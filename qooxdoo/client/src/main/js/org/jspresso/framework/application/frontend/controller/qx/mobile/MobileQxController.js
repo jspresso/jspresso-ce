@@ -331,7 +331,16 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      */
     _updateStatusCommand: function (remoteUpdateStatusCommand) {
       // TODO implement
+    },
+
+    /**
+     * @param viewStateGuid {String}
+     * @param viewStatePermId {String}
+     */
+    setCurrentViewStateGuid: function (viewStateGuid, viewStatePermId) {
+      // NO-OP;
     }
+
 
 
 

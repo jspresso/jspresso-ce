@@ -41,6 +41,7 @@ import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
+import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
@@ -76,7 +77,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
   public IView<RComponent> createView(IViewDescriptor viewDescriptor, IActionHandler actionHandler, Locale locale) {
     if (viewDescriptor instanceof IMobileViewDescriptor || viewDescriptor instanceof IPropertyViewDescriptor
         || viewDescriptor instanceof ITreeViewDescriptor || viewDescriptor instanceof IListViewDescriptor
-        || viewDescriptor instanceof ICardViewDescriptor) {
+        || viewDescriptor instanceof ICardViewDescriptor || viewDescriptor instanceof IComponentViewDescriptor) {
       return super.createView(viewDescriptor, actionHandler, locale);
     }
     throw new UnsupportedOperationException("Mobile view factory can only handle mobile view descriptors.");

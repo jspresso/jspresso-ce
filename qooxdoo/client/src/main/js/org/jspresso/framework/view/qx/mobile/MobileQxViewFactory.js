@@ -21,5 +21,56 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
 
   members: {
 
+    /**
+     *
+     * @return {qx.ui.mobile.form.Button}
+     * @param toolTip {String}
+     * @param label {String}
+     * @param icon {org.jspresso.framework.gui.remote.RIcon}
+     */
+    createButton: function (label, toolTip, icon) {
+      var button = new qx.ui.mobile.form.Button();
+      this._completeButton(button, label, toolTip, icon);
+      return button;
+    },
+
+    /**
+     *
+     * @return {qx.ui.mobile.toolbar.Button}
+     * @param toolTip {String}
+     * @param label {String}
+     * @param icon {org.jspresso.framework.gui.remote.RIcon}
+     */
+    createToolBarButton: function (label, toolTip, icon) {
+      var button = new qx.ui.mobile.toolbar.Button();
+      this._completeButton(button, label, toolTip, icon);
+      return button;
+    },
+
+    /**
+     *
+     * @return {undefined}
+     * @param icon {org.jspresso.framework.gui.remote.RIcon}
+     * @param button {qx.ui.mobile.form.Button}
+     * @param label {String}
+     * @param toolTip {String}
+     */
+    _completeButton: function (button, label, toolTip, icon) {
+      this.setIcon(button, icon);
+      if (label) {
+        button.setLabel(label);
+      }
+    },
+
+    /**
+     * @param button {qx.ui.mobile.form.Button | qx.ui.mobile.menu.Button}
+     * @param listener {function}
+     * @param that {var}
+     */
+    addButtonListener: function (button, listener, that) {
+      button.addListener("tap", listener, that);
+    }
+
+
   }
 });

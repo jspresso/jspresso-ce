@@ -85,19 +85,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 
   construct: function (remotePeerRegistry, actionHandler, commandHandler) {
     this.base(arguments, remotePeerRegistry, actionHandler, commandHandler);
-    this.__remotePeerRegistry = remotePeerRegistry;
-    this.__actionHandler = actionHandler;
-    this.__commandHandler = commandHandler;
   },
 
   members: {
-
-    /** @type {org.jspresso.framework.util.remote.registry.IRemotePeerRegistry} */
-    __remotePeerRegistry: null,
-    /** @type {org.jspresso.framework.action.IActionHandler} */
-    __actionHandler: null,
-    /** @type {org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler} */
-    __commandHandler: null,
 
     /** @type {Array} */
     __dateFormats: null,
@@ -180,7 +170,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       this.applyComponentStyle(component, remoteComponent);
       this._applyPreferredSize(remoteComponent, component);
       if (registerPeers) {
-        this.__remotePeerRegistry.register(remoteComponent);
+        this._getRemotePeerRegistry().register(remoteComponent);
       }
       return component;
     },
@@ -232,14 +222,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       return this.createToolBarFromActionLists(remoteComponent.getSecondaryActionLists());
     },
 
-    _getRemotePeerRegistry: function () {
-      return this.__remotePeerRegistry;
-    },
-
-    _getActionHandler: function () {
-      return this.__actionHandler;
-    },
-
     _createCustomComponent: function (remoteComponent) {
       return null;
     },
@@ -259,9 +241,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       modelController.addTarget(imageComponent, "source", "value");
 
       if (remoteImageComponent.getAction() != null) {
-        this.__remotePeerRegistry.register(remoteImageComponent.getAction());
+        this._getRemotePeerRegistry().register(remoteImageComponent.getAction());
         imageComponent.addListener("click", function (e) {
-          this.__actionHandler.execute(remoteImageComponent.getAction());
+          this._getActionHandler().execute(remoteImageComponent.getAction());
         }, this);
       }
 
@@ -837,7 +819,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _fontFamilyToolbarEntry: function (htmlEditor) {
       var button = new qx.ui.form.SelectBox;
       button.set({
-        toolTipText: this.__actionHandler.translate("change_font_family"),
+        toolTipText: this._getActionHandler().translate("change_font_family"),
         focusable: false,
         keepFocus: true,
         width: 120,
@@ -879,7 +861,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _fontSizeToolbarEntry: function (htmlEditor) {
       var button = new qx.ui.form.SelectBox;
       button.set({
-        toolTipText: this.__actionHandler.translate("change_font_size"),
+        toolTipText: this._getActionHandler().translate("change_font_size"),
         focusable: false,
         keepFocus: true,
         width: 50,
@@ -913,27 +895,27 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var toolbarEntries = [
         {
           bold: {
-            text: this.__actionHandler.translate("format_bold"),
+            text: this._getActionHandler().translate("format_bold"),
             image: "qx/icon/Oxygen/16/actions/format-text-bold.png",
             action: htmlEditor.setBold
           },
           italic: {
-            text: this.__actionHandler.translate("format_italic"),
+            text: this._getActionHandler().translate("format_italic"),
             image: "qx/icon/Oxygen/16/actions/format-text-italic.png",
             action: htmlEditor.setItalic
           },
           underline: {
-            text: this.__actionHandler.translate("format_underline"),
+            text: this._getActionHandler().translate("format_underline"),
             image: "qx/icon/Oxygen/16/actions/format-text-underline.png",
             action: htmlEditor.setUnderline
           },
           strikethrough: {
-            text: this.__actionHandler.translate("format_strikethrough"),
+            text: this._getActionHandler().translate("format_strikethrough"),
             image: "qx/icon/Oxygen/16/actions/format-text-strikethrough.png",
             action: htmlEditor.setStrikeThrough
           },
           removeFormat: {
-            text: this.__actionHandler.translate("remove_format"),
+            text: this._getActionHandler().translate("remove_format"),
             image: "qx/icon/Oxygen/16/actions/edit-clear.png",
             action: htmlEditor.removeFormat
           }
@@ -941,22 +923,22 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 
         {
           alignLeft: {
-            text: this.__actionHandler.translate("align_left"),
+            text: this._getActionHandler().translate("align_left"),
             image: "qx/icon/Oxygen/16/actions/format-justify-left.png",
             action: htmlEditor.setJustifyLeft
           },
           alignCenter: {
-            text: this.__actionHandler.translate("align_center"),
+            text: this._getActionHandler().translate("align_center"),
             image: "qx/icon/Oxygen/16/actions/format-justify-center.png",
             action: htmlEditor.setJustifyCenter
           },
           alignRight: {
-            text: this.__actionHandler.translate("align_right"),
+            text: this._getActionHandler().translate("align_right"),
             image: "qx/icon/Oxygen/16/actions/format-justify-right.png",
             action: htmlEditor.setJustifyRight
           },
           alignJustify: {
-            text: this.__actionHandler.translate("align_justify"),
+            text: this._getActionHandler().translate("align_justify"),
             image: "qx/icon/Oxygen/16/actions/format-justify-fill.png",
             action: htmlEditor.setJustifyFull
           }
@@ -981,12 +963,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 
         {
           indent: {
-            text: this.__actionHandler.translate("indent_more"),
+            text: this._getActionHandler().translate("indent_more"),
             image: "qx/icon/Oxygen/16/actions/format-indent-more.png",
             action: htmlEditor.insertIndent
           },
           outdent: {
-            text: this.__actionHandler.translate("indent_less"),
+            text: this._getActionHandler().translate("indent_less"),
             image: "qx/icon/Oxygen/16/actions/format-indent-less.png",
             action: htmlEditor.insertOutdent
           }
@@ -1003,22 +985,22 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 
         {
           ol: {
-            text: this.__actionHandler.translate("insert_ordered_list"),
+            text: this._getActionHandler().translate("insert_ordered_list"),
             image: "org/jspresso/framework/htmleditor/list-ordered.png",
             action: htmlEditor.insertOrderedList
           },
           ul: {
-            text: this.__actionHandler.translate("insert_unordered_list"),
+            text: this._getActionHandler().translate("insert_unordered_list"),
             image: "org/jspresso/framework/htmleditor/list-unordered.png",
             action: htmlEditor.insertUnorderedList
           }
         }
         // ,
         // {
-        // undo: { text: this.__actionHandler.translate("undo"), image:
+        // undo: { text: this._getActionHandler().translate("undo"), image:
         // "qx/icon/Oxygen/16/actions/edit-undo.png", action:
         // htmlEditor.undo },
-        // redo: { text: this.__actionHandler.translate("redo"), image:
+        // redo: { text: this._getActionHandler().translate("redo"), image:
         // "qx/icon/Oxygen/16/actions/edit-redo.png", action:
         // htmlEditor.redo }
         // }
@@ -1103,7 +1085,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         textField.addListener("input", function (event) {
           var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
           actionEvent.setActionCommand(textField.getValue());
-          this.__actionHandler.execute(remoteTextField.getCharacterAction(), actionEvent);
+          this._getActionHandler().execute(remoteTextField.getCharacterAction(), actionEvent);
         }, this);
       }
     },
@@ -1128,53 +1110,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       }
       remoteAction.bind("enabled", command, "enabled");
       command.addListener("execute", function (e) {
-        this.__actionHandler.execute(remoteAction);
+        this._getActionHandler().execute(remoteAction);
       }, this);
       return command;
-    },
-
-    /**
-     * @return {qx.ui.form.Button}
-     */
-    createOkButton: function () {
-      var b = this.createButton(this.__actionHandler.translate("ok"), null,
-          new org.jspresso.framework.gui.remote.RIcon().set({
-            imageUrlSpec: "qx/icon/Oxygen/22/actions/dialog-ok.png"
-          }));
-      return b;
-    },
-
-    /**
-     * @return {qx.ui.form.Button}
-     */
-    createCancelButton: function () {
-      var b = this.createButton(this.__actionHandler.translate("cancel"), null,
-          new org.jspresso.framework.gui.remote.RIcon().set({
-            imageUrlSpec: "qx/icon/Oxygen/22/actions/dialog-cancel.png"
-          }));
-      return b;
-    },
-
-    /**
-     * @return {qx.ui.form.Button}
-     */
-    createYesButton: function () {
-      var b = this.createButton(this.__actionHandler.translate("yes"), null,
-          new org.jspresso.framework.gui.remote.RIcon().set({
-            imageUrlSpec: "qx/icon/Oxygen/22/actions/dialog-ok.png"
-          }));
-      return b;
-    },
-
-    /**
-     * @return {qx.ui.form.Button}
-     */
-    createNoButton: function () {
-      var b = this.createButton(this.__actionHandler.translate("no"), null,
-          new org.jspresso.framework.gui.remote.RIcon().set({
-            imageUrlSpec: "qx/icon/Oxygen/22/actions/dialog-close.png"
-          }));
-      return b;
     },
 
     /**
@@ -1237,7 +1175,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     createMenuButton: function (remoteAction) {
       var button = new qx.ui.menu.Button();
       remoteAction.bind("enabled", button, "enabled");
-      this.__remotePeerRegistry.register(remoteAction);
+      this._getRemotePeerRegistry().register(remoteAction);
       this._completeButton(button, remoteAction.getName(), remoteAction.getDescription(), remoteAction.getIcon());
       return button;
     },
@@ -1263,25 +1201,14 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     },
 
     /**
-     *
-     * @param component {qx.ui.core.Widget}
-     * @param icon {org.jspresso.framework.gui.remote.RIcon}
-     */
-    setIcon: function (component, icon) {
-      if (icon) {
-        component.setIcon(icon.getImageUrlSpec());
-      }
-    },
-
-    /**
      * @param button{qx.ui.form.Button}
      * @param remoteAction {org.jspresso.framework.gui.remote.RAction}
      */
     _bindButton: function (button, remoteAction) {
       remoteAction.bind("enabled", button, "enabled");
-      this.__remotePeerRegistry.register(remoteAction);
+      this._getRemotePeerRegistry().register(remoteAction);
       this.addButtonListener(button, function (event) {
-        this.__actionHandler.execute(remoteAction);
+        this._getActionHandler().execute(remoteAction);
       }, this);
     },
 
@@ -1582,7 +1509,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     },
 
     /**
-     * @param button {qx.ui.form.Button|qx.ui.menu.Button}
+     * @param button {qx.ui.form.Button | qx.ui.menu.Button}
      * @param listener {function}
      * @param that {var}
      */
@@ -2101,9 +2028,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         }
       }, this);
       if (remoteTree.getRowAction()) {
-        this.__remotePeerRegistry.register(remoteTree.getRowAction());
+        this._getRemotePeerRegistry().register(remoteTree.getRowAction());
         tree.addListener("dblclick", function (e) {
-          this.__actionHandler.execute(remoteTree.getRowAction());
+          this._getActionHandler().execute(remoteTree.getRowAction());
         }, this);
       }
       return tree;
@@ -2281,7 +2208,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
               }
               var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
               actionEvent.setActionCommand(content);
-              this.__actionHandler.execute(mainAction, actionEvent);
+              this._getActionHandler().execute(mainAction, actionEvent);
             }
           } else {
             state.setValue(null);
@@ -2297,7 +2224,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           textField.addListener("input", function (event) {
             var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
             actionEvent.setActionCommand(textField.getValue());
-            this.__actionHandler.execute(remoteActionField.getCharacterAction(), actionEvent);
+            this._getActionHandler().execute(remoteActionField.getCharacterAction(), actionEvent);
           }, this);
         }
       } else {
@@ -2382,7 +2309,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       /** @type {org.jspresso.framework.state.remote.RemoteCompositeValueState} */
       var state = remoteTable.getState();
       var tableModel = new org.jspresso.framework.view.qx.RTableModel(state, remoteTable.getSortable(),
-          remoteTable.getSortingAction(), this.__commandHandler);
+          remoteTable.getSortingAction(), this._getCommandHandler());
       var modelController = new qx.data.controller.Object(state);
       modelController.addTarget(tableModel, "editable", "writable", false);
       var columnIds = remoteTable.getColumnIds();
@@ -2416,7 +2343,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       for (var i = 0; i < remoteTable.getColumnIds().length; i++) {
         var rColumn = remoteTable.getColumns()[i];
         var rColumnHeader = remoteTable.getColumnHeaders()[i];
-        var editor = new org.jspresso.framework.view.qx.RComponentTableCellEditor(this, rColumn, this.__actionHandler);
+        var editor = new org.jspresso.framework.view.qx.RComponentTableCellEditor(this, rColumn, this._getActionHandler());
         columnModel.setCellEditorFactory(i, editor);
         var bgIndex = -1;
         var fgIndex = -1;
@@ -2454,7 +2381,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           cellRenderer = new org.jspresso.framework.view.qx.BinaryTableCellRenderer();
         } else if (rColumn instanceof org.jspresso.framework.gui.remote.RImageComponent) {
           cellRenderer = new org.jspresso.framework.view.qx.ImageTableCellRenderer();
-          this.__remotePeerRegistry.register(rColumn.getAction());
+          this._getRemotePeerRegistry().register(rColumn.getAction());
           cellRenderer.setAction(rColumn.getAction());
         } else {
           var format = this._createFormat(rColumn);
@@ -2462,7 +2389,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           cellRenderer.setUseAutoAlign(false);
 
           if (rColumn instanceof org.jspresso.framework.gui.remote.RLink) {
-            this.__remotePeerRegistry.register(rColumn.getAction());
+            this._getRemotePeerRegistry().register(rColumn.getAction());
             cellRenderer.setAction(rColumn.getAction());
           }
         }
@@ -2557,7 +2484,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         var renderer = table.getTableColumnModel().getDataCellRenderer(col);
         if ((    renderer instanceof org.jspresso.framework.view.qx.FormattedTableCellRenderer || renderer
             instanceof org.jspresso.framework.view.qx.ImageTableCellRenderer) && renderer.getAction()) {
-          this.__actionHandler.execute(renderer.getAction());
+          this._getActionHandler().execute(renderer.getAction());
         }
       }, this);
 
@@ -2662,9 +2589,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         }
       }, this);
       if (remoteTable.getRowAction()) {
-        this.__remotePeerRegistry.register(remoteTable.getRowAction());
+        this._getRemotePeerRegistry().register(remoteTable.getRowAction());
         table.addListener("dblclick", function (e) {
-          this.__actionHandler.execute(remoteTable.getRowAction());
+          this._getActionHandler().execute(remoteTable.getRowAction());
         }, this);
       }
       if (remoteTable.getPermId()) {
@@ -2680,7 +2607,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           notificationCommand.setColumnIds(columnIds);
           notificationCommand.setColumnWidths(columnWidths);
           //noinspection JSPotentiallyInvalidUsageOfThis
-          this.__commandHandler.registerCommand(notificationCommand);
+          this._getCommandHandler().registerCommand(notificationCommand);
         };
 
         table.getTableColumnModel().addListener("widthChanged", notifyTableChanged, this);
@@ -2826,7 +2753,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       if (state) {
         var modelController = new qx.data.controller.Object(state);
         if (remoteLabel instanceof org.jspresso.framework.gui.remote.RLink && remoteLabel.getAction()) {
-          this.__remotePeerRegistry.register(remoteLabel.getAction());
+          this._getRemotePeerRegistry().register(remoteLabel.getAction());
           atom.setRich(true);
           modelController.addTarget(atom, "label", "value", false, {
             converter: function (modelValue, model) {
@@ -2837,7 +2764,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             }
           });
           atom.addListener("click", function (event) {
-            this.__actionHandler.execute(remoteLabel.getAction());
+            this._getActionHandler().execute(remoteLabel.getAction());
           }, this);
         } else {
           modelController.addTarget(atom, "label", "value", false, {
@@ -3010,7 +2937,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _createTabContainer: function (remoteTabContainer) {
       // view remoteTabContainer may have to be retrieved for late update
       // of cards.
-      this.__remotePeerRegistry.register(remoteTabContainer);
+      this._getRemotePeerRegistry().register(remoteTabContainer);
 
       var tabContainer = new qx.ui.tabview.TabView();
       for (var i = 0; i < remoteTabContainer.getTabs().length; i++) {
@@ -3035,7 +2962,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         command.setTargetPeerGuid(remoteTabContainer.getGuid());
         command.setPermId(remoteTabContainer.getPermId());
         command.setLeadingIndex(index);
-        this.__commandHandler.registerCommand(command);
+        this._getCommandHandler().registerCommand(command);
       }, this);
 
       return tabContainer;
@@ -3160,9 +3087,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       }, this);
 
       if (remoteList.getRowAction()) {
-        this.__remotePeerRegistry.register(remoteList.getRowAction());
+        this._getRemotePeerRegistry().register(remoteList.getRowAction());
         list.addListener("dblclick", function (e) {
-          this.__actionHandler.execute(remoteList.getRowAction());
+          this._getActionHandler().execute(remoteList.getRowAction());
         }, this);
       }
       return list;

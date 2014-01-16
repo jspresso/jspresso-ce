@@ -18,8 +18,6 @@
  */
 package org.jspresso.framework.view.remote;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -40,7 +38,6 @@ import org.jspresso.framework.application.frontend.command.remote.IRemoteCommand
 import org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand;
-import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
 import org.jspresso.framework.application.view.ControllerAwareViewFactory;
 import org.jspresso.framework.binding.AbstractCompositeValueConnector;
@@ -78,7 +75,6 @@ import org.jspresso.framework.gui.remote.RPasswordField;
 import org.jspresso.framework.gui.remote.RPercentField;
 import org.jspresso.framework.gui.remote.RRadioBox;
 import org.jspresso.framework.gui.remote.RSecurityComponent;
-import org.jspresso.framework.gui.remote.RTabContainer;
 import org.jspresso.framework.gui.remote.RTextArea;
 import org.jspresso.framework.gui.remote.RTextComponent;
 import org.jspresso.framework.gui.remote.RTextField;
@@ -125,7 +121,6 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
 import org.jspresso.framework.view.BasicIndexedView;
 import org.jspresso.framework.view.BasicMapView;
 import org.jspresso.framework.view.IActionFactory;
-import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IMapView;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.ViewException;
@@ -1879,7 +1874,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
   @Override
   protected IView<RComponent> constructView(RComponent viewComponent, IViewDescriptor descriptor,
                                             IValueConnector connector) {
-    IView<RComponent> view = constructView(viewComponent, descriptor, connector);
+    IView<RComponent> view = super.constructView(viewComponent, descriptor, connector);
     if (connector instanceof IPermIdSource) {
       ((IPermIdSource) connector).setPermId(descriptor.getPermId());
     }
@@ -1895,7 +1890,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
    */
   @Override
   protected BasicIndexedView<RComponent> constructIndexedView(RComponent viewComponent, ITabViewDescriptor descriptor) {
-    BasicIndexedView<RComponent> indexedView = constructIndexedView(viewComponent, descriptor);
+    BasicIndexedView<RComponent> indexedView = super.constructIndexedView(viewComponent, descriptor);
     getRemotePeerRegistry().register(viewComponent);
     viewComponent.setPermId(getRemotePeerRegistry().registerPermId(descriptor.getPermId(), viewComponent.getGuid()));
     return indexedView;
