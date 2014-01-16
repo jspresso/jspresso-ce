@@ -67,7 +67,7 @@ import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicComponentViewDescriptor extends org.jspresso.framework.view.descriptor.AbstractComponentViewDescriptor
+public class BasicComponentViewDescriptor extends AbstractComponentViewDescriptor
     implements IComponentViewDescriptor {
 
   private int                           columnCount;

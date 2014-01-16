@@ -20,9 +20,11 @@ package org.jspresso.framework.application.frontend.controller.remote;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
@@ -122,7 +124,11 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
   @SuppressWarnings("FieldCanBeLocal")
   private IView<RComponent>      loginView;
   private String[]               clientKeysToTranslate;
+  private Set<String>            workspaceViews;
 
+  /**
+   * Instantiates a new Abstract remote controller.
+   */
   public AbstractRemoteController() {
     commandRegistrationEnabled = false;
     commandLowPriorityOffset = 0;
@@ -215,7 +221,7 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
     return commandQueue;
   }
 
-  protected void clearRequestParams() {
+  private void clearRequestParams() {
     if (HttpRequestHolder.isAvailable()) {
       HttpSession session = HttpRequestHolder.getServletRequest().getSession();
       session.removeAttribute(RequestParamsHttpFilter.REQUEST_PARAMS_KEY);
@@ -844,7 +850,7 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
    */
   @Override
   public void disposeModalDialog(RComponent sourceWidget, Map<String, Object> context) {
-    disposeModalDialog(sourceWidget, context);
+    super.disposeModalDialog(sourceWidget, context);
     registerCommand(new RemoteCloseDialogCommand());
   }
 
@@ -855,6 +861,9 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
   public boolean stop() {
     clear();
     clearRequestParams();
+    if (workspaceViews != null) {
+      workspaceViews.clear();
+    }
     registerCommand(new RemoteRestartCommand());
     return super.stop();
   }
@@ -928,4 +937,54 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
     historyCommand.setName(historyEntry.getName());
     registerCommand(historyCommand);
   }
+
+  /**
+   * Sends a remote workspace display command.
+   * <p/>
+   * {@inheritDoc}
+   */
+  @Override
+  protected void displayWorkspace(String workspaceName, boolean bypassModuleBoundaryActions) {
+    displayWorkspace(workspaceName, bypassModuleBoundaryActions, true);
+  }
+
+  /**
+   * Sets the workspace as selected and optionally notifies the remote peer.
+   *
+   * @param workspaceName
+   *     the selected workspace name.
+   * @param bypassModuleBoundaryActions
+   *     should we bypass module onEnter/Exit actions ?
+   * @param notifyRemote
+   *     if true, a remote notification will be sent to the remote peer.
+   */
+  protected void displayWorkspace(String workspaceName, boolean bypassModuleBoundaryActions, boolean notifyRemote) {
+    if (!ObjectUtils.equals(workspaceName, getSelectedWorkspaceName())) {
+      super.displayWorkspace(workspaceName, bypassModuleBoundaryActions);
+      if (workspaceViews == null) {
+        workspaceViews = new HashSet<>();
+      }
+      RComponent workspaceView = null;
+      if (!workspaceViews.contains(workspaceName)) {
+        workspaceViews.add(workspaceName);
+        workspaceView = createWorkspaceView(workspaceName);
+      }
+      if (notifyRemote) {
+        RemoteWorkspaceDisplayCommand workspaceDisplayCommand = new RemoteWorkspaceDisplayCommand();
+        if (workspaceView != null) {
+          workspaceDisplayCommand.setWorkspaceView(workspaceView);
+        }
+        workspaceDisplayCommand.setWorkspaceName(workspaceName);
+        registerCommand(workspaceDisplayCommand);
+      }
+    }
+  }
+
+  /**
+   * Create workspace view.
+   *
+   * @param workspaceName the workspace name
+   * @return the r component
+   */
+  protected abstract RComponent createWorkspaceView(String workspaceName);
 }

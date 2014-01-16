@@ -43,6 +43,8 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteFocusCom
 import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
 import org.jspresso.framework.application.view.ControllerAwareViewFactory;
+import org.jspresso.framework.binding.AbstractCompositeValueConnector;
+import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
@@ -70,6 +72,7 @@ import org.jspresso.framework.gui.remote.RImageComponent;
 import org.jspresso.framework.gui.remote.RIntegerField;
 import org.jspresso.framework.gui.remote.RLabel;
 import org.jspresso.framework.gui.remote.RLink;
+import org.jspresso.framework.gui.remote.RList;
 import org.jspresso.framework.gui.remote.RNumericComponent;
 import org.jspresso.framework.gui.remote.RPasswordField;
 import org.jspresso.framework.gui.remote.RPercentField;
@@ -80,8 +83,10 @@ import org.jspresso.framework.gui.remote.RTextArea;
 import org.jspresso.framework.gui.remote.RTextComponent;
 import org.jspresso.framework.gui.remote.RTextField;
 import org.jspresso.framework.gui.remote.RTimeField;
+import org.jspresso.framework.gui.remote.RTree;
 import org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IColorPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
@@ -131,11 +136,13 @@ import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEnumerationPropertyViewDescriptor;
+import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IScrollableViewDescriptor;
 import org.jspresso.framework.view.descriptor.IStringPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
+import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
@@ -154,6 +161,9 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
   private boolean                numberServerParse;
   private IRemotePeerRegistry    remotePeerRegistry;
 
+  /**
+   * Instantiates a new Abstract remote view factory.
+   */
   public AbstractRemoteViewFactory() {
     numberServerParse = false;
     dateServerParse = false;
@@ -238,7 +248,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     }
   }
 
-  protected Font createFont(String fontString) {
+  private Font createFont(String fontString) {
     Font font = FontHelper.fromString(fontString);
     return font;
   }
@@ -1620,6 +1630,63 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createListView(IListViewDescriptor viewDescriptor, IActionHandler actionHandler,
+                                             Locale locale) {
+    ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
+        .getModelDescriptor());
+    IComponentDescriptor<?> rowDescriptor = modelDescriptor.getCollectionDescriptor().getElementDescriptor();
+    ICompositeValueConnector rowConnectorPrototype = getConnectorFactory().createCompositeValueConnector(
+        modelDescriptor.getName() + "Element", rowDescriptor.getToHtmlProperty());
+    if (rowConnectorPrototype instanceof AbstractCompositeValueConnector) {
+      ((AbstractCompositeValueConnector) rowConnectorPrototype).setDisplayIcon(viewDescriptor.getIcon());
+      ((AbstractCompositeValueConnector) rowConnectorPrototype).setIconImageURLProvider(
+          viewDescriptor.getIconImageURLProvider());
+    }
+    ICollectionConnector connector = getConnectorFactory().createCollectionConnector(modelDescriptor.getName(),
+        getMvcBinder(), rowConnectorPrototype);
+    RList viewComponent = createRList(viewDescriptor);
+    IView<RComponent> view = constructView(viewComponent, viewDescriptor, connector);
+
+    if (viewDescriptor.getRenderedProperty() != null) {
+      IValueConnector cellConnector = createListConnector(viewDescriptor.getRenderedProperty(), rowDescriptor);
+      rowConnectorPrototype.addChildConnector(viewDescriptor.getRenderedProperty(), cellConnector);
+    }
+    viewComponent.setSelectionMode(viewDescriptor.getSelectionMode().name());
+    if (viewDescriptor.getRowAction() != null) {
+      viewComponent.setRowAction(getActionFactory().createAction(viewDescriptor.getRowAction(), actionHandler, view,
+          locale));
+    }
+    return view;
+  }
+
+  /**
+   * Creates a remote list.
+   *
+   * @param viewDescriptor
+   *     the component view descriptor.
+   * @return the created remote component.
+   */
+  protected RList createRList(IListViewDescriptor viewDescriptor) {
+    RList component = new RList(getGuidGenerator().generateGUID());
+    return component;
+  }
+
+  /**
+   * Creates a remote tree.
+   *
+   * @param viewDescriptor
+   *     the component view descriptor.
+   * @return the created remote component.
+   */
+  protected RTree createRTree(ITreeViewDescriptor viewDescriptor) {
+    RTree component = new RTree(getGuidGenerator().generateGUID());
+    return component;
+  }
+
+  /**
    * Complete property views with dynamic tool tips.
    *
    * @param connector
@@ -1856,5 +1923,23 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
    */
   public void setRemotePeerRegistry(IRemotePeerRegistry remotePeerRegistry) {
     this.remotePeerRegistry = remotePeerRegistry;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createTreeView(ITreeViewDescriptor viewDescriptor, IActionHandler actionHandler,
+                                             Locale locale) {
+    final ICompositeValueConnector connector = createTreeViewConnector(viewDescriptor, actionHandler, locale);
+
+    RTree viewComponent = createRTree(viewDescriptor);
+    viewComponent.setExpanded(viewDescriptor.isExpanded());
+    IView<RComponent> view = constructView(viewComponent, viewDescriptor, connector);
+    if (viewDescriptor.getRowAction() != null) {
+      viewComponent.setRowAction(getActionFactory().createAction(viewDescriptor.getRowAction(), actionHandler, view,
+          locale));
+    }
+    return view;
   }
 }

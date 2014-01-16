@@ -19,23 +19,19 @@
 package org.jspresso.framework.application.frontend.controller.remote;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteFlashDisplayCommand;
-import org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RSplitContainer;
 import org.jspresso.framework.util.gui.Dimension;
-import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.descriptor.EOrientation;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
@@ -53,10 +49,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * @version $LastChangedRevision$
  */
 public class DefaultRemoteController extends AbstractRemoteController {
-
-  private static final Logger LOG = LoggerFactory.getLogger(DefaultRemoteController.class);
-
-  private Set<String>            workspaceViews;
 
   /**
    * Constructs a new {@code DefaultRemoteController} instance.
@@ -91,68 +83,6 @@ public class DefaultRemoteController extends AbstractRemoteController {
   }
 
   /**
-   * Sends a remote workspace display command.
-   * <p/>
-   * {@inheritDoc}
-   */
-  @Override
-  protected void displayWorkspace(String workspaceName, boolean bypassModuleBoundaryActions) {
-    displayWorkspace(workspaceName, bypassModuleBoundaryActions, true);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean stop() {
-    if (workspaceViews != null) {
-      workspaceViews.clear();
-    }
-    return super.stop();
-  }
-
-  /**
-   * Sets the workspace as selected and optionally notifies the remote peer.
-   *
-   * @param workspaceName
-   *     the selected workspace name.
-   * @param bypassModuleBoundaryActions
-   *     should we bypass module onEnter/Exit actions ?
-   * @param notifyRemote
-   *     if true, a remote notification will be sent to the remote peer.
-   */
-  protected void displayWorkspace(String workspaceName, boolean bypassModuleBoundaryActions, boolean notifyRemote) {
-    if (!ObjectUtils.equals(workspaceName, getSelectedWorkspaceName())) {
-      super.displayWorkspace(workspaceName, bypassModuleBoundaryActions);
-      if (workspaceViews == null) {
-        workspaceViews = new HashSet<>();
-      }
-      RSplitContainer workspaceView = null;
-      if (!workspaceViews.contains(workspaceName)) {
-        workspaceView = new RSplitContainer(workspaceName + "_split");
-        workspaceView.setOrientation(EOrientation.HORIZONTAL.toString());
-        IViewDescriptor workspaceNavigatorViewDescriptor = getWorkspace(workspaceName).getViewDescriptor();
-        IValueConnector workspaceConnector = getBackendController().getWorkspaceConnector(workspaceName);
-        IView<RComponent> workspaceNavigator = createWorkspaceNavigator(workspaceName,
-            workspaceNavigatorViewDescriptor);
-        IView<RComponent> moduleAreaView = createModuleAreaView(workspaceName);
-        workspaceView.setLeftTop(workspaceNavigator.getPeer());
-        workspaceView.setRightBottom(moduleAreaView.getPeer());
-        workspaceViews.add(workspaceName);
-        getMvcBinder().bind(workspaceNavigator.getConnector(), workspaceConnector);
-      }
-      if (notifyRemote) {
-        RemoteWorkspaceDisplayCommand workspaceDisplayCommand = new RemoteWorkspaceDisplayCommand();
-        if (workspaceView != null) {
-          workspaceDisplayCommand.setWorkspaceView(workspaceView);
-        }
-        workspaceDisplayCommand.setWorkspaceName(workspaceName);
-        registerCommand(workspaceDisplayCommand);
-      }
-    }
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
@@ -163,4 +93,20 @@ public class DefaultRemoteController extends AbstractRemoteController {
     registerCommand(clipboardCommand);
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  protected RComponent createWorkspaceView(String workspaceName) {
+    RSplitContainer viewComponent = new RSplitContainer(workspaceName + "_split");
+    viewComponent.setOrientation(EOrientation.HORIZONTAL.toString());
+    IViewDescriptor workspaceNavigatorViewDescriptor = getWorkspace(workspaceName).getViewDescriptor();
+    IValueConnector workspaceConnector = getBackendController().getWorkspaceConnector(workspaceName);
+    IView<RComponent> workspaceNavigator = createWorkspaceNavigator(workspaceName,
+        workspaceNavigatorViewDescriptor);
+    IView<RComponent> moduleAreaView = createModuleAreaView(workspaceName);
+    viewComponent.setLeftTop(workspaceNavigator.getPeer());
+    viewComponent.setRightBottom(moduleAreaView.getPeer());
+    getMvcBinder().bind(workspaceNavigator.getConnector(), workspaceConnector);
+    return viewComponent;
+  }
 }

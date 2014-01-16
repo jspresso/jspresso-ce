@@ -20,7 +20,7 @@ package org.jspresso.framework.view.descriptor.mobile;
 
 import java.util.List;
 
-import org.jspresso.framework.view.descriptor.AbstractComponentViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.AbstractComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.EHorizontalPosition;
 
 /**

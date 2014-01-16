@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.view.descriptor;
+package org.jspresso.framework.view.descriptor.basic;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,6 +27,9 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gate.IGateAccessible;
 import org.jspresso.framework.util.gui.Icon;
+import org.jspresso.framework.view.descriptor.ELabelPosition;
+import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
+import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.PropertyViewDescriptorHelper;

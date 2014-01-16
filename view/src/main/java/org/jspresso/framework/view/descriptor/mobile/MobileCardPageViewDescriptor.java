@@ -1,0 +1,84 @@
+/*
+ * Copyright (c) 2005-2014 Vincent Vandenschrick. All rights reserved.
+ *
+ *  This file is part of the Jspresso framework.
+ *
+ *  Jspresso is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Jspresso is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package org.jspresso.framework.view.descriptor.mobile;
+
+import java.util.Collections;
+import java.util.List;
+
+import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
+import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicCompositeViewDescriptor;
+
+/**
+ * A card view descriptor that aggregates other pages as card.
+ *
+ * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
+ */
+public class MobileCardPageViewDescriptor extends BasicCompositeViewDescriptor implements IMobilePageViewDescriptor {
+
+  private ICardViewDescriptor pages;
+
+  /**
+   * Is cascading models.
+   *
+   * @return always false since a single mobile page does not cascade models.
+   */
+  @Override
+  public boolean isCascadingModels() {
+    return true;
+  }
+
+  /**
+   * Sets cascading models. This operation is not supported on mobile pages.
+   *
+   * @param cascadingModels
+   *     the cascading models
+   */
+  @Override
+  public void setCascadingModels(boolean cascadingModels) {
+    throw new UnsupportedOperationException("Cannot configure cascading model on Mobile containers");
+  }
+
+  @Override
+  public List<IViewDescriptor> getChildViewDescriptors() {
+    if (pages != null) {
+      completeChildDescriptor(pages, null);
+    }
+    return Collections.singletonList((IViewDescriptor) pages);
+  }
+
+  /**
+   * Gets pages.
+   *
+   * @return the pages
+   */
+  public ICardViewDescriptor getPages() {
+    return pages;
+  }
+
+  /**
+   * Sets pages.
+   *
+   * @param pages the pages
+   */
+  public void setPages(ICardViewDescriptor pages) {
+    this.pages = pages;
+  }
+}

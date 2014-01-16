@@ -30,10 +30,8 @@ import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
-import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
-import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.remote.AbstractRemoteViewFactory;
 
 /**
@@ -54,28 +52,6 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
   protected RComponent decorateWithPaginationView(RComponent viewPeer, RComponent paginationViewPeer) {
     // pagination through pagination view is not supported in mobile
     return viewPeer;
-  }
-
-  /**
-   * Not supported in mobile environment.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<RComponent> createTreeView(ITreeViewDescriptor viewDescriptor, IActionHandler actionHandler,
-                                             Locale locale) {
-    throw new UnsupportedOperationException("Not supported in mobile environment.");
-  }
-
-  /**
-   * Not supported in mobile environment.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<RComponent> createListView(IListViewDescriptor viewDescriptor, IActionHandler actionHandler,
-                                             Locale locale) {
-    throw new UnsupportedOperationException("Not supported in mobile environment.");
   }
 
   /**

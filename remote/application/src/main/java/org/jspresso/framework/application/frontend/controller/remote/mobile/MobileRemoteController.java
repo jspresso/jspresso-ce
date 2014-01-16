@@ -22,9 +22,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.application.frontend.controller.remote.AbstractRemoteController;
+import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RComponent;
+import org.jspresso.framework.gui.remote.RSplitContainer;
 import org.jspresso.framework.util.gui.Dimension;
+import org.jspresso.framework.view.IView;
+import org.jspresso.framework.view.descriptor.EOrientation;
+import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
  * This is is the mobile implementation of a &quot;remotable&quot; frontend
@@ -55,5 +60,22 @@ public class MobileRemoteController extends AbstractRemoteController {
                                  RComponent sourceComponent, Map<String, Object> context, Dimension dimension,
                                  boolean reuseCurrent) {
     throw new UnsupportedOperationException("Not supported in mobile environment.");
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  protected RComponent createWorkspaceView(String workspaceName) {
+    RSplitContainer viewComponent = new RSplitContainer(workspaceName + "_split");
+    viewComponent.setOrientation(EOrientation.HORIZONTAL.toString());
+    IViewDescriptor workspaceNavigatorViewDescriptor = getWorkspace(workspaceName).getViewDescriptor();
+    IValueConnector workspaceConnector = getBackendController().getWorkspaceConnector(workspaceName);
+    IView<RComponent> workspaceNavigator = createWorkspaceNavigator(workspaceName,
+        workspaceNavigatorViewDescriptor);
+    IView<RComponent> moduleAreaView = createModuleAreaView(workspaceName);
+    viewComponent.setLeftTop(workspaceNavigator.getPeer());
+    viewComponent.setRightBottom(moduleAreaView.getPeer());
+    getMvcBinder().bind(workspaceNavigator.getConnector(), workspaceConnector);
+    return viewComponent;
   }
 }

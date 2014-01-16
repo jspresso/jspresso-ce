@@ -202,39 +202,6 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<RComponent> createListView(IListViewDescriptor viewDescriptor, IActionHandler actionHandler,
-                                             Locale locale) {
-    ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
-        .getModelDescriptor());
-    IComponentDescriptor<?> rowDescriptor = modelDescriptor.getCollectionDescriptor().getElementDescriptor();
-    ICompositeValueConnector rowConnectorPrototype = getConnectorFactory().createCompositeValueConnector(
-        modelDescriptor.getName() + "Element", rowDescriptor.getToHtmlProperty());
-    if (rowConnectorPrototype instanceof AbstractCompositeValueConnector) {
-      ((AbstractCompositeValueConnector) rowConnectorPrototype).setDisplayIcon(viewDescriptor.getIcon());
-      ((AbstractCompositeValueConnector) rowConnectorPrototype).setIconImageURLProvider(
-          viewDescriptor.getIconImageURLProvider());
-    }
-    ICollectionConnector connector = getConnectorFactory().createCollectionConnector(modelDescriptor.getName(),
-        getMvcBinder(), rowConnectorPrototype);
-    RList viewComponent = createRList(viewDescriptor);
-    IView<RComponent> view = constructView(viewComponent, viewDescriptor, connector);
-
-    if (viewDescriptor.getRenderedProperty() != null) {
-      IValueConnector cellConnector = createListConnector(viewDescriptor.getRenderedProperty(), rowDescriptor);
-      rowConnectorPrototype.addChildConnector(viewDescriptor.getRenderedProperty(), cellConnector);
-    }
-    viewComponent.setSelectionMode(viewDescriptor.getSelectionMode().name());
-    if (viewDescriptor.getRowAction() != null) {
-      viewComponent.setRowAction(getActionFactory().createAction(viewDescriptor.getRowAction(), actionHandler, view,
-          locale));
-    }
-    return view;
-  }
-
-  /**
    * Creates a remote border container.
    *
    * @param viewDescriptor
@@ -268,18 +235,6 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
   }
 
   /**
-   * Creates a remote list.
-   *
-   * @param viewDescriptor
-   *     the component view descriptor.
-   * @return the created remote component.
-   */
-  protected RList createRList(IListViewDescriptor viewDescriptor) {
-    RList component = new RList(getGuidGenerator().generateGUID());
-    return component;
-  }
-
-  /**
    * Creates a remote split container.
    *
    * @param viewDescriptor
@@ -299,18 +254,6 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
    */
   protected RTable createRTable(ITableViewDescriptor viewDescriptor) {
     RTable component = new RTable(getGuidGenerator().generateGUID());
-    return component;
-  }
-
-  /**
-   * Creates a remote tree.
-   *
-   * @param viewDescriptor
-   *     the component view descriptor.
-   * @return the created remote component.
-   */
-  protected RTree createRTree(ITreeViewDescriptor viewDescriptor) {
-    RTree component = new RTree(getGuidGenerator().generateGUID());
     return component;
   }
 
@@ -606,24 +549,6 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
         }
       }
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IView<RComponent> createTreeView(ITreeViewDescriptor viewDescriptor, IActionHandler actionHandler,
-                                             Locale locale) {
-    final ICompositeValueConnector connector = createTreeViewConnector(viewDescriptor, actionHandler, locale);
-
-    RTree viewComponent = createRTree(viewDescriptor);
-    viewComponent.setExpanded(viewDescriptor.isExpanded());
-    IView<RComponent> view = constructView(viewComponent, viewDescriptor, connector);
-    if (viewDescriptor.getRowAction() != null) {
-      viewComponent.setRowAction(getActionFactory().createAction(viewDescriptor.getRowAction(), actionHandler, view,
-          locale));
-    }
-    return view;
   }
 
   /**
