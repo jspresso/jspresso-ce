@@ -11,7 +11,7 @@
  * details. You should have received a copy of the GNU Lesser General Public
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
-qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.MobileQxController", {
+qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobile.MobileQxController", {
 
   extend: org.jspresso.framework.application.frontend.controller.qx.AbstractQxController,
 
@@ -57,7 +57,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
 
 
     _createViewFactory: function () {
-      return new org.jspresso.framework.view.qx.MobileQxViewFactory(this, this, this);
+      return new org.jspresso.framework.view.qx.mobile.MobileQxViewFactory(this, this, this);
     },
 
     _showBusy: function (busy) {
@@ -316,7 +316,24 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Mobil
       }
 
       messageDialog.show();
+    },
+
+    /**
+     * @param clipboardCommand {org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand}
+     */
+    _handleClipboardCommand: function (clipboardCommand) {
+      throw new Error("RemoteClipboardCommand is not supported in mobile environmnents.");
+    },
+
+    /**
+     * @param remoteUpdateStatusCommand {org.jspresso.framework.application.frontend.command.remote.RemoteUpdateStatusCommand}
+     * @return {undefined}
+     */
+    _updateStatusCommand: function (remoteUpdateStatusCommand) {
+      // TODO implement
     }
+
+
 
   }
 });

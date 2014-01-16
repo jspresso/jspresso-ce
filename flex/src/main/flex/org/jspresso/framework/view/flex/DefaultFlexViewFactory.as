@@ -108,6 +108,7 @@ import org.jspresso.framework.gui.remote.RDateField;
 import org.jspresso.framework.gui.remote.RDecimalComponent;
 import org.jspresso.framework.gui.remote.RDecimalField;
 import org.jspresso.framework.gui.remote.RDurationField;
+import org.jspresso.framework.gui.remote.REmptyComponent;
 import org.jspresso.framework.gui.remote.REvenGridContainer;
 import org.jspresso.framework.gui.remote.RForm;
 import org.jspresso.framework.gui.remote.RHtmlArea;
@@ -244,6 +245,8 @@ public class DefaultFlexViewFactory {
         component = createList(remoteComponent as RList);
       } else if (remoteComponent is RNumericComponent) {
         component = createNumericComponent(remoteComponent as RNumericComponent);
+      } else if (remoteComponent is REmptyComponent) {
+        component = createEmptyComponent(remoteComponent as REmptyComponent);
       } else if (remoteComponent is RSecurityComponent) {
         component = createSecurityComponent(remoteComponent as RSecurityComponent);
       } else if (remoteComponent is RTable) {
@@ -2227,6 +2230,11 @@ public class DefaultFlexViewFactory {
       sizeMaxComponentWidth(passwordField, remotePasswordField);
     }
     return passwordField;
+  }
+
+  protected function createEmptyComponent(remoteEmptyComponent:REmptyComponent):UIComponent {
+    var emptyComponent:Canvas = new Canvas();
+    return emptyComponent;
   }
 
   protected function createSecurityComponent(remoteSecurityComponent:RSecurityComponent):UIComponent {

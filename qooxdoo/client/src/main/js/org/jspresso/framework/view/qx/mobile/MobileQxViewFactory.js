@@ -12,7 +12,7 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.view.qx.MobileQxViewFactory", {
+qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
   extend: org.jspresso.framework.view.qx.AbstractQxViewFactory,
 
   construct: function (remotePeerRegistry, actionHandler, commandHandler) {

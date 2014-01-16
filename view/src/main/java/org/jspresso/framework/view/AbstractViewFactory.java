@@ -536,43 +536,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
   protected abstract void selectChildViewIndex(E viewComponent, int index);
 
   /**
-   * Adjusts a component various sizes (e.g. min, max, preferred) based on a
-   * formatter and a template value.
-   *
-   * @param component
-   *          the component to adjust the sizes for.
-   * @param formatter
-   *          the formatter used if any.
-   * @param templateValue
-   *          the template value used.
-   * @param viewDescriptor
-   *          the underlying view descriptor.
-   */
-  protected void adjustSizes(IViewDescriptor viewDescriptor, E component,
-      IFormatter<?, String> formatter, Object templateValue) {
-    adjustSizes(viewDescriptor, component, formatter, templateValue, 32);
-  }
-
-  /**
-   * Adjusts a component various sizes (e.g. min, max, preferred) based on a
-   * formatter and a template value.
-   *
-   * @param component
-   *          the component to adjust the sizes for.
-   * @param formatter
-   *          the formatter used if any.
-   * @param templateValue
-   *          the template value used.
-   * @param viewDescriptor
-   *          the underlying view descriptor.
-   * @param extraWidth
-   *          the extra size to be added.
-   */
-  protected abstract void adjustSizes(IViewDescriptor viewDescriptor,
-      E component, IFormatter<?, String> formatter, Object templateValue,
-      int extraWidth);
-
-  /**
    * Applies a component preferred size.
    *
    * @param component
@@ -714,18 +677,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
     }
     return identifier;
   }
-
-  /**
-   * Computes a size in pixels based on a number of characters and a component.
-   * It should use component font do do so.
-   *
-   * @param component
-   *          the component.
-   * @param characterLength
-   *          the number of characters.
-   * @return the ize in pixels.
-   */
-  protected abstract int computePixelWidth(E component, int characterLength);
 
   /**
    * Constructs a composite view.

@@ -90,7 +90,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.MobileApplication",
   extend: qx.application.Mobile,
 
   members: {
-    /** @type {org.jspresso.framework.application.frontend.controller.qx.MobileQxController} */
+    /** @type {org.jspresso.framework.application.frontend.controller.qx.mobile.MobileQxController} */
     __qxController: null,
 
     main: function () {
@@ -113,7 +113,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.MobileApplication",
     },
 
     startController: function (remoteController) {
-      this.__qxController = new org.jspresso.framework.application.frontend.controller.qx.MobileQxController(this,
+      this.__qxController = new org.jspresso.framework.application.frontend.controller.qx.mobile.MobileQxController(this,
           remoteController, "en");
       this.__qxController.start();
     },

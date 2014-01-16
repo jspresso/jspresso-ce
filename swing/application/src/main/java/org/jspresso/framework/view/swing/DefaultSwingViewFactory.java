@@ -295,9 +295,38 @@ public class DefaultSwingViewFactory extends
   }
 
   /**
-   * {@inheritDoc}
+   * Adjusts a component various sizes (e.g. min, max, preferred) based on a
+   * formatter and a template value.
+   *
+   * @param component
+   *          the component to adjust the sizes for.
+   * @param formatter
+   *          the formatter used if any.
+   * @param templateValue
+   *          the template value used.
+   * @param viewDescriptor
+   *          the underlying view descriptor.
    */
-  @Override
+  protected void adjustSizes(IViewDescriptor viewDescriptor, JComponent component,
+                             IFormatter<?, String> formatter, Object templateValue) {
+    adjustSizes(viewDescriptor, component, formatter, templateValue, 32);
+  }
+
+  /**
+   * Adjusts a component various sizes (e.g. min, max, preferred) based on a
+   * formatter and a template value.
+   *
+   * @param component
+   *          the component to adjust the sizes for.
+   * @param formatter
+   *          the formatter used if any.
+   * @param templateValue
+   *          the template value used.
+   * @param viewDescriptor
+   *          the underlying view descriptor.
+   * @param extraWidth
+   *          the extra size to be added.
+   */
   protected void adjustSizes(IViewDescriptor viewDescriptor,
       JComponent component, IFormatter<?, String> formatter,
       Object templateValue, int extraWidth) {
@@ -335,11 +364,7 @@ public class DefaultSwingViewFactory extends
     }
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected int computePixelWidth(JComponent component, int characterLength) {
+  private int computePixelWidth(JComponent component, int characterLength) {
     int charLength = getMaxCharacterLength() + 2;
     if (characterLength > 0 && characterLength < getMaxCharacterLength()) {
       charLength = characterLength + 2;

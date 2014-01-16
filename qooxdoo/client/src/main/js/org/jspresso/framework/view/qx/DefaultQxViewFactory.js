@@ -154,6 +154,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           component = this._createList(remoteComponent);
         } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RNumericComponent) {
           component = this._createNumericComponent(remoteComponent);
+        } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.REmptyComponent) {
+          component = this._createEmptyComponent(remoteComponent);
         } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RSecurityComponent) {
           component = this._createSecurityComponent(remoteComponent);
         } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RTable) {
@@ -2217,6 +2219,16 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     /**
      *
      * @return {qx.ui.core.Widget}
+     * @param remoteSecurityComponent {org.jspresso.framework.gui.remote.REmptyComponent}
+     */
+    _createEmptyComponent: function (remoteEmptyComponent) {
+      var emptyComponent = new qx.ui.core.Widget();
+      return emptyComponent;
+    },
+
+    /**
+     *
+     * @return {qx.ui.core.Widget}
      * @param remoteSecurityComponent {org.jspresso.framework.gui.remote.RSecurityComponent}
      */
     _createSecurityComponent: function (remoteSecurityComponent) {
@@ -2864,7 +2876,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      */
     _createVBoxContainer: function () {
       var hboxContainer = new qx.ui.container.Composite();
-      hboxContainer.setLayout(new qx.ui.layout.HBox());
+      hboxContainer.setLayout(new qx.ui.layout.VBox());
       return hboxContainer;
     },
 
