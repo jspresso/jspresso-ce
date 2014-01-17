@@ -80,7 +80,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
         || viewDescriptor instanceof ICardViewDescriptor || viewDescriptor instanceof IComponentViewDescriptor) {
       return super.createView(viewDescriptor, actionHandler, locale);
     }
-    throw new UnsupportedOperationException(
+    throw new IllegalArgumentException(
         "Mobile view factory can only handle mobile view descriptors and not : " + viewDescriptor.getClass()
                                                                                                  .getSimpleName());
   }
@@ -98,10 +98,11 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
         view = createMobileCardPageView((MobileCardPageViewDescriptor) viewDescriptor, actionHandler, locale);
       }
       bindCompositeView(view);
+      return view;
     }
-    throw new UnsupportedOperationException(
+    throw new IllegalArgumentException(
         "Mobile view factory can only handle mobile view descriptors and not : " + viewDescriptor.getClass()
-                                                                                                 .getSimpleName());
+                                                                                                   .getSimpleName());
   }
 
   /**
@@ -151,7 +152,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
       childrenViews.add(selectionView);
     }
     if (viewDescriptor.getNextPage() != null) {
-      IView<RComponent> nextPageView = createView(viewDescriptor.getSelectionView(), actionHandler, locale);
+      IView<RComponent> nextPageView = createView(viewDescriptor.getNextPage(), actionHandler, locale);
       viewComponent.setNextPage((RMobilePage) nextPageView.getPeer());
       childrenViews.add(nextPageView);
     }

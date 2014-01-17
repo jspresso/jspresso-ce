@@ -85,7 +85,7 @@ public class MobileNavPageViewDescriptor extends BasicCompositeViewDescriptor im
     if (selectionView instanceof IListViewDescriptor || selectionView instanceof ITreeViewDescriptor) {
       this.selectionView = selectionView;
     } else {
-      throw new UnsupportedOperationException("Only list or tree is supported as selection view.");
+      throw new IllegalArgumentException("Only list or tree is supported as selection view.");
     }
   }
 

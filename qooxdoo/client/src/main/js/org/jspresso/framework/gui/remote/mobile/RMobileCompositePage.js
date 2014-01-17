@@ -39,7 +39,7 @@ qx.Class.define("org.jspresso.framework.gui.remote.mobile.RMobileCompositePage",
 
   properties: {
     pageSections: {
-      check: "org.jspresso.framework.gui.remote.RComponent"
+      check: "Array"
     }
   }
 });

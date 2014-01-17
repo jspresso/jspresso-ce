@@ -164,7 +164,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         configureItem: function (item, data, row) {
           item.setTitle(data.workspaceAction.getName());
           item.setSubtitle(data.workspaceAction.getDescription());
-          item.setImage(data.workspaceAction.getIcon().getImageUrlSpec());
+          if(data.workspaceAction.getIcon()) {
+            item.setImage(data.workspaceAction.getIcon().getImageUrlSpec());
+          }
           item.setShowArrow(true);
         }
       });
@@ -318,7 +320,15 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      */
     addDetailPage: function (navigationPage) {
       this.__manager.addDetail(navigationPage);
-    }
+    },
 
+    /**
+     * @param targetPeer {org.jspresso.framework.gui.remote.RComponent}
+     * @param addCardCommand {org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand}
+     * @return {undefined}
+     */
+    _handleAddCardCommand: function (targetPeer, addCardCommand) {
+      this._getViewFactory().addCard(targetPeer.retrievePeer(), addCardCommand.getCard(), addCardCommand.getCardName());
+    }
   }
 });

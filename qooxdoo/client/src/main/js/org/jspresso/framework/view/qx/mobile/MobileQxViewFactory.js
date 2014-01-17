@@ -41,6 +41,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         container = this._createMobileNavPage(remoteContainer);
       } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.mobile.RMobileCompositePage) {
         container = this._createMobileCompositePage(remoteContainer);
+      } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.RCardContainer) {
+        container = this._createCardContainer(remoteContainer);
       }
       return container;
     },
@@ -89,14 +91,16 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           var nextPage = this.createComponent(remotePageSection);
           var listModel = new qx.data.Array();
           listModel.push({
-            state: remotePageSection.getState(),
+            section: remotePageSection,
             next: nextPage
           });
           var list = new qx.ui.mobile.list.List({
             configureItem: function (item, data, row) {
-              item.setTitle(data.state.getValue());
-              item.setSubtitle(data.state.getDescription());
-              item.setImage(data.state.getIconImageUrl());
+              item.setTitle(data.section.getLabel());
+              item.setSubtitle(data.section.getToolTip());
+              if(data.section.getIcon()) {
+                item.setImage(data.section.getIcon().getImageUrlSpec());
+              }
               item.setShowArrow(true);
             }
           });

@@ -36,5 +36,28 @@
   <bean id="remoteFrontController" abstract="true" parent="abstractFrontController"
     class="org.jspresso.framework.application.frontend.controller.remote.mobile.MobileRemoteController" />
 
+  <bean id="queryViewDescriptorFactoryBase"
+        class="org.jspresso.framework.application.view.mobile.MobileQueryViewDescriptorFactory">
+    <property name="okCloseDialogAction" ref="okDialogFrontAction" />
+    <property name="modalDialogAction" ref="modalDialogAction" />
+    <property name="defaultFindIconImageUrl">
+      <bean parent="abstractFwIconImageURL">
+        <constructor-arg index="0" value="find" />
+      </bean>
+    </property>
+  </bean>
+
+  <bean abstract="true" id="abstractFilterableBeanCollectionModuleBase"
+        class="org.jspresso.framework.application.model.mobile.MobileFilterableBeanCollectionModule">
+    <property name="queryComponentDescriptorFactory" ref="queryComponentDescriptorFactory" />
+    <property name="queryViewDescriptorFactory" ref="queryViewDescriptorFactory" />
+    <property name="projectedViewDescriptor" ref="filterableBeanCollectionModuleView" />
+    <property name="startupAction" ref="initModuleFilterAction" />
+    <property name="pagingAction" ref="queryModuleFilterBackAction" />
+  </bean>
+
+  <bean id="filterableBeanCollectionModuleView" parent="decoratedView"
+        class="org.jspresso.framework.view.descriptor.mobile.MobileListViewDescriptor" scope="prototype">
+  </bean>
 </beans>
 

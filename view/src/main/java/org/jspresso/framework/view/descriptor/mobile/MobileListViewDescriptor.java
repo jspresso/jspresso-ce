@@ -122,6 +122,7 @@ public class MobileListViewDescriptor extends BasicListViewDescriptor implements
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public void setSelectionMode(ESelectionMode selectionMode) {
     throw new UnsupportedOperationException("Not supported in mobile environment.");
   }
@@ -153,7 +154,7 @@ public class MobileListViewDescriptor extends BasicListViewDescriptor implements
    */
   @Override
   public IModelDescriptor getSelectionModelDescriptor() {
-    throw null;
+    return null;
   }
 
   /**

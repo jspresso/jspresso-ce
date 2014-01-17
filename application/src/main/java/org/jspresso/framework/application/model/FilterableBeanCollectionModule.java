@@ -64,12 +64,13 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   private Integer                          pageSize;
   private IQueryComponentDescriptorFactory queryComponentDescriptorFactory;
   private IQueryViewDescriptorFactory      queryViewDescriptorFactory;
+
   private IViewDescriptor paginationViewDescriptor;
   private BackendAction   pagingAction;
 
   /**
    * Gets the queryViewDescriptorFactory.
-   * 
+   *
    * @return the queryViewDescriptorFactory.
    */
   protected IQueryViewDescriptorFactory getQueryViewDescriptorFactory() {
@@ -85,7 +86,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
 
   /**
    * Gets the filter.
-   * 
+   *
    * @return the filter.
    */
   public IQueryComponent getFilter() {
@@ -94,7 +95,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
 
   /**
    * Gets the filterComponentDescriptor.
-   * 
+   *
    * @return the filterComponentDescriptor.
    */
   @SuppressWarnings("unchecked")
@@ -107,7 +108,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
 
   /**
    * Gets the filterViewDescriptor.
-   * 
+   *
    * @return the filterViewDescriptor.
    */
   public IViewDescriptor getFilterViewDescriptor() {
@@ -116,7 +117,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
 
   /**
    * Gets the orderingProperties.
-   * 
+   *
    * @return the orderingProperties.
    */
   public Map<String, ESort> getOrderingProperties() {
@@ -128,7 +129,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
 
   /**
    * Gets the pageSize.
-   * 
+   *
    * @return the pageSize.
    */
   @Override
@@ -147,8 +148,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   public IViewDescriptor getViewDescriptor() {
     IViewDescriptor superViewDescriptor = super.getViewDescriptor();
 
-    IComponentDescriptor<?> moduleDescriptor = (IComponentDescriptor<?>) superViewDescriptor
-        .getModelDescriptor();
+    IComponentDescriptor<?> moduleDescriptor = (IComponentDescriptor<?>) superViewDescriptor.getModelDescriptor();
 
     IComponentDescriptor<IComponent> realComponentDesc = getFilterComponentDescriptor();
     IViewDescriptor filterViewDesc = getFilterViewDescriptor();
@@ -157,9 +157,8 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
         .getPropertyDescriptor(FilterableBeanCollectionModuleDescriptor.FILTER);
     boolean customFilterView = false;
     if (filterViewDesc == null) {
-      filterViewDesc = getQueryViewDescriptorFactory()
-          .createQueryViewDescriptor(realComponentDesc,
-              filterModelDescriptorProvider.getComponentDescriptor(), Collections.<String, Object>emptyMap());
+      filterViewDesc = getQueryViewDescriptorFactory().createQueryViewDescriptor(realComponentDesc,
+          filterModelDescriptorProvider.getComponentDescriptor(), Collections.<String, Object>emptyMap());
     } else {
       customFilterView = true;
       // Deeply clean model descriptors on filter views
@@ -167,12 +166,10 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
     }
     if (filterViewDesc instanceof BasicViewDescriptor) {
       ((BasicViewDescriptor) filterViewDesc).setBorderType(EBorderType.TITLED);
-      ((BasicViewDescriptor) filterViewDesc)
-          .setModelDescriptor(filterModelDescriptorProvider);
+      ((BasicViewDescriptor) filterViewDesc).setModelDescriptor(filterModelDescriptorProvider);
     }
     if (customFilterView) {
-      getQueryViewDescriptorFactory().adaptExistingViewDescriptor(
-          filterViewDesc);
+      getQueryViewDescriptorFactory().adaptExistingViewDescriptor(filterViewDesc);
     }
     BasicBorderViewDescriptor decorator = new BasicBorderViewDescriptor();
     decorator.setNorthViewDescriptor(filterViewDesc);
@@ -183,14 +180,14 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
     if (getPageSize() != null && getPageSize() > 0) {
       if (moduleObjectsView != null
           && moduleObjectsView.getPaginationViewDescriptor() == null) {
-        moduleObjectsView.setPaginationViewDescriptor(paginationViewDescriptor);
+        moduleObjectsView.setPaginationViewDescriptor(getPaginationViewDescriptor());
       }
     }
     decorator.setModelDescriptor(superViewDescriptor.getModelDescriptor());
     return decorator;
   }
 
-  private void cleanupFilterViewDescriptor(IViewDescriptor filterViewDesc) {
+  protected void cleanupFilterViewDescriptor(IViewDescriptor filterViewDesc) {
     if (filterViewDesc instanceof BasicViewDescriptor) {
       ((BasicViewDescriptor) filterViewDesc).setModelDescriptor(null);
     }
@@ -376,6 +373,15 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   public void setPaginationViewDescriptor(
       BasicViewDescriptor paginationViewDescriptor) {
     this.paginationViewDescriptor = paginationViewDescriptor;
+  }
+
+  /**
+   * Gets pagination view descriptor.
+   *
+   * @return the pagination view descriptor
+   */
+  protected IViewDescriptor getPaginationViewDescriptor() {
+    return paginationViewDescriptor;
   }
 
   /**
