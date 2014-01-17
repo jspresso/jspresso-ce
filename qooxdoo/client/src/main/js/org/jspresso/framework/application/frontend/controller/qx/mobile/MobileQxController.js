@@ -212,7 +212,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
             this.__workspacesMasterPage.show({animation: "cube", reverse: true});
           }, this);
         }
-        this.__manager.addDetail(workspacePage);
       }
       this.__workspacePages[workspaceName].show();
     },

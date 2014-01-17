@@ -74,6 +74,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       selectionList.addListener("changeSelection", function(evt) {
         nextPage.show();
       }, this);
+      this._addDetailPage(navPage);
       return navPage;
     },
 
@@ -105,7 +106,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
             }
           });
           list.setModel(listModel);
-          this._addDetailPage(nextPage);
           list.addListener("changeSelection", function(evt) {
             var selectedIndex = evt.getData();
             /** @type {qx.ui.mobile.list.List} */
@@ -398,6 +398,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createCardContainer: function (remoteCardContainer) {
       var cardContainer = this._createCardContainerComponent();
+      cardContainer.setUserData("existingCards", []);
 
       for (var i = 0; i < remoteCardContainer.getCardNames().length; i++) {
         var rCardComponent = remoteCardContainer.getCards()[i];
@@ -444,18 +445,13 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     addCard: function (cardContainer, rCardComponent, cardName) {
       if(rCardComponent instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
         var children = cardContainer.getChildren();
-        var existingCard;
-        for (var i = 0; i < children.length; i++) {
-          var child = children[i];
-          if (child.getUserData("cardName") == cardName) {
-            existingCard = child;
-          }
-        }
+        var existingCards = cardContainer.getUserData("existingCards");
+        var existingCard = existingCards.indexOf(cardName) >= 0;
         if (!existingCard) {
+          existingCards.push(cardName);
           var cardComponent = this.createComponent(rCardComponent);
-          cardComponent.setUserData("cardName", cardName);
-          this._addDetailPage(/** @type {qx.ui.mobile.page.NavigationPage}*/cardComponent);
-          cardContainer.add(cardComponent);
+          // Do not actually add the card to the card container since it's actually added to the manager.
+          // cardContainer.add(cardComponent);
           this._selectCard(cardContainer, cardComponent);
         }
       }
