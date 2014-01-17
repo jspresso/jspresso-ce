@@ -80,7 +80,9 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
         || viewDescriptor instanceof ICardViewDescriptor || viewDescriptor instanceof IComponentViewDescriptor) {
       return super.createView(viewDescriptor, actionHandler, locale);
     }
-    throw new UnsupportedOperationException("Mobile view factory can only handle mobile view descriptors.");
+    throw new UnsupportedOperationException(
+        "Mobile view factory can only handle mobile view descriptors and not : " + viewDescriptor.getClass()
+                                                                                                 .getSimpleName());
   }
 
   @Override
@@ -97,25 +99,29 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
       }
       bindCompositeView(view);
     }
-    throw new UnsupportedOperationException("Mobile view factory can only handle mobile view descriptors.");
+    throw new UnsupportedOperationException(
+        "Mobile view factory can only handle mobile view descriptors and not : " + viewDescriptor.getClass()
+                                                                                                 .getSimpleName());
   }
 
   /**
    * Create mobile card page view.
    *
-   * @param viewDescriptor the view descriptor
-   * @param actionHandler the action handler
-   * @param locale the locale
+   * @param viewDescriptor
+   *     the view descriptor
+   * @param actionHandler
+   *     the action handler
+   * @param locale
+   *     the locale
    * @return the i composite view
    */
   protected ICompositeView<RComponent> createMobileCardPageView(MobileCardPageViewDescriptor viewDescriptor,
-                                                              IActionHandler actionHandler, Locale locale) {
+                                                                IActionHandler actionHandler, Locale locale) {
     RMobileCardPage viewComponent = createRMobileCardPage(viewDescriptor);
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent, viewDescriptor);
     List<IView<RComponent>> childrenViews = new ArrayList<>();
     if (viewDescriptor.getPages() != null) {
-      IView<RComponent> pagesView = createView(viewDescriptor.getPages(), actionHandler,
-          locale);
+      IView<RComponent> pagesView = createView(viewDescriptor.getPages(), actionHandler, locale);
       viewComponent.setPages((RCardContainer) pagesView.getPeer());
       childrenViews.add(pagesView);
     }
@@ -140,14 +146,12 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent, viewDescriptor);
     List<IView<RComponent>> childrenViews = new ArrayList<>();
     if (viewDescriptor.getSelectionView() != null) {
-      IView<RComponent> selectionView = createView(viewDescriptor.getSelectionView(), actionHandler,
-          locale);
+      IView<RComponent> selectionView = createView(viewDescriptor.getSelectionView(), actionHandler, locale);
       viewComponent.setSelectionView(selectionView.getPeer());
       childrenViews.add(selectionView);
     }
     if (viewDescriptor.getNextPage() != null) {
-      IView<RComponent> nextPageView = createView(viewDescriptor.getSelectionView(), actionHandler,
-          locale);
+      IView<RComponent> nextPageView = createView(viewDescriptor.getSelectionView(), actionHandler, locale);
       viewComponent.setNextPage((RMobilePage) nextPageView.getPeer());
       childrenViews.add(nextPageView);
     }

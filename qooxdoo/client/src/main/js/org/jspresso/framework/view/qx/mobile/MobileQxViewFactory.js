@@ -30,6 +30,101 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     },
 
     /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteContainer {org.jspresso.framework.gui.remote.RContainer}
+     */
+    _createContainer: function (remoteContainer) {
+      var container;
+      if (remoteContainer instanceof org.jspresso.framework.gui.remote.mobile.RMobileCardPage) {
+        container = this._createMobileCardPage(remoteContainer);
+      } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.mobile.RMobileNavPage) {
+        container = this._createMobileNavPage(remoteContainer);
+      } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.mobile.RMobileCompositePage) {
+        container = this._createMobileCompositePage(remoteContainer);
+      }
+      return container;
+    },
+
+    /**
+     * @param remoteCardPage {org.jspresso.framework.gui.remote.mobile.RMobileCardPage}
+     * @return {qx.ui.mobile.core.Widget}
+     */
+    _createMobileCardPage: function (remoteCardPage) {
+      /** @type {qx.ui.mobile.container.Composite} */
+      var cardContainer = this.createComponent(remoteCardPage.getPages());
+      // Card pages will be added and selected automatically by the card container.
+      return cardContainer;
+    },
+
+    /**
+     * @param remoteNavPage {org.jspresso.framework.gui.remote.mobile.RMobileNavPage}
+     * @return {qx.ui.mobile.core.Widget}
+     */
+    _createMobileNavPage: function (remoteNavPage) {
+      /** @type {qx.ui.mobile.list.List} */
+      var selectionList = this.createComponent(remoteNavPage.getSelectionView());
+      var navPage = new qx.ui.mobile.page.NavigationPage();
+      navPage.addListener("initialize", function (e) {
+        navPage.getContent().add(selectionList);
+      }, this);
+      /** @type {qx.ui.mobile.page.NavigationPage} */
+      var nextPage = this.createComponent(remoteNavPage.getNextPage());
+      this.addDetailPage(nextPage);
+      selectionList.addListener("changeSelection", function(evt) {
+        nextPage.show();
+      }, this);
+      return navPage;
+    },
+
+    /**
+     * @param remoteCompositePage {org.jspresso.framework.gui.remote.mobile.RMobileCompositePage}
+     * @return {qx.ui.mobile.core.Widget}
+     */
+    _createMobileCompositePage: function (remoteCompositePage) {
+      var compositePage = new qx.ui.mobile.page.NavigationPage();
+      var sections = [];
+      for(var i = 0; i < remoteCompositePage.getPageSections().length; i++) {
+        var remotePageSection = remoteCompositePage.getPageSections()[i];
+        if(remotePageSection instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
+          /** @type {qx.ui.mobile.page.NavigationPage} */
+          var nextPage = this.createComponent(remotePageSection);
+          var listModel = new qx.data.Array();
+          listModel.push({
+            state: remotePageSection.getState(),
+            next: nextPage
+          });
+          var list = new qx.ui.mobile.list.List({
+            configureItem: function (item, data, row) {
+              item.setTitle(data.state.getValue());
+              item.setSubtitle(data.state.getDescription());
+              item.setImage(data.state.getIconImageUrl());
+              item.setShowArrow(true);
+            }
+          });
+          list.setModel(listModel);
+          this.addDetailPage(nextPage);
+          list.addListener("changeSelection", function(evt) {
+            var selectedIndex = evt.getData();
+            /** @type {qx.ui.mobile.list.List} */
+            var l = evt.getCurrentTarget();
+            l.getModel().getItem(selectedIndex).next.show();
+          }, this);
+          sections.push(list);
+        } else {
+          var pageSection = this.createComponent(remotePageSection);
+          sections.push(pageSection);
+        }
+      }
+      compositePage.addListener("initialize", function (e) {
+        for(var i = 0; i < sections.length; i++) {
+          compositePage.getContent().add(sections[i]);
+        }
+      }, this);
+      this.addDetailPage(compositePage);
+      return compositePage;
+    },
+
+    /**
      *
      * @return {qx.ui.mobile.form.Button}
      * @param toolTip {String}
@@ -296,6 +391,75 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
 
     /**
      * @return {qx.ui.mobile.core.Widget}
+     * @param remoteCardContainer {org.jspresso.framework.gui.remote.RCardContainer}
+     */
+    _createCardContainer: function (remoteCardContainer) {
+      var cardContainer = this._createCardContainerComponent();
+
+      for (var i = 0; i < remoteCardContainer.getCardNames().length; i++) {
+        var rCardComponent = remoteCardContainer.getCards()[i];
+        var cardName = remoteCardContainer.getCardNames()[i];
+
+        this.addCard(cardContainer, rCardComponent, cardName);
+      }
+
+      /** @type {org.jspresso.framework.state.remote.RemoteValueState} */
+      var state = remoteCardContainer.getState();
+      state.addListener("changeValue", function (e) {
+        var selectedCardName = e.getData();
+        var children = cardContainer.getChildren();
+        var selectedCard;
+        for (var i = 0; i < children.length; i++) {
+          var child = children[i];
+          if (child.getUserData("cardName") == selectedCardName) {
+            selectedCard = child;
+          }
+        }
+        if (selectedCard) {
+          this._selectCard(cardContainer, selectedCard);
+        }
+      }, this);
+      return cardContainer;
+    },
+
+    /**
+     * @param cardComponent {qx.ui.mobile.page.NavigationPage}
+     * @return {undefined}
+     */
+    _addDetailPage: function (cardComponent) {
+      /** @type {org.jspresso.framework.application.frontend.controller.qx.mobile.MobileQxController} */
+          this._getActionHandler().addDetailPage(cardComponent);
+    },
+
+    /**
+     *
+     * @return {undefined}
+     * @param rCardComponent  {org.jspresso.framework.gui.remote.RCardContainer}
+     * @param cardContainer {qx.ui.mobile.container.Composite}
+     * @param cardName {String}
+     */
+    addCard: function (cardContainer, rCardComponent, cardName) {
+      if(rCardComponent instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
+        var children = cardContainer.getChildren();
+        var existingCard;
+        for (var i = 0; i < children.length; i++) {
+          var child = children[i];
+          if (child.getUserData("cardName") == cardName) {
+            existingCard = child;
+          }
+        }
+        if (!existingCard) {
+          var cardComponent = this.createComponent(rCardComponent);
+          cardComponent.setUserData("cardName", cardName);
+          this._addDetailPage(/** @type {qx.ui.mobile.page.NavigationPage}*/cardComponent);
+          cardContainer.add(cardComponent);
+          this._selectCard(cardContainer, cardComponent);
+        }
+      }
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
      */
     _createCardContainerComponent: function () {
       return new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.Card());
@@ -315,7 +479,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @return {qx.ui.mobile.core.Widget}
      */
     _createDefaultComponent: function () {
-      return new qx.ui.core.Widget();
+      return new qx.ui.mobile.core.Widget();
     },
 
     /**

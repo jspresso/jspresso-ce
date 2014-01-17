@@ -251,6 +251,14 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
       return _createDefaultComponent();
     },
 
+    /**
+     * @return {qx.ui.core.Widget | qx.ui.mobile.core.Widget}
+     */
+    _createDefaultComponent: function () {
+      throw new Error("_createDefaultComponent is abstract.");
+    },
+
+
     _modelToViewFieldConverter: function (modelValue, model) {
       if (modelValue == null) {
         return "";

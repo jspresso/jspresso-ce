@@ -26,6 +26,8 @@ import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RSplitContainer;
+import org.jspresso.framework.gui.remote.mobile.RMobileNavPage;
+import org.jspresso.framework.gui.remote.mobile.RMobilePage;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.descriptor.EOrientation;
@@ -66,15 +68,14 @@ public class MobileRemoteController extends AbstractRemoteController {
    * {@inheritDoc}
    */
   protected RComponent createWorkspaceView(String workspaceName) {
-    RSplitContainer viewComponent = new RSplitContainer(workspaceName + "_split");
-    viewComponent.setOrientation(EOrientation.HORIZONTAL.toString());
+    RMobileNavPage viewComponent = new RMobileNavPage(workspaceName + "_navigation");
     IViewDescriptor workspaceNavigatorViewDescriptor = getWorkspace(workspaceName).getViewDescriptor();
     IValueConnector workspaceConnector = getBackendController().getWorkspaceConnector(workspaceName);
     IView<RComponent> workspaceNavigator = createWorkspaceNavigator(workspaceName,
         workspaceNavigatorViewDescriptor);
     IView<RComponent> moduleAreaView = createModuleAreaView(workspaceName);
-    viewComponent.setLeftTop(workspaceNavigator.getPeer());
-    viewComponent.setRightBottom(moduleAreaView.getPeer());
+    viewComponent.setSelectionView(workspaceNavigator.getPeer());
+    viewComponent.setNextPage((RMobilePage) moduleAreaView.getPeer());
     getMvcBinder().bind(workspaceNavigator.getConnector(), workspaceConnector);
     return viewComponent;
   }

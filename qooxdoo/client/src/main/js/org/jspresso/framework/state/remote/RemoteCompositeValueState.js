@@ -22,8 +22,8 @@ qx.Class.define("org.jspresso.framework.state.remote.RemoteCompositeValueState",
   statics: {
 
     /**
-     * @param compositeState (org.jspresso.framework.state.remote.RemoteCompositeValueState}
-     * @param nestedLevel (Integer}
+     * @param compositeState {org.jspresso.framework.state.remote.RemoteCompositeValueState}
+     * @param nestedLevel {Integer}
      * @return {qx.data.Array}
      */
     flatten: function (compositeState, nestedLevel) {
@@ -34,9 +34,9 @@ qx.Class.define("org.jspresso.framework.state.remote.RemoteCompositeValueState",
     },
 
     /**
-     * @param compositeState (org.jspresso.framework.state.remote.RemoteCompositeValueState}
-     * @param nestedLevel (Integer}
-     * @param targetArray (qx.data.Array}
+     * @param compositeState {org.jspresso.framework.state.remote.RemoteCompositeValueState}
+     * @param nestedLevel {Integer}
+     * @param targetArray {qx.data.Array}
      * @return {qx.data.Array}
      */
     __flattenNested: function (compositeState, nestedLevel, targetArray) {

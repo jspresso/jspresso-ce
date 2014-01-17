@@ -43,17 +43,15 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
 
   members: {
     /** @type {qx.application.Mobile} */
-    _application: null,
+    __application: null,
     /** @type {qx.ui.mobile.dialog.Popup} */
     __busyPopup: null,
     /** @type {qx.ui.mobile.page.Manager} */
-    _manager: null,
-    /** @type {qx.ui.mobile.container.Composite} */
-    __workspacesNavigator: null,
+    __manager: null,
     /** @type {qx.ui.mobile.page.NavigationPage} */
-    _workspacesNavigationPage: null,
-
-    __workspacesPages: {},
+    __workspacesMasterPage: null,
+    /** @type {Object} */
+    __workspacePages: {},
 
 
     _createViewFactory: function () {
@@ -68,6 +66,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       }
     },
 
+    /**
+     * @return {undefined}
+     */
+    _restart: function () {
+      this.__workspacePages = {};
+      this.base(arguments);
+    },
     /**
      *
      * @param title {String}
@@ -139,46 +144,34 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      */
     _initApplicationFrame: function (workspaceNames, workspaceActions, exitAction, navigationActions, actions,
                                      secondaryActions, helpActions, size) {
-      this.__workspacesNavigator = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
+      this.__workspacesMasterPage = new qx.ui.mobile.page.NavigationPage();
+      var workspacesNavigatorModel = new qx.data.Array();
       for (var i = 0; i < workspaceActions.getActions().length; i++) {
-        var workspaceAction = workspaceActions.getActions()[i];
-        var workspaceSection = new qx.ui.mobile.container.Collapsible("<html><img src=\""
-            + workspaceAction.getIcon().getImageUrlSpec() + "\"/> " + workspaceAction.getName() + "</html>");
-        workspaceSection.setUserData("model", {
-          name: workspaceNames[i],
-          action: workspaceAction
+        workspacesNavigatorModel.push({
+          workspaceName:   workspaceNames[i],
+          workspaceAction: workspaceActions.getActions()[i]
         });
-        if (i == 0) {
-          workspaceSection.setCollapsed(false);
-        } else {
-          workspaceSection.setCollapsed(true);
+      }
+      var workspaceNavigator = new qx.ui.mobile.list.List({
+        configureItem: function (item, data, row) {
+          item.setTitle(data.workspaceAction.getName());
+          item.setSubtitle(data.workspaceAction.getDescription());
+          item.setImage(data.workspaceAction.getIconImageUrl());
+          item.setShowArrow(true);
         }
-        workspaceSection.addListener("changeCollapsed", function (evt) {
-          var openedWsView = /**@type {qx.ui.mobile.Collapsible}*/ evt.getTarget();
-          if (!openedWsView.getCollapsed()) {
-            for (var j = 0; j < this.__workspacesNavigator.getChildren().length; j++) {
-              if (this.__workspacesNavigator.getChildren()[j] != openedWsView) {
-                (/**@type {qx.ui.mobile.container.Collapsible}*/ this.__workspacesNavigator.getChildren()[j]).setCollapsed(true);
-              }
-            }
-            var workspaceAction = openedWsView.getUserData("model")["action"]
-            this.execute(workspaceAction);
-          }
-        }, this);
-        this.__workspacesNavigator.add(workspaceSection);
-      }
-      this._workspacesNavigationPage = new qx.ui.mobile.page.NavigationPage();
-      this._workspacesNavigationPage.setTitle(this.translate("Workspaces"));
-      this._workspacesNavigationPage.addListener("initialize", function (e) {
-        var content = this._workspacesNavigationPage.getContent();
-        content.add(this.__workspacesNavigator, {flex: 1});
+      });
+      workspaceNavigator.setModel(workspacesNavigatorModel);
+      workspaceNavigator.addListener("changeSelection", function(evt) {
+        var selectedIndex = evt.getData();
+        var workspaceAction = workspacesNavigatorModel.getItem(selectedIndex).workspaceAction;
+        this.execute(workspaceAction);
       }, this);
-      this._manager.addMaster(this._workspacesNavigationPage);
-      if (this._manager.getMasterButton()) {
-        this._manager.getMasterButton().setVisibility("visible");
-        this._manager._onMasterButtonTap();
-      }
-      this._workspacesNavigationPage.show();
+      this.__workspacesMasterPage.addListener("initialize", function (e) {
+        this.__workspacesMasterPage.getContent().add(workspaceNavigator);
+      }, this);
+      this.__workspacesMasterPage.setTitle(this.translate("Workspaces"));
+      this.__manager.addMaster(this.__workspacesMasterPage);
+      this.__workspacesMasterPage.show();
     },
 
     /**
@@ -188,53 +181,20 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      * @return {undefined}
      */
     _displayWorkspace: function (workspaceName, workspaceView) {
-//      if (workspaceView) {
-//        var workspaceNavigator = null;
-//        if (workspaceView instanceof org.jspresso.framework.gui.remote.RSplitContainer) {
-//          var wv = /** @type {org.jspresso.framework.gui.remote.RSplitContainer } */ workspaceView;
-//          workspaceNavigator = wv.getLeftTop();
-//          workspaceView = wv.getRightBottom();
-//        }
-//        var workspaceViewUI = this.createComponent(workspaceView) /*new qx.ui.mobile.form.Label(workspaceName)*/;
-//        var workspacePage = new qx.ui.mobile.page.NavigationPage();
-//        workspacePage.addListener("initialize", function (e) {
-//          var content = workspacePage.getContent();
-//          content.add(workspaceViewUI, {flex: 1});
-//        }, this);
-//        this._manager.addDetail(workspacePage);
-//        if (!workspacePage.isTablet()) {
-//          workspacePage.setShowBackButton(true);
-//          workspacePage.setBackButtonText(this.translate("Workspaces"));
-//          workspacePage.addListener("back", function () {
-//            this._workspacesNavigationPage.show({animation: "cube", reverse: true});
-//          }, this);
-//        }
-//        this.__workspacesPages[workspaceName] = workspacePage;
-//        if (workspaceNavigator) {
-//          var workspaceNavigatorUI = this.createComponent(workspaceNavigator);
-//          workspaceNavigatorUI.addListener("tap", function (e) {
-//            this.__workspacesPages[workspaceName].show();
-//          }, this);
-//          var existingWorkspaceSections = this.__workspacesNavigator.getChildren();
-//          var existingWorkspaceSection = null;
-//          for (var i = 0; existingWorkspaceSection == null && i < existingWorkspaceSections.length; i++) {
-//            var child = existingWorkspaceSections[i];
-//            if (child.getUserData("model").name == workspaceName) {
-//              existingWorkspaceSection = child;
-//            }
-//          }
-//          if (existingWorkspaceSection) {
-//            existingWorkspaceSection.add(workspaceNavigatorUI);
-//          }
-//        }
-//      }
-//      var children = this.__workspacesNavigator.getChildren();
-//      for (var i = 0; i < children.length; i++) {
-//        var child = children[i];
-//        if (child.getUserData("model").name == workspaceName) {
-//          child.setCollapsed(false);
-//        }
-//      }
+      if (workspaceView) {
+        /** @type {qx.ui.mobile.page.NavigationPage} */
+        var workspacePage = this.createComponent(workspaceView);
+        this._manager.addDetail(workspacePage);
+        this.__workspacePages[workspaceName] = workspacePage;
+      }
+      if (!workspacePage.isTablet()) {
+        workspacePage.setShowBackButton(true);
+        workspacePage.setBackButtonText(this.translate("Workspaces"));
+        workspacePage.addListener("back", function () {
+          this.__workspacesMasterPage.show({animation: "cube", reverse: true});
+        }, this);
+      }
+      this.__workspacePages[workspaceName].show();
     },
 
     /**
@@ -333,8 +293,15 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      */
     _updateStatusCommand: function (remoteUpdateStatusCommand) {
       // TODO implement
-    }
+    },
 
+    /**
+     * @param cardComponent {qx.ui.mobile.page.NavigationPage}
+     * @return {undefined}
+     */
+    addDetailPage: function (navigationPage) {
+      this._manager.addDetail(navigationPage);
+    }
 
   }
 });
