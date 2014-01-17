@@ -156,7 +156,12 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
      */
     setIcon: function (component, icon) {
       if (icon) {
-        component.setIcon(icon.getImageUrlSpec());
+        if(typeof component.setIcon == 'function') {
+          component.setIcon(icon.getImageUrlSpec());
+        }
+        if(typeof component.setShow == 'function') {
+          component.setShow("both");
+        }
       }
     },
 

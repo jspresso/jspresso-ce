@@ -24,8 +24,10 @@ import java.util.Map;
 import org.jspresso.framework.application.frontend.controller.remote.AbstractRemoteController;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.remote.RAction;
+import org.jspresso.framework.gui.remote.RCardContainer;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RSplitContainer;
+import org.jspresso.framework.gui.remote.mobile.RMobileCardPage;
 import org.jspresso.framework.gui.remote.mobile.RMobileNavPage;
 import org.jspresso.framework.gui.remote.mobile.RMobilePage;
 import org.jspresso.framework.util.gui.Dimension;
@@ -75,7 +77,9 @@ public class MobileRemoteController extends AbstractRemoteController {
         workspaceNavigatorViewDescriptor);
     IView<RComponent> moduleAreaView = createModuleAreaView(workspaceName);
     viewComponent.setSelectionView(workspaceNavigator.getPeer());
-    viewComponent.setNextPage((RMobilePage) moduleAreaView.getPeer());
+    RMobileCardPage moduleAreaPage = new RMobileCardPage(workspaceName + "_moduleArea");
+    moduleAreaPage.setPages((RCardContainer) moduleAreaView.getPeer());
+    viewComponent.setNextPage(moduleAreaPage);
     getMvcBinder().bind(workspaceNavigator.getConnector(), workspaceConnector);
     return viewComponent;
   }

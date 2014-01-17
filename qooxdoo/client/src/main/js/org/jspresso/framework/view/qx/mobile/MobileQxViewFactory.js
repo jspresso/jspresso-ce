@@ -69,7 +69,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       }, this);
       /** @type {qx.ui.mobile.page.NavigationPage} */
       var nextPage = this.createComponent(remoteNavPage.getNextPage());
-      this.addDetailPage(nextPage);
       selectionList.addListener("changeSelection", function(evt) {
         nextPage.show();
       }, this);
@@ -102,7 +101,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
             }
           });
           list.setModel(listModel);
-          this.addDetailPage(nextPage);
+          this._addDetailPage(nextPage);
           list.addListener("changeSelection", function(evt) {
             var selectedIndex = evt.getData();
             /** @type {qx.ui.mobile.list.List} */
@@ -120,7 +119,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           compositePage.getContent().add(sections[i]);
         }
       }, this);
-      this.addDetailPage(compositePage);
+      this._addDetailPage(compositePage);
       return compositePage;
     },
 
@@ -428,7 +427,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _addDetailPage: function (cardComponent) {
       /** @type {org.jspresso.framework.application.frontend.controller.qx.mobile.MobileQxController} */
-          this._getActionHandler().addDetailPage(cardComponent);
+      this._getActionHandler().addDetailPage(cardComponent);
     },
 
     /**

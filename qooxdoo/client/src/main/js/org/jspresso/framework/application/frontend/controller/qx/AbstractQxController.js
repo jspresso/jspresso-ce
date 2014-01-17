@@ -258,13 +258,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     },
 
     /**
-     * @param loginCommand {org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand}
-     */
-    _handleInitLoginCommmand: function (loginCommand) {
-      throw new Error("_handleInitLoginCommmand is abstract.")
-    },
-
-    /**
      * Close top most dialog.
      */
     _closeDialog: function () {
@@ -285,14 +278,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      */
     _handleHistoryDisplayCommand: function (historyDisplayCommand) {
       throw new Error("_handleHistoryDisplayCommand is abstract.")
-    },
-
-    /**
-     * @param initCommand {org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand}
-     * @return {undefined}
-     */
-    _handleInitCommand: function (initCommand) {
-      throw new Error("_handleInitCommand is abstract.")
     },
 
     /**
@@ -888,9 +873,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      */
     _handleInitCommand: function (initCommand) {
       this.__linkBrowserHistory();
-//      this._initApplicationFrame(initCommand.getWorkspaceNames(), initCommand.getWorkspaceActions(),
-//          initCommand.getExitAction(), initCommand.getNavigationActions(), initCommand.getActions(),
-//          initCommand.getSecondaryActions(), initCommand.getHelpActions(), initCommand.getSize());
+      this._initApplicationFrame(initCommand.getWorkspaceNames(), initCommand.getWorkspaceActions(),
+          initCommand.getExitAction(), initCommand.getNavigationActions(), initCommand.getActions(),
+          initCommand.getSecondaryActions(), initCommand.getHelpActions(), initCommand.getSize());
     }
 
   }
