@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.application.frontend.controller.remote.AbstractRemoteController;
+import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RCardContainer;
@@ -69,9 +70,13 @@ public class MobileRemoteController extends AbstractRemoteController {
   /**
    * {@inheritDoc}
    */
+  @Override
   protected RComponent createWorkspaceView(String workspaceName) {
     RMobileNavPage viewComponent = new RMobileNavPage(workspaceName + "_navigation");
-    IViewDescriptor workspaceNavigatorViewDescriptor = getWorkspace(workspaceName).getViewDescriptor();
+    Workspace workspace = getWorkspace(workspaceName);
+    viewComponent.setLabel(workspace.getI18nName());
+    viewComponent.setToolTip(workspace.getI18nDescription());
+    IViewDescriptor workspaceNavigatorViewDescriptor = workspace.getViewDescriptor();
     IValueConnector workspaceConnector = getBackendController().getWorkspaceConnector(workspaceName);
     IView<RComponent> workspaceNavigator = createWorkspaceNavigator(workspaceName,
         workspaceNavigatorViewDescriptor);

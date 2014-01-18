@@ -206,11 +206,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         var workspacePage = this.createComponent(workspaceView);
         this.__workspacePages[workspaceName] = workspacePage;
         if (!workspacePage.isTablet()) {
-          workspacePage.setShowBackButton(true);
-          workspacePage.setBackButtonText(this.translate("Workspaces"));
-          workspacePage.addListener("back", function () {
-            this.__workspacesMasterPage.show({animation: "cube", reverse: true});
-          }, this);
+          this._getViewFactory().linkNextPageBackButton(workspacePage, this.__workspacesMasterPage, "cube");
         }
       }
       this.__workspacePages[workspaceName].show();
