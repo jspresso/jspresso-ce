@@ -237,8 +237,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
 
         var component = /** @type {qx.ui.mobile.core.Widget} */ this.createComponent(rComponent);
 
-        var row = new qx.ui.mobile.container.Composite();
-        row.setDefaultCssClass("form-row");
+        var row = new qx.ui.mobile.form.Row();
         row.addCssClass("form-row-content");
         if(remoteForm.getLabelsPosition() == "ABOVE"
             || this._isMultiline(rComponent)) {
@@ -247,7 +246,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           row.setLayout(new qx.ui.mobile.layout.HBox())
         }
         if(remoteForm.getLabelsPosition() != "NONE") {
-          var label = new qx.ui.mobile.form.Label(rComponent.getLabel());
+          var label = new qx.ui.mobile.form.Label("<b>" + rComponent.getLabel() + "</b>");
           label.setLabelFor(component.getId());
           row.add(label, {flex:1});
         }
