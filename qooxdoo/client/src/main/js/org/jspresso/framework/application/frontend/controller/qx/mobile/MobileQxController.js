@@ -10,6 +10,8 @@
  * PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details. You should have received a copy of the GNU Lesser General Public
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @asset (org/jspresso/framework/mobile/nav-mobile-menu-icon.png)
  */
 qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobile.MobileQxController", {
 
@@ -34,9 +36,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     this.__busyPopup = new qx.ui.mobile.dialog.Popup(busyIndicator);
     this.__busyPopup.setTitle(this.translate("Loading") + "...");
 
-    this.__manager = new qx.ui.mobile.page.Manager(false);
+    this.__manager = new qx.ui.mobile.page.Manager(/*false*/);
     if (this.__manager.getMasterButton()) {
       this.__manager.getMasterButton().setVisibility("excluded");
+      this.__manager.getMasterButton().setIcon("org/jspresso/framework/mobile/nav-mobile-menu-icon.png");
+      this.__manager.getMasterButton().setShow("icon");
       this.__manager.setHideMasterButtonCaption(this.translate("Hide"));
     }
   },

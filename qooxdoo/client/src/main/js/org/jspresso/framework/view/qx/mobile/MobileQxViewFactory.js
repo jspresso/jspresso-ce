@@ -10,10 +10,21 @@
  * PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details. You should have received a copy of the GNU Lesser General Public
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @asset(org/jspresso/framework/mobile/back-mobile.png)
  */
 
 qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
   extend: org.jspresso.framework.view.qx.AbstractQxViewFactory,
+
+  statics: {
+    bindListItem: function (item, state) {
+      var modelController = new qx.data.controller.Object(state);
+      modelController.addTarget(item, "title", "value");
+      modelController.addTarget(item, "subtitle", "description");
+      modelController.addTarget(item, "image", "iconImageUrl");
+    }
+  },
 
   construct: function (remotePeerRegistry, actionHandler, commandHandler) {
     this.base(arguments, remotePeerRegistry, actionHandler, commandHandler);
@@ -102,6 +113,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       if(typeof animation === undefined) animation = "slide";
       nextPage.setShowBackButton(true);
       nextPage.setBackButtonText(previousPage.getTitle());
+      var backButton = nextPage.getLeftContainer().getChildren()[0];
+      backButton.setIcon("org/jspresso/framework/mobile/back-mobile.png");
+      backButton.setShow("both");
       nextPage.addListener("back", function () {
         previousPage.show({animation: animation,  reverse: true});
       }, this);
@@ -128,10 +142,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           });
           var list = new qx.ui.mobile.list.List({
             configureItem: function (item, data, row) {
-              item.setTitle(data.section.getLabel());
-              item.setSubtitle(data.section.getToolTip());
-              if(data.section.getIcon()) {
-                item.setImage(data.section.getIcon().getImageUrlSpec());
+              var section = data.section;
+              item.setTitle(section.getLabel());
+              item.setSubtitle(section.getToolTip());
+              if(section.getIcon()) {
+                item.setImage(section.getIcon().getImageUrlSpec());
               }
               item.setShowArrow(true);
             }
@@ -367,9 +382,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
 
       var treeList = new qx.ui.mobile.list.List({
         configureItem: function (item, data, row) {
-          item.setTitle(data.state.getValue());
-          item.setSubtitle(data.state.getDescription());
-          item.setImage(data.state.getIconImageUrl());
+          var state = data.state;
+          org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.bindListItem(item, state);
           item.setShowArrow(true);
           item.getImageWidget()._setStyle("margin-left", data.level + "rem");
         }
@@ -690,9 +704,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
 
       var list = new qx.ui.mobile.list.List({
         configureItem: function (item, data, row) {
-          item.setTitle(data.getValue());
-          item.setSubtitle(data.getDescription());
-          item.setImage(data.getIconImageUrl());
+          org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.bindListItem(item,  data);
           item.setShowArrow(true);
         }
       });

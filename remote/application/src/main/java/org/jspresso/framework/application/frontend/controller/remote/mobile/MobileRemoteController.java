@@ -27,13 +27,10 @@ import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RCardContainer;
 import org.jspresso.framework.gui.remote.RComponent;
-import org.jspresso.framework.gui.remote.RSplitContainer;
 import org.jspresso.framework.gui.remote.mobile.RMobileCardPage;
 import org.jspresso.framework.gui.remote.mobile.RMobileNavPage;
-import org.jspresso.framework.gui.remote.mobile.RMobilePage;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.view.IView;
-import org.jspresso.framework.view.descriptor.EOrientation;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
