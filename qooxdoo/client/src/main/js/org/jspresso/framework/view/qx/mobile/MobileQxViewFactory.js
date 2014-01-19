@@ -229,6 +229,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createForm: function (remoteForm) {
       var form = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
+      form.addCssClass("form");
       var top = new qx.ui.mobile.form.Row();
       top.addCssClass("form-row-group-first");
       form.add(top);
@@ -237,7 +238,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
 
         var component = /** @type {qx.ui.mobile.core.Widget} */ this.createComponent(rComponent);
 
-        var row = new qx.ui.mobile.form.Row();
+        var row = new qx.ui.mobile.container.Composite();
+        row.addCssClass("form-row");
         row.addCssClass("form-row-content");
         if(remoteForm.getLabelsPosition() == "ABOVE"
             || this._isMultiline(rComponent)) {
@@ -246,7 +248,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           row.setLayout(new qx.ui.mobile.layout.HBox())
         }
         if(remoteForm.getLabelsPosition() != "NONE") {
-          var label = new qx.ui.mobile.form.Label("<b>" + rComponent.getLabel() + "</b>");
+          var label = new qx.ui.mobile.form.Label("<p>" + rComponent.getLabel() + "</p>");
           label.setLabelFor(component.getId());
           row.add(label, {flex:1});
         }
