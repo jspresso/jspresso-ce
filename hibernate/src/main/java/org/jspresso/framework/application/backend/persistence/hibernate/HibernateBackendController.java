@@ -291,53 +291,49 @@ public class HibernateBackendController extends AbstractBackendController {
       boolean dirtRecorderWasEnabled = isDirtyTrackingEnabled();
       try {
         setDirtyTrackingEnabled(false);
-        // First of all, try to deal with existing opened session from which the
-        // lazy property was loaded. We must delay as much as possible the use of
-        // the Hibernate template that may create a new thread-bound session.
-        if (propertyValue instanceof AbstractPersistentCollection) {
-          if (((AbstractPersistentCollection) propertyValue).getSession() != null
-              && ((AbstractPersistentCollection) propertyValue).getSession()
-                  .isOpen()) {
-            try {
-              Hibernate.initialize(propertyValue);
-              if (propertyValue instanceof Collection<?>) {
-                relinkAfterInitialization(
-                    (Collection<IComponent>) propertyValue, componentOrEntity);
+        // Never initialize session entities from UOW session
+        if (!(isUnitOfWorkActive() && isSessionEntity(componentOrEntity))) {
+          if (propertyValue instanceof AbstractPersistentCollection) {
+            if (((AbstractPersistentCollection) propertyValue).getSession() != null
+                && ((AbstractPersistentCollection) propertyValue).getSession()
+                    .isOpen()) {
+              try {
+                Hibernate.initialize(propertyValue);
+                if (propertyValue instanceof Collection<?>) {
+                  relinkAfterInitialization(
+                      (Collection<IComponent>) propertyValue, componentOrEntity);
+                }
+              } catch (Exception ex) {
+                LOG.error(
+                    "An internal error occurred when forcing {} collection initialization.",
+                    propertyName);
+                LOG.error("Source exception", ex);
               }
-            } catch (Exception ex) {
-              LOG.error(
-                  "An internal error occurred when forcing {} collection initialization.",
-                  propertyName);
-              LOG.error("Source exception", ex);
             }
-          }
-        } else if (propertyValue instanceof HibernateProxy) {
-          HibernateProxy proxy = (HibernateProxy) propertyValue;
-          LazyInitializer li = proxy.getHibernateLazyInitializer();
-          if (li.getSession() != null && li.getSession().isOpen()) {
-            try {
-              Hibernate.initialize(propertyValue);
-            } catch (Exception ex) {
-              LOG.error(
-                  "An internal error occurred when forcing {} reference initialization.",
-                  propertyName);
-              LOG.error("Source exception", ex);
+          } else if (propertyValue instanceof HibernateProxy) {
+            HibernateProxy proxy = (HibernateProxy) propertyValue;
+            LazyInitializer li = proxy.getHibernateLazyInitializer();
+            if (li.getSession() != null && li.getSession().isOpen()) {
+              try {
+                Hibernate.initialize(propertyValue);
+              } catch (Exception ex) {
+                LOG.error(
+                    "An internal error occurred when forcing {} reference initialization.",
+                    propertyName);
+                LOG.error("Source exception", ex);
+              }
             }
           }
         }
 
         if (!isInitialized(propertyValue)) {
-          // If it couldn't succeed, then get the Hibernate template and perform
-          // necessary locks and initialization.
           if (currentInitializationSession != null) {
             performPropertyInitializationUsingSession(componentOrEntity,
                 propertyName, currentInitializationSession);
           } else {
             // Always use NoTxSession to initialize session entities
             boolean suspendUnitOfWork = false;
-            if (isUnitOfWorkActive() && componentOrEntity instanceof IEntity && getRegisteredEntity(
-                ((IEntity) componentOrEntity).getComponentContract(),
-                ((IEntity) componentOrEntity).getId()) == componentOrEntity) {
+            if (isUnitOfWorkActive() && isSessionEntity(componentOrEntity)) {
               suspendUnitOfWork = true;
             }
             try {
@@ -372,6 +368,12 @@ public class HibernateBackendController extends AbstractBackendController {
         setDirtyTrackingEnabled(dirtRecorderWasEnabled);
       }
     }
+  }
+
+  private boolean isSessionEntity(IComponent componentOrEntity) {
+    return componentOrEntity instanceof IEntity && getRegisteredEntity(
+        ((IEntity) componentOrEntity).getComponentContract(), ((IEntity) componentOrEntity).getId())
+        == componentOrEntity;
   }
 
   @SuppressWarnings("unchecked")
