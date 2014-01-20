@@ -19,10 +19,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
 
   statics: {
     bindListItem: function (item, state) {
-      var modelController = new qx.data.controller.Object(state);
-      modelController.addTarget(item, "title", "value");
-      modelController.addTarget(item, "subtitle", "description");
-      modelController.addTarget(item, "image", "iconImageUrl");
+      item.setTitle(state.getValue());
+      item.setSubtitle(state.getDescription());
+      item.setImage(state.getIconImageUrl());
     }
   },
 

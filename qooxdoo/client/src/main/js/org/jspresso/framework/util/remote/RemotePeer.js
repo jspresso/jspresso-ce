@@ -16,6 +16,7 @@ qx.Class.define("org.jspresso.framework.util.remote.RemotePeer", {
   extend: qx.core.Object,
 
   implement: [org.jspresso.framework.util.remote.IRemotePeer],
+  include:   [qx.data.marshal.MEventBubbling],
 
   construct: function () {
     this.base(arguments);

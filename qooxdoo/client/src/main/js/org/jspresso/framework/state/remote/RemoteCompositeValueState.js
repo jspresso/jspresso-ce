@@ -98,12 +98,14 @@ qx.Class.define("org.jspresso.framework.state.remote.RemoteCompositeValueState",
     description: {
       check: "String",
       nullable: true,
-      event: "changeDescription"
+      event: "changeDescription",
+      apply: "_applyEventPropagation"
     },
     iconImageUrl: {
       check: "String",
       nullable: true,
-      event: "changeIconImageUrl"
+      event: "changeIconImageUrl",
+      apply: "_applyEventPropagation"
     },
     leadingIndex: {
       check: "Integer",

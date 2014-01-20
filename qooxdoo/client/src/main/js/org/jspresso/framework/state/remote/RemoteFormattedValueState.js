@@ -22,7 +22,8 @@ qx.Class.define("org.jspresso.framework.state.remote.RemoteFormattedValueState",
   properties: {
     valueAsObject: {
       nullable: true,
-      event: "changeValueAsObject"
+      event: "changeValueAsObject",
+      apply: "_applyEventPropagation"
     }
   }
 });

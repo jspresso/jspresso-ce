@@ -22,15 +22,18 @@ qx.Class.define("org.jspresso.framework.state.remote.RemoteValueState", {
   properties: {
     readable: {
       check: "Boolean",
-      event: "changeReadable"
+      event: "changeReadable",
+      apply: "_applyEventPropagation"
     },
     value: {
       nullable: true,
-      event: "changeValue"
+      event: "changeValue",
+      apply: "_applyEventPropagation"
     },
     writable: {
       check: "Boolean",
-      event: "changeWritable"
+      event: "changeWritable",
+      apply: "_applyEventPropagation"
     },
     parent: {
       check: "org.jspresso.framework.state.remote.RemoteCompositeValueState",
