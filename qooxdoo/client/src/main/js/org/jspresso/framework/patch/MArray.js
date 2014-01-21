@@ -40,8 +40,14 @@ qx.Mixin.define("org.jspresso.framework.patch.MArray", {
         qx.core.Assert.assertArray(array, "The parameter must be an array.");
       }
 
-      var oldArrayLength = this.__array.length;
-      Array.prototype.push.apply(this.__array, array);
+      var arrayMember = this.toArray();
+      var oldArrayLength;
+      if(arrayMember) {
+        oldArrayLength = arrayMember.length;
+      } else {
+        oldArrayLength = 0;
+      }
+      Array.prototype.push.apply(arrayMember, array);
 
       // add a listener to the new items
       for (var i = 0; i < array.length; i++) {
@@ -49,7 +55,8 @@ qx.Mixin.define("org.jspresso.framework.patch.MArray", {
       }
 
       var oldLength = this.length;
-      this.__updateLength();
+      this.length = this.toArray().length;
+      this.fireDataEvent("changeLength", this.length, oldLength);
 
       // fire change bubbles
       var name =
