@@ -97,7 +97,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           }
         }
       });
-      extraMenu.getSelectionList().setModel(new qx.data.Array(extraActions))
+      extraMenu.getSelectionList().setModel(new qx.data.Array(extraActions));
       extraMenu.setAnchor(extraButton);
       extraMenu.addListener("changeSelection", function(evt){
         var selectedIndex = evt.getData();
@@ -110,30 +110,42 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     },
 
     /**
-     * @param remoteForm {org.jspresso.framework.gui.remote.RForm}
-     * @param form {qx.ui.mobile.container.Composite}
+     * @param actionLists {Array}
+     * @return {Array}
      */
-    _addFormActions: function (remoteForm, form) {
-      var count = 0;
-      var actionLists = remoteForm.getActionLists();
+    _extractAllActions: function (actionLists) {
+      var allActions = [];
       if (actionLists && actionLists.length > 0) {
-        var toolBar = new qx.ui.mobile.toolbar.ToolBar();
-        var extraActions = [];
         for (var i = 0; i < actionLists.length; i++) {
           var actionList = actionLists[i];
           var actions = actionList.getActions();
           if (actions) {
             for (var j = 0; j < actions.length; j++) {
-              if(count < 3) {
-                toolBar.add(this.createToolBarAction(actions[j]));
-                count ++;
-              } else {
-                extraActions.push(actions[j]);
-              }
+              allActions.push(actions[j]);
             }
           }
         }
-        if(extraActions.length > 0) {
+      }
+      return allActions;
+    },
+
+    /**
+     * @param remoteForm {org.jspresso.framework.gui.remote.RForm}
+     * @param form {qx.ui.mobile.container.Composite}
+     */
+    _addFormActions: function (remoteForm, form) {
+      var extraActions = [];
+      var actions = this._extractAllActions(remoteForm.getActionLists());
+      if (actions.length > 0) {
+        var toolBar = new qx.ui.mobile.toolbar.ToolBar();
+        for (var i = 0; i < actions.length; i++) {
+          if (i < 3 || actions.length == 4) {
+            toolBar.add(this.createToolBarAction(actions[i]));
+          } else {
+            extraActions.push(actions[i]);
+          }
+        }
+        if (extraActions.length > 0) {
           toolBar.add(this._createExtraActionsToolBarButton(extraActions));
         }
         form.add(toolBar);
@@ -145,24 +157,18 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @param page {qx.ui.mobile.page.NavigationPage}
      */
     _addPageActions: function (remotePage, page) {
-      var count = 0;
-      var actionLists = remotePage.getActionLists();
-      if (actionLists && actionLists.length > 0) {
-        var extraActions = [];
-        for (var i = 0; i < actionLists.length; i++) {
-          var actionList = actionLists[i];
-          var actions = actionList.getActions();
-          if (actions) {
-            for (var j = 0; j < actions.length; j++) {
-              if(count == 0) {
-                this.setPageAction(page, actions[j]);
-              } else {
-                extraActions.push(actions[j]);
-              }
-            }
+      var extraActions = [];
+      var actions = this._extractAllActions(remotePage.getActionLists());
+      if (actions.length > 0) {
+        var toolBar = new qx.ui.mobile.toolbar.ToolBar();
+        for (var i = 0; i < actions.length; i++) {
+          if (i == 0 || actions.length == 2) {
+            this.setPageAction(page, actions[i]);
+          } else {
+            extraActions.push(actions[i]);
           }
         }
-        if(extraActions.length > 0) {
+        if (extraActions.length > 0) {
           page.getRightContainer().add(this._createExtraActionsToolBarButton(extraActions));
         }
       }
