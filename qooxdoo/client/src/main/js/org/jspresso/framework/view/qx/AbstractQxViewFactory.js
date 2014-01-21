@@ -107,11 +107,10 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
     },
 
     /**
-     * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
      * @return {qx.ui.core.Widget | qx.ui.mobile.core.Widget}
      */
-    _createCustomComponent: function (remoteComponent) {
-      return null;
+    _createDefaultComponent: function () {
+      throw new Error("_createDefaultComponent is abstract.");
     },
 
     /**
