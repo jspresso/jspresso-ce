@@ -729,9 +729,25 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var modelController = new qx.data.controller.Object(state);
       modelController.addTarget(checkBox, "value", "value", true);
       modelController.addTarget(checkBox, "enabled", "writable", false);
+    },
+
+    /**
+     *
+     * @param page {qx.ui.mobile.page.NavigationPage}
+     * @param pageAction {org.jspresso.framework.gui.remote.RAction}
+     */
+    setPageAction: function (page, pageAction) {
+      if(pageAction) {
+        page.setButtonText(pageAction.getName());
+        if(pageAction.getIcon()) {
+          page.setButtonIcon(pageAction.getIcon().getImageUrlSpec());
+        }
+        page.addListener("action", function(event) {
+          this._getActionHandler().execute(pageAction);
+        }, this);
+        page.setShowButton(true);
+      }
     }
-
-
 
 
   }

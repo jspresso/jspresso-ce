@@ -22,7 +22,9 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
+import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
@@ -105,5 +107,32 @@ public class MobileNavPageViewDescriptor extends BasicCompositeViewDescriptor im
    */
   public void setNextPage(IMobilePageViewDescriptor nextPage) {
     this.nextPage = nextPage;
+  }
+
+
+  /**
+   * Delegates to the selection view.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public String getI18nName(ITranslationProvider translationProvider, Locale locale) {
+    if (getName() == null && getI18nNameKey() == null) {
+      return getSelectionView().getI18nName(translationProvider, locale);
+    }
+    return super.getI18nName(translationProvider, locale);
+  }
+
+  /**
+   * Delegates to the selection view.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public String getI18nDescription(ITranslationProvider translationProvider, Locale locale) {
+    if (getDescription() == null) {
+      return getSelectionView().getI18nName(translationProvider, locale);
+    }
+    return super.getI18nDescription(translationProvider, locale);
   }
 }

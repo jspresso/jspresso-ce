@@ -38,7 +38,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
 
     this.__manager = new qx.ui.mobile.page.Manager(/*false*/);
     if (this.__manager.getMasterButton()) {
-      this.__manager.getMasterButton().setVisibility("excluded");
       this.__manager.getMasterButton().setIcon("org/jspresso/framework/mobile/nav-mobile-menu-icon.png");
       this.__manager.getMasterButton().setShow("icon");
       this.__manager.setHideMasterButtonCaption(this.translate("Hide"));
@@ -54,6 +53,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     __manager: null,
     /** @type {qx.ui.mobile.page.NavigationPage} */
     __workspacesMasterPage: null,
+    /** @type {org.jspresso.framework.gui.remote.RAction} */
+    __exitAction: null,
     /** @type {Object} */
     __workspacePages: {},
     /** @type {String} */
@@ -78,6 +79,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     _restart: function () {
       this.__workspacePages = {};
       this.__displayedWorkspaceName = null;
+      this.__workspacesMasterPage.exclude();
       this.base(arguments);
     },
     /**
@@ -126,6 +128,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         dialogPage.getContent().add(dialogContent);
         dialogPage.setTitle(title);
       }
+      if (this.__manager.getMasterButton()) {
+        this.__manager.getMasterButton().exclude();
+      }
     },
 
     /**
@@ -138,6 +143,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         if (topDialogPage) {
           topDialogPage.exclude({animation: "slideup", reverse: true});
           //topDialogPage.destroy();
+        }
+      }
+      if(this._dialogStack && this._dialogStack.length == 1) {
+        if (this.__manager.getMasterButton()) {
+          this.__manager.getMasterButton().setVisibility("visible");
         }
       }
     },
@@ -157,6 +167,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     _initApplicationFrame: function (workspaceNames, workspaceActions, exitAction, navigationActions, actions,
                                      secondaryActions, helpActions, size) {
       this.__workspacesMasterPage = new qx.ui.mobile.page.NavigationPage();
+      this.__exitAction= exitAction;
       var workspacesNavigatorModel = new qx.data.Array();
       for (var i = 0; i < workspaceActions.getActions().length; i++) {
         workspacesNavigatorModel.push({
@@ -189,9 +200,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       }, this);
       this.__workspacesMasterPage.setTitle(this.translate("Workspaces"));
       this.__manager.addMaster(this.__workspacesMasterPage);
-      if (this.__manager.getMasterButton()) {
-        this.__manager.getMasterButton().setVisibility("visible");
-      }
       this.__workspacesMasterPage.show();
     },
 
@@ -208,6 +216,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       if (workspaceView) {
         /** @type {qx.ui.mobile.page.NavigationPage} */
         var workspacePage = this.createComponent(workspaceView);
+        this._getViewFactory().setPageAction(workspacePage, this.__exitAction);
         this.__workspacePages[workspaceName] = workspacePage;
         if (!workspacePage.isTablet()) {
           this._getViewFactory().linkNextPageBackButton(workspacePage, this.__workspacesMasterPage, "cube");
