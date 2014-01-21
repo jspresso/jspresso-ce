@@ -1121,18 +1121,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     },
 
     /**
-     * @param button{qx.ui.form.Button}
-     * @param remoteAction {org.jspresso.framework.gui.remote.RAction}
-     */
-    _bindButton: function (button, remoteAction) {
-      remoteAction.bind("enabled", button, "enabled");
-      this._getRemotePeerRegistry().register(remoteAction);
-      this.addButtonListener(button, function (event) {
-        this._getActionHandler().execute(remoteAction);
-      }, this);
-    },
-
-    /**
      * @return {qx.ui.form.Button}
      * @param remoteAction {org.jspresso.framework.gui.remote.RAction}
      */
@@ -2127,7 +2115,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     },
 
     /**
-     *
      * @param component {qx.ui.core.Widget}
      * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
      * @param disableActionsWithField {Boolean}

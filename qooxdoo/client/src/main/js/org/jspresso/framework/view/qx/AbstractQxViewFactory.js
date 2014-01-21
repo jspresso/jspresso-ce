@@ -280,8 +280,19 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
 
     _readOnlyFieldConverter: function (writable, model) {
       return !writable;
-    }
+    },
 
+    /**
+     * @param button{qx.ui.form.Button | qx.ui.mobile.form.Button | qx.ui.toolbar.Button | qx.ui.mobile.toolbar.Button}
+     * @param remoteAction {org.jspresso.framework.gui.remote.RAction}
+     */
+    _bindButton: function (button, remoteAction) {
+      remoteAction.bind("enabled", button, "enabled");
+      this._getRemotePeerRegistry().register(remoteAction);
+      this.addButtonListener(button, function (event) {
+        this._getActionHandler().execute(remoteAction);
+      }, this);
+    }
 
 
 

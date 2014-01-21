@@ -40,6 +40,160 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     },
 
     /**
+     * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
+     * @param registerPeers {Boolean}
+     * @return {qx.ui.mobile.core.Widget}
+     */
+    createComponent: function (remoteComponent, registerPeers) {
+      var component = this.base(arguments, remoteComponent, registerPeers);
+      component = this._decorateWithActions(remoteComponent, component);
+      return component;
+    },
+
+    /**
+     * @return {qx.ui.mobile.form.Button}
+     * @param remoteAction {org.jspresso.framework.gui.remote.RAction}
+     */
+    createAction: function (remoteAction) {
+      var button = this.createButton(remoteAction.getName(), remoteAction.getDescription(), remoteAction.getIcon());
+      this._bindButton(button, remoteAction);
+      return button;
+    },
+
+    /**
+     *
+     * @return {qx.ui.mobile.form.Button}
+     * @param remoteAction {org.jspresso.framework.gui.remote.RAction}
+     */
+    createToolBarAction: function (remoteAction) {
+      var button = this.createToolBarButton(remoteAction.getName(), remoteAction.getDescription(),
+          remoteAction.getIcon());
+      this._bindButton(button, remoteAction);
+      return button;
+    },
+
+    /**
+     * @param component {qx.ui.mobile.core.Widget}
+     * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
+     * @param disableActionsWithField {Boolean}
+     * @returns {qx.ui.mobile.core.Widget}
+     */
+    _decorateWithAsideActions: function (component, remoteComponent, disableActionsWithField) {
+      return component;
+    },
+
+    /**
+     * @param extraActions {Array}
+     * @return {qx.ui.mobile.toolbar.Button}
+     */
+    _createExtraActionsToolBarButton: function (extraActions) {
+      var extraButton = new qx.ui.mobile.toolbar.Button("...");
+      var extraMenu = new qx.ui.mobile.dialog.Menu();
+      extraMenu.getSelectionList().setDelegate({
+        configureItem: function (item, data, row) {
+          item.setTitle(data.getName());
+          if(data.getIcon()) {
+            item.setImage(data.getIcon().getImageUrlSpec());
+          }
+        }
+      });
+      extraMenu.getSelectionList().setModel(new qx.data.Array(extraActions))
+      extraMenu.setAnchor(extraButton);
+      extraMenu.addListener("changeSelection", function(evt){
+        var selectedIndex = evt.getData();
+        this._getActionHandler().execute(extraActions[selectedIndex]);
+      }, this);
+      this.addButtonListener(extraButton, function(evt) {
+        extraMenu.show();
+      }, this);
+      return extraButton;
+    },
+
+    /**
+     * @param remoteForm {org.jspresso.framework.gui.remote.RForm}
+     * @param form {qx.ui.mobile.container.Composite}
+     */
+    _addFormActions: function (remoteForm, form) {
+      var count = 0;
+      var actionLists = remoteForm.getActionLists();
+      if (actionLists && actionLists.length > 0) {
+        var toolBar = new qx.ui.mobile.toolbar.ToolBar();
+        var extraActions = [];
+        for (var i = 0; i < actionLists.length; i++) {
+          var actionList = actionLists[i];
+          var actions = actionList.getActions();
+          if (actions) {
+            for (var j = 0; j < actions.length; j++) {
+              if(count < 3) {
+                toolBar.add(this.createToolBarAction(actions[j]));
+                count ++;
+              } else {
+                extraActions.push(actions[j]);
+              }
+            }
+          }
+        }
+        if(extraActions.length > 0) {
+          toolBar.add(this._createExtraActionsToolBarButton(extraActions));
+        }
+        form.add(toolBar);
+      }
+    },
+
+    /**
+     * @param remotePage {org.jspresso.framework.gui.remote.mobile.RMobilePage}
+     * @param page {qx.ui.mobile.page.NavigationPage}
+     */
+    _addPageActions: function (remotePage, page) {
+      var count = 0;
+      var actionLists = remotePage.getActionLists();
+      if (actionLists && actionLists.length > 0) {
+        var extraActions = [];
+        for (var i = 0; i < actionLists.length; i++) {
+          var actionList = actionLists[i];
+          var actions = actionList.getActions();
+          if (actions) {
+            for (var j = 0; j < actions.length; j++) {
+              if(count == 0) {
+                this.setPageAction(page, actions[j]);
+              } else {
+                extraActions.push(actions[j]);
+              }
+            }
+          }
+        }
+        if(extraActions.length > 0) {
+          page.getRightContainer().add(this._createExtraActionsToolBarButton(extraActions));
+        }
+      }
+    },
+
+    /**
+     * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
+     * @param component {qx.ui.core.Widget}
+     * @return {qx.ui.core.Widget}
+     */
+    _decorateWithActions: function (remoteComponent, component) {
+      if (remoteComponent instanceof org.jspresso.framework.gui.remote.RTextField || remoteComponent
+          instanceof org.jspresso.framework.gui.remote.RDateField || remoteComponent
+          instanceof org.jspresso.framework.gui.remote.RNumericComponent || remoteComponent
+          instanceof org.jspresso.framework.gui.remote.RLabel || remoteComponent
+          instanceof org.jspresso.framework.gui.remote.RTimeField || remoteComponent
+          instanceof org.jspresso.framework.gui.remote.RComboBox || remoteComponent
+          instanceof org.jspresso.framework.gui.remote.RCheckBox) {
+        return this._decorateWithAsideActions(component, remoteComponent, false);
+      } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RForm) {
+        this._addFormActions(remoteComponent, /** @type {qx.ui.mobile.container.Composite} */ component);
+        return component;
+      } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
+        this._addPageActions(remoteComponent, /** @type {qx.ui.mobile.page.NavigationPage} */ component);
+        return component;
+      } else {
+        return component;
+      }
+    },
+
+    /**
      * @return {qx.ui.mobile.core.Widget}
      * @param remoteContainer {org.jspresso.framework.gui.remote.RContainer}
      */
@@ -195,6 +349,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     createToolBarButton: function (label, toolTip, icon) {
       var button = new qx.ui.mobile.toolbar.Button();
       this._completeButton(button, label, toolTip, icon);
+      button.setIconPosition("top");
       return button;
     },
 

@@ -70,8 +70,8 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
       nextPage = (IMobilePageViewDescriptor) getElementViewDescriptor();
     } else {
       nextPage = new MobileCompositePageViewDescriptor();
-      ((MobileCompositePageViewDescriptor) nextPage).setPageSections(Collections.singletonList
-          (getElementViewDescriptor()));
+      ((MobileCompositePageViewDescriptor) nextPage).setPageSections(Collections.singletonList(
+          getElementViewDescriptor()));
     }
     moduleObjectsPageView.setNextPage(nextPage);
     moduleObjectsPageView.setModelDescriptor(moduleDescriptor);
@@ -101,11 +101,12 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
     sections.add(filterViewDesc);
     sections.add(moduleObjectsPageView);
     MobileCompositePageViewDescriptor moduleViewDescriptor = new MobileCompositePageViewDescriptor();
+    moduleViewDescriptor.setI18nNameKey(getName());
     moduleViewDescriptor.setPageSections(sections);
 
     if (getPageSize() != null && getPageSize() > 0) {
-      if (moduleObjectsView != null && moduleObjectsView.getPaginationViewDescriptor() == null && moduleObjectsView
-      instanceof BasicListViewDescriptor) {
+      if (moduleObjectsView != null && moduleObjectsView.getPaginationViewDescriptor() == null
+          && moduleObjectsView instanceof BasicListViewDescriptor) {
         ((BasicListViewDescriptor) moduleObjectsView).setPaginationViewDescriptor(getPaginationViewDescriptor());
       }
     }

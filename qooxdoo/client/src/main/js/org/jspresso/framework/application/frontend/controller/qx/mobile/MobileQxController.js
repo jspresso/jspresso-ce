@@ -98,6 +98,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
 
       var dialogContent = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
       var dialogMessage = new qx.ui.mobile.embed.Html(message);
+      dialogMessage.addCssClass("form-row-group-title");
 
       dialogContent.add(dialogMessage);
       dialogContent.add(dialogView);
