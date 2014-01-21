@@ -252,7 +252,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
      * @param remoteSecurityComponent {org.jspresso.framework.gui.remote.RSecurityComponent}
      */
     _createSecurityComponent: function (remoteSecurityComponent) {
-      return _createDefaultComponent();
+      return this._createDefaultComponent();
     },
 
     /**
@@ -260,7 +260,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
      * @param remoteEmptyComponent {org.jspresso.framework.gui.remote.REmptyComponent}
      */
     _createEmptyComponent: function (remoteEmptyComponent) {
-      return _createDefaultComponent();
+      return this._createDefaultComponent();
     },
 
     /**
