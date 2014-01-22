@@ -264,7 +264,7 @@
   </bean>
 
   <bean id="asyncActionsThreadGroup" class="java.lang.ThreadGroup">
-    <constructor-arg value="Jspresso Asynchronous Actions" />
+    <constructor-arg type="java.lang.String" value="Jspresso Asynchronous Actions" />
   </bean>
 
   <bean abstract="true" id="abstractBackControllerBase" class="org.jspresso.framework.application.backend.AbstractBackendController">
