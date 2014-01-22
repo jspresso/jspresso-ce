@@ -263,6 +263,9 @@
     <property name="backendControllerBeanName" value="applicationBackController"/>
   </bean>
 
+  <bean id="asyncActionsThreadGroup" class="java.lang.ThreadGroup">
+    <constructor-arg value="Jspresso Asynchronous Actions" />
+  </bean>
 
   <bean abstract="true" id="abstractBackControllerBase" class="org.jspresso.framework.application.backend.AbstractBackendController">
     <property name="entityFactory" ref="controllerAwareEntityFactory" />
@@ -279,6 +282,7 @@
     <property name="customExceptionHandler" ref="customExceptionHandler" />
     <property name="userPreferencesStore" ref="userPreferencesStore" />
     <property name="slaveControllerFactory" ref="backendControllerFactory"/>
+    <property name="asyncActionsThreadGroup" ref="asyncActionsThreadGroup" />
   </bean>
 
   <bean abstract="true" id="abstractBackController" parent="abstractBackControllerBase" />
