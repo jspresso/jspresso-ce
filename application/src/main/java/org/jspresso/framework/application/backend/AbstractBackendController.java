@@ -392,10 +392,17 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   private synchronized ThreadGroup getControllerAsyncActionsThreadGroup() {
-    if (controllerAsyncActionsThreadGroup == null) {
+    if (controllerAsyncActionsThreadGroup == null || controllerAsyncActionsThreadGroup.isDestroyed()) {
       controllerAsyncActionsThreadGroup = new ThreadGroup(asyncActionsThreadGroup, toString());
     }
     return controllerAsyncActionsThreadGroup;
+  }
+
+  private synchronized void cleanupControllerAsyncActionsThreadGroup() {
+    if (controllerAsyncActionsThreadGroup != null && controllerAsyncActionsThreadGroup.activeCount() == 0
+        && !controllerAsyncActionsThreadGroup.isDestroyed()) {
+      controllerAsyncActionsThreadGroup.destroy();
+    }
   }
 
   /**
@@ -1077,6 +1084,7 @@ public abstract class AbstractBackendController extends AbstractController
       moduleConnectors.clear();
     }
     transferStructure = null;
+    cleanupControllerAsyncActionsThreadGroup();
     return true;
   }
 
