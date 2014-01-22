@@ -134,8 +134,9 @@ public abstract class AbstractBackendController extends AbstractController
   private final LRUMap                                 moduleConnectors;
   private final ISecurityContextBuilder                securityContextBuilder;
   private final Map<Serializable, IEntity>             entitiesExcludedFromSessionSanityChecks;
-  private final ThreadGroup                            asyncActionsThreadGroup;
   private final Set<AsyncActionExecutor>               asyncExecutors;
+  private       ThreadGroup                            asyncActionsThreadGroup;
+  private       ThreadGroup                            controllerAsyncActionsThreadGroup;
   private       IApplicationSession                    applicationSession;
   private       IEntityCloneFactory                    carbonEntityCloneFactory;
   private       IComponentCollectionFactory            collectionFactory;
@@ -168,7 +169,6 @@ public abstract class AbstractBackendController extends AbstractController
     entityRegistry = createEntityRegistry("sessionEntityRegistry");
     entitiesExcludedFromSessionSanityChecks = new ReferenceMap(AbstractReferenceMap.WEAK, AbstractReferenceMap.WEAK);
     throwExceptionOnBadUsage = true;
-    asyncActionsThreadGroup = new ThreadGroup("Asynchronous Actions");
     asyncExecutors = new LinkedHashSet<>();
     setAsyncExecutorsMaxCount(10);
   }
@@ -374,7 +374,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public AsyncActionExecutor executeAsynchronously(IAction action, Map<String, Object> context) {
     AbstractBackendController slaveBackendController = createBackendController();
-    AsyncActionExecutor slaveExecutor = new AsyncActionExecutor(action, context, asyncActionsThreadGroup,
+    AsyncActionExecutor slaveExecutor = new AsyncActionExecutor(action, context, getControllerAsyncActionsThreadGroup(),
         slaveBackendController);
     asyncExecutors.add(slaveExecutor);
     Set<AsyncActionExecutor> oldRunningExecutors = new LinkedHashSet<>(
@@ -389,6 +389,13 @@ public abstract class AbstractBackendController extends AbstractController
       }
     }
     return slaveExecutor;
+  }
+
+  private synchronized ThreadGroup getControllerAsyncActionsThreadGroup() {
+    if (controllerAsyncActionsThreadGroup == null) {
+      controllerAsyncActionsThreadGroup = new ThreadGroup(asyncActionsThreadGroup, toString());
+    }
+    return controllerAsyncActionsThreadGroup;
   }
 
   /**
@@ -2456,11 +2463,13 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public Set<AsyncActionExecutor> getRunningExecutors() {
-    int activeCount = asyncActionsThreadGroup.activeCount();
-    AsyncActionExecutor[] activeExecutors = new AsyncActionExecutor[activeCount];
-    asyncActionsThreadGroup.enumerate(activeExecutors);
-    return new LinkedHashSet<>(
-        Arrays.asList(activeExecutors));
+    if (controllerAsyncActionsThreadGroup != null) {
+      int activeCount = controllerAsyncActionsThreadGroup.activeCount();
+      AsyncActionExecutor[] activeExecutors = new AsyncActionExecutor[activeCount];
+      controllerAsyncActionsThreadGroup.enumerate(activeExecutors);
+      return new LinkedHashSet<>(Arrays.asList(activeExecutors));
+    }
+    return Collections.emptySet();
   }
 
   /**
@@ -2468,8 +2477,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   @Override
   public Set<AsyncActionExecutor> getCompletedExecutors() {
-    Set<AsyncActionExecutor> completedExecutors = new LinkedHashSet<>(
-        asyncExecutors);
+    Set<AsyncActionExecutor> completedExecutors = new LinkedHashSet<>(asyncExecutors);
     completedExecutors.removeAll(getRunningExecutors());
     return completedExecutors;
   }
@@ -2664,5 +2672,14 @@ public abstract class AbstractBackendController extends AbstractController
     List<IEntity> copy = recordedMergedEntities;
     recordedMergedEntities = null;
     return copy;
+  }
+
+  /**
+   * Sets async actions thread group.
+   *
+   * @param asyncActionsThreadGroup the async actions thread group
+   */
+  public void setAsyncActionsThreadGroup(ThreadGroup asyncActionsThreadGroup) {
+    this.asyncActionsThreadGroup = asyncActionsThreadGroup;
   }
 }
