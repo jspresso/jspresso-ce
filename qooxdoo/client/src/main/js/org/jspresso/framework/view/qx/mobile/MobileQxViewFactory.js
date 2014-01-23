@@ -79,6 +79,17 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @returns {qx.ui.mobile.core.Widget}
      */
     _decorateWithAsideActions: function (component, remoteComponent, disableActionsWithField) {
+      var actions = this._extractAllActions(remoteComponent.getActionLists());
+      if (actions.length > 0) {
+        var maxToolbarActionCount = 2;
+        var hBox = new qx.ui.mobile.layout.HBox();
+        hBox.setAlignY("middle");
+        var actionField = new qx.ui.mobile.container.Composite(hBox);
+        var toolBar = this._createToolBarFromActions(actions, maxToolbarActionCount);
+        actionField.add(compnent);
+        actionField.add(toolBar);
+        return actionField;
+      }
       return component;
     },
 
@@ -130,54 +141,43 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     },
 
     /**
-     * @param remoteForm {org.jspresso.framework.gui.remote.RForm}
-     * @param form {qx.ui.mobile.container.Composite}
+     * @param actions {Array}
+     * @param maxToolbarActionCount {Integer}
+     * @return {qx.ui.mobile.toolbar.ToolBar}
      */
-    _addFormActions: function (remoteForm, form) {
+    _createToolBarFromActions: function (actions, maxToolbarActionCount) {
       var extraActions = [];
-      var actions = this._extractAllActions(remoteForm.getActionLists());
-      if (actions.length > 0) {
-        var toolBar = new qx.ui.mobile.toolbar.ToolBar();
-        for (var i = 0; i < actions.length; i++) {
-          if (i < 3 || actions.length == 4) {
-            toolBar.add(this.createToolBarAction(actions[i]));
-          } else {
-            extraActions.push(actions[i]);
-          }
+      var toolBar = new qx.ui.mobile.toolbar.ToolBar();
+      for (var i = 0; i < actions.length; i++) {
+        if (i < maxToolbarActionCount - 1 || actions.length == maxToolbarActionCount) {
+          toolBar.add(this.createToolBarAction(actions[i]));
+        } else {
+          extraActions.push(actions[i]);
         }
-        if (extraActions.length > 0) {
-          toolBar.add(this._createExtraActionsToolBarButton(extraActions));
-        }
-        form.add(toolBar);
       }
+      if (extraActions.length > 0) {
+        toolBar.add(this._createExtraActionsToolBarButton(extraActions));
+      }
+      return toolBar;
     },
 
     /**
-     * @param remotePage {org.jspresso.framework.gui.remote.mobile.RMobilePage}
-     * @param page {qx.ui.mobile.page.NavigationPage}
+     * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
+     * @param component {qx.ui.mobile.core.Widget}
      */
-    _addPageActions: function (remotePage, page) {
-      var extraActions = [];
-      var actions = this._extractAllActions(remotePage.getActionLists());
+    _addToolBarActions: function (remoteComponent, component) {
+      var maxToolbarActionCount = 4;
+      var actions = this._extractAllActions(remoteComponent.getActionLists());
       if (actions.length > 0) {
-        var toolBar = new qx.ui.mobile.toolbar.ToolBar();
-        for (var i = 0; i < actions.length; i++) {
-          if (i == 0 || actions.length == 2) {
-            this.setPageAction(page, actions[i]);
-          } else {
-            extraActions.push(actions[i]);
-          }
-        }
-        if (extraActions.length > 0) {
-          page.getRightContainer().add(this._createExtraActionsToolBarButton(extraActions));
-        }
+        var toolBar = this._createToolBarFromActions(actions, maxToolbarActionCount);
+        component.add(toolBar);
       }
     },
 
     /**
      * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
-     * @param component {qx.ui.core.Widget}
-     * @return {qx.ui.core.Widget}
+     * @param component {qx.ui.mobile.core.Widget}
+     * @return {qx.ui.mobile.core.Widget}
      */
     _decorateWithActions: function (remoteComponent, component) {
       if (remoteComponent instanceof org.jspresso.framework.gui.remote.RTextField || remoteComponent
@@ -188,11 +188,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           instanceof org.jspresso.framework.gui.remote.RComboBox || remoteComponent
           instanceof org.jspresso.framework.gui.remote.RCheckBox) {
         return this._decorateWithAsideActions(component, remoteComponent, false);
-      } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RForm) {
-        this._addFormActions(remoteComponent, /** @type {qx.ui.mobile.container.Composite} */ component);
-        return component;
-      } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
-        this._addPageActions(remoteComponent, /** @type {qx.ui.mobile.page.NavigationPage} */ component);
+      } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RForm
+          || remoteComponent instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
+        this._addToolBarActions(remoteComponent, /** @type {qx.ui.mobile.container.Composite} */ component);
         return component;
       } else {
         return component;
@@ -274,7 +272,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       nextPage.setBackButtonText(previousPage.getTitle());
       var backButton = nextPage.getLeftContainer().getChildren()[0];
       backButton.setIcon("org/jspresso/framework/mobile/back-mobile.png");
-      backButton.setShow("both");
+      //backButton.setShow("both");
+      backButton.setShow("icon")
       nextPage.addListener("back", function () {
         previousPage.show({animation: animation,  reverse: true});
       }, this);
@@ -817,24 +816,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         atom.setIcon(remoteLabel.getIcon().getImageUrlSpec());
       }
       return atom;
-    },
-
-    /**
-     * @return {qx.ui.mobile.core.Widget}
-     */
-    _createHBoxContainer: function () {
-      var hboxContainer = new qx.ui.mobile.container.Composite();
-      hboxContainer.setLayout(new qx.ui.mobile.layout.HBox());
-      return hboxContainer;
-    },
-
-    /**
-     * @return {qx.ui.mobile.core.Widget}
-     */
-    _createVBoxContainer: function () {
-      var hboxContainer = new qx.ui.mobile.container.Composite();
-      hboxContainer.setLayout(new qx.ui.mobile.layout.VBox());
-      return hboxContainer;
     },
 
     /**

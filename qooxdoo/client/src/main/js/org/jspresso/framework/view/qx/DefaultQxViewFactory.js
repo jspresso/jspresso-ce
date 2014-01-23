@@ -426,7 +426,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @param remoteDateField {org.jspresso.framework.gui.remote.RDateField}
      */
     _createDateTimeField: function (remoteDateField) {
-      var dateTimeField = this._createHBoxContainer();
+      var dateTimeField = new qx.ui.container.Composite(new qx.ui.layout.HBox())
       var oldType = remoteDateField.getType();
       try {
         remoteDateField.setType("DATE");
@@ -2124,10 +2124,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _decorateWithAsideActions: function (component, remoteComponent, disableActionsWithField) {
       var decorated = component;
       if (remoteComponent.getActionLists()) {
-        var actionField = new qx.ui.container.Composite();
+        var actionField = new qx.ui.container.Composite(new qx.ui.layout.HBox());
         actionField.setFocusable(true);
         actionField.setAllowStretchY(false, false);
-        actionField.setLayout(new qx.ui.layout.HBox());
 
         if (component) {
           component.setAlignY("middle");
@@ -2499,7 +2498,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         secondaryToolBar = this._createSecondaryToolBar(remoteComponent, component);
       }
       if (toolBar || secondaryToolBar) {
-        var surroundingBox = this._createVBoxContainer();
+        var surroundingBox = new qx.ui.container.Composite(new qx.ui.layout.VBox())
         var slideBar;
         if (toolBar) {
           slideBar = new qx.ui.container.SlideBar();
@@ -2660,24 +2659,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 
     /**
      * @return {qx.ui.core.Widget}
-     */
-    _createHBoxContainer: function () {
-      var hboxContainer = new qx.ui.container.Composite();
-      hboxContainer.setLayout(new qx.ui.layout.HBox());
-      return hboxContainer;
-    },
-
-    /**
-     * @return {qx.ui.core.Widget}
-     */
-    _createVBoxContainer: function () {
-      var hboxContainer = new qx.ui.container.Composite();
-      hboxContainer.setLayout(new qx.ui.layout.VBox());
-      return hboxContainer;
-    },
-
-    /**
-     * @return {qx.ui.core.Widget}
      * @param remoteDateField {org.jspresso.framework.gui.remote.RDateField}
      */
     _createDateField: function (remoteDateField) {
@@ -2725,10 +2706,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @param remoteColorField {org.jspresso.framework.gui.remote.RColorField}
      */
     _createColorField: function (remoteColorField) {
-      var colorField = new qx.ui.container.Composite();
+      var colorField = new qx.ui.container.Composite(new qx.ui.layout.HBox())
       colorField.setFocusable(true);
       colorField.setAllowStretchY(false, false);
-      colorField.setLayout(new qx.ui.layout.HBox());
 
       var colorPopup = new qx.ui.control.ColorPopup();
       colorPopup.exclude();
