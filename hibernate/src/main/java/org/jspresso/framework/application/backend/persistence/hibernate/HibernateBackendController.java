@@ -311,8 +311,12 @@ public class HibernateBackendController extends AbstractBackendController {
       boolean dirtRecorderWasEnabled = isDirtyTrackingEnabled();
       try {
         setDirtyTrackingEnabled(false);
+
+        boolean isSessionEntity = isSessionEntity(componentOrEntity);
+        boolean isUnitOfWorkActive = isUnitOfWorkActive();
+
         // Never initialize session entities from UOW session
-        if (!(isUnitOfWorkActive() && isSessionEntity(componentOrEntity))) {
+        if (!(isUnitOfWorkActive && isSessionEntity)) {
           if (propertyValue instanceof AbstractPersistentCollection) {
             if (((AbstractPersistentCollection) propertyValue).getSession() != null
                 && ((AbstractPersistentCollection) propertyValue).getSession()
@@ -351,29 +355,31 @@ public class HibernateBackendController extends AbstractBackendController {
             performPropertyInitializationUsingSession(componentOrEntity,
                 propertyName, currentInitializationSession);
           } else {
-            // Always use NoTxSession to initialize session entities
             boolean suspendUnitOfWork = false;
-            if (isUnitOfWorkActive() && isSessionEntity(componentOrEntity)) {
-              suspendUnitOfWork = true;
+            boolean startUnitOfWork = false;
+            if (isSessionEntity) {
+              // Always use NoTxSession to initialize session entities
+              if (isUnitOfWorkActive) {
+                suspendUnitOfWork = true;
+              }
+            } else {
+              // Never use NoTxSession to initialize non session entities (see bug #1153)
+              startUnitOfWork = true;
             }
             try {
               if (suspendUnitOfWork) {
                 suspendUnitOfWork();
               }
-              Session hibernateSession = getHibernateSession();
-              FlushMode oldFlushMode = hibernateSession.getFlushMode();
-              try {
-                // Temporary switch to a read-only session.
-                hibernateSession.setFlushMode(FlushMode.MANUAL);
-                try {
-                  currentInitializationSession = hibernateSession;
-                  performPropertyInitializationUsingSession(componentOrEntity,
-                      propertyName, hibernateSession);
-                } finally {
-                  currentInitializationSession = null;
-                }
-              } finally {
-                hibernateSession.setFlushMode(oldFlushMode);
+              if (startUnitOfWork) {
+                getTransactionTemplate().execute(new TransactionCallbackWithoutResult() {
+                  @Override
+                  protected void doInTransactionWithoutResult(TransactionStatus status) {
+                    initializeProperty(componentOrEntity, propertyName);
+                    status.setRollbackOnly();
+                  }
+                });
+              } else {
+                initializeProperty(componentOrEntity, propertyName);
               }
             } finally {
               if (suspendUnitOfWork) {
@@ -387,6 +393,24 @@ public class HibernateBackendController extends AbstractBackendController {
       } finally {
         setDirtyTrackingEnabled(dirtRecorderWasEnabled);
       }
+    }
+  }
+
+  private void initializeProperty(IComponent componentOrEntity, String propertyName) {
+    Session hibernateSession = getHibernateSession();
+    FlushMode oldFlushMode = hibernateSession.getFlushMode();
+    try {
+      // Temporary switch to a read-only session.
+      hibernateSession.setFlushMode(FlushMode.MANUAL);
+      try {
+        currentInitializationSession = hibernateSession;
+        performPropertyInitializationUsingSession(componentOrEntity,
+            propertyName, hibernateSession);
+      } finally {
+        currentInitializationSession = null;
+      }
+    } finally {
+      hibernateSession.setFlushMode(oldFlushMode);
     }
   }
 
