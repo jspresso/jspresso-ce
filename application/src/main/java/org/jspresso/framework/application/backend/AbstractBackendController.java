@@ -1327,9 +1327,11 @@ public abstract class AbstractBackendController extends AbstractController
                 }
               }
               if (propertyDescriptor == null || !propertyDescriptor.isComputed()) {
-                Collection<IComponent> snapshotCollection = (Collection<IComponent>) dirtyProperties
-                    .get(propertyName);
-                if (snapshotCollection != null) {
+                Collection<IComponent> snapshotCollection = null;
+                Object originalProperty = dirtyProperties.get(propertyName);
+                // Workaround bug #1148
+                if (originalProperty != null && originalProperty instanceof Collection<?>) {
+                  snapshotCollection = (Collection<IComponent>) originalProperty;
                   Collection<IComponent> clonedSnapshotCollection = createTransientEntityCollection(snapshotCollection);
                   for (IComponent snapshotCollectionElement : snapshotCollection) {
                     if (snapshotCollectionElement != null) {
