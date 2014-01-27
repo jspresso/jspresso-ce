@@ -77,7 +77,7 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 /**
  * This is the default Jspresso implementation of Hibernate-based backend
  * controller.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -709,8 +709,11 @@ public class HibernateBackendController extends AbstractBackendController {
       Collection<IComponent> snapshotCollection = null;
       Map<String, Object> dirtyProperties = getDirtyProperties(registeredEntity);
       if (dirtyProperties != null) {
-        snapshotCollection = (Collection<IComponent>) dirtyProperties
-            .get(propertyName);
+        Object originalProperty = dirtyProperties.get(propertyName);
+        // Workaround bug #1148
+        if (originalProperty != null && originalProperty instanceof Collection<?>) {
+          snapshotCollection = (Collection<IComponent>) originalProperty;
+        }
       }
       mergedCollection = wrapDetachedCollection(registeredEntity,
           registeredCollection, snapshotCollection,
