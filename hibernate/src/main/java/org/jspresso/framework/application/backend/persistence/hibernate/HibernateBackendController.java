@@ -363,8 +363,10 @@ public class HibernateBackendController extends AbstractBackendController {
                 suspendUnitOfWork = true;
               }
             } else {
-              // Never use NoTxSession to initialize non session entities (see bug #1153)
-              startUnitOfWork = true;
+              if (!isUnitOfWorkActive) {
+                // Never use NoTxSession to initialize non session entities (see bug #1153)
+                startUnitOfWork = true;
+              }
             }
             try {
               if (suspendUnitOfWork) {
