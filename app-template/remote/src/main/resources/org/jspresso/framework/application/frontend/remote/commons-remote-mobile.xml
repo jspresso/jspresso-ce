@@ -23,9 +23,15 @@
 
   <!-- Remote mobile root application context for the Jspresso framework. -->
 
+  <bean id="editPageAction" class="org.jspresso.framework.application.frontend.action.remote.EditPageAction">
+    <property name="name" value="modify"/>
+  </bean>
+
   <bean id="remoteViewFactory" abstract="true"
         class="org.jspresso.framework.view.remote.mobile.MobileRemoteViewFactory"
-    parent="viewFactoryBase" />
+    parent="viewFactoryBase">
+    <property name="editPageAction" ref="editPageAction" />
+  </bean>
 
   <!-- QBE customization since remote view supports 3-state checkboxes -->
   <bean id="triStateBooleanSupported" class="java.lang.Boolean">

@@ -682,8 +682,5 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       this._getViewFactory().edit(targetPeer.retrievePeer());
     }
 
-
-
-
   }
 });

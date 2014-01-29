@@ -40,6 +40,10 @@ qx.Class.define("org.jspresso.framework.gui.remote.mobile.RMobileCompositePage",
   properties: {
     pageSections: {
       check: "Array"
+    },
+    editorPage: {
+      check: "org.jspresso.framework.gui.remote.mobile.RMobileCompositePage",
+      nullable: true
     }
   }
 });

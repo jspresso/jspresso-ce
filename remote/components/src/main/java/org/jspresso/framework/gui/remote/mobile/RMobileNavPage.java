@@ -29,7 +29,7 @@ import org.jspresso.framework.gui.remote.RComponent;
 public class RMobileNavPage extends RMobilePage {
 
   private static final long serialVersionUID = 5221935284465846374L;
-  private RComponent selectionView;
+  private RComponent  selectionView;
   private RMobilePage nextPage;
 
   /**
@@ -62,7 +62,8 @@ public class RMobileNavPage extends RMobilePage {
   /**
    * Sets selection view.
    *
-   * @param selectionView the selection view
+   * @param selectionView
+   *     the selection view
    */
   public void setSelectionView(RComponent selectionView) {
     this.selectionView = selectionView;
@@ -80,7 +81,8 @@ public class RMobileNavPage extends RMobilePage {
   /**
    * Sets next page.
    *
-   * @param nextPage the next page
+   * @param nextPage
+   *     the next page
    */
   public void setNextPage(RMobilePage nextPage) {
     this.nextPage = nextPage;

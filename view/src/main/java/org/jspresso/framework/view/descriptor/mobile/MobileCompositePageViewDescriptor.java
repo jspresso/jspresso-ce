@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicCompositeViewDescriptor;
 
 /**
  * A composite view descriptor that aggregates view sections on a single page.
@@ -30,10 +29,17 @@ import org.jspresso.framework.view.descriptor.basic.BasicCompositeViewDescriptor
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$
  */
-public class MobileCompositePageViewDescriptor extends BasicCompositeViewDescriptor
-    implements IMobilePageViewDescriptor {
+public class MobileCompositePageViewDescriptor extends AbstractMobilePageViewDescriptor {
 
   private List<IMobilePageSectionViewDescriptor> pageSections;
+  private boolean inlineEditing;
+
+  /**
+   * Instantiates a new Mobile composite page view descriptor.
+   */
+  public MobileCompositePageViewDescriptor() {
+    inlineEditing = false;
+  }
 
   /**
    * Is cascading models.
@@ -48,7 +54,8 @@ public class MobileCompositePageViewDescriptor extends BasicCompositeViewDescrip
   /**
    * Sets cascading models. This operation is not supported on mobile pages.
    *
-   * @param cascadingModels the cascading models
+   * @param cascadingModels
+   *     the cascading models
    */
   @Override
   public void setCascadingModels(boolean cascadingModels) {
@@ -58,7 +65,8 @@ public class MobileCompositePageViewDescriptor extends BasicCompositeViewDescrip
   /**
    * Sets page sections.
    *
-   * @param pageSections the page sections
+   * @param pageSections
+   *     the page sections
    */
   public void setPageSections(List<IMobilePageSectionViewDescriptor> pageSections) {
     this.pageSections = pageSections;
@@ -70,18 +78,78 @@ public class MobileCompositePageViewDescriptor extends BasicCompositeViewDescrip
    * @return the page sections
    */
   public List<IMobilePageSectionViewDescriptor> getPageSections() {
-    return pageSections;
+    if (pageSections != null) {
+      List<IMobilePageSectionViewDescriptor> refinedPageSections = new ArrayList<>();
+      for (IMobilePageSectionViewDescriptor section : pageSections) {
+        if (section instanceof MobileComponentViewDescriptor) {
+          if (isInlineEditing()) {
+            refinedPageSections.add(section);
+          } else {
+            refinedPageSections.add(((MobileComponentViewDescriptor) section).cloneReadOnly());
+          }
+        } else {
+          refinedPageSections.add(section);
+        }
+      }
+      return refinedPageSections;
+    }
+    return null;
   }
 
+  /**
+   * Completes child view descriptors before returning them.
+   * <p/>
+   * {@inheritDoc}
+   */
   @Override
   public List<IViewDescriptor> getChildViewDescriptors() {
-    if (pageSections != null) {
+    List<IMobilePageSectionViewDescriptor> childViewDescriptors = getPageSections();
+    if (childViewDescriptors != null) {
       IViewDescriptor previousViewDescriptor = null;
-      for (IViewDescriptor pageSection : pageSections) {
+      for (IViewDescriptor pageSection : childViewDescriptors) {
         completeChildDescriptor(pageSection, previousViewDescriptor);
         previousViewDescriptor = pageSection;
       }
+      return new ArrayList<IViewDescriptor>(childViewDescriptors);
     }
-    return new ArrayList<IViewDescriptor>(pageSections);
+    return null;
+  }
+
+  /**
+   * Clones the page, keeping only form sections and making them editable.
+   *
+   * @return the editable clone of the page.
+   */
+  public MobileCompositePageViewDescriptor cloneEditable() {
+    MobileCompositePageViewDescriptor editableClone = (MobileCompositePageViewDescriptor) clone();
+    editableClone.setInlineEditing(true);
+    if (pageSections != null) {
+      List<IMobilePageSectionViewDescriptor> editableSections = new ArrayList<>();
+      for (IMobilePageSectionViewDescriptor section : pageSections) {
+        if (section instanceof MobileComponentViewDescriptor) {
+          editableSections.add(section);
+        }
+      }
+      editableClone.setPageSections(editableSections);
+    }
+    return editableClone;
+  }
+
+  /**
+   * Is inline editing.
+   *
+   * @return the boolean
+   */
+  public boolean isInlineEditing() {
+    return inlineEditing;
+  }
+
+  /**
+   * Sets inline editing.
+   *
+   * @param inlineEditing the inline editing
+   */
+  public void setInlineEditing(boolean inlineEditing) {
+    this.inlineEditing = inlineEditing;
   }
 }

@@ -22,20 +22,21 @@ import org.jspresso.framework.gui.remote.RComponent;
 
 /**
  * A mobile nav page.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
 public class RMobileCompositePage extends RMobilePage {
 
   private static final long serialVersionUID = 1457626334914255111L;
-  private RComponent[] pageSections;
+  private RComponent[]         pageSections;
+  private RMobileCompositePage editorPage;
 
   /**
    * Constructs a new {@code RMobileCardPage} instance.
    *
    * @param guid
-   *          the guid
+   *     the guid
    */
   public RMobileCompositePage(String guid) {
     super(guid);
@@ -61,9 +62,29 @@ public class RMobileCompositePage extends RMobilePage {
   /**
    * Sets page sections.
    *
-   * @param pageSections the page sections
+   * @param pageSections
+   *     the page sections
    */
   public void setPageSections(RComponent... pageSections) {
     this.pageSections = pageSections;
+  }
+
+  /**
+   * Gets editor page.
+   *
+   * @return the editor page
+   */
+  public RMobileCompositePage getEditorPage() {
+    return editorPage;
+  }
+
+  /**
+   * Sets editor page.
+   *
+   * @param editorPage
+   *     the editor page
+   */
+  public void setEditorPage(RMobileCompositePage editorPage) {
+    this.editorPage = editorPage;
   }
 }

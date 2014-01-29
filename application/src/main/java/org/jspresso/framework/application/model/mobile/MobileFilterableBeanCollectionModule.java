@@ -101,6 +101,7 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
     sections.add(filterViewDesc);
     sections.add(moduleObjectsPageView);
     MobileCompositePageViewDescriptor moduleViewDescriptor = new MobileCompositePageViewDescriptor();
+    moduleViewDescriptor.setInlineEditing(true);
     moduleViewDescriptor.setI18nNameKey(getName());
     moduleViewDescriptor.setPageSections(sections);
 
@@ -158,7 +159,9 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
    */
   @Override
   public IMobilePageSectionViewDescriptor getElementViewDescriptor() {
-    return (IMobilePageSectionViewDescriptor) super.getElementViewDescriptor();
+    IMobilePageSectionViewDescriptor elementViewDescriptor = (IMobilePageSectionViewDescriptor) super
+        .getElementViewDescriptor();
+    return elementViewDescriptor;
   }
 
   /**
@@ -187,8 +190,8 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
   public void setFilterViewDescriptor(IViewDescriptor filterViewDescriptor) {
     if (!(filterViewDescriptor instanceof MobileComponentViewDescriptor)) {
       throw new IllegalArgumentException(
-          "Mobile filterable bean collection module views only support mobile component views as filter views " +
-              "and not :" + filterViewDescriptor.getClass().getSimpleName());
+          "Mobile filterable bean collection module views only support mobile component views as filter views "
+              + "and not :" + filterViewDescriptor.getClass().getSimpleName());
     }
     super.setFilterViewDescriptor(filterViewDescriptor);
   }

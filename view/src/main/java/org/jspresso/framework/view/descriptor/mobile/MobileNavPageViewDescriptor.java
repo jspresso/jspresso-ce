@@ -18,9 +18,7 @@
  */
 package org.jspresso.framework.view.descriptor.mobile;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -28,7 +26,6 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicCompositeViewDescriptor;
 
 /**
  * Navigation page view descriptors that are able to navigate to another page based on a selection component.
@@ -36,7 +33,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicCompositeViewDescriptor
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$
  */
-public class MobileNavPageViewDescriptor extends BasicCompositeViewDescriptor implements IMobilePageViewDescriptor {
+public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescriptor {
 
   private IViewDescriptor           selectionView;
   private IMobilePageViewDescriptor nextPage;

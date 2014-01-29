@@ -342,6 +342,32 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      */
     _handleAddCardCommand: function (targetPeer, addCardCommand) {
       this._getViewFactory().addCard(targetPeer.retrievePeer(), addCardCommand.getCard(), addCardCommand.getCardName());
+    },
+
+    /**
+     * @param targetPeer {org.jspresso.framework.gui.remote.RComponent}
+     * @param focusCommand {org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand}
+     * @return {undefined}
+     */
+    _handleFocusCommand: function (targetPeer, focusCommand) {
+      /** qx.ui.mobile.core.Widget */
+      var component = targetPeer.retrievePeer();
+      if(component instanceof qx.ui.mobile.page.NavigationPage) {
+        this._getViewFactory().focus(/** qx.ui.mobile.page.NavigationPage */ component);
+      }
+    },
+
+    /**
+     * @param targetPeer {org.jspresso.framework.gui.remote.RComponent}
+     * @param editCommand {org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand}
+     * @return {undefined}
+     */
+    _handleEditCommand: function (targetPeer, editCommand) {
+      /** qx.ui.mobile.core.Widget */
+      var component = targetPeer.retrievePeer();
+      if(component instanceof qx.ui.mobile.page.NavigationPage) {
+        this._getViewFactory().edit(/** qx.ui.mobile.page.NavigationPage */ component);
+      }
     }
   }
 });

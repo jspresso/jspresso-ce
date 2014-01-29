@@ -31,7 +31,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicCompositeViewDescriptor
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$
  */
-public class MobileCardPageViewDescriptor extends BasicCompositeViewDescriptor implements IMobilePageViewDescriptor {
+public class MobileCardPageViewDescriptor  extends AbstractMobilePageViewDescriptor {
 
   private ICardViewDescriptor pages;
 

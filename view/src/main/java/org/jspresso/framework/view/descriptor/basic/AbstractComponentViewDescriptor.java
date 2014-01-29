@@ -30,9 +30,6 @@ import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.view.descriptor.ELabelPosition;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.PropertyViewDescriptorHelper;
 
 /**
  * Abstract class for component view descriptors.
@@ -45,6 +42,7 @@ public abstract class AbstractComponentViewDescriptor extends BasicViewDescripto
   private ELabelPosition                labelsPosition;
   private List<String>                  renderedProperties;
   private List<IPropertyViewDescriptor> propertyViewDescriptors;
+  private AbstractComponentViewDescriptor readOnlyClone;
 
   /**
    * Instantiates a new Abstract component view descriptor.
@@ -69,6 +67,7 @@ public abstract class AbstractComponentViewDescriptor extends BasicViewDescripto
   /**
    * {@inheritDoc}
    */
+  @Override
   public ELabelPosition getLabelsPosition() {
     return labelsPosition;
   }
@@ -76,6 +75,7 @@ public abstract class AbstractComponentViewDescriptor extends BasicViewDescripto
   /**
    * {@inheritDoc}
    */
+  @Override
   public List<IPropertyViewDescriptor> getPropertyViewDescriptors() {
     return getPropertyViewDescriptors(true);
   }
@@ -83,6 +83,7 @@ public abstract class AbstractComponentViewDescriptor extends BasicViewDescripto
   /**
    * {@inheritDoc}
    */
+  @Override
   public List<IPropertyViewDescriptor> getPropertyViewDescriptors(boolean explodeComponentReferences) {
     IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) getModelDescriptor())
         .getComponentDescriptor();
@@ -267,5 +268,25 @@ public abstract class AbstractComponentViewDescriptor extends BasicViewDescripto
       }
     }
     return readOnly;
+  }
+
+  /**
+   * Clone the component view in read only mode.
+   *
+   * @return the read-only component view descriptor.
+   */
+  protected synchronized AbstractComponentViewDescriptor cloneReadOnly() {
+    if (readOnlyClone == null) {
+      readOnlyClone = (AbstractComponentViewDescriptor) clone();
+      List<IPropertyViewDescriptor> readOnlyDescriptors = new ArrayList<>();
+      for (IPropertyViewDescriptor descriptor : getPropertyViewDescriptors(false)) {
+        BasicPropertyViewDescriptor readOnlyDescriptor = (BasicPropertyViewDescriptor)
+            ((BasicPropertyViewDescriptor) descriptor).clone();
+        readOnlyDescriptor.setReadOnly(true);
+        readOnlyDescriptors.add(readOnlyDescriptor);
+      }
+      readOnlyClone.setPropertyViewDescriptors(readOnlyDescriptors);
+    }
+    return readOnlyClone;
   }
 }

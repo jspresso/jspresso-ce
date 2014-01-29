@@ -16,29 +16,27 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.view.descriptor.mobile;
+package org.jspresso.framework.application.frontend.action.remote;
 
-import org.jspresso.framework.view.action.IDisplayableAction;
+import java.util.Map;
+
+import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand;
+import org.jspresso.framework.gui.remote.RComponent;
 
 /**
- * Marker interface for mobile page view descriptors.
+ * Triggers editing of current page.
  *
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$
  */
-public interface IMobilePageViewDescriptor extends IMobilePageSectionViewDescriptor {
+public class EditPageAction extends AbstractRemoteAction {
 
-  /**
-   * Gets back action. The back action will be triggered when the user requests back navigation.
-   *
-   * @return the back action
-   */
-  IDisplayableAction getBackAction();
-
-  /**
-   * Gets main action. The main action will be displayed at the up right corner of the page.
-   *
-   * @return the main action
-   */
-  IDisplayableAction getMainAction();
+  @Override
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+    RemoteEditCommand editCommand = new RemoteEditCommand();
+    editCommand.setTargetPeerGuid(((RComponent)getView(context).getPeer()).getGuid());
+    registerCommand(editCommand, context);
+    return super.execute(actionHandler, context);
+  }
 }

@@ -16,58 +16,39 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.gui.remote.mobile;
+package org.jspresso.framework.view.descriptor.mobile;
 
-import org.jspresso.framework.gui.remote.RAction;
-import org.jspresso.framework.gui.remote.RContainer;
+import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.basic.BasicCompositeViewDescriptor;
 
 /**
- * A mobile page.
+ * Abstract base class for mobile page view descriptors.
  *
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$
  */
-public abstract class RMobilePage extends RContainer {
+public abstract class AbstractMobilePageViewDescriptor extends BasicCompositeViewDescriptor
+    implements IMobilePageViewDescriptor {
 
-  private static final long serialVersionUID = 9067959612763951538L;
-
-  private RAction backAction;
-  private RAction mainAction;
-
-  /**
-   * Constructs a new {@code RMobilePage} instance.
-   *
-   * @param guid
-   *     the guid
-   */
-  public RMobilePage(String guid) {
-    super(guid);
-  }
-
-  /**
-   * Constructs a new {@code RMobilePage} instance. Only used for
-   * serialization support.
-   */
-  public RMobilePage() {
-    // For serialization support
-  }
+  private IDisplayableAction backAction;
+  private IDisplayableAction mainAction;
 
   /**
    * Gets back action.
    *
    * @return the back action
    */
-  public RAction getBackAction() {
+  @Override
+  public IDisplayableAction getBackAction() {
     return backAction;
   }
 
   /**
    * Sets back action.
    *
-   * @param backAction
-   *     the back action
+   * @param backAction the back action
    */
-  public void setBackAction(RAction backAction) {
+  public void setBackAction(IDisplayableAction backAction) {
     this.backAction = backAction;
   }
 
@@ -76,17 +57,17 @@ public abstract class RMobilePage extends RContainer {
    *
    * @return the main action
    */
-  public RAction getMainAction() {
+  @Override
+  public IDisplayableAction getMainAction() {
     return mainAction;
   }
 
   /**
    * Sets main action.
    *
-   * @param mainAction
-   *     the main action
+   * @param mainAction the main action
    */
-  public void setMainAction(RAction mainAction) {
+  public void setMainAction(IDisplayableAction mainAction) {
     this.mainAction = mainAction;
   }
 }

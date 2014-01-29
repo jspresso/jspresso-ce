@@ -35,6 +35,17 @@ qx.Class.define("org.jspresso.framework.gui.remote.mobile.RMobilePage", {
 
   construct: function () {
     this.base(arguments);
+  },
+
+  properties: {
+    backAction: {
+      check: "org.jspresso.framework.gui.remote.RAction",
+      nullable: true
+    },
+    mainAction: {
+      check: "org.jspresso.framework.gui.remote.RAction",
+      nullable: true
+    }
   }
 
 });

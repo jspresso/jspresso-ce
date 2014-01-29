@@ -18,8 +18,6 @@
  */
 package org.jspresso.framework.view.remote.mobile;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -27,6 +25,7 @@ import java.util.Locale;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
 import org.jspresso.framework.binding.ICompositeValueConnector;
+import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RCardContainer;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RTabContainer;
@@ -36,9 +35,9 @@ import org.jspresso.framework.gui.remote.mobile.RMobileNavPage;
 import org.jspresso.framework.gui.remote.mobile.RMobilePage;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.view.BasicCompositeView;
-import org.jspresso.framework.view.BasicIndexedView;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IView;
+import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
@@ -67,6 +66,8 @@ import org.jspresso.framework.view.remote.AbstractRemoteViewFactory;
  */
 @SuppressWarnings("UnusedParameters")
 public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
+
+  private IDisplayableAction editPageAction;
 
   /**
    * Checks that the view descriptor is mobile compatible.
@@ -102,7 +103,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     }
     throw new IllegalArgumentException(
         "Mobile view factory can only handle mobile view descriptors and not : " + viewDescriptor.getClass()
-                                                                                                   .getSimpleName());
+                                                                                                 .getSimpleName());
   }
 
   /**
@@ -183,6 +184,14 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
       childrenViews.add(pageSectionView);
     }
     viewComponent.setPageSections(pageSections.toArray(new RComponent[pageSections.size()]));
+    if (!viewDescriptor.isInlineEditing()) {
+      ICompositeView<RComponent> editorPageView = (ICompositeView<RComponent>) createView(
+          viewDescriptor.cloneEditable(), actionHandler, locale);
+      viewComponent.setEditorPage((RMobileCompositePage) editorPageView.getView().getPeer());
+      RAction editorAction = getActionFactory().createAction(getEditPageAction(), actionHandler, view, locale);
+      viewComponent.setMainAction(editorAction);
+      childrenViews.add(editorPageView);
+    }
     view.setChildren(childrenViews);
     return view;
   }
@@ -229,6 +238,17 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
   @Override
   protected ICompositeView<RComponent> createEvenGridView(IEvenGridViewDescriptor viewDescriptor,
                                                           IActionHandler actionHandler, Locale locale) {
+    throw new UnsupportedOperationException("Not supported in mobile environment.");
+  }
+
+  /**
+   * Not supported in mobile environment.
+   * <p/>
+   * {@inheritDoc}
+   */
+  @Override
+  protected ICompositeView<RComponent> createTabView(ITabViewDescriptor viewDescriptor, IActionHandler actionHandler,
+                                                     Locale locale) {
     throw new UnsupportedOperationException("Not supported in mobile environment.");
   }
 
@@ -317,49 +337,6 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
    * {@inheritDoc}
    */
   @Override
-  protected ICompositeView<RComponent> createTabView(ITabViewDescriptor viewDescriptor, IActionHandler actionHandler,
-                                                     Locale locale) {
-    final RTabContainer viewComponent = createRTabContainer(viewDescriptor);
-    final BasicIndexedView<RComponent> view = constructIndexedView(viewComponent, viewDescriptor);
-
-    viewComponent.addPropertyChangeListener("selectedIndex", new PropertyChangeListener() {
-
-      @Override
-      public void propertyChange(PropertyChangeEvent evt) {
-        RTabContainer source = (RTabContainer) evt.getSource();
-        view.setCurrentViewIndex(source.getSelectedIndex());
-      }
-    });
-    List<RComponent> tabs = new ArrayList<>();
-    List<IView<RComponent>> childrenViews = new ArrayList<>();
-
-    for (IViewDescriptor childViewDescriptor : viewDescriptor.getChildViewDescriptors()) {
-      if (actionHandler.isAccessGranted(childViewDescriptor)) {
-        IView<RComponent> childView = createView(childViewDescriptor, actionHandler, locale);
-        RComponent tab = childView.getPeer();
-        switch (viewDescriptor.getRenderingOptions()) {
-          case ICON:
-            tab.setLabel(null);
-            break;
-          case LABEL:
-            tab.setIcon(null);
-            break;
-          default:
-            break;
-        }
-        tabs.add(tab);
-        childrenViews.add(childView);
-      }
-    }
-    viewComponent.setTabs(tabs.toArray(new RComponent[tabs.size()]));
-    view.setChildren(childrenViews);
-    return view;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   protected void selectChildViewIndex(RComponent viewComponent, int index) {
     if (viewComponent instanceof RTabContainer) {
       RTabContainer rTab = ((RTabContainer) viewComponent);
@@ -375,13 +352,21 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
   }
 
   /**
-   * Creates a remote tab container.
+   * Gets edit page action.
    *
-   * @param viewDescriptor
-   *     the component view descriptor.
-   * @return the created remote component.
+   * @return the edit page action
    */
-  protected RTabContainer createRTabContainer(ITabViewDescriptor viewDescriptor) {
-    return new RTabContainer(getGuidGenerator().generateGUID());
+  protected IDisplayableAction getEditPageAction() {
+    return editPageAction;
+  }
+
+  /**
+   * Sets edit page action.
+   *
+   * @param editPageAction
+   *     the edit page action
+   */
+  public void setEditPageAction(IDisplayableAction editPageAction) {
+    this.editPageAction = editPageAction;
   }
 }

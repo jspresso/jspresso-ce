@@ -212,6 +212,16 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.RCardContainer) {
         container = this._createCardContainer(remoteContainer);
       }
+      if(remoteContainer instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
+        if(remoteContainer.getMainAction()) {
+          this.setPageAction(container,  remoteContainer.getMainAction());
+        }
+        if(remoteContainer.getBackAction()) {
+          container.addListener("back", function () {
+            this._getActionHandler().execute(remoteContainer.getBackAction());
+          }, this);
+        }
+      }
       return container;
     },
 
@@ -321,6 +331,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           var pageSection = this.createComponent(remotePageSection);
           sections.push(pageSection);
         }
+      }
+      if(remoteCompositePage.getEditorPage()) {
+        var editorPage = this._createMobileCompositePage(remoteCompositePage.getEditorPage());
+        this.linkNextPageBackButton(editorPage, compositePage, "flip")
+        compositePage.setUserData("editorPage", editorPage);
       }
       compositePage.addListener("initialize", function (e) {
         for(var i = 0; i < sections.length; i++) {
@@ -874,7 +889,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     },
 
     /**
-     *
      * @param page {qx.ui.mobile.page.NavigationPage}
      * @param pageAction {org.jspresso.framework.gui.remote.RAction}
      */
@@ -889,8 +903,28 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }, this);
         page.setShowButton(true);
       }
-    }
+    },
 
+    /**
+     * @param component {qx.ui.mobile.page.NavigationPage}
+     * @return {undefined}
+     */
+    focus: function (component) {
+      if (component) {
+        component.show();
+      }
+    },
+
+    /**
+     * @param component {qx.ui.mobile.page.NavigationPage}
+     * @return {undefined}
+     */
+    edit: function (component) {
+      var editorPage = component.getUserData("editorPage");
+      if (editorPage) {
+        editorPage.show({animation: "flip"});
+      }
+    }
 
   }
 });
