@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.jspresso.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
@@ -37,6 +38,7 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
 
   private IViewDescriptor           selectionView;
   private IMobilePageViewDescriptor nextPage;
+  private IDisplayableAction        pageEndAction;
 
   /**
    * Is cascading models.
@@ -131,5 +133,23 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
       return getSelectionView().getI18nName(translationProvider, locale);
     }
     return super.getI18nDescription(translationProvider, locale);
+  }
+
+  /**
+   * Gets page end action.
+   *
+   * @return the page end action
+   */
+  public IDisplayableAction getPageEndAction() {
+    return pageEndAction;
+  }
+
+  /**
+   * Sets page end action.
+   *
+   * @param pageEndAction the page end action
+   */
+  public void setPageEndAction(IDisplayableAction pageEndAction) {
+    this.pageEndAction = pageEndAction;
   }
 }

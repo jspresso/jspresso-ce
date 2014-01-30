@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.gui.remote.mobile;
 
+import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RComponent;
 
 /**
@@ -31,6 +32,7 @@ public class RMobileNavPage extends RMobilePage {
   private static final long serialVersionUID = 5221935284465846374L;
   private RComponent  selectionView;
   private RMobilePage nextPage;
+  private RAction     pageEndAction;
 
   /**
    * Constructs a new {@code RMobileCardPage} instance.
@@ -86,5 +88,13 @@ public class RMobileNavPage extends RMobilePage {
    */
   public void setNextPage(RMobilePage nextPage) {
     this.nextPage = nextPage;
+  }
+
+  public RAction getPageEndAction() {
+    return pageEndAction;
+  }
+
+  public void setPageEndAction(RAction pageEndAction) {
+    this.pageEndAction = pageEndAction;
   }
 }

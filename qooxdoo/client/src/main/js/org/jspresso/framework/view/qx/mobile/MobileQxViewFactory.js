@@ -247,6 +247,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       navPage.setTitle(remoteNavPage.getLabel());
       navPage.addListener("initialize", function (e) {
         navPage.getContent().add(selectionList);
+        if(remoteNavPage.getPageEndAction()) {
+          navPage._getScrollContainer().addListener("pageEnd", function(e) {
+            this._getActionHandler().execute(remoteNavPage.getPageEndAction());
+          }, this);
+        }
       }, this);
       /** @type {qx.ui.mobile.page.NavigationPage} */
       var nextPage = this.createComponent(remoteNavPage.getNextPage());

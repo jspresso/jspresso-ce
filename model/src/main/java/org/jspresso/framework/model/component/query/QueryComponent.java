@@ -788,4 +788,14 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     }
     return false;
   }
+
+  /**
+   * Gets results.
+   *
+   * @return the results
+   */
+  @Override
+  public List<?> getResults() {
+    return getQueriedComponents();
+  }
 }

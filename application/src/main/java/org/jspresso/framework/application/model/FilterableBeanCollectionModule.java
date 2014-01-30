@@ -602,4 +602,14 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
       IQueryComponentDescriptorFactory queryComponentDescriptorFactory) {
     this.queryComponentDescriptorFactory = queryComponentDescriptorFactory;
   }
+
+  /**
+   * Gets results.
+   *
+   * @return the results
+   */
+  @Override
+  public List<?> getResults() {
+    return getModuleObjects();
+  }
 }

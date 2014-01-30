@@ -189,4 +189,11 @@ public interface IPageable {
    * @return the selected record count
    */
   Integer getSelectedRecordCount();
+
+  /**
+   * Gets results.
+   *
+   * @return the results
+   */
+  List<?> getResults();
 }

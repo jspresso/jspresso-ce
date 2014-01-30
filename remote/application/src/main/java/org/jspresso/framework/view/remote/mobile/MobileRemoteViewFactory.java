@@ -157,6 +157,10 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
       viewComponent.setNextPage((RMobilePage) nextPageView.getPeer());
       childrenViews.add(nextPageView);
     }
+    if (viewDescriptor.getPageEndAction() != null) {
+      viewComponent.setPageEndAction(getActionFactory().createAction(viewDescriptor.getPageEndAction(),
+          actionHandler, view, locale));
+    }
     view.setChildren(childrenViews);
     return view;
   }
