@@ -86,9 +86,13 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         hBox.setAlignY("middle");
         var actionField = new qx.ui.mobile.container.Composite(hBox);
         var toolBar = this._createToolBarFromActions(actions, maxToolbarActionCount);
-        actionField.add(compnent);
-        actionField.add(toolBar);
-        return actionField;
+        if(component) {
+          actionField.add(component);
+          actionField.add(toolBar);
+          return actionField;
+        } else {
+          return toolBar
+        }
       }
       return component;
     },
@@ -506,8 +510,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var cbModel = new qx.data.Array();
       for (var i = 0; i < remoteComboBox.getValues().length; i++) {
         if (i == 0 && remoteComboBox.getValues()[i].length > 0) {
-          remoteComboBox.getValues().insertAt(0, "");
-          cbModel.push(" ");
+          qx.lang.Array.insertAt(remoteComboBox.getValues(), "", 0);
+          cbModel.insertAt(0, " ");
         }
         cbModel.push(remoteComboBox.getTranslations()[i]);
       }
@@ -718,6 +722,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var textField;
       if (remoteActionField.getShowTextField()) {
         textField = new qx.ui.mobile.form.TextField();
+        textField.setPlaceholder(remoteActionField.getLabel());
       }
       var actionField = this._decorateWithAsideActions(textField, remoteActionField, true);
       var state = remoteActionField.getState();
@@ -772,20 +777,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createFormattedField: function (rComponent) {
       var formattedField = new qx.ui.mobile.form.TextField();
+      formattedField.setPlaceholder(rComponent.getLabel());
       this._bindFormattedField(formattedField, rComponent);
       return formattedField;
-    },
-
-    /**
-     *
-     * @param expectedCharCount {Integer}
-     * @param component {qx.ui.mobile.core.Widget}
-     * @param maxCharCount {Integer}
-     * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
-     * @return {undefined}
-     */
-    _sizeMaxComponentWidth: function (component, remoteComponent, expectedCharCount, maxCharCount) {
-      // NO-OP
     },
 
     /**
@@ -845,6 +839,15 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     _createDateField: function (remoteDateField) {
       var dateField = this._createFormattedField(remoteDateField);
       return dateField;
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteTimeField {org.jspresso.framework.gui.remote.RTimeField}
+     */
+    _createTimeField: function (remoteTimeField) {
+      var timeField = this._createFormattedField(remoteTimeField);
+      return timeField;
     },
 
     /**
@@ -929,7 +932,130 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       if (editorPage) {
         editorPage.show({animation: "flip"});
       }
+    },
+
+    /**
+     * @param formattedField {qx.ui.mobile.form.TextField}
+     * @param rComponent {org.jspresso.framework.gui.remote.RComponent}
+     */
+    _bindFormattedField: function (formattedField, rComponent) {
+      var format = this._createFormat(rComponent);
+      var state = rComponent.getState();
+      var modelController = new qx.data.controller.Object(state);
+      modelController.addTarget(formattedField, "value", "value", true, {
+        converter: function (modelValue, model) {
+          if (modelValue == null) {
+            return "";
+          }
+          var formattedValue = modelValue;
+          if (format) {
+            formattedValue = format.format(modelValue);
+          }
+          return formattedValue;
+        }
+      }, {
+        converter: function (viewValue, model) {
+          var parsedValue = viewValue;
+          if (viewValue == null || viewValue.length == 0) {
+            parsedValue = null;
+          } else if (format) {
+            try {
+              parsedValue = format.parse(viewValue);
+            } catch (ex) {
+              // restore old value.
+              parsedValue = state.getValue();
+              if (parsedValue) {
+                formattedField.setValue(format.format(parsedValue));
+              } else {
+                formattedField.setValue("");
+              }
+            }
+          }
+          return parsedValue;
+        }
+      });
+      modelController.addTarget(formattedField, "readOnly", "writable", false, {
+        converter: this._readOnlyFieldConverter
+      });
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteNumericComponent {org.jspresso.framework.gui.remote.RNumericComponent}
+     */
+    _createNumericComponent: function (remoteNumericComponent) {
+      var numericComponent = this.base(arguments, remoteNumericComponent);
+      var maxChars = -1;
+      if (remoteNumericComponent.getMinValue() != null && remoteNumericComponent.getMaxValue() != null) {
+        var formatter = this._createFormat(remoteNumericComponent);
+        maxChars = Math.max(formatter.format(remoteNumericComponent.getMaxValue()).length,
+            formatter.format(remoteNumericComponent.getMinValue()).length);
+        if (numericComponent instanceof qx.ui.mobile.form.TextField) {
+          numericComponent.setMaxLength(maxChars);
+        }
+      }
+      this._configureHorizontalAlignment(numericComponent, remoteNumericComponent.getHorizontalAlignment());
+      return numericComponent;
+    },
+
+    /**
+     * @return {qx.ui.core.Widget}
+     * @param remoteIntegerField {org.jspresso.framework.gui.remote.RIntegerField}
+     */
+    _createIntegerField: function (remoteIntegerField) {
+      var integerField = this._createFormattedField(remoteIntegerField);
+      return integerField;
+    },
+
+    /**
+     * @return {qx.ui.core.Widget}
+     * @param remoteDecimalField {org.jspresso.framework.gui.remote.RDecimalField}
+     */
+    _createDecimalField: function (remoteDecimalField) {
+      var decimalField = this._createFormattedField(remoteDecimalField);
+      return decimalField;
+    },
+
+    /**
+     * @return {qx.ui.core.Widget}
+     * @param remotePercentField {org.jspresso.framework.gui.remote.RPercentField}
+     */
+    _createPercentField: function (remotePercentField) {
+      var percentField = this._createFormattedField(remotePercentField);
+      return percentField;
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteDateField {org.jspresso.framework.gui.remote.RDateField}
+     */
+    _createDateTimeField: function (remoteDateField) {
+      var dateTimeField = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox())
+      var oldType = remoteDateField.getType();
+      try {
+        remoteDateField.setType("DATE");
+        dateTimeField.add(this._createDateField(remoteDateField));
+      } catch (e) {
+        throw e;
+      } finally {
+        remoteDateField.setType(oldType);
+      }
+
+      var remoteTimeField = new org.jspresso.framework.gui.remote.RTimeField();
+      remoteTimeField.setBackground(remoteDateField.getBackground());
+      remoteTimeField.setBorderType(remoteDateField.getBorderType());
+      remoteTimeField.setFont(remoteDateField.getFont());
+      remoteTimeField.setForeground(remoteDateField.getForeground());
+      remoteTimeField.setGuid(remoteDateField.getGuid());
+      remoteTimeField.setState(remoteDateField.getState());
+      remoteTimeField.setToolTip(remoteDateField.getToolTip());
+      remoteTimeField.setSecondsAware(remoteDateField.getSecondsAware());
+      remoteTimeField.useDateDto(true);
+      dateTimeField.add(this.createComponent(remoteTimeField, false));
+      return dateTimeField;
     }
+
+
 
   }
 });

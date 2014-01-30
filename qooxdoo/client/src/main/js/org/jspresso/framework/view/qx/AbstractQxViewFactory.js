@@ -39,6 +39,18 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
 
     /** @type {String} */
     __datePattern: null,
+    /** @type {Array} */
+    __dateFormats: null,
+    /** @type {Array} */
+    __timeFormats: null,
+    /** @type {Array} */
+    __shortTimeFormats: null,
+    /** @type {Array} */
+    __dateTimeFormats: null,
+    /** @type {Array} */
+    __shortDateTimeFormats: null,
+    /** @type {Integer} */
+    __firstDayOfWeek: null,
 
     /**
      * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
@@ -299,11 +311,193 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
       this.addButtonListener(button, function (event) {
         this._getActionHandler().execute(remoteAction);
       }, this);
+    },
+
+    /**
+     *
+     * @return {qx.util.format.IFormat}
+     * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
+     */
+    _createFormat: function (remoteComponent) {
+      var format;
+      if (remoteComponent instanceof org.jspresso.framework.gui.remote.RDateField) {
+        if (remoteComponent.getType() == "DATE_TIME") {
+          var dateTimeFormat = new org.jspresso.framework.util.format.DateFormatDecorator();
+          if (remoteComponent.getSecondsAware()) {
+            if (!this.__dateTimeFormats) {
+              this.__dateTimeFormats = this._createDateFormats(this._createDateTimeFormatPatterns());
+            }
+            dateTimeFormat.setFormatDelegates(this.__dateTimeFormats);
+          } else {
+            if (!this.__shortDateTimeFormats) {
+              this.__shortDateTimeFormats = this._createDateFormats(this._createShortDateTimeFormatPatterns());
+            }
+            dateTimeFormat.setFormatDelegates(this.__shortDateTimeFormats);
+          }
+          dateTimeFormat.setRemoteComponent(remoteComponent);
+          return dateTimeFormat;
+        } else {
+          var dateFormat = new org.jspresso.framework.util.format.DateFormatDecorator();
+          if (!this.__dateFormats) {
+            this.__dateFormats = this._createDateFormats(this._createDateFormatPatterns());
+          }
+          dateFormat.setFormatDelegates(this.__dateFormats);
+          dateFormat.setRemoteComponent(remoteComponent);
+          return dateFormat;
+        }
+      } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RPasswordField) {
+        return new org.jspresso.framework.util.format.PasswordFormat();
+      } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RTimeField) {
+        var timeFormat = new org.jspresso.framework.util.format.DateFormatDecorator();
+        if (remoteComponent.getSecondsAware()) {
+          if (!this.__timeFormats) {
+            this.__timeFormats = this._createDateFormats(this._createTimeFormatPatterns());
+          }
+          timeFormat.setFormatDelegates(this.__timeFormats);
+        } else {
+          if (!this.__shortTimeFormats) {
+            this.__shortTimeFormats = this._createDateFormats(this._createShortTimeFormatPatterns());
+          }
+          timeFormat.setFormatDelegates(this.__shortTimeFormats);
+        }
+        timeFormat.setRemoteComponent(remoteComponent);
+        return timeFormat;
+      } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RNumericComponent) {
+        if (remoteComponent instanceof org.jspresso.framework.gui.remote.RDecimalComponent) {
+          if (remoteComponent instanceof org.jspresso.framework.gui.remote.RPercentField) {
+            format = new org.jspresso.framework.util.format.ScaledNumberFormat();
+            format.setScale(100);
+            format.setPostfix(" %");
+          } else {
+            format = new qx.util.format.NumberFormat();
+          }
+          if (remoteComponent.getMaxFractionDigit()) {
+            format.setMaximumFractionDigits(remoteComponent.getMaxFractionDigit());
+            format.setMinimumFractionDigits(remoteComponent.getMaxFractionDigit());
+          }
+        } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RIntegerField) {
+          format = new qx.util.format.NumberFormat();
+          format.setMaximumFractionDigits(0);
+        }
+      }
+      return format;
+    },
+
+    _createTimeFormatPatterns: function () {
+      var formatPatterns = [];
+      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HHmmss", "HH:mm:ss"));
+      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HHmm", "HH:mm"));
+      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HH", "HH"));
+      return formatPatterns;
+    },
+
+    _createShortTimeFormatPatterns: function () {
+      var formatPatterns = [];
+      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HHmm", "HH:mm"));
+      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HH", "HH"));
+      return formatPatterns;
+    },
+
+    _createDateFormatPatterns: function () {
+      var formatPatterns = [];
+      var defaultFormatPattern = this._getDatePattern();
+      formatPatterns.push(defaultFormatPattern);
+      for (var i = defaultFormatPattern.length; i > 0; i--) {
+        var subPattern = defaultFormatPattern.substring(0, i);
+        if (subPattern.charAt(subPattern.length - 1) == "/") {
+          formatPatterns.push(subPattern.substring(0, subPattern.length - 1));
+        }
+      }
+      return formatPatterns;
+    },
+
+    _createDateTimeFormatPatterns: function () {
+      var dateFormatPatterns = this._createDateFormatPatterns();
+      var timeFormatPatterns = this._createTimeFormatPatterns();
+      var formatPatterns = [];
+      for (var i = 0; i < dateFormatPatterns.length; i++) {
+        for (var j = 0; j < timeFormatPatterns.length; j++) {
+          formatPatterns.push(dateFormatPatterns[i] + " " + timeFormatPatterns[j]);
+        }
+        formatPatterns.push(dateFormatPatterns[i]);
+      }
+      return formatPatterns;
+    },
+
+    _createShortDateTimeFormatPatterns: function () {
+      var dateFormatPatterns = this._createDateFormatPatterns();
+      var timeFormatPatterns = this._createShortTimeFormatPatterns();
+      var formatPatterns = [];
+      for (var i = 0; i < dateFormatPatterns.length; i++) {
+        for (var j = 0; j < timeFormatPatterns.length; j++) {
+          formatPatterns.push(dateFormatPatterns[i] + " " + timeFormatPatterns[j]);
+        }
+        formatPatterns.push(dateFormatPatterns[i]);
+      }
+      return formatPatterns;
+    },
+
+    _createDateFormats: function (formatPatterns) {
+      var formats = [];
+      for (var i = 0; i < formatPatterns.length; i++) {
+        formats.push(new qx.util.format.DateFormat(formatPatterns[i]));
+      }
+      return formats;
+    },
+
+    /**
+     *
+     * @return {undefined}
+     * @param firstDayOfWeek {Integer}
+     */
+    setFirstDayOfWeek: function (firstDayOfWeek) {
+      this.__firstDayOfWeek = firstDayOfWeek;
+    },
+
+    /**
+     *
+     * @return {Integer}
+     */
+    _getFirstDayOfWeek: function () {
+      return this.__firstDayOfWeek;
+    },
+
+    _createDateComponent: function (remoteDateField) {
+      var dateComponent;
+      if (remoteDateField.getType() == "DATE_TIME") {
+        dateComponent = this._createDateTimeField(remoteDateField);
+      } else {
+        dateComponent = this._createDateField(remoteDateField);
+      }
+      return dateComponent;
+    },
+
+    /**
+     * @return {qx.ui.core.Widget | qx.ui.mobile.core.Widget}
+     * @param remoteDecimalComponent {org.jspresso.framework.gui.remote.RDecimalComponent}
+     */
+    _createDecimalComponent: function (remoteDecimalComponent) {
+      var decimalComponent;
+      if (remoteDecimalComponent instanceof org.jspresso.framework.gui.remote.RDecimalField) {
+        decimalComponent = this._createDecimalField(remoteDecimalComponent);
+      } else if (remoteDecimalComponent instanceof org.jspresso.framework.gui.remote.RPercentField) {
+        decimalComponent = this._createPercentField(remoteDecimalComponent);
+      }
+      return decimalComponent;
+    },
+
+    /**
+     * @return {qx.ui.core.Widget | qx.ui.mobile.core.Widget}
+     * @param remoteNumericComponent {org.jspresso.framework.gui.remote.RNumericComponent}
+     */
+    _createNumericComponent: function (remoteNumericComponent) {
+      var numericComponent;
+      if (remoteNumericComponent instanceof org.jspresso.framework.gui.remote.RDecimalComponent) {
+        numericComponent = this._createDecimalComponent(remoteNumericComponent);
+      } else if (remoteNumericComponent instanceof org.jspresso.framework.gui.remote.RIntegerField) {
+        numericComponent = this._createIntegerField(remoteNumericComponent);
+      }
+      return numericComponent;
     }
-
-
-
-
-
   }
 });

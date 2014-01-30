@@ -21,25 +21,16 @@ package org.jspresso.framework.application.model.mobile;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
-import org.jspresso.framework.action.IAction;
-import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.backend.action.AbstractQbeAction;
-import org.jspresso.framework.application.frontend.action.FrontendAction;
+import org.jspresso.framework.application.frontend.action.std.mobile.AddPageAction;
 import org.jspresso.framework.application.model.FilterableBeanCollectionModule;
 import org.jspresso.framework.application.model.descriptor.BeanCollectionModuleDescriptor;
 import org.jspresso.framework.application.model.descriptor.FilterableBeanCollectionModuleDescriptor;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
-import org.jspresso.framework.model.component.query.QueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
-import org.jspresso.framework.util.collection.IPageable;
-import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.descriptor.EBorderType;
-import org.jspresso.framework.view.descriptor.ESelectionMode;
-import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor;
@@ -76,24 +67,9 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
     MobileNavPageViewDescriptor moduleObjectsPageView = new MobileNavPageViewDescriptor();
     moduleObjectsPageView.setSelectionView(moduleObjectsView);
     if (getPagingAction() != null) {
-      moduleObjectsPageView.setPageEndAction(new FrontendAction() {
-        @Override
-        public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
-          try {
-            context.put(AbstractQbeAction.PAGINATE, null);
-            IPageable pageableModel = getModel(context);
-            pageableModel.setStickyResults(pageableModel.getResults());
-            if (pageableModel.getPage() != null) {
-              pageableModel.setPage(pageableModel.getPage() + 1);
-            } else {
-              pageableModel.setPage(1);
-            }
-            return actionHandler.execute(getPagingAction(), context);
-          } finally {
-            context.remove(AbstractQbeAction.PAGINATE);
-          }
-        }
-      });
+      AddPageAction<?, ?, ?> addPageAction = new AddPageAction<>();
+      addPageAction.setWrappedAction(getPagingAction());
+      moduleObjectsPageView.setPageEndAction(addPageAction);
     }
     IMobilePageViewDescriptor nextPage;
     if (getElementViewDescriptor() instanceof IMobilePageViewDescriptor) {
@@ -235,5 +211,15 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
   @Override
   public MobileComponentViewDescriptor getFilterViewDescriptor() {
     return (MobileComponentViewDescriptor) super.getFilterViewDescriptor();
+  }
+
+  /**
+   * Not supported in mobile environment.
+   * <p/>
+   * {@inheritDoc}
+   */
+  @Override
+  public void setPaginationViewDescriptor(BasicViewDescriptor paginationViewDescriptor) {
+    throw new UnsupportedOperationException("Not supported in mobile environment.");
   }
 }

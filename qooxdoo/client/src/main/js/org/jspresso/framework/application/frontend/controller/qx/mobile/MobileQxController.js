@@ -79,7 +79,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     _restart: function () {
       this.__workspacePages = {};
       this.__displayedWorkspaceName = null;
-      this.__workspacesMasterPage.exclude();
+      if(this.__workspacesMasterPage) {
+        this.__workspacesMasterPage.exclude();
+      }
       this.base(arguments);
     },
     /**
@@ -368,6 +370,29 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       if(component instanceof qx.ui.mobile.page.NavigationPage) {
         this._getViewFactory().edit(/** qx.ui.mobile.page.NavigationPage */ component);
       }
+    },
+
+    /**
+     * @param abstractDialogCommand {org.jspresso.framework.application.frontend.command.remote.RemoteAbstractDialogCommand}
+     * @return {undefined}
+     */
+    _handleDialogCommand: function (abstractDialogCommand) {
+      var dialogButtons = [];
+      for (var i = 0; i < abstractDialogCommand.getActions().length; i++) {
+        dialogButtons.push(this._getViewFactory().createAction(abstractDialogCommand.getActions()[i]));
+      }
+      var dialogView;
+      var icon;
+      if (abstractDialogCommand
+          instanceof org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand) {
+        var dialogCommand = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand} */
+            abstractDialogCommand;
+        dialogView = this.createComponent(dialogCommand.getView());
+        icon = dialogCommand.getView().getIcon();
+      }
+      this._popupDialog(abstractDialogCommand.getTitle(), null, dialogView, icon, dialogButtons,
+          abstractDialogCommand.getUseCurrent(), abstractDialogCommand.getDimension());
     }
+
   }
 });
