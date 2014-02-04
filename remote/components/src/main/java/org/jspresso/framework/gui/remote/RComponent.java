@@ -66,7 +66,7 @@ public abstract class RComponent extends RemotePeer implements
    */
   public RComponent(String guid) {
     super(guid);
-    actionHardReferences = new HashSet<>();
+    actionHardReferences = new HashSet<RAction>();
   }
 
   /**
@@ -75,7 +75,7 @@ public abstract class RComponent extends RemotePeer implements
    */
   public RComponent() {
     // For serialization support
-    actionHardReferences = new HashSet<>();
+    actionHardReferences = new HashSet<RAction>();
   }
 
   /**
