@@ -158,7 +158,11 @@ public class RemoteActionFactory extends
     String permId = action.getPermId();
     permId = remotePeerRegistry.registerPermId(permId, remoteAction.getGuid());
     remoteAction.setPermId(permId);
-    hardReferences.add(remoteActionAdapter);
+    if (view == null) {
+      hardReferences.add(remoteActionAdapter);
+    } else {
+      view.getPeer().addReferencedAction(remoteActionAdapter);
+    }
     remotePeerRegistry.register(remoteActionAdapter);
     return remoteAction;
   }

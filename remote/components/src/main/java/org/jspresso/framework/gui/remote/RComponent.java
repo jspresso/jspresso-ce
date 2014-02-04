@@ -18,6 +18,9 @@
  */
 package org.jspresso.framework.gui.remote;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.gui.Dimension;
@@ -35,22 +38,25 @@ public abstract class RComponent extends RemotePeer implements
 
   private static final long serialVersionUID = 4728316436476683941L;
 
-  private RActionList[]     actionLists;
-  private RActionList[]     secondaryActionLists;
-  private String            background;
-  private RemoteValueState  backgroundState;
-  private String            borderType;
-  private Font              font;
-  private RemoteValueState  fontState;
-  private String            foreground;
-  private RemoteValueState  foregroundState;
-  private RIcon             icon;
-  private String            label;
-  private Dimension         preferredSize;
-  private RemoteValueState  state;
-  private String            toolTip;
-  private RemoteValueState  toolTipState;
-  private String            styleName;
+  private       RActionList[]    actionLists;
+  private       RActionList[]    secondaryActionLists;
+  private       String           background;
+  private       RemoteValueState backgroundState;
+  private       String           borderType;
+  private       Font             font;
+  private       RemoteValueState fontState;
+  private       String           foreground;
+  private       RemoteValueState foregroundState;
+  private       RIcon            icon;
+  private       String           label;
+  private       Dimension        preferredSize;
+  private       RemoteValueState state;
+  private       String           toolTip;
+  private       RemoteValueState toolTipState;
+  private       String           styleName;
+
+  @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+  private final Set<RAction>     actionHardReferences;
 
   /**
    * Constructs a new {@code RComponent} instance.
@@ -60,6 +66,7 @@ public abstract class RComponent extends RemotePeer implements
    */
   public RComponent(String guid) {
     super(guid);
+    actionHardReferences = new HashSet<>();
   }
 
   /**
@@ -68,6 +75,7 @@ public abstract class RComponent extends RemotePeer implements
    */
   public RComponent() {
     // For serialization support
+    actionHardReferences = new HashSet<>();
   }
 
   /**
@@ -80,7 +88,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Gets the actionLists.
-   * 
+   *
    * @return the actionLists.
    */
   public RActionList[] getActionLists() {
@@ -89,7 +97,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Gets the background.
-   * 
+   *
    * @return the background.
    */
   public String getBackground() {
@@ -98,7 +106,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Gets the borderType.
-   * 
+   *
    * @return the borderType.
    */
   public String getBorderType() {
@@ -107,7 +115,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Gets the font.
-   * 
+   *
    * @return the font.
    */
   public Font getFont() {
@@ -116,7 +124,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Gets the foreground.
-   * 
+   *
    * @return the foreground.
    */
   public String getForeground() {
@@ -125,7 +133,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Gets the icon.
-   * 
+   *
    * @return the icon.
    */
   public RIcon getIcon() {
@@ -134,7 +142,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Gets the name.
-   * 
+   *
    * @return the name.
    */
   public String getLabel() {
@@ -397,5 +405,14 @@ public abstract class RComponent extends RemotePeer implements
    */
   public void setFontState(RemoteValueState fontState) {
     this.fontState = fontState;
+  }
+
+  /**
+   * Add referenced action to prevent it from being garbage collected.
+   *
+   * @param action the action
+   */
+  public void addReferencedAction(RAction action) {
+    actionHardReferences.add(action);
   }
 }
