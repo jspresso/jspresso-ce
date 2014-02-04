@@ -24,6 +24,8 @@ import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.Map;
 
+import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -37,6 +39,7 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
+import org.jspresso.framework.util.lang.PropertyNameTank;
 
 /**
  * This is the core implementation of all entities in the application. Instances
@@ -48,10 +51,10 @@ import org.jspresso.framework.util.accessor.IAccessorFactory;
 public class BasicEntityInvocationHandler extends
     AbstractComponentInvocationHandler {
 
-  private static final long   serialVersionUID = 6078989823404409653L;
+  private static final long serialVersionUID = 6078989823404409653L;
 
-  private final Map<String, Object> properties;
-  private int                 hashCode;
+  private final TIntObjectMap<Object> properties;
+  private       int           hashCode;
 
   /**
    * Constructs a new {@code BasicEntityInvocationHandler} instance.
@@ -69,14 +72,12 @@ public class BasicEntityInvocationHandler extends
    *          The factory used to create entity extensions based on their
    *          classes.
    */
-  protected BasicEntityInvocationHandler(
-      IComponentDescriptor<IEntity> entityDescriptor,
-      IComponentFactory inlineComponentFactory,
-      IComponentCollectionFactory collectionFactory,
-      IAccessorFactory accessorFactory,
-      IComponentExtensionFactory extensionFactory) {
-    super(entityDescriptor, inlineComponentFactory, collectionFactory,
-        accessorFactory, extensionFactory);
+  protected BasicEntityInvocationHandler(IComponentDescriptor<IEntity> entityDescriptor,
+                                         IComponentFactory inlineComponentFactory,
+                                         IComponentCollectionFactory collectionFactory,
+                                         IAccessorFactory accessorFactory,
+                                         IComponentExtensionFactory extensionFactory) {
+    super(entityDescriptor, inlineComponentFactory, collectionFactory, accessorFactory, extensionFactory);
     this.properties = createPropertyMap();
     this.hashCode = -1;
   }
@@ -89,8 +90,7 @@ public class BasicEntityInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
-  public synchronized Object invoke(Object proxy, Method method, Object[] args)
-      throws Throwable {
+  public synchronized Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     String methodName = method.getName();
     if ("isPersistent".equals(methodName)) {
       return isPersistent(proxy);
@@ -106,8 +106,7 @@ public class BasicEntityInvocationHandler extends
    */
   protected boolean isPersistent(Object proxy) {
     Integer version = ((IEntity) proxy).getVersion();
-    return version != null
-        && !IEntity.DELETED_VERSION.equals(version);
+    return version != null && !IEntity.DELETED_VERSION.equals(version);
   }
 
   /**
@@ -172,7 +171,7 @@ public class BasicEntityInvocationHandler extends
    */
   @Override
   protected Object retrievePropertyValue(String propertyName) {
-    return properties.get(propertyName);
+    return properties.get(PropertyNameTank.indexOf(propertyName));
   }
 
   /**
@@ -180,11 +179,11 @@ public class BasicEntityInvocationHandler extends
    */
   @Override
   protected void storeProperty(String propertyName, Object propertyValue) {
-    properties.put(propertyName, propertyValue);
+    properties.put(PropertyNameTank.indexOf(propertyName), propertyValue);
   }
 
-  private Map<String, Object> createPropertyMap() {
-    return new HashMap<>();
+  private TIntObjectMap<Object> createPropertyMap() {
+    return new TIntObjectHashMap<>();
   }
 
   /**
