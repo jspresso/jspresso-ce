@@ -19,7 +19,6 @@
 package org.jspresso.framework.util.bean;
 
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.util.Set;
 
 import org.jspresso.framework.util.collection.TWeakHashSet;

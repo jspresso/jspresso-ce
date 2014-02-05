@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2014 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -21,8 +21,6 @@ package org.jspresso.framework.util.bean;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.Serializable;
-import java.lang.ref.ReferenceQueue;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -39,7 +37,7 @@ import gnu.trove.map.hash.THashMap;
  * 
  * @author <a href="mailto:haaf@mercatis.de">Holger Engels</a>
  */
-public class WeakPropertyChangeSupport implements Serializable {
+public class PropertyChangeSupport implements Serializable {
 
   private static final long serialVersionUID = 2153623080004651058L;
 
@@ -48,20 +46,18 @@ public class WeakPropertyChangeSupport implements Serializable {
    * <p/>
    * This is transient - its state is written in the writeObject method.
    */
-  private transient LinkedList<WeakEntry<PropertyChangeListener>> listeners;
+  private transient LinkedList<PropertyChangeListener> listeners;
 
   /**
    * Hashtable for managing listeners for specific properties. Maps property
    * names to WeakPropertyChangeSupport objects.
    */
-  private transient THashMap<String, WeakPropertyChangeSupport> children;
+  private transient THashMap<String, PropertyChangeSupport> children;
 
   /**
    * The object to be provided as the "source" for any generated events.
    */
   private Object source;
-
-  private final transient ReferenceQueue<PropertyChangeListener> queue = new ReferenceQueue<>();
 
   /**
    * Constructs a {@code WeakPropertyChangeSupport} object.
@@ -69,7 +65,7 @@ public class WeakPropertyChangeSupport implements Serializable {
    * @param sourceBean
    *          The bean to be given as the source for any events.
    */
-  public WeakPropertyChangeSupport(Object sourceBean) {
+  public PropertyChangeSupport(Object sourceBean) {
     if (sourceBean == null) {
       throw new NullPointerException();
     }
@@ -85,11 +81,9 @@ public class WeakPropertyChangeSupport implements Serializable {
    */
   public synchronized void addPropertyChangeListener(PropertyChangeListener listener) {
     if (listeners == null) {
-      listeners = new java.util.LinkedList<>();
-    } else {
-      processQueue();
+      listeners = new LinkedList<>();
     }
-    listeners.add(WeakEntry.create(listener, queue));
+    listeners.add(listener);
   }
 
   /**
@@ -103,8 +97,7 @@ public class WeakPropertyChangeSupport implements Serializable {
     if (listeners == null) {
       return;
     }
-    processQueue();
-    listeners.remove(WeakEntry.create(listener));
+    listeners.remove(listener);
   }
 
   /**
@@ -121,9 +114,9 @@ public class WeakPropertyChangeSupport implements Serializable {
     if (children == null) {
       children = new THashMap<>();
     }
-    WeakPropertyChangeSupport child = children.get(propertyName);
+    PropertyChangeSupport child = children.get(propertyName);
     if (child == null) {
-      child = new WeakPropertyChangeSupport(source);
+      child = new PropertyChangeSupport(source);
       children.put(propertyName, child);
     }
     child.addPropertyChangeListener(listener);
@@ -131,7 +124,7 @@ public class WeakPropertyChangeSupport implements Serializable {
 
   /**
    * Remove a PropertyChangeListener for a specific property.
-   * 
+   *
    * @param propertyName
    *          The name of the property that was listened on.
    * @param listener
@@ -142,7 +135,7 @@ public class WeakPropertyChangeSupport implements Serializable {
     if (children == null) {
       return;
     }
-    WeakPropertyChangeSupport child = children.get(propertyName);
+    PropertyChangeSupport child = children.get(propertyName);
     if (child == null) {
       return;
     }
@@ -152,7 +145,7 @@ public class WeakPropertyChangeSupport implements Serializable {
   /**
    * Report a bound property update to any registered listeners. No event is
    * fired if old and new are equal and non-null.
-   * 
+   *
    * @param propertyName
    *          The programmatic name of the property that was changed.
    * @param oldValue
@@ -167,11 +160,11 @@ public class WeakPropertyChangeSupport implements Serializable {
       return;
     }
 
-    java.util.LinkedList<WeakEntry<PropertyChangeListener>> targets = null;
-    WeakPropertyChangeSupport child = null;
+    LinkedList<PropertyChangeListener> targets = null;
+    PropertyChangeSupport child = null;
     synchronized (this) {
       if (listeners != null) {
-        targets = (java.util.LinkedList<WeakEntry<PropertyChangeListener>>) listeners
+        targets = (LinkedList<PropertyChangeListener>) listeners
             .clone();
       }
       if (children != null && propertyName != null) {
@@ -183,8 +176,7 @@ public class WeakPropertyChangeSupport implements Serializable {
         oldValue, newValue);
 
     if (targets != null) {
-      for (WeakEntry<PropertyChangeListener> entry : targets) {
-        PropertyChangeListener target = entry.get();
+      for (PropertyChangeListener target : targets) {
         if (target != null) {
           target.propertyChange(evt);
         }
@@ -202,7 +194,7 @@ public class WeakPropertyChangeSupport implements Serializable {
    * <p/>
    * This is merely a convenience wrapper around the more general
    * firePropertyChange method that takes Object values.
-   * 
+   *
    * @param propertyName
    *          The programmatic name of the property that was changed.
    * @param oldValue
@@ -224,7 +216,7 @@ public class WeakPropertyChangeSupport implements Serializable {
    * <p/>
    * This is merely a convenience wrapper around the more general
    * firePropertyChange method that takes Object values.
-   * 
+   *
    * @param propertyName
    *          The programmatic name of the property that was changed.
    * @param oldValue
@@ -244,7 +236,7 @@ public class WeakPropertyChangeSupport implements Serializable {
   /**
    * Fire an existing PropertyChangeEvent to any registered listeners. No event
    * is fired if the given event's old and new values are equal and non-null.
-   * 
+   *
    * @param evt
    *          The PropertyChangeEvent object.
    */
@@ -257,11 +249,11 @@ public class WeakPropertyChangeSupport implements Serializable {
       return;
     }
 
-    java.util.LinkedList<WeakEntry<PropertyChangeListener>> targets = null;
-    WeakPropertyChangeSupport child = null;
+    LinkedList<PropertyChangeListener> targets = null;
+    PropertyChangeSupport child = null;
     synchronized (this) {
       if (listeners != null) {
-        targets = (java.util.LinkedList<WeakEntry<PropertyChangeListener>>) listeners
+        targets = (LinkedList<PropertyChangeListener>) listeners
             .clone();
       }
       if (children != null && propertyName != null) {
@@ -270,8 +262,7 @@ public class WeakPropertyChangeSupport implements Serializable {
     }
 
     if (targets != null) {
-      for (WeakEntry<PropertyChangeListener> entry : targets) {
-        PropertyChangeListener target = entry.get();
+      for (PropertyChangeListener target : targets) {
         if (target != null) {
           target.propertyChange(evt);
         }
@@ -295,7 +286,7 @@ public class WeakPropertyChangeSupport implements Serializable {
       return true;
     }
     if (children != null) {
-      WeakPropertyChangeSupport child = children.get(propertyName);
+      PropertyChangeSupport child = children.get(propertyName);
       if (child != null && child.listeners != null) {
         return !child.listeners.isEmpty();
       }
@@ -306,8 +297,7 @@ public class WeakPropertyChangeSupport implements Serializable {
   private synchronized ArrayList<PropertyChangeListener> getPropertyChangeListenersList() {
     ArrayList<PropertyChangeListener> targets = new ArrayList<>();
     if (listeners != null) {
-      for (WeakEntry<PropertyChangeListener> entry : listeners) {
-        PropertyChangeListener target = entry.get();
+      for (PropertyChangeListener target : listeners) {
         if (target != null) {
           targets.add(target);
         }
@@ -340,86 +330,11 @@ public class WeakPropertyChangeSupport implements Serializable {
       String propertyName) {
     ArrayList<PropertyChangeListener> targets = new ArrayList<>();
     if (children != null && propertyName != null) {
-      WeakPropertyChangeSupport child = children.get(propertyName);
+      PropertyChangeSupport child = children.get(propertyName);
       if (child != null) {
         targets.addAll(child.getPropertyChangeListenersList());
       }
     }
     return targets.toArray(new PropertyChangeListener[targets.size()]);
-  }
-
-  /**
-   * Remove all invalidated entries from the map, that is, remove all entries
-   * whose keys have been discarded. This method should be invoked once by each
-   * public mutator in this class. We don't invoke this method in public
-   * accessors because that can lead to surprising
-   * ConcurrentModificationExceptions.
-   */
-  @SuppressWarnings("unchecked")
-  private void processQueue() {
-    WeakEntry<PropertyChangeListener> wk;
-    while ((wk = (WeakEntry<PropertyChangeListener>) queue.poll()) != null) {
-      listeners.remove(wk);
-    }
-  }
-
-  private static final class WeakEntry<E> extends WeakReference<E> {
-
-    private final int hash; /*
-                       * Hashcode of key, stored here since the key may be
-                       * tossed by the GC
-                       */
-
-    private WeakEntry(E k) {
-      super(k);
-      hash = k.hashCode();
-    }
-
-    private static <E> WeakEntry<E> create(E k) {
-      if (k == null) {
-        return null;
-      }
-      return new WeakEntry<>(k);
-    }
-
-    private WeakEntry(E k, ReferenceQueue<? super E> q) {
-      super(k, q);
-      hash = k.hashCode();
-    }
-
-    private static <E> WeakEntry<E> create(E k, ReferenceQueue<? super E> q) {
-      if (k == null) {
-        return null;
-      }
-      return new WeakEntry<>(k, q);
-    }
-
-    /*
-     * A WeakEntry is equal to another WeakEntry iff they both refer to objects
-     * that are, in turn, equal according to their own equals methods
-     */
-    @Override
-    public boolean equals(Object o) {
-      if (this == o) {
-        return true;
-      }
-      if (!(o instanceof WeakEntry)) {
-        return false;
-      }
-      Object t = this.get();
-      Object u = ((WeakEntry<?>) o).get();
-      if ((t == null) || (u == null)) {
-        return false;
-      }
-      if (t == u) {
-        return true;
-      }
-      return t.equals(u);
-    }
-
-    @Override
-    public int hashCode() {
-      return hash;
-    }
   }
 }

@@ -195,11 +195,11 @@ public class TWeakHashSet<E> extends AbstractSet<E> {
       }
       Object t = this.get();
       Object u = ((WeakElement) o).get();
-      if (t == u) {
-        return true;
-      }
       if ((t == null) || (u == null)) {
         return false;
+      }
+      if (t == u) {
+        return true;
       }
       return t.equals(u);
     }
