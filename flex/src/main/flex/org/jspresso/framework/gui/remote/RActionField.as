@@ -20,7 +20,7 @@ package org.jspresso.framework.gui.remote {
 public class RActionField extends RComponent {
 
   private var _showTextField:Boolean;
-  private var _fieldEditable:Boolean;
+  private var _fieldEditable:Boolean = true;
   private var _characterAction:RAction;
 
   public function RActionField() {

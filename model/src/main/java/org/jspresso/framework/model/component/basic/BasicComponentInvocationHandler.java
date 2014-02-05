@@ -22,8 +22,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
+import gnu.trove.map.hash.THashMap;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -33,7 +32,6 @@ import org.jspresso.framework.model.component.IComponentExtensionFactory;
 import org.jspresso.framework.model.component.IComponentFactory;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
-import org.jspresso.framework.util.lang.PropertyNameTank;
 
 /**
  * This is the core implementation of all inline components in the application.
@@ -46,9 +44,9 @@ import org.jspresso.framework.util.lang.PropertyNameTank;
 public class BasicComponentInvocationHandler extends
     AbstractComponentInvocationHandler {
 
-  private static final long serialVersionUID = -3178070064423598514L;
+  private static final long   serialVersionUID = -3178070064423598514L;
 
-  private final TIntObjectMap<Object> properties;
+  private final Map<String, Object> properties;
 
   /**
    * Constructs a new {@code BasicComponentInvocationHandler} instance.
@@ -66,17 +64,18 @@ public class BasicComponentInvocationHandler extends
    *          The factory used to create component extensions based on their
    *          classes.
    */
-  public BasicComponentInvocationHandler(IComponentDescriptor<IComponent> componentDescriptor,
-                                         IComponentFactory inlineComponentFactory,
-                                         IComponentCollectionFactory collectionFactory,
-                                         IAccessorFactory accessorFactory,
-                                         IComponentExtensionFactory extensionFactory) {
-    super(componentDescriptor, inlineComponentFactory, collectionFactory, accessorFactory, extensionFactory);
+  public BasicComponentInvocationHandler(
+      IComponentDescriptor<IComponent> componentDescriptor,
+      IComponentFactory inlineComponentFactory,
+      IComponentCollectionFactory collectionFactory,
+      IAccessorFactory accessorFactory,
+      IComponentExtensionFactory extensionFactory) {
+    super(componentDescriptor, inlineComponentFactory, collectionFactory,
+        accessorFactory, extensionFactory);
     this.properties = createPropertyMap();
   }
 
   private Object stackOverFlowEqualsWatchDog;
-
   /**
    * {@inheritDoc}
    */
@@ -135,7 +134,7 @@ public class BasicComponentInvocationHandler extends
    */
   @Override
   protected Object retrievePropertyValue(String propertyName) {
-    return properties.get(PropertyNameTank.indexOf(propertyName));
+    return properties.get(propertyName);
   }
 
   /**
@@ -143,7 +142,7 @@ public class BasicComponentInvocationHandler extends
    */
   @Override
   protected void storeProperty(String propertyName, Object propertyValue) {
-    properties.put(PropertyNameTank.indexOf(propertyName), propertyValue);
+    properties.put(propertyName, propertyValue);
   }
 
   private Object stackOverFlowToStringWatchDog;
@@ -168,7 +167,7 @@ public class BasicComponentInvocationHandler extends
   }
 
 
-  private TIntObjectMap<Object> createPropertyMap() {
-    return new TIntObjectHashMap<>();
+  private Map<String, Object> createPropertyMap() {
+    return new THashMap<>();
   }
 }

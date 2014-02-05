@@ -30,18 +30,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.THashMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
-import gnu.trove.set.TIntSet;
 import gnu.trove.set.hash.THashSet;
-import gnu.trove.set.hash.TIntHashSet;
 import gnu.trove.set.hash.TLinkedHashSet;
 import org.apache.commons.beanutils.MethodUtils;
 import org.slf4j.Logger;
@@ -85,7 +80,6 @@ import org.jspresso.framework.util.bean.SinglePropertyChangeSupport;
 import org.jspresso.framework.util.bean.SingleWeakPropertyChangeSupport;
 import org.jspresso.framework.util.collection.CollectionHelper;
 import org.jspresso.framework.util.lang.ObjectUtils;
-import org.jspresso.framework.util.lang.PropertyNameTank;
 
 /**
  * This is the core implementation of all components in the application.
@@ -128,8 +122,8 @@ public abstract class AbstractComponentInvocationHandler implements
   private static final Collection<String>     LIFECYCLE_METHOD_NAMES;
   private              IComponent             owningComponent;
   private              IPropertyDescriptor    owningPropertyDescriptor;
-  private final        TIntObjectMap<TIntSet> fakePclAttachements;
-  private final        TIntObjectMap<TIntSet> delayedFakePclAttachements;
+  private final        Map<String, Set<String>> fakePclAttachements;
+  private final        Map<String, Set<String>> delayedFakePclAttachements;
   private final        PropertyChangeListener fakePcl;
 
   static {
@@ -182,8 +176,8 @@ public abstract class AbstractComponentInvocationHandler implements
         // It's fake
       }
     };
-    this.fakePclAttachements = new TIntObjectHashMap<>();
-    this.delayedFakePclAttachements = new TIntObjectHashMap<>();
+    this.fakePclAttachements = new THashMap<>();
+    this.delayedFakePclAttachements = new THashMap<>();
   }
 
   /**
@@ -303,7 +297,7 @@ public abstract class AbstractComponentInvocationHandler implements
                 return null;
               }
               if (modifierMonitors == null) {
-                modifierMonitors = new HashSet<>();
+                modifierMonitors = new THashSet<>();
               }
               modifierMonitors.add(methodName);
             }
@@ -720,20 +714,18 @@ public abstract class AbstractComponentInvocationHandler implements
     Object referent = straightGetProperty(proxy, propertyName);
     if (referent instanceof IPropertyChangeCapable) {
       initializeInlineTrackerIfNeeded((IPropertyChangeCapable) referent, propertyName, true);
-      int propertyIndex = PropertyNameTank.indexOf(propertyName);
-      TIntSet delayedNestedPropertyListening = delayedFakePclAttachements
-          .remove(propertyIndex);
+      Set<String> delayedNestedPropertyListening = delayedFakePclAttachements
+          .remove(propertyName);
       if (delayedNestedPropertyListening != null) {
-        TIntSet nestedPropertyListening = fakePclAttachements
-            .get(propertyIndex);
+        Set<String> nestedPropertyListening = fakePclAttachements
+            .get(propertyName);
         if (nestedPropertyListening == null) {
-          nestedPropertyListening = new TIntHashSet();
-          fakePclAttachements.put(propertyIndex, nestedPropertyListening);
+          nestedPropertyListening = new THashSet<>();
+          fakePclAttachements.put(propertyName, nestedPropertyListening);
         }
-        for (int nestedPropertyIndex : delayedNestedPropertyListening.toArray()) {
-          String nestedPropertyName = PropertyNameTank.nameOf(nestedPropertyIndex);
+        for (String nestedPropertyName : delayedNestedPropertyListening) {
           ((IPropertyChangeCapable) referent).addWeakPropertyChangeListener(nestedPropertyName, fakePcl);
-          nestedPropertyListening.add(nestedPropertyIndex);
+          nestedPropertyListening.add(nestedPropertyName);
         }
       }
     }
@@ -893,7 +885,6 @@ public abstract class AbstractComponentInvocationHandler implements
       IReferencePropertyDescriptor<?> propertyDescriptor,
       Object oldPropertyValue, Object newPropertyValue) {
     String propertyName = propertyDescriptor.getName();
-    int propertyIndex = PropertyNameTank.indexOf(propertyName);
     NestedReferenceTracker referenceTracker = referenceTrackers.get(propertyName);
 
     // Handle owning component.
@@ -915,31 +906,29 @@ public abstract class AbstractComponentInvocationHandler implements
           ((IPropertyChangeCapable) oldPropertyValue)
               .removePropertyChangeListener(referenceTracker);
         }
-        TIntSet nestedPropertyListening = fakePclAttachements
-            .get(propertyIndex);
+        Set<String> nestedPropertyListening = fakePclAttachements
+            .get(propertyName);
         if (nestedPropertyListening != null) {
-          for (int nestedPropertyIndex : nestedPropertyListening.toArray()) {
-            String nestedPropertyName = PropertyNameTank.nameOf(nestedPropertyIndex);
+          for (String nestedPropertyName : nestedPropertyListening) {
             ((IPropertyChangeCapable) oldPropertyValue)
                 .removePropertyChangeListener(nestedPropertyName, fakePcl);
           }
         }
-        delayedFakePclAttachements.remove(propertyIndex);
+        delayedFakePclAttachements.remove(propertyName);
       }
     }
     storeProperty(propertyName, newPropertyValue);
     if (newPropertyValue instanceof IPropertyChangeCapable) {
-      TIntSet nestedPropertyListening = fakePclAttachements
-          .get(propertyIndex);
+      Set<String> nestedPropertyListening = fakePclAttachements
+          .get(propertyName);
       if (nestedPropertyListening != null) {
         if (isInitialized(newPropertyValue)) {
-          for (int nestedPropertyIndex : nestedPropertyListening.toArray()) {
-            String nestedPropertyName = PropertyNameTank.nameOf(nestedPropertyIndex);
+          for (String nestedPropertyName : nestedPropertyListening) {
             ((IPropertyChangeCapable) newPropertyValue)
                 .addWeakPropertyChangeListener(nestedPropertyName, fakePcl);
           }
         } else {
-          delayedFakePclAttachements.put(propertyIndex, nestedPropertyListening);
+          delayedFakePclAttachements.put(propertyName, nestedPropertyListening);
         }
       }
       if (referenceTracker == null) {
@@ -1144,13 +1133,10 @@ public abstract class AbstractComponentInvocationHandler implements
 
   private void handleNestedPropertyChangeListening(Object proxy,
       String propertyName) {
-    int propertyIndex = PropertyNameTank.indexOf(propertyName);
     int nestedDelimIndex = propertyName.indexOf(IAccessor.NESTED_DELIM);
     if (nestedDelimIndex >= 0) {
       String rootProperty = propertyName.substring(0, nestedDelimIndex);
-      int rootPropertyIndex = PropertyNameTank.indexOf(rootProperty);
       String nestedPropertyName = propertyName.substring(nestedDelimIndex + 1);
-      int nestedPropertyIndex = PropertyNameTank.indexOf(nestedPropertyName);
       NestedReferenceTracker referenceTracker = referenceTrackers
           .get(rootProperty);
       if (referenceTracker == null) {
@@ -1166,22 +1152,22 @@ public abstract class AbstractComponentInvocationHandler implements
         if (isInitialized(currentRootProperty)) {
           ((IPropertyChangeCapable) currentRootProperty)
               .addWeakPropertyChangeListener(nestedPropertyName, fakePcl);
-          TIntSet nestedPropertyListening = fakePclAttachements
-              .get(propertyIndex);
+          Set<String> nestedPropertyListening = fakePclAttachements
+              .get(propertyName);
           if (nestedPropertyListening == null) {
-            nestedPropertyListening = new TIntHashSet();
-            fakePclAttachements.put(rootPropertyIndex, nestedPropertyListening);
+            nestedPropertyListening = new THashSet<>();
+            fakePclAttachements.put(rootProperty, nestedPropertyListening);
           }
-          nestedPropertyListening.add(nestedPropertyIndex);
+          nestedPropertyListening.add(nestedPropertyName);
         } else {
-          TIntSet delayedNestedPropertyListening = delayedFakePclAttachements
-              .get(propertyIndex);
+          Set<String> delayedNestedPropertyListening = delayedFakePclAttachements
+              .get(propertyName);
           if (delayedNestedPropertyListening == null) {
-            delayedNestedPropertyListening = new TIntHashSet();
-            delayedFakePclAttachements.put(rootPropertyIndex,
+            delayedNestedPropertyListening = new THashSet<>();
+            delayedFakePclAttachements.put(rootProperty,
                 delayedNestedPropertyListening);
           }
-          delayedNestedPropertyListening.add(nestedPropertyIndex);
+          delayedNestedPropertyListening.add(nestedPropertyName);
         }
       }
       referenceTracker.addToTrackedProperties(nestedPropertyName);
