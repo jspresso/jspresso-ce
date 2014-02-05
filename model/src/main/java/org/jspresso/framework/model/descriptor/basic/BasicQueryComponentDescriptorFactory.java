@@ -18,6 +18,10 @@
  */
 package org.jspresso.framework.model.descriptor.basic;
 
+import java.util.Map;
+
+import gnu.trove.map.hash.THashMap;
+
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
@@ -32,6 +36,16 @@ import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
  */
 public class BasicQueryComponentDescriptorFactory implements
     IQueryComponentDescriptorFactory {
+
+  private final Map<IComponentDescriptorProvider<? extends IComponent>, IComponentDescriptor<IQueryComponent>> registry;
+  private final Map<Class<? extends IComponent>, IComponentDescriptor<? extends IComponent>> refRegistry;
+  /**
+   * Instantiates a new Basic query component descriptor factory.
+   */
+  public BasicQueryComponentDescriptorFactory() {
+    registry = new THashMap<>();
+    refRegistry = new THashMap<>();
+  }
 
   /**
    * Creates basic query component descriptors.
@@ -48,7 +62,20 @@ public class BasicQueryComponentDescriptorFactory implements
     } else {
       realComponentDescriptorProvider = componentDescriptorProvider;
     }
-    return new BasicQueryComponentDescriptor<IQueryComponent>(
-        realComponentDescriptorProvider);
+    return createOrGetQueryComponentDescriptor(realComponentDescriptorProvider);
+  }
+
+  private IComponentDescriptor<IQueryComponent> createOrGetQueryComponentDescriptor(
+      IComponentDescriptorProvider<? extends IComponent> componentDescriptorProvider) {
+    IComponentDescriptor<IQueryComponent> queryComponentDescriptor;
+    synchronized (registry) {
+      queryComponentDescriptor = registry.get(componentDescriptorProvider);
+      if (queryComponentDescriptor == null) {
+        queryComponentDescriptor = new BasicQueryComponentDescriptor<IQueryComponent>(componentDescriptorProvider,
+            refRegistry);
+        registry.put(componentDescriptorProvider, queryComponentDescriptor);
+      }
+    }
+    return queryComponentDescriptor;
   }
 }

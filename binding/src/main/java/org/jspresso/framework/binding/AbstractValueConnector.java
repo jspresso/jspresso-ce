@@ -23,8 +23,9 @@ import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
+
+import gnu.trove.set.hash.THashSet;
 
 import org.jspresso.framework.model.IModelProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
@@ -107,7 +108,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
       ((ISecurityHandlerAware) gate).setSecurityHandler(getSecurityHandler());
     }
     if (readabilityGates == null) {
-      readabilityGates = new HashSet<>(4);
+      readabilityGates = new THashSet<>(4);
     }
     readabilityGates.add(gate);
     gate.addPropertyChangeListener(IGate.OPEN_PROPERTY,
@@ -151,7 +152,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
       ((ISecurityHandlerAware) gate).setSecurityHandler(getSecurityHandler());
     }
     if (writabilityGates == null) {
-      writabilityGates = new HashSet<>(4);
+      writabilityGates = new THashSet<>(4);
     }
     writabilityGates.add(gate);
     gate.addPropertyChangeListener(IGate.OPEN_PROPERTY,
@@ -256,7 +257,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   @SuppressWarnings("unchecked")
   public int compareTo(IValueConnector another) {
     if (getConnectorValue() != null) {
-      if (another.getConnectorValue() != null) {
+      if (another != null && another.getConnectorValue() != null) {
         if (getConnectorValue() instanceof Comparable) {
           if (getConnectorValue() instanceof String) {
             return ((String) getConnectorValue())
@@ -267,8 +268,10 @@ public abstract class AbstractValueConnector extends AbstractConnector
         }
         return getConnectorValue().toString().compareToIgnoreCase(
             another.getConnectorValue().toString());
+      } else {
+        return 1;
       }
-    } else if (another.getConnectorValue() != null) {
+    } else if (another != null && another.getConnectorValue() != null) {
       return -1;
     }
     return 0;

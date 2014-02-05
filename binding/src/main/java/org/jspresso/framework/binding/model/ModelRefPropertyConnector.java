@@ -19,9 +19,12 @@
 package org.jspresso.framework.binding.model;
 
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import gnu.trove.map.hash.THashMap;
 
 import org.jspresso.framework.binding.ConnectorBindingException;
 import org.jspresso.framework.binding.ICompositeValueConnector;
@@ -55,6 +58,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    */
   public static final String           THIS_PROPERTY = "&this";
   private Map<String, IValueConnector> childConnectors;
+  private Collection<String>           childConnectorKeys;
   private ModelChangeSupport           modelChangeSupport;
 
   private final IModelConnectorFactory       modelConnectorFactory;
@@ -72,7 +76,8 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
     super(modelDescriptor, modelConnectorFactory.getAccessorFactory());
     this.modelConnectorFactory = modelConnectorFactory;
     modelChangeSupport = new ModelChangeSupport(this);
-    childConnectors = new LinkedHashMap<>();
+    childConnectors = new THashMap<>();
+    childConnectorKeys = new ArrayList<>();
   }
 
   /**
@@ -128,7 +133,8 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
     ModelRefPropertyConnector clonedConnector = (ModelRefPropertyConnector) super
         .clone(newConnectorId);
     clonedConnector.modelChangeSupport = new ModelChangeSupport(clonedConnector);
-    clonedConnector.childConnectors = new LinkedHashMap<>();
+    clonedConnector.childConnectors = new THashMap<>();
+    clonedConnector.childConnectorKeys = new ArrayList<>();
     return clonedConnector;
   }
 
@@ -174,6 +180,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
         }
         connector.setParentConnector(this);
         childConnectors.put(actualKey, connector);
+        childConnectorKeys.add(actualKey);
       }
     }
     return connector;
@@ -184,7 +191,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    */
   @Override
   public int getChildConnectorCount() {
-    return getChildConnectorKeys().size();
+    return childConnectorKeys.size();
   }
 
   /**
@@ -192,7 +199,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    */
   @Override
   public Collection<String> getChildConnectorKeys() {
-    return childConnectors.keySet();
+    return new ArrayList<>(childConnectorKeys);
   }
 
   /**

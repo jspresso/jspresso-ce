@@ -21,16 +21,19 @@ package org.jspresso.framework.model.descriptor.basic;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
+import gnu.trove.map.hash.THashMap;
+import gnu.trove.set.hash.THashSet;
+import gnu.trove.set.hash.TLinkedHashSet;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.service.IComponentService;
@@ -54,8 +57,6 @@ import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.lang.StringUtils;
 import org.jspresso.framework.util.sql.SqlHelper;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
 
 /**
  * This is the abstract base descriptor for all component-like part of the
@@ -413,7 +414,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   public List<String> getQueryableProperties() {
     synchronized (queryablePropertiesLock) {
       if (queryableProperties == null) {
-        Set<String> queryablePropertiesSet = new LinkedHashSet<>();
+        Set<String> queryablePropertiesSet = new TLinkedHashSet<>();
         List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
         if (ancestorDescs != null) {
           for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
@@ -443,7 +444,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   @Override
   public Collection<IGate> getReadabilityGates() {
-    Set<IGate> gates = new HashSet<>();
+    Set<IGate> gates = new THashSet<>();
     if (readabilityGates != null) {
       gates.addAll(readabilityGates);
     }
@@ -465,7 +466,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   public List<String> getRenderedProperties() {
     synchronized (renderedPropertiesLock) {
       if (renderedProperties == null) {
-        Set<String> renderedPropertiesSet = new LinkedHashSet<>();
+        Set<String> renderedPropertiesSet = new TLinkedHashSet<>();
         List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
         if (ancestorDescs != null) {
           for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
@@ -499,7 +500,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   @Override
   public Collection<String> getServiceContractClassNames() {
-    Set<String> serviceContractClassNames = new LinkedHashSet<>();
+    Set<String> serviceContractClassNames = new TLinkedHashSet<>();
     if (serviceContracts != null) {
       for (Class<?> serviceContract : serviceContracts) {
         serviceContractClassNames.add(serviceContract.getName());
@@ -653,7 +654,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   @Override
   public Collection<String> getUnclonedProperties() {
-    Set<String> properties = new HashSet<>();
+    Set<String> properties = new THashSet<>();
     if (unclonedProperties != null) {
       properties.addAll(unclonedProperties);
     }
@@ -673,7 +674,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   @Override
   public Collection<IGate> getWritabilityGates() {
-    Set<IGate> gates = new HashSet<>();
+    Set<IGate> gates = new THashSet<>();
     if (writabilityGates != null) {
       gates.addAll(writabilityGates);
     }
@@ -1303,8 +1304,8 @@ public abstract class AbstractComponentDescriptor<E> extends
   private void registerService(Class<?> serviceContract,
       IComponentService service) {
     if (serviceDelegates == null) {
-      serviceDelegates = new HashMap<>();
-      serviceContracts = new HashSet<>();
+      serviceDelegates = new THashMap<>();
+      serviceContracts = new THashSet<>();
     }
     serviceContracts.add(serviceContract);
     Method[] contractServices = serviceContract.getMethods();

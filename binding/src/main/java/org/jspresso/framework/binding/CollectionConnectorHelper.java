@@ -51,7 +51,7 @@ public final class CollectionConnectorHelper {
    * @return the created connector id.
    */
   public static String computeStorageKey(String baseId, int i) {
-    return baseId + "[" + i + "]";
+    return Integer.toString(i);
   }
 
   /**

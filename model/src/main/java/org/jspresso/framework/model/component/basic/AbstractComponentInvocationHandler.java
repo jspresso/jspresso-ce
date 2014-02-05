@@ -29,18 +29,18 @@ import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
 import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.hash.THashMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.set.TIntSet;
+import gnu.trove.set.hash.THashSet;
 import gnu.trove.set.hash.TIntHashSet;
+import gnu.trove.set.hash.TLinkedHashSet;
 import org.apache.commons.beanutils.MethodUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -131,7 +131,7 @@ public abstract class AbstractComponentInvocationHandler implements
   private final        PropertyChangeListener fakePcl;
 
   static {
-    Collection<String> methodNames = new HashSet<>();
+    Collection<String> methodNames = new THashSet<>();
     for (Method m : ILifecycleCapable.class.getMethods()) {
       methodNames.add(m.getName());
     }
@@ -168,8 +168,8 @@ public abstract class AbstractComponentInvocationHandler implements
     this.propertyChangeEnabled = true;
     this.collectionSortEnabled = true;
 
-    this.referenceTrackers = new HashMap<>();
-    this.computedPropertiesCache = new HashMap<>();
+    this.referenceTrackers = new THashMap<>();
+    this.computedPropertiesCache = new THashMap<>();
     // Fake PCL cannot be static, because there must be 1 registration on
     // referent per owning instance, i.e. 2 different instances must not share
     // the same fake PCL that will be removed when the referent is detached.
@@ -301,7 +301,7 @@ public abstract class AbstractComponentInvocationHandler implements
                 return null;
               }
               if (modifierMonitors == null) {
-                modifierMonitors = new HashSet<>();
+                modifierMonitors = new THashSet<>();
               }
               modifierMonitors.add(methodName);
             }
@@ -591,7 +591,7 @@ public abstract class AbstractComponentInvocationHandler implements
         }
       } else if (property instanceof Set<?>) {
         Set<IComponent> propertyAsSet = (Set<IComponent>) property;
-        for (IComponent referent : new HashSet<>(propertyAsSet)) {
+        for (IComponent referent : new THashSet<>(propertyAsSet)) {
           IComponent decorated = decorateReferent(referent, propertyDescriptor
               .getReferencedDescriptor().getElementDescriptor()
               .getComponentDescriptor());
@@ -653,7 +653,7 @@ public abstract class AbstractComponentInvocationHandler implements
       Class<IComponentExtension<IComponent>> extensionClass, IComponent proxy) {
     IComponentExtension<IComponent> extension;
     if (componentExtensions == null) {
-      componentExtensions = new HashMap<>();
+      componentExtensions = new THashMap<>();
       extension = null;
     } else {
       extension = componentExtensions.get(extensionClass);
@@ -1006,7 +1006,7 @@ public abstract class AbstractComponentInvocationHandler implements
    * @return The map of properties.
    */
   protected Map<String, Object> straightGetProperties(Object proxy) {
-    Map<String, Object> allProperties = new HashMap<>();
+    Map<String, Object> allProperties = new THashMap<>();
     for (IPropertyDescriptor propertyDescriptor : componentDescriptor
         .getPropertyDescriptors()) {
       String propertyName = propertyDescriptor.getName();
@@ -1940,9 +1940,9 @@ public abstract class AbstractComponentInvocationHandler implements
           Collection<?> oldCollectionSnapshot = CollectionHelper
               .cloneCollection((Collection<?>) oldProperty);
           // It's a 'many' relation end
-          Collection<Object> oldPropertyElementsToRemove = new HashSet<>();
-          Collection<Object> newPropertyElementsToAdd = new LinkedHashSet<>();
-          Collection<Object> propertyElementsToKeep = new HashSet<>();
+          Collection<Object> oldPropertyElementsToRemove = new THashSet<>();
+          Collection<Object> newPropertyElementsToAdd = new TLinkedHashSet<>();
+          Collection<Object> propertyElementsToKeep = new THashSet<>();
 
           if (oldProperty != null) {
             oldPropertyElementsToRemove.addAll((Collection<?>) oldProperty);
@@ -1989,7 +1989,7 @@ public abstract class AbstractComponentInvocationHandler implements
             Collection<Object> currentProperty = (Collection<Object>) oldProperty;
             if (currentProperty instanceof List) {
               // Just check that only order differs
-              Set<Object> temp = new HashSet<>(currentProperty);
+              Set<Object> temp = new THashSet<>(currentProperty);
               temp.removeAll((List<?>) actualNewProperty);
               currentProperty.clear();
               currentProperty.addAll((List<?>) actualNewProperty);
@@ -2228,7 +2228,7 @@ public abstract class AbstractComponentInvocationHandler implements
       this.referencesInlinedComponent = referencesInlineComponent;
       this.enabled = true;
       this.initialized = false;
-      this.trackedProperties = new HashSet<>();
+      this.trackedProperties = new THashSet<>();
     }
 
     /**

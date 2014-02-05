@@ -18,8 +18,9 @@
  */
 package org.jspresso.framework.gui.remote;
 
-import java.util.HashSet;
 import java.util.Set;
+
+import gnu.trove.set.hash.THashSet;
 
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.RemoteValueState;
@@ -66,7 +67,7 @@ public abstract class RComponent extends RemotePeer implements
    */
   public RComponent(String guid) {
     super(guid);
-    actionHardReferences = new HashSet<>();
+    actionHardReferences = new THashSet<>();
   }
 
   /**
@@ -75,7 +76,7 @@ public abstract class RComponent extends RemotePeer implements
    */
   public RComponent() {
     // For serialization support
-    actionHardReferences = new HashSet<>();
+    actionHardReferences = new THashSet<>();
   }
 
   /**

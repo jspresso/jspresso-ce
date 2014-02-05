@@ -19,9 +19,9 @@
 package org.jspresso.framework.util.bean;
 
 import java.beans.PropertyChangeListener;
-import java.util.Collections;
 import java.util.Set;
-import java.util.WeakHashMap;
+
+import org.jspresso.framework.util.collection.TWeakHashSet;
 
 /**
  * This property change support prevents from adding twice the same property
@@ -43,7 +43,7 @@ public class SingleWeakPropertyChangeSupport extends WeakPropertyChangeSupport {
    */
   public SingleWeakPropertyChangeSupport(Object sourceBean) {
     super(sourceBean);
-    cachedListeners = Collections.newSetFromMap(new WeakHashMap<PropertyChangeListener, Boolean>());
+    cachedListeners = new TWeakHashSet<>();
   }
 
   /**

@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * This is a simple singleton to hold a finished mapping of string to int.
  */
-public class PropertyNameTank {
+public final class PropertyNameTank {
 
   private static final ConcurrentHashMap<String, Integer> TANK = new ConcurrentHashMap<>();
   private static final ConcurrentHashMap<Integer, String> KNAT = new ConcurrentHashMap<>();
@@ -40,7 +40,7 @@ public class PropertyNameTank {
    */
   public static int indexOf(String propertyName) {
     Integer index = TANK.get(propertyName);
-    if(index != null) {
+    if (index != null) {
       return index;
     }
     index = feedTank(propertyName);

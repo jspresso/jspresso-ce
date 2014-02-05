@@ -23,9 +23,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import gnu.trove.map.hash.THashMap;
 
 import org.jspresso.framework.binding.CollectionConnectorHelper;
 import org.jspresso.framework.binding.ICollectionConnector;
@@ -48,6 +49,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
     implements ICollectionConnector {
 
   private Map<String, IValueConnector> childConnectors;
+  private Collection<String>           childConnectorKeys;
   private final IModelConnectorFactory       modelConnectorFactory;
 
   private SelectionChangeSupport       selectionChangeSupport;
@@ -69,9 +71,10 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
       IModelConnectorFactory modelConnectorFactory) {
     super(modelDescriptor, modelConnectorFactory.getAccessorFactory());
     this.modelConnectorFactory = modelConnectorFactory;
-    childConnectors = new LinkedHashMap<>();
+    childConnectors = new THashMap<>();
     selectionChangeSupport = new SelectionChangeSupport(this);
     connectorTank = new ArrayList<>();
+    childConnectorKeys = new ArrayList<>();
   }
 
   /**
@@ -93,6 +96,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   public void addChildConnector(String storageKey, IValueConnector connector) {
     childConnectors.put(storageKey, connector);
     connector.setParentConnector(this);
+    childConnectorKeys.add(storageKey);
   }
 
   /**
@@ -154,7 +158,8 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   public ModelCollectionPropertyConnector clone(String newConnectorId) {
     ModelCollectionPropertyConnector clonedConnector = (ModelCollectionPropertyConnector) super
         .clone(newConnectorId);
-    clonedConnector.childConnectors = new LinkedHashMap<>();
+    clonedConnector.childConnectors = new THashMap<>();
+    clonedConnector.childConnectorKeys = new ArrayList<>();
     clonedConnector.selectionChangeSupport = new SelectionChangeSupport(
         clonedConnector);
     return clonedConnector;
@@ -205,7 +210,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    */
   @Override
   public int getChildConnectorCount() {
-    return getChildConnectorKeys().size();
+    return childConnectorKeys.size();
   }
 
   /**
@@ -213,7 +218,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    */
   @Override
   public Collection<String> getChildConnectorKeys() {
-    return childConnectors.keySet();
+    return new ArrayList<>(childConnectorKeys);
   }
 
   /**
@@ -365,6 +370,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   @Override
   public void removeChildConnector(String storageKey) {
     childConnectors.remove(storageKey);
+    childConnectorKeys.remove(storageKey);
   }
 
   private void cleanupConnector(IValueConnector removedConnector) {

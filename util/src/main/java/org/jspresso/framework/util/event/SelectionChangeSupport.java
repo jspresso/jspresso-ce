@@ -19,9 +19,10 @@
 package org.jspresso.framework.util.event;
 
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
+
+import gnu.trove.set.hash.THashSet;
+import gnu.trove.set.hash.TLinkedHashSet;
 
 /**
  * Helper class to ease the {@code ISelectionChangeListener} management.
@@ -65,7 +66,7 @@ public class SelectionChangeSupport implements ISelectable {
    */
   public void addInhibitedListener(ISelectionChangeListener listener) {
     if (inhibitedListeners == null && listener != null) {
-      inhibitedListeners = new HashSet<>();
+      inhibitedListeners = new TLinkedHashSet<>();
     }
     if (inhibitedListeners != null) {
       inhibitedListeners.add(listener);
@@ -80,7 +81,7 @@ public class SelectionChangeSupport implements ISelectable {
       ISelectionChangeListener listener) {
     if (listener != null) {
       if (listeners == null) {
-        listeners = new LinkedHashSet<>();
+        listeners = new THashSet<>();
       }
       if (!listeners.contains(listener)) {
         listeners.add(listener);
@@ -122,7 +123,7 @@ public class SelectionChangeSupport implements ISelectable {
           && Arrays.equals(oldSelection, newSelection)) {
         return;
       }
-      for (ISelectionChangeListener listener : listeners) {
+      for (ISelectionChangeListener listener : listeners.toArray(new ISelectionChangeListener[listeners.size()])) {
         if (inhibitedListeners == null
             || !inhibitedListeners.contains(listener)) {
           listener.selectionChange(evt);

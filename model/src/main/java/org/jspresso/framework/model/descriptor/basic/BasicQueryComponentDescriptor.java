@@ -20,7 +20,9 @@ package org.jspresso.framework.model.descriptor.basic;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Map;
+
+import gnu.trove.map.hash.THashMap;
 
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
@@ -49,10 +51,22 @@ public class BasicQueryComponentDescriptor<E> extends
    */
   public BasicQueryComponentDescriptor(
       IComponentDescriptorProvider<? extends IComponent> componentDescriptorProvider) {
+    this(componentDescriptorProvider,
+        new THashMap<Class<? extends IComponent>, IComponentDescriptor<? extends IComponent>>());
+  }
+
+  /**
+   * Constructs a new {@code BasicQueryComponentDescriptor} instance.
+   *
+   * @param componentDescriptorProvider
+   *          the provider for delegate entity descriptor.
+   */
+  public BasicQueryComponentDescriptor(
+      IComponentDescriptorProvider<? extends IComponent> componentDescriptorProvider,
+      Map<Class<? extends IComponent>, IComponentDescriptor<? extends IComponent>> registry) {
     super(
         componentDescriptorProvider,
-        IQueryComponent.class,
-        new HashMap<Class<? extends IComponent>, IComponentDescriptor<? extends IComponent>>());
+        IQueryComponent.class, registry);
     finishConfiguration();
   }
 

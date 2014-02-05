@@ -18,9 +18,11 @@
  */
 package org.jspresso.framework.binding;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.Map;
+
+import gnu.trove.map.hash.THashMap;
 
 import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.IItemSelectionListener;
@@ -42,6 +44,7 @@ public abstract class AbstractCompositeValueConnector extends
     AbstractValueConnector implements IRenderableCompositeValueConnector {
 
   private Map<String, IValueConnector> childConnectors;
+  private Collection<String>           childConnectorKeys;
   private String                       displayDescription;
   private Icon                         displayIcon;
   private String                       displayValue;
@@ -61,7 +64,8 @@ public abstract class AbstractCompositeValueConnector extends
     super(id);
     itemSelectionSupport = new ItemSelectionSupport();
     trackingChildrenSelection = false;
-    childConnectors = new LinkedHashMap<>();
+    childConnectors = new THashMap<>();
+    childConnectorKeys = new ArrayList<>();
   }
 
   /**
@@ -87,7 +91,8 @@ public abstract class AbstractCompositeValueConnector extends
   public AbstractCompositeValueConnector clone(String newConnectorId) {
     AbstractCompositeValueConnector clonedConnector = (AbstractCompositeValueConnector) super
         .clone(newConnectorId);
-    clonedConnector.childConnectors = new LinkedHashMap<>();
+    clonedConnector.childConnectors = new THashMap<>();
+    clonedConnector.childConnectorKeys = new ArrayList<>();
     clonedConnector.itemSelectionSupport = new ItemSelectionSupport();
     for (String connectorKey : getChildConnectorKeys()) {
       clonedConnector.addChildConnector(connectorKey,
@@ -109,7 +114,7 @@ public abstract class AbstractCompositeValueConnector extends
    */
   @Override
   public int getChildConnectorCount() {
-    return getChildConnectorKeys().size();
+    return childConnectorKeys.size();
   }
 
   /**
@@ -117,7 +122,7 @@ public abstract class AbstractCompositeValueConnector extends
    */
   @Override
   public Collection<String> getChildConnectorKeys() {
-    return childConnectors.keySet();
+    return new ArrayList<>(childConnectorKeys);
   }
 
   /**
@@ -291,6 +296,7 @@ public abstract class AbstractCompositeValueConnector extends
       IValueConnector childConnector) {
     childConnectors.put(storageKey, childConnector);
     childConnector.setParentConnector(this);
+    childConnectorKeys.add(storageKey);
   }
 
   /**
@@ -387,6 +393,7 @@ public abstract class AbstractCompositeValueConnector extends
   @Override
   public void removeChildConnector(String storageKey) {
     childConnectors.remove(storageKey);
+    childConnectorKeys.remove(storageKey);
   }
 
   /**
