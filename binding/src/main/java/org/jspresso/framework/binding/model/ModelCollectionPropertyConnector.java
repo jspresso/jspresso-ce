@@ -160,6 +160,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
         .clone(newConnectorId);
     clonedConnector.childConnectors = new THashMap<>();
     clonedConnector.childConnectorKeys = new ArrayList<>();
+    clonedConnector.connectorTank = new ArrayList<>();
     clonedConnector.selectionChangeSupport = new SelectionChangeSupport(
         clonedConnector);
     return clonedConnector;
