@@ -54,7 +54,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
 
   private SelectionChangeSupport       selectionChangeSupport;
 
-  private final List<IValueConnector>        connectorTank;
+  private List<IValueConnector>        connectorTank;
 
   /**
    * Constructs a new model property connector on a model collection property.
