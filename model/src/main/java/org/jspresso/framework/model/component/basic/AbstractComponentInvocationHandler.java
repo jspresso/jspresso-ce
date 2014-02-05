@@ -29,6 +29,8 @@ import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -301,7 +303,7 @@ public abstract class AbstractComponentInvocationHandler implements
                 return null;
               }
               if (modifierMonitors == null) {
-                modifierMonitors = new THashSet<>();
+                modifierMonitors = new HashSet<>();
               }
               modifierMonitors.add(methodName);
             }
@@ -1006,7 +1008,7 @@ public abstract class AbstractComponentInvocationHandler implements
    * @return The map of properties.
    */
   protected Map<String, Object> straightGetProperties(Object proxy) {
-    Map<String, Object> allProperties = new THashMap<>();
+    Map<String, Object> allProperties = new HashMap<>();
     for (IPropertyDescriptor propertyDescriptor : componentDescriptor
         .getPropertyDescriptors()) {
       String propertyName = propertyDescriptor.getName();
