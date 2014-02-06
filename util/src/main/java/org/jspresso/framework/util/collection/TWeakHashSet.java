@@ -163,8 +163,7 @@ public class TWeakHashSet<E> extends AbstractSet<E> {
    * costs, we should call it only in the add() method.
    */
   private void processQueue() {
-    WeakElement<E> wv = null;
-
+    WeakElement<E> wv;
     if (delegate != null && queue != null) {
       while ((wv = (WeakElement<E>) queue.poll()) != null) {
         delegate.remove(wv);
