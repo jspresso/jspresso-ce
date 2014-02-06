@@ -947,7 +947,7 @@ public abstract class AbstractComponentInvocationHandler implements
         referenceTracker = new NestedReferenceTracker(proxy, propertyName,
             EntityHelper.isInlineComponentReference(propertyDescriptor)
                 && !propertyDescriptor.isComputed());
-        if(referenceTrackers == null) {
+        if (referenceTrackers == null) {
           referenceTrackers = new THashMap<>();
         }
         referenceTrackers.put(propertyName, referenceTracker);
