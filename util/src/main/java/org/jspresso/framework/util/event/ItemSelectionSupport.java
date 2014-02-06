@@ -75,6 +75,9 @@ public class ItemSelectionSupport {
       IItemSelectionListener listener) {
     if (listener != null && listeners != null) {
       listeners.remove(listener);
+      if (listeners.size() == 0) {
+        listeners = null;
+      }
     }
   }
 }

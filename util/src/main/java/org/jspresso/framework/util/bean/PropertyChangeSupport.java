@@ -98,6 +98,9 @@ public class PropertyChangeSupport implements Serializable {
       return;
     }
     listeners.remove(listener);
+    if (listeners.size() == 0) {
+      listeners = null;
+    }
   }
 
   /**

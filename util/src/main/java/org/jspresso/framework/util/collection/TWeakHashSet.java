@@ -21,7 +21,9 @@ package org.jspresso.framework.util.collection;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
 import java.util.AbstractSet;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.Set;
 
 import gnu.trove.set.hash.THashSet;
 
@@ -41,18 +43,24 @@ public class TWeakHashSet<E> extends AbstractSet<E> {
   /**
    * The delegate that stores the weak references.
    */
-  private THashSet<WeakElement<E>> delegate;
+  private Set<WeakElement<E>> delegate;
   /**
    * Helps to detect garbage collected values.
    */
   private ReferenceQueue<E> queue;
 
-  /**
-   * Instantiates a new T weak hash set.
-   */
-  public TWeakHashSet() {
-    this.delegate = new THashSet<>();
-    this.queue = new ReferenceQueue<>();
+  private ReferenceQueue<E> createOrGetQueue() {
+    if (queue == null) {
+      queue = new ReferenceQueue<>();
+    }
+    return queue;
+  }
+
+  private Set<WeakElement<E>> createOrGetDelegate() {
+    if (delegate == null) {
+      delegate = new THashSet<WeakElement<E>>();
+    }
+    return delegate;
   }
 
   /**
@@ -65,6 +73,10 @@ public class TWeakHashSet<E> extends AbstractSet<E> {
   public Iterator<E> iterator() {
     // remove garbage collected elements
     processQueue();
+
+    if (delegate == null) {
+      return Collections.emptyIterator();
+    }
 
     // get an iterator of the superclass
     final Iterator<WeakElement<E>> i = delegate.iterator();
@@ -98,6 +110,9 @@ public class TWeakHashSet<E> extends AbstractSet<E> {
    */
   @Override
   public boolean contains(Object o) {
+    if (delegate == null) {
+      return false;
+    }
     return delegate.contains(WeakElement.create(o));
   }
 
@@ -112,7 +127,7 @@ public class TWeakHashSet<E> extends AbstractSet<E> {
   @Override
   public boolean add(E o) {
     processQueue();
-    return delegate.add(WeakElement.create(o, this.queue));
+    return createOrGetDelegate().add(WeakElement.create(o, createOrGetQueue()));
   }
 
   /**
@@ -123,7 +138,13 @@ public class TWeakHashSet<E> extends AbstractSet<E> {
    */
   @Override
   public boolean remove(Object o) {
-    boolean ret = delegate.remove(WeakElement.create(o));
+    boolean ret = false;
+    if (delegate != null) {
+      ret = delegate.remove(WeakElement.create(o));
+      if (delegate.size() == 0) {
+        delegate = null;
+      }
+    }
     processQueue();
     return ret;
   }
@@ -144,14 +165,22 @@ public class TWeakHashSet<E> extends AbstractSet<E> {
   private void processQueue() {
     WeakElement<E> wv = null;
 
-    while ((wv = (WeakElement<E>) this.queue.poll()) != null) {
-      delegate.remove(wv);
+    if (delegate != null && queue != null) {
+      while ((wv = (WeakElement<E>) queue.poll()) != null) {
+        delegate.remove(wv);
+      }
+      if (delegate.size() == 0) {
+        delegate = null;
+      }
     }
   }
 
   @Override
   public int size() {
     processQueue();
+    if (delegate == null) {
+      return 0;
+    }
     return delegate.size();
   }
 

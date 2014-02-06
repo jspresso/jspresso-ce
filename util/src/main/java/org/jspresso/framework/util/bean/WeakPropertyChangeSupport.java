@@ -105,6 +105,9 @@ public class WeakPropertyChangeSupport implements Serializable {
     }
     processQueue();
     listeners.remove(WeakEntry.create(listener));
+    if (listeners.size() == 0) {
+      listeners = null;
+    }
   }
 
   /**
@@ -362,6 +365,9 @@ public class WeakPropertyChangeSupport implements Serializable {
       while ((wk = (WeakEntry<PropertyChangeListener>) queue.poll()) != null) {
         listeners.remove(wk);
       }
+    }
+    if (listeners.size() == 0) {
+      listeners = null;
     }
   }
 

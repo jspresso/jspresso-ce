@@ -87,6 +87,9 @@ public class SingleWeakPropertyChangeSupport extends WeakPropertyChangeSupport {
     super.removePropertyChangeListener(listener);
     if (cachedListeners != null) {
       cachedListeners.remove(listener);
+      if (cachedListeners.size() == 0) {
+        cachedListeners = null;
+      }
     }
   }
 
@@ -101,6 +104,9 @@ public class SingleWeakPropertyChangeSupport extends WeakPropertyChangeSupport {
     super.removePropertyChangeListener(propertyName, listener);
     if (cachedListeners != null) {
       cachedListeners.remove(listener);
+      if (cachedListeners.size() == 0) {
+        cachedListeners = null;
+      }
     }
   }
 

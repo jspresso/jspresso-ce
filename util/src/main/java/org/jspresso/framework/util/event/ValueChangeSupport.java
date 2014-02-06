@@ -152,6 +152,9 @@ public class ValueChangeSupport implements IValueChangeSource {
       return;
     }
     inhibitedListeners.remove(listener);
+    if (inhibitedListeners.size() == 0) {
+      inhibitedListeners = null;
+    }
   }
 
   /**
@@ -160,8 +163,12 @@ public class ValueChangeSupport implements IValueChangeSource {
   @Override
   public synchronized void removeValueChangeListener(
       IValueChangeListener listener) {
-    if (listener != null && listeners != null) {
-      listeners.remove(listener);
+    if (listeners == null || listener == null) {
+      return;
+    }
+    listeners.remove(listener);
+    if (listeners.size() == 0) {
+      listeners = null;
     }
   }
 }

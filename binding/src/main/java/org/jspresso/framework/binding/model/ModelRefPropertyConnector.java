@@ -21,6 +21,7 @@ package org.jspresso.framework.binding.model;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -75,9 +76,13 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
       IModelConnectorFactory modelConnectorFactory) {
     super(modelDescriptor, modelConnectorFactory.getAccessorFactory());
     this.modelConnectorFactory = modelConnectorFactory;
-    modelChangeSupport = new ModelChangeSupport(this);
-    childConnectors = new THashMap<>();
-    childConnectorKeys = new ArrayList<>();
+  }
+
+  private void initChildStructureIfNecessary() {
+    if (childConnectors == null) {
+      childConnectors = new THashMap<>();
+      childConnectorKeys = new ArrayList<>();
+    }
   }
 
   /**
@@ -89,6 +94,9 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   @Override
   public void addModelChangeListener(IModelChangeListener listener) {
     if (listener != null) {
+      if (modelChangeSupport == null) {
+        modelChangeSupport = new ModelChangeSupport(this);
+      }
       modelChangeSupport.addModelChangeListener(listener);
     }
   }
@@ -132,9 +140,9 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   public ModelRefPropertyConnector clone(String newConnectorId) {
     ModelRefPropertyConnector clonedConnector = (ModelRefPropertyConnector) super
         .clone(newConnectorId);
-    clonedConnector.modelChangeSupport = new ModelChangeSupport(clonedConnector);
-    clonedConnector.childConnectors = new THashMap<>();
-    clonedConnector.childConnectorKeys = new ArrayList<>();
+    clonedConnector.modelChangeSupport = null;
+    clonedConnector.childConnectors = null;
+    clonedConnector.childConnectorKeys = null;
     return clonedConnector;
   }
 
@@ -159,6 +167,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
       ICompositeValueConnector rootC = (ICompositeValueConnector) getChildConnector(root);
       return rootC.getChildConnector(nested);
     }
+    initChildStructureIfNecessary();
     IValueConnector connector = childConnectors.get(actualKey);
     if (connector == null) {
       IComponentDescriptor<?> componentDescriptor = getModelDescriptor()
@@ -191,6 +200,9 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    */
   @Override
   public int getChildConnectorCount() {
+    if (childConnectorKeys == null) {
+      return 0;
+    }
     return childConnectorKeys.size();
   }
 
@@ -199,6 +211,9 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    */
   @Override
   public Collection<String> getChildConnectorKeys() {
+    if (childConnectorKeys == null) {
+      return Collections.emptyList();
+    }
     return new ArrayList<>(childConnectorKeys);
   }
 
@@ -280,7 +295,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    */
   @Override
   public void removeModelChangeListener(IModelChangeListener listener) {
-    if (listener != null) {
+    if (modelChangeSupport != null && listener != null) {
       modelChangeSupport.removeModelChangeListener(listener);
     }
   }
@@ -305,7 +320,9 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    *          The new model of the connector
    */
   protected void fireModelChange(Object oldModel, Object newModel) {
-    modelChangeSupport.fireModelChange(oldModel, newModel);
+    if (modelChangeSupport != null) {
+      modelChangeSupport.fireModelChange(oldModel, newModel);
+    }
   }
 
   /**

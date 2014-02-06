@@ -152,6 +152,9 @@ public class SelectionChangeSupport implements ISelectable {
       return;
     }
     inhibitedListeners.remove(listener);
+    if (inhibitedListeners.size() == 0) {
+      inhibitedListeners = null;
+    }
   }
 
   /**
@@ -160,8 +163,12 @@ public class SelectionChangeSupport implements ISelectable {
   @Override
   public synchronized void removeSelectionChangeListener(
       ISelectionChangeListener listener) {
-    if (listener != null && listeners != null) {
-      listeners.remove(listener);
+    if (listeners == null || listener == null) {
+      return;
+    }
+    listeners.remove(listener);
+    if (listeners.size() == 0) {
+      listeners = null;
     }
   }
 
