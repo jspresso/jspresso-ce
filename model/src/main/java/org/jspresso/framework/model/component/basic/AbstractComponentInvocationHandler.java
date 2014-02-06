@@ -115,16 +115,19 @@ public abstract class AbstractComponentInvocationHandler implements
   private boolean propertyChangeEnabled;
   private boolean collectionSortEnabled;
 
-  private final Map<String, NestedReferenceTracker> referenceTrackers;
+  private       Map<String, NestedReferenceTracker> referenceTrackers;
 
-  private final Map<String, Object> computedPropertiesCache;
+  private       Map<String, Object> computedPropertiesCache;
 
   private static final Collection<String>     LIFECYCLE_METHOD_NAMES;
   private              IComponent             owningComponent;
   private              IPropertyDescriptor    owningPropertyDescriptor;
-  private final        Map<String, Set<String>> fakePclAttachements;
-  private final        Map<String, Set<String>> delayedFakePclAttachements;
-  private final        PropertyChangeListener fakePcl;
+  private              Map<String, Set<String>> fakePclAttachements;
+  private              Map<String, Set<String>> delayedFakePclAttachements;
+  // Fake PCL cannot be static, because there must be 1 registration on
+  // referent per owning instance, i.e. 2 different instances must not share
+  // the same fake PCL that will be removed when the referent is detached.
+  private              PropertyChangeListener fakePcl;
 
   static {
     Collection<String> methodNames = new THashSet<>();
@@ -164,11 +167,6 @@ public abstract class AbstractComponentInvocationHandler implements
     this.propertyChangeEnabled = true;
     this.collectionSortEnabled = true;
 
-    this.referenceTrackers = new THashMap<>();
-    this.computedPropertiesCache = new THashMap<>();
-    // Fake PCL cannot be static, because there must be 1 registration on
-    // referent per owning instance, i.e. 2 different instances must not share
-    // the same fake PCL that will be removed when the referent is detached.
     this.fakePcl = new PropertyChangeListener() {
 
       @Override
@@ -176,8 +174,6 @@ public abstract class AbstractComponentInvocationHandler implements
         // It's fake
       }
     };
-    this.fakePclAttachements = new THashMap<>();
-    this.delayedFakePclAttachements = new THashMap<>();
   }
 
   /**
@@ -714,13 +710,22 @@ public abstract class AbstractComponentInvocationHandler implements
     Object referent = straightGetProperty(proxy, propertyName);
     if (referent instanceof IPropertyChangeCapable) {
       initializeInlineTrackerIfNeeded((IPropertyChangeCapable) referent, propertyName, true);
-      Set<String> delayedNestedPropertyListening = delayedFakePclAttachements
-          .remove(propertyName);
+      Set<String> delayedNestedPropertyListening = null;
+      if (delayedFakePclAttachements != null) {
+        delayedNestedPropertyListening = delayedFakePclAttachements
+            .remove(propertyName);
+      }
       if (delayedNestedPropertyListening != null) {
-        Set<String> nestedPropertyListening = fakePclAttachements
-            .get(propertyName);
+        Set<String> nestedPropertyListening = null;
+        if (fakePclAttachements != null) {
+          nestedPropertyListening = fakePclAttachements
+              .get(propertyName);
+        }
         if (nestedPropertyListening == null) {
           nestedPropertyListening = new THashSet<>();
+          if(fakePclAttachements == null) {
+            fakePclAttachements = new THashMap<>();
+          }
           fakePclAttachements.put(propertyName, nestedPropertyListening);
         }
         for (String nestedPropertyName : delayedNestedPropertyListening) {
@@ -885,7 +890,11 @@ public abstract class AbstractComponentInvocationHandler implements
       IReferencePropertyDescriptor<?> propertyDescriptor,
       Object oldPropertyValue, Object newPropertyValue) {
     String propertyName = propertyDescriptor.getName();
-    NestedReferenceTracker referenceTracker = referenceTrackers.get(propertyName);
+
+    NestedReferenceTracker referenceTracker = null;
+    if (referenceTrackers != null) {
+      referenceTracker = referenceTrackers.get(propertyName);
+    }
 
     // Handle owning component.
     if (oldPropertyValue instanceof IComponent
@@ -906,21 +915,29 @@ public abstract class AbstractComponentInvocationHandler implements
           ((IPropertyChangeCapable) oldPropertyValue)
               .removePropertyChangeListener(referenceTracker);
         }
-        Set<String> nestedPropertyListening = fakePclAttachements
-            .get(propertyName);
+        Set<String> nestedPropertyListening = null;
+        if (fakePclAttachements != null) {
+          nestedPropertyListening = fakePclAttachements
+              .get(propertyName);
+        }
         if (nestedPropertyListening != null) {
           for (String nestedPropertyName : nestedPropertyListening) {
             ((IPropertyChangeCapable) oldPropertyValue)
                 .removePropertyChangeListener(nestedPropertyName, fakePcl);
           }
         }
-        delayedFakePclAttachements.remove(propertyName);
+        if (delayedFakePclAttachements != null) {
+          delayedFakePclAttachements.remove(propertyName);
+        }
       }
     }
     storeProperty(propertyName, newPropertyValue);
     if (newPropertyValue instanceof IPropertyChangeCapable) {
-      Set<String> nestedPropertyListening = fakePclAttachements
-          .get(propertyName);
+      Set<String> nestedPropertyListening = null;
+      if (fakePclAttachements != null) {
+        nestedPropertyListening = fakePclAttachements
+            .get(propertyName);
+      }
       if (nestedPropertyListening != null) {
         if (isInitialized(newPropertyValue)) {
           for (String nestedPropertyName : nestedPropertyListening) {
@@ -928,6 +945,9 @@ public abstract class AbstractComponentInvocationHandler implements
                 .addWeakPropertyChangeListener(nestedPropertyName, fakePcl);
           }
         } else {
+          if (delayedFakePclAttachements == null) {
+            delayedFakePclAttachements = new THashMap<>();
+          }
           delayedFakePclAttachements.put(propertyName, nestedPropertyListening);
         }
       }
@@ -935,6 +955,9 @@ public abstract class AbstractComponentInvocationHandler implements
         referenceTracker = new NestedReferenceTracker(proxy, propertyName,
             EntityHelper.isInlineComponentReference(propertyDescriptor)
                 && !propertyDescriptor.isComputed());
+        if(referenceTrackers == null) {
+          referenceTrackers = new THashMap<>();
+        }
         referenceTrackers.put(propertyName, referenceTracker);
       }
       referenceTracker.setInitialized(false);
@@ -973,7 +996,10 @@ public abstract class AbstractComponentInvocationHandler implements
       IPropertyChangeCapable referenceProperty, String propertyName,
       boolean fireNestedPropertyChange) {
     if (referenceProperty != null && isInitialized(referenceProperty)) {
-      NestedReferenceTracker storedTracker = referenceTrackers.get(propertyName);
+      NestedReferenceTracker storedTracker = null;
+      if (referenceTrackers != null) {
+        storedTracker = referenceTrackers.get(propertyName);
+      }
       if (storedTracker != null && !storedTracker.isInitialized()) {
         storedTracker.setInitialized(true);
         referenceProperty.addWeakPropertyChangeListener(storedTracker);
@@ -1137,14 +1163,20 @@ public abstract class AbstractComponentInvocationHandler implements
     if (nestedDelimIndex >= 0) {
       String rootProperty = propertyName.substring(0, nestedDelimIndex);
       String nestedPropertyName = propertyName.substring(nestedDelimIndex + 1);
-      NestedReferenceTracker referenceTracker = referenceTrackers
-          .get(rootProperty);
+      NestedReferenceTracker referenceTracker = null;
+      if (referenceTrackers != null) {
+        referenceTracker = referenceTrackers
+            .get(rootProperty);
+      }
       if (referenceTracker == null) {
         IReferencePropertyDescriptor<?> rootPropertyDescriptor = (IReferencePropertyDescriptor<?>) componentDescriptor
             .getPropertyDescriptor(rootProperty);
         referenceTracker = new NestedReferenceTracker(proxy, rootProperty,
             EntityHelper.isInlineComponentReference(rootPropertyDescriptor)
                 && !rootPropertyDescriptor.isComputed());
+        if (referenceTrackers == null) {
+          referenceTrackers = new THashMap<>();
+        }
         referenceTrackers.put(rootProperty, referenceTracker);
       }
       Object currentRootProperty = straightGetProperty(proxy, rootProperty);
@@ -1152,18 +1184,30 @@ public abstract class AbstractComponentInvocationHandler implements
         if (isInitialized(currentRootProperty)) {
           ((IPropertyChangeCapable) currentRootProperty)
               .addWeakPropertyChangeListener(nestedPropertyName, fakePcl);
-          Set<String> nestedPropertyListening = fakePclAttachements
-              .get(propertyName);
+          Set<String> nestedPropertyListening = null;
+          if (fakePclAttachements != null) {
+            nestedPropertyListening = fakePclAttachements
+                .get(propertyName);
+          }
           if (nestedPropertyListening == null) {
             nestedPropertyListening = new THashSet<>();
+            if (fakePclAttachements == null) {
+              fakePclAttachements = new THashMap<>();
+            }
             fakePclAttachements.put(rootProperty, nestedPropertyListening);
           }
           nestedPropertyListening.add(nestedPropertyName);
         } else {
-          Set<String> delayedNestedPropertyListening = delayedFakePclAttachements
-              .get(propertyName);
+          Set<String> delayedNestedPropertyListening = null;
+          if (delayedFakePclAttachements != null) {
+            delayedNestedPropertyListening = delayedFakePclAttachements
+                .get(propertyName);
+          }
           if (delayedNestedPropertyListening == null) {
             delayedNestedPropertyListening = new THashSet<>();
+            if (delayedFakePclAttachements == null) {
+              delayedFakePclAttachements = new THashMap<>();
+            }
             delayedFakePclAttachements.put(rootProperty,
                 delayedNestedPropertyListening);
           }
@@ -1317,7 +1361,7 @@ public abstract class AbstractComponentInvocationHandler implements
   @SuppressWarnings({"unused", "UnusedParameters"})
   private boolean hasListeners(Object proxy,
       String propertyName) {
-    if (computedPropertiesCache.containsKey(propertyName)) {
+    if (computedPropertiesCache != null && computedPropertiesCache.containsKey(propertyName)) {
       // this is necessary in order to force cache re-computation
       computedPropertiesCache.remove(propertyName);
     }
@@ -1410,7 +1454,7 @@ public abstract class AbstractComponentInvocationHandler implements
   protected void firePropertyChange(Object proxy, String propertyName,
       Object oldValue, Object newValue) {
     Object actualNewValue = newValue;
-    if (computedPropertiesCache.containsKey(propertyName)
+    if (computedPropertiesCache != null && computedPropertiesCache.containsKey(propertyName)
         && oldValue != IPropertyChangeCapable.UNKNOWN) {
       computedPropertiesCache.remove(propertyName);
       actualNewValue = IPropertyChangeCapable.UNKNOWN;
@@ -1550,7 +1594,7 @@ public abstract class AbstractComponentInvocationHandler implements
           args[args.length - 1] = interceptedValue;
         }
       } else if (propertyDescriptor.isCacheable()) {
-        if (computedPropertiesCache.containsKey(propertyName)) {
+        if (computedPropertiesCache != null && computedPropertiesCache.containsKey(propertyName)) {
           computedPropertyValue = computedPropertiesCache.get(propertyName);
           return computedPropertyValue;
         }
@@ -1589,6 +1633,9 @@ public abstract class AbstractComponentInvocationHandler implements
             break;
         }
       } else if (propertyDescriptor.isCacheable()) {
+        if (computedPropertiesCache == null) {
+          computedPropertiesCache = new THashMap<>();
+        }
         computedPropertiesCache.put(propertyName, computedPropertyValue);
       }
       return computedPropertyValue;
@@ -2236,7 +2283,6 @@ public abstract class AbstractComponentInvocationHandler implements
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
       if (enabled) {
-        boolean wasEnabled = enabled;
         try {
           enabled = false;
           if (source instanceof IEntity && referencesInlinedComponent) {
@@ -2311,7 +2357,7 @@ public abstract class AbstractComponentInvocationHandler implements
             }
           }
         } finally {
-          enabled = wasEnabled;
+          enabled = true;
         }
       }
     }
