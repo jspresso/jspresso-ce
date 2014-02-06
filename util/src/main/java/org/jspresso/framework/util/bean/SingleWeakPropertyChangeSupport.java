@@ -43,7 +43,6 @@ public class SingleWeakPropertyChangeSupport extends WeakPropertyChangeSupport {
    */
   public SingleWeakPropertyChangeSupport(Object sourceBean) {
     super(sourceBean);
-    cachedListeners = new TWeakHashSet<>();
   }
 
   /**
@@ -55,6 +54,9 @@ public class SingleWeakPropertyChangeSupport extends WeakPropertyChangeSupport {
   public synchronized void addPropertyChangeListener(PropertyChangeListener listener) {
     if (checkUniqueness(null, listener)) {
       super.addPropertyChangeListener(listener);
+      if (cachedListeners == null) {
+        cachedListeners = new TWeakHashSet<>();
+      }
       cachedListeners.add(listener);
     }
   }
@@ -68,6 +70,9 @@ public class SingleWeakPropertyChangeSupport extends WeakPropertyChangeSupport {
   public synchronized void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
     if (checkUniqueness(propertyName, listener)) {
       super.addPropertyChangeListener(propertyName, listener);
+      if (cachedListeners == null) {
+        cachedListeners = new TWeakHashSet<>();
+      }
       cachedListeners.add(listener);
     }
   }
@@ -80,7 +85,9 @@ public class SingleWeakPropertyChangeSupport extends WeakPropertyChangeSupport {
   @Override
   public synchronized void removePropertyChangeListener(PropertyChangeListener listener) {
     super.removePropertyChangeListener(listener);
-    cachedListeners.remove(listener);
+    if (cachedListeners != null) {
+      cachedListeners.remove(listener);
+    }
   }
 
   /**
@@ -92,7 +99,9 @@ public class SingleWeakPropertyChangeSupport extends WeakPropertyChangeSupport {
   @Override
   public synchronized void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
     super.removePropertyChangeListener(propertyName, listener);
-    cachedListeners.remove(listener);
+    if (cachedListeners != null) {
+      cachedListeners.remove(listener);
+    }
   }
 
   private boolean checkUniqueness(String propertyName, PropertyChangeListener listener) {
@@ -112,6 +121,6 @@ public class SingleWeakPropertyChangeSupport extends WeakPropertyChangeSupport {
     */
 
     // Performance optimization. See bug #1135
-    return !cachedListeners.contains(listener);
+    return cachedListeners == null || !cachedListeners.contains(listener);
   }
 }

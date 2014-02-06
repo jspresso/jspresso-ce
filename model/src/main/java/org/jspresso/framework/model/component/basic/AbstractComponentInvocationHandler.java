@@ -166,14 +166,6 @@ public abstract class AbstractComponentInvocationHandler implements
     this.propertyProcessorsEnabled = true;
     this.propertyChangeEnabled = true;
     this.collectionSortEnabled = true;
-
-    this.fakePcl = new PropertyChangeListener() {
-
-      @Override
-      public void propertyChange(PropertyChangeEvent evt) {
-        // It's fake
-      }
-    };
   }
 
   /**
@@ -729,7 +721,7 @@ public abstract class AbstractComponentInvocationHandler implements
           fakePclAttachements.put(propertyName, nestedPropertyListening);
         }
         for (String nestedPropertyName : delayedNestedPropertyListening) {
-          ((IPropertyChangeCapable) referent).addWeakPropertyChangeListener(nestedPropertyName, fakePcl);
+          ((IPropertyChangeCapable) referent).addWeakPropertyChangeListener(nestedPropertyName, createOrGetFakePcl());
           nestedPropertyListening.add(nestedPropertyName);
         }
       }
@@ -923,7 +915,7 @@ public abstract class AbstractComponentInvocationHandler implements
         if (nestedPropertyListening != null) {
           for (String nestedPropertyName : nestedPropertyListening) {
             ((IPropertyChangeCapable) oldPropertyValue)
-                .removePropertyChangeListener(nestedPropertyName, fakePcl);
+                .removePropertyChangeListener(nestedPropertyName, createOrGetFakePcl());
           }
         }
         if (delayedFakePclAttachements != null) {
@@ -942,7 +934,7 @@ public abstract class AbstractComponentInvocationHandler implements
         if (isInitialized(newPropertyValue)) {
           for (String nestedPropertyName : nestedPropertyListening) {
             ((IPropertyChangeCapable) newPropertyValue)
-                .addWeakPropertyChangeListener(nestedPropertyName, fakePcl);
+                .addWeakPropertyChangeListener(nestedPropertyName, createOrGetFakePcl());
           }
         } else {
           if (delayedFakePclAttachements == null) {
@@ -1183,7 +1175,7 @@ public abstract class AbstractComponentInvocationHandler implements
       if (currentRootProperty instanceof IPropertyChangeCapable) {
         if (isInitialized(currentRootProperty)) {
           ((IPropertyChangeCapable) currentRootProperty)
-              .addWeakPropertyChangeListener(nestedPropertyName, fakePcl);
+              .addWeakPropertyChangeListener(nestedPropertyName, createOrGetFakePcl());
           Set<String> nestedPropertyListening = null;
           if (fakePclAttachements != null) {
             nestedPropertyListening = fakePclAttachements
@@ -2069,6 +2061,19 @@ public abstract class AbstractComponentInvocationHandler implements
         releaseEvents();
       }
     }
+  }
+
+  private PropertyChangeListener createOrGetFakePcl() {
+    if (fakePcl == null) {
+      fakePcl = new PropertyChangeListener() {
+
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
+          // It's fake
+        }
+      };
+    }
+    return fakePcl;
   }
 
   /**

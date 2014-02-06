@@ -61,7 +61,7 @@ public class WeakPropertyChangeSupport implements Serializable {
    */
   private Object source;
 
-  private final transient ReferenceQueue<PropertyChangeListener> queue = new ReferenceQueue<>();
+  private transient ReferenceQueue<PropertyChangeListener> queue;
 
   /**
    * Constructs a {@code WeakPropertyChangeSupport} object.
@@ -85,11 +85,11 @@ public class WeakPropertyChangeSupport implements Serializable {
    */
   public synchronized void addPropertyChangeListener(PropertyChangeListener listener) {
     if (listeners == null) {
-      listeners = new java.util.LinkedList<>();
+      listeners = new LinkedList<>();
     } else {
       processQueue();
     }
-    listeners.add(WeakEntry.create(listener, queue));
+    listeners.add(WeakEntry.create(listener, createOrGetQueue()));
   }
 
   /**
@@ -167,11 +167,11 @@ public class WeakPropertyChangeSupport implements Serializable {
       return;
     }
 
-    java.util.LinkedList<WeakEntry<PropertyChangeListener>> targets = null;
+    LinkedList<WeakEntry<PropertyChangeListener>> targets = null;
     WeakPropertyChangeSupport child = null;
     synchronized (this) {
       if (listeners != null) {
-        targets = (java.util.LinkedList<WeakEntry<PropertyChangeListener>>) listeners
+        targets = (LinkedList<WeakEntry<PropertyChangeListener>>) listeners
             .clone();
       }
       if (children != null && propertyName != null) {
@@ -257,11 +257,11 @@ public class WeakPropertyChangeSupport implements Serializable {
       return;
     }
 
-    java.util.LinkedList<WeakEntry<PropertyChangeListener>> targets = null;
+    LinkedList<WeakEntry<PropertyChangeListener>> targets = null;
     WeakPropertyChangeSupport child = null;
     synchronized (this) {
       if (listeners != null) {
-        targets = (java.util.LinkedList<WeakEntry<PropertyChangeListener>>) listeners
+        targets = (LinkedList<WeakEntry<PropertyChangeListener>>) listeners
             .clone();
       }
       if (children != null && propertyName != null) {
@@ -358,9 +358,18 @@ public class WeakPropertyChangeSupport implements Serializable {
   @SuppressWarnings("unchecked")
   private void processQueue() {
     WeakEntry<PropertyChangeListener> wk;
-    while ((wk = (WeakEntry<PropertyChangeListener>) queue.poll()) != null) {
-      listeners.remove(wk);
+    if (queue != null) {
+      while ((wk = (WeakEntry<PropertyChangeListener>) queue.poll()) != null) {
+        listeners.remove(wk);
+      }
     }
+  }
+
+  private ReferenceQueue<PropertyChangeListener> createOrGetQueue() {
+     if (queue == null) {
+       queue = new ReferenceQueue<>();
+     }
+    return queue;
   }
 
   private static final class WeakEntry<E> extends WeakReference<E> {
