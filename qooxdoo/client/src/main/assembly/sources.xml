@@ -16,7 +16,7 @@
         <include>Manifest.json</include>
       </includes>
       <excludes>
-        <exclude>**/js/**/DefaultQxController.js</exclude>
+        <exclude>**/js/**/*QxController.js</exclude>
       </excludes>
     </fileSet>
     <fileSet>
@@ -24,7 +24,7 @@
       <directory>src/main</directory>
       <outputDirectory></outputDirectory>
       <includes>
-        <include>**/js/**/DefaultQxController.js</include>
+        <include>**/js/**/*QxController.js</include>
       </includes>
     </fileSet>
   </fileSets>
