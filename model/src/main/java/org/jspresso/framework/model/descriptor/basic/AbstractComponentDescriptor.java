@@ -21,16 +21,19 @@ package org.jspresso.framework.model.descriptor.basic;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
+import gnu.trove.map.hash.THashMap;
+import gnu.trove.set.hash.THashSet;
+import gnu.trove.set.hash.TLinkedHashSet;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.service.IComponentService;
@@ -403,7 +406,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   public List<String> getQueryableProperties() {
     synchronized (queryablePropertiesLock) {
       if (queryableProperties == null) {
-        Set<String> queryablePropertiesSet = new LinkedHashSet<String>();
+        Set<String> queryablePropertiesSet = new TLinkedHashSet<String>(1);
         List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
         if (ancestorDescs != null) {
           for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
@@ -433,7 +436,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   @Override
   public Collection<IGate> getReadabilityGates() {
-    Set<IGate> gates = new HashSet<IGate>();
+    Set<IGate> gates = new THashSet<IGate>(1);
     if (readabilityGates != null) {
       gates.addAll(readabilityGates);
     }
@@ -455,7 +458,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   public List<String> getRenderedProperties() {
     synchronized (renderedPropertiesLock) {
       if (renderedProperties == null) {
-        Set<String> renderedPropertiesSet = new LinkedHashSet<String>();
+        Set<String> renderedPropertiesSet = new TLinkedHashSet<String>(1);
         List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
         if (ancestorDescs != null) {
           for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
@@ -486,7 +489,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   @Override
   public Collection<String> getServiceContractClassNames() {
-    Set<String> serviceContractClassNames = new LinkedHashSet<String>();
+    Set<String> serviceContractClassNames = new TLinkedHashSet<String>(1);
     if (serviceContracts != null) {
       for (Class<?> serviceContract : serviceContracts) {
         serviceContractClassNames.add(serviceContract.getName());
@@ -640,7 +643,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   @Override
   public Collection<String> getUnclonedProperties() {
-    Set<String> properties = new HashSet<String>();
+    Set<String> properties = new THashSet<String>(1);
     if (unclonedProperties != null) {
       properties.addAll(unclonedProperties);
     }
@@ -660,7 +663,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   @Override
   public Collection<IGate> getWritabilityGates() {
-    Set<IGate> gates = new HashSet<IGate>();
+    Set<IGate> gates = new THashSet<IGate>(1);
     if (writabilityGates != null) {
       gates.addAll(writabilityGates);
     }
@@ -1222,8 +1225,8 @@ public abstract class AbstractComponentDescriptor<E> extends
   private void registerService(Class<?> serviceContract,
       IComponentService service) {
     if (serviceDelegates == null) {
-      serviceDelegates = new HashMap<String, IComponentService>();
-      serviceContracts = new HashSet<Class<?>>();
+      serviceDelegates = new THashMap<String, IComponentService>(1, 1.0f);
+      serviceContracts = new THashSet<Class<?>>(1);
     }
     serviceContracts.add(serviceContract);
     Method[] contractServices = serviceContract.getMethods();

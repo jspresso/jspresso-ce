@@ -18,9 +18,12 @@
  */
 package org.jspresso.framework.binding;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
+import java.util.Collections;
 import java.util.Map;
+
+import gnu.trove.map.hash.THashMap;
 
 import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.IItemSelectionListener;
@@ -42,6 +45,7 @@ public abstract class AbstractCompositeValueConnector extends
     AbstractValueConnector implements IRenderableCompositeValueConnector {
 
   private Map<String, IValueConnector> childConnectors;
+  private Collection<String>           childConnectorKeys;
   private String                       displayDescription;
   private Icon                         displayIcon;
   private String                       displayValue;
@@ -59,9 +63,15 @@ public abstract class AbstractCompositeValueConnector extends
    */
   public AbstractCompositeValueConnector(String id) {
     super(id);
-    itemSelectionSupport = new ItemSelectionSupport();
     trackingChildrenSelection = false;
-    childConnectors = new LinkedHashMap<String, IValueConnector>();
+    initChildStructureIfNecessary();
+  }
+
+  private void initChildStructureIfNecessary() {
+    if (childConnectors == null) {
+      childConnectors = new THashMap<String, IValueConnector>();
+      childConnectorKeys = new ArrayList<String>();
+    }
   }
 
   /**
@@ -87,8 +97,9 @@ public abstract class AbstractCompositeValueConnector extends
   public AbstractCompositeValueConnector clone(String newConnectorId) {
     AbstractCompositeValueConnector clonedConnector = (AbstractCompositeValueConnector) super
         .clone(newConnectorId);
-    clonedConnector.childConnectors = new LinkedHashMap<String, IValueConnector>();
-    clonedConnector.itemSelectionSupport = new ItemSelectionSupport();
+    clonedConnector.childConnectors = null;
+    clonedConnector.childConnectorKeys = null;
+    clonedConnector.itemSelectionSupport = null;
     for (String connectorKey : getChildConnectorKeys()) {
       clonedConnector.addChildConnector(connectorKey,
           getChildConnector(connectorKey).clone());
@@ -101,6 +112,9 @@ public abstract class AbstractCompositeValueConnector extends
    */
   @Override
   public IValueConnector getChildConnector(String connectorKey) {
+    if (childConnectors == null) {
+      return null;
+    }
     return childConnectors.get(connectorKey);
   }
 
@@ -109,7 +123,10 @@ public abstract class AbstractCompositeValueConnector extends
    */
   @Override
   public int getChildConnectorCount() {
-    return getChildConnectorKeys().size();
+    if (childConnectorKeys == null) {
+      return 0;
+    }
+    return childConnectorKeys.size();
   }
 
   /**
@@ -117,7 +134,10 @@ public abstract class AbstractCompositeValueConnector extends
    */
   @Override
   public Collection<String> getChildConnectorKeys() {
-    return childConnectors.keySet();
+    if (childConnectorKeys == null) {
+      return Collections.emptyList();
+    }
+    return new ArrayList<String>(childConnectorKeys);
   }
 
   /**
@@ -289,8 +309,10 @@ public abstract class AbstractCompositeValueConnector extends
   @Override
   public void addChildConnector(String storageKey,
       IValueConnector childConnector) {
+    initChildStructureIfNecessary();
     childConnectors.put(storageKey, childConnector);
     childConnector.setParentConnector(this);
+    childConnectorKeys.add(storageKey);
   }
 
   /**
@@ -302,6 +324,9 @@ public abstract class AbstractCompositeValueConnector extends
    */
   protected void implAddConnectorSelectionListener(
       IItemSelectionListener listener) {
+    if (itemSelectionSupport == null) {
+      itemSelectionSupport = new ItemSelectionSupport();
+    }
     itemSelectionSupport.addItemSelectionListener(listener);
   }
 
@@ -326,7 +351,7 @@ public abstract class AbstractCompositeValueConnector extends
    */
   protected void implFireSelectedItemChange(ItemSelectionEvent evt) {
     selectedItem = evt.getSelectedItem();
-    if (evt.getSource() == this || isTrackingChildrenSelection()) {
+    if (itemSelectionSupport != null && evt.getSource() == this || isTrackingChildrenSelection()) {
       itemSelectionSupport.fireSelectedConnectorChange(evt);
     }
     IValueConnector parentConnector = getParentConnector();
@@ -358,7 +383,9 @@ public abstract class AbstractCompositeValueConnector extends
    */
   protected void implRemoveConnectorSelectionListener(
       IItemSelectionListener listener) {
-    itemSelectionSupport.removeConnectorSelectionListener(listener);
+    if (itemSelectionSupport != null) {
+      itemSelectionSupport.removeConnectorSelectionListener(listener);
+    }
   }
 
   /**
@@ -386,7 +413,10 @@ public abstract class AbstractCompositeValueConnector extends
    */
   @Override
   public void removeChildConnector(String storageKey) {
-    childConnectors.remove(storageKey);
+    if (childConnectors != null) {
+      childConnectors.remove(storageKey);
+      childConnectorKeys.remove(storageKey);
+    }
   }
 
   /**

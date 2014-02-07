@@ -19,9 +19,13 @@
 package org.jspresso.framework.binding.model;
 
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import gnu.trove.map.hash.THashMap;
 
 import org.jspresso.framework.binding.ConnectorBindingException;
 import org.jspresso.framework.binding.ICompositeValueConnector;
@@ -55,6 +59,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    */
   public static final String           THIS_PROPERTY = "&this";
   private Map<String, IValueConnector> childConnectors;
+  private Collection<String>           childConnectorKeys;
   private ModelChangeSupport           modelChangeSupport;
 
   private IModelConnectorFactory       modelConnectorFactory;
@@ -71,8 +76,13 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
       IModelConnectorFactory modelConnectorFactory) {
     super(modelDescriptor, modelConnectorFactory.getAccessorFactory());
     this.modelConnectorFactory = modelConnectorFactory;
-    modelChangeSupport = new ModelChangeSupport(this);
-    childConnectors = new LinkedHashMap<String, IValueConnector>();
+  }
+
+  private void initChildStructureIfNecessary() {
+    if (childConnectors == null) {
+      childConnectors = new THashMap<String, IValueConnector>();
+      childConnectorKeys = new ArrayList<String>();
+    }
   }
 
   /**
@@ -84,6 +94,9 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   @Override
   public void addModelChangeListener(IModelChangeListener listener) {
     if (listener != null) {
+      if (modelChangeSupport == null) {
+        modelChangeSupport = new ModelChangeSupport(this);
+      }
       modelChangeSupport.addModelChangeListener(listener);
     }
   }
@@ -127,8 +140,9 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   public ModelRefPropertyConnector clone(String newConnectorId) {
     ModelRefPropertyConnector clonedConnector = (ModelRefPropertyConnector) super
         .clone(newConnectorId);
-    clonedConnector.modelChangeSupport = new ModelChangeSupport(clonedConnector);
-    clonedConnector.childConnectors = new LinkedHashMap<String, IValueConnector>();
+    clonedConnector.modelChangeSupport = null;
+    clonedConnector.childConnectors = null;
+    clonedConnector.childConnectorKeys = null;
     return clonedConnector;
   }
 
@@ -153,6 +167,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
       ICompositeValueConnector rootC = (ICompositeValueConnector) getChildConnector(root);
       return rootC.getChildConnector(nested);
     }
+    initChildStructureIfNecessary();
     IValueConnector connector = childConnectors.get(actualKey);
     if (connector == null) {
       IComponentDescriptor<?> componentDescriptor = getModelDescriptor()
@@ -174,6 +189,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
         }
         connector.setParentConnector(this);
         childConnectors.put(actualKey, connector);
+        childConnectorKeys.add(actualKey);
       }
     }
     return connector;
@@ -184,7 +200,10 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    */
   @Override
   public int getChildConnectorCount() {
-    return getChildConnectorKeys().size();
+    if (childConnectorKeys == null) {
+      return 0;
+    }
+    return childConnectorKeys.size();
   }
 
   /**
@@ -192,7 +211,10 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    */
   @Override
   public Collection<String> getChildConnectorKeys() {
-    return childConnectors.keySet();
+    if (childConnectorKeys == null) {
+      return Collections.emptyList();
+    }
+    return new ArrayList<String>(childConnectorKeys);
   }
 
   /**
@@ -273,7 +295,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    */
   @Override
   public void removeModelChangeListener(IModelChangeListener listener) {
-    if (listener != null) {
+    if (modelChangeSupport != null && listener != null) {
       modelChangeSupport.removeModelChangeListener(listener);
     }
   }
@@ -298,7 +320,9 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    *          The new model of the connector
    */
   protected void fireModelChange(Object oldModel, Object newModel) {
-    modelChangeSupport.fireModelChange(oldModel, newModel);
+    if (modelChangeSupport != null) {
+      modelChangeSupport.fireModelChange(oldModel, newModel);
+    }
   }
 
   /**

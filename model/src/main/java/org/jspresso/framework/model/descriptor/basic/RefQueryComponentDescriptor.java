@@ -74,6 +74,7 @@ public class RefQueryComponentDescriptor<E> extends
       Map<Class<? extends IComponent>, IComponentDescriptor<? extends IComponent>> registry) {
     super(componentDescriptorProvider.getComponentDescriptor().getName());
     this.registry = registry;
+    this.registry.put((Class<IComponent>) componentContract, (IComponentDescriptor<IComponent>) this);
     this.queryComponentsDescriptorProvider = componentDescriptorProvider;
     this.componentContract = componentContract;
     Collection<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
@@ -188,7 +189,6 @@ public class RefQueryComponentDescriptor<E> extends
       if (refQueryDescriptor == null) {
         refQueryDescriptor = new RefQueryComponentDescriptor<IComponent>(
             referencedDescriptor, referencedType, registry);
-        registry.put(referencedType, refQueryDescriptor);
         ((RefQueryComponentDescriptor<?>) refQueryDescriptor)
             .finishConfiguration();
       }

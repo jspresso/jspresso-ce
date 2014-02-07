@@ -19,9 +19,10 @@
 package org.jspresso.framework.util.event;
 
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
+
+import gnu.trove.set.hash.THashSet;
+import gnu.trove.set.hash.TLinkedHashSet;
 
 /**
  * Helper class to ease the IValueChangeListener management.
@@ -61,7 +62,7 @@ public class ValueChangeSupport implements IValueChangeSource {
    */
   public void addInhibitedListener(IValueChangeListener listener) {
     if (inhibitedListeners == null && listener != null) {
-      inhibitedListeners = new HashSet<IValueChangeListener>(4);
+      inhibitedListeners = new THashSet<IValueChangeListener>(1);
     }
     inhibitedListeners.add(listener);
   }
@@ -73,7 +74,7 @@ public class ValueChangeSupport implements IValueChangeSource {
   public synchronized void addValueChangeListener(IValueChangeListener listener) {
     if (listener != null) {
       if (listeners == null) {
-        listeners = new LinkedHashSet<IValueChangeListener>(8);
+        listeners = new TLinkedHashSet<IValueChangeListener>(1);
       }
       if (!listeners.contains(listener)) {
         listeners.add(listener);
@@ -104,7 +105,7 @@ public class ValueChangeSupport implements IValueChangeSource {
    */
   public void fireValueChange(ValueChangeEvent evt) {
     if (listeners != null && evt.needsFiring()) {
-      for (IValueChangeListener listener : getValueChangeListeners()) {
+      for (IValueChangeListener listener : listeners.toArray(new IValueChangeListener[listeners.size()])) {
         if (inhibitedListeners == null
             || !inhibitedListeners.contains(listener)) {
           if (listeners.contains(listener)) {
@@ -123,7 +124,7 @@ public class ValueChangeSupport implements IValueChangeSource {
   @Override
   public Set<IValueChangeListener> getValueChangeListeners() {
     if (listeners != null) {
-      return new LinkedHashSet<IValueChangeListener>(listeners);
+      return new TLinkedHashSet<IValueChangeListener>(listeners);
     }
     return Collections.emptySet();
   }
@@ -149,6 +150,9 @@ public class ValueChangeSupport implements IValueChangeSource {
       return;
     }
     inhibitedListeners.remove(listener);
+    if (inhibitedListeners.size() == 0) {
+      inhibitedListeners = null;
+    }
   }
 
   /**
@@ -157,8 +161,12 @@ public class ValueChangeSupport implements IValueChangeSource {
   @Override
   public synchronized void removeValueChangeListener(
       IValueChangeListener listener) {
-    if (listener != null && listeners != null) {
-      listeners.remove(listener);
+    if (listeners == null || listener == null) {
+      return;
+    }
+    listeners.remove(listener);
+    if (listeners.size() == 0) {
+      listeners = null;
     }
   }
 }

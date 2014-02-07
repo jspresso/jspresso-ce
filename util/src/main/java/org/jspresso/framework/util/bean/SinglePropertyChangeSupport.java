@@ -19,10 +19,9 @@
 package org.jspresso.framework.util.bean;
 
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-import java.util.Collections;
 import java.util.Set;
-import java.util.WeakHashMap;
+
+import org.jspresso.framework.util.collection.TWeakHashSet;
 
 /**
  * This property change support prevents from adding twice the same property
@@ -44,7 +43,6 @@ public class SinglePropertyChangeSupport extends PropertyChangeSupport {
    */
   public SinglePropertyChangeSupport(Object sourceBean) {
     super(sourceBean);
-    cachedListeners = Collections.newSetFromMap(new WeakHashMap<PropertyChangeListener, Boolean>());
   }
 
   /**
@@ -56,6 +54,9 @@ public class SinglePropertyChangeSupport extends PropertyChangeSupport {
   public synchronized void addPropertyChangeListener(PropertyChangeListener listener) {
     if (checkUniqueness(null, listener)) {
       super.addPropertyChangeListener(listener);
+      if (cachedListeners == null) {
+        cachedListeners = new TWeakHashSet<PropertyChangeListener>();
+      }
       cachedListeners.add(listener);
     }
   }
@@ -69,6 +70,9 @@ public class SinglePropertyChangeSupport extends PropertyChangeSupport {
   public synchronized void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
     if (checkUniqueness(propertyName, listener)) {
       super.addPropertyChangeListener(propertyName, listener);
+      if (cachedListeners == null) {
+        cachedListeners = new TWeakHashSet<PropertyChangeListener>();
+      }
       cachedListeners.add(listener);
     }
   }
@@ -81,7 +85,12 @@ public class SinglePropertyChangeSupport extends PropertyChangeSupport {
   @Override
   public synchronized void removePropertyChangeListener(PropertyChangeListener listener) {
     super.removePropertyChangeListener(listener);
-    cachedListeners.remove(listener);
+    if (cachedListeners != null) {
+      cachedListeners.remove(listener);
+      if (cachedListeners.size() == 0) {
+        cachedListeners = null;
+      }
+    }
   }
 
   /**
@@ -93,12 +102,17 @@ public class SinglePropertyChangeSupport extends PropertyChangeSupport {
   @Override
   public synchronized void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
     super.removePropertyChangeListener(propertyName, listener);
-    cachedListeners.remove(listener);
+    if (cachedListeners != null) {
+      cachedListeners.remove(listener);
+      if (cachedListeners.size() == 0) {
+        cachedListeners = null;
+      }
+    }
   }
 
   private boolean checkUniqueness(String propertyName, PropertyChangeListener listener) {
     /*
-    List<PropertyChangeListener> containedListeners = new ArrayList<>();
+    List<PropertyChangeListener> containedListeners = new ArrayList<PropertyChangeListener>();
     if (propertyName == null) {
       for (PropertyChangeListener pcl : getPropertyChangeListeners()) {
         if (!(pcl instanceof PropertyChangeListenerProxy)) {
@@ -112,6 +126,6 @@ public class SinglePropertyChangeSupport extends PropertyChangeSupport {
     */
 
     // Performance optimization. See bug #1135
-    return !cachedListeners.contains(listener);
+    return cachedListeners == null || !cachedListeners.contains(listener);
   }
 }

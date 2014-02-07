@@ -18,9 +18,11 @@
  */
 package org.jspresso.framework.model.component.basic;
 
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 
+import gnu.trove.map.hash.THashMap;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.jspresso.framework.model.component.IComponent;
@@ -43,7 +45,7 @@ public class BasicComponentInvocationHandler extends
 
   private static final long   serialVersionUID = -3178070064423598514L;
 
-  private Map<String, Object> properties;
+  private final Map<String, Object> properties;
 
   /**
    * Constructs a new <code>BasiccomponentInvocationHandler</code> instance.
@@ -125,6 +127,6 @@ public class BasicComponentInvocationHandler extends
   }
 
   private Map<String, Object> createPropertyMap() {
-    return new HashMap<String, Object>();
+    return new THashMap<String, Object>(1, 1.0f);
   }
 }

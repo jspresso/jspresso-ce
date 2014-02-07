@@ -19,9 +19,10 @@
 package org.jspresso.framework.util.event;
 
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
+
+import gnu.trove.set.hash.THashSet;
+import gnu.trove.set.hash.TLinkedHashSet;
 
 /**
  * Helper class to ease the <code>ISelectionChangeListener</code> management.
@@ -65,7 +66,7 @@ public class SelectionChangeSupport implements ISelectable {
    */
   public void addInhibitedListener(ISelectionChangeListener listener) {
     if (inhibitedListeners == null && listener != null) {
-      inhibitedListeners = new HashSet<ISelectionChangeListener>();
+      inhibitedListeners = new TLinkedHashSet<ISelectionChangeListener>(1);
     }
     inhibitedListeners.add(listener);
   }
@@ -78,7 +79,7 @@ public class SelectionChangeSupport implements ISelectable {
       ISelectionChangeListener listener) {
     if (listener != null) {
       if (listeners == null) {
-        listeners = new LinkedHashSet<ISelectionChangeListener>();
+        listeners = new THashSet<ISelectionChangeListener>(1);
       }
       if (!listeners.contains(listener)) {
         listeners.add(listener);
@@ -120,7 +121,7 @@ public class SelectionChangeSupport implements ISelectable {
           && Arrays.equals(oldSelection, newSelection)) {
         return;
       }
-      for (ISelectionChangeListener listener : listeners) {
+      for (ISelectionChangeListener listener : listeners.toArray(new ISelectionChangeListener[listeners.size()])) {
         if (inhibitedListeners == null
             || !inhibitedListeners.contains(listener)) {
           listener.selectionChange(evt);
@@ -149,6 +150,9 @@ public class SelectionChangeSupport implements ISelectable {
       return;
     }
     inhibitedListeners.remove(listener);
+    if (inhibitedListeners.size() == 0) {
+      inhibitedListeners = null;
+    }
   }
 
   /**
@@ -157,8 +161,12 @@ public class SelectionChangeSupport implements ISelectable {
   @Override
   public synchronized void removeSelectionChangeListener(
       ISelectionChangeListener listener) {
-    if (listener != null && listeners != null) {
-      listeners.remove(listener);
+    if (listeners == null || listener == null) {
+      return;
+    }
+    listeners.remove(listener);
+    if (listeners.size() == 0) {
+      listeners = null;
     }
   }
 

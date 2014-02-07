@@ -75,6 +75,7 @@
     <spring-beandoc.version>0.8.1</spring-beandoc.version>
     <ant-nodeps.version>1.8.1</ant-nodeps.version>
     <stax-api.version>1.0.1</stax-api.version>
+    <trove.version>3.0.3</trove.version>
 
     <!-- Plugins versions -->
     <compiler-plugin.version>3.1</compiler-plugin.version>
@@ -776,7 +777,11 @@
         <artifactId>groovy-all</artifactId>
         <version>${groovy.version}</version>
       </dependency>
-    </dependencies>
+      <dependency>
+        <groupId>net.sf.trove4j</groupId>
+        <artifactId>trove4j</artifactId>
+        <version>${trove.version}</version>
+      </dependency>    </dependencies>
   </dependencyManagement>
   <dependencies>
     <dependency>

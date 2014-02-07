@@ -20,9 +20,9 @@ package org.jspresso.framework.model.entity.basic;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.HashMap;
 import java.util.Map;
 
+import gnu.trove.map.hash.THashMap;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.jspresso.framework.model.component.IComponent;
@@ -46,7 +46,7 @@ public class BasicEntityInvocationHandler extends
 
   private static final long   serialVersionUID = 6078989823404409653L;
 
-  private Map<String, Object> properties;
+  private final Map<String, Object> properties;
   private int                 hashCode;
 
   /**
@@ -170,7 +170,7 @@ public class BasicEntityInvocationHandler extends
   }
 
   private Map<String, Object> createPropertyMap() {
-    return new HashMap<String, Object>();
+    return new THashMap<String, Object>(1, 1.0f);
   }
 
   /**

@@ -18,8 +18,9 @@
  */
 package org.jspresso.framework.model;
 
-import java.util.LinkedHashSet;
 import java.util.Set;
+
+import gnu.trove.set.hash.TLinkedHashSet;
 
 /**
  * Helper class to ease the IModelChangeListener management.
@@ -58,7 +59,7 @@ public class ModelChangeSupport {
   public synchronized void addModelChangeListener(IModelChangeListener listener) {
     if (listener != null) {
       if (listeners == null) {
-        listeners = new LinkedHashSet<IModelChangeListener>();
+        listeners = new TLinkedHashSet<IModelChangeListener>();
       }
       if (!listeners.contains(listener)) {
         listeners.add(listener);
@@ -86,7 +87,7 @@ public class ModelChangeSupport {
       if (oldValue == newValue) {
         return;
       }
-      for (IModelChangeListener listener : listeners) {
+      for (IModelChangeListener listener : listeners.toArray(new IModelChangeListener[listeners.size()])) {
         listener.modelChange(evt);
       }
     }
