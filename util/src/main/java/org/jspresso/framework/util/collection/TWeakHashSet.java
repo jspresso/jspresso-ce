@@ -58,7 +58,7 @@ public class TWeakHashSet<E> extends AbstractSet<E> {
 
   private Set<WeakElement<E>> createOrGetDelegate() {
     if (delegate == null) {
-      delegate = new THashSet<WeakElement<E>>();
+      delegate = new THashSet<>(1);
     }
     return delegate;
   }

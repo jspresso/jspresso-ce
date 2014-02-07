@@ -42,7 +42,7 @@ public class ItemSelectionSupport {
       IItemSelectionListener listener) {
     if (listener != null) {
       if (listeners == null) {
-        listeners = new TLinkedHashSet<>();
+        listeners = new TLinkedHashSet<>(1);
       }
       if (!listeners.contains(listener)) {
         listeners.add(listener);

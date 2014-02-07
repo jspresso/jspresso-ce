@@ -62,7 +62,7 @@ public class ValueChangeSupport implements IValueChangeSource {
    */
   public void addInhibitedListener(IValueChangeListener listener) {
     if (inhibitedListeners == null && listener != null) {
-      inhibitedListeners = new THashSet<>(4);
+      inhibitedListeners = new THashSet<>(1);
     }
     if (inhibitedListeners != null) {
       inhibitedListeners.add(listener);
@@ -76,7 +76,7 @@ public class ValueChangeSupport implements IValueChangeSource {
   public synchronized void addValueChangeListener(IValueChangeListener listener) {
     if (listener != null) {
       if (listeners == null) {
-        listeners = new TLinkedHashSet<>(8);
+        listeners = new TLinkedHashSet<>(1);
       }
       if (!listeners.contains(listener)) {
         listeners.add(listener);

@@ -414,7 +414,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   public List<String> getQueryableProperties() {
     synchronized (queryablePropertiesLock) {
       if (queryableProperties == null) {
-        Set<String> queryablePropertiesSet = new TLinkedHashSet<>();
+        Set<String> queryablePropertiesSet = new TLinkedHashSet<>(1);
         List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
         if (ancestorDescs != null) {
           for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
@@ -444,7 +444,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   @Override
   public Collection<IGate> getReadabilityGates() {
-    Set<IGate> gates = new THashSet<>();
+    Set<IGate> gates = new THashSet<>(1);
     if (readabilityGates != null) {
       gates.addAll(readabilityGates);
     }
@@ -466,7 +466,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   public List<String> getRenderedProperties() {
     synchronized (renderedPropertiesLock) {
       if (renderedProperties == null) {
-        Set<String> renderedPropertiesSet = new TLinkedHashSet<>();
+        Set<String> renderedPropertiesSet = new TLinkedHashSet<>(1);
         List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
         if (ancestorDescs != null) {
           for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
@@ -500,7 +500,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   @Override
   public Collection<String> getServiceContractClassNames() {
-    Set<String> serviceContractClassNames = new TLinkedHashSet<>();
+    Set<String> serviceContractClassNames = new TLinkedHashSet<>(1);
     if (serviceContracts != null) {
       for (Class<?> serviceContract : serviceContracts) {
         serviceContractClassNames.add(serviceContract.getName());
@@ -654,7 +654,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   @Override
   public Collection<String> getUnclonedProperties() {
-    Set<String> properties = new THashSet<>();
+    Set<String> properties = new THashSet<>(1);
     if (unclonedProperties != null) {
       properties.addAll(unclonedProperties);
     }
@@ -674,7 +674,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   @Override
   public Collection<IGate> getWritabilityGates() {
-    Set<IGate> gates = new THashSet<>();
+    Set<IGate> gates = new THashSet<>(1);
     if (writabilityGates != null) {
       gates.addAll(writabilityGates);
     }
@@ -1304,8 +1304,8 @@ public abstract class AbstractComponentDescriptor<E> extends
   private void registerService(Class<?> serviceContract,
       IComponentService service) {
     if (serviceDelegates == null) {
-      serviceDelegates = new THashMap<>();
-      serviceContracts = new THashSet<>();
+      serviceDelegates = new THashMap<>(1, 1.0f);
+      serviceContracts = new THashSet<>(1);
     }
     serviceContracts.add(serviceContract);
     Method[] contractServices = serviceContract.getMethods();

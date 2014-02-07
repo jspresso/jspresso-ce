@@ -130,7 +130,7 @@ public abstract class AbstractComponentInvocationHandler implements
   private              PropertyChangeListener fakePcl;
 
   static {
-    Collection<String> methodNames = new THashSet<>();
+    Collection<String> methodNames = new THashSet<>(6);
     for (Method m : ILifecycleCapable.class.getMethods()) {
       methodNames.add(m.getName());
     }
@@ -285,7 +285,7 @@ public abstract class AbstractComponentInvocationHandler implements
                 return null;
               }
               if (modifierMonitors == null) {
-                modifierMonitors = new THashSet<>();
+                modifierMonitors = new THashSet<>(1);
               }
               modifierMonitors.add(methodName);
             }
@@ -637,7 +637,7 @@ public abstract class AbstractComponentInvocationHandler implements
       Class<IComponentExtension<IComponent>> extensionClass, IComponent proxy) {
     IComponentExtension<IComponent> extension;
     if (componentExtensions == null) {
-      componentExtensions = new THashMap<>();
+      componentExtensions = new THashMap<>(1, 1.0f);
       extension = null;
     } else {
       extension = componentExtensions.get(extensionClass);
@@ -714,9 +714,9 @@ public abstract class AbstractComponentInvocationHandler implements
               .get(propertyName);
         }
         if (nestedPropertyListening == null) {
-          nestedPropertyListening = new THashSet<>();
-          if(fakePclAttachements == null) {
-            fakePclAttachements = new THashMap<>();
+          nestedPropertyListening = new THashSet<>(1);
+          if (fakePclAttachements == null) {
+            fakePclAttachements = new THashMap<>(1, 1.0f);
           }
           fakePclAttachements.put(propertyName, nestedPropertyListening);
         }
@@ -938,7 +938,7 @@ public abstract class AbstractComponentInvocationHandler implements
           }
         } else {
           if (delayedFakePclAttachements == null) {
-            delayedFakePclAttachements = new THashMap<>();
+            delayedFakePclAttachements = new THashMap<>(1, 1.0f);
           }
           delayedFakePclAttachements.put(propertyName, nestedPropertyListening);
         }
@@ -948,7 +948,7 @@ public abstract class AbstractComponentInvocationHandler implements
             EntityHelper.isInlineComponentReference(propertyDescriptor)
                 && !propertyDescriptor.isComputed());
         if (referenceTrackers == null) {
-          referenceTrackers = new THashMap<>();
+          referenceTrackers = new THashMap<>(1, 1.0f);
         }
         referenceTrackers.put(propertyName, referenceTracker);
       }
@@ -1167,7 +1167,7 @@ public abstract class AbstractComponentInvocationHandler implements
             EntityHelper.isInlineComponentReference(rootPropertyDescriptor)
                 && !rootPropertyDescriptor.isComputed());
         if (referenceTrackers == null) {
-          referenceTrackers = new THashMap<>();
+          referenceTrackers = new THashMap<>(1, 1.0f);
         }
         referenceTrackers.put(rootProperty, referenceTracker);
       }
@@ -1182,9 +1182,9 @@ public abstract class AbstractComponentInvocationHandler implements
                 .get(propertyName);
           }
           if (nestedPropertyListening == null) {
-            nestedPropertyListening = new THashSet<>();
+            nestedPropertyListening = new THashSet<>(1);
             if (fakePclAttachements == null) {
-              fakePclAttachements = new THashMap<>();
+              fakePclAttachements = new THashMap<>(1, 1.0f);
             }
             fakePclAttachements.put(rootProperty, nestedPropertyListening);
           }
@@ -1196,9 +1196,9 @@ public abstract class AbstractComponentInvocationHandler implements
                 .get(propertyName);
           }
           if (delayedNestedPropertyListening == null) {
-            delayedNestedPropertyListening = new THashSet<>();
+            delayedNestedPropertyListening = new THashSet<>(1);
             if (delayedFakePclAttachements == null) {
-              delayedFakePclAttachements = new THashMap<>();
+              delayedFakePclAttachements = new THashMap<>(1, 1.0f);
             }
             delayedFakePclAttachements.put(rootProperty,
                 delayedNestedPropertyListening);
@@ -1626,7 +1626,7 @@ public abstract class AbstractComponentInvocationHandler implements
         }
       } else if (propertyDescriptor.isCacheable()) {
         if (computedPropertiesCache == null) {
-          computedPropertiesCache = new THashMap<>();
+          computedPropertiesCache = new THashMap<>(1, 1.0f);
         }
         computedPropertiesCache.put(propertyName, computedPropertyValue);
       }
@@ -1967,9 +1967,9 @@ public abstract class AbstractComponentInvocationHandler implements
           Collection<?> oldCollectionSnapshot = CollectionHelper
               .cloneCollection((Collection<?>) oldProperty);
           // It's a 'many' relation end
-          Collection<Object> oldPropertyElementsToRemove = new THashSet<>();
-          Collection<Object> newPropertyElementsToAdd = new TLinkedHashSet<>();
-          Collection<Object> propertyElementsToKeep = new THashSet<>();
+          Collection<Object> oldPropertyElementsToRemove = new THashSet<>(1);
+          Collection<Object> newPropertyElementsToAdd = new TLinkedHashSet<>(1);
+          Collection<Object> propertyElementsToKeep = new THashSet<>(1);
 
           if (oldProperty != null) {
             oldPropertyElementsToRemove.addAll((Collection<?>) oldProperty);
@@ -2268,7 +2268,7 @@ public abstract class AbstractComponentInvocationHandler implements
       this.referencesInlinedComponent = referencesInlineComponent;
       this.enabled = true;
       this.initialized = false;
-      this.trackedProperties = new THashSet<>();
+      this.trackedProperties = new THashSet<>(1);
     }
 
     /**

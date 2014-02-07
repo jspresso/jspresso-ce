@@ -168,6 +168,6 @@ public class BasicComponentInvocationHandler extends
 
 
   private Map<String, Object> createPropertyMap() {
-    return new THashMap<>();
+    return new THashMap<>(1, 1.0f);
   }
 }
