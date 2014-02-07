@@ -87,7 +87,7 @@ public class WeakPropertyChangeSupport implements Serializable {
   public synchronized void addPropertyChangeListener(PropertyChangeListener listener) {
     processQueue();
     if (listeners == null) {
-      listeners = new ArrayList<>();
+      listeners = new ArrayList<>(1);
     }
     listeners.add(WeakEntry.create(listener, createOrGetQueue()));
   }
@@ -122,7 +122,7 @@ public class WeakPropertyChangeSupport implements Serializable {
    */
   public synchronized void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
     if (children == null) {
-      children = new THashMap<>();
+      children = new THashMap<>(1, 1.0f);
     }
     WeakPropertyChangeSupport child = children.get(propertyName);
     if (child == null) {

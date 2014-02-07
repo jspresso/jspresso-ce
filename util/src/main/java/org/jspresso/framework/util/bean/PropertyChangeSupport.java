@@ -82,7 +82,7 @@ public class PropertyChangeSupport implements Serializable {
    */
   public synchronized void addPropertyChangeListener(PropertyChangeListener listener) {
     if (listeners == null) {
-      listeners = new ArrayList<>();
+      listeners = new ArrayList<>(1);
     }
     listeners.add(listener);
   }
@@ -116,7 +116,7 @@ public class PropertyChangeSupport implements Serializable {
    */
   public synchronized void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
     if (children == null) {
-      children = new THashMap<>();
+      children = new THashMap<>(1, 1.0f);
     }
     PropertyChangeSupport child = children.get(propertyName);
     if (child == null) {
