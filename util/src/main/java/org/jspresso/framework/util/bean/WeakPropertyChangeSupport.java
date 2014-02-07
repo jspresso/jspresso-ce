@@ -24,7 +24,8 @@ import java.io.Serializable;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import gnu.trove.map.hash.THashMap;
 
@@ -48,13 +49,13 @@ public class WeakPropertyChangeSupport implements Serializable {
    * <p/>
    * This is transient - its state is written in the writeObject method.
    */
-  private transient LinkedList<WeakEntry<PropertyChangeListener>> listeners;
+  private transient List<WeakEntry<PropertyChangeListener>> listeners;
 
   /**
    * Hashtable for managing listeners for specific properties. Maps property
    * names to WeakPropertyChangeSupport objects.
    */
-  private transient THashMap<String, WeakPropertyChangeSupport> children;
+  private transient Map<String, WeakPropertyChangeSupport> children;
 
   /**
    * The object to be provided as the "source" for any generated events.
@@ -86,7 +87,7 @@ public class WeakPropertyChangeSupport implements Serializable {
   public synchronized void addPropertyChangeListener(PropertyChangeListener listener) {
     processQueue();
     if (listeners == null) {
-      listeners = new LinkedList<>();
+      listeners = new ArrayList<>();
     }
     listeners.add(WeakEntry.create(listener, createOrGetQueue()));
   }
@@ -169,12 +170,11 @@ public class WeakPropertyChangeSupport implements Serializable {
       return;
     }
 
-    LinkedList<WeakEntry<PropertyChangeListener>> targets = null;
+    List<WeakEntry<PropertyChangeListener>> targets = null;
     WeakPropertyChangeSupport child = null;
     synchronized (this) {
       if (listeners != null) {
-        targets = (LinkedList<WeakEntry<PropertyChangeListener>>) listeners
-            .clone();
+        targets = new ArrayList<>(listeners);
       }
       if (children != null && propertyName != null) {
         child = children.get(propertyName);
@@ -259,12 +259,11 @@ public class WeakPropertyChangeSupport implements Serializable {
       return;
     }
 
-    LinkedList<WeakEntry<PropertyChangeListener>> targets = null;
+    List<WeakEntry<PropertyChangeListener>> targets = null;
     WeakPropertyChangeSupport child = null;
     synchronized (this) {
       if (listeners != null) {
-        targets = (LinkedList<WeakEntry<PropertyChangeListener>>) listeners
-            .clone();
+        targets = new ArrayList<>(listeners);
       }
       if (children != null && propertyName != null) {
         child = children.get(propertyName);

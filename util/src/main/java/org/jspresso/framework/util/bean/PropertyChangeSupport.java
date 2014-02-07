@@ -22,7 +22,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import gnu.trove.map.hash.THashMap;
 
@@ -46,13 +47,13 @@ public class PropertyChangeSupport implements Serializable {
    * <p/>
    * This is transient - its state is written in the writeObject method.
    */
-  private transient LinkedList<PropertyChangeListener> listeners;
+  private transient List<PropertyChangeListener> listeners;
 
   /**
    * Hashtable for managing listeners for specific properties. Maps property
    * names to WeakPropertyChangeSupport objects.
    */
-  private transient THashMap<String, PropertyChangeSupport> children;
+  private transient Map<String, PropertyChangeSupport> children;
 
   /**
    * The object to be provided as the "source" for any generated events.
@@ -81,7 +82,7 @@ public class PropertyChangeSupport implements Serializable {
    */
   public synchronized void addPropertyChangeListener(PropertyChangeListener listener) {
     if (listeners == null) {
-      listeners = new LinkedList<>();
+      listeners = new ArrayList<>();
     }
     listeners.add(listener);
   }
@@ -163,12 +164,11 @@ public class PropertyChangeSupport implements Serializable {
       return;
     }
 
-    LinkedList<PropertyChangeListener> targets = null;
+    List<PropertyChangeListener> targets = null;
     PropertyChangeSupport child = null;
     synchronized (this) {
       if (listeners != null) {
-        targets = (LinkedList<PropertyChangeListener>) listeners
-            .clone();
+        targets = new ArrayList<>(listeners);
       }
       if (children != null && propertyName != null) {
         child = children.get(propertyName);
@@ -252,12 +252,11 @@ public class PropertyChangeSupport implements Serializable {
       return;
     }
 
-    LinkedList<PropertyChangeListener> targets = null;
+    List<PropertyChangeListener> targets = null;
     PropertyChangeSupport child = null;
     synchronized (this) {
       if (listeners != null) {
-        targets = (LinkedList<PropertyChangeListener>) listeners
-            .clone();
+        targets = new ArrayList<>(listeners);
       }
       if (children != null && propertyName != null) {
         child = children.get(propertyName);
