@@ -19,7 +19,11 @@
 package org.jspresso.framework.util.bean;
 
 import java.beans.PropertyChangeListener;
+import java.util.Collection;
 import java.util.Set;
+
+import gnu.trove.set.hash.THashSet;
+import gnu.trove.set.hash.TLinkedHashSet;
 
 import org.jspresso.framework.util.collection.TWeakHashSet;
 
@@ -32,100 +36,30 @@ import org.jspresso.framework.util.collection.TWeakHashSet;
  */
 public class SinglePropertyChangeSupport extends PropertyChangeSupport {
 
-  private static final long serialVersionUID = -3547472625502417905L;
-  private Set<PropertyChangeListener> cachedListeners;
+  private static final long serialVersionUID = -8756036677115452017L;
 
   /**
-   * Constructs a new {@code SinglePropertyChangeSupport} instance.
+   * Constructs a {@code WeakPropertyChangeSupport} object.
    *
    * @param sourceBean
-   *          the source bean.
+   *     The bean to be given as the source for any events.
    */
   public SinglePropertyChangeSupport(Object sourceBean) {
     super(sourceBean);
   }
 
-  /**
-   * Checks listener uniqueness before performing.
-   * <p>
-   * {@inheritDoc}
-   */
   @Override
-  public synchronized void addPropertyChangeListener(PropertyChangeListener listener) {
-    if (checkUniqueness(null, listener)) {
-      super.addPropertyChangeListener(listener);
-      if (cachedListeners == null) {
-        cachedListeners = new TWeakHashSet<PropertyChangeListener>();
-      }
-      cachedListeners.add(listener);
-    }
+  protected Collection<PropertyChangeListener> createListenersCollection() {
+    return new TLinkedHashSet<PropertyChangeListener>(1);
   }
 
   /**
-   * Checks listener uniqueness before performing.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public synchronized void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-    if (checkUniqueness(propertyName, listener)) {
-      super.addPropertyChangeListener(propertyName, listener);
-      if (cachedListeners == null) {
-        cachedListeners = new TWeakHashSet<PropertyChangeListener>();
-      }
-      cachedListeners.add(listener);
-    }
-  }
-
-  /**
-   * Remove property change listener.
+   * Create child.
    *
-   * @param listener the listener
+   * @return the property change support
    */
-  @Override
-  public synchronized void removePropertyChangeListener(PropertyChangeListener listener) {
-    super.removePropertyChangeListener(listener);
-    if (cachedListeners != null) {
-      cachedListeners.remove(listener);
-      if (cachedListeners.size() == 0) {
-        cachedListeners = null;
-      }
-    }
+  protected PropertyChangeSupport createChild() {
+    return new SinglePropertyChangeSupport(getSource());
   }
 
-  /**
-   * Remove property change listener.
-   *
-   * @param propertyName the property name
-   * @param listener the listener
-   */
-  @Override
-  public synchronized void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-    super.removePropertyChangeListener(propertyName, listener);
-    if (cachedListeners != null) {
-      cachedListeners.remove(listener);
-      if (cachedListeners.size() == 0) {
-        cachedListeners = null;
-      }
-    }
-  }
-
-  private boolean checkUniqueness(String propertyName, PropertyChangeListener listener) {
-    /*
-    List<PropertyChangeListener> containedListeners = new ArrayList<PropertyChangeListener>();
-    if (propertyName == null) {
-      for (PropertyChangeListener pcl : getPropertyChangeListeners()) {
-        if (!(pcl instanceof PropertyChangeListenerProxy)) {
-          containedListeners.add(pcl);
-        }
-      }
-    } else {
-      containedListeners.addAll(Arrays.asList(getPropertyChangeListeners(propertyName)));
-    }
-    return !containedListeners.contains(listener);
-    */
-
-    // Performance optimization. See bug #1135
-    return cachedListeners == null || !cachedListeners.contains(listener);
-  }
 }

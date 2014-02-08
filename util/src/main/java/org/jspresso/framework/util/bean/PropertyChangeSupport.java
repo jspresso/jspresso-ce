@@ -22,6 +22,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +48,7 @@ public class PropertyChangeSupport implements Serializable {
    * <p/>
    * This is transient - its state is written in the writeObject method.
    */
-  private transient List<PropertyChangeListener> listeners;
+  private transient Collection<PropertyChangeListener> listeners;
 
   /**
    * Hashtable for managing listeners for specific properties. Maps property
@@ -82,9 +83,18 @@ public class PropertyChangeSupport implements Serializable {
    */
   public synchronized void addPropertyChangeListener(PropertyChangeListener listener) {
     if (listeners == null) {
-      listeners = new ArrayList<PropertyChangeListener>(1);
+      listeners = createListenersCollection();
     }
     listeners.add(listener);
+  }
+
+  /**
+   * Create listeners collection.
+   *
+   * @return the collection
+   */
+  protected Collection<PropertyChangeListener> createListenersCollection() {
+    return new ArrayList<PropertyChangeListener>(1);
   }
 
   /**
@@ -120,10 +130,28 @@ public class PropertyChangeSupport implements Serializable {
     }
     PropertyChangeSupport child = children.get(propertyName);
     if (child == null) {
-      child = new PropertyChangeSupport(source);
+      child = createChild();
       children.put(propertyName, child);
     }
     child.addPropertyChangeListener(listener);
+  }
+
+  /**
+   * Gets source.
+   *
+   * @return the source
+   */
+  protected Object getSource() {
+    return source;
+  }
+
+  /**
+   * Create child.
+   *
+   * @return the property change support
+   */
+  protected PropertyChangeSupport createChild() {
+    return new PropertyChangeSupport(getSource());
   }
 
   /**
