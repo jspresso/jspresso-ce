@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -49,7 +50,7 @@ public class WeakPropertyChangeSupport implements Serializable {
    * <p/>
    * This is transient - its state is written in the writeObject method.
    */
-  private transient List<WeakEntry<PropertyChangeListener>> listeners;
+  private transient Collection<WeakEntry<PropertyChangeListener>> listeners;
 
   /**
    * Hashtable for managing listeners for specific properties. Maps property
@@ -87,9 +88,18 @@ public class WeakPropertyChangeSupport implements Serializable {
   public synchronized void addPropertyChangeListener(PropertyChangeListener listener) {
     processQueue();
     if (listeners == null) {
-      listeners = new ArrayList<>(1);
+      listeners = createListenersCollection();
     }
     listeners.add(WeakEntry.create(listener, createOrGetQueue()));
+  }
+
+  /**
+   * Create listeners collection.
+   *
+   * @return the collection
+   */
+  protected Collection<WeakEntry<PropertyChangeListener>> createListenersCollection() {
+    return new ArrayList<>(1);
   }
 
   /**
@@ -126,10 +136,28 @@ public class WeakPropertyChangeSupport implements Serializable {
     }
     WeakPropertyChangeSupport child = children.get(propertyName);
     if (child == null) {
-      child = new WeakPropertyChangeSupport(source);
+      child = createChild();
       children.put(propertyName, child);
     }
     child.addPropertyChangeListener(listener);
+  }
+
+  /**
+   * Gets source.
+   *
+   * @return the source
+   */
+  protected Object getSource() {
+    return source;
+  }
+
+  /**
+   * Create child.
+   *
+   * @return the property change support
+   */
+  protected WeakPropertyChangeSupport createChild() {
+    return new WeakPropertyChangeSupport(getSource());
   }
 
   /**
@@ -376,7 +404,10 @@ public class WeakPropertyChangeSupport implements Serializable {
     return queue;
   }
 
-  private static final class WeakEntry<E> extends WeakReference<E> {
+  /**
+   * The type Weak entry.
+   */
+  protected static final class WeakEntry<E> extends WeakReference<E> {
 
     private final int hash; /*
                        * Hashcode of key, stored here since the key may be
