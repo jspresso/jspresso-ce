@@ -2504,8 +2504,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         }
       });
       modelController.addTarget(dateField, "enabled", "writable", false);
+      var ps = remoteDateField.getPreferredSize();
+      remoteDateField.setPreferredSize(null);
       this._sizeMaxComponentWidth(dateField, remoteDateField,
           org.jspresso.framework.view.qx.DefaultQxViewFactory.__DATE_CHAR_COUNT);
+      remoteDateField.setPreferredSize(ps);
       return dateField;
     },
 
