@@ -87,7 +87,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         var actionField = new qx.ui.mobile.container.Composite(hBox);
         var toolBar = this._createToolBarFromActions(actions, maxToolbarActionCount);
         if(component) {
-          actionField.add(component);
+          actionField.add(component, {flex:1});
           actionField.add(toolBar);
           return actionField;
         } else {
@@ -378,7 +378,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     createToolBarButton: function (label, toolTip, icon) {
       var button = new qx.ui.mobile.toolbar.Button();
       this._completeButton(button, label, toolTip, icon);
-      button.setIconPosition("top");
+      if(button.getShow() == "both") {
+        button.setIconPosition("top");
+      }
       return button;
     },
 
@@ -394,6 +396,13 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       this.setIcon(button, icon);
       if (label) {
         button.setLabel(label);
+      }
+      if(label && icon) {
+        button.setShow("both");
+      } else if(label) {
+        button.setShow("label");
+      } else {
+        button.setShow("icon");
       }
     },
 
@@ -432,15 +441,19 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
         if(remoteForm.getLabelsPosition() != "NONE") {
           var label = new qx.ui.mobile.form.Label("<p>" + rComponent.getLabel() + "</p>");
-          label.setLabelFor(component.getId());
+          //label.setLabelFor(component.getId());
           row.add(label, {flex:1});
         }
-        if(this._isMultiline(rComponent)) {
-          row.add(component, {flex:1});
-        } else {
+        if(this._isFixedWidth(rComponent)) {
           row.add(component);
+        } else {
+          row.add(component, {flex:1});
         }
-        form.add(row);
+        if(this._isMultiline(rComponent)) {
+          form.add(row, {flex:1});
+        } else {
+          form.add(row);
+        }
       }
       var bottom = new qx.ui.mobile.form.Row();
       bottom.addCssClass("form-row-group-last");

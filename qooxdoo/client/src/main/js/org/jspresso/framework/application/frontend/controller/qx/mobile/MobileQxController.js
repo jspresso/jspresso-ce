@@ -59,6 +59,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     __workspacePages: {},
     /** @type {String} */
     __displayedWorkspaceName: null,
+    /** @type {qx.ui.mobile.page.NavigationPage} */
+    __pageToRestore: null,
 
 
     _createViewFactory: function () {
@@ -109,7 +111,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       }
 
       var dialogPage = null;
-      if (useCurrent && this._dialogStack && this._dialogStack.length > 1) {
+      if (useCurrent && this._dialogStack.length > 1) {
         /** @type {qx.ui.mobile.page.NavigationPage} */
         var topDialogPage = this._dialogStack.pop()[0];
         if (topDialogPage) {
@@ -121,6 +123,17 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         dialogPage.addListener("initialize", function (e) {
           dialogPage.getContent().add(dialogContent);
         }, this);
+        if (this._dialogStack.length == 1) {
+          var details = this.__manager.getDetailNavigation().getContent().getChildren();
+          if(details) {
+            for(var i = details.length -1; i >= 0; i --) {
+              if(details[i].getVisibility() == "visible") {
+                this.__pageToRestore = details[i];
+                break;
+              }
+            }
+          }
+        }
         //this._getViewFactory().setIcon(dialogPage, icon);
         this._dialogStack.push([dialogPage, null, null]);
         this.__manager.addDetail(dialogPage);
@@ -149,6 +162,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         }
       }
       if(this._dialogStack && this._dialogStack.length == 1) {
+        if (this.__pageToRestore) {
+          this.__pageToRestore.show();
+        }
         if (this.__manager.getMasterButton()) {
           this.__manager.getMasterButton().setVisibility("visible");
         }

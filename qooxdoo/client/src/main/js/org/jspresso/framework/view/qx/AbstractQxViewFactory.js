@@ -178,9 +178,6 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
         if(typeof component.setIcon == 'function') {
           component.setIcon(icon.getImageUrlSpec());
         }
-        if(typeof component.setShow == 'function') {
-          component.setShow("both");
-        }
       }
     },
 
@@ -237,6 +234,18 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
           instanceof org.jspresso.framework.gui.remote.RTextArea || rComponent
           instanceof org.jspresso.framework.gui.remote.RList || rComponent
           instanceof org.jspresso.framework.gui.remote.RHtmlArea;
+    },
+
+    /**
+     * @return {Boolean}
+     * @param rComponent {org.jspresso.framework.gui.remote.RComponent}
+     */
+    _isFixedWidth: function (rComponent) {
+      return rComponent instanceof org.jspresso.framework.gui.remote.RDateField || rComponent
+          instanceof org.jspresso.framework.gui.remote.RTimeField || rComponent
+          instanceof org.jspresso.framework.gui.remote.RComboBox || rComponent
+          instanceof org.jspresso.framework.gui.remote.RCheckBox || rComponent
+          instanceof org.jspresso.framework.gui.remote.RColorField;
     },
 
     /**
