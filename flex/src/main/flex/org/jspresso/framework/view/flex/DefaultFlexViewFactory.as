@@ -159,7 +159,7 @@ public class DefaultFlexViewFactory {
   private static const DATE_TEMPLATE:String = "00/00/0000";
   private static const LONG_TIME_TEMPLATE:String = "00:00:00";
   private static const SHORT_TIME_TEMPLATE:String = "00:00";
-  private static const ICON_WIDTH:int = 16;
+  private static const ICON_WIDTH:int = 24;
   [Embed(source="../../../../../../resources/assets/images/reset-16x16.png")]
   private var _resetIcon:Class;
   private var _remotePeerRegistry:IRemotePeerRegistry;
@@ -1934,7 +1934,10 @@ public class DefaultFlexViewFactory {
     dateField.formatString = datePattern;
     dateField.parseFunction = DateUtils.parseDate;
     dateField.editable = true;
+    var ps = remoteDateField.preferredSize;
+    remoteDateField.preferredSize = null;
     sizeMaxComponentWidthFromText(dateField, remoteDateField, DATE_TEMPLATE);
+    remoteDateField.preferredSize = ps;
     dateField.maxWidth += ICON_WIDTH;
     dateField.minWidth = dateField.maxWidth;
     bindDateField(dateField, remoteDateField);
