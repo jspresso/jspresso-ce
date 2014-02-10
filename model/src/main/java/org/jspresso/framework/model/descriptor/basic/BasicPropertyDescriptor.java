@@ -117,20 +117,6 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
    * {@inheritDoc}
    */
   @Override
-  public boolean equals(Object obj) {
-    if (obj != null && obj.getClass().equals(getClass())) {
-      if (getName() == null) {
-        return ((IPropertyDescriptor) obj).getName() == null;
-      }
-      return getName().equals(((IPropertyDescriptor) obj).getName());
-    }
-    return false;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   public Class<?> getDelegateClass() {
     if (delegateClass == null) {
       String className = getDelegateClassName();
@@ -228,14 +214,6 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
   @Override
   public Collection<IGate> getWritabilityGates() {
     return writabilityGates;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public int hashCode() {
-    return getName().hashCode();
   }
 
   /**
