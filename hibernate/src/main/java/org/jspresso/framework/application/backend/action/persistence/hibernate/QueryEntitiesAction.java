@@ -113,20 +113,20 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   public static Criterion createEntityIdsInCriterion(Collection<Serializable> entityIds, int chunkSize) {
     int i = 0;
     Disjunction splittedInlist = Restrictions.disjunction();
-    Set<Serializable> currentMessageIds = new LinkedHashSet<>();
+    Set<Serializable> currentEntityIds = new LinkedHashSet<>();
     boolean complete = false;
     for (Iterator<Serializable> ite = entityIds.iterator(); ite.hasNext(); i++) {
-      currentMessageIds.add(ite.next());
+      currentEntityIds.add(ite.next());
       if (i % chunkSize == (chunkSize - 1)) {
-        splittedInlist.add(Restrictions.in(IEntity.ID, currentMessageIds));
-        currentMessageIds = new LinkedHashSet<>();
+        splittedInlist.add(Restrictions.in(IEntity.ID, currentEntityIds));
+        currentEntityIds = new LinkedHashSet<>();
         complete = true;
       } else {
         complete = false;
       }
     }
     if (!complete) {
-      splittedInlist.add(Restrictions.in(IEntity.ID, currentMessageIds));
+      splittedInlist.add(Restrictions.in(IEntity.ID, currentEntityIds));
     }
     return splittedInlist;
   }
