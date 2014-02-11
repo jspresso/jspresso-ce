@@ -72,8 +72,6 @@ public abstract class AbstractCollectionConnector extends
     super(id);
     this.mvcBinder = binder;
     this.childConnectorPrototype = childConnectorPrototype;
-    selectionChangeSupport = new SelectionChangeSupport(this);
-    connectorTank = new ArrayList<>();
   }
 
   /**
@@ -89,6 +87,9 @@ public abstract class AbstractCollectionConnector extends
    */
   @Override
   public void addSelectionChangeListener(ISelectionChangeListener listener) {
+    if (selectionChangeSupport == null) {
+      selectionChangeSupport = new SelectionChangeSupport(this);
+    }
     selectionChangeSupport.addSelectionChangeListener(listener);
   }
 
@@ -123,10 +124,9 @@ public abstract class AbstractCollectionConnector extends
   public AbstractCollectionConnector clone(String newConnectorId) {
     AbstractCollectionConnector clonedConnector = (AbstractCollectionConnector) super
         .clone(newConnectorId);
-    clonedConnector.selectionChangeSupport = new SelectionChangeSupport(
-        clonedConnector);
+    clonedConnector.selectionChangeSupport = null;
     clonedConnector.removedChildrenConnectors = null;
-    clonedConnector.connectorTank = new ArrayList<>();
+    clonedConnector.connectorTank = null;
     return clonedConnector;
   }
 
@@ -137,7 +137,7 @@ public abstract class AbstractCollectionConnector extends
    */
   @Override
   public IValueConnector createChildConnector(String newConnectorId) {
-    if (!connectorTank.isEmpty()) {
+    if (connectorTank != null && !connectorTank.isEmpty()) {
       return connectorTank.remove(0);
     }
     return childConnectorPrototype.clone(newConnectorId);
@@ -193,6 +193,9 @@ public abstract class AbstractCollectionConnector extends
    */
   @Override
   public int[] getSelectedIndices() {
+    if (selectionChangeSupport == null) {
+      return new int[0];
+    }
     return selectionChangeSupport.getSelectedIndices();
   }
 
@@ -218,7 +221,9 @@ public abstract class AbstractCollectionConnector extends
    */
   @Override
   public void removeSelectionChangeListener(ISelectionChangeListener listener) {
-    selectionChangeSupport.removeSelectionChangeListener(listener);
+    if (selectionChangeSupport != null) {
+      selectionChangeSupport.removeSelectionChangeListener(listener);
+    }
   }
 
   /**
@@ -226,14 +231,18 @@ public abstract class AbstractCollectionConnector extends
    */
   @Override
   public void selectionChange(SelectionChangeEvent evt) {
-    if (evt.getSource() instanceof ISelectionChangeListener) {
+    boolean sourceIsScl = evt.getSource() instanceof ISelectionChangeListener;
+    if (sourceIsScl && selectionChangeSupport == null) {
+      selectionChangeSupport = new SelectionChangeSupport(this);
+    }
+    if (sourceIsScl) {
       selectionChangeSupport
           .addInhibitedListener((ISelectionChangeListener) evt.getSource());
     }
     try {
       setSelectedIndices(evt.getNewSelection(), evt.getLeadingIndex());
     } finally {
-      if (evt.getSource() instanceof ISelectionChangeListener) {
+      if (sourceIsScl) {
         selectionChangeSupport
             .removeInhibitedListener((ISelectionChangeListener) evt.getSource());
       }
@@ -265,7 +274,9 @@ public abstract class AbstractCollectionConnector extends
     if (oldSelectedIndices != null && oldSelectedIndices.length == 0) {
       oldSelectedIndices = null;
     }
-
+    if (selectionChangeSupport == null) {
+      selectionChangeSupport = new SelectionChangeSupport(this);
+    }
     selectionChangeSupport.setSelectedIndices(newSelectedIndices, leadingIndex);
 
     if ((oldSelectedIndices == null && newSelectedIndices != null)
@@ -335,6 +346,9 @@ public abstract class AbstractCollectionConnector extends
 
   private void cleanupConnector(IValueConnector removedConnector) {
     removedConnector.recycle(mvcBinder);
+    if (connectorTank == null) {
+      connectorTank = new ArrayList<>();
+    }
     connectorTank.add(removedConnector);
   }
 

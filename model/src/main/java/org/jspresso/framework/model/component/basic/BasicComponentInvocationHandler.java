@@ -19,10 +19,10 @@
 package org.jspresso.framework.model.component.basic;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import gnu.trove.map.hash.THashMap;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -168,6 +168,6 @@ public class BasicComponentInvocationHandler extends
 
 
   private Map<String, Object> createPropertyMap() {
-    return new HashMap<>();
+    return new THashMap<>(1, 1.0f);
   }
 }

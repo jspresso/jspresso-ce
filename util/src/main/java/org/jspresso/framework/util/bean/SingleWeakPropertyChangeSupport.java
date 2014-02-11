@@ -19,99 +19,48 @@
 package org.jspresso.framework.util.bean;
 
 import java.beans.PropertyChangeListener;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.Set;
-import java.util.WeakHashMap;
+
+import gnu.trove.set.hash.THashSet;
+import gnu.trove.set.hash.TLinkedHashSet;
+
+import org.jspresso.framework.util.collection.TWeakHashSet;
 
 /**
  * This property change support prevents from adding twice the same property
  * change listener.
- * 
- * @version $LastChangedRevision: 3701 $
+ *
+ * @version $LastChangedRevision: 9053 $
  * @author Vincent Vandenschrick
  */
 public class SingleWeakPropertyChangeSupport extends WeakPropertyChangeSupport {
 
-  private static final long serialVersionUID = -3547472625502417905L;
-  private Set<PropertyChangeListener> cachedListeners;
+
+  private static final long serialVersionUID = 1609651022337480186L;
 
   /**
-   * Constructs a new {@code SinglePropertyChangeSupport} instance.
+   * Constructs a {@code WeakPropertyChangeSupport} object.
    *
    * @param sourceBean
-   *          the source bean.
+   *     The bean to be given as the source for any events.
    */
   public SingleWeakPropertyChangeSupport(Object sourceBean) {
     super(sourceBean);
-    cachedListeners = Collections.newSetFromMap(new WeakHashMap<PropertyChangeListener, Boolean>());
   }
 
-  /**
-   * Checks listener uniqueness before performing.
-   * <p>
-   * {@inheritDoc}
-   */
   @Override
-  public synchronized void addPropertyChangeListener(PropertyChangeListener listener) {
-    if (checkUniqueness(null, listener)) {
-      super.addPropertyChangeListener(listener);
-      cachedListeners.add(listener);
-    }
+  protected Collection<WeakEntry<PropertyChangeListener>> createListenersCollection() {
+    return new TLinkedHashSet<>(1);
   }
 
   /**
-   * Checks listener uniqueness before performing.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public synchronized void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-    if (checkUniqueness(propertyName, listener)) {
-      super.addPropertyChangeListener(propertyName, listener);
-      cachedListeners.add(listener);
-    }
-  }
-
-  /**
-   * Remove property change listener.
+   * Create child.
    *
-   * @param listener the listener
+   * @return the property change support
    */
-  @Override
-  public synchronized void removePropertyChangeListener(PropertyChangeListener listener) {
-    super.removePropertyChangeListener(listener);
-    cachedListeners.remove(listener);
+  protected WeakPropertyChangeSupport createChild() {
+    return new SingleWeakPropertyChangeSupport(getSource());
   }
 
-  /**
-   * Remove property change listener.
-   *
-   * @param propertyName the property name
-   * @param listener the listener
-   */
-  @Override
-  public synchronized void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-    super.removePropertyChangeListener(propertyName, listener);
-    cachedListeners.remove(listener);
-  }
-
-  private boolean checkUniqueness(String propertyName, PropertyChangeListener listener) {
-    /*
-    PropertyChangeListener[] containedListeners;
-    if (propertyName == null) {
-      containedListeners = getPropertyChangeListeners();
-    } else {
-      containedListeners = getPropertyChangeListeners(propertyName);
-    }
-    for (PropertyChangeListener containedListener : containedListeners) {
-      if (containedListener == listener) {
-        return false;
-      }
-    }
-    return true;
-    */
-
-    // Performance optimization. See bug #1135
-    return !cachedListeners.contains(listener);
-  }
 }

@@ -23,9 +23,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import gnu.trove.map.hash.THashMap;
 
 import org.jspresso.framework.binding.CollectionConnectorHelper;
 import org.jspresso.framework.binding.ICollectionConnector;
@@ -48,11 +49,12 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
     implements ICollectionConnector {
 
   private Map<String, IValueConnector> childConnectors;
+  private Collection<String>           childConnectorKeys;
   private final IModelConnectorFactory       modelConnectorFactory;
 
   private SelectionChangeSupport       selectionChangeSupport;
 
-  private final List<IValueConnector>        connectorTank;
+  private List<IValueConnector>        connectorTank;
 
   /**
    * Constructs a new model property connector on a model collection property.
@@ -69,9 +71,13 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
       IModelConnectorFactory modelConnectorFactory) {
     super(modelDescriptor, modelConnectorFactory.getAccessorFactory());
     this.modelConnectorFactory = modelConnectorFactory;
-    childConnectors = new LinkedHashMap<>();
-    selectionChangeSupport = new SelectionChangeSupport(this);
-    connectorTank = new ArrayList<>();
+  }
+
+  private void initChildStructureIfNecessary() {
+    if (childConnectors == null) {
+      childConnectors = new THashMap<>();
+      childConnectorKeys = new ArrayList<>();
+    }
   }
 
   /**
@@ -91,8 +97,10 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    */
   @Override
   public void addChildConnector(String storageKey, IValueConnector connector) {
+    initChildStructureIfNecessary();
     childConnectors.put(storageKey, connector);
     connector.setParentConnector(this);
+    childConnectorKeys.add(storageKey);
   }
 
   /**
@@ -100,6 +108,9 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    */
   @Override
   public void addSelectionChangeListener(ISelectionChangeListener listener) {
+    if (selectionChangeSupport == null) {
+      selectionChangeSupport = new SelectionChangeSupport(this);
+    }
     selectionChangeSupport.addSelectionChangeListener(listener);
   }
 
@@ -154,9 +165,10 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   public ModelCollectionPropertyConnector clone(String newConnectorId) {
     ModelCollectionPropertyConnector clonedConnector = (ModelCollectionPropertyConnector) super
         .clone(newConnectorId);
-    clonedConnector.childConnectors = new LinkedHashMap<>();
-    clonedConnector.selectionChangeSupport = new SelectionChangeSupport(
-        clonedConnector);
+    clonedConnector.childConnectors = null;
+    clonedConnector.childConnectorKeys = null;
+    clonedConnector.connectorTank = null;
+    clonedConnector.selectionChangeSupport = null;
     return clonedConnector;
   }
 
@@ -167,7 +179,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    */
   @Override
   public IValueConnector createChildConnector(String connectorId) {
-    if (!connectorTank.isEmpty()) {
+    if (connectorTank != null && !connectorTank.isEmpty()) {
       return connectorTank.remove(0);
     }
     IComponentDescriptor<?> componentDescriptor;
@@ -192,6 +204,9 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    */
   @Override
   public IValueConnector getChildConnector(String connectorKey) {
+    if (childConnectors == null) {
+      return null;
+    }
     int lastDotIndex = connectorKey.lastIndexOf('.');
     if (lastDotIndex > 0) {
       String lastNestedConnectorKey = connectorKey.substring(lastDotIndex + 1);
@@ -205,7 +220,10 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    */
   @Override
   public int getChildConnectorCount() {
-    return getChildConnectorKeys().size();
+    if (childConnectorKeys == null) {
+      return 0;
+    }
+    return childConnectorKeys.size();
   }
 
   /**
@@ -213,7 +231,10 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    */
   @Override
   public Collection<String> getChildConnectorKeys() {
-    return childConnectors.keySet();
+    if (childConnectorKeys == null) {
+      return Collections.emptyList();
+    }
+    return new ArrayList<>(childConnectorKeys);
   }
 
   /**
@@ -241,6 +262,9 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    */
   @Override
   public int[] getSelectedIndices() {
+    if (selectionChangeSupport == null) {
+      return new int[0];
+    }
     return selectionChangeSupport.getSelectedIndices();
   }
 
@@ -294,14 +318,18 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    */
   @Override
   public void selectionChange(SelectionChangeEvent evt) {
-    if (evt.getSource() instanceof ISelectionChangeListener) {
+    boolean isSourceScl = evt.getSource() instanceof ISelectionChangeListener;
+    if (isSourceScl && selectionChangeSupport == null) {
+      selectionChangeSupport = new SelectionChangeSupport(this);
+    }
+    if (isSourceScl) {
       selectionChangeSupport
           .addInhibitedListener((ISelectionChangeListener) evt.getSource());
     }
     try {
       setSelectedIndices(evt.getNewSelection(), evt.getLeadingIndex());
     } finally {
-      if (evt.getSource() instanceof ISelectionChangeListener) {
+      if (isSourceScl) {
         selectionChangeSupport
             .removeInhibitedListener((ISelectionChangeListener) evt.getSource());
       }
@@ -313,6 +341,9 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    */
   @Override
   public void setSelectedIndices(int... newSelectedIndices) {
+    if(selectionChangeSupport == null) {
+      selectionChangeSupport = new SelectionChangeSupport(this);
+    }
     selectionChangeSupport.setSelectedIndices(newSelectedIndices);
   }
 
@@ -321,6 +352,9 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    */
   @Override
   public void setSelectedIndices(int[] newSelectedIndices, int leadingIndex) {
+    if(selectionChangeSupport == null) {
+      selectionChangeSupport = new SelectionChangeSupport(this);
+    }
     selectionChangeSupport.setSelectedIndices(newSelectedIndices, leadingIndex);
   }
 
@@ -364,11 +398,17 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    */
   @Override
   public void removeChildConnector(String storageKey) {
-    childConnectors.remove(storageKey);
+    if (childConnectors != null) {
+      childConnectors.remove(storageKey);
+      childConnectorKeys.remove(storageKey);
+    }
   }
 
   private void cleanupConnector(IValueConnector removedConnector) {
     removedConnector.recycle(null);
+    if (connectorTank == null) {
+      connectorTank = new ArrayList<>();
+    }
     connectorTank.add(removedConnector);
   }
 

@@ -18,8 +18,9 @@
  */
 package org.jspresso.framework.util.event;
 
-import java.util.LinkedHashSet;
 import java.util.Set;
+
+import gnu.trove.set.hash.TLinkedHashSet;
 
 /**
  * Helper class to ease the IItemSelectionListener management.
@@ -41,7 +42,7 @@ public class ItemSelectionSupport {
       IItemSelectionListener listener) {
     if (listener != null) {
       if (listeners == null) {
-        listeners = new LinkedHashSet<>();
+        listeners = new TLinkedHashSet<>(1);
       }
       if (!listeners.contains(listener)) {
         listeners.add(listener);
@@ -58,8 +59,7 @@ public class ItemSelectionSupport {
    */
   public void fireSelectedConnectorChange(ItemSelectionEvent evt) {
     if (listeners != null) {
-      for (IItemSelectionListener listener : new LinkedHashSet<>(
-          listeners)) {
+      for (IItemSelectionListener listener : listeners.toArray(new IItemSelectionListener[listeners.size()])) {
         listener.selectedItemChange(evt);
       }
     }
@@ -75,6 +75,9 @@ public class ItemSelectionSupport {
       IItemSelectionListener listener) {
     if (listener != null && listeners != null) {
       listeners.remove(listener);
+      if (listeners.size() == 0) {
+        listeners = null;
+      }
     }
   }
 }

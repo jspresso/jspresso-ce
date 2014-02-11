@@ -23,8 +23,10 @@ import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Set;
+
+import gnu.trove.set.hash.THashSet;
 
 import org.jspresso.framework.model.IModelProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
@@ -91,7 +93,6 @@ public abstract class AbstractValueConnector extends AbstractConnector
    */
   public AbstractValueConnector(String id) {
     super(id);
-    valueChangeSupport = new ValueChangeSupport(this);
     locallyReadable = true;
     locallyWritable = true;
     oldReadability = isReadable();
@@ -107,7 +108,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
       ((ISecurityHandlerAware) gate).setSecurityHandler(getSecurityHandler());
     }
     if (readabilityGates == null) {
-      readabilityGates = new HashSet<>(4);
+      readabilityGates = new THashSet<>(4);
     }
     readabilityGates.add(gate);
     gate.addPropertyChangeListener(IGate.OPEN_PROPERTY,
@@ -130,6 +131,9 @@ public abstract class AbstractValueConnector extends AbstractConnector
   @Override
   public void addValueChangeListener(IValueChangeListener listener) {
     if (listener != null) {
+      if (valueChangeSupport == null) {
+        valueChangeSupport = new ValueChangeSupport(this);
+      }
       valueChangeSupport.addValueChangeListener(listener);
     }
   }
@@ -139,6 +143,9 @@ public abstract class AbstractValueConnector extends AbstractConnector
    */
   @Override
   public Set<IValueChangeListener> getValueChangeListeners() {
+    if (valueChangeSupport == null) {
+      return Collections.emptySet();
+    }
     return valueChangeSupport.getValueChangeListeners();
   }
 
@@ -151,7 +158,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
       ((ISecurityHandlerAware) gate).setSecurityHandler(getSecurityHandler());
     }
     if (writabilityGates == null) {
-      writabilityGates = new HashSet<>(4);
+      writabilityGates = new THashSet<>(4);
     }
     writabilityGates.add(gate);
     gate.addPropertyChangeListener(IGate.OPEN_PROPERTY,
@@ -217,9 +224,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
     AbstractValueConnector clonedConnector = (AbstractValueConnector) super
         .clone(newConnectorId);
     clonedConnector.oldConnectorValue = null;
-    clonedConnector.valueChangeSupport = new ValueChangeSupport(clonedConnector);
-    for (IValueChangeListener listener : valueChangeSupport
-        .getValueChangeListeners()) {
+    clonedConnector.valueChangeSupport = null;
+    for (IValueChangeListener listener : getValueChangeListeners()) {
       if (listener instanceof ICloneable) {
         clonedConnector
             .addValueChangeListener((IValueChangeListener) ((ICloneable) listener)
@@ -256,7 +262,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   @SuppressWarnings("unchecked")
   public int compareTo(IValueConnector another) {
     if (getConnectorValue() != null) {
-      if (another.getConnectorValue() != null) {
+      if (another != null && another.getConnectorValue() != null) {
         if (getConnectorValue() instanceof Comparable) {
           if (getConnectorValue() instanceof String) {
             return ((String) getConnectorValue())
@@ -267,8 +273,10 @@ public abstract class AbstractValueConnector extends AbstractConnector
         }
         return getConnectorValue().toString().compareToIgnoreCase(
             another.getConnectorValue().toString());
+      } else {
+        return 1;
       }
-    } else if (another.getConnectorValue() != null) {
+    } else if (another != null && another.getConnectorValue() != null) {
       return -1;
     }
     return 0;
@@ -431,7 +439,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    */
   @Override
   public void removeValueChangeListener(IValueChangeListener listener) {
-    if (listener != null) {
+    if (valueChangeSupport != null && listener != null) {
       valueChangeSupport.removeValueChangeListener(listener);
     }
   }
@@ -640,6 +648,9 @@ public abstract class AbstractValueConnector extends AbstractConnector
   @Override
   public void valueChange(ValueChangeEvent evt) {
     // we must prevent the event to return back to the sender.
+    if (valueChangeSupport == null) {
+      valueChangeSupport = new ValueChangeSupport(this);
+    }
     valueChangeSupport.addInhibitedListener((IValueConnector) evt.getSource());
     try {
       setConnectorValue(evt.getNewValue());
@@ -742,7 +753,9 @@ public abstract class AbstractValueConnector extends AbstractConnector
    *          the change event to propagate.
    */
   protected void fireValueChange(ValueChangeEvent changeEvent) {
-    valueChangeSupport.fireValueChange(changeEvent);
+    if (valueChangeSupport != null) {
+      valueChangeSupport.fireValueChange(changeEvent);
+    }
   }
 
   /**
