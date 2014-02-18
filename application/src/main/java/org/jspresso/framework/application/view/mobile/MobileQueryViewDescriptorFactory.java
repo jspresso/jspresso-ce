@@ -39,7 +39,9 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicReferencePropertyViewDescriptor;
+import org.jspresso.framework.view.descriptor.mobile.MobileBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileComponentViewDescriptor;
+import org.jspresso.framework.view.descriptor.mobile.MobileListViewDescriptor;
 
 /**
  * A default implementation for query view descriptor factory.
@@ -72,6 +74,13 @@ public class MobileQueryViewDescriptorFactory<E, F, G> extends BasicQueryViewDes
           propertyView
               .setLovAction(createComparableEditAction((ComparableQueryStructureDescriptor) actualPropertyDescriptor));
           propertyViewDescriptors.add(propertyView);
+      } else if (actualPropertyDescriptor instanceof EnumQueryStructureDescriptor) {
+        BasicReferencePropertyViewDescriptor propertyView = new BasicReferencePropertyViewDescriptor();
+        propertyView.setName(queriableProperty);
+        propertyView
+            .setLovAction(createEnumSelectAction((EnumQueryStructureDescriptor) actualPropertyDescriptor));
+        propertyView.setAutoCompleteEnabled(false);
+        propertyViewDescriptors.add(propertyView);
       } else {
         BasicPropertyViewDescriptor propertyView = new BasicPropertyViewDescriptor();
         propertyView.setName(queriableProperty);
@@ -134,6 +143,40 @@ public class MobileQueryViewDescriptorFactory<E, F, G> extends BasicQueryViewDes
     return comparableEditAction;
   }
 
+
+  /**
+   * Creates the enumSelectAction.
+   *
+   * @param enumPropertyDescriptor
+   *          the enumeration property descriptor to create the LOV action for.
+   * @return the enumSelectAction.
+   */
+  protected IDisplayableAction createEnumSelectAction(
+      final EnumQueryStructureDescriptor enumPropertyDescriptor) {
+    EditComponentAction<E, F, G> enumSelectAction = new EditComponentAction<>();
+    if (enumPropertyDescriptor.getIcon() != null) {
+      enumSelectAction.setIcon(enumPropertyDescriptor.getIcon());
+    } else {
+      enumSelectAction.setIconImageURL(getDefaultFindIconImageUrl());
+    }
+
+    MobileBorderViewDescriptor viewDescriptor = new MobileBorderViewDescriptor();
+    viewDescriptor.setName(EnumQueryStructureDescriptor.ENUMERATION_VALUES);
+    viewDescriptor.setModelDescriptor(enumPropertyDescriptor
+        .getReferencedDescriptor());
+    MobileListViewDescriptor list = new MobileListViewDescriptor();
+    list.setShowArrow(false);
+    list.setName(EnumQueryStructureDescriptor.ENUMERATION_VALUES);
+    list.setRenderedProperty(EnumQueryStructureDescriptor.VALUE);
+    viewDescriptor.setCenterViewDescriptor(list);
+    enumSelectAction.setViewDescriptor(viewDescriptor);
+    enumSelectAction.setCancelAction(null);
+    enumSelectAction.setOkAction(getOkCloseDialogAction());
+
+    enumSelectAction.setNextAction(getModalDialogAction());
+
+    return enumSelectAction;
+  }
 
   /**
    * {@inheritDoc}

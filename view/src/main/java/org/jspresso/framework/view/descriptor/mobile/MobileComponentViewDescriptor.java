@@ -24,7 +24,7 @@ import org.jspresso.framework.view.descriptor.basic.AbstractComponentViewDescrip
 import org.jspresso.framework.view.descriptor.EHorizontalPosition;
 
 /**
- * A composite view descriptor that aggregates mobile views on a single page.
+ * A mobile form view descriptor.
  *
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$

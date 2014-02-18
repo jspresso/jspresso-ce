@@ -51,6 +51,7 @@ import org.jspresso.framework.gui.remote.RActionComponent;
 import org.jspresso.framework.gui.remote.RActionField;
 import org.jspresso.framework.gui.remote.RActionList;
 import org.jspresso.framework.gui.remote.RActionable;
+import org.jspresso.framework.gui.remote.RBorderContainer;
 import org.jspresso.framework.gui.remote.RCardContainer;
 import org.jspresso.framework.gui.remote.RCheckBox;
 import org.jspresso.framework.gui.remote.RColorField;
@@ -118,9 +119,11 @@ import org.jspresso.framework.util.lang.DateDto;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
+import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicIndexedView;
 import org.jspresso.framework.view.BasicMapView;
 import org.jspresso.framework.view.IActionFactory;
+import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IMapView;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.ViewException;
@@ -130,6 +133,7 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.EHorizontalAlignment;
 import org.jspresso.framework.view.descriptor.EHorizontalPosition;
 import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
+import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEnumerationPropertyViewDescriptor;
@@ -1652,6 +1656,56 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
   protected RTree createRTree(ITreeViewDescriptor viewDescriptor) {
     RTree component = new RTree(getGuidGenerator().generateGUID());
     return component;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected ICompositeView<RComponent> createBorderView(IBorderViewDescriptor viewDescriptor,
+                                                        IActionHandler actionHandler, Locale locale) {
+    RBorderContainer viewComponent = createRBorderContainer(viewDescriptor);
+    BasicCompositeView<RComponent> view = constructCompositeView(viewComponent, viewDescriptor);
+    List<IView<RComponent>> childrenViews = new ArrayList<>();
+
+    if (viewDescriptor.getNorthViewDescriptor() != null) {
+      IView<RComponent> northView = createView(viewDescriptor.getNorthViewDescriptor(), actionHandler, locale);
+      viewComponent.setNorth(northView.getPeer());
+      childrenViews.add(northView);
+    }
+    if (viewDescriptor.getWestViewDescriptor() != null) {
+      IView<RComponent> westView = createView(viewDescriptor.getWestViewDescriptor(), actionHandler, locale);
+      viewComponent.setWest(westView.getPeer());
+      childrenViews.add(westView);
+    }
+    if (viewDescriptor.getCenterViewDescriptor() != null) {
+      IView<RComponent> centerView = createView(viewDescriptor.getCenterViewDescriptor(), actionHandler, locale);
+      viewComponent.setCenter(centerView.getPeer());
+      childrenViews.add(centerView);
+    }
+    if (viewDescriptor.getEastViewDescriptor() != null) {
+      IView<RComponent> eastView = createView(viewDescriptor.getEastViewDescriptor(), actionHandler, locale);
+      viewComponent.setEast(eastView.getPeer());
+      childrenViews.add(eastView);
+    }
+    if (viewDescriptor.getSouthViewDescriptor() != null) {
+      IView<RComponent> southView = createView(viewDescriptor.getSouthViewDescriptor(), actionHandler, locale);
+      viewComponent.setSouth(southView.getPeer());
+      childrenViews.add(southView);
+    }
+    view.setChildren(childrenViews);
+    return view;
+  }
+
+  /**
+   * Creates a remote border container.
+   *
+   * @param viewDescriptor
+   *     the component view descriptor.
+   * @return the created remote component.
+   */
+  protected RBorderContainer createRBorderContainer(IBorderViewDescriptor viewDescriptor) {
+    return new RBorderContainer(getGuidGenerator().generateGUID());
   }
 
   /**

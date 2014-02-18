@@ -215,6 +215,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         container = this._createMobileCompositePage(remoteContainer);
       } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.RCardContainer) {
         container = this._createCardContainer(remoteContainer);
+      } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.RBorderContainer) {
+        container = this._createBorderContainer(remoteContainer);
       }
       if(remoteContainer instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
         if(remoteContainer.getMainAction()) {
@@ -573,7 +575,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
 
     /**
      * @return {qx.ui.mobile.core.Widget}
-     * @param remoteTree {org.jspresso.framework.gui.remote.RTree}
+     * @param remoteTree {org.jspresso.framework.gui.remote.mobile.RMobileTree}
      */
     _createTree: function (remoteTree) {
 
@@ -583,7 +585,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         configureItem: function (item, data, row) {
           var state = data.state;
           org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.bindListItem(item, state);
-          item.setShowArrow(true);
+          if(remoteTree instanceof org.jspresso.framework.gui.remote.mobile.RMobileTree) {
+            item.setShowArrow(remoteTree.getShowArrow());
+          }
           item.getImageWidget()._setStyle("margin-left", data.level + "rem");
         }
       });
@@ -668,6 +672,29 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
       }, this);
       return cardContainer;
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteBorderContainer {org.jspresso.framework.gui.remote.RBorderContainer}
+     */
+    _createBorderContainer: function (remoteBorderContainer) {
+      var borderContainer = new qx.ui.mobile.container.Composite();
+      var borderLayout = new qx.ui.mobile.layout.VBox();
+      borderContainer.setLayout(borderLayout);
+      if (remoteBorderContainer.getNorth()) {
+        var child = this.createComponent(remoteBorderContainer.getNorth());
+        borderContainer.add(child);
+      }
+      if (remoteBorderContainer.getCenter()) {
+        var child = this.createComponent(remoteBorderContainer.getCenter());
+        borderContainer.add(child, {flex:1});
+      }
+      if (remoteBorderContainer.getSouth()) {
+        var child = this.createComponent(remoteBorderContainer.getSouth());
+        borderContainer.add(child);
+      }
+      return borderContainer;
     },
 
     /**
@@ -880,7 +907,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     /**
      *
      * @return {qx.ui.mobile.core.Widget}
-     * @param remoteList {org.jspresso.framework.gui.remote.RList}
+     * @param remoteList {org.jspresso.framework.gui.remote.mobile.RMobileList}
      */
     _createList: function (remoteList) {
       var listModel = remoteList.getState().getChildren();
@@ -888,7 +915,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var list = new qx.ui.mobile.list.List({
         configureItem: function (item, data, row) {
           org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.bindListItem(item,  data);
-          item.setShowArrow(true);
+          if(remoteList instanceof org.jspresso.framework.gui.remote.mobile.RMobileList) {
+            item.setShowArrow(remoteList.getShowArrow());
+          }
         }
       });
 

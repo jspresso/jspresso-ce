@@ -47,6 +47,15 @@ import org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor;
  */
 public class MobileListViewDescriptor extends BasicListViewDescriptor implements IMobileViewDescriptor {
 
+  private boolean showArrow;
+
+  /**
+   * Instantiates a new Mobile list view descriptor.
+   */
+  public MobileListViewDescriptor() {
+    showArrow = true;
+  }
+
   /**
    * Not supported in mobile environment.
    * <p>
@@ -166,5 +175,23 @@ public class MobileListViewDescriptor extends BasicListViewDescriptor implements
   public void setSelectionModelDescriptor(
       IModelDescriptor selectionModelDescriptor) {
     throw new UnsupportedOperationException("Not supported in mobile environment.");
+  }
+
+  /**
+   * Is show arrow.
+   *
+   * @return the boolean
+   */
+  public boolean isShowArrow() {
+    return showArrow;
+  }
+
+  /**
+   * Sets show arrow.
+   *
+   * @param showArrow the show arrow
+   */
+  public void setShowArrow(boolean showArrow) {
+    this.showArrow = showArrow;
   }
 }

@@ -108,45 +108,6 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
    * {@inheritDoc}
    */
   @Override
-  protected ICompositeView<RComponent> createBorderView(IBorderViewDescriptor viewDescriptor,
-                                                        IActionHandler actionHandler, Locale locale) {
-    RBorderContainer viewComponent = createRBorderContainer(viewDescriptor);
-    BasicCompositeView<RComponent> view = constructCompositeView(viewComponent, viewDescriptor);
-    List<IView<RComponent>> childrenViews = new ArrayList<>();
-
-    if (viewDescriptor.getNorthViewDescriptor() != null) {
-      IView<RComponent> northView = createView(viewDescriptor.getNorthViewDescriptor(), actionHandler, locale);
-      viewComponent.setNorth(northView.getPeer());
-      childrenViews.add(northView);
-    }
-    if (viewDescriptor.getWestViewDescriptor() != null) {
-      IView<RComponent> westView = createView(viewDescriptor.getWestViewDescriptor(), actionHandler, locale);
-      viewComponent.setWest(westView.getPeer());
-      childrenViews.add(westView);
-    }
-    if (viewDescriptor.getCenterViewDescriptor() != null) {
-      IView<RComponent> centerView = createView(viewDescriptor.getCenterViewDescriptor(), actionHandler, locale);
-      viewComponent.setCenter(centerView.getPeer());
-      childrenViews.add(centerView);
-    }
-    if (viewDescriptor.getEastViewDescriptor() != null) {
-      IView<RComponent> eastView = createView(viewDescriptor.getEastViewDescriptor(), actionHandler, locale);
-      viewComponent.setEast(eastView.getPeer());
-      childrenViews.add(eastView);
-    }
-    if (viewDescriptor.getSouthViewDescriptor() != null) {
-      IView<RComponent> southView = createView(viewDescriptor.getSouthViewDescriptor(), actionHandler, locale);
-      viewComponent.setSouth(southView.getPeer());
-      childrenViews.add(southView);
-    }
-    view.setChildren(childrenViews);
-    return view;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   protected ICompositeView<RComponent> createConstrainedGridView(IConstrainedGridViewDescriptor viewDescriptor,
                                                                  IActionHandler actionHandler, Locale locale) {
     RConstrainedGridContainer viewComponent = createRConstrainedGridContainer(viewDescriptor);
@@ -188,17 +149,6 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
     viewComponent.setCells(cells.toArray(new RComponent[cells.size()]));
     view.setChildren(childrenViews);
     return view;
-  }
-
-  /**
-   * Creates a remote border container.
-   *
-   * @param viewDescriptor
-   *     the component view descriptor.
-   * @return the created remote component.
-   */
-  protected RBorderContainer createRBorderContainer(IBorderViewDescriptor viewDescriptor) {
-    return new RBorderContainer(getGuidGenerator().generateGUID());
   }
 
   /**

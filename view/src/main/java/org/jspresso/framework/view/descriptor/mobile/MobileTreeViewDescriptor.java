@@ -34,6 +34,15 @@ import org.jspresso.framework.view.descriptor.basic.AbstractTreeViewDescriptor;
  */
 public class MobileTreeViewDescriptor extends AbstractTreeViewDescriptor implements IMobileViewDescriptor {
 
+  private boolean showArrow;
+
+  /**
+   * Instantiates a new Mobile tree view descriptor.
+   */
+  public MobileTreeViewDescriptor() {
+    showArrow = true;
+  }
+
   /**
    * Not supported in mobile environment.
    * <p>
@@ -62,5 +71,23 @@ public class MobileTreeViewDescriptor extends AbstractTreeViewDescriptor impleme
   @Override
   public boolean isExpanded() {
     return true;
+  }
+
+  /**
+   * Is show arrow.
+   *
+   * @return the boolean
+   */
+  public boolean isShowArrow() {
+    return showArrow;
+  }
+
+  /**
+   * Sets show arrow.
+   *
+   * @param showArrow the show arrow
+   */
+  public void setShowArrow(boolean showArrow) {
+    this.showArrow = showArrow;
   }
 }

@@ -28,11 +28,15 @@ import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RCardContainer;
 import org.jspresso.framework.gui.remote.RComponent;
+import org.jspresso.framework.gui.remote.RList;
 import org.jspresso.framework.gui.remote.RTabContainer;
+import org.jspresso.framework.gui.remote.RTree;
 import org.jspresso.framework.gui.remote.mobile.RMobileCardPage;
 import org.jspresso.framework.gui.remote.mobile.RMobileCompositePage;
+import org.jspresso.framework.gui.remote.mobile.RMobileList;
 import org.jspresso.framework.gui.remote.mobile.RMobileNavPage;
 import org.jspresso.framework.gui.remote.mobile.RMobilePage;
+import org.jspresso.framework.gui.remote.mobile.RMobileTree;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.ICompositeView;
@@ -53,9 +57,12 @@ import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.IMobilePageSectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.IMobileViewDescriptor;
+import org.jspresso.framework.view.descriptor.mobile.MobileBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileCardPageViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileCompositePageViewDescriptor;
+import org.jspresso.framework.view.descriptor.mobile.MobileListViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileNavPageViewDescriptor;
+import org.jspresso.framework.view.descriptor.mobile.MobileTreeViewDescriptor;
 import org.jspresso.framework.view.remote.AbstractRemoteViewFactory;
 
 /**
@@ -86,6 +93,11 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
                                                                                                  .getSimpleName());
   }
 
+  /**
+   * Checks that the view descriptor is mobile compatible.
+   * <p/>
+   * {@inheritDoc}
+   */
   @Override
   protected ICompositeView<RComponent> createCompositeView(ICompositeViewDescriptor viewDescriptor,
                                                            IActionHandler actionHandler, Locale locale) {
@@ -97,6 +109,8 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
         view = createMobileNavPageView((MobileNavPageViewDescriptor) viewDescriptor, actionHandler, locale);
       } else if (viewDescriptor instanceof MobileCardPageViewDescriptor) {
         view = createMobileCardPageView((MobileCardPageViewDescriptor) viewDescriptor, actionHandler, locale);
+      } else if (viewDescriptor instanceof MobileBorderViewDescriptor) {
+        view = createBorderView((MobileBorderViewDescriptor) viewDescriptor, actionHandler, locale);
       }
       bindCompositeView(view);
       return view;
@@ -158,8 +172,8 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
       childrenViews.add(nextPageView);
     }
     if (viewDescriptor.getPageEndAction() != null) {
-      viewComponent.setPageEndAction(getActionFactory().createAction(viewDescriptor.getPageEndAction(),
-          actionHandler, view, locale));
+      viewComponent.setPageEndAction(getActionFactory().createAction(viewDescriptor.getPageEndAction(), actionHandler,
+          view, locale));
     }
     view.setChildren(childrenViews);
     return view;
@@ -210,6 +224,58 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
 
   private RMobileCardPage createRMobileCardPage(MobileCardPageViewDescriptor viewDescriptor) {
     return new RMobileCardPage(getGuidGenerator().generateGUID());
+  }
+
+  /**
+   * Completes with showArrow property.
+   * <p/>
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createListView(IListViewDescriptor viewDescriptor, IActionHandler actionHandler,
+                                             Locale locale) {
+    IView<RComponent> view = super.createListView(viewDescriptor, actionHandler, locale);
+    if (viewDescriptor instanceof MobileListViewDescriptor) {
+      ((RMobileList) view.getPeer()).setShowArrow(((MobileListViewDescriptor) viewDescriptor).isShowArrow());
+    }
+    return view;
+  }
+
+  /**
+   * Creates a mobile list.
+   * <p/>
+   * {@inheritDoc}
+   */
+  @Override
+  protected RList createRList(IListViewDescriptor viewDescriptor) {
+    RMobileList component = new RMobileList(getGuidGenerator().generateGUID());
+    return component;
+  }
+
+  /**
+   * Completes with showArrow property.
+   * <p/>
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createTreeView(ITreeViewDescriptor viewDescriptor, IActionHandler actionHandler,
+                                             Locale locale) {
+    IView<RComponent> view = super.createTreeView(viewDescriptor, actionHandler, locale);
+    if (viewDescriptor instanceof MobileTreeViewDescriptor) {
+      ((RMobileTree) view.getPeer()).setShowArrow(((MobileTreeViewDescriptor) viewDescriptor).isShowArrow());
+    }
+    return view;
+  }
+
+  /**
+   * Creates a mobile tree.
+   * <p/>
+   * {@inheritDoc}
+   */
+  @Override
+  protected RTree createRTree(ITreeViewDescriptor viewDescriptor) {
+    RMobileTree component = new RMobileTree(getGuidGenerator().generateGUID());
+    return component;
   }
 
   /**
@@ -275,17 +341,6 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
   @Override
   protected ICompositeView<RComponent> createSplitView(ISplitViewDescriptor viewDescriptor,
                                                        IActionHandler actionHandler, Locale locale) {
-    throw new UnsupportedOperationException("Not supported in mobile environment.");
-  }
-
-  /**
-   * Not supported in mobile environment.
-   * <p/>
-   * {@inheritDoc}
-   */
-  @Override
-  protected ICompositeView<RComponent> createBorderView(IBorderViewDescriptor viewDescriptor,
-                                                        IActionHandler actionHandler, Locale locale) {
     throw new UnsupportedOperationException("Not supported in mobile environment.");
   }
 
