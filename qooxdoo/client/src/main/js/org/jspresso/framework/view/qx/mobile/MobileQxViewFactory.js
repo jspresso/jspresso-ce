@@ -441,12 +441,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
         if(remoteForm.getLabelsPosition() != "NONE") {
           var label = new qx.ui.mobile.form.Label("<p>" + rComponent.getLabel() + "</p>");
-          //label.setLabelFor(component.getId());
+          label.setLabelFor(component.getId());
+          label._setStyle("width", "50%");
           row.add(label, {flex:1});
         }
         if(this._isFixedWidth(rComponent)) {
           row.add(component);
         } else {
+          component._setStyle("width", "50%");
           row.add(component, {flex:1});
         }
         if(this._isMultiline(rComponent)) {
@@ -851,6 +853,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createDateField: function (remoteDateField) {
       var dateField = this._createFormattedField(remoteDateField);
+      dateField._setStyle("width", "initial");
       return dateField;
     },
 
@@ -860,6 +863,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createTimeField: function (remoteTimeField) {
       var timeField = this._createFormattedField(remoteTimeField);
+      timeField._setStyle("width", "initial");
       return timeField;
     },
 
@@ -869,6 +873,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createColorField: function (remoteColorField) {
       var colorField = this._createFormattedField(remoteColorField);
+      colorField._setStyle("width", "initial");
       return colorField;
     },
 
