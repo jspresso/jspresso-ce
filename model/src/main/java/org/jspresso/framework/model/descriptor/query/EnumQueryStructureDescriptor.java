@@ -56,6 +56,10 @@ public class EnumQueryStructureDescriptor extends
    * {@code VALUE} value.
    */
   public static final String             VALUE              = "value";
+  /**
+   * {@code I18N_VALUE} value.
+   */
+  public static final String             I18N_VALUE         = "i18nValue";
 
   /**
    * {@code ENUMERATION_VALUES} value.
@@ -100,10 +104,14 @@ public class EnumQueryStructureDescriptor extends
       valuePropertyDescriptor.setI18nNameKey(propertyDescriptor.getName());
     }
     valuePropertyDescriptor.setReadOnly(true);
+    BasicPropertyDescriptor i18nValuePropertyDescriptor = new BasicStringPropertyDescriptor();
+    i18nValuePropertyDescriptor.setName(I18N_VALUE);
+    i18nValuePropertyDescriptor.setReadOnly(true);
 
     List<IPropertyDescriptor> enumValuePropertyDescriptors = new ArrayList<>();
     enumValuePropertyDescriptors.add(selectedPropertyDescriptor);
     enumValuePropertyDescriptors.add(valuePropertyDescriptor);
+    enumValuePropertyDescriptors.add(i18nValuePropertyDescriptor);
     elementDescriptor.setPropertyDescriptors(enumValuePropertyDescriptors);
 
     elementDescriptor.setRenderedProperties(Arrays.asList(SELECTED, VALUE));

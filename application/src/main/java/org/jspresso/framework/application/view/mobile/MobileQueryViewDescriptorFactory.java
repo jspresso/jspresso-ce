@@ -167,7 +167,7 @@ public class MobileQueryViewDescriptorFactory<E, F, G> extends BasicQueryViewDes
     MobileListViewDescriptor list = new MobileListViewDescriptor();
     list.setShowArrow(false);
     list.setName(EnumQueryStructureDescriptor.ENUMERATION_VALUES);
-    list.setRenderedProperty(EnumQueryStructureDescriptor.VALUE);
+    list.setRenderedProperty(EnumQueryStructureDescriptor.I18N_VALUE);
     viewDescriptor.setCenterViewDescriptor(list);
     enumSelectAction.setViewDescriptor(viewDescriptor);
     enumSelectAction.setCancelAction(null);

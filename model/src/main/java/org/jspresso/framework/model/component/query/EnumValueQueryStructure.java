@@ -31,6 +31,7 @@ public class EnumValueQueryStructure extends AbstractPropertyChangeCapable {
 
   private boolean selected;
   private String  value;
+  private String  i18nValue;
 
   /**
    * Constructs a new {@code EnumValueQueryStructure} instance.
@@ -79,5 +80,26 @@ public class EnumValueQueryStructure extends AbstractPropertyChangeCapable {
     String oldValue = this.value;
     this.value = value;
     firePropertyChange("value", oldValue, value);
+  }
+
+  /**
+   * Gets the I18n value.
+   *
+   * @return the I18n value.
+   */
+  public String getI18nValue() {
+    return i18nValue;
+  }
+
+  /**
+   * Sets the I18n value.
+   *
+   * @param i18nValue
+   *          the I18n value to set.
+   */
+  public void setI18nValue(String i18nValue) {
+    String oldI18nValue = this.i18nValue;
+    this.i18nValue = i18nValue;
+    firePropertyChange("i18nValue", oldI18nValue, i18nValue);
   }
 }

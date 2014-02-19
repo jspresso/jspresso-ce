@@ -179,6 +179,7 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
    */
   public void setTranslationProvider(ITranslationProvider translationProvider) {
     this.translationProvider = translationProvider;
+    translateValues();
   }
 
   /**
@@ -198,6 +199,7 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
    */
   public void setLocale(Locale locale) {
     this.locale = locale;
+    translateValues();
   }
 
   /**
@@ -207,5 +209,14 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
    */
   protected IEnumerationPropertyDescriptor getSourceDescriptor() {
     return sourceDescriptor;
+  }
+
+  private void translateValues() {
+    if (getTranslationProvider() != null && getLocale() != null) {
+      for (EnumValueQueryStructure valueQueryStructure : getEnumerationValues()) {
+        valueQueryStructure.setI18nValue(getSourceDescriptor().getI18nValue(valueQueryStructure.getValue(),
+            getTranslationProvider(), getLocale()));
+      }
+    }
   }
 }
