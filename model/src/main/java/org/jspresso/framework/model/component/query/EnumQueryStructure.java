@@ -98,7 +98,7 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
 
   /**
    * Returns the selected enumeration value query structures.
-   * 
+   *
    * @return the selected enumeration value query structures.
    */
   public Set<EnumValueQueryStructure> getSelectedEnumerationValues() {
@@ -109,6 +109,21 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
       }
     }
     return selectedEnumerationValues;
+  }
+
+  /**
+   * Sets the selected enumeration value query structures.
+   *
+   * @param selectedEnumerationValues the selected enumeration value query structures.
+   */
+  public void setSelectedEnumerationValues(Set<EnumValueQueryStructure> selectedEnumerationValues) {
+    for (EnumValueQueryStructure enumValueQueryStructure : getEnumerationValues()) {
+      if (selectedEnumerationValues != null) {
+        enumValueQueryStructure.setSelected(selectedEnumerationValues.contains(enumValueQueryStructure));
+      } else {
+        enumValueQueryStructure.setSelected(false);
+      }
+    }
   }
 
   /**

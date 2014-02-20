@@ -66,6 +66,11 @@ public class EnumQueryStructureDescriptor extends
    */
   public static final String             ENUMERATION_VALUES = "enumerationValues";
 
+  /**
+   * {@code ENUMERATION_VALUES} value.
+   */
+  public static final String             SELECTED_ENUMERATION_VALUES = "selectedEnumerationValues";
+
   private final IEnumerationPropertyDescriptor sourceDescriptor;
 
   /**
@@ -126,11 +131,18 @@ public class EnumQueryStructureDescriptor extends
     enumerationValuesPropertyDescriptor
         .setReferencedDescriptor(enumValuesReferencedDescriptor);
 
+    BasicCollectionPropertyDescriptor<EnumValueQueryStructure> selectedEnumerationValuesPropertyDescriptor;
+    selectedEnumerationValuesPropertyDescriptor = new BasicCollectionPropertyDescriptor<>();
+    selectedEnumerationValuesPropertyDescriptor.setName(SELECTED_ENUMERATION_VALUES);
+    selectedEnumerationValuesPropertyDescriptor
+        .setReferencedDescriptor(enumValuesReferencedDescriptor);
+
     BasicStringPropertyDescriptor toStringPropertyDescriptor = new BasicStringPropertyDescriptor();
     toStringPropertyDescriptor.setName(TO_STRING);
 
     List<IPropertyDescriptor> enumPropertyDescriptors = new ArrayList<>();
     enumPropertyDescriptors.add(enumerationValuesPropertyDescriptor);
+    enumPropertyDescriptors.add(selectedEnumerationValuesPropertyDescriptor);
     enumPropertyDescriptors.add(toStringPropertyDescriptor);
     refDescriptor.setPropertyDescriptors(enumPropertyDescriptors);
     refDescriptor.setToStringProperty(TO_STRING);

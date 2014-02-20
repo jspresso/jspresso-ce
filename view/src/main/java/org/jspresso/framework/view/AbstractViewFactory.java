@@ -2943,6 +2943,15 @@ public abstract class AbstractViewFactory<E, F, G> implements
             (Collection<?>) evt.getNewValue()));
       }
     });
+    viewConnector.addValueChangeListener(new IValueChangeListener() {
+
+      @Override
+      public void valueChange(ValueChangeEvent evt) {
+        viewConnector.setSelectedIndices(ConnectorHelper.getIndicesOf(
+            viewConnector.getCollectionConnector(),
+            (Collection<?>) viewSelectionConnector.getConnectorValue()));
+      }
+    });
     viewSelectionConnector.addPropertyChangeListener(
         IValueConnector.MODEL_CONNECTOR_PROPERTY, new PropertyChangeListener() {
 

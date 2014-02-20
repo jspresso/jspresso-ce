@@ -97,26 +97,6 @@ public class MobileListViewDescriptor extends BasicListViewDescriptor implements
   }
 
   /**
-   * Always {@code ESelectionMode.SINGLE_SELECTION} in mobile environment.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public ESelectionMode getSelectionMode() {
-    return ESelectionMode.SINGLE_SELECTION;
-  }
-
-  /**
-   * Not supported in mobile environment.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public void setSelectionMode(ESelectionMode selectionMode) {
-    throw new UnsupportedOperationException("Not supported in mobile environment.");
-  }
-
-  /**
    * always false in mobile environment.
    * <p>
    * {@inheritDoc}
@@ -133,27 +113,6 @@ public class MobileListViewDescriptor extends BasicListViewDescriptor implements
    */
   @Override
   public void setAutoSelectFirstRow(boolean autoSelectFirstRow) {
-    throw new UnsupportedOperationException("Not supported in mobile environment.");
-  }
-
-  /**
-   * Always null in mobile environment.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public IModelDescriptor getSelectionModelDescriptor() {
-    return null;
-  }
-
-  /**
-   * Not supported in mobile environment.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public void setSelectionModelDescriptor(
-      IModelDescriptor selectionModelDescriptor) {
     throw new UnsupportedOperationException("Not supported in mobile environment.");
   }
 

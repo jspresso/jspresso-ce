@@ -18,7 +18,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
   extend: org.jspresso.framework.view.qx.AbstractQxViewFactory,
 
   statics: {
-    bindListItem: function (item, state) {
+    bindListItem: function (item, state, selected) {
       var children = state.getChildren();
       if(children.length > 1) {
         item.setTitle(children.getItem(1).getValue());
@@ -27,6 +27,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       }
       item.setSubtitle(state.getDescription());
       item.setImage(state.getIconImageUrl());
+      item.setSelected(selected);
     }
   },
 
@@ -589,7 +590,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var treeList = new qx.ui.mobile.list.List({
         configureItem: function (item, data, row) {
           var state = data.state;
-          org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.bindListItem(item, state);
+          org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.bindListItem(item, state, false);
           if(remoteTree instanceof org.jspresso.framework.gui.remote.mobile.RMobileTree) {
             item.setShowArrow(remoteTree.getShowArrow());
           }
@@ -917,12 +918,25 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     _createList: function (remoteList) {
       var listModel = remoteList.getState().getChildren();
 
+      var rendererType;
+      if (remoteList.getSelectionMode() == "SINGLE_SELECTION"
+          || remoteList.getSelectionMode() == "SINGLE_CUMULATIVE_SELECTION") {
+        rendererType = qx.ui.mobile.list.renderer.Default;
+      } else {
+        rendererType = org.jspresso.framework.view.qx.mobile.CheckBoxListItemRenderer;
+      }
+
       var list = new qx.ui.mobile.list.List({
         configureItem: function (item, data, row) {
-          org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.bindListItem(item,  data);
+          var selectedIndices = remoteList.getState().getSelectedIndices();
+          var selected = selectedIndices != null && selectedIndices.indexOf(row) >= 0;
+          org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.bindListItem(item,  data, selected);
           if(remoteList instanceof org.jspresso.framework.gui.remote.mobile.RMobileList) {
             item.setShowArrow(remoteList.getShowArrow());
           }
+        },
+        createItemRenderer : function() {
+          return new rendererType();
         }
       });
 
@@ -930,8 +944,33 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
 
       list.addListener("changeSelection", function(evt) {
         var selectedIndex = evt.getData();
-        remoteList.getState().setLeadingIndex(selectedIndex);
-        remoteList.getState().setSelectedIndices([selectedIndex]);
+        var state = remoteList.getState();
+        if (remoteList.getSelectionMode() == "SINGLE_SELECTION"
+            || remoteList.getSelectionMode() == "SINGLE_CUMULATIVE_SELECTION") {
+          state.setLeadingIndex(selectedIndex);
+          state.setSelectedIndices([selectedIndex]);
+        } else {
+          var selectedIndices = state.getSelectedIndices();
+          if(selectedIndices == null) {
+            selectedIndices = [];
+          } else {
+            selectedIndices = selectedIndices.concat([]);
+          }
+          var selected = selectedIndices.indexOf(selectedIndex);
+          if(selected >= 0) {
+            selectedIndices.splice(selectedIndex, 1);
+            if(selectedIndices.length > 0) {
+              state.setLeadingIndex(selectedIndices[0]);
+            } else {
+              state.setLeadingIndex(-1);
+            }
+          } else {
+            selectedIndices.push(selectedIndex);
+            selectedIndices.sort();
+            state.setLeadingIndex(selectedIndex);
+          }
+          state.setSelectedIndices(selectedIndices);
+        }
       }, this);
       return list;
     },

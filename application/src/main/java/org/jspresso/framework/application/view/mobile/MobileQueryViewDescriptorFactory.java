@@ -37,6 +37,7 @@ import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDes
 import org.jspresso.framework.model.descriptor.query.EnumQueryStructureDescriptor;
 import org.jspresso.framework.util.descriptor.DefaultDescriptor;
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
@@ -178,6 +179,7 @@ public class MobileQueryViewDescriptorFactory<E, F, G> extends BasicQueryViewDes
    *          the enumeration property descriptor to create the LOV action for.
    * @return the enumSelectAction.
    */
+  @Override
   protected IDisplayableAction createEnumSelectAction(
       final EnumQueryStructureDescriptor enumPropertyDescriptor) {
     EditComponentAction<E, F, G> enumSelectAction = new EditComponentAction<>();
@@ -192,10 +194,13 @@ public class MobileQueryViewDescriptorFactory<E, F, G> extends BasicQueryViewDes
     viewDescriptor.setModelDescriptor(enumPropertyDescriptor
         .getReferencedDescriptor());
     MobileListViewDescriptor list = new MobileListViewDescriptor();
+    list.setSelectionMode(ESelectionMode.MULTIPLE_INTERVAL_CUMULATIVE_SELECTION);
     list.setShowArrow(false);
     list.setName(EnumQueryStructureDescriptor.ENUMERATION_VALUES);
     list.setRenderedProperty(EnumQueryStructureDescriptor.I18N_VALUE);
     list.setItemSelectionAction(selectEnumAction);
+    list.setSelectionModelDescriptor(enumPropertyDescriptor.getReferencedDescriptor().getPropertyDescriptor(
+        EnumQueryStructureDescriptor.SELECTED_ENUMERATION_VALUES));
     viewDescriptor.setCenterViewDescriptor(list);
     enumSelectAction.setViewDescriptor(viewDescriptor);
     enumSelectAction.setCancelAction(null);
