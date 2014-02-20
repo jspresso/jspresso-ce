@@ -54,4 +54,12 @@ public interface IRemoteStateOwner {
    *          the incoming state value.
    */
   void setValueFromState(Object stateValue);
+
+  /**
+   * Sets the remoteStateValueMapper.
+   *
+   * @param remoteStateValueMapper
+   *          the remoteStateValueMapper to set.
+   */
+  void setRemoteStateValueMapper(IRemoteStateValueMapper remoteStateValueMapper);
 }

@@ -23,6 +23,7 @@ import java.util.Set;
 import gnu.trove.set.hash.THashSet;
 
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
+import org.jspresso.framework.state.remote.IRemoteStateValueMapper;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.gui.Font;
@@ -415,5 +416,15 @@ public abstract class RComponent extends RemotePeer implements
    */
   public void addReferencedAction(RAction action) {
     actionHardReferences.add(action);
+  }
+
+  /**
+   * NO-OP
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void setRemoteStateValueMapper(IRemoteStateValueMapper remoteStateValueMapper) {
+    // NO OP
   }
 }

@@ -27,6 +27,7 @@ import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicCollectionConnector;
 import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
+import org.jspresso.framework.state.remote.IRemoteStateValueMapper;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.automation.IPermIdSource;
@@ -42,10 +43,11 @@ import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 public class RemoteCollectionConnector extends BasicCollectionConnector
     implements IRemotePeer, IRemoteStateOwner, IPermIdSource {
 
-  private String                    permId;
+  private       String                    permId;
   private final RemoteConnectorFactory    connectorFactory;
-  private String                    guid;
-  private RemoteCompositeValueState state;
+  private       String                    guid;
+  private       IRemoteStateValueMapper   remoteStateValueMapper;
+  private       RemoteCompositeValueState state;
 
   /**
    * Constructs a new {@code RemoteCollectionConnector} instance.
@@ -59,9 +61,8 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
    * @param connectorFactory
    *          the remote connector factory.
    */
-  public RemoteCollectionConnector(String id, IMvcBinder binder,
-      ICompositeValueConnector childConnectorPrototype,
-      RemoteConnectorFactory connectorFactory) {
+  public RemoteCollectionConnector(String id, IMvcBinder binder, ICompositeValueConnector childConnectorPrototype,
+                                   RemoteConnectorFactory connectorFactory) {
     super(id, binder, childConnectorPrototype);
     this.guid = connectorFactory.generateGUID();
     this.connectorFactory = connectorFactory;
@@ -91,8 +92,7 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
    */
   @Override
   public RemoteCollectionConnector clone(String newConnectorId) {
-    RemoteCollectionConnector clonedConnector = (RemoteCollectionConnector) super
-        .clone(newConnectorId);
+    RemoteCollectionConnector clonedConnector = (RemoteCollectionConnector) super.clone(newConnectorId);
     clonedConnector.guid = connectorFactory.generateGUID();
     clonedConnector.state = null;
     connectorFactory.attachListeners(clonedConnector);
@@ -102,7 +102,7 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
 
   /**
    * Gets the permId.
-   * 
+   *
    * @return the permId.
    */
   @Override
@@ -115,7 +115,7 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
 
   /**
    * Gets the guid.
-   * 
+   *
    * @return the guid.
    */
   @Override
@@ -185,10 +185,53 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
   }
 
   /**
+   * Sets the remoteStateValueMapper.
+   *
+   * @param remoteStateValueMapper
+   *          the remoteStateValueMapper to set.
+   */
+  public void setRemoteStateValueMapper(
+      IRemoteStateValueMapper remoteStateValueMapper) {
+    this.remoteStateValueMapper = remoteStateValueMapper;
+  }
+
+  /**
+   * Gets the remoteStateValueMapper.
+   *
+   * @return the remoteStateValueMapper.
+   */
+  protected IRemoteStateValueMapper getRemoteStateValueMapper() {
+    return remoteStateValueMapper;
+  }
+
+  /**
+   * Gets the value that has to be set to the remote state when updating it. It
+   * defaults to the connector value but the  is given a chance here
+   * to mutate the actual object returned. This allows for changing the type of
+   * objects actually exchanged with the remote frontend peer.
+   *
+   * @return the value that has to be set to the remote state when updating it.
+   */
+  protected Object getValueForState() {
+    Object valueForState = getConnectorValue();
+    if (getRemoteStateValueMapper() != null) {
+      valueForState = getRemoteStateValueMapper().getValueForState(getState(), valueForState);
+    }
+    return valueForState;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
   public void setValueFromState(Object stateValue) {
-    setConnectorValue(stateValue);
+    Object valueFromState;
+    if (getRemoteStateValueMapper() != null) {
+      valueFromState = getRemoteStateValueMapper()
+          .getValueFromState(getState(), stateValue);
+    } else {
+      valueFromState = stateValue;
+    }
+    setConnectorValue(valueFromState);
   }
 }

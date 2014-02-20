@@ -180,13 +180,23 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     IColorPropertyDescriptor propertyDescriptor = (IColorPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     IValueConnector connector = getConnectorFactory().createValueConnector(propertyDescriptor.getName());
-    connector.setExceptionHandler(actionHandler);
-    RColorField viewComponent = createRColorField(propertyViewDescriptor);
-    String defaultColor = (String) propertyDescriptor.getDefaultValue();
-    viewComponent.setDefaultColor(defaultColor);
-    if (defaultColor == null && propertyDescriptor.isMandatory()) {
-      viewComponent.setResetEnabled(false);
+    RComponent viewComponent;
+    if (propertyViewDescriptor.isReadOnly()) {
+      if (propertyViewDescriptor.getAction() != null) {
+        viewComponent = createRLink(propertyViewDescriptor, false);
+      } else {
+        viewComponent = createRLabel(propertyViewDescriptor, false);
+      }
+      ((RLabel) viewComponent).setMaxLength(10);
+    } else {
+      viewComponent = createRColorField(propertyViewDescriptor);
+      String defaultColor = (String) propertyDescriptor.getDefaultValue();
+      ((RColorField) viewComponent).setDefaultColor(defaultColor);
+      if (defaultColor == null && propertyDescriptor.isMandatory()) {
+        ((RColorField) viewComponent).setResetEnabled(false);
+      }
     }
+    connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
     return view;
   }
@@ -880,9 +890,13 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     IValueConnector connector;
     RComponent viewComponent;
     IFormatter<Object, String> formatter = createEnumerationFormatter(propertyDescriptor, actionHandler, locale);
-    if (propertyViewDescriptor.isReadOnly() && propertyViewDescriptor.getAction() != null) {
+    if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
-      viewComponent = createRLink(propertyViewDescriptor, false);
+      if (propertyViewDescriptor.getAction() != null) {
+        viewComponent = createRLink(propertyViewDescriptor, false);
+      } else {
+        viewComponent = createRLabel(propertyViewDescriptor, false);
+      }
       ((RLabel) viewComponent).setMaxLength(getFormatLength(formatter, getEnumerationTemplateValue(propertyDescriptor,
           actionHandler, locale)));
     } else {
@@ -928,7 +942,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
       ((REnumBox) viewComponent).setValues(values.toArray(new String[values.size()]));
       ((REnumBox) viewComponent).setTranslations(translations.toArray(new String[translations.size()]));
     }
-    ((RemoteValueConnector) connector).setRemoteStateValueMapper(new IRemoteStateValueMapper() {
+    ((IRemoteStateOwner) connector).setRemoteStateValueMapper(new IRemoteStateValueMapper() {
       @Override
       public Object getValueForState(RemoteValueState state, Object originalValue) {
         if (originalValue == null) {

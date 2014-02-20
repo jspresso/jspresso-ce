@@ -449,7 +449,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
         if(remoteForm.getLabelsPosition() != "NONE") {
           var label = new qx.ui.mobile.form.Label("<p>" + rComponent.getLabel() + "</p>");
-          label.setLabelFor(component.getId());
+          // Changes label color when disabled
+          //label.setLabelFor(component.getId());
           label._setStyle("width", "50%");
           row.add(label, {flex:1});
         }

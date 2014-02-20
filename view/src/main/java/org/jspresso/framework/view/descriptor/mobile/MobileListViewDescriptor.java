@@ -54,6 +54,7 @@ public class MobileListViewDescriptor extends BasicListViewDescriptor implements
    */
   public MobileListViewDescriptor() {
     showArrow = true;
+    setSelectionMode(ESelectionMode.SINGLE_SELECTION);
   }
 
   /**
