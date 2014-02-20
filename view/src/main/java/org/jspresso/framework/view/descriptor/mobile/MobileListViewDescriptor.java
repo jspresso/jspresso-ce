@@ -62,16 +62,6 @@ public class MobileListViewDescriptor extends BasicListViewDescriptor implements
    * {@inheritDoc}
    */
   @Override
-  public IAction getItemSelectionAction() {
-    return null;
-  }
-
-  /**
-   * Not supported in mobile environment.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
   public IAction getRowAction() {
     return null;
   }
@@ -83,16 +73,6 @@ public class MobileListViewDescriptor extends BasicListViewDescriptor implements
    */
   @Override
   public void setRowAction(IAction rowAction) {
-    throw new UnsupportedOperationException("Not supported in mobile environment.");
-  }
-
-  /**
-   * Not supported in mobile environment.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public void setItemSelectionAction(IAction itemSelectionAction) {
     throw new UnsupportedOperationException("Not supported in mobile environment.");
   }
 

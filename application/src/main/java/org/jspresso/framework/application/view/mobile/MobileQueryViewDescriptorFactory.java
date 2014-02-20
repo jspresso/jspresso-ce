@@ -22,10 +22,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.frontend.action.std.EditComponentAction;
 import org.jspresso.framework.application.view.BasicQueryViewDescriptorFactory;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
+import org.jspresso.framework.model.component.query.EnumQueryStructure;
+import org.jspresso.framework.model.component.query.EnumValueQueryStructure;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
@@ -53,6 +57,29 @@ import org.jspresso.framework.view.descriptor.mobile.MobileListViewDescriptor;
  * @param <G>           the actual action type used.
  */
 public class MobileQueryViewDescriptorFactory<E, F, G> extends BasicQueryViewDescriptorFactory<E, F, G> {
+
+  private FrontendAction<E, F, G> selectEnumAction;
+
+  /**
+   * Instantiates a new Mobile query view descriptor factory.
+   */
+  public MobileQueryViewDescriptorFactory() {
+    selectEnumAction = new FrontendAction<E, F, G>() {
+      @Override
+      public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+        EnumQueryStructure eqs = getParentModel(context);
+        List<EnumValueQueryStructure> selectedEnumValues = getSelectedModels(context);
+        for (EnumValueQueryStructure enumValue : eqs.getEnumerationValues()) {
+          if (selectedEnumValues != null && selectedEnumValues.contains(enumValue)) {
+            enumValue.setSelected(true);
+          } else {
+            enumValue.setSelected(false);
+          }
+        }
+        return super.execute(actionHandler, context);
+      }
+    };
+  }
 
   /**
    * {@inheritDoc}
@@ -168,6 +195,7 @@ public class MobileQueryViewDescriptorFactory<E, F, G> extends BasicQueryViewDes
     list.setShowArrow(false);
     list.setName(EnumQueryStructureDescriptor.ENUMERATION_VALUES);
     list.setRenderedProperty(EnumQueryStructureDescriptor.I18N_VALUE);
+    list.setItemSelectionAction(selectEnumAction);
     viewDescriptor.setCenterViewDescriptor(list);
     enumSelectAction.setViewDescriptor(viewDescriptor);
     enumSelectAction.setCancelAction(null);
