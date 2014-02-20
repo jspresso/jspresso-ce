@@ -87,11 +87,15 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     _decorateWithAsideActions: function (component, remoteComponent, disableActionsWithField) {
       var actions = this._extractAllActions(remoteComponent.getActionLists());
       if (actions.length > 0) {
+        var modelController;
+        if (disableActionsWithField && remoteComponent && remoteComponent.getState()) {
+          modelController = new qx.data.controller.Object(remoteComponent.getState());
+        }
         var maxToolbarActionCount = 2;
         var hBox = new qx.ui.mobile.layout.HBox();
         hBox.setAlignY("middle");
         var actionField = new qx.ui.mobile.container.Composite(hBox);
-        var toolBar = this._createToolBarFromActions(actions, maxToolbarActionCount);
+        var toolBar = this._createToolBarFromActions(actions, maxToolbarActionCount, modelController);
         if(component) {
           actionField.add(component, {flex:1});
           actionField.add(toolBar);
@@ -155,18 +159,27 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @param maxToolbarActionCount {Integer}
      * @return {qx.ui.mobile.toolbar.ToolBar}
      */
-    _createToolBarFromActions: function (actions, maxToolbarActionCount) {
+    _createToolBarFromActions: function (actions, maxToolbarActionCount, modelController) {
       var extraActions = [];
       var toolBar = new qx.ui.mobile.toolbar.ToolBar();
+      var actionComponent;
       for (var i = 0; i < actions.length; i++) {
         if (i < maxToolbarActionCount - 1 || actions.length == maxToolbarActionCount) {
-          toolBar.add(this.createToolBarAction(actions[i]));
+          actionComponent = this.createToolBarAction(actions[i]);
+          if(modelController) {
+            modelController.addTarget(actionComponent, "enabled", "writable", false);
+          }
+          toolBar.add(actionComponent);
         } else {
           extraActions.push(actions[i]);
         }
       }
       if (extraActions.length > 0) {
-        toolBar.add(this._createExtraActionsToolBarButton(extraActions));
+        actionComponent = this._createExtraActionsToolBarButton(extraActions);
+        if(modelController) {
+          modelController.addTarget(actionComponent, "enabled", "writable", false);
+        }
+        toolBar.add(actionComponent);
       }
       return toolBar;
     },
@@ -179,7 +192,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var maxToolbarActionCount = 4;
       var actions = this._extractAllActions(remoteComponent.getActionLists());
       if (actions.length > 0) {
-        var toolBar = this._createToolBarFromActions(actions, maxToolbarActionCount);
+        var toolBar = this._createToolBarFromActions(actions, maxToolbarActionCount, null);
         component.add(toolBar);
       }
     },
