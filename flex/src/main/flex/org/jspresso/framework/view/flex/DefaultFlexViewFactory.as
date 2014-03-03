@@ -1972,7 +1972,7 @@ public class DefaultFlexViewFactory {
     dateField.formatString = datePattern;
     dateField.parseFunction = DateUtils.parseDate;
     dateField.editable = true;
-    var ps = remoteDateField.preferredSize;
+    var ps:Dimension = remoteDateField.preferredSize;
     remoteDateField.preferredSize = null;
     sizeMaxComponentWidthFromText(dateField, remoteDateField, DATE_TEMPLATE);
     remoteDateField.preferredSize = ps;
