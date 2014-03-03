@@ -1381,10 +1381,11 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   protected void displayModalDialog(Map<String, Object> context,
       boolean reuseCurrent) {
-    if (!reuseCurrent || dialogContextStack.size() == 0) {
-      LOG.debug("Popping-up modal dialog.");
-      dialogContextStack.add(0, context);
+    if (reuseCurrent && dialogContextStack.size() >= 1) {
+      dialogContextStack.remove(0);
     }
+    LOG.debug("Popping-up modal dialog.");
+    dialogContextStack.add(0, context);
   }
 
   /**
