@@ -975,7 +975,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     createCommand: function (remoteAction) {
       var accel = remoteAction.getAcceleratorAsString();
       if (accel) {
-        accel = accel.replace(" ", "+", "g");
+        accel = accel.replace(/ /g, "+");
       }
       var command = new qx.ui.core.Command(accel);
       this.setIcon(command, remoteAction.getIcon());

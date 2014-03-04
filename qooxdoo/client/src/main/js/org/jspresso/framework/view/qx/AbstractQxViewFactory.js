@@ -407,20 +407,19 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
         timeFormat.setRemoteComponent(remoteComponent);
         return timeFormat;
       } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RNumericComponent) {
+        format = new org.jspresso.framework.util.format.ScaledNumberFormat();
+        format.setThousandsSeparator(this._getThousandsSeparator());
         if (remoteComponent instanceof org.jspresso.framework.gui.remote.RDecimalComponent) {
-          format = new org.jspresso.framework.util.format.ScaledNumberFormat();
+          format.setDecimalSeparator(this._getDecimalSeparator());
           if (remoteComponent instanceof org.jspresso.framework.gui.remote.RPercentField) {
             format.setScale(100);
             format.setPostfix(" %");
           }
-          format.setDecimalSeparator(this._getDecimalSeparator());
-          format.setThousandsSeparator(this._getThousandsSeparator());
           if (remoteComponent.getMaxFractionDigit()) {
             format.setMaximumFractionDigits(remoteComponent.getMaxFractionDigit());
             format.setMinimumFractionDigits(remoteComponent.getMaxFractionDigit());
           }
         } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RIntegerField) {
-          format = new qx.util.format.NumberFormat();
           format.setMaximumFractionDigits(0);
         }
       }

@@ -20,7 +20,7 @@ qx.Class.define("org.jspresso.framework.util.format.ScaledNumberFormat", {
    */
   construct: function (locale) {
     this.base(arguments, locale);
-    this.__locale = locale;
+    this.__savedLocale = locale;
   },
 
   properties: {
@@ -40,7 +40,7 @@ qx.Class.define("org.jspresso.framework.util.format.ScaledNumberFormat", {
 
   members: {
 
-    __locale : null,
+    __savedLocale : null,
 
     /**
      * Formats a number.
@@ -55,6 +55,15 @@ qx.Class.define("org.jspresso.framework.util.format.ScaledNumberFormat", {
       }
       /** @type {String } */
       var formatted = this.base(arguments, actualNumberToFormat);
+      var defaultDecimalSeparator = qx.locale.Number.getDecimalSeparator(this.__savedLocale);
+      var defaultGroupSeparator = qx.locale.Number.getGroupSeparator(this.__savedLocale);
+      if (defaultDecimalSeparator) {
+        formatted = formatted.replace(new RegExp("\\" + defaultDecimalSeparator,"g"), "#dec#");
+      }
+      if (defaultGroupSeparator) {
+        formatted = formatted.replace(new RegExp("\\" + defaultGroupSeparator,"g"), this.getThousandsSeparator());
+      }
+      formatted = formatted.replace(/#dec#/g, this.getDecimalSeparator());
       return formatted;
     },
 
