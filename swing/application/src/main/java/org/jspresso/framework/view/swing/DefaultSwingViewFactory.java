@@ -673,7 +673,7 @@ public class DefaultSwingViewFactory extends
         Action action = getActionFactory().createAction(
             propertyViewDescriptor.getAction(), actionHandler, targetView,
             locale);
-        configurePropertyViewAction(propertyView, action);
+        configurePropertyViewAction(propertyViewDescriptor, action);
         ((JLink<Action>) propertyView.getPeer()).setTarget(action);
       }
 
@@ -2615,7 +2615,7 @@ public class DefaultSwingViewFactory extends
         && columnViewDescriptor.isReadOnly()) {
       Action colAction = getActionFactory().createAction(
           columnViewDescriptor.getAction(), actionHandler, view, locale);
-      configurePropertyViewAction(editorView, colAction);
+      configurePropertyViewAction(columnViewDescriptor, colAction);
       cellRenderer = new HyperlinkTableCellRenderer(cellRenderer, colAction,
           columnIndex);
       viewComponent.addMouseListener((MouseListener) cellRenderer);
@@ -4125,7 +4125,7 @@ public class DefaultSwingViewFactory extends
    *          the action to configure.
    */
   protected void configurePropertyViewAction(
-      IView<JComponent> propertyViewDescriptor, Action propertyViewAction) {
+      IPropertyViewDescriptor propertyViewDescriptor, Action propertyViewAction) {
     Map<String, Object> staticContext = new HashMap<>();
     staticContext.put(ActionContextConstants.PROPERTY_VIEW_DESCRIPTOR,
         propertyViewDescriptor);
