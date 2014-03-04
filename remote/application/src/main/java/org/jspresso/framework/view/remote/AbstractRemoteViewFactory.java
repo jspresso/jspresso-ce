@@ -312,7 +312,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         .getModelDescriptor();
     IValueConnector connector;
     RComponent viewComponent;
-    IFormatter<Object, String> formatter = createIntegerFormatter(propertyDescriptor, locale);
+    IFormatter<Object, String> formatter = createIntegerFormatter(propertyDescriptor, actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
       if (propertyViewDescriptor.getAction() != null) {
@@ -607,7 +607,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
                                                         IActionHandler actionHandler, Locale locale) {
     IPercentPropertyDescriptor propertyDescriptor = (IPercentPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    IFormatter<Object, String> formatter = createPercentFormatter(propertyDescriptor, locale);
+    IFormatter<Object, String> formatter = createPercentFormatter(propertyDescriptor, actionHandler,  locale);
     IValueConnector connector;
     RComponent viewComponent;
     if (propertyViewDescriptor.isReadOnly()) {
@@ -818,7 +818,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     }
     IValueConnector connector;
     RComponent viewComponent;
-    IFormatter<Object, String> formatter = createDecimalFormatter(propertyDescriptor, locale);
+    IFormatter<Object, String> formatter = createDecimalFormatter(propertyDescriptor, actionHandler,  locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
       if (propertyViewDescriptor.getAction() != null) {

@@ -39,6 +39,10 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
 
     /** @type {String} */
     __datePattern: null,
+    /** @type {String} */
+    __decimalSeparator: null,
+    /** @type {String} */
+    __thousandsSeparator: null,
     /** @type {Array} */
     __dateFormats: null,
     /** @type {Array} */
@@ -167,6 +171,36 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
      */
     _getDatePattern: function () {
       return this.__datePattern;
+    },
+
+    /**
+     * @param decimalSeparator {String}
+     * @return {undefined}
+     */
+    setDecimalSeparator: function (decimalSeparator) {
+      this.__decimalSeparator = decimalSeparator;
+    },
+
+    /**
+     * @return {String}
+     */
+    _getDecimalSeparator: function () {
+      return this.__decimalSeparator;
+    },
+
+    /**
+     * @param thousandsSeparator {String}
+     * @return {undefined}
+     */
+    setThousandsSeparator: function (thousandsSeparator) {
+      this.__thousandsSeparator = thousandsSeparator;
+    },
+
+    /**
+     * @return {String}
+     */
+    _getThousandsSeparator: function () {
+      return this.__thousandsSeparator;
     },
 
     /**
@@ -374,13 +408,13 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
         return timeFormat;
       } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RNumericComponent) {
         if (remoteComponent instanceof org.jspresso.framework.gui.remote.RDecimalComponent) {
+          format = new org.jspresso.framework.util.format.ScaledNumberFormat();
           if (remoteComponent instanceof org.jspresso.framework.gui.remote.RPercentField) {
-            format = new org.jspresso.framework.util.format.ScaledNumberFormat();
             format.setScale(100);
             format.setPostfix(" %");
-          } else {
-            format = new qx.util.format.NumberFormat();
           }
+          format.setDecimalSeparator(this._getDecimalSeparator());
+          format.setThousandsSeparator(this._getThousandsSeparator());
           if (remoteComponent.getMaxFractionDigit()) {
             format.setMaximumFractionDigits(remoteComponent.getMaxFractionDigit());
             format.setMinimumFractionDigits(remoteComponent.getMaxFractionDigit());

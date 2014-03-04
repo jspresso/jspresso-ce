@@ -291,6 +291,8 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
     localeCommand.setLanguage(getLocale().getLanguage());
     localeCommand.setDatePattern(getDatePattern(getLocale()));
     localeCommand.setFirstDayOfWeek(getFirstDayOfWeek(getLocale()));
+    localeCommand.setDecimalSeparator(getDecimalSeparator(getLocale()));
+    localeCommand.setThousandsSeparator(getThousandsSeparator(getLocale()));
     localeCommand.setTranslations(translations);
     return localeCommand;
   }

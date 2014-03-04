@@ -357,6 +357,8 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
       }
       getViewFactory().datePattern = (command as RemoteLocaleCommand).datePattern.toUpperCase();
       getViewFactory().firstDayOfWeek = (command as RemoteLocaleCommand).firstDayOfWeek;
+      getViewFactory().decimalSeparator = (command as RemoteLocaleCommand).decimalSeparator;
+      getViewFactory().thousandsSeparator = (command as RemoteLocaleCommand).thousandsSeparator;
       _translations = (command as RemoteLocaleCommand).translations;
     } else if (command is RemoteInitLoginCommand) {
       var initLoginCommand:RemoteInitLoginCommand = command as RemoteInitLoginCommand;

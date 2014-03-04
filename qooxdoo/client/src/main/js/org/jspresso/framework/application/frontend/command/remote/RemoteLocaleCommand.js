@@ -29,6 +29,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
     firstDayOfWeek: {
       check: "Integer"
     },
+    decimalSeparator: {
+      check: "String"
+    },
+    thousandsSeparator: {
+      check: "String"
+    },
     translations: {
       check: "Object"
     }

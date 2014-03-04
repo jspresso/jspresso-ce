@@ -19,17 +19,29 @@ qx.Class.define("org.jspresso.framework.util.format.ScaledNumberFormat", {
    * @param locale {String} optional locale to be used
    */
   construct: function (locale) {
-    this.base(arguments);
+    this.base(arguments, locale);
+    this.__locale = locale;
   },
 
   properties: {
     scale: {
       check: "Number",
       nullable: true
+    },
+    decimalSeparator: {
+      check: "String",
+      nullable: true
+    },
+    thousandsSeparator: {
+      check: "String",
+      nullable: true
     }
   },
 
   members: {
+
+    __locale : null,
+
     /**
      * Formats a number.
      *
@@ -41,7 +53,9 @@ qx.Class.define("org.jspresso.framework.util.format.ScaledNumberFormat", {
       if (this.getScale() && num) {
         actualNumberToFormat = num * this.getScale();
       }
-      return /** @type {String } */ this.base(arguments, actualNumberToFormat);
+      /** @type {String } */
+      var formatted = this.base(arguments, actualNumberToFormat);
+      return formatted;
     },
 
 
@@ -52,12 +66,12 @@ qx.Class.define("org.jspresso.framework.util.format.ScaledNumberFormat", {
      * @return {Double} the number.
      */
     parse: function (str) {
-      /** @type {Number } */
-      var actualParsedNumber = /** @type {Number } */ this.base(arguments, str);
-      if (this.getScale() && actualParsedNumber) {
-        actualParsedNumber = actualParsedNumber / this.getScale();
+      /** @type {Double} */
+      var parsed = /** @type {Double} */ this.base(arguments, str);
+      if (this.getScale() && parsed) {
+        parsed = parsed / this.getScale();
       }
-      return /** @type {Double } */ actualParsedNumber;
+      return parsed;
     }
   }
 });

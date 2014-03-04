@@ -295,6 +295,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     _handleRemoteLocaleCommand: function (localeCommand) {
       qx.locale.Manager.getInstance().setLocale(localeCommand.getLanguage());
       this._getViewFactory().setDatePattern(localeCommand.getDatePattern());
+      this._getViewFactory().setFirstDayOfWeek(localeCommand.getFirstDayOfWeek());
+      this._getViewFactory().setDecimalSeparator(localeCommand.getDecimalSeparator());
+      this._getViewFactory().setThousandsSeparator(localeCommand.getThousandsSeparator());
       this.__translations = localeCommand.getTranslations();
     },
 

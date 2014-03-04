@@ -26,6 +26,8 @@ public class RemoteLocaleCommand extends RemoteCommand {
   private var _language:String;
   private var _datePattern:String;
   private var _firstDayOfWeek:int;
+  private var _decimalSeparator:String;
+  private var _thousandsSeparator:String;
   private var _translations:Object;
 
   public function set language(value:String):void {
@@ -58,6 +60,23 @@ public class RemoteLocaleCommand extends RemoteCommand {
 
   public function set firstDayOfWeek(value:int):void {
     _firstDayOfWeek = value;
+  }
+
+
+  public function get decimalSeparator():String {
+    return _decimalSeparator;
+  }
+
+  public function set decimalSeparator(value:String):void {
+    _decimalSeparator = value;
+  }
+
+  public function get thousandsSeparator():String {
+    return _thousandsSeparator;
+  }
+
+  public function set thousandsSeparator(value:String):void {
+    _thousandsSeparator = value;
   }
 }
 }

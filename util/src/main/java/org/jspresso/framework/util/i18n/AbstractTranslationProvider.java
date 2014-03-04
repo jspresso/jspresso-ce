@@ -84,4 +84,20 @@ public abstract class AbstractTranslationProvider implements
   public int getFirstDayOfWeek(Locale locale) {
     return Integer.parseInt(getTranslation(FIRST_DAY_OF_WEEK_KEY, Integer.toString(1), locale));
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getDecimalSeparator(Locale locale) {
+    return getTranslation(DECIMAL_SEPARATOR_KEY, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getThousandsSeparator(Locale locale) {
+    return getTranslation(THOUSANDS_SEPARATOR_KEY, locale);
+  }
 }

@@ -159,6 +159,22 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getDecimalSeparator(Locale locale) {
+    return getTranslation(DECIMAL_SEPARATOR_KEY, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getThousandsSeparator(Locale locale) {
+    return getTranslation(THOUSANDS_SEPARATOR_KEY, locale);
+  }
+
+  /**
    * Utility method used to extract (recursively through the action chain) the
    * internal state of an action. This state should be used (using equals) in
    * order guarantee that the internal state of an action has not changed during

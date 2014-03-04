@@ -21,6 +21,7 @@ package org.jspresso.framework.view;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -1512,8 +1513,40 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @return the default first day of week.
    */
   protected int getFirstDayOfWeek(IDatePropertyDescriptor propertyDescriptor,
-      ITranslationProvider translationProvider, Locale locale) {
+                                  ITranslationProvider translationProvider, Locale locale) {
     return translationProvider.getFirstDayOfWeek(locale);
+  }
+
+  /**
+   * Return the default decimal separator.
+   *
+   * @param propertyDescriptor
+   *          the decimal property descriptor.
+   * @param translationProvider
+   *          the translation provider.
+   * @param locale
+   *          the locale.
+   * @return the default decimal separator.
+   */
+  protected String getDecimalSeparator(IDecimalPropertyDescriptor propertyDescriptor,
+                                       ITranslationProvider translationProvider, Locale locale) {
+    return translationProvider.getDecimalSeparator(locale);
+  }
+
+  /**
+   * Return the default thousands separator.
+   *
+   * @param propertyDescriptor
+   *          the number property descriptor.
+   * @param translationProvider
+   *          the translation provider.
+   * @param locale
+   *          the locale.
+   * @return the default thousands separator.
+   */
+  protected String getThousandsSeparator(INumberPropertyDescriptor propertyDescriptor,
+                                       ITranslationProvider translationProvider, Locale locale) {
+    return translationProvider.getThousandsSeparator(locale);
   }
 
   /**
@@ -1602,36 +1635,53 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates a decimal format based on a decimal property descriptor.
    *
-   * @param propertyDescriptor
-   *          the decimal property descriptor.
-   * @param locale
-   *          the locale.
-   * @return the decimal format.
+   * @param propertyDescriptor           the decimal property descriptor
+   * @param translationProvider the translation provider
+   * @param locale           the locale
+   * @return the decimal format
    */
   protected NumberFormat createDecimalFormat(
-      IDecimalPropertyDescriptor propertyDescriptor, Locale locale) {
-    NumberFormat format = NumberFormat.getNumberInstance(locale);
+      IDecimalPropertyDescriptor propertyDescriptor,
+      ITranslationProvider translationProvider, Locale locale) {
+    DecimalFormat format = (DecimalFormat) NumberFormat.getNumberInstance(locale);
+    applyDecimalFormatSymbols(format, propertyDescriptor, translationProvider, locale);
     format.setMaximumFractionDigits(propertyDescriptor.getMaxFractionDigit());
-    if (propertyDescriptor.isUsingBigDecimal()
-        && (format instanceof DecimalFormat)) {
-      ((DecimalFormat) format).setParseBigDecimal(true);
+    if (propertyDescriptor.isUsingBigDecimal()) {
+      format.setParseBigDecimal(true);
     }
     format.setMinimumFractionDigits(format.getMaximumFractionDigits());
     return format;
   }
 
+  private void applyDecimalFormatSymbols(DecimalFormat format, INumberPropertyDescriptor propertyDescriptor,
+                                         ITranslationProvider translationProvider, Locale locale) {
+    DecimalFormatSymbols symbols = format.getDecimalFormatSymbols();
+    if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
+      String decimalSeparator = getDecimalSeparator((IDecimalPropertyDescriptor) propertyDescriptor,
+          translationProvider, locale);
+      if (decimalSeparator != null && decimalSeparator.length() > 0) {
+        symbols.setDecimalSeparator(decimalSeparator.charAt(0));
+      }
+    }
+    String thousandsSeparator = getThousandsSeparator(propertyDescriptor, translationProvider, locale);
+    if (thousandsSeparator != null && thousandsSeparator.length() > 0) {
+      symbols.setGroupingSeparator(thousandsSeparator.charAt(0));
+    } else {
+      format.setGroupingUsed(false);
+    }
+  }
+
   /**
    * Creates a decimal formatter based on a decimal property descriptor.
    *
-   * @param propertyDescriptor
-   *          the decimal property descriptor.
-   * @param locale
-   *          the locale.
-   * @return the decimal formatter.
+   * @param propertyDescriptor           the decimal property descriptor
+   * @param translationProvider the translation provider
+   * @param locale           the locale
+   * @return the decimal formatter
    */
   protected IFormatter<Object, String> createDecimalFormatter(
-      IDecimalPropertyDescriptor propertyDescriptor, Locale locale) {
-    return new FormatAdapter(createDecimalFormat(propertyDescriptor, locale));
+      IDecimalPropertyDescriptor propertyDescriptor, ITranslationProvider translationProvider, Locale locale) {
+    return new FormatAdapter(createDecimalFormat(propertyDescriptor, translationProvider, locale));
   }
 
   /**
@@ -1760,15 +1810,15 @@ public abstract class AbstractViewFactory<E, F, G> implements
     }
     if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
       return createPercentFormatter(
-          (IPercentPropertyDescriptor) propertyDescriptor, locale);
+          (IPercentPropertyDescriptor) propertyDescriptor, actionHandler, locale);
     }
     if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
       return createDecimalFormatter(
-          (IDecimalPropertyDescriptor) propertyDescriptor, locale);
+          (IDecimalPropertyDescriptor) propertyDescriptor, actionHandler, locale);
     }
     if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
       return createIntegerFormatter(
-          (IIntegerPropertyDescriptor) propertyDescriptor, locale);
+          (IIntegerPropertyDescriptor) propertyDescriptor, actionHandler, locale);
     }
     return null;
   }
@@ -1832,29 +1882,29 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates an integer format based on an integer property descriptor.
    *
-   * @param propertyDescriptor
-   *          the integer property descriptor.
-   * @param locale
-   *          the locale.
-   * @return the integer format.
+   * @param propertyDescriptor           the integer property descriptor
+   * @param translationProvider the translation provider
+   * @param locale           the locale
+   * @return the integer format
    */
   protected NumberFormat createIntegerFormat(
-      IIntegerPropertyDescriptor propertyDescriptor, Locale locale) {
-    return NumberFormat.getIntegerInstance(locale);
+      IIntegerPropertyDescriptor propertyDescriptor, ITranslationProvider translationProvider, Locale locale) {
+    DecimalFormat format = (DecimalFormat) NumberFormat.getIntegerInstance(locale);
+    applyDecimalFormatSymbols(format, propertyDescriptor, translationProvider, locale);
+    return format;
   }
 
   /**
    * Creates an integer formatter based on an integer property descriptor.
    *
-   * @param propertyDescriptor
-   *          the integer property descriptor.
-   * @param locale
-   *          the locale.
-   * @return the integer formatter.
+   * @param propertyDescriptor           the integer property descriptor
+   * @param translationProvider the translation provider
+   * @param locale           the locale
+   * @return the integer formatter
    */
   protected IFormatter<Object, String> createIntegerFormatter(
-      IIntegerPropertyDescriptor propertyDescriptor, Locale locale) {
-    return new FormatAdapter(createIntegerFormat(propertyDescriptor, locale));
+      IIntegerPropertyDescriptor propertyDescriptor, ITranslationProvider translationProvider, Locale locale) {
+    return new FormatAdapter(createIntegerFormat(propertyDescriptor, translationProvider, locale));
   }
 
   /**
@@ -1993,19 +2043,18 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates a percent format based on a percent property descriptor.
    *
-   * @param propertyDescriptor
-   *          the percent property descriptor.
-   * @param locale
-   *          the locale.
-   * @return the percent format.
+   * @param propertyDescriptor           the percent property descriptor
+   * @param translationProvider the translation provider
+   * @param locale           the locale
+   * @return the percent format
    */
   protected NumberFormat createPercentFormat(
-      IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
-    NumberFormat format = NumberFormat.getPercentInstance(locale);
+      IPercentPropertyDescriptor propertyDescriptor, ITranslationProvider translationProvider, Locale locale) {
+    DecimalFormat format = (DecimalFormat) NumberFormat.getPercentInstance(locale);
+    applyDecimalFormatSymbols(format, propertyDescriptor, translationProvider, locale);
     format.setMaximumFractionDigits(propertyDescriptor.getMaxFractionDigit());
-    if (propertyDescriptor.isUsingBigDecimal()
-        && (format instanceof DecimalFormat)) {
-      ((DecimalFormat) format).setParseBigDecimal(true);
+    if (propertyDescriptor.isUsingBigDecimal()) {
+      format.setParseBigDecimal(true);
     }
     format.setMinimumFractionDigits(format.getMaximumFractionDigits());
     return format;
@@ -2014,15 +2063,14 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates a percent formatter based on a percent property descriptor.
    *
-   * @param propertyDescriptor
-   *          the percent property descriptor.
-   * @param locale
-   *          the locale.
-   * @return the percent formatter.
+   * @param propertyDescriptor           the percent property descriptor
+   * @param translationProvider the translation provider
+   * @param locale           the locale
+   * @return the percent formatter
    */
   protected IFormatter<Object, String> createPercentFormatter(
-      IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
-    return new FormatAdapter(createPercentFormat(propertyDescriptor, locale));
+      IPercentPropertyDescriptor propertyDescriptor, ITranslationProvider translationProvider, Locale locale) {
+    return new FormatAdapter(createPercentFormat(propertyDescriptor, translationProvider, locale));
   }
 
   /**
