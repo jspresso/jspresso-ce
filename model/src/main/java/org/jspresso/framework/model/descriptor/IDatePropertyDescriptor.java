@@ -43,4 +43,10 @@ public interface IDatePropertyDescriptor extends IScalarPropertyDescriptor,
    */
   boolean isTimeZoneAware();
 
+  /**
+   * Allows to override the default format pattern.
+   * @return the overridden format pattern
+   */
+  String getFormatPattern();
+
 }

@@ -21,6 +21,7 @@ public class RDateField extends RComponent {
 
   private var _type:String;
   private var _secondsAware:Boolean;
+  private var _formatPattern:String;
 
   public function RDateField() {
     //default constructor.
@@ -40,6 +41,15 @@ public class RDateField extends RComponent {
 
   public function set secondsAware(value:Boolean):void {
     _secondsAware = value;
+  }
+
+
+  public function get formatPattern():String {
+    return _formatPattern;
+  }
+
+  public function set formatPattern(value:String):void {
+    _formatPattern = value;
   }
 }
 }

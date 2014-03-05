@@ -34,6 +34,7 @@ public class BasicTimePropertyDescriptor extends BasicScalarPropertyDescriptor
     implements ITimePropertyDescriptor {
 
   private boolean secondsAware;
+  private String  formatPattern;
 
   /**
    * Constructs a new {@code BasicTimePropertyDescriptor} instance.
@@ -78,5 +79,22 @@ public class BasicTimePropertyDescriptor extends BasicScalarPropertyDescriptor
    */
   public void setSecondsAware(boolean secondsAware) {
     this.secondsAware = secondsAware;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getFormatPattern() {
+    return formatPattern;
+  }
+
+  /**
+   * Sets format pattern. Allows to override the default one.
+   *
+   * @param formatPattern the format pattern
+   */
+  public void setFormatPattern(String formatPattern) {
+    this.formatPattern = formatPattern;
   }
 }

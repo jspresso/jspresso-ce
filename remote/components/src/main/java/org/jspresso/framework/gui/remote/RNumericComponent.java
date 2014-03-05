@@ -33,6 +33,7 @@ public abstract class RNumericComponent extends RComponent {
   private Number            maxValue;
   private Number            minValue;
   private String            horizontalAlignment;
+  private boolean           thousandsGroupingUsed;
 
   /**
    * Constructs a new {@code RIntegerField} instance.
@@ -115,5 +116,23 @@ public abstract class RNumericComponent extends RComponent {
    */
   public String getHorizontalAlignment() {
     return horizontalAlignment;
+  }
+
+  /**
+   * Is thousands grouping used.
+   *
+   * @return the boolean
+   */
+  public boolean isThousandsGroupingUsed() {
+    return thousandsGroupingUsed;
+  }
+
+  /**
+   * Sets thousands grouping used.
+   *
+   * @param thousandsGroupingUsed the thousands grouping used
+   */
+  public void setThousandsGroupingUsed(boolean thousandsGroupingUsed) {
+    this.thousandsGroupingUsed = thousandsGroupingUsed;
   }
 }

@@ -1467,20 +1467,21 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the locale.
    * @return the date format.
    */
-  protected SimpleDateFormat createDateFormat(
-      IDatePropertyDescriptor propertyDescriptor, TimeZone timeZone,
-      ITranslationProvider translationProvider, Locale locale) {
+  protected SimpleDateFormat createDateFormat(IDatePropertyDescriptor propertyDescriptor, TimeZone timeZone,
+                                              ITranslationProvider translationProvider, Locale locale) {
     SimpleDateFormat format;
-    if (propertyDescriptor.getType() == EDateType.DATE) {
-      format = new NullableSimpleDateFormat(getDatePattern(propertyDescriptor,
-          translationProvider, locale), locale);
+    String formatPattern;
+    if (propertyDescriptor.getFormatPattern() != null) {
+      formatPattern = propertyDescriptor.getFormatPattern();
     } else {
-      format = new NullableSimpleDateFormat(getDatePattern(propertyDescriptor,
-          translationProvider, locale)
-          + " "
-          + getTimePattern(propertyDescriptor, translationProvider, locale),
-          locale);
+      if (propertyDescriptor.getType() == EDateType.DATE) {
+        formatPattern = getDatePattern(propertyDescriptor, translationProvider, locale);
+      } else {
+        formatPattern = getDatePattern(propertyDescriptor, translationProvider, locale) + " " + getTimePattern(
+            propertyDescriptor, translationProvider, locale);
+      }
     }
+    format = new NullableSimpleDateFormat(formatPattern, locale);
     format.setTimeZone(timeZone);
     return format;
   }
@@ -1650,6 +1651,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       format.setParseBigDecimal(true);
     }
     format.setMinimumFractionDigits(format.getMaximumFractionDigits());
+    format.setGroupingUsed(propertyDescriptor.isThousandsGroupingUsed());
     return format;
   }
 
@@ -1891,6 +1893,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       IIntegerPropertyDescriptor propertyDescriptor, ITranslationProvider translationProvider, Locale locale) {
     DecimalFormat format = (DecimalFormat) NumberFormat.getIntegerInstance(locale);
     applyDecimalFormatSymbols(format, propertyDescriptor, translationProvider, locale);
+    format.setGroupingUsed(propertyDescriptor.isThousandsGroupingUsed());
     return format;
   }
 
@@ -2057,6 +2060,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       format.setParseBigDecimal(true);
     }
     format.setMinimumFractionDigits(format.getMaximumFractionDigits());
+    format.setGroupingUsed(propertyDescriptor.isThousandsGroupingUsed());
     return format;
   }
 
@@ -2354,11 +2358,15 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the locale.
    * @return the time format.
    */
-  protected SimpleDateFormat createTimeFormat(
-      ITimePropertyDescriptor propertyDescriptor,
-      ITranslationProvider translationProvider, Locale locale) {
-    SimpleDateFormat format = new NullableSimpleDateFormat(getTimePattern(
-        propertyDescriptor, translationProvider, locale), locale);
+  protected SimpleDateFormat createTimeFormat(ITimePropertyDescriptor propertyDescriptor,
+                                              ITranslationProvider translationProvider, Locale locale) {
+    String formatPattern;
+    if (propertyDescriptor.getFormatPattern() != null) {
+      formatPattern = propertyDescriptor.getFormatPattern();
+    } else {
+      formatPattern = getTimePattern(propertyDescriptor, translationProvider, locale);
+    }
+    SimpleDateFormat format = new NullableSimpleDateFormat(formatPattern, locale);
     return format;
   }
 

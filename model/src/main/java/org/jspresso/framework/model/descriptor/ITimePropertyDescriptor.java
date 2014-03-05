@@ -26,5 +26,10 @@ package org.jspresso.framework.model.descriptor;
  */
 public interface ITimePropertyDescriptor extends IScalarPropertyDescriptor,
     ITimeAwarePropertyDescriptor {
-  // Empty as of now.
+
+  /**
+   * Allows to override the default format pattern.
+   * @return the overridden format pattern
+   */
+  String getFormatPattern();
 }

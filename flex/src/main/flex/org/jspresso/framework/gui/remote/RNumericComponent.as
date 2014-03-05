@@ -22,6 +22,7 @@ public class RNumericComponent extends RComponent {
   private var _maxValue:Number;
   private var _minValue:Number;
   private var _horizontalAlignment:String;
+  private var _thousandsGroupingUsed:Boolean;
 
   public function RNumericComponent() {
     //default constructor.
@@ -49,6 +50,15 @@ public class RNumericComponent extends RComponent {
 
   public function set horizontalAlignment(value:String):void {
     _horizontalAlignment = value;
+  }
+
+
+  public function get thousandsGroupingUsed():Boolean {
+    return _thousandsGroupingUsed;
+  }
+
+  public function set thousandsGroupingUsed(value:Boolean):void {
+    _thousandsGroupingUsed = value;
   }
 }
 }

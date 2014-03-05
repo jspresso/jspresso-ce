@@ -119,6 +119,7 @@ import org.jspresso.framework.gui.remote.RLabel;
 import org.jspresso.framework.gui.remote.RLink;
 import org.jspresso.framework.gui.remote.RList;
 import org.jspresso.framework.gui.remote.RNumericComponent;
+import org.jspresso.framework.gui.remote.RNumericComponent;
 import org.jspresso.framework.gui.remote.RPasswordField;
 import org.jspresso.framework.gui.remote.RPercentField;
 import org.jspresso.framework.gui.remote.RRadioBox;
@@ -1987,7 +1988,11 @@ public class DefaultFlexViewFactory {
   protected function createDateField(remoteDateField:RDateField):UIComponent {
     var dateField:DateField = new EnhancedDateField();
     dateField.firstDayOfWeek = firstDayOfWeek;
-    dateField.formatString = datePattern;
+    if(remoteDateField.formatPattern) {
+      dateField.formatString = remoteDateField.formatPattern;
+    } else {
+      dateField.formatString = datePattern;
+    }
     dateField.parseFunction = DateUtils.parseDate;
     dateField.editable = true;
     var ps:Dimension = remoteDateField.preferredSize;
@@ -3030,16 +3035,26 @@ public class DefaultFlexViewFactory {
   protected function createFormatter(remoteComponent:RComponent):Formatter {
     if (remoteComponent is RDateField) {
       var dateFormatter:DateFormatter = new DateFormatter();
-      dateFormatter.formatString = datePattern;
-      if ((remoteComponent as RDateField).type == "DATE_TIME") {
-        dateFormatter.formatString = dateFormatter.formatString + " " + _timeFormatter.formatString;
+      if ((remoteComponent as RDateField).formatPattern) {
+        dateFormatter.formatString = (remoteComponent as RDateField).formatPattern;
+      } else {
+        dateFormatter.formatString = datePattern;
+        if ((remoteComponent as RDateField).type == "DATE_TIME") {
+          dateFormatter.formatString = dateFormatter.formatString + " " + _timeFormatter.formatString;
+        }
       }
       return dateFormatter;
     } else if (remoteComponent is RTimeField) {
-      if ((remoteComponent as RTimeField).secondsAware) {
-        return _timeFormatter;
+      if ((remoteComponent as RTimeField).formatPattern) {
+        var customTimeFormatter:DateFormatter = new DateFormatter();
+        customTimeFormatter.formatString = (remoteComponent as RTimeField).formatPattern;
+        return customTimeFormatter;
       } else {
-        return _shortTimeFormatter;
+        if ((remoteComponent as RTimeField).secondsAware) {
+          return _timeFormatter;
+        } else {
+          return _shortTimeFormatter;
+        }
       }
     } else if (remoteComponent is RPasswordField) {
       return _passwordFormatter;
@@ -3060,6 +3075,7 @@ public class DefaultFlexViewFactory {
       } else if (remoteComponent is RIntegerField) {
         numberFormatter.precision = 0;
       }
+      numberFormatter.useThousandsSeparator = (remoteComponent as RNumericComponent).thousandsGroupingUsed;
       return numberFormatter;
     }
     return null;

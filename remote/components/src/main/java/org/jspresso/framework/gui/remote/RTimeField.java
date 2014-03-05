@@ -29,6 +29,7 @@ public class RTimeField extends RComponent {
   private static final long serialVersionUID = 2384664561321144507L;
 
   private boolean           secondsAware;
+  private String            formatPattern;
 
   /**
    * Constructs a new {@code RDateField} instance.
@@ -65,5 +66,23 @@ public class RTimeField extends RComponent {
    */
   public void setSecondsAware(boolean secondsAware) {
     this.secondsAware = secondsAware;
+  }
+
+  /**
+   * Gets format pattern.
+   *
+   * @return the format pattern
+   */
+  public String getFormatPattern() {
+    return formatPattern;
+  }
+
+  /**
+   * Sets format pattern.
+   *
+   * @param formatPattern the format pattern
+   */
+  public void setFormatPattern(String formatPattern) {
+    this.formatPattern = formatPattern;
   }
 }

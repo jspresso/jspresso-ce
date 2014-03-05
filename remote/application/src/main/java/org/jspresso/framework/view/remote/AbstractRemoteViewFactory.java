@@ -799,6 +799,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
       viewComponent = createRDateField(propertyViewDescriptor);
       ((RDateField) viewComponent).setType(propertyDescriptor.getType().name());
       ((RDateField) viewComponent).setSecondsAware(propertyDescriptor.isSecondsAware());
+      ((RDateField) viewComponent).setFormatPattern(propertyDescriptor.getFormatPattern());
     }
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
@@ -1022,6 +1023,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     if (view.getPeer() instanceof RNumericComponent) {
       ((RNumericComponent) view.getPeer()).setMaxValue(propertyDescriptor.getMaxValue());
       ((RNumericComponent) view.getPeer()).setMinValue(propertyDescriptor.getMinValue());
+      ((RNumericComponent) view.getPeer()).setThousandsGroupingUsed(propertyDescriptor.isThousandsGroupingUsed());
     }
     if (view.getConnector() instanceof RemoteValueConnector) {
       final RemoteValueConnector rConnector = (RemoteValueConnector) view.getConnector();
@@ -1325,6 +1327,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
       }
       viewComponent = createRTimeField(propertyViewDescriptor);
       ((RTimeField) viewComponent).setSecondsAware(propertyDescriptor.isSecondsAware());
+      ((RTimeField) viewComponent).setFormatPattern(propertyDescriptor.getFormatPattern());
     }
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);

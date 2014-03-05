@@ -365,18 +365,24 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
     _createFormat: function (remoteComponent) {
       var format;
       if (remoteComponent instanceof org.jspresso.framework.gui.remote.RDateField) {
+        var formatDelegates = [];
+        if (remoteComponent.getFormatPattern()) {
+          formatDelegates.push(new qx.util.format.DateFormat(remoteComponent.getFormatPattern()));
+        }
         if (remoteComponent.getType() == "DATE_TIME") {
           var dateTimeFormat = new org.jspresso.framework.util.format.DateFormatDecorator();
           if (remoteComponent.getSecondsAware()) {
             if (!this.__dateTimeFormats) {
               this.__dateTimeFormats = this._createDateFormats(this._createDateTimeFormatPatterns());
             }
-            dateTimeFormat.setFormatDelegates(this.__dateTimeFormats);
+            formatDelegates = formatDelegates.concat(this.__dateTimeFormats);
+            dateTimeFormat.setFormatDelegates(formatDelegates);
           } else {
             if (!this.__shortDateTimeFormats) {
               this.__shortDateTimeFormats = this._createDateFormats(this._createShortDateTimeFormatPatterns());
             }
-            dateTimeFormat.setFormatDelegates(this.__shortDateTimeFormats);
+            formatDelegates = formatDelegates.concat(this.__shortDateTimeFormats);
+            dateTimeFormat.setFormatDelegates(formatDelegates);
           }
           dateTimeFormat.setRemoteComponent(remoteComponent);
           return dateTimeFormat;
@@ -385,27 +391,33 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
           if (!this.__dateFormats) {
             this.__dateFormats = this._createDateFormats(this._createDateFormatPatterns());
           }
-          dateFormat.setFormatDelegates(this.__dateFormats);
+          formatDelegates = formatDelegates.concat(this.__dateFormats);
+          dateFormat.setFormatDelegates(formatDelegates);
           dateFormat.setRemoteComponent(remoteComponent);
           return dateFormat;
         }
-      } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RPasswordField) {
-        return new org.jspresso.framework.util.format.PasswordFormat();
       } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RTimeField) {
+        var formatDelegates = [];
+        if (remoteComponent.getFormatPattern()) {
+          formatDelegates.push(new qx.util.format.DateFormat(remoteComponent.getFormatPattern()));
+        }
         var timeFormat = new org.jspresso.framework.util.format.DateFormatDecorator();
         if (remoteComponent.getSecondsAware()) {
           if (!this.__timeFormats) {
             this.__timeFormats = this._createDateFormats(this._createTimeFormatPatterns());
           }
-          timeFormat.setFormatDelegates(this.__timeFormats);
+          formatDelegates = formatDelegates.concat(this.__timeFormats);
         } else {
           if (!this.__shortTimeFormats) {
             this.__shortTimeFormats = this._createDateFormats(this._createShortTimeFormatPatterns());
           }
-          timeFormat.setFormatDelegates(this.__shortTimeFormats);
+          formatDelegates = formatDelegates.concat(this.__shortTimeFormats);
         }
+        timeFormat.setFormatDelegates(formatDelegates);
         timeFormat.setRemoteComponent(remoteComponent);
         return timeFormat;
+      } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RPasswordField) {
+        return new org.jspresso.framework.util.format.PasswordFormat();
       } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RNumericComponent) {
         format = new org.jspresso.framework.util.format.ScaledNumberFormat();
         format.setThousandsSeparator(this._getThousandsSeparator());
@@ -422,6 +434,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
         } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RIntegerField) {
           format.setMaximumFractionDigits(0);
         }
+        format.setGroupingUsed(remoteComponent.getThousandsGroupingUsed());
       }
       return format;
     },

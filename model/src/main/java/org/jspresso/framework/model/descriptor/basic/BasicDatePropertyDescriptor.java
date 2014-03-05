@@ -36,6 +36,7 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
   private EDateType type;
   private boolean   timeZoneAware;
   private boolean   secondsAware;
+  private String    formatPattern;
 
   /**
    * Constructs a new {@code BasicDatePropertyDescriptor} instance.
@@ -132,5 +133,22 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
    */
   public void setSecondsAware(boolean secondsAware) {
     this.secondsAware = secondsAware;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getFormatPattern() {
+    return formatPattern;
+  }
+
+  /**
+   * Sets format pattern. Allows to override the default one.
+   *
+   * @param formatPattern the format pattern
+   */
+  public void setFormatPattern(String formatPattern) {
+    this.formatPattern = formatPattern;
   }
 }

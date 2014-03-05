@@ -21,6 +21,7 @@ public class RTimeField extends RComponent {
 
   private var _secondsAware:Boolean;
   private var _useDateDto:Boolean;
+  private var _formatPattern:String;
 
   public function RTimeField() {
     //default constructor.
@@ -42,6 +43,15 @@ public class RTimeField extends RComponent {
 
   public function isUseDateDto():Boolean {
     return _useDateDto;
+  }
+
+
+  public function get formatPattern():String {
+    return _formatPattern;
+  }
+
+  public function set formatPattern(value:String):void {
+    _formatPattern = value;
   }
 }
 }

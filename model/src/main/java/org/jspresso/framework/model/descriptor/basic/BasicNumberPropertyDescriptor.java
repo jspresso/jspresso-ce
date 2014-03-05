@@ -36,7 +36,14 @@ public abstract class BasicNumberPropertyDescriptor extends
 
   private BigDecimal maxValue;
   private BigDecimal minValue;
+  private boolean    thousandsGroupingUsed;
 
+  /**
+   * Constructs a new {@code BasicPropertyDescriptor} instance.
+   */
+  public BasicNumberPropertyDescriptor() {
+    thousandsGroupingUsed = true;
+  }
   /**
    * {@inheritDoc}
    */
@@ -160,5 +167,22 @@ public abstract class BasicNumberPropertyDescriptor extends
       return ((BigDecimal) value).compareTo(bound);
     }
     return new BigDecimal(value.doubleValue()).compareTo(bound);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isThousandsGroupingUsed() {
+    return thousandsGroupingUsed;
+  }
+
+  /**
+   * Sets thousands grouping used.
+   *
+   * @param thousandsGroupingUsed the thousands grouping used
+   */
+  public void setThousandsGroupingUsed(boolean thousandsGroupingUsed) {
+    this.thousandsGroupingUsed = thousandsGroupingUsed;
   }
 }

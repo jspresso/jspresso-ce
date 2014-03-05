@@ -31,6 +31,10 @@ qx.Class.define("org.jspresso.framework.gui.remote.RNumericComponent", {
     horizontalAlignment: {
       check: "String",
       nullable: true
+    },
+    thousandsGroupingUsed: {
+      check: "Boolean",
+      nullable: false
     }
   }
 });

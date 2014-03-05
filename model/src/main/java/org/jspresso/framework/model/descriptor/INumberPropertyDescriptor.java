@@ -42,4 +42,10 @@ public interface INumberPropertyDescriptor extends IScalarPropertyDescriptor {
    */
   BigDecimal getMinValue();
 
+  /**
+   * Gets whether thousands grouping is used.
+   * @return {@code true} if thousands grouping is used
+   */
+  boolean isThousandsGroupingUsed();
+
 }
