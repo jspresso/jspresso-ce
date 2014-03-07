@@ -107,6 +107,7 @@ public class BasicComponentDescriptorRegistry implements IComponentDescriptorReg
         }
       }
     }
+    map.put(BasicDescriptorDescriptor.INSTANCE.getName(), BasicDescriptorDescriptor.INSTANCE);
     contractNameToComponentDescriptorMap = map;
   }
 }

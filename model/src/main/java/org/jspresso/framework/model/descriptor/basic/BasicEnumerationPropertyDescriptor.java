@@ -106,4 +106,13 @@ public class BasicEnumerationPropertyDescriptor extends
     this.valuesAndIconImageUrls = valuesAndIconImageUrls;
   }
 
+
+  /**
+   * Returns true.
+   * @return {@code true}
+   */
+  @Override
+  public boolean isLov() {
+    return false;
+  }
 }

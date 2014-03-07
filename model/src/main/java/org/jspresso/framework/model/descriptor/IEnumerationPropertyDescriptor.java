@@ -89,4 +89,10 @@ public interface IEnumerationPropertyDescriptor extends
   String getI18nValue(String value, ITranslationProvider translationProvider,
       Locale locale);
 
+  /**
+   * Should this enumeration be presented as an LOV.
+   *
+   * @return the boolean
+   */
+  boolean isLov();
 }

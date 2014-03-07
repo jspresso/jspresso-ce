@@ -901,47 +901,51 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
       ((RLabel) viewComponent).setMaxLength(getFormatLength(formatter, getEnumerationTemplateValue(propertyDescriptor,
           actionHandler, locale)));
     } else {
-      connector = getConnectorFactory().createValueConnector(propertyDescriptor.getName());
-      List<String> values = new ArrayList<>();
-      List<String> translations = new ArrayList<>();
-      List<String> enumerationValues = new ArrayList<>(propertyDescriptor.getEnumerationValues());
-      filterEnumerationValues(enumerationValues, propertyViewDescriptor);
-      if (!propertyDescriptor.isMandatory()) {
-        enumerationValues.add(0, "");
-      }
-      for (String value : enumerationValues) {
-        values.add(value);
-        if (value != null && propertyDescriptor.isTranslated()) {
-          if ("".equals(value)) {
-            translations.add(" ");
-          } else {
-            translations.add(propertyDescriptor.getI18nValue(value, actionHandler, locale));
-          }
-        } else {
-          if (value == null) {
-            translations.add(" ");
-          } else {
-            translations.add(value);
-          }
-        }
-      }
-      if (propertyViewDescriptor instanceof IEnumerationPropertyViewDescriptor
-          && ((IEnumerationPropertyViewDescriptor) propertyViewDescriptor).isRadio()) {
-        viewComponent = createRRadioBox(propertyViewDescriptor);
-        ((RRadioBox) viewComponent).setOrientation(
-            ((IEnumerationPropertyViewDescriptor) propertyViewDescriptor).getOrientation().name());
+      if (propertyDescriptor.isLov()) {
+        return createEnumerationReferencePropertyView(propertyViewDescriptor, actionHandler, locale);
       } else {
-        viewComponent = createRComboBox(propertyViewDescriptor);
-        ((RComboBox) viewComponent).setReadOnly(propertyViewDescriptor.isReadOnly());
-        List<RIcon> icons = new ArrayList<>();
-        for (String value : enumerationValues) {
-          icons.add(getIconFactory().getIcon(propertyDescriptor.getIconImageURL(value),
-              getIconFactory().getTinyIconSize()));
+        connector = getConnectorFactory().createValueConnector(propertyDescriptor.getName());
+        List<String> values = new ArrayList<>();
+        List<String> translations = new ArrayList<>();
+        List<String> enumerationValues = new ArrayList<>(propertyDescriptor.getEnumerationValues());
+        filterEnumerationValues(enumerationValues, propertyViewDescriptor);
+        if (!propertyDescriptor.isMandatory()) {
+          enumerationValues.add(0, "");
         }
-        ((RComboBox) viewComponent).setIcons(icons.toArray(new RIcon[icons.size()]));
+        for (String value : enumerationValues) {
+          values.add(value);
+          if (value != null && propertyDescriptor.isTranslated()) {
+            if ("".equals(value)) {
+              translations.add(" ");
+            } else {
+              translations.add(propertyDescriptor.getI18nValue(value, actionHandler, locale));
+            }
+          } else {
+            if (value == null) {
+              translations.add(" ");
+            } else {
+              translations.add(value);
+            }
+          }
+        }
+        if (propertyViewDescriptor instanceof IEnumerationPropertyViewDescriptor
+            && ((IEnumerationPropertyViewDescriptor) propertyViewDescriptor).isRadio()) {
+          viewComponent = createRRadioBox(propertyViewDescriptor);
+          ((RRadioBox) viewComponent).setOrientation(
+              ((IEnumerationPropertyViewDescriptor) propertyViewDescriptor).getOrientation().name());
+        } else {
+          viewComponent = createRComboBox(propertyViewDescriptor);
+          ((RComboBox) viewComponent).setReadOnly(propertyViewDescriptor.isReadOnly());
+          List<RIcon> icons = new ArrayList<>();
+          for (String value : enumerationValues) {
+            icons.add(getIconFactory().getIcon(propertyDescriptor.getIconImageURL(value),
+                getIconFactory().getTinyIconSize()));
+          }
+          ((RComboBox) viewComponent).setIcons(icons.toArray(new RIcon[icons.size()]));
+        }
+        ((REnumBox) viewComponent).setValues(values.toArray(new String[values.size()]));
+        ((REnumBox) viewComponent).setTranslations(translations.toArray(new String[translations.size()]));
       }
-      ((REnumBox) viewComponent).setValues(values.toArray(new String[values.size()]));
-      ((REnumBox) viewComponent).setTranslations(translations.toArray(new String[translations.size()]));
     }
     ((IRemoteStateOwner) connector).setRemoteStateValueMapper(new IRemoteStateValueMapper() {
       @Override

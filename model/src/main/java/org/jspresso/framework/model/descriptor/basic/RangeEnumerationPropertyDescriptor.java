@@ -149,4 +149,13 @@ public class RangeEnumerationPropertyDescriptor extends
   public void setRangeStep(Integer rangeStep) {
     this.rangeStep = rangeStep;
   }
+
+  /**
+   * Returns true.
+   * @return {@code true}
+   */
+  @Override
+  public boolean isLov() {
+    return true;
+  }
 }

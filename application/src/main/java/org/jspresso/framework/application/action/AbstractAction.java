@@ -25,6 +25,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.IController;
+import org.jspresso.framework.util.exception.NestedRuntimeException;
 import org.jspresso.framework.util.lang.StringUtils;
 
 /**
@@ -234,5 +235,18 @@ public abstract class AbstractAction extends AbstractActionContextAware
    */
   public IAction getWrappedAction(Map<String, Object> context) {
     return wrappedAction;
+  }
+
+  /**
+   * Clones the action.
+   * @return the action clone.
+   */
+  @Override
+  public AbstractAction clone() {
+    try {
+      return (AbstractAction) super.clone();
+    } catch (CloneNotSupportedException ex) {
+      throw new NestedRuntimeException(ex);
+    }
   }
 }

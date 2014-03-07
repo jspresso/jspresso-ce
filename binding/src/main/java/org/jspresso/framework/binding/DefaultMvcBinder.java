@@ -44,8 +44,12 @@ public class DefaultMvcBinder implements IMvcBinder {
       if (modelConnector == null || modelConnector instanceof ICompositeValueConnector) {
         bindChildren((ICompositeValueConnector) viewConnector, (ICompositeValueConnector) modelConnector);
       } else {
-        throw new IllegalArgumentException("Trying to bind a composite view to a non-composite model for property : "
-            + modelConnector.getModelDescriptor().getName());
+        if (viewConnector instanceof IRenderableCompositeValueConnector) {
+          bind(((IRenderableCompositeValueConnector) viewConnector).getRenderingConnector(), modelConnector);
+        } else {
+          throw new IllegalArgumentException("Trying to bind a composite view to a non-composite model for property : "
+              + modelConnector.getModelDescriptor().getName());
+        }
       }
     }
     viewConnector.boundAsView();

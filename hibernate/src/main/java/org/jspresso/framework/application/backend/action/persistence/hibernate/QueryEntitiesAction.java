@@ -36,13 +36,9 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Subqueries;
 import org.hibernate.transform.ResultTransformer;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
 
-import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.backend.IBackendController;
-import org.jspresso.framework.application.backend.action.IQueryComponentRefiner;
-import org.jspresso.framework.application.backend.session.EMergeMode;
+import org.jspresso.framework.application.backend.action.AbstractQueryComponentsAction;
+import org.jspresso.framework.application.backend.persistence.hibernate.HibernateBackendController;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.persistence.hibernate.criterion.EnhancedDetachedCriteria;
@@ -81,22 +77,18 @@ import org.jspresso.framework.model.persistence.hibernate.criterion.ICriteriaFac
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$
  */
-public class QueryEntitiesAction extends AbstractHibernateAction {
+public class QueryEntitiesAction extends AbstractQueryComponentsAction {
 
   private static final String CRITERIA_FACTORY  = "CRITERIA_FACTORY";
   private static final String CRITERIA_REFINER  = "CRITERIA_REFINER";
-  private static final String COMPONENT_REFINER = "COMPONENT_REFINER";
   private ICriteriaFactory       criteriaFactory;
   private ICriteriaRefiner       criteriaRefiner;
-  private IQueryComponentRefiner queryComponentRefiner;
-  private EMergeMode             mergeMode;
   private boolean                useInListForPagination;
 
   /**
    * Constructs a new {@code QueryEntitiesAction} instance.
    */
   public QueryEntitiesAction() {
-    mergeMode = EMergeMode.MERGE_LAZY;
     useInListForPagination = true;
   }
 
@@ -132,89 +124,6 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean execute(IActionHandler actionHandler, final Map<String, Object> context) {
-    final IQueryComponent queryComponent = getQueryComponent(context);
-    Set<Object> queriedComponents;
-
-    if (getController(context).isUnitOfWorkActive()) {
-      // Ignore merge mode since we are in a TX
-      queriedComponents = doQuery(queryComponent, context, null);
-      // The queried components are assigned to the query component inside the
-      // TX since they are not merged.
-      queryComponent.setQueriedComponents(new ArrayList<>(queriedComponents));
-    } else {
-      final EMergeMode localMergeMode = getMergeMode();
-      queriedComponents = getTransactionTemplate(context).execute(new TransactionCallback<Set<Object>>() {
-
-        @Override
-        public Set<Object> doInTransaction(TransactionStatus status) {
-          Set<Object> txQueriedComponents = doQuery(queryComponent, context, localMergeMode);
-          status.setRollbackOnly();
-          if (localMergeMode == null) {
-            // The queried components are assigned to the query component
-            // inside
-            // the
-            // TX since they are not merged.
-            queryComponent.setQueriedComponents(new ArrayList<>(txQueriedComponents));
-          }
-          return txQueriedComponents;
-        }
-      });
-      if (localMergeMode != null) {
-        // The queried components are assigned to the query component outside of
-        // the
-        // TX since they have been merged into the session.
-        queryComponent.setQueriedComponents(new ArrayList<>(queriedComponents));
-      }
-    }
-    return super.execute(actionHandler, context);
-  }
-
-  private Set<Object> doQuery(IQueryComponent queryComponent, Map<String, Object> context, EMergeMode localMergeMode) {
-
-    IQueryComponentRefiner compRefiner = (IQueryComponentRefiner) queryComponent.get(COMPONENT_REFINER);
-
-    if (compRefiner == null) {
-      compRefiner = getQueryComponentRefiner(context);
-      if (compRefiner != null) {
-        queryComponent.put(COMPONENT_REFINER, compRefiner);
-      }
-    }
-    if (compRefiner != null) {
-      compRefiner.refineQueryComponent(queryComponent, context);
-    }
-
-    List<?> queriedComponents = performQuery(queryComponent, context);
-    Set<Object> mergedComponents = new LinkedHashSet<>();
-
-    List<?> stickyResults = queryComponent.getStickyResults();
-    if (stickyResults != null) {
-      for (Object nextComponent : stickyResults) {
-        mergedComponents.add(nextComponent);
-      }
-    }
-
-    IBackendController controller = getController(context);
-    for (Object nextComponent : queriedComponents) {
-      if (nextComponent instanceof IEntity) {
-        if (!controller.isEntityRegisteredForDeletion((IEntity) nextComponent)) {
-          if (localMergeMode != null) {
-            mergedComponents.add(controller.merge((IEntity) nextComponent, localMergeMode));
-          } else {
-            mergedComponents.add(nextComponent);
-          }
-        }
-      } else {
-        mergedComponents.add(nextComponent);
-      }
-    }
-    return mergedComponents;
-  }
-
-  /**
    * Performs actual Query. This method can be overridden by subclasses in order
    * to deal with non-Hibernate searches.
    *
@@ -224,9 +133,10 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
    *     the action context
    * @return the list of retrieved components.
    */
-  @SuppressWarnings({"unchecked", "ConstantConditions"})
+  @Override
+  @SuppressWarnings({"unchecked", "ConstantConditions" })
   public List<?> performQuery(final IQueryComponent queryComponent, final Map<String, Object> context) {
-    Session hibernateSession = getHibernateSession(context);
+    Session hibernateSession = ((HibernateBackendController)getController(context)).getHibernateSession();
     ICriteriaFactory critFactory = (ICriteriaFactory) queryComponent.get(CRITERIA_FACTORY);
     if (critFactory == null) {
       critFactory = getCriteriaFactory(context);
@@ -379,68 +289,6 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
    */
   public void setCriteriaFactory(ICriteriaFactory criteriaFactory) {
     this.criteriaFactory = criteriaFactory;
-  }
-
-  /**
-   * Retrieves the query component from the context.
-   *
-   * @param context
-   *     the action context.
-   * @return the query component.
-   */
-  protected IQueryComponent getQueryComponent(Map<String, Object> context) {
-    IQueryComponent queryComponent = (IQueryComponent) context.get(IQueryComponent.QUERY_COMPONENT);
-    return queryComponent;
-  }
-
-  /**
-   * Configures a query component refiner that will be called before the query
-   * component is processed to extract the Hibernate detached criteria. This
-   * allows for instance to force query values.
-   *
-   * @param queryComponentRefiner
-   *     the queryComponentRefiner to set.
-   */
-  public void setQueryComponentRefiner(IQueryComponentRefiner queryComponentRefiner) {
-    this.queryComponentRefiner = queryComponentRefiner;
-  }
-
-  /**
-   * Gets query component refiner.
-   *
-   * @param context
-   *     the action context.
-   * @return the query component refiner.
-   */
-  public IQueryComponentRefiner getQueryComponentRefiner(Map<String, Object> context) {
-    if (context.get(COMPONENT_REFINER) != null) {
-      return (IQueryComponentRefiner) context.get(COMPONENT_REFINER);
-    }
-    return queryComponentRefiner;
-  }
-
-  /**
-   * Gets the mergeMode.
-   *
-   * @return the mergeMode.
-   */
-  protected EMergeMode getMergeMode() {
-    return mergeMode;
-  }
-
-  /**
-   * Sets the mergeMode to use when assigning the queried components to the
-   * filter query component. A {@code null} value means that the queried
-   * components will assigned without being merged at all. In that case, the
-   * merging has to be performed later on in the action chain. Forgetting to do
-   * so will lead to unexpected results. Default value is
-   * {@code EMergeMode.MERGE_CLEAN_LAZY}.
-   *
-   * @param mergeMode
-   *     the mergeMode to set.
-   */
-  public void setMergeMode(EMergeMode mergeMode) {
-    this.mergeMode = mergeMode;
   }
 
   /**
