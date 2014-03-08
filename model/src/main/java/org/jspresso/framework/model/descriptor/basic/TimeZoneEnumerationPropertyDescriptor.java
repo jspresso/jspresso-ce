@@ -79,4 +79,13 @@ public class TimeZoneEnumerationPropertyDescriptor extends
   public boolean isTranslated() {
     return false;
   }
+
+  /**
+   * Returns true.
+   * @return {@code true}
+   */
+  @Override
+  public boolean isLov() {
+    return true;
+  }
 }

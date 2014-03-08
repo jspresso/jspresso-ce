@@ -1209,74 +1209,78 @@ public class DefaultSwingViewFactory extends
       connector.setExceptionHandler(actionHandler);
       view = constructView(viewComponent, propertyViewDescriptor, connector);
     } else {
-      List<String> enumerationValues = new ArrayList<>(
+      if (propertyDescriptor.isLov()) {
+        return createEnumerationReferencePropertyView(propertyViewDescriptor, actionHandler, locale);
+      } else {
+        List<String> enumerationValues = new ArrayList<>(
           propertyDescriptor.getEnumerationValues());
-      filterEnumerationValues(enumerationValues, propertyViewDescriptor);
-      if (propertyViewDescriptor instanceof IEnumerationPropertyViewDescriptor
-          && ((IEnumerationPropertyViewDescriptor) propertyViewDescriptor)
-              .isRadio()) {
-        IRenderableCompositeValueConnector connector = getConnectorFactory()
-            .createCompositeValueConnector(
-                ModelRefPropertyConnector.THIS_PROPERTY,
-                propertyDescriptor.getName());
-        JPanel viewComponent = createJPanel();
-        GridLayout layout;
-        switch (((IEnumerationPropertyViewDescriptor) propertyViewDescriptor)
-            .getOrientation()) {
-          case HORIZONTAL:
-            layout = new GridLayout(1, 0);
-            break;
-          case VERTICAL:
-          default:
-            layout = new GridLayout(0, 1);
-        }
-        viewComponent.setLayout(layout);
-        List<IView<JComponent>> childrenViews = new ArrayList<>();
-        for (String enumElement : enumerationValues) {
-          JRadioButton subViewComponent = new JRadioButton();
-          subViewComponent.setText(propertyDescriptor.getI18nValue(enumElement,
-              actionHandler, locale));
-          JRadioButtonConnector subConnector = new JRadioButtonConnector(
-              propertyDescriptor.getName(), subViewComponent, enumElement);
+        filterEnumerationValues(enumerationValues, propertyViewDescriptor);
+        if (propertyViewDescriptor instanceof IEnumerationPropertyViewDescriptor
+            && ((IEnumerationPropertyViewDescriptor) propertyViewDescriptor)
+                .isRadio()) {
+          IRenderableCompositeValueConnector connector = getConnectorFactory()
+              .createCompositeValueConnector(
+                  ModelRefPropertyConnector.THIS_PROPERTY,
+                  propertyDescriptor.getName());
+          JPanel viewComponent = createJPanel();
+          GridLayout layout;
+          switch (((IEnumerationPropertyViewDescriptor) propertyViewDescriptor)
+              .getOrientation()) {
+            case HORIZONTAL:
+              layout = new GridLayout(1, 0);
+              break;
+            case VERTICAL:
+            default:
+              layout = new GridLayout(0, 1);
+          }
+          viewComponent.setLayout(layout);
+          List<IView<JComponent>> childrenViews = new ArrayList<>();
+          for (String enumElement : enumerationValues) {
+            JRadioButton subViewComponent = new JRadioButton();
+            subViewComponent.setText(propertyDescriptor.getI18nValue(enumElement,
+                actionHandler, locale));
+            JRadioButtonConnector subConnector = new JRadioButtonConnector(
+                propertyDescriptor.getName(), subViewComponent, enumElement);
+            adjustSizes(
+                propertyViewDescriptor,
+                subViewComponent,
+                null,
+                getEnumerationTemplateValue(propertyDescriptor, actionHandler,
+                    locale),
+                Toolkit.getDefaultToolkit().getScreenResolution() * 2 / 6);
+            viewComponent.add(subViewComponent);
+            subConnector.setExceptionHandler(actionHandler);
+            IView<JComponent> subView = constructView(subViewComponent,
+                propertyViewDescriptor, subConnector);
+            connector.addChildConnector(subConnector);
+            childrenViews.add(subView);
+          }
+          view = constructCompositeView(viewComponent, propertyViewDescriptor);
+          ((BasicCompositeView<JComponent>) view).setChildren(childrenViews);
+          connector.setExceptionHandler(actionHandler);
+          view.setConnector(connector);
+        } else {
+          JComboBox<String> viewComponent = createJComboBox(propertyViewDescriptor);
+          if (!propertyDescriptor.isMandatory()) {
+            viewComponent.addItem(null);
+          }
+          for (String enumElement : enumerationValues) {
+            viewComponent.addItem(enumElement);
+          }
+          viewComponent.setRenderer(new TranslatedEnumerationListCellRenderer(
+              propertyDescriptor, actionHandler, locale));
           adjustSizes(
               propertyViewDescriptor,
-              subViewComponent,
+              viewComponent,
               null,
               getEnumerationTemplateValue(propertyDescriptor, actionHandler,
                   locale),
-              Toolkit.getDefaultToolkit().getScreenResolution() * 2 / 6);
-          viewComponent.add(subViewComponent);
-          subConnector.setExceptionHandler(actionHandler);
-          IView<JComponent> subView = constructView(subViewComponent,
-              propertyViewDescriptor, subConnector);
-          connector.addChildConnector(subConnector);
-          childrenViews.add(subView);
+              Toolkit.getDefaultToolkit().getScreenResolution() * 3 / 5);
+          IValueConnector connector = new JComboBoxConnector(
+              propertyDescriptor.getName(), viewComponent);
+          connector.setExceptionHandler(actionHandler);
+          view = constructView(viewComponent, propertyViewDescriptor, connector);
         }
-        view = constructCompositeView(viewComponent, propertyViewDescriptor);
-        ((BasicCompositeView<JComponent>) view).setChildren(childrenViews);
-        connector.setExceptionHandler(actionHandler);
-        view.setConnector(connector);
-      } else {
-        JComboBox<String> viewComponent = createJComboBox(propertyViewDescriptor);
-        if (!propertyDescriptor.isMandatory()) {
-          viewComponent.addItem(null);
-        }
-        for (String enumElement : enumerationValues) {
-          viewComponent.addItem(enumElement);
-        }
-        viewComponent.setRenderer(new TranslatedEnumerationListCellRenderer(
-            propertyDescriptor, actionHandler, locale));
-        adjustSizes(
-            propertyViewDescriptor,
-            viewComponent,
-            null,
-            getEnumerationTemplateValue(propertyDescriptor, actionHandler,
-                locale),
-            Toolkit.getDefaultToolkit().getScreenResolution() * 3 / 5);
-        IValueConnector connector = new JComboBoxConnector(
-            propertyDescriptor.getName(), viewComponent);
-        connector.setExceptionHandler(actionHandler);
-        view = constructView(viewComponent, propertyViewDescriptor, connector);
       }
     }
     return view;

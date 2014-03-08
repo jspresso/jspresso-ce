@@ -508,6 +508,15 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   }
 
   /**
+   * Gets find action.
+   *
+   * @return the find action
+   */
+  public IDisplayableAction getFindAction() {
+    return findAction;
+  }
+
+  /**
    * Whenever the LOV action is not used on a reference field, in which case the
    * filter initialization mapping is taken from the reference field descriptor
    * (see {@code BasicReferencePropertyDescriptor} documentation), this
@@ -545,6 +554,15 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    */
   public void setOkAction(IDisplayableAction okAction) {
     this.okAction = okAction;
+  }
+
+  /**
+   * Gets ok action.
+   *
+   * @return the ok action
+   */
+  public IDisplayableAction getOkAction() {
+    return okAction;
   }
 
   /**
@@ -588,6 +606,15 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    */
   public void setPagingAction(IAction pagingAction) {
     this.pagingAction = pagingAction;
+  }
+
+  /**
+   * Gets paging action.
+   *
+   * @return the paging action
+   */
+  public IAction getPagingAction() {
+    return pagingAction;
   }
 
   /**
