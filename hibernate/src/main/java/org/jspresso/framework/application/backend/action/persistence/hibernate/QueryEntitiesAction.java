@@ -168,7 +168,7 @@ public class QueryEntitiesAction extends AbstractQueryComponentsAction {
         criteria.removeAllOrders();
       }
 
-      if (queryComponent.isDistinctEnforced()) {
+      if (queryComponent.isDistinctEnforced() || queryComponent.getQueryDescriptor().isTranslatable()) {
         criteria.setProjection(Projections.distinct(Projections.id()));
         EnhancedDetachedCriteria outerCriteria = EnhancedDetachedCriteria
             .forEntityName(queryComponent.getQueryContract().getName());
