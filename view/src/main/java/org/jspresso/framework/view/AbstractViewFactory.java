@@ -196,6 +196,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
   private       IComponentCollectionFactory componentCollectionFactory;
 
   private IDisplayableAction lovAction;
+  private IDisplayableAction componentsLovActionTemplate;
+
   private int maxCharacterLength       = 32;
   private int maxColumnCharacterLength = 32;
   private IModelCascadingBinder  modelCascadingBinder;
@@ -428,6 +430,15 @@ public abstract class AbstractViewFactory<E, F, G> implements
    */
   public void setLovAction(IDisplayableAction lovAction) {
     this.lovAction = lovAction;
+  }
+
+  /**
+   * Sets components lov action template.
+   *
+   * @param componentsLovActionTemplate the components lov action template
+   */
+  public void setComponentsLovActionTemplate(IDisplayableAction componentsLovActionTemplate) {
+    this.componentsLovActionTemplate = componentsLovActionTemplate;
   }
 
   /**
@@ -2019,8 +2030,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
     INumberPropertyDescriptor propertyDescriptor = (INumberPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
-      view = createIntegerPropertyView(propertyViewDescriptor, actionHandler,
-          locale);
+      view = createIntegerPropertyView(propertyViewDescriptor, actionHandler, locale);
     } else if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
       view = createDecimalPropertyView(propertyViewDescriptor, actionHandler,
           locale);
@@ -2734,6 +2744,15 @@ public abstract class AbstractViewFactory<E, F, G> implements
    */
   protected IDisplayableAction getLovAction() {
     return lovAction;
+  }
+
+  /**
+   * Gets components lov action template.
+   *
+   * @return the components lov action template
+   */
+  public IDisplayableAction getComponentsLovActionTemplate() {
+    return componentsLovActionTemplate;
   }
 
   /**

@@ -32,6 +32,11 @@ import org.jspresso.framework.model.component.query.QueryComponentMatcher;
  */
 public class StaticQueryComponentsAction extends AbstractQueryComponentsAction {
 
+  /**
+   * The constant COMPONENT_STORE_KEY.
+   */
+  public static final String COMPONENT_STORE_KEY = "COMPONENT_STORE";
+
   private List<?> componentStore;
 
   /**
@@ -45,9 +50,21 @@ public class StaticQueryComponentsAction extends AbstractQueryComponentsAction {
    */
   @Override
   public List<?> performQuery(IQueryComponent queryComponent, Map<String, Object> context) {
-    QueryComponentMatcher matcher = new QueryComponentMatcher(queryComponent,
-        getAccessorFactory(context), false, true);
-    return matcher.filterCollection(componentStore);
+    QueryComponentMatcher matcher = new QueryComponentMatcher(queryComponent, getAccessorFactory(context), false, true);
+    return matcher.filterCollection(getComponentStore(context));
+  }
+
+  /**
+   * Gets component store.
+   *
+   * @param context the context
+   * @return the component store
+   */
+  protected List<?> getComponentStore(Map<String, Object> context) {
+    if (context.containsKey(COMPONENT_STORE_KEY)) {
+      return (List<?>) context.get(COMPONENT_STORE_KEY);
+    }
+    return componentStore;
   }
 
   /**

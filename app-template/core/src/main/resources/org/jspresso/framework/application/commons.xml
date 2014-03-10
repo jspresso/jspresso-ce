@@ -124,6 +124,7 @@
     <property name="iconFactory" ref="iconFactory" />
     <property name="actionFactory" ref="actionFactory" />
     <property name="lovAction" ref="lovAction" />
+    <property name="componentsLovActionTemplate" ref="componentsLovAction" />
     <property name="openFileAsBinaryPropertyAction" ref="openFileAsBinaryPropertyAction" />
     <property name="saveBinaryPropertyAsFileAction" ref="saveBinaryPropertyAsFileAction" />
     <property name="resetPropertyAction" ref="resetPropertyFrontAction" />
@@ -316,6 +317,20 @@
   <bean id="lovFindBackAction" class="org.jspresso.framework.application.backend.action.FindAction">
     <property name="queryAction">
       <bean parent="queryEntitiesBackAction">
+        <property name="mergeMode">
+          <null />
+        </property>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="queryComponentsBackAction"
+        class="org.jspresso.framework.application.backend.action.StaticQueryComponentsAction">
+  </bean>
+
+  <bean id="componentsLovFindBackAction" parent="lovFindBackAction">
+    <property name="queryAction">
+      <bean parent="queryComponentsBackAction">
         <property name="mergeMode">
           <null />
         </property>

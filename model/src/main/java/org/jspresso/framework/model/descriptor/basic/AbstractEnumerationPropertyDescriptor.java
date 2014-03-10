@@ -18,10 +18,15 @@
  */
 package org.jspresso.framework.model.descriptor.basic;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Locale;
 
 import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.util.bean.integrity.IntegrityException;
+import org.jspresso.framework.util.descriptor.IDescriptor;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
@@ -190,5 +195,29 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
       throw ie;
     }
     super.preprocessSetter(component, newValue);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public IReferencePropertyDescriptor<IDescriptor> createLovReferenceDescriptor() {
+    BasicReferencePropertyDescriptor<IDescriptor> enumRefPropertyDescriptor = new BasicReferencePropertyDescriptor<>();
+    enumRefPropertyDescriptor.setName(getName());
+    BasicComponentDescriptor<IDescriptor> elementDescriptor = (BasicComponentDescriptor<IDescriptor>) (
+        (BasicComponentDescriptor<IDescriptor>) BasicDescriptorDescriptor.INSTANCE)
+        .clone();
+    elementDescriptor.setI18nNameKey(getName());
+    elementDescriptor.setRenderedProperties(Arrays.asList("description"));
+    BasicPropertyDescriptor descriptionDescriptor =
+        (BasicPropertyDescriptor) elementDescriptor.getPropertyDescriptor("description").clone();
+    descriptionDescriptor.setI18nNameKey(getName());
+    Collection<IPropertyDescriptor> pds = elementDescriptor.getPropertyDescriptors();
+    pds.add(descriptionDescriptor);
+    elementDescriptor.setPropertyDescriptors(pds);
+    enumRefPropertyDescriptor.setReferencedDescriptor(elementDescriptor);
+
+    return enumRefPropertyDescriptor;
   }
 }

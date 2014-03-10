@@ -21,6 +21,7 @@ package org.jspresso.framework.model.descriptor;
 import java.util.List;
 import java.util.Locale;
 
+import org.jspresso.framework.util.descriptor.IDescriptor;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
@@ -95,4 +96,11 @@ public interface IEnumerationPropertyDescriptor extends
    * @return the boolean
    */
   boolean isLov();
+
+  /**
+   * Create LOV reference descriptor.
+   *
+   * @return the reference property descriptor
+   */
+  IReferencePropertyDescriptor<IDescriptor> createLovReferenceDescriptor();
 }

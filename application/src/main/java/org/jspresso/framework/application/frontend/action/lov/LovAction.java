@@ -30,6 +30,7 @@ import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.AbstractQbeAction;
 import org.jspresso.framework.application.backend.action.CreateQueryComponentAction;
+import org.jspresso.framework.application.backend.action.StaticQueryComponentsAction;
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.frontend.action.ModalDialogAction;
@@ -113,6 +114,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   private IDisplayableAction                         okAction;
   private IAction                                    pagingAction;
   private String                                     defaultIconImageURL;
+  private List<?>                                    staticComponentStore;
 
   /**
    * Constructs a new {@code LovAction} instance.
@@ -128,6 +130,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   @Override
   public boolean execute(final IActionHandler actionHandler,
       final Map<String, Object> context) {
+    if (getStaticComponentStore() != null) {
+      context.put(StaticQueryComponentsAction.COMPONENT_STORE_KEY, getStaticComponentStore());
+    }
     IReferencePropertyDescriptor<IComponent> erqDescriptor = getEntityRefQueryDescriptor(context);
     context.put(CreateQueryComponentAction.COMPONENT_REF_DESCRIPTOR,
         erqDescriptor);
@@ -692,5 +697,23 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    */
   public void setPageSize(Integer pageSize) {
     this.pageSize = pageSize;
+  }
+
+  /**
+   * Gets static component store.
+   *
+   * @return the static component store
+   */
+  protected List<?> getStaticComponentStore() {
+    return staticComponentStore;
+  }
+
+  /**
+   * Sets static component store.
+   *
+   * @param staticComponentStore the static component store
+   */
+  public void setStaticComponentStore(List<?> staticComponentStore) {
+    this.staticComponentStore = staticComponentStore;
   }
 }

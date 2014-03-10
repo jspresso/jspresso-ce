@@ -36,6 +36,7 @@ import org.jspresso.framework.application.frontend.action.lov.LovAction;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicDescriptorDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicPropertyDescriptor;
@@ -91,25 +92,12 @@ public abstract class ControllerAwareViewFactory<E, F, G> extends AbstractViewFa
 
     IEnumerationPropertyDescriptor propertyDescriptor = (IEnumerationPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    BasicReferencePropertyDescriptor<IDescriptor> enumRefPropertyDescriptor = new BasicReferencePropertyDescriptor<>();
-    enumRefPropertyDescriptor.setName(propertyDescriptor.getName());
-    BasicComponentDescriptor<IDescriptor> elementDescriptor = (BasicComponentDescriptor<IDescriptor>) (
-        (BasicComponentDescriptor<IDescriptor>) BasicDescriptorDescriptor.INSTANCE)
-        .clone();
-    elementDescriptor.setI18nNameKey(propertyDescriptor.getName());
-    elementDescriptor.setRenderedProperties(Arrays.asList("description"));
-    BasicPropertyDescriptor descriptionDescriptor =
-        (BasicPropertyDescriptor) elementDescriptor.getPropertyDescriptor("description").clone();
-    descriptionDescriptor.setI18nNameKey(propertyDescriptor.getName());
-    Collection<IPropertyDescriptor> pds = elementDescriptor.getPropertyDescriptors();
-    pds.add(descriptionDescriptor);
-    elementDescriptor.setPropertyDescriptors(pds);
-    enumRefPropertyDescriptor.setReferencedDescriptor(elementDescriptor);
-
+    IReferencePropertyDescriptor<IDescriptor> enumRefPropertyDescriptor = propertyDescriptor
+        .createLovReferenceDescriptor();
     BasicReferencePropertyViewDescriptor enumRefPropertyViewDescriptor = new BasicReferencePropertyViewDescriptor();
     enumRefPropertyViewDescriptor.setModelDescriptor(enumRefPropertyDescriptor);
 
-    LovAction<E, F, G> enumLovAction = (LovAction<E, F, G>) getLovAction().clone();
+    LovAction<E, F, G> enumLovAction = (LovAction<E, F, G>) getComponentsLovActionTemplate().clone();
     enumRefPropertyViewDescriptor.setLovAction(enumLovAction);
 
     FrontendAction<E, F, G> enumLovOkFrontAction = (FrontendAction<E, F, G>) enumLovAction.getOkAction().clone();
@@ -128,12 +116,6 @@ public abstract class ControllerAwareViewFactory<E, F, G> extends AbstractViewFa
         return super.execute(actionHandler, context);
       }
     });
-
-    FrontendAction<E, F, G> enumLovFindFrontAction = (FrontendAction<E, F, G>) enumLovAction.getFindAction().clone();
-    enumLovAction.setFindAction(enumLovFindFrontAction);
-
-    FindAction enumLovFindBackAction = (FindAction) enumLovFindFrontAction.getWrappedAction(null).clone();
-    enumLovFindFrontAction.setWrappedAction(enumLovFindBackAction);
 
     List<IDescriptor> values = new ArrayList<>();
     List<String> enumerationValues = new ArrayList<>(propertyDescriptor.getEnumerationValues());
@@ -160,10 +142,7 @@ public abstract class ControllerAwareViewFactory<E, F, G> extends AbstractViewFa
       values.add(valueComponent);
     }
 
-
-    StaticQueryComponentsAction queryEnumValuesAction = new StaticQueryComponentsAction();
-    queryEnumValuesAction.setComponentStore(values);
-    enumLovFindBackAction.setQueryAction(queryEnumValuesAction);
+    enumLovAction.setStaticComponentStore(values);
 
     return createReferencePropertyView(enumRefPropertyViewDescriptor, actionHandler, locale);
   }

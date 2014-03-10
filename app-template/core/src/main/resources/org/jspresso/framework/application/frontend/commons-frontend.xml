@@ -131,6 +131,16 @@
     <property name="nextAction" ref="viewConnectorSetAction" />
   </bean>
 
+  <bean id="lovFindFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
+    <property name="name" value="find.name" />
+    <property name="iconImageURL">
+      <bean parent="abstractFwIconImageURL">
+        <constructor-arg index="0" value="find" />
+      </bean>
+    </property>
+    <property name="wrappedAction" ref="lovFindBackAction" />
+  </bean>
+
   <bean id="lovActionBase" class="org.jspresso.framework.application.frontend.action.lov.LovAction">
     <property name="lovViewDescriptorFactory" ref="lovViewDescriptorFactory" />
     <property name="createQueryComponentAction" ref="createQueryComponentAction" />
@@ -148,15 +158,16 @@
 
   <bean id="lovAction" parent="lovActionBase" />
 
-  <bean id="lovFindFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
-    <property name="name" value="find.name" />
-    <property name="iconImageURL">
-      <bean parent="abstractFwIconImageURL">
-        <constructor-arg index="0" value="find" />
-      </bean>
-    </property>
-    <property name="wrappedAction" ref="lovFindBackAction" />
+  <bean id="componentsLovFindFrontAction" parent="lovFindFrontAction">
+    <property name="wrappedAction" ref="componentsLovFindBackAction" />
   </bean>
+
+  <bean id="componentsLovActionBase" parent="lovActionBase">
+    <property name="findAction" ref="componentsLovFindFrontAction" />
+    <property name="pagingAction" ref="componentsLovFindBackAction" />
+  </bean>
+
+  <bean id="componentsLovAction" parent="componentsLovActionBase"/>
 
   <bean id="nextPageFrontAction" class="org.jspresso.framework.application.frontend.action.std.PageOffsetAction">
     <property name="name" value="next.page.name" />
