@@ -23,14 +23,24 @@
 
   <!-- Remote mobile root application context for the Jspresso framework. -->
 
-  <bean id="editPageAction" class="org.jspresso.framework.application.frontend.action.remote.EditPageAction">
+  <bean id="editPageAction" class="org.jspresso.framework.application.frontend.action.remote.mobile.EditPageAction">
     <property name="name" value="modify"/>
+  </bean>
+
+  <bean id="backPageAction" class="org.jspresso.framework.application.frontend.action.remote.mobile.BackPageAction">
+    <property name="name" value="back"/>
   </bean>
 
   <bean id="remoteViewFactory" abstract="true"
         class="org.jspresso.framework.view.remote.mobile.MobileRemoteViewFactory"
     parent="viewFactoryBase">
     <property name="editPageAction" ref="editPageAction" />
+    <property name="savePageAction">
+      <bean parent="saveModuleObjectFrontAction" >
+        <property name="nextAction" ref="backPageAction" />
+      </bean>
+    </property>
+    <property name="cancelPageAction" ref="reloadModuleObjectFrontAction" />
   </bean>
 
   <!-- QBE customization since remote view supports 3-state checkboxes -->
@@ -61,6 +71,7 @@
     <property name="startupAction" ref="initModuleFilterAction" />
     <property name="pagingAction" ref="queryModuleFilterBackAction" />
     <property name="pageSize" value="6" />
+    <property name="queryModuleFilterAction" ref="queryModuleFilterAction" />
   </bean>
 
   <bean id="filterableBeanCollectionModuleView" parent="decoratedView"

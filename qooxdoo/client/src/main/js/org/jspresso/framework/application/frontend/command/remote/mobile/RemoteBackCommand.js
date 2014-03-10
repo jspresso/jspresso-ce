@@ -30,24 +30,11 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.mobile.RMobileCompositePage", {
-  extend: org.jspresso.framework.gui.remote.mobile.RMobilePage,
+qx.Class.define("org.jspresso.framework.application.frontend.command.remote.mobile.RemoteBackCommand", {
+  extend: org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
 
   construct: function () {
     this.base(arguments);
-  },
-
-  properties: {
-    pageSections: {
-      check: "Array"
-    },
-    editorPage: {
-      check: "org.jspresso.framework.gui.remote.mobile.RMobileCompositePage",
-      nullable: true
-    },
-    editAction: {
-      check: "org.jspresso.framework.gui.remote.RAction",
-      nullable: true
-    }
   }
+
 });

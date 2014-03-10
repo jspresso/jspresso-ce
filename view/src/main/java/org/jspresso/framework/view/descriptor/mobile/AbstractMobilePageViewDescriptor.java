@@ -30,8 +30,28 @@ import org.jspresso.framework.view.descriptor.basic.BasicCompositeViewDescriptor
 public abstract class AbstractMobilePageViewDescriptor extends BasicCompositeViewDescriptor
     implements IMobilePageViewDescriptor {
 
+  private IDisplayableAction enterAction;
   private IDisplayableAction backAction;
   private IDisplayableAction mainAction;
+
+  /**
+   * Gets enter action.
+   *
+   * @return the enter action
+   */
+  @Override
+  public IDisplayableAction getEnterAction() {
+    return enterAction;
+  }
+
+  /**
+   * Sets enter action.
+   *
+   * @param enterAction the enter action
+   */
+  public void setEnterAction(IDisplayableAction enterAction) {
+    this.enterAction = enterAction;
+  }
 
   /**
    * Gets back action.

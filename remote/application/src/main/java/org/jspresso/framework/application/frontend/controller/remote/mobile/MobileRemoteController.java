@@ -21,6 +21,7 @@ package org.jspresso.framework.application.frontend.controller.remote.mobile;
 import java.util.List;
 import java.util.Map;
 
+import org.jspresso.framework.application.frontend.command.remote.mobile.RemoteBackCommand;
 import org.jspresso.framework.application.frontend.controller.remote.AbstractRemoteController;
 import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.binding.IValueConnector;
@@ -62,6 +63,13 @@ public class MobileRemoteController extends AbstractRemoteController {
                                  RComponent sourceComponent, Map<String, Object> context, Dimension dimension,
                                  boolean reuseCurrent) {
     throw new UnsupportedOperationException("Not supported in mobile environment.");
+  }
+
+  /**
+   * Navigate back.
+   */
+  public void navigateBack() {
+    registerCommand(new RemoteBackCommand());
   }
 
   /**

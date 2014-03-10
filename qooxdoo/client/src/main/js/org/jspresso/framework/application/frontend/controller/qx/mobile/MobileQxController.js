@@ -67,6 +67,21 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       return new org.jspresso.framework.view.qx.mobile.MobileQxViewFactory(this, this, this);
     },
 
+    /**
+     * @param command {org.jspresso.framework.application.frontend.command.remote.RemoteCommand}
+     * @return {undefined}
+     */
+    _handleCommand: function (command) {
+      var c;
+      if (command instanceof org.jspresso.framework.application.frontend.command.remote.mobile.RemoteBackCommand) {
+        c = /** @type {org.jspresso.framework.application.frontend.command.remote.mobile.RemoteBackCommand} */
+            command;
+        this._handleBackCommand(c);
+      } else {
+        this.base(arguments, command)
+      }
+    },
+
     _showBusy: function (busy) {
       if (busy) {
         this.__busyPopup.show();
@@ -86,6 +101,24 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       }
       this.base(arguments);
     },
+
+    /**
+     * @return {qx.ui.mobile.page.NavigationPage}
+     */
+    getCurrentPage: function () {
+      var currentPage;
+      var details = this.__manager.getDetailNavigation().getContent().getChildren();
+      if (details) {
+        for (var i = details.length - 1; i >= 0; i--) {
+          if (details[i].getVisibility() == "visible") {
+            currentPage = details[i];
+            break;
+          }
+        }
+      }
+      return currentPage;
+    },
+
     /**
      *
      * @param title {String}
@@ -124,15 +157,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
           dialogPage.getContent().add(dialogContent);
         }, this);
         if (this._dialogStack.length == 1) {
-          var details = this.__manager.getDetailNavigation().getContent().getChildren();
-          if(details) {
-            for(var i = details.length -1; i >= 0; i --) {
-              if(details[i].getVisibility() == "visible") {
-                this.__pageToRestore = details[i];
-                break;
-              }
-            }
-          }
+          this.__pageToRestore = this.getCurrentPage();
         }
         //this._getViewFactory().setIcon(dialogPage, icon);
         this._dialogStack.push([dialogPage, null, null]);
@@ -242,11 +267,20 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         if (workspacePage.isTablet()) {
           this._getViewFactory().setPageAction(workspacePage, this.__exitAction);
         } else {
-          this._getViewFactory().linkNextPageBackButton(workspacePage, this.__workspacesMasterPage, "cube");
+          this._getViewFactory().linkNextPageBackButton(workspacePage, this.__workspacesMasterPage,
+              workspaceView.getBackAction(), "cube");
         }
       }
       this.__workspacePages[workspaceName].show();
     },
+
+    /**
+     * @param backCommand {org.jspresso.framework.application.frontend.command.remote.mobile.RemoteBackCommand}
+     */
+    _handleBackCommand: function (backCommand) {
+      this.getCurrentPage().back();
+    },
+
 
     /**
      * @param messageCommand {org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand}

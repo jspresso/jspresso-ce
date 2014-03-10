@@ -187,6 +187,11 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
     return decorator;
   }
 
+  /**
+   * Cleanup filter view descriptor.
+   *
+   * @param filterViewDesc the filter view desc
+   */
   protected void cleanupFilterViewDescriptor(IViewDescriptor filterViewDesc) {
     if (filterViewDesc instanceof BasicViewDescriptor) {
       ((BasicViewDescriptor) filterViewDesc).setModelDescriptor(null);

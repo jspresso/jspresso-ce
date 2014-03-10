@@ -38,6 +38,10 @@ qx.Class.define("org.jspresso.framework.gui.remote.mobile.RMobilePage", {
   },
 
   properties: {
+    enterAction: {
+      check: "org.jspresso.framework.gui.remote.RAction",
+      nullable: true
+    },
     backAction: {
       check: "org.jspresso.framework.gui.remote.RAction",
       nullable: true

@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.gui.remote.mobile;
 
+import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RComponent;
 
 /**
@@ -31,6 +32,7 @@ public class RMobileCompositePage extends RMobilePage {
   private static final long serialVersionUID = 1457626334914255111L;
   private RComponent[]         pageSections;
   private RMobileCompositePage editorPage;
+  private RAction              editAction;
 
   /**
    * Constructs a new {@code RMobileCardPage} instance.
@@ -86,5 +88,24 @@ public class RMobileCompositePage extends RMobilePage {
    */
   public void setEditorPage(RMobileCompositePage editorPage) {
     this.editorPage = editorPage;
+  }
+
+
+  /**
+   * Gets edit action.
+   *
+   * @return the edit action
+   */
+  public RAction getEditAction() {
+    return editAction;
+  }
+
+  /**
+   * Sets edit action.
+   *
+   * @param editAction the edit action
+   */
+  public void setEditAction(RAction editAction) {
+    this.editAction = editAction;
   }
 }

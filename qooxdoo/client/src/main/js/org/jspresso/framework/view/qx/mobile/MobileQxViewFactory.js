@@ -157,6 +157,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     /**
      * @param actions {Array}
      * @param maxToolbarActionCount {Integer}
+     * @param modelController {qx.data.controller.Object}
      * @return {qx.ui.mobile.toolbar.ToolBar}
      */
     _createToolBarFromActions: function (actions, maxToolbarActionCount, modelController) {
@@ -238,6 +239,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         container = this._createBorderContainer(remoteContainer);
       }
       if(remoteContainer instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
+        if(remoteContainer.getEnterAction()) {
+          container.addListener("start", function () {
+            this._getActionHandler().execute(remoteContainer.getEnterAction());
+          }, this);
+        }
         if(remoteContainer.getMainAction()) {
           this.setPageAction(container,  remoteContainer.getMainAction());
         }
@@ -293,7 +299,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       }, this);
       // Because of MobileCardPage
       if(nextPage instanceof qx.ui.mobile.page.NavigationPage) {
-        this.linkNextPageBackButton(nextPage, navPage);
+        this.linkNextPageBackButton(nextPage, navPage, remoteNavPage.getNextPage().getBackAction());
       } else {
         nextPage.setUserData("previousPage", navPage);
       }
@@ -304,16 +310,20 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     /**
      * @param nextPage {qx.ui.mobile.page.NavigationPage}
      * @param previousPage {qx.ui.mobile.page.NavigationPage}
+     * @param backAction {org.jspresso.framework.gui.remote.RAction}
      * @param animation {String}
      */
-    linkNextPageBackButton: function (nextPage, previousPage, animation) {
+    linkNextPageBackButton: function (nextPage, previousPage, backAction, animation) {
       if(typeof animation === undefined) animation = "slide";
       nextPage.setShowBackButton(true);
-      nextPage.setBackButtonText(previousPage.getTitle());
       var backButton = nextPage.getLeftContainer().getChildren()[0];
-      backButton.setIcon("org/jspresso/framework/mobile/back-mobile.png");
-      //backButton.setShow("both");
-      backButton.setShow("icon")
+      if(backAction && backAction.getName()) {
+        nextPage.setBackButtonText(backAction.getName());
+        backButton.setShow("label");
+      } else {
+        backButton.setIcon("org/jspresso/framework/mobile/back-mobile.png");
+        backButton.setShow("icon");
+      }
       nextPage.addListener("back", function () {
         previousPage.show({animation: animation,  reverse: true});
       }, this);
@@ -332,7 +342,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         if(remotePageSection instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
           /** @type {qx.ui.mobile.page.NavigationPage} */
           var nextPage = this.createComponent(remotePageSection);
-          this.linkNextPageBackButton(nextPage, compositePage);
+          this.linkNextPageBackButton(nextPage, compositePage, remotePageSection.getBackAction());
           var listModel = new qx.data.Array();
           listModel.push({
             section: remotePageSection,
@@ -362,10 +372,22 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           sections.push(pageSection);
         }
       }
-      if(remoteCompositePage.getEditorPage()) {
-        var editorPage = this._createMobileCompositePage(remoteCompositePage.getEditorPage());
-        this.linkNextPageBackButton(editorPage, compositePage, "flip")
+      if(remoteCompositePage.getEditAction() && remoteCompositePage.getEditorPage()) {
+        var editorPage = this.createComponent(remoteCompositePage.getEditorPage());
+        this.linkNextPageBackButton(editorPage, compositePage,
+            remoteCompositePage.getEditorPage().getBackAction(), "flip");
         compositePage.setUserData("editorPage", editorPage);
+        if (remoteCompositePage.getMainAction() == null) {
+          remoteCompositePage.setMainAction(remoteCompositePage.getEditAction());
+        } else {
+          var editActionList = new org.jspresso.framework.gui.remote.RActionList();
+          editActionList.setActions([remoteCompositePage.getEditAction()]);
+          var actionLists = [editActionList];
+          if(remoteCompositePage.getActionLists()) {
+            actionLists = actionLists.concat(remoteCompositePage.getActionLists());
+          }
+          remoteCompositePage.setActionLists(actionLists);
+        }
       }
       compositePage.addListener("initialize", function (e) {
         for(var i = 0; i < sections.length; i++) {

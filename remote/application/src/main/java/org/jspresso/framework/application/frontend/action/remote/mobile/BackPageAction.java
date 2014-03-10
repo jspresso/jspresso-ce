@@ -16,27 +16,29 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.frontend.action.remote;
+package org.jspresso.framework.application.frontend.action.remote.mobile;
 
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.frontend.action.remote.AbstractRemoteAction;
 import org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand;
+import org.jspresso.framework.application.frontend.command.remote.mobile.RemoteBackCommand;
 import org.jspresso.framework.gui.remote.RComponent;
 
 /**
- * Triggers editing of current page.
+ * Triggers back navigation of current page.
  *
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$
  */
-public class EditPageAction extends AbstractRemoteAction {
+public class BackPageAction extends AbstractRemoteAction {
 
   @Override
   public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
-    RemoteEditCommand editCommand = new RemoteEditCommand();
-    editCommand.setTargetPeerGuid(((RComponent)getView(context).getPeer()).getGuid());
-    registerCommand(editCommand, context);
+    RemoteBackCommand backCommand = new RemoteBackCommand();
+    backCommand.setTargetPeerGuid(((RComponent) getView(context).getPeer()).getGuid());
+    registerCommand(backCommand, context);
     return super.execute(actionHandler, context);
   }
 }

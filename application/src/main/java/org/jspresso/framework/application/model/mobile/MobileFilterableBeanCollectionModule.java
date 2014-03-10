@@ -30,6 +30,7 @@ import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
+import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.EBorderType;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
@@ -52,6 +53,8 @@ import org.jspresso.framework.view.descriptor.mobile.MobileNavPageViewDescriptor
  */
 public class MobileFilterableBeanCollectionModule extends FilterableBeanCollectionModule {
 
+  private IDisplayableAction queryModuleFilterAction;
+
   /**
    * {@inheritDoc}
    *
@@ -65,6 +68,7 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
     ((BasicViewDescriptor) moduleObjectsView).setModelDescriptor(moduleDescriptor.getPropertyDescriptor(
         MobileBeanCollectionModule.MODULE_OBJECTS));
     MobileNavPageViewDescriptor moduleObjectsPageView = new MobileNavPageViewDescriptor();
+    moduleObjectsPageView.setEnterAction(getQueryModuleFilterAction());
     moduleObjectsPageView.setSelectionView(moduleObjectsView);
     if (getPagingAction() != null) {
       AddPageAction<?, ?, ?> addPageAction = new AddPageAction<>();
@@ -221,5 +225,23 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
   @Override
   public void setPaginationViewDescriptor(BasicViewDescriptor paginationViewDescriptor) {
     throw new UnsupportedOperationException("Not supported in mobile environment.");
+  }
+
+  /**
+   * Gets query module filter action.
+   *
+   * @return the query module filter action
+   */
+  public IDisplayableAction getQueryModuleFilterAction() {
+    return queryModuleFilterAction;
+  }
+
+  /**
+   * Sets query module filter action.
+   *
+   * @param queryModuleFilterAction the query module filter action
+   */
+  public void setQueryModuleFilterAction(IDisplayableAction queryModuleFilterAction) {
+    this.queryModuleFilterAction = queryModuleFilterAction;
   }
 }

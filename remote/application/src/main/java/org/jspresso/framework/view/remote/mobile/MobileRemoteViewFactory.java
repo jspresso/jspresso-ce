@@ -42,7 +42,6 @@ import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
-import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
@@ -56,6 +55,7 @@ import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.IMobilePageSectionViewDescriptor;
+import org.jspresso.framework.view.descriptor.mobile.IMobilePageViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.IMobileViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileCardPageViewDescriptor;
@@ -75,6 +75,8 @@ import org.jspresso.framework.view.remote.AbstractRemoteViewFactory;
 public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
 
   private IDisplayableAction editPageAction;
+  private IDisplayableAction savePageAction;
+  private IDisplayableAction cancelPageAction;
 
   /**
    * Checks that the view descriptor is mobile compatible.
@@ -103,12 +105,23 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
                                                            IActionHandler actionHandler, Locale locale) {
     if (viewDescriptor instanceof IMobileViewDescriptor) {
       ICompositeView<RComponent> view = null;
-      if (viewDescriptor instanceof MobileCompositePageViewDescriptor) {
-        view = createMobileCompositePageView((MobileCompositePageViewDescriptor) viewDescriptor, actionHandler, locale);
-      } else if (viewDescriptor instanceof MobileNavPageViewDescriptor) {
-        view = createMobileNavPageView((MobileNavPageViewDescriptor) viewDescriptor, actionHandler, locale);
-      } else if (viewDescriptor instanceof MobileCardPageViewDescriptor) {
-        view = createMobileCardPageView((MobileCardPageViewDescriptor) viewDescriptor, actionHandler, locale);
+      if (viewDescriptor instanceof IMobilePageViewDescriptor) {
+        if (viewDescriptor instanceof MobileCompositePageViewDescriptor) {
+          view = createMobileCompositePageView((MobileCompositePageViewDescriptor) viewDescriptor, actionHandler,
+              locale);
+        } else if (viewDescriptor instanceof MobileNavPageViewDescriptor) {
+          view = createMobileNavPageView((MobileNavPageViewDescriptor) viewDescriptor, actionHandler, locale);
+        } else if (viewDescriptor instanceof MobileCardPageViewDescriptor) {
+          view = createMobileCardPageView((MobileCardPageViewDescriptor) viewDescriptor, actionHandler, locale);
+        }
+        if (view != null) {
+          ((RMobilePage) view.getPeer()).setEnterAction(getActionFactory().createAction(
+              ((IMobilePageViewDescriptor) viewDescriptor).getEnterAction(), actionHandler, view, locale));
+          ((RMobilePage) view.getPeer()).setBackAction(getActionFactory().createAction(
+              ((IMobilePageViewDescriptor) viewDescriptor).getBackAction(), actionHandler, view, locale));
+          ((RMobilePage) view.getPeer()).setMainAction(getActionFactory().createAction(
+              ((IMobilePageViewDescriptor) viewDescriptor).getMainAction(), actionHandler, view, locale));
+        }
       } else if (viewDescriptor instanceof MobileBorderViewDescriptor) {
         view = createBorderView((MobileBorderViewDescriptor) viewDescriptor, actionHandler, locale);
       }
@@ -205,9 +218,14 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     if (!viewDescriptor.isInlineEditing()) {
       ICompositeView<RComponent> editorPageView = (ICompositeView<RComponent>) createView(
           viewDescriptor.cloneEditable(), actionHandler, locale);
-      viewComponent.setEditorPage((RMobileCompositePage) editorPageView.getView().getPeer());
+      RMobileCompositePage editorPage = (RMobileCompositePage) editorPageView.getView().getPeer();
+      RAction saveAction = getActionFactory().createAction(getSavePageAction(), actionHandler, view, locale);
+      editorPage.setMainAction(saveAction);
+      RAction cancelAction = getActionFactory().createAction(getCancelPageAction(), actionHandler, view, locale);
+      editorPage.setBackAction(cancelAction);
+      viewComponent.setEditorPage(editorPage);
       RAction editorAction = getActionFactory().createAction(getEditPageAction(), actionHandler, view, locale);
-      viewComponent.setMainAction(editorAction);
+      viewComponent.setEditAction(editorAction);
       childrenViews.add(editorPageView);
     }
     view.setChildren(childrenViews);
@@ -427,5 +445,41 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
    */
   public void setEditPageAction(IDisplayableAction editPageAction) {
     this.editPageAction = editPageAction;
+  }
+
+  /**
+   * Gets save page action.
+   *
+   * @return the save page action
+   */
+  protected IDisplayableAction getSavePageAction() {
+    return savePageAction;
+  }
+
+  /**
+   * Sets save page action.
+   *
+   * @param savePageAction the save page action
+   */
+  public void setSavePageAction(IDisplayableAction savePageAction) {
+    this.savePageAction = savePageAction;
+  }
+
+  /**
+   * Gets cancel page action.
+   *
+   * @return the cancel page action
+   */
+  protected IDisplayableAction getCancelPageAction() {
+    return cancelPageAction;
+  }
+
+  /**
+   * Sets cancel page action.
+   *
+   * @param cancelPageAction the cancel page action
+   */
+  public void setCancelPageAction(IDisplayableAction cancelPageAction) {
+    this.cancelPageAction = cancelPageAction;
   }
 }

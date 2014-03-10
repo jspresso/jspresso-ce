@@ -130,7 +130,7 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
   @Override
   public String getI18nDescription(ITranslationProvider translationProvider, Locale locale) {
     if (getDescription() == null) {
-      return getSelectionView().getI18nName(translationProvider, locale);
+      return getSelectionView().getI18nDescription(translationProvider, locale);
     }
     return super.getI18nDescription(translationProvider, locale);
   }

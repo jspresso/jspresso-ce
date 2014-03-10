@@ -31,6 +31,7 @@ public abstract class RMobilePage extends RContainer {
 
   private static final long serialVersionUID = 9067959612763951538L;
 
+  private RAction enterAction;
   private RAction backAction;
   private RAction mainAction;
 
@@ -50,6 +51,24 @@ public abstract class RMobilePage extends RContainer {
    */
   public RMobilePage() {
     // For serialization support
+  }
+
+  /**
+   * Gets enter action.
+   *
+   * @return the enter action
+   */
+  public RAction getEnterAction() {
+    return enterAction;
+  }
+
+  /**
+   * Sets enter action.
+   *
+   * @param enterAction the enter action
+   */
+  public void setEnterAction(RAction enterAction) {
+    this.enterAction = enterAction;
   }
 
   /**
