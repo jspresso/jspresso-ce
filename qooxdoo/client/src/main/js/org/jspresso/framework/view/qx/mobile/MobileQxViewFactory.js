@@ -38,6 +38,13 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
   members: {
 
     /**
+     * @return {qx.ui.mobile.core.Widget}
+     */
+    _createEmptyWidget: function () {
+      return new qx.ui.core.Widget();
+    },
+
+    /**
      * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
      * @return {qx.ui.mobile.core.Widget}
      */
@@ -222,6 +229,71 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     },
 
     /**
+     * @param page {qx.ui.mobile.page.NavigationPage}
+     * @param pageAction {org.jspresso.framework.gui.remote.RAction}
+     */
+    installPageMainAction: function (page, pageAction) {
+      if(pageAction) {
+        page.setButtonText(pageAction.getName());
+        if(pageAction.getIcon()) {
+          page.setButtonIcon(pageAction.getIcon().getImageUrlSpec());
+        }
+        page.addListener("action", function(event) {
+          this._getActionHandler().execute(pageAction);
+        }, this);
+        page.setShowButton(true);
+      }
+    },
+
+    /**
+     * @param page {qx.ui.mobile.page.NavigationPage}
+     * @param enterAction {org.jspresso.framework.gui.remote.RAction}
+     */
+    installPageEnterAction: function (page, enterAction) {
+      if (enterAction) {
+        page.addListener("start", function () {
+          this._getActionHandler().execute(enterAction);
+        }, this);
+      }
+    },
+
+    /**
+     * @param page {qx.ui.mobile.page.NavigationPage}
+     * @param backAction {org.jspresso.framework.gui.remote.RAction}
+     */
+    installPageBackAction: function (page, backAction) {
+      if (backAction) {
+        this.linkNextPageBackButton(page,  null, backAction);
+      }
+    },
+
+    /**
+     * @param page {qx.ui.mobile.page.NavigationPage}
+     * @param pageEndAction {org.jspresso.framework.gui.remote.RAction}
+     */
+    installPageEndAction: function (page, pageEndAction) {
+      if (pageEndAction) {
+        page.addListener("initialize", function (e) {
+          page._getScrollContainer().addListener("pageEnd", function(e) {
+            this._getActionHandler().execute(pageEndAction);
+          }, this);
+        }, this);
+      }
+    },
+
+    /**
+     *
+     * @param remotePage {org.jspresso.framework.gui.remote.mobile.RMobilePageAware}
+     * @param page {qx.ui.mobile.page.NavigationPage}
+     */
+    installPageActions: function (remotePage, page) {
+      this.installPageEnterAction(page, remotePage.getEnterAction());
+      this.installPageMainAction(page, remotePage.getMainAction());
+      this.installPageBackAction(page, remotePage.getBackAction());
+      this.installPageEndAction(page, remotePage.getPageEndAction());
+    },
+
+    /**
      * @return {qx.ui.mobile.core.Widget}
      * @param remoteContainer {org.jspresso.framework.gui.remote.RContainer}
      */
@@ -233,25 +305,16 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         container = this._createMobileNavPage(remoteContainer);
       } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.mobile.RMobileCompositePage) {
         container = this._createMobileCompositePage(remoteContainer);
+      } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAwareContainer) {
+        container = this.createComponent(remoteContainer.getContent());
       } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.RCardContainer) {
         container = this._createCardContainer(remoteContainer);
       } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.RBorderContainer) {
         container = this._createBorderContainer(remoteContainer);
       }
-      if(remoteContainer instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
-        if(remoteContainer.getEnterAction()) {
-          container.addListener("start", function () {
-            this._getActionHandler().execute(remoteContainer.getEnterAction());
-          }, this);
-        }
-        if(remoteContainer.getMainAction()) {
-          this.setPageAction(container,  remoteContainer.getMainAction());
-        }
-        if(remoteContainer.getBackAction()) {
-          container.addListener("back", function () {
-            this._getActionHandler().execute(remoteContainer.getBackAction());
-          }, this);
-        }
+      if(  remoteContainer instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAware
+          && container instanceof qx.ui.mobile.page.NavigationPage) {
+        this.installPageActions(remoteContainer, container);
       }
       return container;
     },
@@ -285,30 +348,27 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           navPage.getContent().add(headerComponent);
         }
         navPage.getContent().add(selectionComponent);
-        if(remoteNavPage.getPageEndAction()) {
-          navPage._getScrollContainer().addListener("pageEnd", function(e) {
-            this._getActionHandler().execute(remoteNavPage.getPageEndAction());
-          }, this);
-        }
       }, this);
-      /** @type {qx.ui.mobile.page.NavigationPage} */
-      var nextPage = this.createComponent(remoteNavPage.getNextPage());
-      selectionComponent.addListener("changeSelection", function(evt) {
+      if (remoteNavPage.getNextPage()) {
+        /** @type {qx.ui.mobile.page.NavigationPage} */
+        var nextPage = this.createComponent(remoteNavPage.getNextPage());
+        selectionComponent.addListener("changeSelection", function(evt) {
+          // Because of MobileCardPage
+          if(nextPage instanceof qx.ui.mobile.page.NavigationPage) {
+            nextPage.show();
+          } else {
+            var cardPage = nextPage.getUserData("currentPage");
+            if(cardPage) {
+              cardPage.show();
+            }
+          }
+        }, this);
         // Because of MobileCardPage
         if(nextPage instanceof qx.ui.mobile.page.NavigationPage) {
-          nextPage.show();
+          this.linkNextPageBackButton(nextPage, navPage, remoteNavPage.getNextPage().getBackAction());
         } else {
-          var cardPage = nextPage.getUserData("currentPage");
-          if(cardPage) {
-            cardPage.show();
-          }
+          nextPage.setUserData("previousPage", navPage);
         }
-      }, this);
-      // Because of MobileCardPage
-      if(nextPage instanceof qx.ui.mobile.page.NavigationPage) {
-        this.linkNextPageBackButton(nextPage, navPage, remoteNavPage.getNextPage().getBackAction());
-      } else {
-        nextPage.setUserData("previousPage", navPage);
       }
       this._addDetailPage(navPage);
       return navPage;
@@ -322,6 +382,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     linkNextPageBackButton: function (nextPage, previousPage, backAction, animation) {
       if(typeof animation === undefined) animation = "slide";
+
       nextPage.setShowBackButton(true);
       var backButton = nextPage.getLeftContainer().getChildren()[0];
       if(backAction && backAction.getName()) {
@@ -331,9 +392,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         backButton.setIcon("org/jspresso/framework/mobile/back-mobile.png");
         backButton.setShow("icon");
       }
-      nextPage.addListener("back", function () {
-        previousPage.show({animation: animation,  reverse: true});
-      }, this);
+      if(previousPage) {
+        nextPage.addListener("back", function () {
+          previousPage.show({animation: animation,  reverse: true});
+        }, this);
+      }
     },
 
     /**
@@ -1028,23 +1091,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var modelController = new qx.data.controller.Object(state);
       modelController.addTarget(checkBox, "value", "value", true);
       modelController.addTarget(checkBox, "enabled", "writable", false);
-    },
-
-    /**
-     * @param page {qx.ui.mobile.page.NavigationPage}
-     * @param pageAction {org.jspresso.framework.gui.remote.RAction}
-     */
-    setPageAction: function (page, pageAction) {
-      if(pageAction) {
-        page.setButtonText(pageAction.getName());
-        if(pageAction.getIcon()) {
-          page.setButtonIcon(pageAction.getIcon().getImageUrlSpec());
-        }
-        page.addListener("action", function(event) {
-          this._getActionHandler().execute(pageAction);
-        }, this);
-        page.setShowButton(true);
-      }
     },
 
     /**

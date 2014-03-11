@@ -57,20 +57,27 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
     __firstDayOfWeek: null,
 
     /**
+     * @return {qx.ui.core.Widget | qx.ui.mobile.core.Widget}
+     */
+    _createEmptyWidget: function () {
+      throw new Error("_createEmptyWidget is abstract.");
+    },
+
+    /**
      * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
      * @param registerPeers {Boolean}
      * @return {qx.ui.core.Widget | qx.ui.mobile.core.Widget}
      */
     createComponent: function (remoteComponent, registerPeers) {
       if (!remoteComponent) {
-        return new qx.ui.core.Widget();
+        return this.createEmptyWidget();
       }
       if (registerPeers == null) {
         registerPeers = true;
       }
 
       /**
-       * @type {qx.ui.core.Widget}
+       * @type {qx.ui.core.Widget | qx.ui.mobile.core.Widget}
        */
       var component = this._createCustomComponent(remoteComponent);
       if (component == null) {

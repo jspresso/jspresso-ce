@@ -18,11 +18,8 @@
  */
 package org.jspresso.framework.view.descriptor.mobile;
 
-import java.util.List;
-
-import org.jspresso.framework.view.descriptor.EHorizontalPosition;
+import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.AbstractComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
 
 /**
@@ -32,7 +29,12 @@ import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
  * @version $LastChangedRevision$
  */
 public class MobileBorderViewDescriptor extends BasicBorderViewDescriptor
-    implements IMobilePageSectionViewDescriptor {
+    implements IMobilePageSectionViewDescriptor, IMobilePageAware {
+
+  private IDisplayableAction enterAction;
+  private IDisplayableAction backAction;
+  private IDisplayableAction mainAction;
+  private IDisplayableAction pageEndAction;
 
   /**
    *  Not supported in mobile environment.
@@ -53,4 +55,86 @@ public class MobileBorderViewDescriptor extends BasicBorderViewDescriptor
   public void setEastViewDescriptor(IViewDescriptor eastViewDescriptor) {
     throw new UnsupportedOperationException("Not supported in mobile environment.");
   }
+
+  /**
+   * Gets enter action.
+   *
+   * @return the enter action
+   */
+  @Override
+  public IDisplayableAction getEnterAction() {
+    return enterAction;
+  }
+
+  /**
+   * Sets enter action.
+   *
+   * @param enterAction the enter action
+   */
+  @Override
+  public void setEnterAction(IDisplayableAction enterAction) {
+    this.enterAction = enterAction;
+  }
+
+  /**
+   * Gets back action.
+   *
+   * @return the back action
+   */
+  @Override
+  public IDisplayableAction getBackAction() {
+    return backAction;
+  }
+
+  /**
+   * Sets back action.
+   *
+   * @param backAction the back action
+   */
+  @Override
+  public void setBackAction(IDisplayableAction backAction) {
+    this.backAction = backAction;
+  }
+
+  /**
+   * Gets main action.
+   *
+   * @return the main action
+   */
+  @Override
+  public IDisplayableAction getMainAction() {
+    return mainAction;
+  }
+
+  /**
+   * Sets main action.
+   *
+   * @param mainAction the main action
+   */
+  @Override
+  public void setMainAction(IDisplayableAction mainAction) {
+    this.mainAction = mainAction;
+  }
+
+
+  /**
+   * Gets page end action.
+   *
+   * @return the page end action
+   */
+  @Override
+  public IDisplayableAction getPageEndAction() {
+    return pageEndAction;
+  }
+
+  /**
+   * Sets page end action.
+   *
+   * @param pageEndAction the page end action
+   */
+  @Override
+  public void setPageEndAction(IDisplayableAction pageEndAction) {
+    this.pageEndAction = pageEndAction;
+  }
+
 }

@@ -18,34 +18,13 @@
  */
 package org.jspresso.framework.view.descriptor.mobile;
 
-import org.jspresso.framework.view.action.IDisplayableAction;
-
 /**
  * Marker interface for mobile page view descriptors.
  *
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$
  */
-public interface IMobilePageViewDescriptor extends IMobilePageSectionViewDescriptor {
+public interface IMobilePageViewDescriptor extends IMobilePageSectionViewDescriptor, IMobilePageAware {
 
-  /**
-   * Gets enter action. The enter action will be triggered when the user enters the page.
-   *
-   * @return the enter action
-   */
-  IDisplayableAction getEnterAction();
-
-  /**
-   * Gets back action. The back action will be triggered when the user requests back navigation.
-   *
-   * @return the back action
-   */
-  IDisplayableAction getBackAction();
-
-  /**
-   * Gets main action. The main action will be displayed at the up right corner of the page.
-   *
-   * @return the main action
-   */
-  IDisplayableAction getMainAction();
+  // Jus a marker as of now.
 }

@@ -30,14 +30,30 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.mobile.RMobilePage", {
-  extend: org.jspresso.framework.gui.remote.mobile.RMobilePageAware,
+qx.Class.define("org.jspresso.framework.gui.remote.mobile.RMobilePageAware", {
+  extend: org.jspresso.framework.gui.remote.RContainer,
 
   construct: function () {
     this.base(arguments);
   },
 
   properties: {
+    enterAction: {
+      check: "org.jspresso.framework.gui.remote.RAction",
+      nullable: true
+    },
+    backAction: {
+      check: "org.jspresso.framework.gui.remote.RAction",
+      nullable: true
+    },
+    mainAction: {
+      check: "org.jspresso.framework.gui.remote.RAction",
+      nullable: true
+    },
+    pageEndAction: {
+      check: "org.jspresso.framework.gui.remote.RAction",
+      nullable: true
+    }
   }
 
 });

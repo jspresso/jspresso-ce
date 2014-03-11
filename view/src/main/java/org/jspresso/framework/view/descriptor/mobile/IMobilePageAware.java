@@ -19,100 +19,68 @@
 package org.jspresso.framework.view.descriptor.mobile;
 
 import org.jspresso.framework.view.action.IDisplayableAction;
-import org.jspresso.framework.view.descriptor.basic.BasicCompositeViewDescriptor;
 
 /**
- * Abstract base class for mobile page view descriptors.
+ * Interface for mobile view descriptors that are aware of page end events.
  *
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$
  */
-public abstract class AbstractMobilePageViewDescriptor extends BasicCompositeViewDescriptor
-    implements IMobilePageViewDescriptor {
-
-  private IDisplayableAction enterAction;
-  private IDisplayableAction backAction;
-  private IDisplayableAction mainAction;
-  private IDisplayableAction pageEndAction;
+public interface IMobilePageAware {
 
   /**
-   * Gets enter action.
+   * Gets enter action. The enter action will be triggered when the user enters the page.
    *
    * @return the enter action
    */
-  @Override
-  public IDisplayableAction getEnterAction() {
-    return enterAction;
-  }
+  IDisplayableAction getEnterAction();
 
   /**
    * Sets enter action.
    *
    * @param enterAction the enter action
    */
-  @Override
-  public void setEnterAction(IDisplayableAction enterAction) {
-    this.enterAction = enterAction;
-  }
+  void setEnterAction(IDisplayableAction enterAction);
 
   /**
-   * Gets back action.
+   * Gets back action. The back action will be triggered when the user requests back navigation.
    *
    * @return the back action
    */
-  @Override
-  public IDisplayableAction getBackAction() {
-    return backAction;
-  }
+  IDisplayableAction getBackAction();
 
   /**
    * Sets back action.
    *
    * @param backAction the back action
    */
-  @Override
-  public void setBackAction(IDisplayableAction backAction) {
-    this.backAction = backAction;
-  }
+  void setBackAction(IDisplayableAction backAction);
 
   /**
-   * Gets main action.
+   * Gets main action. The main action will be displayed at the up right corner of the page.
    *
    * @return the main action
    */
-  @Override
-  public IDisplayableAction getMainAction() {
-    return mainAction;
-  }
+  IDisplayableAction getMainAction();
 
   /**
    * Sets main action.
    *
    * @param mainAction the main action
    */
-  @Override
-  public void setMainAction(IDisplayableAction mainAction) {
-    this.mainAction = mainAction;
-  }
-
+  void setMainAction(IDisplayableAction mainAction);
 
   /**
-   * Gets page end action.
+   * Gets page end action. The page end action will be triggered when the user scrolls the page to the end.
    *
    * @return the page end action
    */
-  @Override
-  public IDisplayableAction getPageEndAction() {
-    return pageEndAction;
-  }
+  IDisplayableAction getPageEndAction();
 
   /**
    * Sets page end action.
    *
    * @param pageEndAction the page end action
    */
-  @Override
-  public void setPageEndAction(IDisplayableAction pageEndAction) {
-    this.pageEndAction = pageEndAction;
-  }
+  void setPageEndAction(IDisplayableAction pageEndAction);
 }

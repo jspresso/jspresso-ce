@@ -65,16 +65,21 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      *
      * @param title {String}
      * @param message {String}
-     * @param dialogView {qx.ui.core.Widget}
+     * @param remoteDialogView {org.jspresso.framework.gui.remote.RComponent}
      * @param icon {org.jspresso.framework.gui.remote.RIcon}
      * @param buttons {qx.ui.form.Button[]}
      * @param useCurrent {Boolean}
      * @param dimension {org.jspresso.framework.util.gui.Dimension}
      * @return {undefined}
      */
-    _popupDialog: function (title, message, dialogView, icon, buttons, useCurrent, dimension) {
+    _popupDialog: function (title, message, remoteDialogView, icon, buttons, useCurrent, dimension) {
       useCurrent = (typeof useCurrent == 'undefined') ? false : useCurrent;
 
+      var dialogView = remoteDialogView;
+      if (remoteDialogView instanceof org.jspresso.framework.gui.remote.RComponent) {
+        dialogView = this._getViewFactory().createComponent(remoteDialogView);
+      }
+      var dialogView = this._getViewFactory().createComponent(remoteDialogView);
       var buttonBox = new qx.ui.container.Composite();
       buttonBox.setLayout(new qx.ui.layout.HBox(10, "right"));
 
@@ -608,7 +613,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           instanceof org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand) {
         var dialogCommand = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand} */
             abstractDialogCommand;
-        dialogView = this.createComponent(dialogCommand.getView());
+        dialogView = dialogCommand.getView();
         icon = dialogCommand.getView().getIcon();
       } else if (abstractDialogCommand
           instanceof org.jspresso.framework.application.frontend.command.remote.RemoteFlashDisplayCommand) {

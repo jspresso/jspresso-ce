@@ -819,8 +819,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
       }, this);
       var loginButtons = [];
       loginButtons.push(loginButton);
-      var dialogView = this.createComponent(loginCommand.getLoginView());
-      this._popupDialog(loginCommand.getTitle(), loginCommand.getMessage(), dialogView,
+      this._popupDialog(loginCommand.getTitle(), loginCommand.getMessage(), loginCommand.getLoginView(),
           loginCommand.getLoginView().getIcon(), loginButtons);
     },
 

@@ -30,7 +30,7 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.mobile.RMobilePage", {
+qx.Class.define("org.jspresso.framework.gui.remote.mobile.RMobilePageAwareContainer", {
   extend: org.jspresso.framework.gui.remote.mobile.RMobilePageAware,
 
   construct: function () {
@@ -38,6 +38,10 @@ qx.Class.define("org.jspresso.framework.gui.remote.mobile.RMobilePage", {
   },
 
   properties: {
+    content: {
+      check: "org.jspresso.framework.gui.remote.RComponent",
+      nullable: true
+    }
   }
 
 });

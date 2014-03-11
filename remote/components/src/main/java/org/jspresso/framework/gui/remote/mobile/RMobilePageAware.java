@@ -16,32 +16,51 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.view.descriptor.mobile;
+package org.jspresso.framework.gui.remote.mobile;
 
-import org.jspresso.framework.view.action.IDisplayableAction;
-import org.jspresso.framework.view.descriptor.basic.BasicCompositeViewDescriptor;
+import org.jspresso.framework.gui.remote.RAction;
+import org.jspresso.framework.gui.remote.RComponent;
+import org.jspresso.framework.gui.remote.RContainer;
 
 /**
- * Abstract base class for mobile page view descriptors.
+ * A mobile page.
  *
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$
  */
-public abstract class AbstractMobilePageViewDescriptor extends BasicCompositeViewDescriptor
-    implements IMobilePageViewDescriptor {
+public abstract class RMobilePageAware extends RContainer {
 
-  private IDisplayableAction enterAction;
-  private IDisplayableAction backAction;
-  private IDisplayableAction mainAction;
-  private IDisplayableAction pageEndAction;
+  private static final long serialVersionUID = 7539787721325728438L;
+
+  private RAction enterAction;
+  private RAction backAction;
+  private RAction mainAction;
+  private RAction pageEndAction;
+
+  /**
+   * Constructs a new {@code RMobilePageAwareContainer} instance.
+   *
+   * @param guid
+   *     the guid
+   */
+  public RMobilePageAware(String guid) {
+    super(guid);
+  }
+
+  /**
+   * Constructs a new {@code RMobilePageAware} instance. Only used for
+   * serialization support.
+   */
+  public RMobilePageAware() {
+    // For serialization support
+  }
 
   /**
    * Gets enter action.
    *
    * @return the enter action
    */
-  @Override
-  public IDisplayableAction getEnterAction() {
+  public RAction getEnterAction() {
     return enterAction;
   }
 
@@ -50,8 +69,7 @@ public abstract class AbstractMobilePageViewDescriptor extends BasicCompositeVie
    *
    * @param enterAction the enter action
    */
-  @Override
-  public void setEnterAction(IDisplayableAction enterAction) {
+  public void setEnterAction(RAction enterAction) {
     this.enterAction = enterAction;
   }
 
@@ -60,18 +78,17 @@ public abstract class AbstractMobilePageViewDescriptor extends BasicCompositeVie
    *
    * @return the back action
    */
-  @Override
-  public IDisplayableAction getBackAction() {
+  public RAction getBackAction() {
     return backAction;
   }
 
   /**
    * Sets back action.
    *
-   * @param backAction the back action
+   * @param backAction
+   *     the back action
    */
-  @Override
-  public void setBackAction(IDisplayableAction backAction) {
+  public void setBackAction(RAction backAction) {
     this.backAction = backAction;
   }
 
@@ -80,29 +97,26 @@ public abstract class AbstractMobilePageViewDescriptor extends BasicCompositeVie
    *
    * @return the main action
    */
-  @Override
-  public IDisplayableAction getMainAction() {
+  public RAction getMainAction() {
     return mainAction;
   }
 
   /**
    * Sets main action.
    *
-   * @param mainAction the main action
+   * @param mainAction
+   *     the main action
    */
-  @Override
-  public void setMainAction(IDisplayableAction mainAction) {
+  public void setMainAction(RAction mainAction) {
     this.mainAction = mainAction;
   }
-
 
   /**
    * Gets page end action.
    *
    * @return the page end action
    */
-  @Override
-  public IDisplayableAction getPageEndAction() {
+  public RAction getPageEndAction() {
     return pageEndAction;
   }
 
@@ -111,8 +125,7 @@ public abstract class AbstractMobilePageViewDescriptor extends BasicCompositeVie
    *
    * @param pageEndAction the page end action
    */
-  @Override
-  public void setPageEndAction(IDisplayableAction pageEndAction) {
+  public void setPageEndAction(RAction pageEndAction) {
     this.pageEndAction = pageEndAction;
   }
 }

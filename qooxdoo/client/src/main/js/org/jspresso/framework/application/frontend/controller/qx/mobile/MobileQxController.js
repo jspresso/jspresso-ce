@@ -123,15 +123,20 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      *
      * @param title {String}
      * @param message {String}
-     * @param dialogView {qx.ui.mobile.core.Widget}
+     * @param remoteDialogView {org.jspresso.framework.gui.remote.RComponent}
      * @param icon {org.jspresso.framework.gui.remote.RIcon}
      * @param buttons {qx.ui.mobile.form.Button[]}
      * @param useCurrent {Boolean}
      * @param dimension {org.jspresso.framework.util.gui.Dimension}
      * @return {undefined}
      */
-    _popupDialog: function (title, message, dialogView, icon, buttons, useCurrent, dimension) {
+    _popupDialog: function (title, message, remoteDialogView, icon, buttons, useCurrent, dimension) {
       useCurrent = (typeof useCurrent == 'undefined') ? false : useCurrent;
+
+      var dialogView = remoteDialogView;
+      if (remoteDialogView instanceof org.jspresso.framework.gui.remote.RComponent) {
+        dialogView = this._getViewFactory().createComponent(remoteDialogView);
+      }
 
       var dialogContent = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
       var dialogMessage = new qx.ui.mobile.embed.Html(message);
@@ -162,12 +167,14 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         //this._getViewFactory().setIcon(dialogPage, icon);
         this._dialogStack.push([dialogPage, null, null]);
         this.__manager.addDetail(dialogPage);
-        dialogPage.setTitle(title);
         dialogPage.show({animation: "slideup"});
       } else {
         dialogPage.getContent().removeAll();
         dialogPage.getContent().add(dialogContent);
-        dialogPage.setTitle(title);
+      }
+      dialogPage.setTitle(title);
+      if(remoteDialogView instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAware) {
+        this._getViewFactory().installPageActions(remoteDialogView, dialogPage);
       }
       if (this.__manager.getMasterButton()) {
         this.__manager.getMasterButton().exclude();
@@ -245,7 +252,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       this.__workspacesMasterPage.setTitle(this.translate("Workspaces"));
       this.__manager.addMaster(this.__workspacesMasterPage);
       if (!this.__workspacesMasterPage.isTablet()) {
-        this._getViewFactory().setPageAction(this.__workspacesMasterPage, exitAction);
+        this._getViewFactory().installPageMainAction(this.__workspacesMasterPage, exitAction);
       }
       this.__workspacesMasterPage.show();
     },
@@ -265,7 +272,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         var workspacePage = this.createComponent(workspaceView);
         this.__workspacePages[workspaceName] = workspacePage;
         if (workspacePage.isTablet()) {
-          this._getViewFactory().setPageAction(workspacePage, this.__exitAction);
+          this._getViewFactory().installPageMainAction(workspacePage, this.__exitAction);
         } else {
           this._getViewFactory().linkNextPageBackButton(workspacePage, this.__workspacesMasterPage,
               workspaceView.getBackAction(), "cube");
@@ -437,7 +444,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
           instanceof org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand) {
         var dialogCommand = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand} */
             abstractDialogCommand;
-        dialogView = this.createComponent(dialogCommand.getView());
+        dialogView = dialogCommand.getView();
         icon = dialogCommand.getView().getIcon();
       }
       this._popupDialog(abstractDialogCommand.getTitle(), null, dialogView, icon, dialogButtons,

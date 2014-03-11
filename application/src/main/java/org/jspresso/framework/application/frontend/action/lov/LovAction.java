@@ -56,6 +56,7 @@ import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
+import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -227,16 +228,14 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
     // We must bind before querying for potential lazy loading to happen during
     // the transaction.
-    IView<E> lovView = getViewFactory(context).createView(
-        lovViewDescriptorFactory.createLovViewDescriptor(erqDescriptor,
-            getSelectionMode(context), okAction, context), actionHandler,
+    IView<E> lovView = getViewFactory(context).createView(createLovViewDescriptor(erqDescriptor, context), actionHandler,
         getLocale(context));
     IValueConnector queryEntityConnector = (IValueConnector) context
         .get(CreateQueryComponentAction.QUERY_MODEL_CONNECTOR);
     getMvcBinder(context).bind(lovView.getConnector(), queryEntityConnector);
 
     if (autoquery) {
-      actionHandler.execute(findAction, context);
+      actionHandler.execute(getFindAction(), context);
       if (autoCompletePropertyValue != null
           && autoCompletePropertyValue.length() > 0
           && !autoCompletePropertyValue.equals("*")
@@ -278,27 +277,12 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
                   .merge((IEntity) selectedItem, EMergeMode.MERGE_LAZY);
             }
             context.put(LOV_SELECTED_ITEM, selectedItem);
-            actionHandler.execute(okAction, context);
+            actionHandler.execute(getOkAction(), context);
             return true;
           }
         }
       }
-      if (preselectedItem != null
-          && queryComponent.getQueriedComponents().size() > 0) {
-        for (int i = 0; i < queryComponent.getQueriedComponents().size(); i++) {
-          if (preselectedItem.equals(queryComponent.getQueriedComponents().get(
-              i))) {
-            // this is from the dialog.
-            ICollectionConnector resultConnector = (ICollectionConnector) ((ICompositeValueConnector) lovView
-                .getConnector())
-                .getChildConnector(IQueryComponent.QUERIED_COMPONENTS);
-            if (resultConnector != null) {
-              resultConnector.setSelectedIndices(i);
-            }
-            break;
-          }
-        }
-      }
+      handlePreselectedItem(preselectedItem, queryComponent, lovView);
     }
     feedContextWithDialog(erqDescriptor, queryComponent, lovView,
         actionHandler, context);
@@ -310,7 +294,55 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     return super.execute(actionHandler, context);
   }
 
-  private void feedContextWithDialog(
+  /**
+   * Create lov view descriptor.
+   *
+   * @param erqDescriptor the erq descriptor
+   * @param context the context
+   * @return the i view descriptor
+   */
+  protected IViewDescriptor createLovViewDescriptor(IReferencePropertyDescriptor<IComponent> erqDescriptor,
+                                                    Map<String, Object> context) {
+    return lovViewDescriptorFactory.createLovViewDescriptor(erqDescriptor,
+        getSelectionMode(context), getOkAction(), context);
+  }
+
+  /**
+   * Handle preselected item.
+   *
+   * @param preselectedItem the preselected item
+   * @param queryComponent the query component
+   * @param lovView the lov view
+   */
+  protected void handlePreselectedItem(Object preselectedItem, IQueryComponent queryComponent, IView<E> lovView) {
+    if (preselectedItem != null
+        && queryComponent.getQueriedComponents().size() > 0) {
+      for (int i = 0; i < queryComponent.getQueriedComponents().size(); i++) {
+        if (preselectedItem.equals(queryComponent.getQueriedComponents().get(
+            i))) {
+          // this is from the dialog.
+          ICollectionConnector resultConnector = (ICollectionConnector) ((ICompositeValueConnector) lovView
+              .getConnector())
+              .getChildConnector(IQueryComponent.QUERIED_COMPONENTS);
+          if (resultConnector != null) {
+            resultConnector.setSelectedIndices(i);
+          }
+          break;
+        }
+      }
+    }
+  }
+
+  /**
+   * Feed context with dialog.
+   *
+   * @param erqDescriptor the erq descriptor
+   * @param queryComponent the query component
+   * @param lovView the lov view
+   * @param actionHandler the action handler
+   * @param context the context
+   */
+  protected void feedContextWithDialog(
       IReferencePropertyDescriptor<IComponent> erqDescriptor,
       IQueryComponent queryComponent, IView<E> lovView,
       final IActionHandler actionHandler, final Map<String, Object> context) {
@@ -318,9 +350,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     getViewConnector(context).setConnectorValue(
         getViewConnector(context).getConnectorValue());
 
-    actions.add(okAction);
-    actions.add(findAction);
-    actions.add(cancelAction);
+    actions.add(getOkAction());
+    actions.add(getFindAction());
+    actions.add(getCancelAction());
     context.put(ModalDialogAction.DIALOG_ACTIONS, actions);
     context.put(
         ModalDialogAction.DIALOG_TITLE,
@@ -442,6 +474,15 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    */
   public void setCancelAction(IDisplayableAction cancelAction) {
     this.cancelAction = cancelAction;
+  }
+
+  /**
+   * Gets cancel action.
+   *
+   * @return the cancel action
+   */
+  public IDisplayableAction getCancelAction() {
+    return cancelAction;
   }
 
   /**
@@ -654,7 +695,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    *          the LOV context.
    * @return the default selection mode for the result view.
    */
-  private ESelectionMode getDefaultSelectionMode(Map<String, Object> lovContext) {
+  protected ESelectionMode getDefaultSelectionMode(Map<String, Object> lovContext) {
     if (getModel(lovContext) instanceof IQueryComponent) {
       // We are on a filter view that supports multi selection
       return ESelectionMode.MULTIPLE_INTERVAL_CUMULATIVE_SELECTION;

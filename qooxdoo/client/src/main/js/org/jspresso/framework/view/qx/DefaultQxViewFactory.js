@@ -88,6 +88,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
   },
 
   members: {
+    /**
+     * @return {qx.ui.core.Widget}
+     */
+    _createEmptyWidget: function () {
+      return new qx.ui.core.Widget();
+    },
 
     /**
      * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}

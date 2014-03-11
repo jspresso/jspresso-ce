@@ -18,31 +18,55 @@
  */
 package org.jspresso.framework.gui.remote.mobile;
 
+import org.jspresso.framework.gui.remote.RAction;
+import org.jspresso.framework.gui.remote.RComponent;
+import org.jspresso.framework.gui.remote.RContainer;
+
 /**
  * A mobile page.
  *
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$
  */
-public abstract class RMobilePage extends RMobilePageAware {
+public class RMobilePageAwareContainer extends RMobilePageAware {
 
-  private static final long serialVersionUID = 8140805319640281435L;
+  private static final long serialVersionUID = 9067959612763951538L;
+
+  private RComponent content;
 
   /**
-   * Constructs a new {@code RMobilePage} instance.
+   * Constructs a new {@code RMobilePageAwareContainer} instance.
    *
    * @param guid
    *     the guid
    */
-  public RMobilePage(String guid) {
+  public RMobilePageAwareContainer(String guid) {
     super(guid);
   }
 
   /**
-   * Constructs a new {@code RMobilePage} instance. Only used for
+   * Constructs a new {@code RMobilePageAwareContainer} instance. Only used for
    * serialization support.
    */
-  public RMobilePage() {
+  public RMobilePageAwareContainer() {
     // For serialization support
+  }
+
+  /**
+   * Gets content.
+   *
+   * @return the content
+   */
+  public RComponent getContent() {
+    return content;
+  }
+
+  /**
+   * Sets content.
+   *
+   * @param content the content
+   */
+  public void setContent(RComponent content) {
+    this.content = content;
   }
 }

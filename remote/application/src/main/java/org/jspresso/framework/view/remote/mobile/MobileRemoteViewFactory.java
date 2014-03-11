@@ -37,6 +37,8 @@ import org.jspresso.framework.gui.remote.mobile.RMobileCompositePage;
 import org.jspresso.framework.gui.remote.mobile.RMobileList;
 import org.jspresso.framework.gui.remote.mobile.RMobileNavPage;
 import org.jspresso.framework.gui.remote.mobile.RMobilePage;
+import org.jspresso.framework.gui.remote.mobile.RMobilePageAware;
+import org.jspresso.framework.gui.remote.mobile.RMobilePageAwareContainer;
 import org.jspresso.framework.gui.remote.mobile.RMobileTree;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.view.BasicCompositeView;
@@ -55,6 +57,7 @@ import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.jspresso.framework.view.descriptor.mobile.IMobilePageAware;
 import org.jspresso.framework.view.descriptor.mobile.IMobilePageSectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.IMobilePageViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.IMobileViewDescriptor;
@@ -115,16 +118,24 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
         } else if (viewDescriptor instanceof MobileCardPageViewDescriptor) {
           view = createMobileCardPageView((MobileCardPageViewDescriptor) viewDescriptor, actionHandler, locale);
         }
-        if (view != null) {
-          ((RMobilePage) view.getPeer()).setEnterAction(getActionFactory().createAction(
-              ((IMobilePageViewDescriptor) viewDescriptor).getEnterAction(), actionHandler, view, locale));
-          ((RMobilePage) view.getPeer()).setBackAction(getActionFactory().createAction(
-              ((IMobilePageViewDescriptor) viewDescriptor).getBackAction(), actionHandler, view, locale));
-          ((RMobilePage) view.getPeer()).setMainAction(getActionFactory().createAction(
-              ((IMobilePageViewDescriptor) viewDescriptor).getMainAction(), actionHandler, view, locale));
-        }
       } else if (viewDescriptor instanceof MobileBorderViewDescriptor) {
         view = createBorderView((MobileBorderViewDescriptor) viewDescriptor, actionHandler, locale);
+      }
+      if (view != null
+          && view.getDescriptor() instanceof IMobilePageAware) {
+        if (!(view.getPeer() instanceof RMobilePageAware)) {
+          RMobilePageAwareContainer wrapper = createRMobilePageAwareContainer();
+          wrapper.setContent(view.getPeer());
+          view.setPeer(wrapper);
+        }
+        ((RMobilePageAware) view.getPeer()).setEnterAction(getActionFactory().createAction(
+            ((IMobilePageAware) viewDescriptor).getEnterAction(), actionHandler, view, locale));
+        ((RMobilePageAware) view.getPeer()).setBackAction(getActionFactory().createAction(
+            ((IMobilePageAware) viewDescriptor).getBackAction(), actionHandler, view, locale));
+        ((RMobilePageAware) view.getPeer()).setMainAction(getActionFactory().createAction(
+            ((IMobilePageAware) viewDescriptor).getMainAction(), actionHandler, view, locale));
+        ((RMobilePageAware) view.getPeer()).setPageEndAction(getActionFactory().createAction(
+            ((IMobilePageAware) viewDescriptor).getPageEndAction(), actionHandler, view, locale));
       }
       bindCompositeView(view);
       return view;
@@ -194,10 +205,6 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
         getModelCascadingBinder().bind(selectionViewConnector, nextPageView.getConnector());
       }
     }
-    if (viewDescriptor.getPageEndAction() != null) {
-      viewComponent.setPageEndAction(getActionFactory().createAction(viewDescriptor.getPageEndAction(), actionHandler,
-          view, locale));
-    }
     view.setChildren(childrenViews);
     return view;
   }
@@ -252,6 +259,10 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
 
   private RMobileCardPage createRMobileCardPage(MobileCardPageViewDescriptor viewDescriptor) {
     return new RMobileCardPage(getGuidGenerator().generateGUID());
+  }
+
+  private RMobilePageAwareContainer createRMobilePageAwareContainer() {
+    return new RMobilePageAwareContainer(getGuidGenerator().generateGUID());
   }
 
   /**

@@ -46,10 +46,7 @@ qx.Class.define("org.jspresso.framework.gui.remote.mobile.RMobileNavPage", {
       check: "org.jspresso.framework.gui.remote.RComponent"
     },
     nextPage: {
-      check: "org.jspresso.framework.gui.remote.mobile.RMobilePage"
-    },
-    pageEndAction: {
-      check: "org.jspresso.framework.gui.remote.RAction",
+      check: "org.jspresso.framework.gui.remote.mobile.RMobilePage",
       nullable: true
     }
   }

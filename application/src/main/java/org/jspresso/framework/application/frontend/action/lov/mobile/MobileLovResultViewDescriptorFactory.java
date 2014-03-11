@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2014 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -16,19 +16,19 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.frontend.action.lov;
+package org.jspresso.framework.application.frontend.action.lov.mobile;
 
 import java.util.Map;
 
-import org.jspresso.framework.application.action.AbstractActionContextAware;
+import org.jspresso.framework.application.frontend.action.lov.AbstractLovResultViewDescriptorFactory;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
-import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
 import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
+import org.jspresso.framework.view.descriptor.mobile.MobileListViewDescriptor;
 
 /**
  * A default implementation for lov result view factories.
@@ -36,7 +36,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicLovResultViewDescriptorFactory extends
+public class MobileLovResultViewDescriptorFactory extends
     AbstractLovResultViewDescriptorFactory {
 
   /**
@@ -47,7 +47,7 @@ public class BasicLovResultViewDescriptorFactory extends
   public BasicViewDescriptor createResultViewDescriptor(
       IComponentDescriptorProvider<IComponent> entityRefDescriptor,
       Map<String, Object> lovContext) {
-    BasicTableViewDescriptor resultViewDescriptor = new BasicTableViewDescriptor();
+    MobileListViewDescriptor resultViewDescriptor = new MobileListViewDescriptor();
 
     ICollectionPropertyDescriptor<IComponent> queriedEntitiesDescriptor;
     queriedEntitiesDescriptor = (ICollectionPropertyDescriptor<IComponent>) getQueryComponentDescriptorFactory()
@@ -56,15 +56,7 @@ public class BasicLovResultViewDescriptorFactory extends
 
     resultViewDescriptor.setModelDescriptor(queriedEntitiesDescriptor);
     resultViewDescriptor.setReadOnly(true);
-    resultViewDescriptor.setRenderedProperties(entityRefDescriptor
-        .getRenderedProperties());
-    if (getModel(lovContext) instanceof IQueryComponent) {
-      // We are on a filter view that supports multi selection
-      resultViewDescriptor
-          .setSelectionMode(ESelectionMode.MULTIPLE_INTERVAL_CUMULATIVE_SELECTION);
-    } else {
-      resultViewDescriptor.setSelectionMode(ESelectionMode.SINGLE_SELECTION);
-    }
+    resultViewDescriptor.setSelectionMode(ESelectionMode.SINGLE_SELECTION);
 
     resultViewDescriptor.setPermId("Lov." + entityRefDescriptor.getName());
     return resultViewDescriptor;
