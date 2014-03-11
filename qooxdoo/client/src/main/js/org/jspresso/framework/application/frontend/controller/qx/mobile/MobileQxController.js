@@ -167,7 +167,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         //this._getViewFactory().setIcon(dialogPage, icon);
         this._dialogStack.push([dialogPage, null, null]);
         this.__manager.addDetail(dialogPage);
-        dialogPage.show({animation: "slideup"});
       } else {
         dialogPage.getContent().removeAll();
         dialogPage.getContent().add(dialogContent);
@@ -176,6 +175,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       if(remoteDialogView instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAware) {
         this._getViewFactory().installPageActions(remoteDialogView, dialogPage);
       }
+      dialogPage.show({animation: "slideup"});
       if (this.__manager.getMasterButton()) {
         this.__manager.getMasterButton().exclude();
       }
@@ -193,12 +193,16 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
           //topDialogPage.destroy();
         }
       }
-      if(this._dialogStack && this._dialogStack.length == 1) {
-        if (this.__pageToRestore) {
-          this.__pageToRestore.show();
-        }
-        if (this.__manager.getMasterButton()) {
-          this.__manager.getMasterButton().setVisibility("visible");
+      if(this._dialogStack) {
+        if (this._dialogStack.length == 1) {
+          if (this.__pageToRestore) {
+            this.__pageToRestore.show();
+          }
+          if (this.__manager.getMasterButton()) {
+            this.__manager.getMasterButton().setVisibility("visible");
+          }
+        } else {
+          this._dialogStack[this._dialogStack.length-1][0].show({animation: "slideup"});
         }
       }
     },
