@@ -392,6 +392,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         backButton.setIcon("org/jspresso/framework/mobile/back-mobile.png");
         backButton.setShow("icon");
       }
+      if(backAction) {
+        nextPage.addListener("back", function () {
+          this._getActionHandler().execute(backAction);
+        }, this);
+      }
       if(previousPage) {
         nextPage.addListener("back", function () {
           previousPage.show({animation: animation,  reverse: true});
