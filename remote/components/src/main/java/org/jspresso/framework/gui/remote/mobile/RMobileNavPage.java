@@ -30,6 +30,7 @@ import org.jspresso.framework.gui.remote.RComponent;
 public class RMobileNavPage extends RMobilePage {
 
   private static final long serialVersionUID = 5221935284465846374L;
+  private RComponent  headerView;
   private RComponent  selectionView;
   private RMobilePage nextPage;
   private RAction     pageEndAction;
@@ -90,11 +91,39 @@ public class RMobileNavPage extends RMobilePage {
     this.nextPage = nextPage;
   }
 
+  /**
+   * Gets page end action.
+   *
+   * @return the page end action
+   */
   public RAction getPageEndAction() {
     return pageEndAction;
   }
 
+  /**
+   * Sets page end action.
+   *
+   * @param pageEndAction the page end action
+   */
   public void setPageEndAction(RAction pageEndAction) {
     this.pageEndAction = pageEndAction;
+  }
+
+  /**
+   * Gets header view.
+   *
+   * @return the header view
+   */
+  public RComponent getHeaderView() {
+    return headerView;
+  }
+
+  /**
+   * Sets header view.
+   *
+   * @param headerView the header view
+   */
+  public void setHeaderView(RComponent headerView) {
+    this.headerView = headerView;
   }
 }

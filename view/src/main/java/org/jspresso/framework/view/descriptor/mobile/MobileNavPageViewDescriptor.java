@@ -36,6 +36,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  */
 public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescriptor {
 
+  private IViewDescriptor           headerView;
   private IViewDescriptor           selectionView;
   private IMobilePageViewDescriptor nextPage;
   private IDisplayableAction        pageEndAction;
@@ -47,7 +48,7 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
    */
   @Override
   public boolean isCascadingModels() {
-    return true;
+    return false;
   }
 
   /**
@@ -63,9 +64,9 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
 
   @Override
   public List<IViewDescriptor> getChildViewDescriptors() {
+    completeChildDescriptor(headerView, null);
     completeChildDescriptor(selectionView, null);
-    completeChildDescriptor(nextPage, selectionView);
-    return Arrays.asList(selectionView, nextPage);
+    return Arrays.asList(headerView, selectionView);
   }
 
   /**
@@ -151,5 +152,23 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
    */
   public void setPageEndAction(IDisplayableAction pageEndAction) {
     this.pageEndAction = pageEndAction;
+  }
+
+  /**
+   * Gets header view.
+   *
+   * @return the header view
+   */
+  public IViewDescriptor getHeaderView() {
+    return headerView;
+  }
+
+  /**
+   * Sets header view.
+   *
+   * @param headerView the header view
+   */
+  public void setHeaderView(IViewDescriptor headerView) {
+    this.headerView = headerView;
   }
 }

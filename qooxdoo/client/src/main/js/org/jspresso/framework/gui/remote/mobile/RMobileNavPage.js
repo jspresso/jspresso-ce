@@ -38,6 +38,10 @@ qx.Class.define("org.jspresso.framework.gui.remote.mobile.RMobileNavPage", {
   },
 
   properties: {
+    headerView: {
+      check: "org.jspresso.framework.gui.remote.RComponent",
+      nullable: true
+    },
     selectionView: {
       check: "org.jspresso.framework.gui.remote.RComponent"
     },

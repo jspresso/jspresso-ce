@@ -25,6 +25,7 @@ import java.util.Locale;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
 import org.jspresso.framework.binding.ICompositeValueConnector;
+import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RCardContainer;
 import org.jspresso.framework.gui.remote.RComponent;
@@ -174,15 +175,24 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     RMobileNavPage viewComponent = createRMobileNavPage(viewDescriptor);
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent, viewDescriptor);
     List<IView<RComponent>> childrenViews = new ArrayList<>();
+    if (viewDescriptor.getHeaderView() != null) {
+      IView<RComponent> headerView = createView(viewDescriptor.getHeaderView(), actionHandler, locale);
+      viewComponent.setHeaderView(headerView.getPeer());
+      childrenViews.add(headerView);
+    }
+    IValueConnector selectionViewConnector = null;
     if (viewDescriptor.getSelectionView() != null) {
       IView<RComponent> selectionView = createView(viewDescriptor.getSelectionView(), actionHandler, locale);
       viewComponent.setSelectionView(selectionView.getPeer());
       childrenViews.add(selectionView);
+      selectionViewConnector = selectionView.getConnector();
     }
     if (viewDescriptor.getNextPage() != null) {
       IView<RComponent> nextPageView = createView(viewDescriptor.getNextPage(), actionHandler, locale);
       viewComponent.setNextPage((RMobilePage) nextPageView.getPeer());
-      childrenViews.add(nextPageView);
+      if (selectionViewConnector != null) {
+        getModelCascadingBinder().bind(selectionViewConnector, nextPageView.getConnector());
+      }
     }
     if (viewDescriptor.getPageEndAction() != null) {
       viewComponent.setPageEndAction(getActionFactory().createAction(viewDescriptor.getPageEndAction(), actionHandler,

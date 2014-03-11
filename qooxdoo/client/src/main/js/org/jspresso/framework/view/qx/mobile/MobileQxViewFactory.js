@@ -273,11 +273,18 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createMobileNavPage: function (remoteNavPage) {
       /** @type {qx.ui.mobile.list.List} */
-      var selectionList = this.createComponent(remoteNavPage.getSelectionView());
+      var selectionComponent = this.createComponent(remoteNavPage.getSelectionView());
+      var headerComponent;
+      if (remoteNavPage.getHeaderView()) {
+        headerComponent = this.createComponent(remoteNavPage.getHeaderView());
+      }
       var navPage = new qx.ui.mobile.page.NavigationPage();
       navPage.setTitle(remoteNavPage.getLabel());
       navPage.addListener("initialize", function (e) {
-        navPage.getContent().add(selectionList);
+        if (headerComponent) {
+          navPage.getContent().add(headerComponent);
+        }
+        navPage.getContent().add(selectionComponent);
         if(remoteNavPage.getPageEndAction()) {
           navPage._getScrollContainer().addListener("pageEnd", function(e) {
             this._getActionHandler().execute(remoteNavPage.getPageEndAction());
@@ -286,7 +293,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       }, this);
       /** @type {qx.ui.mobile.page.NavigationPage} */
       var nextPage = this.createComponent(remoteNavPage.getNextPage());
-      selectionList.addListener("changeSelection", function(evt) {
+      selectionComponent.addListener("changeSelection", function(evt) {
         // Because of MobileCardPage
         if(nextPage instanceof qx.ui.mobile.page.NavigationPage) {
           nextPage.show();

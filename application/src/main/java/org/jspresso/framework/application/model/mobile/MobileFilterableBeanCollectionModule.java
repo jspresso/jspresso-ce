@@ -18,9 +18,7 @@
  */
 package org.jspresso.framework.application.model.mobile;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import org.jspresso.framework.application.frontend.action.std.mobile.AddPageAction;
 import org.jspresso.framework.application.model.FilterableBeanCollectionModule;
@@ -67,13 +65,12 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
     BeanCollectionModuleDescriptor moduleDescriptor = getDescriptor();
     ((BasicViewDescriptor) moduleObjectsView).setModelDescriptor(moduleDescriptor.getPropertyDescriptor(
         MobileBeanCollectionModule.MODULE_OBJECTS));
-    MobileNavPageViewDescriptor moduleObjectsPageView = new MobileNavPageViewDescriptor();
-    moduleObjectsPageView.setEnterAction(getQueryModuleFilterAction());
-    moduleObjectsPageView.setSelectionView(moduleObjectsView);
+    MobileNavPageViewDescriptor modulePageView = new MobileNavPageViewDescriptor();
+    modulePageView.setSelectionView(moduleObjectsView);
     if (getPagingAction() != null) {
       AddPageAction<?, ?, ?> addPageAction = new AddPageAction<>();
       addPageAction.setWrappedAction(getPagingAction());
-      moduleObjectsPageView.setPageEndAction(addPageAction);
+      modulePageView.setPageEndAction(addPageAction);
     }
     IMobilePageViewDescriptor nextPage;
     if (getElementViewDescriptor() instanceof IMobilePageViewDescriptor) {
@@ -83,8 +80,8 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
       ((MobileCompositePageViewDescriptor) nextPage).setPageSections(Collections.singletonList(
           getElementViewDescriptor()));
     }
-    moduleObjectsPageView.setNextPage(nextPage);
-    moduleObjectsPageView.setModelDescriptor(moduleDescriptor);
+    modulePageView.setNextPage(nextPage);
+    modulePageView.setModelDescriptor(moduleDescriptor);
 
     IComponentDescriptor<IComponent> realComponentDesc = getFilterComponentDescriptor();
     MobileComponentViewDescriptor filterViewDesc = getFilterViewDescriptor();
@@ -107,22 +104,27 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
       getQueryViewDescriptorFactory().adaptExistingViewDescriptor(filterViewDesc);
     }
 
-    List<IMobilePageSectionViewDescriptor> sections = new ArrayList<>();
-    sections.add(filterViewDesc);
-    sections.add(moduleObjectsPageView);
-    MobileCompositePageViewDescriptor moduleViewDescriptor = new MobileCompositePageViewDescriptor();
-    moduleViewDescriptor.setInlineEditing(true);
-    moduleViewDescriptor.setI18nNameKey(getName());
-    moduleViewDescriptor.setPageSections(sections);
-
     if (getPageSize() != null && getPageSize() > 0) {
       if (moduleObjectsView != null && moduleObjectsView.getPaginationViewDescriptor() == null
           && moduleObjectsView instanceof BasicListViewDescriptor) {
         ((BasicListViewDescriptor) moduleObjectsView).setPaginationViewDescriptor(getPaginationViewDescriptor());
       }
     }
-    moduleViewDescriptor.setModelDescriptor(moduleDescriptor);
-    return moduleViewDescriptor;
+
+//    modulePageView.setEnterAction(getQueryModuleFilterAction());
+//    List<IMobilePageSectionViewDescriptor> sections = new ArrayList<>();
+//    sections.add(filterViewDesc);
+//    sections.add(modulePageView);
+//    MobileCompositePageViewDescriptor moduleViewDescriptor = new MobileCompositePageViewDescriptor();
+//    moduleViewDescriptor.setInlineEditing(true);
+//    moduleViewDescriptor.setI18nNameKey(getName());
+//    moduleViewDescriptor.setPageSections(sections);
+//    moduleViewDescriptor.setModelDescriptor(moduleDescriptor);
+//    return moduleViewDescriptor;
+
+    modulePageView.setHeaderView(filterViewDesc);
+    modulePageView.setMainAction(getQueryModuleFilterAction());
+    return modulePageView;
   }
 
   /**

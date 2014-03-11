@@ -40,18 +40,23 @@ import org.jspresso.framework.util.collection.IPageable;
 public class AddPageAction<E, F, G> extends FrontendAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+    IPageable pageableModel = getModel(context);
     try {
-      context.put(AbstractQbeAction.PAGINATE, null);
-      IPageable pageableModel = getModel(context);
-      pageableModel.setStickyResults(pageableModel.getResults());
-      if (pageableModel.getPage() != null) {
-        pageableModel.setPage(pageableModel.getPage() + 1);
+      if (pageableModel.getPage() + 1 < pageableModel.getPageCount()) {
+        context.put(AbstractQbeAction.PAGINATE, null);
+        pageableModel.setStickyResults(pageableModel.getResults());
+        if (pageableModel.getPage() != null) {
+          pageableModel.setPage(pageableModel.getPage() + 1);
+        } else {
+          pageableModel.setPage(1);
+        }
+        return super.execute(actionHandler, context);
       } else {
-        pageableModel.setPage(1);
+        return false;
       }
-      return super.execute(actionHandler, context);
     } finally {
       context.remove(AbstractQbeAction.PAGINATE);
+      pageableModel.setStickyResults(null);
     }
   }
 }
