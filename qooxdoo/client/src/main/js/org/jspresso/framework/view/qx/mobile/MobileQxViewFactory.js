@@ -573,6 +573,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           label._setStyle("width", "30%");
           row.add(label, {flex:1});
         }
+        component._setStyle("font-weight", "normal");
         if(this._isFixedWidth(rComponent)) {
           row.add(component);
         } else {
