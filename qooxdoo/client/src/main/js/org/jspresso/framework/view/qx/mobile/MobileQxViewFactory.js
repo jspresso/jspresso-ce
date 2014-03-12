@@ -904,13 +904,13 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           textField.setReadOnly(true);
         }
         var triggerAction = function (e) {
-          var content = textField.getValue();
+          var content = e.getData();
           if (content && content.length > 0) {
             if (content != state.getValue()) {
               textField.setValue(state.getValue());
               var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
               actionEvent.setActionCommand(content);
-              this.__actionHandler.execute(mainAction, actionEvent);
+              this._getActionHandler().execute(mainAction, actionEvent);
             }
           } else {
             state.setValue(null);
@@ -925,7 +925,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           textField.addListener("input", function (event) {
             var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
             actionEvent.setActionCommand(textField.getValue());
-            this.__actionHandler.execute(remoteActionField.getCharacterAction(), actionEvent);
+            this._getActionHandler().execute(remoteActionField.getCharacterAction(), actionEvent);
           }, this);
         }
       }
@@ -974,7 +974,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
             }
           });
           atom.addListener("tap", function (event) {
-            this.__actionHandler.execute(remoteLabel.getAction());
+            this._getActionHandler().execute(remoteLabel.getAction());
           }, this);
         } else {
           modelController.addTarget(atom, "label", "value", false, {
