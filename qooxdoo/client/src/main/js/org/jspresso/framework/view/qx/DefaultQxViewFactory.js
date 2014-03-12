@@ -2759,14 +2759,20 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         }, this);
       }
       return list;
+    },
+
+    /**
+     * @return {Boolean}
+     * @param rComponent {org.jspresso.framework.gui.remote.RComponent}
+     */
+    _isFixedWidth: function (rComponent) {
+      return rComponent instanceof org.jspresso.framework.gui.remote.RDateField || rComponent
+          instanceof org.jspresso.framework.gui.remote.RTimeField || rComponent
+          instanceof org.jspresso.framework.gui.remote.RComboBox || rComponent
+          instanceof org.jspresso.framework.gui.remote.RCheckBox || rComponent
+          instanceof org.jspresso.framework.gui.remote.RColorField || rComponent
+          instanceof org.jspresso.framework.gui.remote.RLabel;
     }
-
-
-
-
-
-
-
 
   }
 });

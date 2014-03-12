@@ -520,6 +520,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       } else if(label) {
         button.setShow("label");
       } else {
+        button.setGap(0);
+        var padding = "14px";
+        button._setStyle("padding-left", padding);
+        button._setStyle("padding-right", padding);
         button.setShow("icon");
       }
     },
@@ -877,13 +881,17 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createActionField: function (remoteActionField) {
 
-      /** @type {qx.ui.mobile.form.TextField } */
+      /** @type {qx.ui.mobile.form.TextField} */
       var textField;
       if (remoteActionField.getShowTextField()) {
         textField = new qx.ui.mobile.form.TextField();
         textField.setPlaceholder(remoteActionField.getLabel());
       }
-      var actionField = this._decorateWithAsideActions(textField, remoteActionField, true);
+      var toDecorate = textField;
+      if (!textField) {
+        toDecorate = new qx.ui.mobile.core.Widget();
+      }
+      var actionField = this._decorateWithAsideActions(toDecorate, remoteActionField, true);
       var state = remoteActionField.getState();
       var modelController = new qx.data.controller.Object(state);
       var mainAction = remoteActionField.getActionLists()[0].getActions()[0];
@@ -900,11 +908,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           if (content && content.length > 0) {
             if (content != state.getValue()) {
               textField.setValue(state.getValue());
-              if (e instanceof qx.event.type.Focus) {
-                if (e.getRelatedTarget() && (/** @type {qx.ui.mobile.core.Widget } */ e.getRelatedTarget()) == actionField) {
-                  return;
-                }
-              }
               var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
               actionEvent.setActionCommand(content);
               this.__actionHandler.execute(mainAction, actionEvent);
@@ -913,8 +916,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
             state.setValue(null);
           }
         };
-        textField.addListener("blur", triggerAction, this);
-        // textField.addListener("changeValue", triggerAction, this);
+        textField.addListener("changeValue", triggerAction, this);
 
         modelController.addTarget(textField, "value", "value", false, {
           converter: this._modelToViewFieldConverter
@@ -1238,9 +1240,18 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       remoteTimeField.useDateDto(true);
       dateTimeField.add(this.createComponent(remoteTimeField, false));
       return dateTimeField;
+    },
+
+    /**
+     * @return {Boolean}
+     * @param rComponent {org.jspresso.framework.gui.remote.RComponent}
+     */
+    _isFixedWidth: function (rComponent) {
+      return rComponent instanceof org.jspresso.framework.gui.remote.RDateField || rComponent
+          instanceof org.jspresso.framework.gui.remote.RTimeField || rComponent
+          instanceof org.jspresso.framework.gui.remote.RCheckBox || rComponent
+          instanceof org.jspresso.framework.gui.remote.RLabel;
     }
-
-
 
   }
 });

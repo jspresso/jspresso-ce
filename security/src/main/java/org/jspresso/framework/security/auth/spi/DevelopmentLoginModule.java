@@ -329,7 +329,7 @@ public class DevelopmentLoginModule implements LoginModule {
     for (Map.Entry<String, ?> optionEntry : options.entrySet()) {
       if (optionEntry.getKey().startsWith(USER_OPT)) {
         atLeastOneUserEntryFound = true;
-        if (optionEntry.getValue().equals(username)) {
+        if (optionEntry.getValue().toString().equalsIgnoreCase(username)) {
           usernameCorrect = true;
           suffix = optionEntry.getKey().substring(USER_OPT.length());
         }

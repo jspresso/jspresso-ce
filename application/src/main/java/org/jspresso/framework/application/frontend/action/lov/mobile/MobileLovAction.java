@@ -35,23 +35,26 @@ import org.jspresso.framework.view.descriptor.mobile.IMobilePageAware;
 /**
  * This is a standard &quot;List Of Values&quot; action for mobile environment.
  *
- * @version $LastChangedRevision$
- * @author Vincent Vandenschrick
  * @param <E>
- *          the actual gui component type used.
+ *     the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *     the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *     the actual action type used.
+ * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
 public class MobileLovAction<E, F, G> extends LovAction<E, F, G> {
 
   /**
    * Handle preselected item.
    *
-   * @param preselectedItem the preselected item
-   * @param queryComponent the query component
-   * @param lovView the lov view
+   * @param preselectedItem
+   *     the preselected item
+   * @param queryComponent
+   *     the query component
+   * @param lovView
+   *     the lov view
    */
   @Override
   protected void handlePreselectedItem(Object preselectedItem, IQueryComponent queryComponent, IView<E> lovView) {
@@ -63,7 +66,7 @@ public class MobileLovAction<E, F, G> extends LovAction<E, F, G> {
    * Determines the default selection mode for the result view.
    *
    * @param lovContext
-   *          the LOV context.
+   *     the LOV context.
    * @return the default selection mode for the result view.
    */
   @Override
@@ -77,6 +80,8 @@ public class MobileLovAction<E, F, G> extends LovAction<E, F, G> {
                                        Map<String, Object> context) {
     super.feedContextWithDialog(erqDescriptor, queryComponent, lovView, actionHandler, context);
     context.put(ModalDialogAction.DIALOG_ACTIONS, Collections.emptyList());
+    context.put(ModalDialogAction.DIALOG_TITLE, erqDescriptor.getReferencedDescriptor().getI18nName(
+        getTranslationProvider(context), getLocale(context)));
   }
 
   @Override
