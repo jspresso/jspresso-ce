@@ -103,6 +103,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         hBox.setAlignY("middle");
         var actionField = new qx.ui.mobile.container.Composite(hBox);
         var toolBar = this._createToolBarFromActions(actions, maxToolbarActionCount, modelController);
+        toolBar.removeCssClass("toolbar");
+        var buttons = toolBar.getChildren();
+        for (var i = 0; i < buttons.length; i++) {
+          buttons[i].removeCssClass("toolbar-button");
+        }
         if(component) {
           actionField.add(component, {flex:1});
           actionField.add(toolBar);
@@ -565,13 +570,13 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           var label = new qx.ui.mobile.form.Label("<p>" + rComponent.getLabel() + "</p>");
           // Changes label color when disabled
           //label.setLabelFor(component.getId());
-          label._setStyle("width", "50%");
+          label._setStyle("width", "30%");
           row.add(label, {flex:1});
         }
         if(this._isFixedWidth(rComponent)) {
           row.add(component);
         } else {
-          component._setStyle("width", "50%");
+          component._setStyle("width", "70%");
           row.add(component, {flex:1});
         }
         if(this._isMultiline(rComponent)) {

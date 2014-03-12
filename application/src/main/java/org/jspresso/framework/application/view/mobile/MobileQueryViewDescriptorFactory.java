@@ -37,6 +37,7 @@ import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDes
 import org.jspresso.framework.model.descriptor.query.EnumQueryStructureDescriptor;
 import org.jspresso.framework.util.descriptor.DefaultDescriptor;
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.ELabelPosition;
 import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
@@ -91,6 +92,7 @@ public class MobileQueryViewDescriptorFactory<E, F, G> extends BasicQueryViewDes
       IComponentDescriptorProvider<IComponent> componentDescriptorProvider,
       IComponentDescriptor<? extends IQueryComponent> queryComponentDescriptor, Map<String, Object> actionContext) {
     MobileComponentViewDescriptor queryComponentViewDescriptor = new MobileComponentViewDescriptor();
+    queryComponentViewDescriptor.setLabelsPosition(ELabelPosition.NONE);
     List<IPropertyViewDescriptor> propertyViewDescriptors = new ArrayList<>();
     for (String queriableProperty : componentDescriptorProvider
         .getQueryableProperties()) {

@@ -48,6 +48,7 @@ public class MobileLovResultViewDescriptorFactory extends
       IComponentDescriptorProvider<IComponent> entityRefDescriptor,
       Map<String, Object> lovContext) {
     MobileListViewDescriptor resultViewDescriptor = new MobileListViewDescriptor();
+    resultViewDescriptor.setShowArrow(false);
 
     ICollectionPropertyDescriptor<IComponent> queriedEntitiesDescriptor;
     queriedEntitiesDescriptor = (ICollectionPropertyDescriptor<IComponent>) getQueryComponentDescriptorFactory()
