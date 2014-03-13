@@ -1026,9 +1026,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
       }
       var datePickerButton = this.createButton("...", null, null);
+      datePickerButton.removeCssClass("button");
       var datePicker = new org.jspresso.framework.view.qx.mobile.DatePicker(datePickerButton, this.__monthNames);
       datePickerButton.addListener("tap", function(e) {
-        this.datePicker.show();
+        datePicker.show();
       }, this);
       var dateFieldWithPicker = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox())
       dateFieldWithPicker.add(dateField, {flex:1});
