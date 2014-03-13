@@ -1029,11 +1029,49 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       datePickerButton.removeCssClass("button");
       var datePicker = new org.jspresso.framework.view.qx.mobile.DatePicker(datePickerButton, this.__monthNames);
       datePickerButton.addListener("tap", function(e) {
+        var current = remoteDateField.getState().getValue();
+        if (current) {
+          if (current instanceof Date) {
+            current = org.jspresso.framework.util.format.DateUtils.fromDate(new Date());
+          }
+        } else {
+          current = org.jspresso.framework.util.format.DateUtils.fromDate(new Date());
+          current.setHour(0);
+          current.setMinute(0);
+          current.setSecond(0);
+        }
+        datePicker.setSelectedIndex(2, datePicker.getYearIndex(current.getYear()));
+        datePicker.setSelectedIndex(1, current.getMonth());
+        datePicker.setSelectedIndex(0, current.getDate()-1);
         datePicker.show();
       }, this);
-      var dateFieldWithPicker = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox())
+      var dateFieldWithPicker = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox());
       dateFieldWithPicker.add(dateField, {flex:1});
       dateFieldWithPicker.add(datePickerButton, {flex:0});
+      datePicker.addListener("confirmSelection", function(e) {
+        var current = remoteDateField.getState().getValue();
+        if (current) {
+          if (current instanceof Date) {
+            current = org.jspresso.framework.util.format.DateUtils.fromDate(new Date());
+          }
+        } else {
+          current = org.jspresso.framework.util.format.DateUtils.fromDate(new Date());
+          current.setHour(0);
+          current.setMinute(0);
+          current.setSecond(0);
+        }
+        var date = new Number(e.getData()[0].item);
+        var month = e.getData()[1].index;
+        var year = new Number(e.getData()[2].item);
+        var dateDto = new org.jspresso.framework.util.lang.DateDto();
+        dateDto.setYear(year);
+        dateDto.setMonth(month);
+        dateDto.setDate(date);
+        dateDto.setHour(current.getHour());
+        dateDto.setMinute(current.getMinute());
+        dateDto.setSecond(current.getSecond());
+        remoteDateField.getState().setValue(dateDto);
+      }, this);
       return dateFieldWithPicker;
     },
 

@@ -96,6 +96,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.DatePicker", {
       return new qx.data.Array(slotData);
     },
 
+    getYearIndex: function(year) {
+      return new Date().getFullYear() + 50 - year;
+    },
+
     /**
      * Updates the shown days in the picker slot.
      */
