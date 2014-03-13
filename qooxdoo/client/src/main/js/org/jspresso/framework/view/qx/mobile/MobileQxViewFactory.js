@@ -37,6 +37,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
 
   members: {
 
+    /** @type {array} */
+    __monthNames: null,
+
     /**
      * @return {qx.ui.mobile.core.Widget}
      */
@@ -1012,8 +1015,25 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createDateField: function (remoteDateField) {
       var dateField = this._createFormattedField(remoteDateField);
-      dateField._setStyle("width", "initial");
-      return dateField;
+      //dateField._setStyle("width", "initial");
+      if (!this.__monthNames) {
+        this.__monthNames = [];
+        for (var i = 1; i <= 9; i++) {
+          this.__monthNames.push(this._getActionHandler().translate("m_0" + i));
+        }
+        for (var i = 10; i <= 12; i++) {
+          this.__monthNames.push(this._getActionHandler().translate("m_" + i));
+        }
+      }
+      var datePickerButton = this.createButton("...", null, null);
+      var datePicker = new org.jspresso.framework.view.qx.mobile.DatePicker(datePickerButton, this.__monthNames);
+      datePickerButton.addListener("tap", function(e) {
+        this.datePicker.show();
+      }, this);
+      var dateFieldWithPicker = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox())
+      dateFieldWithPicker.add(dateField, {flex:1});
+      dateFieldWithPicker.add(datePickerButton, {flex:0});
+      return dateFieldWithPicker;
     },
 
     /**
@@ -1022,7 +1042,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createTimeField: function (remoteTimeField) {
       var timeField = this._createFormattedField(remoteTimeField);
-      timeField._setStyle("width", "initial");
+      //timeField._setStyle("width", "initial");
       return timeField;
     },
 
@@ -1234,7 +1254,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var oldType = remoteDateField.getType();
       try {
         remoteDateField.setType("DATE");
-        dateTimeField.add(this._createDateField(remoteDateField));
+        dateTimeField.add(this._createDateField(remoteDateField), {flex:1});
       } catch (e) {
         throw e;
       } finally {
@@ -1251,7 +1271,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       remoteTimeField.setToolTip(remoteDateField.getToolTip());
       remoteTimeField.setSecondsAware(remoteDateField.getSecondsAware());
       remoteTimeField.useDateDto(true);
-      dateTimeField.add(this.createComponent(remoteTimeField, false));
+      dateTimeField.add(this.createComponent(remoteTimeField, false), {flex:1});
       return dateTimeField;
     },
 

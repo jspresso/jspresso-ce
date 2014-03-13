@@ -36,14 +36,19 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.DatePicker", {
   statics: {
   },
 
-  construct: function (monthNames) {
-    this.base(arguments);
+  construct: function (anchor, monthNames) {
+    this.base(arguments, anchor);
     this.__monthNames = monthNames;
     this.__pickerDaySlotData = this._createDayPickerSlot(1, new Date().getFullYear());
 
-    addSlot(this.__pickerDaySlotData);
-    addSlot(this._createMonthPickerSlot());
-    addSlot(this._createYearPickerSlot());
+    this.addSlot(this.__pickerDaySlotData);
+    this.addSlot(this._createMonthPickerSlot());
+    this.addSlot(this._createYearPickerSlot());
+    this.addListener("changeSelection", function(e) {
+      if (e.getData().slot > 0) {
+        setTimeout(this._updatePickerDaySlot.bind(this), 100);
+      }
+    },this);
   },
 
   members: {

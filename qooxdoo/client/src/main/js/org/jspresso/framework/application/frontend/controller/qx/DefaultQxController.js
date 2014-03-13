@@ -483,7 +483,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     _getKeysToTranslate: function () {
       /** @type {Array} */
       var keysToTranslate = this.base(arguments);
-      keysToTranslate.concat([
+      keysToTranslate = keysToTranslate.concat([
         "change_font_family", "change_font_size", "format_bold", "format_italic", "format_underline",
         "format_strikethrough", "remove_format", "align_left", "align_center", "align_right", "align_justify",
         "indent_more", "indent_less", "insert_ordered_list", "insert_unordered_list", "undo", "redo"]);

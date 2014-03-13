@@ -453,7 +453,17 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       }
       this._popupDialog(abstractDialogCommand.getTitle(), null, dialogView, icon, dialogButtons,
           abstractDialogCommand.getUseCurrent(), abstractDialogCommand.getDimension());
-    }
+    },
 
+    /**
+     * @return {Array}
+     */
+    _getKeysToTranslate: function () {
+      /** @type {Array} */
+      var keysToTranslate = this.base(arguments);
+      keysToTranslate = keysToTranslate.concat([
+        "m_01", "m_02", "m_03", "m_04", "m_05", "m_06", "m_07", "m_08", "m_09", "m_10", "m_11", "m_12"]);
+      return keysToTranslate;
+    }
   }
 });
