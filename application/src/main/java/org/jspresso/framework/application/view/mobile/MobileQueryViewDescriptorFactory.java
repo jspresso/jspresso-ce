@@ -103,6 +103,7 @@ public class MobileQueryViewDescriptorFactory<E, F, G> extends BasicQueryViewDes
           propertyView.setName(queriableProperty);
           propertyView
               .setLovAction(createComparableEditAction((ComparableQueryStructureDescriptor) actualPropertyDescriptor));
+          propertyView.setAutoCompleteEnabled(false);
           propertyViewDescriptors.add(propertyView);
       } else if (actualPropertyDescriptor instanceof EnumQueryStructureDescriptor) {
         BasicReferencePropertyViewDescriptor propertyView = new BasicReferencePropertyViewDescriptor();

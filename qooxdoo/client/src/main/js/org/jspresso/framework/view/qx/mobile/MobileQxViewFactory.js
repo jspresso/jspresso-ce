@@ -935,6 +935,12 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
             this._getActionHandler().execute(remoteActionField.getCharacterAction(), actionEvent);
           }, this);
         }
+        textField.addListener("tap", function (event) {
+          if (textField.getReadOnly() && mainAction.getEnabled()) {
+            var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
+            this._getActionHandler().execute(mainAction, actionEvent);
+          }
+        }, this);
       }
       return actionField;
     },

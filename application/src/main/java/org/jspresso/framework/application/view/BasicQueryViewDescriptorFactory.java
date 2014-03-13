@@ -89,6 +89,7 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
           propertyView.setName(queriableProperty);
           propertyView
               .setLovAction(createComparableEditAction((ComparableQueryStructureDescriptor) actualPropertyDescriptor));
+          propertyView.setAutoCompleteEnabled(false);
           propertyViewDescriptors.add(propertyView);
         } else {
           BasicPropertyViewDescriptor propertyView;
