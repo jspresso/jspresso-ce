@@ -566,7 +566,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         } else {
           row.setLayout(new qx.ui.mobile.layout.HBox())
         }
-        if(remoteForm.getLabelsPosition() != "NONE") {
+        if(remoteForm.getLabelsPosition() != "NONE"
+            || rComponent instanceof org.jspresso.framework.gui.remote.RCheckBox) {
           var label = new qx.ui.mobile.form.Label("<p>" + rComponent.getLabel() + "</p>");
           // Changes label color when disabled
           //label.setLabelFor(component.getId());
@@ -1077,7 +1078,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           }
           var selected = selectedIndices.indexOf(selectedIndex);
           if(selected >= 0) {
-            selectedIndices.splice(selectedIndex, 1);
+            selectedIndices.splice(selected, 1);
             if(selectedIndices.length > 0) {
               state.setLeadingIndex(selectedIndices[0]);
             } else {

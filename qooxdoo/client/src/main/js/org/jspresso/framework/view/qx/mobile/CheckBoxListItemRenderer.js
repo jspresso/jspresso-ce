@@ -65,8 +65,13 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.CheckBoxListItemRenderer"
       checkBox.setAnonymous(true);
       checkBox.addCssClass("list-itemimage");
       return checkBox;
+    },
+
+    // property apply
+    _applySelected : function(value, old)
+    {
+      this.__checkBox.setValue(value);
+      this.base(arguments, value,  old);
     }
-
-
   }
 });
