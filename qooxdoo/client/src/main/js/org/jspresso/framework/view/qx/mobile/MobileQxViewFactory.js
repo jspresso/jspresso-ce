@@ -1015,7 +1015,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createDateField: function (remoteDateField) {
       var dateField = this._createFormattedField(remoteDateField);
-      //dateField._setStyle("width", "initial");
       if (!this.__monthNames) {
         this.__monthNames = [];
         for (var i = 1; i <= 9; i++) {
@@ -1026,8 +1025,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
       }
       var datePickerButton = this.createButton("...", null, null);
+      dateField.bind("enabled", datePickerButton, "enabled");
       datePickerButton.removeCssClass("button");
       var datePicker = new org.jspresso.framework.view.qx.mobile.DatePicker(datePickerButton, this.__monthNames);
+      datePicker.setConfirmButtonCaption(this._getActionHandler().translate("ok"));
+      datePicker.setCancelButtonCaption(this._getActionHandler().translate("cancel"));
       datePickerButton.addListener("tap", function(e) {
         var current = remoteDateField.getState().getValue();
         if (current) {
@@ -1052,7 +1054,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         var current = remoteDateField.getState().getValue();
         if (current) {
           if (current instanceof Date) {
-            current = org.jspresso.framework.util.format.DateUtils.fromDate(new Date());
+            current = org.jspresso.framework.util.format.DateUtils.fromDate(current);
           }
         } else {
           current = org.jspresso.framework.util.format.DateUtils.fromDate(new Date());
@@ -1060,9 +1062,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           current.setMinute(0);
           current.setSecond(0);
         }
-        var date = new Number(e.getData()[0].item);
+        var date = parseInt(e.getData()[0].item);
         var month = e.getData()[1].index;
-        var year = new Number(e.getData()[2].item);
+        var year = parseInt(e.getData()[2].item);
         var dateDto = new org.jspresso.framework.util.lang.DateDto();
         dateDto.setYear(year);
         dateDto.setMonth(month);
@@ -1081,8 +1083,58 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createTimeField: function (remoteTimeField) {
       var timeField = this._createFormattedField(remoteTimeField);
-      //timeField._setStyle("width", "initial");
-      return timeField;
+      var timePickerButton = this.createButton("...", null, null);
+      timeField.bind("enabled", timePickerButton, "enabled");
+      timePickerButton.removeCssClass("button");
+      var timePicker = new org.jspresso.framework.view.qx.mobile.TimePicker(timePickerButton, remoteTimeField.getSecondsAware());
+      timePicker.setConfirmButtonCaption(this._getActionHandler().translate("ok"));
+      timePicker.setCancelButtonCaption(this._getActionHandler().translate("cancel"));
+      timePickerButton.addListener("tap", function(e) {
+        var current = remoteTimeField.getState().getValue();
+        if (current) {
+          if (current instanceof Date) {
+            current = org.jspresso.framework.util.format.DateUtils.fromDate(current);
+          }
+        } else {
+          current = org.jspresso.framework.util.format.DateUtils.fromDate(new Date());
+          current.setHour(0);
+          current.setMinute(0);
+          current.setSecond(0);
+        }
+        timePicker.setSelectedIndex(0, current.getHour());
+        timePicker.setSelectedIndex(1, current.getMinute());
+        timePicker.setSelectedIndex(2, current.getSecond());
+        timePicker.show();
+      }, this);
+      var timeFieldWithPicker = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox());
+      timeFieldWithPicker.add(timeField, {flex:1});
+      timeFieldWithPicker.add(timePickerButton, {flex:0});
+      timePicker.addListener("confirmSelection", function(e) {
+        var current = remoteTimeField.getState().getValue();
+        if (current) {
+          if (current instanceof Date) {
+            current = org.jspresso.framework.util.format.DateUtils.fromDate(current);
+          }
+        } else {
+          current = org.jspresso.framework.util.format.DateUtils.fromDate(new Date());
+        }
+        var hour = parseInt(e.getData()[0].item);
+        var minute = parseInt(e.getData()[1].item);
+        var second = 0;
+        if(e.getData().length > 2) {
+          second = parseInt(e.getData()[2].item);
+        }
+
+        var dateDto = new org.jspresso.framework.util.lang.DateDto();
+        dateDto.setYear(current.getYear());
+        dateDto.setMonth(current.getMonth());
+        dateDto.setDate(current.getDate());
+        dateDto.setHour(hour);
+        dateDto.setMinute(minute);
+        dateDto.setSecond(second);
+        remoteTimeField.getState().setValue(dateDto);
+      }, this);
+      return timeFieldWithPicker;
     },
 
     /**

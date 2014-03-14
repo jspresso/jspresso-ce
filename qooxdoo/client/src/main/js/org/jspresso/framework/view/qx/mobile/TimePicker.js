@@ -30,88 +30,54 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.view.qx.mobile.DatePicker", {
+qx.Class.define("org.jspresso.framework.view.qx.mobile.TimePicker", {
   extend: qx.ui.mobile.dialog.Picker,
 
   statics: {
   },
 
-  construct: function (anchor, monthNames) {
+  construct: function (anchor, showSeconds) {
     this.base(arguments, anchor);
-    this.__monthNames = monthNames;
-    this.__pickerDaySlotData = this._createDayPickerSlot(1, new Date().getFullYear());
-
-    this.addSlot(this.__pickerDaySlotData);
-    this.addSlot(this._createMonthPickerSlot());
-    this.addSlot(this._createYearPickerSlot());
-    this.addListener("changeSelection", function(e) {
-      if (e.getData().slot > 0) {
-        setTimeout(this._updatePickerDaySlot.bind(this), 100);
-      }
-    },this);
+    this.addSlot(this._createHourPickerSlot());
+    this.addSlot(this._createMinutePickerSlot());
+    if (showSeconds) {
+      this.addSlot(this._createSecondPickerSlot());
+    }
   },
 
   members: {
 
-    __monthNames :null,
-    __pickerDaySlotData : null,
-
     /**
-     * Creates the picker slot data for days in month.
-     * @param month {Integer} current month.
-     * @param year {Integer} current year.
+     * Creates the picker slot data for hours.
      */
-    _createDayPickerSlot : function(month, year) {
-      var daysInMonth = new Date(year, month + 1, 0).getDate();
-
+    _createHourPickerSlot : function() {
       var slotData = [];
-      for (var i = 1; i <= daysInMonth; i++) {
+      for (var i = 0; i < 24; i++) {
         slotData.push(org.jspresso.framework.util.format.StringUtils.lpad("" + i, "0", 2));
       }
       return new qx.data.Array(slotData);
     },
 
-
     /**
-     * Creates the picker slot data for month names, based on current locale settings.
+     * Creates the picker slot data for minutes.
      */
-    _createMonthPickerSlot : function() {
-      var names = this.__monthNames;
+    _createMinutePickerSlot : function() {
       var slotData = [];
-      for (var i = 0; i < names.length; i++) {
-        slotData.push("" + names[i]);
+      for (var i = 0; i < 59; i++) {
+        slotData.push(org.jspresso.framework.util.format.StringUtils.lpad("" + i, "0", 2));
       }
       return new qx.data.Array(slotData);
     },
 
-
     /**
-     * Creates the picker slot data from 1950 till current year +50.
+     * Creates the picker slot data for seconds.
      */
-    _createYearPickerSlot : function() {
+    _createSecondPickerSlot : function() {
       var slotData = [];
-      for (var i = 1950; i < new Date().getFullYear() + 50 ; i++) {
-        slotData.push("" + i);
+      for (var i = 0; i < 59; i++) {
+        slotData.push(org.jspresso.framework.util.format.StringUtils.lpad("" + i, "0", 2));
       }
       return new qx.data.Array(slotData);
-    },
-
-    getYearIndex: function(year) {
-      return year - 1950;
-    },
-
-    /**
-     * Updates the shown days in the picker slot.
-     */
-    _updatePickerDaySlot : function() {
-      var dayIndex = this.getSelectedIndex(0);
-      var monthIndex = this.getSelectedIndex(1);
-      var yearIndex = this.getSelectedIndex(2);
-      var slotData = this._createDayPickerSlot(monthIndex, new Date().getFullYear() - yearIndex);
-      this.__pickerDaySlotData.removeAll();
-      this.__pickerDaySlotData.append(slotData);
-
-      this.setSelectedIndex(0, dayIndex, false);
     }
   }
 });
