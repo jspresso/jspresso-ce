@@ -356,6 +356,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           navPage.getContent().add(headerComponent);
         }
         navPage.getContent().add(selectionComponent);
+        this._addToolBarActions(remoteNavPage.getSelectionView(), navPage);
       }, this);
       if (remoteNavPage.getNextPage()) {
         /** @type {qx.ui.mobile.page.NavigationPage} */
@@ -1153,7 +1154,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @param remoteList {org.jspresso.framework.gui.remote.mobile.RMobileList}
      */
     _createList: function (remoteList) {
-      var listModel = remoteList.getState().getChildren();
+      /** @type {org.jspresso.framework.state.remote.RemoteCompositeValueState} */
+      var state = remoteList.getState();
+      var listModel = state.getChildren();
 
       var rendererType;
       if (remoteList.getSelectionMode() == "SINGLE_SELECTION"
@@ -1165,7 +1168,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
 
       var list = new qx.ui.mobile.list.List({
         configureItem: function (item, data, row) {
-          var selectedIndices = remoteList.getState().getSelectedIndices();
+          var selectedIndices = state.getSelectedIndices();
           var selected = selectedIndices != null && selectedIndices.indexOf(row) >= 0;
           org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.bindListItem(item,  data, selected);
           if(remoteList instanceof org.jspresso.framework.gui.remote.mobile.RMobileList) {
@@ -1181,34 +1184,49 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
 
       list.addListener("changeSelection", function(evt) {
         var selectedIndex = evt.getData();
-        var state = remoteList.getState();
+        var stateSelectedIndices = state.getSelectedIndices();
         if (remoteList.getSelectionMode() == "SINGLE_SELECTION"
             || remoteList.getSelectionMode() == "SINGLE_CUMULATIVE_SELECTION") {
-          state.setLeadingIndex(selectedIndex);
-          state.setSelectedIndices([selectedIndex]);
+          if (!stateSelectedIndices || !qx.lang.Array.equals(stateSelectedIndices, [selectedIndex])) {
+            state.setLeadingIndex(selectedIndex);
+            state.setSelectedIndices([selectedIndex]);
+          }
         } else {
-          var selectedIndices = state.getSelectedIndices();
+          var selectedIndices = stateSelectedIndices;
           if(selectedIndices == null) {
             selectedIndices = [];
           } else {
             selectedIndices = selectedIndices.concat([]);
           }
           var selected = selectedIndices.indexOf(selectedIndex);
+          var leadingIndex;
           if(selected >= 0) {
             selectedIndices.splice(selected, 1);
             if(selectedIndices.length > 0) {
-              state.setLeadingIndex(selectedIndices[0]);
+              leadingIndex = selectedIndices[0];
             } else {
-              state.setLeadingIndex(-1);
+              leadingIndex = -1;
             }
           } else {
             selectedIndices.push(selectedIndex);
             selectedIndices.sort();
-            state.setLeadingIndex(selectedIndex);
+            leadingIndex = selectedIndex;
           }
-          state.setSelectedIndices(selectedIndices);
+          if (!stateSelectedIndices || !qx.lang.Array.equals(stateSelectedIndices, selectedIndices)) {
+            state.setLeadingIndex(leadingIndex);
+            state.setSelectedIndices(selectedIndices);
+          }
         }
       }, this);
+
+      state.addListener("changeSelectedIndices", function (e) {
+        /** @type {Array} */
+        var stateSelection = e.getTarget().getSelectedIndices();
+        if (stateSelection && stateSelection.length > 0) {
+          list.fireDataEvent("changeSelection", stateSelection[0]);
+        }
+      }, this);
+
       return list;
     },
 
