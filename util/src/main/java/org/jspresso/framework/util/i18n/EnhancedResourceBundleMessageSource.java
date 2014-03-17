@@ -237,4 +237,33 @@ public class EnhancedResourceBundleMessageSource extends
   protected Locale getFallbackLocale() {
     return fallbackLocale;
   }
+
+  /**
+   * Double single quotes before calling the base method.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected MessageFormat createMessageFormat(String msg, Locale locale) {
+    String formatPattern;
+    if (msg != null) {
+      StringBuilder buff = new StringBuilder();
+      boolean handled = false;
+      for (int i = 0; i < msg.length(); i++) {
+        if (msg.charAt(i) == '\'') {
+          if (!handled) {
+            buff.append("''");
+            handled = true;
+          }
+        } else {
+          buff.append(msg.charAt(i));
+          handled = false;
+        }
+      }
+      formatPattern = buff.toString();
+    } else {
+      formatPattern =  null;
+    }
+    return super.createMessageFormat(formatPattern, locale);
+  }
 }
