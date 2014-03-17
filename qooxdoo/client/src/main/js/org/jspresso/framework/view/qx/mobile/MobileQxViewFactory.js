@@ -356,7 +356,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           navPage.getContent().add(headerComponent);
         }
         navPage.getContent().add(selectionComponent);
-        this._addToolBarActions(remoteNavPage.getSelectionView(), navPage);
+        var actionLists = remoteNavPage.getSelectionView().getActionLists();
+        if (actionLists) {
+          if (actionLists.length == 1 && actionLists[0].getActions().length == 1) {
+            this.installPageMainAction(navPage, actionLists[0].getActions()[0]);
+          } else {
+            this._addToolBarActions(remoteNavPage.getSelectionView(), navPage);
+          }
+        }
       }, this);
       if (remoteNavPage.getNextPage()) {
         /** @type {qx.ui.mobile.page.NavigationPage} */

@@ -31,12 +31,11 @@ import org.jspresso.framework.gui.remote.RComponent;
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$
  */
-public class EditPageAction extends AbstractRemoteAction {
+public class EditCurrentPageAction extends AbstractRemoteAction {
 
   @Override
   public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     RemoteEditCommand editCommand = new RemoteEditCommand();
-    editCommand.setTargetPeerGuid(((RComponent)getView(context).getPeer()).getGuid());
     registerCommand(editCommand, context);
     return super.execute(actionHandler, context);
   }

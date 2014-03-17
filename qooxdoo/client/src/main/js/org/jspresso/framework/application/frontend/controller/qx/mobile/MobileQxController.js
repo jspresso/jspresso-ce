@@ -77,6 +77,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         c = /** @type {org.jspresso.framework.application.frontend.command.remote.mobile.RemoteBackCommand} */
             command;
         this._handleBackCommand(c);
+      } else if (command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand
+          && !command.getTargetPeerGuid()) {
+          c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand} */
+              command;
+          this._handleEditCommand(null, c);
       } else {
         this.base(arguments, command)
       }
@@ -427,7 +432,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      */
     _handleEditCommand: function (targetPeer, editCommand) {
       /** qx.ui.mobile.core.Widget */
-      var component = targetPeer.retrievePeer();
+      var component;
+      if (targetPeer == null) {
+        component = this.getCurrentPage();
+      } else {
+        component = targetPeer.retrievePeer();
+      }
       if(component instanceof qx.ui.mobile.page.NavigationPage) {
         this._getViewFactory().edit(/** qx.ui.mobile.page.NavigationPage */ component);
       }

@@ -22,10 +22,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
  * Navigation page view descriptors that are able to navigate to another page based on a selection component.
@@ -78,7 +80,8 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
   /**
    * Sets selection view. Supports only tree or list.
    *
-   * @param selectionView the selection view
+   * @param selectionView
+   *     the selection view
    */
   public void setSelectionView(IViewDescriptor selectionView) {
     if (selectionView instanceof IListViewDescriptor || selectionView instanceof ITreeViewDescriptor) {
@@ -94,14 +97,20 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
    * @return the next page
    */
   public IMobilePageViewDescriptor getNextPage() {
-    completeChildDescriptor(nextPage, selectionView);
+    if (nextPage.getModelDescriptor() == null && selectionView.getModelDescriptor() != null
+        && nextPage instanceof BasicViewDescriptor) {
+      ((BasicViewDescriptor) nextPage).setModelDescriptor(
+          ((ICollectionPropertyDescriptor<?>) selectionView.getModelDescriptor()).getReferencedDescriptor()
+                                                                                 .getElementDescriptor());
+    }
     return nextPage;
   }
 
   /**
    * Sets next page.
    *
-   * @param nextPage the next page
+   * @param nextPage
+   *     the next page
    */
   public void setNextPage(IMobilePageViewDescriptor nextPage) {
     this.nextPage = nextPage;
@@ -110,7 +119,7 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
 
   /**
    * Delegates to the selection view.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -123,7 +132,7 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
 
   /**
    * Delegates to the selection view.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -147,7 +156,8 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
   /**
    * Sets header view.
    *
-   * @param headerView the header view
+   * @param headerView
+   *     the header view
    */
   public void setHeaderView(IViewDescriptor headerView) {
     this.headerView = headerView;

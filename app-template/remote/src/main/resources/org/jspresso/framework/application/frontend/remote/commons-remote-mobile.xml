@@ -23,7 +23,7 @@
 
   <!-- Remote mobile root application context for the Jspresso framework. -->
 
-  <bean id="editPageAction" class="org.jspresso.framework.application.frontend.action.remote.mobile.EditPageAction">
+  <bean id="editPageAction" class="org.jspresso.framework.application.frontend.action.remote.mobile.EditCurrentPageAction">
     <property name="name" value="modify"/>
   </bean>
 
