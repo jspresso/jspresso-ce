@@ -80,15 +80,18 @@ public class MobileCompositePageViewDescriptor extends AbstractMobilePageViewDes
   public List<IMobilePageSectionViewDescriptor> getPageSections() {
     if (pageSections != null) {
       List<IMobilePageSectionViewDescriptor> refinedPageSections = new ArrayList<>();
-      for (IMobilePageSectionViewDescriptor section : pageSections) {
-        if (section instanceof MobileComponentViewDescriptor) {
+      IViewDescriptor previousViewDescriptor = null;
+      for (IMobilePageSectionViewDescriptor pageSection : pageSections) {
+        completeChildDescriptor(pageSection, previousViewDescriptor);
+        previousViewDescriptor = pageSection;
+        if (pageSection instanceof MobileComponentViewDescriptor) {
           if (isInlineEditing()) {
-            refinedPageSections.add(section);
+            refinedPageSections.add(pageSection);
           } else {
-            refinedPageSections.add(((MobileComponentViewDescriptor) section).cloneReadOnly());
+            refinedPageSections.add(((MobileComponentViewDescriptor) pageSection).cloneReadOnly());
           }
         } else {
-          refinedPageSections.add(section);
+          refinedPageSections.add(pageSection);
         }
       }
       return refinedPageSections;
@@ -105,11 +108,6 @@ public class MobileCompositePageViewDescriptor extends AbstractMobilePageViewDes
   public List<IViewDescriptor> getChildViewDescriptors() {
     List<IMobilePageSectionViewDescriptor> childViewDescriptors = getPageSections();
     if (childViewDescriptors != null) {
-      IViewDescriptor previousViewDescriptor = null;
-      for (IViewDescriptor pageSection : childViewDescriptors) {
-        completeChildDescriptor(pageSection, previousViewDescriptor);
-        previousViewDescriptor = pageSection;
-      }
       return new ArrayList<IViewDescriptor>(childViewDescriptors);
     }
     return null;

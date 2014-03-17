@@ -62,9 +62,7 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
 
   @Override
   public List<IViewDescriptor> getChildViewDescriptors() {
-    completeChildDescriptor(headerView, null);
-    completeChildDescriptor(selectionView, null);
-    return Arrays.asList(headerView, selectionView);
+    return Arrays.asList(getHeaderView(), getSelectionView());
   }
 
   /**
@@ -73,6 +71,7 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
    * @return the selection view
    */
   public IViewDescriptor getSelectionView() {
+    completeChildDescriptor(selectionView, null);
     return selectionView;
   }
 
@@ -95,6 +94,7 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
    * @return the next page
    */
   public IMobilePageViewDescriptor getNextPage() {
+    completeChildDescriptor(nextPage, selectionView);
     return nextPage;
   }
 
@@ -140,6 +140,7 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
    * @return the header view
    */
   public IViewDescriptor getHeaderView() {
+    completeChildDescriptor(headerView, null);
     return headerView;
   }
 
