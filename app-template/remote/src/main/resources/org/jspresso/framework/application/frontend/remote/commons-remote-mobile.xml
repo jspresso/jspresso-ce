@@ -31,20 +31,42 @@
     <property name="name" value="back"/>
   </bean>
 
+  <bean id="saveAndGoBackFrontAction" parent="saveModuleObjectFrontAction" >
+    <property name="nextAction" ref="backPageAction" />
+  </bean>
+
+  <bean id="reloadAndGoBackFrontAction" parent="reloadModuleObjectFrontAction">
+    <property name="nextAction" ref="backPageAction"/>
+  </bean>
+
+  <bean id="cloneComponentFrontAction" parent="cloneEntityCollectionFrontAction">
+    <property name="wrappedAction">
+      <bean class="org.jspresso.framework.application.backend.action.CloneComponentAction">
+        <property name="entityCloneFactory" ref="smartEntityCloneFactory" />
+      </bean>
+    </property>
+    <property name="nextAction" ref="editPageAction" />
+  </bean>
+
+  <bean id="deleteAndSaveComponentFrontAction"  parent="removeEntityCollectionFromMasterFrontAction">
+    <property name="yesAction">
+      <bean
+          class="org.jspresso.framework.application.frontend.action.FrontendAction">
+        <property name="wrappedAction">
+          <bean
+              class="org.jspresso.framework.application.backend.action.persistence.hibernate.DeleteEntityAction" />
+        </property>
+        <property name="nextAction" ref="saveAndGoBackFrontAction" />
+      </bean>
+    </property>
+  </bean>
+
   <bean id="remoteViewFactory" abstract="true"
         class="org.jspresso.framework.view.remote.mobile.MobileRemoteViewFactory"
     parent="viewFactoryBase">
     <property name="editPageAction" ref="editPageAction" />
-    <property name="savePageAction">
-      <bean parent="saveModuleObjectFrontAction" >
-        <property name="nextAction" ref="backPageAction" />
-      </bean>
-    </property>
-    <property name="cancelPageAction">
-      <bean parent="reloadModuleObjectFrontAction">
-        <property name="nextAction" ref="backPageAction"/>
-      </bean>
-    </property>
+    <property name="savePageAction" ref="saveAndGoBackFrontAction"/>
+    <property name="cancelPageAction" ref="reloadAndGoBackFrontAction"/>
   </bean>
 
   <!-- QBE customization since remote view supports 3-state checkboxes -->
