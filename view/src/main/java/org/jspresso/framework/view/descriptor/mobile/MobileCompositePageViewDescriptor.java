@@ -130,6 +130,7 @@ public class MobileCompositePageViewDescriptor extends AbstractMobilePageViewDes
       }
       editableClone.setPageSections(editableSections);
     }
+    editableClone.setActionMap(null);
     return editableClone;
   }
 

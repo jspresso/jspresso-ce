@@ -209,7 +209,13 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var actions = this._extractAllActions(remoteComponent.getActionLists());
       if (actions.length > 0) {
         var toolBar = this._createToolBarFromActions(actions, maxToolbarActionCount, null);
-        component.add(toolBar);
+        if (component instanceof qx.ui.mobile.page.Page) {
+          component.addListener("initialize", function (e) {
+            component.add(toolBar);
+          }, this);
+        } else {
+          component.add(toolBar);
+        }
       }
     },
 
