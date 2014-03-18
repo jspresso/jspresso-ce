@@ -69,6 +69,31 @@
     </property>
   </bean>
 
+  <bean id="masterActionMap" class="org.jspresso.framework.view.action.ActionMap">
+    <property name="actionLists">
+      <bean class="org.jspresso.framework.view.action.ActionList">
+        <property name="actions">
+          <bean parent="addToMasterFrontAction">
+            <property name="nextAction" ref="editPageAction" />
+          </bean>
+        </property>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="detailActionMap" class="org.jspresso.framework.view.action.ActionMap">
+    <property name="actionLists">
+      <bean class="org.jspresso.framework.view.action.ActionList">
+        <property name="actions">
+          <list>
+            <ref bean="deleteAndSaveComponentFrontAction"/>
+            <ref bean="cloneComponentFrontAction" />
+          </list>
+        </property>
+      </bean>
+    </property>
+  </bean>
+
   <bean id="remoteViewFactory" abstract="true"
         class="org.jspresso.framework.view.remote.mobile.MobileRemoteViewFactory"
     parent="viewFactoryBase">
