@@ -40,7 +40,11 @@
         <property name="nextAction" ref="backPageAction" />
       </bean>
     </property>
-    <property name="cancelPageAction" ref="reloadModuleObjectFrontAction" />
+    <property name="cancelPageAction">
+      <bean parent="reloadModuleObjectFrontAction">
+        <property name="nextAction" ref="backPageAction"/>
+      </bean>
+    </property>
   </bean>
 
   <!-- QBE customization since remote view supports 3-state checkboxes -->

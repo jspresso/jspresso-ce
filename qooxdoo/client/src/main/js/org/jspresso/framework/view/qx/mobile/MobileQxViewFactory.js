@@ -271,7 +271,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     installPageBackAction: function (page, backAction) {
       if (backAction) {
-        this.linkNextPageBackButton(page,  null, backAction);
+        this.linkNextPageBackButton(page,  null, backAction, null);
       }
     },
 
@@ -381,7 +381,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }, this);
         // Because of MobileCardPage
         if(nextPage instanceof qx.ui.mobile.page.NavigationPage) {
-          this.linkNextPageBackButton(nextPage, navPage, remoteNavPage.getNextPage().getBackAction());
+          this.linkNextPageBackButton(nextPage, navPage, null, null);
         } else {
           nextPage.setUserData("previousPage", navPage);
         }
@@ -401,12 +401,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
 
       nextPage.setShowBackButton(true);
       var backButton = nextPage.getLeftContainer().getChildren()[0];
+      backButton.setShow("both");
       if(backAction && backAction.getName()) {
         nextPage.setBackButtonText(backAction.getName());
-        backButton.setShow("label");
       } else {
         backButton.setIcon("org/jspresso/framework/mobile/back-mobile.png");
-        backButton.setShow("icon");
       }
       if(backAction) {
         nextPage.addListener("back", function () {
@@ -433,7 +432,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         if(remotePageSection instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
           /** @type {qx.ui.mobile.page.NavigationPage} */
           var nextPage = this.createComponent(remotePageSection);
-          this.linkNextPageBackButton(nextPage, compositePage, remotePageSection.getBackAction());
+          this.linkNextPageBackButton(nextPage, compositePage, null, null);
           var listModel = new qx.data.Array();
           listModel.push({
             section: remotePageSection,
@@ -465,8 +464,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       }
       if(remoteCompositePage.getEditAction() && remoteCompositePage.getEditorPage()) {
         var editorPage = this.createComponent(remoteCompositePage.getEditorPage());
-        this.linkNextPageBackButton(editorPage, compositePage,
-            remoteCompositePage.getEditorPage().getBackAction(), "flip");
+        this.linkNextPageBackButton(editorPage, compositePage, null, "flip");
         compositePage.setUserData("editorPage", editorPage);
         if (remoteCompositePage.getMainAction() == null) {
           remoteCompositePage.setMainAction(remoteCompositePage.getEditAction());
@@ -862,7 +860,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           var cardComponent = this.createComponent(rCardComponent);
           // Do not actually add the card to the card container since it's added to the manager.
           // cardContainer.add(cardComponent);
-          this.linkNextPageBackButton(cardComponent, cardContainer.getUserData("previousPage"));
+          this.linkNextPageBackButton(cardComponent, cardContainer.getUserData("previousPage"), null, null);
           this._selectCard(cardContainer, cardComponent);
         }
       }

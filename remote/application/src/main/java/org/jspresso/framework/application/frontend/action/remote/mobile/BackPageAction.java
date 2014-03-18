@@ -37,7 +37,6 @@ public class BackPageAction extends AbstractRemoteAction {
   @Override
   public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     RemoteBackCommand backCommand = new RemoteBackCommand();
-    backCommand.setTargetPeerGuid(((RComponent) getView(context).getPeer()).getGuid());
     registerCommand(backCommand, context);
     return super.execute(actionHandler, context);
   }
