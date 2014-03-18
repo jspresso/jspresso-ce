@@ -59,7 +59,7 @@ public abstract class AbstractCloneAction extends
       return false;
     }
     Object clone = cloneElement(modelConnector.getConnectorValue(), context);
-    modelConnector.setConnectorValue(clone);
+    setActionParameter(clone, context);
     return super.execute(actionHandler, context);
   }
 

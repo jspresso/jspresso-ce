@@ -45,7 +45,15 @@
         <property name="entityCloneFactory" ref="smartEntityCloneFactory" />
       </bean>
     </property>
-    <property name="nextAction" ref="editPageAction" />
+    <property name="nextAction">
+      <bean parent="backPageAction">
+        <property name="nextAction">
+          <bean class="org.jspresso.framework.application.frontend.action.ActionParamToSelectedModelAction">
+            <property name="nextAction" ref="editPageAction" />
+          </bean>
+        </property>
+      </bean>
+    </property>
   </bean>
 
   <bean id="deleteAndSaveComponentFrontAction"  parent="removeEntityCollectionFromMasterFrontAction">

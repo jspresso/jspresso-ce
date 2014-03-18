@@ -191,18 +191,18 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
       viewComponent.setHeaderView(headerView.getPeer());
       childrenViews.add(headerView);
     }
-    IValueConnector selectionViewConnector = null;
     if (viewDescriptor.getSelectionView() != null) {
       IView<RComponent> selectionView = createView(viewDescriptor.getSelectionView(), actionHandler, locale);
       viewComponent.setSelectionView(selectionView.getPeer());
       childrenViews.add(selectionView);
-      selectionViewConnector = selectionView.getConnector();
-    }
-    if (viewDescriptor.getNextPage() != null) {
-      IView<RComponent> nextPageView = createView(viewDescriptor.getNextPage(), actionHandler, locale);
-      viewComponent.setNextPage((RMobilePage) nextPageView.getPeer());
-      if (selectionViewConnector != null) {
-        getModelCascadingBinder().bind(selectionViewConnector, nextPageView.getConnector());
+      IValueConnector selectionViewConnector = selectionView.getConnector();
+      if (viewDescriptor.getNextPage() != null) {
+        IView<RComponent> nextPageView = createView(viewDescriptor.getNextPage(), actionHandler, locale);
+        viewComponent.setNextPage((RMobilePage) nextPageView.getPeer());
+        if (selectionViewConnector != null) {
+          getModelCascadingBinder().bind(selectionViewConnector, nextPageView.getConnector());
+        }
+        nextPageView.setParent(selectionView);
       }
     }
     view.setChildren(childrenViews);
