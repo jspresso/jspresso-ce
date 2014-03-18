@@ -79,9 +79,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         this._handleBackCommand(c);
       } else if (command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand
           && !command.getTargetPeerGuid()) {
-          c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand} */
-              command;
-          this._handleEditCommand(null, c);
+        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand} */
+            command;
+        this._handleEditCommand(null, c);
       } else {
         this.base(arguments, command)
       }
@@ -311,9 +311,15 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
 
       this._getViewFactory().setIcon(messageDialog, messageCommand.getTitleIcon());
 
-      var message = new qx.ui.mobile.basic.Atom(messageCommand.getMessage());
-      this._getViewFactory().setIcon(message, messageCommand.getMessageIcon());
-      messageDialogContent.add(message);
+      if (messageCommand.getMessageIcon()) {
+        var icon = new qx.ui.mobile.basic.Atom();
+        this._getViewFactory().setIcon(icon, messageCommand.getMessageIcon());
+        icon.setShow("icon");
+        messageDialogContent.add(icon);
+      }
+      var label = new qx.ui.mobile.basic.Label(messageCommand.getMessage());
+      label.setWrap(true);
+      messageDialogContent.add(label);
       messageDialogContent.add(new qx.ui.mobile.form.Row());
 
       var buttonBox = new qx.ui.mobile.container.Composite();
