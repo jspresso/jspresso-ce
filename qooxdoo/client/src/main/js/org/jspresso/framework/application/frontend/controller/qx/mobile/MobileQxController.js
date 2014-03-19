@@ -112,17 +112,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      */
     getCurrentPage: function () {
       return qx.ui.mobile.page.Page._currentPage;
-//      var currentPage;
-//      var details = this.__manager.getDetailNavigation().getContent().getChildren();
-//      if (details) {
-//        for (var i = details.length - 1; i >= 0; i--) {
-//          if (details[i].getVisibility() == "visible") {
-//            currentPage = details[i];
-//            break;
-//          }
-//        }
-//      }
-//      return currentPage;
     },
 
     /**

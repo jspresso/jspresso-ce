@@ -326,8 +326,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
       /** @type {qx.data.Array} */
       var children = compositeValueState.getChildren();
       /** @type {Array} */
-      var childrenContent = children.toArray();
-      /** @type {Array} */
       var commandChildren = childrenCommand.getChildren().toArray();
 
       if (childrenCommand.getRemove()) {
@@ -340,10 +338,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
           }
         }
       } else {
-        var oldLength = childrenContent.length;
+        var oldLength = children.getLength();
         var newLength = commandChildren.length;
 
-        for (var i = 0; i < commandChildren.length; i++) {
+        var args = [];
+        args.length = newLength;
+
+        for (var i = 0; i < newLength; i++) {
           /** @type {org.jspresso.framework.state.remote.RemoteValueState} */
           var child = commandChildren[i];
           if (this.isRegistered(child.getGuid())) {
@@ -351,23 +352,14 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
           } else {
             this.register(child);
           }
-          var existingChild = null;
-          if (i < childrenContent.length) {
-            existingChild = childrenContent[i];
-          }
-          if (existingChild != child) {
-            childrenContent[i] = child;
-          }
+          args[i] = child;
         }
-        childrenContent.length = newLength;
-        children.length = newLength;
-        children.fireDataEvent("changeLength", oldLength, newLength);
-        children.fireDataEvent("change", {
-          start: 0,
-          end: newLength,
-          type: "add",
-          items: childrenContent
-        }, null);
+        if (oldLength > 0) {
+          args.unshift(0, oldLength);
+          qx.data.Array.prototype.splice.apply(children, args);
+        } else {
+          qx.data.Array.prototype.push.apply(children, args);
+        }
       }
     },
 
