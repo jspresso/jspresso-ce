@@ -433,7 +433,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         nextPage.addListener("back", function () {
           // Force page exclusion since nextPage visibility might be made "excluded" too late.
           nextPage.setVisibility("excluded");
-          previousPage.show({animation: animation,  reverse: true});
+          this._getActualPageToShow(previousPage).show({animation: animation,  reverse: true});
         }, this);
       }
     },
