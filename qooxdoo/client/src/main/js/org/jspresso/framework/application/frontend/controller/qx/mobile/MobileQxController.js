@@ -191,7 +191,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       if(this._dialogStack) {
         if (this._dialogStack.length == 1) {
           if (this.__pageToRestore) {
-            this.__pageToRestore.show();
+            this.__pageToRestore.show({animation: "slideup", reverse: true});
           }
           if (this.__manager.getMasterButton()) {
             this.__manager.getMasterButton().setVisibility("visible");
