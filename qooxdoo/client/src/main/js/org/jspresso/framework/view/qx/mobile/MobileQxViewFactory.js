@@ -39,8 +39,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
 
   members: {
 
-    /** @type {array} */
+    /** @type {Array} */
     __monthNames: null,
+    /** @type {qx.ui.mobile.form.TextField} */
+    __textFieldToBlur: null,
 
     /**
      * @return {qx.ui.mobile.core.Widget}
@@ -244,6 +246,12 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       }
     },
 
+    _loseFocus: function () {
+      if (this.__textFieldToBlur) {
+        this.__textFieldToBlur.blur();
+      }
+    },
+
     /**
      * @param page {qx.ui.mobile.page.NavigationPage}
      * @param pageAction {org.jspresso.framework.gui.remote.RAction}
@@ -255,6 +263,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           page.setButtonIcon(pageAction.getIcon().getImageUrlSpec());
         }
         page.addListener("action", function(event) {
+          this._loseFocus();
           this._getActionHandler().execute(pageAction);
         }, this);
         page.setShowButton(true);
@@ -428,11 +437,13 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       }
       if(backAction) {
         nextPage.addListener("back", function () {
+          this._loseFocus();
           this._getActionHandler().execute(backAction);
         }, this);
       }
       if(previousPage) {
         nextPage.addListener("back", function () {
+          this._loseFocus();
           // Force page exclusion since nextPage visibility might be made "excluded" too late.
           nextPage.setVisibility("excluded");
           this._getActualPageToShow(previousPage).show({animation: animation,  reverse: true});
@@ -655,13 +666,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       modelController.addTarget(textField, "readOnly", "writable", false, {
         converter: this._readOnlyFieldConverter
       });
-      if (remoteTextField.getCharacterAction()) {
-        textField.addListener("input", function (event) {
+      textField.addListener("input", function (event) {
+        this.__textFieldToBlur = textField;
+        if (remoteTextField.getCharacterAction()) {
           var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
           actionEvent.setActionCommand(textField.getValue());
           this._getActionHandler().execute(remoteTextField.getCharacterAction(), actionEvent);
-        }, this);
-      }
+        }
+      }, this);
     },
 
     /**
@@ -964,13 +976,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         modelController.addTarget(textField, "value", "value", false, {
           converter: this._modelToViewFieldConverter
         });
-        if (remoteActionField.getCharacterAction()) {
-          textField.addListener("input", function (event) {
+        textField.addListener("input", function (event) {
+          this.__textFieldToBlur = textField;
+          if (remoteActionField.getCharacterAction()) {
             var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
             actionEvent.setActionCommand(textField.getValue());
             this._getActionHandler().execute(remoteActionField.getCharacterAction(), actionEvent);
-          }, this);
-        }
+          }
+        }, this);
         textField.addListener("tap", function (event) {
           if (textField.getReadOnly() && mainAction.getEnabled()) {
             var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
