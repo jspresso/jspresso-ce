@@ -23,7 +23,6 @@ import java.util.List;
 
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicCompositeViewDescriptor;
 
 /**
  * A card view descriptor that aggregates other pages as card.
@@ -33,7 +32,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicCompositeViewDescriptor
  */
 public class MobileCardPageViewDescriptor  extends AbstractMobilePageViewDescriptor {
 
-  private ICardViewDescriptor pages;
+  private ICardViewDescriptor pagesCardViewDescriptor;
 
   /**
    * Is cascading models.
@@ -58,10 +57,10 @@ public class MobileCardPageViewDescriptor  extends AbstractMobilePageViewDescrip
 
   @Override
   public List<IViewDescriptor> getChildViewDescriptors() {
-    if (pages != null) {
-      completeChildDescriptor(pages, null);
+    if (pagesCardViewDescriptor != null) {
+      completeChildDescriptor(pagesCardViewDescriptor, null);
     }
-    return Collections.singletonList((IViewDescriptor) pages);
+    return Collections.singletonList((IViewDescriptor) pagesCardViewDescriptor);
   }
 
   /**
@@ -69,16 +68,16 @@ public class MobileCardPageViewDescriptor  extends AbstractMobilePageViewDescrip
    *
    * @return the pages
    */
-  public ICardViewDescriptor getPages() {
-    return pages;
+  public ICardViewDescriptor getPagesCardViewDescriptor() {
+    return pagesCardViewDescriptor;
   }
 
   /**
    * Sets pages.
    *
-   * @param pages the pages
+   * @param pagesCardViewDescriptor the pages
    */
-  public void setPages(ICardViewDescriptor pages) {
-    this.pages = pages;
+  public void setPagesCardViewDescriptor(ICardViewDescriptor pagesCardViewDescriptor) {
+    this.pagesCardViewDescriptor = pagesCardViewDescriptor;
   }
 }

@@ -25,7 +25,6 @@ import org.jspresso.framework.application.model.descriptor.BeanModuleDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.view.descriptor.EBorderType;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.IMobilePageSectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileCompositePageViewDescriptor;
@@ -63,7 +62,7 @@ public class MobileBeanModule extends BeanModule {
         beanViewDescriptor.setBorderType(EBorderType.TITLED);
         beanViewDescriptor.setName(componentDescriptor.getName());
         projectedViewDescriptor = new MobileCompositePageViewDescriptor();
-        projectedViewDescriptor.setPageSections(Collections.singletonList(
+        projectedViewDescriptor.setPageSectionDescriptors(Collections.singletonList(
             (IMobilePageSectionViewDescriptor) beanViewDescriptor));
         setProjectedViewDescriptor(projectedViewDescriptor);
       }

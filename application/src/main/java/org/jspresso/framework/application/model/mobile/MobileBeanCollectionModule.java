@@ -24,7 +24,6 @@ import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.descriptor.BeanCollectionModuleDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicCollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.IMobilePageSectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.IMobilePageViewDescriptor;
@@ -57,16 +56,16 @@ public class MobileBeanCollectionModule extends BeanCollectionModule {
     ((BasicViewDescriptor) moduleObjectsView).setModelDescriptor(moduleDescriptor.getPropertyDescriptor(
         MobileBeanCollectionModule.MODULE_OBJECTS));
     MobileNavPageViewDescriptor moduleViewDescriptor = new MobileNavPageViewDescriptor();
-    moduleViewDescriptor.setSelectionView(moduleObjectsView);
+    moduleViewDescriptor.setSelectionViewDescriptor(moduleObjectsView);
     IMobilePageViewDescriptor nextPage;
     if (getElementViewDescriptor() instanceof IMobilePageViewDescriptor) {
       nextPage = (IMobilePageViewDescriptor) getElementViewDescriptor();
     } else {
       nextPage = new MobileCompositePageViewDescriptor();
-      ((MobileCompositePageViewDescriptor) nextPage).setPageSections(Collections.singletonList
-          (getElementViewDescriptor()));
+      ((MobileCompositePageViewDescriptor) nextPage).setPageSectionDescriptors(Collections.singletonList(
+          getElementViewDescriptor()));
     }
-    moduleViewDescriptor.setNextPage(nextPage);
+    moduleViewDescriptor.setNextPageViewDescriptor(nextPage);
     moduleViewDescriptor.setModelDescriptor(moduleDescriptor);
     return moduleViewDescriptor;
   }

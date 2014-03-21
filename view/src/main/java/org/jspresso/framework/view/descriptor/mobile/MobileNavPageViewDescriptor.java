@@ -37,9 +37,9 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
  */
 public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescriptor {
 
-  private IViewDescriptor           headerView;
-  private IViewDescriptor           selectionView;
-  private IMobilePageViewDescriptor nextPage;
+  private IViewDescriptor           headerViewDescriptor;
+  private IViewDescriptor           selectionViewDescriptor;
+  private IMobilePageViewDescriptor nextPageViewDescriptor;
 
   /**
    * Is cascading models.
@@ -64,7 +64,7 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
 
   @Override
   public List<IViewDescriptor> getChildViewDescriptors() {
-    return Arrays.asList(getHeaderView(), getSelectionView());
+    return Arrays.asList(getHeaderViewDescriptor(), getSelectionViewDescriptor());
   }
 
   /**
@@ -72,20 +72,21 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
    *
    * @return the selection view
    */
-  public IViewDescriptor getSelectionView() {
-    completeChildDescriptor(selectionView, null);
-    return selectionView;
+  public IViewDescriptor getSelectionViewDescriptor() {
+    completeChildDescriptor(selectionViewDescriptor, null);
+    return selectionViewDescriptor;
   }
 
   /**
    * Sets selection view. Supports only tree or list.
    *
-   * @param selectionView
+   * @param selectionViewDescriptor
    *     the selection view
    */
-  public void setSelectionView(IViewDescriptor selectionView) {
-    if (selectionView instanceof IListViewDescriptor || selectionView instanceof ITreeViewDescriptor) {
-      this.selectionView = selectionView;
+  public void setSelectionViewDescriptor(IViewDescriptor selectionViewDescriptor) {
+    if (selectionViewDescriptor instanceof IListViewDescriptor
+        || selectionViewDescriptor instanceof ITreeViewDescriptor) {
+      this.selectionViewDescriptor = selectionViewDescriptor;
     } else {
       throw new IllegalArgumentException("Only list or tree is supported as selection view.");
     }
@@ -96,24 +97,24 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
    *
    * @return the next page
    */
-  public IMobilePageViewDescriptor getNextPage() {
-    if (nextPage.getModelDescriptor() == null && selectionView.getModelDescriptor() != null
-        && nextPage instanceof BasicViewDescriptor) {
-      ((BasicViewDescriptor) nextPage).setModelDescriptor(
-          ((ICollectionPropertyDescriptor<?>) selectionView.getModelDescriptor()).getReferencedDescriptor()
+  public IMobilePageViewDescriptor getNextPageViewDescriptor() {
+    if (nextPageViewDescriptor.getModelDescriptor() == null && selectionViewDescriptor.getModelDescriptor() != null
+        && nextPageViewDescriptor instanceof BasicViewDescriptor) {
+      ((BasicViewDescriptor) nextPageViewDescriptor).setModelDescriptor(
+          ((ICollectionPropertyDescriptor<?>) selectionViewDescriptor.getModelDescriptor()).getReferencedDescriptor()
                                                                                  .getElementDescriptor());
     }
-    return nextPage;
+    return nextPageViewDescriptor;
   }
 
   /**
    * Sets next page.
    *
-   * @param nextPage
+   * @param nextPageViewDescriptor
    *     the next page
    */
-  public void setNextPage(IMobilePageViewDescriptor nextPage) {
-    this.nextPage = nextPage;
+  public void setNextPageViewDescriptor(IMobilePageViewDescriptor nextPageViewDescriptor) {
+    this.nextPageViewDescriptor = nextPageViewDescriptor;
   }
 
 
@@ -125,7 +126,7 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
   @Override
   public String getI18nName(ITranslationProvider translationProvider, Locale locale) {
     if (getName() == null && getI18nNameKey() == null) {
-      return getSelectionView().getI18nName(translationProvider, locale);
+      return getSelectionViewDescriptor().getI18nName(translationProvider, locale);
     }
     return super.getI18nName(translationProvider, locale);
   }
@@ -138,7 +139,7 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
   @Override
   public String getI18nDescription(ITranslationProvider translationProvider, Locale locale) {
     if (getDescription() == null) {
-      return getSelectionView().getI18nDescription(translationProvider, locale);
+      return getSelectionViewDescriptor().getI18nDescription(translationProvider, locale);
     }
     return super.getI18nDescription(translationProvider, locale);
   }
@@ -148,18 +149,18 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
    *
    * @return the header view
    */
-  public IViewDescriptor getHeaderView() {
-    completeChildDescriptor(headerView, null);
-    return headerView;
+  public IViewDescriptor getHeaderViewDescriptor() {
+    completeChildDescriptor(headerViewDescriptor, null);
+    return headerViewDescriptor;
   }
 
   /**
    * Sets header view.
    *
-   * @param headerView
+   * @param headerViewDescriptor
    *     the header view
    */
-  public void setHeaderView(IViewDescriptor headerView) {
-    this.headerView = headerView;
+  public void setHeaderViewDescriptor(IViewDescriptor headerViewDescriptor) {
+    this.headerViewDescriptor = headerViewDescriptor;
   }
 }

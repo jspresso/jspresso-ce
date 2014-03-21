@@ -161,8 +161,8 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     RMobileCardPage viewComponent = createRMobileCardPage(viewDescriptor);
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent, viewDescriptor);
     List<IView<RComponent>> childrenViews = new ArrayList<>();
-    if (viewDescriptor.getPages() != null) {
-      IView<RComponent> pagesView = createView(viewDescriptor.getPages(), actionHandler, locale);
+    if (viewDescriptor.getPagesCardViewDescriptor() != null) {
+      IView<RComponent> pagesView = createView(viewDescriptor.getPagesCardViewDescriptor(), actionHandler, locale);
       viewComponent.setPages((RCardContainer) pagesView.getPeer());
       childrenViews.add(pagesView);
     }
@@ -186,18 +186,18 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     RMobileNavPage viewComponent = createRMobileNavPage(viewDescriptor);
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent, viewDescriptor);
     List<IView<RComponent>> childrenViews = new ArrayList<>();
-    if (viewDescriptor.getHeaderView() != null) {
-      IView<RComponent> headerView = createView(viewDescriptor.getHeaderView(), actionHandler, locale);
+    if (viewDescriptor.getHeaderViewDescriptor() != null) {
+      IView<RComponent> headerView = createView(viewDescriptor.getHeaderViewDescriptor(), actionHandler, locale);
       viewComponent.setHeaderView(headerView.getPeer());
       childrenViews.add(headerView);
     }
-    if (viewDescriptor.getSelectionView() != null) {
-      IView<RComponent> selectionView = createView(viewDescriptor.getSelectionView(), actionHandler, locale);
+    if (viewDescriptor.getSelectionViewDescriptor() != null) {
+      IView<RComponent> selectionView = createView(viewDescriptor.getSelectionViewDescriptor(), actionHandler, locale);
       viewComponent.setSelectionView(selectionView.getPeer());
       childrenViews.add(selectionView);
       IValueConnector selectionViewConnector = selectionView.getConnector();
-      if (viewDescriptor.getNextPage() != null) {
-        IView<RComponent> nextPageView = createView(viewDescriptor.getNextPage(), actionHandler, locale);
+      if (viewDescriptor.getNextPageViewDescriptor() != null) {
+        IView<RComponent> nextPageView = createView(viewDescriptor.getNextPageViewDescriptor(), actionHandler, locale);
         viewComponent.setNextPage((RMobilePage) nextPageView.getPeer());
         if (selectionViewConnector != null) {
           getModelCascadingBinder().bind(selectionViewConnector, nextPageView.getConnector());
@@ -226,7 +226,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent, viewDescriptor);
     List<IView<RComponent>> childrenViews = new ArrayList<>();
     List<RComponent> pageSections = new ArrayList<>();
-    for (IMobilePageSectionViewDescriptor pageSectionViewDescriptor : viewDescriptor.getPageSections()) {
+    for (IMobilePageSectionViewDescriptor pageSectionViewDescriptor : viewDescriptor.getPageSectionDescriptors()) {
       IView<RComponent> pageSectionView = createView(pageSectionViewDescriptor, actionHandler, locale);
       pageSections.add(pageSectionView.getPeer());
       childrenViews.add(pageSectionView);

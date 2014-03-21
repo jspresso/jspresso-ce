@@ -66,7 +66,7 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
     ((BasicViewDescriptor) moduleObjectsView).setModelDescriptor(moduleDescriptor.getPropertyDescriptor(
         MobileBeanCollectionModule.MODULE_OBJECTS));
     MobileNavPageViewDescriptor modulePageView = new MobileNavPageViewDescriptor();
-    modulePageView.setSelectionView(moduleObjectsView);
+    modulePageView.setSelectionViewDescriptor(moduleObjectsView);
     if (getPagingAction() != null) {
       AddPageAction<?, ?, ?> addPageAction = new AddPageAction<>();
       addPageAction.setWrappedAction(getPagingAction());
@@ -77,10 +77,10 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
       nextPage = (IMobilePageViewDescriptor) getElementViewDescriptor();
     } else {
       nextPage = new MobileCompositePageViewDescriptor();
-      ((MobileCompositePageViewDescriptor) nextPage).setPageSections(Collections.singletonList(
+      ((MobileCompositePageViewDescriptor) nextPage).setPageSectionDescriptors(Collections.singletonList(
           getElementViewDescriptor()));
     }
-    modulePageView.setNextPage(nextPage);
+    modulePageView.setNextPageViewDescriptor(nextPage);
     modulePageView.setModelDescriptor(moduleDescriptor);
 
     IComponentDescriptor<IComponent> realComponentDesc = getFilterComponentDescriptor();
@@ -118,11 +118,11 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
 //    MobileCompositePageViewDescriptor moduleViewDescriptor = new MobileCompositePageViewDescriptor();
 //    moduleViewDescriptor.setInlineEditing(true);
 //    moduleViewDescriptor.setI18nNameKey(getName());
-//    moduleViewDescriptor.setPageSections(sections);
+//    moduleViewDescriptor.setPageSectionDescriptors(sections);
 //    moduleViewDescriptor.setModelDescriptor(moduleDescriptor);
 //    return moduleViewDescriptor;
 
-    modulePageView.setHeaderView(filterViewDesc);
+    modulePageView.setHeaderViewDescriptor(filterViewDesc);
     modulePageView.setMainAction(getQueryModuleFilterAction());
     return modulePageView;
   }
