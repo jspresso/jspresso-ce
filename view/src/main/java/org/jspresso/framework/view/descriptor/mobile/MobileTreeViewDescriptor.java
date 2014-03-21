@@ -49,16 +49,6 @@ public class MobileTreeViewDescriptor extends AbstractTreeViewDescriptor impleme
    * {@inheritDoc}
    */
   @Override
-  public IAction getItemSelectionAction() {
-    return null;
-  }
-
-  /**
-   * Not supported in mobile environment.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
   public IAction getRowAction() {
     return null;
   }

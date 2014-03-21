@@ -20,6 +20,7 @@ package org.jspresso.framework.view.descriptor.basic;
 
 import java.util.List;
 
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicListDescriptor;
@@ -52,6 +53,7 @@ public abstract class AbstractTreeViewDescriptor extends BasicViewDescriptor imp
   private int maxDepth = 10;
   private String               renderedProperty;
   private ITreeLevelDescriptor rootSubtreeDescriptor;
+  private IAction itemSelectionAction;
 
   /**
    * {@inheritDoc}
@@ -242,5 +244,26 @@ public abstract class AbstractTreeViewDescriptor extends BasicViewDescriptor imp
   public void setRootSubtreeDescriptor(
       ITreeLevelDescriptor rootSubtreeDescriptor) {
     this.rootSubtreeDescriptor = rootSubtreeDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public IAction getItemSelectionAction() {
+    return itemSelectionAction;
+  }
+
+  /**
+   * This property allows to bind an action that gets triggered every time the
+   * selection changes on the tree view. The action context passed to the action
+   * when it is executed is the same as if it had been registered on the tree
+   * view.
+   *
+   * @param itemSelectionAction
+   *          the itemSelectionAction to set.
+   */
+  public void setItemSelectionAction(IAction itemSelectionAction) {
+    this.itemSelectionAction = itemSelectionAction;
   }
 }

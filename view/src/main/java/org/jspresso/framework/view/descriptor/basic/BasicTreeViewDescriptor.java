@@ -34,7 +34,6 @@ import org.jspresso.framework.action.IAction;
 public class BasicTreeViewDescriptor extends AbstractTreeViewDescriptor {
 
   private boolean                    expanded;
-  private IAction                    itemSelectionAction;
   private IAction                    rowAction;
 
   /**
@@ -42,14 +41,6 @@ public class BasicTreeViewDescriptor extends AbstractTreeViewDescriptor {
    */
   public BasicTreeViewDescriptor() {
     expanded = false;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public IAction getItemSelectionAction() {
-    return itemSelectionAction;
   }
 
   /**
@@ -80,19 +71,6 @@ public class BasicTreeViewDescriptor extends AbstractTreeViewDescriptor {
    */
   public void setExpanded(boolean expanded) {
     this.expanded = expanded;
-  }
-
-  /**
-   * This property allows to bind an action that gets triggered every time the
-   * selection changes on the tree view. The action context passed to the action
-   * when it is executed is the same as if it had been registered on the tree
-   * view.
-   * 
-   * @param itemSelectionAction
-   *          the itemSelectionAction to set.
-   */
-  public void setItemSelectionAction(IAction itemSelectionAction) {
-    this.itemSelectionAction = itemSelectionAction;
   }
 
   /**
