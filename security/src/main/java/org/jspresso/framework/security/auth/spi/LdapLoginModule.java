@@ -30,13 +30,14 @@ import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 import javax.naming.ldap.InitialLdapContext;
+import javax.security.auth.login.LoginException;
 
 import org.jboss.security.auth.spi.LdapExtLoginModule;
 import org.jspresso.framework.security.UserPrincipal;
 
 /**
  * Extends the JBoss LdapExtLoginModule to keep track of the authenticated
- * ditinguished name.
+ * distinguished name.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
@@ -48,11 +49,12 @@ public class LdapLoginModule extends LdapExtLoginModule {
   private static final String SLICE_START         = "[";
 
   /**
-   * Overriden to complete the main principal with optional data from the
+   * Overridden to complete the main principal with optional data from the
    * backing store.
    * <p>
    * {@inheritDoc}
    */
+  @SuppressWarnings({"unchecked", "ConstantConditions"})
   @Override
   protected String bindDNAuthentication(InitialLdapContext ctx, String user,
       Object credential, String searchBaseDN, String filter)
@@ -162,7 +164,7 @@ public class LdapLoginModule extends LdapExtLoginModule {
   }
 
   /**
-   * Overriden to construct a user principal instead of the default
+   * Overridden to construct a user principal instead of the default
    * SimplePrincipal.
    * <p>
    * {@inheritDoc}
@@ -188,7 +190,7 @@ public class LdapLoginModule extends LdapExtLoginModule {
    * @param endIndex
    *          end index.
    * @return the LDAP name slice.
-   * @throws NamingException
+   * @throws NamingException whenever a naming exception occurs.
    */
   protected String extractSlice(String nameAsString, NameParser nameParser,
       int startIndex, int endIndex) throws NamingException {
@@ -202,5 +204,22 @@ public class LdapLoginModule extends LdapExtLoginModule {
       endI = name.size() + endI;
     }
     return name.getPrefix(endI).getSuffix(startI).toString();
+  }
+
+  /**
+   * Complete identity and feed shared context.
+   * <p>
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public boolean login() throws LoginException {
+    if (super.login()) {
+      // Fixes bug #1175
+      if (sharedState.get("javax.security.auth.login.name") instanceof String) {
+        sharedState.put("javax.security.auth.login.name", getIdentity());
+      }
+    }
+    return false;
   }
 }

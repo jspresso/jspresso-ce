@@ -33,7 +33,7 @@ import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 
 /**
- * An extended database login module to comlpement the user principal with
+ * An extended database login module to complement the user principal with
  * custom values.
  * 
  * @version $LastChangedRevision$
@@ -42,10 +42,11 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
 public class DatabaseLoginModule extends DatabaseServerLoginModule {
 
   /**
-   * Complement identity.
+   * Complete identity and feed shared context.
    * <p>
    * {@inheritDoc}
    */
+  @SuppressWarnings({"ConstantConditions", "unchecked"})
   @Override
   public boolean login() throws LoginException {
     if (super.login() && getIdentity() instanceof UserPrincipal) {
@@ -96,6 +97,10 @@ public class DatabaseLoginModule extends DatabaseServerLoginModule {
             // Can't do much here
           }
         }
+      }
+      // Fixes bug #1175
+      if (sharedState.get("javax.security.auth.login.name") instanceof String) {
+        sharedState.put("javax.security.auth.login.name", getIdentity());
       }
       return true;
     }
