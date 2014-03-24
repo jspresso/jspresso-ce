@@ -30,6 +30,7 @@ import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 import javax.naming.ldap.InitialLdapContext;
+import javax.security.auth.login.LoginException;
 
 import org.jboss.security.auth.spi.LdapExtLoginModule;
 import org.jspresso.framework.security.UserPrincipal;
@@ -203,5 +204,22 @@ public class LdapLoginModule extends LdapExtLoginModule {
       endI = name.size() + endI;
     }
     return name.getPrefix(endI).getSuffix(startI).toString();
+  }
+
+  /**
+   * Complete identity and feed shared context.
+   * <p>
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public boolean login() throws LoginException {
+    if (super.login()) {
+      // Fixes bug #1175
+      if (sharedState.get("javax.security.auth.login.name") instanceof String) {
+        sharedState.put("javax.security.auth.login.name", getIdentity());
+      }
+    }
+    return false;
   }
 }
