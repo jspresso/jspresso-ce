@@ -120,6 +120,7 @@ public class EnumQueryStructureDescriptor extends
     elementDescriptor.setPropertyDescriptors(enumValuePropertyDescriptors);
 
     elementDescriptor.setRenderedProperties(Arrays.asList(SELECTED, VALUE));
+    elementDescriptor.setToStringProperty(I18N_VALUE);
 
     BasicSetDescriptor<EnumValueQueryStructure> enumValuesReferencedDescriptor;
     enumValuesReferencedDescriptor = new BasicSetDescriptor<>();

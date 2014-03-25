@@ -89,7 +89,7 @@
           <workingDirectory>src/main/py</workingDirectory>
           <arguments>
             <argument>${symbol_dollar}{project.build.directory}/qooxdoo-sdk/tool/bin/generator.py</argument>
-            <argument>source-all,build</argument>
+            <argument>source,build,source-mobile,build-mobile</argument>
           </arguments>
         </configuration>
       </plugin>

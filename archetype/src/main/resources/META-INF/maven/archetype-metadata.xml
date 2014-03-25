@@ -26,32 +26,32 @@
     </requiredProperty>
   </requiredProperties>
   <fileSets>
-    <fileSet filtered="true" encoding="UTF-8">
+    <fileSet filtered="true" packaged="false" encoding="UTF-8">
       <directory>src/main/assembly</directory>
       <includes>
         <include>**/*.xml</include>
       </includes>
     </fileSet>
-    <fileSet filtered="true" encoding="UTF-8">
+    <fileSet filtered="true" packaged="false" encoding="UTF-8">
       <directory>src/site</directory>
       <includes>
         <include>**/*.xml</include>
       </includes>
     </fileSet>
-    <fileSet filtered="true" encoding="UTF-8">
+    <fileSet filtered="true" packaged="false" encoding="UTF-8">
       <directory>conf</directory>
       <includes>
         <include>**/*.config</include>
         <include>**/*.properties</include>
       </includes>
     </fileSet>
-    <fileSet encoding="UTF-8">
+    <fileSet filtered="false" packaged="false" encoding="UTF-8">
       <directory>src/site</directory>
       <includes>
         <include>**/*.jpg</include>
       </includes>
     </fileSet>
-    <fileSet filtered="true" encoding="UTF-8">
+    <fileSet filtered="true" packaged="false" encoding="UTF-8">
       <directory>launches</directory>
       <includes>
         <include>*.launch</include>
@@ -61,7 +61,7 @@
   <modules>
     <module id="${rootArtifactId}-core" dir="core" name="${rootArtifactId}-core">
       <fileSets>
-        <fileSet filtered="true" encoding="UTF-8">
+        <fileSet filtered="true" packaged="false" encoding="UTF-8">
           <directory/>
           <includes>
             <include>.project</include>
@@ -97,25 +97,25 @@
             <include>**/*.groovy</include>
           </includes>
         </fileSet>
-        <fileSet packaged="true" encoding="UTF-8">
+        <fileSet filtered="false" packaged="true" encoding="UTF-8">
           <directory>src/main/resources</directory>
           <includes>
             <include>**/*.png</include>
           </includes>
         </fileSet>
-        <fileSet filtered="true" encoding="UTF-8">
+        <fileSet filtered="true" packaged="false" encoding="UTF-8">
           <directory>conf</directory>
           <includes>
             <include>**/*.properties</include>
           </includes>
         </fileSet>
-        <fileSet filtered="true" encoding="UTF-8">
+        <fileSet filtered="true" packaged="false" encoding="UTF-8">
           <directory>src/main/assembly</directory>
           <includes>
             <include>*.xml</include>
           </includes>
         </fileSet>
-        <fileSet filtered="true" encoding="UTF-8">
+        <fileSet filtered="true" packaged="false" encoding="UTF-8">
           <directory>src/main/dsl</directory>
           <includes>
             <include>*.groovy</include>
@@ -127,7 +127,7 @@
       <modules>
         <module id="${rootArtifactId}-startup-swing" dir="swing" name="${rootArtifactId}-startup-swing">
           <fileSets>
-            <fileSet filtered="true" encoding="UTF-8">
+            <fileSet filtered="true" packaged="false" encoding="UTF-8">
               <directory/>
               <includes>
                 <include>.springBeans</include>
@@ -140,7 +140,7 @@
                 <exclude>log4j.properties</exclude>
               </excludes>
             </fileSet>
-            <fileSet filtered="true" encoding="UTF-8">
+            <fileSet filtered="true" packaged="false" encoding="UTF-8">
               <directory>src/main/resources</directory>
               <includes>
                 <include>ehcache.xml</include>
@@ -157,7 +157,7 @@
         </module>
         <module id="${rootArtifactId}-startup-remote" dir="remote" name="${rootArtifactId}-startup-remote">
           <fileSets>
-            <fileSet filtered="true" encoding="UTF-8">
+            <fileSet filtered="true" packaged="false" encoding="UTF-8">
               <directory/>
               <includes>
                 <include>.springBeans</include>
@@ -277,7 +277,7 @@
             <exclude>log4j.properties</exclude>
           </excludes>
         </fileSet>
-        <fileSet filtered="true" encoding="UTF-8">
+        <fileSet filtered="true" packaged="false" encoding="UTF-8">
           <directory>src/main/resources</directory>
           <includes>
             <include>ehcache.xml</include>
@@ -290,7 +290,7 @@
             <include>**/*.java</include>
           </includes>
         </fileSet>
-        <fileSet filtered="true" encoding="UTF-8">
+        <fileSet filtered="true" packaged="false" encoding="UTF-8">
           <directory>src/main/webapp</directory>
           <includes>
             <include>**/*.xml</include>
@@ -298,7 +298,7 @@
             <include>**/*.html</include>
           </includes>
         </fileSet>
-        <fileSet encoding="UTF-8">
+        <fileSet filtered="false" packaged="false" encoding="UTF-8">
           <directory>src/main/webapp</directory>
           <includes>
             <include>**/*.jpg</include>
