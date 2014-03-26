@@ -48,12 +48,13 @@ public class CloseDialogAction<E, F, G> extends FrontendAction<E, F, G> {
     // action.
     // return super.execute(actionHandler, context);
     if (actionHandler.execute(getWrappedAction(context), context)) {
-      getController(context).disposeModalDialog(getActionWidget(context),
-          context);
-      if (getNextAction(context) != null) {
-        return actionHandler.execute(getNextAction(context), context);
+      if (getController(context).disposeModalDialog(getActionWidget(context),
+          context)) {
+        if (getNextAction(context) != null) {
+          return actionHandler.execute(getNextAction(context), context);
+        }
+        return true;
       }
-      return true;
     }
     return false;
   }

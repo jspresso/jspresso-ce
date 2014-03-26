@@ -90,7 +90,7 @@ public class MockSwingController extends
   public void displayDialog(JComponent mainView, List<Action> actions,
       String title, JComponent sourceComponent, Map<String, Object> context,
       Dimension dimension, boolean reuseCurrent, boolean modal) {
-    super.displayModalDialog(context, reuseCurrent);
+    displayModalDialog(mainView, context, reuseCurrent);
     final JDialog dialog;
     Window window = SwingUtil.getVisibleWindow(sourceComponent);
     boolean newDialog = true;
@@ -160,13 +160,16 @@ public class MockSwingController extends
    * {@inheritDoc}
    */
   @Override
-  public void disposeModalDialog(JComponent sourceWidget,
+  public boolean disposeModalDialog(JComponent sourceWidget,
       Map<String, Object> context) {
-    super.disposeModalDialog(sourceWidget, context);
-    Window actionWindow = SwingUtil.getVisibleWindow(sourceWidget);
-    if (actionWindow instanceof JDialog) {
-      actionWindow.dispose();
+    if (super.disposeModalDialog(sourceWidget, context)) {
+      Window actionWindow = SwingUtil.getVisibleWindow(sourceWidget);
+      if (actionWindow instanceof JDialog) {
+        actionWindow.dispose();
+      }
+      return true;
     }
+    return false;
   }
 
   /**

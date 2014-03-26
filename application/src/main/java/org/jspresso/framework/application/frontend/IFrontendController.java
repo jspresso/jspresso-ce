@@ -183,8 +183,9 @@ public interface IFrontendController<E, F, G> extends IController, IIconDescript
    *     the source widget.
    * @param context
    *     the context to complement with the head of the context stack.
+   * @return true if the modal dialog could actually be disposed.
    */
-  void disposeModalDialog(E sourceWidget, Map<String, Object> context);
+  boolean disposeModalDialog(E sourceWidget, Map<String, Object> context);
 
   /**
    * Gets the peer model controller.

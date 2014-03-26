@@ -64,7 +64,7 @@ public class DefaultRemoteController extends AbstractRemoteController {
   public void displayFlashObject(String swfUrl, Map<String, String> flashContext, List<RAction> actions, String title,
                                  RComponent sourceComponent, Map<String, Object> context, Dimension dimension,
                                  boolean reuseCurrent) {
-    super.displayModalDialog(context, reuseCurrent);
+    displayModalDialog(null, context, reuseCurrent);
     RemoteFlashDisplayCommand flashCommand = new RemoteFlashDisplayCommand();
     flashCommand.setSwfUrl(swfUrl);
     flashCommand.setTitle(title);
