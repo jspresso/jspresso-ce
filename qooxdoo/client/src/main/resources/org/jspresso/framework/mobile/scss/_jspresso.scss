@@ -18,8 +18,8 @@
  */
 
 .jspresso-button {
-  padding-left: rem(3);
-  padding-rignt: rem(3);
+  padding-left: rem(12);
+  padding-right: rem(12);
 }
 
 .jspresso-form-label {
@@ -31,6 +31,10 @@
 }
 
 .jspresso-form-element-grow {
+  width: 70%;
+}
+
+.text-field.jspresso-form-element-grow, .number-field.jspresso-form-element-grow, .password-field.jspresso-form-element-grow {
   width: 70%;
 }
 

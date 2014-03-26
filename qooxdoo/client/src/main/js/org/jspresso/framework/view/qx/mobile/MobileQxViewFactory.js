@@ -151,7 +151,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @return {qx.ui.mobile.toolbar.Button}
      */
     _createExtraActionsToolBarButton: function (extraActions) {
-      var extraButton = new qx.ui.mobile.toolbar.Button("[ ... ]");
+      var extraButton = new qx.ui.mobile.toolbar.Button("...");
       var extraMenu = new qx.ui.mobile.dialog.Menu();
       extraMenu.getSelectionList().setDelegate({
         configureItem: function (item, data, row) {
@@ -592,9 +592,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         button.setShow("label");
       } else {
         button.setGap(0);
-        button.addCssClass("jspresso-button");
         button.setShow("icon");
       }
+      button.addCssClass("jspresso-button");
     },
 
     /**
@@ -642,7 +642,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         if(this._isFixedWidth(rComponent)) {
           row.add(component);
         } else {
-          component.addCssClass("jspresso-element-grow");
+          component.addCssClass("jspresso-form-element-grow");
           row.add(component, {flex:1});
         }
         if(this._isMultiline(rComponent)) {
@@ -777,6 +777,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           if(remoteTree instanceof org.jspresso.framework.gui.remote.mobile.RMobileTree) {
             item.setShowArrow(remoteTree.getShowArrow());
           }
+          item.setLevel(data.level);
         },
         createItemRenderer : function() {
           return new org.jspresso.framework.view.qx.mobile.TreeItemRenderer();
@@ -1088,7 +1089,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           this.__monthNames.push(this._getActionHandler().translate("m_" + i));
         }
       }
-      var datePickerButton = this.createButton("[ ... ]", null, null);
+      var datePickerButton = this.createButton("...", null, null);
       dateField.bind("enabled", datePickerButton, "enabled");
       datePickerButton.removeCssClass("button");
       var datePicker = new org.jspresso.framework.view.qx.mobile.DatePicker(datePickerButton, this.__monthNames);
@@ -1147,7 +1148,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createTimeField: function (remoteTimeField) {
       var timeField = this._createFormattedField(remoteTimeField);
-      var timePickerButton = this.createButton("[ ... ]", null, null);
+      var timePickerButton = this.createButton("...", null, null);
       timeField.bind("enabled", timePickerButton, "enabled");
       timePickerButton.removeCssClass("button");
       var timePicker = new org.jspresso.framework.view.qx.mobile.TimePicker(timePickerButton, remoteTimeField.getSecondsAware());
