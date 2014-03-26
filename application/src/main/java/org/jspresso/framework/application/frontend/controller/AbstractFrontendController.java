@@ -122,6 +122,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private static final   String UP_SEP            = "!";
   private static final   String LANG_KEY          = "LANG_KEY";
   private static final   String TZ_KEY            = "TZ_KEY";
+  private static final   String CURR_DIALOG_VIEW  = "CURR_DIALOG_VIEW";
   private final List<ModuleHistoryEntry>              backwardHistoryEntries;
   private final DefaultIconDescriptor                 controllerDescriptor;
   private final List<Map<String, Object>>             dialogContextStack;
@@ -481,25 +482,46 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
-  public void disposeModalDialog(E sourceWidget, Map<String, Object> context) {
+  public boolean disposeModalDialog(E sourceWidget, Map<String, Object> context) {
     LOG.debug("Disposing modal dialog.");
-    @SuppressWarnings("unchecked")
-    E componentToFocus = (E) context.get(FrontendAction.COMPONENT_TO_FOCUS);
-    if (componentToFocus != null) {
-      focus(componentToFocus);
-    }
     if (dialogContextStack.size() > 0) {
       Map<String, Object> savedContext = dialogContextStack.remove(0);
+      E currentDialogView = (E) savedContext.get(CURR_DIALOG_VIEW);
+
+      if (currentDialogView != null && !isParentOf(currentDialogView,
+          (IView<E>) context.get(ActionContextConstants.VIEW))) {
+        dialogContextStack.add(0, savedContext);
+        LOG.debug("Trying to dispose a dialog that is not the top one. Ignoring.");
+        return false;
+      }
+      @SuppressWarnings("unchecked")
+      E componentToFocus = (E) context.get(FrontendAction.COMPONENT_TO_FOCUS);
+      if (componentToFocus != null) {
+        focus(componentToFocus);
+      }
       if (savedContext != null) {
         // preserve action param
         Object actionParam = context.get(ActionContextConstants.ACTION_PARAM);
         context.putAll(savedContext);
         context.put(ActionContextConstants.ACTION_PARAM, actionParam);
       }
+      return true;
     } else {
       LOG.debug("Trying to dispose a modal dialog while there is no dialog left.");
     }
+    return false;
+  }
+
+  private boolean isParentOf(E parentView, IView<E> view) {
+    if (view == null) {
+      return false;
+    }
+    if (parentView == view.getPeer()) {
+      return true;
+    }
+    return isParentOf(parentView, view.getParent());
   }
 
   private boolean checkActionChainTheadSafety = true;
@@ -1429,18 +1451,21 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Must be called when a modal dialog is displayed.
-   * 
+   *
+   * @param dialogView
+   *     the dialog view
    * @param context
-   *          the context to store on the context stack.
+   *     the context to store on the context stack.
    * @param reuseCurrent
-   *          set to true to reuse an existing modal dialog.
+   *     set to true to reuse an existing modal dialog.
    */
-  protected void displayModalDialog(Map<String, Object> context,
+  protected void displayModalDialog(E dialogView, Map<String, Object> context,
       boolean reuseCurrent) {
     if (reuseCurrent && dialogContextStack.size() >= 1) {
       dialogContextStack.remove(0);
     }
     LOG.debug("Popping-up modal dialog.");
+    context.put(CURR_DIALOG_VIEW, dialogView);
     dialogContextStack.add(0, context);
   }
 

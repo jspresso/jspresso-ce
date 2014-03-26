@@ -142,7 +142,7 @@ public class DefaultSwingController extends
       final List<Action> actions, final String title,
       final JComponent sourceComponent, final Map<String, Object> context,
       final Dimension dimension, final boolean reuseCurrent, final boolean modal) {
-    super.displayModalDialog(context, reuseCurrent);
+    displayModalDialog(mainView, context, reuseCurrent);
     SwingUtilities.invokeLater(new Runnable() {
 
       @Override
@@ -285,13 +285,16 @@ public class DefaultSwingController extends
    * {@inheritDoc}
    */
   @Override
-  public void disposeModalDialog(JComponent sourceWidget,
+  public boolean disposeModalDialog(JComponent sourceWidget,
       Map<String, Object> context) {
-    super.disposeModalDialog(sourceWidget, context);
-    Window actionWindow = SwingUtil.getVisibleWindow(sourceWidget);
-    if (actionWindow instanceof JDialog) {
-      actionWindow.dispose();
+    if (super.disposeModalDialog(sourceWidget, context)) {
+      Window actionWindow = SwingUtil.getVisibleWindow(sourceWidget);
+      if (actionWindow instanceof JDialog) {
+        actionWindow.dispose();
+      }
+      return true;
     }
+    return false;
   }
 
   /**
