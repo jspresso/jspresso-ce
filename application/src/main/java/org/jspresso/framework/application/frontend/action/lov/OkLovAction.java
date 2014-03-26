@@ -95,8 +95,9 @@ public class OkLovAction<E, F, G> extends FrontendAction<E, F, G> {
         }
       }
       // Only in that case a dialog has been opened
-      getController(context).disposeModalDialog(getActionWidget(context),
-          context);
+      if (!getController(context).disposeModalDialog(getActionWidget(context), context)) {
+        return false;
+      }
     } else {
       setActionParameter(context.get(LovAction.LOV_SELECTED_ITEM), context);
     }

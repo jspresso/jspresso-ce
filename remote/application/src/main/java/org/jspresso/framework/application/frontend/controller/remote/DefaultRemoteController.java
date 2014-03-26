@@ -166,7 +166,7 @@ public class DefaultRemoteController extends
       Map<String, String> flashContext, List<RAction> actions, String title,
       RComponent sourceComponent, Map<String, Object> context,
       Dimension dimension, boolean reuseCurrent) {
-    super.displayModalDialog(context, reuseCurrent);
+    displayModalDialog(null, context, reuseCurrent);
     RemoteFlashDisplayCommand flashCommand = new RemoteFlashDisplayCommand();
     flashCommand.setSwfUrl(swfUrl);
     flashCommand.setTitle(title);
@@ -191,7 +191,7 @@ public class DefaultRemoteController extends
   public void displayDialog(RComponent mainView, List<RAction> actions,
       String title, RComponent sourceComponent, Map<String, Object> context,
       Dimension dimension, boolean reuseCurrent, boolean modal) {
-    super.displayModalDialog(context, reuseCurrent);
+    displayModalDialog(mainView, context, reuseCurrent);
     RemoteDialogCommand dialogCommand = new RemoteDialogCommand();
     dialogCommand.setTitle(title);
     dialogCommand.setView(mainView);
@@ -226,10 +226,12 @@ public class DefaultRemoteController extends
    * {@inheritDoc}
    */
   @Override
-  public void disposeModalDialog(RComponent sourceWidget,
-      Map<String, Object> context) {
-    super.disposeModalDialog(sourceWidget, context);
-    registerCommand(new RemoteCloseDialogCommand());
+  public boolean disposeModalDialog(RComponent sourceWidget, Map<String, Object> context) {
+    if (super.disposeModalDialog(sourceWidget, context)) {
+      registerCommand(new RemoteCloseDialogCommand());
+      return true;
+    }
+    return false;
   }
 
   /**
