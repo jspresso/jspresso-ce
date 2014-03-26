@@ -634,9 +634,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
             || rComponent instanceof org.jspresso.framework.gui.remote.RCheckBox) {
           var label = new qx.ui.mobile.form.Label("<p>" + rComponent.getLabel() + "</p>");
           // Changes label color when disabled
-          //label.setLabelFor(component.getId());
+          // label.setLabelFor(component.getId());
           label.addCssClass("jspresso-form-label");
-          row.add(label, {flex:1});
+          // to align form elements to the left
+          row.add(label/*, {flex:1}*/);
         }
         component.addCssClass("jspresso-form-element");
         if(this._isFixedWidth(rComponent)) {
@@ -1461,7 +1462,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _isFixedWidth: function (rComponent) {
       return rComponent instanceof org.jspresso.framework.gui.remote.RCheckBox || rComponent
-          instanceof org.jspresso.framework.gui.remote.RLabel;
+          instanceof org.jspresso.framework.gui.remote.RLabel || (rComponent
+          instanceof org.jspresso.framework.gui.remote.RActionField && !rComponent.isShowTextField());
     }
 
   }
