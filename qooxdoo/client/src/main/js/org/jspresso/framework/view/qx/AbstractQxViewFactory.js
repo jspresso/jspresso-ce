@@ -126,7 +126,17 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
       if (registerPeers) {
         this._getRemotePeerRegistry().register(remoteComponent);
       }
+      this.applyComponentStyle(component, remoteComponent);
       return component;
+    },
+
+    /**
+     * @param component {qx.ui.core.Widget | qx.ui.mobile.core.Widget}
+     * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
+     * @return {undefined}
+     */
+    applyComponentStyle: function (component, remoteComponent) {
+      throw new Error("applyComponentStyle is abstract.");
     },
 
     /**

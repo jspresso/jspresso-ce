@@ -117,11 +117,15 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       this._configureToolTip(remoteComponent, component);
       component = this._decorateWithActions(remoteComponent, component);
       component = this._decorateWithBorder(remoteComponent, component);
-      this.applyComponentStyle(component, remoteComponent);
       this._applyPreferredSize(remoteComponent, component);
       return component;
     },
 
+    /**
+     * @param component {qx.ui.core.Widget}
+     * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
+     * @return {undefined}
+     */
     applyComponentStyle: function (component, remoteComponent) {
       if (remoteComponent.getForeground()) {
         component.setTextColor(org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(remoteComponent.getForeground()));

@@ -42,6 +42,8 @@
     "QOOXDOO_PATH"         : "${symbol_dollar}{TARGET}/qooxdoo-sdk",
     "QXTHEME"              : "${package}.startup.qooxdoo.theme.Theme", // possible values: "qx.theme.Indigo","qx.theme.Classic","qx.theme.Simple","qx.theme.Modern"
     "QXICONTHEME"          : ["Oxygen", "Tango"],
+    "JSPRESSO_QX_DIR"      : "${symbol_dollar}{TARGET}/jspresso-qooxdoo-client-zip",
+    "JSPRESSO_QX_SCSS_DIR" : "${symbol_dollar}{JSPRESSO_QX_DIR}/org/jspresso/framework/mobile/scss",
     "MOBILE_THEME"         : "custom", // possible values: "indigo","flat","custom"
     "MOBILE_CSS_DIR"       : "${symbol_dollar}{APPLICATION_PATH}/css",
     "MOBILE_CSS_PATH"      : "${symbol_dollar}{MOBILE_CSS_DIR}/${symbol_dollar}{MOBILE_THEME}.css",
@@ -74,7 +76,7 @@
       "library" :
       [
         {
-          "manifest" : "${symbol_dollar}{TARGET}/jspresso-qooxdoo-client-zip/Manifest.json"
+          "manifest" : "${symbol_dollar}{JSPRESSO_QX_DIR}/Manifest.json"
         }
       ]
     },
@@ -214,7 +216,7 @@
         "command" :
             [
               "${symbol_dollar}{MKDIRCMD} ${symbol_dollar}{BUILD_PATH_CSS}/${symbol_dollar}{MOBILE_CSS_DIR}",
-              "${symbol_dollar}{SCSS_CMD} ${symbol_dollar}{RESOURCES}/${symbol_dollar}{MOBILE_SCSS_PATH} -o ${symbol_dollar}{BUILD_PATH_CSS}/${symbol_dollar}{MOBILE_CSS_PATH} --load-path=${symbol_dollar}{RESOURCES}/${symbol_dollar}{MOBILE_SCSS_DIR},${symbol_dollar}{QX_MOBILE_SCSS_DIR},${symbol_dollar}{QX_SHARED_SCSS_DIR}"
+              "${symbol_dollar}{SCSS_CMD} ${symbol_dollar}{RESOURCES}/${symbol_dollar}{MOBILE_SCSS_PATH} -o ${symbol_dollar}{BUILD_PATH_CSS}/${symbol_dollar}{MOBILE_CSS_PATH} --load-path=${symbol_dollar}{RESOURCES}/${symbol_dollar}{MOBILE_SCSS_DIR},${symbol_dollar}{QX_MOBILE_SCSS_DIR},${symbol_dollar}{QX_SHARED_SCSS_DIR},${symbol_dollar}{JSPRESSO_QX_SCSS_DIR}"
             ]
       }
     },
@@ -228,7 +230,7 @@
         "paths"    : ["${symbol_dollar}{RESOURCES}/${symbol_dollar}{MOBILE_SCSS_DIR}"],
         "command" :
         {
-          "line"  : "${symbol_dollar}{SCSS_CMD} ${symbol_dollar}{RESOURCES}/${symbol_dollar}{MOBILE_SCSS_PATH} -o ${symbol_dollar}{BUILD_PATH_CSS}/${symbol_dollar}{MOBILE_CSS_PATH} --load-path=${symbol_dollar}{RESOURCES}/${symbol_dollar}{MOBILE_SCSS_DIR},${symbol_dollar}{QX_MOBILE_SCSS_DIR},${symbol_dollar}{QX_SHARED_SCSS_DIR}",
+          "line"  : "${symbol_dollar}{SCSS_CMD} ${symbol_dollar}{RESOURCES}/${symbol_dollar}{MOBILE_SCSS_PATH} -o ${symbol_dollar}{BUILD_PATH_CSS}/${symbol_dollar}{MOBILE_CSS_PATH} --load-path=${symbol_dollar}{RESOURCES}/${symbol_dollar}{MOBILE_SCSS_DIR},${symbol_dollar}{QX_MOBILE_SCSS_DIR},${symbol_dollar}{QX_SHARED_SCSS_DIR},${symbol_dollar}{JSPRESSO_QX_SCSS_DIR}",
           "exec-on-startup" : true,
           "per-file" : false
         }

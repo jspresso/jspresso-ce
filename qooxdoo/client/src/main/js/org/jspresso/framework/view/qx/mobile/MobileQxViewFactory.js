@@ -71,6 +71,26 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     },
 
     /**
+     * @param component {qx.ui.mobile.core.Widget}
+     * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
+     * @return {undefined}
+     */
+    applyComponentStyle: function (component, remoteComponent) {
+      this._applyStyleName(component, remoteComponent.getStyleName());
+    },
+
+    /**
+     * @param component {qx.ui.mobile.core.Widget}
+     * @param styleName {String}
+     * @return {undefined}
+     */
+    _applyStyleName: function (component, styleName) {
+      if (styleName) {
+        component.addCssClass(styleName);
+      }
+    },
+
+    /**
      * @return {qx.ui.mobile.form.Button}
      * @param remoteAction {org.jspresso.framework.gui.remote.RAction}
      */
@@ -572,9 +592,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         button.setShow("label");
       } else {
         button.setGap(0);
-        var padding = "14px";
-        button._setStyle("padding-left", padding);
-        button._setStyle("padding-right", padding);
+        button.addCssClass("jspresso-button");
         button.setShow("icon");
       }
     },
@@ -617,14 +635,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           var label = new qx.ui.mobile.form.Label("<p>" + rComponent.getLabel() + "</p>");
           // Changes label color when disabled
           //label.setLabelFor(component.getId());
-          label._setStyle("width", "30%");
+          label.addCssClass("jspresso-form-label");
           row.add(label, {flex:1});
         }
-        component._setStyle("font-weight", "normal");
+        component.addCssClass("jspresso-form-element");
         if(this._isFixedWidth(rComponent)) {
           row.add(component);
         } else {
-          component._setStyle("width", "70%");
+          component.addCssClass("jspresso-element-grow");
           row.add(component, {flex:1});
         }
         if(this._isMultiline(rComponent)) {
@@ -759,7 +777,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           if(remoteTree instanceof org.jspresso.framework.gui.remote.mobile.RMobileTree) {
             item.setShowArrow(remoteTree.getShowArrow());
           }
-          item.getImageWidget()._setStyle("margin-left", data.level + "rem");
+        },
+        createItemRenderer : function() {
+          return new org.jspresso.framework.view.qx.mobile.TreeItemRenderer();
         }
       });
       treeList.setModel(treeListModel);
@@ -1187,7 +1207,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createColorField: function (remoteColorField) {
       var colorField = this._createFormattedField(remoteColorField);
-      colorField._setStyle("width", "initial");
+      colorField.addCssClass("jspresso-color-field");
       return colorField;
     },
 
