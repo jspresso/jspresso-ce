@@ -48,7 +48,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @return {qx.ui.mobile.core.Widget}
      */
     _createEmptyWidget: function () {
-      return new qx.ui.core.Widget();
+      return new qx.ui.mobile.core.Widget();
     },
 
     /**
@@ -630,8 +630,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         } else {
           row.setLayout(new qx.ui.mobile.layout.HBox())
         }
-        if(remoteForm.getLabelsPosition() != "NONE"
-            || rComponent instanceof org.jspresso.framework.gui.remote.RCheckBox) {
+        if(remoteForm.getLabelsPosition() != "NONE") {
           var label = new qx.ui.mobile.form.Label("<p>" + rComponent.getLabel() + "</p>");
           // Changes label color when disabled
           // label.setLabelFor(component.getId());
@@ -639,6 +638,15 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           // to align form elements to the left
           row.add(label/*, {flex:1}*/);
         }
+        if(remoteForm.getLabelsPosition() == "NONE"
+            && rComponent instanceof org.jspresso.framework.gui.remote.RCheckBox) {
+          var wrapper = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox());
+          component.addCssClass("checkbox-form");
+          wrapper.add(component);
+          wrapper.add(new qx.ui.mobile.form.Label(rComponent.getLabel()));
+          component = wrapper;
+        }
+
         component.addCssClass("jspresso-form-element");
         if(this._isFixedWidth(rComponent)) {
           row.add(component);
@@ -1050,7 +1058,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         var modelController = new qx.data.controller.Object(state);
         if (remoteLabel instanceof org.jspresso.framework.gui.remote.RLink && remoteLabel.getAction()) {
           this.__remotePeerRegistry.register(remoteLabel.getAction());
-          atom.setRich(true);
           modelController.addTarget(atom, "label", "value", false, {
             converter: function (modelValue, model) {
               if (modelValue) {
@@ -1404,7 +1411,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     },
 
     /**
-     * @return {qx.ui.core.Widget}
+     * @return {qx.ui.mobile.core.Widget}
      * @param remoteIntegerField {org.jspresso.framework.gui.remote.RIntegerField}
      */
     _createIntegerField: function (remoteIntegerField) {
@@ -1413,7 +1420,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     },
 
     /**
-     * @return {qx.ui.core.Widget}
+     * @return {qx.ui.mobile.core.Widget}
      * @param remoteDecimalField {org.jspresso.framework.gui.remote.RDecimalField}
      */
     _createDecimalField: function (remoteDecimalField) {
@@ -1422,12 +1429,21 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     },
 
     /**
-     * @return {qx.ui.core.Widget}
+     * @return {qx.ui.mobile.core.Widget}
      * @param remotePercentField {org.jspresso.framework.gui.remote.RPercentField}
      */
     _createPercentField: function (remotePercentField) {
       var percentField = this._createFormattedField(remotePercentField);
       return percentField;
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteDurationField {org.jspresso.framework.gui.remote.RDurationField}
+     */
+    _createDurationField: function (remoteDurationField) {
+      var durationField = this._createFormattedField(remoteDurationField);
+      return durationField;
     },
 
     /**
@@ -1458,6 +1474,63 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       remoteTimeField.useDateDto(true);
       dateTimeField.add(this.createComponent(remoteTimeField, false), {flex:1});
       return dateTimeField;
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteImageComponent {org.jspresso.framework.gui.remote.RImageComponent}
+     */
+    _createImageComponent: function (remoteImageComponent) {
+      var imageComponent = new qx.ui.mobile.basic.Image();
+
+      var state = remoteImageComponent.getState();
+      var modelController = new qx.data.controller.Object(state);
+      modelController.addTarget(imageComponent, "source", "value");
+
+      if (remoteImageComponent.getAction() != null) {
+        this._getRemotePeerRegistry().register(remoteImageComponent.getAction());
+        imageComponent.addListener("tap", function (e) {
+          this._getActionHandler().execute(remoteImageComponent.getAction());
+        }, this);
+      }
+      return imageComponent;
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteRadioBox {org.jspresso.framework.gui.remote.RRadioBox}
+     */
+    _createRadioBox: function (remoteRadioBox) {
+      var radioBox = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
+      var radioGroup = new qx.ui.mobile.form.RadioGroup();
+      for (var i = 0; i < remoteRadioBox.getValues().length; i++) {
+        var rb = new qx.ui.mobile.form.RadioButton();
+        rb.addCssClass("radiobutton-form");
+        rb.setModel(remoteRadioBox.getValues()[i]);
+        radioGroup.add(rb);
+        var option = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox());
+        option.add(rb);
+        option.add(new qx.ui.mobile.form.Label(remoteRadioBox.getTranslations()[i]));
+        radioBox.add(option);
+      }
+
+      var state = remoteRadioBox.getState();
+      var modelController = new qx.data.controller.Object(state);
+      modelController.addTarget(radioGroup, "modelSelection", "value", false, {
+        converter: function (modelValue, model) {
+          return [modelValue];
+        }
+      });
+      radioGroup.getModelSelection().addListener("change", function (e) {
+        var modelSelection = e.getTarget();
+        if (modelSelection.length > 0) {
+          state.setValue(modelSelection.getItem(0));
+        } else {
+          state.setValue(null);
+        }
+      });
+      modelController.addTarget(radioGroup, "enabled", "writable", false);
+      return radioBox;
     },
 
     /**
