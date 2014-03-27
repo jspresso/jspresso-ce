@@ -24,13 +24,16 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
       check: "Array"
     },
     actions: {
-      check: "Array"
+      check: "Array",
+      nullable: true
     },
     secondaryActions: {
-      check: "Array"
+      check: "Array",
+      nullable: true
     },
     helpActions: {
-      check: "Array"
+      check: "Array",
+      nullable: true
     },
     workspaceActions: {
       check: "org.jspresso.framework.gui.remote.RActionList"
