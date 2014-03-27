@@ -1057,7 +1057,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       if (state) {
         var modelController = new qx.data.controller.Object(state);
         if (remoteLabel instanceof org.jspresso.framework.gui.remote.RLink && remoteLabel.getAction()) {
-          this.__remotePeerRegistry.register(remoteLabel.getAction());
+          this._getRemotePeerRegistry().register(remoteLabel.getAction());
           modelController.addTarget(atom, "label", "value", false, {
             converter: function (modelValue, model) {
               if (modelValue) {
