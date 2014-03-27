@@ -720,7 +720,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       comboBox.setPlaceholder(remoteComboBox.getLabel());
       var cbModel = new qx.data.Array();
       for (var i = 0; i < remoteComboBox.getValues().length; i++) {
-        cbModel.push(remoteComboBox.getTranslations()[i]);
+        var tr = remoteComboBox.getTranslations()[i];
+        if (tr == " ") {
+          tr = String.fromCharCode(0x00A0);
+        }
+        cbModel.push(tr);
       }
       comboBox.setModel(cbModel);
       this._bindComboBox(remoteComboBox, comboBox);

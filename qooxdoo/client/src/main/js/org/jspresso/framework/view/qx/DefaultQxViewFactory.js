@@ -1547,12 +1547,15 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         for (var i = 0; i < remoteComboBox.getValues().length; i++) {
           if (i == 0 && remoteComboBox.getValues()[i].length > 0) {
             // Qx combos do not support null values
-            var fallbackLi = new qx.ui.form.ListItem(" ");
+            var fallbackLi = new qx.ui.form.ListItem(String.fromCharCode(0x00A0));
             fallbackLi.setModel("");
             this.setIcon(fallbackLi, null);
             comboBox.add(fallbackLi);
           }
           var tr = remoteComboBox.getTranslations()[i];
+          if (tr == " ") {
+            tr = String.fromCharCode(0x00A0);
+          }
           var li = new qx.ui.form.ListItem(tr);
           li.setModel(remoteComboBox.getValues()[i]);
           var rIcon = remoteComboBox.getIcons()[i];
