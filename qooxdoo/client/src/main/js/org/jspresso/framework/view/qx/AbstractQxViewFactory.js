@@ -281,10 +281,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
      * @param rComponent {org.jspresso.framework.gui.remote.RComponent}
      */
     _isMultiline: function (rComponent) {
-      return rComponent instanceof org.jspresso.framework.gui.remote.RTable || rComponent
-          instanceof org.jspresso.framework.gui.remote.RTextArea || rComponent
-          instanceof org.jspresso.framework.gui.remote.RList || rComponent
-          instanceof org.jspresso.framework.gui.remote.RHtmlArea;
+      throw new Error("_isMultiline is abstract.");
     },
 
     /**

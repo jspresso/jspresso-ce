@@ -2772,6 +2772,17 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @return {Boolean}
      * @param rComponent {org.jspresso.framework.gui.remote.RComponent}
      */
+    _isMultiline: function (rComponent) {
+      return rComponent instanceof org.jspresso.framework.gui.remote.RTable || rComponent
+          instanceof org.jspresso.framework.gui.remote.RTextArea || rComponent
+          instanceof org.jspresso.framework.gui.remote.RList || rComponent
+          instanceof org.jspresso.framework.gui.remote.RHtmlArea;
+    },
+
+    /**
+     * @return {Boolean}
+     * @param rComponent {org.jspresso.framework.gui.remote.RComponent}
+     */
     _isFixedWidth: function (rComponent) {
       return rComponent instanceof org.jspresso.framework.gui.remote.RDateField || rComponent
           instanceof org.jspresso.framework.gui.remote.RTimeField || rComponent

@@ -20,7 +20,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
   statics: {
     bindListItem: function (item, state, selected) {
       var children = state.getChildren();
-      if(state.getValue()) {
+      if (state.getValue()) {
         item.setTitle(state.getValue());
       } else if (children.length > 1) {
         item.setTitle(children.getItem(1).getValue());
@@ -135,8 +135,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         for (var i = 0; i < buttons.length; i++) {
           buttons[i].removeCssClass("toolbar-button");
         }
-        if(component) {
-          actionField.add(component, {flex:1});
+        if (component) {
+          actionField.add(component, {flex: 1});
           actionField.add(toolBar);
           return actionField;
         } else {
@@ -156,18 +156,18 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       extraMenu.getSelectionList().setDelegate({
         configureItem: function (item, data, row) {
           item.setTitle(data.getName());
-          if(data.getIcon()) {
+          if (data.getIcon()) {
             item.setImage(data.getIcon().getImageUrlSpec());
           }
         }
       });
       extraMenu.getSelectionList().setModel(new qx.data.Array(extraActions));
       extraMenu.setAnchor(extraButton);
-      extraMenu.addListener("changeSelection", function(evt){
+      extraMenu.addListener("changeSelection", function (evt) {
         var selectedIndex = evt.getData();
         this._getActionHandler().execute(extraActions[selectedIndex]);
       }, this);
-      this.addButtonListener(extraButton, function(evt) {
+      this.addButtonListener(extraButton, function (evt) {
         extraMenu.show();
       }, this);
       return extraButton;
@@ -206,7 +206,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       for (var i = 0; i < actions.length; i++) {
         if (i < maxToolbarActionCount - 1 || actions.length == maxToolbarActionCount) {
           actionComponent = this.createToolBarAction(actions[i]);
-          if(modelController) {
+          if (modelController) {
             modelController.addTarget(actionComponent, "enabled", "writable", false);
           }
           toolBar.add(actionComponent);
@@ -216,7 +216,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       }
       if (extraActions.length > 0) {
         actionComponent = this._createExtraActionsToolBarButton(extraActions);
-        if(modelController) {
+        if (modelController) {
           modelController.addTarget(actionComponent, "enabled", "writable", false);
         }
         toolBar.add(actionComponent);
@@ -257,8 +257,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           instanceof org.jspresso.framework.gui.remote.RComboBox || remoteComponent
           instanceof org.jspresso.framework.gui.remote.RCheckBox) {
         return this._decorateWithAsideActions(component, remoteComponent, false);
-      } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RForm
-          || remoteComponent instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
+      } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RForm || remoteComponent
+          instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
         this._addToolBarActions(remoteComponent, /** @type {qx.ui.mobile.container.Composite} */ component);
         return component;
       } else {
@@ -277,12 +277,12 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @param pageAction {org.jspresso.framework.gui.remote.RAction}
      */
     installPageMainAction: function (page, pageAction) {
-      if(pageAction) {
+      if (pageAction) {
         page.setButtonText(pageAction.getName());
-        if(pageAction.getIcon()) {
+        if (pageAction.getIcon()) {
           page.setButtonIcon(pageAction.getIcon().getImageUrlSpec());
         }
-        page.addListener("action", function(event) {
+        page.addListener("action", function (event) {
           this._loseFocus();
           this._getActionHandler().execute(pageAction);
         }, this);
@@ -308,7 +308,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     installPageBackAction: function (page, backAction) {
       if (backAction) {
-        this.linkNextPageBackButton(page,  null, backAction, null);
+        this.linkNextPageBackButton(page, null, backAction, null);
       }
     },
 
@@ -319,7 +319,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     installPageEndAction: function (page, pageEndAction) {
       if (pageEndAction) {
         page.addListener("initialize", function (e) {
-          page._getScrollContainer().addListener("pageEnd", function(e) {
+          page._getScrollContainer().addListener("pageEnd", function (e) {
             this._getActionHandler().execute(pageEndAction);
           }, this);
         }, this);
@@ -357,8 +357,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.RBorderContainer) {
         container = this._createBorderContainer(remoteContainer);
       }
-      if(  remoteContainer instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAware
-          && container instanceof qx.ui.mobile.page.NavigationPage) {
+      if (remoteContainer instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAware && container
+          instanceof qx.ui.mobile.page.NavigationPage) {
         this.installPageActions(remoteContainer, container);
       }
       return container;
@@ -421,14 +421,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       if (remoteNavPage.getNextPage()) {
         /** @type {qx.ui.mobile.page.NavigationPage} */
         var nextPage = this.createComponent(remoteNavPage.getNextPage());
-        selectionComponent.addListener("changeSelection", function(evt) {
+        selectionComponent.addListener("changeSelection", function (evt) {
           var pageToShow = this._getActualPageToShow(nextPage);
           if (pageToShow && pageToShow.getVisibility() != "visible") {
             pageToShow.show();
           }
         }, this);
         // Because of MobileCardPage
-        if(nextPage instanceof qx.ui.mobile.page.NavigationPage) {
+        if (nextPage instanceof qx.ui.mobile.page.NavigationPage) {
           this.linkNextPageBackButton(nextPage, navPage, null, null);
         } else {
           nextPage.setUserData("previousPage", navPage);
@@ -445,29 +445,29 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @param animation {String}
      */
     linkNextPageBackButton: function (nextPage, previousPage, backAction, animation) {
-      if(typeof animation === undefined) animation = "slide";
+      if (typeof animation === undefined) animation = "slide";
 
       if (previousPage || backAction) {
         nextPage.setShowBackButton(true);
         var backButton = nextPage.getLeftContainer().getChildren()[0];
         backButton.setShow("both");
-        if(backAction && backAction.getName()) {
+        if (backAction && backAction.getName()) {
           nextPage.setBackButtonText(backAction.getName());
         } else {
           backButton.setIcon("org/jspresso/framework/mobile/back-mobile.png");
         }
-        if(backAction) {
+        if (backAction) {
           nextPage.addListener("back", function () {
             this._loseFocus();
             this._getActionHandler().execute(backAction);
           }, this);
         }
-        if(previousPage) {
+        if (previousPage) {
           nextPage.addListener("back", function () {
             this._loseFocus();
             // Force page exclusion since nextPage visibility might be made "excluded" too late.
             nextPage.setVisibility("excluded");
-            this._getActualPageToShow(previousPage).show({animation: animation,  reverse: true});
+            this._getActualPageToShow(previousPage).show({animation: animation, reverse: true});
           }, this);
         }
       }
@@ -481,9 +481,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var compositePage = new qx.ui.mobile.page.NavigationPage();
       compositePage.setTitle(remoteCompositePage.getLabel());
       var sections = [];
-      for(var i = 0; i < remoteCompositePage.getPageSections().length; i++) {
+      for (var i = 0; i < remoteCompositePage.getPageSections().length; i++) {
         var remotePageSection = remoteCompositePage.getPageSections()[i];
-        if(remotePageSection instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
+        if (remotePageSection instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
           /** @type {qx.ui.mobile.page.NavigationPage} */
           var nextPage = this.createComponent(remotePageSection);
           this.linkNextPageBackButton(nextPage, compositePage, null, null);
@@ -497,14 +497,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
               var section = data.section;
               item.setTitle(section.getLabel());
               item.setSubtitle(section.getToolTip());
-              if(section.getIcon()) {
+              if (section.getIcon()) {
                 item.setImage(section.getIcon().getImageUrlSpec());
               }
               item.setShowArrow(true);
             }
           });
           list.setModel(listModel);
-          list.addListener("changeSelection", function(evt) {
+          list.addListener("changeSelection", function (evt) {
             var selectedIndex = evt.getData();
             /** @type {qx.ui.mobile.list.List} */
             var l = evt.getCurrentTarget();
@@ -519,7 +519,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           sections.push(pageSection);
         }
       }
-      if(remoteCompositePage.getEditAction() && remoteCompositePage.getEditorPage()) {
+      if (remoteCompositePage.getEditAction() && remoteCompositePage.getEditorPage()) {
         var editorPage = this.createComponent(remoteCompositePage.getEditorPage());
         this.linkNextPageBackButton(editorPage, compositePage, null, "flip");
         compositePage.setUserData("editorPage", editorPage);
@@ -529,14 +529,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           var editActionList = new org.jspresso.framework.gui.remote.RActionList();
           editActionList.setActions([remoteCompositePage.getEditAction()]);
           var actionLists = [editActionList];
-          if(remoteCompositePage.getActionLists()) {
+          if (remoteCompositePage.getActionLists()) {
             actionLists = actionLists.concat(remoteCompositePage.getActionLists());
           }
           remoteCompositePage.setActionLists(actionLists);
         }
       }
       compositePage.addListener("initialize", function (e) {
-        for(var i = 0; i < sections.length; i++) {
+        for (var i = 0; i < sections.length; i++) {
           compositePage.getContent().add(sections[i]);
         }
       }, this);
@@ -567,7 +567,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     createToolBarButton: function (label, toolTip, icon) {
       var button = new qx.ui.mobile.toolbar.Button();
       this._completeButton(button, label, toolTip, icon);
-      if(button.getShow() == "both") {
+      if (button.getShow() == "both") {
         button.setIconPosition("top");
       }
       return button;
@@ -586,9 +586,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       if (label) {
         button.setLabel(label);
       }
-      if(label && icon) {
+      if (label && icon) {
         button.setShow("both");
-      } else if(label) {
+      } else if (label) {
         button.setShow("label");
       } else {
         button.setGap(0);
@@ -624,13 +624,12 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         var row = new qx.ui.mobile.container.Composite();
         row.addCssClass("form-row");
         row.addCssClass("form-row-content");
-        if(remoteForm.getLabelsPosition() == "ABOVE"
-            || this._isMultiline(rComponent)) {
+        if (remoteForm.getLabelsPosition() == "ABOVE") {
           row.setLayout(new qx.ui.mobile.layout.VBox());
         } else {
-          row.setLayout(new qx.ui.mobile.layout.HBox())
+          row.setLayout(new qx.ui.mobile.layout.HBox());
         }
-        if(remoteForm.getLabelsPosition() != "NONE") {
+        if (remoteForm.getLabelsPosition() != "NONE") {
           var label = new qx.ui.mobile.form.Label("<p>" + rComponent.getLabel() + "</p>");
           // Changes label color when disabled
           // label.setLabelFor(component.getId());
@@ -638,8 +637,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           // to align form elements to the left
           row.add(label/*, {flex:1}*/);
         }
-        if(remoteForm.getLabelsPosition() == "NONE"
-            && rComponent instanceof org.jspresso.framework.gui.remote.RCheckBox) {
+        if (remoteForm.getLabelsPosition() == "NONE" && rComponent
+            instanceof org.jspresso.framework.gui.remote.RCheckBox) {
           var wrapper = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox());
           component.addCssClass("checkbox-form");
           wrapper.add(component);
@@ -648,14 +647,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
 
         component.addCssClass("jspresso-form-element");
-        if(this._isFixedWidth(rComponent)) {
+        if (this._isFixedWidth(rComponent)) {
           row.add(component);
         } else {
           component.addCssClass("jspresso-form-element-grow");
-          row.add(component, {flex:1});
+          row.add(component, {flex: 1});
         }
-        if(this._isMultiline(rComponent)) {
-          form.add(row, {flex:1});
+        if (this._isMultiline(rComponent)) {
+          form.add(row, {flex: 1});
         } else {
           form.add(row);
         }
@@ -745,23 +744,20 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _bindComboBox: function (remoteComboBox, comboBox) {
       // To workaround the fact that value change is not notified correctly.
-      comboBox.addListener("changeSelection", function(evt) {
+      comboBox.addListener("changeSelection", function (evt) {
         comboBox.setValue(evt.getData()["item"]);
       }, this);
       var state = remoteComboBox.getState();
       var modelController = new qx.data.controller.Object(state);
-      modelController.addTarget(comboBox, "value", "value", true,
-          {
-            converter: function (modelValue, model, source, target) {
-              return model.getItem(remoteComboBox.getValues().indexOf(modelValue));
-            }
-          },
-          {
-            converter: function (modelValue, model, source, target) {
-              return remoteComboBox.getValues()[comboBox.getModel().indexOf(modelValue)];
-            }
-          }
-      );
+      modelController.addTarget(comboBox, "value", "value", true, {
+        converter: function (modelValue, model, source, target) {
+          return model.getItem(remoteComboBox.getValues().indexOf(modelValue));
+        }
+      }, {
+        converter: function (modelValue, model, source, target) {
+          return remoteComboBox.getValues()[comboBox.getModel().indexOf(modelValue)];
+        }
+      });
       modelController.addTarget(comboBox, "enabled", "writable", false);
     },
 
@@ -781,31 +777,32 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createTree: function (remoteTree) {
 
-      var treeListModel = org.jspresso.framework.state.remote.RemoteCompositeValueState.flatten(remoteTree.getState(), 0);
+      var treeListModel = org.jspresso.framework.state.remote.RemoteCompositeValueState.flatten(remoteTree.getState(),
+          0);
 
       var treeList = new qx.ui.mobile.list.List({
         configureItem: function (item, data, row) {
           var state = data.state;
           org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.bindListItem(item, state, false);
-          if(remoteTree instanceof org.jspresso.framework.gui.remote.mobile.RMobileTree) {
+          if (remoteTree instanceof org.jspresso.framework.gui.remote.mobile.RMobileTree) {
             item.setShowArrow(remoteTree.getShowArrow());
           }
           item.setLevel(data.level);
         },
-        createItemRenderer : function() {
+        createItemRenderer: function () {
           return new org.jspresso.framework.view.qx.mobile.TreeItemRenderer();
         }
       });
       treeList.setModel(treeListModel);
       var selections = [];
-      treeList.addListener("changeSelection", function(evt) {
+      treeList.addListener("changeSelection", function (evt) {
         var futureDeselections = [];
         var localLevel = 0;
-        for(var i = 1; i < treeListModel.length; i++) {
+        for (var i = 1; i < treeListModel.length; i++) {
           var lowerNode = treeListModel.getItem(i);
-          if(lowerNode.level > localLevel) {
-            var currentNode = treeListModel.getItem(i-1);
-            if(currentNode.state.getSelectedIndices() != null && currentNode.state.getSelectedIndices().length > 0) {
+          if (lowerNode.level > localLevel) {
+            var currentNode = treeListModel.getItem(i - 1);
+            if (currentNode.state.getSelectedIndices() != null && currentNode.state.getSelectedIndices().length > 0) {
               futureDeselections.push(currentNode.state);
             }
           }
@@ -815,12 +812,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         var currentNode = treeListModel.getItem(selectedIndex);
         var localIndex = 0;
         var futureSelections = [];
-        for(var i = selectedIndex-1; i >= 0; i--) {
+        for (var i = selectedIndex - 1; i >= 0; i--) {
           var upperNode = treeListModel.getItem(i);
-          if(upperNode.level < currentNode.level) {
-            futureSelections = [{state: upperNode.state, selection: [localIndex]}].concat(futureSelections);
+          if (upperNode.level < currentNode.level) {
+            futureSelections = [
+              {state: upperNode.state, selection: [localIndex]}
+            ].concat(futureSelections);
             var j = futureDeselections.indexOf(upperNode.state);
-            if(j >= 0) {
+            if (j >= 0) {
               futureDeselections[j] = null;
             }
             currentNode = upperNode;
@@ -829,14 +828,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
             localIndex++;
           }
         }
-        for(var i = 0; i < futureDeselections.length; i++) {
-          if(futureDeselections[i]) {
+        for (var i = 0; i < futureDeselections.length; i++) {
+          if (futureDeselections[i]) {
             futureDeselections[i].setLeadingIndex(-1);
             futureDeselections[i].setSelectedIndices(null);
           }
         }
-        for(var i = 0; i < futureSelections.length ; i++) {
-          if(futureSelections[i]) {
+        for (var i = 0; i < futureSelections.length; i++) {
+          if (futureSelections[i]) {
             futureSelections[i].state.setLeadingIndex(futureSelections[i].selection[0]);
             futureSelections[i].state.setSelectedIndices(futureSelections[i].selection);
           }
@@ -893,7 +892,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       }
       if (remoteBorderContainer.getCenter()) {
         var child = this.createComponent(remoteBorderContainer.getCenter());
-        borderContainer.add(child, {flex:1});
+        borderContainer.add(child, {flex: 1});
       }
       if (remoteBorderContainer.getSouth()) {
         var child = this.createComponent(remoteBorderContainer.getSouth());
@@ -919,7 +918,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @param cardName {String}
      */
     addCard: function (cardContainer, rCardComponent, cardName) {
-      if(rCardComponent instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
+      if (rCardComponent instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
         var children = cardContainer.getChildren();
         var existingCards = cardContainer.getUserData("existingCards");
         var existingCard = existingCards.indexOf(cardName) >= 0;
@@ -1107,7 +1106,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var datePicker = new org.jspresso.framework.view.qx.mobile.DatePicker(datePickerButton, this.__monthNames);
       datePicker.setConfirmButtonCaption(this._getActionHandler().translate("ok"));
       datePicker.setCancelButtonCaption(this._getActionHandler().translate("cancel"));
-      datePickerButton.addListener("tap", function(e) {
+      datePickerButton.addListener("tap", function (e) {
         var current = remoteDateField.getState().getValue();
         if (current) {
           if (current instanceof Date) {
@@ -1121,13 +1120,13 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
         datePicker.setSelectedIndex(2, datePicker.getYearIndex(current.getYear()));
         datePicker.setSelectedIndex(1, current.getMonth());
-        datePicker.setSelectedIndex(0, current.getDate()-1);
+        datePicker.setSelectedIndex(0, current.getDate() - 1);
         datePicker.show();
       }, this);
       var dateFieldWithPicker = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox());
-      dateFieldWithPicker.add(dateField, {flex:1});
-      dateFieldWithPicker.add(datePickerButton, {flex:0});
-      datePicker.addListener("confirmSelection", function(e) {
+      dateFieldWithPicker.add(dateField, {flex: 1});
+      dateFieldWithPicker.add(datePickerButton, {flex: 0});
+      datePicker.addListener("confirmSelection", function (e) {
         var current = remoteDateField.getState().getValue();
         if (current) {
           if (current instanceof Date) {
@@ -1163,10 +1162,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var timePickerButton = this.createButton("...", null, null);
       timeField.bind("enabled", timePickerButton, "enabled");
       timePickerButton.removeCssClass("button");
-      var timePicker = new org.jspresso.framework.view.qx.mobile.TimePicker(timePickerButton, remoteTimeField.getSecondsAware());
+      var timePicker = new org.jspresso.framework.view.qx.mobile.TimePicker(timePickerButton,
+          remoteTimeField.getSecondsAware());
       timePicker.setConfirmButtonCaption(this._getActionHandler().translate("ok"));
       timePicker.setCancelButtonCaption(this._getActionHandler().translate("cancel"));
-      timePickerButton.addListener("tap", function(e) {
+      timePickerButton.addListener("tap", function (e) {
         var current = remoteTimeField.getState().getValue();
         if (current) {
           if (current instanceof Date) {
@@ -1184,9 +1184,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         timePicker.show();
       }, this);
       var timeFieldWithPicker = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox());
-      timeFieldWithPicker.add(timeField, {flex:1});
-      timeFieldWithPicker.add(timePickerButton, {flex:0});
-      timePicker.addListener("confirmSelection", function(e) {
+      timeFieldWithPicker.add(timeField, {flex: 1});
+      timeFieldWithPicker.add(timePickerButton, {flex: 0});
+      timePicker.addListener("confirmSelection", function (e) {
         var current = remoteTimeField.getState().getValue();
         if (current) {
           if (current instanceof Date) {
@@ -1198,7 +1198,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         var hour = parseInt(e.getData()[0].item);
         var minute = parseInt(e.getData()[1].item);
         var second = 0;
-        if(e.getData().length > 2) {
+        if (e.getData().length > 2) {
           second = parseInt(e.getData()[2].item);
         }
 
@@ -1235,8 +1235,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var listModel = state.getChildren();
 
       var rendererType;
-      if (remoteList.getSelectionMode() == "SINGLE_SELECTION"
-          || remoteList.getSelectionMode() == "SINGLE_CUMULATIVE_SELECTION") {
+      if (remoteList.getSelectionMode() == "SINGLE_SELECTION" || remoteList.getSelectionMode()
+          == "SINGLE_CUMULATIVE_SELECTION") {
         rendererType = qx.ui.mobile.list.renderer.Default;
       } else {
         rendererType = org.jspresso.framework.view.qx.mobile.CheckBoxListItemRenderer;
@@ -1246,40 +1246,40 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         configureItem: function (item, data, row) {
           var selectedIndices = state.getSelectedIndices();
           var selected = selectedIndices != null && selectedIndices.indexOf(row) >= 0;
-          org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.bindListItem(item,  data, selected);
-          if(remoteList instanceof org.jspresso.framework.gui.remote.mobile.RMobileList) {
+          org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.bindListItem(item, data, selected);
+          if (remoteList instanceof org.jspresso.framework.gui.remote.mobile.RMobileList) {
             item.setShowArrow(remoteList.getShowArrow());
           }
         },
-        createItemRenderer : function() {
+        createItemRenderer: function () {
           return new rendererType();
         }
       });
 
       list.setModel(listModel);
 
-      list.addListener("changeSelection", function(evt) {
+      list.addListener("changeSelection", function (evt) {
         var selectedIndex = evt.getData();
         var stateSelectedIndices = state.getSelectedIndices();
         var item = listModel.getItem(selectedIndex);
-        if (remoteList.getSelectionMode() == "SINGLE_SELECTION"
-            || remoteList.getSelectionMode() == "SINGLE_CUMULATIVE_SELECTION") {
+        if (remoteList.getSelectionMode() == "SINGLE_SELECTION" || remoteList.getSelectionMode()
+            == "SINGLE_CUMULATIVE_SELECTION") {
           if (!stateSelectedIndices || !qx.lang.Array.equals(stateSelectedIndices, [selectedIndex])) {
             state.setLeadingIndex(selectedIndex);
             state.setSelectedIndices([selectedIndex]);
           }
         } else {
           var selectedIndices = stateSelectedIndices;
-          if(selectedIndices == null) {
+          if (selectedIndices == null) {
             selectedIndices = [];
           } else {
             selectedIndices = selectedIndices.concat([]);
           }
           var selected = selectedIndices.indexOf(selectedIndex);
           var leadingIndex;
-          if(list.getUserData("tapEvent") && selected >= 0) {
+          if (list.getUserData("tapEvent") && selected >= 0) {
             selectedIndices.splice(selected, 1);
-            if(selectedIndices.length > 0) {
+            if (selectedIndices.length > 0) {
               leadingIndex = selectedIndices[0];
             } else {
               leadingIndex = -1;
@@ -1455,7 +1455,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var oldType = remoteDateField.getType();
       try {
         remoteDateField.setType("DATE");
-        dateTimeField.add(this._createDateField(remoteDateField), {flex:1});
+        dateTimeField.add(this._createDateField(remoteDateField), {flex: 1});
       } catch (e) {
         throw e;
       } finally {
@@ -1472,7 +1472,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       remoteTimeField.setToolTip(remoteDateField.getToolTip());
       remoteTimeField.setSecondsAware(remoteDateField.getSecondsAware());
       remoteTimeField.useDateDto(true);
-      dateTimeField.add(this.createComponent(remoteTimeField, false), {flex:1});
+      dateTimeField.add(this.createComponent(remoteTimeField, false), {flex: 1});
       return dateTimeField;
     },
 
@@ -1493,6 +1493,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           this._getActionHandler().execute(remoteImageComponent.getAction());
         }, this);
       }
+      var layout = new qx.ui.mobile.layout.HBox().set({alignX: "center", alignY: "middle"});
+      var wrapper = new qx.ui.mobile.container.Composite(layout);
+      wrapper.add(imageComponent, {flex: 1});
+      imageComponent = wrapper;
       return imageComponent;
     },
 
@@ -1537,9 +1541,22 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @return {Boolean}
      * @param rComponent {org.jspresso.framework.gui.remote.RComponent}
      */
+    _isMultiline: function (rComponent) {
+      return rComponent instanceof org.jspresso.framework.gui.remote.RTable || rComponent
+          instanceof org.jspresso.framework.gui.remote.RTextArea || rComponent
+          instanceof org.jspresso.framework.gui.remote.RList || rComponent
+          instanceof org.jspresso.framework.gui.remote.RHtmlArea || (rComponent
+          instanceof org.jspresso.framework.gui.remote.RImageComponent && !rComponent.isScrollable());
+    },
+
+    /**
+     * @return {Boolean}
+     * @param rComponent {org.jspresso.framework.gui.remote.RComponent}
+     */
     _isFixedWidth: function (rComponent) {
       return rComponent instanceof org.jspresso.framework.gui.remote.RCheckBox || rComponent
-          instanceof org.jspresso.framework.gui.remote.RLabel || (rComponent
+          instanceof org.jspresso.framework.gui.remote.RLabel || /*rComponent
+       instanceof org.jspresso.framework.gui.remote.RImageComponent ||*/ (rComponent
           instanceof org.jspresso.framework.gui.remote.RActionField && !rComponent.isShowTextField());
     }
 
