@@ -101,7 +101,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     _restart: function () {
       this.__workspacePages = {};
       this.__displayedWorkspaceName = null;
-      if(this.__workspacesMasterPage) {
+      if (this.__workspacesMasterPage) {
         this.__workspacesMasterPage.exclude();
       }
       this.base(arguments);
@@ -151,7 +151,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
           dialogPage = topDialogPage;
         }
       }
-      if(dialogPage == null) {
+      if (dialogPage == null) {
         dialogPage = new qx.ui.mobile.page.NavigationPage();
         dialogPage.addListener("initialize", function (e) {
           dialogPage.getContent().add(dialogContent);
@@ -167,12 +167,22 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         dialogPage.getContent().add(dialogContent);
       }
       dialogPage.setTitle(title);
-      if(remoteDialogView instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAware) {
+      if (remoteDialogView instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAware) {
         this._getViewFactory().installPageActions(remoteDialogView, dialogPage);
       }
       dialogPage.show({animation: "slideup"});
+      this.__setMasterSectionVisible(false);
+    },
+
+    __setMasterSectionVisible: function (visible) {
       if (this.__manager.getMasterButton()) {
-        this.__manager.getMasterButton().exclude();
+        if (visible) {
+          this.__manager.setMasterContainerHidden(false);
+          this.__manager.getMasterButton().setVisibility("visible");
+        } else {
+          this.__manager.setMasterContainerHidden(true);
+          this.__manager.getMasterButton().setVisibility("excluded");
+        }
       }
     },
 
@@ -188,16 +198,14 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
           //topDialogPage.destroy();
         }
       }
-      if(this._dialogStack) {
+      if (this._dialogStack) {
         if (this._dialogStack.length == 1) {
           if (this.__pageToRestore) {
             this.__pageToRestore.show({animation: "slideup", reverse: true});
           }
-          if (this.__manager.getMasterButton()) {
-            this.__manager.getMasterButton().setVisibility("visible");
-          }
+          this.__setMasterSectionVisible(true);
         } else {
-          this._dialogStack[this._dialogStack.length-1][0].show({animation: "slideup", reverse: true});
+          this._dialogStack[this._dialogStack.length - 1][0].show({animation: "slideup", reverse: true});
         }
       }
     },
@@ -217,11 +225,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     _initApplicationFrame: function (workspaceNames, workspaceActions, exitAction, navigationActions, actions,
                                      secondaryActions, helpActions, size) {
       this.__workspacesMasterPage = new qx.ui.mobile.page.NavigationPage();
-      this.__exitAction= exitAction;
+      this.__exitAction = exitAction;
       var workspacesNavigatorModel = new qx.data.Array();
       for (var i = 0; i < workspaceActions.getActions().length; i++) {
         workspacesNavigatorModel.push({
-          workspaceName:   workspaceNames[i],
+          workspaceName: workspaceNames[i],
           workspaceAction: workspaceActions.getActions()[i]
         });
       }
@@ -229,18 +237,18 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         configureItem: function (item, data, row) {
           item.setTitle(data.workspaceAction.getName());
           item.setSubtitle(data.workspaceAction.getDescription());
-          if(data.workspaceAction.getIcon()) {
+          if (data.workspaceAction.getIcon()) {
             item.setImage(data.workspaceAction.getIcon().getImageUrlSpec());
           }
           item.setShowArrow(true);
         }
       });
       workspaceNavigator.setModel(workspacesNavigatorModel);
-      workspaceNavigator.addListener("changeSelection", function(evt) {
+      workspaceNavigator.addListener("changeSelection", function (evt) {
         var selectedIndex = evt.getData();
         var workspaceAction = workspacesNavigatorModel.getItem(selectedIndex).workspaceAction;
         var workspacePage = this.__workspacePages[workspaceNames[selectedIndex]];
-        if(workspacePage) {
+        if (workspacePage) {
           workspacePage.show();
         }
         this.execute(workspaceAction);
@@ -262,7 +270,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      * @return {undefined}
      */
     _displayWorkspace: function (workspaceName, workspaceView) {
-      if(workspaceName == this.__displayedWorkspaceName) {
+      if (workspaceName == this.__displayedWorkspaceName) {
         return;
       }
       this.__displayedWorkspaceName = workspaceName;
@@ -416,7 +424,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     _handleFocusCommand: function (targetPeer, focusCommand) {
       /** qx.ui.mobile.core.Widget */
       var component = targetPeer.retrievePeer();
-      if(component instanceof qx.ui.mobile.page.NavigationPage) {
+      if (component instanceof qx.ui.mobile.page.NavigationPage) {
         this._getViewFactory().focus(/** qx.ui.mobile.page.NavigationPage */ component);
       }
     },
@@ -434,7 +442,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       } else {
         component = targetPeer.retrievePeer();
       }
-      if(component instanceof qx.ui.mobile.page.NavigationPage) {
+      if (component instanceof qx.ui.mobile.page.NavigationPage) {
         this._getViewFactory().edit(/** qx.ui.mobile.page.NavigationPage */ component);
       }
     },
