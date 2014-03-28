@@ -94,12 +94,17 @@
     </property>
   </bean>
 
-  <bean id="remoteViewFactory" abstract="true"
+  <bean id="mobileViewFactoryBase" abstract="true"
         class="org.jspresso.framework.view.remote.mobile.MobileRemoteViewFactory"
-    parent="viewFactoryBase">
-    <property name="editPageAction" ref="editPageAction" />
+        parent="viewFactoryBase">
+    <property name="editPageAction" ref="editPageAction"/>
     <property name="savePageAction" ref="saveAndGoBackFrontAction"/>
     <property name="cancelPageAction" ref="reloadAndGoBackFrontAction"/>
+  </bean>
+
+  <bean id="remoteViewFactory" abstract="true"
+        class="org.jspresso.framework.view.remote.mobile.MobileRemoteViewFactory"
+    parent="mobileViewFactoryBase">
   </bean>
 
   <!-- QBE customization since remote view supports 3-state checkboxes -->
@@ -108,8 +113,10 @@
   </bean>
 
   <!-- The controllers. -->
-  <bean id="remoteFrontController" abstract="true" parent="abstractFrontController"
-    class="org.jspresso.framework.application.frontend.controller.remote.mobile.MobileRemoteController" />
+  <bean id="abstractMobileFrontController" abstract="true" parent="abstractFrontController"
+        class="org.jspresso.framework.application.frontend.controller.remote.mobile.MobileRemoteController"/>
+
+  <bean id="remoteFrontController" abstract="true" parent="abstractMobileFrontController"/>
 
   <bean id="queryViewDescriptorFactoryBase"
         class="org.jspresso.framework.application.view.mobile.MobileQueryViewDescriptorFactory">
