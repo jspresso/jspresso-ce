@@ -197,7 +197,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
             this.__manager.getMasterButton().setVisibility("visible");
           }
         } else {
-          this._dialogStack[this._dialogStack.length-1][0].show({animation: "slideup"});
+          this._dialogStack[this._dialogStack.length-1][0].show({animation: "slideup", reverse: true});
         }
       }
     },

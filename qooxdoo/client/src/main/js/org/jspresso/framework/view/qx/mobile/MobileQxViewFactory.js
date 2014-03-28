@@ -427,12 +427,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
             pageToShow.show();
           }
         }, this);
-        // Because of MobileCardPage
-        if (nextPage instanceof qx.ui.mobile.page.NavigationPage) {
-          this.linkNextPageBackButton(nextPage, navPage, null, null);
-        } else {
-          nextPage.setUserData("previousPage", navPage);
-        }
+        this.linkNextPageBackButton(nextPage, navPage, null, null);
       }
       this._addDetailPage(navPage);
       return navPage;
@@ -445,6 +440,26 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @param animation {String}
      */
     linkNextPageBackButton: function (nextPage, previousPage, backAction, animation) {
+      // Because of MobileCardPage
+      if (!(nextPage instanceof qx.ui.mobile.page.NavigationPage)) {
+        if (!nextPage.getUserData("previousPage")) {
+          var existingCard = nextPage.getUserData("currentPage");
+          if (existingCard) {
+            this.linkNextPageBackButton(existingCard, previousPage, backAction, animation);
+          }
+          var existingCards = nextPage.getChildren();
+          if (existingCards) {
+            for (var i = 0; i < existingCards.length; i++) {
+              if (existingCard != existingCards[i]) {
+                this.linkNextPageBackButton(existingCards[i], previousPage, backAction, animation);
+              }
+            }
+          }
+          nextPage.setUserData("previousPage", previousPage);
+        }
+        return;
+      }
+
       if (typeof animation === undefined) animation = "slide";
 
       if (previousPage || backAction) {
@@ -636,13 +651,25 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           label.addCssClass("jspresso-form-label");
           // to align form elements to the left
           row.add(label/*, {flex:1}*/);
+        } else {
+          if (rComponent instanceof org.jspresso.framework.gui.remote.RCheckBox) {
+            var wrapper = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox());
+            component.addCssClass("checkbox-form");
+            wrapper.add(component);
+            wrapper.add(new qx.ui.mobile.form.Label(rComponent.getLabel()));
+            component = wrapper;
+          }
         }
-        if (remoteForm.getLabelsPosition() == "NONE" && rComponent
-            instanceof org.jspresso.framework.gui.remote.RCheckBox) {
-          var wrapper = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox());
-          component.addCssClass("checkbox-form");
-          wrapper.add(component);
-          wrapper.add(new qx.ui.mobile.form.Label(rComponent.getLabel()));
+
+        if (rComponent instanceof org.jspresso.framework.gui.remote.RImageComponent) {
+          var layout = new qx.ui.mobile.layout.HBox().set({alignY: "middle"});
+          if (remoteForm.getLabelsPosition() == "NONE") {
+            layout.setAlignX("center");
+          } else {
+            layout.setAlignX("left");
+          }
+          var wrapper = new qx.ui.mobile.container.Composite(layout);
+          wrapper.add(component, {flex: 1});
           component = wrapper;
         }
 
@@ -1493,10 +1520,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           this._getActionHandler().execute(remoteImageComponent.getAction());
         }, this);
       }
-      var layout = new qx.ui.mobile.layout.HBox().set({alignX: "center", alignY: "middle"});
-      var wrapper = new qx.ui.mobile.container.Composite(layout);
-      wrapper.add(imageComponent, {flex: 1});
-      imageComponent = wrapper;
       return imageComponent;
     },
 
@@ -1555,8 +1578,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _isFixedWidth: function (rComponent) {
       return rComponent instanceof org.jspresso.framework.gui.remote.RCheckBox || rComponent
-          instanceof org.jspresso.framework.gui.remote.RLabel || /*rComponent
-       instanceof org.jspresso.framework.gui.remote.RImageComponent ||*/ (rComponent
+          instanceof org.jspresso.framework.gui.remote.RLabel || (rComponent
           instanceof org.jspresso.framework.gui.remote.RActionField && !rComponent.isShowTextField());
     }
 
