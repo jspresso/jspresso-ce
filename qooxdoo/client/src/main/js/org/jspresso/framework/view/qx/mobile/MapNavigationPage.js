@@ -40,6 +40,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MapNavigationPage", {
     _mapnikLayer: null,
     _geolocationEnabled: false,
     _bufferredPosition: null,
+    _mapDivId: null,
 
 
     // overridden
@@ -80,7 +81,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MapNavigationPage", {
       });
 
       var mapContainer = new qx.ui.mobile.container.Composite(layout);
-      mapContainer.setId("osmMap");
+      this._mapDivId = mapContainer.getId();
 
       return mapContainer;
     },
@@ -92,7 +93,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MapNavigationPage", {
       var req = new qx.bom.request.Script();
 
       req.onload = function () {
-        this._map = new OpenLayers.Map("osmMap");
+        this._map = new OpenLayers.Map(this._mapDivId);
         this._mapnikLayer = new OpenLayers.Layer.OSM("mapnik", null, {});
 
         this._map.addLayer(this._mapnikLayer);
