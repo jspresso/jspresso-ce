@@ -177,4 +177,18 @@
     </property>
   </bean>
 
+  <bean id="loginViewDescriptorBase"
+        class="org.jspresso.framework.view.descriptor.mobile.MobileComponentViewDescriptor">
+    <property name="name" value="login.name"/>
+    <property name="iconImageURL">
+      <bean parent="abstractFwIconImageURL">
+        <constructor-arg index="0" value="password"/>
+      </bean>
+    </property>
+    <property name="modelDescriptor" ref="loginModelDescriptor"/>
+  </bean>
+
+  <bean abstract="true" id="abstractWorkspace" class="org.jspresso.framework.application.model.mobile.MobileWorkspace">
+    <property name="iconProvider" ref="defaultModuleIconProvider"/>
+  </bean>
 </beans>

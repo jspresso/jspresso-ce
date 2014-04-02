@@ -210,6 +210,7 @@ import org.jspresso.framework.view.descriptor.IEnumerationPropertyViewDescriptor
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
+import org.jspresso.framework.view.descriptor.IMapViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IScrollableViewDescriptor;
@@ -1041,6 +1042,15 @@ public class DefaultSwingViewFactory extends
       propertyLabel.setIcon(null);
     }
     return propertyLabel;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<JComponent> createMapView( IMapViewDescriptor viewDescriptor, IActionHandler actionHandler,
+                                             Locale locale) {
+    return null;
   }
 
   /**

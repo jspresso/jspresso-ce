@@ -71,6 +71,7 @@ import org.jspresso.framework.gui.remote.RIntegerField;
 import org.jspresso.framework.gui.remote.RLabel;
 import org.jspresso.framework.gui.remote.RLink;
 import org.jspresso.framework.gui.remote.RList;
+import org.jspresso.framework.gui.remote.RMap;
 import org.jspresso.framework.gui.remote.RNumericComponent;
 import org.jspresso.framework.gui.remote.RPasswordField;
 import org.jspresso.framework.gui.remote.RPercentField;
@@ -122,6 +123,7 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicIndexedView;
 import org.jspresso.framework.view.BasicMapView;
+import org.jspresso.framework.view.BasicView;
 import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IMapView;
@@ -138,6 +140,7 @@ import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEnumerationPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
+import org.jspresso.framework.view.descriptor.IMapViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IScrollableViewDescriptor;
@@ -1516,6 +1519,37 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
           getIconFactory().getTinyIconSize()));
     }
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createMapView(IMapViewDescriptor viewDescriptor, IActionHandler actionHandler, Locale
+      locale) {
+    RMap viewComponent = createRMap(viewDescriptor);
+    String connectorId = ModelRefPropertyConnector.THIS_PROPERTY;
+    if (viewDescriptor.getModelDescriptor() instanceof IPropertyDescriptor) {
+      connectorId = viewDescriptor.getModelDescriptor().getName();
+    }
+    ICompositeValueConnector connector = getConnectorFactory().createCompositeValueConnector(connectorId, null);
+    connector.addChildConnector(getConnectorFactory().createValueConnector(viewDescriptor.getLongitudeProperty()));
+    connector.addChildConnector(getConnectorFactory().createValueConnector(viewDescriptor.getLatitudeProperty()));
+    connector.setExceptionHandler(actionHandler);
+    IView<RComponent> view = constructView(viewComponent, viewDescriptor, connector);
+    return view;
+  }
+
+  /**
+   * Creates a remote map.
+   *
+   * @param viewDescriptor
+   *     the map view descriptor.
+   * @return the created remote component.
+   */
+  protected RMap createRMap(IMapViewDescriptor viewDescriptor) {
+    return new RMap(getGuidGenerator().generateGUID());
+  }
+
 
   /**
    * Creates a remote form.

@@ -125,6 +125,7 @@ import org.jspresso.framework.view.descriptor.IGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IHtmlViewDescriptor;
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
+import org.jspresso.framework.view.descriptor.IMapViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISimpleTreeLevelDescriptor;
@@ -255,6 +256,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
                 ((ITreeViewDescriptor) viewDescriptor).getItemSelectionAction(), getActionFactory(), actionHandler,
                 view));
           }
+        } else if (viewDescriptor instanceof IMapViewDescriptor) {
+          view = createMapView((IMapViewDescriptor) viewDescriptor, actionHandler, locale);
         } else if (viewDescriptor instanceof ICompositeViewDescriptor) {
           view = createCompositeView((ICompositeViewDescriptor) viewDescriptor, actionHandler, locale);
         }
@@ -1172,6 +1175,20 @@ public abstract class AbstractViewFactory<E, F, G> implements
       Locale locale);
 
   /**
+   * Creates a map view.
+   *
+   * @param viewDescriptor
+   *     the view descriptor.
+   * @param actionHandler
+   *     the action handler.
+   * @param locale
+   *     the locale.
+   * @return the created component view.
+   */
+  protected abstract IView<E> createMapView(IMapViewDescriptor viewDescriptor, IActionHandler actionHandler,
+                                                  Locale locale);
+
+  /**
    * Computes the property name used to compute a property view dynamic tooltip
    * or null if none or if the tooltip is a static one.
    *
@@ -1682,6 +1699,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
     } else {
       format.setGroupingUsed(false);
     }
+    format.setDecimalFormatSymbols(symbols);
   }
 
   /**

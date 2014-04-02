@@ -35,6 +35,8 @@ import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.gui.IconProvider;
 import org.jspresso.framework.util.lang.StringUtils;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.AbstractTreeViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
  * A workspace is an group of functional application modules. You may decide
@@ -252,20 +254,26 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    */
   public IViewDescriptor getViewDescriptor() {
     if (viewDescriptor == null) {
-      viewDescriptor = new BasicWorkspaceViewDescriptor();
-      ((BasicWorkspaceViewDescriptor) viewDescriptor).setName(getName());
-      ((BasicWorkspaceViewDescriptor) viewDescriptor)
+      viewDescriptor = createWorkspaceViewDescriptor();
+      ((AbstractTreeViewDescriptor) viewDescriptor).setName(getName());
+      ((AbstractTreeViewDescriptor) viewDescriptor)
           .setDescription(getDescription());
-      ((BasicWorkspaceViewDescriptor) viewDescriptor).setIcon(getIcon());
-      if (iconProvider == null) {
-        iconProvider = new WorkspaceIconProvider();
-      }
-      ((BasicWorkspaceViewDescriptor) viewDescriptor)
-          .setIconImageURLProvider(iconProvider);
-      ((BasicWorkspaceViewDescriptor) viewDescriptor)
+      ((AbstractTreeViewDescriptor) viewDescriptor).setIcon(getIcon());
+      ((AbstractTreeViewDescriptor) viewDescriptor)
+          .setIconImageURLProvider(getIconProvider());
+      ((AbstractTreeViewDescriptor) viewDescriptor)
           .setItemSelectionAction(getItemSelectionAction());
     }
     return viewDescriptor;
+  }
+
+  /**
+   * Create workspace view descriptor.
+   *
+   * @return the workspace view descriptor
+   */
+  protected AbstractTreeViewDescriptor createWorkspaceViewDescriptor() {
+    return new BasicWorkspaceViewDescriptor();
   }
 
   /**
@@ -280,7 +288,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
 
   /**
    * Gets the started.
-   * 
+   *
    * @return the started.
    */
   public boolean isStarted() {
@@ -291,7 +299,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    * Configures the key used to translate actual internationalized workspace
    * description. The resulting translation will generally be leveraged as a
    * toolTip on the UI side but its use may be extended for online help.
-   * 
+   *
    * @param description
    *          the workspace description.
    */
@@ -317,7 +325,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
   /**
    * Stores the internationalized workspace description for use in the UI as
    * toolTip for instance.
-   * 
+   *
    * @param i18nDescription
    *          the i18nDescription to set.
    * @internal
@@ -329,7 +337,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
   /**
    * Stores the internationalized workspace name for use in the UI as workspace
    * label.
-   * 
+   *
    * @param i18nName
    *          the i18nName to set.
    * @internal
@@ -346,7 +354,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    * <li>the <b>jar:/</b> pseudo URL protocol</li>
    * <li>the <b>classpath:/</b> pseudo URL protocol</li>
    * </ul>
-   * 
+   *
    * @param iconImageURL
    *          the iconImageURL to set.
    */
@@ -359,7 +367,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
 
   /**
    * Sets the icon preferred width.
-   * 
+   *
    * @param iconPreferredWidth
    *          the iconPreferredWidth to set.
    */
@@ -372,7 +380,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
 
   /**
    * Sets the icon preferred width.
-   * 
+   *
    * @param iconPreferredHeight
    *          the iconPreferredHeight to set.
    */
@@ -399,6 +407,18 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
   }
 
   /**
+   * Gets icon provider.
+   *
+   * @return the icon provider
+   */
+  protected IconProvider getIconProvider() {
+    if (iconProvider == null) {
+      iconProvider = new WorkspaceIconProvider();
+    }
+    return iconProvider;
+  }
+
+  /**
    * Configures the action to be installed as item selection action on the
    * rendered module tree view - see
    * {@code BasicTreeViewDescriptor.itemSelectionAction}. The configured
@@ -416,7 +436,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    * Installs a list of module(s) into this workspace. Each module may own
    * sub-modules that form a (potentially complex and dynamic) hierarchy, that
    * is visually rendered as a tree view.
-   * 
+   *
    * @param modules
    *          the modules modules to set.
    */
@@ -438,7 +458,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    * Configures the key used to translate actual internationalized workspace
    * name. The resulting translation will be leveraged as the workspace label on
    * the UI side.
-   * 
+   *
    * @param name
    *          the module's name.
    */
@@ -448,7 +468,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
 
   /**
    * Sets the started.
-   * 
+   *
    * @param started
    *          the started to set.
    * @internal
@@ -462,7 +482,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    * &quot;started&quot; by the user. The action will execute in the context of
    * the workspace but with no specific module selected. It will help
    * initializing workspace values, notify user, ...
-   * 
+   *
    * @param startupAction
    *          the startupAction to set.
    */
@@ -472,7 +492,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
 
   /**
    * Configures the security handler used to secure this module.
-   * 
+   *
    * @param securityHandler
    *          the security handler.
    * @internal
@@ -501,7 +521,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
 
   /**
    * Gets the securityHandler.
-   * 
+   *
    * @return the securityHandler.
    */
   private ISecurityHandler getSecurityHandler() {
@@ -510,7 +530,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
 
   /**
    * Gets the permId.
-   * 
+   *
    * @return the permId.
    */
   @Override
@@ -527,7 +547,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    * record/replay controllers to uniquely identify an application element.
    * Permanent identifiers are generated by the SJS build based on the element
    * id but must be explicitly set if Spring XML is used.
-   * 
+   *
    * @param permId
    *          the permId to set.
    */

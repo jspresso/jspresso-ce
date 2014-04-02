@@ -117,6 +117,8 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
           component = this._createTimeField(remoteComponent);
         } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RTree) {
           component = this._createTree(remoteComponent);
+        } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RMap) {
+          component = this._createMap(remoteComponent);
         }
       }
       if (component == null) {

@@ -1649,6 +1649,14 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 
     /**
      * @return {qx.ui.core.Widget}
+     * @param remoteMap {org.jspresso.framework.gui.remote.RMap}
+     */
+    _createMap: function (remoteMap) {
+      return this._createDefaultComponent();
+    },
+
+    /**
+     * @return {qx.ui.core.Widget}
      * @param remoteTree {org.jspresso.framework.gui.remote.RTree}
      */
     _createTree: function (remoteTree) {

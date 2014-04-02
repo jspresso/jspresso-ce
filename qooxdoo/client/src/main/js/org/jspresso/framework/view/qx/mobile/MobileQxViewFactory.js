@@ -12,6 +12,7 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  *
  * @asset(org/jspresso/framework/mobile/back-mobile.png)
+ * @asset(org/jspresso/framework/mobile/my_location-mobile.png)
  */
 
 qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
@@ -498,9 +499,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var sections = [];
       for (var i = 0; i < remoteCompositePage.getPageSections().length; i++) {
         var remotePageSection = remoteCompositePage.getPageSections()[i];
-        if (remotePageSection instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
+        var pageSection = this.createComponent(remotePageSection);
+        if (pageSection instanceof qx.ui.mobile.page.NavigationPage) {
           /** @type {qx.ui.mobile.page.NavigationPage} */
-          var nextPage = this.createComponent(remotePageSection);
+          var nextPage = pageSection;
           this.linkNextPageBackButton(nextPage, compositePage, null, null);
           var listModel = new qx.data.Array();
           listModel.push({
@@ -530,7 +532,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           }, this);
           sections.push(list);
         } else {
-          var pageSection = this.createComponent(remotePageSection);
           sections.push(pageSection);
         }
       }
@@ -796,6 +797,35 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var checkBox = new qx.ui.mobile.form.CheckBox();
       this._bindCheckBox(remoteCheckBox, checkBox);
       return checkBox;
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteMap {org.jspresso.framework.gui.remote.RMap}
+     */
+    _createMap: function (remoteMap) {
+      var mapPage = new org.jspresso.framework.view.qx.mobile.MapNavigationPage();
+      mapPage.setButtonIcon("org/jspresso/framework/mobile/my_location-mobile.png");
+      mapPage.addListener("action", function (event) {
+        mapPage.moveToCurrentPosition();
+      }, this);
+      var state = remoteMap.getState();
+      var longitudeState = state.getChildren().getItem(0);
+      var latitudeState = state.getChildren().getItem(1);
+      var updateMapLocation = function() {
+        var longitude = longitudeState.getValue();
+        var latitude = latitudeState.getValue();
+        if(longitude != null && latitude != null) {
+          mapPage.zoomToPosition(longitude, latitude, 12, true);
+        }
+      };
+      longitudeState.addListener("changeValue", updateMapLocation, this);
+      latitudeState.addListener("changeValue", updateMapLocation, this);
+
+      mapPage.setTitle(remoteMap.getLabel());
+      mapPage.setShowButton(true);
+      this._addDetailPage(mapPage);
+      return mapPage;
     },
 
     /**

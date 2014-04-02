@@ -51,6 +51,7 @@ import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
+import org.jspresso.framework.view.descriptor.IMapViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
@@ -90,8 +91,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
   @Override
   public IView<RComponent> createView(IViewDescriptor viewDescriptor, IActionHandler actionHandler, Locale locale) {
     if (viewDescriptor instanceof IMobileViewDescriptor || viewDescriptor instanceof IPropertyViewDescriptor
-        || viewDescriptor instanceof ITreeViewDescriptor || viewDescriptor instanceof IListViewDescriptor
-        || viewDescriptor instanceof ICardViewDescriptor || viewDescriptor instanceof IComponentViewDescriptor) {
+        || viewDescriptor instanceof ICardViewDescriptor) {
       return super.createView(viewDescriptor, actionHandler, locale);
     }
     throw new IllegalArgumentException(

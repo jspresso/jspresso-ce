@@ -118,6 +118,7 @@ import org.jspresso.framework.gui.remote.RIntegerField;
 import org.jspresso.framework.gui.remote.RLabel;
 import org.jspresso.framework.gui.remote.RLink;
 import org.jspresso.framework.gui.remote.RList;
+import org.jspresso.framework.gui.remote.RMap;
 import org.jspresso.framework.gui.remote.RNumericComponent;
 import org.jspresso.framework.gui.remote.RNumericComponent;
 import org.jspresso.framework.gui.remote.RPasswordField;
@@ -278,10 +279,12 @@ public class DefaultFlexViewFactory {
         component = createTimeField(remoteComponent as RTimeField);
       } else if (remoteComponent is RTree) {
         component = createTree(remoteComponent as RTree);
+      } else if (remoteComponent is RMap) {
+        component = createMap(remoteComponent as RMap);
       }
     }
     if (component == null) {
-      component = new Canvas();
+      component = createDefaultComponent();
     }
     remoteComponent.assignPeer(component);
     if (isNaN(component.minWidth)) {
@@ -313,6 +316,10 @@ public class DefaultFlexViewFactory {
       getRemotePeerRegistry().register(remoteComponent);
     }
     return component;
+  }
+
+  protected function createDefaultComponent():Canvas {
+    return new Canvas();
   }
 
   public function createPanelComponent():Panel {
@@ -812,6 +819,10 @@ public class DefaultFlexViewFactory {
       textComponent = createLabel(remoteTextComponent as RLabel);
     }
     return textComponent;
+  }
+
+  protected function createMap(remoteMap:RMap):UIComponent {
+    return createDefaultComponent();
   }
 
   protected function createTree(remoteTree:RTree):UIComponent {
