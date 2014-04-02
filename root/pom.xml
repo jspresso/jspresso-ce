@@ -93,9 +93,10 @@
     <source-plugin.version>2.2.1</source-plugin.version>
     <antrun-plugin.version>1.7</antrun-plugin.version>
     <info-reports-plugin.version>2.7</info-reports-plugin.version>
-    <webdav-jackrabbit.version>2.6</webdav-jackrabbit.version>
+    <webdav-jackrabbit.version>2.4</webdav-jackrabbit.version>
     <dependency-plugin.version>2.8</dependency-plugin.version>
     <jrebel-plugin.version>1.1.5</jrebel-plugin.version>
+    <commons-logging.version>1.1.3</commons-logging.version>
 
     <!-- Other plugins versions -->
     <war-plugin.version>2.4</war-plugin.version>
@@ -123,17 +124,17 @@
     </repository>
     <snapshotRepository>
       <id>jspresso-snapshots-repository</id>
-      <url>http://repository.jspresso.org/maven2-snapshots</url>
+      <url>dav:http://repository.jspresso.org/maven2-snapshots</url>
     </snapshotRepository>
     <site>
       <id>jspresso-maven-site</id>
-      <url>http://www.jspresso.org/external/maven-site/</url>
+      <url>dav:http://www.jspresso.org/external/maven-site/</url>
     </site>
   </distributionManagement>
   <pluginRepositories>
     <pluginRepository>
       <id>jspresso-repository</id>
-      <url>http://repository.jspresso.org/maven2</url>
+      <url>dav:http://repository.jspresso.org/maven2</url>
       <releases>
         <enabled>true</enabled>
       </releases>
