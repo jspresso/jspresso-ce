@@ -77,15 +77,15 @@
   <distributionManagement>
     <repository>
       <id>jspresso-repository</id>
-      <url>dav:http://repository.jspresso.org/maven2</url>
+      <url>http://repository.jspresso.org/maven2</url>
     </repository>
     <snapshotRepository>
       <id>jspresso-snapshots-repository</id>
-      <url>dav:http://repository.jspresso.org/maven2-snapshots</url>
+      <url>http://repository.jspresso.org/maven2-snapshots</url>
     </snapshotRepository>
     <site>
       <id>jspresso-maven-site</id>
-      <url>dav:http://www.jspresso.org/external/maven-site/</url>
+      <url>http://www.jspresso.org/external/maven-site/</url>
     </site>
   </distributionManagement>
   <pluginRepositories>
