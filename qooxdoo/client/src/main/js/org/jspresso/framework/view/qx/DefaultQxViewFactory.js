@@ -115,6 +115,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     __shortDateTimeFormats: null,
     /** @type String */
     __datePattern: null,
+    /** @type {String} */
+    __decimalSeparator: null,
+    /** @type {String} */
+    __thousandsSeparator: null,
     /** @type Integer */
     __firstDayOfWeek: null,
 
@@ -2706,6 +2710,36 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     },
 
     /**
+     * @param decimalSeparator {String}
+     * @return {undefined}
+     */
+    setDecimalSeparator: function (decimalSeparator) {
+      this.__decimalSeparator = decimalSeparator;
+    },
+
+    /**
+     * @return {String}
+     */
+    _getDecimalSeparator: function () {
+      return this.__decimalSeparator;
+    },
+
+    /**
+     * @param thousandsSeparator {String}
+     * @return {undefined}
+     */
+    setThousandsSeparator: function (thousandsSeparator) {
+      this.__thousandsSeparator = thousandsSeparator;
+    },
+
+    /**
+     * @return {String}
+     */
+    _getThousandsSeparator: function () {
+      return this.__thousandsSeparator;
+    },
+
+    /**
      *
      *            component
      *            icon
@@ -2834,20 +2868,19 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         timeFormat.setRemoteComponent(remoteComponent);
         return timeFormat;
       } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RNumericComponent) {
+        format = new org.jspresso.framework.util.format.ScaledNumberFormat();
+        format.setThousandsSeparator(this._getThousandsSeparator());
         if (remoteComponent instanceof org.jspresso.framework.gui.remote.RDecimalComponent) {
+          format.setDecimalSeparator(this._getDecimalSeparator());
           if (remoteComponent instanceof org.jspresso.framework.gui.remote.RPercentField) {
-            format = new org.jspresso.framework.util.format.ScaledNumberFormat();
             format.setScale(100);
             format.setPostfix(" %");
-          } else {
-            format = new qx.util.format.NumberFormat();
           }
           if (remoteComponent.getMaxFractionDigit()) {
             format.setMaximumFractionDigits(remoteComponent.getMaxFractionDigit());
             format.setMinimumFractionDigits(remoteComponent.getMaxFractionDigit());
           }
         } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RIntegerField) {
-          format = new qx.util.format.NumberFormat();
           format.setMaximumFractionDigits(0);
         }
       }

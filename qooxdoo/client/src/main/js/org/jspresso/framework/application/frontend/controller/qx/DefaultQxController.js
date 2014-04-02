@@ -296,6 +296,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
             command;
         qx.locale.Manager.getInstance().setLocale(c.getLanguage());
         this.__viewFactory.setDatePattern(c.getDatePattern());
+        this.__viewFactory.setDecimalSeparator(localeCommand.getDecimalSeparator());
+        this.__viewFactory.setThousandsSeparator(localeCommand.getThousandsSeparator());
         this.__translations = c.getTranslations();
       } else if (command
           instanceof org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand) {

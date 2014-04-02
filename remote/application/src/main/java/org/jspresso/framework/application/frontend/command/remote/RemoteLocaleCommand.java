@@ -33,6 +33,8 @@ public class RemoteLocaleCommand extends RemoteCommand {
   private String              language;
   private String              datePattern;
   private int                 firstDayOfWeek;
+  private String              decimalSeparator;
+  private String              thousandsSeparator;
   private Map<String, String> translations;
 
   /**
@@ -109,5 +111,41 @@ public class RemoteLocaleCommand extends RemoteCommand {
    */
   public void setFirstDayOfWeek(int firstDayOfWeek) {
     this.firstDayOfWeek = firstDayOfWeek;
+  }
+
+  /**
+   * Gets decimal separator.
+   *
+   * @return the decimal separator
+   */
+  public String getDecimalSeparator() {
+    return decimalSeparator;
+  }
+
+  /**
+   * Sets decimal separator.
+   *
+   * @param decimalSeparator the decimal separator
+   */
+  public void setDecimalSeparator(String decimalSeparator) {
+    this.decimalSeparator = decimalSeparator;
+  }
+
+  /**
+   * Gets thousands separator.
+   *
+   * @return the thousands separator
+   */
+  public String getThousandsSeparator() {
+    return thousandsSeparator;
+  }
+
+  /**
+   * Sets thousands separator.
+   *
+   * @param thousandsSeparator the thousands separator
+   */
+  public void setThousandsSeparator(String thousandsSeparator) {
+    this.thousandsSeparator = thousandsSeparator;
   }
 }

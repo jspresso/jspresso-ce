@@ -47,6 +47,16 @@ public interface ITranslationProvider {
   String FIRST_DAY_OF_WEEK_KEY       = "firstDayOfWeek";
 
   /**
+   * {@code DECIMAL_SEPARATOR_KEY}.
+   */
+  String DECIMAL_SEPARATOR_KEY = "decimal_separator";
+
+  /**
+   * {@code THOUSANDS_SEPARATOR_KEY}.
+   */
+  String THOUSANDS_SEPARATOR_KEY = "thousands_separator";
+
+  /**
    * Gets a translated string based on a key.
    * 
    * @param key
@@ -132,10 +142,29 @@ public interface ITranslationProvider {
   /**
    * Return the default short time pattern (without seconds) expressed as a
    * SimpleDateFormat pattern.
-   * 
+   *
    * @param locale
    *          the locale.
    * @return the default short time pattern.
    */
   String getShortTimePattern(Locale locale);
+
+  /**
+   * Return the default default decimal separator.
+   *
+   * @param locale
+   *          the locale.
+   * @return the default decimal separator.
+   */
+  String getDecimalSeparator(Locale locale);
+
+
+  /**
+   * Return the default default thousands separator.
+   *
+   * @param locale
+   *          the locale.
+   * @return the default thousands separator.
+   */
+  String getThousandsSeparator(Locale locale);
 }

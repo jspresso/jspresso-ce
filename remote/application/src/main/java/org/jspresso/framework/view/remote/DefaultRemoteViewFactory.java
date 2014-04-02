@@ -746,7 +746,7 @@ public class DefaultRemoteViewFactory extends
     IValueConnector connector;
     RComponent viewComponent;
     IFormatter<Object, String> formatter = createDecimalFormatter(
-        propertyDescriptor, locale);
+        propertyDescriptor, actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(
           propertyDescriptor.getName(), formatter);
@@ -1049,7 +1049,7 @@ public class DefaultRemoteViewFactory extends
     IValueConnector connector;
     RComponent viewComponent;
     IFormatter<Object, String> formatter = createIntegerFormatter(
-        propertyDescriptor, locale);
+        propertyDescriptor, actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(
           propertyDescriptor.getName(), formatter);
@@ -1186,7 +1186,7 @@ public class DefaultRemoteViewFactory extends
     IPercentPropertyDescriptor propertyDescriptor = (IPercentPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     IFormatter<Object, String> formatter = createPercentFormatter(
-        propertyDescriptor, locale);
+        propertyDescriptor, actionHandler, locale);
     IValueConnector connector;
     RComponent viewComponent;
     if (propertyViewDescriptor.isReadOnly()) {

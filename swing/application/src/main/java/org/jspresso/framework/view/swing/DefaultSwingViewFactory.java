@@ -1101,7 +1101,7 @@ public class DefaultSwingViewFactory extends
           locale);
     }
     IFormatter<Object, String> formatter = createDecimalFormatter(
-        propertyDescriptor, locale);
+        propertyDescriptor, actionHandler, locale);
     JComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
@@ -1457,7 +1457,7 @@ public class DefaultSwingViewFactory extends
     IIntegerPropertyDescriptor propertyDescriptor = (IIntegerPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     IFormatter<?, String> formatter = createIntegerFormatter(
-        propertyDescriptor, locale);
+        propertyDescriptor, actionHandler,  locale);
     JComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
@@ -1981,7 +1981,7 @@ public class DefaultSwingViewFactory extends
     IPercentPropertyDescriptor propertyDescriptor = (IPercentPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     IFormatter<?, String> formatter = createPercentFormatter(
-        propertyDescriptor, locale);
+        propertyDescriptor, actionHandler, locale);
     JComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
@@ -2263,7 +2263,7 @@ public class DefaultSwingViewFactory extends
           locale);
     } else if (propertyDescriptor instanceof INumberPropertyDescriptor) {
       cellRenderer = createNumberTableCellRenderer(
-          (INumberPropertyDescriptor) propertyDescriptor, locale);
+          (INumberPropertyDescriptor) propertyDescriptor, actionHandler, locale);
     } else if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
       cellRenderer = createRelationshipEndTableCellRenderer(
           (IRelationshipEndPropertyDescriptor) propertyDescriptor, locale);
@@ -3273,13 +3273,13 @@ public class DefaultSwingViewFactory extends
   }
 
   private TableCellRenderer createDecimalTableCellRenderer(
-      IDecimalPropertyDescriptor propertyDescriptor, Locale locale) {
+      IDecimalPropertyDescriptor propertyDescriptor, ITranslationProvider translationProvider, Locale locale) {
     if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
       return createPercentTableCellRenderer(
-          (IPercentPropertyDescriptor) propertyDescriptor, locale);
+          (IPercentPropertyDescriptor) propertyDescriptor, translationProvider, locale);
     }
     return new FormattedTableCellRenderer(createDecimalFormatter(
-        propertyDescriptor, locale));
+        propertyDescriptor, translationProvider, locale));
   }
 
   private TableCellRenderer createDurationTableCellRenderer(
@@ -3350,9 +3350,9 @@ public class DefaultSwingViewFactory extends
   }
 
   private TableCellRenderer createIntegerTableCellRenderer(
-      IIntegerPropertyDescriptor propertyDescriptor, Locale locale) {
+      IIntegerPropertyDescriptor propertyDescriptor, ITranslationProvider translationProvider, Locale locale) {
     return new FormattedTableCellRenderer(createIntegerFormatter(
-        propertyDescriptor, locale));
+        propertyDescriptor, translationProvider, locale));
   }
 
   private JPopupMenu createJPopupMenu(IView<JComponent> view,
@@ -3406,22 +3406,22 @@ public class DefaultSwingViewFactory extends
   }
 
   private TableCellRenderer createNumberTableCellRenderer(
-      INumberPropertyDescriptor propertyDescriptor, Locale locale) {
+      INumberPropertyDescriptor propertyDescriptor, ITranslationProvider translationProvider, Locale locale) {
     TableCellRenderer cellRenderer = null;
     if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
       cellRenderer = createIntegerTableCellRenderer(
-          (IIntegerPropertyDescriptor) propertyDescriptor, locale);
+          (IIntegerPropertyDescriptor) propertyDescriptor, translationProvider,  locale);
     } else if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
       cellRenderer = createDecimalTableCellRenderer(
-          (IDecimalPropertyDescriptor) propertyDescriptor, locale);
+          (IDecimalPropertyDescriptor) propertyDescriptor, translationProvider,  locale);
     }
     return cellRenderer;
   }
 
   private TableCellRenderer createPercentTableCellRenderer(
-      IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
+      IPercentPropertyDescriptor propertyDescriptor, ITranslationProvider translationProvider,  Locale locale) {
     return new FormattedTableCellRenderer(createPercentFormatter(
-        propertyDescriptor, locale));
+        propertyDescriptor, translationProvider, locale));
   }
 
   private TableCellRenderer createReferenceTableCellRenderer(

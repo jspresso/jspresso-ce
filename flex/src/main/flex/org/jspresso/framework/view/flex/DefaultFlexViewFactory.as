@@ -174,6 +174,8 @@ public class DefaultFlexViewFactory {
   private var _iconTemplate:Class;
   private var _datePattern:String;
   private var _firstDayOfWeek:int;
+  private var _decimalSeparator:String;
+  private var _thousandsSeparator:String;
 
   public function DefaultFlexViewFactory(remotePeerRegistry:IRemotePeerRegistry, actionHandler:IActionHandler,
                                          commandHandler:IRemoteCommandHandler) {
@@ -215,6 +217,22 @@ public class DefaultFlexViewFactory {
 
   public function set firstDayOfWeek(value:int):void {
     _firstDayOfWeek = value;
+  }
+
+  public function get decimalSeparator():String {
+    return _decimalSeparator;
+  }
+
+  public function set decimalSeparator(value:String):void {
+    _decimalSeparator = value;
+  }
+
+  public function get thousandsSeparator():String {
+    return _thousandsSeparator;
+  }
+
+  public function set thousandsSeparator(value:String):void {
+    _thousandsSeparator = value;
   }
 
   public function createComponent(remoteComponent:RComponent, registerPeers:Boolean = true):UIComponent {
@@ -3024,6 +3042,8 @@ public class DefaultFlexViewFactory {
       } else {
         numberFormatter = new NumberFormatter();
       }
+      numberFormatter.decimalSeparatorTo = decimalSeparator;
+      numberFormatter.thousandsSeparatorTo = thousandsSeparator;
       numberFormatter.decimalSeparatorFrom = ".";
       numberFormatter.thousandsSeparatorFrom = "";
       numberFormatter.rounding = NumberBaseRoundType.NEAREST;
