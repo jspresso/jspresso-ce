@@ -20,11 +20,13 @@
       <groupId>com.adobe.flex.framework</groupId>
       <artifactId>framework</artifactId>
       <type>swc</type>
+      <scope>external</scope>
     </dependency>
     <dependency>
       <groupId>com.adobe.flex.framework</groupId>
       <artifactId>spark</artifactId>
       <type>swc</type>
+      <!--<scope>merged</scope>-->
       <scope>theme</scope>
     </dependency>
     <dependency>
@@ -32,17 +34,34 @@
       <artifactId>flexlib</artifactId>
       <type>swc</type>
       <classifier>flex3</classifier>
+      <scope>merged</scope>
     </dependency>
     <dependency>
       <groupId>resizecontainers</groupId>
       <artifactId>resizecontainers</artifactId>
       <type>swc</type>
+      <scope>merged</scope>
     </dependency>
     <dependency>
       <groupId>sephiroth</groupId>
       <artifactId>checkbox3state</artifactId>
       <type>swc</type>
+      <scope>merged</scope>
     </dependency>
+    <dependency>
+      <groupId>org.openscales</groupId>
+      <artifactId>openscales-core</artifactId>
+      <type>swc</type>
+      <scope>merged</scope>
+    </dependency>
+<!--
+    <dependency>
+      <groupId>org.openscales</groupId>
+      <artifactId>openscales-fx</artifactId>
+      <type>swc</type>
+      <scope>merged</scope>
+    </dependency>
+-->
   </dependencies>
 
   <build>

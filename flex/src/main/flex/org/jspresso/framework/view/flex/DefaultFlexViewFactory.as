@@ -20,6 +20,7 @@ import flash.events.FocusEvent;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 import flash.events.TextEvent;
+import flash.sensors.Geolocation;
 
 import flex.utils.ui.resize.ResizablePanel;
 
@@ -42,7 +43,6 @@ import mx.containers.TabNavigator;
 import mx.containers.VBox;
 import mx.containers.ViewStack;
 import mx.controls.Button;
-import mx.controls.ButtonLabelPlacement;
 import mx.controls.CheckBox;
 import mx.controls.ColorPicker;
 import mx.controls.ComboBox;
@@ -98,7 +98,6 @@ import org.jspresso.framework.gui.remote.RActionList;
 import org.jspresso.framework.gui.remote.RBorderContainer;
 import org.jspresso.framework.gui.remote.RCardContainer;
 import org.jspresso.framework.gui.remote.RCheckBox;
-import org.jspresso.framework.gui.remote.RCollectionComponent;
 import org.jspresso.framework.gui.remote.RColorField;
 import org.jspresso.framework.gui.remote.RComboBox;
 import org.jspresso.framework.gui.remote.RComponent;
@@ -119,7 +118,6 @@ import org.jspresso.framework.gui.remote.RLabel;
 import org.jspresso.framework.gui.remote.RLink;
 import org.jspresso.framework.gui.remote.RList;
 import org.jspresso.framework.gui.remote.RMap;
-import org.jspresso.framework.gui.remote.RNumericComponent;
 import org.jspresso.framework.gui.remote.RNumericComponent;
 import org.jspresso.framework.gui.remote.RPasswordField;
 import org.jspresso.framework.gui.remote.RPercentField;
@@ -151,6 +149,19 @@ import org.jspresso.framework.util.gui.Font;
 import org.jspresso.framework.util.html.HtmlUtil;
 import org.jspresso.framework.util.lang.DateDto;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
+import org.openscales.core.Map;
+import org.openscales.core.basetypes.Resolution;
+import org.openscales.core.control.Zoom;
+import org.openscales.core.feature.PointFeature;
+import org.openscales.core.handler.mouse.DragHandler;
+import org.openscales.core.handler.mouse.WheelHandler;
+import org.openscales.core.layer.VectorLayer;
+import org.openscales.core.layer.osm.Mapnik;
+import org.openscales.core.style.Style;
+import org.openscales.geometry.basetypes.Bounds;
+import org.openscales.geometry.basetypes.Location;
+import org.openscales.geometry.basetypes.Size;
+import org.openscales.proj4as.ProjProjection;
 import org.sepy.ui.CheckBoxExtended;
 
 public class DefaultFlexViewFactory {
@@ -822,7 +833,50 @@ public class DefaultFlexViewFactory {
   }
 
   protected function createMap(remoteMap:RMap):UIComponent {
-    return createDefaultComponent();
+    var map:Map = new Map();
+    map.size = new Size(1200, 1000);
+    map.projection = "EPSG:900913";
+    map.center = new Location(2.3470, 48.8590, "EPSG:4326");
+    map.resolution = new Resolution(12, "EPSG:900913");
+    map.maxExtent = new Bounds(-20037508.34, -20037508.34, 20037508.34, 20037508.34, "EPSG:900913");
+
+    var mapnik:Mapnik = new Mapnik("Mapnik");
+    mapnik.maxExtent = new Bounds(-20037508.34, -20037508.34, 20037508.34, 20037508.34, mapnik.projection);
+    map.addLayer(mapnik);
+
+    var markers:VectorLayer = new VectorLayer("markers");
+    markers.projection = new ProjProjection("EPSG:4326");
+    markers.generateResolutions(19);
+    markers.style = Style.getDefaultPointStyle();
+    map.addLayer(markers);
+
+    map.addControl(new EnhancedZoom(getActionHandler()));
+    map.addControl(new WheelHandler());
+    map.addControl(new DragHandler());
+
+    var state:RemoteCompositeValueState = remoteMap.state as RemoteCompositeValueState;
+    var longitudeState:RemoteValueState = state.children[0];
+    var latitudeState:RemoteValueState = state.children[1];
+    var updateMapLocation:Function = function():void {
+      var longitude:Number = longitudeState.value as Number;
+      var latitude:Number = latitudeState.value as Number;
+      if (longitude && latitude) {
+        map.center = new Location(longitude, latitude);
+        var marker:PointFeature = PointFeature.createPointFeature(map.center);
+        markers.addFeature(marker);
+      }
+    };
+    BindingUtils.bindSetter(updateMapLocation, longitudeState, "value");
+    BindingUtils.bindSetter(updateMapLocation, latitudeState, "value");
+
+    var wrapper:UIComponent = new UIComponent();
+    wrapper.addEventListener(Event.RESIZE, function(e:Event):void {
+      map.x = 2;
+      map.y = 2;
+      map.size = new Size(wrapper.width -4, wrapper.height-4);
+    });
+    wrapper.addChild(map);
+    return wrapper;
   }
 
   protected function createTree(remoteTree:RTree):UIComponent {

@@ -75,6 +75,7 @@
     <ant-nodeps.version>1.8.1</ant-nodeps.version>
     <stax-api.version>1.0.1</stax-api.version>
     <trove.version>3.0.3</trove.version>
+    <openscales.version>2.2</openscales.version>
 
     <!-- Plugins versions common to Jspresso root pom-->
     <compiler-plugin.version>3.1</compiler-plugin.version>
@@ -257,6 +258,16 @@
     <repository>
       <id>swt-repo</id>
       <url>https://swt-repo.googlecode.com/svn/repo/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>openscales-repo</id>
+      <url>http://openscales.org/nexus/content/repositories/releases/</url>
       <releases>
         <enabled>true</enabled>
       </releases>
@@ -798,7 +809,20 @@
         <groupId>net.sf.trove4j</groupId>
         <artifactId>trove4j</artifactId>
         <version>${trove.version}</version>
-      </dependency>    </dependencies>
+      </dependency>
+      <dependency>
+        <groupId>org.openscales</groupId>
+        <artifactId>openscales-core</artifactId>
+        <version>${openscales.version}</version>
+        <type>swc</type>
+      </dependency>
+      <dependency>
+        <groupId>org.openscales</groupId>
+        <artifactId>openscales-fx</artifactId>
+        <version>${openscales.version}</version>
+        <type>swc</type>
+      </dependency>
+    </dependencies>
   </dependencyManagement>
   <dependencies>
     <dependency>

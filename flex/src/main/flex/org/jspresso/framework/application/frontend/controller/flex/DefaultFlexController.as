@@ -22,11 +22,12 @@ import flash.events.DataEvent;
 import flash.events.Event;
 import flash.events.IOErrorEvent;
 import flash.events.MouseEvent;
+import flash.external.ExternalInterface;
 import flash.net.FileFilter;
 import flash.net.FileReference;
 import flash.net.URLRequest;
 import flash.net.navigateToURL;
-import flash.net.registerClassAlias;
+import flash.system.Security;
 import flash.utils.getTimer;
 
 import mx.binding.utils.BindingUtils;
@@ -110,50 +111,19 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteWritabil
 import org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCancelCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCommand;
 import org.jspresso.framework.gui.remote.RAction;
-import org.jspresso.framework.gui.remote.RActionComponent;
 import org.jspresso.framework.gui.remote.RActionEvent;
-import org.jspresso.framework.gui.remote.RActionField;
 import org.jspresso.framework.gui.remote.RActionList;
-import org.jspresso.framework.gui.remote.RBorderContainer;
-import org.jspresso.framework.gui.remote.RCardContainer;
-import org.jspresso.framework.gui.remote.RCheckBox;
-import org.jspresso.framework.gui.remote.RColorField;
-import org.jspresso.framework.gui.remote.RComboBox;
 import org.jspresso.framework.gui.remote.RComponent;
-import org.jspresso.framework.gui.remote.RConstrainedGridContainer;
-import org.jspresso.framework.gui.remote.RContainer;
-import org.jspresso.framework.gui.remote.RDateField;
-import org.jspresso.framework.gui.remote.RDecimalField;
-import org.jspresso.framework.gui.remote.RDurationField;
-import org.jspresso.framework.gui.remote.REnumBox;
-import org.jspresso.framework.gui.remote.REvenGridContainer;
-import org.jspresso.framework.gui.remote.RForm;
 import org.jspresso.framework.gui.remote.RIcon;
-import org.jspresso.framework.gui.remote.RImageComponent;
-import org.jspresso.framework.gui.remote.RIntegerField;
-import org.jspresso.framework.gui.remote.RLabel;
-import org.jspresso.framework.gui.remote.RLink;
-import org.jspresso.framework.gui.remote.RList;
-import org.jspresso.framework.gui.remote.RPasswordField;
-import org.jspresso.framework.gui.remote.RPercentField;
-import org.jspresso.framework.gui.remote.RRadioBox;
 import org.jspresso.framework.gui.remote.RSplitContainer;
 import org.jspresso.framework.gui.remote.RTabContainer;
-import org.jspresso.framework.gui.remote.RTable;
-import org.jspresso.framework.gui.remote.RTextArea;
-import org.jspresso.framework.gui.remote.RTextField;
-import org.jspresso.framework.gui.remote.RTimeField;
-import org.jspresso.framework.gui.remote.RTree;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteFormattedValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.array.ArrayUtil;
-import org.jspresso.framework.util.gui.CellConstraints;
 import org.jspresso.framework.util.gui.Dimension;
-import org.jspresso.framework.util.gui.Font;
 import org.jspresso.framework.util.html.HtmlUtil;
 import org.jspresso.framework.util.remote.IRemotePeer;
-import org.jspresso.framework.util.remote.RemotePeer;
 import org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
 import org.jspresso.framework.view.flex.CollapsibleAccordion;
@@ -187,6 +157,8 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
   private var _postponedChildrenNotificationBuffer:Array;
   private var _postponedSelectionCommands:Object;
   private var _postponedEditionCommands:Array;
+  private var _userGeoLocation:Object;
+
 
   public function DefaultFlexController(remoteController:RemoteObject, userLanguage:String) {
     _remotePeerRegistry = new BasicRemotePeerRegistry();
@@ -200,8 +172,8 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     _userLanguage = userLanguage;
     _initialLocaleChain = ResourceManager.getInstance().localeChain;
     _fakeDialog = getViewFactory().createPanelComponent();
-    registerRemoteClasses();
     initRemoteController();
+    initGeoLocation();
   }
 
   protected function createViewFactory():DefaultFlexViewFactory {
@@ -838,10 +810,9 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     //_remoteController.channelSet.disconnectAll();
   }
 
-  protected function popupError(message:String,
-                                messageHeader:String="An unexpected error occured",
-                                messageHeaderCode:String="error.unexpected",
-                                title:String="Error", titleCode:String="error"):void {
+  protected function popupError(message:String, messageHeader:String = "An unexpected error occured",
+                                messageHeaderCode:String = "error.unexpected", title:String = "Error",
+                                titleCode:String = "error"):void {
     var popupTitle:String;
     var popupMessageHeader:String;
     var popupMessage:String = message;
@@ -866,7 +837,8 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
       buff += popupMessage.substr(popupMessage.length - 600, popupMessage.length);
       popupMessage = buff;
     }
-    var alert:Alert = Alert.show(popupMessageHeader + "\n\nDetails :\n" + popupMessage, popupTitle, Alert.OK, null, null, null, Alert.OK);
+    var alert:Alert = Alert.show(popupMessageHeader + "\n\nDetails :\n" + popupMessage, popupTitle, Alert.OK, null,
+                                 null, null, Alert.OK);
     fixAlertSize(alert);
   }
 
@@ -1226,7 +1198,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
   }
 
   public function translate(key:String):String {
-    if(_translations != null) {
+    if (_translations != null) {
       var tr:String = _translations[key] as String;
       if (tr != null) {
         return tr;
@@ -1408,81 +1380,49 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     return FlexGlobals.topLevelApplication as Application;
   }
 
-  protected function registerRemoteClasses():void {
-    registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteCommand", RemoteCommand);
-    registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteReadabilityCommand",
-                       RemoteReadabilityCommand);
-    registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteWritabilityCommand",
-                       RemoteWritabilityCommand);
-    registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand",
-                       RemoteActionCommand);
-    registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand",
-                       RemoteChildrenCommand);
-    registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand",
-                       RemoteEnablementCommand);
-    registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand",
-                       RemoteSelectionCommand);
-    registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteUpdateStatusCommand",
-                       RemoteUpdateStatusCommand);
-    registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand",
-                       RemoteValueCommand);
-    registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand",
-                       RemoteAddCardCommand);
-    registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand",
-                       RemoteCleanupCommand);
-    registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand",
-                       RemoteClipboardCommand);
-    registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand",
-                       RemoteFocusCommand);
-    registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteCloseDialogCommand",
-                       RemoteCloseDialogCommand);
-    registerClassAlias("org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand",
-                       RemoteEditCommand);
+  public function initGeoLocation():void {
+    if (ExternalInterface.available) {
+      //Security.allowDomain("*");
+      var appId:String = getTopLevelApplication().id;
 
-    registerClassAlias("org.jspresso.framework.util.gui.CellConstraints", CellConstraints);
-    registerClassAlias("org.jspresso.framework.util.gui.Dimension", Dimension);
-    registerClassAlias("org.jspresso.framework.util.gui.Font", Font);
+      const CHECK_GEOLOCATION:String = "document.insertScript = function() { checkGeoLocation = function() {"
+          + "return (navigator && navigator.geolocation); } }";
+      const GET_GEOLOCATION:String = "document.insertScript = function() { getGeoLocation = function() {"
+          + "var app = document.getElementById('" + appId + "');"
+          + "navigator.geolocation.getCurrentPosition(" +
+          "function(position) {app.geoLocationSuccessHandler(position);}," +
+          "function(error) {app.geoLocationErrorHandler(error);}" +
+          "); } }";
 
-    registerClassAlias("org.jspresso.framework.state.remote.RemoteCompositeValueState", RemoteCompositeValueState);
-    registerClassAlias("org.jspresso.framework.state.remote.RemoteFormattedValueState", RemoteFormattedValueState);
-    registerClassAlias("org.jspresso.framework.state.remote.RemoteValueState", RemoteValueState);
+      ExternalInterface.call(CHECK_GEOLOCATION);
+      var geoEnabled:Boolean = ExternalInterface.call("checkGeoLocation");
+      if (geoEnabled == true) {
+        ExternalInterface.addCallback("geoLocationSuccessHandler", geoLocationSuccessHandler);
+        ExternalInterface.addCallback("geoLocationErrorHandler", geoLocationErrorHandler);
+        ExternalInterface.call(GET_GEOLOCATION);
+      }
+    }
+  }
 
-    registerClassAlias("org.jspresso.framework.util.remote.IRemotePeer", IRemotePeer);
-    registerClassAlias("org.jspresso.framework.util.remote.RemotePeer", RemotePeer);
+  [Bindable]
+  public function get userGeoLocation():Object {
+    return _userGeoLocation;
+  }
 
-    registerClassAlias("org.jspresso.framework.gui.remote.RAction", RAction);
-    registerClassAlias("org.jspresso.framework.gui.remote.RActionComponent", RActionComponent);
-    registerClassAlias("org.jspresso.framework.gui.remote.RActionField", RActionField);
-    registerClassAlias("org.jspresso.framework.gui.remote.RBorderContainer", RBorderContainer);
-    registerClassAlias("org.jspresso.framework.gui.remote.RCardContainer", RCardContainer);
-    registerClassAlias("org.jspresso.framework.gui.remote.RCheckBox", RCheckBox);
-    registerClassAlias("org.jspresso.framework.gui.remote.RColorField", RColorField);
-    registerClassAlias("org.jspresso.framework.gui.remote.RComboBox", RComboBox);
-    registerClassAlias("org.jspresso.framework.gui.remote.RRadioBox", RRadioBox);
-    registerClassAlias("org.jspresso.framework.gui.remote.REnumBox", REnumBox);
-    registerClassAlias("org.jspresso.framework.gui.remote.RComponent", RComponent);
-    registerClassAlias("org.jspresso.framework.gui.remote.RContainer", RContainer);
-    registerClassAlias("org.jspresso.framework.gui.remote.RDateField", RDateField);
-    registerClassAlias("org.jspresso.framework.gui.remote.RDecimalField", RDecimalField);
-    registerClassAlias("org.jspresso.framework.gui.remote.RDurationField", RDurationField);
-    registerClassAlias("org.jspresso.framework.gui.remote.RForm", RForm);
-    registerClassAlias("org.jspresso.framework.gui.remote.REvenGridContainer", REvenGridContainer);
-    registerClassAlias("org.jspresso.framework.gui.remote.RConstrainedGridContainer", RConstrainedGridContainer);
-    registerClassAlias("org.jspresso.framework.gui.remote.RIcon", RIcon);
-    registerClassAlias("org.jspresso.framework.gui.remote.RImageComponent", RImageComponent);
-    registerClassAlias("org.jspresso.framework.gui.remote.RIntegerField", RIntegerField);
-    registerClassAlias("org.jspresso.framework.gui.remote.RLabel", RLabel);
-    registerClassAlias("org.jspresso.framework.gui.remote.RLink", RLink);
-    registerClassAlias("org.jspresso.framework.gui.remote.RList", RList);
-    registerClassAlias("org.jspresso.framework.gui.remote.RPasswordField", RPasswordField);
-    registerClassAlias("org.jspresso.framework.gui.remote.RPercentField", RPercentField);
-    registerClassAlias("org.jspresso.framework.gui.remote.RSplitContainer", RSplitContainer);
-    registerClassAlias("org.jspresso.framework.gui.remote.RTabContainer", RTabContainer);
-    registerClassAlias("org.jspresso.framework.gui.remote.RTable", RTable);
-    registerClassAlias("org.jspresso.framework.gui.remote.RTextArea", RTextArea);
-    registerClassAlias("org.jspresso.framework.gui.remote.RTextField", RTextField);
-    registerClassAlias("org.jspresso.framework.gui.remote.RTimeField", RTimeField);
-    registerClassAlias("org.jspresso.framework.gui.remote.RTree", RTree);
+  public function set userGeoLocation(value:Object):void {
+    _userGeoLocation = value;
+  }
+
+  public function geoLocationSuccessHandler(position:Object):void {
+    userGeoLocation = position;
+  }
+
+  public function geoLocationErrorHandler(error:Object):void {
+    //_geoLocation = null;
+  }
+
+  public function queryUserGeoLocation():void {
+    ExternalInterface.call("getGeoLocation");
   }
 }
 }
