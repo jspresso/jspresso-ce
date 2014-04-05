@@ -1652,7 +1652,20 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @param remoteMap {org.jspresso.framework.gui.remote.RMap}
      */
     _createMap: function (remoteMap) {
-      return this._createDefaultComponent();
+      var map = new org.jspresso.framework.view.qx.MapComponent();
+      var state = remoteMap.getState();
+      var longitudeState = state.getChildren().getItem(0);
+      var latitudeState = state.getChildren().getItem(1);
+      var updateMapLocation = function () {
+        var longitude = longitudeState.getValue();
+        var latitude = latitudeState.getValue();
+        if (longitude != null && latitude != null) {
+          map.zoomToPosition(longitude, latitude, 12, true);
+        }
+      };
+      longitudeState.addListener("changeValue", updateMapLocation, this);
+      latitudeState.addListener("changeValue", updateMapLocation, this);
+      return map;
     },
 
     /**

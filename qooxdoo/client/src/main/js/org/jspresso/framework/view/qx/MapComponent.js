@@ -18,45 +18,39 @@
  */
 
 /**
- * Mobile page showing an OpenStreetMap map.
+ * A Widget showing an OpenStreetMap map.
  *
  * @ignore(OpenLayers.*)
- * @asset(qx/mobile/css/*)
  */
-qx.Class.define("org.jspresso.framework.view.qx.mobile.MapNavigationPage", {
-  extend: qx.ui.mobile.page.NavigationPage,
+qx.Class.define("org.jspresso.framework.view.qx.MapComponent", {
+  extend: qx.ui.core.Widget,
 
   construct: function () {
-    this.base(arguments, false);
-    this._geolocationEnabled = qx.core.Environment.get("html.geolocation");
+    this.base(arguments);
+    this.__geolocationEnabled = qx.core.Environment.get("html.geolocation");
+    this.addListenerOnce("appear", this._initialize, this);
+    this.addListener("resize", this._redrawMap, this);
   },
 
 
   members: {
     __mapUri: "http://www.openlayers.org/api/OpenLayers.js",
+    //__mapUri: "file:///Applications/envdev/OpenLayers-2.13.1/OpenLayers.debug.js",
     __map: null,
     __markers: null,
     __myPositionMarker: null,
     __mapnikLayer: null,
     __geolocationEnabled: false,
     __bufferredPosition: null,
-    __mapDivId: null,
 
 
     // overridden
     _initialize: function () {
-      this.base(arguments);
-
       if (this.__geolocationEnabled) {
         this._initGeoLocation();
       }
 
       this._loadMapLibrary();
-
-      // Listens on window orientation change and resize, and triggers redraw of map.
-      // Needed for triggering OpenLayers to use a bigger area, and draw more tiles.
-      qx.event.Registration.addListener(window, "orientationchange", this._redrawMap, this);
-      qx.event.Registration.addListener(window, "resize", this._redrawMap, this);
     },
 
 
@@ -71,21 +65,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MapNavigationPage", {
       }
     },
 
-
-    // overridden
-    _createScrollContainer: function () {
-      // MapContainer
-      var layout = new qx.ui.mobile.layout.VBox().set({
-        alignX: "center",
-        alignY: "middle"
-      });
-
-      var mapContainer = new qx.ui.mobile.container.Composite(layout);
-      this.__mapDivId = mapContainer.getId();
-
-      return mapContainer;
-    },
-
     /**
      * Loads JavaScript library which is needed for the map.
      */
@@ -93,7 +72,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MapNavigationPage", {
       var req = new qx.bom.request.Script();
 
       req.onload = function () {
-        this.__map = new OpenLayers.Map(this.__mapDivId);
+        var dom = this.getContentElement().getDomElement();
+        this.__map = new OpenLayers.Map({div: dom});
+
         this.__mapnikLayer = new OpenLayers.Layer.OSM("mapnik", null, {});
 
         this.__map.addLayer(this.__mapnikLayer);
