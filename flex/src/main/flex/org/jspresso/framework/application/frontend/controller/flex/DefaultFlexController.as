@@ -1404,6 +1404,11 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     }
   }
 
+  protected function registerRemoteClasses():void {
+    // Kept for compatibility reasons
+  }
+
+
   [Bindable]
   public function get userGeoLocation():Object {
     return _userGeoLocation;
