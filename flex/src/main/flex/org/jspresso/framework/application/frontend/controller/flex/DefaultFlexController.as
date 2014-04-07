@@ -173,6 +173,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     _initialLocaleChain = ResourceManager.getInstance().localeChain;
     _fakeDialog = getViewFactory().createPanelComponent();
     initRemoteController();
+    registerRemoteClasses();
     initGeoLocation();
   }
 
@@ -1405,7 +1406,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
   }
 
   protected function registerRemoteClasses():void {
-    // Kept for compatibility reasons
+    // Override to register custom DTOs
   }
 
 
