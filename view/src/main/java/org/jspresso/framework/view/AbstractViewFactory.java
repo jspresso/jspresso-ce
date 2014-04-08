@@ -3120,11 +3120,13 @@ public abstract class AbstractViewFactory<E, F, G> implements
             new ISelectionChangeListener() {
               @Override
               public void selectionChange(SelectionChangeEvent evt) {
-                IPageable pageable = ((ICollectionConnector) evt.getSource()).getModelConnector().getModelProvider()
-                                                                             .getModel();
-                if (pageable != null) {
-                  int[] selectedIndices = evt.getNewSelection();
-                  pageable.setSelectedRecordCount(selectedIndices == null ? 0 : selectedIndices.length);
+                IValueConnector modelConnector = ((ICollectionConnector) evt.getSource()).getModelConnector();
+                if (modelConnector != null) { // Fixes bug #1181
+                  IPageable pageable = modelConnector.getModelProvider().getModel();
+                  if (pageable != null) {
+                    int[] selectedIndices = evt.getNewSelection();
+                    pageable.setSelectedRecordCount(selectedIndices == null ? 0 : selectedIndices.length);
+                  }
                 }
               }
             });
