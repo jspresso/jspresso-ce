@@ -361,6 +361,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       if (remoteContainer instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAware && container
           instanceof qx.ui.mobile.page.NavigationPage) {
         this.installPageActions(remoteContainer, container);
+        container.setUserData("pageGuid", remoteContainer.getGuid());
       }
       return container;
     },
@@ -419,13 +420,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           }
         }
       }, this);
-      if (remoteNavPage.getNextPage()) {
+      var remoteNextPage = remoteNavPage.getNextPage();
+      if (remoteNextPage) {
         /** @type {qx.ui.mobile.page.NavigationPage} */
-        var nextPage = this.createComponent(remoteNavPage.getNextPage());
+        var nextPage = this.createComponent(remoteNextPage);
         selectionComponent.addListener("changeSelection", function (evt) {
           var pageToShow = this._getActualPageToShow(nextPage);
           if (pageToShow && pageToShow.getVisibility() != "visible") {
-            pageToShow.show();
+            this._getActionHandler().showDetailPage(pageToShow);
           }
         }, this);
         this.linkNextPageBackButton(nextPage, navPage, null, null);
@@ -527,7 +529,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
             var l = evt.getCurrentTarget();
             var pageToShow = this._getActualPageToShow(l.getModel().getItem(selectedIndex).next);
             if (pageToShow && pageToShow.getVisibility() != "visible") {
-              pageToShow.show();
+              this._getActionHandler().showDetailPage(pageToShow);
             }
           }, this);
           sections.push(list);
@@ -1007,7 +1009,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       cardContainer.setUserData("currentPage", selectedCard);
       var pageToShow = this._getActualPageToShow(selectedCard);
       if (pageToShow && pageToShow.getVisibility() != "visible") {
-        pageToShow.show();
+        this._getActionHandler().showDetailPage(pageToShow);
       }
     },
 
@@ -1388,7 +1390,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     focus: function (component) {
       var pageToShow = this._getActualPageToShow(component);
       if (pageToShow && pageToShow.getVisibility() != "visible") {
-        pageToShow.show();
+        this._getActionHandler().showDetailPage(pageToShow);
       }
     },
 

@@ -824,53 +824,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     },
 
     /**
-     * @param historyDisplayCommand {org.jspresso.framework.application.frontend.command.remote.RemoteHistoryDisplayCommand}
-     * @return {undefined}
-     */
-    _handleHistoryDisplayCommand: function (historyDisplayCommand) {
-      if (historyDisplayCommand.getSnapshotId()) {
-        this.__lastReceivedSnapshotId = historyDisplayCommand.getSnapshotId();
-        qx.bom.History.getInstance().addToHistory("snapshotId=" + historyDisplayCommand.getSnapshotId(),
-            historyDisplayCommand.getName());
-      } else if (historyDisplayCommand.getName()) {
-        qx.bom.History.getInstance().setTitle(historyDisplayCommand.getName());
-      }
-    },
-
-    /**
-     * @return {undefined}
-     */
-    __linkBrowserHistory: function () {
-      /**
-       * @type {qx.bom.History}
-       */
-      var browserManager = qx.bom.History.getInstance();
-      browserManager.addListener("request", function (e) {
-        var state = e.getData();
-        var vars = state.split('&');
-        var decodedFragment = {};
-        for (var i = 0; i < vars.length; i++) {
-          var tmp = vars[i].split('=');
-          decodedFragment[tmp[0]] = tmp[1];
-        }
-        if (decodedFragment.snapshotId && decodedFragment.snapshotId != this.__lastReceivedSnapshotId) {
-          var command = new org.jspresso.framework.application.frontend.command.remote.RemoteHistoryDisplayCommand();
-          command.setSnapshotId(decodedFragment.snapshotId);
-          this.registerCommand(command);
-        }
-      }, this);
-    },
-
-    /**
      * @param initCommand {org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand}
      * @return {undefined}
      */
     _handleInitCommand: function (initCommand) {
-      this.__linkBrowserHistory();
       this._initApplicationFrame(initCommand.getWorkspaceNames(), initCommand.getWorkspaceActions(),
           initCommand.getExitAction(), initCommand.getNavigationActions(), initCommand.getActions(),
           initCommand.getSecondaryActions(), initCommand.getHelpActions(), initCommand.getSize());
     }
-
   }
 });

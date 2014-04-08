@@ -30,18 +30,15 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
    */
   construct: function (application, remoteController, userLanguage) {
     this.base(arguments, remoteController, userLanguage);
-    this._application = application;
+    this.__isTablet = (qx.core.Environment.get("device.type") == "tablet" || qx.core.Environment.get("device.type")
+        == "desktop");
+    this.__application = application;
 
     var busyIndicator = new qx.ui.mobile.dialog.BusyIndicator(this.translate("Wait") + "...");
     this.__busyPopup = new qx.ui.mobile.dialog.Popup(busyIndicator);
     this.__busyPopup.setTitle(this.translate("Loading") + "...");
-
-    this.__manager = new qx.ui.mobile.page.Manager(/*false*/);
-    if (this.__manager.getMasterButton()) {
-      this.__manager.getMasterButton().setIcon("org/jspresso/framework/mobile/nav-mobile-menu-icon.png");
-      this.__manager.getMasterButton().setShow("icon");
-      this.__manager.setHideMasterButtonCaption(this.translate("Hide"));
-    }
+    this.__manager = this.__createManager();
+    this.__routing = this.__createRouting();
   },
 
   members: {
@@ -61,7 +58,59 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     __displayedWorkspaceName: null,
     /** @type {qx.ui.mobile.page.NavigationPage} */
     __pageToRestore: null,
+    /** @type {qx.application.Routing} */
+    __routing: null,
+    /** @type {boolean} */
+    __isTablet: false,
 
+    /**
+     * @return {qx.application.Routing}
+     */
+    __createRouting: function () {
+      var routing = new qx.application.Routing();
+      routing.onGet("/*", function (data) {
+        if (this.__isTablet) {
+          routing.execute("/workspace/" + this.__displayedWorkspaceName);
+        } else {
+          routing.execute("/workspaces");
+        }
+      }, this);
+      routing.onGet("/workspaces", function (data) {
+        if (this.__workspacesMasterPage) {
+          this.__workspacesMasterPage.show();
+        }
+      }, this);
+      routing.onGet("/workspace/{workspaceName}", function (data) {
+        var workspacePage = this.__workspacePages[data.params.workspaceName];
+        if (workspacePage) {
+          workspacePage.show();
+        }
+      }, this);
+      routing.onGet("/page/{pageGuid}", function (data) {
+        /** @type {org.jspresso.framework.gui.remote.mobile.RMobilePage} */
+        var remotePage = this.getRegistered(data.params.pageGuid);
+        if (remotePage) {
+          var page = remotePage.retrievePeer();
+          if (page) {
+            page.show();
+          }
+        }
+      }, this);
+      return routing;
+    },
+
+    /**
+     * @return {qx.ui.mobile.page.Manager}
+     */
+    __createManager: function () {
+      var manager = new qx.ui.mobile.page.Manager(/*false*/);
+      if (manager.getMasterButton()) {
+        manager.getMasterButton().setIcon("org/jspresso/framework/mobile/nav-mobile-menu-icon.png");
+        manager.getMasterButton().setShow("icon");
+        manager.setHideMasterButtonCaption(this.translate("Hide"));
+      }
+      return manager;
+    },
 
     _createViewFactory: function () {
       return new org.jspresso.framework.view.qx.mobile.MobileQxViewFactory(this, this, this);
@@ -104,6 +153,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       if (this.__workspacesMasterPage) {
         this.__workspacesMasterPage.exclude();
       }
+      this.__pageToRestore = null;
+      // The 2 following lines break exit action.
+      // this.__manager = this.__createManager();
+      // this.__routing = this.__createRouting();
       this.base(arguments);
     },
 
@@ -247,10 +300,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       workspaceNavigator.addListener("changeSelection", function (evt) {
         var selectedIndex = evt.getData();
         var workspaceAction = workspacesNavigatorModel.getItem(selectedIndex).workspaceAction;
-        var workspacePage = this.__workspacePages[workspaceNames[selectedIndex]];
-        if (workspacePage) {
-          workspacePage.show();
-        }
+        this.__routing.execute("/workspace/" + workspaceNames[selectedIndex]);
         this.execute(workspaceAction);
       }, this);
       this.__workspacesMasterPage.addListener("initialize", function (e) {
@@ -258,10 +308,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       }, this);
       this.__workspacesMasterPage.setTitle(this.translate("Workspaces"));
       this.__manager.addMaster(this.__workspacesMasterPage);
-      if (!this.__workspacesMasterPage.isTablet()) {
+
+      if (!this.__isTablet) {
         this._getViewFactory().installPageMainAction(this.__workspacesMasterPage, exitAction);
       }
-      this.__workspacesMasterPage.show();
+      this.__routing.execute("/workspaces");
     },
 
     /**
@@ -278,14 +329,14 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         /** @type {qx.ui.mobile.page.NavigationPage} */
         var workspacePage = this.createComponent(workspaceView);
         this.__workspacePages[workspaceName] = workspacePage;
-        if (workspacePage.isTablet()) {
+        if (this.__isTablet) {
           this._getViewFactory().installPageMainAction(workspacePage, this.__exitAction);
         } else {
           this._getViewFactory().linkNextPageBackButton(workspacePage, this.__workspacesMasterPage,
               workspaceView.getBackAction(), "cube");
         }
       }
-      this.__workspacePages[workspaceName].show();
+      this.__routing.execute("/workspace/" + workspaceName);
     },
 
     /**
@@ -400,6 +451,19 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     },
 
     /**
+     * @param page {qx.ui.mobile.page.Page}
+     * @return {undefined}
+     */
+    showDetailPage: function (page) {
+      var pageGuid = page.getUserData("pageGuid");
+      if (pageGuid) {
+        this.__routing.execute("/page/" + pageGuid);
+      } else {
+        page.show();
+      }
+    },
+
+    /**
      * @param navigationPage {qx.ui.mobile.page.NavigationPage}
      * @return {undefined}
      */
@@ -478,6 +542,14 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       keysToTranslate = keysToTranslate.concat([
         "m_01", "m_02", "m_03", "m_04", "m_05", "m_06", "m_07", "m_08", "m_09", "m_10", "m_11", "m_12"]);
       return keysToTranslate;
+    },
+
+    /**
+     * @param historyDisplayCommand {org.jspresso.framework.application.frontend.command.remote.RemoteHistoryDisplayCommand}
+     * @return {undefined}
+     */
+    _handleHistoryDisplayCommand: function (historyDisplayCommand) {
+      // Not supported in mobile environment
     }
   }
 });

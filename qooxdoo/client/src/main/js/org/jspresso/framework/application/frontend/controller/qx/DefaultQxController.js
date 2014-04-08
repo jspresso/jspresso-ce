@@ -28,8 +28,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
    */
   construct: function (application, remoteController, userLanguage) {
     this.base(arguments, remoteController, userLanguage);
-    this._application = application;
-    this._application.getRoot().set({
+    this.__application = application;
+    this.__application.getRoot().set({
       blockerColor: '#bfbfbf',
       blockerOpacity: 0.5
     });
@@ -38,7 +38,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
   members: {
 
     /** @type {qx.application.Standalone} */
-    _application: null,
+    __application: null,
     /** @type {qx.ui.form.RadioGroup} */
     __workspaceAccordionGroup: null,
     /** @type {qx.ui.container.Stack} */
@@ -55,9 +55,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
 
     _showBusy: function (busy) {
       if (busy) {
-        this._application.getRoot().setGlobalCursor("wait");
+        this.__application.getRoot().setGlobalCursor("wait");
       } else {
-        this._application.getRoot().setGlobalCursor("default");
+        this.__application.getRoot().setGlobalCursor("default");
       }
     },
 
@@ -117,9 +117,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         //        if(this._dialogStack && this._dialogStack.length > 1) {
         //          dialogParent = this._dialogStack[_dialogStack.length -1];
         //        } else {
-        //          dialogParent = this._application.getRoot();
+        //          dialogParent = this.__application.getRoot();
         //        }
-        dialogParent = this._application.getRoot();
+        dialogParent = this.__application.getRoot();
         dialog = new qx.ui.window.Window();
         dialog.setLayout(new qx.ui.layout.Grow());
         dialog.set({
@@ -162,7 +162,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       if (this._dialogStack && this._dialogStack.length > 1) {
         /** @type {qx.ui.window.Window} */
         var topDialog = this._dialogStack.pop()[0];
-        this._application.getRoot().remove(topDialog);
+        this.__application.getRoot().remove(topDialog);
         topDialog.close();
         topDialog.destroy();
       }
@@ -222,7 +222,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      */
     _initApplicationFrame: function (workspaceNames, workspaceActions, exitAction, navigationActions, actions,
                                      secondaryActions, helpActions, size) {
-      //this._application.getRoot().removeAll();
+      //this.__application.getRoot().removeAll();
 
       var applicationFrame = new qx.ui.container.Composite(new qx.ui.layout.VBox());
 
@@ -273,7 +273,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       var scrollContainer = new qx.ui.container.Scroll();
       scrollContainer.add(applicationFrame);
 
-      this._application.getRoot().add(scrollContainer, {edge: 0})
+      this.__application.getRoot().add(scrollContainer, {edge: 0})
     },
 
     /**
@@ -349,7 +349,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       });
       messageDialog.setLayout(new qx.ui.layout.VBox(10));
       this._getViewFactory().setIcon(messageDialog, messageCommand.getTitleIcon());
-      this._application.getRoot().add(messageDialog);
+      this.__application.getRoot().add(messageDialog);
 
       var message = new qx.ui.basic.Atom(messageCommand.getMessage());
       message.setRich(org.jspresso.framework.util.html.HtmlUtil.isHtml(messageCommand.getMessage()));
@@ -411,7 +411,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       } else {
         var okButton = this._getViewFactory().createOkButton();
         this._getViewFactory().addButtonListener(okButton, function (event) {
-          this._application.getRoot().remove(messageDialog);
+          this.__application.getRoot().remove(messageDialog);
           messageDialog.close();
           messageDialog.destroy();
         }, this);
@@ -504,7 +504,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       });
       uploadDialog.setLayout(new qx.ui.layout.VBox(10));
       //this._getViewFactory().setIcon(uploadDialog, messageCommand.getTitleIcon());
-      this._application.getRoot().add(uploadDialog);
+      this.__application.getRoot().add(uploadDialog);
 
       var uploadForm = new uploadwidget.UploadForm('uploadForm', uploadCommand.getFileUrl());
       uploadForm.set({
@@ -567,7 +567,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           height: 0,
           decorator: null //new qx.ui.decoration.Background("transparent")
         });
-        this._application.getRoot().add(this.__dlFrame);
+        this.__application.getRoot().add(this.__dlFrame);
       }
       if (this.__dlFrame.getSource() === downloadCommand.getFileUrl()) {
         this.__dlFrame.resetSource();
@@ -579,7 +579,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @return {undefined}
      */
     _restart: function () {
-      this._application.getRoot().removeAll();
+      this.__application.getRoot().removeAll();
       this.__dlFrame = null;
       this.base(arguments);
     },
@@ -685,6 +685,53 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      */
     _handleEditCommand: function (targetPeer, editCommand) {
       this._getViewFactory().edit(targetPeer.retrievePeer());
+    },
+
+    /**
+     * @param historyDisplayCommand {org.jspresso.framework.application.frontend.command.remote.RemoteHistoryDisplayCommand}
+     * @return {undefined}
+     */
+    _handleHistoryDisplayCommand: function (historyDisplayCommand) {
+      if (historyDisplayCommand.getSnapshotId()) {
+        this.__lastReceivedSnapshotId = historyDisplayCommand.getSnapshotId();
+        qx.bom.History.getInstance().addToHistory("snapshotId=" + historyDisplayCommand.getSnapshotId(),
+            historyDisplayCommand.getName());
+      } else if (historyDisplayCommand.getName()) {
+        qx.bom.History.getInstance().setTitle(historyDisplayCommand.getName());
+      }
+    },
+
+    /**
+     * @return {undefined}
+     */
+    __linkBrowserHistory: function () {
+      /**
+       * @type {qx.bom.History}
+       */
+      var browserManager = qx.bom.History.getInstance();
+      browserManager.addListener("request", function (e) {
+        var state = e.getData();
+        var vars = state.split('&');
+        var decodedFragment = {};
+        for (var i = 0; i < vars.length; i++) {
+          var tmp = vars[i].split('=');
+          decodedFragment[tmp[0]] = tmp[1];
+        }
+        if (decodedFragment.snapshotId && decodedFragment.snapshotId != this.__lastReceivedSnapshotId) {
+          var command = new org.jspresso.framework.application.frontend.command.remote.RemoteHistoryDisplayCommand();
+          command.setSnapshotId(decodedFragment.snapshotId);
+          this.registerCommand(command);
+        }
+      }, this);
+    },
+
+    /**
+     * @param initCommand {org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand}
+     * @return {undefined}
+     */
+    _handleInitCommand: function (initCommand) {
+      this.__linkBrowserHistory();
+      this.base(arguments, initCommand);
     }
 
   }
