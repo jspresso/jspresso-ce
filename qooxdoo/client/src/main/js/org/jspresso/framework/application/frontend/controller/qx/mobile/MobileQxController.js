@@ -32,6 +32,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     this.base(arguments, remoteController, userLanguage);
     this.__isTablet = (qx.core.Environment.get("device.type") == "tablet" || qx.core.Environment.get("device.type")
         == "desktop");
+    // this.__isTablet = false;
     this.__application = application;
 
     var busyIndicator = new qx.ui.mobile.dialog.BusyIndicator(this.translate("Wait") + "...");
@@ -63,6 +64,26 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     /** @type {boolean} */
     __isTablet: false,
 
+    __routeToPage: function (page, data, animation) {
+      var back = false;
+      if (data && data.customData) {
+        if (data.customData.animation) {
+          animation = data.customData.animation;
+        }
+        if (data.customData.fromHistory) {
+          if (data.customData.action == "back") {
+            if (this.getCurrentPage().getShowBackButton()) {
+              this.getCurrentPage().back();
+            }
+            return;
+          }
+        } else if (data.customData.back) {
+          back = true;
+        }
+      }
+      page.show({animation: animation, reverse: back});
+    },
+
     /**
      * @return {qx.application.Routing}
      */
@@ -70,20 +91,21 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       var routing = new qx.application.Routing();
       routing.onGet("/*", function (data) {
         if (this.__isTablet) {
-          routing.execute("/workspace/" + this.__displayedWorkspaceName);
+          var page = this.__workspacePages[this.__displayedWorkspaceName];
         } else {
-          routing.execute("/workspaces");
+          page = this.__workspacesMasterPage;
         }
+        this.__routeToPage(page, data, "cube");
       }, this);
       routing.onGet("/workspaces", function (data) {
         if (this.__workspacesMasterPage) {
-          this.__workspacesMasterPage.show();
+          this.__routeToPage(this.__workspacesMasterPage, data, "cube");
         }
       }, this);
       routing.onGet("/workspace/{workspaceName}", function (data) {
         var workspacePage = this.__workspacePages[data.params.workspaceName];
         if (workspacePage) {
-          workspacePage.show();
+          this.__routeToPage(workspacePage, data, "cube");
         }
       }, this);
       routing.onGet("/page/{pageGuid}", function (data) {
@@ -92,7 +114,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         if (remotePage) {
           var page = remotePage.retrievePeer();
           if (page) {
-            page.show();
+            this.__routeToPage(page, data, "slide");
           }
         }
       }, this);
@@ -103,12 +125,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      * @return {qx.ui.mobile.page.Manager}
      */
     __createManager: function () {
-      var manager = new qx.ui.mobile.page.Manager(/*false*/);
+      var manager = new qx.ui.mobile.page.Manager(this.__isTablet);
       if (manager.getMasterButton()) {
         manager.getMasterButton().setIcon("org/jspresso/framework/mobile/nav-mobile-menu-icon.png");
         manager.getMasterButton().setShow("icon");
         manager.setHideMasterButtonCaption(this.translate("Hide"));
       }
+      manager.getDetailNavigation().getLayout().setShowAnimation(true);
       return manager;
     },
 
@@ -154,9 +177,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         this.__workspacesMasterPage.exclude();
       }
       this.__pageToRestore = null;
-      // The 2 following lines break exit action.
+      // The following lines break exit action.
       // this.__manager = this.__createManager();
-      // this.__routing = this.__createRouting();
+      this.__routing = this.__createRouting();
       this.base(arguments);
     },
 
@@ -300,7 +323,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       workspaceNavigator.addListener("changeSelection", function (evt) {
         var selectedIndex = evt.getData();
         var workspaceAction = workspacesNavigatorModel.getItem(selectedIndex).workspaceAction;
-        this.__routing.execute("/workspace/" + workspaceNames[selectedIndex]);
+        this.__routing.executeGet("/workspace/" + workspaceNames[selectedIndex], {animation: "cube", reverse: false});
         this.execute(workspaceAction);
       }, this);
       this.__workspacesMasterPage.addListener("initialize", function (e) {
@@ -312,7 +335,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       if (!this.__isTablet) {
         this._getViewFactory().installPageMainAction(this.__workspacesMasterPage, exitAction);
       }
-      this.__routing.execute("/workspaces");
+      this.__routing.executeGet("/workspaces", {animation: "cube", reverse: false});
     },
 
     /**
@@ -336,7 +359,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
               workspaceView.getBackAction(), "cube");
         }
       }
-      this.__routing.execute("/workspace/" + workspaceName);
+      this.__routing.executeGet("/workspace/" + workspaceName, {animation: "cube", reverse: false});
     },
 
     /**
@@ -453,13 +476,17 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     /**
      * @param page {qx.ui.mobile.page.Page}
      * @return {undefined}
+     * @param animation {string}
+     * @param back {boolean}
      */
-    showDetailPage: function (page) {
+    showDetailPage: function (page, animation, back) {
+      if (typeof animation === undefined) animation = "slide";
+      if (typeof back === undefined) back = false;
       var pageGuid = page.getUserData("pageGuid");
-      if (pageGuid) {
-        this.__routing.execute("/page/" + pageGuid);
+      if (pageGuid && !back) {
+        this.__routing.executeGet("/page/" + pageGuid, {animation: animation, back: back});
       } else {
-        page.show();
+        page.show({animation: animation, reverse: back});
       }
     },
 

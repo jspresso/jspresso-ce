@@ -358,9 +358,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.RBorderContainer) {
         container = this._createBorderContainer(remoteContainer);
       }
-      if (remoteContainer instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAware && container
-          instanceof qx.ui.mobile.page.NavigationPage) {
-        this.installPageActions(remoteContainer, container);
+      if (container instanceof qx.ui.mobile.page.NavigationPage) {
+        if (remoteContainer instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAware) {
+          this.installPageActions(remoteContainer, container);
+        }
         container.setUserData("pageGuid", remoteContainer.getGuid());
       }
       return container;
@@ -485,7 +486,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
             this._loseFocus();
             // Force page exclusion since nextPage visibility might be made "excluded" too late.
             nextPage.setVisibility("excluded");
-            this._getActualPageToShow(previousPage).show({animation: animation, reverse: true});
+            this._getActionHandler().showDetailPage(this._getActualPageToShow(previousPage), animation, true);
           }, this);
         }
       }
@@ -807,6 +808,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createMap: function (remoteMap) {
       var mapPage = new org.jspresso.framework.view.qx.mobile.MapNavigationPage();
+      mapPage.setUserData("pageGuid", remoteMap.getGuid());
       mapPage.setButtonIcon("org/jspresso/framework/mobile/my_location-mobile.png");
       mapPage.addListener("action", function (event) {
         mapPage.moveToCurrentPosition();
@@ -814,10 +816,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var state = remoteMap.getState();
       var longitudeState = state.getChildren().getItem(0);
       var latitudeState = state.getChildren().getItem(1);
-      var updateMapLocation = function() {
+      var updateMapLocation = function () {
         var longitude = longitudeState.getValue();
         var latitude = latitudeState.getValue();
-        if(longitude != null && latitude != null) {
+        if (longitude != null && latitude != null) {
           mapPage.zoomToPosition(longitude, latitude, 12, true);
         }
       };
@@ -961,12 +963,12 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     },
 
     /**
-     * @param cardComponent {qx.ui.mobile.page.NavigationPage}
+     * @param navigationPage {qx.ui.mobile.page.NavigationPage}
      * @return {undefined}
      */
-    _addDetailPage: function (cardComponent) {
+    _addDetailPage: function (navigationPage) {
       /** @type {org.jspresso.framework.application.frontend.controller.qx.mobile.MobileQxController} */
-      this._getActionHandler().addDetailPage(cardComponent);
+      this._getActionHandler().addDetailPage(navigationPage);
     },
 
     /**
@@ -1009,7 +1011,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       cardContainer.setUserData("currentPage", selectedCard);
       var pageToShow = this._getActualPageToShow(selectedCard);
       if (pageToShow && pageToShow.getVisibility() != "visible") {
-        this._getActionHandler().showDetailPage(pageToShow);
+        //this._getActionHandler().showDetailPage(pageToShow);
+        pageToShow.show();
       }
     },
 
@@ -1401,7 +1404,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     edit: function (component) {
       var editorPage = component.getUserData("editorPage");
       if (editorPage) {
-        editorPage.show({animation: "flip"});
+        this._getActionHandler().showDetailPage(editorPage, "flip");
       }
     },
 
