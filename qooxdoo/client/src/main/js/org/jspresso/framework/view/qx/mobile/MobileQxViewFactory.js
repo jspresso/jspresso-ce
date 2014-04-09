@@ -57,6 +57,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @return {qx.ui.mobile.core.Widget}
      */
     _createCustomComponent: function (remoteComponent) {
+      if (remoteComponent instanceof org.jspresso.framework.gui.remote.mobile.RImagePicker) {
+        return this._createImagePicker(remoteComponent);
+      }
       return null;
     },
 
@@ -1593,6 +1596,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       });
       modelController.addTarget(radioGroup, "enabled", "writable", false);
       return radioBox;
+    },
+
+    /**
+     * @param remoteImagePicker {org.jspresso.framework.gui.remote.mobile.RImagePicker}
+     * @return {qx.ui.mobile.core.Widget}
+     */
+    _createImagePicker: function (remoteImagePicker) {
+      return new org.jspresso.framework.view.qx.mobile.ImagePicker();
     },
 
     /**

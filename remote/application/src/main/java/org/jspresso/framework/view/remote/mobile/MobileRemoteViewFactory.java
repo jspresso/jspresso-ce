@@ -29,9 +29,11 @@ import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RCardContainer;
 import org.jspresso.framework.gui.remote.RComponent;
+import org.jspresso.framework.gui.remote.RImageComponent;
 import org.jspresso.framework.gui.remote.RList;
 import org.jspresso.framework.gui.remote.RTabContainer;
 import org.jspresso.framework.gui.remote.RTree;
+import org.jspresso.framework.gui.remote.mobile.RImagePicker;
 import org.jspresso.framework.gui.remote.mobile.RMobileCardPage;
 import org.jspresso.framework.gui.remote.mobile.RMobileCompositePage;
 import org.jspresso.framework.gui.remote.mobile.RMobileList;
@@ -446,6 +448,19 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
         selectionCommand.setLeadingIndex(index);
         getRemoteCommandHandler().registerCommand(selectionCommand);
       }
+    }
+  }
+
+  /**
+   * Will create an image picker if the component is not read-only.
+   * {@inheritDoc}
+   */
+  @Override
+  protected RImageComponent createRImageComponent(IPropertyViewDescriptor viewDescriptor) {
+    if (viewDescriptor.isReadOnly()) {
+      return super.createRImageComponent(viewDescriptor);
+    } else {
+      return new RImagePicker(getGuidGenerator().generateGUID());
     }
   }
 
