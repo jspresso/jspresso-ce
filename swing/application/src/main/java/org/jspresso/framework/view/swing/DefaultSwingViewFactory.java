@@ -45,6 +45,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -105,6 +106,16 @@ import chrriis.dj.swingsuite.JComboButton;
 import chrriis.dj.swingsuite.JLink;
 import chrriis.dj.swingsuite.JTriStateCheckBox;
 import chrriis.dj.swingsuite.LinkListener;
+import com.bbn.openmap.LayerHandler;
+import com.bbn.openmap.MapBean;
+import com.bbn.openmap.MapHandler;
+import com.bbn.openmap.MouseDelegator;
+import com.bbn.openmap.event.OMMouseMode;
+import com.bbn.openmap.gui.BasicMapPanel;
+import com.bbn.openmap.gui.EmbeddedNavPanel;
+import com.bbn.openmap.gui.EmbeddedScaleDisplayPanel;
+import com.bbn.openmap.gui.OverlayMapPanel;
+import com.bbn.openmap.layer.imageTile.MapTileLayer;
 import org.syntax.jedit.JEditTextArea;
 import org.syntax.jedit.tokenmarker.TokenMarker;
 
@@ -134,6 +145,7 @@ import org.jspresso.framework.binding.swing.JFormattedFieldConnector;
 import org.jspresso.framework.binding.swing.JHTMLEditorConnector;
 import org.jspresso.framework.binding.swing.JImageConnector;
 import org.jspresso.framework.binding.swing.JLabelConnector;
+import org.jspresso.framework.binding.swing.JMapViewConnector;
 import org.jspresso.framework.binding.swing.JPasswordFieldConnector;
 import org.jspresso.framework.binding.swing.JPercentFieldConnector;
 import org.jspresso.framework.binding.swing.JRadioButtonConnector;
@@ -1048,9 +1060,45 @@ public class DefaultSwingViewFactory extends
    * {@inheritDoc}
    */
   @Override
-  protected IView<JComponent> createMapView( IMapViewDescriptor viewDescriptor, IActionHandler actionHandler,
+  protected IView<JComponent> createMapView(IMapViewDescriptor viewDescriptor, IActionHandler actionHandler,
                                              Locale locale) {
-    return null;
+    BasicMapPanel viewComponent = createMapView();
+    MapBean mapBean = viewComponent.getMapBean();
+    mapBean.setScale(100000);
+
+    MapHandler mapHandler = viewComponent.getMapHandler();
+    // Add navigation tools over the map
+    mapHandler.add(new EmbeddedNavPanel());
+    // Add scale display widget over the map
+    mapHandler.add(new EmbeddedScaleDisplayPanel());
+    // Add MouseDelegator, which handles mouse modes (managing mouse
+    // events)
+    mapHandler.add(new MouseDelegator());
+    // Add OMMouseMode, which handles how the map reacts to mouse
+    // movements
+    mapHandler.add(new OMMouseMode());
+
+    mapHandler.add(new LayerHandler());
+    MapTileLayer mapTileLayer = new MapTileLayer();
+    Properties tileProperties = new Properties();
+    tileProperties.setProperty("rootDir", "http://c.tile.openstreetmap.org/");
+    mapTileLayer.setProperties(tileProperties);
+    mapTileLayer.setVisible(true);
+
+    mapHandler.add(mapTileLayer);
+
+    IModelDescriptor modelDescriptor = viewDescriptor.getModelDescriptor();
+    String connectorId;
+    if (modelDescriptor instanceof IPropertyDescriptor) {
+      connectorId = modelDescriptor.getName();
+    } else {
+      connectorId = ModelRefPropertyConnector.THIS_PROPERTY;
+    }
+    IValueConnector connector = new JMapViewConnector(connectorId, mapBean,
+        viewDescriptor.getLongitudeProperty()
+        , viewDescriptor.getLatitudeProperty());
+    IView<JComponent> view = constructView(viewComponent, viewDescriptor, connector);
+    return view;
   }
 
   /**
@@ -1681,6 +1729,15 @@ public class DefaultSwingViewFactory extends
       label.setFont(createFont(BOLD_FONT, label.getFont()));
     }
     return label;
+  }
+
+  /**
+   * Creates a map view.
+   *
+   * @return the created map view.
+   */
+  protected BasicMapPanel createMapView() {
+    return new OverlayMapPanel();
   }
 
   /**

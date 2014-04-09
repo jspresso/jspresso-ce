@@ -76,6 +76,7 @@
     <stax-api.version>1.0.1</stax-api.version>
     <trove.version>3.0.3</trove.version>
     <openscales.version>2.2</openscales.version>
+    <openmap.version>5.0.3</openmap.version>
 
     <!-- Plugins versions common to Jspresso root pom-->
     <compiler-plugin.version>3.1</compiler-plugin.version>
@@ -821,6 +822,21 @@
         <artifactId>openscales-fx</artifactId>
         <version>${openscales.version}</version>
         <type>swc</type>
+      </dependency>
+      <dependency>
+        <groupId>com.bbn.openmap</groupId>
+        <artifactId>openmap</artifactId>
+        <version>${openmap.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>javax.media</groupId>
+            <artifactId>jai_codec</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>javax.media</groupId>
+            <artifactId>jai_core</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
     </dependencies>
   </dependencyManagement>

@@ -42,5 +42,9 @@
       <groupId>chrriis</groupId>
       <artifactId>dj-swingsuite</artifactId>
     </dependency>
-	</dependencies>
+    <dependency>
+      <groupId>com.bbn.openmap</groupId>
+      <artifactId>openmap</artifactId>
+    </dependency>
+  </dependencies>
 </project>

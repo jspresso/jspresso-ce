@@ -641,8 +641,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
           }
         } else {
           String connectorId;
-          if (viewDescriptor.getModelDescriptor() instanceof IPropertyDescriptor) {
-            connectorId = viewDescriptor.getModelDescriptor().getName();
+          IModelDescriptor modelDescriptor = viewDescriptor.getModelDescriptor();
+          if (modelDescriptor instanceof IPropertyDescriptor) {
+            connectorId = modelDescriptor.getName();
           } else {
             connectorId = ModelRefPropertyConnector.THIS_PROPERTY;
           }
