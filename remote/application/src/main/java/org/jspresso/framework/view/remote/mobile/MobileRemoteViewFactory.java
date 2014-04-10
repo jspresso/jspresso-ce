@@ -43,17 +43,17 @@ import org.jspresso.framework.gui.remote.mobile.RMobilePageAware;
 import org.jspresso.framework.gui.remote.mobile.RMobilePageAwareContainer;
 import org.jspresso.framework.gui.remote.mobile.RMobileTree;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.server.remote.RemotePeerRegistryServlet;
+import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
-import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
-import org.jspresso.framework.view.descriptor.IMapViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
@@ -98,7 +98,8 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     }
     throw new IllegalArgumentException(
         "Mobile view factory can only handle mobile view descriptors and not : " + viewDescriptor.getClass()
-                                                                                                 .getSimpleName());
+                                                                                                 .getSimpleName()
+    );
   }
 
   /**
@@ -123,8 +124,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
       } else if (viewDescriptor instanceof MobileBorderViewDescriptor) {
         view = createBorderView((MobileBorderViewDescriptor) viewDescriptor, actionHandler, locale);
       }
-      if (view != null
-          && view.getDescriptor() instanceof IMobilePageAware) {
+      if (view != null && view.getDescriptor() instanceof IMobilePageAware) {
         if (!(view.getPeer() instanceof RMobilePageAware)) {
           RMobilePageAwareContainer wrapper = createRMobilePageAwareContainer();
           wrapper.setContent(view.getPeer());
@@ -144,7 +144,8 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     }
     throw new IllegalArgumentException(
         "Mobile view factory can only handle mobile view descriptors and not : " + viewDescriptor.getClass()
-                                                                                                 .getSimpleName());
+                                                                                                 .getSimpleName()
+    );
   }
 
   /**
@@ -451,6 +452,17 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     }
   }
 
+  @Override
+  protected IView<RComponent> createImagePropertyView(IPropertyViewDescriptor propertyViewDescriptor,
+                                                      IActionHandler actionHandler, Locale locale) {
+    IView<RComponent> imagePropertyView = super.createImagePropertyView(propertyViewDescriptor, actionHandler, locale);
+    if (imagePropertyView.getPeer() instanceof RImagePicker) {
+      ((RImagePicker) imagePropertyView.getPeer()).setSubmitUrl(RemotePeerRegistryServlet.computeUploadUrl(
+          ((IRemotePeer) imagePropertyView.getConnector()).getGuid()));
+    }
+    return imagePropertyView;
+  }
+
   /**
    * Will create an image picker if the component is not read-only.
    * {@inheritDoc}
@@ -495,7 +507,8 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
   /**
    * Sets save page action.
    *
-   * @param savePageAction the save page action
+   * @param savePageAction
+   *     the save page action
    */
   public void setSavePageAction(IDisplayableAction savePageAction) {
     this.savePageAction = savePageAction;
@@ -513,7 +526,8 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
   /**
    * Sets cancel page action.
    *
-   * @param cancelPageAction the cancel page action
+   * @param cancelPageAction
+   *     the cancel page action
    */
   public void setCancelPageAction(IDisplayableAction cancelPageAction) {
     this.cancelPageAction = cancelPageAction;

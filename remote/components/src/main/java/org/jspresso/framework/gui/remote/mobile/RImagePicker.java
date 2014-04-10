@@ -30,6 +30,8 @@ public class RImagePicker extends RImageComponent {
 
   private static final long serialVersionUID = -8099319637631348345L;
 
+  private String submitUrl;
+
   /**
    * Constructs a new {@code RImagePicker} instance.
    *
@@ -46,5 +48,23 @@ public class RImagePicker extends RImageComponent {
    */
   public RImagePicker() {
     // For serialization support
+  }
+
+  /**
+   * Gets submit url.
+   *
+   * @return the submit url
+   */
+  public String getSubmitUrl() {
+    return submitUrl;
+  }
+
+  /**
+   * Sets submit url.
+   *
+   * @param submitUrl the submit url
+   */
+  public void setSubmitUrl(String submitUrl) {
+    this.submitUrl = submitUrl;
   }
 }

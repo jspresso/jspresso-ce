@@ -179,7 +179,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       this.__pageToRestore = null;
       // The following lines break exit action.
       // this.__manager = this.__createManager();
-      this.__routing = this.__createRouting();
+      // this.__routing = this.__createRouting();
       this.base(arguments);
     },
 

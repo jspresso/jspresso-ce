@@ -1603,7 +1603,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @return {qx.ui.mobile.core.Widget}
      */
     _createImagePicker: function (remoteImagePicker) {
-      return new org.jspresso.framework.view.qx.mobile.ImagePicker();
+      return new org.jspresso.framework.view.qx.mobile.ImagePicker(remoteImagePicker.getSubmitUrl(),
+          remoteImagePicker.getLabel());
     },
 
     /**
