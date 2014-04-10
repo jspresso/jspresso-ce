@@ -18,25 +18,18 @@
  */
 package org.jspresso.framework.util.resources.server;
 
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.Transparency;
-import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
@@ -47,24 +40,26 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.http.HttpRequestHolder;
+import org.jspresso.framework.util.image.ImageHelper;
 import org.jspresso.framework.util.io.IoHelper;
 import org.jspresso.framework.util.resources.AbstractResource;
 import org.jspresso.framework.util.resources.IActiveResource;
 import org.jspresso.framework.util.resources.IResource;
 import org.jspresso.framework.util.resources.IResourceBase;
 import org.jspresso.framework.util.url.UrlHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This servlet class returns the web resource which matches the specified id
  * request parameter requesting it to the resource manager.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -143,7 +138,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
 
   /**
    * Computes the url where the resource is available for download.
-   * 
+   *
    * @param id
    *          the resource id.
    * @return the resource url.
@@ -155,7 +150,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
 
   /**
    * Computes the url where the image is available for download.
-   * 
+   *
    * @param icon
    *          the icon to load the image for.
    * @param dimension
@@ -178,7 +173,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
 
   /**
    * Computes the url where the image is available for download.
-   * 
+   *
    * @param localImageUrl
    *          the image local url.
    * @param dimension
@@ -202,7 +197,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
 
   /**
    * Computes the url where the resource is available for download.
-   * 
+   *
    * @param localUrl
    *          the resource local url.
    * @return the resource url.
@@ -213,7 +208,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
 
   /**
    * Computes the url where the resource is available for download.
-   * 
+   *
    * @param localUrl
    *          the resource local url.
    * @param omitFileName
@@ -234,7 +229,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
 
   /**
    * Computes a static URL based on servlet request.
-   * 
+   *
    * @param relativePath
    *          the relative path.
    * @return the absolute static URL.
@@ -245,7 +240,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
 
   /**
    * Computes the url where the resource can be uploaded.
-   * 
+   *
    * @return the resource url.
    */
   public static String computeUploadUrl() {
@@ -255,7 +250,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
 
   /**
    * Computes the url where the resource is available for download.
-   * 
+   *
    * @param request
    *          the incoming HTTP request.
    * @param id
@@ -268,7 +263,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
 
   /**
    * Computes a static URL based on servlet request.
-   * 
+   *
    * @param request
    *          the servlet request.
    * @param relativePath
@@ -284,7 +279,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
 
   /**
    * Computes the url where the resource can be uploaded.
-   * 
+   *
    * @param request
    *          the incoming HTTP request.
    * @return the resource url.
@@ -427,8 +422,8 @@ public abstract class ResourceProviderServlet extends HttpServlet {
           String width = request.getParameter(IMAGE_WIDTH_PARAMETER);
           String height = request.getParameter(IMAGE_HEIGHT_PARAMETER);
           if (width != null && height != null) {
-            inputStream = scaleImage(imageUrl, Integer.parseInt(width),
-                Integer.parseInt(height));
+            inputStream = new BufferedInputStream(new ByteArrayInputStream(ImageHelper.scaleImage(imageUrl, Integer.parseInt(width),
+                Integer.parseInt(height), "PNG")));
           } else {
             inputStream = new BufferedInputStream(imageUrl.openStream());
           }
@@ -469,7 +464,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
 
   /**
    * Writes an active resource to the servlet output stream.
-   * 
+   *
    * @param resource
    *          the resource to write.
    * @param outputStream
@@ -492,88 +487,6 @@ public abstract class ResourceProviderServlet extends HttpServlet {
       response.setHeader("Content-Disposition", "attachment; filename="
           + actualFileName);
     }
-  }
-
-  private BufferedInputStream scaleImage(URL originalImageUrl, int width,
-      int height) throws IOException {
-    BufferedImage image = ImageIO.read(originalImageUrl);
-    BufferedImage scaledImage = getScaledInstance(image, width, height,
-        RenderingHints.VALUE_INTERPOLATION_BILINEAR, true);
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    ImageIO.write(scaledImage, "PNG", baos);
-    return new BufferedInputStream(new ByteArrayInputStream(baos.toByteArray()));
-  }
-
-  /**
-   * Convenience method that returns a scaled instance of the provided
-   * {@code BufferedImage}.
-   * 
-   * @param img
-   *          the original image to be scaled
-   * @param targetWidth
-   *          the desired width of the scaled instance, in pixels
-   * @param targetHeight
-   *          the desired height of the scaled instance, in pixels
-   * @param hint
-   *          one of the rendering hints that corresponds to
-   *          {@code RenderingHints.KEY_INTERPOLATION} (e.g.
-   *          {@code RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR},
-   *          {@code RenderingHints.VALUE_INTERPOLATION_BILINEAR},
-   *          {@code RenderingHints.VALUE_INTERPOLATION_BICUBIC})
-   * @param higherQuality
-   *          if true, this method will use a multi-step scaling technique that
-   *          provides higher quality than the usual one-step technique (only
-   *          useful in downscaling cases, where {@code targetWidth} or
-   *          {@code targetHeight} is smaller than the original dimensions, and
-   *          generally only when the {@code BILINEAR} hint is specified)
-   * @return a scaled version of the original {@code BufferedImage}
-   */
-  public BufferedImage getScaledInstance(BufferedImage img, int targetWidth,
-      int targetHeight, Object hint, boolean higherQuality) {
-    int type = BufferedImage.TYPE_INT_ARGB;
-    if (img.getTransparency() == Transparency.OPAQUE) {
-      type = BufferedImage.TYPE_INT_RGB;
-    }
-    BufferedImage ret = img;
-    int w, h;
-    if (higherQuality) {
-      // Use multi-step technique: start with original size, then
-      // scale down in multiple passes with drawImage()
-      // until the target size is reached
-      w = img.getWidth();
-      h = img.getHeight();
-    } else {
-      // Use one-step technique: scale directly from original
-      // size to target size with a single drawImage() call
-      w = targetWidth;
-      h = targetHeight;
-    }
-
-    do {
-      if (higherQuality && w > targetWidth) {
-        w /= 2;
-      }
-      if (w < targetWidth) {
-        w = targetWidth;
-      }
-
-      if (higherQuality && h > targetHeight) {
-        h /= 2;
-      }
-      if (h < targetHeight) {
-        h = targetHeight;
-      }
-
-      BufferedImage tmp = new BufferedImage(w, h, type);
-      Graphics2D g2 = tmp.createGraphics();
-      g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, hint);
-      g2.drawImage(ret, 0, 0, w, h, null);
-      g2.dispose();
-
-      ret = tmp;
-    } while (w != targetWidth || h != targetHeight);
-
-    return ret;
   }
 
   private boolean isLocalUrlAllowed(String localUrl) {
