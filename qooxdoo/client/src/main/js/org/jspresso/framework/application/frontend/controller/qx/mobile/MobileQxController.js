@@ -449,7 +449,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       } else {
         var okButton = this._getViewFactory().createOkButton();
         this._getViewFactory().addButtonListener(okButton, function (event) {
-          this._application.getRoot().remove(messageDialog);
+          this.__application.getRoot().remove(messageDialog);
           messageDialog.hide();
           messageDialog.destroy();
         }, this);
