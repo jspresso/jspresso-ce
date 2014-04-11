@@ -1565,9 +1565,8 @@ public abstract class AbstractComponentInvocationHandler implements
         if (propertyProcessorsEnabled) {
           switch (accessorInfo.getAccessorType()) {
             case SETTER:
+              interceptedValue = propertyDescriptor.interceptSetter(proxy, interceptedValue);
               propertyDescriptor.preprocessSetter(proxy, interceptedValue);
-              interceptedValue = propertyDescriptor.interceptSetter(proxy,
-                  interceptedValue);
               break;
             case ADDER:
               ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
@@ -2168,9 +2167,9 @@ public abstract class AbstractComponentInvocationHandler implements
                                      String translatedValue,
                                      IEntityFactory entityFactory, Locale locale) {
     if (locale != null) {
+      String actualTranslatedValue = (String) propertyDescriptor.interceptSetter(proxy, translatedValue);
       // manually trigger interceptors
       propertyDescriptor.preprocessSetter(proxy, translatedValue);
-      String actualTranslatedValue = (String) propertyDescriptor.interceptSetter(proxy, translatedValue);
       String barePropertyName = propertyDescriptor.getName();
       if (barePropertyName.endsWith(IComponentDescriptor.NLS_SUFFIX)) {
         barePropertyName = barePropertyName.substring(0,

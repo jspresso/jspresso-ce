@@ -220,6 +220,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
       } else if (propertyDescriptor instanceof IScalarPropertyDescriptor) {
         Object defaultValue = ((IScalarPropertyDescriptor) propertyDescriptor).getDefaultValue();
         if (defaultValue != null) {
+          defaultValue = propertyDescriptor.interceptSetter(component, defaultValue);
           propertyDescriptor.preprocessSetter(component, defaultValue);
           component.straightSetProperty(propertyDescriptor.getName(),
               ((IScalarPropertyDescriptor) propertyDescriptor).getDefaultValue());
