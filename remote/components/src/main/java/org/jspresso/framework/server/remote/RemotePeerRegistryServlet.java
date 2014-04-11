@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,6 +39,7 @@ import org.slf4j.LoggerFactory;
 
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.util.http.HttpRequestHolder;
+import org.jspresso.framework.util.image.ImageHelper;
 import org.jspresso.framework.util.io.IoHelper;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
 
@@ -58,30 +58,61 @@ public class RemotePeerRegistryServlet extends HttpServlet {
   private static final String ID_PARAMETER = "id";
 
   /**
+   * height.
+   */
+  private static final String IMAGE_HEIGHT_PARAMETER = "height";
+
+  /**
+   * width.
+   */
+  private static final String IMAGE_WIDTH_PARAMETER = "width";
+
+  /**
    * PeerRegistry.
    */
-  public static final String PEER_REGISTRY = "peerRegistry";
+  public static final  String PEER_REGISTRY         = "peerRegistry";
 
   /**
    * the url pattern to activate a resource download.
    */
   private static final String REGISTRY_SERVLET_URL_PATTERN = "/registry";
 
-  private static final Logger LOG              = LoggerFactory.getLogger(RemotePeerRegistryServlet.class);
+  private static final Logger LOG = LoggerFactory.getLogger(RemotePeerRegistryServlet.class);
 
-  private static final long   serialVersionUID = -2706982900134792757L;
+  private static final long serialVersionUID = -2706982900134792757L;
 
   /**
    * Computes the url where the resource is available for download.
    *
    * @param request
-   *          the incoming HTTP request.
+   *     the incoming HTTP request.
    * @param id
-   *          the resource id.
+   *     the resource id.
    * @return the resource url.
    */
   public static String computeDownloadUrl(HttpServletRequest request, String id) {
     return computeUrl(request, "?" + ID_PARAMETER + "=" + id);
+  }
+
+  /**
+   * Computes the url where the image is available for download.
+   *
+   * @param request      the incoming HTTP request.
+   * @param id      the resource id.
+   * @param scaledWidth the scaled width
+   * @param scaledHeight the scaled height
+   * @return the resource url.
+   */
+  public static String computeImageDownloadUrl(HttpServletRequest request, String id, Integer scaledWidth, Integer
+      scaledHeight) {
+    String downloadUrl = computeDownloadUrl(request, id);
+    if (scaledWidth != null) {
+      downloadUrl += "&" + IMAGE_WIDTH_PARAMETER + "=" + scaledWidth;
+    }
+    if (scaledHeight != null) {
+      downloadUrl += "&" + IMAGE_HEIGHT_PARAMETER + "=" + scaledHeight;
+    }
+    return downloadUrl;
   }
 
   /**
@@ -101,12 +132,25 @@ public class RemotePeerRegistryServlet extends HttpServlet {
    * Computes the url where the resource is available for download.
    *
    * @param id
-   *          the resource id.
+   *     the resource id.
    * @return the resource url.
    */
   public static String computeDownloadUrl(String id) {
     HttpServletRequest request = HttpRequestHolder.getServletRequest();
     return computeDownloadUrl(request, id);
+  }
+
+  /**
+   * Computes the url where the image is available for download. Optionally performs scaling.
+   *
+   * @param id      the resource id.
+   * @param scaledWidth the scaled width
+   * @param scaledHeight the scaled height
+   * @return the resource url.
+   */
+  public static String computeImageDownloadUrl(String id, Integer scaledWidth, Integer scaledHeight) {
+    HttpServletRequest request = HttpRequestHolder.getServletRequest();
+    return computeImageDownloadUrl(request, id, scaledWidth, scaledHeight);
   }
 
   /**
@@ -134,25 +178,41 @@ public class RemotePeerRegistryServlet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String id = request.getParameter(ID_PARAMETER);
+    Integer scaledWidth = null;
+    Integer scaledHeight = null;
 
     if (id == null) {
       response.sendError(HttpServletResponse.SC_BAD_REQUEST, "No state id specified.");
       return;
     }
 
-    BufferedInputStream inputStream;
+    BufferedInputStream inputStream = null;
     IRemotePeerRegistry peerRegistry = (IRemotePeerRegistry) request.getSession().getAttribute(PEER_REGISTRY);
     IRemoteStateOwner stateOwner = (IRemoteStateOwner) peerRegistry.getRegistered(id);
-    byte[] stateValue = (byte[]) stateOwner.actualValue();
-    inputStream = new BufferedInputStream(new ByteArrayInputStream(stateValue));
-    response.setContentLength(stateValue.length);
+    Object stateValue = stateOwner.actualValue();
+    if (request.getParameter(IMAGE_WIDTH_PARAMETER) != null) {
+      scaledWidth = Integer.parseInt(request.getParameter(IMAGE_WIDTH_PARAMETER));
+    }
+    if (request.getParameter(IMAGE_HEIGHT_PARAMETER) != null) {
+      scaledHeight = Integer.parseInt(request.getParameter(IMAGE_HEIGHT_PARAMETER));
+    }
+    if (scaledWidth != null || scaledHeight != null) {
+      stateValue = ImageHelper.scaleImage(stateValue, scaledWidth, scaledHeight);
+    }
+    if (stateValue instanceof byte[]) {
+      inputStream = new BufferedInputStream(new ByteArrayInputStream((byte[]) stateValue));
+      response.setContentLength(((byte[]) stateValue).length);
+    } else if (stateValue != null) {
+      inputStream = new BufferedInputStream(new ByteArrayInputStream(stateValue.toString().getBytes("UTF-8")));
+    }
+    if (inputStream != null) {
+      BufferedOutputStream outputStream = new BufferedOutputStream(response.getOutputStream());
 
-    BufferedOutputStream outputStream = new BufferedOutputStream(response.getOutputStream());
+      IoHelper.copyStream(inputStream, outputStream);
 
-    IoHelper.copyStream(inputStream, outputStream);
-
-    inputStream.close();
-    outputStream.close();
+      inputStream.close();
+      outputStream.close();
+    }
   }
 
   /**

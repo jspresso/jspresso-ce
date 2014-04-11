@@ -18,9 +18,15 @@
  */
 package org.jspresso.framework.binding.swing;
 
+import java.io.IOException;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.jspresso.framework.util.image.ImageHelper;
 import org.jspresso.framework.util.url.UrlHelper;
 
 /**
@@ -32,18 +38,37 @@ import org.jspresso.framework.util.url.UrlHelper;
  */
 public class JImageConnector extends JComponentConnector<JLabel> {
 
-  private Object imageSource;
+  private Object  imageSource;
+  private Integer scaledWidth;
+  private Integer scaledHeight;
+
+  private static final Logger LOG = LoggerFactory.getLogger(JImageConnector.class);
+
+      /**
+       * Constructs a new {@code JImageConnector} instance.
+       *
+       * @param id
+       *     the id of the connector.
+       * @param connectedJComponent
+       *     the connected JLabel.
+       */
+
+  public JImageConnector(String id, JLabel connectedJComponent) {
+    this(id, connectedJComponent, null, null);
+  }
 
   /**
    * Constructs a new {@code JImageConnector} instance.
    *
-   * @param id
-   *          the id of the connector.
-   * @param connectedJComponent
-   *          the connected JLabel.
+   * @param id      the id of the connector.
+   * @param connectedJComponent      the connected JLabel.
+   * @param scaledWidth the scaled width
+   * @param scaledHeight the scaled height
    */
-  public JImageConnector(String id, JLabel connectedJComponent) {
+  public JImageConnector(String id, JLabel connectedJComponent, Integer scaledWidth, Integer scaledHeight) {
     super(id, connectedJComponent);
+    this.scaledWidth = scaledWidth;
+    this.scaledHeight = scaledHeight;
   }
 
   /**
@@ -67,14 +92,17 @@ public class JImageConnector extends JComponentConnector<JLabel> {
    */
   @Override
   protected void protectedSetConnecteeValue(Object connecteeValue) {
-    this.imageSource = connecteeValue;
+    imageSource = connecteeValue;
+    byte[] scaledImage = null;
     if (imageSource != null) {
-      if (imageSource instanceof byte[]) {
-        getConnectedJComponent().setIcon(new ImageIcon((byte[]) imageSource));
-      } else if (imageSource instanceof String) {
-        getConnectedJComponent().setIcon(
-            new ImageIcon(UrlHelper.createURL((String) imageSource)));
+      try {
+        scaledImage = ImageHelper.scaleImage(imageSource, scaledWidth, scaledHeight);
+      } catch (IOException ioe) {
+        LOG.warn("Failed to read image in connector {}", getId());
       }
+    }
+    if (scaledImage != null) {
+        getConnectedJComponent().setIcon(new ImageIcon(scaledImage));
     } else {
       getConnectedJComponent().setIcon(null);
     }

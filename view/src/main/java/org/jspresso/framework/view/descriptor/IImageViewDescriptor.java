@@ -18,12 +18,15 @@
  */
 package org.jspresso.framework.view.descriptor;
 
+import org.jspresso.framework.util.image.IScalableImageAware;
+
 /**
  * This public interface is implemented by any image view descriptor.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
-public interface IImageViewDescriptor extends IScrollableViewDescriptor, IPropertyViewDescriptor {
-  // This is just a marker interface as of now.
+public interface IImageViewDescriptor extends IScrollableViewDescriptor, IPropertyViewDescriptor, IScalableImageAware {
+
+  // Empty as of now
 }

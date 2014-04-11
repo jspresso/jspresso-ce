@@ -30,9 +30,52 @@ import org.jspresso.framework.model.descriptor.IImageUrlPropertyDescriptor;
 public class BasicImageUrlPropertyDescriptor extends
     BasicStringPropertyDescriptor implements IImageUrlPropertyDescriptor {
 
+  private Integer scaledWidth;
+  private Integer scaledHeight;
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Integer getScaledWidth() {
+    return scaledWidth;
+  }
+
+  /**
+   * Sets scaled width. This property, when set to a positive integer will force the image width to be resized to the
+   * target value. If only one of the 2 scaled dimensions is set, then the image is scaled by preserving its aspect
+   * ratio.
+   *
+   * @param scaledWidth
+   *     the scaled width
+   */
+  public void setScaledWidth(Integer scaledWidth) {
+    this.scaledWidth = scaledWidth;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Integer getScaledHeight() {
+    return scaledHeight;
+  }
+
+  /**
+   * Sets scaled height. This property, when set to a positive integer will force the image height to be resized to the
+   * target value. If only one of the 2 scaled dimensions is set, then the image is scaled by preserving its aspect
+   * ratio.
+   *
+   * @param scaledHeight
+   *     the scaled height
+   */
+  public void setScaledHeight(Integer scaledHeight) {
+    this.scaledHeight = scaledHeight;
+  }
+
   /**
    * Returns {@code false}.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override

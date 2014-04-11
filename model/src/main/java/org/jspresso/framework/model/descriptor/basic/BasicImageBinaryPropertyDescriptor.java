@@ -18,18 +18,97 @@
  */
 package org.jspresso.framework.model.descriptor.basic;
 
+import java.io.IOException;
+
+import org.jspresso.framework.model.component.ComponentException;
 import org.jspresso.framework.model.descriptor.IImageBinaryPropertyDescriptor;
+import org.jspresso.framework.util.image.ImageHelper;
 
 /**
  * Describes a property used to store an image binary value. This type of
  * descriptor instructs Jspresso to use an image component to interact with this
  * type of property.
- * 
- * @version $LastChangedRevision: 4431 $
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision: 4431 $
  */
-public class BasicImageBinaryPropertyDescriptor extends
-    BasicBinaryPropertyDescriptor implements IImageBinaryPropertyDescriptor {
+public class BasicImageBinaryPropertyDescriptor extends BasicBinaryPropertyDescriptor
+    implements IImageBinaryPropertyDescriptor {
 
-  // Empty as of now.
+  private Integer scaledWidth;
+  private Integer scaledHeight;
+  private String  formatName;
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Integer getScaledWidth() {
+    return scaledWidth;
+  }
+
+  /**
+   * Sets scaled width. This property, when set to a positive integer will force the image width to be resized to the
+   * target value. If only one of the 2 scaled dimensions is set, then the image is scaled by preserving its aspect
+   * ratio.
+   *
+   * @param scaledWidth
+   *     the scaled width
+   */
+  public void setScaledWidth(Integer scaledWidth) {
+    this.scaledWidth = scaledWidth;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Integer getScaledHeight() {
+    return scaledHeight;
+  }
+
+  /**
+   * Sets scaled height. This property, when set to a positive integer will force the image height to be resized to the
+   * target value. If only one of the 2 scaled dimensions is set, then the image is scaled by preserving its aspect
+   * ratio.
+   *
+   * @param scaledHeight
+   *     the scaled height
+   */
+  public void setScaledHeight(Integer scaledHeight) {
+    this.scaledHeight = scaledHeight;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getFormatName() {
+    return formatName;
+  }
+
+  /**
+   * Sets format name. When set to something not null (e.g. PNG, JPG, ...), the image is transformed to the specified
+   * format before being stored.
+   *
+   * @param formatName
+   *     the format name
+   */
+  public void setFormatName(String formatName) {
+    this.formatName = formatName;
+  }
+
+  @Override
+  public Object interceptSetter(Object component, Object newValue) {
+    Object actualNewValue = newValue;
+    if (newValue instanceof byte[]) {
+      try {
+        actualNewValue = ImageHelper.scaleImage(actualNewValue, getScaledWidth(), getScaledHeight(),
+            getFormatName());
+      } catch (IOException ioe) {
+        // could not transform the image property view.
+      }
+    }
+    return super.interceptSetter(component, actualNewValue);
+  }
 }

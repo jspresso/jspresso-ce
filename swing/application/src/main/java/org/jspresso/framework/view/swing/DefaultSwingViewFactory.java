@@ -195,6 +195,7 @@ import org.jspresso.framework.util.gui.ColorHelper;
 import org.jspresso.framework.util.gui.ERenderingOptions;
 import org.jspresso.framework.util.gui.FontHelper;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.util.image.IScalableImageAware;
 import org.jspresso.framework.util.swing.SwingUtil;
 import org.jspresso.framework.util.url.UrlHelper;
 import org.jspresso.framework.view.BasicCompositeView;
@@ -1503,8 +1504,18 @@ public class DefaultSwingViewFactory extends
     } else {
       imageLabel = createJLabel(propertyViewDescriptor, false);
     }
+    IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor.getModelDescriptor();
+    Integer scaledWidth = null;
+    Integer scaledHeight = null;
+    if (propertyViewDescriptor instanceof IScalableImageAware) {
+      scaledWidth = ((IScalableImageAware) propertyViewDescriptor).getScaledWidth();
+      scaledHeight = ((IScalableImageAware) propertyViewDescriptor).getScaledHeight();
+    } else if (propertyDescriptor instanceof IScalableImageAware) {
+      scaledWidth = ((IScalableImageAware) propertyDescriptor).getScaledWidth();
+      scaledHeight = ((IScalableImageAware) propertyDescriptor).getScaledHeight();
+    }
     JImageConnector connector = new JImageConnector(propertyViewDescriptor
-        .getModelDescriptor().getName(), imageLabel);
+        .getModelDescriptor().getName(), imageLabel, scaledWidth, scaledHeight);
     connector.setExceptionHandler(actionHandler);
     JPanel viewComponent = createJPanel();
     BorderLayout layout = new BorderLayout();

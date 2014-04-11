@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.model.descriptor;
 
+import org.jspresso.framework.util.image.IScalableImageAware;
+
 /**
  * This interface is implemented by descriptors of image binary properties.
  * 
@@ -25,7 +27,12 @@ package org.jspresso.framework.model.descriptor;
  * @author Vincent Vandenschrick
  */
 public interface IImageBinaryPropertyDescriptor extends
-    IBinaryPropertyDescriptor {
+    IBinaryPropertyDescriptor, IScalableImageAware {
 
-  // Empty as of now.
+  /**
+   * Gets format name.
+   *
+   * @return the format name
+   */
+  String getFormatName();
 }

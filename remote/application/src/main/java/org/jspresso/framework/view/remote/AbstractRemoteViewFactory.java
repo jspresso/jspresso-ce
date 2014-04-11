@@ -116,6 +116,7 @@ import org.jspresso.framework.util.gui.ERenderingOptions;
 import org.jspresso.framework.util.gui.Font;
 import org.jspresso.framework.util.gui.FontHelper;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.util.image.IScalableImageAware;
 import org.jspresso.framework.util.lang.DateDto;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
@@ -976,10 +977,11 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
    * {@inheritDoc}
    */
   @Override
-  protected IView<RComponent> createImagePropertyView(IPropertyViewDescriptor propertyViewDescriptor,
+  protected IView<RComponent> createImagePropertyView(final IPropertyViewDescriptor propertyViewDescriptor,
                                                       IActionHandler actionHandler, Locale locale) {
     IValueConnector connector = getConnectorFactory().createValueConnector(
         propertyViewDescriptor.getModelDescriptor().getName());
+    final IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor.getModelDescriptor();
     connector.setExceptionHandler(actionHandler);
     if (connector instanceof RemoteValueConnector) {
       final RemoteValueConnector rConnector = (RemoteValueConnector) connector;
@@ -987,19 +989,33 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
 
         @Override
         public Object getValueForState(RemoteValueState state, Object originalValue) {
-          if (originalValue instanceof byte[]) {
-            String valueForStateUrl = RemotePeerRegistryServlet.computeDownloadUrl(state.getGuid());
-            Checksum checksumEngine = new CRC32();
-            checksumEngine.update((byte[]) originalValue, 0, ((byte[]) originalValue).length);
-            // we must add a check sum so that the client knows when the url
-            // content changes.
-            valueForStateUrl += ("&cs=" + checksumEngine.getValue());
+          if (originalValue != null) {
+            Integer scaledWidth = null;
+            Integer scaledHeight = null;
+            if (propertyViewDescriptor instanceof IScalableImageAware) {
+              scaledWidth = ((IScalableImageAware) propertyViewDescriptor).getScaledWidth();
+              scaledHeight = ((IScalableImageAware) propertyViewDescriptor).getScaledHeight();
+            } else if (propertyDescriptor instanceof IScalableImageAware) {
+              scaledWidth = ((IScalableImageAware) propertyDescriptor).getScaledWidth();
+              scaledHeight = ((IScalableImageAware) propertyDescriptor).getScaledHeight();
+            }
+            String valueForStateUrl = null;
+            if (originalValue instanceof byte[] || scaledWidth != null || scaledHeight != null) {
+              valueForStateUrl = RemotePeerRegistryServlet.computeImageDownloadUrl(state.getGuid(), scaledWidth,
+                  scaledHeight);
+              if (originalValue instanceof byte[]) {
+                Checksum checksumEngine = new CRC32();
+                checksumEngine.update((byte[]) originalValue, 0, ((byte[]) originalValue).length);
+                // we must add a check sum so that the client knows when the url
+                // content changes.
+                valueForStateUrl += ("&cs=" + checksumEngine.getValue());
+              }
+            } else if (originalValue instanceof String) {
+              valueForStateUrl = ResourceProviderServlet.computeLocalResourceDownloadUrl((String) originalValue);
+            }
             return valueForStateUrl;
           }
-          if (originalValue instanceof String) {
-            return ResourceProviderServlet.computeLocalResourceDownloadUrl((String) originalValue);
-          }
-          return originalValue;
+          return null;
         }
 
         @Override

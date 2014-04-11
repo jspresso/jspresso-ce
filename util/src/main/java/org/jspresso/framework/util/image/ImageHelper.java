@@ -32,6 +32,8 @@ import javax.imageio.ImageReadParam;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
+import org.jspresso.framework.util.url.UrlHelper;
+
 /**
  * This is a simple helper class to be able to deal with images.
  *
@@ -51,10 +53,13 @@ public final class ImageHelper {
    * @param img
    *     the original image to be scaled
    * @param targetWidth
-   *     the desired width of the scaled instance, in pixels. Use -1 if you want it scaled based on the target height,
+   *     the desired width of the scaled instance, in pixels. Use null or negative if you want it scaled based on the
+   *     target
+   *     height,
    *     preserving ratio.
    * @param targetHeight
-   *     the desired height of the scaled instance, in pixels. Use -1 if you want it scaled based on the target width,
+   *     the desired height of the scaled instance, in pixels. Use null or negative if you want it scaled based on the
+   *     target width,
    *     preserving ratio.
    * @param hint
    *     one of the rendering hints that corresponds to
@@ -70,65 +75,68 @@ public final class ImageHelper {
    *     generally only when the {@code BILINEAR} hint is specified)
    * @return a scaled version of the original {@code BufferedImage}
    */
-  public static BufferedImage getScaledInstance(BufferedImage img, int targetWidth, int targetHeight, Object hint,
-                                                boolean higherQuality) {
+  public static BufferedImage getScaledInstance(BufferedImage img, Integer targetWidth, Integer targetHeight,
+                                                Object hint, boolean higherQuality) {
     int originalWidth = img.getWidth();
     int originalHeight = img.getHeight();
 
-    int actualTargetWidth = targetWidth;
-    int actualTargetHeight = targetHeight;
+    if ((targetWidth != null && targetWidth > 0) || (targetHeight != null && targetHeight > 0)) {
+      Integer actualTargetWidth = targetWidth;
+      Integer actualTargetHeight = targetHeight;
 
-    if (actualTargetHeight <= 0) {
-      actualTargetHeight = originalHeight * targetWidth / originalWidth;
-    }
-    if (actualTargetWidth <= 0) {
-      actualTargetWidth = originalWidth * targetHeight / originalHeight;
-    }
-
-    int type = BufferedImage.TYPE_INT_ARGB;
-    if (img.getTransparency() == Transparency.OPAQUE) {
-      type = BufferedImage.TYPE_INT_RGB;
-    }
-    BufferedImage ret = img;
-    int w, h;
-    if (higherQuality) {
-      // Use multi-step technique: start with original size, then
-      // scale down in multiple passes with drawImage()
-      // until the target size is reached
-      w = img.getWidth();
-      h = img.getHeight();
-    } else {
-      // Use one-step technique: scale directly from original
-      // size to target size with a single drawImage() call
-      w = actualTargetWidth;
-      h = actualTargetHeight;
-    }
-
-    do {
-      if (higherQuality && w > actualTargetWidth) {
-        w /= 2;
+      if (actualTargetHeight == null || actualTargetHeight <= 0) {
+        actualTargetHeight = originalHeight * targetWidth / originalWidth;
       }
-      if (w < actualTargetWidth) {
+      if (actualTargetWidth == null || actualTargetWidth <= 0) {
+        actualTargetWidth = originalWidth * targetHeight / originalHeight;
+      }
+
+      int type = BufferedImage.TYPE_INT_ARGB;
+      if (img.getTransparency() == Transparency.OPAQUE) {
+        type = BufferedImage.TYPE_INT_RGB;
+      }
+      BufferedImage ret = img;
+      int w, h;
+      if (higherQuality) {
+        // Use multi-step technique: start with original size, then
+        // scale down in multiple passes with drawImage()
+        // until the target size is reached
+        w = img.getWidth();
+        h = img.getHeight();
+      } else {
+        // Use one-step technique: scale directly from original
+        // size to target size with a single drawImage() call
         w = actualTargetWidth;
-      }
-
-      if (higherQuality && h > actualTargetHeight) {
-        h /= 2;
-      }
-      if (h < actualTargetHeight) {
         h = actualTargetHeight;
       }
 
-      BufferedImage tmp = new BufferedImage(w, h, type);
-      Graphics2D g2 = tmp.createGraphics();
-      g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, hint);
-      g2.drawImage(ret, 0, 0, w, h, null);
-      g2.dispose();
+      do {
+        if (higherQuality && w > actualTargetWidth) {
+          w /= 2;
+        }
+        if (w < actualTargetWidth) {
+          w = actualTargetWidth;
+        }
 
-      ret = tmp;
-    } while (w != actualTargetWidth || h != actualTargetHeight);
+        if (higherQuality && h > actualTargetHeight) {
+          h /= 2;
+        }
+        if (h < actualTargetHeight) {
+          h = actualTargetHeight;
+        }
 
-    return ret;
+        BufferedImage tmp = new BufferedImage(w, h, type);
+        Graphics2D g2 = tmp.createGraphics();
+        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, hint);
+        g2.drawImage(ret, 0, 0, w, h, null);
+        g2.dispose();
+
+        ret = tmp;
+      } while (w != actualTargetWidth || h != actualTargetHeight);
+
+      return ret;
+    }
+    return img;
   }
 
   /**
@@ -147,7 +155,7 @@ public final class ImageHelper {
    * @throws IOException
    *     the iO exception
    */
-  public static byte[] performScaling(BufferedImage image, int width, int height, String targetFormatName)
+  public static byte[] performScaling(BufferedImage image, Integer width, Integer height, String targetFormatName)
       throws IOException {
     BufferedImage scaledImage = getScaledInstance(image, width, height, RenderingHints.VALUE_INTERPOLATION_BILINEAR,
         true);
@@ -172,7 +180,7 @@ public final class ImageHelper {
    * @throws IOException
    *     the iO exception
    */
-  public static byte[] scaleImage(Object originalImageInput, int width, int height, String targetFormatName)
+  public static byte[] scaleImage(Object originalImageInput, Integer width, Integer height, String targetFormatName)
       throws IOException {
     Object[] imageReaderAndInputStream = getImageReaderAndInputStream(originalImageInput);
     return scaleImageReader((ImageReader) imageReaderAndInputStream[0], (ImageInputStream) imageReaderAndInputStream[1],
@@ -193,14 +201,18 @@ public final class ImageHelper {
    * @throws IOException
    *     the iO exception
    */
-  public static byte[] scaleImage(Object originalImageInput, int width, int height) throws IOException {
+  public static byte[] scaleImage(Object originalImageInput, Integer width, Integer height) throws IOException {
     Object[] imageReaderAndInputStream = getImageReaderAndInputStream(originalImageInput);
     return scaleImageReader((ImageReader) imageReaderAndInputStream[0], (ImageInputStream) imageReaderAndInputStream[1],
-        width, height, ((ImageReader) imageReaderAndInputStream[0]).getFormatName());
+        width, height, null);
   }
 
-  private static byte[] scaleImageReader(ImageReader imageReader, ImageInputStream stream, int width, int height,
-                                         String targetFormatName) throws IOException {
+  private static byte[] scaleImageReader(ImageReader imageReader, ImageInputStream stream, Integer width,
+                                         Integer height, String targetFormatName) throws IOException {
+    String actualFormatName = targetFormatName;
+    if (actualFormatName == null) {
+      actualFormatName  = imageReader.getFormatName();
+    }
     ImageReadParam param = imageReader.getDefaultReadParam();
     imageReader.setInput(stream, true, true);
     BufferedImage bi;
@@ -210,12 +222,14 @@ public final class ImageHelper {
       imageReader.dispose();
       stream.close();
     }
-    return performScaling(bi, width, height, targetFormatName);
+    return performScaling(bi, width, height, actualFormatName);
   }
 
   private static Object transformInput(Object originalImageInput) throws IOException {
     Object actualInput = originalImageInput;
-    if (originalImageInput instanceof URL) {
+    if (originalImageInput instanceof String) {
+      actualInput = UrlHelper.createURL((String) originalImageInput).openStream();
+    } else if (originalImageInput instanceof URL) {
       actualInput = ((URL) originalImageInput).openStream();
     } else if (originalImageInput instanceof byte[]) {
       actualInput = new ByteArrayInputStream((byte[]) originalImageInput);
