@@ -53,6 +53,7 @@ import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
+import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
