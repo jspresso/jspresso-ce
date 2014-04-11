@@ -184,25 +184,31 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *           unique-key = "${reduceSQLName(generateSQLName(propertyDescriptor.unicityScope),"_UNQ")}"
     </#if>
     <#if instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.INumberPropertyDescriptor")>
+      <#local precision = 10>
+      <#local scale = 0>
       <#if (propertyDescriptor.minValue??)
          &&(propertyDescriptor.maxValue??)>
-        <#local infLength=propertyDescriptor.minValue?int?c?length/>
-        <#local supLength=propertyDescriptor.maxValue?int?c?length/>
+        <#local infLength=propertyDescriptor.minValue?c?length/>
+        <#local supLength=propertyDescriptor.maxValue?c?length/>
         <#if (infLength > supLength)>
-          <#local length=infLength/>
+          <#local precision = infLength/>
         <#else>
-          <#local length=supLength/>
+          <#local precision = supLength/>
         </#if>
-   *           precision = "${length?c}"
-      <#else>
-   *           precision = "10"
+        <#if (precision > 32)>
+          <#local precision = 32/>
+        </#if>
       </#if>
       <#if instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor")>
         <#if propertyDescriptor.maxFractionDigit??>
-   *           scale = "${propertyDescriptor.maxFractionDigit?c}"
+          <#local scale = propertyDescriptor.maxFractionDigit/>
         <#else>
-   *           scale = "2"
+          <#local scale = 2/>
         </#if>
+      </#if>
+   *           precision = "${(precision + scale)?c}"
+      <#if (scale > 0)>
+   *           scale = "${scale?c}"
       </#if>
     </#if>
   <#elseif propertyDescriptor.sqlName??>
