@@ -83,4 +83,34 @@ public interface IMobilePageAware {
    * @param pageEndAction the page end action
    */
   void setPageEndAction(IDisplayableAction pageEndAction);
+
+  /**
+   * Gets swipe left action.
+   *
+   * @return the swipe left action
+   */
+  IDisplayableAction getSwipeLeftAction();
+
+  /**
+   * Sets swipe left action.
+   *
+   * @param swipeLeftAction
+   *     the swipe left action
+   */
+  void setSwipeLeftAction(IDisplayableAction swipeLeftAction);
+
+  /**
+   * Gets swipe right action.
+   *
+   * @return the swipe right action
+   */
+  IDisplayableAction getSwipeRightAction();
+
+  /**
+   * Sets swipe right action.
+   *
+   * @param swipeRightAction
+   *     the swipe right action
+   */
+  void setSwipeRightAction(IDisplayableAction swipeRightAction);
 }

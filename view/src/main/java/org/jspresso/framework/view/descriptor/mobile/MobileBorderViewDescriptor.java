@@ -35,6 +35,8 @@ public class MobileBorderViewDescriptor extends BasicBorderViewDescriptor
   private IDisplayableAction backAction;
   private IDisplayableAction mainAction;
   private IDisplayableAction pageEndAction;
+  private IDisplayableAction swipeLeftAction;
+  private IDisplayableAction swipeRightAction;
 
   /**
    *  Not supported in mobile environment.
@@ -130,11 +132,51 @@ public class MobileBorderViewDescriptor extends BasicBorderViewDescriptor
   /**
    * Sets page end action.
    *
-   * @param pageEndAction the page end action
+   * @param pageEndAction
+   *     the page end action
    */
   @Override
   public void setPageEndAction(IDisplayableAction pageEndAction) {
     this.pageEndAction = pageEndAction;
   }
 
+  /**
+   * Gets swipe left action.
+   *
+   * @return the swipe left action
+   */
+  @Override
+  public IDisplayableAction getSwipeLeftAction() {
+    return swipeLeftAction;
+  }
+
+  /**
+   * Sets swipe left action.
+   *
+   * @param swipeLeftAction the swipe left action
+   */
+  @Override
+  public void setSwipeLeftAction(IDisplayableAction swipeLeftAction) {
+    this.swipeLeftAction = swipeLeftAction;
+  }
+
+  /**
+   * Gets swipe right action.
+   *
+   * @return the swipe right action
+   */
+  @Override
+  public IDisplayableAction getSwipeRightAction() {
+    return swipeRightAction;
+  }
+
+  /**
+   * Sets swipe right action.
+   *
+   * @param swipeRightAction the swipe right action
+   */
+  @Override
+  public void setSwipeRightAction(IDisplayableAction swipeRightAction) {
+    this.swipeRightAction = swipeRightAction;
+  }
 }

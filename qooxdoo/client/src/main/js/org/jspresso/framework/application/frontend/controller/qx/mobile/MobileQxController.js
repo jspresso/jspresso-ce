@@ -63,6 +63,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     __routing: null,
     /** @type {boolean} */
     __isTablet: false,
+    /** @type {qx.ui.mobile.page.NavigationPage} */
+    __blankPage: null,
 
     __routeToPage: function (page, data, animation) {
       var back = false;
@@ -132,6 +134,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         manager.setHideMasterButtonCaption(this.translate("Hide"));
       }
       manager.getDetailNavigation().getLayout().setShowAnimation(true);
+      this.__blankPage = new qx.ui.mobile.page.NavigationPage();
+      manager.addDetail(this.__blankPage);
       return manager;
     },
 
@@ -154,6 +158,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand} */
             command;
         this._handleEditCommand(null, c);
+      } else if (command
+          instanceof org.jspresso.framework.application.frontend.command.remote.mobile.RemoteAnimationCommand) {
+        c = /** @type {org.jspresso.framework.application.frontend.command.remote.mobile.RemoteAnimationCommand} */
+            command;
+        this._handleAnimationCommand(c);
       } else {
         this.base(arguments, command)
       }
@@ -480,8 +489,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      * @param back {boolean}
      */
     showDetailPage: function (page, animation, back) {
-      if (typeof animation === undefined) animation = "slide";
-      if (typeof back === undefined) back = false;
+      if (typeof animation === undefined) {
+        animation = "slide";
+      }
+      if (typeof back === undefined) {
+        back = false;
+      }
       var pageGuid = page.getUserData("pageGuid");
       if (pageGuid && !back) {
         this.__routing.executeGet("/page/" + pageGuid, {animation: animation, back: back});
@@ -577,6 +590,28 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      */
     _handleHistoryDisplayCommand: function (historyDisplayCommand) {
       // Not supported in mobile environment
+    },
+
+    /**
+     * @param animationCommand {org.jspresso.framework.application.frontend.command.remote.mobile.RemoteAnimationCommand}
+     * @return {undefined}
+     */
+    _handleAnimationCommand: function (animationCommand) {
+      var page = this.getCurrentPage();
+      if (animationCommand.getTargetPeerGuid()) {
+        page = this.getRegistered(animationCommand.getTargetPeerGuid());
+      }
+      var cardAnimation = new qx.ui.mobile.layout.CardAnimation();
+      var pageElement = page.getContentElement();
+      var animation = qx.bom.element.Animation.animate(pageElement,
+          cardAnimation.getAnimation(animationCommand.getAnimation(), animationCommand.getDirection(),
+              animationCommand.getReverse()), animationCommand.getDuration());
+      if (animationCommand.getCallbackAction()) {
+        animation.addListenerOnce("end", function (e) {
+          page.exclude();
+          this.execute(animationCommand.getCallbackAction());
+        }, this);
+      }
     }
   }
 });

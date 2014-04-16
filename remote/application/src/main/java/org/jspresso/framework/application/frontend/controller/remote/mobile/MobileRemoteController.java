@@ -21,6 +21,7 @@ package org.jspresso.framework.application.frontend.controller.remote.mobile;
 import java.util.List;
 import java.util.Map;
 
+import org.jspresso.framework.application.frontend.command.remote.mobile.RemoteAnimationCommand;
 import org.jspresso.framework.application.frontend.command.remote.mobile.RemoteBackCommand;
 import org.jspresso.framework.application.frontend.controller.remote.AbstractRemoteController;
 import org.jspresso.framework.application.model.Workspace;
@@ -30,6 +31,7 @@ import org.jspresso.framework.gui.remote.RCardContainer;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.mobile.RMobileCardPage;
 import org.jspresso.framework.gui.remote.mobile.RMobileNavPage;
+import org.jspresso.framework.gui.remote.mobile.RMobilePage;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
@@ -37,8 +39,8 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 /**
  * This is is the mobile implementation of a &quot;remotable&quot; frontend
  * controller.
- * 
- * @version $LastChangedRevision: 8508 $
+ *
+ * @version $LastChangedRevision : 8508 $
  * @author Vincent Vandenschrick
  */
 public class MobileRemoteController extends AbstractRemoteController {
@@ -47,6 +49,8 @@ public class MobileRemoteController extends AbstractRemoteController {
    * Not supported in mobile environment.
    * <p>
    * {@inheritDoc}
+   * @param plainContent the plain content
+   * @param htmlContent the html content
    */
   @Override
   public void setClipboardContent(String plainContent, String htmlContent) {
@@ -57,6 +61,14 @@ public class MobileRemoteController extends AbstractRemoteController {
    * Not supported in mobile environment.
    * <p>
    * {@inheritDoc}
+   * @param swfUrl the swf url
+   * @param flashContext the flash context
+   * @param actions the actions
+   * @param title the title
+   * @param sourceComponent the source component
+   * @param context the context
+   * @param dimension the dimension
+   * @param reuseCurrent the reuse current
    */
   @Override
   public void displayFlashObject(String swfUrl, Map<String, String> flashContext, List<RAction> actions, String title,
@@ -73,7 +85,33 @@ public class MobileRemoteController extends AbstractRemoteController {
   }
 
   /**
+   * Animate page.
+   *
+   * @param page the page
+   * @param animation the animation
+   * @param direction the direction
+   * @param reverse the reverse
+   * @param duration the duration
+   * @param callbackAction the callback action
+   */
+  public void animatePage(RMobilePage page, String animation, String direction, boolean reverse, int duration,
+                          RAction callbackAction) {
+    RemoteAnimationCommand command = new RemoteAnimationCommand();
+    if (page != null) {
+      command.setTargetPeerGuid(page.getGuid());
+    }
+    command.setAnimation(animation);
+    command.setDirection(direction);
+    command.setReverse(reverse);
+    command.setDuration(duration);
+    command.setCallbackAction(callbackAction);
+    registerCommand(command);
+  }
+
+  /**
    * {@inheritDoc}
+   * @param workspaceName the workspace name
+   * @return the r component
    */
   @Override
   protected RComponent createWorkspaceView(String workspaceName) {

@@ -23,7 +23,6 @@ import java.util.Map;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.remote.AbstractRemoteAction;
 import org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand;
-import org.jspresso.framework.gui.remote.RComponent;
 
 /**
  * Triggers editing of current page.

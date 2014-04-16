@@ -31,6 +31,48 @@
     <property name="name" value="back"/>
   </bean>
 
+  <bean id="nextElementAction"
+        class="org.jspresso.framework.application.frontend.action.remote.mobile.AnimateAction">
+    <property name="animation" value="slide"/>
+    <property name="direction" value="out"/>
+    <property name="reverse" value="false"/>
+    <property name="duration" value="500"/>
+    <property name="callbackAction">
+      <bean class="org.jspresso.framework.application.frontend.action.remote.mobile.NearElementAction">
+        <property name="reverse" value="false"/>
+        <property name="nextAction">
+          <bean class="org.jspresso.framework.application.frontend.action.remote.mobile.AnimateAction">
+            <property name="animation" value="slide"/>
+            <property name="direction" value="in"/>
+            <property name="reverse" value="false"/>
+            <property name="duration" value="500"/>
+          </bean>
+        </property>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="previousElementAction"
+        class="org.jspresso.framework.application.frontend.action.remote.mobile.AnimateAction">
+    <property name="animation" value="slide"/>
+    <property name="direction" value="out"/>
+    <property name="reverse" value="true"/>
+    <property name="duration" value="500"/>
+    <property name="callbackAction">
+      <bean class="org.jspresso.framework.application.frontend.action.remote.mobile.NearElementAction">
+        <property name="reverse" value="true"/>
+        <property name="nextAction">
+          <bean class="org.jspresso.framework.application.frontend.action.remote.mobile.AnimateAction">
+            <property name="animation" value="slide"/>
+            <property name="direction" value="in"/>
+            <property name="reverse" value="true"/>
+            <property name="duration" value="500"/>
+          </bean>
+        </property>
+      </bean>
+    </property>
+  </bean>
+
   <bean id="saveAndGoBackFrontAction" parent="saveModuleObjectFrontAction" >
     <property name="nextAction" ref="backPageAction" />
   </bean>
@@ -100,6 +142,8 @@
     <property name="editPageAction" ref="editPageAction"/>
     <property name="savePageAction" ref="saveAndGoBackFrontAction"/>
     <property name="cancelPageAction" ref="reloadAndGoBackFrontAction"/>
+    <property name="nextElementAction" ref="nextElementAction"/>
+    <property name="previousElementAction" ref="previousElementAction"/>
   </bean>
 
   <bean id="remoteViewFactory" abstract="true"

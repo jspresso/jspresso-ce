@@ -36,6 +36,8 @@ public abstract class RMobilePageAware extends RContainer {
   private RAction backAction;
   private RAction mainAction;
   private RAction pageEndAction;
+  private RAction swipeLeftAction;
+  private RAction swipeRightAction;
 
   /**
    * Constructs a new {@code RMobilePageAwareContainer} instance.
@@ -127,5 +129,41 @@ public abstract class RMobilePageAware extends RContainer {
    */
   public void setPageEndAction(RAction pageEndAction) {
     this.pageEndAction = pageEndAction;
+  }
+
+  /**
+   * Gets swipe left action.
+   *
+   * @return the swipe left action
+   */
+  public RAction getSwipeLeftAction() {
+    return swipeLeftAction;
+  }
+
+  /**
+   * Sets swipe left action.
+   *
+   * @param swipeLeftAction the swipe left action
+   */
+  public void setSwipeLeftAction(RAction swipeLeftAction) {
+    this.swipeLeftAction = swipeLeftAction;
+  }
+
+  /**
+   * Gets swipe right action.
+   *
+   * @return the swipe right action
+   */
+  public RAction getSwipeRightAction() {
+    return swipeRightAction;
+  }
+
+  /**
+   * Sets swipe right action.
+   *
+   * @param swipeRightAction the swipe right action
+   */
+  public void setSwipeRightAction(RAction swipeRightAction) {
+    this.swipeRightAction = swipeRightAction;
   }
 }

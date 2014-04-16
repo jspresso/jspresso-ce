@@ -19,10 +19,14 @@
 package org.jspresso.framework.view.remote.mobile;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.frontend.action.remote.mobile.NearElementAction;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
@@ -53,7 +57,6 @@ import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
-import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
@@ -85,6 +88,8 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
   private IDisplayableAction editPageAction;
   private IDisplayableAction savePageAction;
   private IDisplayableAction cancelPageAction;
+  private IDisplayableAction nextElementAction;
+  private IDisplayableAction previousElementAction;
 
   /**
    * Checks that the view descriptor is mobile compatible.
@@ -131,14 +136,30 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
           wrapper.setContent(view.getPeer());
           view.setPeer(wrapper);
         }
-        ((RMobilePageAware) view.getPeer()).setEnterAction(getActionFactory().createAction(
-            ((IMobilePageAware) viewDescriptor).getEnterAction(), actionHandler, view, locale));
-        ((RMobilePageAware) view.getPeer()).setBackAction(getActionFactory().createAction(
-            ((IMobilePageAware) viewDescriptor).getBackAction(), actionHandler, view, locale));
-        ((RMobilePageAware) view.getPeer()).setMainAction(getActionFactory().createAction(
-            ((IMobilePageAware) viewDescriptor).getMainAction(), actionHandler, view, locale));
-        ((RMobilePageAware) view.getPeer()).setPageEndAction(getActionFactory().createAction(
-            ((IMobilePageAware) viewDescriptor).getPageEndAction(), actionHandler, view, locale));
+        if (((IMobilePageAware) viewDescriptor).getEnterAction() != null) {
+          ((RMobilePageAware) view.getPeer()).setEnterAction(getActionFactory().createAction(
+              ((IMobilePageAware) viewDescriptor).getEnterAction(), actionHandler, view, locale));
+        }
+        if (((IMobilePageAware) viewDescriptor).getBackAction() != null) {
+          ((RMobilePageAware) view.getPeer()).setBackAction(getActionFactory().createAction(
+              ((IMobilePageAware) viewDescriptor).getBackAction(), actionHandler, view, locale));
+        }
+        if (((IMobilePageAware) viewDescriptor).getMainAction() != null) {
+          ((RMobilePageAware) view.getPeer()).setMainAction(getActionFactory().createAction(
+              ((IMobilePageAware) viewDescriptor).getMainAction(), actionHandler, view, locale));
+        }
+        if (((IMobilePageAware) viewDescriptor).getPageEndAction() != null) {
+          ((RMobilePageAware) view.getPeer()).setPageEndAction(getActionFactory().createAction(
+              ((IMobilePageAware) viewDescriptor).getPageEndAction(), actionHandler, view, locale));
+        }
+        if (((IMobilePageAware) viewDescriptor).getSwipeLeftAction() != null) {
+          ((RMobilePageAware) view.getPeer()).setSwipeLeftAction(getActionFactory().createAction(
+              ((IMobilePageAware) viewDescriptor).getSwipeLeftAction(), actionHandler, view, locale));
+        }
+        if (((IMobilePageAware) viewDescriptor).getSwipeRightAction() != null) {
+          ((RMobilePageAware) view.getPeer()).setSwipeRightAction(getActionFactory().createAction(
+              ((IMobilePageAware) viewDescriptor).getSwipeRightAction(), actionHandler, view, locale));
+        }
       }
       bindCompositeView(view);
       return view;
@@ -200,12 +221,25 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
       viewComponent.setSelectionView(selectionView.getPeer());
       childrenViews.add(selectionView);
       IValueConnector selectionViewConnector = selectionView.getConnector();
-      if (viewDescriptor.getNextPageViewDescriptor() != null) {
-        IView<RComponent> nextPageView = createView(viewDescriptor.getNextPageViewDescriptor(), actionHandler, locale);
-        viewComponent.setNextPage((RMobilePage) nextPageView.getPeer());
+      IMobilePageViewDescriptor nextPageViewDescriptor = viewDescriptor.getNextPageViewDescriptor();
+      if (nextPageViewDescriptor != null) {
+        IView<RComponent> nextPageView = createView(nextPageViewDescriptor, actionHandler, locale);
+        RMobilePage nextPage = (RMobilePage) nextPageView.getPeer();
+        viewComponent.setNextPage(nextPage);
         if (selectionViewConnector != null) {
           getModelCascadingBinder().bind(selectionViewConnector, nextPageView.getConnector());
         }
+        Map<String, Object> staticContext = new HashMap<>();
+        staticContext.put(NearElementAction.NAVIGATION_CONNECTOR_KEY, selectionViewConnector);
+
+        RAction swipeLeftAction = getActionFactory().createAction(getNextElementAction(), actionHandler, view, locale);
+        swipeLeftAction.putValue(IAction.STATIC_CONTEXT_KEY, staticContext);
+        nextPage.setSwipeLeftAction(swipeLeftAction);
+
+        RAction swipeRightAction = getActionFactory().createAction(getPreviousElementAction(), actionHandler, view, locale);
+        swipeRightAction.putValue(IAction.STATIC_CONTEXT_KEY, staticContext);
+        nextPage.setSwipeRightAction(swipeRightAction);
+
         nextPageView.setParent(selectionView);
       }
     }
@@ -532,5 +566,43 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
    */
   public void setCancelPageAction(IDisplayableAction cancelPageAction) {
     this.cancelPageAction = cancelPageAction;
+  }
+
+  /**
+   * Gets next element action.
+   *
+   * @return the next element action
+   */
+  protected IDisplayableAction getNextElementAction() {
+    return nextElementAction;
+  }
+
+  /**
+   * Sets next element action.
+   *
+   * @param nextElementAction
+   *     the next element action
+   */
+  public void setNextElementAction(IDisplayableAction nextElementAction) {
+    this.nextElementAction = nextElementAction;
+  }
+
+  /**
+   * Gets previous element action.
+   *
+   * @return the previous element action
+   */
+  protected IDisplayableAction getPreviousElementAction() {
+    return previousElementAction;
+  }
+
+  /**
+   * Sets previous element action.
+   *
+   * @param previousElementAction
+   *     the previous element action
+   */
+  public void setPreviousElementAction(IDisplayableAction previousElementAction) {
+    this.previousElementAction = previousElementAction;
   }
 }

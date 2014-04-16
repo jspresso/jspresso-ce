@@ -331,6 +331,34 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     },
 
     /**
+     * @param page {qx.ui.mobile.page.NavigationPage}
+     * @param swipeLeftAction {org.jspresso.framework.gui.remote.RAction}
+     */
+    installSwipeLeftAction: function (page, swipeLeftAction) {
+      if (swipeLeftAction) {
+        page.addListener("swipe", function (/** @type {qx.event.type.Swipe}*/ e) {
+          if (e.getAxis() == "x" && e.getDirection() == "left") {
+            this._getActionHandler().execute(swipeLeftAction);
+          }
+        }, this);
+      }
+    },
+
+    /**
+     * @param page {qx.ui.mobile.page.NavigationPage}
+     * @param swipeRightAction {org.jspresso.framework.gui.remote.RAction}
+     */
+    installSwipeRightAction: function (page, swipeRightAction) {
+      if (swipeRightAction) {
+        page.addListener("swipe", function (/** @type {qx.event.type.Swipe}*/ e) {
+          if (e.getAxis() == "x" && e.getDirection() == "right") {
+            this._getActionHandler().execute(swipeRightAction);
+          }
+        }, this);
+      }
+    },
+
+    /**
      *
      * @param remotePage {org.jspresso.framework.gui.remote.mobile.RMobilePageAware}
      * @param page {qx.ui.mobile.page.NavigationPage}
@@ -340,6 +368,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       this.installPageMainAction(page, remotePage.getMainAction());
       this.installPageBackAction(page, remotePage.getBackAction());
       this.installPageEndAction(page, remotePage.getPageEndAction());
+      this.installSwipeLeftAction(page, remotePage.getSwipeLeftAction());
+      this.installSwipeRightAction(page, remotePage.getSwipeRightAction());
     },
 
     /**

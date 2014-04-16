@@ -30,35 +30,31 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.mobile.RMobilePageAware", {
-  extend: org.jspresso.framework.gui.remote.RContainer,
+qx.Class.define("org.jspresso.framework.application.frontend.command.remote.mobile.RemoteAnimationCommand", {
+  extend: org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
 
   construct: function () {
     this.base(arguments);
   },
 
   properties: {
-    enterAction: {
-      check: "org.jspresso.framework.gui.remote.RAction",
-      nullable: true
+    animation: {
+      check: "String",
+      nullable: false
     },
-    backAction: {
-      check: "org.jspresso.framework.gui.remote.RAction",
-      nullable: true
+    direction: {
+      check: "String",
+      nullable: false
     },
-    mainAction: {
-      check: "org.jspresso.framework.gui.remote.RAction",
-      nullable: true
+    reverse: {
+      check: "Boolean",
+      nullable: false
     },
-    pageEndAction: {
-      check: "org.jspresso.framework.gui.remote.RAction",
-      nullable: true
+    duration: {
+      check: "Integer",
+      nullable: false
     },
-    swipeLeftAction: {
-      check: "org.jspresso.framework.gui.remote.RAction",
-      nullable: true
-    },
-    swipeRightAction: {
+    callbackAction: {
       check: "org.jspresso.framework.gui.remote.RAction",
       nullable: true
     }

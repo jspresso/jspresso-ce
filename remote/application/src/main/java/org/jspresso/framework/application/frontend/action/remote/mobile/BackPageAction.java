@@ -23,7 +23,6 @@ import java.util.Map;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.remote.AbstractRemoteAction;
-import org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand;
 import org.jspresso.framework.application.frontend.command.remote.mobile.RemoteBackCommand;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.view.IView;
@@ -42,9 +41,9 @@ public class BackPageAction extends AbstractRemoteAction {
     registerCommand(backCommand, context);
     // Update the context as if the view had changed.
     IView<RComponent> view = getView(context);
-    if(view != null) {
+    if (view != null) {
       view = view.getParent();
-      if(view != null) {
+      if (view != null) {
         context.put(ActionContextConstants.VIEW, view);
         context.put(ActionContextConstants.VIEW_CONNECTOR, view.getConnector());
       }
