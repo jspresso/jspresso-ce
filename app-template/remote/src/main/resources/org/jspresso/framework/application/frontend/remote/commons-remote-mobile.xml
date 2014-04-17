@@ -31,58 +31,52 @@
     <property name="name" value="back"/>
   </bean>
 
-  <bean id="nextElementAction"
+  <bean abstract="true" id="abstractSlideAction"
         class="org.jspresso.framework.application.frontend.action.remote.mobile.AnimateAction">
     <property name="animation" value="slide"/>
     <property name="direction" value="out"/>
     <property name="reverse" value="false"/>
-    <property name="duration" value="500"/>
+    <property name="duration" value="400"/>
+    <property name="hideView" value="true"/>
+  </bean>
+
+  <bean id="nextElementAction" parent="abstractSlideAction">
     <property name="callbackAction">
       <bean class="org.jspresso.framework.application.frontend.action.remote.mobile.NearElementAction">
         <property name="reverse" value="false"/>
         <property name="onSuccessAction">
-          <bean class="org.jspresso.framework.application.frontend.action.remote.mobile.AnimateAction">
-            <property name="animation" value="slide"/>
+          <bean parent="abstractSlideAction">
             <property name="direction" value="in"/>
-            <property name="reverse" value="false"/>
-            <property name="duration" value="500"/>
+            <property name="hideView" value="false"/>
           </bean>
         </property>
         <property name="onFailureAction">
-          <bean class="org.jspresso.framework.application.frontend.action.remote.mobile.AnimateAction">
-            <property name="animation" value="slide"/>
+          <bean parent="abstractSlideAction">
             <property name="direction" value="in"/>
             <property name="reverse" value="true"/>
-            <property name="duration" value="500"/>
+            <property name="hideView" value="false"/>
           </bean>
         </property>
       </bean>
     </property>
   </bean>
 
-  <bean id="previousElementAction"
-        class="org.jspresso.framework.application.frontend.action.remote.mobile.AnimateAction">
-    <property name="animation" value="slide"/>
-    <property name="direction" value="out"/>
+  <bean id="previousElementAction" parent="abstractSlideAction">
     <property name="reverse" value="true"/>
-    <property name="duration" value="500"/>
     <property name="callbackAction">
       <bean class="org.jspresso.framework.application.frontend.action.remote.mobile.NearElementAction">
         <property name="reverse" value="true"/>
         <property name="onSuccessAction">
-          <bean class="org.jspresso.framework.application.frontend.action.remote.mobile.AnimateAction">
-            <property name="animation" value="slide"/>
+          <bean parent="abstractSlideAction">
             <property name="direction" value="in"/>
             <property name="reverse" value="true"/>
-            <property name="duration" value="500"/>
+            <property name="hideView" value="false"/>
           </bean>
         </property>
         <property name="onFailureAction">
-          <bean class="org.jspresso.framework.application.frontend.action.remote.mobile.AnimateAction">
-            <property name="animation" value="slide"/>
+          <bean parent="abstractSlideAction">
             <property name="direction" value="in"/>
-            <property name="reverse" value="false"/>
-            <property name="duration" value="500"/>
+            <property name="hideView" value="false"/>
           </bean>
         </property>
       </bean>

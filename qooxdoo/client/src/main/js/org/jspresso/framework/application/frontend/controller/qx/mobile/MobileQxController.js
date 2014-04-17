@@ -601,17 +601,20 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       if (animationCommand.getTargetPeerGuid()) {
         page = this.getRegistered(animationCommand.getTargetPeerGuid());
       }
+      page.show();
       var cardAnimation = new qx.ui.mobile.layout.CardAnimation();
       var pageElement = page.getContentElement();
       var animation = qx.bom.element.Animation.animate(pageElement,
           cardAnimation.getAnimation(animationCommand.getAnimation(), animationCommand.getDirection(),
               animationCommand.getReverse()), animationCommand.getDuration());
-      if (animationCommand.getCallbackAction()) {
-        animation.addListenerOnce("end", function (e) {
+      animation.addListenerOnce("end", function (e) {
+        if (animationCommand.getHideView()) {
           page.exclude();
+        }
+        if (animationCommand.getCallbackAction()) {
           this.execute(animationCommand.getCallbackAction());
-        }, this);
-      }
+        }
+      }, this);
     }
   }
 });

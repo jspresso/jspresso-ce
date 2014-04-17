@@ -92,10 +92,11 @@ public class MobileRemoteController extends AbstractRemoteController {
    * @param direction the direction
    * @param reverse the reverse
    * @param duration the duration
+   * @param hideView the hide view
    * @param callbackAction the callback action
    */
   public void animatePage(RMobilePage page, String animation, String direction, boolean reverse, int duration,
-                          RAction callbackAction) {
+                          boolean hideView, RAction callbackAction) {
     RemoteAnimationCommand command = new RemoteAnimationCommand();
     if (page != null) {
       command.setTargetPeerGuid(page.getGuid());
@@ -104,6 +105,7 @@ public class MobileRemoteController extends AbstractRemoteController {
     command.setDirection(direction);
     command.setReverse(reverse);
     command.setDuration(duration);
+    command.setHideView(hideView);
     command.setCallbackAction(callbackAction);
     registerCommand(command);
   }

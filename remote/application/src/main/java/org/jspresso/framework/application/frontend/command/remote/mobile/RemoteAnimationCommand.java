@@ -35,6 +35,7 @@ public class RemoteAnimationCommand extends RemoteCommand {
   private String  direction;
   private boolean reverse;
   private int     duration;
+  private boolean hideView;
   private RAction callbackAction;
 
   /**
@@ -49,7 +50,7 @@ public class RemoteAnimationCommand extends RemoteCommand {
   /**
    * Sets animation.
    *
-   * @param animation      the animation
+   * @param animation the animation
    */
   public void setAnimation(String animation) {
     this.animation = animation;
@@ -67,7 +68,7 @@ public class RemoteAnimationCommand extends RemoteCommand {
   /**
    * Sets direction.
    *
-   * @param direction      the direction
+   * @param direction the direction
    */
   public void setDirection(String direction) {
     this.direction = direction;
@@ -85,7 +86,7 @@ public class RemoteAnimationCommand extends RemoteCommand {
   /**
    * Sets reverse.
    *
-   * @param reverse      the reverse
+   * @param reverse the reverse
    */
   public void setReverse(boolean reverse) {
     this.reverse = reverse;
@@ -110,6 +111,24 @@ public class RemoteAnimationCommand extends RemoteCommand {
   }
 
   /**
+   * Is hide view.
+   *
+   * @return the boolean
+   */
+  public boolean isHideView() {
+    return hideView;
+  }
+
+  /**
+   * Sets hide view.
+   *
+   * @param hideView the hide view
+   */
+  public void setHideView(boolean hideView) {
+    this.hideView = hideView;
+  }
+
+  /**
    * Gets callback action.
    *
    * @return the callback action
@@ -121,7 +140,7 @@ public class RemoteAnimationCommand extends RemoteCommand {
   /**
    * Sets callback action.
    *
-   * @param callbackAction      the callback action
+   * @param callbackAction the callback action
    */
   public void setCallbackAction(RAction callbackAction) {
     this.callbackAction = callbackAction;

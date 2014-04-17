@@ -39,8 +39,9 @@ public class AnimateAction extends AbstractRemoteAction {
   private String  animation;
   private String  direction;
   private boolean reverse;
+  private boolean hideView;
+  private int     duration;
   private IAction callbackAction;
-  private int duration;
 
   /**
    * Gets animation.
@@ -54,7 +55,8 @@ public class AnimateAction extends AbstractRemoteAction {
   /**
    * Sets animation.
    *
-   * @param animation      the animation
+   * @param animation
+   *     the animation
    */
   public void setAnimation(String animation) {
     this.animation = animation;
@@ -72,7 +74,8 @@ public class AnimateAction extends AbstractRemoteAction {
   /**
    * Sets direction.
    *
-   * @param direction      the direction
+   * @param direction
+   *     the direction
    */
   public void setDirection(String direction) {
     this.direction = direction;
@@ -90,7 +93,8 @@ public class AnimateAction extends AbstractRemoteAction {
   /**
    * Sets reverse.
    *
-   * @param reverse      the reverse
+   * @param reverse
+   *     the reverse
    */
   public void setReverse(boolean reverse) {
     this.reverse = reverse;
@@ -108,7 +112,8 @@ public class AnimateAction extends AbstractRemoteAction {
   /**
    * Sets callback action.
    *
-   * @param callbackAction      the callback action
+   * @param callbackAction
+   *     the callback action
    */
   public void setCallbackAction(IAction callbackAction) {
     this.callbackAction = callbackAction;
@@ -126,10 +131,29 @@ public class AnimateAction extends AbstractRemoteAction {
   /**
    * Sets duration.
    *
-   * @param duration the duration
+   * @param duration
+   *     the duration
    */
   public void setDuration(int duration) {
     this.duration = duration;
+  }
+
+  /**
+   * Is hide view.
+   *
+   * @return the boolean
+   */
+  protected boolean isHideView() {
+    return hideView;
+  }
+
+  /**
+   * Sets hide view.
+   *
+   * @param hideView the hide view
+   */
+  public void setHideView(boolean hideView) {
+    this.hideView = hideView;
   }
 
   /**
@@ -145,7 +169,7 @@ public class AnimateAction extends AbstractRemoteAction {
       callbackRAction.putValue(IAction.STATIC_CONTEXT_KEY, getUiAction(context).getValue(IAction.STATIC_CONTEXT_KEY));
     }
     ((MobileRemoteController) getController(context)).animatePage(null, getAnimation(), getDirection(), isReverse(),
-        getDuration(), callbackRAction);
+        getDuration(), isHideView(), callbackRAction);
     return super.execute(actionHandler, context);
   }
 }
