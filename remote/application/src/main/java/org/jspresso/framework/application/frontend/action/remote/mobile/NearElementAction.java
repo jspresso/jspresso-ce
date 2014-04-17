@@ -20,10 +20,9 @@ package org.jspresso.framework.application.frontend.action.remote.mobile;
 
 import java.util.Map;
 
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.remote.AbstractRemoteAction;
-import org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand;
-import org.jspresso.framework.application.frontend.controller.remote.mobile.MobileRemoteController;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 
@@ -41,6 +40,18 @@ public class NearElementAction extends AbstractRemoteAction {
   public static final String  NAVIGATION_CONNECTOR_KEY = "NAVIGATION_CONNECTOR_KEY";
   private             boolean reverse                  = false;
 
+  private IAction onSuccessAction;
+  private IAction onFailureAction;
+
+  /**
+   * Execute boolean.
+   *
+   * @param actionHandler
+   *     the action handler
+   * @param context
+   *     the context
+   * @return the boolean
+   */
   @Override
   public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) context.get(NAVIGATION_CONNECTOR_KEY))
@@ -57,6 +68,9 @@ public class NearElementAction extends AbstractRemoteAction {
     }
     if (index >= 0 && index < collectionConnector.getChildConnectorCount()) {
       collectionConnector.setSelectedIndices(index);
+      actionHandler.execute(getOnSuccessAction(), context);
+    } else {
+      actionHandler.execute(getOnFailureAction(), context);
     }
     return super.execute(actionHandler, context);
   }
@@ -73,9 +87,48 @@ public class NearElementAction extends AbstractRemoteAction {
   /**
    * Sets reverse.
    *
-   * @param reverse the reverse
+   * @param reverse
+   *     the reverse
    */
   public void setReverse(boolean reverse) {
     this.reverse = reverse;
+  }
+
+  /**
+   * Gets on success action.
+   *
+   * @return the on success action
+   */
+  protected IAction getOnSuccessAction() {
+    return onSuccessAction;
+  }
+
+  /**
+   * Sets on success action.
+   *
+   * @param onSuccessAction
+   *     the on success action
+   */
+  public void setOnSuccessAction(IAction onSuccessAction) {
+    this.onSuccessAction = onSuccessAction;
+  }
+
+  /**
+   * Gets on failure action.
+   *
+   * @return the on failure action
+   */
+  protected IAction getOnFailureAction() {
+    return onFailureAction;
+  }
+
+  /**
+   * Sets on failure action.
+   *
+   * @param onFailureAction
+   *     the on failure action
+   */
+  public void setOnFailureAction(IAction onFailureAction) {
+    this.onFailureAction = onFailureAction;
   }
 }

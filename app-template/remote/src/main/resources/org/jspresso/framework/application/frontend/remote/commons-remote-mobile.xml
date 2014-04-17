@@ -40,11 +40,19 @@
     <property name="callbackAction">
       <bean class="org.jspresso.framework.application.frontend.action.remote.mobile.NearElementAction">
         <property name="reverse" value="false"/>
-        <property name="nextAction">
+        <property name="onSuccessAction">
           <bean class="org.jspresso.framework.application.frontend.action.remote.mobile.AnimateAction">
             <property name="animation" value="slide"/>
             <property name="direction" value="in"/>
             <property name="reverse" value="false"/>
+            <property name="duration" value="500"/>
+          </bean>
+        </property>
+        <property name="onFailureAction">
+          <bean class="org.jspresso.framework.application.frontend.action.remote.mobile.AnimateAction">
+            <property name="animation" value="slide"/>
+            <property name="direction" value="in"/>
+            <property name="reverse" value="true"/>
             <property name="duration" value="500"/>
           </bean>
         </property>
@@ -61,11 +69,19 @@
     <property name="callbackAction">
       <bean class="org.jspresso.framework.application.frontend.action.remote.mobile.NearElementAction">
         <property name="reverse" value="true"/>
-        <property name="nextAction">
+        <property name="onSuccessAction">
           <bean class="org.jspresso.framework.application.frontend.action.remote.mobile.AnimateAction">
             <property name="animation" value="slide"/>
             <property name="direction" value="in"/>
             <property name="reverse" value="true"/>
+            <property name="duration" value="500"/>
+          </bean>
+        </property>
+        <property name="onFailureAction">
+          <bean class="org.jspresso.framework.application.frontend.action.remote.mobile.AnimateAction">
+            <property name="animation" value="slide"/>
+            <property name="direction" value="in"/>
+            <property name="reverse" value="false"/>
             <property name="duration" value="500"/>
           </bean>
         </property>
