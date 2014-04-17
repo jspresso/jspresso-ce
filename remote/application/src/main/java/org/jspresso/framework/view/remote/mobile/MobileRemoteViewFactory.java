@@ -28,6 +28,7 @@ import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.remote.mobile.NearElementAction;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
+import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.remote.RAction;
@@ -229,17 +230,20 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
         if (selectionViewConnector != null) {
           getModelCascadingBinder().bind(selectionViewConnector, nextPageView.getConnector());
         }
-        Map<String, Object> staticContext = new HashMap<>();
-        staticContext.put(NearElementAction.NAVIGATION_CONNECTOR_KEY, selectionViewConnector);
+        if (selectionViewConnector instanceof ICollectionConnector) {
+          Map<String, Object> staticContext = new HashMap<>();
+          staticContext.put(NearElementAction.NAVIGATION_CONNECTOR_KEY, selectionViewConnector);
+          staticContext.put(NearElementAction.FETCH_ACTION_KEY, viewDescriptor.getPageEndAction());
 
-        RAction swipeLeftAction = getActionFactory().createAction(getNextElementAction(), actionHandler, view, locale);
-        swipeLeftAction.putValue(IAction.STATIC_CONTEXT_KEY, staticContext);
-        nextPage.setSwipeLeftAction(swipeLeftAction);
+          RAction swipeLeftAction = getActionFactory().createAction(getNextElementAction(), actionHandler, view, locale);
+          swipeLeftAction.putValue(IAction.STATIC_CONTEXT_KEY, staticContext);
+          nextPage.setSwipeLeftAction(swipeLeftAction);
 
-        RAction swipeRightAction = getActionFactory().createAction(getPreviousElementAction(), actionHandler, view, locale);
-        swipeRightAction.putValue(IAction.STATIC_CONTEXT_KEY, staticContext);
-        nextPage.setSwipeRightAction(swipeRightAction);
-
+          RAction swipeRightAction = getActionFactory().createAction(getPreviousElementAction(), actionHandler, view,
+              locale);
+          swipeRightAction.putValue(IAction.STATIC_CONTEXT_KEY, staticContext);
+          nextPage.setSwipeRightAction(swipeRightAction);
+        }
         nextPageView.setParent(selectionView);
       }
     }

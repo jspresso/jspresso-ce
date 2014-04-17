@@ -38,6 +38,7 @@ public class NearElementAction extends AbstractRemoteAction {
    * The constant NAVIGATION_CONNECTOR_KEY.
    */
   public static final String  NAVIGATION_CONNECTOR_KEY = "NAVIGATION_CONNECTOR_KEY";
+  public static final String  FETCH_ACTION_KEY         = "FETCH_ACTION_KEY";
   private             boolean reverse                  = false;
 
   private IAction onSuccessAction;
@@ -46,10 +47,8 @@ public class NearElementAction extends AbstractRemoteAction {
   /**
    * Execute boolean.
    *
-   * @param actionHandler
-   *     the action handler
-   * @param context
-   *     the context
+   * @param actionHandler      the action handler
+   * @param context      the context
    * @return the boolean
    */
   @Override
@@ -66,6 +65,12 @@ public class NearElementAction extends AbstractRemoteAction {
         index++;
       }
     }
+    if (index >= collectionConnector.getChildConnectorCount()) {
+      IAction fetchAction = getFetchAction(context);
+      if (fetchAction != null) {
+        actionHandler.execute(fetchAction, context);
+      }
+    }
     if (index >= 0 && index < collectionConnector.getChildConnectorCount()) {
       collectionConnector.setSelectedIndices(index);
       actionHandler.execute(getOnSuccessAction(), context);
@@ -73,6 +78,16 @@ public class NearElementAction extends AbstractRemoteAction {
       actionHandler.execute(getOnFailureAction(), context);
     }
     return super.execute(actionHandler, context);
+  }
+
+  /**
+   * Gets fetch action.
+   *
+   * @param context the context
+   * @return the fetch action
+   */
+  protected IAction getFetchAction(Map<String, Object> context) {
+    return (IAction) context.get(FETCH_ACTION_KEY);
   }
 
   /**
@@ -87,8 +102,7 @@ public class NearElementAction extends AbstractRemoteAction {
   /**
    * Sets reverse.
    *
-   * @param reverse
-   *     the reverse
+   * @param reverse      the reverse
    */
   public void setReverse(boolean reverse) {
     this.reverse = reverse;
@@ -106,8 +120,7 @@ public class NearElementAction extends AbstractRemoteAction {
   /**
    * Sets on success action.
    *
-   * @param onSuccessAction
-   *     the on success action
+   * @param onSuccessAction      the on success action
    */
   public void setOnSuccessAction(IAction onSuccessAction) {
     this.onSuccessAction = onSuccessAction;
@@ -125,8 +138,7 @@ public class NearElementAction extends AbstractRemoteAction {
   /**
    * Sets on failure action.
    *
-   * @param onFailureAction
-   *     the on failure action
+   * @param onFailureAction      the on failure action
    */
   public void setOnFailureAction(IAction onFailureAction) {
     this.onFailureAction = onFailureAction;
