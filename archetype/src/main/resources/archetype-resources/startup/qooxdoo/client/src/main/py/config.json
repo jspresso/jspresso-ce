@@ -37,7 +37,7 @@
     "BUILD_PATH"           : "${symbol_dollar}{TARGET}/web",
     "BUILD_PATH_CSS"       : "${symbol_dollar}{TARGET}/css",
     "APPLICATION"          : "${package}.startup.qooxdoo",
-    "APPLICATION_PATH"     : "${packageInPathFormat}/qooxdoo",
+    "APPLICATION_PATH"     : "${packageInPathFormat}/startup/qooxdoo",
     "APPLICATION_CSS"      : "${symbol_dollar}{APPLICATION_PATH}/css/styles.css",
     "QOOXDOO_PATH"         : "${symbol_dollar}{TARGET}/qooxdoo-sdk",
     "QXTHEME"              : "${package}.startup.qooxdoo.theme.Theme", // possible values: "qx.theme.Indigo","qx.theme.Classic","qx.theme.Simple","qx.theme.Modern"
