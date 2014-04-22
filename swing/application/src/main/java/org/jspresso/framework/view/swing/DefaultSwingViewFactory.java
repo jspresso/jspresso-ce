@@ -1258,7 +1258,7 @@ public class DefaultSwingViewFactory extends
    */
   @Override
   protected IView<JComponent> createEnumerationPropertyView(
-      IPropertyViewDescriptor propertyViewDescriptor,
+      final IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
     final IEnumerationPropertyDescriptor propertyDescriptor = (IEnumerationPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
@@ -1280,7 +1280,7 @@ public class DefaultSwingViewFactory extends
         public void valueChange(ValueChangeEvent evt) {
           viewComponent.setIcon(getIconFactory().getIcon(
               propertyDescriptor.getIconImageURL(String.valueOf(evt
-                  .getNewValue())), getIconFactory().getTinyIconSize()));
+                  .getNewValue())), getEnumerationIconDimension(propertyViewDescriptor)));
         }
       });
       ((JLabelConnector) connector).setFormatter(formatter);
