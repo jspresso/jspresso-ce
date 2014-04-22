@@ -880,12 +880,10 @@ public class DefaultRemoteViewFactory extends
               getEnumerationTemplateValue(propertyDescriptor, actionHandler,
                   locale)));
     } else {
-      connector = getConnectorFactory().createValueConnector(
-          propertyDescriptor.getName());
+      connector = getConnectorFactory().createValueConnector(propertyDescriptor.getName());
       List<String> values = new ArrayList<String>();
       List<String> translations = new ArrayList<String>();
-      List<String> enumerationValues = new ArrayList<String>(
-          propertyDescriptor.getEnumerationValues());
+      List<String> enumerationValues = new ArrayList<String>(propertyDescriptor.getEnumerationValues());
       filterEnumerationValues(enumerationValues, propertyViewDescriptor);
       if (!propertyDescriptor.isMandatory()) {
         enumerationValues.add(0, "");
@@ -896,8 +894,7 @@ public class DefaultRemoteViewFactory extends
           if ("".equals(value)) {
             translations.add(" ");
           } else {
-            translations.add(propertyDescriptor.getI18nValue(value,
-                actionHandler, locale));
+            translations.add(propertyDescriptor.getI18nValue(value, actionHandler, locale));
           }
         } else {
           if (value == null) {
@@ -908,27 +905,22 @@ public class DefaultRemoteViewFactory extends
         }
       }
       if (propertyViewDescriptor instanceof IEnumerationPropertyViewDescriptor
-          && ((IEnumerationPropertyViewDescriptor) propertyViewDescriptor)
-              .isRadio()) {
+          && ((IEnumerationPropertyViewDescriptor) propertyViewDescriptor).isRadio()) {
         viewComponent = createRRadioBox(propertyViewDescriptor);
-        ((RRadioBox) viewComponent)
-            .setOrientation(((IEnumerationPropertyViewDescriptor) propertyViewDescriptor)
-                .getOrientation().name());
+        ((RRadioBox) viewComponent).setOrientation(
+            ((IEnumerationPropertyViewDescriptor) propertyViewDescriptor).getOrientation().name());
       } else {
         viewComponent = createRComboBox(propertyViewDescriptor);
-        ((RComboBox) viewComponent).setReadOnly(propertyViewDescriptor
-            .isReadOnly());
+        ((RComboBox) viewComponent).setReadOnly(propertyViewDescriptor.isReadOnly());
         List<RIcon> icons = new ArrayList<RIcon>();
         for (String value : enumerationValues) {
-          icons.add(getIconFactory().getIcon(
-              propertyDescriptor.getIconImageURL(value),
-              getIconFactory().getTinyIconSize()));
+          icons.add(getIconFactory().getIcon(propertyDescriptor.getIconImageURL(value), getEnumerationIconDimension(
+              propertyViewDescriptor)));
         }
-        ((RComboBox) viewComponent).setIcons(icons.toArray(new RIcon[0]));
+        ((RComboBox) viewComponent).setIcons(icons.toArray(new RIcon[icons.size()]));
       }
-      ((REnumBox) viewComponent).setValues(values.toArray(new String[0]));
-      ((REnumBox) viewComponent).setTranslations(translations
-          .toArray(new String[0]));
+      ((REnumBox) viewComponent).setValues(values.toArray(new String[values.size()]));
+      ((REnumBox) viewComponent).setTranslations(translations.toArray(new String[translations.size()]));
     }
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent,

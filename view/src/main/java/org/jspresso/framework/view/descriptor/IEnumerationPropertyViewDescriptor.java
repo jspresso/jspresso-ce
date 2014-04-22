@@ -20,6 +20,8 @@ package org.jspresso.framework.view.descriptor;
 
 import java.util.Set;
 
+import org.jspresso.framework.util.gui.Dimension;
+
 /**
  * A property view descriptor used to refine (filter) values that are displayed
  * in enumeration property views.
@@ -63,4 +65,12 @@ public interface IEnumerationPropertyViewDescriptor extends
    *         horizontally and <code>VERTICAL</code> otherwise.
    */
   EOrientation getOrientation();
+
+  /**
+   * Gets enumeration icon dimension.
+   *
+   * @return the enumeration icon dimension
+   */
+  Dimension getEnumIconDimension();
+
 }

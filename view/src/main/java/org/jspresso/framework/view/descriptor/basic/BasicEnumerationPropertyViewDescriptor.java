@@ -20,6 +20,7 @@ package org.jspresso.framework.view.descriptor.basic;
 
 import java.util.Set;
 
+import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.view.descriptor.EOrientation;
 import org.jspresso.framework.view.descriptor.IEnumerationPropertyViewDescriptor;
 
@@ -27,25 +28,26 @@ import org.jspresso.framework.view.descriptor.IEnumerationPropertyViewDescriptor
  * This specialized property view descriptor is used in order to be able to
  * refine the &quot;values&quot; that are taken from the model enumeration. You
  * can configure a set of allowed values from which the user can choose.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
-public class BasicEnumerationPropertyViewDescriptor extends
-    BasicPropertyViewDescriptor implements IEnumerationPropertyViewDescriptor {
+public class BasicEnumerationPropertyViewDescriptor extends BasicPropertyViewDescriptor
+    implements IEnumerationPropertyViewDescriptor {
 
-  private Set<String>  allowedValues;
-  private Set<String>  forbiddenValues;
-  private boolean      radio;
+  private Set<String> allowedValues;
+  private Set<String> forbiddenValues;
+  private boolean     radio;
+  private Dimension   enumIconDimension;
   private EOrientation orientation = EOrientation.VERTICAL;
 
   /**
    * Returns an optional forbidden set of values to restrict the model ones.
    * Only values belonging to the allowed ones should actually be made available
    * as a choice.
-   * 
+   *
    * @param allowedValues
-   *          the allowedValues to set.
+   *     the allowedValues to set.
    */
   public void setAllowedValues(Set<String> allowedValues) {
     this.allowedValues = allowedValues;
@@ -53,7 +55,7 @@ public class BasicEnumerationPropertyViewDescriptor extends
 
   /**
    * Gets the allowedValues.
-   * 
+   *
    * @return the allowedValues.
    */
   @Override
@@ -65,9 +67,9 @@ public class BasicEnumerationPropertyViewDescriptor extends
    * Returns an optional forbidden set of values to restrict the model ones.
    * Only values not belonging to the forbidden ones should actually be made
    * available as a choice.
-   * 
+   *
    * @param forbiddenValues
-   *          an optional forbidden set of values to restrict the model ones.
+   *     an optional forbidden set of values to restrict the model ones.
    */
   public void setForbiddenValues(Set<String> forbiddenValues) {
     this.forbiddenValues = forbiddenValues;
@@ -75,7 +77,7 @@ public class BasicEnumerationPropertyViewDescriptor extends
 
   /**
    * Gets the forbiddenValues.
-   * 
+   *
    * @return the forbiddenValues.
    */
   @Override
@@ -85,7 +87,7 @@ public class BasicEnumerationPropertyViewDescriptor extends
 
   /**
    * Gets the radio.
-   * 
+   *
    * @return the radio.
    */
   @Override
@@ -98,7 +100,7 @@ public class BasicEnumerationPropertyViewDescriptor extends
    * supported instead of combobox. Default value is <code>false</code>.
    * 
    * @param radio
-   *          the radio to set.
+   *     the radio to set.
    */
   public void setRadio(boolean radio) {
     this.radio = radio;
@@ -106,7 +108,7 @@ public class BasicEnumerationPropertyViewDescriptor extends
 
   /**
    * Gets the orientation.
-   * 
+   *
    * @return the orientation.
    */
   @Override
@@ -120,10 +122,71 @@ public class BasicEnumerationPropertyViewDescriptor extends
    * <code>VERTICAL</code> otherwise. Default value is <code>VERTICAL</code>.
    * 
    * @param orientation
-   *          the orientation to set.
+   *     the orientation to set.
    */
   public void setOrientation(EOrientation orientation) {
     this.orientation = orientation;
   }
 
+  /**
+   * Gets the enumeration icon dimension.
+   *
+   * @return the enumeration icon dimension.
+   */
+  @Override
+  public Dimension getEnumIconDimension() {
+    return enumIconDimension;
+  }
+
+  /**
+   * Sets the icon dimension.
+   *
+   * @param enumIconDimension
+   *     the icon dimension to set.
+   */
+  public void setEnumIconDimension(Dimension enumIconDimension) {
+    this.enumIconDimension = enumIconDimension;
+  }
+
+  /**
+   * Sets the enumeration icon width.
+   *
+   * @param iconWidth
+   *     the icon width to set.
+   */
+  @SuppressWarnings("SuspiciousNameCombination")
+  public void setEnumIconWidth(int iconWidth) {
+    if (enumIconDimension == null) {
+      enumIconDimension = new Dimension();
+      enumIconDimension.setHeight(iconWidth);
+    }
+    enumIconDimension.setWidth(iconWidth);
+  }
+
+  /**
+   * Sets the enumeration icon height.
+   *
+   * @param iconHeight
+   *     the icon height to set.
+   */
+  @SuppressWarnings("SuspiciousNameCombination")
+  public void setEnumIconHeight(int iconHeight) {
+    if (enumIconDimension == null) {
+      enumIconDimension = new Dimension();
+      enumIconDimension.setWidth(iconHeight);
+    }
+    enumIconDimension.setHeight(iconHeight);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicEnumerationPropertyViewDescriptor clone() {
+    BasicEnumerationPropertyViewDescriptor clone = (BasicEnumerationPropertyViewDescriptor) super.clone();
+    if (enumIconDimension != null) {
+      clone.enumIconDimension = enumIconDimension.clone();
+    }
+    return clone;
+  }
 }

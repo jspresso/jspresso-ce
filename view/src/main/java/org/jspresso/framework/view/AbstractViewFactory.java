@@ -3111,6 +3111,21 @@ public abstract class AbstractViewFactory<E, F, G> implements
   }
 
   /**
+   * Gets enumeration icon dimension.
+   *
+   * @param propertyViewDescriptor the property view descriptor
+   * @return the enumeration icon dimension
+   */
+  protected Dimension getEnumerationIconDimension(IPropertyViewDescriptor propertyViewDescriptor) {
+    Dimension iconSize = getIconFactory().getTinyIconSize();
+    if (propertyViewDescriptor instanceof IEnumerationPropertyViewDescriptor
+        && ((IEnumerationPropertyViewDescriptor) propertyViewDescriptor).getEnumIconDimension() != null) {
+      iconSize = ((IEnumerationPropertyViewDescriptor) propertyViewDescriptor).getEnumIconDimension();
+    }
+    return iconSize;
+  }
+
+  /**
    * Decorates a view with a pagination view.
    * 
    * @param viewPeer

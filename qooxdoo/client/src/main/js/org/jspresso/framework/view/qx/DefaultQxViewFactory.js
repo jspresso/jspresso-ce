@@ -565,7 +565,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             labels[value] = rColumn.getTranslations()[j];
             icons[value] = rColumn.getIcons()[j];
           }
-          cellRenderer = new org.jspresso.framework.view.qx.EnumerationTableCellRenderer(
+          cellRenderer = new org.jspresso.framework.view.qx.EnumerationTableCellRenderer(table,
               labels, icons);
         } else if (rColumn instanceof org.jspresso.framework.gui.remote.RActionField
             && !rColumn.isShowTextField()) {
