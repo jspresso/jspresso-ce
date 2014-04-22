@@ -1352,14 +1352,14 @@ public class DefaultSwingViewFactory extends
             viewComponent.addItem(enumElement);
           }
           viewComponent.setRenderer(new TranslatedEnumerationListCellRenderer(
-              propertyDescriptor, actionHandler, locale));
+              propertyDescriptor, getEnumerationIconDimension(propertyViewDescriptor), actionHandler, locale));
           adjustSizes(
               propertyViewDescriptor,
               viewComponent,
               null,
               getEnumerationTemplateValue(propertyDescriptor, actionHandler,
-                  locale),
-              Toolkit.getDefaultToolkit().getScreenResolution() * 3 / 5);
+                  locale), getEnumerationIconDimension(propertyViewDescriptor).getWidth()/*Toolkit.getDefaultToolkit()
+                                                                                      .getScreenResolution() * 3 / 5*/);
           IValueConnector connector = new JComboBoxConnector(
               propertyDescriptor.getName(), viewComponent);
           connector.setExceptionHandler(actionHandler);
@@ -2364,8 +2364,9 @@ public class DefaultSwingViewFactory extends
           (IDurationPropertyDescriptor) propertyDescriptor, actionHandler,
           locale);
     } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
+      org.jspresso.framework.util.gui.Dimension iconSize = getEnumerationIconDimension(propertyViewDescriptor);
       cellRenderer = createEnumerationTableCellRenderer(
-          (IEnumerationPropertyDescriptor) propertyDescriptor, actionHandler,
+          (IEnumerationPropertyDescriptor) propertyDescriptor, iconSize, actionHandler,
           locale);
     } else if (propertyDescriptor instanceof INumberPropertyDescriptor) {
       cellRenderer = createNumberTableCellRenderer(
@@ -2746,12 +2747,7 @@ public class DefaultSwingViewFactory extends
           column.setPreferredWidth(Math.max(
               computePixelWidth(viewComponent, 2), minHeaderWidth));
         } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
-          column.setPreferredWidth(Math.max(
-              computePixelWidth(
-                  viewComponent,
-                  getEnumerationTemplateValue(
-                      (IEnumerationPropertyDescriptor) propertyDescriptor,
-                      actionHandler, locale).length() + 4), minHeaderWidth));
+          column.setPreferredWidth(Math.max(editorView.getPeer().getPreferredSize().width, minHeaderWidth));
         } else {
           column.setPreferredWidth(Math.max(Math
               .min(
@@ -3397,8 +3393,9 @@ public class DefaultSwingViewFactory extends
 
   private TableCellRenderer createEnumerationTableCellRenderer(
       IEnumerationPropertyDescriptor propertyDescriptor,
+      org.jspresso.framework.util.gui.Dimension iconDimension,
       ITranslationProvider translationProvider, Locale locale) {
-    return new TranslatedEnumerationTableCellRenderer(propertyDescriptor,
+    return new TranslatedEnumerationTableCellRenderer(propertyDescriptor, iconDimension,
         translationProvider, locale);
   }
 
@@ -3867,23 +3864,23 @@ public class DefaultSwingViewFactory extends
     private final ITranslationProvider           translationProvider;
     private final Locale                         locale;
     private final IEnumerationPropertyDescriptor propertyDescriptor;
+    private final org.jspresso.framework.util.gui.Dimension iconDimension;
 
     /**
      * Constructs a new {@code TranslatedEnumerationCellRenderer} instance.
      *
-     * @param propertyDescriptor
-     *          the property descriptor from which the enumeration name is
+     * @param propertyDescriptor           the property descriptor from which the enumeration name is
      *          taken. The prefix used to lookup translation keys in the form
      *          keyPrefix.value is the propertyDescriptor enumeration name.
-     * @param translationProvider
-     *          the translation provider.
-     * @param locale
-     *          the locale to lookup the translation.
+     * @param iconDimension the icon dimension
+     * @param translationProvider           the translation provider.
+     * @param locale           the locale to lookup the translation.
      */
     public TranslatedEnumerationListCellRenderer(
-        IEnumerationPropertyDescriptor propertyDescriptor,
+        IEnumerationPropertyDescriptor propertyDescriptor, org.jspresso.framework.util.gui.Dimension iconDimension,
         ITranslationProvider translationProvider, Locale locale) {
       this.propertyDescriptor = propertyDescriptor;
+      this.iconDimension = iconDimension;
       this.translationProvider = translationProvider;
       this.locale = locale;
     }
@@ -3898,7 +3895,7 @@ public class DefaultSwingViewFactory extends
           index, isSelected, cellHasFocus);
       label.setIcon(getIconFactory().getIcon(
           propertyDescriptor.getIconImageURL(String.valueOf(value)),
-          getIconFactory().getTinyIconSize()));
+          iconDimension));
       if (value != null && propertyDescriptor.isTranslated()) {
         label.setText(propertyDescriptor.getI18nValue((String) value,
             translationProvider, locale));
@@ -3920,25 +3917,25 @@ public class DefaultSwingViewFactory extends
     private final ITranslationProvider           translationProvider;
     private final Locale                         locale;
     private final IEnumerationPropertyDescriptor propertyDescriptor;
+    private final org.jspresso.framework.util.gui.Dimension iconDimension;
 
     /**
      * Constructs a new {@code TranslatedEnumerationTableCellRenderer}
      * instance.
      *
-     * @param propertyDescriptor
-     *          the property descriptor from which the enumeration name is
+     * @param propertyDescriptor           the property descriptor from which the enumeration name is
      *          taken. The prefix used to lookup translation keys in the form
      *          keyPrefix.value is the propertyDescriptor enumeration name.
-     * @param translationProvider
-     *          the translation provider.
-     * @param locale
-     *          the locale to lookup the translation.
+     * @param iconDimension the icon dimension
+     * @param translationProvider           the translation provider.
+     * @param locale           the locale to lookup the translation.
      */
     public TranslatedEnumerationTableCellRenderer(
-        IEnumerationPropertyDescriptor propertyDescriptor,
+        IEnumerationPropertyDescriptor propertyDescriptor, org.jspresso.framework.util.gui.Dimension iconDimension,
         ITranslationProvider translationProvider, Locale locale) {
       super();
       this.propertyDescriptor = propertyDescriptor;
+      this.iconDimension = iconDimension;
       this.translationProvider = translationProvider;
       this.locale = locale;
     }
@@ -3951,7 +3948,7 @@ public class DefaultSwingViewFactory extends
         boolean isSelected, boolean hasFocus, int row, int column) {
       setIcon(getIconFactory().getIcon(
           propertyDescriptor.getIconImageURL(String.valueOf(value)),
-          getIconFactory().getTinyIconSize()));
+          iconDimension));
       return super.getTableCellRendererComponent(table, value, isSelected,
           hasFocus, row, column);
     }

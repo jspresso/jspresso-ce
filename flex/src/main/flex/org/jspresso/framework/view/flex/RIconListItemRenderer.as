@@ -25,6 +25,7 @@ import org.jspresso.framework.gui.remote.RIcon;
 public class RIconListItemRenderer extends ListItemRenderer {
 
   private var _image:Image;
+  private var _selectedIcon:RIcon;
 
   private var _labels:Array;
   private var _icons:Array;
@@ -61,10 +62,7 @@ public class RIconListItemRenderer extends ListItemRenderer {
       if (!(listData as ListData).icon) {
         (listData as ListData).icon = _iconTemplate;
       }
-      var _selectedIcon:RIcon = _icons[_index] as RIcon;
-      if (_selectedIcon != null) {
-        _image.source = _selectedIcon.imageUrlSpec;
-      }
+      _selectedIcon = _icons[_index] as RIcon;
     }
     super.data = value;
   }
@@ -72,6 +70,15 @@ public class RIconListItemRenderer extends ListItemRenderer {
   override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
     super.updateDisplayList(unscaledWidth, unscaledHeight);
     if (_showIcon) {
+      if (_selectedIcon != null) {
+        icon.width = _selectedIcon.dimension.width;
+        icon.height = _selectedIcon.dimension.height;
+        _image.source = _selectedIcon.imageUrlSpec;
+        label.x += (_selectedIcon.dimension.width - icon.measuredHeight)
+        label.y += ((_selectedIcon.dimension.height - icon.measuredWidth) / 2);
+      } else {
+        _image.source = null;
+      }
       _image.x = icon.x;
       _image.y = icon.y;
       _image.width = icon.width;
@@ -83,5 +90,18 @@ public class RIconListItemRenderer extends ListItemRenderer {
       icon.visible = false;
     }
   }
+
+  override protected function measure():void {
+    super.measure();
+    if (_selectedIcon && _selectedIcon.dimension) {
+      if (_selectedIcon.dimension.width > measuredWidth) {
+        measuredWidth += (_selectedIcon.dimension.width - icon.measuredWidth);
+      }
+      if (_selectedIcon.dimension.height > measuredHeight) {
+        measuredHeight += (_selectedIcon.dimension.height - icon.measuredHeight);
+      }
+    }
+  }
+
 }
 }

@@ -16,19 +16,16 @@ qx.Class.define("org.jspresso.framework.view.qx.EnumerationTableCellRenderer", {
   extend: qx.ui.table.cellrenderer.Default,
   include: [org.jspresso.framework.view.qx.MCellAdditionalStyle],
 
-  /**
-   *
-   * @param icons {org.jspresso.framework.gui.remote.RIcon[]}
-   * @param labels {String[]}
-   */
-  construct: function (labels, icons) {
+  construct: function (table, labels, icons) {
     this.base(arguments);
+    this.__table = table;
     this.__labels = labels;
     this.__icons = icons;
   },
 
 
   members: {
+    __table: null,
     __labels: null,
     __icons: null,
 
@@ -52,6 +49,9 @@ qx.Class.define("org.jspresso.framework.view.qx.EnumerationTableCellRenderer", {
           "margin-right": "3px",
           "vertical-align": "middle"
         });
+        if (this.__table.getRowHeight() < h) {
+          this.__table.setRowHeight(h + 4);
+        }
         return '<img src="' + rIcon.getImageUrlSpec() + '" style="' + css + '"/>';
       }
       return "";

@@ -43,7 +43,7 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
       }
       var contentHeight = qx.bom.Label.getHtmlSize(cellInfo.value).height;
       if (this.__table.getRowHeight() < contentHeight) {
-        this.__table.setRowHeight(contentHeight);
+        this.__table.setRowHeight(contentHeight + 4);
       }
       if (this.__action) {
         //return "<a href='javascript:qx.event.Registration.fireEvent(qx.core.Init.getApplication().getRoot(),\"tableLinkClicked\",\"qx.event.type.Data\",\""+this.__action.getGuid()+"\");'>"+this._formatValue(cellInfo)+"</a>";

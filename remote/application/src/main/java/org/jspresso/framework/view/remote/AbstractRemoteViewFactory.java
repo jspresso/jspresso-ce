@@ -943,8 +943,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
           ((RComboBox) viewComponent).setReadOnly(propertyViewDescriptor.isReadOnly());
           List<RIcon> icons = new ArrayList<>();
           for (String value : enumerationValues) {
-            icons.add(getIconFactory().getIcon(propertyDescriptor.getIconImageURL(value),
-                getIconFactory().getTinyIconSize()));
+            icons.add(getIconFactory().getIcon(propertyDescriptor.getIconImageURL(value), getEnumerationIconDimension(
+                propertyViewDescriptor)));
           }
           ((RComboBox) viewComponent).setIcons(icons.toArray(new RIcon[icons.size()]));
         }

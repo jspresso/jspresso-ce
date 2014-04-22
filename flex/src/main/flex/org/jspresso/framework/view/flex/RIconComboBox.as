@@ -52,9 +52,13 @@ public class RIconComboBox extends ComboBox {
   override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
     super.updateDisplayList(unscaledWidth, unscaledHeight);
     if (_showIcon) {
-      iconImage.width = textInput.height - getStyle("cornerRadius");
-      //noinspection JSSuspiciousNameCombination
-      iconImage.height = iconImage.width;
+      if (_rIcon != null) {
+        iconImage.source = _rIcon.imageUrlSpec;
+        iconImage.width = _rIcon.dimension.width;
+        iconImage.height = _rIcon.dimension.height;
+      } else {
+        iconImage.source = null;
+      }
       iconImage.x = getStyle("cornerRadius");
       iconImage.y = (height - iconImage.height) / 2;
       textInput.x = iconImage.width + getStyle("cornerRadius");
@@ -62,22 +66,7 @@ public class RIconComboBox extends ComboBox {
   }
 
   public function set rIcon(_icon:RIcon):void {
-    if (_showIcon && _icon != _rIcon) {
-      if (_icon != null) {
-        iconImage.source = _icon.imageUrlSpec;
-      } else {
-        iconImage.source = null;
-      }
-      _rIcon = _icon;
-    }
-  }
-
-  override public function set measuredWidth(value:Number):void {
-    if (_showIcon) {
-      super.measuredWidth = value + (iconImage.width + getStyle("cornerRadius"));
-    } else {
-      super.measuredWidth = value;
-    }
+    _rIcon = _icon;
   }
 
   override public function set selectedItem(sItem:Object):void {
@@ -109,6 +98,18 @@ public class RIconComboBox extends ComboBox {
     } else {
       rIcon = null;
       text = "";
+    }
+  }
+
+  override protected function measure():void {
+    super.measure();
+    if (_rIcon && _rIcon.dimension) {
+      if (_rIcon.dimension.width > measuredWidth) {
+        measuredWidth += _rIcon.dimension.width;
+      }
+      if (_rIcon.dimension.height > measuredHeight) {
+        measuredHeight += _rIcon.dimension.height - textInput.measuredHeight /2;
+      }
     }
   }
 }

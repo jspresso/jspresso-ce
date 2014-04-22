@@ -22,6 +22,7 @@ import org.jspresso.framework.gui.remote.RIcon;
 public class EnumerationDgItemRenderer extends RemoteValueDgItemRenderer {
 
   private var _image:Image;
+  private var _selectedIcon:RIcon;
 
   private var _values:Array;
   private var _labels:Array;
@@ -77,18 +78,22 @@ public class EnumerationDgItemRenderer extends RemoteValueDgItemRenderer {
 
   private function computeIcon(iconIndex:int):void {
     if (_showIcon) {
-      var _selectedIcon:RIcon = _icons[iconIndex] as RIcon;
-      if (_selectedIcon != null) {
-        _image.source = _selectedIcon.imageUrlSpec;
-      } else {
-        _image.source = null;
-      }
+      _selectedIcon = _icons[iconIndex] as RIcon;
     }
   }
 
   override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
     super.updateDisplayList(unscaledWidth, unscaledHeight);
     if (_showIcon) {
+      if (_selectedIcon != null) {
+        icon.width = _selectedIcon.dimension.width;
+        icon.height = _selectedIcon.dimension.height;
+        _image.source = _selectedIcon.imageUrlSpec;
+        label.x += (_selectedIcon.dimension.width - icon.measuredHeight)
+        label.y += ((_selectedIcon.dimension.height - icon.measuredWidth) /2);
+      } else {
+        _image.source = null;
+      }
       _image.x = icon.x;
       _image.y = icon.y;
       _image.width = icon.width;
@@ -98,6 +103,18 @@ public class EnumerationDgItemRenderer extends RemoteValueDgItemRenderer {
     }
     if (icon) {
       icon.visible = false;
+    }
+  }
+
+  override protected function measure():void {
+    super.measure();
+    if (_selectedIcon && _selectedIcon.dimension) {
+      if (_selectedIcon.dimension.width > measuredWidth) {
+        measuredWidth += (_selectedIcon.dimension.width - icon.measuredWidth);
+      }
+      if (_selectedIcon.dimension.height > measuredHeight) {
+        measuredHeight += (_selectedIcon.dimension.height - icon.measuredHeight);
+      }
     }
   }
 
