@@ -185,13 +185,20 @@ public class EnhancedDataGrid extends DataGrid {
   }
 
 
-  override protected function drawSelectionIndicator(indicator:Sprite, x:Number, y:Number, width:Number, height:Number,
-                                                     color:uint, itemRenderer:IListItemRenderer):void {
-    if(isNaN(x) || isNaN(y) || isNaN(width) || isNaN(height) || isNaN(unscaledWidth) ||isNaN(unscaledHeight)) {
-      // Calling the above properties seems sufficient for fixing the Flex error that appears
-      // due to a NaN unscaledWidth.
+  override protected function get unscaledHeight():Number {
+    var uh:Number = super.unscaledHeight;
+    if (isNaN(uh)) {
+      return 0;
     }
-    super.drawSelectionIndicator(indicator, x, y, width, height, color, itemRenderer);
+    return uh;
+  }
+
+  override protected function get unscaledWidth():Number {
+    var uw:Number = super.unscaledWidth;
+    if (isNaN(uw)) {
+      return 0;
+    }
+    return uw;
   }
 }
 }
