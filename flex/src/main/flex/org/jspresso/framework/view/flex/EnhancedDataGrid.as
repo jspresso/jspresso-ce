@@ -187,5 +187,21 @@ package org.jspresso.framework.view.flex {
       }
       super.keyDownHandler(event);
     }
+
+    override protected function get unscaledHeight():Number {
+      var uh:Number = super.unscaledHeight;
+      if (isNaN(uh)) {
+        return 0;
+      }
+      return uh;
+    }
+
+    override protected function get unscaledWidth():Number {
+      var uw:Number = super.unscaledWidth;
+      if (isNaN(uw)) {
+        return 0;
+      }
+      return uw;
+    }
   }
 }
