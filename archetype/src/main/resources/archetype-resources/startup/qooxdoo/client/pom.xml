@@ -105,21 +105,31 @@
             <phase>prepare-package</phase>
             <configuration>
               <target>
-                <property name="web-debug.dir" value="${project.build.directory}/web-debug" />
-                <mkdir dir="" />
-                <replace dir="${web-debug.dir}" token="../../../../target" value="file:///${project.build.directory}">
-                  <include name="**/*.js" />
+                <property name="web-debug.dir" value="${symbol_dollar}{project.build.directory}/web-debug"/>
+                <mkdir dir=""/>
+                <replace dir="${symbol_dollar}{web-debug.dir}" token="../../../../target"
+                         value="file:///${symbol_dollar}{project.build.directory}">
+                  <include name="**/*.js"/>
                 </replace>
-                <replace dir="${web-debug.dir}" token="../../" value="file:///${basedir}/src/main/">
-                  <include name="**/*.js" />
+                <replace dir="${symbol_dollar}{web-debug.dir}" token="../../../target"
+                         value="file:///${symbol_dollar}{project.build.directory}">
+                  <include name="**/*.js"/>
                 </replace>
-                <replace dir="${web-debug.dir}" token="\" value="/">
-                  <include name="**/*.js" />
+                <replace dir="${symbol_dollar}{web-debug.dir}" token="../../"
+                         value="file:///${symbol_dollar}{basedir}/src/main/">
+                  <include name="**/*.js"/>
                 </replace>
-                <replace dir="${web-debug.dir}" token="//(" value="\/(">
-                  <include name="**/*.js" />
+                <replace dir="${symbol_dollar}{web-debug.dir}" token="../"
+                         value="file:///${symbol_dollar}{basedir}/src/main/">
+                  <include name="**/*.js"/>
                 </replace>
-                <delete dir="${project.build.directory}/antrun" />
+                <replace dir="${symbol_dollar}{web-debug.dir}" token="\" value="/">
+                  <include name="**/*.js"/>
+                </replace>
+                <replace dir="${symbol_dollar}{web-debug.dir}" token="//(" value="\/(">
+                  <include name="**/*.js"/>
+                </replace>
+                <delete dir="${symbol_dollar}{project.build.directory}/antrun"/>
               </target>
             </configuration>
           </execution>
