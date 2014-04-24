@@ -114,10 +114,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      */
     createComponent: function (remoteComponent, registerPeers) {
       var component = this.base(arguments, remoteComponent, registerPeers);
-      this._configureToolTip(remoteComponent, component);
-      component = this._decorateWithActions(remoteComponent, component);
-      component = this._decorateWithBorder(remoteComponent, component);
-      this._applyPreferredSize(remoteComponent, component);
+      if (remoteComponent && component) {
+        this._configureToolTip(remoteComponent, component);
+        component = this._decorateWithActions(remoteComponent, component);
+        component = this._decorateWithBorder(remoteComponent, component);
+        this._applyPreferredSize(remoteComponent, component);
+      }
       return component;
     },
 
@@ -416,7 +418,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       remoteTimeField.useDateDto(true);
       dateTimeField.add(this.createComponent(remoteTimeField, false));
       this._sizeMaxComponentWidth(dateTimeField, remoteDateField,
-          org.jspresso.framework.view.qx.DefaultQxViewFactory.__DATE_CHAR_COUNT
+              org.jspresso.framework.view.qx.DefaultQxViewFactory.__DATE_CHAR_COUNT
               + org.jspresso.framework.view.qx.DefaultQxViewFactory.__TIME_CHAR_COUNT + 4);
       return dateTimeField;
     },
@@ -651,7 +653,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       modelController.addTarget(textArea, "readOnly", "writable", false, {
         converter: this._readOnlyFieldConverter
       });
-      this._sizeMaxComponentWidth(textArea, remoteTextArea);
+      textArea.setWidth(null);
       return textArea;
     },
 
@@ -666,6 +668,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       } else {
         htmlComponent = this._createHtmlEditor(remoteHtmlArea);
       }
+      htmlComponent.setWidth(null);
       return htmlComponent;
     },
 
@@ -1340,9 +1343,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           compRowSpan = 2;
           extraRowOffset = 1;
           formLayout.setRowFlex(compRow + 1, 1);
-          if (compColSpan > 1) {
-            component.setMaxWidth(null);
-          }
         } else {
           compRowSpan = 1;
         }
@@ -1354,7 +1354,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           colSpan: compColSpan
         });
 
-        if (compColSpan > 1 && component.getWidth() == null/*to cope with preferred width*/) {
+        if ((compColSpan > 1 || compColSpan == columnCount) && component.getWidth()
+            == null/*to cope with preferred width*/) {
           component.setAllowGrowX(true);
         }
         col += elementWidth;
@@ -1364,20 +1365,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           lastCol = Math.max(compCol + compColSpan, labelCol + labelColSpan);
         }
       }
-      var filler = new qx.ui.core.Widget();
-      filler.setMinWidth(0);
-      filler.setWidth(0);
-      filler.setMinHeight(0);
-      filler.setHeight(0);
-      filler.setAllowStretchX(true);
-      filler.setAllowStretchY(false);
-      form.add(filler, {
-        row: 0,
-        column: lastCol,
-        rowSpan: lastRow + 1,
-        colSpan: 1
-      });
-      formLayout.setColumnFlex(lastCol, 10);
       // Special toolTip handling
       var state = remoteForm.getState();
       var modelController = new qx.data.controller.Object(state);
@@ -2053,7 +2040,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       for (var i = 0; i < remoteTable.getColumnIds().length; i++) {
         var rColumn = remoteTable.getColumns()[i];
         var rColumnHeader = remoteTable.getColumnHeaders()[i];
-        var editor = new org.jspresso.framework.view.qx.RComponentTableCellEditor(this, rColumn, this._getActionHandler());
+        var editor = new org.jspresso.framework.view.qx.RComponentTableCellEditor(this, rColumn,
+            this._getActionHandler());
         columnModel.setCellEditorFactory(i, editor);
         var bgIndex = -1;
         var fgIndex = -1;

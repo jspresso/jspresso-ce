@@ -70,7 +70,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     createComponent: function (remoteComponent, registerPeers) {
       var component = this.base(arguments, remoteComponent, registerPeers);
-      component = this._decorateWithActions(remoteComponent, component);
+      if (remoteComponent && component) {
+        component = this._decorateWithActions(remoteComponent, component);
+      }
       return component;
     },
 

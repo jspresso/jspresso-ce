@@ -70,7 +70,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
      */
     createComponent: function (remoteComponent, registerPeers) {
       if (!remoteComponent) {
-        return this.createEmptyWidget();
+        return this._createEmptyWidget();
       }
       if (registerPeers == null) {
         registerPeers = true;
