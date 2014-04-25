@@ -19,8 +19,6 @@
 package org.jspresso.framework.application.view;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -28,19 +26,11 @@ import java.util.Map;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.IController;
 import org.jspresso.framework.application.backend.action.BackendAction;
-import org.jspresso.framework.application.backend.action.FindAction;
-import org.jspresso.framework.application.backend.action.StaticQueryComponentsAction;
 import org.jspresso.framework.application.backend.session.IApplicationSessionAware;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.frontend.action.lov.LovAction;
-import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
-import org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor;
-import org.jspresso.framework.model.descriptor.basic.BasicDescriptorDescriptor;
-import org.jspresso.framework.model.descriptor.basic.BasicPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor;
 import org.jspresso.framework.util.descriptor.DefaultDescriptor;
 import org.jspresso.framework.util.descriptor.IDescriptor;
 import org.jspresso.framework.util.gate.IGate;

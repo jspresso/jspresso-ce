@@ -31,6 +31,7 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteSelectio
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RCardContainer;
 import org.jspresso.framework.gui.remote.RComponent;
@@ -48,6 +49,7 @@ import org.jspresso.framework.gui.remote.mobile.RMobilePageAware;
 import org.jspresso.framework.gui.remote.mobile.RMobilePageAwareContainer;
 import org.jspresso.framework.gui.remote.mobile.RMobileTree;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.server.remote.RemotePeerRegistryServlet;
 import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.view.BasicCompositeView;
@@ -228,7 +230,14 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
         RMobilePage nextPage = (RMobilePage) nextPageView.getPeer();
         viewComponent.setNextPage(nextPage);
         if (selectionViewConnector != null) {
-          getModelCascadingBinder().bind(selectionViewConnector, nextPageView.getConnector());
+          IValueConnector detailConnector = nextPageView.getConnector();
+          if (nextPageViewDescriptor.getModelDescriptor() instanceof IReferencePropertyDescriptor<?>) {
+            ICompositeValueConnector wrapperConnector = getConnectorFactory().createCompositeValueConnector(
+                ModelRefPropertyConnector.THIS_PROPERTY, null);
+            wrapperConnector.addChildConnector(nextPageView.getConnector());
+            detailConnector = wrapperConnector;
+          }
+          getModelCascadingBinder().bind(selectionViewConnector, detailConnector);
         }
         if (selectionViewConnector instanceof ICollectionConnector) {
           Map<String, Object> staticContext = new HashMap<>();

@@ -21,6 +21,7 @@ package org.jspresso.framework.view.descriptor.mobile;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
@@ -120,6 +121,10 @@ public class MobileCompositePageViewDescriptor extends AbstractMobilePageViewDes
    */
   public MobileCompositePageViewDescriptor cloneEditable() {
     MobileCompositePageViewDescriptor editableClone = (MobileCompositePageViewDescriptor) clone();
+    if (editableClone.getModelDescriptor() instanceof IReferencePropertyDescriptor<?>) {
+      editableClone.setModelDescriptor(
+          ((IReferencePropertyDescriptor) editableClone.getModelDescriptor()).getReferencedDescriptor());
+    }
     editableClone.setInlineEditing(true);
     if (pageSectionDescriptors != null) {
       List<IMobilePageSectionViewDescriptor> editableSections = new ArrayList<>();
@@ -146,7 +151,8 @@ public class MobileCompositePageViewDescriptor extends AbstractMobilePageViewDes
   /**
    * Sets inline editing.
    *
-   * @param inlineEditing the inline editing
+   * @param inlineEditing
+   *     the inline editing
    */
   public void setInlineEditing(boolean inlineEditing) {
     this.inlineEditing = inlineEditing;
