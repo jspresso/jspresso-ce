@@ -565,6 +565,20 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
         numericComponent = this._createIntegerField(remoteNumericComponent);
       }
       return numericComponent;
+    },
+
+    /**
+     * @return {qx.ui.core.Widget | qx.ui.mobile.core.Widget}
+     * @param remoteHtmlArea {org.jspresso.framework.gui.remote.RHtmlArea}
+     */
+    _createHtmlArea: function (remoteHtmlArea) {
+      var htmlComponent;
+      if (remoteHtmlArea.getReadOnly()) {
+        htmlComponent = this._createHtmlText(remoteHtmlArea);
+      } else {
+        htmlComponent = this._createHtmlEditor(remoteHtmlArea);
+      }
+      return htmlComponent;
     }
   }
 });

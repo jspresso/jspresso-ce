@@ -1640,6 +1640,39 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     },
 
     /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param component {qx.ui.mobile.core.Widget}
+     */
+    _decorateWithScrollContainer: function (component) {
+      var scrollContainer = new qx.ui.mobile.container.ScrollComposite();
+      scrollContainer.setFixedHeight(true);
+      scrollContainer.setShowScrollIndicator(false);
+      scrollContainer.add(component, {
+        flex: 1
+      });
+      return scrollContainer;
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteTextArea {org.jspresso.framework.gui.remote.RTextArea}
+     */
+    _createTextArea: function (remoteTextArea) {
+      var textArea = new qx.ui.mobile.form.TextArea();
+      var state = remoteTextArea.getState();
+      var modelController = new qx.data.controller.Object(state);
+      modelController.addTarget(textArea, "value", "value", true, {
+        converter: this._modelToViewFieldConverter
+      }, {
+        converter: this._viewToModelFieldConverter
+      });
+      modelController.addTarget(textArea, "readOnly", "writable", false, {
+        converter: this._readOnlyFieldConverter
+      });
+      return this._decorateWithScrollContainer(textArea);
+    },
+
+    /**
      * @return {Boolean}
      * @param rComponent {org.jspresso.framework.gui.remote.RComponent}
      */
@@ -1659,7 +1692,29 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       return rComponent instanceof org.jspresso.framework.gui.remote.RCheckBox || rComponent
           instanceof org.jspresso.framework.gui.remote.RLabel || (rComponent
           instanceof org.jspresso.framework.gui.remote.RActionField && !rComponent.isShowTextField());
-    }
+    },
 
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteHtmlArea {org.jspresso.framework.gui.remote.RHtmlArea}
+     */
+    _createHtmlEditor: function (remoteHtmlArea) {
+      return this._createTextArea(remoteHtmlArea);
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteHtmlArea {org.jspresso.framework.gui.remote.RHtmlArea}
+     */
+    _createHtmlText: function (remoteHtmlArea) {
+      var htmlText = new qx.ui.mobile.basic.Label();
+      var state = remoteHtmlArea.getState();
+      var modelController = new qx.data.controller.Object(state);
+      modelController.addTarget(htmlText, "value", "value", false, {
+        converter: this._modelToViewFieldConverter
+      });
+      return this._decorateWithScrollContainer(htmlText);
+    }
   }
 });

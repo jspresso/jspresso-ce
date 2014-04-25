@@ -662,12 +662,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @param remoteHtmlArea {org.jspresso.framework.gui.remote.RHtmlArea}
      */
     _createHtmlArea: function (remoteHtmlArea) {
-      var htmlComponent;
-      if (remoteHtmlArea.getReadOnly()) {
-        htmlComponent = this._createHtmlText(remoteHtmlArea);
-      } else {
-        htmlComponent = this._createHtmlEditor(remoteHtmlArea);
-      }
+      var htmlComponent = this.base(arguments, remoteHtmlArea);
       htmlComponent.setWidth(null);
       return htmlComponent;
     },
