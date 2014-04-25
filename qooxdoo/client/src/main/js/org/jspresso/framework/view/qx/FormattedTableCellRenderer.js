@@ -37,7 +37,7 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
     _getContentHtml: function (cellInfo) {
       if (!org.jspresso.framework.util.html.HtmlUtil.isHtml(cellInfo.value) && (typeof(cellInfo.value) == "string"
           || cellInfo.value instanceof String)) {
-        if (cellInfo.value.indexOf("\n")) {
+        if (cellInfo.value.indexOf("\n") > -1) {
           cellInfo.value = "<html>" + cellInfo.value.replace(new RegExp("\n", 'g'), "<br>") + "</html>";
         }
       }

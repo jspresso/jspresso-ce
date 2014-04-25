@@ -1409,8 +1409,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           this.setIcon(decorator.getChildControl("bar"), remoteComponent.getIcon())
         } else {
           decorator = new qx.ui.groupbox.GroupBox();
-          decorator.setLegend(remoteComponent.getLabel());
-          this.setIcon(decorator.getChildControl("legend"), remoteComponent.getIcon());
         }
         decorator.setLayout(new qx.ui.layout.Grow());
         decorator.add(component);
