@@ -1113,7 +1113,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           }
         }, this);
         textField.addListener("tap", function (event) {
-          if (textField.getReadOnly() && mainAction.getEnabled()) {
+          if (textField.getReadOnly() && state.getEnabled()) {
             var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
             this._getActionHandler().execute(mainAction, actionEvent);
           }
@@ -1198,7 +1198,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
       }
       var datePickerButton = this.createButton("...", null, null);
-      dateField.bind("enabled", datePickerButton, "enabled");
+      remoteDateField.getState().bind("writable", datePickerButton, "enabled");
       datePickerButton.removeCssClass("button");
       var datePicker = new org.jspresso.framework.view.qx.mobile.DatePicker(datePickerButton, this.__monthNames);
       datePicker.setConfirmButtonCaption(this._getActionHandler().translate("ok"));
@@ -1257,7 +1257,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     _createTimeField: function (remoteTimeField) {
       var timeField = this._createFormattedField(remoteTimeField);
       var timePickerButton = this.createButton("...", null, null);
-      timeField.bind("enabled", timePickerButton, "enabled");
+      remoteTimeField.getState().bind("writable", timePickerButton, "enabled");
       timePickerButton.removeCssClass("button");
       var timePicker = new org.jspresso.framework.view.qx.mobile.TimePicker(timePickerButton,
           remoteTimeField.getSecondsAware());
