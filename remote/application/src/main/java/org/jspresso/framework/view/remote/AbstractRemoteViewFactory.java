@@ -1698,9 +1698,10 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     RList viewComponent = createRList(viewDescriptor);
     IView<RComponent> view = constructView(viewComponent, viewDescriptor, connector);
 
-    if (viewDescriptor.getRenderedProperty() != null) {
-      IValueConnector cellConnector = createListConnector(viewDescriptor.getRenderedProperty(), rowDescriptor);
-      rowConnectorPrototype.addChildConnector(viewDescriptor.getRenderedProperty(), cellConnector);
+    String renderedProperty = viewDescriptor.getRenderedProperty();
+    if (renderedProperty != null) {
+      IValueConnector cellConnector = createListConnector(renderedProperty, rowDescriptor);
+      rowConnectorPrototype.addChildConnector(renderedProperty, cellConnector);
     }
     viewComponent.setSelectionMode(viewDescriptor.getSelectionMode().name());
     if (viewDescriptor.getRowAction() != null) {

@@ -98,11 +98,12 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
    * @return the next page
    */
   public IMobilePageViewDescriptor getNextPageViewDescriptor() {
-    if (nextPageViewDescriptor.getModelDescriptor() == null && selectionViewDescriptor.getModelDescriptor() != null
-        && nextPageViewDescriptor instanceof BasicViewDescriptor) {
+    if (nextPageViewDescriptor instanceof BasicViewDescriptor && nextPageViewDescriptor.getModelDescriptor() == null
+        && selectionViewDescriptor.getModelDescriptor() != null) {
       ((BasicViewDescriptor) nextPageViewDescriptor).setModelDescriptor(
           ((ICollectionPropertyDescriptor<?>) selectionViewDescriptor.getModelDescriptor()).getReferencedDescriptor()
-                                                                                 .getElementDescriptor());
+                                                                                           .getElementDescriptor()
+                                                                       );
     }
     return nextPageViewDescriptor;
   }

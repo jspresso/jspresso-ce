@@ -63,7 +63,7 @@ public class BasicListViewDescriptor extends BasicCollectionViewDescriptor
     if (renderedProperty == null) {
       return ((ICollectionDescriptorProvider<?>) getModelDescriptor())
           .getCollectionDescriptor().getElementDescriptor()
-          .getToStringProperty();
+          .getToHtmlProperty();
     }
     return renderedProperty;
   }
