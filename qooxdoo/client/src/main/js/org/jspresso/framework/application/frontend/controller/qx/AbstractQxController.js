@@ -695,7 +695,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
         this.__postponedNotificationBuffer = {};
         try {
           var data = result.getData();
-          this._handleCommands(org.jspresso.framework.util.object.ObjectUtil.typeObjectGraph(data["result"]).toArray());
+          var typedResult = org.jspresso.framework.util.object.ObjectUtil.typeObjectGraph(data["result"]);
+          if (typedResult) {
+            this._handleCommands(typedResult.toArray());
+          }
         } catch (e) {
           throw e;
         } finally {

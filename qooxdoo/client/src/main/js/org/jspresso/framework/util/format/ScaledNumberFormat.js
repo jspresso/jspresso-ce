@@ -30,11 +30,11 @@ qx.Class.define("org.jspresso.framework.util.format.ScaledNumberFormat", {
     },
     decimalSeparator: {
       check: "String",
-      nullable: true
+      nullable: false
     },
     thousandsSeparator: {
       check: "String",
-      nullable: true
+      nullable: false
     }
   },
 
@@ -58,10 +58,12 @@ qx.Class.define("org.jspresso.framework.util.format.ScaledNumberFormat", {
       var defaultDecimalSeparator = qx.locale.Number.getDecimalSeparator(this.__savedLocale);
       var defaultGroupSeparator = qx.locale.Number.getGroupSeparator(this.__savedLocale);
       if (defaultDecimalSeparator) {
-        formatted = formatted.replace(new RegExp("\\" + defaultDecimalSeparator, "g"), "#dec#");
+        formatted = formatted.replace(new RegExp(qx.lang.String.escapeRegexpChars(defaultDecimalSeparator), "g"),
+            "#dec#");
       }
       if (defaultGroupSeparator) {
-        formatted = formatted.replace(new RegExp("\\" + defaultGroupSeparator, "g"), this.getThousandsSeparator());
+        formatted = formatted.replace(new RegExp(qx.lang.String.escapeRegexpChars(defaultGroupSeparator), "g"),
+            this.getThousandsSeparator());
       }
       formatted = formatted.replace(/#dec#/g, this.getDecimalSeparator());
       return formatted;

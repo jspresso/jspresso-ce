@@ -228,7 +228,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
      */
     setIcon: function (component, icon) {
       if (icon) {
-        if(typeof component.setIcon == 'function') {
+        if (typeof component.setIcon == 'function') {
           component.setIcon(icon.getImageUrlSpec());
         }
       }
@@ -432,8 +432,9 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
       } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RNumericComponent) {
         format = new org.jspresso.framework.util.format.ScaledNumberFormat();
         format.setThousandsSeparator(this._getThousandsSeparator());
+        format.setDecimalSeparator(this._getDecimalSeparator());
+        format.setGroupingUsed(remoteComponent.getThousandsGroupingUsed());
         if (remoteComponent instanceof org.jspresso.framework.gui.remote.RDecimalComponent) {
-          format.setDecimalSeparator(this._getDecimalSeparator());
           if (remoteComponent instanceof org.jspresso.framework.gui.remote.RPercentField) {
             format.setScale(100);
             format.setPostfix(" %");
@@ -445,7 +446,6 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
         } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RIntegerField) {
           format.setMaximumFractionDigits(0);
         }
-        format.setGroupingUsed(remoteComponent.getThousandsGroupingUsed());
       }
       return format;
     },
