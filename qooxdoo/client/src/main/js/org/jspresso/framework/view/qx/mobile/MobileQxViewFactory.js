@@ -486,7 +486,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           if (existingCard) {
             this.linkNextPageBackButton(existingCard, previousPage, backAction, animation);
           }
-          var existingCards = nextPage.getChildren();
+          var existingCards = nextPage.getUserData("existingCards");
           if (existingCards) {
             for (var i = 0; i < existingCards.length; i++) {
               if (existingCard != existingCards[i]) {
@@ -946,6 +946,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createCardContainer: function (remoteCardContainer) {
       var cardContainer = this._createCardContainerComponent();
+      cardContainer.setUserData("existingCardNames", []);
       cardContainer.setUserData("existingCards", []);
 
       for (var i = 0; i < remoteCardContainer.getCardNames().length; i++) {
@@ -959,10 +960,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var state = remoteCardContainer.getState();
       state.addListener("changeValue", function (e) {
         var selectedCardName = e.getData();
-        var children = cardContainer.getChildren();
+        var cards = cardContainer.getUserData("existingCards");
         var selectedCard;
-        for (var i = 0; i < children.length; i++) {
-          var child = children[i];
+        for (var i = 0; i < cards.length; i++) {
+          var child = cards[i];
           if (child.getUserData("cardName") == selectedCardName) {
             selectedCard = child;
           }
@@ -1015,14 +1016,16 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     addCard: function (cardContainer, rCardComponent, cardName) {
       if (rCardComponent instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
-        var children = cardContainer.getChildren();
         var existingCards = cardContainer.getUserData("existingCards");
-        var existingCard = existingCards.indexOf(cardName) >= 0;
+        var existingCardNames = cardContainer.getUserData("existingCardNames");
+        var existingCard = existingCardNames.indexOf(cardName) >= 0;
         if (!existingCard) {
-          existingCards.push(cardName);
+          existingCardNames.push(cardName);
           var cardComponent = this.createComponent(rCardComponent);
+          cardComponent.setUserData("cardName", cardName);
           // Do not actually add the card to the card container since it's added to the manager.
           // cardContainer.add(cardComponent);
+          existingCards.push(cardComponent);
           this.linkNextPageBackButton(cardComponent, cardContainer.getUserData("previousPage"), null, null);
           this._selectCard(cardContainer, cardComponent);
         }
