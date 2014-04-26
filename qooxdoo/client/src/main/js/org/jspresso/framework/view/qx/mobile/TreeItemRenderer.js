@@ -41,18 +41,21 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.TreeItemRenderer", {
   },
 
   properties: {
-    level :
-    {
-      check : "Integer",
-      apply : "_applyLevel"
+    level: {
+      check: "Integer",
+      apply: "_applyLevel"
     }
   },
 
   members: {
     // property apply
-    _applyLevel : function(value, old)
-    {
-      this.getImageWidget()._setStyle("margin-left", value + "rem");
+    _applyLevel: function (value, old) {
+      if (this.getImageWidget().getSource()) {
+        this.getImageWidget()._setStyle("margin-left", value + "rem");
+      } else {
+        this.getTitleWidget()._setStyle("margin-left", value + "rem");
+        this.getSubtitleWidget()._setStyle("margin-left", value + "rem");
+      }
     }
   }
 });

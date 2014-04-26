@@ -29,10 +29,12 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         item.setTitle("");
       }
       item.setSubtitle(state.getDescription());
-      if (displayIcon && state.getIconImageUrl()) {
-        item.setImage(state.getIconImageUrl());
+      if (displayIcon) {
+        if (state.getIconImageUrl()) {
+          item.setImage(state.getIconImageUrl());
+        }
       } else {
-        item.resetImage();
+        item.setImage(null);
       }
       item.setSelected(selected);
     }
