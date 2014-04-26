@@ -2035,7 +2035,7 @@ public class DefaultSwingViewFactory extends
           viewDescriptor.getRenderedProperty(), cellConnector);
     }
     viewComponent.setCellRenderer(new EvenOddListCellRenderer(getIconFactory(),
-        viewDescriptor.getRenderedProperty()));
+        viewDescriptor.getRenderedProperty(), viewDescriptor.isDisplayIcon()));
     viewComponent.setModel(new CollectionConnectorListModel(connector));
     viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
     listSelectionModelBinder.bindSelectionModel(viewComponent, connector,
@@ -2999,7 +2999,7 @@ public class DefaultSwingViewFactory extends
     viewComponent.getSelectionModel().setSelectionMode(
         TreeSelectionModel.SINGLE_TREE_SELECTION);
     viewComponent.setModel(treeModel);
-    viewComponent.setCellRenderer(new ConnectorTreeCellRenderer());
+    viewComponent.setCellRenderer(new ConnectorTreeCellRenderer(viewDescriptor.isDisplayIcon()));
     treeSelectionModelBinder.bindSelectionModel(connector, viewComponent);
     if (viewDescriptor.isExpanded()) {
       viewComponent.getModel().addTreeModelListener(new TreeModelListener() {
@@ -3780,6 +3780,11 @@ public class DefaultSwingViewFactory extends
   private final class ConnectorTreeCellRenderer extends DefaultTreeCellRenderer {
 
     private static final long serialVersionUID = -5153268751092971328L;
+    private final boolean displayIcon;
+
+    public ConnectorTreeCellRenderer(boolean displayIcon) {
+      this.displayIcon = displayIcon;
+    }
 
     /**
      * {@inheritDoc}
@@ -3794,9 +3799,10 @@ public class DefaultSwingViewFactory extends
         if (value instanceof IRenderableCompositeValueConnector) {
           renderer.setText(((IRenderableCompositeValueConnector) value)
               .getDisplayValue());
-          renderer.setIcon(getIconFactory().getIcon(
-              ((IRenderableCompositeValueConnector) value).getDisplayIcon(),
-              getIconFactory().getSmallIconSize()));
+          if (displayIcon) {
+            renderer.setIcon(getIconFactory().getIcon(((IRenderableCompositeValueConnector) value).getDisplayIcon(),
+                getIconFactory().getSmallIconSize()));
+          }
           String displayDescription = ((IRenderableCompositeValueConnector) value)
               .getDisplayDescription();
           if (displayDescription != null && displayDescription.length() > 0) {

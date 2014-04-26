@@ -21,6 +21,7 @@ public class RTree extends RComponent {
 
   private var _expanded:Boolean;
   private var _rowAction:RAction;
+  private var _displayIcon:Boolean;
 
   public function RTree() {
     //default constructor.
@@ -40,6 +41,15 @@ public class RTree extends RComponent {
 
   public function get rowAction():RAction {
     return _rowAction;
+  }
+
+
+  public function get displayIcon():Boolean {
+    return _displayIcon;
+  }
+
+  public function set displayIcon(value:Boolean):void {
+    _displayIcon = value;
   }
 }
 }

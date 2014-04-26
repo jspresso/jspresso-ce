@@ -24,15 +24,15 @@ import org.jspresso.framework.util.gui.IconProvider;
  * This public interface is implemented by list view descriptors. The described
  * view will typically be implemented by a swing JList representing a collection
  * of java beans described by one of their property.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
 public interface IListViewDescriptor extends ICollectionViewDescriptor {
 
   /**
    * Gets the iconImageURLProvider.
-   * 
+   *
    * @return the iconImageURLProvider.
    */
   IconProvider getIconImageURLProvider();
@@ -40,8 +40,15 @@ public interface IListViewDescriptor extends ICollectionViewDescriptor {
   /**
    * Gets the name of the underlying model property which is made visible by
    * the list.
-   * 
+   *
    * @return the name of the underlying model rendered property.
    */
   String getRenderedProperty();
+
+  /**
+   * Will the list view show icons for elements.
+   *
+   * @return {@code true} whenever the list should show icon.
+   */
+  boolean isDisplayIcon();
 }

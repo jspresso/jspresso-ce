@@ -36,7 +36,7 @@ import org.jspresso.framework.view.descriptor.IListViewDescriptor;
  * In the latter case, the {@code renderedProperty} property will be used
  * to label the tree nodes.
  *
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision : 9424 $
  * @author Vincent Vandenschrick
  */
 public class BasicListViewDescriptor extends BasicCollectionViewDescriptor
@@ -44,10 +44,18 @@ public class BasicListViewDescriptor extends BasicCollectionViewDescriptor
 
   private IconProvider iconImageURLProvider;
   private String       renderedProperty;
+  private boolean      displayIcon;
+
+  /**
+   * Instantiates a new Basic list view descriptor.
+   */
+  public BasicListViewDescriptor() {
+    displayIcon = true;
+  }
 
   /**
    * Gets the iconImageURLProvider.
-   * 
+   *
    * @return the iconImageURLProvider.
    */
   @Override
@@ -57,13 +65,13 @@ public class BasicListViewDescriptor extends BasicCollectionViewDescriptor
 
   /**
    * {@inheritDoc}
+   * @return the rendered property
    */
   @Override
   public String getRenderedProperty() {
     if (renderedProperty == null) {
-      return ((ICollectionDescriptorProvider<?>) getModelDescriptor())
-          .getCollectionDescriptor().getElementDescriptor()
-          .getToHtmlProperty();
+      return ((ICollectionDescriptorProvider<?>) getModelDescriptor()).getCollectionDescriptor().getElementDescriptor()
+                                                                      .getToHtmlProperty();
     }
     return renderedProperty;
   }
@@ -79,8 +87,7 @@ public class BasicListViewDescriptor extends BasicCollectionViewDescriptor
    * <p>
    * {@code String getIconImageURLForObject(Object userObject);}
    *
-   * @param iconImageURLProvider
-   *          the iconImageURLProvider to set.
+   * @param iconImageURLProvider           the iconImageURLProvider to set.
    */
   public void setIconImageURLProvider(IconProvider iconImageURLProvider) {
     this.iconImageURLProvider = iconImageURLProvider;
@@ -91,8 +98,7 @@ public class BasicListViewDescriptor extends BasicCollectionViewDescriptor
    * property is left to {@code null} (default value), the
    * {@code toStringProperty} of the element component descriptor is used.
    *
-   * @param renderedProperty
-   *          the renderedProperty to set.
+   * @param renderedProperty           the renderedProperty to set.
    */
   public void setRenderedProperty(String renderedProperty) {
     this.renderedProperty = renderedProperty;
@@ -100,6 +106,7 @@ public class BasicListViewDescriptor extends BasicCollectionViewDescriptor
 
   /**
    * {@inheritDoc}
+   * @return the boolean
    */
   @Override
   public boolean isScrollable() {
@@ -110,6 +117,7 @@ public class BasicListViewDescriptor extends BasicCollectionViewDescriptor
    * Returns {@code true}.
    * <p>
    * {@inheritDoc}
+   * @return the boolean
    */
   @Override
   public boolean isVerticallyScrollable() {
@@ -120,9 +128,29 @@ public class BasicListViewDescriptor extends BasicCollectionViewDescriptor
    * Returns {@code true}.
    * <p>
    * {@inheritDoc}
+   * @return the boolean
    */
   @Override
   public boolean isHorizontallyScrollable() {
     return true;
+  }
+
+  /**
+   * Will the list view show icons for elements.
+   *
+   * @return {@code true} whenever the list should show icon.
+   */
+  @Override
+  public boolean isDisplayIcon() {
+    return displayIcon;
+  }
+
+  /**
+   * Configures if the list view should show icon based on the icon image url provider. Defaults to {@code true}.
+   *
+   * @param displayIcon the show icon
+   */
+  public void setDisplayIcon(boolean displayIcon) {
+    this.displayIcon = displayIcon;
   }
 }

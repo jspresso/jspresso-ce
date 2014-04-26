@@ -1658,7 +1658,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var treeController = new qx.data.controller.Tree();
       treeController.setChildPath("children");
       treeController.setLabelPath("value");
-      treeController.setIconPath("iconImageUrl");
+      if (remoteTree.getDisplayIcon()) {
+        treeController.setIconPath("iconImageUrl");
+      }
       treeController.setDelegate({
         createItem: function () {
           var item = new qx.ui.tree.TreeFolder();
@@ -2697,7 +2699,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var state = remoteList.getState();
       var listController = new qx.data.controller.List(state.getChildren(), list, "children[1].value");
       listController.setDelegate(new org.jspresso.framework.view.qx.EnhancedListDelegate());
-      listController.setIconPath("iconImageUrl");
+      if(remoteList.getDisplayIcon()) {
+        listController.setIconPath("iconImageUrl");
+      }
 
       listController.addListener("changeSelection", function (e) {
         /** @type {qx.data.Array} */

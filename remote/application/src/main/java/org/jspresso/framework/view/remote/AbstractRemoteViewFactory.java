@@ -1696,6 +1696,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     ICollectionConnector connector = getConnectorFactory().createCollectionConnector(modelDescriptor.getName(),
         getMvcBinder(), rowConnectorPrototype);
     RList viewComponent = createRList(viewDescriptor);
+    viewComponent.setDisplayIcon(viewDescriptor.isDisplayIcon());
     IView<RComponent> view = constructView(viewComponent, viewDescriptor, connector);
 
     String renderedProperty = viewDescriptor.getRenderedProperty();
@@ -1990,6 +1991,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     final ICompositeValueConnector connector = createTreeViewConnector(viewDescriptor, actionHandler, locale);
 
     RTree viewComponent = createRTree(viewDescriptor);
+    viewComponent.setDisplayIcon(viewDescriptor.isDisplayIcon());
     viewComponent.setExpanded(viewDescriptor.isExpanded());
     IView<RComponent> view = constructView(viewComponent, viewDescriptor, connector);
     if (viewDescriptor.getRowAction() != null) {

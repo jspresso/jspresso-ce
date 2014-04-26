@@ -19,7 +19,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
   extend: org.jspresso.framework.view.qx.AbstractQxViewFactory,
 
   statics: {
-    bindListItem: function (item, state, selected) {
+    bindListItem: function (item, state, selected, displayIcon) {
       var children = state.getChildren();
       if (state.getValue()) {
         item.setTitle(state.getValue());
@@ -29,7 +29,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         item.setTitle("");
       }
       item.setSubtitle(state.getDescription());
-      item.setImage(state.getIconImageUrl());
+      if (displayIcon && state.getIconImageUrl()) {
+        item.setImage(state.getIconImageUrl());
+      } else {
+        item.resetImage();
+      }
       item.setSelected(selected);
     }
   },
@@ -499,7 +503,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         return;
       }
 
-      if (typeof animation === undefined) animation = "slide";
+      if (typeof animation === undefined) {
+        animation = "slide";
+      }
 
       if (previousPage || backAction) {
         nextPage.setShowBackButton(true);
@@ -879,7 +885,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var treeList = new qx.ui.mobile.list.List({
         configureItem: function (item, data, row) {
           var state = data.state;
-          org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.bindListItem(item, state, false);
+          org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.bindListItem(item, state, false,
+              remoteTree.getDisplayIcon());
           if (remoteTree instanceof org.jspresso.framework.gui.remote.mobile.RMobileTree) {
             item.setShowArrow(remoteTree.getShowArrow());
           }
@@ -1346,7 +1353,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         configureItem: function (item, data, row) {
           var selectedIndices = state.getSelectedIndices();
           var selected = selectedIndices != null && selectedIndices.indexOf(row) >= 0;
-          org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.bindListItem(item, data, selected);
+          org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.bindListItem(item, data, selected,
+              remoteList.getDisplayIcon());
           if (remoteList instanceof org.jspresso.framework.gui.remote.mobile.RMobileList) {
             item.setShowArrow(remoteList.getShowArrow());
           }

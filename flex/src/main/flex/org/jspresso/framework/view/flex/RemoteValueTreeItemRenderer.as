@@ -22,30 +22,35 @@ import org.jspresso.framework.util.html.HtmlUtil;
 
 public class RemoteValueTreeItemRenderer extends TreeItemRenderer {
 
-  private var image:Image;
+  private var _image:Image;
+  private var _displayIcon:Boolean;
 
   public function RemoteValueTreeItemRenderer() {
-    image = new CachedImage();
-    addChild(image);
+    _image = new CachedImage();
+    addChild(_image);
+  }
+
+  public function set displayIcon(value:Boolean):void {
+    _displayIcon = value;
   }
 
   override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
     super.updateDisplayList(unscaledWidth, unscaledHeight);
-    if (data is RemoteCompositeValueState && (data as RemoteCompositeValueState).iconImageUrl) {
-      image.x = icon.x;
-      image.y = icon.y;
-      image.width = icon.width;
-      image.height = icon.height;
+    if (_displayIcon && data is RemoteCompositeValueState && (data as RemoteCompositeValueState).iconImageUrl) {
+      _image.x = icon.x;
+      _image.y = icon.y;
+      _image.width = icon.width;
+      _image.height = icon.height;
       var iconImageUrl:String = (data as RemoteCompositeValueState).iconImageUrl;
       if (iconImageUrl) {
-        image.source = iconImageUrl;
+        _image.source = iconImageUrl;
       }
-      image.visible = true;
+      _image.visible = true;
       if (icon) {
         icon.visible = false;
       }
     } else {
-      image.visible = false;
+      _image.visible = false;
       if (icon) {
         icon.visible = false;
       }

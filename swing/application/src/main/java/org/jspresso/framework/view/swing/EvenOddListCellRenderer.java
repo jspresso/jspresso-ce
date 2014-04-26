@@ -36,61 +36,60 @@ import org.jspresso.framework.view.IIconFactory;
 
 /**
  * A list cell renderer alternating background color.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
 public class EvenOddListCellRenderer extends DefaultListCellRenderer {
 
-  private static final long  serialVersionUID = 2051850807889065438L;
-  private Color              backgroundBase;
+  private static final long serialVersionUID = 2051850807889065438L;
+  private       Color              backgroundBase;
   private final IIconFactory<Icon> iconFactory;
   private final String             cellConnectorKey;
+  private final boolean            displayIcon;
 
   /**
    * Constructs a new {@code EvenOddListCellRenderer} instance.
    *
-   * @param iconFactory the icon factory.
+   * @param iconFactory
+   *     the icon factory.
    * @param cellConnectorKey
-   *          the key used to retrieve the child cell connector.
+   *     the key used to retrieve the child cell connector.
    */
-  public EvenOddListCellRenderer(IIconFactory<Icon> iconFactory,
-      String cellConnectorKey) {
+  public EvenOddListCellRenderer(IIconFactory<Icon> iconFactory, String cellConnectorKey, boolean displayIcon) {
     super();
     this.iconFactory = iconFactory;
     this.cellConnectorKey = cellConnectorKey;
+    this.displayIcon = displayIcon;
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public Component getListCellRendererComponent(JList<?> list, Object value,
-      int index, boolean isSelected, boolean cellHasFocus) {
-    JLabel renderer = (JLabel) super.getListCellRendererComponent(list, value,
-        index, isSelected, cellHasFocus);
+  public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+                                                boolean cellHasFocus) {
+    JLabel renderer = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
     if (value instanceof IValueConnector) {
       if (value instanceof IRenderableCompositeValueConnector) {
-        IValueConnector cellConnector = ((IRenderableCompositeValueConnector) value)
-            .getChildConnector(cellConnectorKey);
+        IValueConnector cellConnector = ((IRenderableCompositeValueConnector) value).getChildConnector(
+            cellConnectorKey);
         if (cellConnector.getConnectorValue() != null) {
           renderer.setText(cellConnector.getConnectorValue().toString());
         } else {
           renderer.setText("");
         }
-        renderer.setIcon(iconFactory.getIcon(
-            ((IRenderableCompositeValueConnector) value).getDisplayIcon(),
-            iconFactory.getSmallIconSize()));
+        if (displayIcon) {
+          renderer.setIcon(iconFactory.getIcon(((IRenderableCompositeValueConnector) value).getDisplayIcon(),
+              iconFactory.getSmallIconSize()));
+        }
         ListModel<?> lm = list.getModel();
         if (lm instanceof CollectionConnectorListModel) {
-          setToolTipText(((CollectionConnectorListModel) lm)
-              .getRowToolTip(index));
+          setToolTipText(((CollectionConnectorListModel) lm).getRowToolTip(index));
         }
-        if (((IRenderableCompositeValueConnector) value)
-            .getDisplayDescription() != null) {
+        if (((IRenderableCompositeValueConnector) value).getDisplayDescription() != null) {
           ToolTipManager.sharedInstance().registerComponent(list);
-          renderer.setToolTipText(((IRenderableCompositeValueConnector) value)
-              .getDisplayDescription());
+          renderer.setToolTipText(((IRenderableCompositeValueConnector) value).getDisplayDescription());
         }
       } else {
         renderer.setText(value.toString());
@@ -100,8 +99,7 @@ public class EvenOddListCellRenderer extends DefaultListCellRenderer {
     if (backgroundBase != null) {
       actualBackground = backgroundBase;
     }
-    renderer.setBackground(SwingUtil.computeEvenOddBackground(actualBackground,
-        isSelected, index));
+    renderer.setBackground(SwingUtil.computeEvenOddBackground(actualBackground, isSelected, index));
     return renderer;
   }
 

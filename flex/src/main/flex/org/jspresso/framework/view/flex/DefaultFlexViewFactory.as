@@ -433,10 +433,6 @@ public class DefaultFlexViewFactory {
     return new SelectionTrackingTree();
   }
 
-  public function createTreeItemRenderer():ClassFactory {
-    return new ClassFactory(RemoteValueTreeItemRenderer);
-  }
-
   public function createComboBoxComponent():RIconComboBox {
     return new RIconComboBox();
   }
@@ -884,7 +880,9 @@ public class DefaultFlexViewFactory {
     tree.labelField = "value";
     tree.dataTipField = "description";
     tree.dataDescriptor = new RCVSDataDescriptor();
-    tree.itemRenderer = createTreeItemRenderer();
+    var itemRenderer:ClassFactory = new ClassFactory(RemoteValueTreeItemRenderer);
+    itemRenderer.properties = {displayIcon: remoteTree.displayIcon};
+    tree.itemRenderer = itemRenderer;
     tree.dataProvider = remoteTree.state;
     tree.minWidth = 200;
     tree.horizontalScrollPolicy = ScrollPolicy.AUTO;
@@ -2239,8 +2237,7 @@ public class DefaultFlexViewFactory {
     }
 
     var itemRenderer:ClassFactory = new ClassFactory(RemoteValueListItemRenderer);
-    itemRenderer.properties = {iconTemplate: _iconTemplate};
-    //new ClassFactory(RemoteValueDgItemRenderer);
+    itemRenderer.properties = {iconTemplate: _iconTemplate, displayIcon: remoteList.displayIcon};
     list.itemRenderer = itemRenderer;
 
     list.dataProvider = (remoteList.state as RemoteCompositeValueState).children;

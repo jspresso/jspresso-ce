@@ -19,9 +19,19 @@ package org.jspresso.framework.gui.remote {
 [RemoteClass(alias="org.jspresso.framework.gui.remote.RList")]
 public class RList extends RCollectionComponent {
 
+  private var _displayIcon:Boolean;
+
   public function RList() {
     //default constructor.
   }
 
+
+  public function get displayIcon():Boolean {
+    return _displayIcon;
+  }
+
+  public function set displayIcon(value:Boolean):void {
+    _displayIcon = value;
+  }
 }
 }

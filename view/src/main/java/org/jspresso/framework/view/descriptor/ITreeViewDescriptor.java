@@ -74,4 +74,11 @@ public interface ITreeViewDescriptor extends IViewDescriptor {
    */
   boolean isExpanded();
 
+  /**
+   * Will the tree view show icons for elements.
+   *
+   * @return {@code true} whenever the tree should show icon.
+   */
+  boolean isDisplayIcon();
+
 }

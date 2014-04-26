@@ -20,22 +20,22 @@ package org.jspresso.framework.gui.remote;
 
 /**
  * A remote tree component.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
 public class RTree extends RComponent {
 
   private static final long serialVersionUID = 7886711955466326634L;
 
-  private boolean           expanded;
-  private RAction           rowAction;
+  private boolean expanded;
+  private RAction rowAction;
+  private boolean displayIcon;
 
   /**
    * Constructs a new {@code RTreeComponent} instance.
    *
-   * @param guid
-   *          the guid.
+   * @param guid      the guid.
    */
   public RTree(String guid) {
     super(guid);
@@ -51,7 +51,7 @@ public class RTree extends RComponent {
 
   /**
    * Gets the rowAction.
-   * 
+   *
    * @return the rowAction.
    */
   public RAction getRowAction() {
@@ -60,7 +60,7 @@ public class RTree extends RComponent {
 
   /**
    * Gets the expanded.
-   * 
+   *
    * @return the expanded.
    */
   public boolean isExpanded() {
@@ -69,9 +69,8 @@ public class RTree extends RComponent {
 
   /**
    * Sets the expanded.
-   * 
-   * @param expanded
-   *          the expanded to set.
+   *
+   * @param expanded      the expanded to set.
    */
   public void setExpanded(boolean expanded) {
     this.expanded = expanded;
@@ -79,11 +78,28 @@ public class RTree extends RComponent {
 
   /**
    * Sets the rowAction.
-   * 
-   * @param rowAction
-   *          the rowAction to set.
+   *
+   * @param rowAction      the rowAction to set.
    */
   public void setRowAction(RAction rowAction) {
     this.rowAction = rowAction;
+  }
+
+  /**
+   * Is display icon.
+   *
+   * @return the boolean
+   */
+  public boolean isDisplayIcon() {
+    return displayIcon;
+  }
+
+  /**
+   * Sets display icon.
+   *
+   * @param displayIcon the display icon
+   */
+  public void setDisplayIcon(boolean displayIcon) {
+    this.displayIcon = displayIcon;
   }
 }

@@ -28,6 +28,8 @@ public class RList extends RCollectionComponent {
 
   private static final long serialVersionUID = -1926261840192373120L;
 
+  private boolean displayIcon;
+
   /**
    * Constructs a new {@code RList} instance.
    *
@@ -44,5 +46,23 @@ public class RList extends RCollectionComponent {
    */
   public RList() {
     // For serialization support
+  }
+
+  /**
+   * Is display icon.
+   *
+   * @return the boolean
+   */
+  public boolean isDisplayIcon() {
+    return displayIcon;
+  }
+
+  /**
+   * Sets display icon.
+   *
+   * @param displayIcon the display icon
+   */
+  public void setDisplayIcon(boolean displayIcon) {
+    this.displayIcon = displayIcon;
   }
 }

@@ -28,10 +28,6 @@ import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.gui.IconProvider;
 import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicCompositeTreeLevelDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicSimpleTreeLevelDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
  * This descriptor is use to design a tree view. The way to define a tree view
@@ -41,8 +37,8 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
  * node collection can be secured by using role-based authorization (i.e.
  * {@code grantedRoles}) on its descriptor.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
 public abstract class AbstractTreeViewDescriptor extends BasicViewDescriptor implements ITreeViewDescriptor {
 
@@ -53,7 +49,15 @@ public abstract class AbstractTreeViewDescriptor extends BasicViewDescriptor imp
   private int maxDepth = 10;
   private String               renderedProperty;
   private ITreeLevelDescriptor rootSubtreeDescriptor;
-  private IAction itemSelectionAction;
+  private IAction              itemSelectionAction;
+  private boolean              displayIcon;
+
+  /**
+   * Instantiates a new Abstract tree view descriptor.
+   */
+  public AbstractTreeViewDescriptor() {
+    displayIcon = true;
+  }
 
   /**
    * {@inheritDoc}
@@ -118,7 +122,7 @@ public abstract class AbstractTreeViewDescriptor extends BasicViewDescriptor imp
    * nodes. For instance, if the child tree level is mapped to a collection
    * (collA) containing 5 elements (collA_Elt-1 to 5), the tree would look like
    * :
-   *
+   * <p/>
    * <pre>
    * rootItem
    *   coll<b>A</b>_Elt-<b>1</b>
@@ -127,17 +131,17 @@ public abstract class AbstractTreeViewDescriptor extends BasicViewDescriptor imp
    *   coll<b>A</b>_Elt-<b>4</b>
    *   coll<b>A</b>_Elt-<b>5</b>
    * </pre>
-   *
+   * <p/>
    * In the example above, you should notice that there is no need for the tree
    * to install an intermediary node to visually group the collection elements
    * since the collection is alone on its level.
-   * <p>
+   * <p/>
    * This property is only used if the {@code rootSubtreeDescriptor} is not
    * explicitly set. In the latter case, nested subtrees are determined from
    * the {@code rootSubtreeDescriptor}.
    *
    * @param childDescriptor
-   *          the childDescriptor to set.
+   *     the childDescriptor to set.
    */
   public void setChildDescriptor(ITreeLevelDescriptor childDescriptor) {
     this.childDescriptor = childDescriptor;
@@ -149,7 +153,7 @@ public abstract class AbstractTreeViewDescriptor extends BasicViewDescriptor imp
    * nodes (subtrees). For instance, if the children tree levels are mapped to 2
    * collection properties (collA, collB) each containing 3 elements
    * (collA_Elt-1 to 3 and collB_Elt-1 to 3), the tree would look like :
-   *
+   * <p/>
    * <pre>
    * rootItem
    *   <i>collA</i>
@@ -161,20 +165,19 @@ public abstract class AbstractTreeViewDescriptor extends BasicViewDescriptor imp
    *     coll<b>B</b>_Elt-<b>2</b>
    *     coll<b>B</b>_Elt-<b>3</b>
    * </pre>
-   *
+   * <p/>
    * In the example above, you should notice intermediate collection property
    * grouping nodes (collA and collB in italic). They automatically appeared to
    * clearly group the tree nodes belonging to the different collections.
-   * <p>
+   * <p/>
    * This property is only used if the {@code rootSubtreeDescriptor} is not
    * explicitly set. In the latter case, nested subtrees are determined from
    * the {@code rootSubtreeDescriptor}.
    *
    * @param childrenDescriptors
-   *          the childrenDescriptor to set.
+   *     the childrenDescriptor to set.
    */
-  public void setChildrenDescriptors(
-      List<ITreeLevelDescriptor> childrenDescriptors) {
+  public void setChildrenDescriptors(List<ITreeLevelDescriptor> childrenDescriptors) {
     this.childrenDescriptors = childrenDescriptors;
     this.childDescriptor = null;
   }
@@ -187,11 +190,11 @@ public abstract class AbstractTreeViewDescriptor extends BasicViewDescriptor imp
    * URL provider allows to implement finer rules like using different icons
    * based on the underlying object state. There is a single method to implement
    * to achieve this :
-   * <p>
+   * <p/>
    * {@code String getIconImageURLForObject(Object userObject);}
    *
    * @param iconImageURLProvider
-   *          the iconImageURLProvider to set.
+   *     the iconImageURLProvider to set.
    */
   public void setIconImageURLProvider(IconProvider iconImageURLProvider) {
     this.iconImageURLProvider = iconImageURLProvider;
@@ -202,9 +205,9 @@ public abstract class AbstractTreeViewDescriptor extends BasicViewDescriptor imp
    * recursively, i.e. a tree level belongs to its own children hierarchy.
    * Default value is <i>10</i>, meaning that a maximum number of 10 levels can
    * be nested.
-   * 
+   *
    * @param maxDepth
-   *          the maxDepth to set.
+   *     the maxDepth to set.
    */
   public void setMaxDepth(int maxDepth) {
     this.maxDepth = maxDepth;
@@ -213,13 +216,13 @@ public abstract class AbstractTreeViewDescriptor extends BasicViewDescriptor imp
   /**
    * This property allows to define the model property used to label the root
    * node.
-   * <p>
+   * <p/>
    * This property is only used if the {@code rootSubtreeDescriptor} is not
    * explicitly set. In the latter case, {@code renderedProperty} is
    * determined from the {@code rootSubtreeDescriptor}.
    *
    * @param renderedProperty
-   *          the renderedProperty to set.
+   *     the renderedProperty to set.
    */
   public void setRenderedProperty(String renderedProperty) {
     this.renderedProperty = renderedProperty;
@@ -239,10 +242,9 @@ public abstract class AbstractTreeViewDescriptor extends BasicViewDescriptor imp
    * {@code rootSubtreeDescriptor}.
    *
    * @param rootSubtreeDescriptor
-   *          the rootSubtreeDescriptor to set.
+   *     the rootSubtreeDescriptor to set.
    */
-  public void setRootSubtreeDescriptor(
-      ITreeLevelDescriptor rootSubtreeDescriptor) {
+  public void setRootSubtreeDescriptor(ITreeLevelDescriptor rootSubtreeDescriptor) {
     this.rootSubtreeDescriptor = rootSubtreeDescriptor;
   }
 
@@ -261,9 +263,29 @@ public abstract class AbstractTreeViewDescriptor extends BasicViewDescriptor imp
    * view.
    *
    * @param itemSelectionAction
-   *          the itemSelectionAction to set.
+   *     the itemSelectionAction to set.
    */
   public void setItemSelectionAction(IAction itemSelectionAction) {
     this.itemSelectionAction = itemSelectionAction;
+  }
+
+  /**
+   * Gets whether the tree view should be created expanded.
+   *
+   * @return true if the tree view should be created expanded.
+   */
+  @Override
+  public boolean isDisplayIcon() {
+    return displayIcon;
+  }
+
+  /**
+   * Configures if the tree view should show icon based on the icon image url provider. Defaults to {@code true}.
+   *
+   * @param displayIcon
+   *     the show icon
+   */
+  public void setDisplayIcon(boolean displayIcon) {
+    this.displayIcon = displayIcon;
   }
 }

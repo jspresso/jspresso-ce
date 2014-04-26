@@ -17,6 +17,12 @@ qx.Class.define("org.jspresso.framework.gui.remote.RList", {
 
   construct: function () {
     this.base(arguments);
+  },
+
+  properties: {
+    displayIcon: {
+      check: "Boolean"
+    }
   }
 
 });
