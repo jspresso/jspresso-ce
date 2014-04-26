@@ -42,6 +42,9 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
         }
       }
       var contentHeight = qx.bom.Label.getHtmlSize(cellInfo.value).height;
+      if (contentHeight > 150) {
+        contentHeight = 150;
+      }
       if (this.__table.getRowHeight() < contentHeight) {
         this.__table.setRowHeight(contentHeight + 4);
       }
