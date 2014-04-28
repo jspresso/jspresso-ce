@@ -433,6 +433,10 @@ public class DefaultFlexViewFactory {
     return new SelectionTrackingTree();
   }
 
+  public function createTreeItemRenderer():ClassFactory {
+    return new ClassFactory(RemoteValueTreeItemRenderer);
+  }
+
   public function createComboBoxComponent():RIconComboBox {
     return new RIconComboBox();
   }
@@ -880,7 +884,7 @@ public class DefaultFlexViewFactory {
     tree.labelField = "value";
     tree.dataTipField = "description";
     tree.dataDescriptor = new RCVSDataDescriptor();
-    var itemRenderer:ClassFactory = new ClassFactory(RemoteValueTreeItemRenderer);
+    var itemRenderer:ClassFactory = createTreeItemRenderer();
     itemRenderer.properties = {displayIcon: remoteTree.displayIcon};
     tree.itemRenderer = itemRenderer;
     tree.dataProvider = remoteTree.state;
@@ -892,9 +896,6 @@ public class DefaultFlexViewFactory {
       tree.addEventListener(FlexEvent.CREATION_COMPLETE, function (event:FlexEvent):void {
         expandItem(tree, remoteTree.state as RemoteCompositeValueState, true);
       });
-      //        tree.addEventListener(FlexEvent.UPDATE_COMPLETE, function(event:FlexEvent):void {
-      //            expandItem(tree, remoteTree.state as RemoteCompositeValueState, true);
-      //          });
     } else {
       tree.addEventListener(FlexEvent.CREATION_COMPLETE, function (event:FlexEvent):void {
         expandItem(tree, remoteTree.state as RemoteCompositeValueState, false);
@@ -1245,7 +1246,7 @@ public class DefaultFlexViewFactory {
       comboBox.showIcon = hasIcon;
       bindComboBox(comboBox, remoteComboBox);
 
-      var itemRenderer:ClassFactory = new ClassFactory(RIconListItemRenderer);
+      var itemRenderer:ClassFactory = createComboBoxItemRenderer();
       itemRenderer.properties = {labels: remoteComboBox.translations, icons: remoteComboBox.icons, iconTemplate: _iconTemplate, showIcon: hasIcon};
       comboBox.itemRenderer = itemRenderer;
 
@@ -1264,6 +1265,10 @@ public class DefaultFlexViewFactory {
       comboBox.minWidth = comboBox.maxWidth / 2;
       return comboBox;
     }
+  }
+
+  protected function createComboBoxItemRenderer():ClassFactory {
+    return new ClassFactory(RIconListItemRenderer);
   }
 
   protected function bindComboBox(comboBox:RIconComboBox, remoteComboBox:RComboBox):void {
@@ -2236,7 +2241,7 @@ public class DefaultFlexViewFactory {
       list.cumulativeSelection = true;
     }
 
-    var itemRenderer:ClassFactory = new ClassFactory(RemoteValueListItemRenderer);
+    var itemRenderer:ClassFactory = createListItemRenderer();
     itemRenderer.properties = {iconTemplate: _iconTemplate, displayIcon: remoteList.displayIcon};
     list.itemRenderer = itemRenderer;
 
@@ -2250,6 +2255,10 @@ public class DefaultFlexViewFactory {
       });
     }
     return list;
+  }
+
+  protected function createListItemRenderer():ClassFactory {
+    return new ClassFactory(RemoteValueListItemRenderer);
   }
 
   protected function bindList(list:List, state:RemoteCompositeValueState):void {
@@ -2509,7 +2518,7 @@ public class DefaultFlexViewFactory {
         }
       }
 
-      var headerRenderer:ClassFactory = new ClassFactory(DgHeaderItemRenderer);
+      var headerRenderer:ClassFactory = createDataGridHeaderRenderer();
       headerRenderer.properties = { index: i + 1,
         toolTip: editorComponent.toolTip,
         viewFactory: this,
@@ -2587,6 +2596,10 @@ public class DefaultFlexViewFactory {
     table.minWidth = 0;
     table.minHeight = table.headerHeight * 2;
     return table;
+  }
+
+  protected function createDataGridHeaderRenderer():ClassFactory {
+    return new ClassFactory(DgHeaderItemRenderer);
   }
 
   protected function bindTable(table:EnhancedDataGrid, remoteTable:RTable):void {
