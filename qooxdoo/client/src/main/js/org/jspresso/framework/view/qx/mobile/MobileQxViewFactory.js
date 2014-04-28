@@ -809,11 +809,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createComboBox: function (remoteComboBox) {
       var comboBox = new qx.ui.mobile.form.SelectBox();
+      comboBox.setNullable(false);
       comboBox.setPlaceholder(remoteComboBox.getLabel());
       var cbModel = new qx.data.Array();
       for (var i = 0; i < remoteComboBox.getValues().length; i++) {
         var value = remoteComboBox.getValues()[i];
-        ;
         var tr = remoteComboBox.getTranslations()[i];
         if (value == "") {
           // tr = remoteComboBox.getLabel();
