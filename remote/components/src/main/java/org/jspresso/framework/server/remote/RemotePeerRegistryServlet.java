@@ -24,6 +24,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import javax.servlet.http.HttpServlet;
@@ -203,7 +204,7 @@ public class RemotePeerRegistryServlet extends HttpServlet {
       inputStream = new BufferedInputStream(new ByteArrayInputStream((byte[]) stateValue));
       response.setContentLength(((byte[]) stateValue).length);
     } else if (stateValue != null) {
-      inputStream = new BufferedInputStream(new ByteArrayInputStream(stateValue.toString().getBytes("UTF-8")));
+      inputStream = new BufferedInputStream(new ByteArrayInputStream(stateValue.toString().getBytes(StandardCharsets.UTF_8.name())));
     }
     if (inputStream != null) {
       BufferedOutputStream outputStream = new BufferedOutputStream(response.getOutputStream());

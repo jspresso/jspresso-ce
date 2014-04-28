@@ -19,6 +19,7 @@
 package org.jspresso.framework.application.charting.frontend.action.server;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -77,7 +78,7 @@ public class DisplayChartAction<E, F, G> extends AbstractChartAction<E, F, G> {
     IResource resource;
     try {
       resource = new MemoryResource(null, "text/xml", StringUtils
-          .prependUtf8Bom(chartData).getBytes("UTF-8"));
+          .prependUtf8Bom(chartData).getBytes(StandardCharsets.UTF_8.name()));
     } catch (UnsupportedEncodingException ex) {
       throw new ActionException(ex);
     }

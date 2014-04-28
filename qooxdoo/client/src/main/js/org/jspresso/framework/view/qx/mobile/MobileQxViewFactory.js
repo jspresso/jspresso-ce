@@ -801,11 +801,16 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       comboBox.setPlaceholder(remoteComboBox.getLabel());
       var cbModel = new qx.data.Array();
       for (var i = 0; i < remoteComboBox.getValues().length; i++) {
+        var value = remoteComboBox.getValues()[i];
+        ;
         var tr = remoteComboBox.getTranslations()[i];
-        if (tr == " ") {
-          tr = String.fromCharCode(0x00A0);
+        if (value == "") {
+          // tr = remoteComboBox.getLabel();
+          // tr = String.fromCharCode(0x00A0);
+          comboBox.setNullable(true);
+        } else {
+          cbModel.push(tr);
         }
-        cbModel.push(tr);
       }
       comboBox.setModel(cbModel);
       this._bindComboBox(remoteComboBox, comboBox);
@@ -825,11 +830,25 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var modelController = new qx.data.controller.Object(state);
       modelController.addTarget(comboBox, "value", "value", true, {
         converter: function (modelValue, model, source, target) {
-          return model.getItem(remoteComboBox.getValues().indexOf(modelValue));
+          if (!modelValue) {
+            return "";
+          }
+          var offset = 0;
+          if (comboBox.getNullable()) {
+            offset = 1;
+          }
+          return model.getItem(remoteComboBox.getValues().indexOf(modelValue) - offset);
         }
       }, {
         converter: function (modelValue, model, source, target) {
-          return remoteComboBox.getValues()[comboBox.getModel().indexOf(modelValue)];
+          if (!modelValue) {
+            return "";
+          }
+          var offset = 0;
+          if (comboBox.getNullable()) {
+            offset = 1;
+          }
+          return remoteComboBox.getValues()[comboBox.getModel().indexOf(modelValue) + offset];
         }
       });
       modelController.addTarget(comboBox, "enabled", "writable", false);

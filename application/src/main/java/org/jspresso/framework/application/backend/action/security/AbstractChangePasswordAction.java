@@ -4,6 +4,7 @@
 package org.jspresso.framework.application.backend.action.security;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -222,7 +223,7 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
     if (getDigestAlgorithm() != null) {
       MessageDigest md = MessageDigest.getInstance(getDigestAlgorithm());
       md.reset();
-      md.update(new String(newPassword).getBytes("UTF-8"));
+      md.update(new String(newPassword).getBytes(StandardCharsets.UTF_8.name()));
 
       byte[] digest = md.digest();
       return getPasswordStorePrefix() + encode(digest);
