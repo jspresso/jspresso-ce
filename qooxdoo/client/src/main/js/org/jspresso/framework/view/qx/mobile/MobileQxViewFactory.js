@@ -21,10 +21,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
   statics: {
     bindListItem: function (item, state, selected, displayIcon) {
       var children = state.getChildren();
-      if (state.getValue()) {
-        item.setTitle(state.getValue());
-      } else if (children.length > 1) {
+      if (children.length > 1) {
         item.setTitle(children.getItem(1).getValue());
+      } else if (state.getValue()) {
+        item.setTitle(state.getValue());
       } else {
         item.setTitle("");
       }
