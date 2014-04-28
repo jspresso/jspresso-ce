@@ -196,6 +196,7 @@
 
   <bean id="filterableBeanCollectionModuleView" parent="decoratedView"
         class="org.jspresso.framework.view.descriptor.mobile.MobileListViewDescriptor" scope="prototype">
+    <property name="borderType" value="TITLED" />
   </bean>
 
   <bean id="lovResultViewDescriptorFactoryBase"

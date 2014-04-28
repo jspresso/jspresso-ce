@@ -272,6 +272,7 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
       h = getFrameHeight();
     }
     initCommand.setSize(new Dimension(w, h));
+    initCommand.setApplicationName(getI18nName(this, getLocale()));
     return initCommand;
   }
 

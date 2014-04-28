@@ -205,12 +205,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      * @param message {String}
      * @param remoteDialogView {org.jspresso.framework.gui.remote.RComponent}
      * @param icon {org.jspresso.framework.gui.remote.RIcon}
-     * @param buttons {qx.ui.mobile.form.Button[]}
+     * @param actions {org.jspresso.framework.gui.remote.RAction[] | qx.ui.mobile.form.Button[]}
      * @param useCurrent {Boolean}
      * @param dimension {org.jspresso.framework.util.gui.Dimension}
      * @return {undefined}
      */
-    _popupDialog: function (title, message, remoteDialogView, icon, buttons, useCurrent, dimension) {
+    _popupDialog: function (title, message, remoteDialogView, icon, actions, useCurrent, dimension) {
       useCurrent = (typeof useCurrent == 'undefined') ? false : useCurrent;
 
       var dialogView = remoteDialogView;
@@ -224,8 +224,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
 
       dialogContent.add(dialogMessage);
       dialogContent.add(dialogView);
-      for (var i = 0; i < buttons.length; i++) {
-        dialogContent.add(buttons[i]);
+      if (actions[0] instanceof qx.ui.mobile.form.Button) {
+        for (var i = 0; i < actions.length; i++) {
+          dialogContent.add(actions[i]);
+        }
+      } else {
+        dialogContent.add(this._getViewFactory().createToolBarFromActions(actions, 4, null));
       }
 
       var dialogPage = null;
@@ -338,7 +342,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       this.__workspacesMasterPage.addListener("initialize", function (e) {
         this.__workspacesMasterPage.getContent().add(workspaceNavigator);
       }, this);
-      this.__workspacesMasterPage.setTitle(this.translate("Workspaces"));
+      this.__workspacesMasterPage.setTitle(this._getName());
       this.__manager.addMaster(this.__workspacesMasterPage);
 
       if (!this.__isTablet) {
@@ -556,10 +560,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      * @return {undefined}
      */
     _handleDialogCommand: function (abstractDialogCommand) {
-      var dialogButtons = [];
-      for (var i = 0; i < abstractDialogCommand.getActions().length; i++) {
-        dialogButtons.push(this._getViewFactory().createAction(abstractDialogCommand.getActions()[i]));
-      }
       var dialogView;
       var icon;
       if (abstractDialogCommand
@@ -569,7 +569,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         dialogView = dialogCommand.getView();
         icon = dialogCommand.getView().getIcon();
       }
-      this._popupDialog(abstractDialogCommand.getTitle(), null, dialogView, icon, dialogButtons,
+      this._popupDialog(abstractDialogCommand.getTitle(), null, dialogView, icon, abstractDialogCommand.getActions(),
           abstractDialogCommand.getUseCurrent(), abstractDialogCommand.getDimension());
     },
 

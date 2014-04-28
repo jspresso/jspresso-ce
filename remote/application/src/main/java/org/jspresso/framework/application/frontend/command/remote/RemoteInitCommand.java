@@ -24,8 +24,8 @@ import org.jspresso.framework.util.gui.Dimension;
 
 /**
  * Displays the application frame on the client peer.
- * 
- * @version $LastChangedRevision$
+ *
+ * @version $LastChangedRevision : 7847 $
  * @author Vincent Vandenschrick
  */
 public class RemoteInitCommand extends RemoteCommand {
@@ -40,10 +40,11 @@ public class RemoteInitCommand extends RemoteCommand {
   private RAction           exitAction;
   private String[]          workspaceNames;
   private Dimension         size;
+  private String            applicationName;
 
   /**
    * Gets the actions.
-   * 
+   *
    * @return the actions.
    */
   public RActionList[] getActions() {
@@ -52,7 +53,7 @@ public class RemoteInitCommand extends RemoteCommand {
 
   /**
    * Gets the helpActions.
-   * 
+   *
    * @return the helpActions.
    */
   public RActionList[] getHelpActions() {
@@ -61,7 +62,7 @@ public class RemoteInitCommand extends RemoteCommand {
 
   /**
    * Gets the workspaceActions.
-   * 
+   *
    * @return the workspaceActions.
    */
   public RActionList getWorkspaceActions() {
@@ -70,7 +71,7 @@ public class RemoteInitCommand extends RemoteCommand {
 
   /**
    * Gets the workspaceNames.
-   * 
+   *
    * @return the workspaceNames.
    */
   public String[] getWorkspaceNames() {
@@ -79,9 +80,8 @@ public class RemoteInitCommand extends RemoteCommand {
 
   /**
    * Sets the actions.
-   * 
-   * @param actions
-   *          the actions to set.
+   *
+   * @param actions           the actions to set.
    */
   public void setActions(RActionList... actions) {
     this.actions = actions;
@@ -89,9 +89,8 @@ public class RemoteInitCommand extends RemoteCommand {
 
   /**
    * Sets the helpActions.
-   * 
-   * @param helpActions
-   *          the helpActions to set.
+   *
+   * @param helpActions           the helpActions to set.
    */
   public void setHelpActions(RActionList... helpActions) {
     this.helpActions = helpActions;
@@ -99,9 +98,8 @@ public class RemoteInitCommand extends RemoteCommand {
 
   /**
    * Sets the workspaceActions.
-   * 
-   * @param workspaceActions
-   *          the workspaceActions to set.
+   *
+   * @param workspaceActions           the workspaceActions to set.
    */
   public void setWorkspaceActions(RActionList workspaceActions) {
     this.workspaceActions = workspaceActions;
@@ -109,9 +107,8 @@ public class RemoteInitCommand extends RemoteCommand {
 
   /**
    * Sets the workspaceNames.
-   * 
-   * @param workspaceNames
-   *          the workspaceNames to set.
+   *
+   * @param workspaceNames           the workspaceNames to set.
    */
   public void setWorkspaceNames(String... workspaceNames) {
     this.workspaceNames = workspaceNames;
@@ -119,7 +116,7 @@ public class RemoteInitCommand extends RemoteCommand {
 
   /**
    * Gets the navigationActions.
-   * 
+   *
    * @return the navigationActions.
    */
   public RActionList[] getNavigationActions() {
@@ -128,9 +125,8 @@ public class RemoteInitCommand extends RemoteCommand {
 
   /**
    * Sets the navigationActions.
-   * 
-   * @param navigationActions
-   *          the navigationActions to set.
+   *
+   * @param navigationActions           the navigationActions to set.
    */
   public void setNavigationActions(RActionList... navigationActions) {
     this.navigationActions = navigationActions;
@@ -138,7 +134,7 @@ public class RemoteInitCommand extends RemoteCommand {
 
   /**
    * Gets the exitAction.
-   * 
+   *
    * @return the exitAction.
    */
   public RAction getExitAction() {
@@ -147,9 +143,8 @@ public class RemoteInitCommand extends RemoteCommand {
 
   /**
    * Sets the exitAction.
-   * 
-   * @param exitAction
-   *          the exitAction to set.
+   *
+   * @param exitAction           the exitAction to set.
    */
   public void setExitAction(RAction exitAction) {
     this.exitAction = exitAction;
@@ -157,7 +152,7 @@ public class RemoteInitCommand extends RemoteCommand {
 
   /**
    * Gets the secondaryActions.
-   * 
+   *
    * @return the secondaryActions.
    */
   public RActionList[] getSecondaryActions() {
@@ -166,9 +161,8 @@ public class RemoteInitCommand extends RemoteCommand {
 
   /**
    * Sets the secondaryActions.
-   * 
-   * @param secondaryActions
-   *          the secondaryActions to set.
+   *
+   * @param secondaryActions           the secondaryActions to set.
    */
   public void setSecondaryActions(RActionList... secondaryActions) {
     this.secondaryActions = secondaryActions;
@@ -176,7 +170,7 @@ public class RemoteInitCommand extends RemoteCommand {
 
   /**
    * Gets the size.
-   * 
+   *
    * @return the size.
    */
   public Dimension getSize() {
@@ -185,11 +179,28 @@ public class RemoteInitCommand extends RemoteCommand {
 
   /**
    * Sets the size.
-   * 
-   * @param size
-   *          the size to set.
+   *
+   * @param size           the size to set.
    */
   public void setSize(Dimension size) {
     this.size = size;
+  }
+
+  /**
+   * Gets application name.
+   *
+   * @return the application name
+   */
+  public String getApplicationName() {
+    return applicationName;
+  }
+
+  /**
+   * Sets application name.
+   *
+   * @param applicationName the application name
+   */
+  public void setApplicationName(String applicationName) {
+    this.applicationName = applicationName;
   }
 }

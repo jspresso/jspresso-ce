@@ -141,7 +141,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         var hBox = new qx.ui.mobile.layout.HBox();
         hBox.setAlignY("middle");
         var actionField = new qx.ui.mobile.container.Composite(hBox);
-        var toolBar = this._createToolBarFromActions(actions, maxToolbarActionCount, modelController);
+        var toolBar = this.createToolBarFromActions(actions, maxToolbarActionCount, modelController);
         toolBar.removeCssClass("toolbar");
         var buttons = toolBar.getChildren();
         for (var i = 0; i < buttons.length; i++) {
@@ -211,7 +211,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @param modelController {qx.data.controller.Object}
      * @return {qx.ui.mobile.toolbar.ToolBar}
      */
-    _createToolBarFromActions: function (actions, maxToolbarActionCount, modelController) {
+    createToolBarFromActions: function (actions, maxToolbarActionCount, modelController) {
       var extraActions = [];
       var toolBar = new qx.ui.mobile.toolbar.ToolBar();
       var actionComponent;
@@ -244,7 +244,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var maxToolbarActionCount = 4;
       var actions = this._extractAllActions(remoteComponent.getActionLists());
       if (actions.length > 0) {
-        var toolBar = this._createToolBarFromActions(actions, maxToolbarActionCount, null);
+        var toolBar = this.createToolBarFromActions(actions, maxToolbarActionCount, null);
         if (component instanceof qx.ui.mobile.page.Page) {
           component.addListener("initialize", function (e) {
             component.add(toolBar);
@@ -452,6 +452,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         if (headerComponent) {
           navPage.getContent().add(headerComponent);
         }
+        this._addSectionHeader(navPage.getContent(), remoteNavPage.getSelectionView());
         navPage.getContent().add(selectionComponent);
         var actionLists = remoteNavPage.getSelectionView().getActionLists();
         if (actionLists) {
@@ -668,6 +669,15 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       button.addListener("tap", listener, that);
     },
 
+    _addSectionHeader: function (container, remoteSection) {
+      if (remoteSection.getBorderType() == "TITLED" && remoteSection.getLabel()) {
+        var header = new qx.ui.mobile.form.Row();
+        header.addCssClass("form-row-group-title");
+        header.add(new qx.ui.mobile.basic.Label(remoteSection.getLabel()));
+        container.add(header);
+      }
+    },
+
     /**
      * @return {qx.ui.mobile.core.Widget}
      * @param remoteForm {org.jspresso.framework.gui.remote.RForm}
@@ -675,6 +685,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     _createForm: function (remoteForm) {
       var form = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
       form.addCssClass("form");
+      this._addSectionHeader(form, remoteForm);
       var top = new qx.ui.mobile.form.Row();
       top.addCssClass("form-row-group-first");
       form.add(top);

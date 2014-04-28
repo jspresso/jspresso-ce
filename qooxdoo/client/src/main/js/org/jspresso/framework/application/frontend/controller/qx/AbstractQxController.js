@@ -70,11 +70,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     __translations: null,
     /** @type {function} */
     __nextActionCallback: null,
-    /** @type {String} */
-    __lastReceivedSnapshotId: null,
     /** @type {Array} */
     _dialogStack: null,
-
+    /** @type {String} */
+    __applicationName: null,
 
     _createViewFactory: function () {
       throw new Error("_createViewFactory is abstract");
@@ -831,9 +830,14 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      * @return {undefined}
      */
     _handleInitCommand: function (initCommand) {
+      this.__applicationName = initCommand.getApplicationName();
       this._initApplicationFrame(initCommand.getWorkspaceNames(), initCommand.getWorkspaceActions(),
           initCommand.getExitAction(), initCommand.getNavigationActions(), initCommand.getActions(),
           initCommand.getSecondaryActions(), initCommand.getHelpActions(), initCommand.getSize());
+    },
+
+    _getName:function() {
+      return this.__applicationName;
     }
   }
 });

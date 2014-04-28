@@ -30,6 +30,7 @@ public class RemoteInitCommand extends RemoteCommand {
   private var _workspaceNames:Array;
   private var _exitAction:RAction;
   private var _size:Dimension;
+  private var _applicationName:String;
 
   public function RemoteInitCommand() {
     //default constructor.
@@ -99,6 +100,12 @@ public class RemoteInitCommand extends RemoteCommand {
     _size = value;
   }
 
+  public function get applicationName():String {
+    return _applicationName;
+  }
 
+  public function set applicationName(value:String):void {
+    _applicationName = value;
+  }
 }
 }

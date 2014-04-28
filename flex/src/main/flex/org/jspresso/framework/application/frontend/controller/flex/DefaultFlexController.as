@@ -153,11 +153,11 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
   private var _fakeDialog:Panel;
   private var _translations:Object;
   private var _nextActionCallback:Function;
-
   private var _postponedChildrenNotificationBuffer:Array;
   private var _postponedSelectionCommands:Object;
   private var _postponedEditionCommands:Array;
   private var _userGeoLocation:Object;
+  private var _applicationName:String;
 
 
   public function DefaultFlexController(remoteController:RemoteObject, userLanguage:String) {
@@ -396,6 +396,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
       }
     } else if (command is RemoteInitCommand) {
       var initCommand:RemoteInitCommand = command as RemoteInitCommand;
+      this._applicationName = initCommand.applicationName;
       linkBrowserHistory();
       initApplicationFrame(initCommand.workspaceNames, initCommand.workspaceActions, initCommand.exitAction,
                            initCommand.navigationActions, initCommand.actions, initCommand.secondaryActions,
@@ -1429,6 +1430,10 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
 
   public function queryUserGeoLocation():void {
     ExternalInterface.call("getGeoLocation");
+  }
+
+  protected function get name():String {
+    return _applicationName;
   }
 }
 }
