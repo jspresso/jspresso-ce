@@ -1639,7 +1639,12 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           this._getActionHandler().execute(remoteImageComponent.getAction());
         }, this);
       }
-      return imageComponent;
+      var wrapper = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox().set({
+        alignX: "center",
+        alignY: "middle"
+      }));
+      wrapper.add(imageComponent);
+      return wrapper;
     },
 
     /**

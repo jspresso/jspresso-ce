@@ -34,6 +34,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MapNavigationPage", {
 
   members: {
     __mapUri: "http://www.openlayers.org/api/OpenLayers.js",
+    // __mapUri: "file:///Applications/envdev/OpenLayers-2.13.1/OpenLayers.debug.js",
     __map: null,
     __markers: null,
     __myPositionMarker: null,
@@ -71,6 +72,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MapNavigationPage", {
       }
     },
 
+
+    // overridden
+    _createContent: function () {
+      return null;
+    },
 
     // overridden
     _createScrollContainer: function () {
