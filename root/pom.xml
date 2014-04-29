@@ -30,7 +30,7 @@
     <ldapbp.version>1.0</ldapbp.version>
     <hibernate.version>4.3.4.Final</hibernate.version>
     <jbosssx.version>4.0.20.Final</jbosssx.version>
-    <qooxdoo.version>3.5</qooxdoo.version>
+    <qooxdoo.version>3.6-SNAPSHOT</qooxdoo.version>
     <jasper.version>5.1.2</jasper.version>
     <jfree.version>1.0.13</jfree.version>
     <itext.version>4.2.1</itext.version>
@@ -62,6 +62,7 @@
     <freemarker.version>2.3.20</freemarker.version>
     <fusioncharts.version>2.2</fusioncharts.version>
     <qx-collapsable-panel.version>0.6</qx-collapsable-panel.version>
+    <qx-htmlarea.version>1.0</qx-htmlarea.version>
     <qx-upload-widget.version>0.6</qx-upload-widget.version>
     <qx-dark-theme.version>0.6</qx-dark-theme.version>
     <qx-java-rpc.version>0.8</qx-java-rpc.version>
@@ -448,6 +449,12 @@
         <groupId>org.qooxdoo</groupId>
         <artifactId>qooxdoo-collapsable-panel</artifactId>
         <version>${qx-collapsable-panel.version}</version>
+        <type>zip</type>
+      </dependency>
+      <dependency>
+        <groupId>org.qooxdoo</groupId>
+        <artifactId>qooxdoo-htmlarea</artifactId>
+        <version>${qx-htmlarea.version}</version>
         <type>zip</type>
       </dependency>
       <dependency>

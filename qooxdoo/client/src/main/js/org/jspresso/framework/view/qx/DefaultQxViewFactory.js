@@ -672,7 +672,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @param remoteHtmlArea {org.jspresso.framework.gui.remote.RHtmlArea}
      */
     _createHtmlEditor: function (remoteHtmlArea) {
-      var htmlEditor = new qx.ui.embed.HtmlArea(null, null, "blank.html");
+      var htmlEditor = new htmlarea.HtmlArea(null, null, "blank.html");
       htmlEditor.setDecorator("main");
       var state = remoteHtmlArea.getState();
       var modelController = new qx.data.controller.Object(state);

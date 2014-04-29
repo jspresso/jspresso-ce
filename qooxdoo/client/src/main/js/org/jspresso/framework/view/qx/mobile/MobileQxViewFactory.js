@@ -654,7 +654,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       } else if (label) {
         button.setShow("label");
       } else {
-        button.setGap(0);
+        //button.setGap(0);
+        //button.removeCssClass("gap");
         button.setShow("icon");
       }
       button.addCssClass("jspresso-button");
@@ -684,7 +685,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createForm: function (remoteForm) {
       var form = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
-      form.addCssClass("form");
+      form.addCssClasses(["form", "single"]);
       this._addSectionHeader(form, remoteForm);
       var top = new qx.ui.mobile.form.Row();
       top.addCssClass("form-row-group-first");
@@ -742,6 +743,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           form.add(row, {flex: 1});
         } else {
           form.add(row);
+        }
+        if (i < remoteForm.getElements().length - 1) {
+          var separator = new qx.ui.mobile.form.Row();
+          separator.addCssClass("form-separation-row");
+          form.add(separator);
         }
       }
       var bottom = new qx.ui.mobile.form.Row();
@@ -1687,9 +1693,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @param component {qx.ui.mobile.core.Widget}
      */
     _decorateWithScrollContainer: function (component) {
-      var scrollContainer = new qx.ui.mobile.container.ScrollComposite();
-      scrollContainer.setFixedHeight(true);
-      scrollContainer.setShowScrollIndicator(false);
+      var scrollContainer = new qx.ui.mobile.container.Scroll();
+      // scrollContainer.setFixedHeight(true);
+      // scrollContainer.setShowScrollIndicator(false);
       scrollContainer.add(component, {
         flex: 1
       });
