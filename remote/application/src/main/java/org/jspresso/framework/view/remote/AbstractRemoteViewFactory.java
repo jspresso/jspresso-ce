@@ -20,6 +20,7 @@ package org.jspresso.framework.view.remote;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -1005,9 +1006,15 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
               if (originalValue instanceof byte[] || scaledWidth != null || scaledHeight != null) {
                 valueForStateUrl = RemotePeerRegistryServlet.computeImageDownloadUrl(state.getGuid(), scaledWidth,
                     scaledHeight);
+                byte[] checksumSource = null;
                 if (originalValue instanceof byte[]) {
+                  checksumSource = ((byte[]) originalValue);
+                } else if (originalValue instanceof String) {
+                  checksumSource = ((String) originalValue).getBytes();
+                }
+                if (checksumSource != null) {
                   Checksum checksumEngine = new CRC32();
-                  checksumEngine.update((byte[]) originalValue, 0, ((byte[]) originalValue).length);
+                  checksumEngine.update(checksumSource, 0, checksumSource.length);
                   // we must add a check sum so that the client knows when the url
                   // content changes.
                   valueForStateUrl += ("&cs=" + checksumEngine.getValue());

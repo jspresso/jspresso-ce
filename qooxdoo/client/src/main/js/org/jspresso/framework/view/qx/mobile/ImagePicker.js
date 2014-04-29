@@ -91,18 +91,20 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImagePicker", {
       // is align to the top right corner of the upload widget and set its
       // font so large that it will cover even really large underlying buttons.
       var css = {
-        position: "absolute",
+        //position: "absolute",
         cursor: "pointer",
         hideFocus: "true",
         opacity: 0,
-        // align to the top right hand corner
         top: '0px',
         right: '0px',
-        // ff ignores the width setting
-        // pick a realy large font size to get
-        // a huge button that covers
-        // the area of the upload button
-        fontSize: '400px'
+        width: '100%',
+        height: '100%'
+        /*,
+         // ff ignores the width setting
+         // pick a realy large font size to get
+         // a huge button that covers
+         // the area of the upload button
+         fontSize: '400px'*/
       };
       input = qx.dom.Element.create('input', {
         type: 'file',
@@ -119,12 +121,16 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImagePicker", {
 
     _createForm: function (submitUrl) {
       var form;
+      var css = {
+        'margin-top': '-30px'
+      };
       form = qx.dom.Element.create('form', {
         method: 'post',
         action: submitUrl,
         enctype: 'multipart/form-data',
         target: this._createIFrameTarget()
       });
+      qx.bom.element.Style.setStyles(form, css, true);
       form.appendChild(this._createInput());
       return form;
     },
