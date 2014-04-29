@@ -36,8 +36,18 @@ qx.Class.define("org.jspresso.framework.state.remote.RemoteValueState", {
       apply: "_applyEventPropagation"
     },
     parent: {
+      nullable: true,
       check: "org.jspresso.framework.state.remote.RemoteCompositeValueState",
       event: "changeParent"
+    }
+  },
+
+  members: {
+    _applyEventPropagation: function (value, old, name) {
+      this.base(arguments, value, old, name);
+      if (this.getParent()) {
+        this.getParent()._applyEventPropagation(value, old, name);
+      }
     }
   }
 });

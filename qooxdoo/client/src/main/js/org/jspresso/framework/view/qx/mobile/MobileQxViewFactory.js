@@ -449,6 +449,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var navPage = new qx.ui.mobile.page.NavigationPage();
       navPage.setTitle(remoteNavPage.getLabel());
       navPage.addListener("initialize", function (e) {
+        this._addSectionHeader(navPage.getContent(), remoteNavPage.getHeaderView());
         if (headerComponent) {
           navPage.getContent().add(headerComponent);
         }
@@ -579,6 +580,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           }, this);
           sections.push(list);
         } else {
+          sections.push(remotePageSection);
           sections.push(pageSection);
         }
       }
@@ -600,7 +602,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       }
       compositePage.addListener("initialize", function (e) {
         for (var i = 0; i < sections.length; i++) {
-          compositePage.getContent().add(sections[i]);
+          if (sections[i] instanceof org.jspresso.framework.gui.remote.RComponent) {
+            this._addSectionHeader(compositePage.getContent(), sections[i]);
+          } else {
+            compositePage.getContent().add(sections[i]);
+          }
         }
       }, this);
       this._addDetailPage(compositePage);
@@ -671,7 +677,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     },
 
     _addSectionHeader: function (container, remoteSection) {
-      if (remoteSection.getBorderType() == "TITLED" && remoteSection.getLabel()) {
+      if (remoteSection && remoteSection.getBorderType() == "TITLED" && remoteSection.getLabel()) {
         var header = new qx.ui.mobile.form.Row();
         header.addCssClass("form-row-group-title");
         header.add(new qx.ui.mobile.basic.Label(remoteSection.getLabel()));
@@ -686,7 +692,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     _createForm: function (remoteForm) {
       var form = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
       form.addCssClasses(["form", "single"]);
-      this._addSectionHeader(form, remoteForm);
       var top = new qx.ui.mobile.form.Row();
       top.addCssClass("form-row-group-first");
       form.add(top);
