@@ -469,7 +469,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         var nextPage = this.createComponent(remoteNextPage);
         selectionComponent.addListener("changeSelection", function (evt) {
           var pageToShow = this._getActualPageToShow(nextPage);
-          if (pageToShow && pageToShow.getVisibility() != "visible") {
+          if (pageToShow /*&& pageToShow.getVisibility() != "visible"*/) {
             this._getActionHandler().showDetailPage(pageToShow);
           }
         }, this);
