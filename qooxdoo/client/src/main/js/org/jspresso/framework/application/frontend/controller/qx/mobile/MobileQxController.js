@@ -68,14 +68,15 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
 
     __routeToPage: function (page, data, animation) {
       var back = false;
+      var currentPage = this.getCurrentPage();
       if (data && data.customData) {
         if (data.customData.animation) {
           animation = data.customData.animation;
         }
         if (data.customData.fromHistory) {
           if (data.customData.action == "back") {
-            if (this.getCurrentPage().getShowBackButton()) {
-              this.getCurrentPage().back();
+            if (currentPage.getShowBackButton()) {
+              currentPage.back();
             }
             return;
           }
@@ -84,6 +85,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         }
       }
       page.show({animation: animation, reverse: back});
+      if (currentPage && currentPage != page) {
+        currentPage.hide();
+      }
     },
 
     /**
