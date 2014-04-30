@@ -96,7 +96,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.MobileApplication",
     main: function () {
       this.base(arguments);
 
-      qx.Class.patch(qx.ui.mobile.basic.Image, org.jspresso.framework.patch.MImage);
+      //qx.Class.patch(qx.ui.mobile.basic.Image, org.jspresso.framework.patch.MImage);
+      qx.Class.patch(qx.ui.mobile.form.Input, org.jspresso.framework.patch.MInput);
       qx.Class.patch(qx.data.Array, org.jspresso.framework.patch.MArray);
 
       // Enable logging in debug variant
