@@ -112,9 +112,9 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    */
   @Override
   public void translate(ITranslationProvider aTranslationProvider, Locale aLocale) {
+    this.translationProvider = aTranslationProvider;
+    this.locale = aLocale;
     for (Object value : values()) {
-      this.translationProvider = aTranslationProvider;
-      this.locale = aLocale;
       if (value instanceof EnumQueryStructure) {
         ((EnumQueryStructure) value).setTranslationProvider(aTranslationProvider);
         ((EnumQueryStructure) value).setLocale(aLocale);
