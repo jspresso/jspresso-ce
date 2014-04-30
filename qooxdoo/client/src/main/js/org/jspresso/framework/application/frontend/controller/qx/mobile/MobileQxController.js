@@ -392,7 +392,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       var messageDialog = new qx.ui.mobile.dialog.Popup(messageDialogContent);
       messageDialog.setTitle(messageCommand.getTitle());
       messageDialog.setModal(true);
-      messageDialog.setHideOnBlockerClick(false);
 
       this._getViewFactory().setIcon(messageDialog, messageCommand.getTitleIcon());
 

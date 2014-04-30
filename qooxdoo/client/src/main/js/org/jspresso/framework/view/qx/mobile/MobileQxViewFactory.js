@@ -469,9 +469,16 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         /** @type {qx.ui.mobile.page.NavigationPage} */
         var nextPage = this.createComponent(remoteNextPage);
         selectionComponent.addListener("changeSelection", function (evt) {
-          var pageToShow = this._getActualPageToShow(nextPage);
-          if (pageToShow /*&& pageToShow.getVisibility() != "visible"*/) {
-            this._getActionHandler().showDetailPage(pageToShow);
+          var oldSelectedIndex = selectionComponent.getUserData("oldSelectedIndex");
+          var newSelectedIndex = evt.getData();
+          selectionComponent.setUserData("oldSelectedIndex", newSelectedIndex);
+          // Only if index did not change, we must force navigation. If not, navigation will be handled by selection
+          // change on server-side,triggering a page change.
+          if (newSelectedIndex == oldSelectedIndex || nextPage instanceof qx.ui.mobile.page.NavigationPage) {
+            var pageToShow = this._getActualPageToShow(nextPage);
+            if (pageToShow) {
+              this._getActionHandler().showDetailPage(pageToShow);
+            }
           }
         }, this);
         this.linkNextPageBackButton(nextPage, navPage, null, null);
@@ -1096,11 +1103,17 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @param selectedCard  {qx.ui.mobile.core.Widget}
      */
     _selectCard: function (cardContainer, selectedCard) {
+      var currentCard = cardContainer.getUserData("currentPage");
       cardContainer.setUserData("currentPage", selectedCard);
       var pageToShow = this._getActualPageToShow(selectedCard);
-      if (pageToShow && pageToShow.getVisibility() != "visible") {
-        //this._getActionHandler().showDetailPage(pageToShow);
-        pageToShow.show();
+      if (selectedCard != currentCard) {
+        if (currentCard) {
+          currentCard.hide();
+        }
+        if (pageToShow) {
+          // this._getActionHandler().showDetailPage(pageToShow);
+          pageToShow.show();
+        }
       }
     },
 
