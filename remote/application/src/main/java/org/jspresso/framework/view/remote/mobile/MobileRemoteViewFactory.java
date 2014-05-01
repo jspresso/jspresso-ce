@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.view.remote.mobile;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +29,8 @@ import java.util.Map;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.remote.mobile.NearElementAction;
+import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
+import org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
@@ -118,7 +122,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
    */
   @Override
   protected ICompositeView<RComponent> createCompositeView(ICompositeViewDescriptor viewDescriptor,
-                                                           IActionHandler actionHandler, Locale locale) {
+                                                           final IActionHandler actionHandler, Locale locale) {
     if (viewDescriptor instanceof IMobileViewDescriptor) {
       ICompositeView<RComponent> view = null;
       if (viewDescriptor instanceof IMobilePageViewDescriptor) {
@@ -165,6 +169,17 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
         }
       }
       bindCompositeView(view);
+      if (view != null && view.getPeer() instanceof RMobileCompositePage
+          && ((RMobileCompositePage) view.getPeer()).getEditAction() != null) {
+        final RAction editAction = ((RMobileCompositePage) view.getPeer()).getEditAction();
+        editAction.setEnabled(view.getConnector().isWritable());
+        view.getConnector().addPropertyChangeListener(IValueConnector.WRITABLE_PROPERTY, new PropertyChangeListener() {
+          @Override
+          public void propertyChange(PropertyChangeEvent evt) {
+            getActionFactory().setActionEnabled(editAction, (Boolean) evt.getNewValue());
+          }
+        });
+      }
       return view;
     }
     throw new IllegalArgumentException(
@@ -244,7 +259,8 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
           staticContext.put(NearElementAction.NAVIGATION_CONNECTOR_KEY, selectionViewConnector);
           staticContext.put(NearElementAction.FETCH_ACTION_KEY, viewDescriptor.getPageEndAction());
 
-          RAction swipeLeftAction = getActionFactory().createAction(getNextElementAction(), actionHandler, view, locale);
+          RAction swipeLeftAction = getActionFactory().createAction(getNextElementAction(), actionHandler, view,
+              locale);
           swipeLeftAction.putValue(IAction.STATIC_CONTEXT_KEY, staticContext);
           nextPage.setSwipeLeftAction(swipeLeftAction);
 

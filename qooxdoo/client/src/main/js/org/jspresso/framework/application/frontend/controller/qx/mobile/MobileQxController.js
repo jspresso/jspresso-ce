@@ -66,6 +66,14 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     /** @type {qx.ui.mobile.page.NavigationPage} */
     __blankPage: null,
 
+    hideCurrentAndShow: function (page, animation, back) {
+      var currentPage = this.getCurrentPage();
+      if (currentPage && currentPage != page && (!this.isTablet() && currentPage != this.__workspacesMasterPage)) {
+        currentPage.hide();
+      }
+      page.show({animation: animation, reverse: back});
+    },
+
     __routeToPage: function (page, data, animation) {
       var back = false;
       var currentPage = this.getCurrentPage();
@@ -84,10 +92,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
           back = true;
         }
       }
-      page.show({animation: animation, reverse: back});
-      if (currentPage && currentPage != page && (!this.isTablet() && currentPage != this.__workspacesMasterPage)) {
-        currentPage.hide();
-      }
+      this.hideCurrentAndShow(page, animation, back);
     },
 
     /**
@@ -188,10 +193,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      * @return {undefined}
      */
     _restart: function () {
+      if (this.getCurrentPage()) {
+        this.getCurrentPage().hide();
+      }
       this.__workspacePages = {};
       this.__displayedWorkspaceName = null;
       if (this.__workspacesMasterPage) {
-        this.__workspacesMasterPage.exclude();
+        this.__workspacesMasterPage.hide();
       }
       this.__pageToRestore = null;
       // The following lines break exit action.
@@ -510,7 +518,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       if (pageGuid && !back) {
         this.__routing.executeGet("/page/" + pageGuid, {animation: animation, back: back});
       } else {
-        page.show({animation: animation, reverse: back});
+        this.hideCurrentAndShow(page, animation, back);
       }
     },
 

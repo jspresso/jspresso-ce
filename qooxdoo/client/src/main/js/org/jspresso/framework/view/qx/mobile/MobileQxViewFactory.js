@@ -21,7 +21,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
   statics: {
     bindListItem: function (item, state, selected, displayIcon) {
       var children = state.getChildren();
-      if (children.length > 1 && !item instanceof org.jspresso.framework.view.qx.mobile.TreeItemRenderer) {
+      if (children.length > 1 && !(item instanceof org.jspresso.framework.view.qx.mobile.TreeItemRenderer)) {
         item.setTitle(children.getItem(1).getValue());
       } else if (state.getValue()) {
         item.setTitle(state.getValue());
@@ -290,6 +290,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     installPageMainAction: function (page, pageAction) {
       if (pageAction) {
+        this._getRemotePeerRegistry().register(pageAction);
         page.setButtonText(pageAction.getName());
         if (pageAction.getIcon()) {
           page.setButtonIcon(pageAction.getIcon().getImageUrlSpec());
@@ -298,7 +299,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           this._loseFocus();
           this._getActionHandler().execute(pageAction);
         }, this);
-        page.setShowButton(true);
+        page.setShowButton(pageAction.getEnabled());
+        pageAction.addListener("changeEnabled", function (evt) {
+          page.setShowButton(evt.getData());
+        }, this);
       }
     },
 
@@ -591,15 +595,17 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           sections.push(pageSection);
         }
       }
-      if (remoteCompositePage.getEditAction() && remoteCompositePage.getEditorPage()) {
-        var editorPage = this.createComponent(remoteCompositePage.getEditorPage());
+      var rEditAction = remoteCompositePage.getEditAction();
+      var rEditorPage = remoteCompositePage.getEditorPage();
+      if (rEditAction && rEditorPage) {
+        var editorPage = this.createComponent(rEditorPage);
         this.linkNextPageBackButton(editorPage, compositePage, null, "flip");
         compositePage.setUserData("editorPage", editorPage);
         if (remoteCompositePage.getMainAction() == null) {
-          remoteCompositePage.setMainAction(remoteCompositePage.getEditAction());
+          remoteCompositePage.setMainAction(rEditAction);
         } else {
           var editActionList = new org.jspresso.framework.gui.remote.RActionList();
-          editActionList.setActions([remoteCompositePage.getEditAction()]);
+          editActionList.setActions([rEditAction]);
           var actionLists = [editActionList];
           if (remoteCompositePage.getActionLists()) {
             actionLists = actionLists.concat(remoteCompositePage.getActionLists());
@@ -1113,7 +1119,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
         if (pageToShow) {
           // this._getActionHandler().showDetailPage(pageToShow);
-          pageToShow.show();
+          this._getActionHandler().hideCurrentAndShow(pageToShow);
         }
       }
     },
