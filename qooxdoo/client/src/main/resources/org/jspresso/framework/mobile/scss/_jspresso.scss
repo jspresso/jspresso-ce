@@ -50,6 +50,14 @@
 
 .scroll-container {
   border: none;
+  height: inherit;
+  width: 100%;
+}
+
+.scroll {
+  border: none;
+  height: inherit;
+  width: 100%;
 }
 
 .olMapViewport {
@@ -63,4 +71,6 @@
   min-height: 24px;
 }
 
-
+.jspresso-border-none {
+  border: none;
+}

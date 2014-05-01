@@ -21,7 +21,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
   statics: {
     bindListItem: function (item, state, selected, displayIcon) {
       var children = state.getChildren();
-      if (children.length > 1) {
+      if (children.length > 1 && !item instanceof org.jspresso.framework.view.qx.mobile.TreeItemRenderer) {
         item.setTitle(children.getItem(1).getValue());
       } else if (state.getValue()) {
         item.setTitle(state.getValue());
@@ -711,7 +711,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         row.addCssClass("form-row");
         row.addCssClass("form-row-content");
         if (remoteForm.getLabelsPosition() == "ABOVE") {
-          row.setLayout(new qx.ui.mobile.layout.VBox());
+          row.setLayout(new qx.ui.mobile.layout.VBox().set({alignX: 'left'}));
         } else {
           row.setLayout(new qx.ui.mobile.layout.HBox());
         }
@@ -805,6 +805,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           this._getActionHandler().execute(remoteTextField.getCharacterAction(), actionEvent);
         }
       }, this);
+      this.__bindReadOnlyBorder(state, textField);
     },
 
     /**
@@ -1553,6 +1554,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       modelController.addTarget(formattedField, "readOnly", "writable", false, {
         converter: this._readOnlyFieldConverter
       });
+      this.__bindReadOnlyBorder(state, formattedField);
     },
 
     /**
@@ -1725,6 +1727,19 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       return scrollContainer;
     },
 
+    __bindReadOnlyBorder: function (state, textInput) {
+      state.addListener("changeWritable", function (event) {
+        if (!event.getData()) {
+          textInput.addCssClass("jspresso-border-none");
+        } else {
+          textInput.removeCssClass("jspresso-border-none");
+        }
+      }, this);
+      if (!state.getWritable()) {
+        textInput.addCssClass("jspresso-border-none");
+      }
+    },
+
     /**
      * @return {qx.ui.mobile.core.Widget}
      * @param remoteTextArea {org.jspresso.framework.gui.remote.RTextArea}
@@ -1741,6 +1756,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       modelController.addTarget(textArea, "readOnly", "writable", false, {
         converter: this._readOnlyFieldConverter
       });
+      this.__bindReadOnlyBorder(state, textArea);
       return this._decorateWithScrollContainer(textArea);
     },
 

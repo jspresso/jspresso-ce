@@ -85,7 +85,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         }
       }
       page.show({animation: animation, reverse: back});
-      if (currentPage && currentPage != page) {
+      if (currentPage && currentPage != page && (!this.isTablet() && currentPage != this.__workspacesMasterPage)) {
         currentPage.hide();
       }
     },
@@ -96,7 +96,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     __createRouting: function () {
       var routing = new qx.application.Routing();
       routing.onGet("/*", function (data) {
-        if (this.__isTablet) {
+        if (this.isTablet()) {
           var page = this.__workspacePages[this.__displayedWorkspaceName];
         } else {
           page = this.__workspacesMasterPage;
@@ -127,11 +127,15 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       return routing;
     },
 
+    isTablet: function () {
+      return this.__isTablet;
+    },
+
     /**
      * @return {qx.ui.mobile.page.Manager}
      */
     __createManager: function () {
-      var manager = new qx.ui.mobile.page.Manager(this.__isTablet);
+      var manager = new qx.ui.mobile.page.Manager(this.isTablet());
       if (manager.getMasterButton()) {
         manager.getMasterButton().setIcon("org/jspresso/framework/mobile/nav-mobile-menu-icon.png");
         manager.getMasterButton().setShow("icon");
@@ -349,7 +353,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       this.__workspacesMasterPage.setTitle(this._getName());
       this.__manager.addMaster(this.__workspacesMasterPage);
 
-      if (!this.__isTablet) {
+      if (!this.isTablet()) {
         this._getViewFactory().installPageMainAction(this.__workspacesMasterPage, exitAction);
       }
       this.__routing.executeGet("/workspaces", {animation: "cube", reverse: false});
@@ -369,7 +373,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         /** @type {qx.ui.mobile.page.NavigationPage} */
         var workspacePage = this.createComponent(workspaceView);
         this.__workspacePages[workspaceName] = workspacePage;
-        if (this.__isTablet) {
+        if (this.isTablet()) {
           this._getViewFactory().installPageMainAction(workspacePage, this.__exitAction);
         } else {
           this._getViewFactory().linkNextPageBackButton(workspacePage, this.__workspacesMasterPage,
