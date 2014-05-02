@@ -29,17 +29,9 @@ qx.Mixin.define("org.jspresso.framework.patch.MInput", {
         return;
       }
 
-      var scrollContainer = this.__getScrollContainer();
-      if (scrollContainer === null) {
-        return;
-      }
-
       if (qx.core.Environment.get("os.name") == "ios") {
-        //scrollContainer.scrollToWidget(this.getLayoutParent(), 0);
       } else {
         setTimeout(function () {
-          //scrollContainer.scrollToWidget(this.getLayoutParent(), 0);
-
           if (qx.core.Environment.get("os.name") == "android") {
             var old = this._getCaretPosition();
             window.getSelection().empty();

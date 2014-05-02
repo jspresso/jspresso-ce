@@ -82,7 +82,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     /**
      * @return {org.jspresso.framework.view.qx.AbstractQxViewFactory}
      */
-    _getViewFactory: function() {
+    _getViewFactory: function () {
       return this.__viewFactory;
     },
 
@@ -370,13 +370,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     _handleValueCommand: function (valueState, valueCommand) {
       valueState.setValue(valueCommand.getValue());
       if (valueState instanceof org.jspresso.framework.state.remote.RemoteFormattedValueState) {
-        (/**@type {org.jspresso.framework.state.remote.RemoteFormattedValueState} */valueState).
-            setValueAsObject(valueCommand.getValueAsObject());
+        (/**@type {org.jspresso.framework.state.remote.RemoteFormattedValueState} */valueState).setValueAsObject(valueCommand.getValueAsObject());
       } else if (valueState instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
-        (/**@type {org.jspresso.framework.state.remote.RemoteCompositeValueState} */valueState).
-            setDescription(valueCommand.getDescription());
-        (/**@type {org.jspresso.framework.state.remote.RemoteCompositeValueState} */valueState).
-            setIconImageUrl(valueCommand.getIconImageUrl());
+        (/**@type {org.jspresso.framework.state.remote.RemoteCompositeValueState} */valueState).setDescription(valueCommand.getDescription());
+        (/**@type {org.jspresso.framework.state.remote.RemoteCompositeValueState} */valueState).setIconImageUrl(valueCommand.getIconImageUrl());
       }
     },
 
@@ -641,6 +638,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
       if (this.__translations) {
         var tr = this.__translations[key];
         if (tr != null) {
+          if (tr.indexOf("{resource:") >= 0) {
+            tr = tr.replace(/\${resource:([^}]*)}/g, function (match, p1) {
+              return qx.util.ResourceManager.getInstance().toUri(p1);
+            });
+          }
           return tr;
         }
       }
@@ -836,7 +838,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
           initCommand.getSecondaryActions(), initCommand.getHelpActions(), initCommand.getSize());
     },
 
-    _getName:function() {
+    _getName: function () {
       return this.__applicationName;
     }
   }
