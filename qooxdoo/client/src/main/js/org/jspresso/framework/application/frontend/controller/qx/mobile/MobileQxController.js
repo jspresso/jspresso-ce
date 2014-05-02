@@ -77,10 +77,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
 
     hideCurrentAndShow: function (page, animation, back) {
       var currentPage = this.getCurrentPage();
-      if (currentPage && currentPage != page && (!this.isTablet() && currentPage != this.__workspacesMasterPage)) {
+      page.show({animation: animation, reverse: back});
+      if (currentPage && currentPage != page && (!this.isTablet() || currentPage != this.__workspacesMasterPage)) {
         currentPage.hide();
       }
-      page.show({animation: animation, reverse: back});
     },
 
     __routeToPage: function (page, data, animation) {
@@ -700,7 +700,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         var drawer = this._popupDrawer("bottom", content);
         qx.event.Timer.once(function () {
           drawer.hide();
-        }, this, 3000);
+        }, this, 5000);
       }
     },
 
