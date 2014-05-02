@@ -12,6 +12,12 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  *
  * @asset (org/jspresso/framework/mobile/nav-mobile-menu-icon.png)
+ * @asset (org/jspresso/framework/mobile/bookmark/android3_bookmark.png)
+ * @asset (org/jspresso/framework/mobile/bookmark/android4_bookmark.png)
+ * @asset (org/jspresso/framework/mobile/bookmark/blackberry.png)
+ * @asset (org/jspresso/framework/mobile/bookmark/playbook_bookmark.png)
+ * @asset (org/jspresso/framework/mobile/bookmark/safari_forward.png)
+ * @asset (org/jspresso/framework/mobile/bookmark/safari_ios7_forward.png)
  */
 qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobile.MobileQxController", {
 
@@ -21,6 +27,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
   ],
 
   statics: {
+
   },
 
   /**
@@ -65,6 +72,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     __isTablet: false,
     /** @type {qx.ui.mobile.page.NavigationPage} */
     __blankPage: null,
+    /** @type {Object} */
+    __drawers: {},
 
     hideCurrentAndShow: function (page, animation, back) {
       var currentPage = this.getCurrentPage();
@@ -154,6 +163,15 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
 
     _createViewFactory: function () {
       return new org.jspresso.framework.view.qx.mobile.MobileQxViewFactory(this, this, this);
+    },
+
+    /**
+     * @param initCommand {org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand}
+     * @return {undefined}
+     */
+    _handleInitCommand: function (initCommand) {
+      this.base(arguments, initCommand);
+      this._popupBookmarkHint();
     },
 
     /**
@@ -596,6 +614,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       var keysToTranslate = this.base(arguments);
       keysToTranslate = keysToTranslate.concat([
         "m_01", "m_02", "m_03", "m_04", "m_05", "m_06", "m_07", "m_08", "m_09", "m_10", "m_11", "m_12"]);
+      var bookmarkHintKey = this._determineBrowserBookmarkHintKey();
+      if (bookmarkHintKey) {
+        keysToTranslate = keysToTranslate.concat([bookmarkHintKey]);
+      }
       return keysToTranslate;
     },
 
@@ -630,6 +652,77 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
           this.execute(animationCommand.getCallbackAction());
         }
       }, this);
+    },
+
+    _determineBrowserBookmarkHintKey: function () {
+      var deviceType = qx.core.Environment.get("device.type");
+      var osName = qx.core.Environment.get("os.name");
+      var osVersion = qx.core.Environment.get("os.version");
+      var browserName = qx.core.Environment.get("browser.name");
+      var browserVersion = qx.core.Environment.get("browser.version");
+
+      var bookmarkHintKey = null;
+      if (deviceType == "mobile" || deviceType == "tablet") {
+        if (osName.indexOf("ios") >= 0) {
+          if (osVersion >= "7") {
+            bookmarkHintKey = "bookmark_ios7orlater";
+          } else if (osVersion >= "4.2") {
+            bookmarkHintKey = "bookmark_ios42orlater";
+          } else {
+            bookmarkHintKey = "bookmark_ioslegacy";
+          }
+        } else if (osName.indexOf("android") >= 0) {
+          if (osVersion >= "4.4") {
+            bookmarkHintKey = "bookmark_android44";
+          } else if (osVersion >= "4.1") {
+            bookmarkHintKey = "bookmark_android41";
+          } else if (osVersion >= "4") {
+            bookmarkHintKey = "bookmark_android4";
+          } else if (osVersion >= "3") {
+            bookmarkHintKey = "bookmark_android3";
+          } else {
+            bookmarkHintKey = "bookmark_android";
+          }
+        } else if (osName.indexOf("blackberry") >= 0) {
+          bookmarkHintKey = "bookmark_blackberry";
+        } else if (osName.indexOf("playbook") >= 0) {
+          bookmarkHintKey = "bookmark_playbook";
+        }
+      }
+      //return "bookmark_ios7orlater";
+      return bookmarkHintKey;
+    },
+
+    _popupBookmarkHint: function () {
+      var bookmarkHintKey = this._determineBrowserBookmarkHintKey();
+      if (bookmarkHintKey) {
+        var content = new qx.ui.mobile.basic.Label(this.translate(bookmarkHintKey));
+        var drawer = this._popupDrawer("bottom", content);
+        qx.event.Timer.once(function () {
+          drawer.hide();
+        }, this, 3000);
+      }
+    },
+
+    _popupDrawer: function (orientation, content) {
+      var drawer = this.__drawers[orientation];
+      if (!drawer) {
+        drawer = new qx.ui.mobile.container.Drawer();
+        drawer.setOrientation(orientation);
+        drawer.setTapOffset(0);
+        drawer.setPositionZ("above");
+        if (orientation == "bottom" || orientation == "top") {
+          drawer.setLayout(new qx.ui.mobile.layout.VBox());
+          drawer._setStyle("height", "initial");
+        } else {
+          drawer.setLayout(new qx.ui.mobile.layout.HBox());
+          drawer._setStyle("width", "initial");
+        }
+      }
+      drawer.removeAll();
+      drawer.add(content);
+      drawer.show();
+      return drawer;
     }
   }
 });
