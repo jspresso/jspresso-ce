@@ -69,7 +69,12 @@
       <artifactId>servlet-api</artifactId>
       <scope>provided</scope>
     </dependency>
-	</dependencies>
+    <dependency>
+      <groupId>javaxt</groupId>
+      <artifactId>javaxt-core</artifactId>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
   <build>
     <resources>
       <resource>

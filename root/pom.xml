@@ -78,6 +78,7 @@
     <trove.version>3.0.3</trove.version>
     <openscales.version>2.2</openscales.version>
     <openmap.version>5.0.3</openmap.version>
+    <javaxt.version>1.6.2</javaxt.version>
 
     <!-- Plugins versions common to Jspresso root pom-->
     <compiler-plugin.version>3.1</compiler-plugin.version>
@@ -844,6 +845,11 @@
             <artifactId>jai_core</artifactId>
           </exclusion>
         </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>javaxt</groupId>
+        <artifactId>javaxt-core</artifactId>
+        <version>${javaxt.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

@@ -43,6 +43,10 @@
       <artifactId>dj-swingsuite</artifactId>
     </dependency>
     <dependency>
+      <groupId>javaxt</groupId>
+      <artifactId>javaxt-core</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.bbn.openmap</groupId>
       <artifactId>openmap</artifactId>
     </dependency>

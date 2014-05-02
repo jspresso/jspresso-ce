@@ -31,6 +31,10 @@
       <artifactId>joda-time</artifactId>
     </dependency>
     <dependency>
+      <groupId>javaxt</groupId>
+      <artifactId>javaxt-core</artifactId>
+    </dependency>
+    <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
       <scope>provided</scope>
