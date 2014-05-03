@@ -478,7 +478,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           selectionComponent.setUserData("oldSelectedIndex", newSelectedIndex);
           // Only if index did not change, we must force navigation. If not, navigation will be handled by selection
           // change on server-side,triggering a page change.
-          if (oldSelectedIndex == null || newSelectedIndex == oldSelectedIndex || nextPage instanceof qx.ui.mobile.page.NavigationPage) {
+          if (oldSelectedIndex == null || newSelectedIndex == oldSelectedIndex || nextPage
+              instanceof qx.ui.mobile.page.NavigationPage) {
             var pageToShow = this._getActualPageToShow(nextPage);
             if (pageToShow) {
               this._getActionHandler().showDetailPage(pageToShow);
@@ -540,8 +541,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         if (previousPage) {
           nextPage.addListener("back", function () {
             this._loseFocus();
-            // Force page exclusion since nextPage visibility might be made "excluded" too late.
-            nextPage.setVisibility("excluded");
             this._getActionHandler().showDetailPage(this._getActualPageToShow(previousPage), animation, true);
           }, this);
         }
@@ -1119,7 +1118,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
         if (pageToShow) {
           // this._getActionHandler().showDetailPage(pageToShow);
-          this._getActionHandler().hideCurrentAndShow(pageToShow);
+          this._getActionHandler().showPage(pageToShow);
         }
       }
     },

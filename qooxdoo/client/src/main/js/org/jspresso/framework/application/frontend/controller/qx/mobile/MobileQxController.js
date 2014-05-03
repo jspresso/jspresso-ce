@@ -75,12 +75,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     /** @type {Object} */
     __drawers: {},
 
-    hideCurrentAndShow: function (page, animation, back) {
-      var currentPage = this.getCurrentPage();
+    showPage: function (page, animation, back) {
       page.show({animation: animation, reverse: back});
-      if (currentPage && currentPage != page && (!this.isTablet() || currentPage != this.__workspacesMasterPage)) {
-        currentPage.hide();
-      }
     },
 
     __routeToPage: function (page, data, animation) {
@@ -101,7 +97,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
           back = true;
         }
       }
-      this.hideCurrentAndShow(page, animation, back);
+      this.showPage(page, animation, back);
     },
 
     /**
@@ -536,7 +532,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       if (pageGuid && !back) {
         this.__routing.executeGet("/page/" + pageGuid, {animation: animation, back: back});
       } else {
-        this.hideCurrentAndShow(page, animation, back);
+        this.showPage(page, animation, back);
       }
     },
 
