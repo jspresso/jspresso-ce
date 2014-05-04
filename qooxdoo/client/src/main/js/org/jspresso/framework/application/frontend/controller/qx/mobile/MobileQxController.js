@@ -376,10 +376,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
 
       if (!this.isTablet()) {
         this._getViewFactory().installPageMainAction(this.__workspacesMasterPage, exitAction);
-      }
-      this.__routing.executeGet("/workspaces", {animation: "cube", reverse: false});
-      if (!this.isTablet()) {
-        this.__workspacesMasterPage.hide();
+      } else {
+        this.__routing.executeGet("/workspaces", {animation: "cube", reverse: false});
       }
     },
 
