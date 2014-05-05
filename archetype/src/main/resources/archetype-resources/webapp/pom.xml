@@ -112,17 +112,18 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>net.flexmojos.oss</groupId>
-        <artifactId>flexmojos-maven-plugin</artifactId>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
         <executions>
           <execution>
-            <goals>
-              <goal>copy-flex-resources</goal>
-            </goals>
             <phase>prepare-package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
             <configuration>
               <stripVersion>true</stripVersion>
-              <webappDirectory>${symbol_dollar}{project.build.directory}/${symbol_dollar}{project.artifactId}/flex</webappDirectory>
+              <includeTypes>swf</includeTypes>
+              <outputDirectory>${symbol_dollar}{project.build.directory}/${symbol_dollar}{project.artifactId}/flex</outputDirectory>
             </configuration>
           </execution>
         </executions>
