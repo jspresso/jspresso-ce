@@ -5,6 +5,22 @@
     to
     org.apache.flex.framework
 
+  Whenever you import dependencies that have a transitive dependency towards the old com.adobe.flex.framework
+  artifacts, you might have to exclude the transitive dependencies like below or you might face flexmojos stating
+  that you have incompatible compiler / framework versions :
+
+		<dependency>
+			<groupId>com.example.dependency</groupId>
+			<artifactId>dependency-flex</artifactId>
+			<type>swc</type>
+      <exclusions>
+        <exclusion>
+          <groupId>com.adobe.flex.framework</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
 - We have changed the way spec('') get generated in SJS >= 1.3. Now, when spec('xxx') is declared, the context to
   generate depends on the backend/frontend/view previous node. For instance, when generating a spec('xxx') under a
   frontend node, the call should be changed from :
