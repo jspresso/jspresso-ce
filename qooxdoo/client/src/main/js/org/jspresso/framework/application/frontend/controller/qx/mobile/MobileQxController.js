@@ -39,7 +39,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     this.base(arguments, remoteController, userLanguage);
     this.__isTablet = (qx.core.Environment.get("device.type") == "tablet" || qx.core.Environment.get("device.type")
         == "desktop");
-    // this.__isTablet = false;
+    //this.__isTablet = false;
     this.__application = application;
 
     var busyIndicator = new qx.ui.mobile.dialog.BusyIndicator(this.translate("Wait") + "...");
@@ -372,6 +372,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         this.__workspacesMasterPage.getContent().add(workspaceNavigator);
       }, this);
       this.__workspacesMasterPage.setTitle(this._getName());
+      if (!this.isTablet()) {
+        this.__workspacesMasterPage.setVisibility("hidden");
+      }
       this.__manager.addMaster(this.__workspacesMasterPage);
 
       if (!this.isTablet()) {
