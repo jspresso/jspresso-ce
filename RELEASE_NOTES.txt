@@ -1,5 +1,10 @@
 3.8
 ===
+- Migrated to Apache Flex 4.12. Please change all the references in pom.xml
+    com.adobe.flex.framework
+    to
+    org.apache.flex.framework
+
 - We have changed the way spec('') get generated in SJS >= 1.3. Now, when spec('xxx') is declared, the context to
   generate depends on the backend/frontend/view previous node. For instance, when generating a spec('xxx') under a
   frontend node, the call should be changed from :

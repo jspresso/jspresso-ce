@@ -4,7 +4,7 @@
   <artifactId>jspresso-root</artifactId>
   <packaging>pom</packaging>
   <version>3.8-SNAPSHOT</version>
-  
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <generator.templateResourcePath>/org/jspresso/framework/tools/entitygenerator</generator.templateResourcePath>
@@ -19,8 +19,8 @@
 
     <junit.version>4.11</junit.version>
     <mockito.version>1.9.5-rc1</mockito.version>
-    <flex.version>4.6.b.23201</flex.version>
-    <flexunit.version>0.90</flexunit.version>
+    <flex.version>4.12.0.20140303</flex.version>
+    <flexunit.version>4.1.0</flexunit.version>
     <blazeds.version>4.0.0.14931</blazeds.version>
     <flexlib.version>2.5</flexlib.version>
     <resizecontainers.version>1.0</resizecontainers.version>
@@ -111,7 +111,7 @@
     <build-helper-plugin.version>1.8</build-helper-plugin.version>
     <hibernate3-plugin.version>2.2</hibernate3-plugin.version>
     <jasperreports-plugin.version>1.0-beta-2</jasperreports-plugin.version>
-    <flexmojos-plugin.version>5.0-beta</flexmojos-plugin.version>
+    <flexmojos-plugin.version>7.0.0</flexmojos-plugin.version>
     <exec-plugin.version>1.2.1</exec-plugin.version>
     <gmaven-plugin.version>1.4</gmaven-plugin.version>
     <groovy.version>2.2.2</groovy.version>
@@ -124,7 +124,7 @@
   <distributionManagement>
     <repository>
       <id>jspresso-repository</id>
-      <url>http://repository.jspresso.org/maven2</url>
+      <url>dav:http://repository.jspresso.org/maven2</url>
     </repository>
     <snapshotRepository>
       <id>jspresso-snapshots-repository</id>
@@ -159,6 +159,16 @@
     <pluginRepository>
     	<id>sonatype-repository</id>
     	<url>http://repository.sonatype.org/content/groups/flexgroup</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>sonatype-oss-repository</id>
+      <url>https://oss.sonatype.org/content/repositories/releases</url>
       <releases>
         <enabled>true</enabled>
       </releases>
@@ -231,6 +241,16 @@
     <repository>
       <id>sonatype-repository</id>
       <url>http://repository.sonatype.org/content/groups/flexgroup</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>sonatype-oss-repository</id>
+      <url>https://oss.sonatype.org/content/repositories/releases</url>
       <releases>
         <enabled>true</enabled>
       </releases>
@@ -744,31 +764,31 @@
         <type>swc</type>
       </dependency>
       <dependency>
-        <groupId>com.adobe.flex.framework</groupId>
+        <groupId>org.apache.flex.framework</groupId>
         <artifactId>flex-framework</artifactId>
         <version>${flex.version}</version>
         <type>pom</type>
       </dependency>
       <dependency>
-        <groupId>com.adobe.flex.framework</groupId>
+        <groupId>org.apache.flex.framework</groupId>
         <artifactId>framework</artifactId>
         <version>${flex.version}</version>
         <type>swc</type>
       </dependency>
       <dependency>
-        <groupId>com.adobe.flex.framework</groupId>
+        <groupId>org.apache.flex.framework</groupId>
         <artifactId>spark</artifactId>
         <version>${flex.version}</version>
         <type>swc</type>
       </dependency>
       <dependency>
-        <groupId>com.adobe.flex.framework</groupId>
+        <groupId>org.apache.flex.framework</groupId>
         <artifactId>mx</artifactId>
         <version>${flex.version}</version>
         <type>swc</type>
       </dependency>
       <dependency>
-        <groupId>com.adobe.flex.framework</groupId>
+        <groupId>org.apache.flex.framework</groupId>
         <artifactId>halo</artifactId>
         <version>${flex.version}</version>
         <type>swc</type>
@@ -824,12 +844,32 @@
         <artifactId>openscales-core</artifactId>
         <version>${openscales.version}</version>
         <type>swc</type>
+        <exclusions>
+          <exclusion>
+            <groupId>com.adobe.flex.framework</groupId>
+            <artifactId>flex-framework</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>com.adobe.flex.framework</groupId>
+            <artifactId>playerglobal</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>org.openscales</groupId>
         <artifactId>openscales-fx</artifactId>
         <version>${openscales.version}</version>
         <type>swc</type>
+        <exclusions>
+          <exclusion>
+            <groupId>com.adobe.flex.framework</groupId>
+            <artifactId>flex-framework</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>com.adobe.flex.framework</groupId>
+            <artifactId>playerglobal</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>com.bbn.openmap</groupId>
@@ -860,11 +900,10 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.adobe.flexunit</groupId>
+      <groupId>org.flexunit</groupId>
       <artifactId>flexunit</artifactId>
       <version>${flexunit.version}</version>
-      <!-- 0.90 to conventional Flexunit tests -->
-      <!-- <version>4.x</version> like 4.0-beta-2 to enable Flexunit4 tests -->
+      <classifier>flex4</classifier>
       <type>swc</type>
       <scope>test</scope>
     </dependency>
@@ -1278,7 +1317,7 @@
           </configuration>
           <dependencies>
             <dependency>
-              <groupId>com.adobe.flex</groupId>
+              <groupId>org.apache.flex</groupId>
               <artifactId>compiler</artifactId>
               <version>${flex.version}</version>
               <type>pom</type>

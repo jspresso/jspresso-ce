@@ -12,18 +12,18 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.adobe.flex.framework</groupId>
+      <groupId>org.apache.flex.framework</groupId>
       <artifactId>flex-framework</artifactId>
       <type>pom</type>
     </dependency>
     <dependency>
-      <groupId>com.adobe.flex.framework</groupId>
+      <groupId>org.apache.flex.framework</groupId>
       <artifactId>framework</artifactId>
       <type>swc</type>
       <scope>external</scope>
     </dependency>
     <dependency>
-      <groupId>com.adobe.flex.framework</groupId>
+      <groupId>org.apache.flex.framework</groupId>
       <artifactId>spark</artifactId>
       <type>swc</type>
       <!--<scope>merged</scope>-->

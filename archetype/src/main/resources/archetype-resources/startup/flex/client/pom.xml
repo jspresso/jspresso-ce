@@ -16,18 +16,14 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.adobe.flex.framework</groupId>
-      <artifactId>flex-framework</artifactId>
-      <type>pom</type>
-    </dependency>
-    <dependency>
       <groupId>org.jspresso.framework</groupId>
       <artifactId>jspresso-flex</artifactId>
       <type>swc</type>
     </dependency>
     <dependency>
-      <groupId>com.adobe.flex.framework</groupId>
+      <groupId>org.apache.flex.framework</groupId>
       <artifactId>spark</artifactId>
+      <version></version>
       <type>swc</type>
       <scope>theme</scope>
     </dependency>
