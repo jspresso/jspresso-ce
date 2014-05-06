@@ -947,9 +947,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           var state = data.state;
           org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.bindListItem(item, state, false,
               remoteTree.getDisplayIcon());
-          if (remoteTree instanceof org.jspresso.framework.gui.remote.mobile.RMobileTree) {
-            item.setShowArrow(remoteTree.getShowArrow());
-          }
+          item.setShowArrow(remoteTree.getShowArrow() && row > 0);
           item.setLevel(data.level);
         },
         createItemRenderer: function () {

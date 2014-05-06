@@ -29,8 +29,6 @@ import java.util.Map;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.remote.mobile.NearElementAction;
-import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
-import org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
@@ -270,6 +268,12 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
           nextPage.setSwipeRightAction(swipeRightAction);
         }
         nextPageView.setParent(selectionView);
+      } else {
+        if (selectionView.getPeer() instanceof RMobileTree) {
+          ((RMobileTree) selectionView.getPeer()).setShowArrow(false);
+        } else if (selectionView.getPeer() instanceof RMobileList) {
+          ((RMobileList) selectionView.getPeer()).setShowArrow(false);
+        }
       }
     }
     view.setChildren(childrenViews);
