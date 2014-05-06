@@ -42,11 +42,13 @@ public class AddPageAction<E, F, G> extends FrontendAction<E, F, G> {
   public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     IPageable pageableModel = getModel(context);
     try {
-      if (pageableModel.getPage() + 1 < pageableModel.getPageCount()) {
+      Integer page = pageableModel.getPage();
+      Integer pageCount = pageableModel.getPageCount();
+      if (pageCount != null && (page == null || (page + 1 < pageCount))) {
         context.put(AbstractQbeAction.PAGINATE, null);
         pageableModel.setStickyResults(pageableModel.getResults());
-        if (pageableModel.getPage() != null) {
-          pageableModel.setPage(pageableModel.getPage() + 1);
+        if (page != null) {
+          pageableModel.setPage(page + 1);
         } else {
           pageableModel.setPage(1);
         }
