@@ -724,7 +724,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           var label = new qx.ui.mobile.form.Label("<p>" + rComponent.getLabel() + "</p>");
           // Changes label color when disabled
           // label.setLabelFor(component.getId());
-          label.addCssClass("jspresso-form-label");
+          if (remoteForm.getLabelsPosition() == "ASIDE") {
+            label.addCssClass("jspresso-form-label-aside");
+          }
           // to align form elements to the left
           row.add(label/*, {flex:1}*/);
         } else {
@@ -753,7 +755,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         if (this._isFixedWidth(rComponent)) {
           row.add(component);
         } else {
-          component.addCssClass("jspresso-form-element-grow");
+          if (remoteForm.getLabelsPosition() == "ASIDE") {
+            component.addCssClass("jspresso-form-element-grow-aside");
+          }
           row.add(component, {flex: 1});
         }
         if (this._isMultiline(rComponent)) {
