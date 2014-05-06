@@ -459,6 +459,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
         this._addSectionHeader(navPage.getContent(), remoteNavPage.getSelectionView());
         navPage.getContent().add(selectionComponent);
+        selectionComponent.getModel().addListener("change", function (e) {
+          var scroll = navPage._getScrollContainer();
+          var lastScrollTimestamp = scroll.getUserData("lastScrollTimestamp");
+          if (!lastScrollTimestamp || e.getTimeStamp() - lastScrollTimestamp > 2000) {
+            scroll.setUserData("lastScrollTimestamp", e.getTimeStamp());
+            scroll.scrollToWidget(selectionComponent, 500);
+          }
+        }, this);
         var actionLists = remoteNavPage.getSelectionView().getActionLists();
         if (actionLists) {
           if (actionLists.length == 1 && actionLists[0].getActions().length == 1) {
