@@ -1132,9 +1132,13 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       this._getRemotePeerRegistry().register(remoteTabContainer);
       var tabContainer;
       if (remoteTabContainer.getCarouselMode()) {
-        tabContainer = new qx.ui.mobile.container.Carousel(2000);
+        tabContainer = new qx.ui.mobile.container.Carousel(1000);
       } else {
-        tabContainer = new qx.ui.mobile.tabbar.TabBar();
+        tabContainer = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
+        var tabBar = new qx.ui.mobile.tabbar.TabBar();
+        tabContainer.setUserData("tabBar", tabBar);
+        tabContainer.setUserData("tabBarChildren", []);
+        tabContainer.add(tabBar);
       }
       for (var i = 0; i < remoteTabContainer.getTabs().length; i++) {
         /** @type {org.jspresso.framework.gui.remote.RComponent} */
@@ -1146,7 +1150,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         } else {
           var tab = new qx.ui.mobile.tabbar.TabButton(remoteTab.getLabel(), remoteTab.getIcon());
           tab.setView(tabComponent);
-          tabContainer.add(tab);
+          tabContainer.getUserData("tabBar").add(tab);
+          tabContainer.getUserData("tabBarChildren").push(tab);
+          tabContainer.add(tabComponent);
         }
       }
       if (remoteTabContainer.getCarouselMode()) {
@@ -1163,11 +1169,12 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           this._getCommandHandler().registerCommand(command);
         }, this);
       } else {
+        var tabBar = tabContainer.getUserData("tabBar");
         remoteTabContainer.addListener("changeSelectedIndex", function (event) {
-          tabContainer.setSelection(tabContainer.getChildren()[event.getData()]);
+          tabBar.setSelection(tabContainer.getUserData("tabBarChildren")[event.getData()]);
         });
-        tabContainer.addListener("changeSelection", function (event) {
-          var index = tabContainer.getChildren().indexOf(event.getData());
+        tabBar.addListener("changeSelection", function (event) {
+          var index = tabContainer.getUserData("tabBarChildren").indexOf(event.getData());
           remoteTabContainer.setSelectedIndex(index);
           var command = new org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand();
           command.setTargetPeerGuid(remoteTabContainer.getGuid());
