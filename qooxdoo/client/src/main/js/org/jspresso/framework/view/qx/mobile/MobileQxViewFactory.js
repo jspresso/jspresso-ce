@@ -335,7 +335,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     installPageEndAction: function (page, pageEndAction) {
       if (pageEndAction) {
         page.addListener("initialize", function (e) {
-          page._getScrollContainer().addListener("pageEnd", function (e) {
+          var pageEndScroll = page.getUserData("pageEndScroll");
+          if (!pageEndScroll) {
+            pageEndScroll = page._getScrollContainer();
+          }
+          pageEndScroll.addListener("pageEnd", function (e) {
             this._getActionHandler().execute(pageEndAction);
           }, this);
         }, this);
@@ -452,15 +456,24 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       if (remoteNavPage.getHeaderView()) {
         headerComponent = this.createComponent(remoteNavPage.getHeaderView());
       }
-      var navPage = new qx.ui.mobile.page.NavigationPage();
+      var tabletMode = false;
+      if (headerComponent && this._getActionHandler().isTablet()) {
+        tabletMode = true;
+      }
+      var navPage;
+      if (tabletMode) {
+        navPage = new org.jspresso.framework.view.qx.mobile.NoScrollNavigationPage();
+      } else {
+        navPage = new qx.ui.mobile.page.NavigationPage();
+      }
       navPage.setTitle(remoteNavPage.getLabel());
       navPage.addListener("initialize", function (e) {
+        var scroll;
         var content = navPage.getContent();
         var contentLeft = content;
         var contentRight = content;
-        var tabletMode = false;
-        if (headerComponent && this._getActionHandler().isTablet()) {
-          tabletMode = true;
+        if (tabletMode) {
+          content.setLayout(new qx.ui.mobile.layout.VBox());
           var splittedContent = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox());
           contentLeft = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
           contentRight = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
@@ -468,34 +481,40 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           contentRight.addCssClass("jspresso-tablet-content-right");
           splittedContent.add(contentLeft, {flex: 1});
           splittedContent.add(contentRight, {flex: 1});
-          content.add(splittedContent);
+          content.add(splittedContent, {flex: 1});
         }
         if (headerComponent) {
           this._addSectionHeader(contentLeft, remoteNavPage.getHeaderView());
           contentLeft.add(headerComponent);
         }
         this._addSectionHeader(contentRight, remoteNavPage.getSelectionView());
-        if (/*tabletMode*/ false) {
+        if (tabletMode) {
           var selectionScroll = new qx.ui.mobile.container.Scroll();
-          selectionScroll.add(selectionComponent);
-          contentRight.add(selectionScroll);
+          selectionScroll.addCssClass("group");
+          selectionScroll.add(selectionComponent, {flex: 1});
+          contentRight.add(selectionScroll, {flex: 1});
+          scroll = selectionScroll;
         } else {
           contentRight.add(selectionComponent);
+          scroll = navPage._getScrollContainer();
         }
-        selectionComponent.getModel().addListener("change", function (e) {
-          var scroll = navPage._getScrollContainer();
-          var lastScrollTimestamp = scroll.getUserData("lastScrollTimestamp");
-          if (!lastScrollTimestamp || e.getTimeStamp() - lastScrollTimestamp > 2000) {
-            var scrollPosition = scroll.getPosition();
-            var scrollElt = scroll.getContentElement();
-            var selectionComponentElt = selectionComponent.getContentElement();
-            var scPosition = qx.bom.element.Location.getRelative(scrollElt, selectionComponentElt, "scroll", "scroll");
-            if ((-scPosition.top - scrollPosition[1]) > scrollElt.clientHeight) {
-              scroll.setUserData("lastScrollTimestamp", e.getTimeStamp());
-              scroll.scrollToWidget(selectionComponent, 500);
+        navPage.setUserData("pageEndScroll", scroll);
+        if (!tabletMode) {
+          selectionComponent.getModel().addListener("change", function (e) {
+            var lastScrollTimestamp = scroll.getUserData("lastScrollTimestamp");
+            if (!lastScrollTimestamp || e.getTimeStamp() - lastScrollTimestamp > 2000) {
+              var scrollPosition = scroll.getPosition();
+              var scrollElt = scroll.getContentElement();
+              var selectionComponentElt = selectionComponent.getContentElement();
+              var scPosition = qx.bom.element.Location.getRelative(scrollElt, selectionComponentElt, "scroll",
+                  "scroll");
+              if ((-scPosition.top - scrollPosition[1]) > scrollElt.clientHeight) {
+                scroll.setUserData("lastScrollTimestamp", e.getTimeStamp());
+                scroll.scrollToWidget(selectionComponent, 500);
+              }
             }
-          }
-        }, this);
+          }, this);
+        }
         var actionLists = remoteNavPage.getSelectionView().getActionLists();
         if (actionLists) {
           if (actionLists.length == 1 && actionLists[0].getActions().length == 1) {
