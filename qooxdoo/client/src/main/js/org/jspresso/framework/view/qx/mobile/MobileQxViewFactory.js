@@ -683,19 +683,18 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           splittedContent.add(contentRight, {flex: 1});
           content.add(splittedContent);
         }
-        var ci = 0;
+        var contentToAdd = contentLeft;
         for (var i = 0; i < sections.length; i++) {
-          var contentToAdd;
-          if (ci % 2 == 0) {
-            contentToAdd = contentLeft;
-          } else {
+          var section = sections[i];
+          if (section instanceof qx.ui.mobile.list.List) {
             contentToAdd = contentRight;
-          }
-          if (sections[i] instanceof org.jspresso.framework.gui.remote.RComponent) {
-            this._addSectionHeader(contentToAdd, sections[i]);
           } else {
-            contentToAdd.add(sections[i]);
-            ci++;
+            contentToAdd = contentLeft;
+          }
+          if (section instanceof org.jspresso.framework.gui.remote.RComponent) {
+            this._addSectionHeader(contentToAdd, section);
+          } else {
+            contentToAdd.add(section);
           }
         }
       }, this);
