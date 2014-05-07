@@ -109,4 +109,14 @@ public class DefaultRemoteController extends AbstractRemoteController {
     getMvcBinder().bind(workspaceNavigator.getConnector(), workspaceConnector);
     return viewComponent;
   }
+
+  /**
+   * User logged in.
+   */
+  protected void userLoggedIn() {
+    if (getWorkspaceNames() != null && getWorkspaceNames().size() > 0) {
+      displayWorkspace(getWorkspaceNames().get(0));
+    }
+    super.userLoggedIn();
+  }
 }

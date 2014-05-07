@@ -332,10 +332,7 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
         for (RemoteCommand initCommand : initCommands) {
           registerCommand(initCommand);
         }
-        if (getWorkspaceNames() != null && getWorkspaceNames().size() > 0) {
-          displayWorkspace(getWorkspaceNames().get(0));
-        }
-        execute(getStartupAction(), getStartupActionContext());
+        userLoggedIn();
         clearRequestParams();
       } else {
         loginFailed();
@@ -465,6 +462,13 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
         throw new CommandException("Unsupported command type : " + command.getClass().getSimpleName());
       }
     }
+  }
+
+  /**
+   * User logged in.
+   */
+  protected void userLoggedIn() {
+    execute(getStartupAction(), getStartupActionContext());
   }
 
   /**

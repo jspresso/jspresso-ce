@@ -379,15 +379,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         this.__workspacesMasterPage.getContent().add(workspaceNavigator);
       }, this);
       this.__workspacesMasterPage.setTitle(this._getName());
-      if (!this.isTablet()) {
-        this.__workspacesMasterPage.setVisibility("hidden");
-      }
       this.__manager.addMaster(this.__workspacesMasterPage);
-
       if (!this.isTablet()) {
         this._getViewFactory().installPageMainAction(this.__workspacesMasterPage, exitAction);
-      } else {
-        this.__routing.executeGet("/workspaces", {animation: "cube", reverse: false});
+      }
+      this.__routing.executeGet("/workspaces", {animation: "cube", reverse: false});
+      if (this.isTablet()) {
+        this.__manager.getMasterContainer().show();
       }
     },
 
