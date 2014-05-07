@@ -1151,7 +1151,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       this._getRemotePeerRegistry().register(remoteTabContainer);
       var tabContainer;
       if (remoteTabContainer.getCarouselMode()) {
-        tabContainer = new qx.ui.mobile.container.Carousel(1);
+        tabContainer = new qx.ui.mobile.container.Carousel();
       } else {
         tabContainer = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
         var tabBar = new qx.ui.mobile.tabbar.TabBar();
@@ -1868,13 +1868,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @param component {qx.ui.mobile.core.Widget}
      */
     _decorateWithScrollContainer: function (component) {
-      var scrollContainer = new qx.ui.mobile.container.Scroll();
-      // scrollContainer.setFixedHeight(true);
-      // scrollContainer.setShowScrollIndicator(false);
-      scrollContainer.add(component, {
-        flex: 1
-      });
-      return scrollContainer;
+      return component;
+//      var scrollContainer = new qx.ui.mobile.container.Scroll();
+//      // scrollContainer.setFixedHeight(true);
+//      // scrollContainer.setShowScrollIndicator(false);
+//      scrollContainer.add(component, {
+//        flex: 1
+//      });
+//      return scrollContainer;
     },
 
     __bindReadOnlyBorder: function (state, textInput) {
@@ -1896,6 +1897,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createTextArea: function (remoteTextArea) {
       var textArea = new qx.ui.mobile.form.TextArea();
+      textArea.addCssClass("jspresso-area");
       var state = remoteTextArea.getState();
       var modelController = new qx.data.controller.Object(state);
       modelController.addTarget(textArea, "value", "value", true, {
