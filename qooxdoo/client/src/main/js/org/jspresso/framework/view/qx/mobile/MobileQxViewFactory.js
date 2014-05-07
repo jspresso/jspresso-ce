@@ -477,8 +477,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           var splittedContent = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox());
           contentLeft = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
           contentRight = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
-          contentLeft.addCssClass("jspresso-tablet-content-left");
-          contentRight.addCssClass("jspresso-tablet-content-right");
+          contentLeft.addCssClasses(["jspresso-tablet-content-left", "group"]);
+          contentRight.addCssClasses(["jspresso-tablet-content-right", "group"]);
           splittedContent.add(contentLeft, {flex: 1});
           splittedContent.add(contentRight, {flex: 1});
           content.add(splittedContent, {flex: 1});
@@ -490,7 +490,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         this._addSectionHeader(contentRight, remoteNavPage.getSelectionView());
         if (tabletMode) {
           var selectionScroll = new qx.ui.mobile.container.Scroll();
-          selectionScroll.addCssClass("group");
+          selectionScroll.removeCssClasses(["iscroll", "scroll"]);
           selectionScroll.add(selectionComponent, {flex: 1});
           contentRight.add(selectionScroll, {flex: 1});
           scroll = selectionScroll;
@@ -677,8 +677,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           var splittedContent = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox());
           contentLeft = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
           contentRight = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
-          contentLeft.addCssClass("jspresso-tablet-content-left");
-          contentRight.addCssClass("jspresso-tablet-content-right");
+          contentLeft.addCssClasses(["jspresso-tablet-content-left", "group"]);
+          contentRight.addCssClasses(["jspresso-tablet-content-right", "group"]);
           splittedContent.add(contentLeft, {flex: 1});
           splittedContent.add(contentRight, {flex: 1});
           content.add(splittedContent);
