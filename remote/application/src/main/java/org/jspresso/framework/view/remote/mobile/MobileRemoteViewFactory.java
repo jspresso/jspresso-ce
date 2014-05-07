@@ -49,6 +49,7 @@ import org.jspresso.framework.gui.remote.mobile.RMobileNavPage;
 import org.jspresso.framework.gui.remote.mobile.RMobilePage;
 import org.jspresso.framework.gui.remote.mobile.RMobilePageAware;
 import org.jspresso.framework.gui.remote.mobile.RMobilePageAwareContainer;
+import org.jspresso.framework.gui.remote.mobile.RMobileTabContainer;
 import org.jspresso.framework.gui.remote.mobile.RMobileTree;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
@@ -78,6 +79,7 @@ import org.jspresso.framework.view.descriptor.mobile.MobileCardPageViewDescripto
 import org.jspresso.framework.view.descriptor.mobile.MobileCompositePageViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileListViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileNavPageViewDescriptor;
+import org.jspresso.framework.view.descriptor.mobile.MobileTabViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileTreeViewDescriptor;
 import org.jspresso.framework.view.remote.AbstractRemoteViewFactory;
 
@@ -389,6 +391,18 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
   }
 
   /**
+   * Creates a mobile tab view.
+   * <p/>
+   * {@inheritDoc}
+   */
+  @Override
+  protected RTabContainer createRTabContainer(ITabViewDescriptor viewDescriptor) {
+    RMobileTabContainer component = new RMobileTabContainer(getGuidGenerator().generateGUID());
+    return component;
+  }
+
+
+  /**
    * Not supported in mobile environment.
    * <p/>
    * {@inheritDoc}
@@ -422,14 +436,19 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
   }
 
   /**
-   * Not supported in mobile environment.
+   * Completes with carouselMode property.
    * <p/>
    * {@inheritDoc}
    */
   @Override
   protected ICompositeView<RComponent> createTabView(ITabViewDescriptor viewDescriptor, IActionHandler actionHandler,
                                                      Locale locale) {
-    throw new UnsupportedOperationException("Not supported in mobile environment.");
+    ICompositeView<RComponent> view = super.createTabView(viewDescriptor, actionHandler, locale);
+    if (viewDescriptor instanceof MobileTabViewDescriptor) {
+      ((RMobileTabContainer) view.getPeer()).setCarouselMode(
+          ((MobileTabViewDescriptor) viewDescriptor).isCarouselMode());
+    }
+    return view;
   }
 
   /**

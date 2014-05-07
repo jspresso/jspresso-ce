@@ -37,9 +37,16 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
    */
   construct: function (application, remoteController, userLanguage) {
     this.base(arguments, remoteController, userLanguage);
-    this.__isTablet = (qx.core.Environment.get("device.type") == "tablet" || qx.core.Environment.get("device.type")
-        == "desktop");
-    //this.__isTablet = false;
+    var deviceType = qx.core.Environment.get("device.type");
+    this.__isTablet = false;
+    if (deviceType == "tablet") {
+      this.__isTablet = true;
+    } else if (deviceType == "desktop") {
+      var boundingRect = application.getRoot().getContainerElement().getBoundingClientRect();
+      if (boundingRect.width > 500) {
+        this.__isTablet = true;
+      }
+    }
     this.__application = application;
 
     var busyIndicator = new qx.ui.mobile.dialog.BusyIndicator(this.translate("Wait") + "...");

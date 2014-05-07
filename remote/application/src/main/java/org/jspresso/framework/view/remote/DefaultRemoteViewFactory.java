@@ -494,49 +494,6 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
    * {@inheritDoc}
    */
   @Override
-  protected ICompositeView<RComponent> createTabView(ITabViewDescriptor viewDescriptor, IActionHandler actionHandler,
-                                                     Locale locale) {
-    final RTabContainer viewComponent = createRTabContainer(viewDescriptor);
-    final BasicIndexedView<RComponent> view = constructIndexedView(viewComponent, viewDescriptor);
-
-    viewComponent.addPropertyChangeListener("selectedIndex", new PropertyChangeListener() {
-
-      @Override
-      public void propertyChange(PropertyChangeEvent evt) {
-        RTabContainer source = (RTabContainer) evt.getSource();
-        view.setCurrentViewIndex(source.getSelectedIndex());
-      }
-    });
-    List<RComponent> tabs = new ArrayList<>();
-    List<IView<RComponent>> childrenViews = new ArrayList<>();
-
-    for (IViewDescriptor childViewDescriptor : viewDescriptor.getChildViewDescriptors()) {
-      if (actionHandler.isAccessGranted(childViewDescriptor)) {
-        IView<RComponent> childView = createView(childViewDescriptor, actionHandler, locale);
-        RComponent tab = childView.getPeer();
-        switch (viewDescriptor.getRenderingOptions()) {
-          case ICON:
-            tab.setLabel(null);
-            break;
-          case LABEL:
-            tab.setIcon(null);
-            break;
-          default:
-            break;
-        }
-        tabs.add(tab);
-        childrenViews.add(childView);
-      }
-    }
-    viewComponent.setTabs(tabs.toArray(new RComponent[tabs.size()]));
-    view.setChildren(childrenViews);
-    return view;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   protected void selectChildViewIndex(RComponent viewComponent, int index) {
     if (viewComponent instanceof RTabContainer) {
       RTabContainer rTab = ((RTabContainer) viewComponent);
@@ -551,14 +508,4 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
     }
   }
 
-  /**
-   * Creates a remote tab container.
-   *
-   * @param viewDescriptor
-   *     the component view descriptor.
-   * @return the created remote component.
-   */
-  private RTabContainer createRTabContainer(ITabViewDescriptor viewDescriptor) {
-    return new RTabContainer(getGuidGenerator().generateGUID());
-  }
 }

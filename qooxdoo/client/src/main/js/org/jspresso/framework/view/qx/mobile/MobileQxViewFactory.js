@@ -453,18 +453,45 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var navPage = new qx.ui.mobile.page.NavigationPage();
       navPage.setTitle(remoteNavPage.getLabel());
       navPage.addListener("initialize", function (e) {
-        this._addSectionHeader(navPage.getContent(), remoteNavPage.getHeaderView());
-        if (headerComponent) {
-          navPage.getContent().add(headerComponent);
+        var content = navPage.getContent();
+        var contentLeft = content;
+        var contentRight = content;
+        var tabletMode = false;
+        if (headerComponent && this._getActionHandler().isTablet()) {
+          tabletMode = true;
+          var splittedContent = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox());
+          contentLeft = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
+          contentRight = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
+          contentLeft.addCssClass("jspresso-tablet-content-left");
+          contentRight.addCssClass("jspresso-tablet-content-right");
+          splittedContent.add(contentLeft, {flex: 1});
+          splittedContent.add(contentRight, {flex: 1});
+          content.add(splittedContent);
         }
-        this._addSectionHeader(navPage.getContent(), remoteNavPage.getSelectionView());
-        navPage.getContent().add(selectionComponent);
+        if (headerComponent) {
+          this._addSectionHeader(contentLeft, remoteNavPage.getHeaderView());
+          contentLeft.add(headerComponent);
+        }
+        this._addSectionHeader(contentRight, remoteNavPage.getSelectionView());
+        if (/*tabletMode*/ false) {
+          var selectionScroll = new qx.ui.mobile.container.Scroll();
+          selectionScroll.add(selectionComponent);
+          contentRight.add(selectionScroll);
+        } else {
+          contentRight.add(selectionComponent);
+        }
         selectionComponent.getModel().addListener("change", function (e) {
           var scroll = navPage._getScrollContainer();
           var lastScrollTimestamp = scroll.getUserData("lastScrollTimestamp");
           if (!lastScrollTimestamp || e.getTimeStamp() - lastScrollTimestamp > 2000) {
-            scroll.setUserData("lastScrollTimestamp", e.getTimeStamp());
-            scroll.scrollToWidget(selectionComponent, 500);
+            var scrollPosition = scroll.getPosition();
+            var scrollElt = scroll.getContentElement();
+            var selectionComponentElt = selectionComponent.getContentElement();
+            var scPosition = qx.bom.element.Location.getRelative(scrollElt, selectionComponentElt, "scroll", "scroll");
+            if ((-scPosition.top - scrollPosition[1]) > scrollElt.clientHeight) {
+              scroll.setUserData("lastScrollTimestamp", e.getTimeStamp());
+              scroll.scrollToWidget(selectionComponent, 500);
+            }
           }
         }, this);
         var actionLists = remoteNavPage.getSelectionView().getActionLists();
@@ -563,8 +590,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var compositePage = new qx.ui.mobile.page.NavigationPage();
       compositePage.setTitle(remoteCompositePage.getLabel());
       var sections = [];
-      for (var i = 0; i < remoteCompositePage.getPageSections().length; i++) {
-        var remotePageSection = remoteCompositePage.getPageSections()[i];
+      var pageSections = remoteCompositePage.getPageSections();
+      for (var i = 0; i < pageSections.length; i++) {
+        var remotePageSection = pageSections[i];
         var pageSection = this.createComponent(remotePageSection);
         if (pageSection instanceof qx.ui.mobile.page.NavigationPage) {
           /** @type {qx.ui.mobile.page.NavigationPage} */
@@ -621,11 +649,32 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
       }
       compositePage.addListener("initialize", function (e) {
+        var content = compositePage.getContent();
+        var contentLeft = content;
+        var contentRight = content;
+        if (pageSections.length > 1 && this._getActionHandler().isTablet()) {
+          var splittedContent = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox());
+          contentLeft = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
+          contentRight = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
+          contentLeft.addCssClass("jspresso-tablet-content-left");
+          contentRight.addCssClass("jspresso-tablet-content-right");
+          splittedContent.add(contentLeft, {flex: 1});
+          splittedContent.add(contentRight, {flex: 1});
+          content.add(splittedContent);
+        }
+        var ci = 0;
         for (var i = 0; i < sections.length; i++) {
-          if (sections[i] instanceof org.jspresso.framework.gui.remote.RComponent) {
-            this._addSectionHeader(compositePage.getContent(), sections[i]);
+          var contentToAdd;
+          if (ci % 2 == 0) {
+            contentToAdd = contentLeft;
           } else {
-            compositePage.getContent().add(sections[i]);
+            contentToAdd = contentRight;
+          }
+          if (sections[i] instanceof org.jspresso.framework.gui.remote.RComponent) {
+            this._addSectionHeader(contentToAdd, sections[i]);
+          } else {
+            contentToAdd.add(sections[i]);
+            ci++;
           }
         }
       }, this);

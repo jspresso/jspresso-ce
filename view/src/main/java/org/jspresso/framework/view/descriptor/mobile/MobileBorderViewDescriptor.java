@@ -179,4 +179,14 @@ public class MobileBorderViewDescriptor extends BasicBorderViewDescriptor
   public void setSwipeRightAction(IDisplayableAction swipeRightAction) {
     this.swipeRightAction = swipeRightAction;
   }
+
+  /**
+   * Always {@code false}.
+   * <p/>
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isCascadingModels() {
+    return false;
+  }
 }

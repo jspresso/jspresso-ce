@@ -18,9 +18,10 @@
  */
 package org.jspresso.framework.view.remote;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -78,6 +79,7 @@ import org.jspresso.framework.gui.remote.RPasswordField;
 import org.jspresso.framework.gui.remote.RPercentField;
 import org.jspresso.framework.gui.remote.RRadioBox;
 import org.jspresso.framework.gui.remote.RSecurityComponent;
+import org.jspresso.framework.gui.remote.RTabContainer;
 import org.jspresso.framework.gui.remote.RTextArea;
 import org.jspresso.framework.gui.remote.RTextComponent;
 import org.jspresso.framework.gui.remote.RTextField;
@@ -125,7 +127,6 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicIndexedView;
 import org.jspresso.framework.view.BasicMapView;
-import org.jspresso.framework.view.BasicView;
 import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IMapView;
@@ -613,7 +614,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
                                                         IActionHandler actionHandler, Locale locale) {
     IPercentPropertyDescriptor propertyDescriptor = (IPercentPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    IFormatter<Object, String> formatter = createPercentFormatter(propertyDescriptor, actionHandler,  locale);
+    IFormatter<Object, String> formatter = createPercentFormatter(propertyDescriptor, actionHandler, locale);
     IValueConnector connector;
     RComponent viewComponent;
     if (propertyViewDescriptor.isReadOnly()) {
@@ -825,7 +826,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     }
     IValueConnector connector;
     RComponent viewComponent;
-    IFormatter<Object, String> formatter = createDecimalFormatter(propertyDescriptor, actionHandler,  locale);
+    IFormatter<Object, String> formatter = createDecimalFormatter(propertyDescriptor, actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
       if (propertyViewDescriptor.getAction() != null) {
@@ -1432,7 +1433,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
       if (propertyDescriptor == null) {
         throw new ViewException(
             "Property descriptor [" + propertyName + "] does not exist for model descriptor " + viewDescriptor
-                .getModelDescriptor().getName() + ".");
+                .getModelDescriptor().getName() + "."
+        );
       }
       IView<RComponent> propertyView = createView(propertyViewDescriptor, actionHandler, locale);
       // Fix bug 782
@@ -1552,8 +1554,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
    * {@inheritDoc}
    */
   @Override
-  protected IView<RComponent> createMapView(IMapViewDescriptor viewDescriptor, IActionHandler actionHandler, Locale
-      locale) {
+  protected IView<RComponent> createMapView(IMapViewDescriptor viewDescriptor, IActionHandler actionHandler,
+                                            Locale locale) {
     RMap viewComponent = createRMap(viewDescriptor);
     String connectorId = ModelRefPropertyConnector.THIS_PROPERTY;
     if (viewDescriptor.getModelDescriptor() instanceof IPropertyDescriptor) {
@@ -2034,5 +2036,59 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     getRemotePeerRegistry().register(viewComponent);
     viewComponent.setPermId(getRemotePeerRegistry().registerPermId(descriptor.getPermId(), viewComponent.getGuid()));
     return indexedView;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected ICompositeView<RComponent> createTabView(ITabViewDescriptor viewDescriptor, IActionHandler actionHandler,
+                                                     Locale locale) {
+    final RTabContainer viewComponent = createRTabContainer(viewDescriptor);
+    final BasicIndexedView<RComponent> view = constructIndexedView(viewComponent, viewDescriptor);
+
+    viewComponent.addPropertyChangeListener("selectedIndex", new PropertyChangeListener() {
+
+      @Override
+      public void propertyChange(PropertyChangeEvent evt) {
+        RTabContainer source = (RTabContainer) evt.getSource();
+        view.setCurrentViewIndex(source.getSelectedIndex());
+      }
+    });
+    List<RComponent> tabs = new ArrayList<>();
+    List<IView<RComponent>> childrenViews = new ArrayList<>();
+
+    for (IViewDescriptor childViewDescriptor : viewDescriptor.getChildViewDescriptors()) {
+      if (actionHandler.isAccessGranted(childViewDescriptor)) {
+        IView<RComponent> childView = createView(childViewDescriptor, actionHandler, locale);
+        RComponent tab = childView.getPeer();
+        switch (viewDescriptor.getRenderingOptions()) {
+          case ICON:
+            tab.setLabel(null);
+            break;
+          case LABEL:
+            tab.setIcon(null);
+            break;
+          default:
+            break;
+        }
+        tabs.add(tab);
+        childrenViews.add(childView);
+      }
+    }
+    viewComponent.setTabs(tabs.toArray(new RComponent[tabs.size()]));
+    view.setChildren(childrenViews);
+    return view;
+  }
+
+  /**
+   * Creates a remote tab container.
+   *
+   * @param viewDescriptor
+   *     the component view descriptor.
+   * @return the created remote component.
+   */
+  protected RTabContainer createRTabContainer(ITabViewDescriptor viewDescriptor) {
+    return new RTabContainer(getGuidGenerator().generateGUID());
   }
 }
