@@ -136,6 +136,8 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
         }
       } else if (viewDescriptor instanceof MobileBorderViewDescriptor) {
         view = createBorderView((MobileBorderViewDescriptor) viewDescriptor, actionHandler, locale);
+      } else if (viewDescriptor instanceof MobileTabViewDescriptor) {
+        view = createTabView((MobileTabViewDescriptor) viewDescriptor, actionHandler, locale);
       }
       if (view != null && view.getDescriptor() instanceof IMobilePageAware) {
         if (!(view.getPeer() instanceof RMobilePageAware)) {

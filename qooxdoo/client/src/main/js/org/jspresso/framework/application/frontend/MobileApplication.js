@@ -53,6 +53,9 @@
  * @use(org.jspresso.framework.gui.remote.RTimeField)
  * @use(org.jspresso.framework.gui.remote.RTree)
  *
+ * @use(org.jspresso.framework.gui.remote.mobile.RMobileList)
+ * @use(org.jspresso.framework.gui.remote.mobile.RMobileTree)
+ *
  * @use(org.jspresso.framework.util.gui.Dimension)
  * @use(org.jspresso.framework.util.gui.CellConstraints)
  * @use(org.jspresso.framework.util.gui.Font)

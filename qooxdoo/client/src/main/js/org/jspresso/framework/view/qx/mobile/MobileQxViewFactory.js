@@ -402,6 +402,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         container = this._createCardContainer(remoteContainer);
       } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.RBorderContainer) {
         container = this._createBorderContainer(remoteContainer);
+      } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.mobile.RMobileTabContainer) {
+        container = this._createTabContainer(remoteContainer);
       }
       if (container instanceof qx.ui.mobile.page.NavigationPage) {
         if (remoteContainer instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAware) {
@@ -1121,6 +1123,64 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     },
 
     /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteTabContainer {org.jspresso.framework.gui.remote.mobile.RMobileTabContainer}
+     */
+    _createTabContainer: function (remoteTabContainer) {
+      // view remoteTabContainer may have to be retrieved for late update
+      // of cards.
+      this._getRemotePeerRegistry().register(remoteTabContainer);
+      var tabContainer;
+      if (remoteTabContainer.getCarouselMode()) {
+        tabContainer = new qx.ui.mobile.container.Carousel(2000);
+      } else {
+        tabContainer = new qx.ui.mobile.tabbar.TabBar();
+      }
+      for (var i = 0; i < remoteTabContainer.getTabs().length; i++) {
+        /** @type {org.jspresso.framework.gui.remote.RComponent} */
+        var remoteTab = remoteTabContainer.getTabs()[i];
+        var tabComponent = this.createComponent(remoteTab);
+
+        if (remoteTabContainer.getCarouselMode()) {
+          tabContainer.add(tabComponent);
+        } else {
+          var tab = new qx.ui.mobile.tabbar.TabButton(remoteTab.getLabel(), remoteTab.getIcon());
+          tab.setView(tabComponent);
+          tabContainer.add(tab);
+        }
+      }
+      if (remoteTabContainer.getCarouselMode()) {
+        remoteTabContainer.addListener("changeSelectedIndex", function (event) {
+          tabContainer.setCurrentIndex(event.getData());
+        });
+        tabContainer.addListener("changeCurrentIndex", function (event) {
+          var index = event.getData();
+          remoteTabContainer.setSelectedIndex(index);
+          var command = new org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand();
+          command.setTargetPeerGuid(remoteTabContainer.getGuid());
+          command.setPermId(remoteTabContainer.getPermId());
+          command.setLeadingIndex(index);
+          this._getCommandHandler().registerCommand(command);
+        }, this);
+      } else {
+        remoteTabContainer.addListener("changeSelectedIndex", function (event) {
+          tabContainer.setSelection(tabContainer.getChildren()[event.getData()]);
+        });
+        tabContainer.addListener("changeSelection", function (event) {
+          var index = tabContainer.getChildren().indexOf(event.getData());
+          remoteTabContainer.setSelectedIndex(index);
+          var command = new org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand();
+          command.setTargetPeerGuid(remoteTabContainer.getGuid());
+          command.setPermId(remoteTabContainer.getPermId());
+          command.setLeadingIndex(index);
+          this._getCommandHandler().registerCommand(command);
+        }, this);
+      }
+
+      return tabContainer;
+    },
+
+    /**
      * @param navigationPage {qx.ui.mobile.page.NavigationPage}
      * @return {undefined}
      */
@@ -1244,7 +1304,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           }
         }, this);
         textField.addListener("tap", function (event) {
-          if (textField.getReadOnly() && state.getEnabled()) {
+          if (textField.getReadOnly() && state.getWritable()) {
             var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
             this._getActionHandler().execute(mainAction, actionEvent);
           }

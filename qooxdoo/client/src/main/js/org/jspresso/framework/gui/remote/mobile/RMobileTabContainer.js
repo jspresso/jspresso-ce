@@ -31,7 +31,7 @@
  */
 
 qx.Class.define("org.jspresso.framework.gui.remote.mobile.RMobileTabContainer", {
-  extend: org.jspresso.framework.gui.remote.RTabContainer(),
+  extend: org.jspresso.framework.gui.remote.RTabContainer,
 
   construct: function () {
     this.base(arguments);
