@@ -214,6 +214,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     createToolBarFromActions: function (actions, maxToolbarActionCount, modelController) {
       var extraActions = [];
       var toolBar = new qx.ui.mobile.toolbar.ToolBar();
+      toolBar.addCssClass("jspresso-toolbar");
       var actionComponent;
       for (var i = 0; i < actions.length; i++) {
         if (i < maxToolbarActionCount - 1 || actions.length == maxToolbarActionCount) {
@@ -456,12 +457,12 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       if (remoteNavPage.getHeaderView()) {
         headerComponent = this.createComponent(remoteNavPage.getHeaderView());
       }
-      var tabletMode = false;
+      var isTablet = false;
       if (headerComponent && this._getActionHandler().isTablet()) {
-        tabletMode = true;
+        isTablet = true;
       }
       var navPage;
-      if (tabletMode) {
+      if (isTablet) {
         navPage = new org.jspresso.framework.view.qx.mobile.NoScrollNavigationPage();
       } else {
         navPage = new qx.ui.mobile.page.NavigationPage();
@@ -472,14 +473,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         var content = navPage.getContent();
         var contentLeft = content;
         var contentRight = content;
-        if (tabletMode) {
+        if (isTablet) {
           content.setLayout(new qx.ui.mobile.layout.VBox());
           var splittedContent = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox());
           contentLeft = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
           contentRight = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
           contentLeft.addCssClasses(["jspresso-tablet-content-left", "group"]);
           contentRight.addCssClasses(["jspresso-tablet-content-right", "group"]);
-          splittedContent.add(contentLeft, {flex: 1});
+          splittedContent.add(this._decorateWithScrollContainer(contentLeft), {flex: 1});
           splittedContent.add(contentRight, {flex: 1});
           content.add(splittedContent, {flex: 1});
         }
@@ -488,7 +489,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           contentLeft.add(headerComponent);
         }
         this._addSectionHeader(contentRight, remoteNavPage.getSelectionView());
-        if (tabletMode) {
+        if (isTablet) {
           var selectionScroll = new qx.ui.mobile.container.Scroll();
           selectionScroll.removeCssClasses(["iscroll", "scroll"]);
           selectionScroll.add(selectionComponent, {flex: 1});
@@ -499,7 +500,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           scroll = navPage._getScrollContainer();
         }
         navPage.setUserData("pageEndScroll", scroll);
-        if (!tabletMode) {
+        if (!isTablet) {
           selectionComponent.getModel().addListener("change", function (e) {
             var lastScrollTimestamp = scroll.getUserData("lastScrollTimestamp");
             if (!lastScrollTimestamp || e.getTimeStamp() - lastScrollTimestamp > 2000) {
@@ -635,6 +636,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
               item.setShowArrow(true);
             }
           });
+          list.addCssClass("jspresso-list");
           list.setModel(listModel);
           list.addListener("changeSelection", function (evt) {
             var selectedIndex = evt.getData();
@@ -1031,6 +1033,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           return new org.jspresso.framework.view.qx.mobile.TreeItemRenderer();
         }
       });
+      treeList.addCssClass("jspresso-list");
       treeList.setModel(treeListModel);
       var selections = [];
       treeList.addListener("changeSelection", function (evt) {
@@ -1569,6 +1572,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           return new rendererType();
         }
       });
+      list.addCssClass("jspresso-list");
 
       list.setModel(listModel);
 
@@ -1867,14 +1871,13 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @param component {qx.ui.mobile.core.Widget}
      */
     _decorateWithScrollContainer: function (component) {
-      return component;
-//      var scrollContainer = new qx.ui.mobile.container.Scroll();
-//      // scrollContainer.setFixedHeight(true);
-//      // scrollContainer.setShowScrollIndicator(false);
-//      scrollContainer.add(component, {
-//        flex: 1
-//      });
-//      return scrollContainer;
+      var scrollContainer = new qx.ui.mobile.container.Scroll();
+      // scrollContainer.setFixedHeight(true);
+      // scrollContainer.setShowScrollIndicator(false);
+      scrollContainer.add(component, {
+        flex: 1
+      });
+      return scrollContainer;
     },
 
     __bindReadOnlyBorder: function (state, textInput) {
@@ -1908,7 +1911,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         converter: this._readOnlyFieldConverter
       });
       this.__bindReadOnlyBorder(state, textArea);
-      return this._decorateWithScrollContainer(textArea);
+      return textArea;
     },
 
     /**
@@ -1953,7 +1956,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       modelController.addTarget(htmlText, "value", "value", false, {
         converter: this._modelToViewFieldConverter
       });
-      return this._decorateWithScrollContainer(htmlText);
+      return htmlText;
     }
   }
 });

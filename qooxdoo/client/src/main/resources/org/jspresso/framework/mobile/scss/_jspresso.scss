@@ -68,12 +68,12 @@
   border: none;
 }
 
-.jspresso-tablet-content-right {
-  width: 50%;
+.jspresso-tablet-content-left {
+  width: 100%;
 }
 
 .jspresso-tablet-content-right {
-  width: 50%;
+  width: 100%;
 }
 
 .jspresso-area {
@@ -83,4 +83,8 @@
 
 .jspresso-list {
   padding: 4px;
+}
+
+.jspresso-toolbar {
+  height: initial;
 }

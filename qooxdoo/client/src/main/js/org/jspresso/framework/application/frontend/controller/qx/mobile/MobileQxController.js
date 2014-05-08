@@ -260,12 +260,14 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
 
       dialogContent.add(dialogMessage);
       dialogContent.add(dialogView);
-      if (actions[0] instanceof qx.ui.mobile.form.Button) {
-        for (var i = 0; i < actions.length; i++) {
-          dialogContent.add(actions[i]);
+      if (actions.length > 0) {
+        if (actions[0] instanceof qx.ui.mobile.form.Button) {
+          for (var i = 0; i < actions.length; i++) {
+            dialogContent.add(actions[i]);
+          }
+        } else {
+          dialogContent.add(this._getViewFactory().createToolBarFromActions(actions, 4, null));
         }
-      } else {
-        dialogContent.add(this._getViewFactory().createToolBarFromActions(actions, 4, null));
       }
 
       var dialogPage = null;
