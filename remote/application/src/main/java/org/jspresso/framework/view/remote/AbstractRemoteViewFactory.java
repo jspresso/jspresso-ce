@@ -96,6 +96,7 @@ import org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IDurationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IHtmlPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IImageUrlPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPasswordPropertyDescriptor;
@@ -982,10 +983,11 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
   @Override
   protected IView<RComponent> createImagePropertyView(final IPropertyViewDescriptor propertyViewDescriptor,
                                                       IActionHandler actionHandler, Locale locale) {
-    if (propertyViewDescriptor.isReadOnly() || propertyViewDescriptor instanceof IImageViewDescriptor) {
+    final IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor.getModelDescriptor();
+    if (propertyViewDescriptor.isReadOnly() || propertyViewDescriptor instanceof IImageViewDescriptor
+        || !(propertyDescriptor instanceof IBinaryPropertyDescriptor)) {
       IValueConnector connector = getConnectorFactory().createValueConnector(
           propertyViewDescriptor.getModelDescriptor().getName());
-      final IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor.getModelDescriptor();
       connector.setExceptionHandler(actionHandler);
       if (connector instanceof RemoteValueConnector) {
         final RemoteValueConnector rConnector = (RemoteValueConnector) connector;
