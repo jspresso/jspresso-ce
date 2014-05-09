@@ -1498,14 +1498,15 @@ public class DefaultSwingViewFactory extends
   protected IView<JComponent> createImagePropertyView(
       IPropertyViewDescriptor propertyViewDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    if (propertyViewDescriptor.isReadOnly() || propertyViewDescriptor instanceof IImageViewDescriptor) {
+    final IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor.getModelDescriptor();
+    if (propertyViewDescriptor.isReadOnly() || propertyViewDescriptor instanceof IImageViewDescriptor
+        || !(propertyDescriptor instanceof IBinaryPropertyDescriptor)) {
       JLabel imageLabel;
       if (propertyViewDescriptor.getAction() != null) {
         imageLabel = createJLink(propertyViewDescriptor);
       } else {
         imageLabel = createJLabel(propertyViewDescriptor, false);
       }
-      IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor.getModelDescriptor();
       Integer scaledWidth = null;
       Integer scaledHeight = null;
       if (propertyViewDescriptor instanceof IScalableImageAware) {
