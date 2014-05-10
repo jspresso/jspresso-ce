@@ -63,8 +63,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImagePicker", {
 
     /**
      * Apply the enabled property.
-     *
-     * @type member
      * @param value {Boolean} Current value
      * @param old {Boolean} Previous value
      */
@@ -140,7 +138,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImagePicker", {
      * Don't need a src attribute, if it was set to javascript:void we get an insecure
      * objects error in IE.
      *
-     * @type member
      * @return {String}
      */
     _createIFrameTarget: function () {

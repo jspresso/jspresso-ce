@@ -232,6 +232,33 @@
     </property>
   </bean>
 
+  <bean id="basicLoginViewDescriptorBase"
+        class="org.jspresso.framework.view.descriptor.mobile.MobileComponentViewDescriptor">
+    <property name="name" value="basic"/>
+    <property name="renderedProperties">
+      <list>
+        <value>username</value>
+        <value>password</value>
+        <value>rememberMe</value>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="basicLoginViewDescriptor" parent="basicLoginViewDescriptorBase"/>
+
+  <bean id="advancedLoginViewDescriptor" parent="advancedLoginViewDescriptorBase"/>
+
+  <bean id="advancedLoginViewDescriptorBase"
+        class="org.jspresso.framework.view.descriptor.mobile.MobileComponentViewDescriptor">
+    <property name="name" value="advanced"/>
+    <property name="renderedProperties">
+      <list>
+        <value>language</value>
+        <value>timeZoneId</value>
+      </list>
+    </property>
+  </bean>
+
   <bean id="loginViewDescriptorBase"
         class="org.jspresso.framework.view.descriptor.mobile.MobileTabViewDescriptor">
     <property name="carouselMode" value="true" />
@@ -244,25 +271,8 @@
     <property name="modelDescriptor" ref="loginModelDescriptor"/>
     <property name="tabs">
       <list>
-        <bean class="org.jspresso.framework.view.descriptor.mobile.MobileComponentViewDescriptor">
-          <property name="name" value="basic"/>
-          <property name="renderedProperties">
-            <list>
-              <value>username</value>
-              <value>password</value>
-              <value>rememberMe</value>
-            </list>
-          </property>
-        </bean>
-        <bean class="org.jspresso.framework.view.descriptor.mobile.MobileComponentViewDescriptor">
-          <property name="name" value="advanced"/>
-          <property name="renderedProperties">
-            <list>
-              <value>language</value>
-              <value>timeZoneId</value>
-            </list>
-          </property>
-        </bean>
+        <ref bean="basicLoginViewDescriptor"/>
+        <ref bean="advancedLoginViewDescriptor"/>
       </list>
     </property>
   </bean>

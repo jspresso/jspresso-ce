@@ -1153,7 +1153,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       this._getRemotePeerRegistry().register(remoteTabContainer);
       var tabContainer;
       if (remoteTabContainer.getCarouselMode()) {
-        tabContainer = new qx.ui.mobile.container.Carousel();
+        tabContainer = new org.jspresso.framework.view.qx.mobile.EnhancedCarousel();
+        tabContainer.setHeight(null);
+        tabContainer.addCssClass("jspresso-carousel");
       } else {
         tabContainer = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
         var tabBar = new qx.ui.mobile.tabbar.TabBar();

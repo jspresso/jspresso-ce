@@ -1,5 +1,8 @@
 3.8
 ===
+- In order to clarify class usage  between Jspresso CE and Jspresso EE, all Jspresso EE classes now belong to the
+org.jspresso.framework.ext (sub)package(s)
+
 - Migrated to Apache Flex 4.12. Please change all the references in pom.xml
     com.adobe.flex.framework
     to

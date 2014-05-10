@@ -51,7 +51,9 @@ import org.jspresso.framework.gui.remote.mobile.RMobilePageAware;
 import org.jspresso.framework.gui.remote.mobile.RMobilePageAwareContainer;
 import org.jspresso.framework.gui.remote.mobile.RMobileTabContainer;
 import org.jspresso.framework.gui.remote.mobile.RMobileTree;
+import org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.server.remote.RemotePeerRegistryServlet;
 import org.jspresso.framework.util.remote.IRemotePeer;
@@ -558,7 +560,8 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
    */
   @Override
   protected RImageComponent createRImageComponent(IPropertyViewDescriptor viewDescriptor) {
-    if (viewDescriptor.isReadOnly()) {
+    final IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) viewDescriptor.getModelDescriptor();
+    if (viewDescriptor.isReadOnly() || !(propertyDescriptor instanceof IBinaryPropertyDescriptor)) {
       return super.createRImageComponent(viewDescriptor);
     } else {
       return new RImagePicker(getGuidGenerator().generateGUID());
