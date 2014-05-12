@@ -334,6 +334,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
           if (this.isRegistered(child.getGuid())) {
             child = /** @type {org.jspresso.framework.state.remote.RemoteValueState} */ this.getRegistered(child.getGuid());
             children.remove(child);
+            child.setParent(null);
           }
         }
       } else {
@@ -352,6 +353,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
             this.register(child);
           }
           args[i] = child;
+          child.setParent(compositeValueState);
         }
         if (oldLength > 0) {
           args.unshift(0, oldLength);

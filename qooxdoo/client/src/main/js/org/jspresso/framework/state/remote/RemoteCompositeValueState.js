@@ -65,7 +65,7 @@ qx.Class.define("org.jspresso.framework.state.remote.RemoteCompositeValueState",
         }
         qx.data.Array.prototype.splice.apply(targetArray, [startIndex, changedItemsCount
         ].concat(org.jspresso.framework.state.remote.RemoteCompositeValueState.__flattenNested(compositeState,
-            levelToInvalidate, targetArray).toArray()));
+                levelToInvalidate, targetArray).toArray()));
       };
 
       var id = children.addListener("change", listener);
@@ -80,7 +80,7 @@ qx.Class.define("org.jspresso.framework.state.remote.RemoteCompositeValueState",
         for (var i = 0; i < children.length; i++) {
           if (children.getItem(i) instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
             flat.append(org.jspresso.framework.state.remote.RemoteCompositeValueState.__flattenNested(children.getItem(i),
-                nestedLevel + 1, targetArray));
+                    nestedLevel + 1, targetArray));
           }
         }
       }
@@ -121,13 +121,30 @@ qx.Class.define("org.jspresso.framework.state.remote.RemoteCompositeValueState",
 
   members: {
     __bindChildrenArray: function (value, old) {
+      var children = this.getChildren();
+      var child;
+      if (children) {
+        for (var i = 0; i < children.length; i++) {
+          var child = children.getItem(i);
+          if (value == null || !value.contains(child)) {
+            child.setParent(null);
+          }
+        }
+      }
       if (value == null) {
         this.setChildren(new qx.data.Array());
       } else {
         for (var i = 0; i < value.length; i++) {
-          value.getItem(i).setParent(this);
+          child = value.getItem(i);
+          child.setParent(this);
         }
       }
+      /*
+       children = this.getChildren();
+       children.addListener("changeBubble", function(event) {
+       this._applyEventPropagation(value,  old, "children." + event.getData()["name"]);
+       }, this);
+       */
     },
 
     notifyChildrenChanged: function () {
