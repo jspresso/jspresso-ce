@@ -2460,13 +2460,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             this._getActionHandler().execute(remoteLabel.getAction());
           }, this);
         } else {
+          atom.setRich(true);
           modelController.addTarget(atom, "label", "value", false, {
             converter: function (modelValue, model) {
-              if (org.jspresso.framework.util.html.HtmlUtil.isHtml(modelValue)) {
-                atom.setRich(true);
-              } else {
-                atom.setRich(false);
-              }
               return modelValue;
             }
           });

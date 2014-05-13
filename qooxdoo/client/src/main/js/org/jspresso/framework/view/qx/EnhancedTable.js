@@ -50,7 +50,7 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedTable", {
       if (v != null && v != "") {
         tt.setLabel(v);
         if (tt.isVisible()) {
-          tt.placeToMouse(e);
+          tt.placeToPointer(e);
         }
       } else {
         tt.hide();
