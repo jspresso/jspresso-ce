@@ -136,9 +136,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       if (buttons.length > 0) {
         dialog.addListener("keypress", function (e) {
           if (e.getKeyIdentifier() == "Enter" && !qx.ui.core.FocusHandler.getInstance().isFocused(buttons[0])
-              && !(qx.ui.core.FocusHandler.getInstance().getFocusedWidget() instanceof qx.ui.form.AbstractField)) {
+              && (!(qx.ui.core.FocusHandler.getInstance().getFocusedWidget() instanceof qx.ui.form.AbstractField)
+                  || qx.ui.core.FocusHandler.getInstance().getFocusedWidget() instanceof qx.ui.form.PasswordField)) {
             buttons[0].focus();
-            buttons[0].execute(); // and call the default button's
+            new qx.util.DeferredCall(function () {
+              buttons[0].execute(); // and call the default button's
+            }).schedule();
           }
         });
       }
@@ -246,7 +249,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         workspacePanel.addListener("changeValue", function (event) {
           this.execute(event.getTarget().getUserData("rAction"));
         }, this);
-        this._getViewFactory().setIcon(workspacePanel.getChildControl("bar"), workspaceActions.getActions()[i].getIcon());
+        this._getViewFactory().setIcon(workspacePanel.getChildControl("bar"),
+            workspaceActions.getActions()[i].getIcon());
         workspaceAccordion.add(workspacePanel, {flex: 1});
       }
 
@@ -459,8 +463,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         for (var i = 0; i < actionLists.length; i++) {
           var actionList = actionLists[i];
           if (!useSeparator || !menubarButton) {
-            menubarButton = this._getViewFactory().createMenubarButton(actionList.getName(), actionList.getDescription(),
-                actionList.getIcon());
+            menubarButton = this._getViewFactory().createMenubarButton(actionList.getName(),
+                actionList.getDescription(), actionList.getIcon());
             menuBar.add(menubarButton);
             menubarButton.setMenu(new qx.ui.menu.Menu());
           } else {
