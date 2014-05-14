@@ -1222,7 +1222,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     /**
      *
      * @return {undefined}
-     * @param rCardComponent  {org.jspresso.framework.gui.remote.RCardContainer}
+     * @param rCardComponent  {org.jspresso.framework.gui.remote.RComponent}
      * @param cardContainer {qx.ui.mobile.container.Composite}
      * @param cardName {String}
      */
@@ -1241,6 +1241,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           this.linkNextPageBackButton(cardComponent, cardContainer.getUserData("previousPage"), null, null);
           this._selectCard(cardContainer, cardComponent);
         }
+      } else if (rCardComponent instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAwareContainer) {
+        this.addCard(cardContainer, rCardComponent.getContent(), cardName);
+      } else if (rCardComponent instanceof org.jspresso.framework.gui.remote.RBorderContainer) {
+        this.addCard(cardContainer, rCardComponent.getCenter(), cardName);
       }
     },
 

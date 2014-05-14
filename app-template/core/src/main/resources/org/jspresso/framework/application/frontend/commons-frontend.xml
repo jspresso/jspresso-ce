@@ -1067,11 +1067,15 @@
 
   <!-- Standard ready to use modules -->
 
-  <bean abstract="true" id="abstractSimpleModule" class="org.jspresso.framework.application.model.Module">
+  <bean abstract="true" id="abstractSimpleModuleBase" class="org.jspresso.framework.application.model.Module">
   </bean>
 
-  <bean abstract="true" id="abstractBeanModule" class="org.jspresso.framework.application.model.BeanModule">
+  <bean abstract="true" id="abstractSimpleModule" parent="abstractSimpleModuleBase"/>
+
+  <bean abstract="true" id="abstractBeanModuleBase" class="org.jspresso.framework.application.model.BeanModule">
   </bean>
+
+  <bean abstract="true" id="abstractBeanModule" parent="abstractBeanModuleBase"/>
 
   <bean id="beanCollectionModuleView" parent="decoratedView"
     class="org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor" scope="prototype">

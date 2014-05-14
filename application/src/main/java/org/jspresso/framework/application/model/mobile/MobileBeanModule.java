@@ -26,6 +26,7 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.view.descriptor.EBorderType;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.IMobilePageSectionViewDescriptor;
+import org.jspresso.framework.view.descriptor.mobile.MobileBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileCompositePageViewDescriptor;
 
@@ -85,7 +86,10 @@ public class MobileBeanModule extends BeanModule {
     if (projectedViewDescriptor != null) {
       BeanModuleDescriptor beanModuleDescriptor = getDescriptor();
       projectedViewDescriptor.setModelDescriptor(beanModuleDescriptor.getPropertyDescriptor(MODULE_OBJECT));
-      return projectedViewDescriptor;
+      MobileBorderViewDescriptor viewDescriptor = new MobileBorderViewDescriptor();
+      viewDescriptor.setModelDescriptor(beanModuleDescriptor);
+      viewDescriptor.setCenterViewDescriptor(projectedViewDescriptor);
+      return viewDescriptor;
     }
     return null;
   }
