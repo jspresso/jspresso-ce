@@ -1086,6 +1086,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
             futureSelections[i].state.setSelectedIndices(futureSelections[i].selection);
           }
         }
+        if (remoteTree.getRowAction()) {
+          this._getActionHandler().execute(remoteTree.getRowAction());
+        }
       }, this);
       return treeList;
     },
@@ -1619,6 +1622,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           if (item) {
             item._applyEventPropagation(item.getValue(), undefined, "value");
           }
+        }
+        if (remoteList.getRowAction()) {
+          this._getActionHandler().execute(remoteList.getRowAction());
         }
       }, this);
 

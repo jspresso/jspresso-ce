@@ -18,8 +18,6 @@
  */
 package org.jspresso.framework.view.descriptor.basic;
 
-import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
-import org.jspresso.framework.util.gui.IconProvider;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 
 /**
@@ -39,118 +37,8 @@ import org.jspresso.framework.view.descriptor.IListViewDescriptor;
  * @version $LastChangedRevision : 9424 $
  * @author Vincent Vandenschrick
  */
-public class BasicListViewDescriptor extends BasicCollectionViewDescriptor
+public class BasicListViewDescriptor extends AbstractListViewDescriptor
     implements IListViewDescriptor {
 
-  private IconProvider iconImageURLProvider;
-  private String       renderedProperty;
-  private boolean      displayIcon;
-
-  /**
-   * Instantiates a new Basic list view descriptor.
-   */
-  public BasicListViewDescriptor() {
-    displayIcon = true;
-  }
-
-  /**
-   * Gets the iconImageURLProvider.
-   *
-   * @return the iconImageURLProvider.
-   */
-  @Override
-  public IconProvider getIconImageURLProvider() {
-    return iconImageURLProvider;
-  }
-
-  /**
-   * {@inheritDoc}
-   * @return the rendered property
-   */
-  @Override
-  public String getRenderedProperty() {
-    if (renderedProperty == null) {
-      return ((ICollectionDescriptorProvider<?>) getModelDescriptor()).getCollectionDescriptor().getElementDescriptor()
-                                                                      .getToHtmlProperty();
-    }
-    return renderedProperty;
-  }
-
-  /**
-   * The icon image URL provider is the delegate responsible for inferring a
-   * tree node icon based on its underlying model. By default (i.e. when
-   * {@code iconImageURLProvider} is {@code null}), Jspresso will use
-   * the underlying component descriptor icon, if any. Using a custom icon image
-   * URL provider allows to implement finer rules like using different icons
-   * based on the underlying object state. There is a single method to implement
-   * to achieve this :
-   * <p>
-   * {@code String getIconImageURLForObject(Object userObject);}
-   *
-   * @param iconImageURLProvider           the iconImageURLProvider to set.
-   */
-  public void setIconImageURLProvider(IconProvider iconImageURLProvider) {
-    this.iconImageURLProvider = iconImageURLProvider;
-  }
-
-  /**
-   * Configures the model property to be rendered in the list. Whenever this
-   * property is left to {@code null} (default value), the
-   * {@code toStringProperty} of the element component descriptor is used.
-   *
-   * @param renderedProperty           the renderedProperty to set.
-   */
-  public void setRenderedProperty(String renderedProperty) {
-    this.renderedProperty = renderedProperty;
-  }
-
-  /**
-   * {@inheritDoc}
-   * @return the boolean
-   */
-  @Override
-  public boolean isScrollable() {
-    return isVerticallyScrollable() || isHorizontallyScrollable();
-  }
-
-  /**
-   * Returns {@code true}.
-   * <p>
-   * {@inheritDoc}
-   * @return the boolean
-   */
-  @Override
-  public boolean isVerticallyScrollable() {
-    return true;
-  }
-
-  /**
-   * Returns {@code true}.
-   * <p>
-   * {@inheritDoc}
-   * @return the boolean
-   */
-  @Override
-  public boolean isHorizontallyScrollable() {
-    return true;
-  }
-
-  /**
-   * Will the list view show icons for elements.
-   *
-   * @return {@code true} whenever the list should show icon.
-   */
-  @Override
-  public boolean isDisplayIcon() {
-    return displayIcon;
-  }
-
-  /**
-   * Configures if the list view should show icon based on the icon image url provider. Defaults to {@code true}.
-   *
-   * @param displayIcon the show icon
-   */
-  public void setDisplayIcon(boolean displayIcon) {
-    this.displayIcon = displayIcon;
-  }
+  // Empty as of now.
 }

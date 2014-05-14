@@ -417,6 +417,14 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     },
 
     /**
+     * @param remoteOpenUrlCommand {org.jspresso.framework.application.frontend.command.remote.RemoteOpenUrlCommand}
+     * @return {undefined}
+     */
+    _handleOpenUrlCommand: function (remoteOpenUrlCommand) {
+      window.open(remoteOpenUrlCommand.getUrlSpec(), remoteOpenUrlCommand.getTarget());
+    },
+
+    /**
      * @param command {org.jspresso.framework.application.frontend.command.remote.RemoteCommand}
      * @return {undefined}
      */
@@ -480,7 +488,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
           instanceof org.jspresso.framework.application.frontend.command.remote.RemoteOpenUrlCommand) {
         c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteOpenUrlCommand} */
             command;
-        window.open(c.getUrlSpec(), c.getTarget());
+        this._handleOpenUrlCommand(c);
       } else if (command
           instanceof org.jspresso.framework.application.frontend.command.remote.RemoteUpdateStatusCommand) {
         c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteUpdateStatusCommand} */

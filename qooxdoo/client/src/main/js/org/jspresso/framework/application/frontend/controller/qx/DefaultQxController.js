@@ -706,6 +706,14 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     },
 
     /**
+     * @param remoteOpenUrlCommand {org.jspresso.framework.application.frontend.command.remote.RemoteOpenUrlCommand}
+     * @return {undefined}
+     */
+    _handleOpenUrlCommand: function (remoteOpenUrlCommand) {
+      window.open(remoteOpenUrlCommand.getUrlSpec(), remoteOpenUrlCommand.getTarget());
+    },
+
+    /**
      * @return {undefined}
      */
     __linkBrowserHistory: function () {

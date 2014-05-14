@@ -51,6 +51,7 @@ public abstract class AbstractTreeViewDescriptor extends BasicViewDescriptor imp
   private ITreeLevelDescriptor rootSubtreeDescriptor;
   private IAction              itemSelectionAction;
   private boolean              displayIcon;
+  private IAction rowAction;
 
   /**
    * Instantiates a new Abstract tree view descriptor.
@@ -287,5 +288,26 @@ public abstract class AbstractTreeViewDescriptor extends BasicViewDescriptor imp
    */
   public void setDisplayIcon(boolean displayIcon) {
     this.displayIcon = displayIcon;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public IAction getRowAction() {
+    return rowAction;
+  }
+
+  /**
+   * Registers an action that is implicitly triggered every time a row is
+   * activated (e.g. double-clicked for current UI channels) on the collection
+   * view UI peer. The context of the action execution is the same as if the
+   * action was registered in the view action map.
+   *
+   * @param rowAction
+   *          the rowAction to set.
+   */
+  public void setRowAction(IAction rowAction) {
+    this.rowAction = rowAction;
   }
 }

@@ -18,8 +18,6 @@
  */
 package org.jspresso.framework.view.descriptor.basic;
 
-import org.jspresso.framework.action.IAction;
-
 /**
  * This descriptor is use to design a tree view. The way to define a tree view
  * in Jspresso is a matter of assembling <i>tree level descriptors</i>
@@ -34,21 +32,12 @@ import org.jspresso.framework.action.IAction;
 public class BasicTreeViewDescriptor extends AbstractTreeViewDescriptor {
 
   private boolean                    expanded;
-  private IAction                    rowAction;
 
   /**
    * Constructs a new {@code BasicTreeViewDescriptor} instance.
    */
   public BasicTreeViewDescriptor() {
     expanded = false;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public IAction getRowAction() {
-    return rowAction;
   }
 
   /**
@@ -73,16 +62,4 @@ public class BasicTreeViewDescriptor extends AbstractTreeViewDescriptor {
     this.expanded = expanded;
   }
 
-  /**
-   * Registers an action that is implicitly triggered every time a row is
-   * activated (e.g. double-clicked for current UI channels) on the collection
-   * view UI peer. The context of the action execution is the same as if the
-   * action was registered in the view action map.
-   * 
-   * @param rowAction
-   *          the rowAction to set.
-   */
-  public void setRowAction(IAction rowAction) {
-    this.rowAction = rowAction;
-  }
 }

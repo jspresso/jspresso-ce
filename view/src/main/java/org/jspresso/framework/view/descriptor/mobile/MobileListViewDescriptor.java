@@ -18,15 +18,8 @@
  */
 package org.jspresso.framework.view.descriptor.mobile;
 
-import org.jspresso.framework.action.IAction;
-import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
-import org.jspresso.framework.model.descriptor.IModelDescriptor;
-import org.jspresso.framework.util.gui.IconProvider;
 import org.jspresso.framework.view.descriptor.ESelectionMode;
-import org.jspresso.framework.view.descriptor.IListViewDescriptor;
-import org.jspresso.framework.view.descriptor.IViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicCollectionViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.AbstractListViewDescriptor;
 
 /**
  * This type of descriptor is used to implement a list view. A list view is a
@@ -45,7 +38,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class MobileListViewDescriptor extends BasicListViewDescriptor implements IMobileViewDescriptor {
+public class MobileListViewDescriptor extends AbstractListViewDescriptor implements IMobileViewDescriptor {
 
   private boolean showArrow;
 
@@ -58,37 +51,7 @@ public class MobileListViewDescriptor extends BasicListViewDescriptor implements
   }
 
   /**
-   * Not supported in mobile environment.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public IAction getRowAction() {
-    return null;
-  }
-
-  /**
-   * Not supported in mobile environment.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public void setRowAction(IAction rowAction) {
-    throw new UnsupportedOperationException("Not supported in mobile environment.");
-  }
-
-  /**
-   * Returns {@code true}.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isVerticallyScrollable() {
-    return true;
-  }
-
-  /**
-   * Returns {@code true}.
+   * Returns {@code false}.
    * <p>
    * {@inheritDoc}
    */
@@ -98,7 +61,7 @@ public class MobileListViewDescriptor extends BasicListViewDescriptor implements
   }
 
   /**
-   * always false in mobile environment.
+   * Always false in mobile environment.
    * <p>
    * {@inheritDoc}
    */

@@ -613,6 +613,22 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     },
 
     /**
+     * @param remoteOpenUrlCommand {org.jspresso.framework.application.frontend.command.remote.RemoteOpenUrlCommand}
+     * @return {undefined}
+     */
+    _handleOpenUrlCommand: function (remoteOpenUrlCommand) {
+      var popup = new qx.ui.mobile.dialog.Popup();
+      popup.setTitle("Download");
+      var downloadButton = new qx.ui.mobile.form.Button("Download");
+      downloadButton.addListener("tap", function (e) {
+        window.open(remoteOpenUrlCommand.getUrlSpec(), remoteOpenUrlCommand.getTarget());
+        popup.destroy();
+      }, this);
+      popup.add(downloadButton);
+      popup.show();
+    },
+
+    /**
      * @return {Array}
      */
     _getKeysToTranslate: function () {
