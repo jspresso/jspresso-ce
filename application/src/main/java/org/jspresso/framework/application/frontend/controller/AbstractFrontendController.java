@@ -1895,22 +1895,32 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private void navigatorSelectionChanged(String workspaceName,
       ICompositeValueConnector selectedConnector) {
     if (tracksWorkspaceNavigator) {
-      if (selectedConnector != null
-          && selectedConnector.getConnectorValue() instanceof Module) {
-        Module selectedModule = selectedConnector.getConnectorValue();
-        displayModule(workspaceName, selectedModule);
-        // We do not reset displayed module on navigator selection anymore.
-        // This is because when a node is selected in the tree at different
-        // level,
-        // the module connector selection is a 2-step process :
-        // 1. deselection
-        // 2. selection
-        // The problem is that you never have from and to modules
-        // simultaneously,
-        // thus preventing complex algorithms in onEnter/onLeave actions.
-        // } else {
-        // displayModule(workspaceName, null);
-      }
+      handleWorkspaceNavigatorSelection(workspaceName, selectedConnector);
+    }
+  }
+
+  /**
+   * Handle workspace navigator selection.
+   *
+   * @param workspaceName the workspace name
+   * @param selectedConnector the selected connector
+   */
+  protected void handleWorkspaceNavigatorSelection(String workspaceName, ICompositeValueConnector selectedConnector) {
+    if (selectedConnector != null
+        && selectedConnector.getConnectorValue() instanceof Module) {
+      Module selectedModule = selectedConnector.getConnectorValue();
+      displayModule(workspaceName, selectedModule);
+      // We do not reset displayed module on navigator selection anymore.
+      // This is because when a node is selected in the tree at different
+      // level,
+      // the module connector selection is a 2-step process :
+      // 1. deselection
+      // 2. selection
+      // The problem is that you never have from and to modules
+      // simultaneously,
+      // thus preventing complex algorithms in onEnter/onLeave actions.
+      // } else {
+      // displayModule(workspaceName, null);
     }
   }
 

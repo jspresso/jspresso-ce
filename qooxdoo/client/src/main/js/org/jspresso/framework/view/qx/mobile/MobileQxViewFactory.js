@@ -451,8 +451,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @return {qx.ui.mobile.core.Widget}
      */
     _createMobileNavPage: function (remoteNavPage) {
+      var remoteSelectionComponent = remoteNavPage.getSelectionView();
       /** @type {qx.ui.mobile.list.List} */
-      var selectionComponent = this.createComponent(remoteNavPage.getSelectionView());
+      var selectionComponent = this.createComponent(remoteSelectionComponent);
       var headerComponent;
       if (remoteNavPage.getHeaderView()) {
         headerComponent = this.createComponent(remoteNavPage.getHeaderView());
@@ -529,21 +530,25 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       if (remoteNextPage) {
         /** @type {qx.ui.mobile.page.NavigationPage} */
         var nextPage = this.createComponent(remoteNextPage);
+        this.linkNextPageBackButton(nextPage, navPage, null, null);
         selectionComponent.addListener("changeSelection", function (evt) {
           var oldSelectedIndex = selectionComponent.getUserData("oldSelectedIndex");
           var newSelectedIndex = evt.getData();
           selectionComponent.setUserData("oldSelectedIndex", newSelectedIndex);
-          // Only if index did not change, we must force navigation. If not, navigation will be handled by selection
+          // Navigation will be handled by selection
           // change on server-side,triggering a page change.
-          if (oldSelectedIndex == null || newSelectedIndex == oldSelectedIndex || nextPage
-              instanceof qx.ui.mobile.page.NavigationPage) {
+          if (nextPage instanceof qx.ui.mobile.page.NavigationPage) {
             var pageToShow = this._getActualPageToShow(nextPage);
             if (pageToShow) {
               this._getActionHandler().showDetailPage(pageToShow);
             }
           }
         }, this);
-        this.linkNextPageBackButton(nextPage, navPage, null, null);
+        navPage.addListener("start", function () {
+          var selectionState = remoteSelectionComponent.getState();
+          selectionState.setLeadingIndex(-1);
+          selectionState.setSelectedIndices([]);
+        }, this);
       }
       this._addDetailPage(navPage);
       return navPage;
@@ -1265,14 +1270,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var currentCard = cardContainer.getUserData("currentPage");
       cardContainer.setUserData("currentPage", selectedCard);
       var pageToShow = this._getActualPageToShow(selectedCard);
-      if (selectedCard != currentCard) {
-        if (currentCard) {
-          currentCard.hide();
-        }
-        if (pageToShow) {
-          // this._getActionHandler().showDetailPage(pageToShow);
-          this._getActionHandler().showPage(pageToShow);
-        }
+      if (pageToShow) {
+        this._getActionHandler().showPage(pageToShow);
       }
     },
 

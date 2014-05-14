@@ -24,7 +24,9 @@ import java.util.Map;
 import org.jspresso.framework.application.frontend.command.remote.mobile.RemoteAnimationCommand;
 import org.jspresso.framework.application.frontend.command.remote.mobile.RemoteBackCommand;
 import org.jspresso.framework.application.frontend.controller.remote.AbstractRemoteController;
+import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
+import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RCardContainer;
@@ -133,4 +135,22 @@ public class MobileRemoteController extends AbstractRemoteController {
     getMvcBinder().bind(workspaceNavigator.getConnector(), workspaceConnector);
     return viewComponent;
   }
+
+  /**
+   * Handle workspace navigator selection. Resets selection if selected module is null in order to re-arm client list.
+   *
+   * @param workspaceName
+   *     the workspace name
+   * @param selectedConnector
+   *     the selected connector
+   */
+  protected void handleWorkspaceNavigatorSelection(String workspaceName, ICompositeValueConnector selectedConnector) {
+    if (selectedConnector != null && selectedConnector.getConnectorValue() instanceof Module) {
+      Module selectedModule = selectedConnector.getConnectorValue();
+      displayModule(workspaceName, selectedModule);
+    } else {
+      displayModule(workspaceName, null);
+    }
+  }
+
 }
