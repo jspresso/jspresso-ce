@@ -95,4 +95,11 @@ public interface IController extends IActionHandler, IPropertyChangeCapable {
    *         controller.
    */
   Map<String, Object> getInitialActionContext();
+
+  /**
+   * Gets the session client type.
+   *
+   * @return the client type
+   */
+  EClientType getClientType();
 }

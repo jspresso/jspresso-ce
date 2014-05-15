@@ -70,6 +70,7 @@ import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.ControllerException;
+import org.jspresso.framework.application.EClientType;
 import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
@@ -392,44 +393,6 @@ public class DefaultSwingController extends
     });
   }
 
-  // /**
-  // * This method has been overridden to take care of long-running operations
-  // not
-  // * to have the swing gui blocked. It uses the foxtrot library to achieve
-  // this.
-  // * <p>
-  // * {@inheritDoc}
-  // */
-  // @Override
-  // protected final boolean executeBackend(final IAction action,
-  // final Map<String, Object> context) {
-  // if (action.isLongOperation()) {
-  // Boolean success = (Boolean) SwingUtil.performLongOperation(new Job() {
-  //
-  // /**
-  // * Decorates the super implementation with the foxtrot job.
-  // * <p>
-  // * {@inheritDoc}
-  // */
-  // @Override
-  // public Object run() {
-  // return Boolean.valueOf(protectedExecuteBackend(action, context));
-  // }
-  // });
-  // return success.booleanValue();
-  // }
-  // return protectedExecuteBackend(action, context);
-  // }
-
-  // /**
-  // * {@inheritDoc}
-  // */
-  // @Override
-  // protected final boolean executeFrontend(final IAction action,
-  // final Map<String, Object> context) {
-  // return protectedExecuteFrontend(action, context);
-  // }
-
   /**
    * {@inheritDoc}
    */
@@ -549,6 +512,7 @@ public class DefaultSwingController extends
       Toolkit.getDefaultToolkit().getSystemEventQueue()
           .push(new WaitCursorEventQueue(500));
       Toolkit.getDefaultToolkit().setDynamicLayout(true);
+      getApplicationSession().setClientType(EClientType.DESKTOP_SWING);
       SwingUtilities.invokeLater(new Runnable() {
 
         @Override
@@ -665,36 +629,6 @@ public class DefaultSwingController extends
     }
   }
 
-  // private JMenuBar createApplicationMenuBar() {
-  // JMenuBar applicationMenuBar = new JMenuBar();
-  // List<JMenu> workspaceMenus = createMenus(createWorkspaceActionMap(), true);
-  // if (workspaceMenus != null) {
-  // for (JMenu workspaceMenu : workspaceMenus) {
-  // applicationMenuBar.add(workspaceMenu);
-  // }
-  // }
-  // List<JMenu> navigationMenus = createMenus(getNavigationActions(), true);
-  // if (navigationMenus != null) {
-  // for (JMenu navigationMenu : navigationMenus) {
-  // applicationMenuBar.add(navigationMenu);
-  // }
-  // }
-  // List<JMenu> actionMenus = createMenus(getActionMap(), false);
-  // if (actionMenus != null) {
-  // for (JMenu actionMenu : actionMenus) {
-  // applicationMenuBar.add(actionMenu);
-  // }
-  // }
-  // applicationMenuBar.add(Box.createHorizontalGlue());
-  // List<JMenu> helpActionMenus = createMenus(getHelpActions(), true);
-  // if (helpActionMenus != null) {
-  // for (JMenu helpActionMenu : helpActionMenus) {
-  // applicationMenuBar.add(helpActionMenu);
-  // }
-  // }
-  // return applicationMenuBar;
-  // }
-
   private void createControllerFrame() {
     controllerFrame = new JFrame();
     desktopPane = new JDesktopPane();
@@ -773,30 +707,6 @@ public class DefaultSwingController extends
     return internalFrame;
   }
 
-  // private boolean protectedExecuteBackend(IAction action,
-  // Map<String, Object> context) {
-  // return super.executeBackend(action, context);
-  // }
-
-  // private boolean protectedExecuteFrontend(IAction action,
-  // Map<String, Object> context) {
-  // return super.executeFrontend(action, context);
-  // }
-
-  // private JMenu createMenu(ActionList actionList) {
-  // JMenu menu = new JMenu(actionList.getI18nName(this, getLocale()));
-  // if (actionList.getDescription() != null) {
-  // menu.setToolTipText(actionList.getI18nDescription(this, getLocale())
-  // + IActionFactory.TOOLTIP_ELLIPSIS);
-  // }
-  // menu.setIcon(getIconFactory().getIcon(actionList.getIcon(),
-  // getIconFactory().getSmallIconSize()));
-  // for (JMenuItem menuItem : createMenuItems(actionList)) {
-  // menu.add(menuItem);
-  // }
-  // return menu;
-  // }
-
   private JMenuItem createMenuItem(IDisplayableAction action) {
     return new JMenuItem(getViewFactory().getActionFactory().createAction(
         action, this, null, getLocale()));
@@ -836,49 +746,6 @@ public class DefaultSwingController extends
     }
     return button;
   }
-
-  // private List<JMenuItem> createMenuItems(ActionList actionList) {
-  // List<JMenuItem> menuItems = new ArrayList<JMenuItem>();
-  // for (IDisplayableAction action : actionList.getActions()) {
-  // if (isAccessGranted(action)) {
-  // try {
-  // pushToSecurityContext(action);
-  // menuItems.add(createMenuItem(action));
-  // } finally {
-  // restoreLastSecurityContextSnapshot();
-  // }
-  // }
-  // }
-  // return menuItems;
-  // }
-
-  // @SuppressWarnings("null")
-  // private List<JMenu> createMenus(ActionMap actionMap, boolean useSeparator)
-  // {
-  // List<JMenu> menus = new ArrayList<JMenu>();
-  // if (actionMap != null && isAccessGranted(actionMap)) {
-  // try {
-  // pushToSecurityContext(actionMap);
-  // JMenu menu = null;
-  // for (ActionList actionList : actionMap.getActionLists(this)) {
-  // if (isAccessGranted(actionList)) {
-  // if (!useSeparator || menus.isEmpty()) {
-  // menu = createMenu(actionList);
-  // menus.add(menu);
-  // } else {
-  // menu.addSeparator();
-  // for (JMenuItem menuItem : createMenuItems(actionList)) {
-  // menu.add(menuItem);
-  // }
-  // }
-  // }
-  // }
-  // } finally {
-  // restoreLastSecurityContextSnapshot();
-  // }
-  // }
-  // return menus;
-  // }
 
   private void initLoginProcess() {
     createControllerFrame();

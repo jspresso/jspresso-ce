@@ -23,6 +23,7 @@ import java.util.Map;
 
 import javax.security.auth.Subject;
 
+import org.jspresso.framework.application.EClientType;
 import org.jspresso.framework.security.UserPrincipal;
 
 /**
@@ -115,4 +116,18 @@ public interface IApplicationSession {
    * Clears the application session.
    */
   void clear();
+
+  /**
+   * Gets the session client type.
+   *
+   * @return the client type
+   */
+  EClientType getClientType();
+
+  /**
+   * Sets the session client type.
+   *
+   * @param clientType the client type
+   */
+  void setClientType(EClientType clientType);
 }

@@ -495,6 +495,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     },
 
     /**
+     * @return {String}
+     */
+    _getClientType: function () {
+      return "DESKTOP_HTML5";
+    },
+
+    /**
      *
      * @param uploadCommand {org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand}
      */

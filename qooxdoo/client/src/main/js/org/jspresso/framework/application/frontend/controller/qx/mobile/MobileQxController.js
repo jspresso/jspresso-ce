@@ -644,6 +644,17 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     },
 
     /**
+     * @return {String}
+     */
+    _getClientType: function () {
+      if (this.isTablet()) {
+        return "MOBILE_HTML5_TABLET";
+      } else {
+        return "MOBILE_HTML5_PHONE";
+      }
+    },
+
+    /**
      * @param historyDisplayCommand {org.jspresso.framework.application.frontend.command.remote.RemoteHistoryDisplayCommand}
      * @return {undefined}
      */

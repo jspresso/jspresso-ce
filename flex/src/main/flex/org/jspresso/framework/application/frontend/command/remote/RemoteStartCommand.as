@@ -23,6 +23,7 @@ public class RemoteStartCommand extends RemoteCommand {
   private var _timezoneOffset:int;
   private var _keysToTranslate:Array;
   private var _version:String;
+  private var _clientType:String;
 
   public function RemoteStartCommand() {
     //default constructor.
@@ -60,5 +61,13 @@ public class RemoteStartCommand extends RemoteCommand {
     _version = value;
   }
 
+
+  public function get clientType():String {
+    return _clientType;
+  }
+
+  public function set clientType(value:String):void {
+    _clientType = value;
+  }
 }
 }

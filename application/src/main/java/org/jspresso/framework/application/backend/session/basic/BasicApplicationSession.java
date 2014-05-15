@@ -26,27 +26,30 @@ import java.util.TimeZone;
 
 import javax.security.auth.Subject;
 
+import org.jspresso.framework.application.EClientType;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.security.UserPrincipal;
 
 /**
  * Basic implementation of an application session.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
 public class BasicApplicationSession implements IApplicationSession {
 
   private final Map<String, Object> customValues;
-  private Locale              locale;
-  private TimeZone            timeZone;
-  private Subject             subject;
+  private       Locale              locale;
+  private       TimeZone            timeZone;
+  private       Subject             subject;
+  private       EClientType         clientType;
 
   /**
    * Constructs a new {@code BasicApplicationSession} instance.
    */
   public BasicApplicationSession() {
     customValues = new HashMap<>();
+    clientType = EClientType.UNDEFINED;
   }
 
   /**
@@ -59,7 +62,7 @@ public class BasicApplicationSession implements IApplicationSession {
 
   /**
    * Gets the locale.
-   * 
+   *
    * @return the locale.
    */
   @Override
@@ -84,7 +87,7 @@ public class BasicApplicationSession implements IApplicationSession {
 
   /**
    * Gets the owner.
-   * 
+   *
    * @return the owner.
    */
   @Override
@@ -102,9 +105,9 @@ public class BasicApplicationSession implements IApplicationSession {
 
   /**
    * Sets the locale.
-   * 
+   *
    * @param locale
-   *          the locale to set.
+   *     the locale to set.
    */
   @Override
   public void setLocale(Locale locale) {
@@ -113,9 +116,9 @@ public class BasicApplicationSession implements IApplicationSession {
 
   /**
    * Sets the owner.
-   * 
+   *
    * @param subject
-   *          the owner to set.
+   *     the owner to set.
    */
   @Override
   public void setSubject(Subject subject) {
@@ -124,7 +127,7 @@ public class BasicApplicationSession implements IApplicationSession {
 
   /**
    * Gets the customValues.
-   * 
+   *
    * @return the customValues.
    */
   @Override
@@ -135,7 +138,7 @@ public class BasicApplicationSession implements IApplicationSession {
 
   /**
    * Gets the timeZone.
-   * 
+   *
    * @return the timeZone.
    */
   public TimeZone getTimeZone() {
@@ -144,9 +147,9 @@ public class BasicApplicationSession implements IApplicationSession {
 
   /**
    * Sets the timeZone.
-   * 
+   *
    * @param timeZone
-   *          the timeZone to set.
+   *     the timeZone to set.
    */
   public void setTimeZone(TimeZone timeZone) {
     this.timeZone = timeZone;
@@ -182,5 +185,26 @@ public class BasicApplicationSession implements IApplicationSession {
     locale = null;
     timeZone = null;
     subject = null;
+    clientType = EClientType.UNDEFINED;
+  }
+
+  /**
+   * Gets client type.
+   *
+   * @return the client type
+   */
+  @Override
+  public EClientType getClientType() {
+    return clientType;
+  }
+
+  /**
+   * Sets client type.
+   *
+   * @param clientType the client type
+   */
+  @Override
+  public void setClientType(EClientType clientType) {
+    this.clientType = clientType;
   }
 }

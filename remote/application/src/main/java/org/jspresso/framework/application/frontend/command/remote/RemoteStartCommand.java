@@ -28,14 +28,15 @@ public class RemoteStartCommand extends RemoteCommand {
 
   private static final long serialVersionUID = -8122101348450476262L;
 
-  private String            language;
-  private int               timezoneOffset;
-  private String[]          keysToTranslate;
-  private String            version;
+  private String   language;
+  private int      timezoneOffset;
+  private String[] keysToTranslate;
+  private String   version;
+  private String   clientType;
 
   /**
    * Gets the language.
-   * 
+   *
    * @return the language.
    */
   public String getLanguage() {
@@ -44,7 +45,7 @@ public class RemoteStartCommand extends RemoteCommand {
 
   /**
    * Sets the language.
-   * 
+   *
    * @param language
    *          the language to set.
    */
@@ -54,7 +55,7 @@ public class RemoteStartCommand extends RemoteCommand {
 
   /**
    * Gets the timezoneOffset.
-   * 
+   *
    * @return the timezoneOffset.
    */
   public int getTimezoneOffset() {
@@ -63,7 +64,7 @@ public class RemoteStartCommand extends RemoteCommand {
 
   /**
    * Sets the timezoneOffset.
-   * 
+   *
    * @param timezoneOffset
    *          the timezoneOffset to set.
    */
@@ -73,7 +74,7 @@ public class RemoteStartCommand extends RemoteCommand {
 
   /**
    * Gets the keysToTranslate.
-   * 
+   *
    * @return the keysToTranslate.
    */
   public String[] getKeysToTranslate() {
@@ -82,7 +83,7 @@ public class RemoteStartCommand extends RemoteCommand {
 
   /**
    * Sets the keysToTranslate.
-   * 
+   *
    * @param keysToTranslate
    *          the keysToTranslate to set.
    */
@@ -109,4 +110,21 @@ public class RemoteStartCommand extends RemoteCommand {
     this.version = version;
   }
 
+  /**
+   * Gets client type.
+   *
+   * @return the client type
+   */
+  public String getClientType() {
+    return clientType;
+  }
+
+  /**
+   * Sets client type.
+   *
+   * @param clientType the client type
+   */
+  public void setClientType(String clientType) {
+    this.clientType = clientType;
+  }
 }

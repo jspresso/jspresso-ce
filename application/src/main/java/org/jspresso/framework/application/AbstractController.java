@@ -239,4 +239,9 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable
       actionHandler.execute(delayedActionEntry.getKey(), delayedActionEntry.getValue());
     }
   }
+
+  @Override
+  public EClientType getClientType() {
+    return getApplicationSession().getClientType();
+  }
 }

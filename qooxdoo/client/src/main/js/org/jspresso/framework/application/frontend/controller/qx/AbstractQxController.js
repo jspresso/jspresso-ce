@@ -624,6 +624,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
       startCommand.setKeysToTranslate(this._getKeysToTranslate());
       startCommand.setTimezoneOffset(new Date().getTimezoneOffset() * (-60000));
       startCommand.setVersion(org.jspresso.framework.application.frontend.controller.qx.AbstractQxController.__JSPRESSO_VERSION);
+      startCommand.setClientType(this._getClientType());
       this.__remoteController.callAsyncListeners(true,
           org.jspresso.framework.application.frontend.controller.qx.AbstractQxController.__START_METHOD,
           org.jspresso.framework.util.object.ObjectUtil.untypeObjectGraph(startCommand));
