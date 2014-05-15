@@ -18,9 +18,7 @@
  */
 package org.jspresso.framework.gui.remote.mobile;
 
-import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RComponent;
-import org.jspresso.framework.gui.remote.RContainer;
 
 /**
  * A mobile page.

@@ -456,12 +456,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var remoteSelectionComponent = remoteNavPage.getSelectionView();
       /** @type {qx.ui.mobile.list.List} */
       var selectionComponent = this.createComponent(remoteSelectionComponent);
-      var headerComponent;
-      if (remoteNavPage.getHeaderView()) {
-        headerComponent = this.createComponent(remoteNavPage.getHeaderView());
-      }
+      var rHeaderSections = remoteNavPage.getHeaderSections();
       var isTablet = false;
-      if (headerComponent && this._getActionHandler().isTablet()) {
+      if (rHeaderSections && rHeaderSections.length > 0 && this._getActionHandler().isTablet()) {
         isTablet = true;
       }
       var navPage;
@@ -471,6 +468,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         navPage = new qx.ui.mobile.page.NavigationPage();
       }
       navPage.setTitle(remoteNavPage.getLabel());
+      var headerSections = this._createPageSections(rHeaderSections, navPage);
       navPage.addListener("initialize", function (e) {
         var scroll;
         var content = navPage.getContent();
@@ -487,9 +485,15 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           splittedContent.add(contentRight, {flex: 1});
           content.add(splittedContent, {flex: 1});
         }
-        if (headerComponent) {
-          this._addSectionHeader(contentLeft, remoteNavPage.getHeaderView());
-          contentLeft.add(headerComponent);
+        if (headerSections) {
+          for (var i = 0; i < headerSections.length; i++) {
+            var headerSection = headerSections[i];
+            if (headerSection instanceof org.jspresso.framework.gui.remote.RComponent) {
+              this._addSectionHeader(contentLeft, headerSection);
+            } else {
+              contentLeft.add(headerSection);
+            }
+          }
         }
         this._addSectionHeader(contentRight, remoteNavPage.getSelectionView());
         if (isTablet) {
@@ -612,57 +616,70 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     },
 
     /**
+     *
+     * @param rPageSections {org.jspresso.framework.gui.remote.RComponent[]}
+     * @param holdingPage {qx.ui.mobile.page.NavigationPage}
+     * @return {Array}
+     */
+    _createPageSections: function (rPageSections, holdingPage) {
+      var sections = [];
+      if (rPageSections) {
+        for (var i = 0; i < rPageSections.length; i++) {
+          var remotePageSection = rPageSections[i];
+          var pageSection = this.createComponent(remotePageSection);
+          if (pageSection instanceof qx.ui.mobile.page.NavigationPage) {
+            /** @type {qx.ui.mobile.page.NavigationPage} */
+            var nextPage = pageSection;
+            this.linkNextPageBackButton(nextPage, holdingPage, null, null);
+            var listModel = new qx.data.Array();
+            listModel.push({
+              section: remotePageSection,
+              next: nextPage
+            });
+            var list = new qx.ui.mobile.list.List({
+              configureItem: function (item, data, row) {
+                var section = data.section;
+                item.setTitle(section.getLabel());
+                item.setSubtitle(section.getToolTip());
+                if (section.getIcon()) {
+                  item.setImage(section.getIcon().getImageUrlSpec());
+                }
+                item.setShowArrow(true);
+              }
+            });
+            list.addCssClass("jspresso-list");
+            list.setModel(listModel);
+            list.addListener("changeSelection", function (evt) {
+              var selectedIndex = evt.getData();
+              /** @type {qx.ui.mobile.list.List} */
+              var l = evt.getCurrentTarget();
+              var pageToShow = this._getActualPageToShow(l.getModel().getItem(selectedIndex).next);
+              if (pageToShow && pageToShow.getVisibility() != "visible") {
+                this._getActionHandler().showDetailPage(pageToShow);
+              }
+            }, this);
+            list.setUserData("horizontalPosition", remotePageSection.getHorizontalPosition());
+            sections.push(list);
+          } else {
+            remotePageSection.setUserData("horizontalPosition", remotePageSection.getHorizontalPosition());
+            pageSection.setUserData("horizontalPosition", remotePageSection.getHorizontalPosition());
+            sections.push(remotePageSection);
+            sections.push(pageSection);
+          }
+        }
+      }
+      return sections;
+    },
+
+    /**
      * @param remoteCompositePage {org.jspresso.framework.gui.remote.mobile.RMobileCompositePage}
      * @return {qx.ui.mobile.core.Widget}
      */
     _createMobileCompositePage: function (remoteCompositePage) {
       var compositePage = new qx.ui.mobile.page.NavigationPage();
       compositePage.setTitle(remoteCompositePage.getLabel());
-      var sections = [];
       var pageSections = remoteCompositePage.getPageSections();
-      for (var i = 0; i < pageSections.length; i++) {
-        var remotePageSection = pageSections[i];
-        var pageSection = this.createComponent(remotePageSection);
-        if (pageSection instanceof qx.ui.mobile.page.NavigationPage) {
-          /** @type {qx.ui.mobile.page.NavigationPage} */
-          var nextPage = pageSection;
-          this.linkNextPageBackButton(nextPage, compositePage, null, null);
-          var listModel = new qx.data.Array();
-          listModel.push({
-            section: remotePageSection,
-            next: nextPage
-          });
-          var list = new qx.ui.mobile.list.List({
-            configureItem: function (item, data, row) {
-              var section = data.section;
-              item.setTitle(section.getLabel());
-              item.setSubtitle(section.getToolTip());
-              if (section.getIcon()) {
-                item.setImage(section.getIcon().getImageUrlSpec());
-              }
-              item.setShowArrow(true);
-            }
-          });
-          list.addCssClass("jspresso-list");
-          list.setModel(listModel);
-          list.addListener("changeSelection", function (evt) {
-            var selectedIndex = evt.getData();
-            /** @type {qx.ui.mobile.list.List} */
-            var l = evt.getCurrentTarget();
-            var pageToShow = this._getActualPageToShow(l.getModel().getItem(selectedIndex).next);
-            if (pageToShow && pageToShow.getVisibility() != "visible") {
-              this._getActionHandler().showDetailPage(pageToShow);
-            }
-          }, this);
-          list.setUserData("horizontalPosition", remotePageSection.getHorizontalPosition());
-          sections.push(list);
-        } else {
-          remotePageSection.setUserData("horizontalPosition", remotePageSection.getHorizontalPosition());
-          pageSection.setUserData("horizontalPosition", remotePageSection.getHorizontalPosition());
-          sections.push(remotePageSection);
-          sections.push(pageSection);
-        }
-      }
+      var sections = this._createPageSections(pageSections, compositePage);
       var rEditAction = remoteCompositePage.getEditAction();
       var rEditorPage = remoteCompositePage.getEditorPage();
       if (rEditAction && rEditorPage) {

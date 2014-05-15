@@ -18,7 +18,10 @@
  */
 package org.jspresso.framework.application.model.mobile;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import org.jspresso.framework.application.frontend.action.std.mobile.AddPageAction;
 import org.jspresso.framework.application.model.FilterableBeanCollectionModule;
@@ -32,10 +35,12 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.EBorderType;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.IMobilePageSectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.IMobilePageViewDescriptor;
+import org.jspresso.framework.view.descriptor.mobile.MobileBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileCompositePageViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileNavPageViewDescriptor;
@@ -85,7 +90,7 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
     modulePageView.setModelDescriptor(moduleDescriptor);
 
     IComponentDescriptor<IComponent> realComponentDesc = getFilterComponentDescriptor();
-    MobileComponentViewDescriptor filterViewDesc = getFilterViewDescriptor();
+    IMobilePageSectionViewDescriptor filterViewDesc = (IMobilePageSectionViewDescriptor) getFilterViewDescriptor();
     IComponentDescriptorProvider<IQueryComponent> filterModelDescriptorProvider =
         (IComponentDescriptorProvider<IQueryComponent>) moduleDescriptor
         .getPropertyDescriptor(FilterableBeanCollectionModuleDescriptor.FILTER);
@@ -99,8 +104,10 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
       // Deeply clean model descriptors on filter views
       cleanupFilterViewDescriptor(filterViewDesc);
     }
-    filterViewDesc.setBorderType(EBorderType.TITLED);
-    filterViewDesc.setModelDescriptor(filterModelDescriptorProvider);
+    if (filterViewDesc instanceof BasicViewDescriptor) {
+      ((BasicViewDescriptor) filterViewDesc).setBorderType(EBorderType.TITLED);
+      ((BasicViewDescriptor) filterViewDesc).setModelDescriptor(filterModelDescriptorProvider);
+    }
     if (customFilterView) {
       getQueryViewDescriptorFactory().adaptExistingViewDescriptor(filterViewDesc);
     }
@@ -111,8 +118,19 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
         ((BasicListViewDescriptor) moduleObjectsView).setPaginationViewDescriptor(getPaginationViewDescriptor());
       }
     }
-
-    modulePageView.setHeaderViewDescriptor(filterViewDesc);
+    if (filterViewDesc instanceof MobileCompositePageViewDescriptor) {
+      List<IMobilePageSectionViewDescriptor> refinedSectionDescriptors = new ArrayList<>();
+      for (IMobilePageSectionViewDescriptor sectionViewDescriptor : ((MobileCompositePageViewDescriptor) filterViewDesc)
+          .getPageSectionDescriptors()) {
+        MobileBorderViewDescriptor decorator = new MobileBorderViewDescriptor();
+        decorator.setCenterViewDescriptor(sectionViewDescriptor);
+        decorator.setModelDescriptor(filterModelDescriptorProvider);
+        refinedSectionDescriptors.add(decorator);
+      }
+      modulePageView.setHeaderSectionDescriptors(refinedSectionDescriptors);
+    } else {
+      modulePageView.setHeaderSectionDescriptors(Arrays.asList(filterViewDesc));
+    }
     modulePageView.setMainAction(getQueryModuleFilterAction());
     return modulePageView;
   }
@@ -195,23 +213,13 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
    */
   @Override
   public void setFilterViewDescriptor(IViewDescriptor filterViewDescriptor) {
-    if (!(filterViewDescriptor instanceof MobileComponentViewDescriptor)) {
+    if (!(filterViewDescriptor instanceof MobileComponentViewDescriptor
+        || filterViewDescriptor instanceof MobileCompositePageViewDescriptor)) {
       throw new IllegalArgumentException(
-          "Mobile filterable bean collection module views only support mobile component views as filter views "
-              + "and not :" + filterViewDescriptor.getClass().getSimpleName());
+          "Mobile filterable bean collection module views only support mobile component views or mobile composite "
+              + "pages as filter views and not :" + filterViewDescriptor.getClass().getSimpleName());
     }
     super.setFilterViewDescriptor(filterViewDescriptor);
-  }
-
-  /**
-   * Mobile filterable bean collection module views only support mobile component views as filter views
-   * descriptors.
-   * <p/>
-   * {@inheritDoc}
-   */
-  @Override
-  public MobileComponentViewDescriptor getFilterViewDescriptor() {
-    return (MobileComponentViewDescriptor) super.getFilterViewDescriptor();
   }
 
   /**

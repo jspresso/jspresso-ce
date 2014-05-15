@@ -248,11 +248,17 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     RMobileNavPage viewComponent = createRMobileNavPage(viewDescriptor);
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent, viewDescriptor);
     List<IView<RComponent>> childrenViews = new ArrayList<>();
-    if (viewDescriptor.getHeaderViewDescriptor() != null) {
-      IView<RComponent> headerView = createView(viewDescriptor.getHeaderViewDescriptor(), actionHandler, locale);
-      viewComponent.setHeaderView(headerView.getPeer());
-      childrenViews.add(headerView);
+    List<RComponent> headerSections = new ArrayList<>();
+    if (viewDescriptor.getHeaderSectionsDescriptors() != null) {
+      for (IMobilePageSectionViewDescriptor hsd : viewDescriptor.getHeaderSectionsDescriptors()) {
+        if (isAllowedForClientType(hsd, actionHandler)) {
+          IView<RComponent> headerSection = createView(hsd, actionHandler, locale);
+          headerSections.add(headerSection.getPeer());
+          childrenViews.add(headerSection);
+        }
+      }
     }
+    viewComponent.setHeaderSections(headerSections.toArray(new RComponent[headerSections.size()]));
     if (viewDescriptor.getSelectionViewDescriptor() != null) {
       IView<RComponent> selectionView = createView(viewDescriptor.getSelectionViewDescriptor(), actionHandler, locale);
       viewComponent.setSelectionView(selectionView.getPeer());
@@ -669,7 +675,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
    */
   @Override
   protected RBorderContainer createRBorderContainer(IBorderViewDescriptor viewDescriptor) {
-    return new RBorderContainer(getGuidGenerator().generateGUID());
+    return new RMobileBorderContainer(getGuidGenerator().generateGUID());
   }
 
 

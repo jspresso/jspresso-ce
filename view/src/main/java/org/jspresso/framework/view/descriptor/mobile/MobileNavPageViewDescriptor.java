@@ -18,7 +18,7 @@
  */
 package org.jspresso.framework.view.descriptor.mobile;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -37,9 +37,9 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
  */
 public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescriptor {
 
-  private IViewDescriptor           headerViewDescriptor;
-  private IViewDescriptor           selectionViewDescriptor;
-  private IMobilePageViewDescriptor nextPageViewDescriptor;
+  private List<IMobilePageSectionViewDescriptor> headerSectionDescriptors;
+  private IViewDescriptor                        selectionViewDescriptor;
+  private IMobilePageViewDescriptor              nextPageViewDescriptor;
 
   /**
    * Is cascading models.
@@ -64,7 +64,13 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
 
   @Override
   public List<IViewDescriptor> getChildViewDescriptors() {
-    return Arrays.asList(getHeaderViewDescriptor(), getSelectionViewDescriptor());
+    List<IViewDescriptor> childViewDescriptors = new ArrayList<>();
+    List<IMobilePageSectionViewDescriptor> hsd = getHeaderSectionsDescriptors();
+    if (hsd != null) {
+      childViewDescriptors.addAll(hsd);
+    }
+    childViewDescriptors.add(getSelectionViewDescriptor());
+    return childViewDescriptors;
   }
 
   /**
@@ -146,22 +152,25 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
   }
 
   /**
-   * Gets header view.
+   * Gets header sections descriptors.
    *
-   * @return the header view
+   * @return the header sections descriptors
    */
-  public IViewDescriptor getHeaderViewDescriptor() {
-    completeChildDescriptor(headerViewDescriptor, null);
-    return headerViewDescriptor;
+  public List<IMobilePageSectionViewDescriptor> getHeaderSectionsDescriptors() {
+    if (headerSectionDescriptors != null) {
+      for (IMobilePageSectionViewDescriptor headerSectionDescriptor : headerSectionDescriptors) {
+        completeChildDescriptor(headerSectionDescriptor, null);
+      }
+    }
+    return headerSectionDescriptors;
   }
 
   /**
-   * Sets header view.
+   * Sets header section descriptors.
    *
-   * @param headerViewDescriptor
-   *     the header view
+   * @param headerSectionDescriptors the header section descriptors
    */
-  public void setHeaderViewDescriptor(IViewDescriptor headerViewDescriptor) {
-    this.headerViewDescriptor = headerViewDescriptor;
+  public void setHeaderSectionDescriptors(List<IMobilePageSectionViewDescriptor> headerSectionDescriptors) {
+    this.headerSectionDescriptors = headerSectionDescriptors;
   }
 }

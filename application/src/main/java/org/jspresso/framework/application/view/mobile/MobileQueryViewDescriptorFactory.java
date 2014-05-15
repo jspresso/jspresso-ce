@@ -219,8 +219,8 @@ public class MobileQueryViewDescriptorFactory<E, F, G> extends BasicQueryViewDes
    */
   @Override
   public void adaptExistingViewDescriptor(IViewDescriptor viewDescriptor) {
-    if (viewDescriptor instanceof BasicComponentViewDescriptor) {
-      List<IPropertyViewDescriptor> propertyViews = ((BasicComponentViewDescriptor) viewDescriptor)
+    if (viewDescriptor instanceof MobileComponentViewDescriptor) {
+      List<IPropertyViewDescriptor> propertyViews = ((MobileComponentViewDescriptor) viewDescriptor)
           .getPropertyViewDescriptors(false);
       for (int i = 0; i < propertyViews.size(); i++) {
         IPropertyViewDescriptor propertyView = propertyViews.get(i);
@@ -266,7 +266,7 @@ public class MobileQueryViewDescriptorFactory<E, F, G> extends BasicQueryViewDes
           }
         }
       }
-      ((BasicComponentViewDescriptor) viewDescriptor).setPropertyViewDescriptors(propertyViews);
+      ((MobileComponentViewDescriptor) viewDescriptor).setPropertyViewDescriptors(propertyViews);
     }
     if (viewDescriptor instanceof ICompositeViewDescriptor) {
       List<IViewDescriptor> children = ((ICompositeViewDescriptor) viewDescriptor)

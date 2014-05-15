@@ -42,6 +42,10 @@ qx.Class.define("org.jspresso.framework.gui.remote.mobile.RMobilePageAwareContai
       check: "org.jspresso.framework.gui.remote.RComponent",
       nullable: true
     }
+  },
+  members: {
+    getHorizontalPosition: function () {
+      return this.getContent().getHorizontalPosition();
+    }
   }
-
 });

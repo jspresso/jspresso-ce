@@ -29,9 +29,9 @@ import org.jspresso.framework.gui.remote.RComponent;
 public class RMobileNavPage extends RMobilePage {
 
   private static final long serialVersionUID = 5221935284465846374L;
-  private RComponent  headerView;
-  private RComponent  selectionView;
-  private RMobilePage nextPage;
+  private RComponent[] headerSections;
+  private RComponent   selectionView;
+  private RMobilePage  nextPage;
 
   /**
    * Constructs a new {@code RMobileCardPage} instance.
@@ -90,20 +90,20 @@ public class RMobileNavPage extends RMobilePage {
   }
 
   /**
-   * Gets header view.
+   * Get header sections.
    *
-   * @return the header view
+   * @return the r component [ ]
    */
-  public RComponent getHeaderView() {
-    return headerView;
+  public RComponent[] getHeaderSections() {
+    return headerSections;
   }
 
   /**
-   * Sets header view.
+   * Sets header sections.
    *
-   * @param headerView the header view
+   * @param headerSections the header sections
    */
-  public void setHeaderView(RComponent headerView) {
-    this.headerView = headerView;
+  public void setHeaderSections(RComponent[] headerSections) {
+    this.headerSections = headerSections;
   }
 }
