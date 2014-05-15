@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.view.descriptor.mobile;
 
+import java.util.List;
+
 import org.jspresso.framework.view.descriptor.EHorizontalPosition;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicTabViewDescriptor;
@@ -31,8 +33,9 @@ import org.jspresso.framework.view.descriptor.basic.BasicTabViewDescriptor;
 public class MobileTabViewDescriptor extends BasicTabViewDescriptor
     implements IMobilePageSectionViewDescriptor {
 
-  private boolean carouselMode;
+  private boolean             carouselMode;
   private EHorizontalPosition horizontalPosition;
+  private List<String>        forClientTypes;
 
   /**
    * Instantiates a new Mobile tab view descriptor.
@@ -97,5 +100,26 @@ public class MobileTabViewDescriptor extends BasicTabViewDescriptor
    */
   public void setHorizontalPosition(EHorizontalPosition horizontalPosition) {
     this.horizontalPosition = horizontalPosition;
+  }
+
+
+  /**
+   * Gets for client types.
+   *
+   * @return the for client types
+   */
+  @Override
+  public List<String> getForClientTypes() {
+    return forClientTypes;
+  }
+
+  /**
+   * Sets for client types.
+   *
+   * @param forClientTypes
+   *     the for client types
+   */
+  public void setForClientTypes(List<String> forClientTypes) {
+    this.forClientTypes = forClientTypes;
   }
 }

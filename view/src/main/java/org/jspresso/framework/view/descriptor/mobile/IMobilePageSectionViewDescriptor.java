@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.view.descriptor.mobile;
 
+import org.jspresso.framework.util.gui.IClientTypeAware;
 import org.jspresso.framework.view.descriptor.EHorizontalPosition;
 
 /**
@@ -26,10 +27,10 @@ import org.jspresso.framework.view.descriptor.EHorizontalPosition;
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$
  */
-public interface IMobilePageSectionViewDescriptor extends IMobileViewDescriptor {
+public interface IMobilePageSectionViewDescriptor extends IMobileViewDescriptor, IClientTypeAware {
 
   /**
-   * Gets horizontal position, either LEFT or RIGHT.
+   * Gets horizontal position, either LEFT or .
    *
    * @return the horizontal position
    */

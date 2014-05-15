@@ -108,6 +108,7 @@ import org.jspresso.framework.util.gate.ModelTrackingGate;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.gui.EClientType;
 import org.jspresso.framework.util.gui.ERenderingOptions;
+import org.jspresso.framework.util.gui.IClientTypeAware;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.lang.ICloneable;
 import org.jspresso.framework.util.lang.ObjectUtils;
@@ -3675,12 +3676,12 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Is allowed for client type.
    *
-   * @param propertyView the property view
+   * @param clientTypeAwareView the property view
    * @param actionHandler the action handler
    * @return the boolean
    */
-  protected boolean isAllowedForClientType(IPropertyViewDescriptor propertyView, IActionHandler actionHandler) {
-    List<String> forClientTypes = propertyView.getForClientTypes();
+  protected boolean isAllowedForClientType(IClientTypeAware clientTypeAwareView, IActionHandler actionHandler) {
+    List<String> forClientTypes = clientTypeAwareView.getForClientTypes();
     if (forClientTypes == null) {
       return true;
     }

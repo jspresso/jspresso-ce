@@ -33,6 +33,7 @@ public class MobileComponentViewDescriptor extends AbstractComponentViewDescript
     implements IMobilePageSectionViewDescriptor {
 
   private EHorizontalPosition horizontalPosition;
+  private List<String>        forClientTypes;
 
   /**
    * Instantiates a new Mobile border view descriptor.
@@ -139,5 +140,26 @@ public class MobileComponentViewDescriptor extends AbstractComponentViewDescript
    */
   public void setHorizontalPosition(EHorizontalPosition horizontalPosition) {
     this.horizontalPosition = horizontalPosition;
+  }
+
+
+  /**
+   * Gets for client types.
+   *
+   * @return the for client types
+   */
+  @Override
+  public List<String> getForClientTypes() {
+    return forClientTypes;
+  }
+
+  /**
+   * Sets for client types.
+   *
+   * @param forClientTypes
+   *     the for client types
+   */
+  public void setForClientTypes(List<String> forClientTypes) {
+    this.forClientTypes = forClientTypes;
   }
 }

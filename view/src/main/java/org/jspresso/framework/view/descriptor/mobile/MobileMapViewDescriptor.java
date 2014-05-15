@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.view.descriptor.mobile;
 
+import java.util.List;
+
 import org.jspresso.framework.view.descriptor.EHorizontalPosition;
 import org.jspresso.framework.view.descriptor.basic.BasicMapViewDescriptor;
 
@@ -31,6 +33,7 @@ public class MobileMapViewDescriptor extends BasicMapViewDescriptor
     implements IMobilePageSectionViewDescriptor {
 
   private EHorizontalPosition horizontalPosition;
+  private List<String> forClientTypes;
 
   /**
    * Instantiates a new Mobile map view descriptor.
@@ -58,4 +61,25 @@ public class MobileMapViewDescriptor extends BasicMapViewDescriptor
   public void setHorizontalPosition(EHorizontalPosition horizontalPosition) {
     this.horizontalPosition = horizontalPosition;
   }
+
+  /**
+   * Gets for client types.
+   *
+   * @return the for client types
+   */
+  @Override
+  public List<String> getForClientTypes() {
+    return forClientTypes;
+  }
+
+  /**
+   * Sets for client types.
+   *
+   * @param forClientTypes
+   *     the for client types
+   */
+  public void setForClientTypes(List<String> forClientTypes) {
+    this.forClientTypes = forClientTypes;
+  }
+
 }

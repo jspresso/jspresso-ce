@@ -319,9 +319,11 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     List<IView<RComponent>> childrenViews = new ArrayList<>();
     List<RComponent> pageSections = new ArrayList<>();
     for (IMobilePageSectionViewDescriptor pageSectionViewDescriptor : viewDescriptor.getPageSectionDescriptors()) {
-      IView<RComponent> pageSectionView = createView(pageSectionViewDescriptor, actionHandler, locale);
-      pageSections.add(pageSectionView.getPeer());
-      childrenViews.add(pageSectionView);
+      if (isAllowedForClientType(pageSectionViewDescriptor, actionHandler)) {
+        IView<RComponent> pageSectionView = createView(pageSectionViewDescriptor, actionHandler, locale);
+        pageSections.add(pageSectionView.getPeer());
+        childrenViews.add(pageSectionView);
+      }
     }
     viewComponent.setPageSections(pageSections.toArray(new RComponent[pageSections.size()]));
     if (!viewDescriptor.isInlineEditing() && !viewDescriptor.isReadOnly()) {

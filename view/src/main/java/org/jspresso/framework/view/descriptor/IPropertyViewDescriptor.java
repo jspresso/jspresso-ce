@@ -21,6 +21,7 @@ package org.jspresso.framework.view.descriptor;
 import java.util.List;
 
 import org.jspresso.framework.action.IAction;
+import org.jspresso.framework.util.gui.IClientTypeAware;
 
 /**
  * This public interface is implemented by view descriptors which are just
@@ -29,7 +30,7 @@ import org.jspresso.framework.action.IAction;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IPropertyViewDescriptor extends IViewDescriptor {
+public interface IPropertyViewDescriptor extends IViewDescriptor, IClientTypeAware {
 
   /**
    * Gets the label background.
@@ -104,10 +105,4 @@ public interface IPropertyViewDescriptor extends IViewDescriptor {
    */
   EHorizontalPosition getLabelHorizontalPosition();
 
-  /**
-   * Get the list of client types (or sub-types) that will allow display of this property.
-   *
-   * @return the list of client types (or sub-types)
-   */
-  List<String> getForClientTypes();
 }

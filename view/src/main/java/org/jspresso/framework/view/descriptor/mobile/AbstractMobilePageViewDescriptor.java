@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.view.descriptor.mobile;
 
+import java.util.List;
+
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.EHorizontalPosition;
 import org.jspresso.framework.view.descriptor.basic.BasicCompositeViewDescriptor;
@@ -38,6 +40,7 @@ public abstract class AbstractMobilePageViewDescriptor extends BasicCompositeVie
   private IDisplayableAction  swipeLeftAction;
   private IDisplayableAction  swipeRightAction;
   private EHorizontalPosition horizontalPosition;
+  private List<String>        forClientTypes;
 
   /**
    * Instantiates a new Mobile border view descriptor.
@@ -185,5 +188,24 @@ public abstract class AbstractMobilePageViewDescriptor extends BasicCompositeVie
    */
   public void setHorizontalPosition(EHorizontalPosition horizontalPosition) {
     this.horizontalPosition = horizontalPosition;
+  }
+
+  /**
+   * Gets for client types.
+   *
+   * @return the for client types
+   */
+  @Override
+  public List<String> getForClientTypes() {
+    return forClientTypes;
+  }
+
+  /**
+   * Sets for client types.
+   *
+   * @param forClientTypes the for client types
+   */
+  public void setForClientTypes(List<String> forClientTypes) {
+    this.forClientTypes = forClientTypes;
   }
 }
