@@ -375,7 +375,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
   /**
    * Gets the restricted list of client types that will display this property view. Defaults to {@code null},
    * which means no restriction. The provided list is not empty, then the actual session client type is matched
-   * against each of the restricted client type with either equal or substring semantic.
+   * against each of the restricted client type with either equal or substring or regexp semantic.
    *
    * @return the for client types
    */

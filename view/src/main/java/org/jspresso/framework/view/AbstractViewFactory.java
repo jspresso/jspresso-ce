@@ -106,6 +106,7 @@ import org.jspresso.framework.util.format.NullableSimpleDateFormat;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gate.ModelTrackingGate;
 import org.jspresso.framework.util.gui.Dimension;
+import org.jspresso.framework.util.gui.EClientType;
 import org.jspresso.framework.util.gui.ERenderingOptions;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.lang.ICloneable;
@@ -3669,5 +3670,26 @@ public abstract class AbstractViewFactory<E, F, G> implements
   public void setComponentCollectionFactory(
       IComponentCollectionFactory componentCollectionFactory) {
     this.componentCollectionFactory = componentCollectionFactory;
+  }
+
+  /**
+   * Is allowed for client type.
+   *
+   * @param propertyView the property view
+   * @param actionHandler the action handler
+   * @return the boolean
+   */
+  protected boolean isAllowedForClientType(IPropertyViewDescriptor propertyView, IActionHandler actionHandler) {
+    List<String> forClientTypes = propertyView.getForClientTypes();
+    if (forClientTypes == null) {
+      return true;
+    }
+    String clientType = actionHandler.getClientType().name();
+    for (String allowedClientType : forClientTypes) {
+      if (clientType.matches(".*" + allowedClientType + ".*")) {
+        return true;
+      }
+    }
+    return false;
   }
 }

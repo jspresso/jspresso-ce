@@ -1429,58 +1429,60 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     IView<RComponent> view = constructView(viewComponent, viewDescriptor, connector);
 
     for (IPropertyViewDescriptor propertyViewDescriptor : viewDescriptor.getPropertyViewDescriptors()) {
-      String propertyName = propertyViewDescriptor.getModelDescriptor().getName();
-      IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor.getModelDescriptor())
-          .getComponentDescriptor().getPropertyDescriptor(propertyName);
-      if (propertyDescriptor == null) {
-        throw new ViewException(
-            "Property descriptor [" + propertyName + "] does not exist for model descriptor " + viewDescriptor
-                .getModelDescriptor().getName() + "."
-        );
-      }
-      IView<RComponent> propertyView = createView(propertyViewDescriptor, actionHandler, locale);
-      // Fix bug 782
-      propertyView.getPeer().setIcon(null);
-      propertyView.setParent(view);
+      if (isAllowedForClientType(propertyViewDescriptor, actionHandler)) {
 
-      boolean forbidden = !actionHandler.isAccessGranted(propertyViewDescriptor);
-      if (forbidden) {
-        RComponent securityComponent = createSecurityComponent();
-        securityComponent.setPreferredSize(new Dimension(1, 1));
-        propertyView.setPeer(securityComponent);
-      } else {
-        propertyViews.add(propertyView);
-      }
-      elements.add(propertyView.getPeer());
-      RLabel propertyLabel = createFormPropertyLabel(actionHandler, locale, propertyViewDescriptor, propertyDescriptor,
-          propertyView, forbidden);
-      elementLabels.add(propertyLabel);
-      elementWidths.add(propertyViewDescriptor.getWidth());
-      EHorizontalPosition labelHorizontalPosition = propertyViewDescriptor.getLabelHorizontalPosition();
-      if (labelHorizontalPosition == null) {
-        labelHorizontalPosition = viewDescriptor.getLabelsHorizontalPosition();
-      }
-      if (labelHorizontalPosition == null) {
-        labelHorizontalPosition = EHorizontalPosition.LEFT;
-      }
-      labelHorizontalPositions.add(labelHorizontalPosition.name());
-      connector.addChildConnector(propertyName, propertyView.getConnector());
-      // already handled in createView.
-      // if (propertyViewDescriptor.getReadabilityGates() != null) {
-      // if (propertyViewDescriptor.getWritabilityGates() != null) {
-      // propertyView.getConnector().setLocallyWritable(
-      // !propertyViewDescriptor.isReadOnly());
-      if (propertyView.getPeer() instanceof RActionable && propertyViewDescriptor.getAction() != null) {
-        IView<RComponent> targetView;
-        if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
-          targetView = propertyView;
-        } else {
-          targetView = view;
+        String propertyName = propertyViewDescriptor.getModelDescriptor().getName();
+        IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor.getModelDescriptor())
+            .getComponentDescriptor().getPropertyDescriptor(propertyName);
+        if (propertyDescriptor == null) {
+          throw new ViewException("Property descriptor [" + propertyName + "] does not exist for model descriptor " + viewDescriptor
+              .getModelDescriptor().getName() + "."
+          );
         }
-        RAction action = getActionFactory().createAction(propertyViewDescriptor.getAction(), actionHandler, targetView,
-            locale);
-        configurePropertyViewAction(propertyViewDescriptor, action);
-        ((RActionable) propertyView.getPeer()).setAction(action);
+        IView<RComponent> propertyView = createView(propertyViewDescriptor, actionHandler, locale);
+        // Fix bug 782
+        propertyView.getPeer().setIcon(null);
+        propertyView.setParent(view);
+
+        boolean forbidden = !actionHandler.isAccessGranted(propertyViewDescriptor);
+        if (forbidden) {
+          RComponent securityComponent = createSecurityComponent();
+          securityComponent.setPreferredSize(new Dimension(1, 1));
+          propertyView.setPeer(securityComponent);
+        } else {
+          propertyViews.add(propertyView);
+        }
+        elements.add(propertyView.getPeer());
+        RLabel propertyLabel = createFormPropertyLabel(actionHandler, locale, propertyViewDescriptor, propertyDescriptor,
+            propertyView, forbidden);
+        elementLabels.add(propertyLabel);
+        elementWidths.add(propertyViewDescriptor.getWidth());
+        EHorizontalPosition labelHorizontalPosition = propertyViewDescriptor.getLabelHorizontalPosition();
+        if (labelHorizontalPosition == null) {
+          labelHorizontalPosition = viewDescriptor.getLabelsHorizontalPosition();
+        }
+        if (labelHorizontalPosition == null) {
+          labelHorizontalPosition = EHorizontalPosition.LEFT;
+        }
+        labelHorizontalPositions.add(labelHorizontalPosition.name());
+        connector.addChildConnector(propertyName, propertyView.getConnector());
+        // already handled in createView.
+        // if (propertyViewDescriptor.getReadabilityGates() != null) {
+        // if (propertyViewDescriptor.getWritabilityGates() != null) {
+        // propertyView.getConnector().setLocallyWritable(
+        // !propertyViewDescriptor.isReadOnly());
+        if (propertyView.getPeer() instanceof RActionable && propertyViewDescriptor.getAction() != null) {
+          IView<RComponent> targetView;
+          if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
+            targetView = propertyView;
+          } else {
+            targetView = view;
+          }
+          RAction action = getActionFactory().createAction(propertyViewDescriptor.getAction(), actionHandler, targetView,
+              locale);
+          configurePropertyViewAction(propertyViewDescriptor, action);
+          ((RActionable) propertyView.getPeer()).setAction(action);
+        }
       }
     }
     completePropertyViewsWithDynamicToolTips(connector, propertyViews, modelDescriptor);

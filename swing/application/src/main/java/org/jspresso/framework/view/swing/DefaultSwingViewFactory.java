@@ -600,98 +600,89 @@ public class DefaultSwingViewFactory extends
     for (Iterator<IPropertyViewDescriptor> ite = viewDescriptor
         .getPropertyViewDescriptors().iterator(); ite.hasNext();) {
       IPropertyViewDescriptor propertyViewDescriptor = ite.next();
-      String propertyName = propertyViewDescriptor.getModelDescriptor()
-          .getName();
-      IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor
-          .getModelDescriptor()).getComponentDescriptor()
-          .getPropertyDescriptor(propertyName);
-      if (propertyDescriptor == null) {
-        throw new ViewException("Property descriptor [" + propertyName
-            + "] does not exist for model descriptor "
-            + viewDescriptor.getModelDescriptor().getName() + ".");
-      }
-      IView<JComponent> propertyView = createView(propertyViewDescriptor,
-          actionHandler, locale);
-      propertyView.setParent(view);
-
-      boolean forbidden = !actionHandler
-          .isAccessGranted(propertyViewDescriptor);
-      if (forbidden) {
-        propertyView.setPeer(createSecurityComponent());
-      } else {
-        propertyViews.add(propertyView);
-      }
-      connector.addChildConnector(propertyView.getConnector().getId(),
-          propertyView.getConnector());
-      // already handled in createView.
-      // if (propertyViewDescriptor.getReadabilityGates() != null) {
-      // if (propertyViewDescriptor.getWritabilityGates() != null) {
-      JLabel propertyLabel = createFormPropertyLabel(actionHandler, locale,
-          propertyViewDescriptor, propertyDescriptor, propertyView, forbidden);
-      int propertyWidth = propertyViewDescriptor.getWidth();
-      EHorizontalPosition labelHorizontalPosition = propertyViewDescriptor.getLabelHorizontalPosition();
-      if (labelHorizontalPosition == null) {
-        labelHorizontalPosition = viewDescriptor.getLabelsHorizontalPosition();
-      }
-      if (labelHorizontalPosition == null) {
-        labelHorizontalPosition = EHorizontalPosition.LEFT;
-      }
-      if (propertyWidth > viewDescriptor.getColumnCount()) {
-        propertyWidth = viewDescriptor.getColumnCount();
-      }
-      if (currentX + propertyWidth > viewDescriptor.getColumnCount()) {
-        fillLastRow(viewComponent);
-        currentX = 0;
-        currentY++;
-        currentY += extraRowOffset;
-        extraRowOffset = 0;
-      }
-      // label positioning
-      GridBagConstraints constraints = new GridBagConstraints();
-      computeLabelGridBagConstraints(viewDescriptor, currentX, currentY, formInset, propertyWidth,
-          labelHorizontalPosition, constraints);
-      if (viewDescriptor.getLabelsPosition() != ELabelPosition.NONE
-          && propertyLabel.getText() != null
-          && propertyLabel.getText().length() > 0) {
-        viewComponent.add(propertyLabel, constraints);
-      }
-      // component positioning
-      computeComponentGridBagConstraints(viewDescriptor, currentX, currentY, formInset, propertyWidth,
-          labelHorizontalPosition, constraints);
-      constraints.weightx = propertyView.getPeer().getPreferredSize().width;
-      if (propertyView.getPeer() instanceof JCheckBox) {
-        constraints.weightx = Toolkit.getDefaultToolkit().getScreenResolution();
-      }
-      if (isHeightExtensible(propertyViewDescriptor)) {
-        constraints.weighty = 1.0;
-        constraints.fill = GridBagConstraints.BOTH;
-        constraints.gridheight = 2;
-        extraRowOffset = 1;
-        isSpaceFilled = true;
-        if (!ite.hasNext()) {
-          constraints.gridwidth = GridBagConstraints.REMAINDER;
-          lastRowNeedsFilling = false;
+      if (isAllowedForClientType(propertyViewDescriptor, actionHandler)) {
+        String propertyName = propertyViewDescriptor.getModelDescriptor().getName();
+        IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor.getModelDescriptor())
+            .getComponentDescriptor().getPropertyDescriptor(propertyName);
+        if (propertyDescriptor == null) {
+          throw new ViewException("Property descriptor [" + propertyName + "] does not exist for model descriptor " + viewDescriptor
+              .getModelDescriptor().getName() + ".");
         }
-      } else {
-        constraints.fill = GridBagConstraints.NONE;
-      }
-      viewComponent.add(propertyView.getPeer(), constraints);
-      if (propertyView.getPeer() instanceof JLink<?>
-          && propertyViewDescriptor.getAction() != null) {
-        IView<JComponent> targetView;
-        if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
-          targetView = propertyView;
+        IView<JComponent> propertyView = createView(propertyViewDescriptor, actionHandler, locale);
+        propertyView.setParent(view);
+
+        boolean forbidden = !actionHandler.isAccessGranted(propertyViewDescriptor);
+        if (forbidden) {
+          propertyView.setPeer(createSecurityComponent());
         } else {
-          targetView = view;
+          propertyViews.add(propertyView);
         }
-        Action action = getActionFactory().createAction(
-            propertyViewDescriptor.getAction(), actionHandler, targetView,
-            locale);
-        configurePropertyViewAction(propertyViewDescriptor, action);
-        ((JLink<Action>) propertyView.getPeer()).setTarget(action);
-      }
+        connector.addChildConnector(propertyView.getConnector().getId(), propertyView.getConnector());
+        // already handled in createView.
+        // if (propertyViewDescriptor.getReadabilityGates() != null) {
+        // if (propertyViewDescriptor.getWritabilityGates() != null) {
+        JLabel propertyLabel = createFormPropertyLabel(actionHandler, locale, propertyViewDescriptor, propertyDescriptor, propertyView, forbidden);
+        int propertyWidth = propertyViewDescriptor.getWidth();
+        EHorizontalPosition labelHorizontalPosition = propertyViewDescriptor.getLabelHorizontalPosition();
+        if (labelHorizontalPosition == null) {
+          labelHorizontalPosition = viewDescriptor.getLabelsHorizontalPosition();
+        }
+        if (labelHorizontalPosition == null) {
+          labelHorizontalPosition = EHorizontalPosition.LEFT;
+        }
+        if (propertyWidth > viewDescriptor.getColumnCount()) {
+          propertyWidth = viewDescriptor.getColumnCount();
+        }
+        if (currentX + propertyWidth > viewDescriptor.getColumnCount()) {
+          fillLastRow(viewComponent);
+          currentX = 0;
+          currentY++;
+          currentY += extraRowOffset;
+          extraRowOffset = 0;
+        }
+        // label positioning
+        GridBagConstraints constraints = new GridBagConstraints();
+        computeLabelGridBagConstraints(viewDescriptor, currentX, currentY, formInset, propertyWidth,
+            labelHorizontalPosition, constraints);
+        if (viewDescriptor.getLabelsPosition() != ELabelPosition.NONE && propertyLabel.getText() != null && propertyLabel.getText().length() > 0) {
+          viewComponent.add(propertyLabel, constraints);
+        }
+        // component positioning
+        computeComponentGridBagConstraints(viewDescriptor, currentX, currentY, formInset, propertyWidth,
+            labelHorizontalPosition, constraints);
+        constraints.weightx = propertyView.getPeer().getPreferredSize().width;
+        if (propertyView.getPeer() instanceof JCheckBox) {
+          constraints.weightx = Toolkit.getDefaultToolkit().getScreenResolution();
+        }
+        if (isHeightExtensible(propertyViewDescriptor)) {
+          constraints.weighty = 1.0;
+          constraints.fill = GridBagConstraints.BOTH;
+          constraints.gridheight = 2;
+          extraRowOffset = 1;
+          isSpaceFilled = true;
+          if (!ite.hasNext()) {
+            constraints.gridwidth = GridBagConstraints.REMAINDER;
+            lastRowNeedsFilling = false;
+          }
+        } else {
+          constraints.fill = GridBagConstraints.NONE;
+        }
+        viewComponent.add(propertyView.getPeer(), constraints);
+        if (propertyView.getPeer() instanceof JLink<?> && propertyViewDescriptor.getAction() != null) {
+          IView<JComponent> targetView;
+          if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
+            targetView = propertyView;
+          } else {
+            targetView = view;
+          }
+          Action action = getActionFactory().createAction(propertyViewDescriptor.getAction(), actionHandler, targetView,
+              locale);
+          configurePropertyViewAction(propertyViewDescriptor, action);
+          ((JLink<Action>) propertyView.getPeer()).setTarget(action);
+        }
 
-      currentX += propertyWidth;
+        currentX += propertyWidth;
+      }
     }
     if (lastRowNeedsFilling) {
       fillLastRow(viewComponent);
