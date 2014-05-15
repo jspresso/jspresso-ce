@@ -19,6 +19,7 @@
 package org.jspresso.framework.view.descriptor.mobile;
 
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.EHorizontalPosition;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
 
@@ -31,12 +32,20 @@ import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
 public class MobileBorderViewDescriptor extends BasicBorderViewDescriptor
     implements IMobilePageSectionViewDescriptor, IMobilePageAware {
 
-  private IDisplayableAction enterAction;
-  private IDisplayableAction backAction;
-  private IDisplayableAction mainAction;
-  private IDisplayableAction pageEndAction;
-  private IDisplayableAction swipeLeftAction;
-  private IDisplayableAction swipeRightAction;
+  private IDisplayableAction  enterAction;
+  private IDisplayableAction  backAction;
+  private IDisplayableAction  mainAction;
+  private IDisplayableAction  pageEndAction;
+  private IDisplayableAction  swipeLeftAction;
+  private IDisplayableAction  swipeRightAction;
+  private EHorizontalPosition horizontalPosition;
+
+  /**
+   * Instantiates a new Mobile border view descriptor.
+   */
+  public MobileBorderViewDescriptor() {
+    this.horizontalPosition = EHorizontalPosition.LEFT;
+  }
 
   /**
    *  Not supported in mobile environment.
@@ -188,5 +197,25 @@ public class MobileBorderViewDescriptor extends BasicBorderViewDescriptor
   @Override
   public boolean isCascadingModels() {
     return false;
+  }
+
+  /**
+   * Gets horizontal position.
+   *
+   * @return the horizontal position
+   */
+  @Override
+  public EHorizontalPosition getHorizontalPosition() {
+    return horizontalPosition;
+  }
+
+  /**
+   * Sets horizontal position.
+   *
+   * @param horizontalPosition
+   *     the horizontal position
+   */
+  public void setHorizontalPosition(EHorizontalPosition horizontalPosition) {
+    this.horizontalPosition = horizontalPosition;
   }
 }

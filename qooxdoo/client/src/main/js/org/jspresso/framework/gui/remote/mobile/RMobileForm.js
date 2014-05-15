@@ -30,8 +30,8 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.mobile.RMobilePage", {
-  extend: org.jspresso.framework.gui.remote.mobile.RMobilePageAware,
+qx.Class.define("org.jspresso.framework.gui.remote.mobile.RMobileForm", {
+  extend: org.jspresso.framework.gui.remote.RForm,
 
   construct: function () {
     this.base(arguments);

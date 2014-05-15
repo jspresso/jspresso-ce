@@ -40,6 +40,10 @@ qx.Class.define("org.jspresso.framework.gui.remote.mobile.RMobileTabContainer", 
   properties: {
     carouselMode: {
       check: "Boolean"
+    },
+    horizontalPosition: {
+      check: "String",
+      nullable: true
     }
   }
 

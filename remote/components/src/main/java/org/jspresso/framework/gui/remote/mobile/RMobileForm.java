@@ -18,39 +18,40 @@
  */
 package org.jspresso.framework.gui.remote.mobile;
 
-/**
- * A mobile page.
- *
- * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
- */
-public abstract class RMobilePage extends RMobilePageAware {
+import org.jspresso.framework.gui.remote.RForm;
 
-  private static final long serialVersionUID = 8140805319640281435L;
+/**
+ * A remote mobile form component.
+ *
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
+public class RMobileForm extends RForm {
+
+  private static final long serialVersionUID = 2672012641048981941L;
   private String horizontalPosition;
 
   /**
-   * Constructs a new {@code RMobilePage} instance.
+   * Constructs a new {@code RMobileForm} instance.
    *
-   * @param guid
-   *     the guid
+   * @param guid           the guid.
    */
-  public RMobilePage(String guid) {
+  public RMobileForm(String guid) {
     super(guid);
   }
 
   /**
-   * Constructs a new {@code RMobilePage} instance. Only used for
+   * Constructs a new {@code RMobileForm} instance. Only used for
    * serialization support.
    */
-  public RMobilePage() {
+  public RMobileForm() {
     // For serialization support
   }
 
   /**
-   * Gets horizontal position.
+   * Get horizontal position.
    *
-   * @return the horizontal position
+   * @return the boolean
    */
   public String getHorizontalPosition() {
     return horizontalPosition;

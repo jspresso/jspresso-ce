@@ -31,6 +31,7 @@ public class RMobileTabContainer extends RTabContainer {
   private static final long serialVersionUID = -6422873290771274158L;
 
   private boolean carouselMode;
+  private String  horizontalPosition;
 
   /**
    * Constructs a new {@code RMobileTabContainer} instance.
@@ -65,5 +66,23 @@ public class RMobileTabContainer extends RTabContainer {
    */
   public void setCarouselMode(boolean carouselMode) {
     this.carouselMode = carouselMode;
+  }
+
+  /**
+   * Get horizontal position.
+   *
+   * @return the boolean
+   */
+  public String getHorizontalPosition() {
+    return horizontalPosition;
+  }
+
+  /**
+   * Sets horizontal position.
+   *
+   * @param horizontalPosition the horizontal position
+   */
+  public void setHorizontalPosition(String horizontalPosition) {
+    this.horizontalPosition = horizontalPosition;
   }
 }

@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.view.descriptor.mobile;
 
+import org.jspresso.framework.view.descriptor.EHorizontalPosition;
+
 /**
  * Marker interface for mobile view descriptors.
  *
@@ -25,5 +27,11 @@ package org.jspresso.framework.view.descriptor.mobile;
  * @version $LastChangedRevision$
  */
 public interface IMobilePageSectionViewDescriptor extends IMobileViewDescriptor {
-  // This is just a marker interface to flag mobile compatible descriptors
+
+  /**
+   * Gets horizontal position, either LEFT or RIGHT.
+   *
+   * @return the horizontal position
+   */
+  EHorizontalPosition getHorizontalPosition();
 }

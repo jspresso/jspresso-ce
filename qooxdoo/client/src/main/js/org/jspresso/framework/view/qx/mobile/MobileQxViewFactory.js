@@ -654,8 +654,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
               this._getActionHandler().showDetailPage(pageToShow);
             }
           }, this);
+          list.setUserData("horizontalPosition", remotePageSection.getHorizontalPosition());
           sections.push(list);
         } else {
+          remotePageSection.setUserData("horizontalPosition", remotePageSection.getHorizontalPosition());
+          pageSection.setUserData("horizontalPosition", remotePageSection.getHorizontalPosition());
           sections.push(remotePageSection);
           sections.push(pageSection);
         }
@@ -682,13 +685,13 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         var content = compositePage.getContent();
         var contentLeft = content;
         var contentRight = content;
-        var needsSplittedContent = pageSections && pageSections.length > 0 && this._getActionHandler().isTablet();
+        var needsSplittedContent = pageSections && pageSections.length > 1 && this._getActionHandler().isTablet();
         var left = false;
         var right = false;
         if (needsSplittedContent) {
           for (var i = 0; (i < sections.length) && !(left && right); i++) {
             var section = sections[i];
-            if (section instanceof qx.ui.mobile.list.List) {
+            if (section.getUserData("horizontalPosition") == "RIGHT") {
               right = true;
             } else {
               left = true;
@@ -710,7 +713,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         var contentToAdd = contentLeft;
         for (var i = 0; i < sections.length; i++) {
           var section = sections[i];
-          if (section instanceof qx.ui.mobile.list.List) {
+          if (section.getUserData("horizontalPosition") == "RIGHT") {
             contentToAdd = contentRight;
           } else {
             contentToAdd = contentLeft;

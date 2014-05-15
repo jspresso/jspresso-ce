@@ -18,39 +18,40 @@
  */
 package org.jspresso.framework.gui.remote.mobile;
 
-/**
- * A mobile page.
- *
- * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
- */
-public abstract class RMobilePage extends RMobilePageAware {
+import org.jspresso.framework.gui.remote.RMap;
 
-  private static final long serialVersionUID = 8140805319640281435L;
+/**
+ * A remote mobile map component.
+ *
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
+public class RMobileMap extends RMap {
+
+  private static final long serialVersionUID = 2672012641048981941L;
   private String horizontalPosition;
 
   /**
-   * Constructs a new {@code RMobilePage} instance.
+   * Constructs a new {@code RMobileMap} instance.
    *
-   * @param guid
-   *     the guid
+   * @param guid           the guid.
    */
-  public RMobilePage(String guid) {
+  public RMobileMap(String guid) {
     super(guid);
   }
 
   /**
-   * Constructs a new {@code RMobilePage} instance. Only used for
+   * Constructs a new {@code RMobileMap} instance. Only used for
    * serialization support.
    */
-  public RMobilePage() {
+  public RMobileMap() {
     // For serialization support
   }
 
   /**
-   * Gets horizontal position.
+   * Get horizontal position.
    *
-   * @return the horizontal position
+   * @return the boolean
    */
   public String getHorizontalPosition() {
     return horizontalPosition;

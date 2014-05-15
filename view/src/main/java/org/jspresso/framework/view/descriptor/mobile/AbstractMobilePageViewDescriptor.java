@@ -19,6 +19,7 @@
 package org.jspresso.framework.view.descriptor.mobile;
 
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.EHorizontalPosition;
 import org.jspresso.framework.view.descriptor.basic.BasicCompositeViewDescriptor;
 
 /**
@@ -30,12 +31,20 @@ import org.jspresso.framework.view.descriptor.basic.BasicCompositeViewDescriptor
 public abstract class AbstractMobilePageViewDescriptor extends BasicCompositeViewDescriptor
     implements IMobilePageViewDescriptor {
 
-  private IDisplayableAction enterAction;
-  private IDisplayableAction backAction;
-  private IDisplayableAction mainAction;
-  private IDisplayableAction pageEndAction;
-  private IDisplayableAction swipeLeftAction;
-  private IDisplayableAction swipeRightAction;
+  private IDisplayableAction  enterAction;
+  private IDisplayableAction  backAction;
+  private IDisplayableAction  mainAction;
+  private IDisplayableAction  pageEndAction;
+  private IDisplayableAction  swipeLeftAction;
+  private IDisplayableAction  swipeRightAction;
+  private EHorizontalPosition horizontalPosition;
+
+  /**
+   * Instantiates a new Mobile border view descriptor.
+   */
+  public AbstractMobilePageViewDescriptor() {
+    this.horizontalPosition = EHorizontalPosition.RIGHT;
+  }
 
   /**
    * Gets enter action.
@@ -156,5 +165,25 @@ public abstract class AbstractMobilePageViewDescriptor extends BasicCompositeVie
   @Override
   public void setSwipeRightAction(IDisplayableAction swipeRightAction) {
     this.swipeRightAction = swipeRightAction;
+  }
+
+  /**
+   * Gets horizontal position.
+   *
+   * @return the horizontal position
+   */
+  @Override
+  public EHorizontalPosition getHorizontalPosition() {
+    return horizontalPosition;
+  }
+
+  /**
+   * Sets horizontal position.
+   *
+   * @param horizontalPosition
+   *     the horizontal position
+   */
+  public void setHorizontalPosition(EHorizontalPosition horizontalPosition) {
+    this.horizontalPosition = horizontalPosition;
   }
 }

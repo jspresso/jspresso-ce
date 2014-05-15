@@ -18,39 +18,40 @@
  */
 package org.jspresso.framework.gui.remote.mobile;
 
-/**
- * A mobile page.
- *
- * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
- */
-public abstract class RMobilePage extends RMobilePageAware {
+import org.jspresso.framework.gui.remote.RBorderContainer;
 
-  private static final long serialVersionUID = 8140805319640281435L;
+/**
+ * A remote mobile border container component.
+ *
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
+public class RMobileBorderContainer extends RBorderContainer {
+
+  private static final long serialVersionUID = 2672012641048981941L;
   private String horizontalPosition;
 
   /**
-   * Constructs a new {@code RMobilePage} instance.
+   * Constructs a new {@code RMobileBorderContainer} instance.
    *
-   * @param guid
-   *     the guid
+   * @param guid           the guid.
    */
-  public RMobilePage(String guid) {
+  public RMobileBorderContainer(String guid) {
     super(guid);
   }
 
   /**
-   * Constructs a new {@code RMobilePage} instance. Only used for
+   * Constructs a new {@code RMobileBorderContainer} instance. Only used for
    * serialization support.
    */
-  public RMobilePage() {
+  public RMobileBorderContainer() {
     // For serialization support
   }
 
   /**
-   * Gets horizontal position.
+   * Is horizontal position.
    *
-   * @return the horizontal position
+   * @return the boolean
    */
   public String getHorizontalPosition() {
     return horizontalPosition;

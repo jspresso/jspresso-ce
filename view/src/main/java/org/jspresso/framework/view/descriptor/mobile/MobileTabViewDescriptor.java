@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.view.descriptor.mobile;
 
+import org.jspresso.framework.view.descriptor.EHorizontalPosition;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicTabViewDescriptor;
 
@@ -31,12 +32,14 @@ public class MobileTabViewDescriptor extends BasicTabViewDescriptor
     implements IMobilePageSectionViewDescriptor {
 
   private boolean carouselMode;
+  private EHorizontalPosition horizontalPosition;
 
   /**
    * Instantiates a new Mobile tab view descriptor.
    */
   public MobileTabViewDescriptor() {
     this.carouselMode = false;
+    this.horizontalPosition = EHorizontalPosition.LEFT;
   }
 
   /**
@@ -75,5 +78,24 @@ public class MobileTabViewDescriptor extends BasicTabViewDescriptor
   @Override
   public boolean isCascadingModels() {
     return false;
+  }
+
+  /**
+   * Gets horizontal position.
+   *
+   * @return the horizontal position
+   */
+  @Override
+  public EHorizontalPosition getHorizontalPosition() {
+    return horizontalPosition;
+  }
+
+  /**
+   * Sets horizontal position.
+   *
+   * @param horizontalPosition the horizontal position
+   */
+  public void setHorizontalPosition(EHorizontalPosition horizontalPosition) {
+    this.horizontalPosition = horizontalPosition;
   }
 }

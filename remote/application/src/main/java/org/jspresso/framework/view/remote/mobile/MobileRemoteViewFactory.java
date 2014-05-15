@@ -35,16 +35,22 @@ import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.gui.remote.RAction;
+import org.jspresso.framework.gui.remote.RBorderContainer;
 import org.jspresso.framework.gui.remote.RCardContainer;
 import org.jspresso.framework.gui.remote.RComponent;
+import org.jspresso.framework.gui.remote.RForm;
 import org.jspresso.framework.gui.remote.RImageComponent;
 import org.jspresso.framework.gui.remote.RList;
+import org.jspresso.framework.gui.remote.RMap;
 import org.jspresso.framework.gui.remote.RTabContainer;
 import org.jspresso.framework.gui.remote.RTree;
 import org.jspresso.framework.gui.remote.mobile.RImagePicker;
+import org.jspresso.framework.gui.remote.mobile.RMobileBorderContainer;
 import org.jspresso.framework.gui.remote.mobile.RMobileCardPage;
 import org.jspresso.framework.gui.remote.mobile.RMobileCompositePage;
+import org.jspresso.framework.gui.remote.mobile.RMobileForm;
 import org.jspresso.framework.gui.remote.mobile.RMobileList;
+import org.jspresso.framework.gui.remote.mobile.RMobileMap;
 import org.jspresso.framework.gui.remote.mobile.RMobileNavPage;
 import org.jspresso.framework.gui.remote.mobile.RMobilePage;
 import org.jspresso.framework.gui.remote.mobile.RMobilePageAware;
@@ -61,11 +67,14 @@ import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
+import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
+import org.jspresso.framework.view.descriptor.IMapViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
@@ -78,8 +87,10 @@ import org.jspresso.framework.view.descriptor.mobile.IMobilePageViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.IMobileViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileCardPageViewDescriptor;
+import org.jspresso.framework.view.descriptor.mobile.MobileComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileCompositePageViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileListViewDescriptor;
+import org.jspresso.framework.view.descriptor.mobile.MobileMapViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileNavPageViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileTabViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileTreeViewDescriptor;
@@ -135,6 +146,10 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
           view = createMobileNavPageView((MobileNavPageViewDescriptor) viewDescriptor, actionHandler, locale);
         } else if (viewDescriptor instanceof MobileCardPageViewDescriptor) {
           view = createMobileCardPageView((MobileCardPageViewDescriptor) viewDescriptor, actionHandler, locale);
+        }
+        if (view != null) {
+          ((RMobilePage) view.getPeer()).setHorizontalPosition(
+              ((IMobilePageViewDescriptor) viewDescriptor).getHorizontalPosition().name());
         }
       } else if (viewDescriptor instanceof MobileBorderViewDescriptor) {
         view = createBorderView((MobileBorderViewDescriptor) viewDescriptor, actionHandler, locale);
@@ -358,6 +373,55 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
   }
 
   /**
+   * Completes with horizontal position property.
+   * <p/>
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createComponentView(IComponentViewDescriptor viewDescriptor, IActionHandler actionHandler,
+                                                  Locale locale) {
+    IView<RComponent> view = super.createComponentView(viewDescriptor, actionHandler, locale);
+    if (viewDescriptor instanceof MobileComponentViewDescriptor) {
+      ((RMobileForm) view.getPeer()).setHorizontalPosition(
+          ((MobileComponentViewDescriptor) viewDescriptor).getHorizontalPosition().name());
+    }
+    return view;
+  }
+
+  /**
+   * Completes with horizontal position property.
+   * <p/>
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createMapView(IMapViewDescriptor viewDescriptor, IActionHandler actionHandler,
+                                            Locale locale) {
+    IView<RComponent> view = super.createMapView(viewDescriptor, actionHandler, locale);
+    if (viewDescriptor instanceof MobileMapViewDescriptor) {
+      ((RMobileMap) view.getPeer()).setHorizontalPosition(
+          ((MobileMapViewDescriptor) viewDescriptor).getHorizontalPosition().name());
+    }
+    return view;
+  }
+
+  /**
+   * Completes with horizontal position property.
+   * <p/>
+   * {@inheritDoc}
+   */
+  @Override
+  protected ICompositeView<RComponent> createBorderView(IBorderViewDescriptor viewDescriptor,
+                                                      IActionHandler actionHandler,
+                                            Locale locale) {
+    ICompositeView<RComponent> view = super.createBorderView(viewDescriptor, actionHandler, locale);
+    if (viewDescriptor instanceof MobileBorderViewDescriptor) {
+      ((RMobileBorderContainer) view.getPeer()).setHorizontalPosition(
+          ((MobileBorderViewDescriptor) viewDescriptor).getHorizontalPosition().name());
+    }
+    return view;
+  }
+
+  /**
    * Creates a mobile list.
    * <p/>
    * {@inheritDoc}
@@ -440,7 +504,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
   }
 
   /**
-   * Completes with carouselMode property.
+   * Completes with carouselMode and horizontal position properties.
    * <p/>
    * {@inheritDoc}
    */
@@ -451,6 +515,8 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     if (viewDescriptor instanceof MobileTabViewDescriptor) {
       ((RMobileTabContainer) view.getPeer()).setCarouselMode(
           ((MobileTabViewDescriptor) viewDescriptor).isCarouselMode());
+      ((RMobileTabContainer) view.getPeer()).setHorizontalPosition(
+          ((MobileTabViewDescriptor) viewDescriptor).getHorizontalPosition().name());
     }
     return view;
   }
@@ -567,6 +633,43 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
       return new RImagePicker(getGuidGenerator().generateGUID());
     }
   }
+
+  /**
+   * Creates a remote mobile form.
+   *
+   * @param viewDescriptor
+   *     the component view descriptor.
+   * @return the created remote component.
+   */
+  @Override
+  protected RForm createRForm(IComponentViewDescriptor viewDescriptor) {
+    return new RMobileForm(getGuidGenerator().generateGUID());
+  }
+
+  /**
+   * Creates a remote mobile map.
+   *
+   * @param viewDescriptor
+   *     the map view descriptor.
+   * @return the created remote component.
+   */
+  @Override
+  protected RMap createRMap(IMapViewDescriptor viewDescriptor) {
+    return new RMobileMap(getGuidGenerator().generateGUID());
+  }
+
+  /**
+   * Creates a mobile remote border container.
+   *
+   * @param viewDescriptor
+   *     the border view descriptor.
+   * @return the created remote component.
+   */
+  @Override
+  protected RBorderContainer createRBorderContainer(IBorderViewDescriptor viewDescriptor) {
+    return new RBorderContainer(getGuidGenerator().generateGUID());
+  }
+
 
   /**
    * Gets edit page action.

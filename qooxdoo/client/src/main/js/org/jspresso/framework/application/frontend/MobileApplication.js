@@ -55,6 +55,11 @@
  *
  * @use(org.jspresso.framework.gui.remote.mobile.RMobileList)
  * @use(org.jspresso.framework.gui.remote.mobile.RMobileTree)
+ * @use(org.jspresso.framework.gui.remote.mobile.RMobileForm)
+ * @use(org.jspresso.framework.gui.remote.mobile.RMobileMap)
+ * @use(org.jspresso.framework.gui.remote.mobile.RMobileBorderContainer)
+ * @use(org.jspresso.framework.gui.remote.mobile.RMobileTabContainer)
+ * @use(org.jspresso.framework.gui.remote.mobile.RMobileTabContainer)
  *
  * @use(org.jspresso.framework.util.gui.Dimension)
  * @use(org.jspresso.framework.util.gui.CellConstraints)

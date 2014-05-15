@@ -32,6 +32,15 @@ import org.jspresso.framework.view.descriptor.EHorizontalPosition;
 public class MobileComponentViewDescriptor extends AbstractComponentViewDescriptor
     implements IMobilePageSectionViewDescriptor {
 
+  private EHorizontalPosition horizontalPosition;
+
+  /**
+   * Instantiates a new Mobile border view descriptor.
+   */
+  public MobileComponentViewDescriptor() {
+    this.horizontalPosition = EHorizontalPosition.LEFT;
+  }
+
   /**
    * Always 1 in mobile environment.
    * <p>
@@ -110,5 +119,25 @@ public class MobileComponentViewDescriptor extends AbstractComponentViewDescript
   @Override
   public MobileComponentViewDescriptor cloneReadOnly() {
     return (MobileComponentViewDescriptor) super.cloneReadOnly();
+  }
+
+  /**
+   * Gets horizontal position.
+   *
+   * @return the horizontal position
+   */
+  @Override
+  public EHorizontalPosition getHorizontalPosition() {
+    return horizontalPosition;
+  }
+
+  /**
+   * Sets horizontal position.
+   *
+   * @param horizontalPosition
+   *     the horizontal position
+   */
+  public void setHorizontalPosition(EHorizontalPosition horizontalPosition) {
+    this.horizontalPosition = horizontalPosition;
   }
 }
