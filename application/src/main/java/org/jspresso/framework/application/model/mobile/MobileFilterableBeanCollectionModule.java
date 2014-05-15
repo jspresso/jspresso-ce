@@ -104,7 +104,14 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
       // Deeply clean model descriptors on filter views
       cleanupFilterViewDescriptor(filterViewDesc);
     }
-    if (filterViewDesc instanceof BasicViewDescriptor) {
+    if (filterViewDesc instanceof MobileCompositePageViewDescriptor) {
+      for (IMobilePageSectionViewDescriptor sectionViewDescriptor : ((MobileCompositePageViewDescriptor) filterViewDesc)
+          .getPageSectionDescriptors()) {
+        if (sectionViewDescriptor instanceof BasicViewDescriptor) {
+          ((BasicViewDescriptor) sectionViewDescriptor).setModelDescriptor(filterModelDescriptorProvider);
+        }
+      }
+    } else if (filterViewDesc instanceof BasicViewDescriptor) {
       ((BasicViewDescriptor) filterViewDesc).setBorderType(EBorderType.TITLED);
       ((BasicViewDescriptor) filterViewDesc).setModelDescriptor(filterModelDescriptorProvider);
     }
@@ -119,15 +126,7 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
       }
     }
     if (filterViewDesc instanceof MobileCompositePageViewDescriptor) {
-      List<IMobilePageSectionViewDescriptor> refinedSectionDescriptors = new ArrayList<>();
-      for (IMobilePageSectionViewDescriptor sectionViewDescriptor : ((MobileCompositePageViewDescriptor) filterViewDesc)
-          .getPageSectionDescriptors()) {
-        MobileBorderViewDescriptor decorator = new MobileBorderViewDescriptor();
-        decorator.setCenterViewDescriptor(sectionViewDescriptor);
-        decorator.setModelDescriptor(filterModelDescriptorProvider);
-        refinedSectionDescriptors.add(decorator);
-      }
-      modulePageView.setHeaderSectionDescriptors(refinedSectionDescriptors);
+      modulePageView.setHeaderSectionDescriptors(((MobileCompositePageViewDescriptor) filterViewDesc).getPageSectionDescriptors());
     } else {
       modulePageView.setHeaderSectionDescriptors(Arrays.asList(filterViewDesc));
     }
