@@ -171,6 +171,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           if (data.getIcon()) {
             item.setImage(data.getIcon().getImageUrlSpec());
           }
+          item.setEnabled(data.getEnabled());
+          item.setSelectable(data.getEnabled());
         }
       });
       extraMenu.getSelectionList().setModel(new qx.data.Array(extraActions));
@@ -680,7 +682,22 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         var content = compositePage.getContent();
         var contentLeft = content;
         var contentRight = content;
-        if (pageSections.length > 1 && this._getActionHandler().isTablet()) {
+        var needsSplittedContent = pageSections && pageSections.length > 0 && this._getActionHandler().isTablet();
+        var left = false;
+        var right = false;
+        if (needsSplittedContent) {
+          for (var i = 0; (i < sections.length) && !(left && right); i++) {
+            var section = sections[i];
+            if (section instanceof qx.ui.mobile.list.List) {
+              right = true;
+            } else {
+              left = true;
+            }
+          }
+          needsSplittedContent = (left && right);
+        }
+
+        if (needsSplittedContent) {
           var splittedContent = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox());
           contentLeft = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
           contentRight = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());

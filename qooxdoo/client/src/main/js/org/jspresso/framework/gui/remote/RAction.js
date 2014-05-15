@@ -30,7 +30,8 @@ qx.Class.define("org.jspresso.framework.gui.remote.RAction", {
     },
     enabled: {
       check: "Boolean",
-      event: "changeEnabled"
+      event: "changeEnabled",
+      apply: "_applyEventPropagation"
     },
     icon: {
       check: "org.jspresso.framework.gui.remote.RIcon",
