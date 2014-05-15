@@ -34,6 +34,7 @@ public class MobileCompositePageViewDescriptor extends AbstractMobilePageViewDes
 
   private List<IMobilePageSectionViewDescriptor> pageSectionDescriptors;
   private boolean                                inlineEditing;
+  private MobileCompositePageViewDescriptor      editorPage;
 
   /**
    * Instantiates a new Mobile composite page view descriptor.
@@ -119,7 +120,7 @@ public class MobileCompositePageViewDescriptor extends AbstractMobilePageViewDes
    *
    * @return the editable clone of the page.
    */
-  public MobileCompositePageViewDescriptor cloneEditable() {
+  protected MobileCompositePageViewDescriptor cloneEditable() {
     MobileCompositePageViewDescriptor editableClone = (MobileCompositePageViewDescriptor) clone();
     if (editableClone.getModelDescriptor() instanceof IReferencePropertyDescriptor<?>) {
       editableClone.setModelDescriptor(
@@ -156,5 +157,26 @@ public class MobileCompositePageViewDescriptor extends AbstractMobilePageViewDes
    */
   public void setInlineEditing(boolean inlineEditing) {
     this.inlineEditing = inlineEditing;
+  }
+
+  /**
+   * Gets editing page. If not explicitly set, the editing page is computed based on the editable fields of the page.
+   *
+   * @return the editing page
+   */
+  public MobileCompositePageViewDescriptor getEditorPage() {
+    if (editorPage == null) {
+      editorPage = cloneEditable();
+    }
+    return editorPage;
+  }
+
+  /**
+   * Sets editing page.
+   *
+   * @param editorPage the editing page
+   */
+  public void setEditorPage(MobileCompositePageViewDescriptor editorPage) {
+    this.editorPage = editorPage;
   }
 }

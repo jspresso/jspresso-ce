@@ -311,7 +311,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     viewComponent.setPageSections(pageSections.toArray(new RComponent[pageSections.size()]));
     if (!viewDescriptor.isInlineEditing() && !viewDescriptor.isReadOnly()) {
       ICompositeView<RComponent> editorPageView = (ICompositeView<RComponent>) createView(
-          viewDescriptor.cloneEditable(), actionHandler, locale);
+          viewDescriptor.getEditorPage(), actionHandler, locale);
       RMobileCompositePage editorPage = (RMobileCompositePage) editorPageView.getView().getPeer();
       RAction saveAction = getActionFactory().createAction(getSavePageAction(), actionHandler, view, locale);
       editorPage.setMainAction(saveAction);
