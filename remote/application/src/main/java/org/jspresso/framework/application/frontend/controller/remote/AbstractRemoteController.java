@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.EClientType;
+import org.jspresso.framework.util.gui.EClientType;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.frontend.command.remote.CommandException;

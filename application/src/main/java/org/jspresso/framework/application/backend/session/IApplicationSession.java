@@ -23,7 +23,7 @@ import java.util.Map;
 
 import javax.security.auth.Subject;
 
-import org.jspresso.framework.application.EClientType;
+import org.jspresso.framework.util.gui.EClientType;
 import org.jspresso.framework.security.UserPrincipal;
 
 /**

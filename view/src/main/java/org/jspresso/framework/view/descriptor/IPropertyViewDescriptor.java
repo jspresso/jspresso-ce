@@ -103,4 +103,11 @@ public interface IPropertyViewDescriptor extends IViewDescriptor {
    * @return the label horizontal position
    */
   EHorizontalPosition getLabelHorizontalPosition();
+
+  /**
+   * Get the list of client types (or sub-types) that will allow display of this property.
+   *
+   * @return the list of client types (or sub-types)
+   */
+  List<String> getForClientTypes();
 }

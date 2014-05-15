@@ -33,6 +33,7 @@ import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
 import org.jspresso.framework.util.exception.IExceptionHandler;
+import org.jspresso.framework.util.gui.EClientType;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
@@ -240,6 +241,11 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable
     }
   }
 
+  /**
+   * Gets client type.
+   *
+   * @return the client type
+   */
   @Override
   public EClientType getClientType() {
     return getApplicationSession().getClientType();

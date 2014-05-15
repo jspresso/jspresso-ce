@@ -26,6 +26,7 @@ import javax.security.auth.Subject;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
+import org.jspresso.framework.util.gui.EClientType;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
@@ -96,10 +97,4 @@ public interface IController extends IActionHandler, IPropertyChangeCapable {
    */
   Map<String, Object> getInitialActionContext();
 
-  /**
-   * Gets the session client type.
-   *
-   * @return the client type
-   */
-  EClientType getClientType();
 }

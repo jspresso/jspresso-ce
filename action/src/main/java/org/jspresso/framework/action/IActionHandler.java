@@ -25,6 +25,7 @@ import javax.security.auth.Subject;
 
 import org.jspresso.framework.security.ISecurityHandler;
 import org.jspresso.framework.util.exception.IExceptionHandler;
+import org.jspresso.framework.util.gui.EClientType;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
@@ -108,4 +109,11 @@ public interface IActionHandler extends IExceptionHandler, ISecurityHandler,
    * @return the reference timeZone.
    */
   TimeZone getReferenceTimeZone();
+
+  /**
+   * Gets the session client type.
+   *
+   * @return the client type
+   */
+  EClientType getClientType();
 }

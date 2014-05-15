@@ -62,6 +62,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
   private IAction              action;
   private EHorizontalAlignment horizontalAlignment;
   private Boolean              sortable;
+  private List<String>         forClientTypes;
 
   /**
    * Gets the labelBackground.
@@ -369,5 +370,26 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    */
   public void setLabelHorizontalPosition(EHorizontalPosition labelHorizontalPosition) {
     this.labelHorizontalPosition = labelHorizontalPosition;
+  }
+
+  /**
+   * Gets the restricted list of client types that will display this property view. Defaults to {@code null},
+   * which means no restriction. The provided list is not empty, then the actual session client type is matched
+   * against each of the restricted client type with either equal or substring semantic.
+   *
+   * @return the for client types
+   */
+  @Override
+  public List<String> getForClientTypes() {
+    return forClientTypes;
+  }
+
+  /**
+   * Sets for client types.
+   *
+   * @param forClientTypes the for client types
+   */
+  public void setForClientTypes(List<String> forClientTypes) {
+    this.forClientTypes = forClientTypes;
   }
 }

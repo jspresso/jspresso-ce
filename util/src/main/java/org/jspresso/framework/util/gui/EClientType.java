@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application;
+package org.jspresso.framework.util.gui;
 
 /**
  * An enumeration for identifying the session client type.

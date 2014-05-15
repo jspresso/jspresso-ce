@@ -26,7 +26,7 @@ import java.util.TimeZone;
 
 import javax.security.auth.Subject;
 
-import org.jspresso.framework.application.EClientType;
+import org.jspresso.framework.util.gui.EClientType;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.security.UserPrincipal;
 
