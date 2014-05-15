@@ -146,7 +146,7 @@ public class MobileCompositePageViewDescriptor extends AbstractMobilePageViewDes
    * @return the boolean
    */
   public boolean isInlineEditing() {
-    return inlineEditing;
+    return inlineEditing || getModelDescriptor() == null;
   }
 
   /**

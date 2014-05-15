@@ -276,7 +276,7 @@ public abstract class AbstractComponentViewDescriptor extends BasicViewDescripto
    * @return the read-only component view descriptor.
    */
   protected synchronized AbstractComponentViewDescriptor cloneReadOnly() {
-    if (readOnlyClone == null) {
+    if (readOnlyClone == null && getModelDescriptor() != null) {
       readOnlyClone = (AbstractComponentViewDescriptor) clone();
       List<IPropertyViewDescriptor> readOnlyDescriptors = new ArrayList<>();
       for (IPropertyViewDescriptor descriptor : getPropertyViewDescriptors(false)) {
