@@ -125,9 +125,7 @@
     <property name="actionLists">
       <bean class="org.jspresso.framework.view.action.ActionList">
         <property name="actions">
-          <bean parent="addToMasterFrontAction">
-            <property name="nextAction" ref="editPageAction" />
-          </bean>
+          <ref bean="addToMasterFrontAction"/>
         </property>
       </bean>
     </property>
@@ -214,6 +212,20 @@
         <property name="actions">
           <list>
             <ref bean="addToMasterFrontAction"/>
+          </list>
+        </property>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="beanModuleActionMap" class="org.jspresso.framework.view.action.ActionMap">
+    <property name="actionLists">
+      <bean class="org.jspresso.framework.view.action.ActionList">
+        <property name="name" value="ACTION"/>
+        <property name="actions">
+          <list>
+            <ref bean="removeFromModuleObjectsFrontAction"/>
+            <ref bean="cloneModuleObjectFrontAction"/>
           </list>
         </property>
       </bean>
