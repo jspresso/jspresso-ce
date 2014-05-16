@@ -20,6 +20,7 @@ package org.jspresso.framework.application.view.descriptor.basic;
 
 import javax.security.auth.Subject;
 
+import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.AbstractCardViewDescriptor;
@@ -27,9 +28,9 @@ import org.jspresso.framework.view.descriptor.basic.AbstractCardViewDescriptor;
 /**
  * This is a card view descriptor which stacks the projected view descriptors of
  * the workspace structure.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  * @internal
  */
 public class WorkspaceCardViewDescriptor extends AbstractCardViewDescriptor {
@@ -40,9 +41,8 @@ public class WorkspaceCardViewDescriptor extends AbstractCardViewDescriptor {
   @Override
   public String getCardNameForModel(Object model, Subject subject) {
     if (model instanceof Module) {
-      IViewDescriptor pvd = ((Module) model).getProjectedViewDescriptor();
-      if (pvd != null) {
-        String cardName = Integer.toString(pvd.hashCode());
+      String cardName = computeModuleCardName((Module) model);
+      if (cardName != null) {
         if (getCardViewDescriptor(cardName) == null) {
           putCardViewDescriptor(cardName, ((Module) model).getViewDescriptor());
         }
@@ -51,5 +51,25 @@ public class WorkspaceCardViewDescriptor extends AbstractCardViewDescriptor {
       return null;
     }
     return null;
+  }
+
+  /**
+   * Computes a identifier that is unique per module view.
+   *
+   * @param module
+   *     the module
+   * @return the string
+   */
+  protected String computeModuleCardName(Module module) {
+    if (module instanceof BeanCollectionModule) {
+      return Integer.toHexString(module.hashCode());
+    } else {
+      // Simple modules, bean modules can share UI
+      IViewDescriptor pvd = module.getProjectedViewDescriptor();
+      if (pvd != null) {
+        return Integer.toHexString(pvd.hashCode());
+      }
+    }
+    return Integer.toHexString(module.hashCode());
   }
 }
