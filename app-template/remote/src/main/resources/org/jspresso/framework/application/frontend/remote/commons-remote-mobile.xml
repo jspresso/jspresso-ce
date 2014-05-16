@@ -207,9 +207,23 @@
     <property name="queryModuleFilterAction" ref="queryModuleFilterAction" />
   </bean>
 
+  <bean id="filterableBeanCollectionModuleActionMap" class="org.jspresso.framework.view.action.ActionMap">
+    <property name="actionLists">
+      <bean class="org.jspresso.framework.view.action.ActionList">
+        <property name="name" value="ACTION"/>
+        <property name="actions">
+          <list>
+            <ref bean="addToMasterFrontAction"/>
+          </list>
+        </property>
+      </bean>
+    </property>
+  </bean>
+
   <bean id="filterableBeanCollectionModuleView" parent="decoratedView"
         class="org.jspresso.framework.view.descriptor.mobile.MobileListViewDescriptor" scope="prototype">
     <property name="borderType" value="TITLED" />
+    <property name="actionMap" ref="filterableBeanCollectionModuleActionMap"/>
   </bean>
 
   <bean id="lovResultViewDescriptorFactoryBase"

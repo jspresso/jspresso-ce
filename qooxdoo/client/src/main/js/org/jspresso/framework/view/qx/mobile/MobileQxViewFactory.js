@@ -164,7 +164,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createExtraActionsToolBarButton: function (extraActions) {
       var extraButton = new qx.ui.mobile.toolbar.Button("...");
-      extraButton.removeCssClass("toolbar-button")
       var extraMenu = new qx.ui.mobile.dialog.Menu();
       extraMenu.getSelectionList().setDelegate({
         configureItem: function (item, data, row) {
