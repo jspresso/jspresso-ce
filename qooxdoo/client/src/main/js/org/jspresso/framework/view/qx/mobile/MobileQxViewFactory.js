@@ -454,6 +454,15 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createMobileNavPage: function (remoteNavPage) {
       var remoteSelectionComponent = remoteNavPage.getSelectionView();
+      var actionLists = remoteNavPage.getActionLists();
+      if (!actionLists) {
+        actionLists = [];
+      }
+      var selectionActionLists = remoteNavPage.getSelectionView().getActionLists();
+      if (selectionActionLists) {
+        actionLists = actionLists.concat(selectionActionLists);
+      }
+      remoteNavPage.setActionLists(actionLists);
       /** @type {qx.ui.mobile.list.List} */
       var selectionComponent = this.createComponent(remoteSelectionComponent);
       var rHeaderSections = remoteNavPage.getHeaderSections();
@@ -522,14 +531,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
               }
             }
           }, this);
-        }
-        var actionLists = remoteNavPage.getSelectionView().getActionLists();
-        if (actionLists) {
-          if (actionLists.length == 1 && actionLists[0].getActions().length == 1) {
-            this.installPageMainAction(navPage, actionLists[0].getActions()[0]);
-          } else {
-            this._addToolBarActions(remoteNavPage.getSelectionView(), navPage);
-          }
         }
       }, this);
       var remoteNextPage = remoteNavPage.getNextPage();

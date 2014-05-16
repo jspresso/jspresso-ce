@@ -168,6 +168,7 @@ public class MobileCompositePageViewDescriptor extends AbstractMobilePageViewDes
     if (editorPage == null) {
       editorPage = cloneEditable();
     }
+    editorPage.setInlineEditing(true);
     return editorPage;
   }
 
