@@ -49,8 +49,7 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
 //        this.__table.setRowHeight(contentHeight + 4);
 //      }
       if (this.__action) {
-        //return "<a href='javascript:qx.event.Registration.fireEvent(qx.core.Init.getApplication().getRoot(),\"tableLinkClicked\",\"qx.event.type.Data\",\""+this.__action.getGuid()+"\");'>"+this._formatValue(cellInfo)+"</a>";
-        //return "<a href='javascript:>"+this._formatValue(cellInfo)+"</a>";
+        // Action is handled in the cell click event
         return "<u>" + this.base(arguments, cellInfo) + "</u>";
       } else {
         if (org.jspresso.framework.util.html.HtmlUtil.isHtml(cellInfo.value)) {

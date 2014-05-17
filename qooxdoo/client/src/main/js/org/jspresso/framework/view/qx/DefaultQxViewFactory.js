@@ -191,7 +191,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 
       if (remoteImageComponent.getAction() != null) {
         this._getRemotePeerRegistry().register(remoteImageComponent.getAction());
-        imageComponent.addListener("click", function (e) {
+        imageComponent.addListener("tap", function (e) {
           this._getActionHandler().execute(remoteImageComponent.getAction());
         }, this);
       }
@@ -1736,7 +1736,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       }, this);
       if (remoteTree.getRowAction()) {
         this._getRemotePeerRegistry().register(remoteTree.getRowAction());
-        tree.addListener("dblclick", function (e) {
+        tree.addListener("dbltap", function (e) {
           this._getActionHandler().execute(remoteTree.getRowAction());
         }, this);
       }
@@ -2172,7 +2172,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         }
       }
       tableModel.setDynamicToolTipIndices(columnToolTips);
-      table.addListener("cellClick", function (e) {
+      table.addListener("cellTap", function (e) {
         var col = e.getColumn();
         var renderer = table.getTableColumnModel().getDataCellRenderer(col);
         if ((    renderer instanceof org.jspresso.framework.view.qx.FormattedTableCellRenderer || renderer
@@ -2197,10 +2197,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         selectionModel.setSelectionMode(qx.ui.table.selection.Model.MULTIPLE_INTERVAL_SELECTION);
       }
       selectionModel.addListener("changeSelection", function (e) {
-        if (selectionModel.hasBatchMode()) {
-          // TODO notify Qooxdoo batchMode is not working.
-          return;
-        }
         var leadingIndex = tableModel.viewIndexToModelIndex(selectionModel.getLeadSelectionIndex());
         var selectedRanges = selectionModel.getSelectedRanges();
 
@@ -2226,8 +2222,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           state.setLeadingIndex(leadingIndex);
           state.setSelectedIndices(selectedIndices);
         }
-        // workaround to update cell rendering
-        table.updateContent();
       }, this);
 
       state.addListener("changeSelectedIndices", function (e) {
@@ -2281,9 +2275,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           selectionModel.setBatchMode(false);
         }
       }, this);
+
       if (remoteTable.getRowAction()) {
         this._getRemotePeerRegistry().register(remoteTable.getRowAction());
-        table.addListener("dblclick", function (e) {
+        table.addListener("dbltap", function (e) {
           this._getActionHandler().execute(remoteTable.getRowAction());
         }, this);
       }
@@ -2456,7 +2451,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
               return modelValue;
             }
           });
-          atom.addListener("click", function (event) {
+          atom.addListener("tap", function (event) {
             this._getActionHandler().execute(remoteLabel.getAction());
           }, this);
         } else {
@@ -2695,7 +2690,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var state = remoteList.getState();
       var listController = new qx.data.controller.List(state.getChildren(), list, "children[1].value");
       listController.setDelegate(new org.jspresso.framework.view.qx.EnhancedListDelegate());
-      if(remoteList.getDisplayIcon()) {
+      if (remoteList.getDisplayIcon()) {
         listController.setIconPath("iconImageUrl");
       }
 
@@ -2763,7 +2758,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 
       if (remoteList.getRowAction()) {
         this._getRemotePeerRegistry().register(remoteList.getRowAction());
-        list.addListener("dblclick", function (e) {
+        list.addListener("dbltap", function (e) {
           this._getActionHandler().execute(remoteList.getRowAction());
         }, this);
       }
