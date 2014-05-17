@@ -41,13 +41,13 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
           cellInfo.value = "<html>" + cellInfo.value.replace(new RegExp("\n", 'g'), "<br>") + "</html>";
         }
       }
-      var contentHeight = qx.bom.Label.getHtmlSize(cellInfo.value).height;
-      if (contentHeight > 150) {
-        contentHeight = 150;
-      }
-      if (this.__table.getRowHeight() < contentHeight) {
-        this.__table.setRowHeight(contentHeight + 4);
-      }
+//      var contentHeight = qx.bom.Label.getHtmlSize(cellInfo.value).height;
+//      if (contentHeight > 150) {
+//        contentHeight = 150;
+//      }
+//      if (this.__table.getRowHeight() < contentHeight) {
+//        this.__table.setRowHeight(contentHeight + 4);
+//      }
       if (this.__action) {
         //return "<a href='javascript:qx.event.Registration.fireEvent(qx.core.Init.getApplication().getRoot(),\"tableLinkClicked\",\"qx.event.type.Data\",\""+this.__action.getGuid()+"\");'>"+this._formatValue(cellInfo)+"</a>";
         //return "<a href='javascript:>"+this._formatValue(cellInfo)+"</a>";
