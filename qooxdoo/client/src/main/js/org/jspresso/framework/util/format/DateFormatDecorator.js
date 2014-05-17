@@ -90,11 +90,12 @@ qx.Class.define("org.jspresso.framework.util.format.DateFormatDecorator", {
       var parsedDay = parsedDate.getDate();
       if (!(this.getRemoteComponent() instanceof org.jspresso.framework.gui.remote.RTimeField)) {
         var today = new Date();
-        if (str.indexOf("70") < 0 && parsedDate.getTime() > 0 && parsedDate.getTime() < 365 * 24 * 3600000) {
+        if (str.indexOf("70") < 0 && parsedDate.getTime() > (-24 * 3600000) && parsedDate.getTime() < 365 * 24
+            * 3600000) {
           parsedYear = today.getFullYear();
         }
-        if (str.indexOf("70") < 0 && str.indexOf("01") < 0 && parsedDate.getTime() > 0 && parsedDate.getTime() < 31 * 24
-            * 3600000) {
+        if (str.indexOf("70") < 0 && str.indexOf("01") < 0 && parsedDate.getTime() > (-24 * 3600000)
+            && parsedDate.getTime() < 31 * 24 * 3600000) {
           parsedMonth = today.getMonth();
         }
       }
