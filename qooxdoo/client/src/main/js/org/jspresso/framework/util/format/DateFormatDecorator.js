@@ -77,6 +77,11 @@ qx.Class.define("org.jspresso.framework.util.format.DateFormatDecorator", {
         }
       }
       if (parsedDate == null) {
+        if (this.getRemoteComponent() instanceof org.jspresso.framework.gui.remote.RDateField
+            || (this.getRemoteComponent() instanceof org.jspresso.framework.gui.remote.RTimeField
+                && (/** @type {org.jspresso.framework.gui.remote.RTimeField } */ this.getRemoteComponent()).isUseDateDto())) {
+          return org.jspresso.framework.util.format.DateUtils.fromDate(/** @type {Date}} */existingDate);
+        }
         return existingDate;
       }
 
@@ -105,8 +110,9 @@ qx.Class.define("org.jspresso.framework.util.format.DateFormatDecorator", {
               parsedDate.getHours(), parsedDate.getMinutes(), parsedDate.getSeconds(), parsedDate.getMilliseconds());
         }
       }
-      if (this.getRemoteComponent() instanceof org.jspresso.framework.gui.remote.RTimeField
-          && (/** @type {org.jspresso.framework.gui.remote.RTimeField } */ this.getRemoteComponent()).isUseDateDto()) {
+      if (this.getRemoteComponent() instanceof org.jspresso.framework.gui.remote.RDateField
+          || (this.getRemoteComponent() instanceof org.jspresso.framework.gui.remote.RTimeField
+              && (/** @type {org.jspresso.framework.gui.remote.RTimeField } */ this.getRemoteComponent()).isUseDateDto())) {
         return org.jspresso.framework.util.format.DateUtils.fromDate(/** @type {Date}} */parsedDate);
       }
       return parsedDate;
