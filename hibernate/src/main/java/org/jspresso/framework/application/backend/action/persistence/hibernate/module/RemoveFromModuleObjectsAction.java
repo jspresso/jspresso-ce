@@ -26,11 +26,13 @@ import java.util.Map;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.IBackendController;
+import org.jspresso.framework.application.backend.action.persistence.hibernate.AbstractHibernateAction;
 import org.jspresso.framework.application.backend.action.persistence.hibernate.AbstractHibernateCollectionAction;
 import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.BeanModule;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.binding.ICollectionConnector;
+import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.entity.IEntity;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
@@ -40,13 +42,13 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
  * selected objects from the module's projected collection <b>and deletes them
  * from the persistent store</b>. If one (or more) of the removed objects are
  * also used in children bean modules, the corresponding children bean modules
- * are also removed accordingly.
+ * are also removed accordingly. It is versatile enough to work on mobile collection module
+ * details.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RemoveFromModuleObjectsAction extends
-    AbstractHibernateCollectionAction {
+public class RemoveFromModuleObjectsAction extends AbstractHibernateAction {
 
   /**
    * Constructs a new {@code RemoveFromModuleObjectsAction} instance.
@@ -76,12 +78,22 @@ public class RemoveFromModuleObjectsAction extends
   @Override
   public boolean execute(IActionHandler actionHandler,
       final Map<String, Object> context) {
-    int[] selectedIndices = getSelectedIndices(context);
-    ICollectionConnector collectionConnector = getModelConnector(context);
+    IValueConnector modelConnector = getModelConnector(context);
+    final List<Object> moduleObjectsToRemove = new ArrayList<>();
 
-    if (selectedIndices == null || selectedIndices.length == 0
-        || collectionConnector == null) {
-      return false;
+    if (modelConnector instanceof ICollectionConnector) {
+      int[] selectedIndices = getSelectedIndices(context);
+      ICollectionConnector collectionConnector = (ICollectionConnector) modelConnector;
+
+      if (selectedIndices == null || selectedIndices.length == 0) {
+        return false;
+      }
+
+      for (int selectedIndice : selectedIndices) {
+        moduleObjectsToRemove.add(collectionConnector.getChildConnector(selectedIndice).getConnectorValue());
+      }
+    } else {
+      moduleObjectsToRemove.add(modelConnector.getConnectorValue());
     }
 
     BeanCollectionModule module = (BeanCollectionModule) getModule(context);
@@ -93,11 +105,6 @@ public class RemoveFromModuleObjectsAction extends
       projectedCollection = new ArrayList<>(module.getModuleObjects());
     }
 
-    final List<Object> moduleObjectsToRemove = new ArrayList<>();
-    for (int selectedIndice : selectedIndices) {
-      moduleObjectsToRemove.add(collectionConnector.getChildConnector(
-          selectedIndice).getConnectorValue());
-    }
     getTransactionTemplate(context).execute(
         new TransactionCallbackWithoutResult() {
 
@@ -140,7 +147,7 @@ public class RemoveFromModuleObjectsAction extends
       removeFromSubModules(module, moduleObjectToRemove);
     }
     module.setModuleObjects(projectedCollection);
-    collectionConnector.setConnectorValue(projectedCollection);
+    //collectionConnector.setConnectorValue(projectedCollection);
     setActionParameter(moduleObjectsToRemove, context);
     return super.execute(actionHandler, context);
   }

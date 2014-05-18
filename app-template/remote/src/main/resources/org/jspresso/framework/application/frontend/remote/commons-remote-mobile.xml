@@ -83,12 +83,11 @@
     </property>
   </bean>
 
-  <bean id="saveAndGoBackFrontAction" parent="saveModuleObjectFrontAction" >
+  <bean id="savePageFrontAction" parent="saveModuleObjectFrontAction" >
     <property name="nextAction" ref="backPageAction" />
   </bean>
 
-  <bean id="reloadAndGoBackFrontAction" parent="reloadModuleObjectFrontAction">
-    <property name="nextAction" ref="backPageAction"/>
+  <bean id="cancelPageFrontAction" parent="reloadModuleObjectFrontAction">
   </bean>
 
   <bean id="cloneComponentFrontAction" parent="cloneEntityCollectionFrontAction">
@@ -99,9 +98,12 @@
     </property>
     <property name="nextAction">
       <bean parent="backPageAction">
+        <property name="wrappedAction">
+          <bean class="org.jspresso.framework.application.backend.action.AddAnyCollectionToMasterAction"/>
+        </property>
         <property name="nextAction">
           <bean class="org.jspresso.framework.application.frontend.action.ActionParamToSelectedModelAction">
-            <property name="nextAction" ref="editPageAction" />
+            <property name="nextAction" ref="editPageAction"/>
           </bean>
         </property>
       </bean>
@@ -116,10 +118,12 @@
           <bean
               class="org.jspresso.framework.application.backend.action.persistence.hibernate.DeleteEntityAction" />
         </property>
-        <property name="nextAction" ref="saveAndGoBackFrontAction" />
+        <property name="nextAction" ref="savePageFrontAction" />
       </bean>
     </property>
   </bean>
+
+  <bean id="cloneModuleObjectFrontAction" parent="cloneComponentFrontAction"/>
 
   <bean id="masterActionMap" class="org.jspresso.framework.view.action.ActionMap">
     <property name="actionLists">
@@ -148,8 +152,8 @@
         class="org.jspresso.framework.view.remote.mobile.MobileRemoteViewFactory"
         parent="viewFactoryBase">
     <property name="editPageAction" ref="editPageAction"/>
-    <property name="savePageAction" ref="saveAndGoBackFrontAction"/>
-    <property name="cancelPageAction" ref="reloadAndGoBackFrontAction"/>
+    <property name="savePageAction" ref="savePageFrontAction"/>
+    <property name="cancelPageAction" ref="cancelPageFrontAction"/>
     <property name="nextElementAction" ref="nextElementAction"/>
     <property name="previousElementAction" ref="previousElementAction"/>
   </bean>
@@ -218,13 +222,20 @@
     </property>
   </bean>
 
-  <bean id="moduleDetailActionMap" class="org.jspresso.framework.view.action.ActionMap">
+  <bean id="beanModuleActionMap" class="org.jspresso.framework.view.action.ActionMap">
     <property name="actionLists">
       <bean class="org.jspresso.framework.view.action.ActionList">
         <property name="name" value="ACTION"/>
         <property name="actions">
           <list>
-            <ref bean="removeModuleObjectFrontAction"/>
+            <bean parent="removeFromModuleObjectsFrontAction">
+              <property name="yesAction">
+                <bean class="org.jspresso.framework.application.frontend.action.FrontendAction">
+                  <property name="wrappedAction" ref="removeFromModuleObjectsAction"/>
+                  <property name="nextAction" ref="backPageAction"/>
+                </bean>
+              </property>
+            </bean>
             <ref bean="cloneModuleObjectFrontAction"/>
           </list>
         </property>
