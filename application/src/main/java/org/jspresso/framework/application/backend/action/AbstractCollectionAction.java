@@ -34,6 +34,8 @@ import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
  */
 public abstract class AbstractCollectionAction extends BackendAction {
 
+  private int[] viewPath;
+
   /**
    * refined to return a collection connector.
    * <p>
@@ -41,7 +43,7 @@ public abstract class AbstractCollectionAction extends BackendAction {
    */
   @Override
   protected ICollectionConnector getModelConnector(Map<String, Object> context) {
-    IValueConnector connector = super.getModelConnector(context);
+    IValueConnector connector = super.getModelConnector(getViewPath(), context);
     // for handling table editing connectors...
     while (connector != null && !(connector instanceof ICollectionConnector)) {
       connector = connector.getParentConnector();
@@ -71,6 +73,24 @@ public abstract class AbstractCollectionAction extends BackendAction {
    */
   @Deprecated
   protected List<?> getSelectedObjects(Map<String, Object> context) {
-    return getSelectedModels(context);
+    return getSelectedModels(getViewPath(), context);
+  }
+
+  /**
+   * Get view path.
+   *
+   * @return the int [ ]
+   */
+  protected int[] getViewPath() {
+    return viewPath;
+  }
+
+  /**
+   * Sets view path.
+   *
+   * @param viewPath the view path
+   */
+  public void setViewPath(int[] viewPath) {
+    this.viewPath = viewPath;
   }
 }

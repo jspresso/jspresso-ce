@@ -131,7 +131,7 @@ public abstract class AbstractAddCollectionToMasterAction extends
         throw new ActionException(ex.getCause());
       }
       setActionParameter(newComponents, context);
-      setSelectedModels(newComponents, context);
+      setSelectedModels(getViewPath(), newComponents, context);
     }
     return super.execute(actionHandler, context);
   }

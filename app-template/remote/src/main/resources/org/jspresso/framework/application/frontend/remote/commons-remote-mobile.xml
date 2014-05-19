@@ -97,15 +97,13 @@
       </bean>
     </property>
     <property name="nextAction">
-      <bean parent="backPageAction">
+      <bean class="org.jspresso.framework.application.frontend.action.FrontendAction">
         <property name="wrappedAction">
-          <bean class="org.jspresso.framework.application.backend.action.AddAnyCollectionToMasterAction"/>
-        </property>
-        <property name="nextAction">
-          <bean class="org.jspresso.framework.application.frontend.action.ActionParamToSelectedModelAction">
-            <property name="nextAction" ref="editPageAction"/>
+          <bean class="org.jspresso.framework.application.backend.action.AddAnyCollectionToMasterAction">
+            <property name="viewPath" value="-1" />
           </bean>
         </property>
+        <property name="nextAction" ref="editPageAction"/>
       </bean>
     </property>
   </bean>
