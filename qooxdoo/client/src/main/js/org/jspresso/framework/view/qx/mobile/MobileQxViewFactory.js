@@ -813,7 +813,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     _addSectionHeader: function (container, remoteSection) {
       if (remoteSection && remoteSection.getBorderType() == "TITLED" && remoteSection.getLabel()) {
         var header = new qx.ui.mobile.form.Row();
-        header.addCssClass("form-row-group-title");
+        header.addCssClasses(["form-row-group-title", "jspresso-form-row-group-title"]);
         header.add(new qx.ui.mobile.basic.Label(remoteSection.getLabel()));
         container.add(header);
       }
