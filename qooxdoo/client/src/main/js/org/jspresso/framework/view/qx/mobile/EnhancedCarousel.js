@@ -36,7 +36,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.EnhancedCarousel", {
   statics: {
   },
 
-  construct : function(transitionDuration) {
+  construct: function (transitionDuration) {
     this.base(arguments, transitionDuration);
   },
 
@@ -45,6 +45,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.EnhancedCarousel", {
       this.base(arguments);
       if (this.getHeight() === null) {
         this._setStyle("height", "initial");
+      }
+      for (var i = 0; i < this.__pages.length; i++) {
+        var pageContentElement = this.__pages[i].getContentElement();
+        qx.bom.element.Style.set(pageContentElement, "height", "initial");
       }
     }
   }
