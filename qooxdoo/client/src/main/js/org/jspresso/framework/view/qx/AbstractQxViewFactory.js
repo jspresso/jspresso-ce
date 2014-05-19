@@ -430,7 +430,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
       } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RPasswordField) {
         return new org.jspresso.framework.util.format.PasswordFormat();
       } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RNumericComponent) {
-        format = new org.jspresso.framework.util.format.ScaledNumberFormat();
+        format = new org.jspresso.framework.util.format.ScaledNumberFormat(qx.locale.Manager.getInstance().getLocale());
         format.setThousandsSeparator(this._getThousandsSeparator());
         format.setDecimalSeparator(this._getDecimalSeparator());
         format.setGroupingUsed(remoteComponent.getThousandsGroupingUsed());

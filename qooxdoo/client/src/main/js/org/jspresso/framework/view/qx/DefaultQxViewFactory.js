@@ -2246,33 +2246,36 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         }
 
         if (!qx.lang.Array.equals(selectedIndices, stateSelection) || leadingIndex != stateLeadingIndex) {
-          selectionModel.setBatchMode(true);
-          selectionModel.resetSelection();
-          if (stateSelection.length > 0) {
-            var minIndex = -1;
-            var maxIndex = minIndex;
-            for (var i = 0; i < stateSelection.length; i++) {
-              if (minIndex < 0) {
-                minIndex = stateSelection[i];
-                maxIndex = minIndex;
-              } else {
-                var nextSelectedIndex = stateSelection[i];
-                if (nextSelectedIndex == maxIndex + 1) {
-                  maxIndex = nextSelectedIndex;
-                } else {
-                  selectionModel.addSelectionInterval(minIndex, maxIndex);
-                  minIndex = nextSelectedIndex;
+          try {
+            selectionModel.setBatchMode(true);
+            selectionModel.resetSelection();
+            if (stateSelection.length > 0) {
+              var minIndex = -1;
+              var maxIndex = minIndex;
+              for (var i = 0; i < stateSelection.length; i++) {
+                if (minIndex < 0) {
+                  minIndex = stateSelection[i];
                   maxIndex = minIndex;
+                } else {
+                  var nextSelectedIndex = stateSelection[i];
+                  if (nextSelectedIndex == maxIndex + 1) {
+                    maxIndex = nextSelectedIndex;
+                  } else {
+                    selectionModel.addSelectionInterval(minIndex, maxIndex);
+                    minIndex = nextSelectedIndex;
+                    maxIndex = minIndex;
+                  }
                 }
               }
+              selectionModel.addSelectionInterval(minIndex, maxIndex);
             }
-            selectionModel.addSelectionInterval(minIndex, maxIndex);
+            if (stateLeadingIndex >= 0) {
+              selectionModel.addSelectionInterval(stateLeadingIndex, stateLeadingIndex);
+              table.setFocusedCell(0, stateLeadingIndex, true);
+            }
+          } finally {
+            selectionModel.setBatchMode(false);
           }
-          if (stateLeadingIndex >= 0) {
-            selectionModel.addSelectionInterval(stateLeadingIndex, stateLeadingIndex);
-            table.setFocusedCell(0, stateLeadingIndex, true);
-          }
-          selectionModel.setBatchMode(false);
         }
       }, this);
 
@@ -2322,7 +2325,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         var slideBar;
         if (toolBar) {
           slideBar = new qx.ui.container.SlideBar();
-          slideBar.add(toolBar);
+          slideBar.add(toolBar, {flex: 1});
           surroundingBox.add(slideBar);
         }
         surroundingBox.add(component, {
@@ -2330,7 +2333,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         });
         if (secondaryToolBar) {
           slideBar = new qx.ui.container.SlideBar();
-          slideBar.add(secondaryToolBar);
+          slideBar.add(secondaryToolBar, {flex: 1});
           surroundingBox.add(slideBar);
         }
         decorated = surroundingBox;
