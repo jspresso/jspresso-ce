@@ -38,18 +38,38 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.EnhancedCarousel", {
 
   construct: function (transitionDuration) {
     this.base(arguments, transitionDuration);
+    this.__pagesCopy = [];
   },
 
   members: {
+    __pagesCopy: null,
+
+    add: function (page) {
+      this.__pagesCopy.push(page);
+      this.base(arguments, page);
+    },
+
+    removePageByIndex: function (pageIndex) {
+      this.base(arguments, pageIndex);
+      if (this.__pagesCopy && this.__pagesCopy.length > pageIndex) {
+        this.__pagesCopy.splice(pageIndex, 1);
+      }
+    },
+
     _updateCarouselLayout: function () {
       this.base(arguments);
       if (this.getHeight() === null) {
         this._setStyle("height", "initial");
       }
-      for (var i = 0; i < this.__pages.length; i++) {
-        var pageContentElement = this.__pages[i].getContentElement();
+      for (var i = 0; i < this.__pagesCopy.length; i++) {
+        var pageContentElement = this.__pagesCopy[i].getContentElement();
         qx.bom.element.Style.set(pageContentElement, "height", "initial");
       }
     }
+  },
+
+  destruct: function () {
+    this.__pagesCopy = null;
   }
+
 });
