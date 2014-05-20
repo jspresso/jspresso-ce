@@ -659,11 +659,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
                 this._getActionHandler().showDetailPage(pageToShow);
               }
             }, this);
-            list.setUserData("horizontalPosition", remotePageSection.getHorizontalPosition());
+            list.setUserData("position", remotePageSection.getPosition());
             sections.push(list);
           } else {
-            remotePageSection.setUserData("horizontalPosition", remotePageSection.getHorizontalPosition());
-            pageSection.setUserData("horizontalPosition", remotePageSection.getHorizontalPosition());
+            remotePageSection.setUserData("position", remotePageSection.getPosition());
+            pageSection.setUserData("position", remotePageSection.getPosition());
             sections.push(remotePageSection);
             sections.push(pageSection);
           }
@@ -701,18 +701,26 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       }
       compositePage.addListener("initialize", function (e) {
         var content = compositePage.getContent();
-        var contentLeft = content;
-        var contentRight = content;
+        var contentTop = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
+        var contentCenter = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
+        var contentBottom = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
+
+        contentTop.addCssClasses(["jspresso-tablet-content-top", "group"]);
+        contentCenter.addCssClasses(["jspresso-tablet-content-center", "group"]);
+        contentBottom.addCssClasses(["jspresso-tablet-content-bottom", "group"]);
+
+        var contentLeft = contentCenter;
+        var contentRight = contentCenter;
         var needsSplittedContent = pageSections && pageSections.length > 1 && this._getActionHandler().isTablet();
         var left = false;
         var right = false;
         if (needsSplittedContent) {
           for (var i = 0; (i < sections.length) && !(left && right); i++) {
             var section = sections[i];
-            if (section.getUserData("horizontalPosition") == "RIGHT") {
-              right = true;
-            } else {
+            if (section.getUserData("position") == "LEFT") {
               left = true;
+            } else if (section.getUserData("position") == "RIGHT") {
+              right = true;
             }
           }
           needsSplittedContent = (left && right);
@@ -726,21 +734,34 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           contentRight.addCssClasses(["jspresso-tablet-content-right", "group"]);
           splittedContent.add(contentLeft, {flex: 1});
           splittedContent.add(contentRight, {flex: 1});
-          content.add(splittedContent);
+          contentCenter.add(splittedContent);
         }
-        var contentToAdd = contentLeft;
+        var contentToAdd = contentTop;
         for (var i = 0; i < sections.length; i++) {
           var section = sections[i];
-          if (section.getUserData("horizontalPosition") == "RIGHT") {
-            contentToAdd = contentRight;
-          } else {
+          if (section.getUserData("position") == "TOP") {
+            contentToAdd = contentTop;
+          } else if (section.getUserData("position") == "LEFT") {
             contentToAdd = contentLeft;
+          } else if (section.getUserData("position") == "RIGHT") {
+            contentToAdd = contentRight;
+          } else if (section.getUserData("position") == "BOTTOM") {
+            contentToAdd = contentBottom;
           }
           if (section instanceof org.jspresso.framework.gui.remote.RComponent) {
             this._addSectionHeader(contentToAdd, section);
           } else {
             contentToAdd.add(section);
           }
+        }
+        if (contentTop.getChildren().length > 0) {
+          content.add(contentTop, {flex: 1});
+        }
+        if (contentCenter.getChildren().length > 0) {
+          content.add(contentCenter, {flex: 1});
+        }
+        if (contentBottom.getChildren().length > 0) {
+          content.add(contentBottom, {flex: 1});
         }
       }, this);
       this._addDetailPage(compositePage);
