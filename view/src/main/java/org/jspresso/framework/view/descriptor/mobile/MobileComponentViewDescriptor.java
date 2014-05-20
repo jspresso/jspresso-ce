@@ -20,8 +20,9 @@ package org.jspresso.framework.view.descriptor.mobile;
 
 import java.util.List;
 
-import org.jspresso.framework.view.descriptor.basic.AbstractComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.EHorizontalPosition;
+import org.jspresso.framework.view.descriptor.EPosition;
+import org.jspresso.framework.view.descriptor.basic.AbstractComponentViewDescriptor;
 
 /**
  * A mobile form view descriptor.
@@ -32,14 +33,14 @@ import org.jspresso.framework.view.descriptor.EHorizontalPosition;
 public class MobileComponentViewDescriptor extends AbstractComponentViewDescriptor
     implements IMobilePageSectionViewDescriptor {
 
-  private EHorizontalPosition horizontalPosition;
-  private List<String>        forClientTypes;
+  private EPosition    position;
+  private List<String> forClientTypes;
 
   /**
    * Instantiates a new Mobile border view descriptor.
    */
   public MobileComponentViewDescriptor() {
-    this.horizontalPosition = EHorizontalPosition.LEFT;
+    this.position = EPosition.LEFT;
   }
 
   /**
@@ -123,23 +124,23 @@ public class MobileComponentViewDescriptor extends AbstractComponentViewDescript
   }
 
   /**
-   * Gets horizontal position.
+   * Gets position.
    *
-   * @return the horizontal position
+   * @return the position
    */
   @Override
-  public EHorizontalPosition getHorizontalPosition() {
-    return horizontalPosition;
+  public EPosition getPosition() {
+    return position;
   }
 
   /**
-   * Sets horizontal position.
+   * Sets position.
    *
-   * @param horizontalPosition
-   *     the horizontal position
+   * @param position
+   *     the position
    */
-  public void setHorizontalPosition(EHorizontalPosition horizontalPosition) {
-    this.horizontalPosition = horizontalPosition;
+  public void setPosition(EPosition position) {
+    this.position = position;
   }
 
 

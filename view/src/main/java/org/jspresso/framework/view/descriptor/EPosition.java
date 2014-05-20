@@ -16,23 +16,33 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.view.descriptor.mobile;
-
-import org.jspresso.framework.util.gui.IClientTypeAware;
-import org.jspresso.framework.view.descriptor.EPosition;
+package org.jspresso.framework.view.descriptor;
 
 /**
- * Marker interface for mobile view descriptors.
+ * Enumeration for position constants.
  *
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$
  */
-public interface IMobilePageSectionViewDescriptor extends IMobileViewDescriptor, IClientTypeAware {
+public enum EPosition {
 
   /**
-   * Gets position, either LEFT, RIGHT, TOP or BOTTOM.
-   *
-   * @return the position
+   * {@code LEFT}.
    */
-  EPosition getPosition();
+  LEFT,
+
+  /**
+   * {@code RIGHT}.
+   */
+  RIGHT,
+
+  /**
+   * {@code TOP}.
+   */
+  TOP,
+
+  /**
+   * {@code BOTTOM}.
+   */
+  BOTTOM
 }

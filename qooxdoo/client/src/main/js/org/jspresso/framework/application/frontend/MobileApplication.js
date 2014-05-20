@@ -122,9 +122,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.MobileApplication",
       this.start();
     },
 
+    _createController: function (remoteController) {
+      return new org.jspresso.framework.application.frontend.controller.qx.mobile.MobileQxController(this, remoteController,
+          "en");
+    },
+
     startController: function (remoteController) {
-      this.__qxController = new org.jspresso.framework.application.frontend.controller.qx.mobile.MobileQxController(this,
-          remoteController, "en");
+      this.__qxController = this._createController(remoteController);
       this.__qxController.start();
     },
 

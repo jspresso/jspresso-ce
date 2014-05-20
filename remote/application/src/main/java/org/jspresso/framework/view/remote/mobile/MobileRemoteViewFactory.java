@@ -149,7 +149,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
         }
         if (view != null) {
           ((RMobilePage) view.getPeer()).setHorizontalPosition(
-              ((IMobilePageViewDescriptor) viewDescriptor).getHorizontalPosition().name());
+              ((IMobilePageViewDescriptor) viewDescriptor).getPosition().name());
         }
       } else if (viewDescriptor instanceof MobileBorderViewDescriptor) {
         view = createBorderView((MobileBorderViewDescriptor) viewDescriptor, actionHandler, locale);
@@ -391,7 +391,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     IView<RComponent> view = super.createComponentView(viewDescriptor, actionHandler, locale);
     if (viewDescriptor instanceof MobileComponentViewDescriptor) {
       ((RMobileForm) view.getPeer()).setHorizontalPosition(
-          ((MobileComponentViewDescriptor) viewDescriptor).getHorizontalPosition().name());
+          ((MobileComponentViewDescriptor) viewDescriptor).getPosition().name());
     }
     return view;
   }
@@ -407,7 +407,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     IView<RComponent> view = super.createMapView(viewDescriptor, actionHandler, locale);
     if (viewDescriptor instanceof MobileMapViewDescriptor) {
       ((RMobileMap) view.getPeer()).setHorizontalPosition(
-          ((MobileMapViewDescriptor) viewDescriptor).getHorizontalPosition().name());
+          ((MobileMapViewDescriptor) viewDescriptor).getPosition().name());
     }
     return view;
   }
@@ -424,7 +424,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     ICompositeView<RComponent> view = super.createBorderView(viewDescriptor, actionHandler, locale);
     if (viewDescriptor instanceof MobileBorderViewDescriptor) {
       ((RMobileBorderContainer) view.getPeer()).setHorizontalPosition(
-          ((MobileBorderViewDescriptor) viewDescriptor).getHorizontalPosition().name());
+          ((MobileBorderViewDescriptor) viewDescriptor).getPosition().name());
     }
     return view;
   }
@@ -524,7 +524,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
       ((RMobileTabContainer) view.getPeer()).setCarouselMode(
           ((MobileTabViewDescriptor) viewDescriptor).isCarouselMode());
       ((RMobileTabContainer) view.getPeer()).setHorizontalPosition(
-          ((MobileTabViewDescriptor) viewDescriptor).getHorizontalPosition().name());
+          ((MobileTabViewDescriptor) viewDescriptor).getPosition().name());
     }
     return view;
   }

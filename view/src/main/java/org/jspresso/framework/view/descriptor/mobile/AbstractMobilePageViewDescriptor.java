@@ -21,7 +21,7 @@ package org.jspresso.framework.view.descriptor.mobile;
 import java.util.List;
 
 import org.jspresso.framework.view.action.IDisplayableAction;
-import org.jspresso.framework.view.descriptor.EHorizontalPosition;
+import org.jspresso.framework.view.descriptor.EPosition;
 import org.jspresso.framework.view.descriptor.basic.BasicCompositeViewDescriptor;
 
 /**
@@ -33,20 +33,20 @@ import org.jspresso.framework.view.descriptor.basic.BasicCompositeViewDescriptor
 public abstract class AbstractMobilePageViewDescriptor extends BasicCompositeViewDescriptor
     implements IMobilePageViewDescriptor {
 
-  private IDisplayableAction  enterAction;
-  private IDisplayableAction  backAction;
-  private IDisplayableAction  mainAction;
-  private IDisplayableAction  pageEndAction;
-  private IDisplayableAction  swipeLeftAction;
-  private IDisplayableAction  swipeRightAction;
-  private EHorizontalPosition horizontalPosition;
-  private List<String>        forClientTypes;
+  private IDisplayableAction enterAction;
+  private IDisplayableAction backAction;
+  private IDisplayableAction mainAction;
+  private IDisplayableAction pageEndAction;
+  private IDisplayableAction swipeLeftAction;
+  private IDisplayableAction swipeRightAction;
+  private EPosition          position;
+  private List<String>       forClientTypes;
 
   /**
    * Instantiates a new Mobile border view descriptor.
    */
   public AbstractMobilePageViewDescriptor() {
-    this.horizontalPosition = EHorizontalPosition.RIGHT;
+    this.position = EPosition.RIGHT;
   }
 
   /**
@@ -171,23 +171,23 @@ public abstract class AbstractMobilePageViewDescriptor extends BasicCompositeVie
   }
 
   /**
-   * Gets horizontal position.
+   * Gets position.
    *
-   * @return the horizontal position
+   * @return the position
    */
   @Override
-  public EHorizontalPosition getHorizontalPosition() {
-    return horizontalPosition;
+  public EPosition getPosition() {
+    return position;
   }
 
   /**
-   * Sets horizontal position.
+   * Sets position.
    *
-   * @param horizontalPosition
-   *     the horizontal position
+   * @param position
+   *     the position
    */
-  public void setHorizontalPosition(EHorizontalPosition horizontalPosition) {
-    this.horizontalPosition = horizontalPosition;
+  public void setPosition(EPosition position) {
+    this.position = position;
   }
 
   /**

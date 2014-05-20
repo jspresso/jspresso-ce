@@ -226,7 +226,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
    *
    * @return the getGuidGenerator().
    */
-  protected IGUIDGenerator<String> getGuidGenerator() {
+  public IGUIDGenerator<String> getGuidGenerator() {
     return guidGenerator;
   }
 
@@ -1863,8 +1863,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
    * @param propertyViewAction
    *     the action to configure.
    */
-  protected void configurePropertyViewAction(IPropertyViewDescriptor propertyViewDescriptor,
-                                             RAction propertyViewAction) {
+  public void configurePropertyViewAction(IPropertyViewDescriptor propertyViewDescriptor, RAction propertyViewAction) {
     Map<String, Object> staticContext = new HashMap<>();
     staticContext.put(ActionContextConstants.PROPERTY_VIEW_DESCRIPTOR, propertyViewDescriptor);
     propertyViewAction.putValue(IAction.STATIC_CONTEXT_KEY, staticContext);
@@ -2018,8 +2017,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
    * {@inheritDoc}
    */
   @Override
-  protected IView<RComponent> constructView(RComponent viewComponent, IViewDescriptor descriptor,
-                                            IValueConnector connector) {
+  public IView<RComponent> constructView(RComponent viewComponent, IViewDescriptor descriptor,
+                                         IValueConnector connector) {
     IView<RComponent> view = super.constructView(viewComponent, descriptor, connector);
     if (connector instanceof IPermIdSource) {
       ((IPermIdSource) connector).setPermId(descriptor.getPermId());

@@ -569,8 +569,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @param collectionConnector
    *          the collection connector to attach the listener to.
    */
-  protected void attachDefaultCollectionListener(
-      ICollectionConnector collectionConnector) {
+  public void attachDefaultCollectionListener(ICollectionConnector collectionConnector) {
     collectionConnector.addValueChangeListener(firstRowSelector);
   }
 
@@ -2817,7 +2816,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *
    * @return the mvcBinder.
    */
-  protected IMvcBinder getMvcBinder() {
+  public IMvcBinder getMvcBinder() {
     return mvcBinder;
   }
 
@@ -3099,9 +3098,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @param locale
    *          the locale.
    */
-  protected void finishCollectionViewConfiguration(IView<E> view,
-      ICollectionViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
+  public void finishCollectionViewConfiguration(IView<E> view, ICollectionViewDescriptor viewDescriptor,
+                                                IActionHandler actionHandler, Locale locale) {
     if (view != null) {
       if (viewDescriptor.getSelectionModelDescriptor() != null) {
         ICollectionDescriptorProvider<?> selectionModelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
