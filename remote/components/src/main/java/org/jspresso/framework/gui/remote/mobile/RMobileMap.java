@@ -29,7 +29,7 @@ import org.jspresso.framework.gui.remote.RMap;
 public class RMobileMap extends RMap {
 
   private static final long serialVersionUID = 2672012641048981941L;
-  private String horizontalPosition;
+  private String position;
 
   /**
    * Constructs a new {@code RMobileMap} instance.
@@ -49,20 +49,20 @@ public class RMobileMap extends RMap {
   }
 
   /**
-   * Get horizontal position.
+   * Get position.
    *
    * @return the boolean
    */
-  public String getHorizontalPosition() {
-    return horizontalPosition;
+  public String getPosition() {
+    return position;
   }
 
   /**
-   * Sets horizontal position.
+   * Sets position.
    *
-   * @param horizontalPosition the horizontal position
+   * @param position the position
    */
-  public void setHorizontalPosition(String horizontalPosition) {
-    this.horizontalPosition = horizontalPosition;
+  public void setPosition(String position) {
+    this.position = position;
   }
 }

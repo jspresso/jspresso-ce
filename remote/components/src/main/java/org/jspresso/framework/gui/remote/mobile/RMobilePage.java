@@ -27,7 +27,7 @@ package org.jspresso.framework.gui.remote.mobile;
 public abstract class RMobilePage extends RMobilePageAware {
 
   private static final long serialVersionUID = 8140805319640281435L;
-  private String horizontalPosition;
+  private String position;
 
   /**
    * Constructs a new {@code RMobilePage} instance.
@@ -48,20 +48,20 @@ public abstract class RMobilePage extends RMobilePageAware {
   }
 
   /**
-   * Gets horizontal position.
+   * Gets position.
    *
-   * @return the horizontal position
+   * @return the position
    */
-  public String getHorizontalPosition() {
-    return horizontalPosition;
+  public String getPosition() {
+    return position;
   }
 
   /**
-   * Sets horizontal position.
+   * Sets position.
    *
-   * @param horizontalPosition the horizontal position
+   * @param position the position
    */
-  public void setHorizontalPosition(String horizontalPosition) {
-    this.horizontalPosition = horizontalPosition;
+  public void setPosition(String position) {
+    this.position = position;
   }
 }

@@ -38,7 +38,7 @@ qx.Class.define("org.jspresso.framework.gui.remote.mobile.RMobileMap", {
   },
 
   properties: {
-    horizontalPosition: {
+    position: {
       check: "String",
       nullable: true
     }

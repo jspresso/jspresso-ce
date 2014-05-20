@@ -38,7 +38,7 @@ qx.Class.define("org.jspresso.framework.gui.remote.mobile.RMobileForm", {
   },
 
   properties: {
-    horizontalPosition: {
+    position: {
       check: "String",
       nullable: true
     }

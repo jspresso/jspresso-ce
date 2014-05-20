@@ -148,8 +148,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
           view = createMobileCardPageView((MobileCardPageViewDescriptor) viewDescriptor, actionHandler, locale);
         }
         if (view != null) {
-          ((RMobilePage) view.getPeer()).setHorizontalPosition(
-              ((IMobilePageViewDescriptor) viewDescriptor).getPosition().name());
+          ((RMobilePage) view.getPeer()).setPosition(((IMobilePageViewDescriptor) viewDescriptor).getPosition().name());
         }
       } else if (viewDescriptor instanceof MobileBorderViewDescriptor) {
         view = createBorderView((MobileBorderViewDescriptor) viewDescriptor, actionHandler, locale);
@@ -390,8 +389,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
                                                   Locale locale) {
     IView<RComponent> view = super.createComponentView(viewDescriptor, actionHandler, locale);
     if (viewDescriptor instanceof MobileComponentViewDescriptor) {
-      ((RMobileForm) view.getPeer()).setHorizontalPosition(
-          ((MobileComponentViewDescriptor) viewDescriptor).getPosition().name());
+      ((RMobileForm) view.getPeer()).setPosition(((MobileComponentViewDescriptor) viewDescriptor).getPosition().name());
     }
     return view;
   }
@@ -406,8 +404,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
                                             Locale locale) {
     IView<RComponent> view = super.createMapView(viewDescriptor, actionHandler, locale);
     if (viewDescriptor instanceof MobileMapViewDescriptor) {
-      ((RMobileMap) view.getPeer()).setHorizontalPosition(
-          ((MobileMapViewDescriptor) viewDescriptor).getPosition().name());
+      ((RMobileMap) view.getPeer()).setPosition(((MobileMapViewDescriptor) viewDescriptor).getPosition().name());
     }
     return view;
   }
@@ -423,7 +420,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
                                             Locale locale) {
     ICompositeView<RComponent> view = super.createBorderView(viewDescriptor, actionHandler, locale);
     if (viewDescriptor instanceof MobileBorderViewDescriptor) {
-      ((RMobileBorderContainer) view.getPeer()).setHorizontalPosition(
+      ((RMobileBorderContainer) view.getPeer()).setPosition(
           ((MobileBorderViewDescriptor) viewDescriptor).getPosition().name());
     }
     return view;
@@ -523,7 +520,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     if (viewDescriptor instanceof MobileTabViewDescriptor) {
       ((RMobileTabContainer) view.getPeer()).setCarouselMode(
           ((MobileTabViewDescriptor) viewDescriptor).isCarouselMode());
-      ((RMobileTabContainer) view.getPeer()).setHorizontalPosition(
+      ((RMobileTabContainer) view.getPeer()).setPosition(
           ((MobileTabViewDescriptor) viewDescriptor).getPosition().name());
     }
     return view;

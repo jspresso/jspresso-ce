@@ -44,8 +44,8 @@ qx.Class.define("org.jspresso.framework.gui.remote.mobile.RMobilePageAwareContai
     }
   },
   members: {
-    getHorizontalPosition: function () {
-      return this.getContent().getHorizontalPosition();
+    getPosition: function () {
+      return this.getContent().getPosition();
     }
   }
 });
