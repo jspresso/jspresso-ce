@@ -71,6 +71,8 @@ public class MobileBeanModule extends BeanModule {
         projectedViewDescriptor.setModelDescriptor(componentDescriptor);
       }
     }
+    projectedViewDescriptor.setI18nName(getI18nName());
+    projectedViewDescriptor.setI18nDescription(getI18nDescription());
     return projectedViewDescriptor;
   }
 

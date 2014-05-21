@@ -71,7 +71,6 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
     ((BasicViewDescriptor) moduleObjectsView).setModelDescriptor(moduleDescriptor.getPropertyDescriptor(
         MobileBeanCollectionModule.MODULE_OBJECTS));
     MobileNavPageViewDescriptor modulePageView = new MobileNavPageViewDescriptor();
-    modulePageView.setI18nNameKey(getName());
     modulePageView.setSelectionViewDescriptor(moduleObjectsView);
     if (getPagingAction() != null) {
       AddPageAction<?, ?, ?> addPageAction = new AddPageAction<>();
@@ -131,6 +130,8 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
       modulePageView.setHeaderSectionDescriptors(Arrays.asList(filterViewDesc));
     }
     modulePageView.setMainAction(getQueryModuleFilterAction());
+    modulePageView.setI18nName(getI18nName());
+    modulePageView.setI18nDescription(getI18nDescription());
     return modulePageView;
   }
 

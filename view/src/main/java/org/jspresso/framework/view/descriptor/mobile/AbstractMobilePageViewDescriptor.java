@@ -41,6 +41,8 @@ public abstract class AbstractMobilePageViewDescriptor extends BasicCompositeVie
   private IDisplayableAction swipeRightAction;
   private EPosition          position;
   private List<String>       forClientTypes;
+  private String             i18nName;
+  private String             i18nDescription;
 
   /**
    * Instantiates a new Mobile border view descriptor.
@@ -207,5 +209,41 @@ public abstract class AbstractMobilePageViewDescriptor extends BasicCompositeVie
    */
   public void setForClientTypes(List<String> forClientTypes) {
     this.forClientTypes = forClientTypes;
+  }
+
+  /**
+   * Gets i 18 n name.
+   *
+   * @return the i 18 n name
+   */
+  public String getI18nName() {
+    return i18nName;
+  }
+
+  /**
+   * Sets i 18 n name.
+   *
+   * @param i18nName the i 18 n name
+   */
+  public void setI18nName(String i18nName) {
+    this.i18nName = i18nName;
+  }
+
+  /**
+   * Gets i 18 n description.
+   *
+   * @return the i 18 n description
+   */
+  public String getI18nDescription() {
+    return i18nDescription;
+  }
+
+  /**
+   * Sets i 18 n description.
+   *
+   * @param i18nDescription the i 18 n description
+   */
+  public void setI18nDescription(String i18nDescription) {
+    this.i18nDescription = i18nDescription;
   }
 }

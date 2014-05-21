@@ -81,6 +81,7 @@ import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.jspresso.framework.view.descriptor.mobile.AbstractMobilePageViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.IMobilePageAware;
 import org.jspresso.framework.view.descriptor.mobile.IMobilePageSectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.IMobilePageViewDescriptor;
@@ -120,7 +121,16 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
   public IView<RComponent> createView(IViewDescriptor viewDescriptor, IActionHandler actionHandler, Locale locale) {
     if (viewDescriptor instanceof IMobileViewDescriptor || viewDescriptor instanceof IPropertyViewDescriptor
         || viewDescriptor instanceof ICardViewDescriptor) {
-      return super.createView(viewDescriptor, actionHandler, locale);
+      IView<RComponent> view = super.createView(viewDescriptor, actionHandler, locale);
+      if (viewDescriptor instanceof AbstractMobilePageViewDescriptor && view.getPeer() instanceof RMobilePage) {
+        if (((AbstractMobilePageViewDescriptor) viewDescriptor).getI18nName() != null) {
+          view.getPeer().setLabel(((AbstractMobilePageViewDescriptor) viewDescriptor).getI18nName());
+        }
+        if (((AbstractMobilePageViewDescriptor) viewDescriptor).getI18nDescription() != null) {
+          view.getPeer().setToolTip(((AbstractMobilePageViewDescriptor) viewDescriptor).getI18nDescription());
+        }
+      }
+      return view;
     }
     throw new IllegalArgumentException(
         "Mobile view factory can only handle mobile view descriptors and not : " + viewDescriptor.getClass()
