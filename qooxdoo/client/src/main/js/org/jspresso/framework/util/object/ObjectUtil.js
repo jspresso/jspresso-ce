@@ -110,6 +110,8 @@ qx.Class.define("org.jspresso.framework.util.object.ObjectUtil", {
                           registry));
                 }
               }
+            } else {
+              throw Error(className + " cannot be de-serialized. Please include the class in meta.")
             }
           } else if (root instanceof Date) {
             typedRoot = root;
