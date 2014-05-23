@@ -11,7 +11,6 @@
  * details. You should have received a copy of the GNU Lesser General Public
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  *
- * @asset (org/jspresso/framework/mobile/nav-mobile-menu-icon.png)
  * @asset (org/jspresso/framework/mobile/bookmark/android3_bookmark.png)
  * @asset (org/jspresso/framework/mobile/bookmark/android4_bookmark.png)
  * @asset (org/jspresso/framework/mobile/bookmark/blackberry.png)
@@ -27,7 +26,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
   ],
 
   statics: {
-
   },
 
   /**
@@ -36,6 +34,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
    */
   construct: function (remoteController, userLanguage) {
     this.base(arguments, remoteController, userLanguage);
+    this.__applicationContainer = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.Card());
+    this.__applicationContainer.addCssClass("jspresso-root");
+    this._getApplication().getRoot().add(this.__applicationContainer, {flex: 1});
     var deviceType = qx.core.Environment.get("device.type");
     this.__isTablet = false;
     if (deviceType == "tablet") {
@@ -56,7 +57,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
   members: {
     /** @type {qx.ui.mobile.dialog.Popup} */
     __busyPopup: null,
-    /** @type {qx.ui.mobile.page.Manager} */
+    /** @type {org.jspresso.framework.application.frontend.controller.qx.mobile.EnhancedManager} */
     __manager: null,
     /** @type {qx.ui.mobile.page.NavigationPage} */
     __workspacesMasterPage: null,
@@ -66,8 +67,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     __workspacePages: {},
     /** @type {String} */
     __displayedWorkspaceName: null,
-    /** @type {qx.ui.mobile.page.NavigationPage} */
-    __pageToRestore: null,
     /** @type {qx.application.Routing} */
     __routing: null,
     /** @type {boolean} */
@@ -76,9 +75,21 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     __blankPage: null,
     /** @type {Object} */
     __drawers: {},
+    /** @type qx.ui.mobile.container.Composite */
+    __applicationContainer: null,
+    /** @type qx.ui.mobile.container.Composite */
+    __managerContainer: null,
+
 
     showPage: function (page, animation, back) {
       page.show({animation: animation, reverse: back});
+    },
+
+    /**
+     * @return {org.jspresso.framework.application.frontend.controller.qx.mobile.EnhancedManager}
+     */
+    _getManager: function () {
+      return this.__manager;
     },
 
     __routeToPage: function (page, data, animation) {
@@ -144,18 +155,20 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     },
 
     /**
-     * @return {qx.ui.mobile.page.Manager}
+     * @return {org.jspresso.framework.application.frontend.controller.qx.mobile.EnhancedManager}
      */
     __createManager: function () {
-      var manager = new qx.ui.mobile.page.Manager(this.isTablet());
+      this.__managerContainer = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
+      this.__applicationContainer.add(this.__managerContainer, {flex: 1});
+      var manager = new org.jspresso.framework.application.frontend.controller.qx.mobile.EnhancedManager(this.isTablet(),
+          this.__managerContainer);
       if (manager.getMasterButton()) {
-        manager.getMasterButton().setIcon("org/jspresso/framework/mobile/nav-mobile-menu-icon.png");
-        manager.getMasterButton().setShow("icon");
         manager.setHideMasterButtonCaption(this.translate("Hide"));
       }
       manager.getDetailNavigation().getLayout().setShowAnimation(true);
       this.__blankPage = new qx.ui.mobile.page.NavigationPage();
       manager.addDetail(this.__blankPage);
+      this.__blankPage.show();
       return manager;
     },
 
@@ -170,6 +183,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     _handleInitCommand: function (initCommand) {
       this.base(arguments, initCommand);
       this._popupBookmarkHint();
+    },
+
+    /**
+     * @param loginCommand {org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand}
+     */
+    _handleInitLoginCommmand: function (loginCommand) {
+      this.base(arguments, loginCommand);
     },
 
     /**
@@ -213,9 +233,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       this.__workspacePages = {};
       this.__displayedWorkspaceName = null;
       this.__workspacesMasterPage = null;
-      this.__pageToRestore = null;
       this.__routing.dispose();
-      this._getApplication().getRoot().removeAll();
+      this.__applicationContainer.removeAll();
 
       // re init
       this.__manager = this.__createManager();
@@ -274,16 +293,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         }
       }
       if (dialogPage == null) {
-        dialogPage = new qx.ui.mobile.page.NavigationPage();
+        dialogPage = new org.jspresso.framework.view.qx.mobile.StandaloneNavigationPage();
         dialogPage.addListener("initialize", function (e) {
           dialogPage.getContent().add(dialogContent);
         }, this);
-        if (this._dialogStack.length == 1) {
-          this.__pageToRestore = this.getCurrentPage();
-        }
-        //this._getViewFactory().setIcon(dialogPage, icon);
         this._dialogStack.push([dialogPage, null, null]);
-        this.__manager.addDetail(dialogPage);
+        this.__applicationContainer.add(dialogPage);
       } else {
         dialogPage.getContent().removeAll();
         dialogPage.getContent().add(dialogContent);
@@ -293,42 +308,32 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         this._getViewFactory().installPageActions(remoteDialogView, dialogPage);
       }
       dialogPage.show({animation: "slideup"});
-      this.__setMasterSectionVisible(false);
-    },
-
-    __setMasterSectionVisible: function (visible) {
-      if (this.__manager.getMasterButton()) {
-        if (visible) {
-          this.__manager.setMasterContainerHidden(false);
-          this.__manager.getMasterButton().setVisibility("visible");
-        } else {
-          this.__manager.setMasterContainerHidden(true);
-          this.__manager.getMasterButton().setVisibility("excluded");
-        }
-      }
     },
 
     /**
      * Close top most dialog.
      */
     _closeDialog: function () {
+      /** @type {qx.ui.mobile.page.NavigationPage} */
+      var pageToDestroy = null;
       if (this._dialogStack && this._dialogStack.length > 1) {
-        /** @type {qx.ui.mobile.page.NavigationPage} */
-        var topDialogPage = this._dialogStack.pop()[0];
-        if (topDialogPage) {
-          topDialogPage.exclude({animation: "slideup", reverse: true});
-          //topDialogPage.destroy();
-        }
+        pageToDestroy = this._dialogStack.pop()[0];
       }
       if (this._dialogStack) {
+        var pageToRestore;
         if (this._dialogStack.length == 1) {
-          if (this.__pageToRestore) {
-            this.__pageToRestore.show({animation: "slideup", reverse: true});
-          }
-          this.__setMasterSectionVisible(true);
+          pageToRestore = this.__managerContainer;
         } else {
-          this._dialogStack[this._dialogStack.length - 1][0].show({animation: "slideup", reverse: true});
+          pageToRestore = this._dialogStack[this._dialogStack.length - 1][0];
         }
+        if (pageToDestroy) {
+          pageToRestore.addListenerOnce("appear", function () {
+            qx.event.Timer.once(function () {
+              pageToDestroy.destroy();
+            }, this, 500);
+          });
+        }
+        pageToRestore.show({animation: "slideup", reverse: true});
       }
     },
 
@@ -376,13 +381,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         this.__workspacesMasterPage.getContent().add(workspaceNavigator);
       }, this);
       this.__workspacesMasterPage.setTitle(this._getName());
-      this.__manager.addMaster(this.__workspacesMasterPage);
+      this._getManager().addMaster(this.__workspacesMasterPage);
       if (!this.isTablet()) {
         this._getViewFactory().installPageMainAction(this.__workspacesMasterPage, exitAction);
       }
       this.__routing.executeGet("/workspaces", {animation: "cube", reverse: false});
       if (this.isTablet()) {
-        this.__manager.getMasterContainer().show();
+        this._getManager().getMasterContainer().show();
       }
     },
 
@@ -546,7 +551,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      * @return {undefined}
      */
     addDetailPage: function (navigationPage) {
-      this.__manager.addDetail(navigationPage);
+      this._getManager().addDetail(navigationPage);
     },
 
     /**
