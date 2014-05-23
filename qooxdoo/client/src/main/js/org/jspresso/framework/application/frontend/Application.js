@@ -108,8 +108,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.Application", {
     },
 
     _createController: function (remoteController) {
-      return new org.jspresso.framework.application.frontend.controller.qx.DefaultQxController(this, remoteController,
-          "en");
+      return new org.jspresso.framework.application.frontend.controller.qx.DefaultQxController(remoteController, "en");
     },
 
     startController: function (remoteController) {

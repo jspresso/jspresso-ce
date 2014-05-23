@@ -31,24 +31,21 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
   },
 
   /**
-   * @param application {qx.application.Mobile}
    * @param remoteController {qx.io.remote.Rpc}
    * @param userLanguage {String}
    */
-  construct: function (application, remoteController, userLanguage) {
+  construct: function (remoteController, userLanguage) {
     this.base(arguments, remoteController, userLanguage);
     var deviceType = qx.core.Environment.get("device.type");
     this.__isTablet = false;
     if (deviceType == "tablet") {
       this.__isTablet = true;
     } else if (deviceType == "desktop") {
-      var boundingRect = application.getRoot().getContainerElement().getBoundingClientRect();
+      var boundingRect = this._getApplication().getRoot().getContainerElement().getBoundingClientRect();
       if (boundingRect.width > 500) {
         this.__isTablet = true;
       }
     }
-    this.__application = application;
-
     var busyIndicator = new qx.ui.mobile.dialog.BusyIndicator(this.translate("Wait") + "...");
     this.__busyPopup = new qx.ui.mobile.dialog.Popup(busyIndicator);
     this.__busyPopup.setTitle(this.translate("Loading") + "...");
@@ -57,8 +54,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
   },
 
   members: {
-    /** @type {qx.application.Mobile} */
-    __application: null,
     /** @type {qx.ui.mobile.dialog.Popup} */
     __busyPopup: null,
     /** @type {qx.ui.mobile.page.Manager} */
@@ -220,7 +215,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       this.__workspacesMasterPage = null;
       this.__pageToRestore = null;
       this.__routing.dispose();
-      this.__application.getRoot().removeAll();
+      this._getApplication().getRoot().removeAll();
 
       // re init
       this.__manager = this.__createManager();
@@ -501,7 +496,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       } else {
         var okButton = this._getViewFactory().createOkButton();
         this._getViewFactory().addButtonListener(okButton, function (event) {
-          this.__application.getRoot().remove(messageDialog);
+          this._getApplication().getRoot().remove(messageDialog);
           messageDialog.hide();
           messageDialog.destroy();
         }, this);

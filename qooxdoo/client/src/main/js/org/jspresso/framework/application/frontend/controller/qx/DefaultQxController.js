@@ -22,14 +22,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
   },
 
   /**
-   * @param application {qx.application.Standalone}
    * @param remoteController {qx.io.remote.Rpc}
    * @param userLanguage {String}
    */
-  construct: function (application, remoteController, userLanguage) {
+  construct: function (remoteController, userLanguage) {
     this.base(arguments, remoteController, userLanguage);
-    this.__application = application;
-    this.__application.getRoot().set({
+    this._getApplication().getRoot().set({
       blockerColor: '#bfbfbf',
       blockerOpacity: 0.5
     });
@@ -37,8 +35,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
 
   members: {
 
-    /** @type {qx.application.Standalone} */
-    __application: null,
     /** @type {qx.ui.form.RadioGroup} */
     __workspaceAccordionGroup: null,
     /** @type {qx.ui.container.Stack} */
@@ -55,9 +51,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
 
     _showBusy: function (busy) {
       if (busy) {
-        this.__application.getRoot().setGlobalCursor("wait");
+        this._getApplication().getRoot().setGlobalCursor("wait");
       } else {
-        this.__application.getRoot().setGlobalCursor("default");
+        this._getApplication().getRoot().setGlobalCursor("default");
       }
     },
 
@@ -79,7 +75,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       if (remoteDialogView instanceof org.jspresso.framework.gui.remote.RComponent) {
         dialogView = this._getViewFactory().createComponent(remoteDialogView);
       }
-      var dialogView = this._getViewFactory().createComponent(remoteDialogView);
       var buttonBox = new qx.ui.container.Composite();
       buttonBox.setLayout(new qx.ui.layout.HBox(10, "right"));
 
@@ -117,9 +112,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         //        if(this._dialogStack && this._dialogStack.length > 1) {
         //          dialogParent = this._dialogStack[_dialogStack.length -1];
         //        } else {
-        //          dialogParent = this.__application.getRoot();
+        //          dialogParent = this._getApplication().getRoot();
         //        }
-        dialogParent = this.__application.getRoot();
+        dialogParent = this._getApplication().getRoot();
         dialog = new qx.ui.window.Window();
         dialog.setLayout(new qx.ui.layout.Grow());
         dialog.set({
@@ -165,7 +160,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       if (this._dialogStack && this._dialogStack.length > 1) {
         /** @type {qx.ui.window.Window} */
         var topDialog = this._dialogStack.pop()[0];
-        this.__application.getRoot().remove(topDialog);
+        this._getApplication().getRoot().remove(topDialog);
         topDialog.close();
         topDialog.destroy();
       }
@@ -225,7 +220,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      */
     _initApplicationFrame: function (workspaceNames, workspaceActions, exitAction, navigationActions, actions,
                                      secondaryActions, helpActions, size) {
-      //this.__application.getRoot().removeAll();
+      //this._getApplication().getRoot().removeAll();
 
       var applicationFrame = new qx.ui.container.Composite(new qx.ui.layout.VBox());
 
@@ -277,7 +272,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       var scrollContainer = new qx.ui.container.Scroll();
       scrollContainer.add(applicationFrame);
 
-      this.__application.getRoot().add(scrollContainer, {edge: 0})
+      this._getApplication().getRoot().add(scrollContainer, {edge: 0})
     },
 
     /**
@@ -353,7 +348,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       });
       messageDialog.setLayout(new qx.ui.layout.VBox(10));
       this._getViewFactory().setIcon(messageDialog, messageCommand.getTitleIcon());
-      this.__application.getRoot().add(messageDialog);
+      this._getApplication().getRoot().add(messageDialog);
 
       var message = new qx.ui.basic.Atom(messageCommand.getMessage());
       message.setRich(org.jspresso.framework.util.html.HtmlUtil.isHtml(messageCommand.getMessage()));
@@ -415,7 +410,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       } else {
         var okButton = this._getViewFactory().createOkButton();
         this._getViewFactory().addButtonListener(okButton, function (event) {
-          this.__application.getRoot().remove(messageDialog);
+          this._getApplication().getRoot().remove(messageDialog);
           messageDialog.close();
           messageDialog.destroy();
         }, this);
@@ -515,7 +510,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       });
       uploadDialog.setLayout(new qx.ui.layout.VBox(10));
       //this._getViewFactory().setIcon(uploadDialog, messageCommand.getTitleIcon());
-      this.__application.getRoot().add(uploadDialog);
+      this._getApplication().getRoot().add(uploadDialog);
 
       var uploadForm = new uploadwidget.UploadForm('uploadForm', uploadCommand.getFileUrl());
       uploadForm.set({
@@ -578,7 +573,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           height: 0,
           decorator: null //new qx.ui.decoration.Background("transparent")
         });
-        this.__application.getRoot().add(this.__dlFrame);
+        this._getApplication().getRoot().add(this.__dlFrame);
       }
       if (this.__dlFrame.getSource() === downloadCommand.getFileUrl()) {
         this.__dlFrame.resetSource();
@@ -590,7 +585,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @return {undefined}
      */
     _restart: function () {
-      this.__application.getRoot().removeAll();
+      this._getApplication().getRoot().removeAll();
       this.__dlFrame = null;
       this.base(arguments);
     },

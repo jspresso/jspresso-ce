@@ -75,6 +75,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     /** @type {String} */
     __applicationName: null,
 
+    _getApplication: function () {
+      return qx.core.Init.getApplication();
+    },
+
     _createViewFactory: function () {
       throw new Error("_createViewFactory is abstract");
     },
