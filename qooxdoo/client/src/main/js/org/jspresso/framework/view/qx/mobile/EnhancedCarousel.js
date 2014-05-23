@@ -38,8 +38,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.EnhancedCarousel", {
 
   construct: function (transitionDuration) {
     this.base(arguments, transitionDuration);
-    // To be removed when Carousel bug on forms not focusable
-    this._getChildren()[0].removeListener("touchstart", qx.bom.Event.preventDefault, this);
     this.__pagesCopy = [];
   },
 
