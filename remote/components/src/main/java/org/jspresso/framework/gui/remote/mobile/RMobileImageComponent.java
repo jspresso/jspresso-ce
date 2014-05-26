@@ -18,31 +18,53 @@
  */
 package org.jspresso.framework.gui.remote.mobile;
 
+import org.jspresso.framework.gui.remote.RImageComponent;
+
 /**
- * A remote mobile image picker.
+ * A remote mobile image component.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RImagePicker extends RMobileImageComponent {
+public class RMobileImageComponent extends RImageComponent {
 
-  private static final long serialVersionUID = 9087891184076988740L;
+  private static final long serialVersionUID = -8099319637631348345L;
+
+  private String submitUrl;
 
   /**
-   * Constructs a new {@code RImagePicker} instance.
+   * Constructs a new {@code RMobileImageComponent} instance.
    *
    * @param guid
    *     the guid.
    */
-  public RImagePicker(String guid) {
+  public RMobileImageComponent(String guid) {
     super(guid);
   }
 
   /**
-   * Constructs a new {@code RImagePicker} instance. Only used for
+   * Constructs a new {@code RMobileImageComponent} instance. Only used for
    * serialization support.
    */
-  public RImagePicker() {
+  public RMobileImageComponent() {
     // For serialization support
+  }
+
+  /**
+   * Gets submit url.
+   *
+   * @return the submit url
+   */
+  public String getSubmitUrl() {
+    return submitUrl;
+  }
+
+  /**
+   * Sets submit url.
+   *
+   * @param submitUrl the submit url
+   */
+  public void setSubmitUrl(String submitUrl) {
+    this.submitUrl = submitUrl;
   }
 }

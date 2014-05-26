@@ -30,7 +30,7 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.mobile.RImagePicker", {
+qx.Class.define("org.jspresso.framework.gui.remote.mobile.RImageCanvas", {
   extend: org.jspresso.framework.gui.remote.mobile.RMobileImageComponent,
 
   construct: function () {

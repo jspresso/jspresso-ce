@@ -19,30 +19,30 @@
 package org.jspresso.framework.gui.remote.mobile;
 
 /**
- * A remote mobile image picker.
+ * A remote mobile image canvas to draw to.
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RImagePicker extends RMobileImageComponent {
+public class RImageCanvas extends RMobileImageComponent {
 
-  private static final long serialVersionUID = 9087891184076988740L;
+  private static final long serialVersionUID = 8536899990104146329L;
 
   /**
-   * Constructs a new {@code RImagePicker} instance.
+   * Constructs a new {@code RImageCanvas} instance.
    *
    * @param guid
    *     the guid.
    */
-  public RImagePicker(String guid) {
+  public RImageCanvas(String guid) {
     super(guid);
   }
 
   /**
-   * Constructs a new {@code RImagePicker} instance. Only used for
+   * Constructs a new {@code RImageCanvas} instance. Only used for
    * serialization support.
    */
-  public RImagePicker() {
+  public RImageCanvas() {
     // For serialization support
   }
 }

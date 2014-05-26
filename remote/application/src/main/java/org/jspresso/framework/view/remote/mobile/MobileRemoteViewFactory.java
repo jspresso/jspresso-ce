@@ -44,11 +44,13 @@ import org.jspresso.framework.gui.remote.RList;
 import org.jspresso.framework.gui.remote.RMap;
 import org.jspresso.framework.gui.remote.RTabContainer;
 import org.jspresso.framework.gui.remote.RTree;
+import org.jspresso.framework.gui.remote.mobile.RImageCanvas;
 import org.jspresso.framework.gui.remote.mobile.RImagePicker;
 import org.jspresso.framework.gui.remote.mobile.RMobileBorderContainer;
 import org.jspresso.framework.gui.remote.mobile.RMobileCardPage;
 import org.jspresso.framework.gui.remote.mobile.RMobileCompositePage;
 import org.jspresso.framework.gui.remote.mobile.RMobileForm;
+import org.jspresso.framework.gui.remote.mobile.RMobileImageComponent;
 import org.jspresso.framework.gui.remote.mobile.RMobileList;
 import org.jspresso.framework.gui.remote.mobile.RMobileMap;
 import org.jspresso.framework.gui.remote.mobile.RMobileNavPage;
@@ -73,6 +75,7 @@ import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
+import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IMapViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
@@ -628,8 +631,8 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
   protected IView<RComponent> createImagePropertyView(IPropertyViewDescriptor propertyViewDescriptor,
                                                       IActionHandler actionHandler, Locale locale) {
     IView<RComponent> imagePropertyView = super.createImagePropertyView(propertyViewDescriptor, actionHandler, locale);
-    if (imagePropertyView.getPeer() instanceof RImagePicker) {
-      ((RImagePicker) imagePropertyView.getPeer()).setSubmitUrl(RemotePeerRegistryServlet.computeUploadUrl(
+    if (imagePropertyView.getPeer() instanceof RMobileImageComponent) {
+      ((RMobileImageComponent) imagePropertyView.getPeer()).setSubmitUrl(RemotePeerRegistryServlet.computeUploadUrl(
           ((IRemotePeer) imagePropertyView.getConnector()).getGuid()));
     }
     return imagePropertyView;
@@ -645,6 +648,9 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     if (viewDescriptor.isReadOnly() || !(propertyDescriptor instanceof IBinaryPropertyDescriptor)) {
       return super.createRImageComponent(viewDescriptor);
     } else {
+      if (viewDescriptor instanceof IImageViewDescriptor && ((IImageViewDescriptor) viewDescriptor).isDrawable()) {
+        return new RImageCanvas(getGuidGenerator().generateGUID());
+      }
       return new RImagePicker(getGuidGenerator().generateGUID());
     }
   }

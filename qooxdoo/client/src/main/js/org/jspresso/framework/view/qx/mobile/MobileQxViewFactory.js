@@ -65,6 +65,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     _createCustomComponent: function (remoteComponent) {
       if (remoteComponent instanceof org.jspresso.framework.gui.remote.mobile.RImagePicker) {
         return this._createImagePicker(remoteComponent);
+      } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.mobile.RImageCanvas) {
+        return this._createImageCanvas(remoteComponent);
       }
       return null;
     },
@@ -1935,6 +1937,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     _createImagePicker: function (remoteImagePicker) {
       return new org.jspresso.framework.view.qx.mobile.ImagePicker(remoteImagePicker.getSubmitUrl(),
           remoteImagePicker.getLabel());
+    },
+
+    /**
+     * @param remoteImageCanvas {org.jspresso.framework.gui.remote.mobile.RImageCanvas}
+     * @return {qx.ui.mobile.core.Widget}
+     */
+    _createImageCanvas: function (remoteImageCanvas) {
+      return new org.jspresso.framework.view.qx.mobile.ImageCanvas(remoteImageCanvas.getSubmitUrl());
     },
 
     /**

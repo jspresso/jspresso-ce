@@ -75,9 +75,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     __blankPage: null,
     /** @type {Object} */
     __drawers: {},
-    /** @type qx.ui.mobile.container.Composite */
+    /** @type {qx.ui.mobile.container.Composite} */
     __applicationContainer: null,
-    /** @type qx.ui.mobile.container.Composite */
+    /** @type {qx.ui.mobile.container.Composite} */
     __managerContainer: null,
 
 

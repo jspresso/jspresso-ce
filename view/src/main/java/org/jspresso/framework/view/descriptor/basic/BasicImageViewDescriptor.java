@@ -39,6 +39,7 @@ public class BasicImageViewDescriptor extends BasicPropertyViewDescriptor
     implements IImageViewDescriptor {
 
   private boolean scrollable;
+  private boolean drawable;
   private Integer scaledWidth;
   private Integer scaledHeight;
 
@@ -135,5 +136,25 @@ public class BasicImageViewDescriptor extends BasicPropertyViewDescriptor
    */
   public void setScaledHeight(Integer scaledHeight) {
     this.scaledHeight = scaledHeight;
+  }
+
+  /**
+   * Gets whether this image view can be modified by the user drawing in the screen, e.g. a POD signature.
+   *
+   * @return the boolean
+   */
+  @Override
+  public boolean isDrawable() {
+    return drawable;
+  }
+
+  /**
+   * Configures whether this image view can be modified by the user drawing in the screen,
+   * e.g. a POD signature. Defaults to {@code false}.
+   *
+   * @param drawable the drawable
+   */
+  public void setDrawable(boolean drawable) {
+    this.drawable = drawable;
   }
 }

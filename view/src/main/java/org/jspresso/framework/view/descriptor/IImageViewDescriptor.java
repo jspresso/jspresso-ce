@@ -28,5 +28,10 @@ import org.jspresso.framework.util.image.IScalableImageAware;
  */
 public interface IImageViewDescriptor extends IScrollableViewDescriptor, IPropertyViewDescriptor, IScalableImageAware {
 
-  // Empty as of now
+  /**
+   * Gets whether this image view can be modified by the user drawing in the screen, e.g. a POD signature.
+   *
+   * @return the boolean
+   */
+  boolean isDrawable();
 }

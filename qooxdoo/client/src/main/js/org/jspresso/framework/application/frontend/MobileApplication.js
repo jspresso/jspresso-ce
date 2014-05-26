@@ -60,6 +60,9 @@
  * @use(org.jspresso.framework.gui.remote.mobile.RMobileBorderContainer)
  * @use(org.jspresso.framework.gui.remote.mobile.RMobileTabContainer)
  * @use(org.jspresso.framework.gui.remote.mobile.RMobileTabContainer)
+ * @use(org.jspresso.framework.gui.remote.mobile.RMobileImageComponent)
+ * @use(org.jspresso.framework.gui.remote.mobile.RImagePicker)
+ * @use(org.jspresso.framework.gui.remote.mobile.RImageCanvas)
  *
  * @use(org.jspresso.framework.util.gui.Dimension)
  * @use(org.jspresso.framework.util.gui.CellConstraints)
