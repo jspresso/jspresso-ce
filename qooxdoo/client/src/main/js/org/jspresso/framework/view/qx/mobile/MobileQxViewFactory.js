@@ -1946,7 +1946,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createImageCanvas: function (remoteImageCanvas) {
       var height;
-      var imageCanvas = new org.jspresso.framework.view.qx.mobile.ImageCanvas(remoteImageCanvas.getDrawingSize());
+      var imageCanvas = new org.jspresso.framework.view.qx.mobile.ImageCanvas(remoteImageCanvas.getDrawingSize(),
+          this._getActionHandler().translate("Clear"));
       var state = remoteImageCanvas.getState();
       state.addListener("changeValue", function (e) {
         if (e.getData().indexOf("://") >= 0) {

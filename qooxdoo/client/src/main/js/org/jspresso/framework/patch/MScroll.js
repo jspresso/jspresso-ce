@@ -73,7 +73,7 @@ qx.Mixin.define("org.jspresso.framework.patch.MScroll", {
             }
 
             // Patch to allow hyperlinks to react in emulated scrolls
-            e.preventDefault();
+            //e.preventDefault();
           }
 
           // we also want to alert interested parties that we are starting scrolling

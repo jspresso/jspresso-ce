@@ -38,11 +38,12 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImageCanvas", {
 
   /**
    * @param dimension {org.jspresso.framework.util.gui.Dimension}
+   * @param clearCaption {String}
    */
-  construct: function (dimension) {
+  construct: function (dimension, clearCaption) {
     this.base(arguments, new qx.ui.mobile.layout.VBox());
     this.__ratio = qx.core.Environment.get("device.pixelRatio");
-    this._initialize(dimension);
+    this._initialize(dimension, clearCaption);
   },
 
   members: {
@@ -55,14 +56,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImageCanvas", {
     __ratio: 1,
 
 
-    _initialize: function (dimension) {
+    _initialize: function (dimension, clearCaption) {
 
       this.__canvasWidth = dimension.getWidth();
       this.__canvasHeight = dimension.getHeight();
 
       this.__lastPoint = {};
 
-      var clearButton = new qx.ui.mobile.navigationbar.Button("Clear");
+      var clearButton = new qx.ui.mobile.form.Button(clearCaption);
       clearButton.addListener("tap", this.clear, this);
 
       this.add(clearButton);
@@ -74,6 +75,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImageCanvas", {
       canvas.addListener("track", this._onTrack, this);
 
       canvas.addListener("touchstart", qx.bom.Event.preventDefault, this);
+      canvas.addListener("tap", qx.bom.Event.preventDefault, this);
+      canvas.addListener("touchstart", qx.bom.Event.stopPropagation, this);
+      canvas.addListener("tap", qx.bom.Event.stopPropagation, this);
 
       canvas.setWidth(this._to(this.__canvasWidth));
       canvas.setHeight(this._to(this.__canvasHeight));
@@ -129,8 +133,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImageCanvas", {
      */
     _onTrack: function (evt) {
       this.__draw(evt);
-      evt.preventDefault();
-      evt.stopPropagation();
     },
 
 
@@ -166,6 +168,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImageCanvas", {
      * Draws the line on canvas.
      */
     __draw: function (evt) {
+      evt.preventDefault();
+      evt.stopPropagation();
       var ctx = this.__canvas.getContext2d();
       var lastPoint = this.__lastPoint[evt.getPointerId()];
 
