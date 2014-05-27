@@ -107,7 +107,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.MobileApplication",
     main: function () {
       this.base(arguments);
 
-      //qx.Class.patch(qx.ui.mobile.basic.Image, org.jspresso.framework.patch.MImage);
       qx.Class.patch(qx.ui.mobile.form.Input, org.jspresso.framework.patch.MInput);
       qx.Class.patch(qx.data.Array, org.jspresso.framework.patch.MArray);
 
@@ -137,6 +136,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.MobileApplication",
     close: function () {
       this.base(arguments);
       this.__qxController.stop()
+    }
+  },
+
+  defer: function (statics) {
+    if (qx.core.Environment.get("qx.mobile.nativescroll") == false) {
+      qx.Class.patch(qx.ui.mobile.container.Scroll, org.jspresso.framework.patch.MScroll);
     }
   }
 });

@@ -1944,7 +1944,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @return {qx.ui.mobile.core.Widget}
      */
     _createImageCanvas: function (remoteImageCanvas) {
-      return new org.jspresso.framework.view.qx.mobile.ImageCanvas(remoteImageCanvas.getSubmitUrl());
+      var height;
+      if (remoteImageCanvas.getPreferredSize()) {
+        height = remoteImageCanvas.getPreferredSize().getHeight();
+      }
+      return new org.jspresso.framework.view.qx.mobile.ImageCanvas(remoteImageCanvas.getSubmitUrl(), height);
     },
 
     /**

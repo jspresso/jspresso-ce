@@ -38,12 +38,13 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImageCanvas", {
 
   /**
    * @param submitUrl {String}
+   * @param height {Integer}
    */
-  construct: function (submitUrl) {
+  construct: function (submitUrl, height) {
     this.base(arguments, new qx.ui.mobile.layout.VBox());
     this.__ratio = qx.core.Environment.get("device.pixelRatio");
     this.__submitUrl = submitUrl;
-    this._initialize();
+    this._initialize(height);
   },
 
   members: {
@@ -57,7 +58,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImageCanvas", {
     __ratio: 1,
 
 
-    _initialize: function () {
+    _initialize: function (height) {
 
       this.__lastPoint = {};
 
@@ -80,7 +81,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImageCanvas", {
       qx.bom.element.Style.set(canvas.getContentElement(), "height", this.__canvasHeight + "px");
 
       var scroll = new qx.ui.mobile.container.Scroll();
-      scroll._setStyle("height", "300px");
+      if (!height) {
+        height = 300;
+      }
+      scroll._setStyle("height", height + "px");
       scroll.add(canvas);
       this.add(scroll, {flex: 1});
 
