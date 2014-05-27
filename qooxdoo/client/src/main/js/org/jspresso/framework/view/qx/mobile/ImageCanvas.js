@@ -37,33 +37,33 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImageCanvas", {
   },
 
   /**
-   * @param submitUrl {String}
-   * @param height {Integer}
+   * @param dimension {org.jspresso.framework.util.gui.Dimension}
    */
-  construct: function (submitUrl, height) {
+  construct: function (dimension) {
     this.base(arguments, new qx.ui.mobile.layout.VBox());
     this.__ratio = qx.core.Environment.get("device.pixelRatio");
-    this.__submitUrl = submitUrl;
-    this._initialize(height);
+    this._initialize(dimension);
   },
 
   members: {
-    __submitUrl: null,
     __canvasLeft: 0,
     __canvasTop: 0,
     __canvas: null,
     __lastPoint: null,
-    __canvasWidth: 1000,
-    __canvasHeight: 1000,
+    __canvasWidth: null,
+    __canvasHeight: null,
     __ratio: 1,
 
 
-    _initialize: function (height) {
+    _initialize: function (dimension) {
+
+      this.__canvasWidth = dimension.getWidth();
+      this.__canvasHeight = dimension.getHeight();
 
       this.__lastPoint = {};
 
       var clearButton = new qx.ui.mobile.navigationbar.Button("Clear");
-      clearButton.addListener("tap", this.__clearCanvas, this);
+      clearButton.addListener("tap", this.clear, this);
 
       this.add(clearButton);
 
@@ -80,15 +80,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImageCanvas", {
       qx.bom.element.Style.set(canvas.getContentElement(), "width", this.__canvasWidth + "px");
       qx.bom.element.Style.set(canvas.getContentElement(), "height", this.__canvasHeight + "px");
 
-      var scroll = new qx.ui.mobile.container.Scroll();
-      if (!height) {
-        height = 300;
-      }
-      scroll._setStyle("height", height + "px");
-      scroll.add(canvas);
-      this.add(scroll, {flex: 1});
-
-      this.__clearCanvas();
+      var wrapper = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox().set({
+        alignX: "center",
+        alignY: "middle"
+      }));
+      wrapper.addCssClass("jspresso-cropper");
+      wrapper.add(canvas);
+      this.add(wrapper, {flex: 1});
+      this.clear();
     },
 
 
@@ -104,7 +103,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImageCanvas", {
     /**
      * Removes any drawings off the canvas.
      */
-    __clearCanvas: function () {
+    clear: function () {
       //this.__canvas.getContentElement().width = this.__canvas.getContentElement().width;
       var ctx = this.__canvas.getContext2d();
       ctx.clearRect(0, 0, this._to(this.__canvasWidth), this._to(this.__canvasHeight));
@@ -142,6 +141,26 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImageCanvas", {
       this.__lastPoint = {};
     },
 
+    __drawImage: function (image) {
+      this.__canvas.getContext2d().drawImage(image, 0, 0, this._to(this.__canvasWidth), this._to(this.__canvasHeight));
+    },
+
+    setImage: function (imageUrl) {
+      var image = new Image();
+      image.src = imageUrl;
+      this.__canvas.addListenerOnce("appear", function (e) {
+        this.__drawImage(image);
+      }, this);
+    },
+
+    getImage: function (imageFormat) {
+      if (!imageFormat) {
+        imageFormat = "png";
+      }
+      var image = new Image();
+      image.src = this.__canvas.getCanvas().toDataURL("image/" + imageFormat);
+      return image;
+    },
 
     /**
      * Draws the line on canvas.

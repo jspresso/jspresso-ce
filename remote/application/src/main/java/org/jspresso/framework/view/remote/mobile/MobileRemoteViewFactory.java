@@ -61,9 +61,11 @@ import org.jspresso.framework.gui.remote.mobile.RMobileTabContainer;
 import org.jspresso.framework.gui.remote.mobile.RMobileTree;
 import org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IImageBinaryPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.server.remote.RemotePeerRegistryServlet;
+import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.ICompositeView;
@@ -137,8 +139,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     }
     throw new IllegalArgumentException(
         "Mobile view factory can only handle mobile view descriptors and not : " + viewDescriptor.getClass()
-                                                                                                 .getSimpleName()
-    );
+                                                                                                 .getSimpleName());
   }
 
   /**
@@ -215,8 +216,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     }
     throw new IllegalArgumentException(
         "Mobile view factory can only handle mobile view descriptors and not : " + viewDescriptor.getClass()
-                                                                                                 .getSimpleName()
-    );
+                                                                                                 .getSimpleName());
   }
 
   /**
@@ -429,8 +429,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
    */
   @Override
   protected ICompositeView<RComponent> createBorderView(IBorderViewDescriptor viewDescriptor,
-                                                      IActionHandler actionHandler,
-                                            Locale locale) {
+                                                        IActionHandler actionHandler, Locale locale) {
     ICompositeView<RComponent> view = super.createBorderView(viewDescriptor, actionHandler, locale);
     if (viewDescriptor instanceof MobileBorderViewDescriptor) {
       ((RMobileBorderContainer) view.getPeer()).setPosition(
@@ -634,6 +633,23 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     if (imagePropertyView.getPeer() instanceof RMobileImageComponent) {
       ((RMobileImageComponent) imagePropertyView.getPeer()).setSubmitUrl(RemotePeerRegistryServlet.computeUploadUrl(
           ((IRemotePeer) imagePropertyView.getConnector()).getGuid()));
+      if (imagePropertyView.getPeer() instanceof RImageCanvas) {
+        Integer scaledWidth = ((IImageViewDescriptor) propertyViewDescriptor).getScaledWidth();
+        Integer scaledHeight = ((IImageViewDescriptor) propertyViewDescriptor).getScaledHeight();
+        if (scaledWidth == null) {
+          if (scaledHeight == null) {
+            scaledWidth = 300;
+          } else {
+            scaledWidth = scaledHeight;
+          }
+        }
+        if (scaledHeight == null) {
+          scaledHeight = scaledWidth;
+        }
+        ((RImageCanvas) imagePropertyView.getPeer()).setDrawingSize(new Dimension(scaledWidth, scaledHeight));
+        ((RImageCanvas) imagePropertyView.getPeer()).setFormatName(
+            ((IImageBinaryPropertyDescriptor) propertyViewDescriptor.getModelDescriptor()).getFormatName());
+      }
     }
     return imagePropertyView;
   }

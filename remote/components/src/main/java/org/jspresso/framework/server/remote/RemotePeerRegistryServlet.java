@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -47,9 +48,9 @@ import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
 /**
  * This servlet class is used to deliver binary content from remote value
  * states.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
 public class RemotePeerRegistryServlet extends HttpServlet {
 
@@ -71,7 +72,7 @@ public class RemotePeerRegistryServlet extends HttpServlet {
   /**
    * PeerRegistry.
    */
-  public static final  String PEER_REGISTRY         = "peerRegistry";
+  public static final String PEER_REGISTRY = "peerRegistry";
 
   /**
    * the url pattern to activate a resource download.
@@ -98,14 +99,18 @@ public class RemotePeerRegistryServlet extends HttpServlet {
   /**
    * Computes the url where the image is available for download.
    *
-   * @param request      the incoming HTTP request.
-   * @param id      the resource id.
-   * @param scaledWidth the scaled width
-   * @param scaledHeight the scaled height
+   * @param request
+   *     the incoming HTTP request.
+   * @param id
+   *     the resource id.
+   * @param scaledWidth
+   *     the scaled width
+   * @param scaledHeight
+   *     the scaled height
    * @return the resource url.
    */
-  public static String computeImageDownloadUrl(HttpServletRequest request, String id, Integer scaledWidth, Integer
-      scaledHeight) {
+  public static String computeImageDownloadUrl(HttpServletRequest request, String id, Integer scaledWidth,
+                                               Integer scaledHeight) {
     String downloadUrl = computeDownloadUrl(request, id);
     if (scaledWidth != null) {
       downloadUrl += "&" + IMAGE_WIDTH_PARAMETER + "=" + scaledWidth;
@@ -144,9 +149,12 @@ public class RemotePeerRegistryServlet extends HttpServlet {
   /**
    * Computes the url where the image is available for download. Optionally performs scaling.
    *
-   * @param id      the resource id.
-   * @param scaledWidth the scaled width
-   * @param scaledHeight the scaled height
+   * @param id
+   *     the resource id.
+   * @param scaledWidth
+   *     the scaled width
+   * @param scaledHeight
+   *     the scaled height
    * @return the resource url.
    */
   public static String computeImageDownloadUrl(String id, Integer scaledWidth, Integer scaledHeight) {
@@ -204,7 +212,8 @@ public class RemotePeerRegistryServlet extends HttpServlet {
       inputStream = new BufferedInputStream(new ByteArrayInputStream((byte[]) stateValue));
       response.setContentLength(((byte[]) stateValue).length);
     } else if (stateValue != null) {
-      inputStream = new BufferedInputStream(new ByteArrayInputStream(stateValue.toString().getBytes(StandardCharsets.UTF_8.name())));
+      inputStream = new BufferedInputStream(new ByteArrayInputStream(stateValue.toString().getBytes(
+          StandardCharsets.UTF_8.name())));
     }
     if (inputStream != null) {
       BufferedOutputStream outputStream = new BufferedOutputStream(response.getOutputStream());
@@ -232,19 +241,24 @@ public class RemotePeerRegistryServlet extends HttpServlet {
 
     try {
       HttpRequestHolder.setServletRequest(request);
-      FileItemFactory factory = new DiskFileItemFactory();
-      ServletFileUpload upload = new ServletFileUpload(factory);
-
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      OutputStream out = new BufferedOutputStream(baos);
-      List<FileItem> items = upload.parseRequest(request);
-      if (items.size() > 0) {
-        FileItem item = items.get(0);
-        IoHelper.copyStream(item.getInputStream(), out);
+      byte[] content = null;
+      if ("application/x-www-form-urlencoded".equals(request.getContentType())) {
+        String data = request.getParameter("data");
+        content = Base64.decodeBase64(data);
+      } else {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        OutputStream out = new BufferedOutputStream(baos);
+        FileItemFactory factory = new DiskFileItemFactory();
+        ServletFileUpload upload = new ServletFileUpload(factory);
+        List<FileItem> items = upload.parseRequest(request);
+        if (items.size() > 0) {
+          FileItem item = items.get(0);
+          IoHelper.copyStream(item.getInputStream(), out);
+        }
+        out.flush();
+        out.close();
+        content = baos.toByteArray();
       }
-      out.flush();
-      out.close();
-      byte[] content = baos.toByteArray();
 
       IRemotePeerRegistry peerRegistry = (IRemotePeerRegistry) request.getSession().getAttribute(PEER_REGISTRY);
       IRemoteStateOwner stateOwner = (IRemoteStateOwner) peerRegistry.getRegistered(id);

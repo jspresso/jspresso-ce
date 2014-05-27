@@ -1889,6 +1889,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         alignX: "center",
         alignY: "middle"
       }));
+      wrapper.addCssClass("jspresso-cropper");
       wrapper.add(imageComponent);
       return wrapper;
     },
@@ -1945,10 +1946,24 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createImageCanvas: function (remoteImageCanvas) {
       var height;
-      if (remoteImageCanvas.getPreferredSize()) {
-        height = remoteImageCanvas.getPreferredSize().getHeight();
-      }
-      return new org.jspresso.framework.view.qx.mobile.ImageCanvas(remoteImageCanvas.getSubmitUrl(), height);
+      var imageCanvas = new org.jspresso.framework.view.qx.mobile.ImageCanvas(remoteImageCanvas.getDrawingSize());
+      var state = remoteImageCanvas.getState();
+      state.addListener("changeValue", function (e) {
+        if (e.getData().indexOf("://") >= 0) {
+          imageCanvas.clear();
+          if (e.getData()) {
+            imageCanvas.setImage(e.getData());
+          }
+        }
+      }, this);
+      imageCanvas.addListenerOnce("appear", function (e) {
+        var page = this._getActionHandler().getCurrentPage();
+        page.addListener("action", function (e) {
+          var image = imageCanvas.getImage(remoteImageCanvas.getFormatName());
+          state.setValue(image.src.replace(/^.*base64,/, ""));
+        }, this);
+      }, this);
+      return imageCanvas;
     },
 
     /**

@@ -109,6 +109,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.MobileApplication",
 
       qx.Class.patch(qx.ui.mobile.form.Input, org.jspresso.framework.patch.MInput);
       qx.Class.patch(qx.data.Array, org.jspresso.framework.patch.MArray);
+      if (qx.core.Environment.get("qx.mobile.nativescroll") == false) {
+        qx.Class.patch(qx.ui.mobile.container.Scroll, org.jspresso.framework.patch.MScroll);
+      }
 
       // Enable logging in debug variant
       if (qx.core.Environment.get("qx.debug")) {
@@ -136,12 +139,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.MobileApplication",
     close: function () {
       this.base(arguments);
       this.__qxController.stop()
-    }
-  },
-
-  defer: function (statics) {
-    if (qx.core.Environment.get("qx.mobile.nativescroll") == false) {
-      qx.Class.patch(qx.ui.mobile.container.Scroll, org.jspresso.framework.patch.MScroll);
     }
   }
 });

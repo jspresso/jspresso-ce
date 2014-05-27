@@ -33,6 +33,8 @@ import java.util.TimeZone;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
+import org.apache.commons.codec.binary.Base64;
+
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
@@ -1032,6 +1034,9 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
 
           @Override
           public Object getValueFromState(RemoteValueState state, Object originalValue) {
+            if (originalValue instanceof String) {
+              return Base64.decodeBase64((String) originalValue);
+            }
             return originalValue;
           }
         });
