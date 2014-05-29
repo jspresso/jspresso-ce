@@ -71,8 +71,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     __routing: null,
     /** @type {boolean} */
     __isTablet: false,
-    /** @type {qx.ui.mobile.page.NavigationPage} */
-    __blankPage: null,
     /** @type {Object} */
     __drawers: {},
     /** @type {qx.ui.mobile.container.Composite} */
@@ -166,9 +164,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         manager.setHideMasterButtonCaption(this.translate("Hide"));
       }
       manager.getDetailNavigation().getLayout().setShowAnimation(true);
-      this.__blankPage = new qx.ui.mobile.page.NavigationPage();
-      manager.addDetail(this.__blankPage);
-      this.__blankPage.show();
       return manager;
     },
 
@@ -327,11 +322,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
           pageToRestore = this._dialogStack[this._dialogStack.length - 1][0];
         }
         if (pageToDestroy) {
-          pageToRestore.addListenerOnce("appear", function () {
+          pageToDestroy.addListenerOnce("disappear", function () {
             qx.event.Timer.once(function () {
+              this.__applicationContainer.remove(pageToDestroy);
               pageToDestroy.destroy();
             }, this, 500);
-          });
+          }, this);
         }
         pageToRestore.show({animation: "slideup", reverse: true});
       }
@@ -635,8 +631,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       /** @type {Array} */
       var keysToTranslate = this.base(arguments);
       keysToTranslate = keysToTranslate.concat([
-        "m_01", "m_02", "m_03", "m_04", "m_05", "m_06", "m_07", "m_08", "m_09", "m_10", "m_11", "m_12",
-        "Hide", "Wait", "Loading", "Clear"]);
+        "m_01", "m_02", "m_03", "m_04", "m_05", "m_06", "m_07", "m_08", "m_09", "m_10", "m_11", "m_12", "Hide", "Wait",
+        "Loading", "Clear"]);
       var bookmarkHintKey = this._determineBrowserBookmarkHintKey();
       if (bookmarkHintKey) {
         keysToTranslate = keysToTranslate.concat([bookmarkHintKey]);
