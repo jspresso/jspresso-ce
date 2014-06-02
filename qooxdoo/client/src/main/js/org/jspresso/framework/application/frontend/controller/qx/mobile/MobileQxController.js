@@ -164,6 +164,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         manager.setHideMasterButtonCaption(this.translate("Hide"));
       }
       manager.getDetailNavigation().getLayout().setShowAnimation(true);
+      var blankPage = new qx.ui.mobile.page.NavigationPage();
+      manager.addDetail(blankPage);
+      blankPage.show();
       return manager;
     },
 
