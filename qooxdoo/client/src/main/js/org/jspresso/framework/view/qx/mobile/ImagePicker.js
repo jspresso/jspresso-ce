@@ -50,6 +50,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImagePicker", {
   },
 
   // --------------------------------------------------------------------------
+  // [Events]
+  // --------------------------------------------------------------------------
+
+  events: {
+    "imagePicked": "qx.event.type.Event"
+  },
+
+  // --------------------------------------------------------------------------
   // [Members]
   // --------------------------------------------------------------------------
 
@@ -113,6 +121,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImagePicker", {
       qx.bom.element.Style.setStyles(input, css, true);
       qx.event.Registration.addListener(input, "change", function (e) {
         this.__formEl.submit();
+        this.fireEvent("imagePicked");
       }, this);
       return input;
     },
@@ -148,7 +157,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImagePicker", {
       } else {
         frameNode = document.createElement("iframe");
       }
-
       frameNode.id = (frameNode.name = frameName);
       frameNode.style.display = "none";
       document.body.appendChild(frameNode);

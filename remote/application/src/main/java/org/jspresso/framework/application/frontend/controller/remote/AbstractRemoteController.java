@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.frontend.command.remote.RemoteRefreshCommand;
 import org.jspresso.framework.util.gui.EClientType;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
@@ -116,7 +117,6 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
   private static final Logger LOG = LoggerFactory.getLogger(AbstractRemoteController.class);
 
   private List<RemoteCommand>    commandQueue;
-  private boolean                commandRegistrationEnabled;
   private IGUIDGenerator<String> guidGenerator;
   private int                    commandLowPriorityOffset;
   private List<String>           removedPeersGuids;
@@ -131,8 +131,7 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
    * Instantiates a new Abstract remote controller.
    */
   public AbstractRemoteController() {
-    commandRegistrationEnabled = false;
-    commandLowPriorityOffset = 0;
+    resetCommandQueue();
   }
 
   /**
@@ -196,9 +195,6 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
   @Override
   public synchronized List<RemoteCommand> handleCommands(List<RemoteCommand> commands) {
     try {
-      commandRegistrationEnabled = true;
-      commandQueue = new ArrayList<>();
-      commandLowPriorityOffset = 0;
       if (commands != null) {
         for (RemoteCommand command : commands) {
           handleCommand(command);
@@ -213,13 +209,19 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
     } catch (Exception ex) {
       handleException(ex, null);
     } finally {
-      commandRegistrationEnabled = false;
       IBackendController bc = getBackendController();
       if (bc != null) {
         bc.cleanupRequestResources();
       }
     }
-    return commandQueue;
+    return resetCommandQueue();
+  }
+
+  private List<RemoteCommand> resetCommandQueue() {
+    List<RemoteCommand> copy = commandQueue;
+    commandQueue = new ArrayList<>();
+    commandLowPriorityOffset = 0;
+    return copy;
   }
 
   private void clearRequestParams() {
@@ -343,6 +345,8 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
       }
     } else if (command instanceof RemoteWorkspaceDisplayCommand) {
       displayWorkspace(((RemoteWorkspaceDisplayCommand) command).getWorkspaceName(), false);
+    } else if (command instanceof RemoteRefreshCommand) {
+      // do nothing. Previously buffered commands will simply be sent to the client.
     } else if (command instanceof RemoteHistoryDisplayCommand) {
       ModuleHistoryEntry historyEntry = displayPinnedModule(((RemoteHistoryDisplayCommand) command).getSnapshotId());
       if (historyEntry != null) {
@@ -597,13 +601,11 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
    */
   @Override
   public void registerCommand(RemoteCommand command) {
-    if (commandRegistrationEnabled) {
-      if (command instanceof RemoteChildrenCommand && ((RemoteChildrenCommand) command).isRemove()) {
-        commandQueue.add(commandLowPriorityOffset, command);
-        commandLowPriorityOffset++;
-      } else {
-        commandQueue.add(command);
-      }
+    if (command instanceof RemoteChildrenCommand && ((RemoteChildrenCommand) command).isRemove()) {
+      commandQueue.add(commandLowPriorityOffset, command);
+      commandLowPriorityOffset++;
+    } else {
+      commandQueue.add(command);
     }
   }
 

@@ -101,6 +101,7 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteMessageC
 import org.jspresso.framework.application.frontend.command.remote.RemoteOkCancelCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteOpenUrlCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteReadabilityCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteRefreshCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteRestartCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteStartCommand;
@@ -272,6 +273,10 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
         blockUI(!disableUI);
       }
     }
+  }
+
+  public function refresh():void {
+    registerCommand(new RemoteRefreshCommand());
   }
 
   public function registerCommand(command:RemoteCommand):void {

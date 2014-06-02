@@ -1876,9 +1876,16 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var imageComponent = new qx.ui.mobile.basic.Image();
 
       var state = remoteImageComponent.getState();
-      var modelController = new qx.data.controller.Object(state);
-      modelController.addTarget(imageComponent, "source", "value");
-
+      state.addListener("changeValue", function (e) {
+        var imageUrl = e.getData();
+        if (imageUrl) {
+          if (imageUrl.indexOf("://") >= 0) {
+            imageComponent.setSource(imageUrl);
+          }
+        } else {
+          imageComponent.setSource(null);
+        }
+      }, this);
       if (remoteImageComponent.getAction() != null) {
         this._getRemotePeerRegistry().register(remoteImageComponent.getAction());
         imageComponent.addListener("tap", function (e) {
@@ -1936,8 +1943,27 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @return {qx.ui.mobile.core.Widget}
      */
     _createImagePicker: function (remoteImagePicker) {
-      return new org.jspresso.framework.view.qx.mobile.ImagePicker(remoteImagePicker.getSubmitUrl(),
+      var state = remoteImagePicker.getState();
+      var imageChooser = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
+      var imagePicker = new org.jspresso.framework.view.qx.mobile.ImagePicker(remoteImagePicker.getSubmitUrl(),
           remoteImagePicker.getLabel());
+      var imagePreview = this._createImageComponent(remoteImagePicker);
+      imagePreview.addCssClass("group");
+      imageChooser.add(imagePicker, {flex: 1});
+      imageChooser.add(imagePreview, {flex: 1});
+      state.addListener("changeValue", function (e) {
+        if (e.getData()) {
+          imagePicker.setLabel(this._getActionHandler().translate("replace"))
+        } else {
+          imagePicker.setLabel(this._getActionHandler().translate("choose"))
+        }
+      }, this);
+      imagePicker.addListener("imagePicked", function () {
+        qx.event.Timer.once(function () {
+          this._getActionHandler().refresh();
+        }, this, 2000);
+      }, this);
+      return imageChooser;
     },
 
     /**
@@ -1950,18 +1976,21 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           this._getActionHandler().translate("Clear"));
       var state = remoteImageCanvas.getState();
       state.addListener("changeValue", function (e) {
-        if (e.getData().indexOf("://") >= 0) {
-          imageCanvas.clear();
-          if (e.getData()) {
-            imageCanvas.setImage(e.getData());
+        var imageUrl = e.getData();
+        if (imageUrl) {
+          if (imageUrl.indexOf("://") >= 0) {
+            imageCanvas.clear();
+            imageCanvas.setImage(imageUrl);
           }
+        } else {
+          imageCanvas.clear();
         }
       }, this);
       imageCanvas.addListenerOnce("appear", function (e) {
         var page = this._getActionHandler().getCurrentPage();
         page.addListener("action", function (e) {
           var image = imageCanvas.getImage(remoteImageCanvas.getFormatName());
-          state.setValue(image.src.replace(/^.*base64,/, ""));
+          state.setValue(image.src);
         }, this);
       }, this);
       return imageCanvas;

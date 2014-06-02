@@ -20,6 +20,9 @@ qx.Interface.define("org.jspresso.framework.action.IActionHandler", {
     setCurrentViewStateGuid: function (viewStateGuid, viewStatePermId) {
     },
 
+    refresh: function () {
+    },
+
     translate: function (key) {
     }
 

@@ -225,6 +225,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
       }
     },
 
+    refresh: function () {
+      this.registerCommand(new org.jspresso.framework.application.frontend.command.remote.RemoteRefreshCommand());
+    },
+
     /**
      * @param command {org.jspresso.framework.application.frontend.command.remote.RemoteCommand}
      * @return {undefined}

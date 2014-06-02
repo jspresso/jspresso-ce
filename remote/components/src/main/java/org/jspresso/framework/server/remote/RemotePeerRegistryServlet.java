@@ -241,7 +241,7 @@ public class RemotePeerRegistryServlet extends HttpServlet {
 
     try {
       HttpRequestHolder.setServletRequest(request);
-      byte[] content = null;
+      byte[] content;
       if ("application/x-www-form-urlencoded".equals(request.getContentType())) {
         String data = request.getParameter("data");
         content = Base64.decodeBase64(data);

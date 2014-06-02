@@ -1034,8 +1034,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
 
           @Override
           public Object getValueFromState(RemoteValueState state, Object originalValue) {
-            if (originalValue instanceof String) {
-              return Base64.decodeBase64((String) originalValue);
+            if (originalValue instanceof String && ((String) originalValue).contains("base64")) {
+              return Base64.decodeBase64(((String) originalValue).replaceAll("^.*base64,", ""));
             }
             return originalValue;
           }

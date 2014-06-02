@@ -27,6 +27,8 @@ public interface IActionHandler extends ITranslationProvider {
 
   function setCurrentViewStateGuid(component:UIComponent, viewStateGuid:String, viewStatePermId:String):void;
 
+  function refresh():void;
+
   function queryUserGeoLocation():void
 
   function get userGeoLocation():Object;
