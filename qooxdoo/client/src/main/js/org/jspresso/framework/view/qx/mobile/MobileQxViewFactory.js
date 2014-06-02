@@ -178,10 +178,13 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           item.setSelectable(data.getEnabled());
         }
       });
+      for (var i = 0; i < extraActions.length; i++) {
+        this._getRemotePeerRegistry().register(extraActions[i]);
+      }
       extraMenu.getSelectionList().setModel(new qx.data.Array(extraActions));
       extraMenu.setAnchor(extraButton);
       extraMenu.addListener("changeSelection", function (evt) {
-        var selectedIndex = evt.getData();
+        var selectedIndex = evt.getData()["index"];
         this._getActionHandler().execute(extraActions[selectedIndex]);
       }, this);
       this.addButtonListener(extraButton, function (evt) {
@@ -1945,24 +1948,42 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     _createImagePicker: function (remoteImagePicker) {
       var state = remoteImagePicker.getState();
       var imageChooser = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
+      var imagePickerBar = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox());
       var imagePicker = new org.jspresso.framework.view.qx.mobile.ImagePicker(remoteImagePicker.getSubmitUrl(),
           remoteImagePicker.getLabel());
+      imagePicker.addCssClass("jspresso-even-width");
+      var clearButton = new qx.ui.mobile.form.Button(this._getActionHandler().translate("Clear"));
+      clearButton.addListener("tap", function (e) {
+        state.setValue(null);
+      }, this);
+      clearButton.addCssClass("jspresso-even-width");
+      imagePickerBar.add(imagePicker, {flex: 1});
+      imagePickerBar.add(clearButton, {flex: 1});
       var imagePreview = this._createImageComponent(remoteImagePicker);
       imagePreview.addCssClass("group");
-      imageChooser.add(imagePicker, {flex: 1});
+      imageChooser.add(imagePickerBar, {flex: 1});
       imageChooser.add(imagePreview, {flex: 1});
-      state.addListener("changeValue", function (e) {
-        if (e.getData()) {
-          imagePicker.setLabel(this._getActionHandler().translate("replace"))
+
+      var syncPicker = function (imageData) {
+        if (imageData) {
+          imagePicker.setLabel(this._getActionHandler().translate("Replace") + "...");
+          clearButton.setVisibility("visible");
         } else {
-          imagePicker.setLabel(this._getActionHandler().translate("choose"))
+          imagePicker.setLabel(this._getActionHandler().translate("Choose") + "...");
+          clearButton.setVisibility("excluded");
         }
+      };
+
+      state.addListener("changeValue", function (e) {
+        var imageData = e.getData();
+        syncPicker.call(this, imageData);
       }, this);
       imagePicker.addListener("imagePicked", function () {
         qx.event.Timer.once(function () {
           this._getActionHandler().refresh();
         }, this, 2000);
       }, this);
+      syncPicker.call(this, state.getValue());
       return imageChooser;
     },
 
