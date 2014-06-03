@@ -18,10 +18,12 @@
  */
 package org.jspresso.framework.view.descriptor.mobile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jspresso.framework.view.descriptor.EHorizontalPosition;
 import org.jspresso.framework.view.descriptor.EPosition;
+import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.AbstractComponentViewDescriptor;
 
 /**
@@ -35,6 +37,8 @@ public class MobileComponentViewDescriptor extends AbstractComponentViewDescript
 
   private EPosition    position;
   private List<String> forClientTypes;
+  private List<String> excludedReadingProperties;
+  private List<String> excludedWritingProperties;
 
   /**
    * Instantiates a new Mobile border view descriptor.
@@ -45,7 +49,7 @@ public class MobileComponentViewDescriptor extends AbstractComponentViewDescript
 
   /**
    * Always 1 in mobile environment.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -55,7 +59,7 @@ public class MobileComponentViewDescriptor extends AbstractComponentViewDescript
 
   /**
    * Always null in mobile environment.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -65,7 +69,7 @@ public class MobileComponentViewDescriptor extends AbstractComponentViewDescript
 
   /**
    * Always 1 in mobile environment.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -75,7 +79,7 @@ public class MobileComponentViewDescriptor extends AbstractComponentViewDescript
 
   /**
    * Always {@code EHorizontalPosition.LEFT} in mobile environment.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -85,7 +89,7 @@ public class MobileComponentViewDescriptor extends AbstractComponentViewDescript
 
   /**
    * Always {@code true} in mobile environment.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -95,7 +99,7 @@ public class MobileComponentViewDescriptor extends AbstractComponentViewDescript
 
   /**
    * Always {@code true} in mobile environment.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -105,7 +109,7 @@ public class MobileComponentViewDescriptor extends AbstractComponentViewDescript
 
   /**
    * Always {@code false} in mobile environment.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -162,5 +166,87 @@ public class MobileComponentViewDescriptor extends AbstractComponentViewDescript
    */
   public void setForClientTypes(List<String> forClientTypes) {
     this.forClientTypes = forClientTypes;
+  }
+
+  /**
+   * Filter for reading.
+   *
+   * @return the mobile component view descriptor
+   */
+  public MobileComponentViewDescriptor filterForReading() {
+    MobileComponentViewDescriptor filteredComponentViewDescriptor = filterProperties(getExcludedReadingProperties());
+    return filteredComponentViewDescriptor;
+  }
+
+  /**
+   * Filter for writing.
+   *
+   * @return the mobile component view descriptor
+   */
+  public MobileComponentViewDescriptor filterForWriting() {
+    MobileComponentViewDescriptor filteredComponentViewDescriptor = filterProperties(getExcludedWritingProperties());
+    return filteredComponentViewDescriptor;
+  }
+
+  /**
+   * Filter properties.
+   *
+   * @param filteredProperties
+   *     the filtered properties
+   * @return the mobile composite page view descriptor
+   */
+  public MobileComponentViewDescriptor filterProperties(List<String> filteredProperties) {
+    if (filteredProperties != null) {
+      MobileComponentViewDescriptor filteredDescriptor = (MobileComponentViewDescriptor) clone();
+      filteredDescriptor.setExcludedReadingProperties(null);
+      filteredDescriptor.setExcludedWritingProperties(null);
+      List<IPropertyViewDescriptor> filteredPropertyViewDescriptors = new ArrayList<>();
+      for (IPropertyViewDescriptor pvd : getPropertyViewDescriptors()) {
+        if (!filteredProperties.contains(pvd.getName())) {
+          filteredPropertyViewDescriptors.add(pvd);
+        }
+      }
+      filteredDescriptor.setPropertyViewDescriptors(filteredPropertyViewDescriptors);
+      return filteredDescriptor;
+    }
+    return this;
+  }
+
+  /**
+   * Gets filtered reading properties.
+   *
+   * @return the filtered reading properties
+   */
+  public List<String> getExcludedReadingProperties() {
+    return excludedReadingProperties;
+  }
+
+  /**
+   * Sets filtered reading properties. Allows to configure the properties that will be excluded from the read-only page.
+   *
+   * @param excludedReadingProperties
+   *     the filtered reading properties
+   */
+  public void setExcludedReadingProperties(List<String> excludedReadingProperties) {
+    this.excludedReadingProperties = excludedReadingProperties;
+  }
+
+  /**
+   * Gets filtered writing properties.
+   *
+   * @return the filtered writing properties
+   */
+  public List<String> getExcludedWritingProperties() {
+    return excludedWritingProperties;
+  }
+
+  /**
+   * Sets filtered writing properties. Allows to configure the properties that will be excluded from the editor page.
+   *
+   * @param excludedWritingProperties
+   *     the filtered writing properties
+   */
+  public void setExcludedWritingProperties(List<String> excludedWritingProperties) {
+    this.excludedWritingProperties = excludedWritingProperties;
   }
 }

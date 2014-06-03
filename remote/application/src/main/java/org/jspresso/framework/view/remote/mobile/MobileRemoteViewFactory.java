@@ -332,11 +332,13 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
    */
   protected ICompositeView<RComponent> createMobileCompositePageView(MobileCompositePageViewDescriptor viewDescriptor,
                                                                      IActionHandler actionHandler, Locale locale) {
-    RMobileCompositePage viewComponent = createRMobileCompositePage(viewDescriptor);
-    BasicCompositeView<RComponent> view = constructCompositeView(viewComponent, viewDescriptor);
+    MobileCompositePageViewDescriptor filteredViewDescriptor = viewDescriptor.filterForReading();
+    RMobileCompositePage viewComponent = createRMobileCompositePage(filteredViewDescriptor);
+    BasicCompositeView<RComponent> view = constructCompositeView(viewComponent, filteredViewDescriptor);
     List<IView<RComponent>> childrenViews = new ArrayList<>();
     List<RComponent> pageSections = new ArrayList<>();
-    for (IMobilePageSectionViewDescriptor pageSectionViewDescriptor : viewDescriptor.getPageSectionDescriptors()) {
+    for (IMobilePageSectionViewDescriptor pageSectionViewDescriptor : filteredViewDescriptor
+        .getPageSectionDescriptors()) {
       if (isAllowedForClientType(pageSectionViewDescriptor, actionHandler)) {
         IView<RComponent> pageSectionView = createView(pageSectionViewDescriptor, actionHandler, locale);
         pageSections.add(pageSectionView.getPeer());
@@ -345,8 +347,8 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     }
     viewComponent.setPageSections(pageSections.toArray(new RComponent[pageSections.size()]));
     if (!viewDescriptor.isInlineEditing() && !viewDescriptor.isReadOnly()) {
-      ICompositeView<RComponent> editorPageView = (ICompositeView<RComponent>) createView(
-          viewDescriptor.getEditorPage(), actionHandler, locale);
+      MobileCompositePageViewDescriptor filteredEditorPage = viewDescriptor.getEditorPage().filterForWriting();
+      ICompositeView<RComponent> editorPageView = (ICompositeView<RComponent>) createView(filteredEditorPage, actionHandler, locale);
       RMobileCompositePage editorPage = (RMobileCompositePage) editorPageView.getView().getPeer();
       RAction saveAction = getActionFactory().createAction(getSavePageAction(), actionHandler, view, locale);
       editorPage.setMainAction(saveAction);

@@ -105,6 +105,8 @@ public class MobileCompositePageViewDescriptor extends AbstractMobilePageViewDes
    * Completes child view descriptors before returning them.
    * <p/>
    * {@inheritDoc}
+   *
+   * @return the child view descriptors
    */
   @Override
   public List<IViewDescriptor> getChildViewDescriptors() {
@@ -172,10 +174,54 @@ public class MobileCompositePageViewDescriptor extends AbstractMobilePageViewDes
     return editorPage;
   }
 
+
+  /**
+   * Filter properties.
+   *
+   * @return the mobile composite page view descriptor
+   */
+  public MobileCompositePageViewDescriptor filterForReading() {
+    List<IMobilePageSectionViewDescriptor> sections = getPageSectionDescriptors();
+    List<IMobilePageSectionViewDescriptor> filteredSections = new ArrayList<>();
+    for (IMobilePageSectionViewDescriptor section : sections) {
+      if (section instanceof MobileComponentViewDescriptor) {
+        MobileComponentViewDescriptor filteredSection = ((MobileComponentViewDescriptor) section).filterForReading();
+        if (filteredSection.getPropertyViewDescriptors().size() > 0) {
+          filteredSections.add(filteredSection);
+        }
+      }
+    }
+    MobileCompositePageViewDescriptor filteredPage = (MobileCompositePageViewDescriptor) clone();
+    filteredPage.setPageSectionDescriptors(filteredSections);
+    return filteredPage;
+  }
+
+  /**
+   * Filter properties.
+   *
+   * @return the mobile composite page view descriptor
+   */
+  public MobileCompositePageViewDescriptor filterForWriting() {
+    List<IMobilePageSectionViewDescriptor> sections = getPageSectionDescriptors();
+    List<IMobilePageSectionViewDescriptor> filteredSections = new ArrayList<>();
+    for (IMobilePageSectionViewDescriptor section : sections) {
+      if (section instanceof MobileComponentViewDescriptor) {
+        MobileComponentViewDescriptor filteredSection = ((MobileComponentViewDescriptor) section).filterForWriting();
+        if (filteredSection.getPropertyViewDescriptors().size() > 0) {
+          filteredSections.add(filteredSection);
+        }
+      }
+    }
+    MobileCompositePageViewDescriptor filteredPage = (MobileCompositePageViewDescriptor) clone();
+    filteredPage.setPageSectionDescriptors(filteredSections);
+    return filteredPage;
+  }
+
   /**
    * Sets editing page.
    *
-   * @param editorPage the editing page
+   * @param editorPage
+   *     the editing page
    */
   public void setEditorPage(MobileCompositePageViewDescriptor editorPage) {
     this.editorPage = editorPage;

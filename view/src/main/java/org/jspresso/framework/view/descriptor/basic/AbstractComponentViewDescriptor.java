@@ -39,9 +39,9 @@ import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
  */
 public abstract class AbstractComponentViewDescriptor extends BasicViewDescriptor implements IComponentViewDescriptor {
 
-  private ELabelPosition                labelsPosition;
-  private List<String>                  renderedProperties;
-  private List<IPropertyViewDescriptor> propertyViewDescriptors;
+  private ELabelPosition                  labelsPosition;
+  private List<String>                    renderedProperties;
+  private List<IPropertyViewDescriptor>   propertyViewDescriptors;
   private AbstractComponentViewDescriptor readOnlyClone;
 
   /**
@@ -73,10 +73,12 @@ public abstract class AbstractComponentViewDescriptor extends BasicViewDescripto
   }
 
   /**
+   * If you need to override the behaviour, override {@link #getPropertyViewDescriptors(boolean)}.
+   * <p>
    * {@inheritDoc}
    */
   @Override
-  public List<IPropertyViewDescriptor> getPropertyViewDescriptors() {
+  public final List<IPropertyViewDescriptor> getPropertyViewDescriptors() {
     return getPropertyViewDescriptors(true);
   }
 
@@ -209,7 +211,8 @@ public abstract class AbstractComponentViewDescriptor extends BasicViewDescripto
   /**
    * Gets property width.
    *
-   * @param propertyName the property name
+   * @param propertyName
+   *     the property name
    * @return the property width
    */
   protected abstract Integer getPropertyWidth(String propertyName);
@@ -217,7 +220,8 @@ public abstract class AbstractComponentViewDescriptor extends BasicViewDescripto
   /**
    * Compute default rendered child properties.
    *
-   * @param propertyName the property name
+   * @param propertyName
+   *     the property name
    * @return the list
    */
   protected abstract List<String> computeDefaultRenderedChildProperties(String propertyName);
@@ -229,13 +233,13 @@ public abstract class AbstractComponentViewDescriptor extends BasicViewDescripto
    * view fields, you just pass-in a list of property names. view fields are
    * then created from this list, keeping model defaults for all fields
    * characteristics.
-   * <p>
+   * <p/>
    * Whenever the property value is {@code null} (default), the fields list
    * is determined from the component descriptor {@code renderedProperties}
    * property.
    *
    * @param renderedProperties
-   *          the renderedProperties to set.
+   *     the renderedProperties to set.
    */
   public void setRenderedProperties(List<String> renderedProperties) {
     this.renderedProperties = renderedProperties;
@@ -280,8 +284,9 @@ public abstract class AbstractComponentViewDescriptor extends BasicViewDescripto
       readOnlyClone = (AbstractComponentViewDescriptor) clone();
       List<IPropertyViewDescriptor> readOnlyDescriptors = new ArrayList<>();
       for (IPropertyViewDescriptor descriptor : getPropertyViewDescriptors(false)) {
-        BasicPropertyViewDescriptor readOnlyDescriptor = (BasicPropertyViewDescriptor)
-            ((BasicPropertyViewDescriptor) descriptor).clone();
+        BasicPropertyViewDescriptor readOnlyDescriptor = (BasicPropertyViewDescriptor) ((BasicPropertyViewDescriptor)
+            descriptor)
+            .clone();
         readOnlyDescriptor.setReadOnly(true);
         readOnlyDescriptors.add(readOnlyDescriptor);
       }
