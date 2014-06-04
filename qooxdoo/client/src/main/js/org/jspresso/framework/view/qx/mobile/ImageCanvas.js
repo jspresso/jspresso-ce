@@ -73,6 +73,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImageCanvas", {
       this.add(clearButton);
 
       var canvas = this.__canvas = new qx.ui.mobile.embed.Canvas();
+      canvas.addCssClass("jspresso-canvas");
 
       canvas.addListener("trackstart", this._onTrackStart, this);
       canvas.addListener("trackend", this._onTrackEnd, this);

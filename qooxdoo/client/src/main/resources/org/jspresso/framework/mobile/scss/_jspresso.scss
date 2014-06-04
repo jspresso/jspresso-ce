@@ -123,3 +123,9 @@
 .jspresso-cropper {
   overflow: hidden;
 }
+
+.jspresso-canvas {
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+}
