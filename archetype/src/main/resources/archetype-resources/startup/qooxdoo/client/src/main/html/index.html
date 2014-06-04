@@ -1,10 +1,12 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>${applicationName}</title>
-  <script type="text/javascript" src="script/${package}.startup.qooxdoo.js"></script>
-  <script type="text/javascript" src=".qxrpc"></script>
-</head>
-<body></body>
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <script>
+    if (typeof window.orientation !== 'undefined') {
+      document.location = "./index-mobile.html";
+    } else {
+      document.location = "./index-desktop.html"
+    }
+  </script></head>
 </html>
