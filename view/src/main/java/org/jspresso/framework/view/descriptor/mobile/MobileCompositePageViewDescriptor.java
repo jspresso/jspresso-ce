@@ -189,6 +189,8 @@ public class MobileCompositePageViewDescriptor extends AbstractMobilePageViewDes
         if (filteredSection.getPropertyViewDescriptors().size() > 0) {
           filteredSections.add(filteredSection);
         }
+      } else {
+        filteredSections.add(section);
       }
     }
     MobileCompositePageViewDescriptor filteredPage = (MobileCompositePageViewDescriptor) clone();
