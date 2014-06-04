@@ -48,7 +48,10 @@ public class SaveModuleObjectFrontAction<E, F, G> extends FrontendAction<E, F, G
   private       boolean dirtyTrackingEnabled;
   private final IGate   dirtyModuleGate;
 
-  SaveModuleObjectFrontAction() {
+  /**
+   * Instantiates a new Save module object front action.
+   */
+  public SaveModuleObjectFrontAction() {
     dirtyTrackingEnabled = false;
     dirtyModuleGate = new DirtyModuleGate();
   }
