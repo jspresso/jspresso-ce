@@ -1889,6 +1889,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           imageComponent.setSource(null);
         }
       }, this);
+      imageComponent.setSource(state.getValue());
       if (remoteImageComponent.getAction() != null) {
         this._getRemotePeerRegistry().register(remoteImageComponent.getAction());
         imageComponent.addListener("tap", function (e) {
@@ -2008,6 +2009,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           imageCanvas.clear();
         }
       }, this);
+      imageCanvas.setImage(state.getValue());
       imageCanvas.addListener("drawn", function (e) {
         var image = imageCanvas.getImage(remoteImageCanvas.getFormatName());
         state.setValue(image.src);

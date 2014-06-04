@@ -20,7 +20,6 @@ package org.jspresso.framework.model.descriptor.basic;
 
 import java.io.IOException;
 
-import org.jspresso.framework.model.component.ComponentException;
 import org.jspresso.framework.model.descriptor.IImageBinaryPropertyDescriptor;
 import org.jspresso.framework.util.image.ImageHelper;
 
@@ -105,6 +104,7 @@ public class BasicImageBinaryPropertyDescriptor extends BasicBinaryPropertyDescr
       try {
         actualNewValue = ImageHelper.scaleImage(actualNewValue, getScaledWidth(), getScaledHeight(),
             getFormatName());
+        return actualNewValue;
       } catch (IOException ioe) {
         // could not transform the image property view.
       }
