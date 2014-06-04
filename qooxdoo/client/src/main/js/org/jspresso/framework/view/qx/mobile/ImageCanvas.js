@@ -46,6 +46,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImageCanvas", {
     this._initialize(dimension, clearCaption);
   },
 
+  events: {
+    "drawn": "qx.event.type.Event"
+  },
+
   members: {
     __canvasLeft: 0,
     __canvasTop: 0,
@@ -141,6 +145,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImageCanvas", {
      */
     _onTrackEnd: function (evt) {
       this.__lastPoint = {};
+      this.fireEvent("drawn");
     },
 
     __drawImage: function (image) {

@@ -1981,7 +1981,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       imagePicker.addListener("imagePicked", function () {
         qx.event.Timer.once(function () {
           this._getActionHandler().refresh();
-        }, this, 2000);
+        }, this, 500);
       }, this);
       syncPicker.call(this, state.getValue());
       return imageChooser;
@@ -2000,19 +2000,16 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         var imageUrl = e.getData();
         if (imageUrl) {
           if (imageUrl.indexOf("://") >= 0) {
-            imageCanvas.clear();
+            //imageCanvas.clear();
             imageCanvas.setImage(imageUrl);
           }
         } else {
           imageCanvas.clear();
         }
       }, this);
-      imageCanvas.addListenerOnce("appear", function (e) {
-        var page = this._getActionHandler().getCurrentPage();
-        page.addListener("action", function (e) {
-          var image = imageCanvas.getImage(remoteImageCanvas.getFormatName());
-          state.setValue(image.src);
-        }, this);
+      imageCanvas.addListener("drawn", function (e) {
+        var image = imageCanvas.getImage(remoteImageCanvas.getFormatName());
+        state.setValue(image.src);
       }, this);
       return imageCanvas;
     },
