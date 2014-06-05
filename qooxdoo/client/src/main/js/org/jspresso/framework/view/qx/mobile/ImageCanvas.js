@@ -119,6 +119,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImageCanvas", {
       ctx.fillStyle = "#ffffff";
       ctx.fillRect(0, 0, this._to(this.__canvasWidth), this._to(this.__canvasHeight));
       ctx.fill();
+      this.fireEvent("drawn");
     },
 
 
