@@ -98,7 +98,7 @@
 }
 
 .jspresso-list {
-  padding: 4px;
+  padding: rem(4);
 }
 
 .jspresso-toolbar {
@@ -106,7 +106,7 @@
 }
 
 .jspresso-carousel {
-  padding-bottom: 10px;
+  padding-bottom: rem(10);
 }
 
 .jspresso-form-row-group-title {
@@ -124,8 +124,13 @@
   overflow: hidden;
 }
 
+.jspresso-image-canvas {
+}
+
 .jspresso-canvas {
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
+  border: rem(1) solid #bcbcbc;
+  border-radius: rem(3);
 }

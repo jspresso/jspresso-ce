@@ -42,7 +42,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImageCanvas", {
    */
   construct: function (dimension, clearCaption) {
     this.base(arguments, new qx.ui.mobile.layout.VBox());
-    this.__ratio = qx.core.Environment.get("device.pixelRatio");
+    this.__ratio = /*qx.core.Environment.get("device.pixelRatio")*/ 1;
     this._initialize(dimension, clearCaption);
   },
 
@@ -155,11 +155,15 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImageCanvas", {
     },
 
     setImage: function (imageUrl) {
-      var image = new Image();
-      image.src = imageUrl;
-      this.__canvas.addListenerOnce("appear", function (e) {
-        this.__drawImage(image);
-      }, this);
+      if(imageUrl) {
+        var image = new Image();
+        image.src = imageUrl;
+        this.__canvas.addListenerOnce("appear", function (e) {
+          this.__drawImage(image);
+        }, this);
+      } else {
+        this.clear();
+      }
     },
 
     getImage: function (imageFormat) {

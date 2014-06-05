@@ -24,6 +24,8 @@ import java.util.Locale;
 
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.view.ViewException;
+import org.jspresso.framework.view.descriptor.ICollectionViewDescriptorProvider;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
@@ -104,13 +106,16 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
    * @return the next page
    */
   public IMobilePageViewDescriptor getNextPageViewDescriptor() {
-    if (nextPageViewDescriptor instanceof BasicViewDescriptor && nextPageViewDescriptor.getModelDescriptor() == null
-        && selectionViewDescriptor.getModelDescriptor() != null
-        && selectionViewDescriptor instanceof ICollectionPropertyDescriptor<?>) {
-      ((BasicViewDescriptor) nextPageViewDescriptor).setModelDescriptor(
-          ((ICollectionPropertyDescriptor<?>) selectionViewDescriptor.getModelDescriptor()).getReferencedDescriptor()
-                                                                                           .getElementDescriptor()
-                                                                       );
+    if (nextPageViewDescriptor.getModelDescriptor() == null) {
+      if (nextPageViewDescriptor instanceof BasicViewDescriptor && selectionViewDescriptor.getModelDescriptor() != null
+          && selectionViewDescriptor instanceof ICollectionViewDescriptorProvider) {
+        ((BasicViewDescriptor) nextPageViewDescriptor).setModelDescriptor(
+            ((ICollectionPropertyDescriptor<?>) ((ICollectionViewDescriptorProvider) selectionViewDescriptor)
+                .getCollectionViewDescriptor().getModelDescriptor()).getReferencedDescriptor().getElementDescriptor());
+      } else {
+        throw new ViewException("Unable to determine the model automatically on " + nextPageViewDescriptor
+            + ". You must set it explicitly.");
+      }
     }
     return nextPageViewDescriptor;
   }
@@ -169,7 +174,8 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
   /**
    * Sets header section descriptors.
    *
-   * @param headerSectionDescriptors the header section descriptors
+   * @param headerSectionDescriptors
+   *     the header section descriptors
    */
   public void setHeaderSectionDescriptors(List<IMobilePageSectionViewDescriptor> headerSectionDescriptors) {
     this.headerSectionDescriptors = headerSectionDescriptors;
