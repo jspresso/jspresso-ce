@@ -40,6 +40,12 @@ import javax.security.auth.login.LoginException;
 import org.apache.commons.lang.LocaleUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.exception.ConstraintViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.ConcurrencyFailureException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
+
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IAction;
@@ -86,11 +92,6 @@ import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.dao.ConcurrencyFailureException;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.orm.hibernate4.SessionFactoryUtils;
 
 /**
  * Base class for frontend application controllers. Frontend controllers are
@@ -503,12 +504,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
       if (componentToFocus != null) {
         focus(componentToFocus);
       }
-      if (savedContext != null) {
-        // preserve action param
-        Object actionParam = context.get(ActionContextConstants.ACTION_PARAM);
-        context.putAll(savedContext);
-        context.put(ActionContextConstants.ACTION_PARAM, actionParam);
-      }
+      // preserve action param
+      Object actionParam = context.get(ActionContextConstants.ACTION_PARAM);
+      context.putAll(savedContext);
+      context.put(ActionContextConstants.ACTION_PARAM, actionParam);
       return true;
     } else {
       LOG.debug("Trying to dispose a modal dialog while there is no dialog left.");
@@ -743,10 +742,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
   public Map<String, Object> getInitialActionContext() {
     Map<String, Object> initialActionContext = new HashMap<>();
     initialActionContext.putAll(getBackendController().getInitialActionContext());
-    if (dialogContextStack != null) {
-      for (int i = dialogContextStack.size() - 1; i >= 0; i--) {
-        initialActionContext.putAll(dialogContextStack.get(i));
-      }
+    for (int i = dialogContextStack.size() - 1; i >= 0; i--) {
+      initialActionContext.putAll(dialogContextStack.get(i));
     }
     initialActionContext.put(ActionContextConstants.FRONT_CONTROLLER, this);
     initialActionContext.put(ActionContextConstants.MODULE, selectedModules.get(getSelectedWorkspaceName()));
@@ -1234,24 +1231,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
       LOG.info("User {} logged out for session {}.", getApplicationSession()
           .getUsername(), getApplicationSession().getId());
     }
-    if (selectedModules != null) {
-      selectedModules.clear();
-    }
-    if (workspaceNavigatorConnectors != null) {
-      workspaceNavigatorConnectors.clear();
-    }
-    if (workspaceViews != null) {
-      workspaceViews.clear();
-    }
-    if (backwardHistoryEntries != null) {
-      backwardHistoryEntries.clear();
-    }
-    if (forwardHistoryEntries != null) {
-      forwardHistoryEntries.clear();
-    }
-    if (dialogContextStack != null) {
-      dialogContextStack.clear();
-    }
+    selectedModules.clear();
+    workspaceNavigatorConnectors.clear();
+    workspaceViews.clear();
+    backwardHistoryEntries.clear();
+    forwardHistoryEntries.clear();
+    dialogContextStack.clear();
 
     selectedWorkspaceName = null;
     loginCallbackHandler = null;
@@ -1967,10 +1952,15 @@ public abstract class AbstractFrontendController<E, F, G> extends
     }
   }
 
-  private void translateWorkspace(Workspace workspace) {
+  /**
+   * Translate workspace.
+   *
+   * @param workspace the workspace
+   */
+  protected void translateWorkspace(Workspace workspace) {
     workspace.setI18nName(getTranslation(workspace.getName(), getLocale()));
-    workspace.setI18nDescription(getTranslation(workspace.getDescription(), "",
-        getLocale()));
+    workspace.setI18nDescription(getTranslation(workspace.getDescription(), "", getLocale()));
+    workspace.setI18nHeaderDescription(getTranslation(workspace.getHeaderDescription(), "", getLocale()));
     if (workspace.getModules() != null) {
       for (Module module : workspace.getModules()) {
         translateModule(module);
@@ -2286,10 +2276,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
       sessionId = getApplicationSession().getId();
       userId = getApplicationSession().getUsername();
     }
-    LOG.error("An unexpected error occurred for user {} on session {}.",
-        new Object[] {
-            userId, sessionId, ex
-        });
+    LOG.error("An unexpected error occurred for user {} on session {}.", userId, sessionId, ex);
   }
 
   /**

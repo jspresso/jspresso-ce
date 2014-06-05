@@ -26,33 +26,43 @@ import org.jspresso.framework.application.frontend.command.remote.mobile.RemoteB
 import org.jspresso.framework.application.frontend.controller.remote.AbstractRemoteController;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
+import org.jspresso.framework.application.model.mobile.MobileWorkspace;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RCardContainer;
 import org.jspresso.framework.gui.remote.RComponent;
+import org.jspresso.framework.gui.remote.RLabel;
 import org.jspresso.framework.gui.remote.mobile.RMobileCardPage;
+import org.jspresso.framework.gui.remote.mobile.RMobileForm;
 import org.jspresso.framework.gui.remote.mobile.RMobileNavPage;
 import org.jspresso.framework.gui.remote.mobile.RMobilePage;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.view.IView;
+import org.jspresso.framework.view.descriptor.EBorderType;
+import org.jspresso.framework.view.descriptor.EHorizontalPosition;
+import org.jspresso.framework.view.descriptor.ELabelPosition;
+import org.jspresso.framework.view.descriptor.EPosition;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
  * This is is the mobile implementation of a &quot;remotable&quot; frontend
  * controller.
  *
- * @version $LastChangedRevision : 8508 $
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision : 8508 $
  */
 public class MobileRemoteController extends AbstractRemoteController {
 
   /**
    * Not supported in mobile environment.
-   * <p>
+   * <p/>
    * {@inheritDoc}
-   * @param plainContent the plain content
-   * @param htmlContent the html content
+   *
+   * @param plainContent
+   *     the plain content
+   * @param htmlContent
+   *     the html content
    */
   @Override
   public void setClipboardContent(String plainContent, String htmlContent) {
@@ -61,16 +71,25 @@ public class MobileRemoteController extends AbstractRemoteController {
 
   /**
    * Not supported in mobile environment.
-   * <p>
+   * <p/>
    * {@inheritDoc}
-   * @param swfUrl the swf url
-   * @param flashContext the flash context
-   * @param actions the actions
-   * @param title the title
-   * @param sourceComponent the source component
-   * @param context the context
-   * @param dimension the dimension
-   * @param reuseCurrent the reuse current
+   *
+   * @param swfUrl
+   *     the swf url
+   * @param flashContext
+   *     the flash context
+   * @param actions
+   *     the actions
+   * @param title
+   *     the title
+   * @param sourceComponent
+   *     the source component
+   * @param context
+   *     the context
+   * @param dimension
+   *     the dimension
+   * @param reuseCurrent
+   *     the reuse current
    */
   @Override
   public void displayFlashObject(String swfUrl, Map<String, String> flashContext, List<RAction> actions, String title,
@@ -89,13 +108,20 @@ public class MobileRemoteController extends AbstractRemoteController {
   /**
    * Animate page.
    *
-   * @param page the page
-   * @param animation the animation
-   * @param direction the direction
-   * @param reverse the reverse
-   * @param duration the duration
-   * @param hideView the hide view
-   * @param callbackAction the callback action
+   * @param page
+   *     the page
+   * @param animation
+   *     the animation
+   * @param direction
+   *     the direction
+   * @param reverse
+   *     the reverse
+   * @param duration
+   *     the duration
+   * @param hideView
+   *     the hide view
+   * @param callbackAction
+   *     the callback action
    */
   public void animatePage(RMobilePage page, String animation, String direction, boolean reverse, int duration,
                           boolean hideView, RAction callbackAction) {
@@ -114,7 +140,9 @@ public class MobileRemoteController extends AbstractRemoteController {
 
   /**
    * {@inheritDoc}
-   * @param workspaceName the workspace name
+   *
+   * @param workspaceName
+   *     the workspace name
    * @return the r component
    */
   @Override
@@ -123,10 +151,22 @@ public class MobileRemoteController extends AbstractRemoteController {
     Workspace workspace = getWorkspace(workspaceName);
     viewComponent.setLabel(workspace.getI18nName());
     viewComponent.setToolTip(workspace.getI18nDescription());
+    if (workspace.getI18nHeaderDescription() != null && workspace.getI18nHeaderDescription().length() > 0) {
+      RMobileForm headerForm = new RMobileForm(getGuidGenerator().generateGUID());
+      RLabel headerLabel = new RLabel(getGuidGenerator().generateGUID());
+      headerLabel.setLabel(workspace.getI18nHeaderDescription());
+      headerForm.setPosition(EPosition.TOP.name());
+      headerForm.setBorderType(EBorderType.NONE.name());
+      headerForm.setLabelsPosition(ELabelPosition.NONE.name());
+      headerForm.setElementLabels(headerLabel);
+      headerForm.setElements(headerLabel);
+      headerForm.setElementWidths(1);
+      headerForm.setLabelHorizontalPositions(EHorizontalPosition.LEFT.name());
+      viewComponent.setHeaderSections(headerForm);
+    }
     IViewDescriptor workspaceNavigatorViewDescriptor = workspace.getViewDescriptor();
     IValueConnector workspaceConnector = getBackendController().getWorkspaceConnector(workspaceName);
-    IView<RComponent> workspaceNavigator = createWorkspaceNavigator(workspaceName,
-        workspaceNavigatorViewDescriptor);
+    IView<RComponent> workspaceNavigator = createWorkspaceNavigator(workspaceName, workspaceNavigatorViewDescriptor);
     IView<RComponent> moduleAreaView = createModuleAreaView(workspaceName);
     viewComponent.setSelectionView(workspaceNavigator.getPeer());
     RMobileCardPage moduleAreaPage = new RMobileCardPage(workspaceName + "_moduleArea");
@@ -144,6 +184,7 @@ public class MobileRemoteController extends AbstractRemoteController {
    * @param selectedConnector
    *     the selected connector
    */
+  @Override
   protected void handleWorkspaceNavigatorSelection(String workspaceName, ICompositeValueConnector selectedConnector) {
     if (selectedConnector != null && selectedConnector.getConnectorValue() instanceof Module) {
       Module selectedModule = selectedConnector.getConnectorValue();
@@ -152,5 +193,4 @@ public class MobileRemoteController extends AbstractRemoteController {
       displayModule(workspaceName, null);
     }
   }
-
 }

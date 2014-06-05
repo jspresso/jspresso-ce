@@ -505,7 +505,7 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
     if (isAccessGranted(actionList)) {
       try {
         pushToSecurityContext(actionList);
-        RActionList rActionList = new RActionList(guidGenerator.generateGUID());
+        RActionList rActionList = new RActionList(getGuidGenerator().generateGUID());
         rActionList.setName(actionList.getI18nName(this, getLocale()));
         rActionList.setDescription(actionList.getI18nDescription(this, getLocale()));
         rActionList.setIcon(getIconFactory().getIcon(actionList.getIcon(), getIconFactory().getTinyIconSize()));
@@ -1003,4 +1003,13 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
    * @return the r component
    */
   protected abstract RComponent createWorkspaceView(String workspaceName);
+
+  /**
+   * Gets guid generator.
+   *
+   * @return the guid generator
+   */
+  protected IGUIDGenerator<String> getGuidGenerator() {
+    return guidGenerator;
+  }
 }

@@ -103,7 +103,7 @@ public class RMobileNavPage extends RMobilePage {
    *
    * @param headerSections the header sections
    */
-  public void setHeaderSections(RComponent[] headerSections) {
+  public void setHeaderSections(RComponent... headerSections) {
     this.headerSections = headerSections;
   }
 }

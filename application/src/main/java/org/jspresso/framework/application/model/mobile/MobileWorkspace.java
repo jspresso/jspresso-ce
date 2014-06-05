@@ -18,28 +18,8 @@
  */
 package org.jspresso.framework.application.model.mobile;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
-import org.jspresso.framework.action.IAction;
-import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
-import org.jspresso.framework.application.model.WorkspaceIconProvider;
-import org.jspresso.framework.application.view.descriptor.basic.BasicWorkspaceViewDescriptor;
 import org.jspresso.framework.application.view.descriptor.mobile.MobileWorkspaceViewDescriptor;
-import org.jspresso.framework.security.ISecurable;
-import org.jspresso.framework.security.ISecurityHandler;
-import org.jspresso.framework.util.automation.IPermIdSource;
-import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
-import org.jspresso.framework.util.gui.Icon;
-import org.jspresso.framework.util.gui.IconProvider;
-import org.jspresso.framework.util.lang.StringUtils;
-import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.AbstractTreeViewDescriptor;
 
 /**
@@ -68,6 +48,7 @@ public class MobileWorkspace extends Workspace {
    *
    * @return the workspace view descriptor
    */
+  @Override
   protected AbstractTreeViewDescriptor createWorkspaceViewDescriptor() {
     return new MobileWorkspaceViewDescriptor();
   }

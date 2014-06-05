@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.view.descriptor.basic.BasicWorkspaceViewDescriptor;
 import org.jspresso.framework.security.ISecurable;
@@ -36,7 +37,6 @@ import org.jspresso.framework.util.gui.IconProvider;
 import org.jspresso.framework.util.lang.StringUtils;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.AbstractTreeViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
  * A workspace is an group of functional application modules. You may decide
@@ -45,7 +45,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
  * helps to clearly separates tasks-unrelated modules and eases authorization
  * management since a workspace can be granted or forbidden as a whole by
  * Jspresso security.
- * <p>
+ * <p/>
  * Workspaces might be graphically represented differently depending on the UI
  * technology used. For instance, the Swing and ULC channels use a MDI UI in
  * which each workspace is represented as an internal frame (document). On the
@@ -53,16 +53,16 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
  * accordion. Whatever the graphical representation is, there is at most one
  * workspace active at a time for a user session - either the active (focused)
  * internal frame or the expanded accordion section.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
 public class Workspace extends AbstractPropertyChangeCapable implements ISecurable, IPermIdSource {
 
   /**
    * {@code DESCRIPTION} is "description".
    */
-  public static final String DESCRIPTION      = "description";
+  public static final String DESCRIPTION = "description";
 
   /**
    * {@code I18N_DESCRIPTION} is "i18nDescription".
@@ -72,37 +72,49 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
   /**
    * {@code I18N_NAME} is "i18nName".
    */
-  public static final String I18N_NAME        = "i18nName";
+  public static final String I18N_NAME = "i18nName";
 
   /**
    * {@code MODULES} is "modules".
    */
-  public static final String MODULES          = "modules";
+  public static final String MODULES = "modules";
 
   /**
    * {@code NAME} is "name".
    */
-  public static final String NAME             = "name";
+  public static final String NAME = "name";
+
+  /**
+   * {@code HEADER_DESCRIPTION} is "HeaderDescription".
+   */
+  public static final String HEADER_DESCRIPTION = "HeaderDescription";
+
+  /**
+   * {@code I18N_HEADER_DESCRIPTION} is "i18nHeaderDescription".
+   */
+  public static final String I18N_HEADER_DESCRIPTION = "i18nHeaderDescription";
 
   private String             description;
   private Collection<String> grantedRoles;
+  private String             headerDescription;
   private String             i18nDescription;
+  private String             i18nHeaderDescription;
   private String             i18nName;
   private Icon               icon;
   private IconProvider       iconProvider;
   private IAction            itemSelectionAction;
 
-  private List<Module>       modules;
-  private String             name;
+  private List<Module> modules;
+  private String       name;
 
-  private boolean            started;
+  private boolean started;
 
-  private IAction            startupAction;
-  private ISecurityHandler   securityHandler;
+  private IAction          startupAction;
+  private ISecurityHandler securityHandler;
 
-  private IViewDescriptor    viewDescriptor;
+  private IViewDescriptor viewDescriptor;
 
-  private String             permId;
+  private String permId;
 
   /**
    * Constructs a new {@code Workspace} instance.
@@ -113,7 +125,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
 
   /**
    * Equality based on name.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -130,7 +142,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
 
   /**
    * Gets the workspace description. It may serve for the workspace view.
-   * 
+   *
    * @return the workspace description.
    */
   public String getDescription() {
@@ -139,7 +151,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
 
   /**
    * Gets the grantedRoles.
-   * 
+   *
    * @return the grantedRoles.
    */
   @Override
@@ -149,7 +161,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
 
   /**
    * Gets the i18nDescription.
-   * 
+   *
    * @return the i18nDescription.
    */
   public String getI18nDescription() {
@@ -161,7 +173,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
 
   /**
    * Gets the i18nName.
-   * 
+   *
    * @return the i18nName.
    */
   public String getI18nName() {
@@ -173,7 +185,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
 
   /**
    * Gets the icon.
-   * 
+   *
    * @return the icon.
    */
   public Icon getIcon() {
@@ -183,9 +195,9 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
   /**
    * Gets the item selection action that will be attached to the created view
    * that displays the workspace.
-   * 
+   *
    * @return the item selection action that will be attached to the created view
-   *         that displays the workspace
+   * that displays the workspace
    */
   public IAction getItemSelectionAction() {
     return itemSelectionAction;
@@ -193,7 +205,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
 
   /**
    * Gets the modules modules.
-   * 
+   *
    * @return the list of modules belonging to this workspace.
    */
   public List<Module> getModules() {
@@ -202,9 +214,9 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
 
   /**
    * Gets the modules modules.
-   * 
+   *
    * @param bypassSecurity
-   *          bypasses security restrictions imposed to the user.
+   *     bypasses security restrictions imposed to the user.
    * @return the list of modules belonging to this workspace.
    */
   public List<Module> getModules(boolean bypassSecurity) {
@@ -213,7 +225,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
     }
     ISecurityHandler sh = getSecurityHandler();
     if (sh != null) {
-      for (Iterator<Module> ite = modules.iterator(); ite.hasNext();) {
+      for (Iterator<Module> ite = modules.iterator(); ite.hasNext(); ) {
         Module nextModule = ite.next();
         if (!bypassSecurity && !sh.isAccessGranted(nextModule)) {
           try {
@@ -230,7 +242,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
 
   /**
    * Gets the workspace name. It may serve for the workspace view.
-   * 
+   *
    * @return the workspace name.
    */
   public String getName() {
@@ -239,7 +251,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
 
   /**
    * Gets the startupAction.
-   * 
+   *
    * @return the startupAction.
    */
   public IAction getStartupAction() {
@@ -249,20 +261,17 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
   /**
    * Gets the workspace view descriptor. Whenever the view descriptor has not
    * been set, a default one is generated.
-   * 
+   *
    * @return the viewDescriptor.
    */
   public IViewDescriptor getViewDescriptor() {
     if (viewDescriptor == null) {
       viewDescriptor = createWorkspaceViewDescriptor();
       ((AbstractTreeViewDescriptor) viewDescriptor).setName(getName());
-      ((AbstractTreeViewDescriptor) viewDescriptor)
-          .setDescription(getDescription());
+      ((AbstractTreeViewDescriptor) viewDescriptor).setDescription(getDescription());
       ((AbstractTreeViewDescriptor) viewDescriptor).setIcon(getIcon());
-      ((AbstractTreeViewDescriptor) viewDescriptor)
-          .setIconImageURLProvider(getIconProvider());
-      ((AbstractTreeViewDescriptor) viewDescriptor)
-          .setItemSelectionAction(getItemSelectionAction());
+      ((AbstractTreeViewDescriptor) viewDescriptor).setIconImageURLProvider(getIconProvider());
+      ((AbstractTreeViewDescriptor) viewDescriptor).setItemSelectionAction(getItemSelectionAction());
     }
     return viewDescriptor;
   }
@@ -278,7 +287,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
 
   /**
    * Hash code based on name.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -301,7 +310,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    * toolTip on the UI side but its use may be extended for online help.
    *
    * @param description
-   *          the workspace description.
+   *     the workspace description.
    */
   public void setDescription(String description) {
     this.description = description;
@@ -316,7 +325,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    * workspace.
    *
    * @param grantedRoles
-   *          the grantedRoles to set.
+   *     the grantedRoles to set.
    */
   public void setGrantedRoles(Collection<String> grantedRoles) {
     this.grantedRoles = StringUtils.ensureSpaceFree(grantedRoles);
@@ -327,7 +336,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    * toolTip for instance.
    *
    * @param i18nDescription
-   *          the i18nDescription to set.
+   *     the i18nDescription to set.
    * @internal
    */
   public void setI18nDescription(String i18nDescription) {
@@ -339,7 +348,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    * label.
    *
    * @param i18nName
-   *          the i18nName to set.
+   *     the i18nName to set.
    * @internal
    */
   public void setI18nName(String i18nName) {
@@ -356,7 +365,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    * </ul>
    *
    * @param iconImageURL
-   *          the iconImageURL to set.
+   *     the iconImageURL to set.
    */
   public void setIconImageURL(String iconImageURL) {
     if (icon == null) {
@@ -369,7 +378,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    * Sets the icon preferred width.
    *
    * @param iconPreferredWidth
-   *          the iconPreferredWidth to set.
+   *     the iconPreferredWidth to set.
    */
   public void setIconPreferredWidth(int iconPreferredWidth) {
     if (icon == null) {
@@ -382,7 +391,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    * Sets the icon preferred width.
    *
    * @param iconPreferredHeight
-   *          the iconPreferredHeight to set.
+   *     the iconPreferredHeight to set.
    */
   public void setIconPreferredHeight(int iconPreferredHeight) {
     if (icon == null) {
@@ -400,7 +409,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    * that it unlikely has to be changed.
    *
    * @param iconImageURLProvider
-   *          the iconImageURLProvider to set.
+   *     the iconImageURLProvider to set.
    */
   public void setIconProvider(IconProvider iconImageURLProvider) {
     this.iconProvider = iconImageURLProvider;
@@ -426,7 +435,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    * workspace.
    *
    * @param itemSelectionAction
-   *          the itemSelectionAction to set.
+   *     the itemSelectionAction to set.
    */
   public void setItemSelectionAction(IAction itemSelectionAction) {
     this.itemSelectionAction = itemSelectionAction;
@@ -438,7 +447,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    * is visually rendered as a tree view.
    *
    * @param modules
-   *          the modules modules to set.
+   *     the modules modules to set.
    */
   public void setModules(List<Module> modules) {
     List<Module> oldValue = null;
@@ -460,7 +469,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    * the UI side.
    *
    * @param name
-   *          the module's name.
+   *     the module's name.
    */
   public void setName(String name) {
     this.name = name;
@@ -470,7 +479,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    * Sets the started.
    *
    * @param started
-   *          the started to set.
+   *     the started to set.
    * @internal
    */
   public void setStarted(boolean started) {
@@ -484,7 +493,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    * initializing workspace values, notify user, ...
    *
    * @param startupAction
-   *          the startupAction to set.
+   *     the startupAction to set.
    */
   public void setStartupAction(IAction startupAction) {
     this.startupAction = startupAction;
@@ -494,7 +503,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    * Configures the security handler used to secure this module.
    *
    * @param securityHandler
-   *          the security handler.
+   *     the security handler.
    * @internal
    */
   public void setSecurityHandler(ISecurityHandler securityHandler) {
@@ -508,7 +517,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
 
   /**
    * based on i18n name.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -549,10 +558,50 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    * id but must be explicitly set if Spring XML is used.
    *
    * @param permId
-   *          the permId to set.
+   *     the permId to set.
    */
   @Override
   public void setPermId(String permId) {
     this.permId = permId;
+  }
+
+  /**
+   * Gets header description.
+   *
+   * @return the header description
+   */
+  public String getHeaderDescription() {
+    return headerDescription;
+  }
+
+  /**
+   * Configures the key used to translate actual internationalized workspace
+   * header description. The resulting translation will generally be leveraged as a
+   * text header on the UI side.
+   *
+   * @param headerDescription
+   *     the header description
+   */
+  public void setHeaderDescription(String headerDescription) {
+    this.headerDescription = headerDescription;
+  }
+
+  /**
+   * Gets i 18 n header description.
+   *
+   * @return the i 18 n header description
+   */
+  public String getI18nHeaderDescription() {
+    return i18nHeaderDescription;
+  }
+
+  /**
+   * Sets i 18 n header description.
+   *
+   * @param i18nHeaderDescription
+   *     the i 18 n header description
+   */
+  public void setI18nHeaderDescription(String i18nHeaderDescription) {
+    this.i18nHeaderDescription = i18nHeaderDescription;
   }
 }
