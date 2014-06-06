@@ -476,6 +476,16 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       if (rHeaderSections && rHeaderSections.length > 0 && this._getActionHandler().isTablet()) {
         needsSplittedContent = true;
       }
+      if (needsSplittedContent) {
+        var center = false;
+        for (var i = 0; (i < rHeaderSections.length) && !center; i++) {
+          var rHeaderSection = rHeaderSections[i];
+          if (rHeaderSection.getPosition() == "LEFT" || rHeaderSection.getPosition() == "RIGHT") {
+            center = true;
+          }
+        }
+        needsSplittedContent = center;
+      }
       var navPage;
       if (needsSplittedContent) {
         navPage = new org.jspresso.framework.view.qx.mobile.NoScrollNavigationPage();
@@ -730,9 +740,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         var contentLeft = contentCenter;
         var contentRight = contentCenter;
         var needsSplittedContent = pageSections && pageSections.length > 1 && this._getActionHandler().isTablet();
-        var left = false;
-        var right = false;
         if (needsSplittedContent) {
+          var left = false;
+          var right = false;
           for (var i = 0; (i < sections.length) && !(left && right); i++) {
             var section = sections[i];
             if (section.getUserData("position") == "LEFT") {
