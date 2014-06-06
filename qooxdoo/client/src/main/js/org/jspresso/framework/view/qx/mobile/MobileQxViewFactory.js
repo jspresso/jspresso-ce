@@ -472,17 +472,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       /** @type {qx.ui.mobile.list.List} */
       var selectionComponent = this.createComponent(remoteSelectionComponent);
       var rHeaderSections = remoteNavPage.getHeaderSections();
-      var needsSplittedContent = rHeaderSections && this._getActionHandler().isTablet();
-      var left = false;
-      var right = true; // The selection component is always there
-      if (needsSplittedContent) {
-        for (var i = 0; (i < rHeaderSections.length) && !(left && right); i++) {
-          var rSection = rHeaderSections[i];
-          if (rSection.getPosition() == "LEFT") {
-            left = true;
-          }
-        }
-        needsSplittedContent = (left && right);
+      var needsSplittedContent = false;
+      if (rHeaderSections && rHeaderSections.length > 0 && this._getActionHandler().isTablet()) {
+        needsSplittedContent = true;
       }
       var navPage;
       if (needsSplittedContent) {
@@ -495,47 +487,41 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       navPage.addListener("initialize", function (e) {
         var scroll;
         var content = navPage.getContent();
-        var contentTop = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
-        var contentCenter = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
-        var contentBottom = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
-
-        contentTop.addCssClasses(["jspresso-tablet-content-top", "group"]);
-        contentCenter.addCssClasses(["jspresso-tablet-content-center", "group"]);
-        contentBottom.addCssClasses(["jspresso-tablet-content-bottom", "group"]);
-
-        var contentLeft = contentCenter;
-        var contentRight = contentCenter;
-
+        var contentLeft = content;
+        var contentRight = content;
+        var splittedContent;
         if (needsSplittedContent) {
-          var splittedContent = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox());
+          content.setLayout(new qx.ui.mobile.layout.VBox());
+          splittedContent = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox());
           contentLeft = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
           contentRight = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
           contentLeft.addCssClasses(["jspresso-tablet-content-left", "group"]);
           contentRight.addCssClasses(["jspresso-tablet-content-right", "group"]);
-          splittedContent.add(contentLeft, {flex: 1});
+          splittedContent.add(this._decorateWithScrollContainer(contentLeft), {flex: 1});
           splittedContent.add(contentRight, {flex: 1});
-          contentCenter.add(splittedContent);
         }
         if (headerSections) {
-          var contentToAdd = contentTop;
           for (var i = 0; i < headerSections.length; i++) {
-            var section = headerSections[i];
-            if (section.getUserData("position") == "TOP") {
-              contentToAdd = contentTop;
-            } else if (section.getUserData("position") == "LEFT") {
+            var contentToAdd;
+            var headerSection = headerSections[i];
+            if (headerSection.getUserData("position") == "TOP" || headerSection.getUserData("position") == "BOTTOM") {
+              contentToAdd = content;
+            } else if (headerSection.getUserData("position") == "LEFT" || headerSection.getUserData("position")
+                == "RIGHT") {
               contentToAdd = contentLeft;
-            } else if (section.getUserData("position") == "RIGHT") {
-              contentToAdd = contentRight;
-            } else if (section.getUserData("position") == "BOTTOM") {
-              contentToAdd = contentBottom;
             }
-            if (section instanceof org.jspresso.framework.gui.remote.RComponent) {
-              this._addSectionHeader(contentToAdd, section);
+            if (headerSection instanceof org.jspresso.framework.gui.remote.RComponent) {
+              this._addSectionHeader(contentToAdd, headerSection);
             } else {
-              contentToAdd.add(section);
+              contentToAdd.add(headerSection);
             }
           }
         }
+
+        if (needsSplittedContent) {
+          content.add(splittedContent, {flex: 1});
+        }
+
         this._addSectionHeader(contentRight, remoteNavPage.getSelectionView());
         if (needsSplittedContent) {
           var selectionScroll = new qx.ui.mobile.container.Scroll();
@@ -546,15 +532,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         } else {
           contentRight.add(selectionComponent);
           scroll = navPage._getScrollContainer();
-        }
-        if (contentTop.getChildren().length > 0) {
-          content.add(contentTop, {flex: 1});
-        }
-        if (contentCenter.getChildren().length > 0) {
-          content.add(contentCenter, {flex: 1});
-        }
-        if (contentBottom.getChildren().length > 0) {
-          content.add(contentBottom, {flex: 1});
         }
         navPage.setUserData("pageEndScroll", scroll);
         if (!needsSplittedContent) {
