@@ -20,7 +20,8 @@ qx.Mixin.define("org.jspresso.framework.patch.MScroll", {
 
   members: {
     /**
-     * Do not prevent default on events since it blocks hyperlinks. Waiting for a Qooxdoo fix.
+     * Returns a map with default iScroll properties for the iScroll instance.
+     * @return {Object} Map with default iScroll properties
      */
     _getDefaultScrollProperties: function () {
       var container = this;
@@ -60,7 +61,9 @@ qx.Mixin.define("org.jspresso.framework.patch.MScroll", {
           }
 
           if (target.tagName != 'SELECT' && target.tagName != 'INPUT' && target.tagName != 'TEXTAREA' && target.tagName
-              != 'LABEL') {
+              != 'LABEL'
+            //Patch to allow hyperlinks to react on iOS
+              && target.tagName != 'A') {
             // Remove focus from input elements, so that the keyboard and the mouse cursor is hidden
             var elements = [];
             var inputElements = qx.lang.Array.cast(document.getElementsByTagName("input"), Array);
@@ -72,8 +75,7 @@ qx.Mixin.define("org.jspresso.framework.patch.MScroll", {
               elements[i].blur();
             }
 
-            // Patch to allow hyperlinks to react in emulated scrolls
-            //e.preventDefault();
+            e.preventDefault();
           }
 
           // we also want to alert interested parties that we are starting scrolling
