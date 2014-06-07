@@ -42,7 +42,11 @@ qx.Mixin.define("org.jspresso.framework.patch.MScroll", {
             }
           }
         },
-        onScrollMove: function () {
+        onScrollMove: function (e) {
+          //Patch to allow jqPlot to react on iOS
+          if (e.target.className == 'jqplot-event-canvas') {
+            e.preventDefault()
+          }
           // Alert interested parties that we scrolled to end of page.
           if (qx.core.Environment.get("qx.mobile.nativescroll") == false) {
             if (this.y == this.maxScrollY) {
@@ -63,7 +67,9 @@ qx.Mixin.define("org.jspresso.framework.patch.MScroll", {
           if (target.tagName != 'SELECT' && target.tagName != 'INPUT' && target.tagName != 'TEXTAREA' && target.tagName
               != 'LABEL'
             //Patch to allow hyperlinks to react on iOS
-              && target.tagName != 'A') {
+              && target.tagName != 'A'
+            //Patch to allow jqPlot to react on iOS
+              && target.className != 'jqplot-event-canvas') {
             // Remove focus from input elements, so that the keyboard and the mouse cursor is hidden
             var elements = [];
             var inputElements = qx.lang.Array.cast(document.getElementsByTagName("input"), Array);
