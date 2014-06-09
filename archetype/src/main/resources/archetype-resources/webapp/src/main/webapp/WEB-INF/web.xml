@@ -147,7 +147,7 @@
   </filter-mapping>
   <filter-mapping>
     <filter-name>RequestParamsHttpFilter</filter-name>
-    <url-pattern>/qooxdoo/*</url-pattern>
+    <url-pattern>/html5/*</url-pattern>
   </filter-mapping>
   <!-- End request params filter section -->
 
