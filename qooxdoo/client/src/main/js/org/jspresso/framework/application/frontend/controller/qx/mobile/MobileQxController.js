@@ -47,16 +47,20 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         this.__isTablet = true;
       }
     }
-    var busyIndicator = new qx.ui.mobile.dialog.BusyIndicator(this.translate("Wait") + "...");
-    this.__busyPopup = new qx.ui.mobile.dialog.Popup(busyIndicator);
+    this.__busyIndicator = new qx.ui.mobile.dialog.BusyIndicator(this.translate("Wait") + "...");
+    this.__busyPopup = new qx.ui.mobile.dialog.Popup(this.__busyIndicator);
     this.__busyPopup.setTitle(this.translate("Loading") + "...");
     this.__manager = this.__createManager();
     this.__routing = this.__createRouting();
   },
 
   members: {
+    /** @type {qx.ui.mobile.dialog.BusyIndicator} */
+    __busyIndicator: null,
     /** @type {qx.ui.mobile.dialog.Popup} */
     __busyPopup: null,
+    /** @type {qx.ui.mobile.page.NavigationPage} */
+    __blankPage: null,
     /** @type {org.jspresso.framework.application.frontend.controller.qx.mobile.EnhancedManager} */
     __manager: null,
     /** @type {qx.ui.mobile.page.NavigationPage} */
@@ -80,7 +84,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
 
 
     showPage: function (page, animation, back) {
+      var currentPage = this.getCurrentPage();
       page.show({animation: animation, reverse: back});
+      if (page != currentPage && (currentPage != this.__workspacesMasterPage || !this.isTablet())) {
+        qx.event.Timer.once(function () {
+          currentPage.setVisibility("excluded");
+        }, this, 600);
+      }
     },
 
     /**
@@ -164,9 +174,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         manager.setHideMasterButtonCaption(this.translate("Hide"));
       }
       manager.getDetailNavigation().getLayout().setShowAnimation(true);
-      var blankPage = new qx.ui.mobile.page.NavigationPage();
-      manager.addDetail(blankPage);
-      blankPage.show();
+      this.__blankPage = new qx.ui.mobile.page.NavigationPage();
+      manager.addDetail(this.__blankPage);
+      this.__blankPage.show();
       return manager;
     },
 
@@ -385,7 +395,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         this._getViewFactory().installPageMainAction(this.__workspacesMasterPage, exitAction);
       }
       this.__routing.executeGet("/workspaces", {animation: "cube", reverse: false});
-      if (this.isTablet()) {
+      if (this.isTablet() && (this.getCurrentPage() == null || this.getCurrentPage() == this.__blankPage)) {
         this._getManager().getMasterContainer().show();
       }
     },
@@ -625,6 +635,19 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       }, this);
       popup.add(downloadButton);
       popup.show();
+    },
+
+    /**
+     * @param localeCommand {org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand}
+     * @return {undefined}
+     */
+    _handleRemoteLocaleCommand: function (localeCommand) {
+      this.base(arguments, localeCommand);
+      if (this._getManager().getMasterButton()) {
+        this._getManager().setHideMasterButtonCaption(this.translate("Hide"));
+      }
+      this.__busyIndicator.setLabel(this.translate("Wait") + "...");
+      this.__busyPopup.setTitle(this.translate("Loading") + "...");
     },
 
     /**

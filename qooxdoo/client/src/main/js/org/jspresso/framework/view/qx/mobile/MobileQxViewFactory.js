@@ -1335,6 +1335,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           existingCards.push(cardComponent);
           this.linkNextPageBackButton(cardComponent, cardContainer.getUserData("previousPage"), null, null);
           this._selectCard(cardContainer, cardComponent);
+        } else {
+          this._selectCard(cardContainer, existingCards[existingCardNames.indexOf(cardName)]);
         }
       } else if (rCardComponent instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAwareContainer) {
         this.addCard(cardContainer, rCardComponent.getContent(), cardName);
