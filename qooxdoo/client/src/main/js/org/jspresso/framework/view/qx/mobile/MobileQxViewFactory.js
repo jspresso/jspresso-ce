@@ -348,9 +348,18 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           if (!pageEndScroll) {
             pageEndScroll = page._getScrollContainer();
           }
-          pageEndScroll.addListener("pageEnd", function (e) {
-            this._getActionHandler().execute(pageEndAction);
-          }, this);
+          if (qx.core.Environment.get("qx.mobile.nativescroll") == false) {
+            pageEndScroll.addListener("pageEnd", function (e) {
+              this._getActionHandler().execute(pageEndAction);
+            }, this);
+          } else {
+            qx.bom.Event.addNativeListener(pageEndScroll._getContentElement(), "scroll",
+                qx.lang.Function.bind(function (e) {
+                  if ((e.currentTarget.scrollTop + e.currentTarget.clientHeight) > e.currentTarget.scrollHeight - 200) {
+                    this._getActionHandler().execute(pageEndAction);
+                  }
+                }, this));
+          }
         }, this);
       }
     },
@@ -535,7 +544,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         this._addSectionHeader(contentRight, remoteNavPage.getSelectionView());
         if (needsSplittedContent) {
           var selectionScroll = new qx.ui.mobile.container.Scroll();
-          selectionScroll.removeCssClasses(["iscroll", "scroll"]);
+          //selectionScroll.removeCssClasses(["iscroll", "scroll"]);
           selectionScroll.add(selectionComponent, {flex: 1});
           contentRight.add(selectionScroll, {flex: 1});
           scroll = selectionScroll;
