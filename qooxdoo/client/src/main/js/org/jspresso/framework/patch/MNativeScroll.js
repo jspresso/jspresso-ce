@@ -26,10 +26,10 @@ qx.Mixin.define("org.jspresso.framework.patch.MNativeScroll", {
      */
     _onTouchMove: function (evt) {
       // If scroll container is scrollable
-      if (this._isScrollableY()) {
+      if (this._isScrollableY() || this._isScrollableX()) {
         evt.stopPropagation();
       } else {
-//        evt.preventDefault();
+        evt.preventDefault();
       }
     }
 

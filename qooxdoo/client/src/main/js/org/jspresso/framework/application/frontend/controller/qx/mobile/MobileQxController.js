@@ -88,7 +88,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       page.show({animation: animation, reverse: back});
       if (page != currentPage && (currentPage != this.__workspacesMasterPage || !this.isTablet())) {
         qx.event.Timer.once(function () {
-          if (currentPage != this.getCurrentPage()) {
+          if (currentPage != this.getCurrentPage() && currentPage.getVisibility() != "excluded") {
             currentPage.exclude();
           }
         }, this, 1000);
