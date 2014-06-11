@@ -109,8 +109,8 @@
       },
       "environment" :
       {
-        "qx.mobile.emulatetouch" : true,
-        "qx.mobile.nativescroll" : false,
+        "qx.mobile.emulatetouch" : false,
+        "qx.mobile.nativescroll" : true,
         "qx.theme"               : "${symbol_dollar}{MOBILE_THEME}"
       }
     },
