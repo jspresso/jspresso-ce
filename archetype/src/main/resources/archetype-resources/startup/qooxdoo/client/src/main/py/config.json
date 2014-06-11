@@ -86,7 +86,7 @@
     {
       "copy-files" :
       {
-        "files" : ["*.html"],
+        "files" : ["*.html","*.png"],
         "source" : "${symbol_dollar}{ROOT}/html"
       }
     },
