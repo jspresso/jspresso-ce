@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-qx.Mixin.define("org.jspresso.framework.patch.MScroll", {
+qx.Mixin.define("org.jspresso.framework.patch.MIScroll", {
 
   members: {
     /**

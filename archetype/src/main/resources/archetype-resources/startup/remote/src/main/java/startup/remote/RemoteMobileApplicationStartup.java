@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.hrsample.startup.remote;
+package ${package}.startup.remote;
 
 import org.jspresso.framework.application.startup.remote.RemoteStartup;
 

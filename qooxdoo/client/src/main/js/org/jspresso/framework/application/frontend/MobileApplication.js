@@ -110,7 +110,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.MobileApplication",
       qx.Class.patch(qx.ui.mobile.form.Input, org.jspresso.framework.patch.MInput);
       qx.Class.patch(qx.data.Array, org.jspresso.framework.patch.MArray);
       if (qx.core.Environment.get("qx.mobile.nativescroll") == false) {
-        qx.Class.patch(qx.ui.mobile.container.Scroll, org.jspresso.framework.patch.MScroll);
+        qx.Class.patch(qx.ui.mobile.container.Scroll, org.jspresso.framework.patch.MIScroll);
+      } else {
+        qx.Class.patch(qx.ui.mobile.container.Scroll, org.jspresso.framework.patch.MNativeScroll);
       }
 
       // Enable logging in debug variant
