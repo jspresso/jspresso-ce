@@ -201,7 +201,8 @@
         "command" :
             [
               "${symbol_dollar}{MKDIRCMD} ${symbol_dollar}{BUILD_PATH}/resource/${symbol_dollar}{MOBILE_CSS_DIR}",
-              "${symbol_dollar}{CATCMD} ${symbol_dollar}{BUILD_PATH_CSS}/${symbol_dollar}{MOBILE_CSS_PATH} ${symbol_dollar}{RESOURCES}/${symbol_dollar}{APPLICATION_CSS} | ${symbol_dollar}{CSSMIN_CMD} > ${symbol_dollar}{BUILD_PATH}/resource/${symbol_dollar}{APPLICATION_CSS}"
+              "${symbol_dollar}{CATCMD} ${symbol_dollar}{BUILD_PATH_CSS}/${symbol_dollar}{MOBILE_CSS_PATH} ${symbol_dollar}{RESOURCES}/${symbol_dollar}{APPLICATION_CSS} > ${symbol_dollar}{TARGET}/cache-sass/tmp.css",
+              "${symbol_dollar}{CSSMIN_CMD} < ${symbol_dollar}{TARGET}/cache-sass/tmp.css > ${symbol_dollar}{BUILD_PATH}/resource/${symbol_dollar}{APPLICATION_CSS}"
             ]
       }
     },
