@@ -251,6 +251,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      * @return {undefined}
      */
     _restart: function () {
+      if (this._getManager().getMasterContainer()) {
+        this._getManager().getMasterContainer().hide();
+      }
       // cleanup
       this.__workspacePages = {};
       this.__displayedWorkspaceName = null;
@@ -409,10 +412,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         this._getViewFactory().installPageMainAction(this.__workspacesMasterPage, exitAction);
       }
       this.__routing.executeGet("/workspaces", {animation: "cube", reverse: false});
-      if (this.isTablet() && (this.getCurrentPage() == null || this.getCurrentPage() == this.__workspacesMasterPage
-          || this.getCurrentPage() == this.__blankPage)) {
-        this._getManager().getMasterContainer().show();
-      }
+
+      qx.event.Timer.once(function () {
+        if (this.isTablet() && (this.getCurrentPage() == null || this.getCurrentPage() == this.__workspacesMasterPage
+            || this.getCurrentPage() == this.__blankPage)) {
+          this._getManager().getMasterContainer().show();
+        }
+      }, this, 2000);
     },
 
     /**
