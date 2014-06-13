@@ -43,6 +43,9 @@ qx.Mixin.define("org.jspresso.framework.patch.MCard", {
     __patchReverse: null,
     __patchCardAnimation: null,
 
+    __lastAnimatedTo: null,
+    __toExcludeManually: null,
+
 
     // overridden
     _getCssClasses: function () {
@@ -125,6 +128,9 @@ qx.Mixin.define("org.jspresso.framework.patch.MCard", {
       }
       this.__patchCurrentWidget = this.__patchNextWidget;
       this.__patchCurrentWidget.addCssClass("active");
+
+      this.__lastAnimatedTo = null;
+      this.__toExcludeManually = null;
     },
 
 
@@ -171,6 +177,12 @@ qx.Mixin.define("org.jspresso.framework.patch.MCard", {
       if (widget.isDisposed()) {
         return;
       }
+      if (this.__toExcludeManually) {
+        this.__toExcludeManually.exclude();
+      }
+      this.__toExcludeManually = this.__lastAnimatedTo;
+      this.__lastAnimatedTo = widget;
+
       // Fix size of current and next widget, then start animation.
       this.__patchInAnimation = true;
 
