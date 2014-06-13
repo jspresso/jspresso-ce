@@ -84,7 +84,27 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
 
 
     showPage: function (page, animation, back) {
+      this._getViewFactory().loseFocus();
       page.show({animation: animation, reverse: back});
+    },
+
+    /**
+     * @param action {org.jspresso.framework.gui.remote.RAction}
+     * @param actionEvent {org.jspresso.framework.gui.remote.RActionEvent}
+     * @param actionCallback {function}
+     * @return {undefined}
+     */
+    execute: function (action, actionEvent, actionCallback) {
+      this._getViewFactory().loseFocus();
+      this.base(arguments, action, actionEvent, actionCallback);
+    },
+
+    /**
+     * @return {undefined}
+     */
+    _performLogin: function () {
+      this._getViewFactory().loseFocus();
+      this.base(arguments);
     },
 
     /**

@@ -287,7 +287,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       }
     },
 
-    _loseFocus: function () {
+    loseFocus: function () {
       if (this.__textFieldToBlur) {
         this.__textFieldToBlur.blur();
       }
@@ -305,7 +305,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           page.setButtonIcon(pageAction.getIcon().getImageUrlSpec());
         }
         page.addListener("action", function (event) {
-          this._loseFocus();
           this._getActionHandler().execute(pageAction);
         }, this);
         page.setShowButton(pageAction.getEnabled());
@@ -640,13 +639,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
         if (backAction) {
           nextPage.addListener("back", function () {
-            this._loseFocus();
             this._getActionHandler().execute(backAction);
           }, this);
         }
         if (previousPage) {
           nextPage.addListener("back", function () {
-            this._loseFocus();
             this._getActionHandler().showDetailPage(this._getActualPageToShow(previousPage), animation, true);
           }, this);
         }

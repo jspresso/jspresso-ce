@@ -117,11 +117,11 @@ qx.Mixin.define("org.jspresso.framework.patch.MCard", {
      */
     _swapWidget: function () {
       if (this.__patchCurrentWidget) {
-        this.__patchCurrentWidget.removeCssClass("active");
         var pageToExclude = this.__patchCurrentWidget;
+        pageToExclude.removeCssClass("active");
         qx.event.Timer.once(function () {
           pageToExclude.exclude();
-        }, this, 100);
+        }, this, 0);
       }
       this.__patchCurrentWidget = this.__patchNextWidget;
       this.__patchCurrentWidget.addCssClass("active");
