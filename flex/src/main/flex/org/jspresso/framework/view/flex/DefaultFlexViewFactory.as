@@ -499,6 +499,7 @@ public class DefaultFlexViewFactory {
                 var character:String = String.fromCharCode(keyEvent.charCode);
                 if (splittedAccelerator.indexOf(character.toLowerCase()) >= 0) {
                   keyEvent.stopPropagation();
+                  component.setFocus();
                   getActionHandler().execute(action);
                 }
               }
