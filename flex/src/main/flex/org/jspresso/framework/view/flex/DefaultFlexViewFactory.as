@@ -459,6 +459,7 @@ public class DefaultFlexViewFactory {
                 var character:String = String.fromCharCode(keyEvent.charCode);
                 if (splittedAccelerator.indexOf(character.toLowerCase()) >= 0) {
                   keyEvent.stopPropagation();
+                  component.setFocus();
                   getActionHandler().execute(action);
                 }
               }
@@ -1041,8 +1042,9 @@ public class DefaultFlexViewFactory {
         }
       };
       textInput.addEventListener(FlexEvent.ENTER, triggerAction);
-      textInput.addEventListener(FocusEvent.KEY_FOCUS_CHANGE, triggerAction);
       textInput.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE, triggerAction);
+      textInput.addEventListener(FocusEvent.KEY_FOCUS_CHANGE, triggerAction);
+      textInput.addEventListener(FocusEvent.FOCUS_OUT, triggerAction);
     }
   }
 
@@ -2018,6 +2020,7 @@ public class DefaultFlexViewFactory {
     };
     dateField.addEventListener(FlexEvent.ENTER, updateModel);
     dateField.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE, updateModel);
+    dateField.addEventListener(FocusEvent.FOCUS_OUT, updateModel);
     dateField.addEventListener(FocusEvent.KEY_FOCUS_CHANGE, updateModel);
   }
 
@@ -2665,6 +2668,7 @@ public class DefaultFlexViewFactory {
       remoteState.value = text;
     };
     textArea.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE, updateModel);
+    textArea.addEventListener(FocusEvent.FOCUS_OUT, updateModel);
     textArea.addEventListener(FocusEvent.KEY_FOCUS_CHANGE, updateModel);
   }
 
@@ -2714,7 +2718,7 @@ public class DefaultFlexViewFactory {
       }
     };
     htmlEditor.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE, updateModel);
-    htmlEditor.addEventListener(FocusEvent.KEY_FOCUS_CHANGE, updateModel);
+    htmlEditor.addEventListener(FocusEvent.FOCUS_OUT, updateModel);
     //htmlEditor.addEventListener(Event.CHANGE,updateModel);
   }
 
@@ -2935,6 +2939,7 @@ public class DefaultFlexViewFactory {
     };
 
     textInput.addEventListener(FlexEvent.ENTER, updateModel);
+    textInput.addEventListener(FocusEvent.FOCUS_OUT, updateModel);
     textInput.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE, updateModel);
     textInput.addEventListener(FocusEvent.KEY_FOCUS_CHANGE, updateModel);
   }
