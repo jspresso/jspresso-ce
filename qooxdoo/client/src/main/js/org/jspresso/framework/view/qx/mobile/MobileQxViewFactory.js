@@ -588,9 +588,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           }
         }, this);
         navPage.addListener("start", function () {
-          var selectionState = remoteSelectionComponent.getState();
-          selectionState.setLeadingIndex(-1);
-          selectionState.setSelectedIndices([]);
+          if (!this._getActionHandler().isAnimating()) {
+            var selectionState = remoteSelectionComponent.getState();
+            selectionState.setLeadingIndex(-1);
+            selectionState.setSelectedIndices([]);
+          }
         }, this);
       }
       this._addDetailPage(navPage);
@@ -1340,7 +1342,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           // cardContainer.add(cardComponent);
           existingCards.push(cardComponent);
           this.linkNextPageBackButton(cardComponent, cardContainer.getUserData("previousPage"), null, null);
-          this._selectCard(cardContainer, cardComponent);
+          //this._selectCard(cardContainer, cardComponent);
         } else {
           this._selectCard(cardContainer, existingCards[existingCardNames.indexOf(cardName)]);
         }

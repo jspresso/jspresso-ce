@@ -81,11 +81,47 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     __applicationContainer: null,
     /** @type {qx.ui.mobile.container.Composite} */
     __managerContainer: null,
+    /** @type {qx.ui.mobile.page.NavigationPage[]} */
+    __animationQueue: null,
 
 
     showPage: function (page, animation, back) {
       this._getViewFactory().loseFocus();
-      page.show({animation: animation, reverse: back});
+      var detailCardLayout = this._getManager().getDetailNavigation().getLayout();
+      if (page.getLayoutParent().getLayoutParent() == this._getManager().getDetailNavigation()
+          && detailCardLayout.getShowAnimation()) {
+        if (this.__animationQueue != null) {
+          this.__animationQueue.push({page: page, animation: animation, back: back});
+        } else {
+          this.__animationQueue = [];
+          page.show({animation: animation, reverse: back});
+          detailCardLayout.addListenerOnce("animationEnd", function (e) {
+            this.__dequeueAnimation();
+          }, this);
+        }
+      } else {
+        page.show({animation: animation, reverse: back});
+      }
+    },
+
+    __dequeueAnimation: function () {
+      if (this.__animationQueue != null) {
+        if (this.__animationQueue.length > 0) {
+          var detailCardLayout = this._getManager().getDetailNavigation().getLayout();
+          detailCardLayout.addListenerOnce("animationEnd", function (e) {
+            this.__dequeueAnimation();
+          }, this);
+          var anim = this.__animationQueue.splice(0, 1)[0];
+          anim.page.show({animation: anim.animation, back: anim.back});
+        }
+        if (this.__animationQueue.length == 0) {
+          this.__animationQueue = null;
+        }
+      }
+    },
+
+    isAnimating: function () {
+      return this.__animationQueue != null && this.__animationQueue.length > 0;
     },
 
     /**
@@ -707,7 +743,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     },
 
     /**
-     * @param animationCommand {org.jspresso.framework.application.frontend.command.remote.mobile.RemoteAnimationCommand}
+     * @param animationCommand {org.jspresso.framework.application.frontend.command.remote.mobile.RemotAnimationCommand}
      * @return {undefined}
      */
     _handleAnimationCommand: function (animationCommand) {
