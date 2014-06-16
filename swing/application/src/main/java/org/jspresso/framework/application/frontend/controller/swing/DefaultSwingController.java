@@ -70,6 +70,7 @@ import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.ControllerException;
+import org.jspresso.framework.security.UsernamePasswordHandler;
 import org.jspresso.framework.util.gui.EClientType;
 import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.IBackendController;
@@ -131,8 +132,7 @@ public class DefaultSwingController extends
     flashPlayer.load(getClass(), UrlHelper.getResourcePathOrUrl(swfUrl, true),
         options);
 
-    displayDialog(flashPlayer, actions, title, sourceComponent, context,
-        dimension, reuseCurrent, false);
+    displayDialog(flashPlayer, actions, title, sourceComponent, context, dimension, reuseCurrent, false);
   }
 
   /**
@@ -518,8 +518,7 @@ public class DefaultSwingController extends
         @Override
         public void run() {
           // To register the backend controller in the event dispatch thread
-          BackendControllerHolder
-              .setSessionBackendController(backendController);
+          BackendControllerHolder.setSessionBackendController(backendController);
           initLoginProcess();
         }
       });
@@ -749,65 +748,57 @@ public class DefaultSwingController extends
 
   private void initLoginProcess() {
     createControllerFrame();
-    String lcName = getLoginContextName();
-    if (lcName == null) {
+    if (isLoginInteractive()) {
+      IView<JComponent> loginView = createLoginView();
+
+      // Login dialog
+      final JDialog dialog = new JDialog(controllerFrame, getLoginViewDescriptor().getI18nName(this, getLocale()), true);
+      dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+
+      JPanel buttonBox = new JPanel();
+      buttonBox.setLayout(new BoxLayout(buttonBox, BoxLayout.X_AXIS));
+      buttonBox.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
+
+      JButton loginButton = new JButton(getTranslation("ok", getLocale()));
+      loginButton.setIcon(getIconFactory().getOkYesIcon(getIconFactory().getSmallIconSize()));
+      loginButton.addActionListener(new ActionListener() {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+          if (performLogin()) {
+            dialog.dispose();
+            updateControllerFrame();
+            execute(getStartupAction(), getStartupActionContext());
+          } else {
+            loginFailed(dialog);
+          }
+        }
+      });
+      buttonBox.add(loginButton);
+      dialog.getRootPane().setDefaultButton(loginButton);
+
+      JButton exitButton = new JButton();
+      exitButton.setAction(getViewFactory().getActionFactory().createAction(getExitAction(), this, null, getLocale()));
+      exitButton.setIcon(getIconFactory().getCancelIcon(getIconFactory().getSmallIconSize()));
+      buttonBox.add(exitButton);
+
+      JPanel actionPanel = new JPanel(new BorderLayout());
+      actionPanel.add(buttonBox, BorderLayout.EAST);
+
+      JPanel mainPanel = new JPanel(new BorderLayout());
+      mainPanel.add(new JLabel(getTranslation(LoginUtils.CRED_MESSAGE, getLocale())), BorderLayout.NORTH);
+      mainPanel.add(loginView.getPeer(), BorderLayout.CENTER);
+      mainPanel.add(actionPanel, BorderLayout.SOUTH);
+      dialog.add(mainPanel);
+
+      dialog.pack();
+      SwingUtil.centerInParent(dialog);
+      dialog.setVisible(true);
+    } else {
       performLogin();
       updateControllerFrame();
       execute(getStartupAction(), getInitialActionContext());
-      return;
     }
-
-    IView<JComponent> loginView = createLoginView();
-
-    // Login dialog
-    final JDialog dialog = new JDialog(controllerFrame,
-        getLoginViewDescriptor().getI18nName(this, getLocale()), true);
-    dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-
-    JPanel buttonBox = new JPanel();
-    buttonBox.setLayout(new BoxLayout(buttonBox, BoxLayout.X_AXIS));
-    buttonBox.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
-
-    JButton loginButton = new JButton(getTranslation("ok", getLocale()));
-    loginButton.setIcon(getIconFactory().getOkYesIcon(
-        getIconFactory().getSmallIconSize()));
-    loginButton.addActionListener(new ActionListener() {
-
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        if (performLogin()) {
-          dialog.dispose();
-          updateControllerFrame();
-          execute(getStartupAction(), getStartupActionContext());
-        } else {
-          loginFailed(dialog);
-        }
-      }
-    });
-    buttonBox.add(loginButton);
-    dialog.getRootPane().setDefaultButton(loginButton);
-
-    JButton exitButton = new JButton();
-    exitButton.setAction(getViewFactory().getActionFactory().createAction(
-        getExitAction(), this, null, getLocale()));
-    exitButton.setIcon(getIconFactory().getCancelIcon(
-        getIconFactory().getSmallIconSize()));
-    buttonBox.add(exitButton);
-
-    JPanel actionPanel = new JPanel(new BorderLayout());
-    actionPanel.add(buttonBox, BorderLayout.EAST);
-
-    JPanel mainPanel = new JPanel(new BorderLayout());
-    mainPanel.add(
-        new JLabel(getTranslation(LoginUtils.CRED_MESSAGE, getLocale())),
-        BorderLayout.NORTH);
-    mainPanel.add(loginView.getPeer(), BorderLayout.CENTER);
-    mainPanel.add(actionPanel, BorderLayout.SOUTH);
-    dialog.add(mainPanel);
-
-    dialog.pack();
-    SwingUtil.centerInParent(dialog);
-    dialog.setVisible(true);
   }
 
   /**

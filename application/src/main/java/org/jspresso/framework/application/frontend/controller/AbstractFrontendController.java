@@ -83,6 +83,7 @@ import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.preferences.IPreferencesStore;
+import org.jspresso.framework.util.uid.RandomGUID;
 import org.jspresso.framework.util.url.UrlHelper;
 import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IMapView;
@@ -123,6 +124,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private static final   Logger LOG               = LoggerFactory.getLogger(AbstractFrontendController.class);
   private static final   String UP_KEY            = "UP_KEY";
   private static final   String UP_SEP            = "!";
+  private static final   String UP_GUID           = "UP_GUID";
   private static final   String LANG_KEY          = "LANG_KEY";
   private static final   String TZ_KEY            = "TZ_KEY";
   private static final   String CURR_DIALOG_VIEW  = "CURR_DIALOG_VIEW";
@@ -1231,6 +1233,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
       LOG.info("User {} logged out for session {}.", getApplicationSession()
           .getUsername(), getApplicationSession().getId());
     }
+    putClientPreference(UP_KEY, encodeUserPass(getApplicationSession().getUsername(), null));
+    removeUserPreference(UP_GUID);
     selectedModules.clear();
     workspaceNavigatorConnectors.clear();
     workspaceViews.clear();
@@ -1574,7 +1578,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * @return true if {@code getLoginContext()} returns null.
    */
   protected boolean isLoginInteractive() {
-    return getLoginContextName() != null;
+    return getLoginContextName() != null && !shouldAutoLogin();
   }
 
   /**
@@ -2031,6 +2035,16 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
+   * Should auto login.
+   *
+   * @return the boolean
+   */
+  protected boolean shouldAutoLogin() {
+    UsernamePasswordHandler uph = getLoginCallbackHandler();
+    return uph.getPassword() != null && uph.getPassword().length() == 0;
+  }
+
+  /**
    * Encodes username / password into a string for storing. The stored string is
    * used later for "remember me" function.
    * 
@@ -2042,14 +2056,16 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   @SuppressWarnings("UnusedParameters")
   protected String encodeUserPass(String username, String password) {
+    String loginGuid = new RandomGUID().toString();
     StringBuilder buff = new StringBuilder();
     if (username != null) {
       buff.append(username);
     }
     buff.append(UP_SEP);
-//    if (password != null) {
-//      buff.append(password);
-//    }
+    if (password != null) {
+      buff.append(loginGuid);
+    }
+    putUserPreference(UP_GUID, loginGuid);
     return buff.toString();
   }
 
@@ -2067,14 +2083,13 @@ public abstract class AbstractFrontendController<E, F, G> extends
       String[] temp = encodedUserPass.split(UP_SEP);
       if (temp.length == 2) {
         userPass[0] = temp[0];
-        // userPass[1] = temp[1];
+        if (temp[1] != null && temp[1].equals(getUserPreference(UP_GUID))) {
+          userPass[1] = "";
+        }
       } else if (temp.length == 1) {
         if (encodedUserPass.indexOf(UP_SEP) != 0) {
           userPass[0] = temp[0];
         }
-//        else {
-//          userPass[1] = temp[0];
-//        }
       }
     }
     return userPass;
