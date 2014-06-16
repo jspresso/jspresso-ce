@@ -454,7 +454,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
             || this.getCurrentPage() == this.__blankPage)) {
           this._getManager().getMasterContainer().show();
         }
-      }, this, 2000);
+      }, this, 1000);
     },
 
     /**
