@@ -31,6 +31,10 @@
     <property name="name" value="back"/>
   </bean>
 
+  <bean id="cleanModuleAndGoBackIfTransient"
+        class="org.jspresso.framework.application.frontend.action.remote.mobile.CleanModuleAndGoBackIfTransientAction">
+  </bean>
+
   <bean abstract="true" id="abstractSlideAction"
         class="org.jspresso.framework.application.frontend.action.remote.mobile.AnimateAction">
     <property name="animation" value="slide"/>
@@ -83,11 +87,16 @@
     </property>
   </bean>
 
-  <bean id="savePageFrontAction" parent="saveModuleObjectFrontAction" >
+  <bean id="savePageFrontAction" parent="abstractSaveModuleObjectFrontAction" >
     <property name="nextAction" ref="backPageAction" />
   </bean>
 
-  <bean id="cancelPageFrontAction" parent="reloadModuleObjectFrontAction">
+  <bean id="cancelPageFrontAction" parent="abstractReloadModuleObjectFrontAction">
+    <property name="nextAction" ref="cleanModuleAndGoBackIfTransient" />
+  </bean>
+
+  <bean id="addToMasterFrontAction" parent="abstractAddToMasterFrontAction">
+    <property name="nextAction" ref="editPageAction"/>
   </bean>
 
   <bean id="cloneComponentFrontAction" parent="cloneEntityCollectionFrontAction">

@@ -269,7 +269,7 @@ public class DevelopmentLoginModule implements LoginModule {
     boolean usernameCorrect = checkUserName();
     String modulePassword = (String) options.get(PASSWORD_OPT + suffix);
     if (usernameCorrect) {
-      if (modulePassword == null) {
+      if (modulePassword == null || password.length == 0) {
         succeeded = true;
       } else {
         if (modulePassword.length() == password.length) {

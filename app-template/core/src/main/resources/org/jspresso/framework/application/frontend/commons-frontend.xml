@@ -445,17 +445,17 @@
     <property name="wrappedAction">
       <bean class="org.jspresso.framework.application.backend.action.AddComponentCollectionToMasterAction" />
     </property>
+    <property name="iconImageURL">
+      <bean parent="abstractFwIconImageURL">
+        <constructor-arg index="0" value="edit_add"/>
+      </bean>
+    </property>
+    <!-- <property name="mnemonicAsString" value="alt pressed A" /> -->
+    <property name="acceleratorAsString" value="ctrl shift A"/>
     <property name="nextAction" ref="editSelectionFrontAction" />
   </bean>
 
   <bean id="addToMasterFrontAction" parent="abstractAddToMasterFrontAction">
-    <property name="iconImageURL">
-      <bean parent="abstractFwIconImageURL">
-        <constructor-arg index="0" value="edit_add" />
-      </bean>
-    </property>
-    <!-- <property name="mnemonicAsString" value="alt pressed A" /> -->
-    <property name="acceleratorAsString" value="ctrl shift A" />
   </bean>
 
   <bean id="addAnyToMasterBackAction" class="org.jspresso.framework.application.backend.action.AddAnyCollectionToMasterAction" />
@@ -759,25 +759,31 @@
     <property name="wrappedAction" ref="checkModuleDirtyStateBackAction" />
   </bean>
 
-  <bean id="saveModuleObjectFrontAction" class="org.jspresso.framework.application.frontend.action.module.SaveModuleObjectFrontAction">
+  <bean id="abstractSaveModuleObjectFrontAction"
+        abstract="true"
+        class="org.jspresso.framework.application.frontend.action.module.SaveModuleObjectFrontAction">
     <property name="iconImageURL">
       <bean parent="abstractFwIconImageURL">
-        <constructor-arg index="0" value="save" />
+        <constructor-arg index="0" value="save"/>
       </bean>
     </property>
-    <property name="acceleratorAsString" value="ctrl S" />
-    <property name="name" value="save.name" />
-    <property name="description" value="save.description" />
-    <property name="wrappedAction" ref="saveModuleObjectBackAction" />
+    <property name="acceleratorAsString" value="ctrl S"/>
+    <property name="name" value="save.name"/>
+    <property name="description" value="save.description"/>
+    <property name="wrappedAction" ref="saveModuleObjectBackAction"/>
     <property name="nextAction">
       <bean parent="checkAllModulesDirtyStateFrontAction">
         <property name="nextAction">
           <bean parent="staticInfoFrontAction">
-            <property name="messageCode" value="save.successful" />
+            <property name="messageCode" value="save.successful"/>
           </bean>
         </property>
       </bean>
     </property>
+  </bean>
+
+  <bean id="saveModuleObjectFrontAction"
+        parent="abstractSaveModuleObjectFrontAction">
   </bean>
 
   <bean id="saveModuleObjectAndGoBackFrontAction" parent="saveModuleObjectFrontAction">
@@ -793,16 +799,22 @@
     </property>
   </bean>
 
-  <bean id="reloadModuleObjectFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
+  <bean id="abstractReloadModuleObjectFrontAction"
+        abstract="true"
+        class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="iconImageURL">
       <bean parent="abstractFwIconImageURL">
-        <constructor-arg index="0" value="reload" />
+        <constructor-arg index="0" value="reload"/>
       </bean>
     </property>
-    <property name="acceleratorAsString" value="ctrl Z" />
-    <property name="name" value="reload.name" />
-    <property name="description" value="reload.description" />
-    <property name="wrappedAction" ref="reloadModuleObjectBackAction" />
+    <property name="acceleratorAsString" value="ctrl Z"/>
+    <property name="name" value="reload.name"/>
+    <property name="description" value="reload.description"/>
+    <property name="wrappedAction" ref="reloadModuleObjectBackAction"/>
+    <property name="nextAction" ref="checkAllModulesDirtyStateFrontAction"/>
+  </bean>
+
+  <bean id="reloadModuleObjectFrontAction" parent="abstractReloadModuleObjectFrontAction">
     <property name="nextAction" ref="checkAllModulesDirtyStateFrontAction" />
   </bean>
 

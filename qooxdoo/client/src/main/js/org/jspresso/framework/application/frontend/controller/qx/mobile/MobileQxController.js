@@ -86,21 +86,23 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
 
 
     showPage: function (page, animation, back) {
-      this._getViewFactory().loseFocus();
-      var detailCardLayout = this._getManager().getDetailNavigation().getLayout();
-      if (page.getLayoutParent().getLayoutParent() == this._getManager().getDetailNavigation()
-          && detailCardLayout.getShowAnimation()) {
-        if (this.__animationQueue != null) {
-          this.__animationQueue.push({page: page, animation: animation, back: back});
+      if (this.getCurrentPage() != page) {
+        this._getViewFactory().loseFocus();
+        var detailCardLayout = this._getManager().getDetailNavigation().getLayout();
+        if (page.getLayoutParent().getLayoutParent() == this._getManager().getDetailNavigation()
+            && detailCardLayout.getShowAnimation()) {
+          if (this.__animationQueue != null) {
+            this.__animationQueue.push({page: page, animation: animation, back: back});
+          } else {
+            this.__animationQueue = [];
+            page.show({animation: animation, reverse: back});
+            detailCardLayout.addListenerOnce("animationEnd", function (e) {
+              this.__dequeueAnimation();
+            }, this);
+          }
         } else {
-          this.__animationQueue = [];
           page.show({animation: animation, reverse: back});
-          detailCardLayout.addListenerOnce("animationEnd", function (e) {
-            this.__dequeueAnimation();
-          }, this);
         }
-      } else {
-        page.show({animation: animation, reverse: back});
       }
     },
 
@@ -112,7 +114,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
             this.__dequeueAnimation();
           }, this);
           var anim = this.__animationQueue.splice(0, 1)[0];
-          anim.page.show({animation: anim.animation, back: anim.back});
+          anim.page.show({animation: anim.animation, reverse: anim.back});
         }
         if (this.__animationQueue.length == 0) {
           this.__animationQueue = null;
