@@ -31,7 +31,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.NoScrollNavigationPage", 
   members: {
 
     _createScrollContainer: function () {
-      return new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
+      var content = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
+      content.addCssClass("jspresso-noscroll-content");
+      return  content;
     }
   }
 });
