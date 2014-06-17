@@ -2082,7 +2082,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createTextArea: function (remoteTextArea) {
       var textArea = new qx.ui.mobile.form.TextArea();
-      textArea.addCssClass("jspresso-area");
+      textArea.addCssClass("jspresso-textarea");
       var state = remoteTextArea.getState();
       var modelController = new qx.data.controller.Object(state);
       modelController.addTarget(textArea, "value", "value", true, {
