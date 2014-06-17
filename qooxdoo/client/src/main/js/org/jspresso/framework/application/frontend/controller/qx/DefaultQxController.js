@@ -207,20 +207,19 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     },
 
     /**
-     * @param workspaceNames {String[]}
-     * @param workspaceActions {org.jspresso.framework.gui.remote.RActionList}
-     * @param exitAction {org.jspresso.framework.gui.remote.RAction}
-     * @param navigationActions {org.jspresso.framework.gui.remote.RActionList[]}
-     * @param actions {org.jspresso.framework.gui.remote.RActionList[]}
-     * @param secondaryActions {org.jspresso.framework.gui.remote.RActionList[]}
-     * @param helpActions {org.jspresso.framework.gui.remote.RActionList[]}
-     * @param size {org.jspresso.framework.util.gui.Dimension}
+     * @param initCommand {org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand}
      * @return {undefined}
-     *
      */
-    _initApplicationFrame: function (workspaceNames, workspaceActions, exitAction, navigationActions, actions,
-                                     secondaryActions, helpActions, size) {
-      //this._getApplication().getRoot().removeAll();
+    _initApplicationFrame: function (initCommand) {
+
+      var workspaceNames = initCommand.getWorkspaceNames();
+      var workspaceActions = initCommand.getWorkspaceActions();
+      var exitAction = initCommand.getExitAction();
+      var navigationActions = initCommand.getNavigationActions();
+      var actions = initCommand.getActions();
+      var secondaryActions = initCommand.getSecondaryActions();
+      var helpActions = initCommand.getHelpActions();
+      var size = initCommand.getSize();
 
       var applicationFrame = new qx.ui.container.Composite(new qx.ui.layout.VBox());
 

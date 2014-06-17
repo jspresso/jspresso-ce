@@ -403,9 +403,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
       var initCommand:RemoteInitCommand = command as RemoteInitCommand;
       this._applicationName = initCommand.applicationName;
       linkBrowserHistory();
-      initApplicationFrame(initCommand.workspaceNames, initCommand.workspaceActions, initCommand.exitAction,
-                           initCommand.navigationActions, initCommand.actions, initCommand.secondaryActions,
-                           initCommand.helpActions, initCommand.size);
+      initApplicationFrame(initCommand);
     } else if (command is RemoteWorkspaceDisplayCommand) {
       var workspaceDisplayCommand:RemoteWorkspaceDisplayCommand = command as RemoteWorkspaceDisplayCommand;
       displayWorkspace(workspaceDisplayCommand.workspaceName, workspaceDisplayCommand.workspaceView);
@@ -984,9 +982,18 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
   }
 
 
-  protected function initApplicationFrame(workspaceNames:Array, workspaceActions:RActionList, exitAction:RAction,
-                                          navigationActions:Array, actions:Array, secondaryActions:Array,
-                                          helpActions:Array, size:Dimension):void {
+  protected function initApplicationFrame(initCommand:RemoteInitCommand):void {
+
+    var workspaceNames:Array = initCommand.workspaceNames;
+    var workspaceActions:RActionList = initCommand.workspaceActions;
+    var exitAction:RAction = initCommand.exitAction;
+    var navigationActions:Array = initCommand.navigationActions;
+    var actions:Array = initCommand.actions;
+    var secondaryActions:Array = initCommand.secondaryActions;
+    var helpActions:Array = initCommand.helpActions;
+    var size:Dimension = initCommand.size;
+
+
     _workspaceAccordion = createWorkspaceAccordion(workspaceNames, workspaceActions);
     _workspaceAccordion.addEventListener(FlexEvent.CREATION_COMPLETE, function (event:FlexEvent):void {
       for (var i:int = 0; i < workspaceActions.actions.length; i++) {

@@ -196,6 +196,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         if (workspacePage) {
           this.__routeToPage(workspacePage, data, "cube");
         }
+        if (this.isTablet()) {
+          this._getManager().getMasterContainer().hide();
+        }
       }, this);
       routing.onGet("/page/{pageGuid}", function (data) {
         /** @type {org.jspresso.framework.gui.remote.mobile.RMobilePage} */
@@ -402,29 +405,25 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     },
 
     /**
-     * @param workspaceNames {String[]}
-     * @param workspaceActions {org.jspresso.framework.gui.remote.RActionList}
-     * @param exitAction {org.jspresso.framework.gui.remote.RAction}
-     * @param navigationActions {org.jspresso.framework.gui.remote.RActionList[]}
-     * @param actions {org.jspresso.framework.gui.remote.RActionList[]}
-     * @param secondaryActions {org.jspresso.framework.gui.remote.RActionList[]}
-     * @param helpActions {org.jspresso.framework.gui.remote.RActionList[]}
-     * @param size {org.jspresso.framework.util.gui.Dimension}
+     * @param initCommand {org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand}
      * @return {undefined}
-     *
      */
-    _initApplicationFrame: function (workspaceNames, workspaceActions, exitAction, navigationActions, actions,
-                                     secondaryActions, helpActions, size) {
+    _initApplicationFrame: function (initCommand) {
+
+      var applicationDescription = initCommand.getApplicationDescription();
+      var workspaceNames = initCommand.getWorkspaceNames();
+      var workspaceDescriptions = initCommand.getWorkspaceDescriptions();
+      var workspaceActions = initCommand.getWorkspaceActions();
+      var exitAction = initCommand.getExitAction();
+      var navigationActions = initCommand.getNavigationActions();
+      var actions = initCommand.getActions();
+      var secondaryActions = initCommand.getSecondaryActions();
+      var helpActions = initCommand.getHelpActions();
+      var size = initCommand.getSize();
+
       this.__workspacesMasterPage = new qx.ui.mobile.page.NavigationPage();
       this.__exitAction = exitAction;
-      var workspacesNavigatorModel = new qx.data.Array();
-      for (var i = 0; i < workspaceActions.getActions().length; i++) {
-        workspacesNavigatorModel.push({
-          workspaceName: workspaceNames[i],
-          workspaceAction: workspaceActions.getActions()[i]
-        });
-      }
-      var workspaceNavigator = new qx.ui.mobile.list.List({
+      var workspaceItemListDelegate = {
         configureItem: function (item, data, row) {
           item.setTitle(data.workspaceAction.getName());
           item.setSubtitle(data.workspaceAction.getDescription());
@@ -433,16 +432,38 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
           }
           item.setShowArrow(true);
         }
-      });
-      workspaceNavigator.setModel(workspacesNavigatorModel);
-      workspaceNavigator.addListener("changeSelection", function (evt) {
-        var selectedIndex = evt.getData();
-        var workspaceAction = workspacesNavigatorModel.getItem(selectedIndex).workspaceAction;
-        this.__routing.executeGet("/workspace/" + workspaceNames[selectedIndex], {animation: "cube", reverse: false});
-        this.execute(workspaceAction);
-      }, this);
+      };
       this.__workspacesMasterPage.addListener("initialize", function (e) {
-        this.__workspacesMasterPage.getContent().add(workspaceNavigator);
+        var pageContent = this.__workspacesMasterPage.getContent();
+        if (applicationDescription) {
+          var descriptionLabel = new qx.ui.mobile.basic.Label(applicationDescription);
+          descriptionLabel.addCssClass("group");
+          pageContent.add(descriptionLabel);
+        }
+        for (var i = 0; i < workspaceActions.getActions().length; i++) {
+          var workspaceModel = new qx.data.Array([
+            {
+              workspaceName: workspaceNames[i],
+              workspaceAction: workspaceActions.getActions()[i]
+            }
+          ]);
+          var workspaceNavigator = new qx.ui.mobile.list.List(workspaceItemListDelegate);
+          workspaceNavigator.addCssClass("jspresso-list");
+          workspaceNavigator.addCssClass("group");
+          workspaceNavigator.setModel(workspaceModel);
+          workspaceNavigator.addListener("tap", function (evt) {
+            var model = evt.getCurrentTarget().getModel().getItem(0);
+            var workspaceAction = model.workspaceAction;
+            this.__routing.executeGet("/workspace/" + model.workspaceName, {animation: "cube", reverse: false});
+            this.execute(workspaceAction);
+          }, this);
+          if (workspaceDescriptions[i]) {
+            var workspaceDescription = new qx.ui.mobile.basic.Label(workspaceDescriptions[i]);
+            workspaceDescription.addCssClass("group");
+            pageContent.add(workspaceDescription);
+          }
+          pageContent.add(workspaceNavigator);
+        }
       }, this);
       this.__workspacesMasterPage.setTitle(this._getName());
       this._getManager().addMaster(this.__workspacesMasterPage);

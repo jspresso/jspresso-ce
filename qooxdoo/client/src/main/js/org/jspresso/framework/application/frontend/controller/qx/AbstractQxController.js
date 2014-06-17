@@ -852,9 +852,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      */
     _handleInitCommand: function (initCommand) {
       this.__applicationName = initCommand.getApplicationName();
-      this._initApplicationFrame(initCommand.getWorkspaceNames(), initCommand.getWorkspaceActions(),
-          initCommand.getExitAction(), initCommand.getNavigationActions(), initCommand.getActions(),
-          initCommand.getSecondaryActions(), initCommand.getHelpActions(), initCommand.getSize());
+      this._initApplicationFrame(initCommand);
     },
 
     _getName: function () {
