@@ -28,9 +28,11 @@ public class RemoteInitCommand extends RemoteCommand {
   private var _navigationActions:Array;
   private var _workspaceActions:RActionList;
   private var _workspaceNames:Array;
+  private var _workspaceDescriptions:Array;
   private var _exitAction:RAction;
   private var _size:Dimension;
   private var _applicationName:String;
+  private var _applicationDescription:String;
 
   public function RemoteInitCommand() {
     //default constructor.
@@ -106,6 +108,22 @@ public class RemoteInitCommand extends RemoteCommand {
 
   public function set applicationName(value:String):void {
     _applicationName = value;
+  }
+
+  public function get workspaceDescriptions():Array {
+    return _workspaceDescriptions;
+  }
+
+  public function set workspaceDescriptions(value:Array):void {
+    _workspaceDescriptions = value;
+  }
+
+  public function get applicationDescription():String {
+    return _applicationDescription;
+  }
+
+  public function set applicationDescription(value:String):void {
+    _applicationDescription = value;
   }
 }
 }

@@ -32,15 +32,17 @@ public class RemoteInitCommand extends RemoteCommand {
 
   private static final long serialVersionUID = -5984969345298629961L;
 
-  private RActionList[]     actions;
-  private RActionList[]     secondaryActions;
-  private RActionList[]     navigationActions;
-  private RActionList[]     helpActions;
-  private RActionList       workspaceActions;
-  private RAction           exitAction;
-  private String[]          workspaceNames;
-  private Dimension         size;
-  private String            applicationName;
+  private RActionList[] actions;
+  private RActionList[] secondaryActions;
+  private RActionList[] navigationActions;
+  private RActionList[] helpActions;
+  private RActionList   workspaceActions;
+  private RAction       exitAction;
+  private String[]      workspaceNames;
+  private String[]      workspaceDescriptions;
+  private Dimension     size;
+  private String        applicationName;
+  private String        applicationDescription;
 
   /**
    * Gets the actions.
@@ -67,15 +69,6 @@ public class RemoteInitCommand extends RemoteCommand {
    */
   public RActionList getWorkspaceActions() {
     return workspaceActions;
-  }
-
-  /**
-   * Gets the workspaceNames.
-   *
-   * @return the workspaceNames.
-   */
-  public String[] getWorkspaceNames() {
-    return workspaceNames;
   }
 
   /**
@@ -112,6 +105,34 @@ public class RemoteInitCommand extends RemoteCommand {
    */
   public void setWorkspaceNames(String... workspaceNames) {
     this.workspaceNames = workspaceNames;
+  }
+
+  /**
+   * Gets the workspaceNames.
+   *
+   * @return the workspaceNames.
+   */
+  public String[] getWorkspaceNames() {
+    return workspaceNames;
+  }
+
+  /**
+   * Sets the workspaceDescriptions.
+   *
+   * @param workspaceDescriptions
+   *     the workspaceDescriptions to set.
+   */
+  public void setWorkspaceDescriptions(String... workspaceDescriptions) {
+    this.workspaceDescriptions = workspaceDescriptions;
+  }
+
+  /**
+   * Gets the workspaceDescriptions.
+   *
+   * @return the workspaceDescriptions.
+   */
+  public String[] getWorkspaceDescriptions() {
+    return workspaceDescriptions;
   }
 
   /**
@@ -202,5 +223,24 @@ public class RemoteInitCommand extends RemoteCommand {
    */
   public void setApplicationName(String applicationName) {
     this.applicationName = applicationName;
+  }
+
+  /**
+   * Gets application description.
+   *
+   * @return the application description
+   */
+  public String getApplicationDescription() {
+    return applicationDescription;
+  }
+
+  /**
+   * Sets application description.
+   *
+   * @param applicationDescription
+   *     the application description
+   */
+  public void setApplicationDescription(String applicationDescription) {
+    this.applicationDescription = applicationDescription;
   }
 }

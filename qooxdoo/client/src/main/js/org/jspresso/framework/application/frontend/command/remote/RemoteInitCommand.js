@@ -41,6 +41,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
     workspaceNames: {
       check: "Array"
     },
+    workspaceDescriptions: {
+      check: "Array"
+    },
     exitAction: {
       check: "org.jspresso.framework.gui.remote.RAction"
     },
@@ -50,6 +53,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
     },
     applicationName: {
       check: "String"
+    },
+    applicationDescription: {
+      check: "String",
+      nullable: true
     }
   }
 });

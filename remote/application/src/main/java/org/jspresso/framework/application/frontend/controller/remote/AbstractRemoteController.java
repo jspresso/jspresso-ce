@@ -250,8 +250,13 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
    */
   protected RemoteInitCommand createInitCommand() {
     RemoteInitCommand initCommand = new RemoteInitCommand();
-    List<String> var = getWorkspaceNames();
-    initCommand.setWorkspaceNames(var.toArray(new String[var.size()]));
+    List<String> workspaceNames = getWorkspaceNames();
+    initCommand.setWorkspaceNames(workspaceNames.toArray(new String[workspaceNames.size()]));
+    String[] workspaceDescriptions = new String[workspaceNames.size()];
+    for (int i = 0; i < workspaceDescriptions.length; i++) {
+      workspaceDescriptions[i] = getWorkspace(workspaceNames.get(i)).getI18nHeaderDescription();
+    }
+    initCommand.setWorkspaceDescriptions(workspaceDescriptions);
     initCommand.setWorkspaceActions(createRActionList(createWorkspaceActionList()));
     if (getActionMap() != null && isAccessGranted(getActionMap())) {
       try {
@@ -276,6 +281,7 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
     }
     initCommand.setSize(new Dimension(w, h));
     initCommand.setApplicationName(getI18nName(this, getLocale()));
+    initCommand.setApplicationDescription(getI18nDescription(this, getLocale()));
     return initCommand;
   }
 

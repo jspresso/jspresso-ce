@@ -151,17 +151,9 @@ public class MobileRemoteController extends AbstractRemoteController {
     Workspace workspace = getWorkspace(workspaceName);
     viewComponent.setLabel(workspace.getI18nName());
     viewComponent.setToolTip(workspace.getI18nDescription());
-    if (workspace.getI18nHeaderDescription() != null && workspace.getI18nHeaderDescription().length() > 0) {
-      RMobileForm headerForm = new RMobileForm(getGuidGenerator().generateGUID());
-      RLabel headerLabel = new RLabel(getGuidGenerator().generateGUID());
-      headerLabel.setLabel(workspace.getI18nHeaderDescription());
-      headerForm.setPosition(EPosition.TOP.name());
-      headerForm.setBorderType(EBorderType.NONE.name());
-      headerForm.setLabelsPosition(ELabelPosition.NONE.name());
-      headerForm.setElementLabels(headerLabel);
-      headerForm.setElements(headerLabel);
-      headerForm.setElementWidths(1);
-      headerForm.setLabelHorizontalPositions(EHorizontalPosition.LEFT.name());
+    String workspaceI18nHeaderDescription = workspace.getI18nHeaderDescription();
+    if (workspaceI18nHeaderDescription != null && workspaceI18nHeaderDescription.length() > 0) {
+      RMobileForm headerForm = createHeaderForm(workspaceI18nHeaderDescription);
       viewComponent.setHeaderSections(headerForm);
     }
     IViewDescriptor workspaceNavigatorViewDescriptor = workspace.getViewDescriptor();
@@ -174,6 +166,20 @@ public class MobileRemoteController extends AbstractRemoteController {
     viewComponent.setNextPage(moduleAreaPage);
     getMvcBinder().bind(workspaceNavigator.getConnector(), workspaceConnector);
     return viewComponent;
+  }
+
+  private RMobileForm createHeaderForm(String i18nDescription) {
+    RMobileForm headerForm = new RMobileForm(getGuidGenerator().generateGUID());
+    RLabel headerLabel = new RLabel(getGuidGenerator().generateGUID());
+    headerLabel.setLabel(i18nDescription);
+    headerForm.setPosition(EPosition.TOP.name());
+    headerForm.setBorderType(EBorderType.NONE.name());
+    headerForm.setLabelsPosition(ELabelPosition.NONE.name());
+    headerForm.setElementLabels(headerLabel);
+    headerForm.setElements(headerLabel);
+    headerForm.setElementWidths(1);
+    headerForm.setLabelHorizontalPositions(EHorizontalPosition.LEFT.name());
+    return headerForm;
   }
 
   /**
