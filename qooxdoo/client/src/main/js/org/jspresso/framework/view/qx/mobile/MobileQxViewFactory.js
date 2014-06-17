@@ -21,12 +21,18 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
   statics: {
     bindListItem: function (item, state, selected, displayIcon) {
       var children = state.getChildren();
+      var title;
       if (children.length > 1 && !(item instanceof org.jspresso.framework.view.qx.mobile.TreeItemRenderer)) {
-        item.setTitle(children.getItem(1).getValue());
+        title = children.getItem(1).getValue();
       } else if (state.getValue()) {
-        item.setTitle(state.getValue());
+        title = state.getValue();
       } else {
-        item.setTitle("");
+        title = "";
+      }
+      item.setTitle(title);
+      if (title.match(/.*<\/.*>.*/)) {
+        // Title is self formatted
+        item.getTitleWidget().removeCssClass("list-item-title");
       }
       item.setSubtitle(state.getDescription());
       if (displayIcon) {

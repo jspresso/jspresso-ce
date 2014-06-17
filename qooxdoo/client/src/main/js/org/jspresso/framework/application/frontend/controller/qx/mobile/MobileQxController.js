@@ -196,9 +196,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         if (workspacePage) {
           this.__routeToPage(workspacePage, data, "cube");
         }
-        if (this.isTablet()) {
-          this._getManager().getMasterContainer().hide();
-        }
+//        if (this.isTablet()) {
+//          this._getManager().getMasterContainer().hide();
+//        }
       }, this);
       routing.onGet("/page/{pageGuid}", function (data) {
         /** @type {org.jspresso.framework.gui.remote.mobile.RMobilePage} */
