@@ -26,6 +26,7 @@ import java.util.TimeZone;
 
 import javax.security.auth.Subject;
 
+import org.jspresso.framework.security.SecurityHelper;
 import org.jspresso.framework.util.gui.EClientType;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.security.UserPrincipal;
@@ -171,7 +172,7 @@ public class BasicApplicationSession implements IApplicationSession {
     if (getPrincipal() != null) {
       return getPrincipal().getName();
     }
-    return "Unknown user";
+    return SecurityHelper.ANONYMOUS_USER_NAME;
   }
 
   /**

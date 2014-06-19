@@ -34,8 +34,6 @@ import org.slf4j.LoggerFactory;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.frontend.command.remote.RemoteRefreshCommand;
-import org.jspresso.framework.util.gui.EClientType;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.frontend.command.remote.CommandException;
@@ -50,10 +48,10 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteHistoryD
 import org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand;
-import org.jspresso.framework.application.frontend.command.remote.RemoteLoginCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteOkCancelCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteOpenUrlCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteRefreshCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteRestartCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSortCommand;
@@ -85,6 +83,7 @@ import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.gui.Dimension;
+import org.jspresso.framework.util.gui.EClientType;
 import org.jspresso.framework.util.http.CookiePreferencesStore;
 import org.jspresso.framework.util.http.HttpRequestHolder;
 import org.jspresso.framework.util.http.RequestParamsHttpFilter;
@@ -331,10 +330,8 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
             this, loginView, getLocale()));
         registerCommand(initLoginCommand);
       } else {
-        handleCommand(new RemoteLoginCommand());
+        login();
       }
-    } else if (command instanceof RemoteLoginCommand) {
-      login();
     } else if (command instanceof RemoteWorkspaceDisplayCommand) {
       displayWorkspace(((RemoteWorkspaceDisplayCommand) command).getWorkspaceName(), false);
     } else if (command instanceof RemoteRefreshCommand) {

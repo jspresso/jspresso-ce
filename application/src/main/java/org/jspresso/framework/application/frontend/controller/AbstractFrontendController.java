@@ -1233,8 +1233,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
       LOG.info("User {} logged out for session {}.", getApplicationSession()
           .getUsername(), getApplicationSession().getId());
     }
-    putClientPreference(UP_KEY, encodeUserPass(getApplicationSession().getUsername(), null));
-    removeUserPreference(UP_GUID);
+    clearImplicitLogin();
     selectedModules.clear();
     workspaceNavigatorConnectors.clear();
     workspaceViews.clear();
@@ -1247,6 +1246,23 @@ public abstract class AbstractFrontendController<E, F, G> extends
     getBackendController().removeDirtInterceptor(dirtInterceptor);
     started = !getBackendController().stop();
     return !started;
+  }
+
+  /**
+   * Clear implicit principal, i.e. SSO principal or "remember me" login.
+   */
+  protected void clearImplicitLogin() {
+    String username = getApplicationSession().getUsername();
+    if (!SecurityHelper.ANONYMOUS_USER_NAME.equals(username)) {
+      if (getClientPreference(UP_KEY) != null) {
+        // reset get through pass
+        putClientPreference(UP_KEY, encodeUserPass(username, null));
+      }
+    } else {
+      UsernamePasswordHandler uph = getLoginCallbackHandler();
+      uph.clear();
+    }
+    removeUserPreference(UP_GUID);
   }
 
   /**
@@ -1643,11 +1659,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
   @Override
   public void loggedIn(Subject subject) {
     UsernamePasswordHandler uph = getLoginCallbackHandler();
-    if (uph.isRememberMe()) {
-      putClientPreference(UP_KEY,
-          encodeUserPass(uph.getUsername(), uph.getPassword()));
-    } else {
-      removeClientPreference(UP_KEY);
+    if (!SecurityHelper.ANONYMOUS_USER_NAME.equals(uph.getUsername())) {
+      if (uph.isRememberMe()) {
+        putClientPreference(UP_KEY, encodeUserPass(uph.getUsername(), uph.getPassword()));
+      } else {
+        removeClientPreference(UP_KEY);
+      }
     }
     String loginLocale = uph.getLanguage();
     if (loginLocale != null && !loginLocale.isEmpty()) {
@@ -1721,7 +1738,17 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Request login to tha application.
+   * Request anonymous login to tha application.
+   */
+  protected void loginAnonymously() {
+    UsernamePasswordHandler uph = getLoginCallbackHandler();
+    uph.setUsername(SecurityHelper.ANONYMOUS_USER_NAME);
+    uph.setPassword("");
+    login();
+  }
+
+  /**
+   * Request login to the application.
    */
   protected abstract void login();
 
@@ -1734,7 +1761,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     FrontendAction<E, F, G> triggerLoginAction = new FrontendAction<E, F, G>() {
       @Override
       public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
-        login();
+        loginAnonymously();
         return super.execute(actionHandler, context);
       }
     };
