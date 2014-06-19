@@ -138,7 +138,7 @@ public class MockFrontendController<E, F, G> extends
    * {@inheritDoc}
    */
   @Override
-  protected void login() {
+  public void login() {
     // NO-OP
   }
 }

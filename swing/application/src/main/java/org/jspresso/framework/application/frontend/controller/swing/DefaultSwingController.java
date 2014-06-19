@@ -749,10 +749,18 @@ public class DefaultSwingController extends
       buttonBox.setLayout(new BoxLayout(buttonBox, BoxLayout.X_AXIS));
       buttonBox.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
 
-      JButton loginButton = new JButton(getViewFactory().getActionFactory().createAction(createTriggerLoginAction(),
-          this, loginView, getLocale()));
-      buttonBox.add(loginButton);
-      loginDialog.getRootPane().setDefaultButton(loginButton);
+      int i = 0;
+      for (ActionList actionList : getLoginViewDescriptor().getActionMap().getActionLists(this)) {
+        for (IDisplayableAction action : actionList.getActions()) {
+          JButton button = new JButton(getViewFactory().getActionFactory().createAction(action,
+              getViewFactory().getIconFactory().getSmallIconSize(), this, loginView, getLocale()));
+          buttonBox.add(button);
+          if (i == 0) {
+            loginDialog.getRootPane().setDefaultButton(button);
+          }
+          i++;
+        }
+      }
 
       JButton exitButton = new JButton();
       exitButton.setAction(getViewFactory().getActionFactory().createAction(getExitAction(), this, null, getLocale()));
@@ -783,7 +791,7 @@ public class DefaultSwingController extends
    * Login to the application.
    */
   @Override
-  protected void login() {
+  public void login() {
     if (performLogin()) {
       loginDialog.dispose();
       updateControllerFrame();

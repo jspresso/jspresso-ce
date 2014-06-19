@@ -579,6 +579,27 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
         htmlComponent = this._createHtmlEditor(remoteHtmlArea);
       }
       return htmlComponent;
+    },
+
+    /**
+     * @param actionLists {Array}
+     * @return {Array}
+     */
+    extractAllActions: function (actionLists) {
+      var allActions = [];
+      if (actionLists && actionLists.length > 0) {
+        for (var i = 0; i < actionLists.length; i++) {
+          var actionList = actionLists[i];
+          var actions = actionList.getActions();
+          if (actions) {
+            for (var j = 0; j < actions.length; j++) {
+              allActions.push(actions[j]);
+            }
+          }
+        }
+      }
+      return allActions;
     }
+
   }
 });

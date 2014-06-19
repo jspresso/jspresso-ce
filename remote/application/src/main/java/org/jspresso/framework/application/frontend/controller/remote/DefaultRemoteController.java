@@ -22,9 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteFlashDisplayCommand;
 import org.jspresso.framework.binding.IValueConnector;

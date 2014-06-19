@@ -139,7 +139,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @returns {qx.ui.mobile.core.Widget}
      */
     _decorateWithAsideActions: function (component, remoteComponent, disableActionsWithField) {
-      var actions = this._extractAllActions(remoteComponent.getActionLists());
+      var actions = this.extractAllActions(remoteComponent.getActionLists());
       if (actions.length > 0) {
         var modelController;
         if (disableActionsWithField && remoteComponent && remoteComponent.getState()) {
@@ -200,26 +200,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     },
 
     /**
-     * @param actionLists {Array}
-     * @return {Array}
-     */
-    _extractAllActions: function (actionLists) {
-      var allActions = [];
-      if (actionLists && actionLists.length > 0) {
-        for (var i = 0; i < actionLists.length; i++) {
-          var actionList = actionLists[i];
-          var actions = actionList.getActions();
-          if (actions) {
-            for (var j = 0; j < actions.length; j++) {
-              allActions.push(actions[j]);
-            }
-          }
-        }
-      }
-      return allActions;
-    },
-
-    /**
      * @param actions {Array}
      * @param maxToolbarActionCount {Integer}
      * @param modelController {qx.data.controller.Object}
@@ -257,7 +237,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _addToolBarActions: function (remoteComponent, component) {
       var maxToolbarActionCount = 4;
-      var actions = this._extractAllActions(remoteComponent.getActionLists());
+      var actions = this.extractAllActions(remoteComponent.getActionLists());
       if (actions.length > 0) {
         var toolBar = this.createToolBarFromActions(actions, maxToolbarActionCount, null);
         if (component instanceof qx.ui.mobile.page.Page) {

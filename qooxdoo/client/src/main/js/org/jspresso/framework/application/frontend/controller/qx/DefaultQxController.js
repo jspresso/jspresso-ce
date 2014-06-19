@@ -94,7 +94,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       }
       dialogBox.add(dialogView, {flex: 1});
       for (var i = 0; i < buttons.length; i++) {
-        buttonBox.add(buttons[i]);
+        if (buttons.length > 0) {
+          if (buttons[0] instanceof org.jspresso.framework.gui.remote.RAction) {
+            buttonBox.add(this._getViewFactory().createAction(buttons[i]));
+          } else {
+            buttonBox.add(buttons[i]);
+          }
+        }
       }
       dialogBox.add(buttonBox);
 

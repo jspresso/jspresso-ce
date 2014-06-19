@@ -337,11 +337,14 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
       _translations = (command as RemoteLocaleCommand).translations;
     } else if (command is RemoteInitLoginCommand) {
       var initLoginCommand:RemoteInitLoginCommand = command as RemoteInitLoginCommand;
-      var loginButton:Button = getViewFactory().createDialogAction(initLoginCommand.loginAction);
+      var loginButtons:Array = [];
+      for (var i:int = 0; i < initLoginCommand.loginActions.length; i ++) {
+        loginButtons.push(getViewFactory().createDialogAction(initLoginCommand.loginActions[i]));
+      }
       var rLoginView:RComponent = initLoginCommand.loginView;
       var loginView:UIComponent = getViewFactory().createComponent(rLoginView);
       popupDialog(rLoginView.label, rLoginView.toolTip, loginView, rLoginView.icon,
-                  [loginButton]);
+                  loginButtons);
     } else if (command is RemoteCleanupCommand) {
       var removedPeerGuids:Array = (command as RemoteCleanupCommand).removedPeerGuids;
       for (var rpeerIndex:int = 0; rpeerIndex < removedPeerGuids.length; rpeerIndex++) {

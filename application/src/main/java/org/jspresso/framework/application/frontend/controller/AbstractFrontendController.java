@@ -93,6 +93,7 @@ import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
  * Base class for frontend application controllers. Frontend controllers are
@@ -1357,7 +1358,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * @return the login view
    */
   protected IView<E> createLoginView() {
-    IView<E> loginView = getViewFactory().createView(getLoginViewDescriptor(),
+    BasicViewDescriptor refinedViewDescriptor = ((BasicViewDescriptor) getLoginViewDescriptor()).clone();
+    refinedViewDescriptor.setActionMap(null);
+    refinedViewDescriptor.setSecondaryActionMap(null);
+    IView<E> loginView = getViewFactory().createView(refinedViewDescriptor,
         this, getLocale());
     IValueConnector loginModelConnector = getBackendController()
         .createModelConnector("login",
@@ -1465,8 +1469,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
       @Override
       public void selectedItemChange(ItemSelectionEvent event) {
-        navigatorSelectionChanged(workspaceName,
-            (ICompositeValueConnector) event.getSelectedItem());
+        navigatorSelectionChanged(workspaceName, (ICompositeValueConnector) event.getSelectedItem());
       }
     });
     workspaceNavigatorConnectors.put(workspaceName,
@@ -1740,34 +1743,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * Request anonymous login to tha application.
    */
-  protected void loginAnonymously() {
+  @Override
+  public void loginAnonymously() {
     UsernamePasswordHandler uph = getLoginCallbackHandler();
     uph.setUsername(SecurityHelper.ANONYMOUS_USER_NAME);
     uph.setPassword("");
     login();
-  }
-
-  /**
-   * Request login to the application.
-   */
-  protected abstract void login();
-
-  /**
-   * Create trigger login action.
-   *
-   * @return the trigger login action.
-   */
-  protected IDisplayableAction createTriggerLoginAction() {
-    FrontendAction<E, F, G> triggerLoginAction = new FrontendAction<E, F, G>() {
-      @Override
-      public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
-        login();
-        return super.execute(actionHandler, context);
-      }
-    };
-    triggerLoginAction.setName("ok");
-    triggerLoginAction.setIcon(new Icon(getIconFactory().getOkYesIconImageURL(), getIconFactory().getSmallIconSize()));
-    return triggerLoginAction;
   }
 
   /**

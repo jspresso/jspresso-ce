@@ -100,6 +100,7 @@ import org.jspresso.framework.view.IViewFactory;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.remote.AbstractRemoteViewFactory;
 import org.jspresso.framework.view.remote.RemoteActionFactory;
 
@@ -326,8 +327,10 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
         RemoteInitLoginCommand initLoginCommand = new RemoteInitLoginCommand();
         loginView = createLoginView();
         initLoginCommand.setLoginView(loginView.getPeer());
-        initLoginCommand.setLoginAction(getViewFactory().getActionFactory().createAction(createTriggerLoginAction(),
-            this, loginView, getLocale()));
+        IViewDescriptor loginViewDescriptor = getLoginViewDescriptor();
+        initLoginCommand.setLoginActions(extractActions(loginViewDescriptor.getActionMap(), loginView));
+        initLoginCommand.setSecondaryLoginActions(extractActions(loginViewDescriptor.getSecondaryActionMap(),
+            loginView));
         registerCommand(initLoginCommand);
       } else {
         login();
@@ -461,11 +464,25 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
     }
   }
 
+  private RAction[] extractActions(ActionMap actionMap, IView<RComponent>view) {
+    if (actionMap != null) {
+      List<RAction> actions = new ArrayList<>();
+      for (ActionList actionList : actionMap.getActionLists(this)) {
+        for (IDisplayableAction action : actionList.getActions()) {
+          actions.add(getViewFactory().getActionFactory().createAction(action,
+              getViewFactory().getIconFactory().getSmallIconSize(), this, view, getLocale()));
+        }
+      }
+      return actions.toArray(new RAction[actions.size()]);
+    }
+    return null;
+  }
+
   /**
    * Logs into the application.
    */
   @Override
-  protected void login() {
+  public void login() {
     if (performLogin()) {
       if (isLoginInteractive()) {
         registerCommand(new RemoteCloseDialogCommand());

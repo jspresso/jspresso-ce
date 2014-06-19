@@ -1063,6 +1063,33 @@
     </property>
   </bean>
 
+  <bean id="loginFrontAction" class="org.jspresso.framework.application.frontend.action.security.LoginAction">
+    <property name="name" value="ok"/>
+    <property name="description" value="credentialMessage"/>
+    <property name="iconImageURL">
+      <bean parent="abstractFwIconImageURL">
+        <constructor-arg index="0" value="ok"/>
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="loginActionList" class="org.jspresso.framework.view.action.ActionList">
+    <property name="name" value="ACTION"/>
+    <property name="actions">
+      <list>
+        <ref bean="loginFrontAction"/>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="loginActionMap" class="org.jspresso.framework.view.action.ActionMap">
+    <property name="actionLists">
+      <list>
+        <ref bean="loginActionList"/>
+      </list>
+    </property>
+  </bean>
+
   <!-- Login utils -->
   <bean abstract="true" id="abstractLoginViewDescriptorBase"
         class="org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor">
@@ -1074,6 +1101,7 @@
       </bean>
     </property>
     <property name="modelDescriptor" ref="loginModelDescriptor"/>
+    <property name="actionMap" ref="loginActionMap" />
   </bean>
 
   <bean id="loginViewDescriptorBase"

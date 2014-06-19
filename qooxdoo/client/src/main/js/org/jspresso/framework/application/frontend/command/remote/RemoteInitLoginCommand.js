@@ -23,8 +23,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
     loginView: {
       check: "org.jspresso.framework.gui.remote.RComponent"
     },
-    loginAction: {
-      check: "org.jspresso.framework.gui.remote.RAction"
+    loginActions: {
+      check: "Array",
+      nullable: true
+    },
+    secondaryLoginActions: {
+      check: "Array",
+      nullable: true
     }
   }
 });

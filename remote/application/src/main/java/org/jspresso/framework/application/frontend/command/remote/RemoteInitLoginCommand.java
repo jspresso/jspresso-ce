@@ -19,6 +19,7 @@
 package org.jspresso.framework.application.frontend.command.remote;
 
 import org.jspresso.framework.gui.remote.RAction;
+import org.jspresso.framework.gui.remote.RActionList;
 import org.jspresso.framework.gui.remote.RComponent;
 
 /**
@@ -32,7 +33,8 @@ public class RemoteInitLoginCommand extends RemoteCommand {
   private static final long serialVersionUID = 5672752293218754196L;
 
   private RComponent loginView;
-  private RAction    loginAction;
+  private RAction[]  loginActions;
+  private RAction[]  secondaryLoginActions;
 
   /**
    * Gets the loginView.
@@ -54,20 +56,38 @@ public class RemoteInitLoginCommand extends RemoteCommand {
   }
 
   /**
-   * Gets login action.
+   * Get login actions.
    *
-   * @return the login action
+   * @return the r action [ ]
    */
-  public RAction getLoginAction() {
-    return loginAction;
+  public RAction[] getLoginActions() {
+    return loginActions;
   }
 
   /**
-   * Sets login action.
+   * Sets login actions.
    *
-   * @param loginAction the login action
+   * @param loginActions the login actions
    */
-  public void setLoginAction(RAction loginAction) {
-    this.loginAction = loginAction;
+  public void setLoginActions(RAction[] loginActions) {
+    this.loginActions = loginActions;
+  }
+
+  /**
+   * Get secondary login actions.
+   *
+   * @return the r action [ ]
+   */
+  public RAction[] getSecondaryLoginActions() {
+    return secondaryLoginActions;
+  }
+
+  /**
+   * Sets secondary login actions.
+   *
+   * @param secondaryLoginActions the secondary login actions
+   */
+  public void setSecondaryLoginActions(RAction[] secondaryLoginActions) {
+    this.secondaryLoginActions = secondaryLoginActions;
   }
 }

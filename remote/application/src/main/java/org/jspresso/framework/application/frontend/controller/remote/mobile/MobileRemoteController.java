@@ -26,7 +26,6 @@ import org.jspresso.framework.application.frontend.command.remote.mobile.RemoteB
 import org.jspresso.framework.application.frontend.controller.remote.AbstractRemoteController;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
-import org.jspresso.framework.application.model.mobile.MobileWorkspace;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.remote.RAction;

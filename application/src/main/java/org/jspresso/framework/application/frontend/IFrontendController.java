@@ -494,4 +494,14 @@ public interface IFrontendController<E, F, G> extends IController, IIconDescript
    *     the exception to trace.
    */
   void traceUnexpectedException(Throwable ex);
+
+  /**
+   * Triggers login to the application.
+   */
+  void login();
+
+  /**
+   * Triggers login to the application anonymously.
+   */
+  void loginAnonymously();
 }
