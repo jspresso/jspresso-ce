@@ -21,13 +21,11 @@ import flash.display.Sprite;
 import flash.events.DataEvent;
 import flash.events.Event;
 import flash.events.IOErrorEvent;
-import flash.events.MouseEvent;
 import flash.external.ExternalInterface;
 import flash.net.FileFilter;
 import flash.net.FileReference;
 import flash.net.URLRequest;
 import flash.net.navigateToURL;
-import flash.system.Security;
 import flash.utils.getTimer;
 
 import mx.binding.utils.BindingUtils;
@@ -96,7 +94,6 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteHistoryD
 import org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand;
-import org.jspresso.framework.application.frontend.command.remote.RemoteLoginCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteOkCancelCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteOpenUrlCommand;
@@ -341,10 +338,6 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     } else if (command is RemoteInitLoginCommand) {
       var initLoginCommand:RemoteInitLoginCommand = command as RemoteInitLoginCommand;
       var loginButton:Button = getViewFactory().createDialogAction(initLoginCommand.loginAction);
-      var listener:Function = function (event:MouseEvent):void {
-        performLogin();
-      };
-      getViewFactory().addButtonEventListenerWithTimeout(loginButton, listener, 1000);
       var rLoginView:RComponent = initLoginCommand.loginView;
       var loginView:UIComponent = getViewFactory().createComponent(rLoginView);
       popupDialog(rLoginView.label, rLoginView.toolTip, loginView, rLoginView.icon,
@@ -1268,12 +1261,6 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     }
     _workspaceViewStack.selectedChild = _workspaceViewStack.getChildByName(workspaceName) as Container;
     _workspaceAccordion.selectedChild = _workspaceAccordion.getAcccordionSectionByName(workspaceName) as Container;
-  }
-
-  protected function performLogin():void {
-    blockUI(false);
-    var loginCommand:RemoteLoginCommand = new RemoteLoginCommand();
-    registerCommand(loginCommand);
   }
 
   protected function popupDialog(title:String, message:String, dialogView:UIComponent, icon:RIcon, buttons:Array,
