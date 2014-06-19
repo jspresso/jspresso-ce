@@ -1090,6 +1090,8 @@
     </property>
   </bean>
 
+  <bean id="secondaryLoginActionMap" parent="null"/>
+
   <!-- Login utils -->
   <bean abstract="true" id="abstractLoginViewDescriptorBase"
         class="org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor">
@@ -1102,6 +1104,7 @@
     </property>
     <property name="modelDescriptor" ref="loginModelDescriptor"/>
     <property name="actionMap" ref="loginActionMap"/>
+    <property name="secondaryActionMap" ref="secondaryLoginActionMap"/>
   </bean>
 
   <bean id="loginViewDescriptorBase"
