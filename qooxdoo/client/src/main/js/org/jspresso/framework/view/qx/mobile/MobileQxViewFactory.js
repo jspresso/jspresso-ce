@@ -30,7 +30,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         title = "";
       }
       item.setTitle(title);
-      if (title.match(/.*<\/.*>.*/)) {
+      if (title && title.match(/.*<\/.*>.*/)) {
         // Title is self formatted
         item.getTitleWidget().removeCssClass("list-item-title");
       }
