@@ -23,17 +23,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
     loginView: {
       check: "org.jspresso.framework.gui.remote.RComponent"
     },
-    message: {
-      check: "String"
-    },
-    okIcon: {
-      check: "org.jspresso.framework.gui.remote.RIcon"
-    },
-    okLabel: {
-      check: "String"
-    },
-    title: {
-      check: "String"
+    loginAction: {
+      check: "org.jspresso.framework.gui.remote.RAction"
     }
   }
 });

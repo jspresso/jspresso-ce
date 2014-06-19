@@ -536,7 +536,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * <p/>
    * {@inheritDoc}
    */
-  @SuppressWarnings({"ThrowFromFinallyBlock", "ConstantConditions"})
+  @SuppressWarnings({"ThrowFromFinallyBlock", "ConstantConditions" })
   @Override
   public boolean execute(IAction action, Map<String, Object> context) {
     if (action == null) {
@@ -1718,6 +1718,29 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   protected Map<String, Object> getStartupActionContext() {
     return getInitialActionContext();
+  }
+
+  /**
+   * Request login to tha application.
+   */
+  protected abstract void login();
+
+  /**
+   * Create trigger login action.
+   *
+   * @return the trigger login action.
+   */
+  protected IDisplayableAction createTriggerLoginAction() {
+    FrontendAction<E, F, G> triggerLoginAction = new FrontendAction<E, F, G>() {
+      @Override
+      public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+        login();
+        return super.execute(actionHandler, context);
+      }
+    };
+    triggerLoginAction.setName("ok");
+    triggerLoginAction.setIcon(new Icon(getIconFactory().getOkYesIconImageURL(), getIconFactory().getSmallIconSize()));
+    return triggerLoginAction;
   }
 
   /**

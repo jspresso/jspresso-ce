@@ -317,15 +317,9 @@
   </bean>
 
   <bean id="loginViewDescriptorBase"
+        parent="abstractLoginViewDescriptorBase"
         class="org.jspresso.framework.view.descriptor.mobile.MobileTabViewDescriptor">
-    <property name="carouselMode" value="true" />
-    <property name="name" value="login.name"/>
-    <property name="iconImageURL">
-      <bean parent="abstractFwIconImageURL">
-        <constructor-arg index="0" value="password"/>
-      </bean>
-    </property>
-    <property name="modelDescriptor" ref="loginModelDescriptor"/>
+    <property name="carouselMode" value="true"/>
     <property name="tabs">
       <list>
         <ref bean="basicLoginViewDescriptor"/>

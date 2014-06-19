@@ -327,28 +327,14 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
         RemoteInitLoginCommand initLoginCommand = new RemoteInitLoginCommand();
         loginView = createLoginView();
         initLoginCommand.setLoginView(loginView.getPeer());
-        initLoginCommand.setTitle(getLoginViewDescriptor().getI18nName(this, getLocale()));
-        initLoginCommand.setMessage(getTranslation(LoginUtils.CRED_MESSAGE, getLocale()));
-        initLoginCommand.setOkLabel(getTranslation("ok", getLocale()));
-        initLoginCommand.setOkIcon(getIconFactory().getOkYesIcon(getIconFactory().getSmallIconSize()));
+        initLoginCommand.setLoginAction(getViewFactory().getActionFactory().createAction(createTriggerLoginAction(),
+            this, loginView, getLocale()));
         registerCommand(initLoginCommand);
       } else {
         handleCommand(new RemoteLoginCommand());
       }
     } else if (command instanceof RemoteLoginCommand) {
-      if (performLogin()) {
-        if (isLoginInteractive()) {
-          registerCommand(new RemoteCloseDialogCommand());
-        }
-        List<RemoteCommand> initCommands = createInitCommands();
-        for (RemoteCommand initCommand : initCommands) {
-          registerCommand(initCommand);
-        }
-        userLoggedIn();
-        clearRequestParams();
-      } else {
-        loginFailed();
-      }
+      login();
     } else if (command instanceof RemoteWorkspaceDisplayCommand) {
       displayWorkspace(((RemoteWorkspaceDisplayCommand) command).getWorkspaceName(), false);
     } else if (command instanceof RemoteRefreshCommand) {
@@ -475,6 +461,26 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
       } else {
         throw new CommandException("Unsupported command type : " + command.getClass().getSimpleName());
       }
+    }
+  }
+
+  /**
+   * Logs into the application.
+   */
+  @Override
+  protected void login() {
+    if (performLogin()) {
+      if (isLoginInteractive()) {
+        registerCommand(new RemoteCloseDialogCommand());
+      }
+      List<RemoteCommand> initCommands = createInitCommands();
+      for (RemoteCommand initCommand : initCommands) {
+        registerCommand(initCommand);
+      }
+      userLoggedIn();
+      clearRequestParams();
+    } else {
+      loginFailed();
     }
   }
 

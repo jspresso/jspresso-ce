@@ -25,8 +25,6 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.datatransfer.Clipboard;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.WindowAdapter;
@@ -66,18 +64,21 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
+import chrriis.dj.nativeswing.swtimpl.components.FlashPluginOptions;
+import chrriis.dj.nativeswing.swtimpl.components.JFlashPlayer;
+import chrriis.dj.swingsuite.JComboButton;
+
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.ControllerException;
-import org.jspresso.framework.security.UsernamePasswordHandler;
-import org.jspresso.framework.util.gui.EClientType;
 import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.swing.components.JErrorDialog;
 import org.jspresso.framework.util.gui.Dimension;
+import org.jspresso.framework.util.gui.EClientType;
 import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.preferences.IPreferencesStore;
@@ -94,10 +95,6 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.swing.BasicTransferable;
 
-import chrriis.dj.nativeswing.swtimpl.components.FlashPluginOptions;
-import chrriis.dj.nativeswing.swtimpl.components.JFlashPlayer;
-import chrriis.dj.swingsuite.JComboButton;
-
 /**
  * This is is the default implementation of the <b>Swing</b> frontend
  * controller. It will implement a 2-tier architecture that is particularly
@@ -110,27 +107,26 @@ import chrriis.dj.swingsuite.JComboButton;
 public class DefaultSwingController extends
     AbstractFrontendController<JComponent, Icon, Action> {
 
-  private JFrame                      controllerFrame;
-  private JDesktopPane                desktopPane;
-  private JLabel                      statusBar;
-  private WaitCursorTimer             waitTimer;
+  private JFrame          controllerFrame;
+  private JDesktopPane    desktopPane;
+  private JLabel          statusBar;
+  private WaitCursorTimer waitTimer;
 
   private Map<String, JInternalFrame> workspaceInternalFrames;
+  private JDialog                     loginDialog;
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public void displayFlashObject(String swfUrl,
-      Map<String, String> flashContext, List<Action> actions, String title,
-      JComponent sourceComponent, Map<String, Object> context,
-      Dimension dimension, boolean reuseCurrent) {
+  public void displayFlashObject(String swfUrl, Map<String, String> flashContext, List<Action> actions, String title,
+                                 JComponent sourceComponent, Map<String, Object> context, Dimension dimension,
+                                 boolean reuseCurrent) {
 
     JFlashPlayer flashPlayer = new JFlashPlayer();
     FlashPluginOptions options = new FlashPluginOptions();
     options.setVariables(flashContext);
-    flashPlayer.load(getClass(), UrlHelper.getResourcePathOrUrl(swfUrl, true),
-        options);
+    flashPlayer.load(getClass(), UrlHelper.getResourcePathOrUrl(swfUrl, true), options);
 
     displayDialog(flashPlayer, actions, title, sourceComponent, context, dimension, reuseCurrent, false);
   }
@@ -139,10 +135,9 @@ public class DefaultSwingController extends
    * {@inheritDoc}
    */
   @Override
-  public void displayDialog(final JComponent mainView,
-      final List<Action> actions, final String title,
-      final JComponent sourceComponent, final Map<String, Object> context,
-      final Dimension dimension, final boolean reuseCurrent, final boolean modal) {
+  public void displayDialog(final JComponent mainView, final List<Action> actions, final String title,
+                            final JComponent sourceComponent, final Map<String, Object> context,
+                            final Dimension dimension, final boolean reuseCurrent, final boolean modal) {
     displayModalDialog(mainView, context, reuseCurrent);
     SwingUtilities.invokeLater(new Runnable() {
 
@@ -187,8 +182,7 @@ public class DefaultSwingController extends
         actionPanel.add(buttonBox, BorderLayout.EAST);
 
         if (dimension != null) {
-          mainView.setPreferredSize(new java.awt.Dimension(
-              dimension.getWidth(), dimension.getHeight()));
+          mainView.setPreferredSize(new java.awt.Dimension(dimension.getWidth(), dimension.getHeight()));
         }
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
@@ -224,23 +218,19 @@ public class DefaultSwingController extends
    * {@inheritDoc}
    */
   @Override
-  protected void displayWorkspace(String workspaceName,
-      boolean bypassModuleBoundaryActions) {
+  protected void displayWorkspace(String workspaceName, boolean bypassModuleBoundaryActions) {
     if (!ObjectUtils.equals(workspaceName, getSelectedWorkspaceName())) {
       super.displayWorkspace(workspaceName, bypassModuleBoundaryActions);
       if (workspaceName != null) {
         if (workspaceInternalFrames == null) {
           workspaceInternalFrames = new HashMap<>();
         }
-        JInternalFrame workspaceInternalFrame = workspaceInternalFrames
-            .get(workspaceName);
+        JInternalFrame workspaceInternalFrame = workspaceInternalFrames.get(workspaceName);
         if (workspaceInternalFrame == null) {
-          IViewDescriptor workspaceNavigatorViewDescriptor = getWorkspace(
-              workspaceName).getViewDescriptor();
-          IValueConnector workspaceConnector = getBackendController()
-              .getWorkspaceConnector(workspaceName);
-          IView<JComponent> workspaceNavigator = createWorkspaceNavigator(
-              workspaceName, workspaceNavigatorViewDescriptor);
+          IViewDescriptor workspaceNavigatorViewDescriptor = getWorkspace(workspaceName).getViewDescriptor();
+          IValueConnector workspaceConnector = getBackendController().getWorkspaceConnector(workspaceName);
+          IView<JComponent> workspaceNavigator = createWorkspaceNavigator(workspaceName,
+              workspaceNavigatorViewDescriptor);
           IView<JComponent> moduleAreaView = createModuleAreaView(workspaceName);
           JSplitPane workspaceView = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
           workspaceView.setOneTouchExpandable(true);
@@ -752,30 +742,17 @@ public class DefaultSwingController extends
       IView<JComponent> loginView = createLoginView();
 
       // Login dialog
-      final JDialog dialog = new JDialog(controllerFrame, getLoginViewDescriptor().getI18nName(this, getLocale()), true);
-      dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+      loginDialog = new JDialog(controllerFrame, getLoginViewDescriptor().getI18nName(this, getLocale()), true);
+      loginDialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
       JPanel buttonBox = new JPanel();
       buttonBox.setLayout(new BoxLayout(buttonBox, BoxLayout.X_AXIS));
       buttonBox.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
 
-      JButton loginButton = new JButton(getTranslation("ok", getLocale()));
-      loginButton.setIcon(getIconFactory().getOkYesIcon(getIconFactory().getSmallIconSize()));
-      loginButton.addActionListener(new ActionListener() {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-          if (performLogin()) {
-            dialog.dispose();
-            updateControllerFrame();
-            execute(getStartupAction(), getStartupActionContext());
-          } else {
-            loginFailed(dialog);
-          }
-        }
-      });
+      JButton loginButton = new JButton(getViewFactory().getActionFactory().createAction(createTriggerLoginAction(),
+          this, loginView, getLocale()));
       buttonBox.add(loginButton);
-      dialog.getRootPane().setDefaultButton(loginButton);
+      loginDialog.getRootPane().setDefaultButton(loginButton);
 
       JButton exitButton = new JButton();
       exitButton.setAction(getViewFactory().getActionFactory().createAction(getExitAction(), this, null, getLocale()));
@@ -786,18 +763,33 @@ public class DefaultSwingController extends
       actionPanel.add(buttonBox, BorderLayout.EAST);
 
       JPanel mainPanel = new JPanel(new BorderLayout());
-      mainPanel.add(new JLabel(getTranslation(LoginUtils.CRED_MESSAGE, getLocale())), BorderLayout.NORTH);
+      mainPanel.add(new JLabel(getLoginViewDescriptor().getI18nDescription(this, getLocale())),
+          BorderLayout.NORTH);
       mainPanel.add(loginView.getPeer(), BorderLayout.CENTER);
       mainPanel.add(actionPanel, BorderLayout.SOUTH);
-      dialog.add(mainPanel);
+      loginDialog.add(mainPanel);
 
-      dialog.pack();
-      SwingUtil.centerInParent(dialog);
-      dialog.setVisible(true);
+      loginDialog.pack();
+      SwingUtil.centerInParent(loginDialog);
+      loginDialog.setVisible(true);
     } else {
       performLogin();
       updateControllerFrame();
       execute(getStartupAction(), getInitialActionContext());
+    }
+  }
+
+  /**
+   * Login to the application.
+   */
+  @Override
+  protected void login() {
+    if (performLogin()) {
+      loginDialog.dispose();
+      updateControllerFrame();
+      execute(getStartupAction(), getStartupActionContext());
+    } else {
+      loginFailed(loginDialog);
     }
   }
 

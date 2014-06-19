@@ -133,4 +133,12 @@ public class MockFrontendController<E, F, G> extends
   public void setClipboardContent(String plainContent, String htmlContent) {
     // NO-OP
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void login() {
+    // NO-OP
+  }
 }

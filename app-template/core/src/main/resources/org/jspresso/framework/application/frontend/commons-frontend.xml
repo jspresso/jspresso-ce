@@ -1064,15 +1064,22 @@
   </bean>
 
   <!-- Login utils -->
-  <bean id="loginViewDescriptorBase" class="org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor">
-    <property name="name" value="login.name" />
+  <bean abstract="true" id="abstractLoginViewDescriptorBase"
+        class="org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor">
+    <property name="name" value="login.name"/>
+    <property name="description" value="credentialMessage"/>
     <property name="iconImageURL">
       <bean parent="abstractFwIconImageURL">
-        <constructor-arg index="0" value="password" />
+        <constructor-arg index="0" value="password"/>
       </bean>
     </property>
+    <property name="modelDescriptor" ref="loginModelDescriptor"/>
+  </bean>
+
+  <bean id="loginViewDescriptorBase"
+        parent="abstractLoginViewDescriptorBase"
+        class="org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor">
     <property name="columnCount" value="1" />
-    <property name="modelDescriptor" ref="loginModelDescriptor" />
   </bean>
 
   <bean id="loginViewDescriptor" parent="loginViewDescriptorBase" />

@@ -15,17 +15,14 @@
 
 package org.jspresso.framework.application.frontend.command.remote {
 
+import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RComponent;
-import org.jspresso.framework.gui.remote.RIcon;
 
 [RemoteClass(alias="org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand")]
 public class RemoteInitLoginCommand extends RemoteCommand {
 
   private var _loginView:RComponent;
-  private var _message:String;
-  private var _okIcon:RIcon;
-  private var _okLabel:String;
-  private var _title:String;
+  private var _loginAction:RAction;
 
   public function RemoteInitLoginCommand() {
     //default constructor.
@@ -39,36 +36,13 @@ public class RemoteInitLoginCommand extends RemoteCommand {
     return _loginView;
   }
 
-  public function set message(value:String):void {
-    _message = value;
+
+  public function get loginAction():RAction {
+    return _loginAction;
   }
 
-  public function get message():String {
-    return _message;
-  }
-
-  public function set okIcon(value:RIcon):void {
-    _okIcon = value;
-  }
-
-  public function get okIcon():RIcon {
-    return _okIcon;
-  }
-
-  public function set okLabel(value:String):void {
-    _okLabel = value;
-  }
-
-  public function get okLabel():String {
-    return _okLabel;
-  }
-
-  public function set title(value:String):void {
-    _title = value;
-  }
-
-  public function get title():String {
-    return _title;
+  public function set loginAction(value:RAction):void {
+    _loginAction = value;
   }
 }
 }

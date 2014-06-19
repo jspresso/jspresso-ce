@@ -18,8 +18,8 @@
  */
 package org.jspresso.framework.application.frontend.command.remote;
 
+import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RComponent;
-import org.jspresso.framework.gui.remote.RIcon;
 
 /**
  * This command initiates the login phase.
@@ -31,15 +31,12 @@ public class RemoteInitLoginCommand extends RemoteCommand {
 
   private static final long serialVersionUID = 5672752293218754196L;
 
-  private RComponent        loginView;
-  private String            message;
-  private RIcon             okIcon;
-  private String            okLabel;
-  private String            title;
+  private RComponent loginView;
+  private RAction    loginAction;
 
   /**
    * Gets the loginView.
-   * 
+   *
    * @return the loginView.
    */
   public RComponent getLoginView() {
@@ -47,44 +44,8 @@ public class RemoteInitLoginCommand extends RemoteCommand {
   }
 
   /**
-   * Gets the message.
-   * 
-   * @return the message.
-   */
-  public String getMessage() {
-    return message;
-  }
-
-  /**
-   * Gets the okIcon.
-   * 
-   * @return the okIcon.
-   */
-  public RIcon getOkIcon() {
-    return okIcon;
-  }
-
-  /**
-   * Gets the okLabel.
-   * 
-   * @return the okLabel.
-   */
-  public String getOkLabel() {
-    return okLabel;
-  }
-
-  /**
-   * Gets the title.
-   * 
-   * @return the title.
-   */
-  public String getTitle() {
-    return title;
-  }
-
-  /**
    * Sets the loginView.
-   * 
+   *
    * @param loginView
    *          the loginView to set.
    */
@@ -93,42 +54,20 @@ public class RemoteInitLoginCommand extends RemoteCommand {
   }
 
   /**
-   * Sets the message.
-   * 
-   * @param message
-   *          the message to set.
+   * Gets login action.
+   *
+   * @return the login action
    */
-  public void setMessage(String message) {
-    this.message = message;
+  public RAction getLoginAction() {
+    return loginAction;
   }
 
   /**
-   * Sets the okIcon.
-   * 
-   * @param okIcon
-   *          the okIcon to set.
+   * Sets login action.
+   *
+   * @param loginAction the login action
    */
-  public void setOkIcon(RIcon okIcon) {
-    this.okIcon = okIcon;
-  }
-
-  /**
-   * Sets the okLabel.
-   * 
-   * @param okLabel
-   *          the okLabel to set.
-   */
-  public void setOkLabel(String okLabel) {
-    this.okLabel = okLabel;
-  }
-
-  /**
-   * Sets the title.
-   * 
-   * @param title
-   *          the title to set.
-   */
-  public void setTitle(String title) {
-    this.title = title;
+  public void setLoginAction(RAction loginAction) {
+    this.loginAction = loginAction;
   }
 }

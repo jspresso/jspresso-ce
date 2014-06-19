@@ -828,14 +828,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      * @param loginCommand {org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand}
      */
     _handleInitLoginCommmand: function (loginCommand) {
-      var loginButton = this._getViewFactory().createButton(loginCommand.getOkLabel(), null, loginCommand.getOkIcon());
+      var loginButton = this._getViewFactory().createAction(loginCommand.getLoginAction());
       this._getViewFactory().addButtonListener(loginButton, function (event) {
         this._performLogin();
       }, this);
-      var loginButtons = [];
-      loginButtons.push(loginButton);
-      this._popupDialog(loginCommand.getTitle(), loginCommand.getMessage(), loginCommand.getLoginView(),
-          loginCommand.getLoginView().getIcon(), loginButtons);
+      var loginView = loginCommand.getLoginView();
+      this._popupDialog(loginView.getLabel(), loginView.getToolTip(), loginView,
+          loginView.getIcon(), [loginButton]);
     },
 
     /**
