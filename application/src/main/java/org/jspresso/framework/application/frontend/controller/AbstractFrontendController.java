@@ -1761,7 +1761,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     FrontendAction<E, F, G> triggerLoginAction = new FrontendAction<E, F, G>() {
       @Override
       public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
-        loginAnonymously();
+        login();
         return super.execute(actionHandler, context);
       }
     };
