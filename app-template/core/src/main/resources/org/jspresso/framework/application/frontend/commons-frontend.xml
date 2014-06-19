@@ -1101,7 +1101,8 @@
       </bean>
     </property>
     <property name="modelDescriptor" ref="loginModelDescriptor"/>
-    <property name="actionMap" ref="loginActionMap" />
+    <property name="actionMap" ref="loginActionMap"/>
+    <property name="secondaryActionMap" ref="loginActionMap"/>
   </bean>
 
   <bean id="loginViewDescriptorBase"

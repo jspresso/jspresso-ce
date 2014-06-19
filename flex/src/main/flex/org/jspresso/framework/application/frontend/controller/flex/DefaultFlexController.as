@@ -337,14 +337,10 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
       _translations = (command as RemoteLocaleCommand).translations;
     } else if (command is RemoteInitLoginCommand) {
       var initLoginCommand:RemoteInitLoginCommand = command as RemoteInitLoginCommand;
-      var loginButtons:Array = [];
-      for (var i:int = 0; i < initLoginCommand.loginActions.length; i ++) {
-        loginButtons.push(getViewFactory().createDialogAction(initLoginCommand.loginActions[i]));
-      }
       var rLoginView:RComponent = initLoginCommand.loginView;
       var loginView:UIComponent = getViewFactory().createComponent(rLoginView);
       popupDialog(rLoginView.label, rLoginView.toolTip, loginView, rLoginView.icon,
-                  loginButtons);
+                  initLoginCommand.loginActions, false, null, initLoginCommand.secondaryLoginActions);
     } else if (command is RemoteCleanupCommand) {
       var removedPeerGuids:Array = (command as RemoteCleanupCommand).removedPeerGuids;
       for (var rpeerIndex:int = 0; rpeerIndex < removedPeerGuids.length; rpeerIndex++) {
@@ -1266,8 +1262,9 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     _workspaceAccordion.selectedChild = _workspaceAccordion.getAcccordionSectionByName(workspaceName) as Container;
   }
 
-  protected function popupDialog(title:String, message:String, dialogView:UIComponent, icon:RIcon, buttons:Array,
-                                 useCurrent:Boolean = false, dimension:Dimension = null):void {
+  protected function popupDialog(title:String, message:String, dialogView:UIComponent, icon:RIcon, actions:Array,
+                                 useCurrent:Boolean = false, dimension:Dimension = null,
+                                 secondaryActions:Array = null):void {
     dialogView.percentWidth = 100.0;
     dialogView.percentHeight = 100.0;
     var buttonBox:HBox = new HBox();
@@ -1293,7 +1290,19 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     var separator:HRule = new HRule();
     separator.percentWidth = 100.0;
     dialogBox.addChild(separator);
-    for each(var button:Button in buttons) {
+    var allActions:Array;
+    if (secondaryActions) {
+      allActions = actions.concat(secondaryActions);
+    } else {
+      allActions = actions;
+    }
+    for each(var buttonOrAction:Object in allActions) {
+      var button:Button;
+      if (buttonOrAction is RAction) {
+        button = getViewFactory().createDialogAction(buttonOrAction as RAction);
+      } else {
+        button = buttonOrAction as Button;
+      }
       if (!dialogBox.defaultButton) {
         dialogBox.defaultButton = button;
       }

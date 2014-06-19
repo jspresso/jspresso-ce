@@ -43,7 +43,7 @@ import org.jspresso.framework.util.security.LoginUtils;
 /**
  * A development login module with configuration parametrized user, password,
  * roles and custom properties.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -249,13 +249,13 @@ public class DevelopmentLoginModule implements LoginModule {
         callbackHandler.handle(callbacks);
         username = ((NameCallback) callbacks[0]).getName();
         char[] tmpPassword = ((PasswordCallback) callbacks[1]).getPassword();
-        if (tmpPassword == null) {
-          // treat a NULL password as an empty password
-          tmpPassword = new char[0];
+        if (tmpPassword != null) {
+          password = new char[tmpPassword.length];
+          System.arraycopy(tmpPassword, 0, password, 0, tmpPassword.length);
+          ((PasswordCallback) callbacks[1]).clearPassword();
+        } else {
+          password = null;
         }
-        password = new char[tmpPassword.length];
-        System.arraycopy(tmpPassword, 0, password, 0, tmpPassword.length);
-        ((PasswordCallback) callbacks[1]).clearPassword();
       }
     } catch (java.io.IOException ioe) {
       throw new RuntimeException(ioe);
@@ -289,10 +289,12 @@ public class DevelopmentLoginModule implements LoginModule {
     succeeded = false;
     username = null;
     suffix = "";
-    for (int i = 0; i < password.length; i++) {
-      password[i] = ' ';
+    if (password != null) {
+      for (int i = 0; i < password.length; i++) {
+        password[i] = ' ';
+      }
+      password = null;
     }
-    password = null;
     throw new FailedLoginException(LoginUtils.PASSWORD_FAILED);
   }
 

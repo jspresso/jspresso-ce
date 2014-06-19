@@ -324,9 +324,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      * @param actions {org.jspresso.framework.gui.remote.RAction[] | qx.ui.mobile.form.Button[]}
      * @param useCurrent {Boolean}
      * @param dimension {org.jspresso.framework.util.gui.Dimension}
+     * @param secondaryActions {org.jspresso.framework.gui.remote.RAction[] | qx.ui.mobile.form.Button[]}
      * @return {undefined}
      */
-    _popupDialog: function (title, message, remoteDialogView, icon, actions, useCurrent, dimension) {
+    _popupDialog: function (title, message, remoteDialogView, icon, actions, useCurrent, dimension, secondaryActions) {
       useCurrent = (typeof useCurrent == 'undefined') ? false : useCurrent;
 
       var dialogView = remoteDialogView;
@@ -339,14 +340,42 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       dialogMessage.addCssClass("form-row-group-title");
 
       dialogContent.add(dialogMessage);
+
+      if (secondaryActions) {
+        for (var i = 0; i < secondaryActions.length; i++) {
+          var action = secondaryActions[i];
+          if (action instanceof org.jspresso.framework.gui.remote.RAction) {
+            var actionAsList = new qx.ui.mobile.list.List({
+              configureItem: function (item, data, row) {
+                item.setTitle(data.getName());
+                item.setSubtitle(data.getDescription());
+                if (data.getIcon()) {
+                  item.setImage(data.getIcon().getImageUrlSpec());
+                }
+                item.setShowArrow(true);
+              }
+            });
+            actionAsList.addListener("tap", function (evt) {
+              var modelAction = evt.getCurrentTarget().getModel().getItem(0);
+              this.execute(modelAction);
+            }, this);
+            actionAsList.addCssClass("jspresso-list");
+            actionAsList.setModel(new qx.data.Array([action]));
+            dialogContent.add(actionAsList);
+          } else {
+            dialogContent.add(action);
+          }
+        }
+      }
+
       dialogContent.add(dialogView);
       if (actions.length > 0) {
-        if (actions[0] instanceof qx.ui.mobile.form.Button) {
+        if (actions[0] instanceof org.jspresso.framework.gui.remote.RAction) {
+          dialogContent.add(this._getViewFactory().createToolBarFromActions(actions, 4, null));
+        } else {
           for (var i = 0; i < actions.length; i++) {
             dialogContent.add(actions[i]);
           }
-        } else {
-          dialogContent.add(this._getViewFactory().createToolBarFromActions(actions, 4, null));
         }
       }
 

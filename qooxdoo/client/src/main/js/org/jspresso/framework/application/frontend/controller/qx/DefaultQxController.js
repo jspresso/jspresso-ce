@@ -63,12 +63,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @param message {String}
      * @param remoteDialogView {org.jspresso.framework.gui.remote.RComponent}
      * @param icon {org.jspresso.framework.gui.remote.RIcon}
-     * @param buttons {qx.ui.form.Button[]}
+     * @param actions {org.jspresso.framework.gui.remote.RAction[] | qx.ui.form.Button[]}
      * @param useCurrent {Boolean}
      * @param dimension {org.jspresso.framework.util.gui.Dimension}
+     * @param secondaryActions {org.jspresso.framework.gui.remote.RAction[] | qx.ui.form.Button[]}
      * @return {undefined}
      */
-    _popupDialog: function (title, message, remoteDialogView, icon, buttons, useCurrent, dimension) {
+    _popupDialog: function (title, message, remoteDialogView, icon, actions, useCurrent, dimension, secondaryActions) {
       useCurrent = (typeof useCurrent == 'undefined') ? false : useCurrent;
 
       var dialogView = remoteDialogView;
@@ -93,13 +94,17 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         dialogView.setHeight(dimension.getHeight());
       }
       dialogBox.add(dialogView, {flex: 1});
-      for (var i = 0; i < buttons.length; i++) {
-        if (buttons.length > 0) {
-          if (buttons[0] instanceof org.jspresso.framework.gui.remote.RAction) {
-            buttonBox.add(this._getViewFactory().createAction(buttons[i]));
-          } else {
-            buttonBox.add(buttons[i]);
-          }
+      var allActions;
+      if (secondaryActions) {
+        allActions = actions.concat(secondaryActions);
+      } else {
+        allActions = actions;
+      }
+      for (var i = 0; i < allActions.length; i++) {
+        if (allActions[i] instanceof org.jspresso.framework.gui.remote.RAction) {
+          buttonBox.add(this._getViewFactory().createAction(allActions[i]));
+        } else {
+          buttonBox.add(allActions[i]);
         }
       }
       dialogBox.add(buttonBox);
@@ -134,14 +139,14 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       }
       dialog.setCaption(title);
       this._getViewFactory().setIcon(dialog, icon);
-      if (buttons.length > 0) {
+      if (actions.length > 0) {
         dialog.addListener("keypress", function (e) {
-          if (e.getKeyIdentifier() == "Enter" && !qx.ui.core.FocusHandler.getInstance().isFocused(buttons[0])
+          if (e.getKeyIdentifier() == "Enter" && !qx.ui.core.FocusHandler.getInstance().isFocused(actions[0])
               && (!(qx.ui.core.FocusHandler.getInstance().getFocusedWidget() instanceof qx.ui.form.AbstractField)
                   || qx.ui.core.FocusHandler.getInstance().getFocusedWidget() instanceof qx.ui.form.PasswordField)) {
-            buttons[0].focus();
+            actions[0].focus();
             new qx.util.DeferredCall(function () {
-              buttons[0].execute(); // and call the default button's
+              actions[0].execute(); // and call the default button's
             }).schedule();
           }
         });
