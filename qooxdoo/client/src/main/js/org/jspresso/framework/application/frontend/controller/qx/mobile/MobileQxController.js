@@ -324,10 +324,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      * @param actions {org.jspresso.framework.gui.remote.RAction[] | qx.ui.mobile.form.Button[]}
      * @param useCurrent {Boolean}
      * @param dimension {org.jspresso.framework.util.gui.Dimension}
-     * @param secondaryActions {org.jspresso.framework.gui.remote.RAction[] | qx.ui.mobile.form.Button[]}
+     * @param secondaryActionLists {org.jspresso.framework.gui.remote.RActionList[]}
      * @return {undefined}
      */
-    _popupDialog: function (title, message, remoteDialogView, icon, actions, useCurrent, dimension, secondaryActions) {
+    _popupDialog: function (title, message, remoteDialogView, icon, actions, useCurrent, dimension, secondaryActionLists) {
       useCurrent = (typeof useCurrent == 'undefined') ? false : useCurrent;
 
       var dialogView = remoteDialogView;
@@ -341,10 +341,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
 
       dialogContent.add(dialogMessage);
 
-      if (secondaryActions) {
-        for (var i = 0; i < secondaryActions.length; i++) {
-          var action = secondaryActions[i];
-          if (action instanceof org.jspresso.framework.gui.remote.RAction) {
+      if (secondaryActionLists) {
+        for (var i = 0; i < secondaryActionLists.length; i++) {
+          var actionList = secondaryActionLists[i];
+          for(var j = 0; j < actionList.getActions().length; j++) {
+            var action = actionList.getActions()[j];
             var actionAsList = new qx.ui.mobile.list.List({
               configureItem: function (item, data, row) {
                 item.setTitle(data.getName());
@@ -362,8 +363,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
             actionAsList.addCssClass("jspresso-list");
             actionAsList.setModel(new qx.data.Array([action]));
             dialogContent.add(actionAsList);
-          } else {
-            dialogContent.add(action);
           }
         }
       }

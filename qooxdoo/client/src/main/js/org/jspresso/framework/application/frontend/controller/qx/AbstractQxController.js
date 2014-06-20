@@ -822,7 +822,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     _handleInitLoginCommmand: function (loginCommand) {
       var loginView = loginCommand.getLoginView();
       this._popupDialog(loginView.getLabel(), loginView.getToolTip(), loginView, loginView.getIcon(),
-          loginCommand.getLoginActions(), false, null, loginCommand.getSecondaryLoginActions());
+          this._getViewFactory().extractAllActions(loginCommand.getLoginActionLists()), false, null,
+          loginCommand.getSecondaryLoginActionLists());
     },
 
     /**

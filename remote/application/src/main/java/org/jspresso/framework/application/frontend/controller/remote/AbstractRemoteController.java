@@ -257,18 +257,18 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
       workspaceDescriptions[i] = getWorkspace(workspaceNames.get(i)).getI18nHeaderDescription();
     }
     initCommand.setWorkspaceDescriptions(workspaceDescriptions);
-    initCommand.setWorkspaceActions(createRActionList(createWorkspaceActionList()));
+    initCommand.setWorkspaceActions(createRActionList(createWorkspaceActionList(), null));
     if (getActionMap() != null && isAccessGranted(getActionMap())) {
       try {
         pushToSecurityContext(getActionMap());
-        initCommand.setActions(createRActionLists(getActionMap()));
+        initCommand.setActions(createRActionLists(getActionMap(), null));
       } finally {
         restoreLastSecurityContextSnapshot();
       }
     }
-    initCommand.setSecondaryActions(createRActionLists(getSecondaryActionMap()));
-    initCommand.setHelpActions(createRActionLists(getHelpActions()));
-    initCommand.setNavigationActions(createRActionLists(getNavigationActions()));
+    initCommand.setSecondaryActions(createRActionLists(getSecondaryActionMap(), null));
+    initCommand.setHelpActions(createRActionLists(getHelpActions(), null));
+    initCommand.setNavigationActions(createRActionLists(getNavigationActions(), null));
     initCommand.setExitAction(getViewFactory().getActionFactory().createAction(getExitAction(), this, null,
         getLocale()));
     int w = 0;
@@ -328,8 +328,8 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
         loginView = createLoginView();
         initLoginCommand.setLoginView(loginView.getPeer());
         IViewDescriptor loginViewDescriptor = getLoginViewDescriptor();
-        initLoginCommand.setLoginActions(extractActions(loginViewDescriptor.getActionMap(), loginView));
-        initLoginCommand.setSecondaryLoginActions(extractActions(loginViewDescriptor.getSecondaryActionMap(),
+        initLoginCommand.setLoginActionLists(createRActionLists(loginViewDescriptor.getActionMap(), loginView));
+        initLoginCommand.setSecondaryLoginActionLists(createRActionLists(loginViewDescriptor.getSecondaryActionMap(),
             loginView));
         registerCommand(initLoginCommand);
       } else {
@@ -464,20 +464,6 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
     }
   }
 
-  private RAction[] extractActions(ActionMap actionMap, IView<RComponent>view) {
-    if (actionMap != null) {
-      List<RAction> actions = new ArrayList<>();
-      for (ActionList actionList : actionMap.getActionLists(this)) {
-        for (IDisplayableAction action : actionList.getActions()) {
-          actions.add(getViewFactory().getActionFactory().createAction(action,
-              getViewFactory().getIconFactory().getSmallIconSize(), this, view, getLocale()));
-        }
-      }
-      return actions.toArray(new RAction[actions.size()]);
-    }
-    return null;
-  }
-
   /**
    * Logs into the application.
    */
@@ -527,7 +513,7 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
     return messageCommand;
   }
 
-  private RActionList createRActionList(ActionList actionList) {
+  private RActionList createRActionList(ActionList actionList, IView<RComponent> view) {
     if (isAccessGranted(actionList)) {
       try {
         pushToSecurityContext(actionList);
@@ -541,7 +527,7 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
           if (isAccessGranted(action)) {
             try {
               pushToSecurityContext(action);
-              actions.add(getViewFactory().getActionFactory().createAction(action, this, null, getLocale()));
+              actions.add(getViewFactory().getActionFactory().createAction(action, this, view, getLocale()));
             } finally {
               restoreLastSecurityContextSnapshot();
             }
@@ -557,7 +543,7 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
     return null;
   }
 
-  private RActionList[] createRActionLists(ActionMap actionMap) {
+  private RActionList[] createRActionLists(ActionMap actionMap, IView<RComponent> view) {
     List<RActionList> actionLists = new ArrayList<>();
     if (actionMap != null) {
       if (isAccessGranted(actionMap)) {
@@ -567,7 +553,7 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
             if (isAccessGranted(actionList)) {
               try {
                 pushToSecurityContext(actionList);
-                RActionList rActionList = createRActionList(actionList);
+                RActionList rActionList = createRActionList(actionList, view);
                 if (rActionList != null) {
                   actionLists.add(rActionList);
                 }

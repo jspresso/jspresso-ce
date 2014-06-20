@@ -340,7 +340,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
       var rLoginView:RComponent = initLoginCommand.loginView;
       var loginView:UIComponent = getViewFactory().createComponent(rLoginView);
       popupDialog(rLoginView.label, rLoginView.toolTip, loginView, rLoginView.icon,
-                  initLoginCommand.loginActions, false, null, initLoginCommand.secondaryLoginActions);
+                  extractAllActions(initLoginCommand.loginActionLists), false, null, initLoginCommand.secondaryLoginActionLists);
     } else if (command is RemoteCleanupCommand) {
       var removedPeerGuids:Array = (command as RemoteCleanupCommand).removedPeerGuids;
       for (var rpeerIndex:int = 0; rpeerIndex < removedPeerGuids.length; rpeerIndex++) {
@@ -1264,7 +1264,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
 
   protected function popupDialog(title:String, message:String, dialogView:UIComponent, icon:RIcon, actions:Array,
                                  useCurrent:Boolean = false, dimension:Dimension = null,
-                                 secondaryActions:Array = null):void {
+                                 secondaryActionLists:Array = null):void {
     dialogView.percentWidth = 100.0;
     dialogView.percentHeight = 100.0;
     var buttonBox:HBox = new HBox();
@@ -1290,12 +1290,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     var separator:HRule = new HRule();
     separator.percentWidth = 100.0;
     dialogBox.addChild(separator);
-    var allActions:Array;
-    if (secondaryActions) {
-      allActions = actions.concat(secondaryActions);
-    } else {
-      allActions = actions;
-    }
+    var allActions:Array = actions.concat(extractAllActions(secondaryActionLists));
     for each(var buttonOrAction:Object in allActions) {
       var button:Button;
       if (buttonOrAction is RAction) {
@@ -1365,6 +1360,23 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
       dialog.callLater(focusInit);
     });
     PopUpManager.centerPopUp(dialog);
+  }
+
+  private function extractAllActions(secondaryActionLists:Array):Array {
+    var allActions:Array = [];
+    if (secondaryActionLists) {
+      if (secondaryActionLists != null) {
+        for (var i:int = 0; i < secondaryActionLists.length; i++) {
+          var actionList:RActionList = secondaryActionLists[i] as RActionList;
+          if (actionList.actions != null) {
+            for (var j:int = 0; j < actionList.actions.length; j++) {
+              allActions.push(actionList.actions[j]);
+            }
+          }
+        }
+      }
+    }
+    return allActions;
   }
 
   public function setCurrentViewStateGuid(component:UIComponent, viewStateGuid:String, viewStatePermId:String):void {

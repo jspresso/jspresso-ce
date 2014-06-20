@@ -22,8 +22,8 @@ import org.jspresso.framework.gui.remote.RComponent;
 public class RemoteInitLoginCommand extends RemoteCommand {
 
   private var _loginView:RComponent;
-  private var _loginActions:Array;
-  private var _secondaryLoginActions:Array;
+  private var _loginActionLists:Array;
+  private var _secondaryLoginActionLists:Array;
 
   public function RemoteInitLoginCommand() {
     //default constructor.
@@ -38,20 +38,20 @@ public class RemoteInitLoginCommand extends RemoteCommand {
   }
 
 
-  public function get loginActions():Array {
-    return _loginActions;
+  public function get loginActionLists():Array {
+    return _loginActionLists;
   }
 
-  public function set loginActions(value:Array):void {
-    _loginActions = value;
+  public function set loginActionLists(value:Array):void {
+    _loginActionLists = value;
   }
 
-  public function get secondaryLoginActions():Array {
-    return _secondaryLoginActions;
+  public function get secondaryLoginActionLists():Array {
+    return _secondaryLoginActionLists;
   }
 
-  public function set secondaryLoginActions(value:Array):void {
-    _secondaryLoginActions = value;
+  public function set secondaryLoginActionLists(value:Array):void {
+    _secondaryLoginActionLists = value;
   }
 }
 }

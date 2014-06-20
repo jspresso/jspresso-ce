@@ -66,10 +66,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @param actions {org.jspresso.framework.gui.remote.RAction[] | qx.ui.form.Button[]}
      * @param useCurrent {Boolean}
      * @param dimension {org.jspresso.framework.util.gui.Dimension}
-     * @param secondaryActions {org.jspresso.framework.gui.remote.RAction[] | qx.ui.form.Button[]}
+     * @param secondaryActionLists {org.jspresso.framework.gui.remote.RActionList[]}
      * @return {undefined}
      */
-    _popupDialog: function (title, message, remoteDialogView, icon, actions, useCurrent, dimension, secondaryActions) {
+    _popupDialog: function (title, message, remoteDialogView, icon, actions, useCurrent, dimension, secondaryActionLists) {
       useCurrent = (typeof useCurrent == 'undefined') ? false : useCurrent;
 
       var dialogView = remoteDialogView;
@@ -95,8 +95,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       }
       dialogBox.add(dialogView, {flex: 1});
       var allActions;
-      if (secondaryActions) {
-        allActions = actions.concat(secondaryActions);
+      if (secondaryActionLists) {
+        allActions = actions.concat(this._getViewFactory().extractAllActions(secondaryActionLists));
       } else {
         allActions = actions;
       }

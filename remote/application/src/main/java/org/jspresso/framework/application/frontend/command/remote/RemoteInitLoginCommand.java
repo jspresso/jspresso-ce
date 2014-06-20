@@ -18,23 +18,22 @@
  */
 package org.jspresso.framework.application.frontend.command.remote;
 
-import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RActionList;
 import org.jspresso.framework.gui.remote.RComponent;
 
 /**
  * This command initiates the login phase.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
 public class RemoteInitLoginCommand extends RemoteCommand {
 
   private static final long serialVersionUID = 5672752293218754196L;
 
-  private RComponent loginView;
-  private RAction[]  loginActions;
-  private RAction[]  secondaryLoginActions;
+  private RComponent    loginView;
+  private RActionList[] loginActionLists;
+  private RActionList[] secondaryLoginActionLists;
 
   /**
    * Gets the loginView.
@@ -49,7 +48,7 @@ public class RemoteInitLoginCommand extends RemoteCommand {
    * Sets the loginView.
    *
    * @param loginView
-   *          the loginView to set.
+   *     the loginView to set.
    */
   public void setLoginView(RComponent loginView) {
     this.loginView = loginView;
@@ -60,17 +59,18 @@ public class RemoteInitLoginCommand extends RemoteCommand {
    *
    * @return the r action [ ]
    */
-  public RAction[] getLoginActions() {
-    return loginActions;
+  public RActionList[] getLoginActionLists() {
+    return loginActionLists;
   }
 
   /**
    * Sets login actions.
    *
-   * @param loginActions the login actions
+   * @param loginActionLists
+   *     the login actions
    */
-  public void setLoginActions(RAction[] loginActions) {
-    this.loginActions = loginActions;
+  public void setLoginActionLists(RActionList... loginActionLists) {
+    this.loginActionLists = loginActionLists;
   }
 
   /**
@@ -78,16 +78,17 @@ public class RemoteInitLoginCommand extends RemoteCommand {
    *
    * @return the r action [ ]
    */
-  public RAction[] getSecondaryLoginActions() {
-    return secondaryLoginActions;
+  public RActionList[] getSecondaryLoginActionLists() {
+    return secondaryLoginActionLists;
   }
 
   /**
    * Sets secondary login actions.
    *
-   * @param secondaryLoginActions the secondary login actions
+   * @param secondaryLoginActionLists
+   *     the secondary login actions
    */
-  public void setSecondaryLoginActions(RAction[] secondaryLoginActions) {
-    this.secondaryLoginActions = secondaryLoginActions;
+  public void setSecondaryLoginActionLists(RActionList... secondaryLoginActionLists) {
+    this.secondaryLoginActionLists = secondaryLoginActionLists;
   }
 }
