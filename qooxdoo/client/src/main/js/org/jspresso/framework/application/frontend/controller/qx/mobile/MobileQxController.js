@@ -537,7 +537,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      * @param backCommand {org.jspresso.framework.application.frontend.command.remote.mobile.RemoteBackCommand}
      */
     _handleBackCommand: function (backCommand) {
-      this.getCurrentPage().back();
+      var wasEnabled = this._changeNotificationsEnabled;
+      try {
+        this._changeNotificationsEnabled = true;
+        this.getCurrentPage().back();
+      } finally {
+        this._changeNotificationsEnabled = wasEnabled;
+      }
     },
 
 

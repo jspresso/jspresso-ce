@@ -21,7 +21,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
               org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler],
 
   statics: {
-    __JSPRESSO_VERSION: "${jspresso.version}",
+    __JSPRESSO_VERSION: "4.0-SNAPSHOT",
     __HANDLE_COMMANDS_METHOD: "handleCommands",
     __START_METHOD: "start",
     __STOP_METHOD: "stop"
@@ -34,7 +34,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
   construct: function (remoteController, userLanguage) {
     this.__remotePeerRegistry = new org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry();
     this.__viewFactory = this._createViewFactory();
-    this.__changeNotificationsEnabled = true;
+    this._changeNotificationsEnabled = true;
     this.__remoteController = remoteController;
     this.__commandsQueue = [];
     this.__commandsBacklog = [];
@@ -53,7 +53,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     /** @type {org.jspresso.framework.util.remote.registry.IRemotePeerRegistry} */
     __remotePeerRegistry: null,
     /** @type {Boolean} */
-    __changeNotificationsEnabled: null,
+    _changeNotificationsEnabled: null,
     /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteCommand[]} */
     __commandsQueue: null,
     /** @type {Boolean} */
@@ -152,9 +152,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      * @return {undefined}
      */
     _bindRemoteValueState: function (remoteValueState) {
-      var wasEnabled = this.__changeNotificationsEnabled;
+      var wasEnabled = this._changeNotificationsEnabled;
       try {
-        this.__changeNotificationsEnabled = false;
+        this._changeNotificationsEnabled = false;
         remoteValueState.addListener("changeValue", this._valueUpdated, this);
         if (remoteValueState instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
           remoteValueState.addListener("changeSelectedIndices", this._selectedIndicesUpdated, this);
@@ -162,7 +162,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
       } catch (e) {
         throw e;
       } finally {
-        this.__changeNotificationsEnabled = wasEnabled;
+        this._changeNotificationsEnabled = wasEnabled;
       }
     },
 
@@ -172,7 +172,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      */
     _selectedIndicesUpdated: function (event) {
       var remoteCompositeValueState = event.getTarget();
-      if (this.__changeNotificationsEnabled) {
+      if (this._changeNotificationsEnabled) {
         //this.debug(">>> Selected indices update <<< " + remoteCompositeValueState.getSelectedIndices() + " on " + remoteCompositeValueState.getValue());
         var command = new org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand();
         command.setTargetPeerGuid(remoteCompositeValueState.getGuid());
@@ -190,7 +190,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      */
     _valueUpdated: function (event) {
       var remoteValueState = event.getTarget();
-      if (this.__changeNotificationsEnabled) {
+      if (this._changeNotificationsEnabled) {
         //this.debug(">>> Value update <<< " + remoteValueState.getValue());
         var command = new org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand();
         command.setTargetPeerGuid(remoteValueState.getGuid());
@@ -234,7 +234,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      * @return {undefined}
      */
     registerCommand: function (command) {
-      if (this.__changeNotificationsEnabled) {
+      if (this._changeNotificationsEnabled) {
         //this.debug("Command registered for next round trip : " + command);
         this.__commandsQueue.push(command);
         this._dispatchCommands();
@@ -248,9 +248,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      */
     _handleCommands: function (commands) {
       //this.debug("Received commands :");
-      var wasEnabled = this.__changeNotificationsEnabled;
+      var wasEnabled = this._changeNotificationsEnabled;
       try {
-        this.__changeNotificationsEnabled = false;
+        this._changeNotificationsEnabled = false;
         if (commands) {
           for (var i = 0; i < commands.length; i++) {
             //this.debug("  -> " + commands[i]);
@@ -260,7 +260,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
       } catch (e) {
         throw e;
       } finally {
-        this.__changeNotificationsEnabled = wasEnabled;
+        this._changeNotificationsEnabled = wasEnabled;
       }
     },
 
@@ -605,7 +605,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      */
     _restart: function () {
       this.__remotePeerRegistry = new org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry();
-      this.__changeNotificationsEnabled = true;
+      this._changeNotificationsEnabled = true;
       this.__commandsQueue = [];
       this.__commandsBacklog = [];
       this._dialogStack = [];
@@ -821,8 +821,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      */
     _handleInitLoginCommmand: function (loginCommand) {
       var loginView = loginCommand.getLoginView();
-      this._popupDialog(loginView.getLabel(), loginView.getToolTip(), loginView,
-          loginView.getIcon(), loginCommand.getLoginActions(), false, null, loginCommand.getSecondaryLoginActions());
+      this._popupDialog(loginView.getLabel(), loginView.getToolTip(), loginView, loginView.getIcon(),
+          loginCommand.getLoginActions(), false, null, loginCommand.getSecondaryLoginActions());
     },
 
     /**
