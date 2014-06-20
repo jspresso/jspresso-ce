@@ -29,6 +29,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -72,6 +73,11 @@ public class RequestParamsHttpFilter implements Filter {
         session.setAttribute(REQUEST_PARAMS_KEY, existing);
       }
       existing.putAll(parameterMap);
+      if (parameterMap.size() > 0 && ((HttpServletRequest) request).getRequestURL().indexOf("html") >= 0) {
+        ((HttpServletResponse) response).setHeader("Cache-control", "no-cache, no-store");
+        ((HttpServletResponse) response).setHeader("Pragma", "no-cache");
+        ((HttpServletResponse) response).setHeader("Expires", "-1");
+      }
     }
     chain.doFilter(request, response);
   }
