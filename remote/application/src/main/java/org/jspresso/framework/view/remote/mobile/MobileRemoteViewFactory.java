@@ -263,10 +263,15 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     List<RComponent> headerSections = new ArrayList<>();
     if (viewDescriptor.getHeaderSectionsDescriptors() != null) {
       for (IMobilePageSectionViewDescriptor hsd : viewDescriptor.getHeaderSectionsDescriptors()) {
-        if (isAllowedForClientType(hsd, actionHandler)) {
-          IView<RComponent> headerSection = createView(hsd, actionHandler, locale);
-          headerSections.add(headerSection.getPeer());
-          childrenViews.add(headerSection);
+        try {
+          actionHandler.pushToSecurityContext(hsd);
+          if (actionHandler.isAccessGranted(hsd) && isAllowedForClientType(hsd, actionHandler)) {
+            IView<RComponent> headerSection = createView(hsd, actionHandler, locale);
+            headerSections.add(headerSection.getPeer());
+            childrenViews.add(headerSection);
+          }
+        } finally {
+          actionHandler.restoreLastSecurityContextSnapshot();
         }
       }
     }
@@ -339,10 +344,16 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     List<RComponent> pageSections = new ArrayList<>();
     for (IMobilePageSectionViewDescriptor pageSectionViewDescriptor : filteredViewDescriptor
         .getPageSectionDescriptors()) {
-      if (isAllowedForClientType(pageSectionViewDescriptor, actionHandler)) {
-        IView<RComponent> pageSectionView = createView(pageSectionViewDescriptor, actionHandler, locale);
-        pageSections.add(pageSectionView.getPeer());
-        childrenViews.add(pageSectionView);
+      try {
+        actionHandler.pushToSecurityContext(pageSectionViewDescriptor);
+        if (actionHandler.isAccessGranted(pageSectionViewDescriptor)
+            && isAllowedForClientType(pageSectionViewDescriptor, actionHandler)) {
+          IView<RComponent> pageSectionView = createView(pageSectionViewDescriptor, actionHandler, locale);
+          pageSections.add(pageSectionView.getPeer());
+          childrenViews.add(pageSectionView);
+        }
+      } finally {
+        actionHandler.restoreLastSecurityContextSnapshot();
       }
     }
     viewComponent.setPageSections(pageSections.toArray(new RComponent[pageSections.size()]));
