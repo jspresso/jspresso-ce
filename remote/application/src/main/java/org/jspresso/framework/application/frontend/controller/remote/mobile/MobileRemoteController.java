@@ -150,11 +150,11 @@ public class MobileRemoteController extends AbstractRemoteController {
     Workspace workspace = getWorkspace(workspaceName);
     viewComponent.setLabel(workspace.getI18nName());
     viewComponent.setToolTip(workspace.getI18nDescription());
-    String workspaceI18nHeaderDescription = workspace.getI18nHeaderDescription();
-    if (workspaceI18nHeaderDescription != null && workspaceI18nHeaderDescription.length() > 0) {
-      RMobileForm headerForm = createHeaderForm(workspaceI18nHeaderDescription);
-      viewComponent.setHeaderSections(headerForm);
-    }
+    //    String workspaceI18nHeaderDescription = workspace.getI18nHeaderDescription();
+    //    if (workspaceI18nHeaderDescription != null && workspaceI18nHeaderDescription.length() > 0) {
+    //      RMobileForm headerForm = createHeaderForm(workspaceI18nHeaderDescription);
+    //      viewComponent.setHeaderSections(headerForm);
+    //    }
     IViewDescriptor workspaceNavigatorViewDescriptor = workspace.getViewDescriptor();
     IValueConnector workspaceConnector = getBackendController().getWorkspaceConnector(workspaceName);
     IView<RComponent> workspaceNavigator = createWorkspaceNavigator(workspaceName, workspaceNavigatorViewDescriptor);
