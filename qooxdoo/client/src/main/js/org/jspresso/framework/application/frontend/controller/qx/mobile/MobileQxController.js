@@ -516,7 +516,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       }, this);
       this.__workspacesMasterPage.setTitle(this._getName());
       this._getManager().addMaster(this.__workspacesMasterPage);
-      if (!this.isTablet()) {
+      if (this.isTablet()) {
+        this._getViewFactory().installPageMainAction(this.__blankPage, exitAction);
+      } else {
         this._getViewFactory().installPageMainAction(this.__workspacesMasterPage, exitAction);
       }
       this.__routing.executeGet("/workspaces", {animation: "cube", reverse: false});
