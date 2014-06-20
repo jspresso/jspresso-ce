@@ -327,7 +327,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      * @param secondaryActionLists {org.jspresso.framework.gui.remote.RActionList[]}
      * @return {undefined}
      */
-    _popupDialog: function (title, message, remoteDialogView, icon, actions, useCurrent, dimension, secondaryActionLists) {
+    _popupDialog: function (title, message, remoteDialogView, icon, actions, useCurrent, dimension,
+                            secondaryActionLists) {
       useCurrent = (typeof useCurrent == 'undefined') ? false : useCurrent;
 
       var dialogView = remoteDialogView;
@@ -340,12 +341,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       if (secondaryActionLists) {
         for (var i = 0; i < secondaryActionLists.length; i++) {
           var actionList = secondaryActionLists[i];
-          if(actionList.getDescription()) {
+          if (actionList.getDescription()) {
             var actionListMessage = new qx.ui.mobile.embed.Html(actionList.getDescription());
             actionListMessage.addCssClass("form-row-group-title");
             dialogContent.add(actionListMessage);
           }
-          for(var j = 0; j < actionList.getActions().length; j++) {
+          for (var j = 0; j < actionList.getActions().length; j++) {
             var action = actionList.getActions()[j];
             var actionAsList = new qx.ui.mobile.list.List({
               configureItem: function (item, data, row) {
@@ -373,15 +374,30 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       dialogContent.add(dialogMessage);
 
       dialogContent.add(dialogView);
+
+      var buttonBox = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
+      buttonBox.getLayout().setAlignX("center");
       if (actions.length > 0) {
         if (actions[0] instanceof org.jspresso.framework.gui.remote.RAction) {
-          dialogContent.add(this._getViewFactory().createToolBarFromActions(actions, 4, null));
+          var toolBar = this._getViewFactory().createToolBarFromActions(actions, 4, null);
+          if (this.isTablet()) {
+            toolBar.addCssClass("jspresso-tablet-dialog-actions");
+          } else {
+            toolBar.addCssClass("jspresso-phone-dialog-actions");
+          }
+          buttonBox.add(toolBar, {flex: 1});
         } else {
           for (var i = 0; i < actions.length; i++) {
-            dialogContent.add(actions[i]);
+            if (this.isTablet()) {
+              actions[i].addCssClass("jspresso-tablet-dialog-actions");
+            } else {
+              actions[i].addCssClass("jspresso-phone-dialog-actions");
+            }
+            buttonBox.add(actions[i], {flex: 1});
           }
         }
       }
+      dialogContent.add(buttonBox, {flex: 1});
 
       var dialogPage = null;
       if (useCurrent && this._dialogStack.length > 1) {
