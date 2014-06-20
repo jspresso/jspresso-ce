@@ -1982,6 +1982,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       imagePreview.addCssClass("group");
       imageChooser.add(imagePickerBar, {flex: 1});
       imageChooser.add(imagePreview, {flex: 1});
+      imageChooser.addCssClass("jspresso-image-chooser");
 
       var syncPicker = function (imageData) {
         if (imageData) {

@@ -139,3 +139,11 @@
   border: rem(1) solid #bcbcbc;
   border-radius: rem(3);
 }
+
+._jspresso-image-chooser {
+
+}
+
+.form-row.vbox * .jspresso-image-chooser * {
+  margin-top: 0rem;
+}
