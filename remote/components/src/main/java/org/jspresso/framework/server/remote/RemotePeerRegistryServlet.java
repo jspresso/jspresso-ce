@@ -25,6 +25,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServlet;
@@ -40,6 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
+import org.jspresso.framework.util.exception.IExceptionHandler;
 import org.jspresso.framework.util.http.HttpRequestHolder;
 import org.jspresso.framework.util.image.ImageHelper;
 import org.jspresso.framework.util.io.IoHelper;
@@ -199,21 +201,23 @@ public class RemotePeerRegistryServlet extends HttpServlet {
     IRemotePeerRegistry peerRegistry = (IRemotePeerRegistry) request.getSession().getAttribute(PEER_REGISTRY);
     IRemoteStateOwner stateOwner = (IRemoteStateOwner) peerRegistry.getRegistered(id);
     Object stateValue = stateOwner.actualValue();
-    if (request.getParameter(IMAGE_WIDTH_PARAMETER) != null) {
-      scaledWidth = Integer.parseInt(request.getParameter(IMAGE_WIDTH_PARAMETER));
-    }
-    if (request.getParameter(IMAGE_HEIGHT_PARAMETER) != null) {
-      scaledHeight = Integer.parseInt(request.getParameter(IMAGE_HEIGHT_PARAMETER));
-    }
-    if (scaledWidth != null || scaledHeight != null) {
-      stateValue = ImageHelper.scaleImage(stateValue, scaledWidth, scaledHeight);
-    }
-    if (stateValue instanceof byte[]) {
-      inputStream = new BufferedInputStream(new ByteArrayInputStream((byte[]) stateValue));
-      response.setContentLength(((byte[]) stateValue).length);
-    } else if (stateValue != null) {
-      inputStream = new BufferedInputStream(new ByteArrayInputStream(stateValue.toString().getBytes(
-          StandardCharsets.UTF_8.name())));
+    if (stateValue != null) {
+      if (request.getParameter(IMAGE_WIDTH_PARAMETER) != null) {
+        scaledWidth = Integer.parseInt(request.getParameter(IMAGE_WIDTH_PARAMETER));
+      }
+      if (request.getParameter(IMAGE_HEIGHT_PARAMETER) != null) {
+        scaledHeight = Integer.parseInt(request.getParameter(IMAGE_HEIGHT_PARAMETER));
+      }
+      if (scaledWidth != null || scaledHeight != null) {
+        stateValue = ImageHelper.scaleImage(stateValue, scaledWidth, scaledHeight);
+      }
+      if (stateValue instanceof byte[]) {
+        inputStream = new BufferedInputStream(new ByteArrayInputStream((byte[]) stateValue));
+        response.setContentLength(((byte[]) stateValue).length);
+      } else {
+        inputStream = new BufferedInputStream(new ByteArrayInputStream(stateValue.toString().getBytes(
+            StandardCharsets.UTF_8.name())));
+      }
     }
     if (inputStream != null) {
       BufferedOutputStream outputStream = new BufferedOutputStream(response.getOutputStream());
@@ -239,6 +243,7 @@ public class RemotePeerRegistryServlet extends HttpServlet {
       return;
     }
 
+    IRemotePeerRegistry peerRegistry = (IRemotePeerRegistry) request.getSession().getAttribute(PEER_REGISTRY);
     try {
       HttpRequestHolder.setServletRequest(request);
       byte[] content;
@@ -260,12 +265,15 @@ public class RemotePeerRegistryServlet extends HttpServlet {
         content = baos.toByteArray();
       }
 
-      IRemotePeerRegistry peerRegistry = (IRemotePeerRegistry) request.getSession().getAttribute(PEER_REGISTRY);
       IRemoteStateOwner stateOwner = (IRemoteStateOwner) peerRegistry.getRegistered(id);
       stateOwner.setValueFromState(content);
 
     } catch (Exception ex) {
-      LOG.error("An unexpected error occurred while uploading the content.", ex);
+      if (peerRegistry instanceof IExceptionHandler) {
+        ((IExceptionHandler) peerRegistry).handleException(ex, Collections.<String, Object>emptyMap());
+      } else {
+        LOG.error("An unexpected error occurred while uploading the content.", ex);
+      }
     } finally {
       HttpRequestHolder.setServletRequest(null);
     }
