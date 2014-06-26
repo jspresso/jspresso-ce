@@ -83,6 +83,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     __managerContainer: null,
     /** @type {qx.ui.mobile.page.NavigationPage[]} */
     __animationQueue: null,
+    /** @type {qx.ui.mobile.page.NavigationPage} */
+    __savedCurrentPage: null,
 
 
     showPage: function (page, animation, back) {
@@ -422,6 +424,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       if (remoteDialogView instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAware) {
         this._getViewFactory().installPageActions(remoteDialogView, dialogPage);
       }
+      if (this.__managerContainer.getVisibility() == "visible") {
+        this.__savedCurrentPage = this.getCurrentPage();
+      }
       dialogPage.show({animation: "slideup"});
     },
 
@@ -450,6 +455,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
           }, this);
         }
         pageToRestore.show({animation: "slideup", reverse: true});
+        if (this.__savedCurrentPage) {
+          qx.ui.mobile.page.Page._currentPage = this.__savedCurrentPage;
+          this.__savedCurrentPage = null;
+        }
       }
     },
 
