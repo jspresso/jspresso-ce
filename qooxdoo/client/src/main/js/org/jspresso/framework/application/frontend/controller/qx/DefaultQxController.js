@@ -539,6 +539,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       uploadDialog.add(buttonBox);
 
       uploadForm.addListener("completed", function (e) {
+        this._showBusy(false);
         uploadField.setFileName('');
         var document = uploadForm.getIframeDocument();
         var resource = document.firstChild;
@@ -555,12 +556,14 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
 
       var okButton = this._getViewFactory().createOkButton();
       this._getViewFactory().addButtonListener(okButton, function (event) {
+        this._showBusy(true);
         uploadForm.send();
       }, this);
       buttonBox.add(okButton);
 
       var cancelButton = this._getViewFactory().createCancelButton();
       this._getViewFactory().addButtonListener(cancelButton, function (event) {
+        this._showBusy(false);
         uploadDialog.close();
         uploadDialog.destroy();
         this.execute(uploadCommand.getCancelCallbackAction());

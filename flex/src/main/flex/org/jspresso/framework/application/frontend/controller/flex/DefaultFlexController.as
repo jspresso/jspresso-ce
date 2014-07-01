@@ -537,10 +537,12 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
   protected function handleFileUpload(uploadCommand:RemoteFileUploadCommand):void {
     _fileReference = new FileReference();
     _fileReference.addEventListener(Event.SELECT, function (event:Event):void {
+      blockUI(false);
       var request:URLRequest = new URLRequest(uploadCommand.fileUrl);
       _fileReference.upload(request);
     });
     _fileReference.addEventListener(DataEvent.UPLOAD_COMPLETE_DATA, function (event:DataEvent):void {
+      blockUI(true);
       var xml:XML = new XML(event.data);
       var resourceId:String = xml.@id;
       var actionEvent:RActionEvent = new RActionEvent();
@@ -549,10 +551,12 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
       popFakeDialog();
     });
     _fileReference.addEventListener(Event.CANCEL, function (event:Event):void {
+      blockUI(true);
       execute(uploadCommand.cancelCallbackAction);
       popFakeDialog();
     });
     _fileReference.addEventListener(IOErrorEvent.IO_ERROR, function (event:IOErrorEvent):void {
+      blockUI(true);
       popupError(event.text);
       popFakeDialog();
     });
