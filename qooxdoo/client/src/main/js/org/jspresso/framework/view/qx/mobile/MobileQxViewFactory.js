@@ -501,7 +501,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           contentRight = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
           contentLeft.addCssClasses(["jspresso-tablet-content-left", "group"]);
           contentRight.addCssClasses(["jspresso-tablet-content-right", "group"]);
-          splittedContent.add(this._decorateWithScrollContainer(contentLeft), {flex: 1});
+          splittedContent.add(this.decorateWithScrollContainer(contentLeft), {flex: 1});
           splittedContent.add(contentRight, {flex: 1});
         }
         if (headerSections) {
@@ -2040,7 +2040,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @return {qx.ui.mobile.core.Widget}
      * @param component {qx.ui.mobile.core.Widget}
      */
-    _decorateWithScrollContainer: function (component) {
+    decorateWithScrollContainer: function (component) {
       var scrollContainer = new qx.ui.mobile.container.Scroll();
       // scrollContainer.setFixedHeight(true);
       // scrollContainer.setShowScrollIndicator(false);

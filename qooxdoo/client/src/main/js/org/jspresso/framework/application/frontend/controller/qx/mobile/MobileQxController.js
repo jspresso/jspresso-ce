@@ -374,7 +374,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       var dialogMessage = new qx.ui.mobile.embed.Html(message);
       dialogMessage.addCssClass("form-row-group-title");
       dialogContent.add(dialogMessage);
-
       dialogContent.add(dialogView);
 
       var buttonBox = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
@@ -399,7 +398,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
           }
         }
       }
-      dialogContent.add(buttonBox, {flex: 1});
 
       var dialogPage = null;
       if (useCurrent && this._dialogStack.length > 1) {
@@ -412,7 +410,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       if (dialogPage == null) {
         dialogPage = new org.jspresso.framework.view.qx.mobile.StandaloneNavigationPage();
         dialogPage.addListener("initialize", function (e) {
-          dialogPage.getContent().add(dialogContent);
+          dialogPage.getContent().add(dialogContent, {flex: 1});
+          dialogPage.add(buttonBox);
         }, this);
         this._dialogStack.push([dialogPage, null, null]);
         this.__applicationContainer.add(dialogPage);
