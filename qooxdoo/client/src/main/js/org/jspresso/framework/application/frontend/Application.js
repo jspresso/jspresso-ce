@@ -60,7 +60,6 @@
  * @use(org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand)
  * @use(org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand)
  * @use(org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand)
- * @use(org.jspresso.framework.application.frontend.command.remote.RemoteLoginCommand)
  * @use(org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand)
  * @use(org.jspresso.framework.application.frontend.command.remote.RemoteOkCancelCommand)
  * @use(org.jspresso.framework.application.frontend.command.remote.RemoteOpenUrlCommand)
