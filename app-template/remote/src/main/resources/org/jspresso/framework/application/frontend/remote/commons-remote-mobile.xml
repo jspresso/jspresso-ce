@@ -331,4 +331,9 @@
   <bean abstract="true" id="abstractWorkspace" class="org.jspresso.framework.application.model.mobile.MobileWorkspace">
     <property name="iconProvider" ref="defaultModuleIconProvider"/>
   </bean>
+
+  <bean id="editComponentAction"
+        parent="abstractEditComponentAction"
+        class="org.jspresso.framework.application.frontend.action.std.mobile.MobileEditComponentAction">
+  </bean>
 </beans>

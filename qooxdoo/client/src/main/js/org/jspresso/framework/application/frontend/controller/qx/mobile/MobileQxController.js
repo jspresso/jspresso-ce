@@ -339,6 +339,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       }
 
       var dialogContent = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
+      dialogContent.addCssClass("group");
 
       if (secondaryActionLists) {
         for (var i = 0; i < secondaryActionLists.length; i++) {
@@ -378,6 +379,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
 
       var buttonBox = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
       buttonBox.getLayout().setAlignX("center");
+      buttonBox.addCssClass("group");
       if (actions.length > 0) {
         if (actions[0] instanceof org.jspresso.framework.gui.remote.RAction) {
           var toolBar = this._getViewFactory().createToolBarFromActions(actions, 4, null);
@@ -417,7 +419,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         this.__applicationContainer.add(dialogPage);
       } else {
         dialogPage.getContent().removeAll();
-        dialogPage.getContent().add(dialogContent);
+        dialogPage.getContent().add(dialogContent, {flex: 1});
+        dialogPage.add(buttonBox);
       }
       dialogPage.setTitle(title);
       if (remoteDialogView instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAware) {

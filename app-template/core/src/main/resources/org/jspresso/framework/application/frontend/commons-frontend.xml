@@ -359,9 +359,14 @@
 
   <bean id="editSelectedComponentAction" parent="editSelectedComponentActionBase"/>
 
-  <bean id="editComponentAction" class="org.jspresso.framework.application.frontend.action.std.EditComponentAction">
-    <property name="cancelAction" ref="cancelDialogFrontAction" />
-    <property name="nextAction" ref="modalDialogAction" />
+  <bean id="abstractEditComponentAction" abstract="true">
+    <property name="cancelAction" ref="cancelDialogFrontAction"/>
+    <property name="nextAction" ref="modalDialogAction"/>
+  </bean>
+
+  <bean id="editComponentAction"
+        parent="abstractEditComponentAction"
+        class="org.jspresso.framework.application.frontend.action.std.EditComponentAction">
   </bean>
 
   <bean id="editReportParametersAction" parent="editComponentAction"

@@ -62,14 +62,14 @@ public abstract class AbstractEditComponentAction<E, F, G> extends
 
     IViewDescriptor editViewDescriptor = getViewDescriptor(context);
 
-    IView<E> componentView = getViewFactory(context).createView(
+    IView<E> dialogView = getViewFactory(context).createView(
         editViewDescriptor, actionHandler, getLocale(context));
     String dialogTitle = getI18nName(getTranslationProvider(context),
         getLocale(context));
     if (dialogTitle != null && dialogTitle.length() > 0) {
       context.put(ModalDialogAction.DIALOG_TITLE, dialogTitle);
     }
-    context.put(ModalDialogAction.DIALOG_VIEW, componentView);
+    context.put(ModalDialogAction.DIALOG_VIEW, dialogView);
 
     Object component = getComponentToEdit(context);
     IModelDescriptor modelDescriptor = getEditModelDescriptor(context);
@@ -87,7 +87,7 @@ public abstract class AbstractEditComponentAction<E, F, G> extends
     componentConnector.setConnectorValue(component);
 
     getMvcBinder(context)
-        .bind(componentView.getConnector(), componentConnector);
+        .bind(dialogView.getConnector(), componentConnector);
 
     return super.execute(actionHandler, context);
   }
