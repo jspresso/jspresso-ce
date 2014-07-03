@@ -1217,16 +1217,22 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var borderContainer = new qx.ui.mobile.container.Composite();
       var borderLayout = new qx.ui.mobile.layout.VBox();
       borderContainer.setLayout(borderLayout);
-      if (remoteBorderContainer.getNorth()) {
-        var child = this.createComponent(remoteBorderContainer.getNorth());
+      var north = remoteBorderContainer.getNorth();
+      if (north) {
+        var child = this.createComponent(north);
+        this._addSectionHeader(borderContainer, north);
         borderContainer.add(child);
       }
-      if (remoteBorderContainer.getCenter()) {
-        var child = this.createComponent(remoteBorderContainer.getCenter());
+      var center = remoteBorderContainer.getCenter();
+      if (center) {
+        var child = this.createComponent(center);
+        this._addSectionHeader(borderContainer, center);
         borderContainer.add(child, {flex: 1});
       }
-      if (remoteBorderContainer.getSouth()) {
-        var child = this.createComponent(remoteBorderContainer.getSouth());
+      var south = remoteBorderContainer.getSouth();
+      if (south) {
+        var child = this.createComponent(south);
+        this._addSectionHeader(borderContainer, south);
         borderContainer.add(child);
       }
       return borderContainer;
