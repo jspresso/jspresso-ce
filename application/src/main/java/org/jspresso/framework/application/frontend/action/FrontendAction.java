@@ -238,6 +238,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    *
    * @return the collectionBased.
    */
+  @Override
   public boolean isCollectionBased() {
     return collectionBased;
   }
@@ -247,6 +248,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    *
    * @return the multiSelectionEnabled.
    */
+  @Override
   public boolean isMultiSelectionEnabled() {
     return multiSelectionEnabled;
   }

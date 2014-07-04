@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.gui.remote.mobile;
 
+import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RComponent;
 
 /**
@@ -29,9 +30,11 @@ import org.jspresso.framework.gui.remote.RComponent;
 public class RMobileNavPage extends RMobilePage {
 
   private static final long serialVersionUID = 5221935284465846374L;
-  private RComponent[] headerSections;
-  private RComponent   selectionView;
-  private RMobilePage  nextPage;
+  private RComponent[]         headerSections;
+  private RComponent           selectionView;
+  private RMobilePage          nextPage;
+  private RMobileNavPage       editorPage;
+  private RAction              editAction;
 
   /**
    * Constructs a new {@code RMobileCardPage} instance.
@@ -105,5 +108,41 @@ public class RMobileNavPage extends RMobilePage {
    */
   public void setHeaderSections(RComponent... headerSections) {
     this.headerSections = headerSections;
+  }
+
+  /**
+   * Gets editor page.
+   *
+   * @return the editor page
+   */
+  public RMobileNavPage getEditorPage() {
+    return editorPage;
+  }
+
+  /**
+   * Sets editor page.
+   *
+   * @param editorPage the editor page
+   */
+  public void setEditorPage(RMobileNavPage editorPage) {
+    this.editorPage = editorPage;
+  }
+
+  /**
+   * Gets edit action.
+   *
+   * @return the edit action
+   */
+  public RAction getEditAction() {
+    return editAction;
+  }
+
+  /**
+   * Sets edit action.
+   *
+   * @param editAction the edit action
+   */
+  public void setEditAction(RAction editAction) {
+    this.editAction = editAction;
   }
 }

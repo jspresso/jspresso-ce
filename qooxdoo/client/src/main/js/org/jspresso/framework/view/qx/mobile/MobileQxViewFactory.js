@@ -488,6 +488,24 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       }
       navPage.setTitle(remoteNavPage.getLabel());
       var headerSections = this._createPageSections(rHeaderSections, navPage);
+      var rEditAction = remoteNavPage.getEditAction();
+      var rEditorPage = remoteNavPage.getEditorPage();
+      if (rEditAction && rEditorPage) {
+        var editorPage = this.createComponent(rEditorPage);
+        this.linkNextPageBackButton(editorPage, navPage, null, "flip");
+        navPage.setUserData("editorPage", editorPage);
+        if (remoteNavPage.getMainAction() == null) {
+          remoteNavPage.setMainAction(rEditAction);
+        } else {
+          var editActionList = new org.jspresso.framework.gui.remote.RActionList();
+          editActionList.setActions([rEditAction]);
+          var actionLists = [editActionList];
+          if (remoteNavPage.getActionLists()) {
+            actionLists = actionLists.concat(remoteNavPage.getActionLists());
+          }
+          remoteNavPage.setActionLists(actionLists);
+        }
+      }
       navPage.addListener("initialize", function (e) {
         var scroll;
         var content = navPage.getContent();
@@ -1652,7 +1670,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           == "SINGLE_CUMULATIVE_SELECTION") {
         rendererType = qx.ui.mobile.list.renderer.Default;
       } else {
-        rendererType = org.jspresso.framework.view.qx.mobile.CheckBoxListItemRenderer;
+        rendererType = org.jspresso.framework.view.qx.mobile.SelectableListItemRenderer;
       }
 
       var list = new org.jspresso.framework.view.qx.mobile.EnhancedList({

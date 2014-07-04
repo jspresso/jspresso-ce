@@ -58,4 +58,18 @@ public interface IDisplayableAction extends IAction, IIconDescriptor, IStylable 
    * @return the mnemonic string representation.
    */
   String getMnemonicAsString();
+
+  /**
+   * Is collection based.
+   *
+   * @return the boolean
+   */
+  boolean isCollectionBased();
+
+  /**
+   * Is multi selection enabled.
+   *
+   * @return the boolean
+   */
+  boolean isMultiSelectionEnabled();
 }

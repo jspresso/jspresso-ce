@@ -25,10 +25,12 @@ import java.util.Locale;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.ViewException;
+import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptorProvider;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicCollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
@@ -42,6 +44,7 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
   private List<IMobilePageSectionViewDescriptor> headerSectionDescriptors;
   private IViewDescriptor                        selectionViewDescriptor;
   private IMobilePageViewDescriptor              nextPageViewDescriptor;
+  private MobileNavPageViewDescriptor            editorPage;
 
   /**
    * Is cascading models.
@@ -179,5 +182,31 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
    */
   public void setHeaderSectionDescriptors(List<IMobilePageSectionViewDescriptor> headerSectionDescriptors) {
     this.headerSectionDescriptors = headerSectionDescriptors;
+  }
+
+  /**
+   * Gets editor page. The editor page is made of the nav page clone with multiple cumulative
+   * selection and the action map containing only the selection based actions.
+   *
+   * @return the editing page
+   */
+  public MobileNavPageViewDescriptor getEditorPage() {
+    if (editorPage == null) {
+      editorPage = clone();
+      editorPage.setReadOnly(true);
+      if (editorPage.getSelectionViewDescriptor() instanceof BasicCollectionViewDescriptor) {
+        ((BasicCollectionViewDescriptor) editorPage.getSelectionViewDescriptor()).setSelectionMode(
+            ESelectionMode.MULTIPLE_INTERVAL_CUMULATIVE_SELECTION);
+        editorPage.setNextPageViewDescriptor(null);
+      }
+    }
+    return editorPage;
+  }
+
+  @Override
+  public MobileNavPageViewDescriptor clone() {
+    MobileNavPageViewDescriptor clone = (MobileNavPageViewDescriptor) super.clone();
+    clone.selectionViewDescriptor = ((BasicViewDescriptor) selectionViewDescriptor).clone();
+    return clone;
   }
 }

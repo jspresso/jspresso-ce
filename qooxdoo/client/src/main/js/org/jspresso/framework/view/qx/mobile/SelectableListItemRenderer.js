@@ -30,7 +30,7 @@
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.view.qx.mobile.CheckBoxListItemRenderer", {
+qx.Class.define("org.jspresso.framework.view.qx.mobile.SelectableListItemRenderer", {
   extend: qx.ui.mobile.list.renderer.Default,
 
   statics: {
@@ -42,7 +42,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.CheckBoxListItemRenderer"
 
   members: {
 
-    __checkBox : null,
+    __selectBox : null,
 
     /**
      * Inits the widgets for the renderer.
@@ -50,27 +50,28 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.CheckBoxListItemRenderer"
      */
     _init : function()
     {
-      this.__checkBox = this._createCheckBox();
-      this.add(this.__checkBox);
+      this.__selectBox = this._createSelectBox();
+      this.add(this.__selectBox);
       this.base(arguments);
     },
 
     /**
-     * Creates and returns the CheckBox widget. Override this to adapt the widget code.
+     * Creates and returns the SelectBox widget. Override this to adapt the widget code.
      *
-     * @return {qx.ui.mobile.form.CheckBox} the CheckBox widget.
+     * @return {qx.ui.mobile.form.CheckBox} the SelectBox widget.
      */
-    _createCheckBox : function() {
-      var checkBox = new qx.ui.mobile.form.CheckBox();
-      checkBox.setAnonymous(true);
-      checkBox.addCssClass("list-itemimage");
-      return checkBox;
+    _createSelectBox : function() {
+      var selectBox = new qx.ui.mobile.form.CheckBox();
+      //var selectBox = new qx.ui.mobile.form.RadioButton();
+      selectBox.setAnonymous(true);
+      selectBox.addCssClass("list-item-image");
+      return selectBox;
     },
 
     // property apply
     _applySelected : function(value, old)
     {
-      this.__checkBox.setValue(value);
+      this.__selectBox.setValue(value);
       this.base(arguments, value,  old);
     }
   }

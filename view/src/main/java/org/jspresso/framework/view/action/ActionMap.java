@@ -28,6 +28,7 @@ import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.ISecurityHandler;
 import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.gui.ERenderingOptions;
+import org.jspresso.framework.util.lang.ICloneable;
 
 /**
  * An action map is used to structure a set of actions. The actions are not
@@ -44,7 +45,7 @@ import org.jspresso.framework.util.gui.ERenderingOptions;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ActionMap implements ISecurable, IPermIdSource {
+public class ActionMap implements ISecurable, IPermIdSource, ICloneable {
 
   private List<ActionList>   actionLists;
   private List<ActionMap>    parentActionMaps;
@@ -232,5 +233,19 @@ public class ActionMap implements ISecurable, IPermIdSource {
   @Override
   public void setPermId(String permId) {
     this.permId = permId;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public ActionMap clone() {
+    ActionMap clone = null;
+    try {
+      clone = (ActionMap) super.clone();
+    } catch (CloneNotSupportedException e) {
+      // Cannot happen;
+    }
+    return clone;
   }
 }

@@ -64,12 +64,15 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IImageBinaryPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.security.ISecurityHandler;
 import org.jspresso.framework.server.remote.RemotePeerRegistryServlet;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IView;
+import org.jspresso.framework.view.action.ActionList;
+import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
@@ -86,6 +89,7 @@ import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.AbstractMobilePageViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.IMobilePageAware;
 import org.jspresso.framework.view.descriptor.mobile.IMobilePageSectionViewDescriptor;
@@ -257,6 +261,23 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
    */
   protected ICompositeView<RComponent> createMobileNavPageView(MobileNavPageViewDescriptor viewDescriptor,
                                                                IActionHandler actionHandler, Locale locale) {
+    MobileNavPageViewDescriptor editorPageDescriptor = null;
+    IViewDescriptor selectionViewDescriptor = viewDescriptor.getSelectionViewDescriptor();
+    if (selectionViewDescriptor != null) {
+      if (!viewDescriptor.isReadOnly()) {
+        ActionMap collectionBasedActionMap = filterActionMap(selectionViewDescriptor.getActionMap(), true,
+            actionHandler);
+        if (collectionBasedActionMap != null) {
+          ActionMap notCollectionBasedActionMap = filterActionMap(selectionViewDescriptor.getActionMap(), false,
+              actionHandler);
+          editorPageDescriptor = viewDescriptor.getEditorPage();
+          ((BasicViewDescriptor) editorPageDescriptor.getSelectionViewDescriptor()).setActionMap(
+              collectionBasedActionMap);
+          selectionViewDescriptor = ((BasicViewDescriptor) selectionViewDescriptor).clone();
+          ((BasicViewDescriptor) selectionViewDescriptor).setActionMap(notCollectionBasedActionMap);
+        }
+      }
+    }
     RMobileNavPage viewComponent = createRMobileNavPage(viewDescriptor);
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent, viewDescriptor);
     List<IView<RComponent>> childrenViews = new ArrayList<>();
@@ -276,8 +297,8 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
       }
     }
     viewComponent.setHeaderSections(headerSections.toArray(new RComponent[headerSections.size()]));
-    if (viewDescriptor.getSelectionViewDescriptor() != null) {
-      IView<RComponent> selectionView = createView(viewDescriptor.getSelectionViewDescriptor(), actionHandler, locale);
+    if (selectionViewDescriptor != null) {
+      IView<RComponent> selectionView = createView(selectionViewDescriptor, actionHandler, locale);
       viewComponent.setSelectionView(selectionView.getPeer());
       childrenViews.add(selectionView);
       IValueConnector selectionViewConnector = selectionView.getConnector();
@@ -320,6 +341,15 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
         }
       }
     }
+    if (editorPageDescriptor != null) {
+      ICompositeView<RComponent> editorPageView = (ICompositeView<RComponent>) createView(editorPageDescriptor,
+          actionHandler, locale);
+      RMobileNavPage editorPage = (RMobileNavPage) editorPageView.getView().getPeer();
+      viewComponent.setEditorPage(editorPage);
+      RAction editorAction = getActionFactory().createAction(getEditPageAction(), actionHandler, view, locale);
+      viewComponent.setEditAction(editorAction);
+      childrenViews.add(editorPageView);
+    }
     view.setChildren(childrenViews);
     return view;
   }
@@ -346,8 +376,8 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
         .getPageSectionDescriptors()) {
       try {
         actionHandler.pushToSecurityContext(pageSectionViewDescriptor);
-        if (actionHandler.isAccessGranted(pageSectionViewDescriptor)
-            && isAllowedForClientType(pageSectionViewDescriptor, actionHandler)) {
+        if (actionHandler.isAccessGranted(pageSectionViewDescriptor) && isAllowedForClientType(
+            pageSectionViewDescriptor, actionHandler)) {
           IView<RComponent> pageSectionView = createView(pageSectionViewDescriptor, actionHandler, locale);
           pageSections.add(pageSectionView.getPeer());
           childrenViews.add(pageSectionView);
@@ -359,7 +389,8 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     viewComponent.setPageSections(pageSections.toArray(new RComponent[pageSections.size()]));
     if (!viewDescriptor.isInlineEditing() && !viewDescriptor.isReadOnly()) {
       MobileCompositePageViewDescriptor filteredEditorPage = viewDescriptor.getEditorPage().filterForWriting();
-      ICompositeView<RComponent> editorPageView = (ICompositeView<RComponent>) createView(filteredEditorPage, actionHandler, locale);
+      ICompositeView<RComponent> editorPageView = (ICompositeView<RComponent>) createView(filteredEditorPage,
+          actionHandler, locale);
       RMobileCompositePage editorPage = (RMobileCompositePage) editorPageView.getView().getPeer();
       RAction saveAction = getActionFactory().createAction(getSavePageAction(), actionHandler, view, locale);
       editorPage.setMainAction(saveAction);
@@ -815,4 +846,50 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
   public void setPreviousElementAction(IDisplayableAction previousElementAction) {
     this.previousElementAction = previousElementAction;
   }
+
+  /**
+   * Filter action map keeping only collectionBased or not collectionBased actions depending on the
+   * keepCollectionBased parameter.
+   *
+   * @param actionMap
+   *     the action map
+   * @param keepCollectionBased
+   *     the keep collection based
+   * @param securityHandler
+   *     the security handler
+   * @return the action map
+   */
+  protected ActionMap filterActionMap(ActionMap actionMap, boolean keepCollectionBased,
+                                      ISecurityHandler securityHandler) {
+    ActionMap filteredActionMap = null;
+    if (actionMap != null) {
+      List<ActionList> filteredActionLists = null;
+      for (ActionList actionList : actionMap.getActionLists(securityHandler)) {
+        List<IDisplayableAction> filteredActions = null;
+        for (IDisplayableAction action : actionList.getActions()) {
+          if ((keepCollectionBased && action.isCollectionBased()) || (!keepCollectionBased && !action
+              .isCollectionBased())) {
+            if (filteredActions == null) {
+              filteredActions = new ArrayList<>();
+            }
+            filteredActions.add(action);
+          }
+          if (filteredActions != null) {
+            ActionList filteredActionList = actionList.clone();
+            filteredActionList.setActions(filteredActions);
+            if (filteredActionLists == null) {
+              filteredActionLists = new ArrayList<>();
+              filteredActionLists.add(filteredActionList);
+            }
+          }
+        }
+      }
+      if (filteredActionLists != null) {
+        filteredActionMap = actionMap.clone();
+        filteredActionMap.setActionLists(filteredActionLists);
+      }
+    }
+    return filteredActionMap;
+  }
+
 }
