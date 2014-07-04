@@ -268,13 +268,13 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
         ActionMap collectionBasedActionMap = filterActionMap(selectionViewDescriptor.getActionMap(), true,
             actionHandler);
         if (collectionBasedActionMap != null) {
-          ActionMap notCollectionBasedActionMap = filterActionMap(selectionViewDescriptor.getActionMap(), false,
-              actionHandler);
           editorPageDescriptor = viewDescriptor.getEditorPage();
           ((BasicViewDescriptor) editorPageDescriptor.getSelectionViewDescriptor()).setActionMap(
               collectionBasedActionMap);
-          selectionViewDescriptor = ((BasicViewDescriptor) selectionViewDescriptor).clone();
-          ((BasicViewDescriptor) selectionViewDescriptor).setActionMap(notCollectionBasedActionMap);
+//          selectionViewDescriptor = ((BasicViewDescriptor) selectionViewDescriptor).clone();
+//          ActionMap notCollectionBasedActionMap = filterActionMap(selectionViewDescriptor.getActionMap(), false,
+//              actionHandler);
+//          ((BasicViewDescriptor) selectionViewDescriptor).setActionMap(notCollectionBasedActionMap);
         }
       }
     }
