@@ -1213,15 +1213,17 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       state.addListener("changeValue", function (e) {
         var selectedCardName = e.getData();
         var cards = cardContainer.getUserData("existingCards");
-        var selectedCard;
-        for (var i = 0; i < cards.length; i++) {
-          var child = cards[i];
-          if (child.getUserData("cardName") == selectedCardName) {
-            selectedCard = child;
+        if (cards) {
+          var selectedCard;
+          for (var i = 0; i < cards.length; i++) {
+            var child = cards[i];
+            if (child.getUserData("cardName") == selectedCardName) {
+              selectedCard = child;
+            }
           }
-        }
-        if (selectedCard) {
-          this._selectCard(cardContainer, selectedCard);
+          if (selectedCard) {
+            this._selectCard(cardContainer, selectedCard);
+          }
         }
       }, this);
       return cardContainer;
@@ -1341,26 +1343,31 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @param cardName {String}
      */
     addCard: function (cardContainer, rCardComponent, cardName) {
-      if (rCardComponent instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
+      if (rCardComponent instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAwareContainer) {
+        this.addCard(cardContainer, rCardComponent.getContent(), cardName);
+      } else if (rCardComponent instanceof org.jspresso.framework.gui.remote.RBorderContainer
+          && rCardComponent.getCenter() instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
+        this.addCard(cardContainer, rCardComponent.getCenter(), cardName);
+      } else {
         var existingCards = cardContainer.getUserData("existingCards");
         var existingCardNames = cardContainer.getUserData("existingCardNames");
         var existingCard = existingCardNames.indexOf(cardName) >= 0;
         if (!existingCard) {
           existingCardNames.push(cardName);
           var cardComponent = this.createComponent(rCardComponent);
-          cardComponent.setUserData("cardName", cardName);
-          // Do not actually add the card to the card container since it's added to the manager.
-          // cardContainer.add(cardComponent);
           existingCards.push(cardComponent);
-          this.linkNextPageBackButton(cardComponent, cardContainer.getUserData("previousPage"), null, null);
-          //this._selectCard(cardContainer, cardComponent);
+          cardComponent.setUserData("cardName", cardName);
+          if (rCardComponent instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
+            // Do not actually add the card to the card container since it's added to the manager.
+            // cardContainer.add(cardComponent);
+            this.linkNextPageBackButton(cardComponent, cardContainer.getUserData("previousPage"), null, null);
+          } else {
+            cardContainer.add(cardComponent);
+            this._selectCard(cardContainer, cardComponent);
+          }
         } else {
           this._selectCard(cardContainer, existingCards[existingCardNames.indexOf(cardName)]);
         }
-      } else if (rCardComponent instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAwareContainer) {
-        this.addCard(cardContainer, rCardComponent.getContent(), cardName);
-      } else if (rCardComponent instanceof org.jspresso.framework.gui.remote.RBorderContainer) {
-        this.addCard(cardContainer, rCardComponent.getCenter(), cardName);
       }
     },
 
@@ -1378,11 +1385,15 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @param selectedCard  {qx.ui.mobile.core.Widget}
      */
     _selectCard: function (cardContainer, selectedCard) {
-      var currentCard = cardContainer.getUserData("currentPage");
-      cardContainer.setUserData("currentPage", selectedCard);
-      var pageToShow = this._getActualPageToShow(selectedCard);
-      if (pageToShow) {
-        this._getActionHandler().showPage(pageToShow);
+      if (selectedCard instanceof qx.ui.mobile.page.NavigationPage) {
+        var currentCard = cardContainer.getUserData("currentPage");
+        cardContainer.setUserData("currentPage", selectedCard);
+        var pageToShow = this._getActualPageToShow(selectedCard);
+        if (pageToShow) {
+          this._getActionHandler().showPage(pageToShow);
+        }
+      } else if (selectedCard) {
+        selectedCard.show();
       }
     },
 

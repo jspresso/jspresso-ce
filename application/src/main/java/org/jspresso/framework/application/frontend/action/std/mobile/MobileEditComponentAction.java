@@ -28,6 +28,7 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.IMobilePageAware;
+import org.jspresso.framework.view.descriptor.mobile.MobileBorderViewDescriptor;
 
 /**
  * This is the mobile version of the edit component action.
@@ -47,12 +48,17 @@ public class MobileEditComponentAction<E, F, G> extends EditComponentAction<E, F
   @Override
   protected IViewDescriptor getViewDescriptor(Map<String, Object> context) {
     IViewDescriptor viewDescriptor = super.getViewDescriptor(context);
+    IMobilePageAware refinedViewDescriptor;
     if (viewDescriptor instanceof IMobilePageAware && viewDescriptor instanceof BasicViewDescriptor) {
-      IMobilePageAware refinedViewDescriptor = (IMobilePageAware) ((BasicViewDescriptor) viewDescriptor).clone();
-      refinedViewDescriptor.setMainAction(getOkAction());
-      refinedViewDescriptor.setBackAction(getCancelAction());
-      viewDescriptor = (IViewDescriptor) refinedViewDescriptor;
+      refinedViewDescriptor = (IMobilePageAware) ((BasicViewDescriptor) viewDescriptor).clone();
+    } else {
+      refinedViewDescriptor = new MobileBorderViewDescriptor();
+      ((MobileBorderViewDescriptor) refinedViewDescriptor).setModelDescriptor(viewDescriptor.getModelDescriptor());
+      ((MobileBorderViewDescriptor) refinedViewDescriptor).setCenterViewDescriptor(viewDescriptor);
     }
+    refinedViewDescriptor.setMainAction(getOkAction());
+    refinedViewDescriptor.setBackAction(getCancelAction());
+    viewDescriptor = (IViewDescriptor) refinedViewDescriptor;
     return viewDescriptor;
   }
 
