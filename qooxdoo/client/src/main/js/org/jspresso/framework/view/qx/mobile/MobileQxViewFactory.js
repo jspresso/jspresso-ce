@@ -1235,6 +1235,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var borderContainer = new qx.ui.mobile.container.Composite();
       var borderLayout = new qx.ui.mobile.layout.VBox();
       borderContainer.setLayout(borderLayout);
+      this._addSectionHeader(borderContainer, remoteBorderContainer);
       var north = remoteBorderContainer.getNorth();
       if (north) {
         var child = this.createComponent(north);

@@ -139,6 +139,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
           view.getPeer().setToolTip(((AbstractMobilePageViewDescriptor) viewDescriptor).getI18nDescription());
         }
       }
+      decorateWithPageAwareContainer(view, viewDescriptor, actionHandler, locale);
       return view;
     }
     throw new IllegalArgumentException(
@@ -173,37 +174,6 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
       } else if (viewDescriptor instanceof MobileTabViewDescriptor) {
         view = createTabView((MobileTabViewDescriptor) viewDescriptor, actionHandler, locale);
       }
-      if (view != null && view.getDescriptor() instanceof IMobilePageAware) {
-        if (!(view.getPeer() instanceof RMobilePageAware)) {
-          RMobilePageAwareContainer wrapper = createRMobilePageAwareContainer();
-          wrapper.setContent(view.getPeer());
-          view.setPeer(wrapper);
-        }
-        if (((IMobilePageAware) viewDescriptor).getEnterAction() != null) {
-          ((RMobilePageAware) view.getPeer()).setEnterAction(getActionFactory().createAction(
-              ((IMobilePageAware) viewDescriptor).getEnterAction(), actionHandler, view, locale));
-        }
-        if (((IMobilePageAware) viewDescriptor).getBackAction() != null) {
-          ((RMobilePageAware) view.getPeer()).setBackAction(getActionFactory().createAction(
-              ((IMobilePageAware) viewDescriptor).getBackAction(), actionHandler, view, locale));
-        }
-        if (((IMobilePageAware) viewDescriptor).getMainAction() != null) {
-          ((RMobilePageAware) view.getPeer()).setMainAction(getActionFactory().createAction(
-              ((IMobilePageAware) viewDescriptor).getMainAction(), actionHandler, view, locale));
-        }
-        if (((IMobilePageAware) viewDescriptor).getPageEndAction() != null) {
-          ((RMobilePageAware) view.getPeer()).setPageEndAction(getActionFactory().createAction(
-              ((IMobilePageAware) viewDescriptor).getPageEndAction(), actionHandler, view, locale));
-        }
-        if (((IMobilePageAware) viewDescriptor).getSwipeLeftAction() != null) {
-          ((RMobilePageAware) view.getPeer()).setSwipeLeftAction(getActionFactory().createAction(
-              ((IMobilePageAware) viewDescriptor).getSwipeLeftAction(), actionHandler, view, locale));
-        }
-        if (((IMobilePageAware) viewDescriptor).getSwipeRightAction() != null) {
-          ((RMobilePageAware) view.getPeer()).setSwipeRightAction(getActionFactory().createAction(
-              ((IMobilePageAware) viewDescriptor).getSwipeRightAction(), actionHandler, view, locale));
-        }
-      }
       bindCompositeView(view);
       if (view != null && view.getPeer() instanceof RMobileCompositePage
           && ((RMobileCompositePage) view.getPeer()).getEditAction() != null) {
@@ -221,6 +191,41 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     throw new IllegalArgumentException(
         "Mobile view factory can only handle mobile view descriptors and not : " + viewDescriptor.getClass()
                                                                                                  .getSimpleName());
+  }
+
+  private void decorateWithPageAwareContainer(IView<RComponent> view, IViewDescriptor viewDescriptor,
+                                              IActionHandler actionHandler, Locale locale) {
+    if (view != null && view.getDescriptor() instanceof IMobilePageAware) {
+      if (!(view.getPeer() instanceof RMobilePageAware)) {
+        RMobilePageAwareContainer wrapper = createRMobilePageAwareContainer();
+        wrapper.setContent(view.getPeer());
+        view.setPeer(wrapper);
+      }
+      if (((IMobilePageAware) viewDescriptor).getEnterAction() != null) {
+        ((RMobilePageAware) view.getPeer()).setEnterAction(getActionFactory().createAction(
+            ((IMobilePageAware) viewDescriptor).getEnterAction(), actionHandler, view, locale));
+      }
+      if (((IMobilePageAware) viewDescriptor).getBackAction() != null) {
+        ((RMobilePageAware) view.getPeer()).setBackAction(getActionFactory().createAction(
+            ((IMobilePageAware) viewDescriptor).getBackAction(), actionHandler, view, locale));
+      }
+      if (((IMobilePageAware) viewDescriptor).getMainAction() != null) {
+        ((RMobilePageAware) view.getPeer()).setMainAction(getActionFactory().createAction(
+            ((IMobilePageAware) viewDescriptor).getMainAction(), actionHandler, view, locale));
+      }
+      if (((IMobilePageAware) viewDescriptor).getPageEndAction() != null) {
+        ((RMobilePageAware) view.getPeer()).setPageEndAction(getActionFactory().createAction(
+            ((IMobilePageAware) viewDescriptor).getPageEndAction(), actionHandler, view, locale));
+      }
+      if (((IMobilePageAware) viewDescriptor).getSwipeLeftAction() != null) {
+        ((RMobilePageAware) view.getPeer()).setSwipeLeftAction(getActionFactory().createAction(
+            ((IMobilePageAware) viewDescriptor).getSwipeLeftAction(), actionHandler, view, locale));
+      }
+      if (((IMobilePageAware) viewDescriptor).getSwipeRightAction() != null) {
+        ((RMobilePageAware) view.getPeer()).setSwipeRightAction(getActionFactory().createAction(
+            ((IMobilePageAware) viewDescriptor).getSwipeRightAction(), actionHandler, view, locale));
+      }
+    }
   }
 
   /**
