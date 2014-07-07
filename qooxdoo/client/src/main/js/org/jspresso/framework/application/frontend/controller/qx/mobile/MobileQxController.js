@@ -83,6 +83,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     __managerContainer: null,
     /** @type {qx.ui.mobile.page.NavigationPage[]} */
     __animationQueue: null,
+    /** @type {qx.ui.mobile.dialog.Popup[]} */
+    __messageQueue: null,
     /** @type {qx.ui.mobile.page.NavigationPage} */
     __savedCurrentPage: null,
 
@@ -122,9 +124,33 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
           this.__animationQueue = null;
         }
       }
+      if (!this.__animationQueue && this.__messageQueue) {
+        for (var i = 0; i < this.__messageQueue.length; i++) {
+          var md = this.__messageQueue[i];
+          qx.event.Timer.once(function () {
+            md.show();
+          }, this, 100);
+        }
+        this.__messageQueue = null;
+      }
+    },
+
+    __showDialog: function (dialog) {
+      if (this.isAnimating()) {
+        if (this.__messageQueue == null) {
+          this.__messageQueue = [];
+        }
+        this.__messageQueue.push(dialog);
+      } else {
+        dialog.show();
+      }
     },
 
     isAnimating: function () {
+      return this.__animationQueue != null;
+    },
+
+    hasAnimationQueued: function () {
       return this.__animationQueue != null && this.__animationQueue.length > 0;
     },
 
@@ -664,7 +690,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         }, this);
         buttonBox.add(okButton);
       }
-      messageDialog.show();
+      this.__showDialog(messageDialog);
     },
 
     /**

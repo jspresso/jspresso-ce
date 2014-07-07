@@ -592,7 +592,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           }
         }, this);
         navPage.addListener("start", function () {
-          if (!this._getActionHandler().isAnimating()) {
+          if (!this._getActionHandler().hasAnimationQueued()) {
             var selectionState = remoteSelectionComponent.getState();
             selectionState.setLeadingIndex(-1);
             selectionState.setSelectedIndices([]);
