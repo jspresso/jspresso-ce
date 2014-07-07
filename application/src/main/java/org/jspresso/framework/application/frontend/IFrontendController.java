@@ -435,6 +435,21 @@ public interface IFrontendController<E, F, G> extends IController, IIconDescript
   IView<E> getCurrentModuleView();
 
   /**
+   * Remember login.
+   *
+   * @param username the username
+   * @param password the password
+   */
+  void rememberLogin(String username, String password);
+
+  /**
+   * Gets remembered login.
+   *
+   * @return the remembered login
+   */
+  String getRememberedLogin();
+
+  /**
    * Reads a client preference.
    *
    * @param key

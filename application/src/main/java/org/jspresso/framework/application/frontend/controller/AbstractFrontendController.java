@@ -1257,13 +1257,38 @@ public abstract class AbstractFrontendController<E, F, G> extends
     if (!SecurityHelper.ANONYMOUS_USER_NAME.equals(username)) {
       if (getClientPreference(UP_KEY) != null) {
         // reset get through pass
-        putClientPreference(UP_KEY, encodeUserPass(username, null));
+        rememberLogin(username, null);
       }
     } else {
       UsernamePasswordHandler uph = getLoginCallbackHandler();
       uph.clear();
     }
     removeUserPreference(UP_GUID);
+  }
+
+  /**
+   * Remember login.
+   *
+   * @param username the username
+   * @param password the password
+   */
+  @Override
+  public void rememberLogin(String username, String password) {
+    putClientPreference(UP_KEY, encodeUserPass(username, password));
+  }
+
+  /**
+   * Gets remembered login.
+   *
+   * @return the remembered login
+   */
+  @Override
+  public String getRememberedLogin() {
+    String[] savedUserPass = decodeUserPass(getClientPreference(UP_KEY));
+    if (savedUserPass != null && savedUserPass.length > 0) {
+      return savedUserPass[0];
+    }
+    return null;
   }
 
   /**
@@ -1664,7 +1689,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     UsernamePasswordHandler uph = getLoginCallbackHandler();
     if (!SecurityHelper.ANONYMOUS_USER_NAME.equals(uph.getUsername())) {
       if (uph.isRememberMe()) {
-        putClientPreference(UP_KEY, encodeUserPass(uph.getUsername(), uph.getPassword()));
+        rememberLogin(uph.getUsername(), uph.getPassword());
       } else {
         removeClientPreference(UP_KEY);
       }
