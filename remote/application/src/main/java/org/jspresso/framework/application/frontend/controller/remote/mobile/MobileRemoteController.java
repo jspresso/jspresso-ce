@@ -21,6 +21,7 @@ package org.jspresso.framework.application.frontend.controller.remote.mobile;
 import java.util.List;
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.application.frontend.command.remote.mobile.RemoteAnimationCommand;
 import org.jspresso.framework.application.frontend.command.remote.mobile.RemoteBackCommand;
 import org.jspresso.framework.application.frontend.controller.remote.AbstractRemoteController;
@@ -99,9 +100,22 @@ public class MobileRemoteController extends AbstractRemoteController {
 
   /**
    * Navigate back.
+   * @param context the context
    */
-  public void navigateBack() {
+  @SuppressWarnings("unchecked")
+  public void navigateBack(Map<String, Object> context) {
     registerCommand(new RemoteBackCommand());
+    if (context != null) {
+      // Update the context as if the view had changed.
+      IView<RComponent> view = (IView<RComponent>) context.get(ActionContextConstants.VIEW);
+      if (view != null) {
+        view = view.getParent();
+        if (view != null) {
+          context.put(ActionContextConstants.VIEW, view);
+          context.put(ActionContextConstants.VIEW_CONNECTOR, view.getConnector());
+        }
+      }
+    }
   }
 
   /**

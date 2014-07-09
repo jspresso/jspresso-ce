@@ -20,15 +20,11 @@ package org.jspresso.framework.application.frontend.action.remote.mobile;
 
 import java.util.Map;
 
-import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.remote.AbstractRemoteAction;
-import org.jspresso.framework.application.frontend.command.remote.mobile.RemoteBackCommand;
 import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.Module;
-import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.model.entity.IEntity;
-import org.jspresso.framework.view.IView;
 
 /**
  * Check current selected module object. If it is transient, removes it from the current module and go back.
