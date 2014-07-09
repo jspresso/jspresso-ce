@@ -89,7 +89,14 @@ public final class ImageHelper {
     return scaleImage(originalImageInput, width, height, null);
   }
 
-  private static Image createImage(Object originalImageInput) throws IOException {
+  /**
+   * Create image.
+   *
+   * @param originalImageInput the original image input
+   * @return the image
+   * @throws IOException the iO exception
+   */
+  public static Image createImage(Object originalImageInput) throws IOException {
     Image image;
     if (originalImageInput instanceof byte[]) {
       image = new Image((byte[]) originalImageInput);
