@@ -59,6 +59,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     __busyIndicator: null,
     /** @type {qx.ui.mobile.dialog.Popup} */
     __busyPopup: null,
+    /** @type {Boolean} */
+    __busy: false,
     /** @type {qx.ui.mobile.page.NavigationPage} */
     __blankPage: null,
     /** @type {org.jspresso.framework.application.frontend.controller.qx.mobile.EnhancedManager} */
@@ -310,8 +312,14 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
 
     _showBusy: function (busy) {
       if (busy) {
-        this.__busyPopup.show();
+        this.__busy = true;
+        qx.event.Timer.once(function () {
+          if (this.__busy) {
+            this.__busyPopup.show();
+          }
+        }, this, 500);
       } else {
+        this.__busy = false;
         this.__busyPopup.hide();
       }
     },
