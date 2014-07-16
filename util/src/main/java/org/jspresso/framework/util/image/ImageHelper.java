@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.net.URL;
 
 import javaxt.io.Image;
+import org.apache.commons.codec.binary.Base64;
 
 import org.jspresso.framework.util.url.UrlHelper;
 
@@ -110,6 +111,29 @@ public final class ImageHelper {
       throw new RuntimeException("Unsupported image input.");
     }
     return image;
+  }
+
+  /**
+   * To base 64 src.
+   *
+   * @param originalImageInput the original image input
+   * @param format the format
+   * @return the string
+   * @throws IOException the iO exception
+   */
+  public static String toBase64Src(Object originalImageInput, String format) throws IOException {
+    Image img = createImage(originalImageInput);
+    return "data:image/" + format + ";base64," + Base64.encodeBase64String(img.getByteArray(format));
+  }
+
+  /**
+   * From base 64 src.
+   *
+   * @param base64Src the base 64 src
+   * @return the byte [ ]
+   */
+  public static byte[] fromBase64Src(String base64Src) {
+    return Base64.decodeBase64(base64Src.replaceAll("^.*base64,", ""));
   }
 
 }

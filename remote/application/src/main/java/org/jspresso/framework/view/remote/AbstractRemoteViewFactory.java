@@ -122,6 +122,7 @@ import org.jspresso.framework.util.gui.Font;
 import org.jspresso.framework.util.gui.FontHelper;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.image.IScalableImageAware;
+import org.jspresso.framework.util.image.ImageHelper;
 import org.jspresso.framework.util.lang.DateDto;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
@@ -1034,7 +1035,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
           @Override
           public Object getValueFromState(RemoteValueState state, Object originalValue) {
             if (originalValue instanceof String && ((String) originalValue).contains("base64")) {
-              return Base64.decodeBase64(((String) originalValue).replaceAll("^.*base64,", ""));
+              return ImageHelper.fromBase64Src((String) originalValue);
             }
             return originalValue;
           }
