@@ -77,6 +77,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     __routing: null,
     /** @type {boolean} */
     __isTablet: false,
+    /** @type {boolean} */
+    __restoreMasterOnClose: false,
     /** @type {Object} */
     __drawers: {},
     /** @type {qx.ui.mobile.container.Composite} */
@@ -460,10 +462,20 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       if (remoteDialogView instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAware) {
         this._getViewFactory().installPageActions(remoteDialogView, dialogPage);
       }
-      if (this.__managerContainer.getVisibility() == "visible") {
+      if (this.__managerContainer.isVisible()) {
         this.__savedCurrentPage = this.getCurrentPage();
       }
-      dialogPage.show({animation: "slideup"});
+
+      var masterContainer = this._getManager().getMasterContainer();
+      if (masterContainer.isVisible()) {
+        this.__restoreMasterOnClose = true;
+        masterContainer.addListenerOnce("changeVisibility", function () {
+          dialogPage.show({animation: "slideup"});
+        }, this);
+        this._getManager()._onHideMasterButtonTap();
+      } else {
+        dialogPage.show({animation: "slideup"});
+      }
     },
 
     /**
@@ -494,6 +506,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         if (this.__savedCurrentPage) {
           qx.ui.mobile.page.Page._currentPage = this.__savedCurrentPage;
           this.__savedCurrentPage = null;
+        }
+        if (this.__restoreMasterOnClose && pageToRestore == this.__managerContainer) {
+          this._getManager()._onMasterButtonTap();
         }
       }
     },
