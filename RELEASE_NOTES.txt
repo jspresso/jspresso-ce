@@ -1,4 +1,4 @@
-3.8
+4.0
 ===
 - In order to clarify class usage  between Jspresso CE and Jspresso EE, all Jspresso EE classes now belong to the
 org.jspresso.framework.ext (sub)package(s)
