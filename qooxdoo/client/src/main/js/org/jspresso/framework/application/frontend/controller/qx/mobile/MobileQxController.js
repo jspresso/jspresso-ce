@@ -467,7 +467,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       }
 
       var masterContainer = this._getManager().getMasterContainer();
-      if (masterContainer.isVisible()) {
+      if (this.isTablet() && masterContainer.isVisible()) {
         this.__restoreMasterOnClose = true;
         masterContainer.addListenerOnce("changeVisibility", function () {
           dialogPage.show({animation: "slideup"});
@@ -507,7 +507,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
           qx.ui.mobile.page.Page._currentPage = this.__savedCurrentPage;
           this.__savedCurrentPage = null;
         }
-        if (this.__restoreMasterOnClose && pageToRestore == this.__managerContainer) {
+        if (this.isTablet() && this.__restoreMasterOnClose && pageToRestore == this.__managerContainer) {
           this._getManager()._onMasterButtonTap();
         }
       }
