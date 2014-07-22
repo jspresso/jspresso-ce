@@ -912,7 +912,9 @@
     <profile>
       <id>attach-sources</id>
       <activation>
-        <activeByDefault>true</activeByDefault>
+        <property>
+          <name>!disableAttachSources</name>
+        </property>
       </activation>
       <build>
         <plugins>
@@ -935,7 +937,9 @@
     <profile>
       <id>attach-javadocs</id>
       <activation>
-        <activeByDefault>true</activeByDefault>
+        <property>
+          <name>!disableAttachJavadocs</name>
+        </property>
       </activation>
       <build>
         <plugins>
@@ -1047,6 +1051,42 @@
             </configuration>
           </plugin>
         </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>doclint-java8-disable</id>
+      <activation>
+        <jdk>[1.8,)</jdk>
+      </activation>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-javadoc-plugin</artifactId>
+              <version>${javadoc-plugin.version}</version>
+              <configuration>
+                <additionalparam>-Xdoclint:none</additionalparam>
+              </configuration>
+            </plugin>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-site-plugin</artifactId>
+              <version>${site-plugin.version}</version>
+              <configuration>
+                <reportPlugins>
+                  <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <configuration>
+                      <additionalparam>-Xdoclint:none</additionalparam>
+                    </configuration>
+                  </plugin>
+                </reportPlugins>
+              </configuration>
+            </plugin>
+          </plugins>
+        </pluginManagement>
       </build>
     </profile>
   </profiles>
