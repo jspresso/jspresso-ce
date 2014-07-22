@@ -151,14 +151,14 @@
         <groupId>org.mortbay.jetty</groupId>
         <artifactId>jetty-maven-plugin</artifactId>
         <configuration>
-          <webApp>${symbol_dollar}{basedir}/webapp/target/${rootArtifactId}-webapp</webApp>
+          <war>${symbol_dollar}{basedir}/webapp/target/${rootArtifactId}-webapp</war>
           <webAppConfig>
             <contextPath>/${rootArtifactId}-webapp</contextPath>
           </webAppConfig>
           <systemProperties>
             <systemProperty>
               <name>java.security.auth.login.config</name>
-              <value>conf/jaas.config</value>
+              <value>${symbol_dollar}{basedir}/conf/jaas.config</value>
             </systemProperty>
           </systemProperties>
         </configuration>
