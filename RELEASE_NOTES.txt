@@ -1,5 +1,24 @@
 4.0
 ===
+- In the webapp/pom.xml replace the whole flexmojos wrapper plugin execution by the following block :
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <stripVersion>true</stripVersion>
+              <includeTypes>swf</includeTypes>
+              <outputDirectory>${project.build.directory}/${project.artifactId}/flex</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
 - Wenhever you use the Jetty Maven plugin, please replace the <webApp> configuration tag by <war> in your root pom.xml.
 
 - In order to clarify class usage  between Jspresso CE and Jspresso EE, all Jspresso EE classes now belong to the
