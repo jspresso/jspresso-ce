@@ -61,11 +61,14 @@ import org.jspresso.framework.gui.remote.mobile.RMobileTabContainer;
 import org.jspresso.framework.gui.remote.mobile.RMobileTree;
 import org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IImageBinaryPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.security.ISecurityHandler;
 import org.jspresso.framework.server.remote.RemotePeerRegistryServlet;
+import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.remote.IRemotePeer;
 import org.jspresso.framework.view.BasicCompositeView;
@@ -175,16 +178,33 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
         view = createTabView((MobileTabViewDescriptor) viewDescriptor, actionHandler, locale);
       }
       bindCompositeView(view);
-      if (view != null && view.getPeer() instanceof RMobileCompositePage
-          && ((RMobileCompositePage) view.getPeer()).getEditAction() != null) {
-        final RAction editAction = ((RMobileCompositePage) view.getPeer()).getEditAction();
-        editAction.setEnabled(view.getConnector().isWritable());
-        view.getConnector().addPropertyChangeListener(IValueConnector.WRITABLE_PROPERTY, new PropertyChangeListener() {
-          @Override
-          public void propertyChange(PropertyChangeEvent evt) {
-            getActionFactory().setActionEnabled(editAction, (Boolean) evt.getNewValue());
+      if (view != null && view.getPeer() instanceof RMobileCompositePage) {
+        if (((RMobileCompositePage) view.getPeer()).getEditAction() != null) {
+          final RAction editAction = ((RMobileCompositePage) view.getPeer()).getEditAction();
+          editAction.setEnabled(view.getConnector().isWritable());
+          view.getConnector().addPropertyChangeListener(IValueConnector.WRITABLE_PROPERTY,
+              new PropertyChangeListener() {
+                @Override
+                public void propertyChange(PropertyChangeEvent evt) {
+                  getActionFactory().setActionEnabled(editAction, (Boolean) evt.getNewValue());
+                }
+              });
+        }
+        for (IView<RComponent> child : view.getChildren()) {
+          if (child.getPeer() instanceof RMobileNavPage) {
+            completePageWithDynamicLabels((ICompositeValueConnector) view.getConnector(), child,
+                ((IComponentDescriptorProvider<?>) view.getDescriptor().getModelDescriptor()).getComponentDescriptor(),
+                (IPropertyDescriptor) ((MobileNavPageViewDescriptor) child.getDescriptor()).getSelectionViewDescriptor()
+                                                                                           .getModelDescriptor());
+          } else if (child.getPeer() instanceof RMobileCompositePage) {
+            IModelDescriptor sectionModelDescriptor = child.getDescriptor().getModelDescriptor();
+            if (sectionModelDescriptor instanceof IPropertyDescriptor) {
+              completePageWithDynamicLabels((ICompositeValueConnector) view.getConnector(), child,
+                  ((IComponentDescriptorProvider<?>) view.getDescriptor().getModelDescriptor())
+                      .getComponentDescriptor(), (IPropertyDescriptor) sectionModelDescriptor);
+            }
           }
-        });
+        }
       }
       return view;
     }
@@ -607,6 +627,52 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
   protected ICompositeView<RComponent> createSplitView(ISplitViewDescriptor viewDescriptor,
                                                        IActionHandler actionHandler, Locale locale) {
     throw new UnsupportedOperationException("Not supported in mobile environment.");
+  }
+
+  /**
+   * Complete page with dynamic tool tip and label.
+   *
+   * @param connector
+   *     the connector
+   * @param pageView
+   *     the property view
+   * @param modelDescriptor
+   *     the model descriptor
+   * @param propertyDescriptor
+   *     the property descriptor
+   */
+  protected void completePageWithDynamicLabels(ICompositeValueConnector connector, IView<RComponent> pageView,
+                                               IComponentDescriptor<?> modelDescriptor,
+                                               IPropertyDescriptor propertyDescriptor) {
+    IViewDescriptor viewDescriptor = pageView.getDescriptor();
+
+    // Compute dynamic label
+    String dynamicLabelProperty = computePropertyDynamicLabel(modelDescriptor, viewDescriptor, propertyDescriptor);
+    // Dynamic label
+    if (dynamicLabelProperty != null) {
+      IValueConnector labelConnector = connector.getChildConnector(dynamicLabelProperty);
+      if (labelConnector == null) {
+        labelConnector = getConnectorFactory().createValueConnector(dynamicLabelProperty);
+        connector.addChildConnector(dynamicLabelProperty, labelConnector);
+      }
+      if (labelConnector instanceof IRemoteStateOwner) {
+        pageView.getPeer().setLabelState(((IRemoteStateOwner) labelConnector).getState());
+      }
+    }
+
+    // Compute dynamic tooltip
+    String dynamicToolTipProperty = computePropertyDynamicToolTip(modelDescriptor, viewDescriptor, propertyDescriptor);
+    // Dynamic tooltip
+    if (dynamicToolTipProperty != null) {
+      IValueConnector tooltipConnector = connector.getChildConnector(dynamicToolTipProperty);
+      if (tooltipConnector == null) {
+        tooltipConnector = getConnectorFactory().createValueConnector(dynamicToolTipProperty);
+        connector.addChildConnector(dynamicToolTipProperty, tooltipConnector);
+      }
+      if (tooltipConnector instanceof IRemoteStateOwner) {
+        pageView.getPeer().setToolTipState(((IRemoteStateOwner) tooltipConnector).getState());
+      }
+    }
   }
 
   /**

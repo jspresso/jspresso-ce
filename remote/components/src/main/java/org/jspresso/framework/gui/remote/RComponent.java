@@ -40,25 +40,26 @@ public abstract class RComponent extends RemotePeer implements
 
   private static final long serialVersionUID = 4728316436476683941L;
 
-  private       RActionList[]    actionLists;
-  private       RActionList[]    secondaryActionLists;
-  private       String           background;
-  private       RemoteValueState backgroundState;
-  private       String           borderType;
-  private       Font             font;
-  private       RemoteValueState fontState;
-  private       String           foreground;
-  private       RemoteValueState foregroundState;
-  private       RIcon            icon;
-  private       String           label;
-  private       Dimension        preferredSize;
-  private       RemoteValueState state;
-  private       String           toolTip;
-  private       RemoteValueState toolTipState;
-  private       String           styleName;
+  private RActionList[]    actionLists;
+  private RActionList[]    secondaryActionLists;
+  private String           background;
+  private RemoteValueState backgroundState;
+  private String           borderType;
+  private Font             font;
+  private RemoteValueState fontState;
+  private String           foreground;
+  private RemoteValueState foregroundState;
+  private RIcon            icon;
+  private String           label;
+  private RemoteValueState labelState;
+  private Dimension        preferredSize;
+  private RemoteValueState state;
+  private String           toolTip;
+  private RemoteValueState toolTipState;
+  private String           styleName;
 
   @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-  private final Set<RAction>     actionHardReferences;
+  private final Set<RAction> actionHardReferences;
 
   /**
    * Constructs a new {@code RComponent} instance.
@@ -153,7 +154,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Gets the preferredSize.
-   * 
+   *
    * @return the preferredSize.
    */
   public Dimension getPreferredSize() {
@@ -407,6 +408,24 @@ public abstract class RComponent extends RemotePeer implements
    */
   public void setFontState(RemoteValueState fontState) {
     this.fontState = fontState;
+  }
+
+  /**
+   * Gets label state.
+   *
+   * @return the label state
+   */
+  public RemoteValueState getLabelState() {
+    return labelState;
+  }
+
+  /**
+   * Sets label state.
+   *
+   * @param labelState the label state
+   */
+  public void setLabelState(RemoteValueState labelState) {
+    this.labelState = labelState;
   }
 
   /**

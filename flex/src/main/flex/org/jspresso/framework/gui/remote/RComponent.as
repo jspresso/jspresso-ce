@@ -37,6 +37,7 @@ public class RComponent extends RemotePeer implements IRemoteStateOwner {
   private var _foregroundState:RemoteValueState;
   private var _icon:RIcon;
   private var _label:String;
+  private var _labelState:RemoteValueState;
   private var _state:RemoteValueState;
   private var _toolTip:String;
   private var _toolTipState:RemoteValueState;
@@ -175,6 +176,14 @@ public class RComponent extends RemotePeer implements IRemoteStateOwner {
 
   public function set foregroundState(value:RemoteValueState):void {
     _foregroundState = value;
+  }
+
+  public function get labelState():RemoteValueState {
+    return _labelState;
+  }
+
+  public function set labelState(value:RemoteValueState):void {
+    _labelState = value;
   }
 
   public function get fontState():RemoteValueState {

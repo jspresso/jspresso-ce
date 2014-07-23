@@ -36,7 +36,8 @@ qx.Class.define("org.jspresso.framework.gui.remote.RComponent", {
     },
     backgroundState: {
       check: "org.jspresso.framework.state.remote.RemoteValueState",
-      nullable: true
+      nullable: true,
+      apply: "_bindDynamicState"
     },
     borderType: {
       check: "String",
@@ -48,7 +49,8 @@ qx.Class.define("org.jspresso.framework.gui.remote.RComponent", {
     },
     fontState: {
       check: "org.jspresso.framework.state.remote.RemoteValueState",
-      nullable: true
+      nullable: true,
+      apply: "_bindDynamicState"
     },
     foreground: {
       check: "String",
@@ -56,7 +58,8 @@ qx.Class.define("org.jspresso.framework.gui.remote.RComponent", {
     },
     foregroundState: {
       check: "org.jspresso.framework.state.remote.RemoteValueState",
-      nullable: true
+      nullable: true,
+      apply: "_bindDynamicState"
     },
     icon: {
       check: "org.jspresso.framework.gui.remote.RIcon",
@@ -65,6 +68,11 @@ qx.Class.define("org.jspresso.framework.gui.remote.RComponent", {
     label: {
       check: "String",
       nullable: true
+    },
+    labelState: {
+      check: "org.jspresso.framework.state.remote.RemoteValueState",
+      nullable: true,
+      apply: "_bindDynamicState"
     },
     state: {
       check: "org.jspresso.framework.state.remote.RemoteValueState",
@@ -76,7 +84,8 @@ qx.Class.define("org.jspresso.framework.gui.remote.RComponent", {
     },
     toolTipState: {
       check: "org.jspresso.framework.state.remote.RemoteValueState",
-      nullable: true
+      nullable: true,
+      apply: "_bindDynamicState"
     },
     preferredSize: {
       check: "org.jspresso.framework.util.gui.Dimension",
@@ -98,6 +107,15 @@ qx.Class.define("org.jspresso.framework.gui.remote.RComponent", {
 
     retrievePeer: function () {
       return this.__peer;
+    },
+
+    _bindDynamicState: function (value, old, name) {
+      if (value) {
+        value.addListener("changeValue", function (e) {
+          this._applyEventPropagation(e.getData(), e.getOldData(), name.substring(0, name.length - "State".length));
+        }, this);
+      }
     }
+
   }
 });

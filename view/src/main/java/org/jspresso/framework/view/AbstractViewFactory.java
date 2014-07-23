@@ -106,7 +106,6 @@ import org.jspresso.framework.util.format.NullableSimpleDateFormat;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gate.ModelTrackingGate;
 import org.jspresso.framework.util.gui.Dimension;
-import org.jspresso.framework.util.gui.EClientType;
 import org.jspresso.framework.util.gui.ERenderingOptions;
 import org.jspresso.framework.util.gui.IClientTypeAware;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
@@ -1191,13 +1190,43 @@ public abstract class AbstractViewFactory<E, F, G> implements
                                                   Locale locale);
 
   /**
+   * Computes the property name used to compute a property view dynamic label
+   * or null if none or if the label is a static one. Note that for the label to be considered as a dynamic one,
+   * the name must be different from the bound property name.
+   *
+   * @param modelDescriptor
+   *     the component model descriptor.
+   * @param viewDescriptor
+   *     the view descriptor
+   * @param propertyDescriptor
+   *     the property descriptor.
+   * @return the property name used to compute a property view dynamic label
+   * or null if none or if the label is a static one.
+   */
+  protected String computePropertyDynamicLabel(IComponentDescriptor<?> modelDescriptor, IViewDescriptor viewDescriptor,
+                                               IPropertyDescriptor propertyDescriptor) {
+    String dynamicLabelProperty = null;
+    String labelKey = null;
+    if (viewDescriptor.getName() != null) {
+      labelKey = viewDescriptor.getName();
+    }
+    if (labelKey != null && !labelKey.equals(propertyDescriptor.getName())) {
+      IPropertyDescriptor labelProperty = modelDescriptor.getPropertyDescriptor(labelKey);
+      if (labelProperty != null) {
+        dynamicLabelProperty = labelProperty.getName();
+      }
+    }
+    return dynamicLabelProperty;
+  }
+
+  /**
    * Computes the property name used to compute a property view dynamic tooltip
    * or null if none or if the tooltip is a static one.
    *
    * @param modelDescriptor
    *          the component model descriptor.
-   * @param propertyViewDescriptor
-   *          the property view descriptor
+   * @param viewDescriptor
+   *          the view descriptor
    * @param propertyDescriptor
    *          the property descriptor.
    * @return the property name used to compute a property view dynamic tooltip
@@ -1205,12 +1234,12 @@ public abstract class AbstractViewFactory<E, F, G> implements
    */
   protected String computePropertyDynamicToolTip(
       IComponentDescriptor<?> modelDescriptor,
-      IPropertyViewDescriptor propertyViewDescriptor,
+      IViewDescriptor viewDescriptor,
       IPropertyDescriptor propertyDescriptor) {
     String dynamicToolTipProperty = null;
     String descriptionKey;
-    if (propertyViewDescriptor.getDescription() != null) {
-      descriptionKey = propertyViewDescriptor.getDescription();
+    if (viewDescriptor.getDescription() != null) {
+      descriptionKey = viewDescriptor.getDescription();
     } else {
       descriptionKey = propertyDescriptor.getDescription();
     }

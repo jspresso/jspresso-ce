@@ -673,15 +673,27 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
             var nextPage = pageSection;
             this.linkNextPageBackButton(nextPage, holdingPage, null, null);
             var listModel = new qx.data.Array();
-            listModel.push({
-              section: remotePageSection,
-              next: nextPage
-            });
+            remotePageSection.setUserData("next", nextPage);
+            if (remotePageSection.getLabelState()) {
+              this._getRemotePeerRegistry().register(remotePageSection.getLabelState());
+            }
+            if (remotePageSection.getToolTipState()) {
+              this._getRemotePeerRegistry().register(remotePageSection.getToolTipState());
+            }
+            listModel.push(remotePageSection);
             var list = new qx.ui.mobile.list.List({
               configureItem: function (item, data, row) {
-                var section = data.section;
-                item.setTitle(section.getLabel());
-                item.setSubtitle(section.getToolTip());
+                var section = data;
+                if (section.getLabelState()) {
+                  item.setTitle(section.getLabelState().getValue());
+                } else {
+                  item.setTitle(section.getLabel());
+                }
+                if (section.getToolTipState()) {
+                  item.setSubtitle(section.getToolTipState().getValue());
+                } else {
+                  item.setSubtitle(section.getToolTip());
+                }
                 if (section.getIcon()) {
                   item.setImage(section.getIcon().getImageUrlSpec());
                 }
@@ -694,7 +706,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
               var selectedIndex = evt.getData();
               /** @type {qx.ui.mobile.list.List} */
               var l = evt.getCurrentTarget();
-              var pageToShow = this._getActualPageToShow(l.getModel().getItem(selectedIndex).next);
+              var pageToShow = this._getActualPageToShow(l.getModel().getItem(selectedIndex).getUserData("next"));
               if (pageToShow && pageToShow.getVisibility() != "visible") {
                 this._getActionHandler().showDetailPage(pageToShow);
               }
