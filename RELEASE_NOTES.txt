@@ -33,10 +33,10 @@ org.jspresso.framework.ext (sub)package(s)
   artifacts, you might have to exclude the transitive dependencies like below or you might face flexmojos stating
   that you have incompatible compiler / framework versions :
 
-		<dependency>
-			<groupId>com.example.dependency</groupId>
-			<artifactId>dependency-flex</artifactId>
-			<type>swc</type>
+    <dependency>
+      <groupId>com.example.dependency</groupId>
+      <artifactId>dependency-flex</artifactId>
+      <type>swc</type>
       <exclusions>
         <exclusion>
           <groupId>com.adobe.flex.framework</groupId>
@@ -431,17 +431,17 @@ Create the it_IT, cs_CZ, sk_SK, ru_RU, bg_BG, tr_TR directories in startup/flex/
     
     <bean id="checkAllModulesDirtyStateFrontAction" class="org.jspresso.framework.application.backend.action.module.CheckAllModulesDirtyStateAction" />
   changed to :
-	  <bean id="checkAllModulesDirtyStateBackAction" class="org.jspresso.framework.application.backend.action.module.CheckAllModulesDirtyStateAction" />
-	  <bean id="checkAllModulesDirtyStateFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
-	    <property name="wrappedAction" ref="checkAllModulesDirtyStateBackAction" />
-	  </bean>
+    <bean id="checkAllModulesDirtyStateBackAction" class="org.jspresso.framework.application.backend.action.module.CheckAllModulesDirtyStateAction" />
+    <bean id="checkAllModulesDirtyStateFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
+      <property name="wrappedAction" ref="checkAllModulesDirtyStateBackAction" />
+    </bean>
 
     <bean id="checkModuleDirtyStateFrontAction" class="org.jspresso.framework.application.backend.action.module.CheckModuleDirtyStateAction" />
   changed to :
-	  <bean id="checkModuleDirtyStateBackAction" class="org.jspresso.framework.application.backend.action.module.CheckModuleDirtyStateAction" />
-	  <bean id="checkModuleDirtyStateFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
-	    <property name="wrappedAction" ref="checkModuleDirtyStateBackAction" />
-	  </bean>
+    <bean id="checkModuleDirtyStateBackAction" class="org.jspresso.framework.application.backend.action.module.CheckModuleDirtyStateAction" />
+    <bean id="checkModuleDirtyStateFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
+      <property name="wrappedAction" ref="checkModuleDirtyStateBackAction" />
+    </bean>
 
   
 - The instance used as session entity registry by the backend controller is now directly created by the controller instead
@@ -470,48 +470,48 @@ Create the it_IT, cs_CZ, sk_SK, ru_RU, bg_BG, tr_TR directories in startup/flex/
   onLoad="focusFlex()"
 
 - in webapp/flex/index.html, replace the whole section (replace ${application} by your application name):
-	
-	<script langugage='javascript' type="text/javascript">
-	  function getRootURL()
-	  {
-	      return location.href.substring(0,location.href.indexOf("/flex")); ;
-	  }
-	  
-	  function stop()
-	  {
-	      // Here you'll need to provide the id of your Flex swf
-	      document.getElementById("${application}-startup-flex-client").stop();
-	      //alert("Disconnected!");
-	  }
-	</script>
-	
+  
+  <script langugage='javascript' type="text/javascript">
+    function getRootURL()
+    {
+        return location.href.substring(0,location.href.indexOf("/flex")); ;
+    }
+    
+    function stop()
+    {
+        // Here you'll need to provide the id of your Flex swf
+        document.getElementById("${application}-startup-flex-client").stop();
+        //alert("Disconnected!");
+    }
+  </script>
+  
   by
   
   <script langugage='javascript' type="text/javascript">
-	  function getRootURL() {
-	    return location.href.substring(0,location.href.indexOf("/flex"));
-	  }
-	
-	  function stop() {
-	    if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
-	      var xmlhttp = new XMLHttpRequest();
-	    } else {// code for IE6, IE5
-	      var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-	    }
-	    xmlhttp.open("GET", getRootURL()+"/util/stop",false);
-	    xmlhttp.onreadystatechange = function() {
-	    };
-	    xmlhttp.send();
-	  }
-	  
-	  function focusFlex() {
-	    var flexApp = document.getElementById("${application}-startup-flex-client");
-	    if(flexApp) {
-	      flexApp.tabIndex = 0;
-	      flexApp.focus();
-	    }
-	  }
-	</script>
+    function getRootURL() {
+      return location.href.substring(0,location.href.indexOf("/flex"));
+    }
+  
+    function stop() {
+      if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+        var xmlhttp = new XMLHttpRequest();
+      } else {// code for IE6, IE5
+        var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+      }
+      xmlhttp.open("GET", getRootURL()+"/util/stop",false);
+      xmlhttp.onreadystatechange = function() {
+      };
+      xmlhttp.send();
+    }
+    
+    function focusFlex() {
+      var flexApp = document.getElementById("${application}-startup-flex-client");
+      if(flexApp) {
+        flexApp.tabIndex = 0;
+        flexApp.focus();
+      }
+    }
+  </script>
 
 - Add the following servlet definition to your web.xml :
   <servlet>
@@ -675,20 +675,20 @@ to   <prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvi
   http://mantis.jspresso.org/view.php?id=524
   you should add the following filter definition in your web.xml descriptor :
   
-	  <!-- Request params filter section -->
-	  <filter>
-	    <filter-name>RequestParamsHttpFilter</filter-name>
-	    <filter-class>org.jspresso.framework.util.http.RequestParamsHttpFilter</filter-class>
-	  </filter>
-	  <filter-mapping>
-	    <filter-name>RequestParamsHttpFilter</filter-name>
-	    <url-pattern>/flex/*</url-pattern>
-	  </filter-mapping>
-	  <filter-mapping>
-	    <filter-name>RequestParamsHttpFilter</filter-name>
-	    <url-pattern>/qooxdoo/*</url-pattern>
-	  </filter-mapping>
-	  <!-- End request params filter section -->
+    <!-- Request params filter section -->
+    <filter>
+      <filter-name>RequestParamsHttpFilter</filter-name>
+      <filter-class>org.jspresso.framework.util.http.RequestParamsHttpFilter</filter-class>
+    </filter>
+    <filter-mapping>
+      <filter-name>RequestParamsHttpFilter</filter-name>
+      <url-pattern>/flex/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+      <filter-name>RequestParamsHttpFilter</filter-name>
+      <url-pattern>/qooxdoo/*</url-pattern>
+    </filter-mapping>
+    <!-- End request params filter section -->
 
 
 3.5.11
@@ -785,38 +785,38 @@ to allow for more flexible card selection and potentially generation.
 
 - Due to the migration to qooxdoo 1.5, there is a manual change to perform on existing projects.
 Edit startup/qooxdoo/client/pom.xml and replace the following section :
-	  <execution>
-	    <id>web-debug</id>
-	    ...
-	    ...
-	  </execution>
+    <execution>
+      <id>web-debug</id>
+      ...
+      ...
+    </execution>
 
 by
-	  <execution>
-	    <id>web-debug</id>
-	    <goals>
-	      <goal>run</goal>
-	    </goals>
-	    <phase>prepare-package</phase>
-	    <configuration>
-	      <tasks>
-	        <property name="web-debug.dir" value="${project.build.directory}/web-debug" />
-	        <mkdir dir="" />
-	        <replace dir="${web-debug.dir}" token="../../../../target" value="file:///${project.build.directory}">
-	          <include name="**/*.js" />
-	        </replace>
-	        <replace dir="${web-debug.dir}" token="../../" value="file:///${basedir}/src/main/">
-	          <include name="**/*.js" />
-	        </replace>
-	        <replace dir="${web-debug.dir}" token="\" value="/">
-	          <include name="**/*.js" />
-	        </replace>
-	        <replace dir="${web-debug.dir}" token="//(" value="\/(">
-	          <include name="**/*.js" />
-	        </replace>
-	      </tasks>
-	    </configuration>
-	  </execution>
+    <execution>
+      <id>web-debug</id>
+      <goals>
+        <goal>run</goal>
+      </goals>
+      <phase>prepare-package</phase>
+      <configuration>
+        <tasks>
+          <property name="web-debug.dir" value="${project.build.directory}/web-debug" />
+          <mkdir dir="" />
+          <replace dir="${web-debug.dir}" token="../../../../target" value="file:///${project.build.directory}">
+            <include name="**/*.js" />
+          </replace>
+          <replace dir="${web-debug.dir}" token="../../" value="file:///${basedir}/src/main/">
+            <include name="**/*.js" />
+          </replace>
+          <replace dir="${web-debug.dir}" token="\" value="/">
+            <include name="**/*.js" />
+          </replace>
+          <replace dir="${web-debug.dir}" token="//(" value="\/(">
+            <include name="**/*.js" />
+          </replace>
+        </tasks>
+      </configuration>
+    </execution>
 
 Edit startup/qooxdoo/client/src/main/py/config.json and replace the following section :
     "source-script" :
@@ -852,10 +852,10 @@ by
       },
       "compile-options" :
       {
-			  "paths" :
-			  {
-			    "file" : "${TARGET}/web-debug/script/${APPLICATION}.js"
-			  },
+        "paths" :
+        {
+          "file" : "${TARGET}/web-debug/script/${APPLICATION}.js"
+        },
         "uris" : 
         {
           "add-nocache-param" : false
@@ -1220,16 +1220,16 @@ update your existing projects, follow the step by step procedure described here 
 This implies a light change in the spring definition files.
 For instance instead of referring to static beans definitions like :
 
-	<property
-	  name="orientation"
-	  ref="HORIZONTAL" />
+  <property
+    name="orientation"
+    ref="HORIZONTAL" />
 
 You will now use direct enum injection :
-	
-	<property
-	  name="orientation"
-	  value="HORIZONTAL" />
-	  
+  
+  <property
+    name="orientation"
+    value="HORIZONTAL" />
+    
 see http://sourceforge.net/tracker2/index.php?func=detail&aid=2319923&group_id=231671&atid=1083851
 
 
