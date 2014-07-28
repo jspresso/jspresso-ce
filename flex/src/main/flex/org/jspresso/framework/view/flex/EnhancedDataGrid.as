@@ -76,6 +76,9 @@ public class EnhancedDataGrid extends DataGrid {
   }
 
   public function itemEditBeginning(event:DataGridEvent):void {
+    // Fixes bug where datagrid does not get refreshed after an edition end due to a click in anther column.
+    // see bug #1198
+    collection.enableAutoUpdate();
     if (preventEditing) {
       event.preventDefault();
     }
