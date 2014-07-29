@@ -2,6 +2,65 @@ Jspresso CE - Change Log
 
 
 
+Jspresso CE - 4.0 (Released 2014-07-29) [ View Issues ]
+=======================================
+- 0001198: [View] Flex datagrid might not refresh correctly (vvandens) - closed.
+- 0001194: [Frontend] Remember me should aut login the user until he actually logs out (vvandens) - closed.
+- 0001192: [View] When the window focus is lost in the Flex view, the current focused field may not be correctly sent to the server (vvandens) - closed.
+- 0001191: [Frontend] Comparable properties in filter : crash when trying to select the blank operator value (vvandens) - closed.
+- 0001185: [Frontend] Impossible to use date in a filter view module based on a Component (vvandens) - closed.
+- 0001184: [View] Allow to specify the icon size of an enumeration property view (vvandens) - closed.
+- 0001183: [Model] BigDecimal : generated scale and precision (vvandens) - closed.
+- 0001182: [Frontend] Allow to define resizing dimensions on image property / property views as well as storage format (vvandens) - closed.
+- 0001180: [View] Add map vizualization to Flex and Qooxdoo (vvandens) - closed.
+- 0001181: [Frontend] NPE in card view runtime (vvandens) - closed.
+- 0001179: [Model] NPE in WeakPropertyChangeSupport (vvandens) - closed.
+- 0001177: [Frontend] RemoteCloseDialogAction might be trigerred on the wrong dialog (vvandens) - closed.
+- 0001175: [Backend] JAAS login modules should enforce that UserPrincipal is shared when needed (vvandens) - closed.
+- 0001171: [Persistence] When an entity is made translatable, pagination might be broken due to outer joins (vvandens) - closed.
+- 0001173: [Frontend] Allow for custom fields definitions in filter views without using computed fields on actual model (vvandens) - closed.
+- 0001172: [Frontend] Quotes are doubled in standard translations (vvandens) - closed.
+- 0001169: [Frontend] Be able to transform an enumeration into a LOV (vvandens) - closed.
+- 0001142: [Frontend] Number display format (vvandens) - closed.
+- 0001163: [View] French Number Format (vvandens) - closed.
+- 0001164: [Frontend] When reusing a dialog, the dialog context stack is not correctly updated and current view can be garbage collected on server (vvandens) - closed.
+- 0001159: [View] Once resized, a date/time column truncates the editor field. (vvandens) - closed.
+- 0001157: [Frontend] Improve session memory footprint (vvandens) - closed.
+- 0001158: [Persistence] Sorting on properties starting with a single lowercase letter fails (vvandens) - closed.
+- 0001155: [Frontend] Memory leak in LovAction (vvandens) - closed.
+- 0001148: [Persistence] Entity loaded with MERGE_EAGER mode, having an uninitialized collection leads to ClassCastException (vvandens) - closed.
+- 0001153: [Backend] Merging back an entity with MergeMode.LAZY after a TX can lead to attaching a UOW entity to a session entity (vvandens) - closed.
+- 0001151: [Backend] Asynchronous actions ThreadGroup should be a Spring singleton and not per backend controller (vvandens) - closed.
+- 0001147: [Build & tools] EntityGenerator maven plugin might fail when executed multiple times in a reactor project (vvandens) - closed.
+- 0001146: [Backend] Nested property change are not always correctly fired (vvandens) - closed.
+- 0001145: [Backend] Allow for async actions to automatically mege back entities that have been flushed to the DB. (vvandens) - closed.
+- 0001143: [Frontend] Runtime exception handling in async actions (vvandens) - closed.
+- 0001140: [Backend] Using JTA, Hibernate might not correctly sync with transactions (vvandens) - closed.
+- 0001125: [Frontend] Impossible to use qooxdoo on Cloudbees (vvandens) - closed.
+- 0001137: [Backend] Allow to have async actions to register on completion callbacks (vvandens) - closed.
+- 0001136: [Frontend] NPE on nested queryMultiselect:true filter views (vvandens) - closed.
+- 0001135: [Backend] SingleWeakPropertyChangeListener is CPU consuming (vvandens) - closed.
+- 0001134: [Backend] When merging back an entity from the UOW, the session entity might incorrectly be attached to the UOW Hibernate session (vvandens) - closed.
+- 0001124: [Backend] User passwords pattern + Passwords different from login (vvandens) - closed.
+- 0001131: [Backend] Export functionality interacting with application (vvandens) - closed.
+- 0001132: [Backend] Export servlet does not report errors (vvandens) - closed.
+- 0001130: [Backend] detachedEntities stored in an entity are not correctly merged (vvandens) - closed.
+- 0001129: [Backend] Sometimes fails to clone in UOW with Hibernate exception (vvandens) - closed.
+- 0001115: [Model] infinite curl when computing hashCode on an tree structure (vvandens) - closed.
+- 0001128: [Backend] When using translatable properties for queriing, an Hibernate QueryException (duplicate alias) might be thrown (vvandens) - closed.
+- 0001127: [Persistence] HibernateException when using an in-memory TX, modifying an entity collection property and querying the entity again (vvandens) - closed.
+- 0001126: [Model] NPE when resetting to null uninitialized referenced property and getting the property again (vvandens) - closed.
+- 0001104: [Frontend] Allow to customize the window to navigate with openUrlAction (vvandens) - closed.
+- 0001120: [Frontend] problem with addAsChildModuleFrontAction (vvandens) - closed.
+- 0001122: [Backend] If we detect a flush on an uncloned entity, there should be an explicit exception thown (vvandens) - closed.
+- 0001105: [Build & tools] incomplete permId set (vvandens) - closed.
+- 0001109: [Model] Issues on translatable properties (jspresso 3.7-SNAPSHOT) (vvandens) - closed.
+- 0001116: [Build & tools] bsf jar jog4j.properties conflict (vvandens) - closed.
+- 0001117: [Persistence] Column name on 1-n relationships with sqlName defined (vvandens) - closed.
+- 0001119: [View] Form labels should not be marked as mandatory when the property view is read-only (vvandens) - closed.
+- 0001118: [Backend] Inside a REQUIRES_NEW TX, the Hibernate interceptor might return outer UOW entities (vvandens) - closed.
+[55 issues]
+
 Jspresso CE - 3.7 (Released 2013-09-20) [ View Issues ]
 =======================================
 - 0001114: [Persistence] Saving master/detail type entity can lead to an inconsistent collection state: Collection instead of PersistentCollection (vvandens) - closed.
