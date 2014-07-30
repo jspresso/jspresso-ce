@@ -1112,6 +1112,18 @@ public class DefaultFlexViewFactory {
         textInput.editable = false;
       }
 
+      var resetFieldValue:Function = function (event:Event):void {
+        var tf:TextInput = (event.currentTarget as TextInput);
+        var inputText:String = tf.text;
+        if (inputText != remoteState.value) {
+          if (remoteState.value == null) {
+            tf.text = null;
+          } else {
+            tf.text = remoteState.value.toString();
+          }
+        }
+      }
+
       var triggerAction:Function = function (event:Event):void {
         var tf:TextInput = (event.currentTarget as TextInput);
         var inputText:String = tf.text;
@@ -1138,7 +1150,8 @@ public class DefaultFlexViewFactory {
       textInput.addEventListener(FlexEvent.ENTER, triggerAction);
       textInput.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE, triggerAction);
       textInput.addEventListener(FocusEvent.KEY_FOCUS_CHANGE, triggerAction);
-      textInput.addEventListener(FocusEvent.FOCUS_OUT, triggerAction);
+      // Do not trigger action since it might be triggered twice.
+      textInput.addEventListener(FocusEvent.FOCUS_OUT, resetFieldValue);
     }
   }
 
