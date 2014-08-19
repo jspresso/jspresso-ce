@@ -901,61 +901,56 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     IValueConnector connector;
     RComponent viewComponent;
     IFormatter<Object, String> formatter = createEnumerationFormatter(propertyDescriptor, actionHandler, locale);
-    if (propertyViewDescriptor.isReadOnly()) {
+    // it's important to keep this special case for enumeration property views that are read-only.
+    // r/o enumeration property views, if not assigned an action, should be transmitted as a read-only combo-box.
+    // If not, enumeration images will disappear (see bug #1200)
+    if (propertyViewDescriptor.isReadOnly() && propertyViewDescriptor.getAction() != null) {
       connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
-      if (propertyViewDescriptor.getAction() != null) {
-        viewComponent = createRLink(propertyViewDescriptor, false);
-      } else {
-        viewComponent = createRLabel(propertyViewDescriptor, false);
-      }
+      viewComponent = createRLink(propertyViewDescriptor, false);
       ((RLabel) viewComponent).setMaxLength(getFormatLength(formatter, getEnumerationTemplateValue(propertyDescriptor,
           actionHandler, locale)));
     } else {
-      if (propertyDescriptor.isLov()) {
-        return createEnumerationReferencePropertyView(propertyViewDescriptor, actionHandler, locale);
-      } else {
-        connector = getConnectorFactory().createValueConnector(propertyDescriptor.getName());
-        List<String> values = new ArrayList<>();
-        List<String> translations = new ArrayList<>();
-        List<String> enumerationValues = new ArrayList<>(propertyDescriptor.getEnumerationValues());
-        filterEnumerationValues(enumerationValues, propertyViewDescriptor);
-        if (!propertyDescriptor.isMandatory()) {
-          enumerationValues.add(0, "");
-        }
-        for (String value : enumerationValues) {
-          values.add(value);
-          if (value != null && propertyDescriptor.isTranslated()) {
-            if ("".equals(value)) {
-              translations.add(" ");
-            } else {
-              translations.add(propertyDescriptor.getI18nValue(value, actionHandler, locale));
-            }
-          } else {
-            if (value == null) {
-              translations.add(" ");
-            } else {
-              translations.add(value);
-            }
-          }
-        }
-        if (propertyViewDescriptor instanceof IEnumerationPropertyViewDescriptor
-            && ((IEnumerationPropertyViewDescriptor) propertyViewDescriptor).isRadio()) {
-          viewComponent = createRRadioBox(propertyViewDescriptor);
-          ((RRadioBox) viewComponent).setOrientation(
-              ((IEnumerationPropertyViewDescriptor) propertyViewDescriptor).getOrientation().name());
-        } else {
-          viewComponent = createRComboBox(propertyViewDescriptor);
-          ((RComboBox) viewComponent).setReadOnly(propertyViewDescriptor.isReadOnly());
-          List<RIcon> icons = new ArrayList<>();
-          for (String value : enumerationValues) {
-            icons.add(getIconFactory().getIcon(propertyDescriptor.getIconImageURL(value), getEnumerationIconDimension(
-                propertyViewDescriptor)));
-          }
-          ((RComboBox) viewComponent).setIcons(icons.toArray(new RIcon[icons.size()]));
-        }
-        ((REnumBox) viewComponent).setValues(values.toArray(new String[values.size()]));
-        ((REnumBox) viewComponent).setTranslations(translations.toArray(new String[translations.size()]));
+      connector = getConnectorFactory().createValueConnector(propertyDescriptor.getName());
+      List<String> values = new ArrayList<>();
+      List<String> translations = new ArrayList<>();
+      List<String> enumerationValues = new ArrayList<>(propertyDescriptor.getEnumerationValues());
+      filterEnumerationValues(enumerationValues, propertyViewDescriptor);
+      if (!propertyDescriptor.isMandatory()) {
+        enumerationValues.add(0, "");
       }
+      for (String value : enumerationValues) {
+        values.add(value);
+        if (value != null && propertyDescriptor.isTranslated()) {
+          if ("".equals(value)) {
+            translations.add(" ");
+          } else {
+            translations.add(propertyDescriptor.getI18nValue(value, actionHandler, locale));
+          }
+        } else {
+          if (value == null) {
+            translations.add(" ");
+          } else {
+            translations.add(value);
+          }
+        }
+      }
+      if (propertyViewDescriptor instanceof IEnumerationPropertyViewDescriptor
+          && ((IEnumerationPropertyViewDescriptor) propertyViewDescriptor).isRadio()) {
+        viewComponent = createRRadioBox(propertyViewDescriptor);
+        ((RRadioBox) viewComponent).setOrientation(
+            ((IEnumerationPropertyViewDescriptor) propertyViewDescriptor).getOrientation().name());
+      } else {
+        viewComponent = createRComboBox(propertyViewDescriptor);
+        ((RComboBox) viewComponent).setReadOnly(propertyViewDescriptor.isReadOnly());
+        List<RIcon> icons = new ArrayList<>();
+        for (String value : enumerationValues) {
+          icons.add(getIconFactory().getIcon(propertyDescriptor.getIconImageURL(value),
+              getIconFactory().getTinyIconSize()));
+        }
+        ((RComboBox) viewComponent).setIcons(icons.toArray(new RIcon[icons.size()]));
+      }
+      ((REnumBox) viewComponent).setValues(values.toArray(new String[values.size()]));
+      ((REnumBox) viewComponent).setTranslations(translations.toArray(new String[translations.size()]));
     }
     ((IRemoteStateOwner) connector).setRemoteStateValueMapper(new IRemoteStateValueMapper() {
       @Override
