@@ -39,6 +39,23 @@ public class RIconComboBox extends ComboBox {
 
   public function set icons(value:Array):void {
     _icons = value;
+    if (value) {
+      var iconWidth:Number = 0;
+      var iconHeight:Number = 0;
+      for (var i:int = 0; i < value.length; i++) {
+        var rIcon:RIcon = value[i];
+        if (rIcon && rIcon.dimension) {
+          if (rIcon.dimension.width > iconWidth) {
+            iconWidth = rIcon.dimension.width;
+          }
+          if (rIcon.dimension.height > iconHeight) {
+            iconHeight = rIcon.dimension.height;
+          }
+        }
+      }
+      iconImage.width = iconWidth;
+      iconImage.height = iconHeight;
+    }
   }
 
   public function set showIcon(value:Boolean):void {
@@ -54,8 +71,6 @@ public class RIconComboBox extends ComboBox {
     if (_showIcon) {
       if (_rIcon != null) {
         iconImage.source = _rIcon.imageUrlSpec;
-        iconImage.width = _rIcon.dimension.width;
-        iconImage.height = _rIcon.dimension.height;
       } else {
         iconImage.source = null;
       }
@@ -63,10 +78,6 @@ public class RIconComboBox extends ComboBox {
       iconImage.y = (height - iconImage.height) / 2;
       textInput.x = iconImage.width + getStyle("cornerRadius");
     }
-  }
-
-  public function set rIcon(_icon:RIcon):void {
-    _rIcon = _icon;
   }
 
   override public function set selectedItem(sItem:Object):void {
@@ -90,13 +101,13 @@ public class RIconComboBox extends ComboBox {
   private function updateTextAndIcon(index:int):void {
     if (index != -1) {
       if (_icons) {
-        rIcon = _icons[index];
+        _rIcon = _icons[index];
       }
       if (_labels && text != _labels[index]) {
         text = _labels[index];
       }
     } else {
-      rIcon = null;
+      _rIcon = null;
       text = "";
     }
   }
@@ -108,7 +119,7 @@ public class RIconComboBox extends ComboBox {
         measuredWidth += _rIcon.dimension.width;
       }
       if (_rIcon.dimension.height > measuredHeight) {
-        measuredHeight += _rIcon.dimension.height - textInput.measuredHeight /2;
+        measuredHeight += _rIcon.dimension.height - textInput.measuredHeight / 2;
       }
     }
   }
