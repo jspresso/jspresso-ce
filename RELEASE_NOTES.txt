@@ -1,5 +1,9 @@
 4.0
 ===
+- Modules do not base their equality on object equality anymore. 2 arbitrary modules are now considedered equal
+  if and only if : they have the same name AND they have the same i18nNameKey AND they have the same view descriptor.
+  BeanModules augment this rule by checking equality of their beans.
+
 - In the webapp/pom.xml replace the whole flexmojos wrapper plugin execution by the following block :
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
