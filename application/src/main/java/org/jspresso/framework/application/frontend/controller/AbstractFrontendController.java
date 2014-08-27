@@ -2121,8 +2121,14 @@ public abstract class AbstractFrontendController<E, F, G> extends
     if (password != null) {
       buff.append(loginGuid);
     }
-    putUserPreference(UP_GUID, loginGuid);
+    putUserPreference(getGlobalUserPreferenceGuidKey(username), loginGuid);
     return buff.toString();
+  }
+
+  private String getGlobalUserPreferenceGuidKey(String username) {
+    // We must encode the username in the preference key, since the user is not yet logged-in,
+    // thus the preference store is the global one.
+    return UP_GUID + "|" + username;
   }
 
   /**
@@ -2139,7 +2145,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
       String[] temp = encodedUserPass.split(UP_SEP);
       if (temp.length == 2) {
         userPass[0] = temp[0];
-        if (temp[1] != null && temp[1].equals(getUserPreference(UP_GUID))) {
+        if (temp[1] != null && temp[1].equals(getUserPreference(getGlobalUserPreferenceGuidKey(userPass[0])))) {
           userPass[1] = "";
         }
       } else if (temp.length == 1) {

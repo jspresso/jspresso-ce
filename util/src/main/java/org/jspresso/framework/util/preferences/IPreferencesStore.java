@@ -27,8 +27,13 @@ package org.jspresso.framework.util.preferences;
 public interface IPreferencesStore {
 
   /**
+   * &quot;global&quot; constant.
+   */
+  String GLOBAL_STORE = "global";
+
+  /**
    * Sets the path of this store.
-   * 
+   *
    * @param storePath
    *          the path identifying this store.
    */
@@ -36,7 +41,7 @@ public interface IPreferencesStore {
 
   /**
    * Retrieves a preference from the preference store.
-   * 
+   *
    * @param key
    *          the key of the preference.
    * @return the value of the preference or null if no preference with this key
@@ -46,7 +51,7 @@ public interface IPreferencesStore {
 
   /**
    * Stores a preference into the preference store.
-   * 
+   *
    * @param key
    *          the key of the preference.
    * @param value
@@ -57,7 +62,7 @@ public interface IPreferencesStore {
 
   /**
    * Removes a preference from the preference store.
-   * 
+   *
    * @param key
    *          the key of the preference.
    */

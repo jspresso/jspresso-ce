@@ -116,6 +116,9 @@ public class DatabaseLoginModule extends DatabaseServerLoginModule {
     if (password == null) {
       return null;
     }
+    if (password.length() == 0) {
+      return password;
+    }
     return super.createPasswordHash(username, password, digestOption);
   }
 
