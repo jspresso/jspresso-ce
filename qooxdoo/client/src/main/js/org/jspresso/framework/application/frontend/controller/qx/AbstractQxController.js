@@ -21,7 +21,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
               org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler],
 
   statics: {
-    __JSPRESSO_VERSION: "4.0-SNAPSHOT",
+    __JSPRESSO_VERSION: "${jspresso.version}",
     __HANDLE_COMMANDS_METHOD: "handleCommands",
     __START_METHOD: "start",
     __STOP_METHOD: "stop"
