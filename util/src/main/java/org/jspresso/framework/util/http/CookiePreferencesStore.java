@@ -36,7 +36,7 @@ public class CookiePreferencesStore implements IPreferencesStore {
    * Constructs a new {@code CookiePreferencesStore} instance.
    */
   public CookiePreferencesStore() {
-    this.storePath = "";
+    this.storePath = GLOBAL_STORE;
   }
 
   /**
@@ -54,7 +54,7 @@ public class CookiePreferencesStore implements IPreferencesStore {
       }
       this.storePath = buff.toString();
     } else {
-      this.storePath = "";
+      this.storePath = GLOBAL_STORE;
     }
   }
 

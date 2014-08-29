@@ -48,11 +48,16 @@ public class BeanPropertyAccessor extends AbstractPropertyAccessor {
   public BeanPropertyAccessor(String property, Class<?> beanClass) {
     super(property);
     this.beanClass = computeTargetBeanClass(beanClass, getProperty());
-
-    PropertyDescriptor propertyDescriptor = PropertyHelper
-        .getPropertyDescriptor(getBeanClass(), getLastNestedProperty());
-    if (propertyDescriptor != null) {
-      this.writable = propertyDescriptor.getWriteMethod() != null;
+    String lastNestedProperty = getLastNestedProperty();
+    if (Map.class.isAssignableFrom(getBeanClass()) && !PropertyHelper.getPropertyNames(getBeanClass()).contains(
+        lastNestedProperty)) {
+      // we deal with map values
+      this.writable = true;
+    } else {
+      PropertyDescriptor propertyDescriptor = PropertyHelper.getPropertyDescriptor(getBeanClass(), lastNestedProperty);
+      if (propertyDescriptor != null) {
+        this.writable = propertyDescriptor.getWriteMethod() != null;
+      }
     }
   }
 
