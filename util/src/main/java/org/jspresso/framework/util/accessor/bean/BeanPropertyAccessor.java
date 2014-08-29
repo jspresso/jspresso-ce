@@ -23,7 +23,6 @@ import java.util.Map;
 
 import org.jspresso.framework.util.accessor.AbstractPropertyAccessor;
 import org.jspresso.framework.util.accessor.IAccessor;
-import org.jspresso.framework.util.bean.MissingPropertyException;
 import org.jspresso.framework.util.bean.PropertyHelper;
 
 /**
