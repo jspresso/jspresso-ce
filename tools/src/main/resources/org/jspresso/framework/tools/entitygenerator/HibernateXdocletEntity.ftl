@@ -413,24 +413,24 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
         <#if inverse>
    *           column = "${reduceSQLName("2"+dedupAliasPrefix+compSqlName,"_ID2")}"
           <#if fkName??>
-   *           foreign-key = "${reduceSQLName(fkName)}"
+   *           foreign-key = "${reduceSQLName(dedupSQLName(fkName))}"
           <#else>
-   *           foreign-key = "${reduceSQLName(joinTableName+"_"+compSqlName,"_FK2")}"
+   *           foreign-key = "${reduceSQLName(dedupSQLName(joinTableName+"_"+compSqlName),"_FK2")}"
           </#if>
         <#else>
    *           column = "${reduceSQLName("1"+dedupAliasPrefix+compSqlName,"_ID1")}"
           <#if fkName??>
-   *           foreign-key = "${reduceSQLName(fkName)}"
+   *           foreign-key = "${reduceSQLName(dedupSQLName(fkName))}"
           <#else>
-   *           foreign-key = "${reduceSQLName(joinTableName+"_"+compSqlName,"_FK2")}"
+   *           foreign-key = "${reduceSQLName(dedupSQLName(joinTableName+"_"+compSqlName),"_FK2")}"
           </#if>
         </#if>
       <#else>
    *           column = "${reduceSQLName(dedupAliasPrefix + compSqlName,"_ID")}"
         <#if fkName??>
-   *           foreign-key = "${reduceSQLName(fkName)}"
+   *           foreign-key = "${reduceSQLName(dedupSQLName(fkName))}"
         <#else>
-   *           foreign-key = "${reduceSQLName(joinTableName+"_"+compSqlName,"_FK")}"
+   *           foreign-key = "${reduceSQLName(dedupSQLName(joinTableName+"_"+compSqlName),"_FK")}"
         </#if>
       </#if>
    * @hibernate.many-to-many
@@ -439,24 +439,24 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
         <#if inverse>
    *           column = "${reduceSQLName("1"+dedupAliasPrefix+eltSqlName,"_ID1")}"
           <#if reverseFkName??>
-   *           foreign-key = "${reduceSQLName(reverseFkName)}"
+   *           foreign-key = "${reduceSQLName(dedupSQLName(reverseFkName))}"
           <#else>
-   *           foreign-key = "${reduceSQLName(joinTableName+"_"+eltSqlName,"_FK1")}"
+   *           foreign-key = "${reduceSQLName(dedupSQLName(joinTableName+"_"+eltSqlName),"_FK1")}"
           </#if>
         <#else>
    *           column = "${reduceSQLName("2"+dedupAliasPrefix_eltSqlName,"_ID2")}"
           <#if reverseFkName??>
-   *           foreign-key = "${reduceSQLName(reverseFkName)}"
+   *           foreign-key = "${reduceSQLName(dedupSQLName(reverseFkName))}"
           <#else>
-   *           foreign-key = "${reduceSQLName(joinTableName+"_"+eltSqlName,"_FK2")}"
+   *           foreign-key = "${reduceSQLName(dedupSQLName(joinTableName+"_"+eltSqlName),"_FK2")}"
           </#if>
         </#if>
       <#else>
    *           column = "${reduceSQLName(dedupAliasPrefix+eltSqlName,"_ID")}"
         <#if reverseFkName??>
-   *           foreign-key = "${reduceSQLName(reverseFkName)}"
+   *           foreign-key = "${reduceSQLName(dedupSQLName(reverseFkName))}"
         <#else>
-   *           foreign-key = "${reduceSQLName(joinTableName+"_"+eltSqlName,"_FK")}"
+   *           foreign-key = "${reduceSQLName(dedupSQLName(joinTableName+"_"+eltSqlName),"_FK")}"
         </#if>
       </#if>
     <#else>
@@ -474,13 +474,13 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
       <#if isEntity>
         <#if bidirectional>
           <#if fkName??>
-   *           foreign-key = "${reduceSQLName(fkName)}"
+   *           foreign-key = "${reduceSQLName(dedupSQLName(fkName))}"
           </#if>
         <#else>
           <#if fkName??>
-   *           foreign-key = "${reduceSQLName(fkName)}"
+   *           foreign-key = "${reduceSQLName(dedupSQLName(fkName))}"
           <#else>
-   *           foreign-key = "${reduceSQLName(revSqlName,"_FK")}"
+   *           foreign-key = "${reduceSQLName(dedupSQLName(revSqlName),"_FK")}"
           </#if>
         </#if>
       <#else>
@@ -634,9 +634,9 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
         </#if>
         <#if isEntity>
           <#if fkName??>
-   *           foreign-key = "${reduceSQLName(fkName)}"
+   *           foreign-key = "${reduceSQLName(dedupSQLName(fkName))}"
           <#else>
-   *           foreign-key = "${reduceSQLName(tableName+"_"+propSqlName,"_FK")}"
+   *           foreign-key = "${reduceSQLName(dedupSQLName(tableName+"_"+propSqlName),"_FK")}"
           </#if>
         </#if>
    * @hibernate.column

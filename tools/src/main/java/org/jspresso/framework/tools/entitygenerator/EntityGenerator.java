@@ -41,6 +41,7 @@ import org.hibernate.type.BasicTypeRegistry;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.util.freemarker.CompactString;
 import org.jspresso.framework.util.freemarker.CompareStrings;
+import org.jspresso.framework.util.freemarker.DedupSqlName;
 import org.jspresso.framework.util.freemarker.GenerateSqlName;
 import org.jspresso.framework.util.freemarker.InstanceOf;
 import org.jspresso.framework.util.freemarker.ReduceSqlName;
@@ -281,7 +282,8 @@ public class EntityGenerator {
       Map<String, Object> rootContext = new HashMap<>();
 
       rootContext.put("generateSQLName", new GenerateSqlName());
-      rootContext.put("reduceSQLName", new ReduceSqlName(maxSqlNameSize));
+      rootContext.put("dedupSQLName", new DedupSqlName(false));
+      rootContext.put("reduceSQLName", new ReduceSqlName(maxSqlNameSize, new DedupSqlName(true)));
       rootContext.put("instanceof", new InstanceOf(wrapper));
       rootContext.put("compareStrings", new CompareStrings(wrapper));
       rootContext.put("compactString", new CompactString());

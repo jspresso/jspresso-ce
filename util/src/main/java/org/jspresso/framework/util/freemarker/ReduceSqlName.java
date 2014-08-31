@@ -40,19 +40,20 @@ public class ReduceSqlName implements TemplateMethodModelEx {
 
   private final int                  maxSize;
   private final Map<String, String>  shortened;
-  private final Map<String, Integer> deduppers;
+  private final DedupSqlName dedupper;
 
   /**
-   * Constructs a new {@code SqlNameReductor} instance.
+   * Constructs a new {@code ReduceSqlName} instance.
    *
-   * @param maxSize
-   *          the maximum size of the identifiers. {@code -1} means no
+   * @param maxSize           the maximum size of the identifiers.
+   * means no
    *          limit.
+   * @param dedupSqlName the dedup sql name
    */
-  public ReduceSqlName(int maxSize) {
+  public ReduceSqlName(int maxSize, DedupSqlName dedupSqlName) {
     this.maxSize = maxSize;
     shortened = new HashMap<>();
-    deduppers = new HashMap<>();
+    dedupper = dedupSqlName;
   }
 
   /**
@@ -113,14 +114,7 @@ public class ReduceSqlName implements TemplateMethodModelEx {
       reduced.append(sqlColumnName.substring(0, size - 2)).append(WORD_SEP);
     }
     String reducedAsString = reduced.toString();
-    if (deduppers.containsKey(reducedAsString)) {
-      deduppers.put(reducedAsString,
-          deduppers.get(reducedAsString) + 1);
-    } else {
-      deduppers.put(reducedAsString, 0);
-    }
-    String dedupper = Integer.toHexString(deduppers.get(reducedAsString));
-    reducedAsString = reduced.substring(0, reduced.length() - dedupper.length()) + dedupper;
+    reducedAsString = dedupper.dedup(reducedAsString);
     shortened.put(sqlColumnName, reducedAsString + mandatorySuffix);
     return reducedAsString + mandatorySuffix;
   }
