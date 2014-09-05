@@ -18,8 +18,6 @@
  */
 package org.jspresso.framework.view.remote;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -50,22 +48,18 @@ import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.IRemoteStateValueMapper;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
-import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.event.IValueChangeListener;
 import org.jspresso.framework.util.gui.CellConstraints;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.gui.Font;
 import org.jspresso.framework.util.gui.FontHelper;
 import org.jspresso.framework.view.BasicCompositeView;
-import org.jspresso.framework.view.BasicIndexedView;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IView;
-import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
-import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
