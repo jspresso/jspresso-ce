@@ -167,7 +167,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     IView<E> parentView = getView(new int[]{
         -1
     }, context);
-    if (parentView.getDescriptor() instanceof ITableViewDescriptor) {
+    if (parentView != null && parentView.getDescriptor() instanceof ITableViewDescriptor) {
       context.put(FrontendAction.COMPONENT_TO_FOCUS, parentView.getPeer());
     }
 
