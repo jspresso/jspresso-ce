@@ -253,6 +253,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       this._decorateApplicationFrame(applicationFrame, exitAction, navigationActions, actions, helpActions);
 
       var workspaceAccordion = new qx.ui.container.Composite(new qx.ui.layout.VBox(5));
+      var logo = new qx.ui.basic.Image("logo.png");
+      workspaceAccordion.add(logo, {flex: 1});
       this.__workspaceAccordionGroup = new qx.ui.form.RadioGroup();
       this.__workspaceAccordionGroup.setAllowEmptySelection(false);
       for (var i = 0; i < workspaceActions.getActions().length; i++) {
