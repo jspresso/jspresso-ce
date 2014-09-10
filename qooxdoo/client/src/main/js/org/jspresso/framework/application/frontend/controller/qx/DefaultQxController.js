@@ -208,12 +208,14 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       if (this._getName()) {
         var appNameLabel = new qx.ui.basic.Label(this._getName());
         var font = qx.theme.manager.Font.getInstance().resolve("default");
+        font = new qx.bom.Font(16, font.getFamily());
         font.setBold(true);
-        font.setSize(16);
         appNameLabel.setFont(font);
-        appNameLabel.setTextColor("#DDDDDD");
+        appNameLabel.setTextColor("#777777");
+        appNameLabel.setAlignY("middle");
         toolBar.add(appNameLabel);
       }
+      toolBar.addSpacer();
       toolBar.add(this._getStatusBar());
       //toolBar.addSpacer();
       if (helpActions) {
