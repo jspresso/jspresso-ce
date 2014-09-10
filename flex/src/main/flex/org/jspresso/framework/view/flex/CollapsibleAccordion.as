@@ -70,10 +70,15 @@ public class CollapsibleAccordion extends Container {
   public var orientation:String = "right";
 
   [Bindable]
+  public var contentStyle:String = "drawerContent";
+
+  [Bindable]
   public var accordianStyle:String = "drawerAccordion";
 
   [Bindable]
   public var drawerButtonStyle:String = "drawerButton";
+
+  [Bindable]
   public var closeButtonStyle:String = "drawerCloseRight";
 
   [Bindable]
@@ -104,36 +109,12 @@ public class CollapsibleAccordion extends Container {
 
   public function CollapsibleAccordion() {
     super();
-    //      var delayedOpening:Function = function(event : FlexEvent):void {
-    //        callLater(onCreateComplete, [event]);
-    //      };
-    //      addEventListener( FlexEvent.CREATION_COMPLETE, delayedOpening );
     buttonDict = new ArrayCollection();
     verticalScrollPolicy = ScrollPolicy.OFF;
     horizontalScrollPolicy = ScrollPolicy.OFF;
     _drawerOpAllowed = true;
   }
 
-  //    private function onCreateComplete( event : FlexEvent ) : void
-  //    {
-  //      var t:Timer = new Timer(10000, 1);
-  //      t.addEventListener(TimerEvent.TIMER_COMPLETE, function(event:TimerEvent):void {
-  //        currentWidth = barSize;
-  //        if ( close )
-  //        {
-  //          if(orientation == "right"){
-  //            accordionVBox.x = -1 * openSize;
-  //          }else{
-  //            accordionVBox.x = openSize;
-  //          }
-  //        }
-  //        else
-  //        {
-  //          accordionVBox.x = 0;
-  //        }
-  //      });
-  //      t.start();
-  //    }
 
   public function set content(value:Array):void {
     if (_content) {
@@ -160,7 +141,6 @@ public class CollapsibleAccordion extends Container {
 
   public function set barSize(value:Number):void {
     _barSize = value;
-    //currentWidth=value;
   }
 
   [Bindable]
@@ -222,11 +202,12 @@ public class CollapsibleAccordion extends Container {
     accordionVBox.percentHeight = 100;
     accordionVBox.percentWidth = 100;
     accordionVBox.setStyle("verticalGap", 0);
+    accordionVBox.styleName = contentStyle;
 
     accordion = new Accordion();
     accordion.historyManagementEnabled = _historyManagementEnabled;
     accordion.addEventListener(IndexChangedEvent.CHANGE, onAccordionChange);
-    accordion.styleName = accordianStyle; //"drawerAccordion";
+    accordion.styleName = accordianStyle;
     accordion.percentHeight = 100;
     accordion.percentWidth = 100;
     accordion.setStyle("headerHeight", barSize);
