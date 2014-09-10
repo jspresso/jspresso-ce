@@ -71,7 +71,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @param secondaryActionLists {org.jspresso.framework.gui.remote.RActionList[]}
      * @return {undefined}
      */
-    _popupDialog: function (title, message, remoteDialogView, icon, actions, useCurrent, dimension, secondaryActionLists) {
+    _popupDialog: function (title, message, remoteDialogView, icon, actions, useCurrent, dimension,
+                            secondaryActionLists) {
       useCurrent = (typeof useCurrent == 'undefined') ? false : useCurrent;
 
       var dialogView = remoteDialogView;
@@ -204,6 +205,15 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       }
       //this._getViewFactory().installActionLists(toolBar, actions);
       toolBar.addSpacer();
+      if (this._getName()) {
+        var appNameLabel = new qx.ui.basic.Label(this._getName());
+        var font = qx.theme.manager.Font.getInstance().resolve("default");
+        font.setBold(true);
+        font.setSize(16);
+        appNameLabel.setFont(font);
+        appNameLabel.setTextColor("#DDDDDD");
+        toolBar.add(appNameLabel);
+      }
       toolBar.add(this._getStatusBar());
       //toolBar.addSpacer();
       if (helpActions) {
