@@ -212,7 +212,6 @@
     <property name="projectedViewDescriptor" ref="filterableBeanCollectionModuleView" />
     <property name="startupAction" ref="initModuleFilterAction" />
     <property name="pagingAction" ref="queryModuleFilterBackAction" />
-    <property name="pageSize" value="6" />
     <property name="queryModuleFilterAction" ref="queryModuleFilterAction" />
   </bean>
 

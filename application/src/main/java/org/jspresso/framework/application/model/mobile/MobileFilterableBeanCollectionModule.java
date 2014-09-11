@@ -18,12 +18,11 @@
  */
 package org.jspresso.framework.application.model.mobile;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import org.jspresso.framework.application.frontend.action.std.mobile.AddPageAction;
+import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.FilterableBeanCollectionModule;
 import org.jspresso.framework.application.model.descriptor.BeanCollectionModuleDescriptor;
 import org.jspresso.framework.application.model.descriptor.FilterableBeanCollectionModuleDescriptor;
@@ -35,12 +34,10 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.EBorderType;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.IMobilePageSectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.IMobilePageViewDescriptor;
-import org.jspresso.framework.view.descriptor.mobile.MobileBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileCompositePageViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileNavPageViewDescriptor;
@@ -69,7 +66,7 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
     IListViewDescriptor moduleObjectsView = getProjectedViewDescriptor();
     BeanCollectionModuleDescriptor moduleDescriptor = getDescriptor();
     ((BasicViewDescriptor) moduleObjectsView).setModelDescriptor(moduleDescriptor.getPropertyDescriptor(
-        MobileBeanCollectionModule.MODULE_OBJECTS));
+        BeanCollectionModule.MODULE_OBJECTS));
     MobileNavPageViewDescriptor modulePageView = new MobileNavPageViewDescriptor();
     modulePageView.setSelectionViewDescriptor(moduleObjectsView);
     if (getPagingAction() != null) {
