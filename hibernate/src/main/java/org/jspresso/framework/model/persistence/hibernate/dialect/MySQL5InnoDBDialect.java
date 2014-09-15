@@ -38,6 +38,6 @@ public class MySQL5InnoDBDialect extends
     registerColumnType(Types.VARBINARY, 63, "varbinary($l)");
     // for Hibernate 4 between 4.0 and 4.3, the Mysql mapping changed from bit to boolean - tinyint(1).
     // This was restored in Hibernate > 4.3 but for 4.2, we need to override this mapping.
-    registerColumnType(Types.BOOLEAN, "bit(1)");
+    registerColumnType(Types.BOOLEAN, "bit");
   }
 }
