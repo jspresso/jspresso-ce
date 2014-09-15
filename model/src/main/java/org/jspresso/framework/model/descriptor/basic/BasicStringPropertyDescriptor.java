@@ -44,7 +44,7 @@ public class BasicStringPropertyDescriptor extends
    * Instantiates a new Basic string property descriptor.
    */
   public BasicStringPropertyDescriptor() {
-    setMaxLength(256);
+    setMaxLength(255);
   }
 
   /**
