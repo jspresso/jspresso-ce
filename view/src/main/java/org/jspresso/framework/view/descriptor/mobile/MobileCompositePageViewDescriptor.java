@@ -126,7 +126,7 @@ public class MobileCompositePageViewDescriptor extends AbstractMobilePageViewDes
     MobileCompositePageViewDescriptor editableClone = (MobileCompositePageViewDescriptor) clone();
     if (editableClone.getModelDescriptor() instanceof IReferencePropertyDescriptor<?>) {
       editableClone.setModelDescriptor(
-          ((IReferencePropertyDescriptor) editableClone.getModelDescriptor()).getReferencedDescriptor());
+          ((IReferencePropertyDescriptor<?>) editableClone.getModelDescriptor()).getReferencedDescriptor());
     }
     editableClone.setInlineEditing(true);
     if (pageSectionDescriptors != null) {
