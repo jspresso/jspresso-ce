@@ -41,19 +41,11 @@ public class BasicStringPropertyDescriptor extends
   private Boolean translatable;
 
   /**
-   * Instantiates a new Basic string property descriptor.
-   */
-  public BasicStringPropertyDescriptor() {
-    setMaxLength(255);
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
   public BasicStringPropertyDescriptor clone() {
-    BasicStringPropertyDescriptor clonedDescriptor = (BasicStringPropertyDescriptor) super
-        .clone();
+    BasicStringPropertyDescriptor clonedDescriptor = (BasicStringPropertyDescriptor) super.clone();
 
     return clonedDescriptor;
   }
@@ -63,8 +55,7 @@ public class BasicStringPropertyDescriptor extends
    */
   @Override
   public BasicStringPropertyDescriptor createQueryDescriptor() {
-    BasicStringPropertyDescriptor queryDescriptor = (BasicStringPropertyDescriptor) super
-        .createQueryDescriptor();
+    BasicStringPropertyDescriptor queryDescriptor = (BasicStringPropertyDescriptor) super.createQueryDescriptor();
     queryDescriptor.setMaxLength(null);
     queryDescriptor.setRegexpPattern(null);
     return queryDescriptor;
@@ -75,7 +66,13 @@ public class BasicStringPropertyDescriptor extends
    */
   @Override
   public Integer getMaxLength() {
-    return maxLength;
+    if (maxLength != null) {
+      return maxLength;
+    }
+    if (isComputed()) {
+      return null;
+    }
+    return getDefaultMaxLength();
   }
 
   /**
@@ -88,7 +85,7 @@ public class BasicStringPropertyDescriptor extends
 
   /**
    * Gets the regexpPattern.
-   * 
+   *
    * @return the regexpPattern.
    */
   @Override
@@ -98,7 +95,7 @@ public class BasicStringPropertyDescriptor extends
 
   /**
    * Gets the regexpPatternSample.
-   * 
+   *
    * @return the regexpPatternSample.
    */
   @Override
@@ -263,5 +260,14 @@ public class BasicStringPropertyDescriptor extends
    */
   protected String getValueAsString(Object value) {
     return (String) value;
+  }
+
+  /**
+   * Gets default max length.
+   *
+   * @return the default max length
+   */
+  protected Integer getDefaultMaxLength() {
+    return 255;
   }
 }

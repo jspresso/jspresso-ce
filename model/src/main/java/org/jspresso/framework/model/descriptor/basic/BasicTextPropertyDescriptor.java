@@ -40,13 +40,6 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
   private boolean                   queryMultiline = false;
 
   /**
-   * Instantiates a new Basic text property descriptor.
-   */
-  public BasicTextPropertyDescriptor() {
-    setMaxLength(8192);
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
@@ -193,5 +186,15 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
    */
   public void setQueryMultiline(boolean queryMultiline) {
     this.queryMultiline = queryMultiline;
+  }
+
+  /**
+   * Gets default max length.
+   *
+   * @return the default max length
+   */
+  @Override
+  protected Integer getDefaultMaxLength() {
+    return 8192;
   }
 }
