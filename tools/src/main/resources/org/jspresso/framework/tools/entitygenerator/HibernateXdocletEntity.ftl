@@ -444,7 +444,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *           foreign-key = "${reduceSQLName(joinTableName+"_"+eltSqlName,"_FK1")}"
           </#if>
         <#else>
-   *           column = "${reduceSQLName("2"+dedupAliasPrefix_eltSqlName,"_ID2")}"
+   *           column = "${reduceSQLName("2"+dedupAliasPrefix+eltSqlName,"_ID2")}"
           <#if reverseFkName??>
    *           foreign-key = "${reduceSQLName(reverseFkName)}"
           <#else>
