@@ -411,14 +411,14 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    * @hibernate.key
       <#if componentName=elementName>
         <#if inverse>
-   *           column = "${reduceSQLName("2"+dedupAliasPrefix+compSqlName,"_ID2")}"
+   *           column = "${reduceSQLName("_2"+dedupAliasPrefix+compSqlName,"_ID2")}"
           <#if fkName??>
    *           foreign-key = "${reduceSQLName(dedupSQLName(fkName))}"
           <#else>
    *           foreign-key = "${reduceSQLName(dedupSQLName(joinTableName+"_"+compSqlName),"_FK2")}"
           </#if>
         <#else>
-   *           column = "${reduceSQLName("1"+dedupAliasPrefix+compSqlName,"_ID1")}"
+   *           column = "${reduceSQLName("_1"+dedupAliasPrefix+compSqlName,"_ID1")}"
           <#if fkName??>
    *           foreign-key = "${reduceSQLName(dedupSQLName(fkName))}"
           <#else>
@@ -437,14 +437,14 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *           class = "${elementType}"
       <#if componentName=elementName>
         <#if inverse>
-   *           column = "${reduceSQLName("1"+dedupAliasPrefix+eltSqlName,"_ID1")}"
+   *           column = "${reduceSQLName("_1"+dedupAliasPrefix+eltSqlName,"_ID1")}"
           <#if reverseFkName??>
    *           foreign-key = "${reduceSQLName(dedupSQLName(reverseFkName))}"
           <#else>
    *           foreign-key = "${reduceSQLName(dedupSQLName(joinTableName+"_"+eltSqlName),"_FK1")}"
           </#if>
         <#else>
-   *           column = "${reduceSQLName("2"+dedupAliasPrefix+eltSqlName,"_ID2")}"
+   *           column = "${reduceSQLName("_2"+dedupAliasPrefix+eltSqlName,"_ID2")}"
           <#if reverseFkName??>
    *           foreign-key = "${reduceSQLName(dedupSQLName(reverseFkName))}"
           <#else>
