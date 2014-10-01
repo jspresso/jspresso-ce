@@ -25,7 +25,7 @@
     <flexlib.version>2.5</flexlib.version>
     <resizecontainers.version>1.0</resizecontainers.version>
     <checkbox3state.version>1.0</checkbox3state.version>
-    <spring.version>4.0.2.RELEASE</spring.version>
+    <spring.version>4.0.7.RELEASE</spring.version>
     <spring-ldap.version>2.0.1.RELEASE</spring-ldap.version>
     <ldapbp.version>1.0</ldapbp.version>
     <hibernate.version>4.3.4.Final</hibernate.version>
