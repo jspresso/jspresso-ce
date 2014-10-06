@@ -1065,6 +1065,9 @@ public abstract class AbstractBackendController extends AbstractController
     // if (applicationSession != null) {
     // applicationSession.clear();
     // }
+    if (getUserPreferencesStore() != null) {
+      getUserPreferencesStore().setStorePath(IPreferencesStore.GLOBAL_STORE);
+    }
     if (dirtRecorder != null) {
       dirtRecorder.clear();
     }
@@ -1981,7 +1984,6 @@ public abstract class AbstractBackendController extends AbstractController
     if (getUserPreferencesStore() != null) {
       getUserPreferencesStore().setStorePath(getApplicationSession().getUsername());
     }
-
   }
 
   /**
