@@ -51,7 +51,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
    * Constructs a new {@code JdbcPreferenceStore} instance.
    */
   public JdbcPreferencesStore() {
-    this.storePath = GLOBAL_STORE;
+    setStorePath(GLOBAL_STORE);
   }
 
   /**
@@ -71,6 +71,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
     } else {
       this.storePath = GLOBAL_STORE;
     }
+    preferences = null;
   }
 
   /**

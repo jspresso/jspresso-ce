@@ -1234,7 +1234,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
       LOG.info("User {} logged out for session {}.", getApplicationSession()
           .getUsername(), getApplicationSession().getId());
     }
-    clearImplicitLogin();
     selectedModules.clear();
     workspaceNavigatorConnectors.clear();
     workspaceViews.clear();
@@ -1246,6 +1245,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     loginCallbackHandler = null;
     getBackendController().removeDirtInterceptor(dirtInterceptor);
     started = !getBackendController().stop();
+    clearImplicitLogin();
     return !started;
   }
 
