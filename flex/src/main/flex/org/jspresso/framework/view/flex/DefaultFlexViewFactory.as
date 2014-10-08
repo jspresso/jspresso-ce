@@ -1952,39 +1952,41 @@ public class DefaultFlexViewFactory {
     }
     splitContainer.addEventListener(FlexEvent.CREATION_COMPLETE, function (event:FlexEvent):void {
       var splitC:DividedBox = event.currentTarget as DividedBox;
-      var leftTop:UIComponent = (splitC.getChildAt(0) as UIComponent);
-      var rightBottom:UIComponent = (splitC.getChildAt(1) as UIComponent);
-      if (leftTop && rightBottom) {
-        if (remoteSplitContainer.orientation == "VERTICAL") {
-          var topHeight:Number;
-          var bottomHeight:Number;
-          if (leftTop.height > 0) {
-            topHeight = leftTop.height;
+      if (splitC.getChildren().length > 1) {
+        var leftTop:UIComponent = (splitC.getChildAt(0) as UIComponent);
+        var rightBottom:UIComponent = (splitC.getChildAt(1) as UIComponent);
+        if (leftTop && rightBottom) {
+          if (remoteSplitContainer.orientation == "VERTICAL") {
+            var topHeight:Number;
+            var bottomHeight:Number;
+            if (leftTop.height > 0) {
+              topHeight = leftTop.height;
+            } else {
+              topHeight = leftTop.measuredHeight;
+            }
+            if (rightBottom.height > 0) {
+              bottomHeight = rightBottom.height;
+            } else {
+              bottomHeight = rightBottom.measuredHeight;
+            }
+            leftTop.percentHeight = (topHeight * 100.0) / (topHeight + bottomHeight);
+            rightBottom.percentHeight = (bottomHeight * 100.0) / (topHeight + bottomHeight);
           } else {
-            topHeight = leftTop.measuredHeight;
+            var leftWidth:Number;
+            var rightWidth:Number;
+            if (leftTop.width > 0) {
+              leftWidth = leftTop.width;
+            } else {
+              leftWidth = leftTop.measuredWidth;
+            }
+            if (rightBottom.width > 0) {
+              rightWidth = rightBottom.width;
+            } else {
+              rightWidth = rightBottom.measuredWidth;
+            }
+            leftTop.percentWidth = (leftWidth * 100.0) / (leftWidth + rightWidth);
+            rightBottom.percentWidth = (rightWidth * 100.0) / (leftWidth + rightWidth);
           }
-          if (rightBottom.height > 0) {
-            bottomHeight = rightBottom.height;
-          } else {
-            bottomHeight = rightBottom.measuredHeight;
-          }
-          leftTop.percentHeight = (topHeight * 100.0) / (topHeight + bottomHeight);
-          rightBottom.percentHeight = (bottomHeight * 100.0) / (topHeight + bottomHeight);
-        } else {
-          var leftWidth:Number;
-          var rightWidth:Number;
-          if (leftTop.width > 0) {
-            leftWidth = leftTop.width;
-          } else {
-            leftWidth = leftTop.measuredWidth;
-          }
-          if (rightBottom.width > 0) {
-            rightWidth = rightBottom.width;
-          } else {
-            rightWidth = rightBottom.measuredWidth;
-          }
-          leftTop.percentWidth = (leftWidth * 100.0) / (leftWidth + rightWidth);
-          rightBottom.percentWidth = (rightWidth * 100.0) / (leftWidth + rightWidth);
         }
       }
     });
