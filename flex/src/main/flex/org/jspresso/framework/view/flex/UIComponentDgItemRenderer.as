@@ -52,13 +52,21 @@ public class UIComponentDgItemRenderer extends RemoteValueDgItemEditor implement
     //default constructor.
     addEventListener(MouseEvent.MOUSE_OVER, function (event:MouseEvent):void {
       var dg:DataGrid = listData.owner as DataGrid;
-      var cellValueState:RemoteValueState = getCellValueState();
-      _actionHandler.setCurrentViewStateGuid(dg, cellValueState.guid, cellValueState.permId);
+      // Even if the mouse enters or leaves the editing cell, the current view state GUID should
+      // stay on the editing cell. See bug #1217.
+      if (!dg.editedItemPosition) {
+        var cellValueState:RemoteValueState = getCellValueState();
+        _actionHandler.setCurrentViewStateGuid(dg, cellValueState.guid, cellValueState.permId);
+      }
     });
     addEventListener(MouseEvent.MOUSE_OUT, function (event:MouseEvent):void {
       var dg:DataGrid = listData.owner as DataGrid;
-      var cellValueState:RemoteValueState = getCellValueState();
-      _actionHandler.setCurrentViewStateGuid(dg, null, null);
+      // Even if the mouse enters or leaves the editing cell, the current view state GUID should
+      // stay on the editing cell. See bug #1217.
+      if (!dg.editedItemPosition) {
+        var cellValueState:RemoteValueState = getCellValueState();
+        _actionHandler.setCurrentViewStateGuid(dg, null, null);
+      }
     });
   }
 
