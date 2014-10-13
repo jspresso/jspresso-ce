@@ -500,4 +500,6 @@
       </list>
     </property>
   </bean>
+
+  <bean lazy-init="false" class="org.jspresso.framework.security.auth.ProxyAuthenticatorInit"/>
 </beans>
