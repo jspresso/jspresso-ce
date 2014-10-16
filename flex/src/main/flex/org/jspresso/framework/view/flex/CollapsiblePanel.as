@@ -100,6 +100,8 @@ public class CollapsiblePanel extends Panel {
    */
   private var originalVScrollPolicy:String;
 
+  private var _isCollapsible:Boolean = true;
+
   // --------------------------------------------------------------------------
   //
   // Constructor
@@ -233,7 +235,7 @@ public class CollapsiblePanel extends Panel {
    * Handles user click on the header text.
    */
   private function titleTextField_clickHandler(event:MouseEvent):void {
-    if (!enabled) {
+    if (!(enabled && isCollapsible)) {
       return;
     }
 
@@ -248,6 +250,21 @@ public class CollapsiblePanel extends Panel {
 
   private function tween_effectEndHandler(event:EffectEvent):void {
     verticalScrollPolicy = originalVScrollPolicy;
+  }
+
+
+  /**
+   * Gets whether the panel is actually collapsible. This is true by default.
+   */
+  public function get isCollapsible():Boolean {
+    return _isCollapsible;
+  }
+
+  /**
+   * Sets whether the panel is actually collapsible. This is true by default.
+   */
+  public function set isCollapsible(value:Boolean):void {
+    _isCollapsible = value;
   }
 }
 }
