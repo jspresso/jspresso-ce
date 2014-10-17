@@ -1405,7 +1405,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var decorator = component;
       if (remoteComponent.getBorderType() && remoteComponent.getBorderType() != "NONE") {
         if (remoteComponent.getBorderType() == "TITLED") {
-          decorator = new collapsablepanel.Panel(remoteComponent.getLabel());
+          decorator = new org.jspresso.framework.view.qx.EnhancedCollapsiblePanel(remoteComponent.getLabel());
           this.setIcon(decorator.getChildControl("bar"), remoteComponent.getIcon())
         } else {
           decorator = new qx.ui.groupbox.GroupBox();

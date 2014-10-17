@@ -258,7 +258,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       this.__workspaceAccordionGroup = new qx.ui.form.RadioGroup();
       this.__workspaceAccordionGroup.setAllowEmptySelection(false);
       for (var i = 0; i < workspaceActions.getActions().length; i++) {
-        var workspacePanel = new collapsablepanel.Panel(workspaceActions.getActions()[i].getName());
+        var workspacePanel = new org.jspresso.framework.view.qx.EnhancedCollapsiblePanel(workspaceActions.getActions()[i].getName());
         if (i == 0) {
           workspacePanel.setValue(true);
         } else {
