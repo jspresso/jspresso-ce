@@ -361,6 +361,44 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       }
     },
 
+    createErrorTab: function (tabLabel, message) {
+      var tab = new qx.ui.tabview.Page(tabLabel);
+      tab.setLayout(new qx.ui.layout.Grow());
+      var scrollContainer = new qx.ui.container.Scroll();
+      scrollContainer.setScrollbarX("off");
+      scrollContainer.setScrollbarY("auto");
+      scrollContainer.add(message);
+      tab.add(scrollContainer);
+      return tab;
+    },
+
+    /**
+     * @param messageCommand {org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand}
+     */
+    createMessageDialogContent: function (messageCommand) {
+      var message = messageCommand.getMessage();
+      message = org.jspresso.framework.util.html.HtmlUtil.toHtml(org.jspresso.framework.util.html.HtmlUtil.preformat(message));
+      var messageComponent = new qx.ui.basic.Atom(message);
+      messageComponent.setRich(org.jspresso.framework.util.html.HtmlUtil.isHtml(message));
+      this._getViewFactory().setIcon(messageComponent, messageCommand.getMessageIcon());
+      if (messageCommand
+          instanceof org.jspresso.framework.application.frontend.command.remote.RemoteErrorMessageCommand) {
+        var detailMessage = messageCommand.getDetailMessage();
+        var detailMessageComponent = new qx.ui.form.TextArea();
+        detailMessageComponent.setReadOnly(true);
+        detailMessageComponent.setValue(detailMessage);
+
+        var tabContainer = new qx.ui.tabview.TabView();
+        tabContainer.add(this.createErrorTab(this.translate("error"), messageComponent));
+        tabContainer.add(this.createErrorTab(this.translate("detail"), detailMessageComponent));
+        tabContainer.setWidth(600);
+        tabContainer.setHeight(300);
+        return tabContainer;
+      } else {
+        return messageComponent;
+      }
+    },
+
     /**
      * @param messageCommand {org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand}
      */
@@ -375,10 +413,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       messageDialog.setLayout(new qx.ui.layout.VBox(10));
       this._getViewFactory().setIcon(messageDialog, messageCommand.getTitleIcon());
       this._getApplication().getRoot().add(messageDialog);
-
-      var message = new qx.ui.basic.Atom(messageCommand.getMessage());
-      message.setRich(org.jspresso.framework.util.html.HtmlUtil.isHtml(messageCommand.getMessage()));
-      this._getViewFactory().setIcon(message, messageCommand.getMessageIcon());
+      var message = this.createMessageDialogContent(messageCommand);
       messageDialog.add(message);
 
       var buttonBox = new qx.ui.container.Composite();
