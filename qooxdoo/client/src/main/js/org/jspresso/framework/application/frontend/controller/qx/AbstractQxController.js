@@ -642,7 +642,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      * @return {Array}
      */
     _getKeysToTranslate: function () {
-      return ["ok", "cancel", "yes", "no"];
+      return ["ok", "cancel", "yes", "no", "detail"];
     },
 
     translate: function (key) {

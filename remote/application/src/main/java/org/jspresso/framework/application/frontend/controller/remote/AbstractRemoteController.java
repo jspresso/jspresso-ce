@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.application.frontend.controller.remote;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -44,6 +46,7 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteCleanupC
 import org.jspresso.framework.application.frontend.command.remote.RemoteCloseDialogCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteErrorMessageCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteHistoryDisplayCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand;
@@ -505,8 +508,8 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
    *
    * @return a empty error message command.
    */
-  protected RemoteMessageCommand createErrorMessageCommand() {
-    RemoteMessageCommand messageCommand = new RemoteMessageCommand();
+  protected RemoteErrorMessageCommand createErrorMessageCommand() {
+    RemoteErrorMessageCommand messageCommand = new RemoteErrorMessageCommand();
     messageCommand.setTitle(getTranslation("error", getLocale()));
     messageCommand.setTitleIcon(getIconFactory().getErrorIcon(getIconFactory().getTinyIconSize()));
     messageCommand.setMessageIcon(getIconFactory().getErrorIcon(getIconFactory().getLargeIconSize()));
@@ -671,14 +674,17 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
       return true;
     }
     String userFriendlyExceptionMessage = computeUserFriendlyExceptionMessage(ex);
-    RemoteMessageCommand messageCommand = createErrorMessageCommand();
+    RemoteErrorMessageCommand errorMessageCommand = createErrorMessageCommand();
     if (userFriendlyExceptionMessage != null) {
-      messageCommand.setMessage(userFriendlyExceptionMessage);
+      errorMessageCommand.setMessage(userFriendlyExceptionMessage);
     } else {
       traceUnexpectedException(ex);
-      messageCommand.setMessage(ex.getLocalizedMessage());
+      errorMessageCommand.setMessage(ex.getLocalizedMessage());
     }
-    registerCommand(messageCommand);
+    StringWriter stringWriter = new StringWriter();
+    ex.printStackTrace(new PrintWriter(stringWriter));
+    errorMessageCommand.setDetailMessage(stringWriter.toString());
+    registerCommand(errorMessageCommand);
     return true;
   }
 

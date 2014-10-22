@@ -30,14 +30,14 @@ public class RemoteMessageCommand extends RemoteCommand {
 
   private static final long serialVersionUID = -3501069430686194296L;
 
-  private String            message;
-  private RIcon             messageIcon;
-  private String            title;
-  private RIcon             titleIcon;
+  private String message;
+  private RIcon  messageIcon;
+  private String title;
+  private RIcon  titleIcon;
 
   /**
    * Gets the message.
-   * 
+   *
    * @return the message.
    */
   public String getMessage() {
@@ -46,7 +46,7 @@ public class RemoteMessageCommand extends RemoteCommand {
 
   /**
    * Gets the messageIcon.
-   * 
+   *
    * @return the messageIcon.
    */
   public RIcon getMessageIcon() {
@@ -55,7 +55,7 @@ public class RemoteMessageCommand extends RemoteCommand {
 
   /**
    * Gets the title.
-   * 
+   *
    * @return the title.
    */
   public String getTitle() {
@@ -64,7 +64,7 @@ public class RemoteMessageCommand extends RemoteCommand {
 
   /**
    * Gets the titleIcon.
-   * 
+   *
    * @return the titleIcon.
    */
   public RIcon getTitleIcon() {
@@ -73,7 +73,7 @@ public class RemoteMessageCommand extends RemoteCommand {
 
   /**
    * Sets the message.
-   * 
+   *
    * @param message
    *          the message to set.
    */
@@ -83,7 +83,7 @@ public class RemoteMessageCommand extends RemoteCommand {
 
   /**
    * Sets the messageIcon.
-   * 
+   *
    * @param messageIcon
    *          the messageIcon to set.
    */
@@ -93,7 +93,7 @@ public class RemoteMessageCommand extends RemoteCommand {
 
   /**
    * Sets the title.
-   * 
+   *
    * @param title
    *          the title to set.
    */
@@ -103,7 +103,7 @@ public class RemoteMessageCommand extends RemoteCommand {
 
   /**
    * Sets the titleIcon.
-   * 
+   *
    * @param titleIcon
    *          the titleIcon to set.
    */

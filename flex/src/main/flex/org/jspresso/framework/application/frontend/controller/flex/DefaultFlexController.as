@@ -21,6 +21,7 @@ import flash.display.Sprite;
 import flash.events.DataEvent;
 import flash.events.Event;
 import flash.events.IOErrorEvent;
+import flash.events.MouseEvent;
 import flash.external.ExternalInterface;
 import flash.net.FileFilter;
 import flash.net.FileReference;
@@ -37,6 +38,7 @@ import mx.containers.Canvas;
 import mx.containers.HBox;
 import mx.containers.HDividedBox;
 import mx.containers.Panel;
+import mx.containers.TabNavigator;
 import mx.containers.VBox;
 import mx.containers.ViewStack;
 import mx.containers.dividedBoxClasses.BoxDivider;
@@ -47,6 +49,7 @@ import mx.controls.Label;
 import mx.controls.Menu;
 import mx.controls.MenuBar;
 import mx.controls.SWFLoader;
+import mx.controls.Text;
 import mx.controls.Tree;
 import mx.controls.alertClasses.AlertForm;
 import mx.core.Application;
@@ -86,6 +89,7 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteDialogCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteErrorMessageCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteFileDownloadCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteFlashDisplayCommand;
@@ -126,6 +130,8 @@ import org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
 import org.jspresso.framework.view.flex.CollapsibleAccordion;
 import org.jspresso.framework.view.flex.DefaultFlexViewFactory;
+import org.jspresso.framework.view.flex.EnhancedButton;
+import org.jspresso.framework.view.flex.EnhancedTabNavigator;
 import org.jspresso.framework.view.flex.RIconMenuBarItem;
 import org.jspresso.framework.view.flex.RIconMenuItemRenderer;
 
@@ -386,9 +392,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
       popupDialog(dialogCommand.title, null, dialogView, icon, dialogButtons, dialogCommand.useCurrent,
                   dialogCommand.dimension);
     } else if (command is RemoteCloseDialogCommand) {
-      if (_dialogStack && _dialogStack.length > 1) {
-        PopUpManager.removePopUp((_dialogStack.pop() as Array)[0] as UIComponent);
-      }
+      closeDialog();
     } else if (command is RemoteInitCommand) {
       var initCommand:RemoteInitCommand = command as RemoteInitCommand;
       this._applicationName = initCommand.applicationName;
@@ -506,6 +510,12 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
           _postponedEditionCommands.push(command);
         }
       }
+    }
+  }
+
+  private function closeDialog():void {
+    if (_dialogStack && _dialogStack.length > 1) {
+      PopUpManager.removePopUp((_dialogStack.pop() as Array)[0] as UIComponent);
     }
   }
 
@@ -681,29 +691,64 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
   }
 
   protected function handleMessageCommand(messageCommand:RemoteMessageCommand):void {
-    var alert:Alert = createAlert(messageCommand);
-
-    var alertForm:AlertForm = alert.mx_internal::alertForm;
-    if (messageCommand.messageIcon) {
-      alert.iconClass = getViewFactory().getIconForComponent(alertForm, messageCommand.messageIcon);
-      alert.removeChild(alertForm);
-      for (var childIndex:int = alertForm.numChildren - 1; childIndex >= 0; childIndex--) {
-        var childComp:DisplayObject = alertForm.getChildAt(childIndex);
-        if (childComp is Button) {
-          alertForm.removeChildAt(childIndex);
+    if(messageCommand instanceof RemoteErrorMessageCommand) {
+      handleErrorMessageCommand(messageCommand as RemoteErrorMessageCommand);
+    } else {
+      var alert:Alert = createAlert(messageCommand);
+      var alertForm:AlertForm = alert.mx_internal::alertForm;
+      if (messageCommand.messageIcon) {
+        alert.iconClass = getViewFactory().getIconForComponent(alertForm, messageCommand.messageIcon);
+        alert.removeChild(alertForm);
+        for (var childIndex:int = alertForm.numChildren - 1; childIndex >= 0; childIndex--) {
+          var childComp:DisplayObject = alertForm.getChildAt(childIndex);
+          if (childComp is Button) {
+            alertForm.removeChildAt(childIndex);
+          }
         }
+        alertForm.mx_internal::buttons = [];
+        //Force re-initialization of alert form.
+        alertForm.initialized = false;
+        alert.addChild(alertForm);
       }
-      alertForm.mx_internal::buttons = [];
-      //Force re-initialization of alert form.
-      alertForm.initialized = false;
-      alert.addChild(alertForm);
-    }
 
-    if (messageCommand.titleIcon) {
-      alert.titleIcon = getViewFactory().getIconForComponent(alert, messageCommand.titleIcon);
+      if (messageCommand.titleIcon) {
+        alert.titleIcon = getViewFactory().getIconForComponent(alert, messageCommand.titleIcon);
+      }
+      fixAlertSize(alert);
+      PopUpManager.centerPopUp(alert as IFlexDisplayObject);
     }
-    fixAlertSize(alert);
-    PopUpManager.centerPopUp(alert as IFlexDisplayObject);
+  }
+
+  protected function handleErrorMessageCommand(remoteErrorMessageCommand:RemoteErrorMessageCommand):void {
+    var tabContainer:TabNavigator = new EnhancedTabNavigator();
+    tabContainer.historyManagementEnabled = false;
+    tabContainer.resizeToContent = true;
+
+    tabContainer.addChild(createErrorTab(translate("error"), remoteErrorMessageCommand.message));
+    tabContainer.addChild(createErrorTab(translate("detail"), remoteErrorMessageCommand.detailMessage));
+
+    var closeButton:Button = getViewFactory().createDialogButton("ok", null, remoteErrorMessageCommand.titleIcon);
+    closeButton.addEventListener(MouseEvent.CLICK, function(evt:MouseEvent):void {
+      closeDialog();
+    });
+    popupDialog(remoteErrorMessageCommand.title, translate("error.unexpected"), tabContainer, remoteErrorMessageCommand.titleIcon, [closeButton]);
+  }
+
+  private function createErrorTab(tabLabel:String, message:String):UIComponent {
+    var errorTabCanvas:Canvas = new Canvas();
+    errorTabCanvas.percentWidth = 100.0;
+    errorTabCanvas.percentHeight = 100.0;
+    errorTabCanvas.label = tabLabel;
+    errorTabCanvas.horizontalScrollPolicy = ScrollPolicy.AUTO;
+    errorTabCanvas.verticalScrollPolicy = ScrollPolicy.AUTO;
+    var errorText:Text = new Text();
+    if (HtmlUtil.isHtml(message)) {
+      errorText.htmlText = message;
+    } else {
+      errorText.text = message;
+    }
+    errorTabCanvas.addChild(errorText);
+    return errorTabCanvas;
   }
 
   protected function fixAlertSize(alert:Alert):void {
@@ -1203,7 +1248,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
 
   protected function getKeysToTranslate():Array {
     return ["FS.browse.continue", "file.upload", "file.download", "system.clipboard.continue", "content.copy", "error",
-            "error.unexpected", "server.comm.failure"];
+            "error.unexpected", "server.comm.failure", "ok", "cancel", "yes", "no", "detail"];
   }
 
   public function translate(key:String):String {
