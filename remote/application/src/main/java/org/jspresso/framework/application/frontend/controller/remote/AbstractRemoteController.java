@@ -498,8 +498,11 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
    * Callback after a failed login.
    */
   protected void loginFailed() {
-    RemoteMessageCommand errorMessageCommand = createErrorMessageCommand();
+    RemoteMessageCommand errorMessageCommand = new RemoteMessageCommand();
     errorMessageCommand.setMessage(getTranslation(LoginUtils.LOGIN_FAILED, getLocale()));
+    errorMessageCommand.setTitle(getTranslation("error", getLocale()));
+    errorMessageCommand.setTitleIcon(getIconFactory().getErrorIcon(getIconFactory().getTinyIconSize()));
+    errorMessageCommand.setMessageIcon(getIconFactory().getErrorIcon(getIconFactory().getLargeIconSize()));
     registerCommand(errorMessageCommand);
   }
 
