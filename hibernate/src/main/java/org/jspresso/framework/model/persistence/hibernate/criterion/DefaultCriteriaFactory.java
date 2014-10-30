@@ -497,12 +497,18 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
   protected Criterion createLikeRestriction(
       IPropertyDescriptor propertyDescriptor, String prefixedProperty,
       String propertyValue) {
+    MatchMode matchMode;
+    if (propertyValue.contains("%")) {
+      matchMode = MatchMode.EXACT;
+    } else {
+      matchMode = MatchMode.START;
+    }
     if (propertyDescriptor instanceof IStringPropertyDescriptor
         && ((IStringPropertyDescriptor) propertyDescriptor).isUpperCase()) {
       // don't use ignoreCase() to be able to leverage indices.
-      return Restrictions.like(prefixedProperty, propertyValue.toUpperCase(), MatchMode.START);
+      return Restrictions.like(prefixedProperty, propertyValue.toUpperCase(), matchMode);
     }
-    return Restrictions.like(prefixedProperty, propertyValue, MatchMode.START)
+    return Restrictions.like(prefixedProperty, propertyValue, matchMode)
         .ignoreCase();
   }
 
