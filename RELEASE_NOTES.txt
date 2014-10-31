@@ -1,3 +1,8 @@
+4.1
+===
+- Due to RFE #1221, DefaultCriteriaFactory.createXXXRestriction method signatures have been augmented with
+  componentDescriptor, queryComponent and context in order to be able to take options in subclasses.
+
 4.0
 ===
 - Modules do not base their equality on object equality anymore. 2 arbitrary modules are now considedered equal
