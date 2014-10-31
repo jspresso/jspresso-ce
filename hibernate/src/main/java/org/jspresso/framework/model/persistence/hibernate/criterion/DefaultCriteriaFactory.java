@@ -60,14 +60,12 @@ import org.jspresso.framework.view.descriptor.basic.PropertyViewDescriptorHelper
 /**
  * Default implementation of a criteria factory.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
-public class DefaultCriteriaFactory extends AbstractActionContextAware
-    implements ICriteriaFactory {
+public class DefaultCriteriaFactory extends AbstractActionContextAware implements ICriteriaFactory {
 
-  private static final Logger LOG = LoggerFactory
-                                      .getLogger(DefaultCriteriaFactory.class);
+  private static final Logger LOG = LoggerFactory.getLogger(DefaultCriteriaFactory.class);
 
   private boolean             triStateBooleanSupported;
 
@@ -83,21 +81,19 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
    */
   @SuppressWarnings("ConstantConditions")
   @Override
-  public void completeCriteriaWithOrdering(EnhancedDetachedCriteria criteria,
-      IQueryComponent queryComponent, Map<String, Object> context) {
+  public void completeCriteriaWithOrdering(EnhancedDetachedCriteria criteria, IQueryComponent queryComponent,
+                                           Map<String, Object> context) {
     criteria.setProjection(null);
     criteria.setResultTransformer(CriteriaSpecification.ROOT_ENTITY);
     // complete sorting properties
     if (queryComponent.getOrderingProperties() != null) {
-      for (Map.Entry<String, ESort> orderingProperty : queryComponent
-          .getOrderingProperties().entrySet()) {
+      for (Map.Entry<String, ESort> orderingProperty : queryComponent.getOrderingProperties().entrySet()) {
         String propertyName = orderingProperty.getKey();
         String[] propElts = propertyName.split("\\.");
         DetachedCriteria orderingCriteria = criteria;
         boolean sortable = true;
         if (propElts.length > 1) {
-          IComponentDescriptor<?> currentCompDesc = queryComponent
-              .getQueryDescriptor();
+          IComponentDescriptor<?> currentCompDesc = queryComponent.getQueryDescriptor();
           int i = 0;
           List<String> path = new ArrayList<>();
           for (; sortable && i < propElts.length - 1; i++) {
@@ -119,12 +115,10 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
           if (sortable) {
             StringBuilder name = new StringBuilder();
             for (int j = i; sortable && j < propElts.length; j++) {
-              IPropertyDescriptor propDescriptor = currentCompDesc
-                  .getPropertyDescriptor(propElts[j]);
+              IPropertyDescriptor propDescriptor = currentCompDesc.getPropertyDescriptor(propElts[j]);
               sortable = sortable && isSortable(propDescriptor);
               if (j < propElts.length - 1) {
-                currentCompDesc = ((IReferencePropertyDescriptor<?>) propDescriptor)
-                    .getReferencedDescriptor();
+                currentCompDesc = ((IReferencePropertyDescriptor<?>) propDescriptor).getReferencedDescriptor();
               }
               if (j > i) {
                 name.append(".");
@@ -133,21 +127,19 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
             }
             if (sortable) {
               for (String pathElt : path) {
-                orderingCriteria = criteria.getSubCriteriaFor(orderingCriteria,
-                    pathElt, JoinType.LEFT_OUTER_JOIN);
+                orderingCriteria = criteria.getSubCriteriaFor(orderingCriteria, pathElt, JoinType.LEFT_OUTER_JOIN);
               }
               propertyName = name.toString();
             }
           }
         } else {
-          IPropertyDescriptor propertyDescriptor = queryComponent
-              .getQueryDescriptor().getPropertyDescriptor(propertyName);
+          IPropertyDescriptor propertyDescriptor = queryComponent.getQueryDescriptor().getPropertyDescriptor(
+              propertyName);
           if (propertyDescriptor != null) {
             sortable = isSortable(propertyDescriptor);
           } else {
             LOG.error("Ordering property {} not found on {}", propertyName,
-                queryComponent.getQueryDescriptor().getComponentContract()
-                    .getName());
+                queryComponent.getQueryDescriptor().getComponentContract().getName());
             sortable = false;
           }
         }
@@ -170,19 +162,17 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
   }
 
   private boolean isSortable(IPropertyDescriptor propertyDescriptor) {
-    return propertyDescriptor != null
-        && (!propertyDescriptor.isComputed() || propertyDescriptor
-            .getPersistenceFormula() != null);
+    return propertyDescriptor != null && (!propertyDescriptor.isComputed()
+        || propertyDescriptor.getPersistenceFormula() != null);
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public EnhancedDetachedCriteria createCriteria(
-      IQueryComponent queryComponent, Map<String, Object> context) {
-    EnhancedDetachedCriteria criteria = EnhancedDetachedCriteria
-        .forEntityName(queryComponent.getQueryContract().getName());
+  public EnhancedDetachedCriteria createCriteria(IQueryComponent queryComponent, Map<String, Object> context) {
+    EnhancedDetachedCriteria criteria = EnhancedDetachedCriteria.forEntityName(
+        queryComponent.getQueryContract().getName());
     boolean abort = completeCriteria(criteria, criteria, null, queryComponent, context);
     if (abort) {
       return null;
@@ -191,36 +181,30 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
   }
 
   @SuppressWarnings("ConstantConditions")
-  private boolean completeCriteria(EnhancedDetachedCriteria rootCriteria,
-      DetachedCriteria currentCriteria, String path,
+  private boolean completeCriteria(EnhancedDetachedCriteria rootCriteria, DetachedCriteria currentCriteria, String path,
       IQueryComponent aQueryComponent, Map<String, Object> context) {
     boolean abort = false;
+    IComponentDescriptor<?> componentDescriptor = aQueryComponent.getQueryDescriptor();
     if (aQueryComponent instanceof ComparableQueryStructure) {
       completeCriteria(currentCriteria, createComparableQueryStructureRestriction(path,
-          (ComparableQueryStructure) aQueryComponent));
+          (ComparableQueryStructure) aQueryComponent, componentDescriptor, aQueryComponent, context));
     } else {
-      IComponentDescriptor<?> componentDescriptor = aQueryComponent
-          .getQueryDescriptor();
       String translationsPath = AbstractComponentDescriptor.getComponentTranslationsDescriptorTemplate().getName();
       String translationsAlias = componentDescriptor.getComponentContract().getSimpleName() + "_" + translationsPath;
       if (componentDescriptor.isTranslatable()) {
-        rootCriteria.getSubCriteriaFor(currentCriteria, translationsPath,
-            translationsAlias,
-            JoinType.LEFT_OUTER_JOIN);
+        rootCriteria.getSubCriteriaFor(currentCriteria, translationsPath, translationsAlias, JoinType.LEFT_OUTER_JOIN);
       }
       for (Map.Entry<String, Object> property : aQueryComponent.entrySet()) {
-        IPropertyDescriptor propertyDescriptor = componentDescriptor
-            .getPropertyDescriptor(property.getKey());
+        IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor(property.getKey());
         if (propertyDescriptor != null) {
           boolean isEntityRef = false;
-          if (componentDescriptor.isEntity()
-              && aQueryComponent.containsKey(IEntity.ID)) {
+          if (componentDescriptor.isEntity() && aQueryComponent.containsKey(IEntity.ID)) {
             isEntityRef = true;
           }
           if ((!PropertyViewDescriptorHelper.isComputed(componentDescriptor, property.getKey()) || (
               propertyDescriptor instanceof IStringPropertyDescriptor
-                  && ((IStringPropertyDescriptor) propertyDescriptor).isTranslatable()))
-              && (!isEntityRef || IEntity.ID.equals(property.getKey()))) {
+                  && ((IStringPropertyDescriptor) propertyDescriptor).isTranslatable())) && (!isEntityRef || IEntity.ID
+              .equals(property.getKey()))) {
             String prefixedProperty;
             if (path != null) {
               prefixedProperty = path + "." + property.getKey();
@@ -233,47 +217,40 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
               } else {
                 completeCriteria(currentCriteria, Restrictions.eq(prefixedProperty, property.getValue()));
               }
-            } else if (property.getValue() instanceof Boolean
-                && (isTriStateBooleanSupported() || (Boolean) property
+            } else if (property.getValue() instanceof Boolean && (isTriStateBooleanSupported() || (Boolean) property
                 .getValue())) {
               completeCriteria(currentCriteria, Restrictions.eq(prefixedProperty, property.getValue()));
             } else if (property.getValue() instanceof String) {
               if (IEntity.ID.equalsIgnoreCase(property.getKey())) {
                 completeCriteria(currentCriteria, createIdRestriction(propertyDescriptor, prefixedProperty,
-                    property.getValue()));
+                    property.getValue(), componentDescriptor, aQueryComponent, context));
               } else {
                 completeCriteriaWithTranslations(currentCriteria, translationsPath, translationsAlias, property,
-                    componentDescriptor, propertyDescriptor, prefixedProperty,
-                    getBackendController(context).getLocale());
+                    propertyDescriptor, prefixedProperty, getBackendController(context).getLocale(),
+                    componentDescriptor, aQueryComponent, context);
               }
-            } else if (property.getValue() instanceof Number
-                || property.getValue() instanceof Date) {
+            } else if (property.getValue() instanceof Number || property.getValue() instanceof Date) {
               completeCriteria(currentCriteria, Restrictions.eq(prefixedProperty, property.getValue()));
             } else if (property.getValue() instanceof EnumQueryStructure) {
               completeCriteria(currentCriteria, createEnumQueryStructureRestriction(prefixedProperty,
                   ((EnumQueryStructure) property.getValue())));
             } else if (property.getValue() instanceof IQueryComponent) {
-              IQueryComponent joinedComponent = ((IQueryComponent) property
-                  .getValue());
+              IQueryComponent joinedComponent = ((IQueryComponent) property.getValue());
               if (!isQueryComponentEmpty(joinedComponent, propertyDescriptor)) {
                 if (joinedComponent.isInlineComponent()/* || path != null */) {
                   // the joined component is an inline component so we must use
                   // dot nested properties. Same applies if we are in a nested
                   // path i.e. already on an inline component.
-                  abort = abort
-                      || completeCriteria(rootCriteria, currentCriteria,
-                          prefixedProperty,
+                  abort = abort || completeCriteria(rootCriteria, currentCriteria, prefixedProperty,
                           (IQueryComponent) property.getValue(), context);
                 } else {
                   // the joined component is an entity so we must use
                   // nested criteria; unless the autoComplete property
                   // is a special char.
                   boolean digDeeper = true;
-                  String autoCompleteProperty = joinedComponent
-                      .getQueryDescriptor().getAutoCompleteProperty();
+                  String autoCompleteProperty = joinedComponent.getQueryDescriptor().getAutoCompleteProperty();
                   if (autoCompleteProperty != null) {
-                    String val = (String) joinedComponent
-                        .get(autoCompleteProperty);
+                    String val = (String) joinedComponent.get(autoCompleteProperty);
                     if (val != null) {
                       boolean negate = false;
                       if (val.startsWith(IQueryComponent.NOT_VAL)) {
@@ -291,12 +268,9 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
                     }
                   }
                   if (digDeeper) {
-                    DetachedCriteria joinCriteria = rootCriteria
-                        .getSubCriteriaFor(currentCriteria, prefixedProperty,
+                    DetachedCriteria joinCriteria = rootCriteria.getSubCriteriaFor(currentCriteria, prefixedProperty,
                             JoinType.INNER_JOIN);
-                    abort = abort
-                        || completeCriteria(rootCriteria, joinCriteria, null,
-                            joinedComponent, context);
+                    abort = abort || completeCriteria(rootCriteria, joinCriteria, null, joinedComponent, context);
                   }
                 }
               }
@@ -314,22 +288,33 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
   /**
    * Complete criteria with translations.
    *
-   * @param currentCriteria the current criteria
-   * @param translationsPath the translations path
-   * @param translationsAlias the translations alias
-   * @param property the property
-   * @param componentDescriptor the component descriptor
-   * @param propertyDescriptor the property descriptor
-   * @param prefixedProperty the prefixed property
-   * @param locale the locale
+   * @param currentCriteria
+   *     the current criteria
+   * @param translationsPath
+   *     the translations path
+   * @param translationsAlias
+   *     the translations alias
+   * @param property
+   *     the property
+   * @param propertyDescriptor
+   *     the property descriptor
+   * @param prefixedProperty
+   *     the prefixed property
+   * @param locale
+   *     the locale
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param queryComponent
+   *     the query component
+   * @param context
+   *     the context
    */
   @SuppressWarnings("unchecked")
-  protected void completeCriteriaWithTranslations(DetachedCriteria currentCriteria,
-                                                  String translationsPath, String translationsAlias,
-                                                  Map.Entry<String, Object> property,
-                                                  IComponentDescriptor<?> componentDescriptor,
+  protected void completeCriteriaWithTranslations(DetachedCriteria currentCriteria, String translationsPath,
+                                                  String translationsAlias, Map.Entry<String, Object> property,
                                                   IPropertyDescriptor propertyDescriptor, String prefixedProperty,
-                                                  Locale locale) {
+                                                  Locale locale, IComponentDescriptor<?> componentDescriptor,
+                                                  IQueryComponent queryComponent, Map<String, Object> context) {
     if (propertyDescriptor instanceof IStringPropertyDescriptor && ((IStringPropertyDescriptor) propertyDescriptor)
         .isTranslatable()) {
       String nlsOrRawValue = null;
@@ -347,7 +332,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
             ((ICollectionPropertyDescriptor<IPropertyTranslation>) componentDescriptor.getPropertyDescriptor(
                 translationsPath)).getCollectionDescriptor().getElementDescriptor().getPropertyDescriptor(
                 IPropertyTranslation.TRANSLATED_VALUE), translationsAlias + "." + IPropertyTranslation.TRANSLATED_VALUE,
-            nlsValue));
+            nlsValue, componentDescriptor, queryComponent, context));
         String languagePath = translationsAlias + "." + IPropertyTranslation.LANGUAGE;
         translationRestriction.add(Restrictions.eq(languagePath, locale.getLanguage()));
         translationRestriction.add(Restrictions.eq(translationsAlias + "." + IPropertyTranslation.PROPERTY_NAME,
@@ -361,22 +346,24 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
               languagePath, locale.getLanguage())));
           String rawPropertyName = barePropertyName + IComponentDescriptor.RAW_SUFFIX;
           rawValueRestriction.add(createStringRestriction(componentDescriptor.getPropertyDescriptor(rawPropertyName),
-              rawPropertyName, nlsOrRawValue));
+              rawPropertyName, nlsOrRawValue, componentDescriptor, queryComponent, context));
           disjunction.add(rawValueRestriction);
         }
         currentCriteria.add(disjunction);
       }
     } else {
       completeCriteria(currentCriteria, createStringRestriction(propertyDescriptor, prefixedProperty,
-          (String) property.getValue()));
+          (String) property.getValue(), componentDescriptor, queryComponent, context));
     }
   }
 
   /**
    * Complete with criterion.
    *
-   * @param currentCriteria the current criteria
-   * @param criterion the criterion
+   * @param currentCriteria
+   *     the current criteria
+   * @param criterion
+   *     the criterion
    */
   protected void completeCriteria(DetachedCriteria currentCriteria, Criterion criterion) {
     if (criterion != null) {
@@ -393,12 +380,10 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
    *          the collection of checked / unchecked enumeration values.
    * @return the created criterion or null if no criterion necessary.
    */
-  protected Criterion createEnumQueryStructureRestriction(String path,
-      EnumQueryStructure enumQueryStructure) {
+  protected Criterion createEnumQueryStructureRestriction(String path, EnumQueryStructure enumQueryStructure) {
     Set<String> inListValues = new HashSet<>();
     boolean nullAllowed = false;
-    for (EnumValueQueryStructure inListValue : enumQueryStructure
-        .getSelectedEnumerationValues()) {
+    for (EnumValueQueryStructure inListValue : enumQueryStructure.getSelectedEnumerationValues()) {
       if (inListValue.getValue() == null || "".equals(inListValue.getValue())) {
         nullAllowed = true;
       } else {
@@ -421,16 +406,24 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
    * 
    * @param propertyDescriptor
    *          the id property descriptor.
+   * @param prefixedProperty
+   *     the full path of the property.
    * @param propertyValue
    *          the string property value.
-   * @param prefixedProperty
-   *          the full path of the property.
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param queryComponent
+   *     the query component
+   * @param context
+   *     the context
    * @return the created criterion or null if no criterion necessary.
    */
-  protected Criterion createIdRestriction(IPropertyDescriptor propertyDescriptor,
-                                     String prefixedProperty, Object propertyValue) {
+  protected Criterion createIdRestriction(IPropertyDescriptor propertyDescriptor, String prefixedProperty,
+                                          Object propertyValue, IComponentDescriptor<?> componentDescriptor,
+                                          IQueryComponent queryComponent, Map<String, Object> context) {
     if (propertyValue instanceof String) {
-      return createStringRestriction(propertyDescriptor, prefixedProperty, (String) propertyValue);
+      return createStringRestriction(propertyDescriptor, prefixedProperty, (String) propertyValue, componentDescriptor,
+          queryComponent, context);
     } else {
       return Restrictions.eq(prefixedProperty, propertyValue);
     }
@@ -441,14 +434,21 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
    *
    * @param propertyDescriptor
    *          the property descriptor.
+   * @param prefixedProperty
+   *     the full path of the property.
    * @param propertyValue
    *          the string property value.
-   * @param prefixedProperty
-   *          the full path of the property.
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param queryComponent
+   *     the query component
+   * @param context
+   *     the context
    * @return the created criterion or null if no criterion necessary.
    */
   protected Criterion createStringRestriction(IPropertyDescriptor propertyDescriptor, String prefixedProperty,
-                                         String propertyValue) {
+                                              String propertyValue, IComponentDescriptor<?> componentDescriptor,
+                                              IQueryComponent queryComponent, Map<String, Object> context) {
     Junction stringRestriction = null;
     if (propertyValue.length() > 0) {
       String[] propValues = propertyValue.split(IQueryComponent.DISJUNCT);
@@ -469,8 +469,8 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
                 || propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
               crit = Restrictions.eq(prefixedProperty, val);
             } else {
-              crit = createLikeRestriction(propertyDescriptor,
-                  prefixedProperty, val);
+              crit = createLikeRestriction(propertyDescriptor, prefixedProperty, val, componentDescriptor,
+                  queryComponent, context);
             }
           }
           if (negate) {
@@ -492,31 +492,45 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware
    *          the complete property path.
    * @param propertyValue
    *          the value to create the like restriction for
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param queryComponent
+   *     the query component
+   * @param context
+   *     the context
    * @return the created criterion or null if no criterion necessary.
    */
-  protected Criterion createLikeRestriction(
-      IPropertyDescriptor propertyDescriptor, String prefixedProperty,
-      String propertyValue) {
-    if (propertyDescriptor instanceof IStringPropertyDescriptor
-        && ((IStringPropertyDescriptor) propertyDescriptor).isUpperCase()) {
-      // don't use ignoreCase() to be able to leverage indices.
-      return Restrictions.like(prefixedProperty, propertyValue.toUpperCase(), MatchMode.START);
+  protected Criterion createLikeRestriction(IPropertyDescriptor propertyDescriptor, String prefixedProperty,
+                                            String propertyValue, IComponentDescriptor<?> componentDescriptor,
+                                            IQueryComponent queryComponent, Map<String, Object> context) {
+    MatchMode matchMode;
+    if (propertyValue.contains("%")) {
+      matchMode = MatchMode.EXACT;
+    } else {
+      matchMode = MatchMode.START;
     }
-    return Restrictions.like(prefixedProperty, propertyValue, MatchMode.START)
-        .ignoreCase();
+    if (propertyDescriptor instanceof IStringPropertyDescriptor && ((IStringPropertyDescriptor) propertyDescriptor)
+        .isUpperCase()) {
+      // don't use ignoreCase() to be able to leverage indices.
+      return Restrictions.like(prefixedProperty, propertyValue.toUpperCase(), matchMode);
+    }
+    return Restrictions.like(prefixedProperty, propertyValue, matchMode).ignoreCase();
   }
 
   /**
    * Creates a criterion by processing a comparable query structure.
    * 
-   * @param path
-   *          the path to the comparable property.
-   * @param queryStructure
-   *          the comparable query structure.
+   * @param path      the path to the comparable property.
+   * @param queryStructure      the comparable query structure.
+   * @param componentDescriptor the component descriptor
+   * @param queryComponent the query component
+   * @param context the context
    * @return the created criterion or null if no criterion necessary.
    */
-  protected Criterion createComparableQueryStructureRestriction(String path,
-      ComparableQueryStructure queryStructure) {
+  protected Criterion createComparableQueryStructureRestriction(String path, ComparableQueryStructure queryStructure,
+                                                                IComponentDescriptor<?> componentDescriptor,
+                                                                IQueryComponent queryComponent,
+                                                                Map<String, Object> context) {
     Junction queryStructureRestriction = null;
     if (queryStructure.isRestricting()) {
       queryStructureRestriction = Restrictions.conjunction();
