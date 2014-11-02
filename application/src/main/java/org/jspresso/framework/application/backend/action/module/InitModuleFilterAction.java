@@ -76,6 +76,20 @@ public class InitModuleFilterAction extends BackendAction {
           (Class<? extends IComponent>) filterableBeanCollectionModule.getElementComponentDescriptor()
                                                                       .getComponentContract());
     }
+    ICollectionViewDescriptor moduleObjectsViewDescriptor = BasicCollectionViewDescriptor.extractMainCollectionView(
+        filterableBeanCollectionModule.getProjectedViewDescriptor());
+    if (moduleObjectsViewDescriptor instanceof ITableViewDescriptor) {
+      List<String> prefetchProperties = new ArrayList<>();
+      for (IPropertyViewDescriptor columnDescriptor : ((ITableViewDescriptor) moduleObjectsViewDescriptor)
+          .getColumnViewDescriptors()) {
+        IPropertyDescriptor columnPropertyDescriptor = (IPropertyDescriptor) columnDescriptor.getModelDescriptor();
+        if (columnPropertyDescriptor.isComputed()
+            || columnPropertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
+          prefetchProperties.add(columnPropertyDescriptor.getName());
+        }
+      }
+      queryComponent.setPrefetchProperties(prefetchProperties);
+    }
     if (queryComponentRefiner != null) {
       queryComponentRefiner.refineQueryComponent(queryComponent, context);
     }
@@ -98,20 +112,6 @@ public class InitModuleFilterAction extends BackendAction {
         }
       };
       queryComponent.addPropertyChangeListener(IPageable.PAGE, paginationListener);
-    }
-    ICollectionViewDescriptor moduleObjectsViewDescriptor = BasicCollectionViewDescriptor.extractMainCollectionView(
-        filterableBeanCollectionModule.getProjectedViewDescriptor());
-    if (moduleObjectsViewDescriptor instanceof ITableViewDescriptor) {
-      List<String> prefetchProperties = new ArrayList<>();
-      for (IPropertyViewDescriptor columnDescriptor : ((ITableViewDescriptor) moduleObjectsViewDescriptor)
-          .getColumnViewDescriptors()) {
-        IPropertyDescriptor columnPropertyDescriptor = (IPropertyDescriptor) columnDescriptor.getModelDescriptor();
-        if (columnPropertyDescriptor.isComputed()
-            || columnPropertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
-          prefetchProperties.add(columnPropertyDescriptor.getName());
-        }
-      }
-      queryComponent.setPrefetchProperties(prefetchProperties);
     }
     return super.execute(actionHandler, context);
   }
