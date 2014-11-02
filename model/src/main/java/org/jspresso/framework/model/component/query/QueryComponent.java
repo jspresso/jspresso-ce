@@ -46,8 +46,8 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
  * The default implementation of a query component.
- * 
- * @version $LastChangedRevision$
+ *
+ * @version $LastChangedRevision : 9452 $
  * @author Vincent Vandenschrick
  */
 public class QueryComponent extends ObjectEqualityMap<String, Object> implements
@@ -60,6 +60,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   private       IComponentDescriptor<?> queryDescriptor;
   private       Map<String, ESort>      defaultOrderingProperties;
   private       Map<String, ESort>      orderingProperties;
+  private       List<String>            prefetchProperties;
   private       Integer                 page;
   private       Integer                 pageSize;
   private       Integer                 recordCount;
@@ -73,10 +74,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   /**
    * Constructs a new {@code QueryComponent} instance.
    *
-   * @param componentDescriptor
-   *          the query componentDescriptor.
-   * @param componentFactory
-   *          the component factory.
+   * @param componentDescriptor           the query componentDescriptor.
+   * @param componentFactory           the component factory.
    */
   public QueryComponent(IComponentDescriptor<?> componentDescriptor, IComponentFactory componentFactory) {
     this.componentDescriptor = componentDescriptor;
@@ -109,6 +108,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    * structures.
    * <p>
    * {@inheritDoc}
+   * @param aTranslationProvider the a translation provider
+   * @param aLocale the a locale
    */
   @Override
   public void translate(ITranslationProvider aTranslationProvider, Locale aLocale) {
@@ -119,8 +120,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
         ((EnumQueryStructure) value).setTranslationProvider(aTranslationProvider);
         ((EnumQueryStructure) value).setLocale(aLocale);
       } else if (value instanceof ComparableQueryStructure) {
-        ((ComparableQueryStructure) value)
-            .setTranslationProvider(aTranslationProvider);
+        ((ComparableQueryStructure) value).setTranslationProvider(aTranslationProvider);
         ((ComparableQueryStructure) value).setLocale(aLocale);
       } else if (value instanceof QueryComponent) {
         ((QueryComponent) value)
@@ -131,6 +131,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   * @param key the key
+   * @return the object
    */
   @SuppressWarnings("unchecked")
   @Override
@@ -165,6 +167,9 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   * @param key the key
+   * @param value the value
+   * @return the object
    */
   @SuppressWarnings("unchecked")
   @Override
@@ -307,6 +312,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   * @param key the key
+   * @return the object
    */
   @SuppressWarnings("unchecked")
   @Override
@@ -324,7 +331,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * Gets the componentDescriptor.
-   * 
+   *
    * @return the componentDescriptor.
    */
   @Override
@@ -334,7 +341,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * Gets the queryComponentDescriptor.
-   * 
+   *
    * @return the componentDescriptor.
    */
   @Override
@@ -344,7 +351,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * Gets the orderingProperties.
-   * 
+   *
    * @return the orderingProperties.
    */
   @Override
@@ -360,6 +367,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   * @return the page
    */
   @Override
   public Integer getPage() {
@@ -368,6 +376,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   * @return the display page index
    */
   @Override
   public Integer getDisplayPageIndex() {
@@ -387,6 +396,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   * @param displayPageIndex the display page index
    */
   @Override
   public void setDisplayPageIndex(Integer displayPageIndex) {
@@ -399,6 +409,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   * @return the page count
    */
   @Override
   public Integer getPageCount() {
@@ -419,6 +430,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   * @return the page size
    */
   @Override
   public Integer getPageSize() {
@@ -430,6 +442,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   * @return the queried components
    */
   @Override
   public List<?> getQueriedComponents() {
@@ -438,6 +451,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   * @return the query contract
    */
   @Override
   public Class<?> getQueryContract() {
@@ -450,6 +464,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   * @return the record count
    */
   @Override
   public Integer getRecordCount() {
@@ -458,6 +473,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   * @return the boolean
    */
   @Override
   public boolean isInlineComponent() {
@@ -467,6 +483,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   * @return the boolean
    */
   @Override
   public boolean isPageNavigationEnabled() {
@@ -475,6 +492,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   * @return the boolean
    */
   @Override
   public boolean isNextPageEnabled() {
@@ -484,6 +502,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   * @return the boolean
    */
   @Override
   public boolean isPreviousPageEnabled() {
@@ -492,6 +511,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   * @param defaultOrderingProperties the default ordering properties
    */
   @Override
   public void setDefaultOrderingProperties(
@@ -501,9 +521,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * Sets the sortingAttributes.
-   * 
-   * @param orderingProperties
-   *          the sortingAttributes to set.
+   *
+   * @param orderingProperties           the sortingAttributes to set.
    */
   @Override
   public void setOrderingProperties(Map<String, ESort> orderingProperties) {
@@ -512,6 +531,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   * @param page the page
    */
   @Override
   public void setPage(Integer page) {
@@ -549,6 +569,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   * @param pageSize the page size
    */
   @Override
   public void setPageSize(Integer pageSize) {
@@ -565,6 +586,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   * @param queriedComponents the queried components
    */
   @Override
   public void setQueriedComponents(List<?> queriedComponents) {
@@ -576,9 +598,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * Sets the recordCount.
-   * 
-   * @param recordCount
-   *          the recordCount to set.
+   *
+   * @param recordCount           the recordCount to set.
    */
   @Override
   public void setRecordCount(Integer recordCount) {
@@ -629,8 +650,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     /**
      * Constructs a new {@code InnerComponentTracker} instance.
      *
-     * @param componentName
-     *          the name of the component to track the properties.
+     * @param componentName           the name of the component to track the properties.
      */
     public InlinedComponentTracker(String componentName) {
       this.componentName = componentName;
@@ -638,6 +658,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
     /**
      * {@inheritDoc}
+     * @param evt the evt
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
@@ -649,7 +670,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * Gets the componentFactory.
-   * 
+   *
    * @return the componentFactory.
    */
   protected IComponentFactory getComponentFactory() {
@@ -658,6 +679,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   * @return the query component
    */
   @Override
   public QueryComponent clone() {
@@ -667,7 +689,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * Gets whether to enforce select distinct when querying.
-   * 
+   *
    * @return the distinctEnforced.
    */
   @Override
@@ -677,9 +699,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * Sets the distinctEnforced.
-   * 
-   * @param distinctEnforced
-   *          the distinctEnforced to set.
+   *
+   * @param distinctEnforced           the distinctEnforced to set.
    */
   public void setDistinctEnforced(boolean distinctEnforced) {
     this.distinctEnforced = distinctEnforced;
@@ -687,6 +708,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   * @return the string
    */
   @Override
   public String toString() {
@@ -695,6 +717,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   * @param stickyResults the sticky results
    */
   @Override
   public void setStickyResults(List<?> stickyResults) {
@@ -703,6 +726,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   * @return the sticky results
    */
   @Override
   public List<?> getStickyResults() {
@@ -712,9 +736,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   /**
    * Hydrates a query component with a hierarchical map holding bare filter
    * values.
-   * 
-   * @param state
-   *          the hierarchical map holding bare filter values.
+   *
+   * @param state           the hierarchical map holding bare filter values.
    */
   @SuppressWarnings("unchecked")
   @Override
@@ -735,6 +758,10 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   * @param <T>  the type parameter
+   * @param value the value
+   * @param propertyDescriptor the property descriptor
+   * @return the t
    */
   @SuppressWarnings("unchecked")
   @Override
@@ -797,5 +824,25 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   @Override
   public List<?> getResults() {
     return getQueriedComponents();
+  }
+
+  /**
+   * Gets prefetch properties.
+   *
+   * @return the prefetch properties
+   */
+  @Override
+  public List<String> getPrefetchProperties() {
+    return prefetchProperties;
+  }
+
+  /**
+   * Sets prefetch properties.
+   *
+   * @param prefetchProperties the prefetch properties
+   */
+  @Override
+  public void setPrefetchProperties(List<String> prefetchProperties) {
+    this.prefetchProperties = prefetchProperties;
   }
 }

@@ -20,6 +20,8 @@ package org.jspresso.framework.application.backend.action.module;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
@@ -32,14 +34,20 @@ import org.jspresso.framework.application.model.descriptor.FilterableBeanCollect
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 import org.jspresso.framework.util.collection.IPageable;
+import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
+import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
+import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicCollectionViewDescriptor;
 
 /**
  * Initialize a module filter with a brand new query component and resets the
  * module objects collection.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
 public class InitModuleFilterAction extends BackendAction {
 
@@ -48,29 +56,25 @@ public class InitModuleFilterAction extends BackendAction {
 
   /**
    * Initializes the module filter and resets the bean collection.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
   @Override
-  public boolean execute(final IActionHandler actionHandler,
-      final Map<String, Object> context) {
-    final FilterableBeanCollectionModule filterableBeanCollectionModule = (FilterableBeanCollectionModule) getModule(context);
-    context
-        .put(
-            CreateQueryComponentAction.COMPONENT_REF_DESCRIPTOR,
-            ((IComponentDescriptor<?>) filterableBeanCollectionModule
-                .getViewDescriptor().getModelDescriptor())
-                .getPropertyDescriptor(FilterableBeanCollectionModuleDescriptor.FILTER));
+  public boolean execute(final IActionHandler actionHandler, final Map<String, Object> context) {
+    final FilterableBeanCollectionModule filterableBeanCollectionModule = (FilterableBeanCollectionModule) getModule(
+        context);
+    context.put(CreateQueryComponentAction.COMPONENT_REF_DESCRIPTOR,
+        ((IComponentDescriptor<?>) filterableBeanCollectionModule.getViewDescriptor().getModelDescriptor())
+            .getPropertyDescriptor(FilterableBeanCollectionModuleDescriptor.FILTER));
     final IQueryComponent queryComponent;
     if (createQueryComponentAction != null) {
       actionHandler.execute(createQueryComponentAction, context);
-      queryComponent = (IQueryComponent) context
-          .get(IQueryComponent.QUERY_COMPONENT);
+      queryComponent = (IQueryComponent) context.get(IQueryComponent.QUERY_COMPONENT);
     } else {
       queryComponent = getEntityFactory(context).createQueryComponentInstance(
-          (Class<? extends IComponent>) filterableBeanCollectionModule
-              .getElementComponentDescriptor().getComponentContract());
+          (Class<? extends IComponent>) filterableBeanCollectionModule.getElementComponentDescriptor()
+                                                                      .getComponentContract());
     }
     if (queryComponentRefiner != null) {
       queryComponentRefiner.refineQueryComponent(queryComponent, context);
@@ -86,39 +90,49 @@ public class InitModuleFilterAction extends BackendAction {
           if (evt.getOldValue() != null && evt.getNewValue() != null) {
             try {
               context.put(AbstractQbeAction.PAGINATE, null);
-              actionHandler.execute(
-                  filterableBeanCollectionModule.getPagingAction(), context);
+              actionHandler.execute(filterableBeanCollectionModule.getPagingAction(), context);
             } finally {
               context.remove(AbstractQbeAction.PAGINATE);
             }
           }
         }
       };
-      queryComponent.addPropertyChangeListener(IPageable.PAGE,
-          paginationListener);
+      queryComponent.addPropertyChangeListener(IPageable.PAGE, paginationListener);
+    }
+    ICollectionViewDescriptor moduleObjectsViewDescriptor = BasicCollectionViewDescriptor.extractMainCollectionView(
+        filterableBeanCollectionModule.getProjectedViewDescriptor());
+    if (moduleObjectsViewDescriptor instanceof ITableViewDescriptor) {
+      List<String> prefetchProperties = new ArrayList<>();
+      for (IPropertyViewDescriptor columnDescriptor : ((ITableViewDescriptor) moduleObjectsViewDescriptor)
+          .getColumnViewDescriptors()) {
+        IPropertyDescriptor columnPropertyDescriptor = (IPropertyDescriptor) columnDescriptor.getModelDescriptor();
+        if (columnPropertyDescriptor.isComputed()
+            || columnPropertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
+          prefetchProperties.add(columnPropertyDescriptor.getName());
+        }
+      }
+      queryComponent.setPrefetchProperties(prefetchProperties);
     }
     return super.execute(actionHandler, context);
   }
 
   /**
    * Sets the createQueryComponentAction.
-   * 
+   *
    * @param createQueryComponentAction
-   *          the createQueryComponentAction to set.
+   *     the createQueryComponentAction to set.
    */
-  public void setCreateQueryComponentAction(
-      CreateQueryComponentAction createQueryComponentAction) {
+  public void setCreateQueryComponentAction(CreateQueryComponentAction createQueryComponentAction) {
     this.createQueryComponentAction = createQueryComponentAction;
   }
 
   /**
    * Sets the queryComponentRefiner.
-   * 
+   *
    * @param queryComponentRefiner
-   *          the queryComponentRefiner to set.
+   *     the queryComponentRefiner to set.
    */
-  public void setQueryComponentRefiner(
-      IQueryComponentRefiner queryComponentRefiner) {
+  public void setQueryComponentRefiner(IQueryComponentRefiner queryComponentRefiner) {
     this.queryComponentRefiner = queryComponentRefiner;
   }
 }
