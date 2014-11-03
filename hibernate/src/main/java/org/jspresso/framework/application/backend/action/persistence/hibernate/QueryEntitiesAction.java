@@ -36,6 +36,8 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Subqueries;
 import org.hibernate.transform.ResultTransformer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.jspresso.framework.application.backend.action.AbstractQueryComponentsAction;
 import org.jspresso.framework.application.backend.persistence.hibernate.HibernateBackendController;
@@ -43,6 +45,7 @@ import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.persistence.hibernate.criterion.EnhancedDetachedCriteria;
 import org.jspresso.framework.model.persistence.hibernate.criterion.ICriteriaFactory;
+import org.jspresso.framework.util.accessor.IAccessorFactory;
 
 /**
  * This action is used to Hibernate query entities by example. It is used behind
@@ -75,15 +78,17 @@ import org.jspresso.framework.model.persistence.hibernate.criterion.ICriteriaFac
  * {@code criteriaRefiner}.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision : 9166 $
  */
 public class QueryEntitiesAction extends AbstractQueryComponentsAction {
 
-  private static final String CRITERIA_FACTORY  = "CRITERIA_FACTORY";
-  private static final String CRITERIA_REFINER  = "CRITERIA_REFINER";
-  private ICriteriaFactory       criteriaFactory;
-  private ICriteriaRefiner       criteriaRefiner;
-  private boolean                useInListForPagination;
+  private static final Logger LOG = LoggerFactory.getLogger(QueryEntitiesAction.class);
+
+  private static final String CRITERIA_FACTORY    = "CRITERIA_FACTORY";
+  private static final String CRITERIA_REFINER    = "CRITERIA_REFINER";
+  private ICriteriaFactory criteriaFactory;
+  private ICriteriaRefiner criteriaRefiner;
+  private boolean          useInListForPagination;
 
   /**
    * Constructs a new {@code QueryEntitiesAction} instance.
@@ -134,9 +139,9 @@ public class QueryEntitiesAction extends AbstractQueryComponentsAction {
    * @return the list of retrieved components.
    */
   @Override
-  @SuppressWarnings({"unchecked", "ConstantConditions" })
+  @SuppressWarnings({"unchecked", "ConstantConditions"})
   public List<?> performQuery(final IQueryComponent queryComponent, final Map<String, Object> context) {
-    Session hibernateSession = ((HibernateBackendController)getController(context)).getHibernateSession();
+    Session hibernateSession = ((HibernateBackendController) getController(context)).getHibernateSession();
     ICriteriaFactory critFactory = (ICriteriaFactory) queryComponent.get(CRITERIA_FACTORY);
     if (critFactory == null) {
       critFactory = getCriteriaFactory(context);
@@ -170,8 +175,8 @@ public class QueryEntitiesAction extends AbstractQueryComponentsAction {
 
       if (queryComponent.isDistinctEnforced() || queryComponent.getQueryDescriptor().isTranslatable()) {
         criteria.setProjection(Projections.distinct(Projections.id()));
-        EnhancedDetachedCriteria outerCriteria = EnhancedDetachedCriteria
-            .forEntityName(queryComponent.getQueryContract().getName());
+        EnhancedDetachedCriteria outerCriteria = EnhancedDetachedCriteria.forEntityName(
+            queryComponent.getQueryContract().getName());
         outerCriteria.add(Subqueries.propertyIn(IEntity.ID, criteria));
         criteria = outerCriteria;
       }
@@ -196,8 +201,8 @@ public class QueryEntitiesAction extends AbstractQueryComponentsAction {
         }
         if (useInListForPagination) {
           criteria.setProjection(Projections.id());
-          List<Serializable> entityIds = criteria.getExecutableCriteria(hibernateSession)
-                                                 .setFirstResult(page * pageSize).setMaxResults(pageSize).list();
+          List<Serializable> entityIds = criteria.getExecutableCriteria(hibernateSession).setFirstResult(
+              page * pageSize).setMaxResults(pageSize).list();
           if (entityIds.isEmpty()) {
             entities = new ArrayList<>();
           } else {
@@ -217,8 +222,8 @@ public class QueryEntitiesAction extends AbstractQueryComponentsAction {
             }
           }
         } else {
-          entities = criteria.getExecutableCriteria(hibernateSession).setFirstResult(page * pageSize)
-                             .setMaxResults(pageSize).list();
+          entities = criteria.getExecutableCriteria(hibernateSession).setFirstResult(page * pageSize).setMaxResults(
+              pageSize).list();
         }
       } else {
         if (refinerOrders != null) {
@@ -235,6 +240,22 @@ public class QueryEntitiesAction extends AbstractQueryComponentsAction {
       }
       if (totalCount != null) {
         queryComponent.setRecordCount(totalCount);
+      }
+    }
+    List<String> prefetchProperties = queryComponent.getPrefetchProperties();
+    if (prefetchProperties != null && entities != null) {
+      // Will load the prefetch properties in the same transaction in order to leverage
+      // Hibernate batch fetching.
+      IAccessorFactory accessorFactory = getAccessorFactory(context);
+      for (String prefetchProperty : prefetchProperties) {
+        for (IEntity entity : entities) {
+          try {
+            accessorFactory.createPropertyAccessor(prefetchProperty, queryComponent.getQueryContract()).getValue(
+                entity);
+          } catch (Exception e) {
+            LOG.warn("An unexpected exception occurred when pre-fetching property {}", prefetchProperty, e);
+          }
+        }
       }
     }
     return entities;
@@ -261,7 +282,7 @@ public class QueryEntitiesAction extends AbstractQueryComponentsAction {
    * @return the configured criteria refiner.
    */
   public ICriteriaRefiner getCriteriaRefiner(Map<String, Object> context) {
-    if (context.get(CRITERIA_REFINER) != null) {
+    if (context.containsKey(CRITERIA_REFINER)) {
       return (ICriteriaRefiner) context.get(CRITERIA_REFINER);
     }
     return this.criteriaRefiner;
@@ -275,7 +296,7 @@ public class QueryEntitiesAction extends AbstractQueryComponentsAction {
    * @return the criteriaFactory.
    */
   protected ICriteriaFactory getCriteriaFactory(Map<String, Object> context) {
-    if (context.get(CRITERIA_FACTORY) != null) {
+    if (context.containsKey(CRITERIA_FACTORY)) {
       return (ICriteriaFactory) context.get(CRITERIA_FACTORY);
     }
     return criteriaFactory;
