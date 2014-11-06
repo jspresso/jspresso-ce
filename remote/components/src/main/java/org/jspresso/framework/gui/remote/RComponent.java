@@ -59,7 +59,7 @@ public abstract class RComponent extends RemotePeer implements
   private String           styleName;
 
   @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-  private final Set<RAction> actionHardReferences;
+  private final transient Set<RAction> actionHardReferences;
 
   /**
    * Constructs a new {@code RComponent} instance.
