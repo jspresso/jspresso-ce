@@ -214,6 +214,14 @@ public class LdapLoginModule extends LdapExtLoginModule {
   @SuppressWarnings("unchecked")
   @Override
   public boolean login() throws LoginException {
+    Object password = sharedState.get("javax.security.auth.login.password");
+    if (password == null) {
+      password = getUsernameAndPassword()[1];
+    }
+    if (password instanceof String
+        && ((String) password).length() == 0) {
+      return true;
+    }
     if (super.login()) {
       // Fixes bug #1175
       if (sharedState.get("javax.security.auth.login.name") instanceof String) {
