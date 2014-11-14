@@ -21,8 +21,10 @@ package org.jspresso.framework.model.descriptor.basic;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -32,6 +34,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 import gnu.trove.set.hash.TLinkedHashSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 
@@ -62,7 +66,7 @@ import org.jspresso.framework.util.sql.SqlHelper;
  * This is the abstract base descriptor for all component-like part of the
  * domain model. All the properties included in this base descriptor can of
  * course be used in concrete sub-types.
- * <p>
+ * <p/>
  * These sub-types include :
  * <ul>
  * <li><i>BasicEntityDescriptor</i> for defining a persistent entity</li>
@@ -73,65 +77,67 @@ import org.jspresso.framework.util.sql.SqlHelper;
  * make use of it in Jspresso UIs.</li>
  * </ul>
  *
- * @version $LastChangedRevision$
- * @author Vincent Vandenschrick
  * @param <E>
- *          the concrete type of components.
+ *     the concrete type of components.
+ * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
-public abstract class AbstractComponentDescriptor<E> extends
-    DefaultIconDescriptor implements IComponentDescriptor<E>, BeanFactoryAware {
+public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescriptor
+    implements IComponentDescriptor<E>, BeanFactoryAware {
 
   /**
    * IInterface descriptor for IComponent {@code COMPONENT_DESCRIPTOR}.
    */
   protected static final IComponentDescriptor<IComponent> COMPONENT_DESCRIPTOR = createComponentDescriptor();
 
-  private List<IComponentDescriptor<?>>                   ancestorDescriptors;
+  private static final Logger LOG = LoggerFactory.getLogger(AbstractComponentDescriptor.class);
 
-  private BeanFactory                                     beanFactory;
-  private Class<?>                                        componentContract;
+  private List<IComponentDescriptor<?>> ancestorDescriptors;
 
-  private Collection<String>                              grantedRoles;
-  private List<String>                                    lifecycleInterceptorBeanNames;
-  private List<String>                                    lifecycleInterceptorClassNames;
+  private BeanFactory beanFactory;
+  private Class<?>    componentContract;
 
-  private List<ILifecycleInterceptor<?>>                  lifecycleInterceptors;
-  private Map<String, ESort>                              orderingProperties;
-  private Integer                                         pageSize;
-  private Map<String, IPropertyDescriptor>                propertyDescriptorsMap;
+  private Collection<String> grantedRoles;
+  private List<String>       lifecycleInterceptorBeanNames;
+  private List<String>       lifecycleInterceptorClassNames;
 
-  private List<String>                                    queryableProperties;
-  private List<String>                                    renderedProperties;
-  private IComponentDescriptor<E>                         queryDescriptor;
-  private Collection<IGate>                               readabilityGates;
+  private List<ILifecycleInterceptor<?>>   lifecycleInterceptors;
+  private Map<String, ESort>               orderingProperties;
+  private Integer                          pageSize;
+  private Map<String, IPropertyDescriptor> propertyDescriptorsMap;
 
-  private Set<Class<?>>                                   serviceContracts;
-  private Map<String, String>                             serviceDelegateBeanNames;
-  private Map<String, String>                             serviceDelegateClassNames;
-  private Map<String, IComponentService>                  serviceDelegates;
+  private List<String>            queryableProperties;
+  private List<String>            renderedProperties;
+  private IComponentDescriptor<E> queryDescriptor;
+  private Collection<IGate>       readabilityGates;
 
-  private String                                          sqlName;
-  private List<IPropertyDescriptor>                       tempPropertyBuffer;
+  private Set<Class<?>>                  serviceContracts;
+  private Map<String, String>            serviceDelegateBeanNames;
+  private Map<String, String>            serviceDelegateClassNames;
+  private Map<String, IComponentService> serviceDelegates;
 
-  private String                                          toStringProperty;
-  private String                                          toHtmlProperty;
-  private String                                          autoCompleteProperty;
+  private String                    sqlName;
+  private List<IPropertyDescriptor> tempPropertyBuffer;
 
-  private Collection<String>                              unclonedProperties;
+  private String toStringProperty;
+  private String toHtmlProperty;
+  private String autoCompleteProperty;
 
-  private Collection<IGate>                               writabilityGates;
+  private Collection<String> unclonedProperties;
 
-  private Map<String, IPropertyDescriptor>                propertyDescriptorsCache;
-  private Collection<IPropertyDescriptor>                 allPropertyDescriptorsCache;
+  private Collection<IGate> writabilityGates;
 
-  private static BasicCollectionPropertyDescriptor<IComponent>     componentTranslationsDescriptorTemplate;
+  private Map<String, IPropertyDescriptor> propertyDescriptorsCache;
+  private Collection<IPropertyDescriptor>  allPropertyDescriptorsCache;
+
+  private static BasicCollectionPropertyDescriptor<IComponent> componentTranslationsDescriptorTemplate;
 
   /**
    * Constructs a new {@code AbstractComponentDescriptor} instance.
    *
    * @param name
-   *          the name of the descriptor which has to be the fully-qualified
-   *          class name of its contract.
+   *     the name of the descriptor which has to be the fully-qualified
+   *     class name of its contract.
    */
   public AbstractComponentDescriptor(String name) {
     setName(name);
@@ -162,22 +168,18 @@ public abstract class AbstractComponentDescriptor<E> extends
         if (ancestorDescs != null) {
           List<IComponentDescriptor<?>> queryAncestorDescriptors = new ArrayList<>();
           for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
-            queryAncestorDescriptors.add(ancestorDescriptor
-                .createQueryDescriptor());
+            queryAncestorDescriptors.add(ancestorDescriptor.createQueryDescriptor());
           }
-          ((AbstractComponentDescriptor<E>) queryDescriptor)
-              .setAncestorDescriptors(queryAncestorDescriptors);
+          ((AbstractComponentDescriptor<E>) queryDescriptor).setAncestorDescriptors(queryAncestorDescriptors);
         }
 
         Collection<IPropertyDescriptor> declaredPropertyDescs = getDeclaredPropertyDescriptors();
         if (declaredPropertyDescs != null) {
           Collection<IPropertyDescriptor> queryPropertyDescriptors = new ArrayList<>();
           for (IPropertyDescriptor propertyDescriptor : declaredPropertyDescs) {
-            queryPropertyDescriptors.add(propertyDescriptor
-                .createQueryDescriptor());
+            queryPropertyDescriptors.add(propertyDescriptor.createQueryDescriptor());
           }
-          ((AbstractComponentDescriptor<E>) queryDescriptor)
-              .setPropertyDescriptors(queryPropertyDescriptors);
+          ((AbstractComponentDescriptor<E>) queryDescriptor).setPropertyDescriptors(queryPropertyDescriptors);
         }
       }
     }
@@ -331,13 +333,11 @@ public abstract class AbstractComponentDescriptor<E> extends
     }
     int nestedDotIndex = propertyName.indexOf(IAccessor.NESTED_DELIM);
     if (nestedDotIndex > 0) {
-      IPropertyDescriptor rootProp = getPropertyDescriptor(propertyName
-          .substring(0, nestedDotIndex));
+      IPropertyDescriptor rootProp = getPropertyDescriptor(propertyName.substring(0, nestedDotIndex));
       if (rootProp instanceof IComponentDescriptorProvider<?>) {
         IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) rootProp)
             .getComponentDescriptor();
-        descriptor = componentDescriptor.getPropertyDescriptor(propertyName
-            .substring(nestedDotIndex + 1));
+        descriptor = componentDescriptor.getPropertyDescriptor(propertyName.substring(nestedDotIndex + 1));
         if (descriptor != null) {
           descriptor = descriptor.clone();
           if (descriptor instanceof BasicPropertyDescriptor) {
@@ -381,10 +381,8 @@ public abstract class AbstractComponentDescriptor<E> extends
         List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
         if (ancestorDescs != null) {
           for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
-            for (IPropertyDescriptor propertyDescriptor : ancestorDescriptor
-                .getPropertyDescriptors()) {
-              allDescriptors.put(propertyDescriptor.getName(),
-                  propertyDescriptor);
+            for (IPropertyDescriptor propertyDescriptor : ancestorDescriptor.getPropertyDescriptors()) {
+              allDescriptors.put(propertyDescriptor.getName(), propertyDescriptor);
             }
           }
         }
@@ -392,8 +390,7 @@ public abstract class AbstractComponentDescriptor<E> extends
         if (declaredPropertyDescriptors != null) {
           for (IPropertyDescriptor propertyDescriptor : declaredPropertyDescriptors) {
             propertyDescriptor = refinePropertyDescriptor(propertyDescriptor);
-            allDescriptors
-                .put(propertyDescriptor.getName(), propertyDescriptor);
+            allDescriptors.put(propertyDescriptor.getName(), propertyDescriptor);
           }
         }
         allPropertyDescriptorsCache = new ArrayList<>();
@@ -418,16 +415,14 @@ public abstract class AbstractComponentDescriptor<E> extends
         List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
         if (ancestorDescs != null) {
           for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
-            for (String propertyName : ancestorDescriptor
-                .getQueryableProperties()) {
+            for (String propertyName : ancestorDescriptor.getQueryableProperties()) {
               queryablePropertiesSet.add(propertyName);
             }
           }
         }
         for (String renderedProperty : getRenderedProperties()) {
           IPropertyDescriptor declaredPropertyDescriptor = getDeclaredPropertyDescriptor(renderedProperty);
-          if (declaredPropertyDescriptor != null
-              && declaredPropertyDescriptor.isQueryable()) {
+          if (declaredPropertyDescriptor != null && declaredPropertyDescriptor.isQueryable()) {
             queryablePropertiesSet.add(renderedProperty);
           }
         }
@@ -470,8 +465,7 @@ public abstract class AbstractComponentDescriptor<E> extends
         List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
         if (ancestorDescs != null) {
           for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
-            for (String propertyName : ancestorDescriptor
-                .getRenderedProperties()) {
+            for (String propertyName : ancestorDescriptor.getRenderedProperties()) {
               renderedPropertiesSet.add(propertyName);
             }
           }
@@ -540,8 +534,7 @@ public abstract class AbstractComponentDescriptor<E> extends
     }
     List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
     if (service == null && ancestorDescs != null) {
-      for (Iterator<IComponentDescriptor<?>> ite = ancestorDescs.iterator(); service == null
-          && ite.hasNext();) {
+      for (Iterator<IComponentDescriptor<?>> ite = ancestorDescs.iterator(); service == null && ite.hasNext(); ) {
         IComponentDescriptor<?> ancestorDescriptor = ite.next();
         service = ancestorDescriptor.getServiceDelegate(targetMethod);
       }
@@ -583,8 +576,7 @@ public abstract class AbstractComponentDescriptor<E> extends
         } else if (getPropertyDescriptor("id") != null) {
           toStringProperty = "id";
         } else {
-          toStringProperty = getPropertyDescriptors().iterator().next()
-              .getName();
+          toStringProperty = getPropertyDescriptors().iterator().next().getName();
         }
       }
     }
@@ -608,7 +600,7 @@ public abstract class AbstractComponentDescriptor<E> extends
 
   /**
    * Gets the autocomplete property.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -630,8 +622,7 @@ public abstract class AbstractComponentDescriptor<E> extends
             if (autoCompleteProperty == null) {
               Collection<IPropertyDescriptor> allProps = getPropertyDescriptors();
               for (IPropertyDescriptor pd : allProps) {
-                if (pd instanceof IStringPropertyDescriptor
-                    && !IEntity.ID.equals(pd.getName())) {
+                if (pd instanceof IStringPropertyDescriptor && !IEntity.ID.equals(pd.getName())) {
                   autoCompleteProperty = pd.getName();
                   break;
                 }
@@ -649,7 +640,7 @@ public abstract class AbstractComponentDescriptor<E> extends
 
   /**
    * The properties returned include the uncloned properties of the ancestors.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -704,10 +695,9 @@ public abstract class AbstractComponentDescriptor<E> extends
    * mapped.
    *
    * @param ancestorDescriptors
-   *          The list of ancestor component descriptors.
+   *     The list of ancestor component descriptors.
    */
-  public void setAncestorDescriptors(
-      List<IComponentDescriptor<?>> ancestorDescriptors) {
+  public void setAncestorDescriptors(List<IComponentDescriptor<?>> ancestorDescriptors) {
     this.ancestorDescriptors = ancestorDescriptors;
   }
 
@@ -731,7 +721,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * access that is of the developer responsibility.
    *
    * @param grantedRoles
-   *          the grantedRoles to set.
+   *     the grantedRoles to set.
    */
   public void setGrantedRoles(Collection<String> grantedRoles) {
     this.grantedRoles = StringUtils.ensureSpaceFree(grantedRoles);
@@ -757,14 +747,12 @@ public abstract class AbstractComponentDescriptor<E> extends
    * type assignable from the component type.
    *
    * @param lifecycleInterceptorBeanNames
-   *          the lifecycleInterceptorBeanNames to set. They are used to
-   *          retrieve interceptor instances from the Spring bean factory this
-   *          descriptor comes from if any.
+   *     the lifecycleInterceptorBeanNames to set. They are used to
+   *     retrieve interceptor instances from the Spring bean factory this
+   *     descriptor comes from if any.
    */
-  public void setLifecycleInterceptorBeanNames(
-      List<String> lifecycleInterceptorBeanNames) {
-    this.lifecycleInterceptorBeanNames = StringUtils
-        .ensureSpaceFree(lifecycleInterceptorBeanNames);
+  public void setLifecycleInterceptorBeanNames(List<String> lifecycleInterceptorBeanNames) {
+    this.lifecycleInterceptorBeanNames = StringUtils.ensureSpaceFree(lifecycleInterceptorBeanNames);
   }
 
   /**
@@ -778,12 +766,10 @@ public abstract class AbstractComponentDescriptor<E> extends
    * When needed, Jspresso will create the property processor instances.
    *
    * @param lifecycleInterceptorClassNames
-   *          the lifecycleInterceptorClassNames to set.
+   *     the lifecycleInterceptorClassNames to set.
    */
-  public void setLifecycleInterceptorClassNames(
-      List<String> lifecycleInterceptorClassNames) {
-    this.lifecycleInterceptorClassNames = StringUtils
-        .ensureSpaceFree(lifecycleInterceptorClassNames);
+  public void setLifecycleInterceptorClassNames(List<String> lifecycleInterceptorClassNames) {
+    this.lifecycleInterceptorClassNames = StringUtils.ensureSpaceFree(lifecycleInterceptorClassNames);
   }
 
   /**
@@ -803,22 +789,19 @@ public abstract class AbstractComponentDescriptor<E> extends
    * for the collection sort order.
    *
    * @param untypedOrderingProperties
-   *          the orderingProperties to set.
+   *     the orderingProperties to set.
    */
   public void setOrderingProperties(Map<String, ?> untypedOrderingProperties) {
     if (untypedOrderingProperties != null) {
       orderingProperties = new LinkedHashMap<>();
-      for (Map.Entry<String, ?> untypedOrderingProperty : untypedOrderingProperties
-          .entrySet()) {
+      for (Map.Entry<String, ?> untypedOrderingProperty : untypedOrderingProperties.entrySet()) {
         if (untypedOrderingProperty.getValue() instanceof ESort) {
-          orderingProperties.put(untypedOrderingProperty.getKey(),
-              (ESort) untypedOrderingProperty.getValue());
+          orderingProperties.put(untypedOrderingProperty.getKey(), (ESort) untypedOrderingProperty.getValue());
         } else if (untypedOrderingProperty.getValue() instanceof String) {
-          orderingProperties.put(untypedOrderingProperty.getKey(),
-              ESort.valueOf((String) untypedOrderingProperty.getValue()));
+          orderingProperties.put(untypedOrderingProperty.getKey(), ESort.valueOf(
+              (String) untypedOrderingProperty.getValue()));
         } else {
-          orderingProperties.put(untypedOrderingProperty.getKey(),
-              ESort.ASCENDING);
+          orderingProperties.put(untypedOrderingProperty.getKey(), ESort.ASCENDING);
         }
       }
     } else {
@@ -834,7 +817,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * value (default) disables paging for this component.
    *
    * @param pageSize
-   *          the pageSize to set.
+   *     the pageSize to set.
    */
   public void setPageSize(Integer pageSize) {
     this.pageSize = pageSize;
@@ -851,7 +834,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * properties are keyed by their names.
    *
    * @param descriptors
-   *          the propertyDescriptors to set.
+   *     the propertyDescriptors to set.
    */
   public void setPropertyDescriptors(Collection<IPropertyDescriptor> descriptors) {
     // This is important to use an intermediate structure since all descriptors
@@ -876,20 +859,20 @@ public abstract class AbstractComponentDescriptor<E> extends
    * used in the filter UIs that are based on this component family (a QBE
    * screen for instance). Since this is a {@code List} queryable
    * properties are rendered in the same order.
-   * <p>
+   * <p/>
    * Whenever this this property is {@code null} (default value), Jspresso
    * chooses the default set of queryable properties based on their type. For
    * instance, collection properties and binary properties are not used but
    * string, numeric, reference, ... properties are. A computed property cannot
    * be used since it has no data store existence and thus cannot be queried
    * upon.
-   * <p>
+   * <p/>
    * Note that this property is not inherited by children descriptors, i.e. even
    * if an ancestor defines an explicit set of queryable properties, its
    * children ignore this setting.
    *
    * @param queryableProperties
-   *          the queryableProperties to set.
+   *     the queryableProperties to set.
    */
   public void setQueryableProperties(List<String> queryableProperties) {
     this.queryableProperties = StringUtils.ensureSpaceFree(queryableProperties);
@@ -899,7 +882,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * Sets the readabilityGates.
    *
    * @param readabilityGates
-   *          the readabilityGates to set.
+   *     the readabilityGates to set.
    * @internal
    */
   public void setReadabilityGates(Collection<IGate> readabilityGates) {
@@ -913,17 +896,17 @@ public abstract class AbstractComponentDescriptor<E> extends
    * component. Any type of property can be used except collection properties.
    * Since this is a {@code List} queryable properties are rendered in the
    * same order.
-   * <p>
+   * <p/>
    * Whenever this property is {@code null} (default value) Jspresso
    * determines the default set of properties to render based on their types,
    * e.g. ignores collection properties.
-   * <p>
+   * <p/>
    * Note that this property is not inherited by children descriptors, i.e. even
    * if an ancestor defines an explicit set of rendered properties, its children
    * ignore this setting.
    *
    * @param renderedProperties
-   *          the renderedProperties to set.
+   *     the renderedProperties to set.
    */
   public void setRenderedProperties(List<String> renderedProperties) {
     this.renderedProperties = StringUtils.ensureSpaceFree(renderedProperties);
@@ -958,14 +941,12 @@ public abstract class AbstractComponentDescriptor<E> extends
    * {@code IComponentService} marker interface.
    *
    * @param serviceDelegateBeanNames
-   *          the serviceDelegateBeanNames to set. They are used to retrieve
-   *          delegate instances from the Spring bean factory this descriptor
-   *          comes from if any.
+   *     the serviceDelegateBeanNames to set. They are used to retrieve
+   *     delegate instances from the Spring bean factory this descriptor
+   *     comes from if any.
    */
-  public void setServiceDelegateBeanNames(
-      Map<String, String> serviceDelegateBeanNames) {
-    this.serviceDelegateBeanNames = StringUtils
-        .ensureSpaceFree(serviceDelegateBeanNames);
+  public void setServiceDelegateBeanNames(Map<String, String> serviceDelegateBeanNames) {
+    this.serviceDelegateBeanNames = StringUtils.ensureSpaceFree(serviceDelegateBeanNames);
   }
 
   /**
@@ -979,27 +960,25 @@ public abstract class AbstractComponentDescriptor<E> extends
    * When needed, Jspresso will create service delegate instances.
    *
    * @param serviceDelegateClassNames
-   *          the component services to be registered keyed by their contract. A
-   *          service contract is an interface class defining the service
-   *          methods to be registered as implemented by the service delegate.
-   *          Map values must be instances of {@code IComponentService}.
+   *     the component services to be registered keyed by their contract. A
+   *     service contract is an interface class defining the service
+   *     methods to be registered as implemented by the service delegate.
+   *     Map values must be instances of {@code IComponentService}.
    */
-  public void setServiceDelegateClassNames(
-      Map<String, String> serviceDelegateClassNames) {
-    this.serviceDelegateClassNames = StringUtils
-        .ensureSpaceFree(serviceDelegateClassNames);
+  public void setServiceDelegateClassNames(Map<String, String> serviceDelegateClassNames) {
+    this.serviceDelegateClassNames = StringUtils.ensureSpaceFree(serviceDelegateClassNames);
   }
 
   /**
    * Instructs Jspresso to use this name when translating this component type
    * name to the data store namespace. This includes , but is not limited to,
    * database table names.
-   * <p>
+   * <p/>
    * Default value is {@code null} so that Jspresso uses its default naming
    * policy.
    *
    * @param sqlName
-   *          the sqlName to set.
+   *     the sqlName to set.
    */
   public void setSqlName(String sqlName) {
     this.sqlName = sqlName;
@@ -1010,7 +989,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * property name assigned will be used when displaying the component instance
    * as a string. It may be a computed property that composes several other
    * properties in a human friendly format.
-   * <p>
+   * <p/>
    * Whenever this property is {@code null}, the following rule apply to
    * determine the <i>toString</i> property :
    * <ol>
@@ -1022,7 +1001,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * ignore this setting.
    *
    * @param toStringProperty
-   *          the toStringProperty to set.
+   *     the toStringProperty to set.
    */
   public void setToStringProperty(String toStringProperty) {
     this.toStringProperty = toStringProperty;
@@ -1033,14 +1012,14 @@ public abstract class AbstractComponentDescriptor<E> extends
    * property name assigned will be used when displaying the component instance
    * as HTML. It may be a computed property that composes several other
    * properties in a human friendly format.
-   * <p>
+   * <p/>
    * Whenever this property is {@code null}, the
    * {@code toStringProperty} is used. Note that this property is not
    * inherited by children descriptors, i.e. even if an ancestor defines an
    * explicit <i>toHtmlProperty</i> property, its children ignore this setting.
    *
    * @param toHtmlProperty
-   *          the toHtmlProperty to set.
+   *     the toHtmlProperty to set.
    */
   public void setToHtmlProperty(String toHtmlProperty) {
     this.toHtmlProperty = toHtmlProperty;
@@ -1049,7 +1028,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * Allows to customize the property used to autocomplete reference fields on
    * this component.
-   * <p>
+   * <p/>
    * Whenever this property is {@code null}, the following rule apply to
    * determine the <i>lovProperty</i> :
    * <ol>
@@ -1062,7 +1041,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * this setting.
    *
    * @param autoCompleteProperty
-   *          the autoCompleteProperty to set.
+   *     the autoCompleteProperty to set.
    */
   public void setAutoCompleteProperty(String autoCompleteProperty) {
     this.autoCompleteProperty = autoCompleteProperty;
@@ -1077,7 +1056,7 @@ public abstract class AbstractComponentDescriptor<E> extends
    * the ancestor declares it un-cloneable.
    *
    * @param unclonedProperties
-   *          the unclonedProperties to set.
+   *     the unclonedProperties to set.
    */
   public void setUnclonedProperties(Collection<String> unclonedProperties) {
     this.unclonedProperties = StringUtils.ensureSpaceFree(unclonedProperties);
@@ -1088,47 +1067,70 @@ public abstract class AbstractComponentDescriptor<E> extends
    * component will be considered writable if and only if all gates are open.
    * This mechanism is mainly used for dynamic UI authorization based on model
    * state, e.g. a validated invoice should not be editable anymore.
-   * <p>
+   * <p/>
    * Descriptor assigned gates will be cloned for each component instance
    * created and backed by this descriptor. So basically, each component
    * instance will have its own, unshared collection of writability gates.
-   * <p>
+   * <p/>
    * Jspresso provides a useful set of gate types, like the binary property gate
    * that open/close based on the value of a boolean property of owning
    * component.
-   * <p>
+   * <p/>
    * By default, component descriptors are not assigned any gates collection,
    * i.e. there is no writability restriction. Note that gates do not enforce
    * programmatic writability of a component; only UI is impacted.
    *
    * @param writabilityGates
-   *          the writabilityGates to set.
+   *     the writabilityGates to set.
    */
   public void setWritabilityGates(Collection<IGate> writabilityGates) {
     this.writabilityGates = writabilityGates;
   }
 
-  static List<String> explodeComponentReferences(
-      IComponentDescriptor<?> componentDescriptor, List<String> propertyNames) {
-    List<String> explodedProperties = new ArrayList<>();
-    for (String propertyName : propertyNames) {
-      IPropertyDescriptor propertyDescriptor = componentDescriptor
-          .getPropertyDescriptor(propertyName);
-      if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>
-          && EntityHelper
-              .isInlineComponentReference((IReferencePropertyDescriptor<?>) propertyDescriptor)) {
-        List<String> nestedProperties = new ArrayList<>();
-        for (String nestedRenderedProperty : ((IReferencePropertyDescriptor<?>) propertyDescriptor)
-            .getReferencedDescriptor().getRenderedProperties()) {
-          nestedProperties.add(propertyName + "." + nestedRenderedProperty);
+  private static ThreadLocal<Collection<Class<?>>> sofeWatchdog = new ThreadLocal<>();
+
+  static List<String> explodeComponentReferences(IComponentDescriptor<?> componentDescriptor,
+                                                 List<String> propertyNames) {
+    boolean createdWatchDog = false;
+    Collection<Class<?>> watchDog = sofeWatchdog.get();
+    if (watchDog == null) {
+      createdWatchDog = true;
+      watchDog = new LinkedHashSet<>();
+      sofeWatchdog.set(watchDog);
+    }
+    try {
+      List<String> explodedProperties = new ArrayList<>();
+      for (String propertyName : propertyNames) {
+        IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor(propertyName);
+        if (propertyDescriptor instanceof IReferencePropertyDescriptor<?> && EntityHelper.isInlineComponentReference(
+          (IReferencePropertyDescriptor<?>) propertyDescriptor)) {
+          if (watchDog.contains(componentDescriptor.getComponentContract())) {
+            // Whenever there are circular references between inline components, do not try to resolve them since it's
+            // impossible, but log the warning.
+            LOG.warn("A circular reference has been detected on inline {} components. You should explicitly declare "
+                    + "their rendered properties since they cannot be computed automatically.",
+                watchDog);
+          } else {
+            watchDog.add(componentDescriptor.getComponentContract());
+            List<String> nestedProperties = new ArrayList<>();
+            List<String> nestedRenderedProperties;
+            nestedRenderedProperties = ((IReferencePropertyDescriptor<?>) propertyDescriptor).getReferencedDescriptor()
+                                                                                             .getRenderedProperties();
+            for (String nestedRenderedProperty : nestedRenderedProperties) {
+              nestedProperties.add(propertyName + "." + nestedRenderedProperty);
+            }
+            explodedProperties.addAll(explodeComponentReferences(componentDescriptor, nestedProperties));
+          }
+        } else {
+          explodedProperties.add(propertyName);
         }
-        explodedProperties.addAll(explodeComponentReferences(
-            componentDescriptor, nestedProperties));
-      } else {
-        explodedProperties.add(propertyName);
+      }
+      return explodedProperties;
+    } finally {
+      if (createdWatchDog) {
+        sofeWatchdog.remove();
       }
     }
-    return explodedProperties;
   }
 
   private IPropertyDescriptor getDeclaredPropertyDescriptor(String propertyName) {
@@ -1164,8 +1166,8 @@ public abstract class AbstractComponentDescriptor<E> extends
         tempPropertyBuffer = null;
         if (isTranslatable()) {
           for (IPropertyDescriptor translatablePropertyDescriptor : getPropertyDescriptors()) {
-            if (translatablePropertyDescriptor instanceof IStringPropertyDescriptor && ((IStringPropertyDescriptor)
-                translatablePropertyDescriptor).isTranslatable()
+            if (translatablePropertyDescriptor instanceof IStringPropertyDescriptor
+                && ((IStringPropertyDescriptor) translatablePropertyDescriptor).isTranslatable()
                 && !translatablePropertyDescriptor.getName().endsWith(NLS_SUFFIX)) {
               completeWithComputedNlsDescriptors(translatablePropertyDescriptor);
             }
@@ -1203,10 +1205,9 @@ public abstract class AbstractComponentDescriptor<E> extends
     nlsDescriptor.setDelegateWritable(true);
     nlsDescriptor.setComputed(true);
     if (!isPurelyAbstract()) {
-      nlsDescriptor.setSqlName(
-          "(SELECT T.TRANSLATED_VALUE FROM {tableName}_T T WHERE T." +
-              "T_{tableName}_ID = ID AND T.LANGUAGE = :JspressoSessionGlobals.language AND " +
-              "T.PROPERTY_NAME = '" + barePropertyName + "')");
+      nlsDescriptor.setSqlName("(SELECT T.TRANSLATED_VALUE FROM {tableName}_T T WHERE T." +
+          "T_{tableName}_ID = ID AND T.LANGUAGE = :JspressoSessionGlobals.language AND " +
+          "T.PROPERTY_NAME = '" + barePropertyName + "')");
     }
     BasicStringPropertyDescriptor rawOrNlsDescriptor = (BasicStringPropertyDescriptor) rawDescriptor.clone();
     rawOrNlsDescriptor.setName(barePropertyName);
@@ -1230,17 +1231,13 @@ public abstract class AbstractComponentDescriptor<E> extends
   private void registerDelegateServicesIfNecessary() {
     synchronized (delegateServicesLock) {
       if (serviceDelegateClassNames != null) {
-        for (Entry<String, String> nextPair : serviceDelegateClassNames
-            .entrySet()) {
+        for (Entry<String, String> nextPair : serviceDelegateClassNames.entrySet()) {
           try {
             IComponentService delegate = null;
-            if (!("".equals(nextPair.getValue()) || "null"
-                .equalsIgnoreCase(nextPair.getValue()))) {
-              delegate = (IComponentService) Class.forName(nextPair.getValue())
-                  .newInstance();
+            if (!("".equals(nextPair.getValue()) || "null".equalsIgnoreCase(nextPair.getValue()))) {
+              delegate = (IComponentService) Class.forName(nextPair.getValue()).newInstance();
             }
-            registerService(Class.forName(ObjectUtils
-                .extractRawClassName(nextPair.getKey())), delegate);
+            registerService(Class.forName(ObjectUtils.extractRawClassName(nextPair.getKey())), delegate);
           } catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
             throw new DescriptorException(ex);
           }
@@ -1250,11 +1247,9 @@ public abstract class AbstractComponentDescriptor<E> extends
     }
     synchronized (delegateServicesLock) {
       if (serviceDelegateBeanNames != null && beanFactory != null) {
-        for (Entry<String, String> nextPair : serviceDelegateBeanNames
-            .entrySet()) {
+        for (Entry<String, String> nextPair : serviceDelegateBeanNames.entrySet()) {
           try {
-            registerService(Class.forName(ObjectUtils
-                .extractRawClassName(nextPair.getKey())), beanFactory.getBean(
+            registerService(Class.forName(ObjectUtils.extractRawClassName(nextPair.getKey())), beanFactory.getBean(
                 nextPair.getValue(), IComponentService.class));
           } catch (ClassNotFoundException ex) {
             throw new DescriptorException(ex);
@@ -1265,8 +1260,7 @@ public abstract class AbstractComponentDescriptor<E> extends
     }
   }
 
-  private void registerLifecycleInterceptor(
-      ILifecycleInterceptor<?> lifecycleInterceptor) {
+  private void registerLifecycleInterceptor(ILifecycleInterceptor<?> lifecycleInterceptor) {
     if (lifecycleInterceptors == null) {
       lifecycleInterceptors = new ArrayList<>();
     }
@@ -1281,8 +1275,8 @@ public abstract class AbstractComponentDescriptor<E> extends
       if (lifecycleInterceptorClassNames != null) {
         for (String lifecycleInterceptorClassName : lifecycleInterceptorClassNames) {
           try {
-            registerLifecycleInterceptor((ILifecycleInterceptor<?>) Class
-                .forName(lifecycleInterceptorClassName).newInstance());
+            registerLifecycleInterceptor((ILifecycleInterceptor<?>) Class.forName(lifecycleInterceptorClassName)
+                                                                         .newInstance());
           } catch (InstantiationException | ClassNotFoundException | IllegalAccessException ex) {
             throw new DescriptorException(ex);
           }
@@ -1293,16 +1287,14 @@ public abstract class AbstractComponentDescriptor<E> extends
     synchronized (lifecycleInterceptorsLock) {
       if (lifecycleInterceptorBeanNames != null && beanFactory != null) {
         for (String lifecycleInterceptorBeanName : lifecycleInterceptorBeanNames) {
-          registerLifecycleInterceptor(beanFactory.getBean(
-              lifecycleInterceptorBeanName, ILifecycleInterceptor.class));
+          registerLifecycleInterceptor(beanFactory.getBean(lifecycleInterceptorBeanName, ILifecycleInterceptor.class));
         }
         lifecycleInterceptorBeanNames = null;
       }
     }
   }
 
-  private void registerService(Class<?> serviceContract,
-      IComponentService service) {
+  private void registerService(Class<?> serviceContract, IComponentService service) {
     if (serviceDelegates == null) {
       serviceDelegates = new THashMap<>(1, 1.0f);
       serviceContracts = new THashSet<>(1);
@@ -1316,7 +1308,7 @@ public abstract class AbstractComponentDescriptor<E> extends
 
   /**
    * Returns the component contract class name.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -1327,7 +1319,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * A component permanent id is forced to be its fully-qualified class name.
    * Trying to set it to another value will raise an exception.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -1340,11 +1332,10 @@ public abstract class AbstractComponentDescriptor<E> extends
    * descriptor.
    *
    * @param propertyDescriptor
-   *          the original property descriptor.
+   *     the original property descriptor.
    * @return the transformed property descriptor.
    */
-  protected IPropertyDescriptor refinePropertyDescriptor(
-      IPropertyDescriptor propertyDescriptor) {
+  protected IPropertyDescriptor refinePropertyDescriptor(IPropertyDescriptor propertyDescriptor) {
     return propertyDescriptor;
   }
 
@@ -1376,7 +1367,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   protected boolean isDeclaredTranslatable() {
     Collection<IPropertyDescriptor> propertyDescriptors = getDeclaredPropertyDescriptors();
     if (propertyDescriptors != null) {
-      for (IPropertyDescriptor pDesc: propertyDescriptors) {
+      for (IPropertyDescriptor pDesc : propertyDescriptors) {
         if (pDesc instanceof IStringPropertyDescriptor) {
           if (((IStringPropertyDescriptor) pDesc).isTranslatable()) {
             return true;
@@ -1390,7 +1381,8 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * Sets component translations descriptor template.
    *
-   * @param template the template
+   * @param template
+   *     the template
    */
   public static synchronized void setComponentTranslationsDescriptorTemplate(
       BasicCollectionPropertyDescriptor<IComponent> template) {
@@ -1402,7 +1394,8 @@ public abstract class AbstractComponentDescriptor<E> extends
    *
    * @return the component translation descriptor template
    */
-  public static synchronized BasicCollectionPropertyDescriptor<IComponent> getComponentTranslationsDescriptorTemplate() {
+  public static synchronized BasicCollectionPropertyDescriptor<IComponent> getComponentTranslationsDescriptorTemplate
+  () {
     return componentTranslationsDescriptorTemplate;
   }
 }
