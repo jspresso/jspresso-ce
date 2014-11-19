@@ -74,7 +74,7 @@ public abstract class AbstractComponentViewDescriptor extends BasicViewDescripto
 
   /**
    * If you need to override the behaviour, override {@link #getPropertyViewDescriptors(boolean)}.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -100,6 +100,13 @@ public abstract class AbstractComponentViewDescriptor extends BasicViewDescripto
         propertyViewDescriptor.setRenderedChildProperties(computeDefaultRenderedChildProperties(renderedProperty));
         propertyViewDescriptor.setModelDescriptor(componentDescriptor.getPropertyDescriptor(renderedProperty));
         declaredPropertyViewDescriptors.add(propertyViewDescriptor);
+      }
+    } else {
+      for (IPropertyViewDescriptor pvd : declaredPropertyViewDescriptors) {
+        if (pvd.getModelDescriptor() == null && pvd instanceof BasicPropertyViewDescriptor) {
+          ((BasicPropertyViewDescriptor) pvd).setModelDescriptor(componentDescriptor.getPropertyDescriptor(
+              pvd.getName()));
+        }
       }
     }
     List<IPropertyViewDescriptor> actualPropertyViewDescriptors;
