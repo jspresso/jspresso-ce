@@ -498,12 +498,22 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
    * Callback after a failed login.
    */
   protected void loginFailed() {
-    RemoteMessageCommand errorMessageCommand = new RemoteMessageCommand();
+    RemoteMessageCommand errorMessageCommand = createErrorMessageCommand();
     errorMessageCommand.setMessage(getTranslation(LoginUtils.LOGIN_FAILED, getLocale()));
+    registerCommand(errorMessageCommand);
+  }
+
+  /**
+   * Create error message command.
+   *
+   * @return the remote message command
+   */
+  protected RemoteMessageCommand createErrorMessageCommand() {
+    RemoteMessageCommand errorMessageCommand = new RemoteMessageCommand();
     errorMessageCommand.setTitle(getTranslation("error", getLocale()));
     errorMessageCommand.setTitleIcon(getIconFactory().getErrorIcon(getIconFactory().getTinyIconSize()));
     errorMessageCommand.setMessageIcon(getIconFactory().getErrorIcon(getIconFactory().getLargeIconSize()));
-    registerCommand(errorMessageCommand);
+    return errorMessageCommand;
   }
 
   /**
@@ -511,7 +521,7 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
    *
    * @return a empty error message command.
    */
-  protected RemoteErrorMessageCommand createErrorMessageCommand() {
+  protected RemoteErrorMessageCommand createDetailedErrorMessageCommand() {
     RemoteErrorMessageCommand messageCommand = new RemoteErrorMessageCommand();
     messageCommand.setTitle(getTranslation("error", getLocale()));
     messageCommand.setTitleIcon(getIconFactory().getErrorIcon(getIconFactory().getTinyIconSize()));
@@ -676,17 +686,19 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
     if (super.handleException(ex, context)) {
       return true;
     }
+    RemoteMessageCommand errorMessageCommand;
     String userFriendlyExceptionMessage = computeUserFriendlyExceptionMessage(ex);
-    RemoteErrorMessageCommand errorMessageCommand = createErrorMessageCommand();
     if (userFriendlyExceptionMessage != null) {
+      errorMessageCommand = createErrorMessageCommand();
       errorMessageCommand.setMessage(userFriendlyExceptionMessage);
     } else {
+      errorMessageCommand = createDetailedErrorMessageCommand();
       traceUnexpectedException(ex);
       errorMessageCommand.setMessage(ex.getLocalizedMessage());
+      StringWriter stringWriter = new StringWriter();
+      ex.printStackTrace(new PrintWriter(stringWriter));
+      ((RemoteErrorMessageCommand) errorMessageCommand).setDetailMessage(stringWriter.toString());
     }
-    StringWriter stringWriter = new StringWriter();
-    ex.printStackTrace(new PrintWriter(stringWriter));
-    errorMessageCommand.setDetailMessage(stringWriter.toString());
     registerCommand(errorMessageCommand);
     return true;
   }
