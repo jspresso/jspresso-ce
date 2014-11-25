@@ -691,7 +691,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
   }
 
   protected function handleMessageCommand(messageCommand:RemoteMessageCommand):void {
-    if(messageCommand instanceof RemoteErrorMessageCommand) {
+    if(messageCommand is RemoteErrorMessageCommand) {
       handleErrorMessageCommand(messageCommand as RemoteErrorMessageCommand);
     } else {
       var alert:Alert = createAlert(messageCommand);
