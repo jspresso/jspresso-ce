@@ -555,8 +555,11 @@ public abstract class AbstractValueConnector extends AbstractConnector
     this.modelConnector = modelConnector;
     if (getModelConnector() != null) {
       // manually triggers a connector value change event
-      valueChange(new ValueChangeEvent(getModelConnector(),
-          getConnectorValue(), getModelConnector().getConnectorValue()));
+      ValueChangeEvent evt = new ValueChangeEvent(getModelConnector(), getConnectorValue(),
+          getModelConnector().getConnectorValue());
+      if (evt.needsFiring()) {
+        valueChange(evt);
+      }
       getModelConnector().addValueChangeListener(this);
       addValueChangeListener(getModelConnector());
       if (modelReadabilityListener == null) {
