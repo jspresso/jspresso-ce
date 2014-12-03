@@ -422,7 +422,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
           <#if fkName??>
    *           foreign-key = "${reduceSQLName(fkName)}"
           <#else>
-   *           foreign-key = "${reduceSQLName(joinTableName+"_"+compSqlName,"_FK2")}"
+   *           foreign-key = "${reduceSQLName(joinTableName+"_"+compSqlName,"_FK1")}"
           </#if>
         </#if>
       <#else>
