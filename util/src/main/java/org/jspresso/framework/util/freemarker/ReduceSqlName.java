@@ -76,6 +76,7 @@ public class ReduceSqlName implements TemplateMethodModelEx {
   }
 
   private String reduceToMaxSize(String sqlColumnName, String mandatorySuffix) {
+    String shortenedKey = sqlColumnName + mandatorySuffix;
     int size = maxSize;
     if (mandatorySuffix.length() > 0) {
       size -= mandatorySuffix.length();
@@ -83,8 +84,8 @@ public class ReduceSqlName implements TemplateMethodModelEx {
     if (size <= 0 || sqlColumnName.length() <= size) {
       return sqlColumnName + mandatorySuffix;
     }
-    if (shortened.containsKey(sqlColumnName)) {
-      return shortened.get(sqlColumnName);
+    if (shortened.containsKey(shortenedKey)) {
+      return shortened.get(shortenedKey);
     }
     String[] splitted = sqlColumnName.split(WORD_SEP);
     int charsPerSection = (size / splitted.length) - 1;
@@ -121,7 +122,7 @@ public class ReduceSqlName implements TemplateMethodModelEx {
     }
     String dedupper = Integer.toHexString(deduppers.get(reducedAsString));
     reducedAsString = reduced.substring(0, reduced.length() - dedupper.length()) + dedupper;
-    shortened.put(sqlColumnName, reducedAsString + mandatorySuffix);
+    shortened.put(shortenedKey, reducedAsString + mandatorySuffix);
     return reducedAsString + mandatorySuffix;
   }
 
