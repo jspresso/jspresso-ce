@@ -27,6 +27,7 @@
     <checkbox3state.version>1.0</checkbox3state.version>
     <spring.version>4.0.7.RELEASE</spring.version>
     <spring-ldap.version>2.0.1.RELEASE</spring-ldap.version>
+    <spring-data-mongodb.version>1.6.1.RELEASE</spring-data-mongodb.version>
     <ldapbp.version>1.0</ldapbp.version>
     <hibernate.version>4.3.4.Final</hibernate.version>
     <jbosssx.version>4.0.20.Final</jbosssx.version>
@@ -348,6 +349,11 @@
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
+        <artifactId>jspresso-mongo</artifactId>
+        <version>${jspresso.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-swing</artifactId>
         <version>${jspresso.version}</version>
       </dependency>
@@ -598,6 +604,11 @@
         <groupId>org.springframework.ldap</groupId>
         <artifactId>spring-ldap-core</artifactId>
         <version>${spring-ldap.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.data</groupId>
+        <artifactId>spring-data-mongodb</artifactId>
+        <version>${spring-data-mongodb.version}</version>
       </dependency>
       <dependency>
         <groupId>com.sun</groupId>

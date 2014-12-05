@@ -445,8 +445,9 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    * @return the queried components
    */
   @Override
-  public List<?> getQueriedComponents() {
-    return queriedComponents;
+  @SuppressWarnings("unchecked")
+  public <T> List<T> getQueriedComponents() {
+    return (List<T>) queriedComponents;
   }
 
   /**
@@ -454,12 +455,13 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    * @return the query contract
    */
   @Override
-  public Class<?> getQueryContract() {
+  @SuppressWarnings("unchecked")
+  public <T> Class<T> getQueryContract() {
     if (componentDescriptor instanceof IQueryComponentDescriptor) {
-      return ((IQueryComponentDescriptor) componentDescriptor)
+      return (Class<T>) ((IQueryComponentDescriptor) componentDescriptor)
           .getQueriedComponentsDescriptor().getComponentContract();
     }
-    return componentDescriptor.getComponentContract();
+    return (Class<T>) componentDescriptor.getComponentContract();
   }
 
   /**

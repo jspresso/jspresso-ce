@@ -88,16 +88,20 @@ public interface IQueryComponent extends Map<String, Object>, IPageable, ISortab
   /**
    * Gets the list of components result of the query.
    *
+   * @param <T>
+   *     type type of value.
    * @return the list of components result of the query.
    */
-  List<?> getQueriedComponents();
+  <T> List<T> getQueriedComponents();
 
   /**
    * Gets the contract of the components to query.
    *
+   * @param <T>
+   *     type type of value.
    * @return the contract of the components to query.
    */
-  Class<?> getQueryContract();
+  <T> Class<T> getQueryContract();
 
   /**
    * Tests whether this query component maps an inline component or an entity.

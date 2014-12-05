@@ -266,6 +266,7 @@
     <module>security</module>
     <module>view</module>
     <module>hibernate</module>
+    <module>mongo</module>
     <module>swing</module>
     <module>remote</module>
     <module>flex</module>

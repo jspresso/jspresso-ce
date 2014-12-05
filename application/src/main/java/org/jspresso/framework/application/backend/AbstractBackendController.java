@@ -1953,7 +1953,9 @@ public abstract class AbstractBackendController extends AbstractController
    *     the component or proxy.
    * @return the proxy implementation if it's an ORM proxy.
    */
-  protected abstract Object unwrapProxy(Object componentOrProxy);
+  protected Object unwrapProxy(Object componentOrProxy) {
+    return componentOrProxy;
+  }
 
   /**
    * Clones an uninitialized (proxied) property.

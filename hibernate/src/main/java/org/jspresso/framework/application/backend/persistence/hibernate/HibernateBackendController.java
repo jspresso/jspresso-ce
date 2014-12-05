@@ -971,20 +971,19 @@ public class HibernateBackendController extends AbstractBackendController {
 
       // This is useless to clone in UOW now that UOW registration is done
       // in onLoad interceptor
-      // res = (List<T>) cloneInUnitOfWork(findByCriteria(criteria, firstResult,
+      // res = (List<T>) cloneInUnitOfWork(find(criteria, firstResult,
       // maxResults, null));
 
-      res = findByCriteria(criteria, firstResult, maxResults, null);
+      res = find(criteria, firstResult, maxResults, null);
     } else {
       // merge mode is passed for merge to occur inside the transaction.
-      res = findByCriteria(criteria, firstResult, maxResults, mergeMode);
+      res = find(criteria, firstResult, maxResults, mergeMode);
     }
     return res;
   }
 
-  private <T extends IEntity> List<T> findByCriteria(
-      final DetachedCriteria criteria, final int firstResult,
-      final int maxResults, final EMergeMode mergeMode) {
+  private <T extends IEntity> List<T> find(final DetachedCriteria criteria, final int firstResult, final int maxResults,
+                                           final EMergeMode mergeMode) {
     return getTransactionTemplate().execute(new TransactionCallback<List<T>>() {
 
       @SuppressWarnings("unchecked")
@@ -1030,7 +1029,7 @@ public class HibernateBackendController extends AbstractBackendController {
   }
 
   /**
-   * Reloads an entity in hibernate.
+   * Reloads an entity in Hibernate.
    * 
    * @param entity
    *          the entity to reload.
