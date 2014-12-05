@@ -1,0 +1,527 @@
+/*
+ * Copyright (c) 2005-2014 Vincent Vandenschrick. All rights reserved.
+ *
+ *  This file is part of the Jspresso framework.
+ *
+ *  Jspresso is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Jspresso is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package org.jspresso.framework.model.persistence.mongo.criterion;
+
+import static org.springframework.data.mongodb.core.query.Criteria.*;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+
+import org.jspresso.framework.application.action.AbstractActionContextAware;
+import org.jspresso.framework.model.component.IQueryComponent;
+import org.jspresso.framework.model.component.query.ComparableQueryStructure;
+import org.jspresso.framework.model.component.query.EnumQueryStructure;
+import org.jspresso.framework.model.component.query.EnumValueQueryStructure;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
+import org.jspresso.framework.model.entity.EntityHelper;
+import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.util.accessor.AbstractPropertyAccessor;
+import org.jspresso.framework.util.collection.ESort;
+import org.jspresso.framework.view.descriptor.basic.PropertyViewDescriptorHelper;
+
+/**
+ * Default implementation of a query factory.
+ *
+ * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
+ */
+public class DefaultQueryFactory extends AbstractActionContextAware implements IQueryFactory {
+
+  private static final Logger LOG = LoggerFactory.getLogger(DefaultQueryFactory.class);
+
+  private boolean triStateBooleanSupported;
+
+  /**
+   * Constructs a new {@code DefaultQueryFactory} instance.
+   */
+  public DefaultQueryFactory() {
+    triStateBooleanSupported = false;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("ConstantConditions")
+  @Override
+  public void completeQueryWithOrdering(Query query, IQueryComponent queryComponent, Map<String, Object> context) {
+    // complete sorting properties
+    if (queryComponent.getOrderingProperties() != null) {
+      List<Sort.Order> sortOrders = new ArrayList<>();
+      for (Map.Entry<String, ESort> orderingProperty : queryComponent.getOrderingProperties().entrySet()) {
+        String propertyName = orderingProperty.getKey();
+        String[] propElts = propertyName.split("\\.");
+        boolean sortable = true;
+        if (propElts.length > 1) {
+          IComponentDescriptor<?> currentCompDesc = queryComponent.getQueryDescriptor();
+          int i = 0;
+          for (; sortable && i < propElts.length - 1; i++) {
+            IReferencePropertyDescriptor<?> refPropDescriptor = ((IReferencePropertyDescriptor<?>) currentCompDesc
+                .getPropertyDescriptor(propElts[i]));
+            if (refPropDescriptor != null) {
+              sortable = sortable && isSortable(refPropDescriptor);
+              if (EntityHelper.isInlineComponentReference(refPropDescriptor)) {
+                break;
+              }
+              currentCompDesc = refPropDescriptor.getReferencedDescriptor();
+            } else {
+              LOG.error("Ordering property {} not found on {}", propElts[i],
+                  currentCompDesc.getComponentContract().getName());
+              sortable = false;
+            }
+          }
+          if (sortable) {
+            StringBuilder name = new StringBuilder();
+            for (int j = i; sortable && j < propElts.length; j++) {
+              IPropertyDescriptor propDescriptor = currentCompDesc.getPropertyDescriptor(propElts[j]);
+              sortable = sortable && isSortable(propDescriptor);
+              if (j < propElts.length - 1) {
+                currentCompDesc = ((IReferencePropertyDescriptor<?>) propDescriptor).getReferencedDescriptor();
+              }
+              if (j > i) {
+                name.append(".");
+              }
+              name.append(propElts[j]);
+            }
+            if (sortable) {
+              propertyName = name.toString();
+            }
+          }
+        } else {
+          IPropertyDescriptor propertyDescriptor = queryComponent.getQueryDescriptor().getPropertyDescriptor(
+              propertyName);
+          if (propertyDescriptor != null) {
+            sortable = isSortable(propertyDescriptor);
+          } else {
+            LOG.error("Ordering property {} not found on {}", propertyName,
+                queryComponent.getQueryDescriptor().getComponentContract().getName());
+            sortable = false;
+          }
+        }
+        if (sortable) {
+          Sort.Order order;
+          switch (orderingProperty.getValue()) {
+            case DESCENDING:
+              order = new Sort.Order(Sort.Direction.DESC, AbstractPropertyAccessor.toJavaBeanPropertyName(
+                  propertyName));
+              break;
+            case ASCENDING:
+            default:
+              order = new Sort.Order(Sort.Direction.ASC, AbstractPropertyAccessor.toJavaBeanPropertyName(propertyName));
+          }
+          sortOrders.add(order);
+        }
+      }
+      query.with(new Sort(sortOrders));
+    }
+  }
+
+  private boolean isSortable(IPropertyDescriptor propertyDescriptor) {
+    return propertyDescriptor != null && (!propertyDescriptor.isComputed()
+        || propertyDescriptor.getPersistenceFormula() != null);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Query createQuery(IQueryComponent queryComponent, Map<String, Object> context) {
+    Query query = new Query();
+    boolean abort = completeQuery(query, null, queryComponent, context);
+    if (abort) {
+      return null;
+    }
+    return query;
+  }
+
+  @SuppressWarnings("ConstantConditions")
+  private boolean completeQuery(Query query, String path, IQueryComponent aQueryComponent,
+                                Map<String, Object> context) {
+    boolean abort = false;
+    IComponentDescriptor<?> componentDescriptor = aQueryComponent.getQueryDescriptor();
+    if (aQueryComponent instanceof ComparableQueryStructure) {
+      completeQuery(query, createComparableQueryStructureRestriction(path, (ComparableQueryStructure) aQueryComponent,
+          componentDescriptor, aQueryComponent, context));
+    } else {
+      for (Map.Entry<String, Object> property : aQueryComponent.entrySet()) {
+        IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor(property.getKey());
+        if (propertyDescriptor != null) {
+          boolean isEntityRef = false;
+          if (componentDescriptor.isEntity() && aQueryComponent.containsKey(IEntity.ID)) {
+            isEntityRef = true;
+          }
+          if ((!PropertyViewDescriptorHelper.isComputed(componentDescriptor, property.getKey()) || (
+              propertyDescriptor instanceof IStringPropertyDescriptor
+                  && ((IStringPropertyDescriptor) propertyDescriptor).isTranslatable())) && (!isEntityRef || IEntity.ID
+              .equals(property.getKey()))) {
+            String prefixedProperty;
+            if (path != null) {
+              prefixedProperty = path + "." + property.getKey();
+            } else {
+              prefixedProperty = property.getKey();
+            }
+            if (property.getValue() instanceof IEntity) {
+              if (!((IEntity) property.getValue()).isPersistent()) {
+                abort = true;
+              } else {
+                completeQuery(query, where(prefixedProperty).is(property.getValue()));
+              }
+            } else if (property.getValue() instanceof Boolean && (isTriStateBooleanSupported() || (Boolean) property
+                .getValue())) {
+              completeQuery(query, where(prefixedProperty).is(property.getValue()));
+            } else if (property.getValue() instanceof String) {
+              if (IEntity.ID.equalsIgnoreCase(property.getKey())) {
+                completeQuery(query, createIdRestriction(propertyDescriptor, prefixedProperty, property.getValue(),
+                    componentDescriptor, aQueryComponent, context));
+              } else {
+                completeQuery(query, createStringRestriction(propertyDescriptor, prefixedProperty,
+                    (String) property.getValue(), componentDescriptor, aQueryComponent, context));
+              }
+            } else if (property.getValue() instanceof Number || property.getValue() instanceof Date) {
+              completeQuery(query, where(prefixedProperty).is(property.getValue()));
+            } else if (property.getValue() instanceof EnumQueryStructure) {
+              completeQuery(query, createEnumQueryStructureRestriction(prefixedProperty,
+                  ((EnumQueryStructure) property.getValue())));
+            } else if (property.getValue() instanceof IQueryComponent) {
+              IQueryComponent joinedComponent = ((IQueryComponent) property.getValue());
+              if (!isQueryComponentEmpty(joinedComponent, propertyDescriptor)) {
+                if (joinedComponent.isInlineComponent()/* || path != null */) {
+                  // the joined component is an inline component so we must use
+                  // dot nested properties. Same applies if we are in a nested
+                  // path i.e. already on an inline component.
+                  abort = abort || completeQuery(query, prefixedProperty, (IQueryComponent) property.getValue(),
+                      context);
+                } else {
+                  // the joined component is an entity so we must use
+                  // nested query; unless the autoComplete property
+                  // is a special char.
+                  boolean digDeeper = true;
+                  String autoCompleteProperty = joinedComponent.getQueryDescriptor().getAutoCompleteProperty();
+                  if (autoCompleteProperty != null) {
+                    String val = (String) joinedComponent.get(autoCompleteProperty);
+                    if (val != null) {
+                      boolean negate = false;
+                      if (val.startsWith(IQueryComponent.NOT_VAL)) {
+                        val = val.substring(1);
+                        negate = true;
+                      }
+                      if (IQueryComponent.NULL_VAL.equals(val)) {
+                        Criteria crit;
+                        if (negate) {
+                          crit = where(prefixedProperty).ne(null);
+                        } else {
+                          crit = where(prefixedProperty).is(null);
+                        }
+                        completeQuery(query, crit);
+                        digDeeper = false;
+                      }
+                    }
+                  }
+                  if (digDeeper) {
+                    abort = abort || completeQuery(query, null, joinedComponent, context);
+                  }
+                }
+              }
+            } else if (property.getValue() != null) {
+              // Unknown property type. Assume equals.
+              completeQuery(query, where(prefixedProperty).is(property.getValue()));
+            }
+          }
+        }
+      }
+    }
+    return abort;
+  }
+
+  /**
+   * Complete with criteria.
+   *
+   * @param currentQuery
+   *     the current query
+   * @param criteria
+   *     the criteria
+   */
+  protected void completeQuery(Query currentQuery, Criteria criteria) {
+    if (criteria != null) {
+      currentQuery.addCriteria(criteria);
+    }
+  }
+
+  /**
+   * Complements a query by processing an enumeration query structure.
+   *
+   * @param path
+   *     the path to the comparable property.
+   * @param enumQueryStructure
+   *     the collection of checked / unchecked enumeration values.
+   * @return the created criteria or null if no criteria necessary.
+   */
+  protected Criteria createEnumQueryStructureRestriction(String path, EnumQueryStructure enumQueryStructure) {
+    Set<String> inListValues = new HashSet<>();
+    boolean nullAllowed = false;
+    for (EnumValueQueryStructure inListValue : enumQueryStructure.getSelectedEnumerationValues()) {
+      if (inListValue.getValue() == null || "".equals(inListValue.getValue())) {
+        nullAllowed = true;
+      } else {
+        inListValues.add(inListValue.getValue());
+      }
+    }
+    if (!inListValues.isEmpty()) {
+      List<Criteria> disjunctions = new ArrayList<>();
+      disjunctions.add(where(path).in(inListValues));
+      if (nullAllowed) {
+        disjunctions.add(where(path).is(null));
+      }
+
+      return Criteria.where(path).orOperator(disjunctions.toArray(new Criteria[disjunctions.size()]));
+    }
+    return null;
+  }
+
+  /**
+   * Creates an id based restriction.
+   *
+   * @param propertyDescriptor
+   *     the id property descriptor.
+   * @param prefixedProperty
+   *     the full path of the property.
+   * @param propertyValue
+   *     the string property value.
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param queryComponent
+   *     the query component
+   * @param context
+   *     the context
+   * @return the created criteria or null if no criteria necessary.
+   */
+  protected Criteria createIdRestriction(IPropertyDescriptor propertyDescriptor, String prefixedProperty,
+                                         Object propertyValue, IComponentDescriptor<?> componentDescriptor,
+                                         IQueryComponent queryComponent, Map<String, Object> context) {
+    if (propertyValue instanceof String) {
+      return createStringRestriction(propertyDescriptor, prefixedProperty, (String) propertyValue, componentDescriptor,
+          queryComponent, context);
+    } else {
+      return where(prefixedProperty).is(propertyValue);
+    }
+  }
+
+  /**
+   * Creates a string based restriction.
+   *
+   * @param propertyDescriptor
+   *     the property descriptor.
+   * @param prefixedProperty
+   *     the full path of the property.
+   * @param propertyValue
+   *     the string property value.
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param queryComponent
+   *     the query component
+   * @param context
+   *     the context
+   * @return the created criteria or null if no criteria necessary.
+   */
+  protected Criteria createStringRestriction(IPropertyDescriptor propertyDescriptor, String prefixedProperty,
+                                             String propertyValue, IComponentDescriptor<?> componentDescriptor,
+                                             IQueryComponent queryComponent, Map<String, Object> context) {
+    List<Criteria> disjunctions = new ArrayList<>();
+    if (propertyValue.length() > 0) {
+      String[] propValues = propertyValue.split(IQueryComponent.DISJUNCT);
+      for (String propValue : propValues) {
+        String val = propValue;
+        if (val.length() > 0) {
+          Criteria crit;
+          boolean negate = false;
+          if (val.startsWith(IQueryComponent.NOT_VAL)) {
+            val = val.substring(1);
+            negate = true;
+          }
+          if (IQueryComponent.NULL_VAL.equals(val)) {
+            if (negate) {
+              crit = where(prefixedProperty).ne(null);
+            } else {
+              crit = where(prefixedProperty).is(null);
+            }
+          } else {
+            if (IEntity.ID.equals(propertyDescriptor.getName())
+                || propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
+              if (negate) {
+                crit = where(prefixedProperty).ne(val);
+              } else {
+                crit = where(prefixedProperty).is(val);
+              }
+            } else {
+              crit = createLikeRestriction(propertyDescriptor, prefixedProperty, val, componentDescriptor,
+                  queryComponent, context);
+            }
+          }
+          disjunctions.add(crit);
+        }
+      }
+    }
+    return where(prefixedProperty).orOperator(disjunctions.toArray(new Criteria[disjunctions.size()]));
+  }
+
+  /**
+   * Creates a like restriction.
+   *
+   * @param propertyDescriptor
+   *     the property descriptor.
+   * @param prefixedProperty
+   *     the complete property path.
+   * @param propertyValue
+   *     the value to create the like restriction for
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param queryComponent
+   *     the query component
+   * @param context
+   *     the context
+   * @return the created criteria or null if no criteria necessary.
+   */
+  protected Criteria createLikeRestriction(IPropertyDescriptor propertyDescriptor, String prefixedProperty,
+                                           String propertyValue, IComponentDescriptor<?> componentDescriptor,
+                                           IQueryComponent queryComponent, Map<String, Object> context) {
+    String regex = propertyValue;
+    if (propertyDescriptor instanceof IStringPropertyDescriptor && ((IStringPropertyDescriptor) propertyDescriptor)
+        .isUpperCase()) {
+      regex = regex.toUpperCase();
+    }
+    regex = regex.replaceAll("%", ".*");
+    return where(prefixedProperty).regex(regex);
+  }
+
+  /**
+   * Creates a criteria by processing a comparable query structure.
+   *
+   * @param path
+   *     the path to the comparable property.
+   * @param queryStructure
+   *     the comparable query structure.
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param queryComponent
+   *     the query component
+   * @param context
+   *     the context
+   * @return the created criteria or null if no criteria necessary.
+   */
+  protected Criteria createComparableQueryStructureRestriction(String path, ComparableQueryStructure queryStructure,
+                                                               IComponentDescriptor<?> componentDescriptor,
+                                                               IQueryComponent queryComponent,
+                                                               Map<String, Object> context) {
+    Criteria queryStructureRestriction = where(path);
+    if (queryStructure.isRestricting()) {
+      String comparator = queryStructure.getComparator();
+      Object infValue = queryStructure.getInfValue();
+      Object supValue = queryStructure.getSupValue();
+      Object compareValue = infValue;
+      if (compareValue == null) {
+        compareValue = supValue;
+      }
+      switch (comparator) {
+        case ComparableQueryStructureDescriptor.EQ:
+          queryStructureRestriction.is(compareValue);
+          break;
+        case ComparableQueryStructureDescriptor.GT:
+          queryStructureRestriction.gt(compareValue);
+          break;
+        case ComparableQueryStructureDescriptor.GE:
+          queryStructureRestriction.gte(compareValue);
+          break;
+        case ComparableQueryStructureDescriptor.LT:
+          queryStructureRestriction.lt(compareValue);
+          break;
+        case ComparableQueryStructureDescriptor.LE:
+          queryStructureRestriction.lte(compareValue);
+          break;
+        case ComparableQueryStructureDescriptor.NU:
+          queryStructureRestriction.is(null);
+          break;
+        case ComparableQueryStructureDescriptor.NN:
+          queryStructureRestriction.ne(null);
+          break;
+        case ComparableQueryStructureDescriptor.BE:
+          if (infValue != null && supValue != null) {
+            queryStructureRestriction.gte(infValue).andOperator(where(path).lte(supValue));
+          } else if (infValue != null) {
+            queryStructureRestriction.gte(infValue);
+          } else {
+            queryStructureRestriction.lte(supValue);
+          }
+          break;
+        default:
+          break;
+      }
+    }
+    return queryStructureRestriction;
+  }
+
+  /**
+   * Whether a query component must be considered empty, thus not generating any
+   * restriction.
+   *
+   * @param queryComponent
+   *     the query component to test.
+   * @param holdingPropertyDescriptor
+   *     the holding property descriptor or null if none.
+   * @return true, if the query component does not generate any restriction.
+   */
+  @SuppressWarnings("UnusedParameters")
+  protected boolean isQueryComponentEmpty(IQueryComponent queryComponent,
+                                          IPropertyDescriptor holdingPropertyDescriptor) {
+    return !queryComponent.isRestricting();
+  }
+
+  /**
+   * Gets the triStateBooleanSupported.
+   *
+   * @return the triStateBooleanSupported.
+   */
+  public boolean isTriStateBooleanSupported() {
+    return triStateBooleanSupported;
+  }
+
+  /**
+   * Sets the triStateBooleanSupported.
+   *
+   * @param triStateBooleanSupported
+   *     the triStateBooleanSupported to set.
+   */
+  public void setTriStateBooleanSupported(boolean triStateBooleanSupported) {
+    this.triStateBooleanSupported = triStateBooleanSupported;
+  }
+
+}
