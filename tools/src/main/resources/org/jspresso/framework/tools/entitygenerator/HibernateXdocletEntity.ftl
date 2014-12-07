@@ -220,6 +220,9 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#if instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor")>
   ${propertyType} is${propertyName?cap_first}();
   <#else>
+  <#if propertyDescriptor.name ="version">
+  @org.springframework.data.annotation.Version
+  </#if>
   ${propertyType} get${propertyName?cap_first}();
   </#if>
 

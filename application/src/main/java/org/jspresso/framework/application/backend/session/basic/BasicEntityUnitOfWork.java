@@ -219,7 +219,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
     if (nestedUnitOfWork != null && nestedUnitOfWork.isActive()) {
       return true;
     }
-    return suspended == false && dirtRecorder != null;
+    return !suspended && dirtRecorder != null;
   }
 
   /**

@@ -20,73 +20,109 @@
 
 <!--suppress SpringModelInspection -->
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
-  default-lazy-init="true">
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                           http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd"
+       default-lazy-init="true">
 
   <!-- MongoDB root application context for the Jspresso framework. -->
 
+  <bean id="transactionManager" class="org.jspresso.framework.application.backend.persistence.FakeTransactionManager"/>
+
   <bean id="transactionTemplate" class="org.jspresso.framework.application.backend.ControllerAwareTransactionTemplate">
-    <!--<property name="transactionManager" ref="transactionManager" />-->
+    <property name="transactionManager" ref="transactionManager"/>
   </bean>
 
   <!-- Mongo root action beans. -->
   <bean abstract="true" id="abstractMongoBackAction"
-    class="org.jspresso.framework.application.backend.action.persistence.mongo.AbstractMongoAction" />
+        class="org.jspresso.framework.application.backend.action.persistence.mongo.AbstractMongoAction"/>
 
   <bean id="triStateBooleanSupported" class="java.lang.Boolean">
-    <constructor-arg value="true" />
+    <constructor-arg value="true"/>
   </bean>
 
   <bean id="queryFactoryBase" abstract="true"
-    class="org.jspresso.framework.model.persistence.mongo.criterion.DefaultQueryFactory">
-    <property name="triStateBooleanSupported" ref="triStateBooleanSupported" />
+        class="org.jspresso.framework.model.persistence.mongo.criterion.DefaultQueryFactory">
+    <property name="triStateBooleanSupported" ref="triStateBooleanSupported"/>
   </bean>
 
-  <bean id="queryFactory" parent="queryFactoryBase" />
+  <bean id="queryFactory" parent="queryFactoryBase"/>
 
-  <bean id="applicationQueryRefiner" class="org.jspresso.framework.application.backend.action.persistence.mongo.MockQueryRefiner" />
+  <bean id="applicationQueryRefiner"
+        class="org.jspresso.framework.application.backend.action.persistence.mongo.MockQueryRefiner"/>
 
   <bean id="queryEntitiesBackActionBase" parent="abstractMongoBackAction"
-    class="org.jspresso.framework.application.backend.action.persistence.mongo.QueryEntitiesAction">
-    <property name="queryFactory" ref="queryFactory" />
-    <property name="queryRefiner" ref="applicationQueryRefiner" />
+        class="org.jspresso.framework.application.backend.action.persistence.mongo.QueryEntitiesAction">
+    <property name="queryFactory" ref="queryFactory"/>
+    <property name="queryRefiner" ref="applicationQueryRefiner"/>
   </bean>
 
-  <bean id="queryEntitiesBackAction" parent="queryEntitiesBackActionBase" />
+  <bean id="queryEntitiesBackAction" parent="queryEntitiesBackActionBase"/>
 
   <bean id="removeCollectionFromMasterBackAction" parent="abstractMongoBackAction"
-    class="org.jspresso.framework.application.backend.action.persistence.mongo.RemoveCollectionFromMasterAction" />
+        class="org.jspresso.framework.application.backend.action.persistence.mongo.RemoveCollectionFromMasterAction"/>
 
   <bean id="removeModuleObjectAction" parent="abstractMongoBackAction"
-    class="org.jspresso.framework.application.backend.action.persistence.mongo.module.RemoveModuleObjectAction" />
+        class="org.jspresso.framework.application.backend.action.persistence.mongo.module.RemoveModuleObjectAction"/>
 
   <bean id="removeFromModuleObjectsAction" parent="abstractMongoBackAction"
-    class="org.jspresso.framework.application.backend.action.persistence.mongo.module.RemoveFromModuleObjectsAction" />
+        class="org.jspresso.framework.application.backend.action.persistence.mongo.module.RemoveFromModuleObjectsAction"/>
 
   <bean id="saveBackAction" parent="abstractMongoBackAction"
-    class="org.jspresso.framework.application.backend.action.persistence.mongo.SaveAction" />
+        class="org.jspresso.framework.application.backend.action.persistence.mongo.SaveAction"/>
 
   <bean id="saveModuleObjectBackAction" parent="saveBackAction"
-    class="org.jspresso.framework.application.backend.action.persistence.mongo.SaveModuleObjectAction" />
+        class="org.jspresso.framework.application.backend.action.persistence.mongo.SaveModuleObjectAction"/>
 
   <bean id="reloadBackAction" parent="abstractMongoBackAction"
-    class="org.jspresso.framework.application.backend.action.persistence.mongo.ReloadAction" />
+        class="org.jspresso.framework.application.backend.action.persistence.mongo.ReloadAction"/>
 
   <bean id="reloadModuleObjectBackAction" parent="reloadBackAction"
-    class="org.jspresso.framework.application.backend.action.persistence.mongo.ReloadModuleObjectAction" />
+        class="org.jspresso.framework.application.backend.action.persistence.mongo.ReloadModuleObjectAction"/>
 
   <bean name="controllerAwareEntityFactory" parent="basicEntityFactory"
-    class="org.jspresso.framework.application.backend.entity.ControllerAwareProxyEntityFactory" />
+        class="org.jspresso.framework.application.backend.entity.ControllerAwareProxyEntityFactory"/>
 
   <bean abstract="true" id="abstractMongoBackController" parent="abstractBackController"
-    class="org.jspresso.framework.application.backend.persistence.mongo.MongoBackendController">
+        class="org.jspresso.framework.application.backend.persistence.mongo.MongoBackendController">
+    <property name="mongoTemplate" ref="mongoTemplate"/>
   </bean>
 
   <bean id="smartEntityCloneFactoryBase" class="org.jspresso.framework.model.entity.SmartEntityCloneFactory"
-    depends-on="componentTuplizerInit">
+        depends-on="componentTuplizerInit">
   </bean>
 
-  <bean id="smartEntityCloneFactory" parent="smartEntityCloneFactoryBase" />
+  <bean id="smartEntityCloneFactory" parent="smartEntityCloneFactoryBase"/>
 
-  <bean id="applicationBackController" parent="abstractMongoBackController" scope="prototype" />
+  <bean id="applicationBackController" parent="abstractMongoBackController" scope="prototype"/>
+
+  <bean id="jspressoMappingContext"
+        class="org.jspresso.framework.application.backend.persistence.mongo.JspressoMongoMappingContext">
+    <property name="descriptorRegistry" ref="controllerAwareEntityFactory"/>
+  </bean>
+
+  <bean class="org.jspresso.framework.application.backend.persistence.mongo.JspressoMongoEventListener">
+    <property name="entityFactory" ref="controllerAwareEntityFactory"/>
+  </bean>
+
+  <mongo:mapping-converter mapping-context-ref="jspressoMappingContext">
+    <mongo:custom-converters>
+      <mongo:converter>
+        <bean class="org.jspresso.framework.model.persistence.mongo.JspressoEntityReadConverter">
+          <property name="entityFactory" ref="controllerAwareEntityFactory"/>
+        </bean>
+      </mongo:converter>
+      <mongo:converter>
+        <bean class="org.jspresso.framework.model.persistence.mongo.JspressoEntityWriteConverter">
+          <property name="descriptorRegistry" ref="controllerAwareEntityFactory"/>
+        </bean>
+      </mongo:converter>
+    </mongo:custom-converters>
+  </mongo:mapping-converter>
+
+  <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+    <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
+    <constructor-arg name="mongoConverter" ref="mappingConverter"/>
+  </bean>
+
 </beans>
