@@ -179,27 +179,21 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
     } else {
       String translationsPath = AbstractComponentDescriptor.getComponentTranslationsDescriptorTemplate().getName();
       for (Map.Entry<String, Object> property : aQueryComponent.entrySet()) {
-        String propertyName = property.getKey();
-        IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor(propertyName);
+        IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor(property.getKey());
         if (propertyDescriptor != null) {
           boolean isEntityRef = false;
           if (componentDescriptor.isEntity() && aQueryComponent.containsKey(IEntity.ID)) {
             isEntityRef = true;
           }
-          if ((!PropertyViewDescriptorHelper.isComputed(componentDescriptor, propertyName) || (
+          if ((!PropertyViewDescriptorHelper.isComputed(componentDescriptor, property.getKey()) || (
               propertyDescriptor instanceof IStringPropertyDescriptor
                   && ((IStringPropertyDescriptor) propertyDescriptor).isTranslatable())) && (!isEntityRef || IEntity.ID
-              .equals(propertyName))) {
+              .equals(property.getKey()))) {
             String prefixedProperty;
             if (path != null) {
-              if (IEntity.ID.equals(propertyName)) {
-                // To support DBRefs
-                prefixedProperty = path + ".$" + propertyName;
-              } else {
-                prefixedProperty = path + "." + propertyName;
-              }
+              prefixedProperty = path + "." + property.getKey();
             } else {
-              prefixedProperty = propertyName;
+              prefixedProperty = property.getKey();
             }
             if (property.getValue() instanceof IEntity) {
               if (!((IEntity) property.getValue()).isPersistent()) {
@@ -211,7 +205,7 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
                 .getValue())) {
               completeQuery(query, where(prefixedProperty).is(property.getValue()));
             } else if (property.getValue() instanceof String) {
-              if (IEntity.ID.equalsIgnoreCase(propertyName)) {
+              if (IEntity.ID.equalsIgnoreCase(property.getKey())) {
                 completeQuery(query, createIdRestriction(propertyDescriptor, prefixedProperty, property.getValue(),
                     componentDescriptor, aQueryComponent, context));
               } else {
@@ -343,10 +337,10 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
                                          Object propertyValue, IComponentDescriptor<?> componentDescriptor,
                                          IQueryComponent queryComponent, Map<String, Object> context) {
     if (propertyValue instanceof String) {
-      return createStringRestriction(propertyDescriptor, prefixedProperty, (String) propertyValue, componentDescriptor,
-          queryComponent, context);
+      return createStringRestriction(propertyDescriptor, prefixedProperty.replace(IEntity.ID, "$id"),
+          (String) propertyValue, componentDescriptor, queryComponent, context);
     } else {
-      return where(prefixedProperty).is(propertyValue);
+      return where(prefixedProperty.replace(IEntity.ID, "$id")).is(propertyValue);
     }
   }
 
