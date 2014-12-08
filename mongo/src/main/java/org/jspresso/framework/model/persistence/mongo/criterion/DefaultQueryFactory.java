@@ -28,8 +28,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import org.hibernate.criterion.Junction;
-import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
@@ -180,23 +178,28 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
           componentDescriptor, aQueryComponent, context));
     } else {
       String translationsPath = AbstractComponentDescriptor.getComponentTranslationsDescriptorTemplate().getName();
-      String translationsAlias = translationsPath;
       for (Map.Entry<String, Object> property : aQueryComponent.entrySet()) {
-        IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor(property.getKey());
+        String propertyName = property.getKey();
+        IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor(propertyName);
         if (propertyDescriptor != null) {
           boolean isEntityRef = false;
           if (componentDescriptor.isEntity() && aQueryComponent.containsKey(IEntity.ID)) {
             isEntityRef = true;
           }
-          if ((!PropertyViewDescriptorHelper.isComputed(componentDescriptor, property.getKey()) || (
+          if ((!PropertyViewDescriptorHelper.isComputed(componentDescriptor, propertyName) || (
               propertyDescriptor instanceof IStringPropertyDescriptor
                   && ((IStringPropertyDescriptor) propertyDescriptor).isTranslatable())) && (!isEntityRef || IEntity.ID
-              .equals(property.getKey()))) {
+              .equals(propertyName))) {
             String prefixedProperty;
             if (path != null) {
-              prefixedProperty = path + "." + property.getKey();
+              if (IEntity.ID.equals(propertyName)) {
+                // To support DBRefs
+                prefixedProperty = path + ".$" + propertyName;
+              } else {
+                prefixedProperty = path + "." + propertyName;
+              }
             } else {
-              prefixedProperty = property.getKey();
+              prefixedProperty = propertyName;
             }
             if (property.getValue() instanceof IEntity) {
               if (!((IEntity) property.getValue()).isPersistent()) {
@@ -208,11 +211,11 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
                 .getValue())) {
               completeQuery(query, where(prefixedProperty).is(property.getValue()));
             } else if (property.getValue() instanceof String) {
-              if (IEntity.ID.equalsIgnoreCase(property.getKey())) {
+              if (IEntity.ID.equalsIgnoreCase(propertyName)) {
                 completeQuery(query, createIdRestriction(propertyDescriptor, prefixedProperty, property.getValue(),
                     componentDescriptor, aQueryComponent, context));
               } else {
-                completeQueryWithTranslations(query, translationsPath, translationsAlias, property, propertyDescriptor,
+                completeQueryWithTranslations(query, translationsPath, translationsPath, property, propertyDescriptor,
                     prefixedProperty, getBackendController(context).getLocale(), componentDescriptor, aQueryComponent,
                     context);
               }
@@ -504,6 +507,7 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
    *     the context
    * @return the created criteria or null if no criteria necessary.
    */
+  @SuppressWarnings("unused")
   protected Criteria createLikeRestriction(IPropertyDescriptor propertyDescriptor, String prefixedProperty,
                                            String propertyValue, IComponentDescriptor<?> componentDescriptor,
                                            IQueryComponent queryComponent, Map<String, Object> context) {
@@ -534,6 +538,7 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
    *     the context
    * @return the created criteria or null if no criteria necessary.
    */
+  @SuppressWarnings("unused")
   protected Criteria createComparableQueryStructureRestriction(String path, ComparableQueryStructure queryStructure,
                                                                IComponentDescriptor<?> componentDescriptor,
                                                                IQueryComponent queryComponent,
