@@ -25,9 +25,11 @@ import java.util.Set;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.DBObject;
-import com.mongodb.DBRef;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.converter.ConditionalGenericConverter;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
@@ -45,11 +47,12 @@ import org.jspresso.framework.model.entity.IEntityFactory;
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$
  */
-public class JspressoEntityReadConverter implements ConditionalGenericConverter {
+public class JspressoEntityReadConverter
+    implements ConditionalGenericConverter, ApplicationListener<ContextRefreshedEvent> {
 
-  private IEntityFactory                entityFactory;
-  private IComponentCollectionFactory   collectionFactory;
-  private JspressoMappingMongoConverter mongoConverter;
+  private IEntityFactory              entityFactory;
+  private IComponentCollectionFactory collectionFactory;
+  private MongoTemplate               mongo;
 
   /**
    * Convert object.
@@ -69,7 +72,7 @@ public class JspressoEntityReadConverter implements ConditionalGenericConverter 
   }
 
   @SuppressWarnings("unchecked")
-  private Object convertEntity(DBObject source, Class<? extends IEntity> entityType) {
+  private IEntity convertEntity(DBObject source, Class<? extends IEntity> entityType) {
     Serializable id = (Serializable) source.get("_id");
     IComponentDescriptor<? extends IEntity> entityDescriptor = (IComponentDescriptor<? extends IEntity>)
         getEntityFactory()
@@ -77,6 +80,11 @@ public class JspressoEntityReadConverter implements ConditionalGenericConverter 
     IEntity entity = getEntityFactory().createEntityInstance(entityType, id);
     completeComponent(source, entityDescriptor, entity);
     return entity;
+  }
+
+  @SuppressWarnings("unchecked")
+  private IEntity convertEntity(Serializable id, Class<? extends IEntity> entityType) {
+    return getMongo().findById(id, entityType);
   }
 
   @SuppressWarnings("unchecked")
@@ -101,7 +109,7 @@ public class JspressoEntityReadConverter implements ConditionalGenericConverter 
           if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
             if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
               targetType = ((IReferencePropertyDescriptor<?>) propertyDescriptor).getReferencedDescriptor()
-                                                                               .getModelType();
+                                                                                 .getModelType();
             } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
               targetType = ((ICollectionPropertyDescriptor<?>) propertyDescriptor).getCollectionDescriptor()
                                                                                   .getElementDescriptor()
@@ -116,10 +124,11 @@ public class JspressoEntityReadConverter implements ConditionalGenericConverter 
                                                                         .getCollectionInterface());
                 for (Object element : (BasicDBList) propertyValue) {
                   if (element instanceof DBObject) {
-                    collectionProperty.add(convertComponent((DBObject) element, (Class<? extends IComponent>) targetType));
-                  } else if (element instanceof DBRef) {
-                    collectionProperty.add(convertEntity(((DBRef) element).fetch(), (Class<? extends IEntity>)
-                        targetType));
+                    collectionProperty.add(convertComponent((DBObject) element,
+                        (Class<? extends IComponent>) targetType));
+                  } else if (element instanceof Serializable) {
+                    collectionProperty.add(convertEntity((Serializable) element,
+                        (Class<? extends IEntity>) targetType));
                   } else {
                     collectionProperty.add(element);
                   }
@@ -134,9 +143,9 @@ public class JspressoEntityReadConverter implements ConditionalGenericConverter 
             } else {
               component.straightSetProperty(propertyName, propertyValue);
             }
-          } else if (propertyValue instanceof DBRef) {
+          } else if (targetType != null && propertyValue instanceof Serializable) {
             //TODO Lazy loading
-            component.straightSetProperty(propertyName, convertEntity(((DBRef) propertyValue).fetch(),
+            component.straightSetProperty(propertyName, convertEntity((Serializable) propertyValue,
                 (Class<? extends IEntity>) targetType));
           } else {
             component.straightSetProperty(propertyName, propertyValue);
@@ -192,25 +201,6 @@ public class JspressoEntityReadConverter implements ConditionalGenericConverter 
   }
 
   /**
-   * Gets mongo converter.
-   *
-   * @return the mongo converter
-   */
-  protected JspressoMappingMongoConverter getMongoConverter() {
-    return mongoConverter;
-  }
-
-  /**
-   * Sets mongo converter.
-   *
-   * @param mongoConverter
-   *     the mongo converter
-   */
-  public void setMongoConverter(JspressoMappingMongoConverter mongoConverter) {
-    this.mongoConverter = mongoConverter;
-  }
-
-  /**
    * Gets collection factory.
    *
    * @return the collection factory
@@ -227,5 +217,29 @@ public class JspressoEntityReadConverter implements ConditionalGenericConverter 
    */
   public void setCollectionFactory(IComponentCollectionFactory collectionFactory) {
     this.collectionFactory = collectionFactory;
+  }
+
+  /**
+   * Gets mongo.
+   *
+   * @return the mongo
+   */
+  protected MongoTemplate getMongo() {
+    return mongo;
+  }
+
+  /**
+   * Sets mongo.
+   *
+   * @param mongo
+   *     the mongo
+   */
+  public void setMongo(MongoTemplate mongo) {
+    this.mongo = mongo;
+  }
+
+  @Override
+  public void onApplicationEvent(ContextRefreshedEvent event) {
+    setMongo(event.getApplicationContext().getBean("mongoTemplate", MongoTemplate.class));
   }
 }

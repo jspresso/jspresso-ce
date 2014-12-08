@@ -19,16 +19,12 @@
 package org.jspresso.framework.model.persistence.mongo;
 
 import java.beans.PropertyDescriptor;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 import org.springframework.data.mapping.model.FieldNamingStrategy;
 import org.springframework.data.mapping.model.SimpleTypeHolder;
 import org.springframework.data.mongodb.core.mapping.CachingMongoPersistentProperty;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.MongoPersistentEntity;
-
-import org.jspresso.framework.model.entity.IEntity;
 
 /**
  * Jspresso specialized Mongo persistent property.
@@ -38,49 +34,23 @@ import org.jspresso.framework.model.entity.IEntity;
  */
 public class JspressoMongoPersistentProperty extends CachingMongoPersistentProperty {
 
-  private static final org.springframework.data.mongodb.core.mapping.DBRef DB_REF = new DBRef() {
-    @Override
-    public Class<? extends Annotation> annotationType() {
-      return DBRef.class;
-    }
-    @Override
-    public String db() {
-      return null;
-    }
-    @Override
-    public boolean lazy() {
-      return true;
-    }
-  };
-
   /**
    * Creates a new {@link org.springframework.data.mongodb.core.mapping.CachingMongoPersistentProperty}.
    *
-   * @param field the field
-   * @param propertyDescriptor the property descriptor
-   * @param owner the owner
-   * @param simpleTypeHolder the simple type holder
-   * @param fieldNamingStrategy the field naming strategy
+   * @param field
+   *     the field
+   * @param propertyDescriptor
+   *     the property descriptor
+   * @param owner
+   *     the owner
+   * @param simpleTypeHolder
+   *     the simple type holder
+   * @param fieldNamingStrategy
+   *     the field naming strategy
    */
   public JspressoMongoPersistentProperty(Field field, PropertyDescriptor propertyDescriptor,
                                          MongoPersistentEntity<?> owner, SimpleTypeHolder simpleTypeHolder,
                                          FieldNamingStrategy fieldNamingStrategy) {
     super(field, propertyDescriptor, owner, simpleTypeHolder, fieldNamingStrategy);
-  }
-
-  @Override
-  public DBRef getDBRef() {
-    if (IEntity.class.isAssignableFrom(getType())) {
-      return DB_REF;
-    }
-    return super.getDBRef();
-  }
-
-  @Override
-  public boolean isDbReference() {
-    if (IEntity.class.isAssignableFrom(getType())) {
-      return true;
-    }
-    return super.isDbReference();
   }
 }

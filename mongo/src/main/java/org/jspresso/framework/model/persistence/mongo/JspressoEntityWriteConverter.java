@@ -43,7 +43,6 @@ import org.jspresso.framework.model.entity.IEntity;
 public class JspressoEntityWriteConverter implements Converter<IEntity, DBObject> {
 
   private IComponentDescriptorRegistry  descriptorRegistry;
-  private JspressoMappingMongoConverter mongoConverter;
 
   /**
    * Convert dB object.
@@ -72,9 +71,7 @@ public class JspressoEntityWriteConverter implements Converter<IEntity, DBObject
       if (propertyDescriptor != null && !propertyDescriptor.isComputed() && !IEntity.ID.equals(propertyName)) {
         if (propertyValue instanceof IComponent) {
           if (propertyValue instanceof IEntity) {
-            dbo.put(propertyName, getMongoConverter().toDBRef(propertyValue,
-                getMongoConverter().getMappingContext().getPersistentEntity(component.getComponentContract())
-                                   .getPersistentProperty(propertyName)));
+            dbo.put(propertyName, ((IEntity) propertyValue).getId());
           } else {
             dbo.put(propertyName, convertComponent((IComponent) propertyValue));
           }
@@ -87,7 +84,11 @@ public class JspressoEntityWriteConverter implements Converter<IEntity, DBObject
           }
           for (Object element : (Collection) propertyValue) {
             if (element instanceof IComponent) {
-              convertedCollection.add(convertComponent((IComponent) element));
+              if (element instanceof IEntity) {
+                convertedCollection.add(((IEntity) element).getId());
+              } else {
+                convertedCollection.add(convertComponent((IComponent) element));
+              }
             } else {
               convertedCollection.add(element);
             }
@@ -118,24 +119,5 @@ public class JspressoEntityWriteConverter implements Converter<IEntity, DBObject
    */
   public void setDescriptorRegistry(IComponentDescriptorRegistry descriptorRegistry) {
     this.descriptorRegistry = descriptorRegistry;
-  }
-
-  /**
-   * Gets mongo converter.
-   *
-   * @return the mongo converter
-   */
-  protected JspressoMappingMongoConverter getMongoConverter() {
-    return mongoConverter;
-  }
-
-  /**
-   * Sets mongo converter.
-   *
-   * @param mongoConverter
-   *     the mongo converter
-   */
-  public void setMongoConverter(JspressoMappingMongoConverter mongoConverter) {
-    this.mongoConverter = mongoConverter;
   }
 }

@@ -114,18 +114,20 @@
     <property name="customConversions" ref="conversions"/>
   </bean>
 
+  <bean id="entityReadConverter" class="org.jspresso.framework.model.persistence.mongo.JspressoEntityReadConverter">
+    <property name="entityFactory" ref="controllerAwareEntityFactory"/>
+    <property name="collectionFactory" ref="componentCollectionFactory"/>
+  </bean>
+
+  <bean id="entityWriteConverter" class="org.jspresso.framework.model.persistence.mongo.JspressoEntityWriteConverter">
+    <property name="descriptorRegistry" ref="componentDescriptorRegistry"/>
+  </bean>
+
   <bean id="conversions" class="org.springframework.data.mongodb.core.convert.CustomConversions">
     <constructor-arg>
       <list>
-        <bean class="org.jspresso.framework.model.persistence.mongo.JspressoEntityReadConverter">
-          <property name="entityFactory" ref="controllerAwareEntityFactory"/>
-          <property name="collectionFactory" ref="componentCollectionFactory"/>
-          <property name="mongoConverter" ref="jspressoMappingConverter"/>
-        </bean>
-        <bean class="org.jspresso.framework.model.persistence.mongo.JspressoEntityWriteConverter">
-          <property name="descriptorRegistry" ref="componentDescriptorRegistry"/>
-          <property name="mongoConverter" ref="jspressoMappingConverter"/>
-        </bean>
+        <ref bean="entityReadConverter"/>
+        <ref bean="entityWriteConverter"/>
       </list>
     </constructor-arg>
   </bean>

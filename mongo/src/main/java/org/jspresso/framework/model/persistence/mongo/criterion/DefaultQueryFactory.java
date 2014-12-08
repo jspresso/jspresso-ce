@@ -337,10 +337,10 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
                                          Object propertyValue, IComponentDescriptor<?> componentDescriptor,
                                          IQueryComponent queryComponent, Map<String, Object> context) {
     if (propertyValue instanceof String) {
-      return createStringRestriction(propertyDescriptor, prefixedProperty.replace(IEntity.ID, "$id"),
+      return createStringRestriction(propertyDescriptor, prefixedProperty.replace('.' + IEntity.ID, ""),
           (String) propertyValue, componentDescriptor, queryComponent, context);
     } else {
-      return where(prefixedProperty.replace(IEntity.ID, "$id")).is(propertyValue);
+      return where(prefixedProperty.replace('.'+IEntity.ID, "")).is(propertyValue);
     }
   }
 
