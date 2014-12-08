@@ -59,9 +59,9 @@ public class JspressoEntityWriteConverter implements Converter<IEntity, DBObject
     return dbo;
   }
 
+  @SuppressWarnings("unchecked")
   private DBObject convertComponent(IComponent component) {
     DBObject dbo = new BasicDBObject();
-    dbo.put("_class", component.getComponentContract().getName());
     IComponentDescriptor<? extends IEntity> entityDescriptor = (IComponentDescriptor<? extends IEntity>)
         getDescriptorRegistry()
         .getComponentDescriptor(component.getComponentContract());
@@ -69,7 +69,7 @@ public class JspressoEntityWriteConverter implements Converter<IEntity, DBObject
       Object propertyValue = propertyEntry.getValue();
       String propertyName = propertyEntry.getKey();
       IPropertyDescriptor propertyDescriptor = entityDescriptor.getPropertyDescriptor(propertyName);
-      if (propertyDescriptor != null && !propertyDescriptor.isComputed()) {
+      if (propertyDescriptor != null && !propertyDescriptor.isComputed() && !IEntity.ID.equals(propertyName)) {
         if (propertyValue instanceof IComponent) {
           if (propertyValue instanceof IEntity) {
             dbo.put(propertyName, getMongoConverter().toDBRef(propertyValue,
@@ -98,7 +98,6 @@ public class JspressoEntityWriteConverter implements Converter<IEntity, DBObject
         }
       }
     }
-
     return dbo;
   }
 

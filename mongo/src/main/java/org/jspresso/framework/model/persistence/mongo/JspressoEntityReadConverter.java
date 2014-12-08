@@ -21,7 +21,6 @@ package org.jspresso.framework.model.persistence.mongo;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 
 import com.mongodb.BasicDBList;
@@ -35,9 +34,10 @@ import org.jspresso.framework.model.component.IComponentCollectionFactory;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
-import org.jspresso.framework.util.exception.NestedRuntimeException;
 
 /**
  * Custom converter for Jspresso entities.
@@ -62,19 +62,15 @@ public class JspressoEntityReadConverter implements ConditionalGenericConverter 
    *     the target type
    * @return the object
    */
+  @SuppressWarnings("unchecked")
   @Override
   public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
-    return convertEntity((DBObject) source);
+    return convertEntity((DBObject) source, (Class<? extends IEntity>) targetType.getType());
   }
 
-  private Object convertEntity(DBObject source) {
+  @SuppressWarnings("unchecked")
+  private Object convertEntity(DBObject source, Class<? extends IEntity> entityType) {
     Serializable id = (Serializable) source.get("_id");
-    Class<? extends IEntity> entityType;
-    try {
-      entityType = (Class<? extends IEntity>) Class.forName((String) source.get("_class"));
-    } catch (ClassNotFoundException e) {
-      throw new NestedRuntimeException(e);
-    }
     IComponentDescriptor<? extends IEntity> entityDescriptor = (IComponentDescriptor<? extends IEntity>)
         getEntityFactory()
         .getComponentDescriptor(entityType);
@@ -83,13 +79,8 @@ public class JspressoEntityReadConverter implements ConditionalGenericConverter 
     return entity;
   }
 
-  private Object convertComponent(DBObject source) {
-    Class<? extends IComponent> componentType;
-    try {
-      componentType = (Class<? extends IComponent>) Class.forName((String) source.get("_class"));
-    } catch (ClassNotFoundException e) {
-      throw new NestedRuntimeException(e);
-    }
+  @SuppressWarnings("unchecked")
+  private Object convertComponent(DBObject source, Class<? extends IComponent> componentType) {
     IComponentDescriptor<? extends IComponent> componentDescriptor = (IComponentDescriptor<? extends IComponent>)
         getEntityFactory()
         .getComponentDescriptor(componentType);
@@ -98,6 +89,7 @@ public class JspressoEntityReadConverter implements ConditionalGenericConverter 
     return component;
   }
 
+  @SuppressWarnings("unchecked")
   private void completeComponent(DBObject source, IComponentDescriptor<? extends IComponent> entityDescriptor,
                                  IComponent component) {
     for (IPropertyDescriptor propertyDescriptor : entityDescriptor.getPropertyDescriptors()) {
@@ -105,27 +97,47 @@ public class JspressoEntityReadConverter implements ConditionalGenericConverter 
         String propertyName = propertyDescriptor.getName();
         if (source.containsField(propertyName)) {
           Object propertyValue = source.get(propertyName);
+          Class<?> targetType = null;
+          if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
+            if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
+              targetType = ((IReferencePropertyDescriptor<?>) propertyDescriptor).getReferencedDescriptor()
+                                                                               .getModelType();
+            } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
+              targetType = ((ICollectionPropertyDescriptor<?>) propertyDescriptor).getCollectionDescriptor()
+                                                                                  .getElementDescriptor()
+                                                                                  .getModelType();
+            }
+          }
           if (propertyValue instanceof DBObject) {
             if (propertyValue instanceof BasicDBList) {
-              Collection<Object> collectionProperty = getCollectionFactory().createComponentCollection(
-                  ((ICollectionPropertyDescriptor) propertyDescriptor).getCollectionDescriptor()
-                                                                      .getCollectionInterface());
-              for (Object element : (BasicDBList) propertyValue) {
-                if (element instanceof DBObject) {
-                  collectionProperty.add(convertComponent((DBObject) element));
-                } else if (element instanceof DBRef) {
-                  collectionProperty.add(convertEntity(((DBRef) element).fetch()));
-                } else {
-                  collectionProperty.add(element);
+              if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
+                Collection<Object> collectionProperty = getCollectionFactory().createComponentCollection(
+                    ((ICollectionPropertyDescriptor) propertyDescriptor).getCollectionDescriptor()
+                                                                        .getCollectionInterface());
+                for (Object element : (BasicDBList) propertyValue) {
+                  if (element instanceof DBObject) {
+                    collectionProperty.add(convertComponent((DBObject) element, (Class<? extends IComponent>) targetType));
+                  } else if (element instanceof DBRef) {
+                    collectionProperty.add(convertEntity(((DBRef) element).fetch(), (Class<? extends IEntity>)
+                        targetType));
+                  } else {
+                    collectionProperty.add(element);
+                  }
                 }
+                component.straightSetProperty(propertyName, collectionProperty);
+              } else {
+                component.straightSetProperty(propertyName, propertyValue);
               }
-              component.straightSetProperty(propertyName, collectionProperty);
+            } else if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
+              component.straightSetProperty(propertyName, convertComponent((DBObject) propertyValue,
+                  (Class<? extends IComponent>) targetType));
             } else {
-              component.straightSetProperty(propertyName, convertComponent((DBObject) propertyValue));
+              component.straightSetProperty(propertyName, propertyValue);
             }
           } else if (propertyValue instanceof DBRef) {
             //TODO Lazy loading
-            component.straightSetProperty(propertyName, convertEntity(((DBRef) propertyValue).fetch()));
+            component.straightSetProperty(propertyName, convertEntity(((DBRef) propertyValue).fetch(),
+                (Class<? extends IEntity>) targetType));
           } else {
             component.straightSetProperty(propertyName, propertyValue);
           }

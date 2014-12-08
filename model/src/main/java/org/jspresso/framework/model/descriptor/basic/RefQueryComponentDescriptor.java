@@ -68,6 +68,7 @@ public class RefQueryComponentDescriptor<E> extends
    *          the shared registry to store / retrieve referenced query
    *          descriptors.
    */
+  @SuppressWarnings("unchecked")
   protected RefQueryComponentDescriptor(
       IComponentDescriptorProvider<? extends IComponent> componentDescriptorProvider,
       Class<? extends E> componentContract,

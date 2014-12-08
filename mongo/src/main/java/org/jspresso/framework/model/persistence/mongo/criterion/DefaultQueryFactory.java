@@ -24,9 +24,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import org.hibernate.criterion.Junction;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
@@ -34,15 +37,18 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 import org.jspresso.framework.application.action.AbstractActionContextAware;
+import org.jspresso.framework.model.component.IPropertyTranslation;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.component.query.ComparableQueryStructure;
 import org.jspresso.framework.model.component.query.EnumQueryStructure;
 import org.jspresso.framework.model.component.query.EnumValueQueryStructure;
+import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.basic.AbstractComponentDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.model.entity.EntityHelper;
 import org.jspresso.framework.model.entity.IEntity;
@@ -173,6 +179,8 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
       completeQuery(query, createComparableQueryStructureRestriction(path, (ComparableQueryStructure) aQueryComponent,
           componentDescriptor, aQueryComponent, context));
     } else {
+      String translationsPath = AbstractComponentDescriptor.getComponentTranslationsDescriptorTemplate().getName();
+      String translationsAlias = translationsPath;
       for (Map.Entry<String, Object> property : aQueryComponent.entrySet()) {
         IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor(property.getKey());
         if (propertyDescriptor != null) {
@@ -204,8 +212,9 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
                 completeQuery(query, createIdRestriction(propertyDescriptor, prefixedProperty, property.getValue(),
                     componentDescriptor, aQueryComponent, context));
               } else {
-                completeQuery(query, createStringRestriction(propertyDescriptor, prefixedProperty,
-                    (String) property.getValue(), componentDescriptor, aQueryComponent, context));
+                completeQueryWithTranslations(query, translationsPath, translationsAlias, property, propertyDescriptor,
+                    prefixedProperty, getBackendController(context).getLocale(), componentDescriptor, aQueryComponent,
+                    context);
               }
             } else if (property.getValue() instanceof Number || property.getValue() instanceof Date) {
               completeQuery(query, where(prefixedProperty).is(property.getValue()));
@@ -248,7 +257,7 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
                     }
                   }
                   if (digDeeper) {
-                    abort = abort || completeQuery(query, null, joinedComponent, context);
+                    abort = abort || completeQuery(query, prefixedProperty, joinedComponent, context);
                   }
                 }
               }
@@ -302,8 +311,10 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
       if (nullAllowed) {
         disjunctions.add(where(path).is(null));
       }
-
-      return Criteria.where(path).orOperator(disjunctions.toArray(new Criteria[disjunctions.size()]));
+      if (disjunctions.size() == 1) {
+        return disjunctions.get(0);
+      }
+      return where(path).orOperator(disjunctions.toArray(new Criteria[disjunctions.size()]));
     }
     return null;
   }
@@ -333,6 +344,85 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
           queryComponent, context);
     } else {
       return where(prefixedProperty).is(propertyValue);
+    }
+  }
+
+  /**
+   * Complete query with translations.
+   *
+   * @param currentQuery
+   *     the current query
+   * @param translationsPath
+   *     the translations path
+   * @param translationsAlias
+   *     the translations alias
+   * @param property
+   *     the property
+   * @param propertyDescriptor
+   *     the property descriptor
+   * @param prefixedProperty
+   *     the prefixed property
+   * @param locale
+   *     the locale
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param queryComponent
+   *     the query component
+   * @param context
+   *     the context
+   */
+  @SuppressWarnings("unchecked")
+  protected void completeQueryWithTranslations(Query currentQuery, String translationsPath, String translationsAlias,
+                                               Map.Entry<String, Object> property,
+                                               IPropertyDescriptor propertyDescriptor, String prefixedProperty,
+                                               Locale locale, IComponentDescriptor<?> componentDescriptor,
+                                               IQueryComponent queryComponent, Map<String, Object> context) {
+    if (propertyDescriptor instanceof IStringPropertyDescriptor && ((IStringPropertyDescriptor) propertyDescriptor)
+        .isTranslatable()) {
+      String nlsOrRawValue = null;
+      String nlsValue = (String) property.getValue();
+      String barePropertyName = property.getKey();
+      if (property.getKey().endsWith(IComponentDescriptor.NLS_SUFFIX)) {
+        barePropertyName = barePropertyName.substring(0,
+            barePropertyName.length() - IComponentDescriptor.NLS_SUFFIX.length());
+      } else {
+        nlsOrRawValue = nlsValue;
+      }
+      if (nlsValue != null) {
+        List<Criteria> translationRestriction = new ArrayList<>();
+        translationRestriction.add(createStringRestriction(
+            ((ICollectionPropertyDescriptor<IPropertyTranslation>) componentDescriptor.getPropertyDescriptor(
+                translationsPath)).getCollectionDescriptor().getElementDescriptor().getPropertyDescriptor(
+                IPropertyTranslation.TRANSLATED_VALUE), translationsAlias + "." + IPropertyTranslation.TRANSLATED_VALUE,
+            nlsValue, componentDescriptor, queryComponent, context));
+        String languagePath = translationsAlias + "." + IPropertyTranslation.LANGUAGE;
+        translationRestriction.add(where(languagePath).is(locale.getLanguage()));
+        translationRestriction.add(where(translationsAlias + "." + IPropertyTranslation.PROPERTY_NAME).is(
+            barePropertyName));
+
+        List<Criteria> disjunction = new ArrayList<>();
+        disjunction.add(new Criteria().andOperator(translationRestriction.toArray(
+            new Criteria[translationRestriction.size()])));
+        if (nlsOrRawValue != null) {
+          List<Criteria> rawValueRestriction = new ArrayList<>();
+          // No SQL exists equivalent in Mongo...
+          // rawValueRestriction.add(new Criteria().orOperator(where(translationsPath).is(null), where(languagePath)
+          //  .is(locale.getLanguage())));
+          String rawPropertyName = barePropertyName + IComponentDescriptor.RAW_SUFFIX;
+          rawValueRestriction.add(createStringRestriction(componentDescriptor.getPropertyDescriptor(rawPropertyName),
+              rawPropertyName, nlsOrRawValue, componentDescriptor, queryComponent, context));
+          if (rawValueRestriction.size() == 1) {
+            disjunction.add(rawValueRestriction.get(0));
+          } else {
+            disjunction.add(new Criteria().andOperator(rawValueRestriction.toArray(
+                new Criteria[rawValueRestriction.size()])));
+          }
+        }
+        currentQuery.addCriteria(new Criteria().orOperator(disjunction.toArray(new Criteria[disjunction.size()])));
+      }
+    } else {
+      completeQuery(currentQuery, createStringRestriction(propertyDescriptor, prefixedProperty,
+          (String) property.getValue(), componentDescriptor, queryComponent, context));
     }
   }
 
@@ -391,6 +481,9 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
         }
       }
     }
+    if (disjunctions.size() == 1) {
+      return disjunctions.get(0);
+    }
     return where(prefixedProperty).orOperator(disjunctions.toArray(new Criteria[disjunctions.size()]));
   }
 
@@ -420,6 +513,9 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
       regex = regex.toUpperCase();
     }
     regex = regex.replaceAll("%", ".*");
+    if (!regex.endsWith(".*")) {
+      regex += ".*";
+    }
     return where(prefixedProperty).regex(regex);
   }
 

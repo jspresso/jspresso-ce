@@ -26,6 +26,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.AbstractQbeAction;
@@ -42,10 +45,12 @@ import org.jspresso.framework.model.IModelProvider;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IComponentDescriptorRegistry;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor;
+import org.jspresso.framework.model.descriptor.basic.RefQueryComponentDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.collection.IPageable;
@@ -58,9 +63,6 @@ import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * This is a standard &quot;List Of Values&quot; action for reference property
  * views. Although this action is used by default in view factories on reference
@@ -70,38 +72,35 @@ import org.slf4j.LoggerFactory;
  * Additionally you can statically configure the descriptor of the searched
  * entities using the {@code entityDescriptor} parameter so that the LOV
  * will act on this type of entities.
- * <p>
+ * <p/>
  * The LOV action prepares a QBE view (filter / result list) along with 3
  * actions that can be further refined : {@code findAction},
  * {@code okAction} and {@code cancelAction}. It must the be linked to
  * a {@code ModalDialogAction} so that the LOV actually pops up.
  *
- * @version $LastChangedRevision$
- * @author Vincent Vandenschrick
  * @param <E>
- *          the actual gui component type used.
+ *     the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *     the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *     the actual action type used.
+ * @author Vincent Vandenschrick
+ * @version $LastChangedRevision : 10134 $
  */
 public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
-  private static final Logger                        LOG                      = LoggerFactory
-                                                                                  .getLogger(LovAction.class);
+  private static final Logger LOG = LoggerFactory.getLogger(LovAction.class);
 
   /**
    * {@code LOV_PRESELECTED_ITEM}.
    */
-  public static final String                         LOV_PRESELECTED_ITEM     = "LOV_PRESELECTED_ITEM";
+  public static final  String LOV_PRESELECTED_ITEM     = "LOV_PRESELECTED_ITEM";
   /**
    * {@code LOV_SELECTED_ITEM}.
    */
-  public static final String                         LOV_SELECTED_ITEM        = "LOV_SELECTED_ITEM";
-  private static final String                        NON_LOV_TRIGGERING_CHARS = "%"
-                                                                                  + IQueryComponent.DISJUNCT
-                                                                                  + IQueryComponent.NOT_VAL
-                                                                                  + IQueryComponent.NULL_VAL;
+  public static final  String LOV_SELECTED_ITEM        = "LOV_SELECTED_ITEM";
+  private static final String NON_LOV_TRIGGERING_CHARS =
+      "%" + IQueryComponent.DISJUNCT + IQueryComponent.NOT_VAL + IQueryComponent.NULL_VAL;
   private boolean                                    autoquery;
   private Integer                                    pageSize;
   private IDisplayableAction                         cancelAction;
@@ -116,6 +115,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   private IAction                                    pagingAction;
   private String                                     defaultIconImageURL;
   private List<?>                                    staticComponentStore;
+  private IComponentDescriptorRegistry               componentDescriptorRegistry;
 
   /**
    * Constructs a new {@code LovAction} instance.
@@ -126,76 +126,69 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * {@inheritDoc}
+   *
+   * @param actionHandler
+   *     the action handler
+   * @param context
+   *     the context
+   * @return the boolean
    */
-  @SuppressWarnings("ConstantConditions")
+  @SuppressWarnings({"ConstantConditions", "unchecked"})
   @Override
-  public boolean execute(final IActionHandler actionHandler,
-      final Map<String, Object> context) {
+  public boolean execute(final IActionHandler actionHandler, final Map<String, Object> context) {
     if (getStaticComponentStore() != null) {
       context.put(StaticQueryComponentsAction.COMPONENT_STORE_KEY, getStaticComponentStore());
     }
     IReferencePropertyDescriptor<IComponent> erqDescriptor = getEntityRefQueryDescriptor(context);
-    context.put(CreateQueryComponentAction.COMPONENT_REF_DESCRIPTOR,
-        erqDescriptor);
+    context.put(CreateQueryComponentAction.COMPONENT_REF_DESCRIPTOR, erqDescriptor);
     IValueConnector viewConnector = getViewConnector(context);
     Object preselectedItem = context.get(LOV_PRESELECTED_ITEM);
     String autoCompletePropertyValue = getActionCommand(context);
 
     Object masterComponent = null;
-    if (getModelDescriptor(context) instanceof IPropertyDescriptor
-        && viewConnector.getParentConnector() != null) {
+    if (getModelDescriptor(context) instanceof IPropertyDescriptor && viewConnector.getParentConnector() != null) {
       if (preselectedItem == null) {
         preselectedItem = viewConnector.getConnectorValue();
       }
       // The following relies on a workaround used to determine the bean
       // model whenever the lov component is used inside a JTable.
-      IValueConnector parentModelConnector = viewConnector.getParentConnector()
-          .getModelConnector();
+      IValueConnector parentModelConnector = viewConnector.getParentConnector().getModelConnector();
       if (parentModelConnector instanceof IModelProvider) {
         masterComponent = ((IModelProvider) parentModelConnector).getModel();
       } else if (parentModelConnector instanceof ICollectionConnector) {
-        int collectionIndex = ((ICollectionConnector) viewConnector
-            .getParentConnector()).getSelectedIndices()[0];
-        masterComponent = ((ICollectionConnector) parentModelConnector)
-            .getChildConnector(collectionIndex).getConnectorValue();
+        int collectionIndex = ((ICollectionConnector) viewConnector.getParentConnector()).getSelectedIndices()[0];
+        masterComponent = ((ICollectionConnector) parentModelConnector).getChildConnector(collectionIndex)
+                                                                       .getConnectorValue();
       }
     } else {
       masterComponent = getSelectedModel(context);
     }
     context.put(CreateQueryComponentAction.MASTER_COMPONENT, masterComponent);
 
-    IView<E> parentView = getView(new int[]{
-        -1
-    }, context);
+    IView<E> parentView = getView(new int[]{-1}, context);
     if (parentView != null && parentView.getDescriptor() instanceof ITableViewDescriptor) {
       context.put(FrontendAction.COMPONENT_TO_FOCUS, parentView.getPeer());
     }
 
     actionHandler.execute(createQueryComponentAction, context);
-    IQueryComponent queryComponent = (IQueryComponent) context
-        .get(IQueryComponent.QUERY_COMPONENT);
+    IQueryComponent queryComponent = (IQueryComponent) context.get(IQueryComponent.QUERY_COMPONENT);
     queryComponent.setPageSize(getPageSize());
 
-    autoCompletePropertyValue = queryComponent
-        .refineValue(autoCompletePropertyValue, null);
+    autoCompletePropertyValue = queryComponent.refineValue(autoCompletePropertyValue, null);
 
     String autoCompletePropertyName = null;
     if (viewConnector instanceof IRenderableCompositeValueConnector
-        && ((IRenderableCompositeValueConnector) viewConnector)
-            .getRenderingConnector() != null) {
+        && ((IRenderableCompositeValueConnector) viewConnector).getRenderingConnector() != null) {
       Map<String, ESort> lovOrderingProperties = new LinkedHashMap<>();
-      autoCompletePropertyName = ((IRenderableCompositeValueConnector) viewConnector)
-          .getRenderingConnector().getModelDescriptor().getName();
-      if (autoCompletePropertyValue != null
-          && autoCompletePropertyValue.length() > 0
-          && !autoCompletePropertyValue.equals("*")
-          && !containsNonLovTriggeringChar(autoCompletePropertyValue)) {
+      autoCompletePropertyName = ((IRenderableCompositeValueConnector) viewConnector).getRenderingConnector()
+                                                                                     .getModelDescriptor().getName();
+      if (autoCompletePropertyValue != null && autoCompletePropertyValue.length() > 0 && !autoCompletePropertyValue
+          .equals("*") && !containsNonLovTriggeringChar(autoCompletePropertyValue)) {
         // only modify sort ordering if we are in auto complete mode
         // see bug #549
         lovOrderingProperties.put(autoCompletePropertyName, ESort.ASCENDING);
       }
-      Map<String, ESort> legacyOrderingProperties = queryComponent
-          .getOrderingProperties();
+      Map<String, ESort> legacyOrderingProperties = queryComponent.getOrderingProperties();
       if (legacyOrderingProperties != null) {
         lovOrderingProperties.putAll(legacyOrderingProperties);
       }
@@ -218,9 +211,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
           } else {
             viewConnector.setConnectorValue(queryComponent);
           }
-          ((IRenderableCompositeValueConnector) viewConnector)
-              .getRenderingConnector().setConnectorValue(
-                  autoCompletePropertyValue);
+          ((IRenderableCompositeValueConnector) viewConnector).getRenderingConnector().setConnectorValue(
+              autoCompletePropertyValue);
           return true;
         }
       }
@@ -228,18 +220,26 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
     // We must bind before querying for potential lazy loading to happen during
     // the transaction.
-    IView<E> lovView = getViewFactory(context).createView(createLovViewDescriptor(erqDescriptor, context), actionHandler,
-        getLocale(context));
-    IValueConnector queryEntityConnector = (IValueConnector) context
-        .get(CreateQueryComponentAction.QUERY_MODEL_CONNECTOR);
+    if (erqDescriptor.getReferencedDescriptor() instanceof RefQueryComponentDescriptor<?>) {
+      IReferencePropertyDescriptor<IComponent> refinedErqDescriptor = ((BasicReferencePropertyDescriptor<IComponent>)
+          erqDescriptor)
+          .clone();
+      // we are on a nested LOV => We must retrieve the real Entity descriptor
+      ((BasicReferencePropertyDescriptor<IComponent>) refinedErqDescriptor).setReferencedDescriptor(
+          (IComponentDescriptor<? extends IComponent>) getComponentDescriptorRegistry().getComponentDescriptor(
+              erqDescriptor.getModelType()));
+      erqDescriptor = refinedErqDescriptor;
+    }
+    IView<E> lovView = getViewFactory(context).createView(createLovViewDescriptor(erqDescriptor, context),
+        actionHandler, getLocale(context));
+    IValueConnector queryEntityConnector = (IValueConnector) context.get(
+        CreateQueryComponentAction.QUERY_MODEL_CONNECTOR);
     getMvcBinder(context).bind(lovView.getConnector(), queryEntityConnector);
 
     if (autoquery) {
       actionHandler.execute(getFindAction(), context);
-      if (autoCompletePropertyValue != null
-          && autoCompletePropertyValue.length() > 0
-          && !autoCompletePropertyValue.equals("*")
-          && queryComponent.getQueriedComponents() != null) {
+      if (autoCompletePropertyValue != null && autoCompletePropertyValue.length() > 0 && !autoCompletePropertyValue
+          .equals("*") && queryComponent.getQueriedComponents() != null) {
         if (queryComponent.getQueriedComponents().size() > 0) {
           Object selectedItem = null;
           Object firstItem = queryComponent.getQueriedComponents().get(0);
@@ -249,32 +249,25 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
             Object secondItem = queryComponent.getQueriedComponents().get(1);
             try {
               // Determine if it is a single exact match.
-              String firstItemPropertyValue = getBackendController(
-                  context)
-                  .getAccessorFactory()
-                  .createPropertyAccessor(autoCompletePropertyName,
-                      firstItem.getClass()).getValue(firstItem);
-              String secondItemPropertyValue = getBackendController(
-                  context)
-                  .getAccessorFactory()
-                  .createPropertyAccessor(autoCompletePropertyName,
-                      firstItem.getClass()).getValue(secondItem);
-              if (autoCompletePropertyValue
-                  .equalsIgnoreCase(firstItemPropertyValue)
-                  && !autoCompletePropertyValue
-                      .equalsIgnoreCase(secondItemPropertyValue)) {
+              String firstItemPropertyValue = getBackendController(context).getAccessorFactory().createPropertyAccessor(
+                  autoCompletePropertyName, firstItem.getClass()).getValue(firstItem);
+              String secondItemPropertyValue = getBackendController(context).getAccessorFactory()
+                                                                            .createPropertyAccessor(
+                                                                                autoCompletePropertyName,
+                                                                                firstItem.getClass()).getValue(
+                      secondItem);
+              if (autoCompletePropertyValue.equalsIgnoreCase(firstItemPropertyValue) && !autoCompletePropertyValue
+                  .equalsIgnoreCase(secondItemPropertyValue)) {
                 selectedItem = firstItem;
               }
             } catch (Exception ex) {
-              LOG.warn("Could not retrieve {} on {}", new Object[] {
-                  autoCompletePropertyName, firstItem, ex
-              });
+              LOG.warn("Could not retrieve {} on {}", autoCompletePropertyName, firstItem, ex);
             }
           }
           if (selectedItem != null) {
             if (selectedItem instanceof IEntity) {
-              selectedItem = getController(context).getBackendController()
-                  .merge((IEntity) selectedItem, EMergeMode.MERGE_LAZY);
+              selectedItem = getController(context).getBackendController().merge((IEntity) selectedItem,
+                  EMergeMode.MERGE_LAZY);
             }
             context.put(LOV_SELECTED_ITEM, selectedItem);
             actionHandler.execute(getOkAction(), context);
@@ -284,8 +277,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
       }
       handlePreselectedItem(preselectedItem, queryComponent, lovView);
     }
-    feedContextWithDialog(erqDescriptor, queryComponent, lovView,
-        actionHandler, context);
+    feedContextWithDialog(erqDescriptor, queryComponent, lovView, actionHandler, context);
     if (context.get(FrontendAction.COMPONENT_TO_FOCUS) == null) {
       // To return to the action field once the dialog closes if and only if
       // The focus has not been explicitly set to something else.
@@ -297,33 +289,35 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   /**
    * Create lov view descriptor.
    *
-   * @param erqDescriptor the erq descriptor
-   * @param context the context
+   * @param erqDescriptor
+   *     the erq descriptor
+   * @param context
+   *     the context
    * @return the i view descriptor
    */
   protected IViewDescriptor createLovViewDescriptor(IReferencePropertyDescriptor<IComponent> erqDescriptor,
                                                     Map<String, Object> context) {
-    return lovViewDescriptorFactory.createLovViewDescriptor(erqDescriptor,
-        getSelectionMode(context), getOkAction(), context);
+    return lovViewDescriptorFactory.createLovViewDescriptor(erqDescriptor, getSelectionMode(context), getOkAction(),
+        context);
   }
 
   /**
    * Handle preselected item.
    *
-   * @param preselectedItem the preselected item
-   * @param queryComponent the query component
-   * @param lovView the lov view
+   * @param preselectedItem
+   *     the preselected item
+   * @param queryComponent
+   *     the query component
+   * @param lovView
+   *     the lov view
    */
   protected void handlePreselectedItem(Object preselectedItem, IQueryComponent queryComponent, IView<E> lovView) {
-    if (preselectedItem != null
-        && queryComponent.getQueriedComponents().size() > 0) {
+    if (preselectedItem != null && queryComponent.getQueriedComponents().size() > 0) {
       for (int i = 0; i < queryComponent.getQueriedComponents().size(); i++) {
-        if (preselectedItem.equals(queryComponent.getQueriedComponents().get(
-            i))) {
+        if (preselectedItem.equals(queryComponent.getQueriedComponents().get(i))) {
           // this is from the dialog.
           ICollectionConnector resultConnector = (ICollectionConnector) ((ICompositeValueConnector) lovView
-              .getConnector())
-              .getChildConnector(IQueryComponent.QUERIED_COMPONENTS);
+              .getConnector()).getChildConnector(IQueryComponent.QUERIED_COMPONENTS);
           if (resultConnector != null) {
             resultConnector.setSelectedIndices(i);
           }
@@ -336,34 +330,33 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   /**
    * Feed context with dialog.
    *
-   * @param erqDescriptor the erq descriptor
-   * @param queryComponent the query component
-   * @param lovView the lov view
-   * @param actionHandler the action handler
-   * @param context the context
+   * @param erqDescriptor
+   *     the erq descriptor
+   * @param queryComponent
+   *     the query component
+   * @param lovView
+   *     the lov view
+   * @param actionHandler
+   *     the action handler
+   * @param context
+   *     the context
    */
-  protected void feedContextWithDialog(
-      IReferencePropertyDescriptor<IComponent> erqDescriptor,
-      IQueryComponent queryComponent, IView<E> lovView,
-      final IActionHandler actionHandler, final Map<String, Object> context) {
+  protected void feedContextWithDialog(IReferencePropertyDescriptor<IComponent> erqDescriptor,
+                                       IQueryComponent queryComponent, IView<E> lovView,
+                                       final IActionHandler actionHandler, final Map<String, Object> context) {
     List<IDisplayableAction> actions = new ArrayList<>();
-    getViewConnector(context).setConnectorValue(
-        getViewConnector(context).getConnectorValue());
+    getViewConnector(context).setConnectorValue(getViewConnector(context).getConnectorValue());
 
     actions.add(getOkAction());
     actions.add(getFindAction());
     actions.add(getCancelAction());
     context.put(ModalDialogAction.DIALOG_ACTIONS, actions);
-    context.put(
-        ModalDialogAction.DIALOG_TITLE,
-        getI18nName(getTranslationProvider(context), getLocale(context))
-            + " : "
-            + erqDescriptor.getReferencedDescriptor().getI18nName(
-                getTranslationProvider(context), getLocale(context)));
+    context.put(ModalDialogAction.DIALOG_TITLE, getI18nName(getTranslationProvider(context), getLocale(context)) + " : "
+        + erqDescriptor.getReferencedDescriptor().getI18nName(getTranslationProvider(context), getLocale(context)));
     context.put(ModalDialogAction.DIALOG_VIEW, lovView);
     if (lovView instanceof ICompositeView<?>) {
-      context.put(ModalDialogAction.DIALOG_FOCUSED_COMPONENT,
-          ((ICompositeView<E>) lovView).getChildren().get(1).getPeer());
+      context.put(ModalDialogAction.DIALOG_FOCUSED_COMPONENT, ((ICompositeView<E>) lovView).getChildren().get(1)
+                                                                                           .getPeer());
     }
 
     if (pagingAction != null) {
@@ -381,8 +374,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
           }
         }
       };
-      queryComponent.addPropertyChangeListener(IPageable.PAGE,
-          paginationListener);
+      queryComponent.addPropertyChangeListener(IPageable.PAGE, paginationListener);
     }
   }
 
@@ -399,16 +391,19 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * {@inheritDoc}
+   *
+   * @param translationProvider
+   *     the translation provider
+   * @param locale
+   *     the locale
+   * @return the i 18 n description
    */
   @Override
-  public String getI18nDescription(ITranslationProvider translationProvider,
-      Locale locale) {
+  public String getI18nDescription(ITranslationProvider translationProvider, Locale locale) {
     if (getDescription() == null) {
       if (entityDescriptor != null) {
-        return translationProvider.getTranslation("lov.element.description",
-            new Object[] {
-              entityDescriptor.getI18nName(translationProvider, locale)
-            }, locale);
+        return translationProvider.getTranslation("lov.element.description", new Object[]{entityDescriptor.getI18nName(
+            translationProvider, locale)}, locale);
       }
       return translationProvider.getTranslation("lov.description", locale);
     }
@@ -417,16 +412,19 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * {@inheritDoc}
+   *
+   * @param translationProvider
+   *     the translation provider
+   * @param locale
+   *     the locale
+   * @return the i 18 n name
    */
   @Override
-  public String getI18nName(ITranslationProvider translationProvider,
-      Locale locale) {
+  public String getI18nName(ITranslationProvider translationProvider, Locale locale) {
     if (getName() == null) {
       if (entityDescriptor != null) {
-        return translationProvider.getTranslation("lov.element.name",
-            new Object[] {
-              entityDescriptor.getI18nName(translationProvider, locale)
-            }, locale);
+        return translationProvider.getTranslation("lov.element.name", new Object[]{entityDescriptor.getI18nName(
+            translationProvider, locale)}, locale);
       }
       return translationProvider.getTranslation("lov.name", locale);
     }
@@ -435,6 +433,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * {@inheritDoc}
+   *
+   * @return the icon
    */
   @Override
   public Icon getIcon() {
@@ -459,7 +459,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    * to true.
    *
    * @param autoquery
-   *          the autoquery to set.
+   *     the autoquery to set.
    */
   public void setAutoquery(boolean autoquery) {
     this.autoquery = autoquery;
@@ -468,9 +468,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   /**
    * Configures the action to be executed whenever the user cancels the LOV
    * dialog.
-   * 
+   *
    * @param cancelAction
-   *          the cancelAction to set.
+   *     the cancelAction to set.
    */
   public void setCancelAction(IDisplayableAction cancelAction) {
     this.cancelAction = cancelAction;
@@ -488,12 +488,11 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   /**
    * Configures the action used to create the filter query component based on
    * the type of entities backing the LOV.
-   * 
+   *
    * @param createQueryComponentAction
-   *          the createQueryComponentAction to set.
+   *     the createQueryComponentAction to set.
    */
-  public void setCreateQueryComponentAction(
-      CreateQueryComponentAction createQueryComponentAction) {
+  public void setCreateQueryComponentAction(CreateQueryComponentAction createQueryComponentAction) {
     this.createQueryComponentAction = createQueryComponentAction;
   }
 
@@ -501,42 +500,36 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    * Configures explicitly the type of entities the LOV relies on. This is
    * automatically determined when installed on a reference field but must be set
    * in any other case.
-   * 
+   *
    * @param entityDescriptor
-   *          the entityDescriptor to set.
+   *     the entityDescriptor to set.
    */
-  public void setEntityDescriptor(
-      IComponentDescriptor<? extends IComponent> entityDescriptor) {
+  public void setEntityDescriptor(IComponentDescriptor<? extends IComponent> entityDescriptor) {
     this.entityDescriptor = entityDescriptor;
-    this.entityRefQueryDescriptor = createEntityRefQueryDescriptor(
-        entityDescriptor, initializationMapping);
+    this.entityRefQueryDescriptor = createEntityRefQueryDescriptor(entityDescriptor, initializationMapping);
   }
 
   /**
    * Gets the entity descriptor to execute the LOV action for from the context.
    * It allows sub classes to override in order to define the descriptor at
    * runtime.
-   * 
+   *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the entity descriptor to execute the LOV action for.
    */
   @SuppressWarnings("UnusedParameters")
-  protected IComponentDescriptor<? extends IComponent> getEntityDescriptor(
-      Map<String, Object> context) {
+  protected IComponentDescriptor<? extends IComponent> getEntityDescriptor(Map<String, Object> context) {
     return entityDescriptor;
   }
 
   private IReferencePropertyDescriptor<IComponent> createEntityRefQueryDescriptor(
-      IComponentDescriptor<? extends IComponent> descriptor,
-      Map<String, Object> initMapping) {
+      IComponentDescriptor<? extends IComponent> descriptor, Map<String, Object> initMapping) {
     IReferencePropertyDescriptor<IComponent> refQueryDescriptor = null;
     if (descriptor != null) {
       refQueryDescriptor = new BasicReferencePropertyDescriptor<>();
-      ((BasicReferencePropertyDescriptor<IComponent>) refQueryDescriptor)
-          .setReferencedDescriptor(descriptor);
-      ((BasicReferencePropertyDescriptor<IComponent>) refQueryDescriptor)
-          .setInitializationMapping(initMapping);
+      ((BasicReferencePropertyDescriptor<IComponent>) refQueryDescriptor).setReferencedDescriptor(descriptor);
+      ((BasicReferencePropertyDescriptor<IComponent>) refQueryDescriptor).setInitializationMapping(initMapping);
     }
     return refQueryDescriptor;
   }
@@ -545,9 +538,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    * Configures the action to be executed whenever the user queries the
    * persistent store, either explicitly when using the action installed in the
    * LOV dialog or implicitly through the auto query feature.
-   * 
+   *
    * @param findAction
-   *          the findAction to set.
+   *     the findAction to set.
    */
   public void setFindAction(IDisplayableAction findAction) {
     this.findAction = findAction;
@@ -571,32 +564,30 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    * the view model to the filter.
    *
    * @param initializationMapping
-   *          the initializationMapping to set.
+   *     the initializationMapping to set.
    */
   public void setInitializationMapping(Map<String, Object> initializationMapping) {
     this.initializationMapping = initializationMapping;
-    this.entityRefQueryDescriptor = createEntityRefQueryDescriptor(
-        entityDescriptor, initializationMapping);
+    this.entityRefQueryDescriptor = createEntityRefQueryDescriptor(entityDescriptor, initializationMapping);
   }
 
   /**
    * Configures the factory to be used to create the QBE view used in the
    * dialog.
-   * 
+   *
    * @param lovViewDescriptorFactory
-   *          the lovViewDescriptorFactory to set.
+   *     the lovViewDescriptorFactory to set.
    */
-  public void setLovViewDescriptorFactory(
-      ILovViewDescriptorFactory lovViewDescriptorFactory) {
+  public void setLovViewDescriptorFactory(ILovViewDescriptorFactory lovViewDescriptorFactory) {
     this.lovViewDescriptorFactory = lovViewDescriptorFactory;
   }
 
   /**
    * Configures the action to be executed whenever the user validates the LOV
    * selection.
-   * 
+   *
    * @param okAction
-   *          the okAction to set.
+   *     the okAction to set.
    */
   public void setOkAction(IDisplayableAction okAction) {
     this.okAction = okAction;
@@ -613,14 +604,13 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Gets the entityRefQueryDescriptor.
-   * 
+   *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the entityRefQueryDescriptor.
    */
   @SuppressWarnings("unchecked")
-  protected IReferencePropertyDescriptor<IComponent> getEntityRefQueryDescriptor(
-      Map<String, Object> context) {
+  protected IReferencePropertyDescriptor<IComponent> getEntityRefQueryDescriptor(Map<String, Object> context) {
     if (entityRefQueryDescriptor != null) {
       return entityRefQueryDescriptor;
     }
@@ -646,9 +636,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Sets the pagingAction.
-   * 
+   *
    * @param pagingAction
-   *          the pagingAction to set.
+   *     the pagingAction to set.
    */
   public void setPagingAction(IAction pagingAction) {
     this.pagingAction = pagingAction;
@@ -665,9 +655,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Gets the selectionMode of the result view.
-   * 
+   *
    * @param lovContext
-   *          the LOV action context.
+   *     the LOV action context.
    * @return the selectionMode.
    */
   protected ESelectionMode getSelectionMode(Map<String, Object> lovContext) {
@@ -681,8 +671,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    * Allows to force the result view selection mode.
    *
    * @param selectionMode
-   *          the result view selection mode. When {@code null}, the
-   *          default selection mode is applied.
+   *     the result view selection mode. When
+   *     , the
+   *     default selection mode is applied.
    */
   public void setSelectionMode(ESelectionMode selectionMode) {
     this.selectionMode = selectionMode;
@@ -690,9 +681,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Determines the default selection mode for the result view.
-   * 
+   *
    * @param lovContext
-   *          the LOV context.
+   *     the LOV context.
    * @return the default selection mode for the result view.
    */
   protected ESelectionMode getDefaultSelectionMode(Map<String, Object> lovContext) {
@@ -705,7 +696,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Gets the defaultIconImageURL.
-   * 
+   *
    * @return the defaultIconImageURL.
    */
   protected String getDefaultIconImageURL() {
@@ -714,9 +705,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Sets the defaultIconImageURL.
-   * 
+   *
    * @param defaultIconImageURL
-   *          the defaultIconImageURL to set.
+   *     the defaultIconImageURL to set.
    */
   public void setDefaultIconImageURL(String defaultIconImageURL) {
     this.defaultIconImageURL = defaultIconImageURL;
@@ -734,7 +725,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   /**
    * Sets page size.
    *
-   * @param pageSize the page size
+   * @param pageSize
+   *     the page size
    */
   public void setPageSize(Integer pageSize) {
     this.pageSize = pageSize;
@@ -752,9 +744,29 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   /**
    * Sets static component store.
    *
-   * @param staticComponentStore the static component store
+   * @param staticComponentStore
+   *     the static component store
    */
   public void setStaticComponentStore(List<?> staticComponentStore) {
     this.staticComponentStore = staticComponentStore;
+  }
+
+  /**
+   * Gets component descriptor registry.
+   *
+   * @return the component descriptor registry
+   */
+  protected IComponentDescriptorRegistry getComponentDescriptorRegistry() {
+    return componentDescriptorRegistry;
+  }
+
+  /**
+   * Sets component descriptor registry.
+   *
+   * @param componentDescriptorRegistry
+   *     the component descriptor registry
+   */
+  public void setComponentDescriptorRegistry(IComponentDescriptorRegistry componentDescriptorRegistry) {
+    this.componentDescriptorRegistry = componentDescriptorRegistry;
   }
 }

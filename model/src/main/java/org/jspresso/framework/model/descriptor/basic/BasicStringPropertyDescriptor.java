@@ -58,6 +58,7 @@ public class BasicStringPropertyDescriptor extends
     BasicStringPropertyDescriptor queryDescriptor = (BasicStringPropertyDescriptor) super.createQueryDescriptor();
     queryDescriptor.setMaxLength(null);
     queryDescriptor.setRegexpPattern(null);
+    queryDescriptor.setTranslatable(false);
     return queryDescriptor;
   }
 
