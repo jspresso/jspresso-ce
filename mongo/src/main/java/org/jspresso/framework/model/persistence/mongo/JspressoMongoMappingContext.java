@@ -16,20 +16,25 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.backend.persistence.mongo;
+package org.jspresso.framework.model.persistence.mongo;
 
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Proxy;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.SimplePropertyHandler;
 import org.springframework.data.mapping.context.PersistentPropertyPath;
+import org.springframework.data.mapping.model.PropertyNameFieldNamingStrategy;
+import org.springframework.data.mapping.model.SimpleTypeHolder;
 import org.springframework.data.mongodb.core.mapping.BasicMongoPersistentEntity;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 import org.springframework.data.mongodb.core.mapping.MongoPersistentProperty;
@@ -52,6 +57,7 @@ public class JspressoMongoMappingContext extends MongoMappingContext {
   private static final Logger LOG = LoggerFactory.getLogger(JspressoMongoMappingContext.class);
 
   private IComponentDescriptorRegistry descriptorRegistry;
+  private ApplicationContext           applicationContext;
 
   /**
    * Gets persistent entity.
@@ -103,6 +109,23 @@ public class JspressoMongoMappingContext extends MongoMappingContext {
     return super.addPersistentEntity(getEntityContractFromType(type));
   }
 
+  @Override
+  public MongoPersistentProperty createPersistentProperty(Field field, PropertyDescriptor descriptor,
+                                                          BasicMongoPersistentEntity<?> owner,
+                                                          SimpleTypeHolder simpleTypeHolder) {
+    return new JspressoMongoPersistentProperty(field, descriptor, owner, simpleTypeHolder,
+        PropertyNameFieldNamingStrategy.INSTANCE);
+  }
+
+  @Override
+  protected <T> BasicMongoPersistentEntity<T> createPersistentEntity(TypeInformation<T> typeInformation) {
+    BasicMongoPersistentEntity<T> entity = new BasicMongoPersistentEntity<T>(typeInformation);
+    if (applicationContext != null) {
+      entity.setApplicationContext(applicationContext);
+    }
+    return entity;
+  }
+
   /**
    * Add persistent entity.
    *
@@ -120,11 +143,6 @@ public class JspressoMongoMappingContext extends MongoMappingContext {
         .getComponentDescriptor(entityType);
     if (entityDescriptor != null) {
       final Set<String> entityDeclaredPropertyNames = new HashSet<>();
-/*
-      for (IPropertyDescriptor propertyDescriptor : entityDescriptor.getDeclaredPropertyDescriptors()) {
-        entityDeclaredPropertyNames.add(propertyDescriptor.getName());
-      }
-*/
       try {
         for (PropertyDescriptor propertyDescriptor : Introspector.getBeanInfo(entityType).getPropertyDescriptors()) {
           entityDeclaredPropertyNames.add(propertyDescriptor.getName());
@@ -187,4 +205,11 @@ public class JspressoMongoMappingContext extends MongoMappingContext {
   public void setDescriptorRegistry(IComponentDescriptorRegistry descriptorRegistry) {
     this.descriptorRegistry = descriptorRegistry;
   }
+
+  @Override
+  public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    this.applicationContext = applicationContext;
+    super.setApplicationContext(applicationContext);
+  }
+
 }

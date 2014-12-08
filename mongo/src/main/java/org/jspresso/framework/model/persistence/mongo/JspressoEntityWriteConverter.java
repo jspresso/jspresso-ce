@@ -18,16 +18,20 @@
  */
 package org.jspresso.framework.model.persistence.mongo;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import org.springframework.core.convert.converter.Converter;
 
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorRegistry;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 
 /**
@@ -38,31 +42,63 @@ import org.jspresso.framework.model.entity.IEntity;
  */
 public class JspressoEntityWriteConverter implements Converter<IEntity, DBObject> {
 
-  private IComponentDescriptorRegistry descriptorRegistry;
+  private IComponentDescriptorRegistry  descriptorRegistry;
+  private JspressoMappingMongoConverter mongoConverter;
 
   /**
    * Convert dB object.
    *
-   * @param source the source
+   * @param entity
+   *     the entity
    * @return the dB object
    */
   @Override
-  public DBObject convert(IEntity source) {
+  public DBObject convert(IEntity entity) {
+    DBObject dbo = convertComponent(entity);
+    dbo.put("_id", entity.getId());
+    return dbo;
+  }
+
+  private DBObject convertComponent(IComponent component) {
     DBObject dbo = new BasicDBObject();
-    dbo.put("_id", source.getId());
-    dbo.put("_class", source.getComponentContract().getName());
-    IComponentDescriptor<? extends IEntity> entityDescriptor
-        = (IComponentDescriptor<? extends IEntity>) getDescriptorRegistry().getComponentDescriptor(source.getComponentContract());
-    for (Map.Entry<String, Object> propertyEntry : source.straightGetProperties().entrySet()) {
+    dbo.put("_class", component.getComponentContract().getName());
+    IComponentDescriptor<? extends IEntity> entityDescriptor = (IComponentDescriptor<? extends IEntity>)
+        getDescriptorRegistry()
+        .getComponentDescriptor(component.getComponentContract());
+    for (Map.Entry<String, Object> propertyEntry : component.straightGetProperties().entrySet()) {
       Object propertyValue = propertyEntry.getValue();
       String propertyName = propertyEntry.getKey();
       IPropertyDescriptor propertyDescriptor = entityDescriptor.getPropertyDescriptor(propertyName);
       if (propertyDescriptor != null && !propertyDescriptor.isComputed()) {
-        if (propertyDescriptor instanceof IScalarPropertyDescriptor) {
+        if (propertyValue instanceof IComponent) {
+          if (propertyValue instanceof IEntity) {
+            dbo.put(propertyName, getMongoConverter().toDBRef(propertyValue,
+                getMongoConverter().getMappingContext().getPersistentEntity(component.getComponentContract())
+                                   .getPersistentProperty(propertyName)));
+          } else {
+            dbo.put(propertyName, convertComponent((IComponent) propertyValue));
+          }
+        } else if (propertyValue instanceof Collection<?>) {
+          Collection<Object> convertedCollection;
+          if (propertyValue instanceof List) {
+            convertedCollection = new ArrayList<>();
+          } else {
+            convertedCollection = new HashSet<>();
+          }
+          for (Object element : (Collection) propertyValue) {
+            if (element instanceof IComponent) {
+              convertedCollection.add(convertComponent((IComponent) element));
+            } else {
+              convertedCollection.add(element);
+            }
+          }
+          dbo.put(propertyName, convertedCollection);
+        } else {
           dbo.put(propertyName, propertyValue);
         }
       }
     }
+
     return dbo;
   }
 
@@ -78,9 +114,29 @@ public class JspressoEntityWriteConverter implements Converter<IEntity, DBObject
   /**
    * Sets descriptor registry.
    *
-   * @param descriptorRegistry the descriptor registry
+   * @param descriptorRegistry
+   *     the descriptor registry
    */
   public void setDescriptorRegistry(IComponentDescriptorRegistry descriptorRegistry) {
     this.descriptorRegistry = descriptorRegistry;
+  }
+
+  /**
+   * Gets mongo converter.
+   *
+   * @return the mongo converter
+   */
+  protected JspressoMappingMongoConverter getMongoConverter() {
+    return mongoConverter;
+  }
+
+  /**
+   * Sets mongo converter.
+   *
+   * @param mongoConverter
+   *     the mongo converter
+   */
+  public void setMongoConverter(JspressoMappingMongoConverter mongoConverter) {
+    this.mongoConverter = mongoConverter;
   }
 }

@@ -97,7 +97,7 @@
   <bean id="applicationBackController" parent="abstractMongoBackController" scope="prototype"/>
 
   <bean id="jspressoMappingContext"
-        class="org.jspresso.framework.application.backend.persistence.mongo.JspressoMongoMappingContext">
+        class="org.jspresso.framework.model.persistence.mongo.JspressoMongoMappingContext">
     <property name="descriptorRegistry" ref="controllerAwareEntityFactory"/>
   </bean>
 
@@ -105,24 +105,36 @@
     <property name="entityFactory" ref="controllerAwareEntityFactory"/>
   </bean>
 
-  <mongo:mapping-converter mapping-context-ref="jspressoMappingContext">
-    <mongo:custom-converters>
-      <mongo:converter>
+  <bean id="jspressoMappingConverter"
+        class="org.jspresso.framework.model.persistence.mongo.JspressoMappingMongoConverter">
+    <constructor-arg>
+      <bean class="org.springframework.data.mongodb.core.convert.DefaultDbRefResolver">
+        <constructor-arg ref="mongoDbFactory"/>
+      </bean>
+    </constructor-arg>
+    <constructor-arg ref="jspressoMappingContext"/>
+    <property name="customConversions" ref="conversions"/>
+  </bean>
+
+  <bean id="conversions" class="org.springframework.data.mongodb.core.convert.CustomConversions">
+    <constructor-arg>
+      <list>
         <bean class="org.jspresso.framework.model.persistence.mongo.JspressoEntityReadConverter">
           <property name="entityFactory" ref="controllerAwareEntityFactory"/>
+          <property name="collectionFactory" ref="componentCollectionFactory"/>
+          <property name="mongoConverter" ref="jspressoMappingConverter"/>
         </bean>
-      </mongo:converter>
-      <mongo:converter>
         <bean class="org.jspresso.framework.model.persistence.mongo.JspressoEntityWriteConverter">
           <property name="descriptorRegistry" ref="controllerAwareEntityFactory"/>
+          <property name="mongoConverter" ref="jspressoMappingConverter"/>
         </bean>
-      </mongo:converter>
-    </mongo:custom-converters>
-  </mongo:mapping-converter>
+      </list>
+    </constructor-arg>
+  </bean>
 
   <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
     <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
-    <constructor-arg name="mongoConverter" ref="mappingConverter"/>
+    <constructor-arg name="mongoConverter" ref="jspressoMappingConverter"/>
   </bean>
 
 </beans>
