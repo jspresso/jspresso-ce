@@ -19,9 +19,7 @@
 package org.jspresso.framework.application.backend.persistence.mongo;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -52,174 +50,23 @@ import org.jspresso.framework.model.entity.IEntity;
 public class MongoBackendController extends AbstractBackendController {
 
   private MongoTemplate mongoTemplate;
-
-  private Set<IEntity> updatedEntities;
-  private Set<IEntity> deletedEntities;
-  private boolean traversedPendingOperations = false;
-
-
   private static final Logger LOG = LoggerFactory.getLogger(MongoBackendController.class);
 
   /**
-   * Allows for a new run of performPendingOperations.
-   * <p/>
    * {@inheritDoc}
    */
   @Override
-  public void clearPendingOperations() {
-    super.clearPendingOperations();
-    traversedPendingOperations = false;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void doBeginUnitOfWork() {
-    updatedEntities = new HashSet<>();
-    deletedEntities = new HashSet<>();
-    super.doBeginUnitOfWork();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void doCommitUnitOfWork() {
-    for (IEntity deletedEntity : deletedEntities) {
-      // Notifies the session of deleted entities.
-      recordAsSynchronized(deletedEntity);
-    }
-    updatedEntities = null;
-    deletedEntities = null;
-    if (traversedPendingOperations) {
-      // We must get rid of the pending operations only in the case of a
-      // successful commit.
-      clearPendingOperations();
+  protected void doCommitUnitOfWork() {
+    for (Map<Serializable, IEntity> uowEntities : getUnitOfWorkEntities().values()) {
+      for (IEntity uowEntity : uowEntities.values()) {
+        if (isEntityRegisteredForDeletion(uowEntity)) {
+          getMongoTemplate().remove(uowEntity);
+        } else if (isDirtyInDepth(uowEntity)) {
+          getMongoTemplate().save(uowEntity);
+        }
+      }
     }
     super.doCommitUnitOfWork();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void performPendingOperations() {
-    if (!traversedPendingOperations) {
-      traversedPendingOperations = true;
-      MongoTemplate mongo = getMongoTemplate();
-      Collection<IEntity> entitiesToUpdate = getEntitiesRegisteredForUpdate();
-      Collection<IEntity> entitiesToDelete = getEntitiesRegisteredForDeletion();
-      List<IEntity> entitiesToClone = new ArrayList<>();
-      if (entitiesToUpdate != null) {
-        entitiesToClone.addAll(entitiesToUpdate);
-      }
-      if (entitiesToDelete != null) {
-        entitiesToClone.addAll(entitiesToDelete);
-      }
-      List<IEntity> sessionEntities = cloneInUnitOfWork(entitiesToClone);
-      Map<IEntity, IEntity> entityMap = new HashMap<>();
-      for (int i = 0; i < entitiesToClone.size(); i++) {
-        entityMap.put(entitiesToClone.get(i), sessionEntities.get(i));
-      }
-      if (entitiesToUpdate != null) {
-        for (IEntity entityToUpdate : entitiesToUpdate) {
-          IEntity sessionEntity = entityMap.get(entityToUpdate);
-          if (sessionEntity == null) {
-            sessionEntity = entityToUpdate;
-          }
-          updatedEntities.add(sessionEntity);
-          mongo.save(sessionEntity);
-        }
-      }
-      // there might have been new entities to delete
-      entitiesToDelete = getEntitiesRegisteredForDeletion();
-      if (entitiesToDelete != null) {
-        for (IEntity entityToDelete : entitiesToDelete) {
-          IEntity sessionEntity = entityMap.get(entityToDelete);
-          if (sessionEntity == null) {
-            sessionEntity = entityToDelete;
-          }
-          deletedEntities.add(sessionEntity);
-          mongo.remove(sessionEntity);
-        }
-      }
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void registerForDeletion(IEntity entity) {
-    if (entity == null) {
-      throw new IllegalArgumentException("Passed entity cannot be null");
-    }
-    if (isUnitOfWorkActive()) {
-      Set<IEntity> deletedEntitiesSnapshot = new HashSet<>(deletedEntities);
-      try {
-        deletedEntities.add(entity);
-        getMongoTemplate().remove(entity);
-        updatedEntities.remove(entity);
-      } catch (RuntimeException re) {
-        deletedEntities = deletedEntitiesSnapshot;
-        throw re;
-      }
-    } else {
-      super.registerForDeletion(entity);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isEntityRegisteredForDeletion(IEntity entity) {
-    return deletedEntities != null && deletedEntities.contains(entity) || super.isEntityRegisteredForDeletion(entity);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void registerForUpdate(IEntity entity) {
-    if (entity == null) {
-      throw new IllegalArgumentException("Passed entity cannot be null");
-    }
-    if (isUnitOfWorkActive()) {
-      Set<IEntity> updatedEntitiesSnapshot = new HashSet<>(updatedEntities);
-      try {
-        updatedEntities.add(entity);
-        getMongoTemplate().save(entity);
-      } catch (RuntimeException re) {
-        updatedEntities = updatedEntitiesSnapshot;
-        throw re;
-      }
-    } else {
-      super.registerForUpdate(entity);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isEntityRegisteredForUpdate(IEntity entity) {
-    return updatedEntities != null && updatedEntities.contains(entity) || super.isEntityRegisteredForUpdate(entity);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void doRollbackUnitOfWork() {
-    updatedEntities = null;
-    deletedEntities = null;
-    try {
-      super.doRollbackUnitOfWork();
-    } finally {
-      traversedPendingOperations = false;
-    }
   }
 
   /**
@@ -295,8 +142,7 @@ public class MongoBackendController extends AbstractBackendController {
    *     the type of the entity.
    * @return the first found entity or null
    */
-  public <T extends IEntity> List<T> findByQuery(final Query query, EMergeMode mergeMode,
-                                                    Class<? extends T> clazz) {
+  public <T extends IEntity> List<T> findByQuery(final Query query, EMergeMode mergeMode, Class<? extends T> clazz) {
     return findByQuery(query, -1, -1, mergeMode, clazz);
   }
 
@@ -321,7 +167,7 @@ public class MongoBackendController extends AbstractBackendController {
    */
   @SuppressWarnings("UnusedParameters")
   public <T extends IEntity> List<T> findByQuery(final Query query, int firstResult, int maxResults,
-                                                    EMergeMode mergeMode, Class<? extends T> clazz) {
+                                                 EMergeMode mergeMode, Class<? extends T> clazz) {
     List<T> res;
     if (isUnitOfWorkActive()) {
       // merge mode must be ignored if a transaction is pre-existing, so force
@@ -381,8 +227,8 @@ public class MongoBackendController extends AbstractBackendController {
 
         @Override
         protected void doInTransactionWithoutResult(TransactionStatus status) {
-          merge(getMongoTemplate().findById(entity.getId(), getComponentContract(entity)), EMergeMode
-              .MERGE_CLEAN_EAGER);
+          merge(getMongoTemplate().findById(entity.getId(), getComponentContract(entity)),
+              EMergeMode.MERGE_CLEAN_EAGER);
         }
       });
     }
