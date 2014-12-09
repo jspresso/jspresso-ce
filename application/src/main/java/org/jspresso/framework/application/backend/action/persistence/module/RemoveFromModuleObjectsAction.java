@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2014 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -16,26 +16,26 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.backend.action.persistence.hibernate.module;
+package org.jspresso.framework.application.backend.action.persistence.module;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.IBackendController;
-import org.jspresso.framework.application.backend.action.persistence.hibernate.AbstractHibernateAction;
-import org.jspresso.framework.application.backend.action.persistence.hibernate.AbstractHibernateCollectionAction;
+import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.BeanModule;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.entity.IEntity;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 
 /**
  * This action, which is to be used on bean collection modules, removes the
@@ -48,7 +48,7 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RemoveFromModuleObjectsAction extends AbstractHibernateAction {
+public class RemoveFromModuleObjectsAction extends BackendAction {
 
   /**
    * Constructs a new {@code RemoveFromModuleObjectsAction} instance.
@@ -161,7 +161,7 @@ public class RemoveFromModuleObjectsAction extends AbstractHibernateAction {
    *          the action context.
    * @throws NoSuchMethodException
    *           whenever this exception occurs.
-   * @throws InvocationTargetException
+   * @throws java.lang.reflect.InvocationTargetException
    *           whenever this exception occurs.
    * @throws IllegalAccessException
    *           whenever this exception occurs.

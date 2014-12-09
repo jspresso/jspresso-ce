@@ -42,10 +42,6 @@
     <property name="transactionManager" ref="transactionManager" />
   </bean>
 
-  <!-- Hibernate root action beans. -->
-  <bean abstract="true" id="abstractHibernateBackAction"
-    class="org.jspresso.framework.application.backend.action.persistence.hibernate.AbstractHibernateAction" />
-
   <bean id="triStateBooleanSupported" class="java.lang.Boolean">
     <constructor-arg value="true" />
   </bean>
@@ -59,34 +55,13 @@
 
   <bean id="applicationCriteriaRefiner" class="org.jspresso.framework.application.backend.action.persistence.hibernate.MockCriteriaRefiner" />
 
-  <bean id="queryEntitiesBackActionBase" parent="abstractHibernateBackAction"
+  <bean id="queryEntitiesBackActionBase" parent="abstractBackendAction"
     class="org.jspresso.framework.application.backend.action.persistence.hibernate.QueryEntitiesAction">
     <property name="criteriaFactory" ref="criteriaFactory" />
     <property name="criteriaRefiner" ref="applicationCriteriaRefiner" />
   </bean>
 
   <bean id="queryEntitiesBackAction" parent="queryEntitiesBackActionBase" />
-
-  <bean id="removeCollectionFromMasterBackAction" parent="abstractHibernateBackAction"
-    class="org.jspresso.framework.application.backend.action.persistence.hibernate.RemoveCollectionFromMasterAction" />
-
-  <bean id="removeModuleObjectAction" parent="abstractHibernateBackAction"
-    class="org.jspresso.framework.application.backend.action.persistence.hibernate.module.RemoveModuleObjectAction" />
-
-  <bean id="removeFromModuleObjectsAction" parent="abstractHibernateBackAction"
-    class="org.jspresso.framework.application.backend.action.persistence.hibernate.module.RemoveFromModuleObjectsAction" />
-
-  <bean id="saveBackAction" parent="abstractHibernateBackAction"
-    class="org.jspresso.framework.application.backend.action.persistence.hibernate.SaveAction" />
-
-  <bean id="saveModuleObjectBackAction" parent="saveBackAction"
-    class="org.jspresso.framework.application.backend.action.persistence.hibernate.SaveModuleObjectAction" />
-
-  <bean id="reloadBackAction" parent="abstractHibernateBackAction"
-    class="org.jspresso.framework.application.backend.action.persistence.hibernate.ReloadAction" />
-
-  <bean id="reloadModuleObjectBackAction" parent="reloadBackAction"
-    class="org.jspresso.framework.application.backend.action.persistence.hibernate.ReloadModuleObjectAction" />
 
   <bean id="hibernateControllerAwareProxyEntityFactory" parent="controllerAwareEntityFactory"
     class="org.jspresso.framework.application.backend.persistence.hibernate.HibernateControllerAwareProxyEntityFactory" />

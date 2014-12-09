@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.backend.action.persistence.mongo;
+package org.jspresso.framework.application.backend.action.persistence;
 
 import java.util.ArrayList;
 import java.util.Collection;

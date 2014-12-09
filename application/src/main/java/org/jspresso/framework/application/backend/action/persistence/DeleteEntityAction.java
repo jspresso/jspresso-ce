@@ -16,13 +16,14 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.backend.action.persistence.hibernate;
+package org.jspresso.framework.application.backend.action.persistence;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.component.IComponent;
 
@@ -36,7 +37,7 @@ import org.jspresso.framework.model.component.IComponent;
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$
  */
-public class DeleteEntityAction extends AbstractHibernateAction {
+public class DeleteEntityAction extends BackendAction {
 
   /**
    * Retrieves the master and its managed collection from the model connector

@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.backend.action;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,8 @@ import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.async.AsyncActionExecutor;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.model.component.IComponent;
+import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.view.IView;
@@ -101,6 +104,29 @@ public class BackendAction extends AbstractAction {
   protected IApplicationSession getApplicationSession(
       Map<String, Object> context) {
     return getController(context).getApplicationSession();
+  }
+
+  /**
+   * Performs necessary cleanings when an entity or component is deleted.
+   *
+   * @param component
+   *          the deleted entity or component.
+   * @param context
+   *          The action context.
+   * @param dryRun
+   *          set to true to simulate before actually doing it.
+   * @throws IllegalAccessException
+   *           whenever this kind of exception occurs.
+   * @throws java.lang.reflect.InvocationTargetException
+   *           whenever this kind of exception occurs.
+   * @throws NoSuchMethodException
+   *           whenever this kind of exception occurs.
+   */
+  protected void cleanRelationshipsOnDeletion(IComponent component,
+      Map<String, Object> context, boolean dryRun)
+      throws IllegalAccessException, InvocationTargetException,
+      NoSuchMethodException {
+    getController(context).cleanRelationshipsOnDeletion(component, dryRun);
   }
 
   /**
@@ -250,5 +276,17 @@ public class BackendAction extends AbstractAction {
     if (Thread.currentThread() instanceof AsyncActionExecutor) {
       ((AsyncActionExecutor) Thread.currentThread()).setProgress(progress);
     }
+  }
+
+  /**
+   * Reloads an entity in mongo.
+   *
+   * @param entity
+   *          the entity to reload.
+   * @param context
+   *          the action context.
+   */
+  protected void reloadEntity(IEntity entity, Map<String, Object> context) {
+    getController(context).reload(entity);
   }
 }

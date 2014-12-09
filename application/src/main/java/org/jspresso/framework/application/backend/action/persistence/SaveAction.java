@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2014 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -16,16 +16,18 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.backend.action.persistence.hibernate;
+package org.jspresso.framework.application.backend.action.persistence;
 
 import java.util.List;
 import java.util.Map;
 
-import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.backend.IBackendController;
-import org.jspresso.framework.model.entity.IEntity;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+
+import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.backend.IBackendController;
+import org.jspresso.framework.application.backend.action.BackendAction;
+import org.jspresso.framework.model.entity.IEntity;
 
 /**
  * Saves the entities provided by the context {@code ActionParameter}. All
@@ -34,7 +36,7 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class SaveAction extends AbstractHibernateAction {
+public class SaveAction extends BackendAction {
 
   /**
    * Saves the object(s) provided by the action context in a transaction.

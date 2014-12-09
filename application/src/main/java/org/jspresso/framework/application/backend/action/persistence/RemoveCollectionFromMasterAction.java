@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2014 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.backend.action.persistence.hibernate;
+package org.jspresso.framework.application.backend.action.persistence;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
@@ -24,6 +24,8 @@ import java.util.Map;
 
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.backend.action.AbstractCollectionAction;
+import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
@@ -45,7 +47,7 @@ import org.jspresso.framework.util.accessor.ICollectionAccessor;
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$
  */
-public class RemoveCollectionFromMasterAction extends AbstractHibernateCollectionAction {
+public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
 
   /**
    * Constructs a new {@code RemoveCollectionFromMasterAction} instance.

@@ -314,6 +314,27 @@
 
   <bean id="abstractBackendAction" abstract="true" class="org.jspresso.framework.application.backend.action.BackendAction" />
 
+  <bean id="removeCollectionFromMasterBackAction" parent="abstractBackendAction"
+        class="org.jspresso.framework.application.backend.action.persistence.RemoveCollectionFromMasterAction"/>
+
+  <bean id="removeModuleObjectAction" parent="abstractBackendAction"
+        class="org.jspresso.framework.application.backend.action.persistence.module.RemoveModuleObjectAction"/>
+
+  <bean id="removeFromModuleObjectsAction" parent="abstractBackendAction"
+        class="org.jspresso.framework.application.backend.action.persistence.module.RemoveFromModuleObjectsAction"/>
+
+  <bean id="saveBackAction" parent="abstractBackendAction"
+        class="org.jspresso.framework.application.backend.action.persistence.SaveAction"/>
+
+  <bean id="saveModuleObjectBackAction" parent="saveBackAction"
+        class="org.jspresso.framework.application.backend.action.persistence.SaveModuleObjectAction"/>
+
+  <bean id="reloadBackAction" parent="abstractBackendAction"
+        class="org.jspresso.framework.application.backend.action.persistence.ReloadAction"/>
+
+  <bean id="reloadModuleObjectBackAction" parent="reloadBackAction"
+        class="org.jspresso.framework.application.backend.action.persistence.ReloadModuleObjectAction"/>
+
   <bean id="lovFindBackAction" class="org.jspresso.framework.application.backend.action.FindAction">
     <property name="queryAction">
       <bean parent="queryEntitiesBackAction">

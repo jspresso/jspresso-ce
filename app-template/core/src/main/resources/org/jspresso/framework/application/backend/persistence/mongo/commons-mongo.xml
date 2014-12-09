@@ -31,10 +31,6 @@
     <property name="transactionManager" ref="transactionManager"/>
   </bean>
 
-  <!-- Mongo root action beans. -->
-  <bean abstract="true" id="abstractMongoBackAction"
-        class="org.jspresso.framework.application.backend.action.persistence.mongo.AbstractMongoAction"/>
-
   <bean id="triStateBooleanSupported" class="java.lang.Boolean">
     <constructor-arg value="true"/>
   </bean>
@@ -56,27 +52,6 @@
   </bean>
 
   <bean id="queryEntitiesBackAction" parent="queryEntitiesBackActionBase"/>
-
-  <bean id="removeCollectionFromMasterBackAction" parent="abstractMongoBackAction"
-        class="org.jspresso.framework.application.backend.action.persistence.mongo.RemoveCollectionFromMasterAction"/>
-
-  <bean id="removeModuleObjectAction" parent="abstractMongoBackAction"
-        class="org.jspresso.framework.application.backend.action.persistence.mongo.module.RemoveModuleObjectAction"/>
-
-  <bean id="removeFromModuleObjectsAction" parent="abstractMongoBackAction"
-        class="org.jspresso.framework.application.backend.action.persistence.mongo.module.RemoveFromModuleObjectsAction"/>
-
-  <bean id="saveBackAction" parent="abstractMongoBackAction"
-        class="org.jspresso.framework.application.backend.action.persistence.mongo.SaveAction"/>
-
-  <bean id="saveModuleObjectBackAction" parent="saveBackAction"
-        class="org.jspresso.framework.application.backend.action.persistence.mongo.SaveModuleObjectAction"/>
-
-  <bean id="reloadBackAction" parent="abstractMongoBackAction"
-        class="org.jspresso.framework.application.backend.action.persistence.mongo.ReloadAction"/>
-
-  <bean id="reloadModuleObjectBackAction" parent="reloadBackAction"
-        class="org.jspresso.framework.application.backend.action.persistence.mongo.ReloadModuleObjectAction"/>
 
   <bean name="controllerAwareEntityFactory" parent="basicEntityFactory"
         class="org.jspresso.framework.application.backend.entity.ControllerAwareProxyEntityFactory"/>

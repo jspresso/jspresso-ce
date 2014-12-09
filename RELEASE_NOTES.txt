@@ -1,5 +1,11 @@
 4.1
 ===
+- Following our will to support other perstsient stores (e.g. MongoDB, see RFE #1234), AbstractHibernateAction and
+  AbstractHibernateCollectionAction have been deleted. Your actions should inherit BackendAction and
+  AbstractCollectionAction. Persistences methods, thate were generic, have been migrated to these classes. The only
+  things that will change are that you will be forced to implicitely cast backend controller to
+  HibernateBackendController or MongoBackendController, depending on your persistence layer.
+
 - Due to RFE #1221, DefaultCriteriaFactory.createXXXRestriction method signatures have been augmented with
   componentDescriptor, queryComponent and context in order to be able to take options in subclasses.
 
