@@ -86,11 +86,7 @@ public class HibernateBackendController extends AbstractBackendController {
 
   private SessionFactory hibernateSessionFactory;
   private FlushMode defaultTxFlushMode = FlushMode.COMMIT;
-  private DataSource noTxDataSource;
-
-  private Set<IEntity> updatedEntities;
-  private Set<IEntity> deletedEntities;
-  private boolean traversedPendingOperations = false;
+  private DataSource   noTxDataSource;
 
   /**
    * {@code JSPRESSO_SESSION_GLOBALS} is "JspressoSessionGlobals".
@@ -106,17 +102,6 @@ public class HibernateBackendController extends AbstractBackendController {
   public static final String JSPRESSO_SESSION_GLOBALS_LANGUAGE = "language";
 
   private static final Logger LOG = LoggerFactory.getLogger(HibernateBackendController.class);
-
-  /**
-   * Allows for a new run of performPendingOperations.
-   * <p/>
-   * {@inheritDoc}
-   */
-  @Override
-  public void clearPendingOperations() {
-    super.clearPendingOperations();
-    traversedPendingOperations = false;
-  }
 
   /**
    * {@inheritDoc}
@@ -179,28 +164,7 @@ public class HibernateBackendController extends AbstractBackendController {
     if (noTxSession != null) {
       noTxSession.clear();
     }
-    updatedEntities = new HashSet<>();
-    deletedEntities = new HashSet<>();
     super.doBeginUnitOfWork();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void doCommitUnitOfWork() {
-    for (IEntity deletedEntity : deletedEntities) {
-      // Notifies the session of deleted entities.
-      recordAsSynchronized(deletedEntity);
-    }
-    updatedEntities = null;
-    deletedEntities = null;
-    if (traversedPendingOperations) {
-      // We must get rid of the pending operations only in the case of a
-      // successful commit.
-      clearPendingOperations();
-    }
-    super.doCommitUnitOfWork();
   }
 
   private Session noTxSession = null;
@@ -467,88 +431,11 @@ public class HibernateBackendController extends AbstractBackendController {
    * {@inheritDoc}
    */
   @Override
-  public void performPendingOperations() {
-    if (!traversedPendingOperations) {
-      traversedPendingOperations = true;
-      Session hibernateSession = getHibernateSession();
-      boolean flushIsNecessary = false;
-      Collection<IEntity> entitiesToUpdate = getEntitiesRegisteredForUpdate();
-      Collection<IEntity> entitiesToDelete = getEntitiesRegisteredForDeletion();
-      List<IEntity> entitiesToClone = new ArrayList<>();
-      if (entitiesToUpdate != null) {
-        entitiesToClone.addAll(entitiesToUpdate);
-      }
-      if (entitiesToDelete != null) {
-        entitiesToClone.addAll(entitiesToDelete);
-      }
-      List<IEntity> uowEntities = cloneInUnitOfWork(entitiesToClone);
-      Map<IEntity, IEntity> entityMap = new HashMap<>();
-      for (int i = 0; i < entitiesToClone.size(); i++) {
-        entityMap.put(entitiesToClone.get(i), uowEntities.get(i));
-      }
-      if (entitiesToUpdate != null) {
-        for (IEntity entityToUpdate : entitiesToUpdate) {
-          IEntity uowEntity = entityMap.get(entityToUpdate);
-          if (uowEntity == null) {
-            uowEntity = entityToUpdate;
-          }
-          updatedEntities.add(uowEntity);
-          hibernateSession.saveOrUpdate(uowEntity);
-          flushIsNecessary = true;
-        }
-      }
-      if (flushIsNecessary) {
-        hibernateSession.flush();
-      }
-      flushIsNecessary = false;
-      // there might have been new entities to delete
-      entitiesToDelete = getEntitiesRegisteredForDeletion();
-      if (entitiesToDelete != null) {
-        for (IEntity entityToDelete : entitiesToDelete) {
-          IEntity uowEntity = entityMap.get(entityToDelete);
-          if (uowEntity == null) {
-            uowEntity = entityToDelete;
-          }
-          deletedEntities.add(uowEntity);
-          hibernateSession.delete(uowEntity);
-          flushIsNecessary = true;
-        }
-      }
-      if (flushIsNecessary) {
-        hibernateSession.flush();
-      }
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   public void registerForDeletion(IEntity entity) {
-    if (entity == null) {
-      throw new IllegalArgumentException("Passed entity cannot be null");
-    }
+    super.registerForDeletion(entity);
     if (isUnitOfWorkActive()) {
-      Set<IEntity> deletedEntitiesSnapshot = new HashSet<>(deletedEntities);
-      try {
-        deletedEntities.add(entity);
-        getHibernateSession().delete(entity);
-        updatedEntities.remove(entity);
-      } catch (RuntimeException re) {
-        deletedEntities = deletedEntitiesSnapshot;
-        throw re;
-      }
-    } else {
-      super.registerForDeletion(entity);
+      getHibernateSession().delete(entity);
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isEntityRegisteredForDeletion(IEntity entity) {
-    return deletedEntities != null && deletedEntities.contains(entity) || super.isEntityRegisteredForDeletion(entity);
   }
 
   /**
@@ -556,42 +443,9 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   @Override
   public void registerForUpdate(IEntity entity) {
-    if (entity == null) {
-      throw new IllegalArgumentException("Passed entity cannot be null");
-    }
+    super.registerForUpdate(entity);
     if (isUnitOfWorkActive()) {
-      Set<IEntity> updatedEntitiesSnapshot = new HashSet<>(updatedEntities);
-      try {
-        updatedEntities.add(entity);
-        getHibernateSession().saveOrUpdate(entity);
-      } catch (RuntimeException re) {
-        updatedEntities = updatedEntitiesSnapshot;
-        throw re;
-      }
-    } else {
-      super.registerForUpdate(entity);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isEntityRegisteredForUpdate(IEntity entity) {
-    return updatedEntities != null && updatedEntities.contains(entity) || super.isEntityRegisteredForUpdate(entity);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void doRollbackUnitOfWork() {
-    updatedEntities = null;
-    deletedEntities = null;
-    try {
-      super.doRollbackUnitOfWork();
-    } finally {
-      traversedPendingOperations = false;
+      getHibernateSession().saveOrUpdate(entity);
     }
   }
 

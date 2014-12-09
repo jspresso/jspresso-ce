@@ -200,14 +200,20 @@ public abstract class AbstractBackendController extends AbstractController imple
   public void performPendingOperations() {
     Collection<IEntity> entitiesToUpdate = getEntitiesRegisteredForUpdate();
     Collection<IEntity> entitiesToDelete = getEntitiesRegisteredForDeletion();
-    List<IEntity> entitiesToClone = new ArrayList<>();
     if (entitiesToUpdate != null) {
-      entitiesToClone.addAll(entitiesToUpdate);
+      List<IEntity> uowEntitiesToUpdate = cloneInUnitOfWork(new ArrayList<>(entitiesToUpdate));
+      for (IEntity uowEntity : uowEntitiesToUpdate) {
+        // Must force insertion
+        registerForUpdate(uowEntity);
+      }
     }
     if (entitiesToDelete != null) {
-      entitiesToClone.addAll(entitiesToDelete);
+      List<IEntity> uowEntitiesToDelete = cloneInUnitOfWork(new ArrayList<>(entitiesToDelete));
+      for (IEntity uowEntity : uowEntitiesToDelete) {
+        // Must force deletion
+        registerForDeletion(uowEntity);
+      }
     }
-    cloneInUnitOfWork(entitiesToClone);
   }
 
   /**
@@ -319,6 +325,12 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   protected void doCommitUnitOfWork() {
     try {
+      Collection<IEntity> deletedEntities = unitOfWork.getEntitiesRegisteredForDeletion();
+      if (deletedEntities != null) {
+        for (IEntity deletedEntity : deletedEntities) {
+          recordAsSynchronized(deletedEntity);
+        }
+      }
       if (unitOfWork.getUpdatedEntities() != null) {
         List<IEntity> mergedEntities = merge(new ArrayList<>(unitOfWork.getUpdatedEntities()),
             EMergeMode.MERGE_CLEAN_LAZY);
@@ -451,15 +463,15 @@ public abstract class AbstractBackendController extends AbstractController imple
   public boolean executeTransactionally(final IAction action, final Map<String, Object> context) {
     Boolean ret = getTransactionTemplate().execute(new TransactionCallback<Boolean>() {
 
-          @Override
-          public Boolean doInTransaction(TransactionStatus status) {
-            boolean executionStatus = action.execute(AbstractBackendController.this, context);
-            if (!executionStatus) {
-              status.setRollbackOnly();
-            }
-            return executionStatus;
-          }
-        });
+      @Override
+      public Boolean doInTransaction(TransactionStatus status) {
+        boolean executionStatus = action.execute(AbstractBackendController.this, context);
+        if (!executionStatus) {
+          status.setRollbackOnly();
+        }
+        return executionStatus;
+      }
+    });
     return ret;
   }
 
@@ -499,7 +511,7 @@ public abstract class AbstractBackendController extends AbstractController imple
       dirtyProperties = dirtRecorder.getChangedProperties(entity);
     }
     if (dirtyProperties != null) {
-      for (Iterator<Map.Entry<String, Object>> ite = dirtyProperties.entrySet().iterator(); ite.hasNext();) {
+      for (Iterator<Map.Entry<String, Object>> ite = dirtyProperties.entrySet().iterator(); ite.hasNext(); ) {
         Map.Entry<String, Object> property = ite.next();
         boolean include = true;
         if (!includeComputed) {
@@ -622,8 +634,10 @@ public abstract class AbstractBackendController extends AbstractController imple
   /**
    * Gets unit of work or registered entity.
    *
-   * @param entityType the entity type
-   * @param id the id
+   * @param entityType
+   *     the entity type
+   * @param id
+   *     the id
    * @return the unit of work or registered entity
    */
   @Override
@@ -1227,13 +1241,13 @@ public abstract class AbstractBackendController extends AbstractController imple
       if (propertyValue instanceof IEntity) {
         if (isInitialized(propertyValue)) {
           uowComponent.straightSetProperty(propertyName, cloneInUnitOfWork((IEntity) propertyValue,
-                  allowOuterScopeUpdate, alreadyCloned));
+              allowOuterScopeUpdate, alreadyCloned));
         } else {
           uowComponent.straightSetProperty(propertyName, cloneUninitializedProperty(uowComponent, propertyValue));
         }
       } else if (propertyValue instanceof IComponent) {
         uowComponent.straightSetProperty(propertyName, cloneComponentInUnitOfWork((IComponent) propertyValue,
-                allowOuterScopeUpdate, alreadyCloned));
+            allowOuterScopeUpdate, alreadyCloned));
       }
     }
     return uowComponent;
@@ -1283,7 +1297,7 @@ public abstract class AbstractBackendController extends AbstractController imple
           if (propertyValue instanceof IEntity) {
             if (isInitialized(propertyValue)) {
               uowEntity.straightSetProperty(propertyName, cloneInUnitOfWork((IEntity) propertyValue,
-                      allowOuterScopeUpdate, alreadyCloned));
+                  allowOuterScopeUpdate, alreadyCloned));
             } else {
               uowEntity.straightSetProperty(propertyName, cloneUninitializedProperty(uowEntity, propertyValue));
             }
@@ -1352,7 +1366,7 @@ public abstract class AbstractBackendController extends AbstractController imple
             uowEntity.straightSetProperty(propertyName, uowArray);
           } else if (propertyValue instanceof IComponent) {
             uowEntity.straightSetProperty(propertyName, cloneComponentInUnitOfWork((IComponent) propertyValue,
-                    allowOuterScopeUpdate, alreadyCloned));
+                allowOuterScopeUpdate, alreadyCloned));
           }
         }
         if (eventsBlocked && uowEntity != null && isInitialized(uowEntity)) {
@@ -1542,7 +1556,7 @@ public abstract class AbstractBackendController extends AbstractController imple
           } else if (propertyValue instanceof IComponent) {
             IComponent registeredComponent = (IComponent) registeredEntityProperties.get(propertyName);
             mergedProperties.put(propertyName, mergeComponent((IComponent) propertyValue, registeredComponent,
-                    mergeMode, alreadyMerged));
+                mergeMode, alreadyMerged));
           } else {
             mergedProperties.put(propertyName, propertyValue);
           }
@@ -1672,7 +1686,7 @@ public abstract class AbstractBackendController extends AbstractController imple
       } else if (propertyValue instanceof IComponent) {
         IComponent registeredSubComponent = (IComponent) registeredComponentProperties.get(propertyName);
         mergedProperties.put(propertyName, mergeComponent((IComponent) propertyValue, registeredSubComponent, mergeMode,
-                alreadyMerged));
+            alreadyMerged));
       } else {
         mergedProperties.put(propertyName, propertyValue);
       }
@@ -2226,15 +2240,13 @@ public abstract class AbstractBackendController extends AbstractController imple
         if (excludedEntity == null || !objectEquals(targetEntity, excludedEntity)) {
           LOG.error(
               "*BAD SESSION USAGE* You are modifying an entity ({})[{}] that has not been previously merged in the "
-                  + "session.\n"
-                  + "You should 1st merge your entities in the session by using the "
+                  + "session.\n" + "You should 1st merge your entities in the session by using the "
                   + "backendController.merge(...) method.\n" + "The property being modified is [{}].", targetEntity,
               getComponentContract(targetEntity).getSimpleName(), propertyDescriptor.getName());
           if (isThrowExceptionOnBadUsage()) {
             throw new BackendException(
                 "An invalid modification of an entity that was not previously registered in the session has been "
-                    + "detected. "
-                    + "Please check the logs.");
+                    + "detected. " + "Please check the logs.");
           }
         }
       }
