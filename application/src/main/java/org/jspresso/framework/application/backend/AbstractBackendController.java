@@ -499,7 +499,7 @@ public abstract class AbstractBackendController extends AbstractController imple
       dirtyProperties = dirtRecorder.getChangedProperties(entity);
     }
     if (dirtyProperties != null) {
-      for (Iterator<Map.Entry<String, Object>> ite = dirtyProperties.entrySet().iterator(); ite.hasNext(); ) {
+      for (Iterator<Map.Entry<String, Object>> ite = dirtyProperties.entrySet().iterator(); ite.hasNext();) {
         Map.Entry<String, Object> property = ite.next();
         boolean include = true;
         if (!includeComputed) {
@@ -620,6 +620,24 @@ public abstract class AbstractBackendController extends AbstractController imple
   }
 
   /**
+   * Gets unit of work or registered entity.
+   *
+   * @param entityType the entity type
+   * @param id the id
+   * @return the unit of work or registered entity
+   */
+  @Override
+  public IEntity getUnitOfWorkOrRegisteredEntity(Class<? extends IEntity> entityType, Serializable id) {
+    IEntity entity;
+    if (isUnitOfWorkActive()) {
+      entity = getUnitOfWorkEntity(entityType, id);
+    } else {
+      entity = getRegisteredEntity(entityType, id);
+    }
+    return entity;
+  }
+
+  /**
    * Gets the transactionTemplate.
    *
    * @return the transactionTemplate.
@@ -665,19 +683,7 @@ public abstract class AbstractBackendController extends AbstractController imple
    * {@inheritDoc}
    */
   @Override
-  public void initializePropertyIfNeeded(IComponent componentOrEntity, String propertyName) {
-    Object propertyValue = componentOrEntity.straightGetProperty(propertyName);
-    if (propertyValue instanceof Collection<?>) {
-      for (Iterator<?> ite = ((Collection<?>) propertyValue).iterator(); ite.hasNext(); ) {
-        Object collectionElement = ite.next();
-        if (collectionElement instanceof IEntity) {
-          if (isEntityRegisteredForDeletion((IEntity) collectionElement)) {
-            ite.remove();
-          }
-        }
-      }
-    }
-  }
+  public abstract void initializePropertyIfNeeded(IComponent componentOrEntity, String propertyName);
 
   /**
    * Sets the model controller workspaces. These workspaces are not kept as-is.
@@ -764,9 +770,7 @@ public abstract class AbstractBackendController extends AbstractController imple
    * {@inheritDoc}
    */
   @Override
-  public boolean isInitialized(Object objectOrProxy) {
-    return true;
-  }
+  public abstract boolean isInitialized(Object objectOrProxy);
 
   /**
    * {@inheritDoc}

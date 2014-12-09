@@ -563,12 +563,8 @@ public abstract class AbstractComponentInvocationHandler implements
           if (referent == null) {
             if (proxy instanceof IEntity) {
               LOG.warn(
-                  "A null element was detected in indexed list [{}] on {}, id {} at index {}",
-                  new Object[]{
-                      propertyName,
-                      ((IEntity) proxy).getComponentContract().getName(),
-                      ((IEntity) proxy).getId(), i
-                  });
+                  "A null element was detected in indexed list [{}] on {}, id {} at index {}", propertyName,
+                  ((IEntity) proxy).getComponentContract().getName(), ((IEntity) proxy).getId(), i);
               LOG.warn("This might be normal but sometimes it reveals a mis-use of indexed collection property accessors.");
             }
           }
@@ -741,7 +737,7 @@ public abstract class AbstractComponentInvocationHandler implements
         setDirtyTrackingEnabled(wasDirtyTrackingEnabled);
       }
     }
-    if(referent instanceof IComponent) {
+    if (referent instanceof IComponent) {
       return decorateReferent((IComponent) referent, referencedDescriptor);
     }
     return referent;
@@ -1655,7 +1651,7 @@ public abstract class AbstractComponentInvocationHandler implements
     if (ILifecycleCapable.ON_PERSIST_METHOD_NAME.equals(methodName)) {
       onPersist((IEntityFactory) args[0], (UserPrincipal) args[1],
           (IEntityLifecycleHandler) args[2]);
-    } else if(ILifecycleCapable.ON_UPDATE_METHOD_NAME.equals(methodName)) {
+    } else if (ILifecycleCapable.ON_UPDATE_METHOD_NAME.equals(methodName)) {
       onUpdate((IEntityFactory) args[0], (UserPrincipal) args[1],
           (IEntityLifecycleHandler) args[2]);
     }

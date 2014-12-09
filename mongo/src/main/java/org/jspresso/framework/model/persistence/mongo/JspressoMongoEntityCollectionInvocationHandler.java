@@ -22,44 +22,48 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 
-import org.jspresso.framework.model.component.ComponentException;
 import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.util.exception.NestedRuntimeException;
 
 /**
- * A proxy for referenced Jspresso entities in order to support lazy loading.
+ * Collection proxy invocation handler.
  *
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$
  */
-public class JspressoMongoEntityProxyHandler implements InvocationHandler {
+public abstract class JspressoMongoEntityCollectionInvocationHandler implements InvocationHandler {
 
-  private static final Object NULL_TARGET = new Object();
+  private Collection<Serializable> ids;
+  private Class<IEntity>           entityContract;
+  private MongoTemplate            mongo;
+  private Collection<IEntity>      target;
 
-  private Serializable   id;
-  private Class<IEntity> entityContract;
-  private MongoTemplate  mongo;
-  private Object         target;
 
   /**
-   * Instantiates a new Jspresso mongo entity proxy handler.
+   * Instantiates a new Jspresso mongo entity list invocation handler.
    *
-   * @param id
-   *     the id
+   * @param ids
+   *     the ids
    * @param entityContract
    *     the entity contract
    * @param mongo
    *     the mongo
    */
-  public JspressoMongoEntityProxyHandler(Serializable id, Class<IEntity> entityContract,
-                                         MongoTemplate mongo) {
-    this.id = id;
+  public JspressoMongoEntityCollectionInvocationHandler(Collection<Serializable> ids,
+                                                        Class<IEntity> entityContract, MongoTemplate mongo) {
+    this.ids = ids;
     this.entityContract = entityContract;
     this.mongo = mongo;
   }
-
 
   /**
    * Invoke object.
@@ -79,12 +83,8 @@ public class JspressoMongoEntityProxyHandler implements InvocationHandler {
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     String methodName = method.getName()/* .intern() */;
     switch (methodName) {
-      case "hashCode":
-        return computeHashCode();
-      case "equals":
-        return computeEquals(proxy, args[0]);
-      case "getComponentContract":
-        return entityContract;
+      case "size":
+        return target != null ? target.size() : ids.size();
       case "isInitialized":
         return target != null;
       case "initialize":
@@ -95,21 +95,6 @@ public class JspressoMongoEntityProxyHandler implements InvocationHandler {
     }
   }
 
-  private boolean computeEquals(Object proxy, Object another) {
-    if (proxy == another) {
-      return true;
-    }
-    if (another instanceof IEntity) {
-      return ((IEntity) another).getComponentContract().equals(entityContract) && ((IEntity) another).getId().equals(
-          id);
-    }
-    return false;
-  }
-
-  private Object computeHashCode() {
-    return id.hashCode();
-  }
-
   /**
    * Invoke method on .
    * <p/>
@@ -117,27 +102,34 @@ public class JspressoMongoEntityProxyHandler implements InvocationHandler {
    */
   private Object invokeTargetMethod(Method method, Object... args) throws NoSuchMethodException {
     initializeIfNecessary();
-    if (target == NULL_TARGET) {
-      throw new NullPointerException("Entity proxy points to a null entity.");
-    }
     try {
-      return entityContract.getMethod(method.getName(), method.getParameterTypes()).invoke(target, args);
+      return Set.class.getMethod(method.getName(), method.getParameterTypes()).invoke(target, args);
     } catch (IllegalArgumentException | IllegalAccessException e) {
-      throw new ComponentException(method.toString() + " is not supported on the component " + entityContract);
+      throw new NestedRuntimeException(method.toString() + " is not supported on the Set interface");
     } catch (InvocationTargetException e) {
       if (e.getCause() instanceof RuntimeException) {
         throw (RuntimeException) e.getCause();
       }
-      throw new ComponentException(e.getCause());
+      throw new NestedRuntimeException(e.getCause());
     }
   }
 
   private void initializeIfNecessary() {
     if (target == null) {
-      target = mongo.findById(id, entityContract);
-      if (target == null) {
-        target = NULL_TARGET;
+      if (ids == null || ids.isEmpty()) {
+        target = createTargetCollection(Collections.<IEntity>emptySet());
+      } else {
+        target = createTargetCollection(mongo.find(new Query(Criteria.where("_id").in(ids)), entityContract));
       }
     }
   }
+
+  /**
+   * Create target collection.
+   *
+   * @param sourceCollection
+   *     the source collection
+   * @return the collection
+   */
+  protected abstract Collection<IEntity> createTargetCollection(Collection<IEntity> sourceCollection);
 }

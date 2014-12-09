@@ -21,6 +21,7 @@ package org.jspresso.framework.application.backend.persistence.mongo;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -35,17 +36,20 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 
 import org.jspresso.framework.application.backend.AbstractBackendController;
 import org.jspresso.framework.application.backend.session.EMergeMode;
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.model.persistence.mongo.JspressoMongoEntityProxy;
+import org.jspresso.framework.model.persistence.mongo.JspressoMongoProxy;
 
 /**
  * This is the default Jspresso implementation of MongoDB-based backend
  * controller.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision : 10441 $
  */
 public class MongoBackendController extends AbstractBackendController {
 
@@ -70,17 +74,52 @@ public class MongoBackendController extends AbstractBackendController {
   }
 
   /**
+   * Initialize property if needed.
+   *
+   * @param componentOrEntity the component or entity
+   * @param propertyName the property name
+   */
+  @Override
+  public void initializePropertyIfNeeded(IComponent componentOrEntity, String propertyName) {
+    Object propertyValue = componentOrEntity.straightGetProperty(propertyName);
+    if (!isInitialized(propertyValue)) {
+      ((JspressoMongoProxy) propertyValue).initialize();
+      if (propertyValue instanceof JspressoMongoEntityProxy) {
+        if (((JspressoMongoEntityProxy) propertyValue).isNull()) {
+          componentOrEntity.straightSetProperty(propertyName, null);
+        }
+      } else if (propertyValue instanceof Collection<?>) {
+        for (Iterator<?> ite = ((Collection<?>) propertyValue).iterator(); ite.hasNext();) {
+          Object collectionElement = ite.next();
+          if (collectionElement instanceof IEntity) {
+            if (isEntityRegisteredForDeletion((IEntity) collectionElement)) {
+              ite.remove();
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Is initialized.
+   *
+   * @param objectOrProxy the object or proxy
+   * @return the boolean
+   */
+  @Override
+  public boolean isInitialized(Object objectOrProxy) {
+    return !(objectOrProxy instanceof JspressoMongoProxy) || ((JspressoMongoProxy) objectOrProxy).isInitialized();
+  }
+
+  /**
    * Finds an entity by ID.
    *
-   * @param <T>
-   *     the entity type to return
-   * @param id
-   *     the entity ID.
-   * @param mergeMode
-   *     the merge mode to use when merging back retrieved entities or null
+   * @param <T>      the entity type to return
+   * @param id      the entity ID.
+   * @param mergeMode      the merge mode to use when merging back retrieved entities or null
    *     if no merge is requested.
-   * @param clazz
-   *     the type of the entity.
+   * @param clazz      the type of the entity.
    * @return the found entity
    */
   @SuppressWarnings("unchecked")
@@ -108,15 +147,11 @@ public class MongoBackendController extends AbstractBackendController {
    * Search Mongo using query. The result is then merged into session unless the method is called into a
    * pre-existing transaction, in which case, the merge mode is ignored and the merge is not performed.
    *
-   * @param <T>
-   *     the entity type to return
-   * @param query
-   *     the Mongo query.
-   * @param mergeMode
-   *     the merge mode to use when merging back retrieved entities or null
+   * @param <T>      the entity type to return
+   * @param query      the Mongo query.
+   * @param mergeMode      the merge mode to use when merging back retrieved entities or null
    *     if no merge is requested.
-   * @param clazz
-   *     the type of the entity.
+   * @param clazz      the type of the entity.
    * @return the first found entity or null
    */
   public <T extends IEntity> T findFirstByQuery(Query query, EMergeMode mergeMode, Class<? extends T> clazz) {
@@ -131,15 +166,11 @@ public class MongoBackendController extends AbstractBackendController {
    * Search Mongo using query. The result is then merged into session unless the method is called into a
    * pre-existing transaction, in which case, the merge mode is ignored and the merge is not performed.
    *
-   * @param <T>
-   *     the entity type to return
-   * @param query
-   *     the Mongo query.
-   * @param mergeMode
-   *     the merge mode to use when merging back retrieved entities or null
+   * @param <T>      the entity type to return
+   * @param query      the Mongo query.
+   * @param mergeMode      the merge mode to use when merging back retrieved entities or null
    *     if no merge is requested.
-   * @param clazz
-   *     the type of the entity.
+   * @param clazz      the type of the entity.
    * @return the first found entity or null
    */
   public <T extends IEntity> List<T> findByQuery(final Query query, EMergeMode mergeMode, Class<? extends T> clazz) {
@@ -150,19 +181,13 @@ public class MongoBackendController extends AbstractBackendController {
    * Search Mongo using query. The result is then merged into session unless the method is called into a
    * pre-existing transaction, in which case, the merge mode is ignored and the merge is not performed.
    *
-   * @param <T>
-   *     the entity type to return
-   * @param query
-   *     the Mongo query.
-   * @param firstResult
-   *     the first result rank to retrieve.
-   * @param maxResults
-   *     the max number of results to retrieve.
-   * @param mergeMode
-   *     the merge mode to use when merging back retrieved entities or null
+   * @param <T>      the entity type to return
+   * @param query      the Mongo query.
+   * @param firstResult      the first result rank to retrieve.
+   * @param maxResults      the max number of results to retrieve.
+   * @param mergeMode      the merge mode to use when merging back retrieved entities or null
    *     if no merge is requested.
-   * @param clazz
-   *     the type of the entity.
+   * @param clazz      the type of the entity.
    * @return the first found entity or null
    */
   @SuppressWarnings("UnusedParameters")
@@ -211,8 +236,7 @@ public class MongoBackendController extends AbstractBackendController {
   /**
    * Reloads an entity in Mongo.
    *
-   * @param entity
-   *     the entity to reload.
+   * @param entity      the entity to reload.
    */
   @Override
   public void reload(final IEntity entity) {
@@ -292,8 +316,7 @@ public class MongoBackendController extends AbstractBackendController {
   /**
    * Sets mongo template.
    *
-   * @param mongoTemplate
-   *     the mongo template
+   * @param mongoTemplate      the mongo template
    */
   public void setMongoTemplate(MongoTemplate mongoTemplate) {
     this.mongoTemplate = mongoTemplate;

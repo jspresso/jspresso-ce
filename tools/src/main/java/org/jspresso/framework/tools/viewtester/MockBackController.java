@@ -4,6 +4,7 @@
 package org.jspresso.framework.tools.viewtester;
 
 import org.jspresso.framework.application.backend.AbstractBackendController;
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.entity.IEntity;
 
 /**
@@ -24,6 +25,16 @@ public class MockBackController extends AbstractBackendController {
   @Override
   public void performPendingOperations() {
     // NO-OP
+  }
+
+  @Override
+  public void initializePropertyIfNeeded(IComponent componentOrEntity, String propertyName) {
+    // NO-OP
+  }
+
+  @Override
+  public boolean isInitialized(Object objectOrProxy) {
+    return false;
   }
 
   /**

@@ -118,6 +118,7 @@ public class JspressoMongoEventListener extends AbstractMongoEventListener<IEnti
   @Override
   public void onAfterConvert(DBObject dbo, IEntity entity) {
     super.onAfterConvert(dbo, entity);
+    getBackendController().registerEntity(entity);
     ((ILifecycleCapable) entity).onLoad();
   }
 

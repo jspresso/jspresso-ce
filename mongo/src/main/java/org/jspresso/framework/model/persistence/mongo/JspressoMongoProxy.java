@@ -18,39 +18,23 @@
  */
 package org.jspresso.framework.model.persistence.mongo;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-
-import org.springframework.data.mongodb.core.MongoTemplate;
-
-import org.jspresso.framework.model.entity.IEntity;
-
 /**
- * List proxy invocation handler.
+ * Interface implemented by all Jspresso mongo proxies.
  *
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$
  */
-public class JspressoMongoEntitySetInvocationHandler extends JspressoMongoEntityCollectionInvocationHandler {
+public interface JspressoMongoProxy {
 
   /**
-   * Instantiates a new Jspresso mongo entity set invocation handler.
+   * Is initialized.
    *
-   * @param ids
-   *     the ids
-   * @param entityContract
-   *     the entity contract
-   * @param mongo
-   *     the mongo
+   * @return the boolean
    */
-  public JspressoMongoEntitySetInvocationHandler(Collection<Serializable> ids, Class<IEntity> entityContract,
-                                                  MongoTemplate mongo) {
-    super(ids, entityContract, mongo);
-  }
+  boolean isInitialized();
 
-  @Override
-  protected Collection<IEntity> createTargetCollection(Collection<IEntity> sourceCollection) {
-    return new LinkedHashSet<>(sourceCollection);
-  }
+  /**
+   * Initialize void.
+   */
+  void initialize();
 }

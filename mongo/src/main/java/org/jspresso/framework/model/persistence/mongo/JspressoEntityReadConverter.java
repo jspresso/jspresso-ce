@@ -34,6 +34,8 @@ import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.converter.ConditionalGenericConverter;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
+import org.jspresso.framework.application.backend.BackendControllerHolder;
+import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
@@ -80,15 +82,22 @@ public class JspressoEntityReadConverter
     IComponentDescriptor<? extends IEntity> entityDescriptor = (IComponentDescriptor<? extends IEntity>)
         getEntityFactory()
         .getComponentDescriptor(entityType);
-    IEntity entity = getEntityFactory().createEntityInstance(entityType, id);
-    completeComponent(source, entityDescriptor, entity);
+    IEntity entity = getBackendController().getUnitOfWorkOrRegisteredEntity(entityType, id);
+    if (entity == null) {
+      entity = getEntityFactory().createEntityInstance(entityType, id);
+      completeComponent(source, entityDescriptor, entity);
+    }
     return entity;
   }
 
+
   @SuppressWarnings("unchecked")
-  private IEntity convertEntity(Serializable id, Class<? extends IEntity> entityType) {
-    return createProxyEntity(id, entityType);
-    // return getMongo().findById(id, entityType);
+  private IEntity convertEntity(Serializable id, Class<IEntity> entityType) {
+    IEntity entity = getBackendController().getUnitOfWorkOrRegisteredEntity(entityType, id);
+    if (entity == null) {
+      entity = createProxyEntity(id, entityType);
+    }
+    return entity;
   }
 
   @SuppressWarnings("unchecked")
@@ -134,7 +143,7 @@ public class JspressoEntityReadConverter
                       collectionProperty.add((Serializable) element);
                     }
                     component.straightSetProperty(propertyName, createProxyCollection(collectionProperty,
-                        (Class<? extends IEntity>) targetType, collectionInterface));
+                        (Class<IEntity>) targetType, collectionInterface));
                   } else {
                     Collection<Object> collectionProperty = getCollectionFactory().createComponentCollection(
                         collectionInterface);
@@ -165,7 +174,7 @@ public class JspressoEntityReadConverter
             }
           } else if (targetType != null && propertyValue instanceof Serializable) {
             component.straightSetProperty(propertyName, convertEntity((Serializable) propertyValue,
-                (Class<? extends IEntity>) targetType));
+                (Class<IEntity>) targetType));
           } else {
             component.straightSetProperty(propertyName, propertyValue);
           }
@@ -262,12 +271,13 @@ public class JspressoEntityReadConverter
     setMongo(event.getApplicationContext().getBean("mongoTemplate", MongoTemplate.class));
   }
 
-  private IEntity createProxyEntity(Serializable id, Class<? extends IEntity> entityContract) {
-    return (IEntity) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[]{entityContract},
-        new JspressoMongoEntityProxyHandler(id, entityContract, getMongo()));
+  private IEntity createProxyEntity(Serializable id, Class<IEntity> entityContract) {
+    return (IEntity) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
+        new Class[]{entityContract, JspressoMongoEntityProxy.class}, new JspressoMongoEntityProxyHandler(id,
+            entityContract, getMongo()));
   }
 
-  private Object createProxyCollection(Collection<Serializable> ids, Class<? extends IEntity> entityContract,
+  private Object createProxyCollection(Collection<Serializable> ids, Class<IEntity> entityContract,
                                        Class<? extends Collection<?>> collectionContract) {
     InvocationHandler handler;
     if (List.class.isAssignableFrom(collectionContract)) {
@@ -275,7 +285,16 @@ public class JspressoEntityReadConverter
     } else {
       handler = new JspressoMongoEntitySetInvocationHandler(ids, entityContract, getMongo());
     }
-    return Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[]{collectionContract},
-        handler);
+    return Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
+        new Class[]{collectionContract, JspressoMongoProxy.class}, handler);
+  }
+
+  /**
+   * Gets the getBackendController().
+   *
+   * @return the backendController.
+   */
+  protected IBackendController getBackendController() {
+    return BackendControllerHolder.getCurrentBackendController();
   }
 }

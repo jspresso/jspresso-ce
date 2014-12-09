@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -420,10 +421,17 @@ public class HibernateBackendController extends AbstractBackendController {
       Hibernate.initialize(propertyValue);
       if (propertyValue instanceof Collection<?>) {
         relinkAfterInitialization((Collection<IComponent>) propertyValue, componentOrEntity);
+        for (Iterator<?> ite = ((Collection<?>) propertyValue).iterator(); ite.hasNext(); ) {
+          Object collectionElement = ite.next();
+          if (collectionElement instanceof IEntity) {
+            if (isEntityRegisteredForDeletion((IEntity) collectionElement)) {
+              ite.remove();
+            }
+          }
+        }
       } else {
         relinkAfterInitialization(Collections.singleton((IComponent) propertyValue), componentOrEntity);
       }
-      super.initializePropertyIfNeeded(componentOrEntity, propertyName);
       clearPropertyDirtyState(propertyValue);
     }
   }

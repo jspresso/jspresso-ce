@@ -220,10 +220,19 @@ public interface IBackendController
   IEntity getUnitOfWorkEntity(Class<? extends IEntity> entityContract, Serializable entityId);
 
   /**
-   * Gets the transactionTemplate.
+   * Gets unit of work or registered entity.
    *
-   * @return the transactionTemplate.
+   * @param entityType the entity type
+   * @param id the id
+   * @return the unit of work or registered entity
    */
+  IEntity getUnitOfWorkOrRegisteredEntity(Class<? extends IEntity> entityType, Serializable id);
+
+    /**
+     * Gets the transactionTemplate.
+     *
+     * @return the transactionTemplate.
+     */
   TransactionTemplate getTransactionTemplate();
 
   /**

@@ -39,13 +39,7 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$
  */
-public class JspressoMongoEntityListInvocationHandler implements InvocationHandler {
-
-  private Collection<Serializable> ids;
-  private Class<? extends IEntity> entityContract;
-  private MongoTemplate            mongo;
-  private List<IEntity>            target;
-
+public class JspressoMongoEntityListInvocationHandler extends JspressoMongoEntityCollectionInvocationHandler {
 
   /**
    * Instantiates a new Jspresso mongo entity list invocation handler.
@@ -57,60 +51,13 @@ public class JspressoMongoEntityListInvocationHandler implements InvocationHandl
    * @param mongo
    *     the mongo
    */
-  public JspressoMongoEntityListInvocationHandler(Collection<Serializable> ids, Class<? extends IEntity> entityContract,
+  public JspressoMongoEntityListInvocationHandler(Collection<Serializable> ids, Class<IEntity> entityContract,
                                                   MongoTemplate mongo) {
-    this.ids = ids;
-    this.entityContract = entityContract;
-    this.mongo = mongo;
+    super(ids, entityContract, mongo);
   }
 
-  /**
-   * Invoke object.
-   *
-   * @param proxy
-   *     the proxy
-   * @param method
-   *     the method
-   * @param args
-   *     the args
-   * @return the object
-   *
-   * @throws Throwable
-   *     the throwable
-   */
   @Override
-  public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-    String methodName = method.getName()/* .intern() */;
-    switch (methodName) {
-      case "size":
-        return ids.size();
-      default:
-        return invokeTargetMethod(method, args);
-    }
-  }
-
-  /**
-   * Invoke method on .
-   * <p/>
-   * {@inheritDoc}
-   */
-  private Object invokeTargetMethod(Method method, Object... args) throws NoSuchMethodException {
-    if (target == null) {
-      if (ids == null || ids.isEmpty()) {
-        target = new ArrayList<>();
-      } else {
-        target = new ArrayList<>(mongo.find(new Query(Criteria.where("_id").in(ids)), entityContract));
-      }
-    }
-    try {
-      return List.class.getMethod(method.getName(), method.getParameterTypes()).invoke(target, args);
-    } catch (IllegalArgumentException | IllegalAccessException e) {
-      throw new NestedRuntimeException(method.toString() + " is not supported on the List interface");
-    } catch (InvocationTargetException e) {
-      if (e.getCause() instanceof RuntimeException) {
-        throw (RuntimeException) e.getCause();
-      }
-      throw new NestedRuntimeException(e.getCause());
-    }
+  protected Collection<IEntity> createTargetCollection(Collection<IEntity> sourceCollection) {
+    return new ArrayList<>(sourceCollection);
   }
 }
