@@ -340,7 +340,7 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
       return createStringRestriction(propertyDescriptor, prefixedProperty.replace('.' + IEntity.ID, ""),
           (String) propertyValue, componentDescriptor, queryComponent, context);
     } else {
-      return where(prefixedProperty.replace('.'+IEntity.ID, "")).is(propertyValue);
+      return where(prefixedProperty.replace('.' + IEntity.ID, "")).is(propertyValue);
     }
   }
 

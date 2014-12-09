@@ -19,8 +19,11 @@
 package org.jspresso.framework.model.persistence.mongo;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Proxy;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import com.mongodb.BasicDBList;
@@ -84,7 +87,8 @@ public class JspressoEntityReadConverter
 
   @SuppressWarnings("unchecked")
   private IEntity convertEntity(Serializable id, Class<? extends IEntity> entityType) {
-    return getMongo().findById(id, entityType);
+    return createProxyEntity(id, entityType);
+    // return getMongo().findById(id, entityType);
   }
 
   @SuppressWarnings("unchecked")
@@ -119,21 +123,37 @@ public class JspressoEntityReadConverter
           if (propertyValue instanceof DBObject) {
             if (propertyValue instanceof BasicDBList) {
               if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
-                Collection<Object> collectionProperty = getCollectionFactory().createComponentCollection(
-                    ((ICollectionPropertyDescriptor) propertyDescriptor).getCollectionDescriptor()
-                                                                        .getCollectionInterface());
-                for (Object element : (BasicDBList) propertyValue) {
-                  if (element instanceof DBObject) {
-                    collectionProperty.add(convertComponent((DBObject) element,
-                        (Class<? extends IComponent>) targetType));
-                  } else if (element instanceof Serializable) {
-                    collectionProperty.add(convertEntity((Serializable) element,
-                        (Class<? extends IEntity>) targetType));
+                Class<? extends Collection<?>> collectionInterface = ((ICollectionPropertyDescriptor)
+                    propertyDescriptor)
+                    .getCollectionDescriptor().getCollectionInterface();
+                if (IComponent.class.isAssignableFrom(targetType)) {
+                  if (IEntity.class.isAssignableFrom(targetType)) {
+                    Collection<Serializable> collectionProperty = getCollectionFactory().createComponentCollection(
+                        collectionInterface);
+                    for (Object element : (BasicDBList) propertyValue) {
+                      collectionProperty.add((Serializable) element);
+                    }
+                    component.straightSetProperty(propertyName, createProxyCollection(collectionProperty,
+                        (Class<? extends IEntity>) targetType, collectionInterface));
                   } else {
+                    Collection<Object> collectionProperty = getCollectionFactory().createComponentCollection(
+                        collectionInterface);
+                    for (Object element : (BasicDBList) propertyValue) {
+                      if (element instanceof DBObject) {
+                        collectionProperty.add(convertComponent((DBObject) element,
+                            (Class<? extends IComponent>) targetType));
+                      }
+                    }
+                    component.straightSetProperty(propertyName, collectionProperty);
+                  }
+                } else {
+                  Collection<Object> collectionProperty = getCollectionFactory().createComponentCollection(
+                      collectionInterface);
+                  for (Object element : (BasicDBList) propertyValue) {
                     collectionProperty.add(element);
                   }
+                  component.straightSetProperty(propertyName, collectionProperty);
                 }
-                component.straightSetProperty(propertyName, collectionProperty);
               } else {
                 component.straightSetProperty(propertyName, propertyValue);
               }
@@ -144,7 +164,6 @@ public class JspressoEntityReadConverter
               component.straightSetProperty(propertyName, propertyValue);
             }
           } else if (targetType != null && propertyValue instanceof Serializable) {
-            //TODO Lazy loading
             component.straightSetProperty(propertyName, convertEntity((Serializable) propertyValue,
                 (Class<? extends IEntity>) targetType));
           } else {
@@ -241,5 +260,22 @@ public class JspressoEntityReadConverter
   @Override
   public void onApplicationEvent(ContextRefreshedEvent event) {
     setMongo(event.getApplicationContext().getBean("mongoTemplate", MongoTemplate.class));
+  }
+
+  private IEntity createProxyEntity(Serializable id, Class<? extends IEntity> entityContract) {
+    return (IEntity) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[]{entityContract},
+        new JspressoMongoEntityProxyHandler(id, entityContract, getMongo()));
+  }
+
+  private Object createProxyCollection(Collection<Serializable> ids, Class<? extends IEntity> entityContract,
+                                       Class<? extends Collection<?>> collectionContract) {
+    InvocationHandler handler;
+    if (List.class.isAssignableFrom(collectionContract)) {
+      handler = new JspressoMongoEntityListInvocationHandler(ids, entityContract, getMongo());
+    } else {
+      handler = new JspressoMongoEntitySetInvocationHandler(ids, entityContract, getMongo());
+    }
+    return Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[]{collectionContract},
+        handler);
   }
 }
