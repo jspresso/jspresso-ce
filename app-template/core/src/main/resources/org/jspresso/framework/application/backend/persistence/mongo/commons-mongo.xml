@@ -45,7 +45,7 @@
   <bean id="applicationQueryRefiner"
         class="org.jspresso.framework.application.backend.action.persistence.mongo.MockQueryRefiner"/>
 
-  <bean id="queryEntitiesBackActionBase" parent="abstractMongoBackAction"
+  <bean id="queryEntitiesBackActionBase" parent="abstractBackendAction"
         class="org.jspresso.framework.application.backend.action.persistence.mongo.QueryEntitiesAction">
     <property name="queryFactory" ref="queryFactory"/>
     <property name="queryRefiner" ref="applicationQueryRefiner"/>
