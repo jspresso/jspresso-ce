@@ -339,6 +339,7 @@ public abstract class AbstractBackendController extends AbstractController imple
         }
       }
     } finally {
+      clearPendingOperations();
       unitOfWork.commit();
     }
   }
