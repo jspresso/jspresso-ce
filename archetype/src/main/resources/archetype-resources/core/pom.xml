@@ -27,6 +27,7 @@
     </dependency>
   </dependencies>
   <profiles>
+#if(${persistence_hibernate_or_mongo} == "hibernate")
     <profile>
       <id>generate-ddl-scripts</id>
       <activation>
@@ -107,6 +108,7 @@
         </plugins>
       </build>
     </profile>
+#end
   </profiles>
   <build>
     <plugins>
@@ -156,6 +158,7 @@
           </execution>
         </executions>
       </plugin>
+#if(${persistence_hibernate_or_mongo} == "hibernate")
       <plugin>
         <groupId>org.codehaus.xdoclet</groupId>
         <artifactId>maven2-xdoclet2-plugin</artifactId>
@@ -234,6 +237,7 @@
           </execution>
         </executions>
       </plugin>
+#end
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>

@@ -26,7 +26,7 @@
         value=""/>
   </bean>
 
-  #if(${persistence_hibernate_or_mongo} == "hibernate")
+#if(${persistence_hibernate_or_mongo} == "hibernate")
   <bean
       id="hibernateSessionFactory"
       parent="abstractHibernateSessionFactory">
@@ -54,8 +54,8 @@
     </property>
   </bean>
 
-  #elseif(${persistence_hibernate_or_mongo} == "mongo")
+#elseif(${persistence_hibernate_or_mongo} == "mongo")
   <mongo:db-factory dbname="${rootArtifactId}-db" host="localhost" port="27017"/>
 
-  #end
+#end
 </beans>
