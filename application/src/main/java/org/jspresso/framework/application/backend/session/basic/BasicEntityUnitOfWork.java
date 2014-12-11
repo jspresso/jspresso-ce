@@ -279,12 +279,10 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
       if (entity == null) {
         throw new IllegalArgumentException("Passed entity cannot be null");
       }
-      if (entity.isPersistent()) {
-        if (entitiesRegisteredForDeletion == null) {
-          entitiesRegisteredForDeletion = new LinkedHashSet<>();
-        }
-        entitiesRegisteredForDeletion.add(entity);
+      if (entitiesRegisteredForDeletion == null) {
+        entitiesRegisteredForDeletion = new LinkedHashSet<>();
       }
+      entitiesRegisteredForDeletion.add(entity);
       if (entitiesRegisteredForUpdate != null) {
         //noinspection StatementWithEmptyBody
         while (entitiesRegisteredForUpdate.remove(entity)) {
