@@ -26,6 +26,7 @@
     <resizecontainers.version>1.0</resizecontainers.version>
     <checkbox3state.version>1.0</checkbox3state.version>
     <spring.version>4.0.7.RELEASE</spring.version>
+    <spring-data-commons.version>1.9.1.RELEASE</spring-data-commons.version>
     <spring-ldap.version>2.0.1.RELEASE</spring-ldap.version>
     <spring-data-mongodb.version>1.6.1.RELEASE</spring-data-mongodb.version>
     <ldapbp.version>1.0</ldapbp.version>
@@ -599,6 +600,11 @@
         <groupId>org.springframework</groupId>
         <artifactId>spring-orm</artifactId>
         <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.data</groupId>
+        <artifactId>spring-data-commons</artifactId>
+        <version>${spring-data-commons.version}</version>
       </dependency>
       <dependency>
         <groupId>org.springframework.ldap</groupId>
