@@ -28,7 +28,7 @@
     <spring.version>4.0.7.RELEASE</spring.version>
     <spring-data-commons.version>1.9.1.RELEASE</spring-data-commons.version>
     <spring-ldap.version>2.0.1.RELEASE</spring-ldap.version>
-    <spring-data-mongodb.version>1.6.1.RELEASE</spring-data-mongodb.version>
+    <spring-data-mongodb.version>1.5.4.RELEASE</spring-data-mongodb.version>
     <ldapbp.version>1.0</ldapbp.version>
     <hibernate.version>4.3.4.Final</hibernate.version>
     <jbosssx.version>4.0.20.Final</jbosssx.version>
