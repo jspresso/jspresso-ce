@@ -44,7 +44,7 @@
     <constructor-arg>
       <list>
         <value>org/jspresso/framework/application/commons.xml</value>
-        <value>org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml</value>
+        <value>org/jspresso/framework/application/backend/persistence/${persistence_hibernate_or_mongo}/commons-${persistence_hibernate_or_mongo}.xml</value>
         <value>${packageInPathFormat}/model/dsl-model.xml</value>
         <value>${packageInPathFormat}/model/model.xml</value>
         <value>${packageInPathFormat}/backend/dsl-backend.xml</value>
@@ -61,7 +61,7 @@
     <constructor-arg>
       <list>
         <value>org/jspresso/framework/application/commons.xml</value>
-        <value>org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml</value>
+        <value>org/jspresso/framework/application/backend/persistence/${persistence_hibernate_or_mongo}/commons-${persistence_hibernate_or_mongo}.xml</value>
         <value>org/jspresso/framework/application/frontend/commons-frontend.xml</value>
         <value>org/jspresso/framework/application/frontend/swing/commons-swing.xml</value>
         <value>${packageInPathFormat}/model/dsl-model.xml</value>
@@ -85,7 +85,7 @@
     <constructor-arg>
       <list>
         <value>org/jspresso/framework/application/commons.xml</value>
-        <value>org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml</value>
+        <value>org/jspresso/framework/application/backend/persistence/${persistence_hibernate_or_mongo}/commons-${persistence_hibernate_or_mongo}.xml</value>
         <value>org/jspresso/framework/application/frontend/commons-frontend.xml</value>
         <value>org/jspresso/framework/application/frontend/remote/commons-remote.xml</value>
         <value>${packageInPathFormat}/model/dsl-model.xml</value>
@@ -109,7 +109,7 @@
     <constructor-arg>
       <list>
         <value>org/jspresso/framework/application/commons.xml</value>
-        <value>org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml</value>
+        <value>org/jspresso/framework/application/backend/persistence/${persistence_hibernate_or_mongo}/commons-${persistence_hibernate_or_mongo}.xml</value>
         <value>org/jspresso/framework/application/frontend/commons-frontend.xml</value>
         <value>org/jspresso/framework/application/frontend/remote/commons-remote.xml</value>
         <value>org/jspresso/framework/application/frontend/remote/commons-remote-mobile.xml</value>

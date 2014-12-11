@@ -18,15 +18,6 @@
  */
 package org.jspresso.framework.application.startup.development;
 
-import java.util.List;
-
-import org.hibernate.Session;
-import org.hibernate.criterion.DetachedCriteria;
-import org.jspresso.framework.application.backend.BackendControllerHolder;
-import org.jspresso.framework.application.backend.persistence.hibernate.HibernateBackendController;
-import org.jspresso.framework.model.component.IComponent;
-import org.jspresso.framework.model.entity.IEntity;
-import org.jspresso.framework.model.entity.IEntityFactory;
 import org.springframework.beans.factory.BeanFactory;
 
 /**
@@ -34,135 +25,18 @@ import org.springframework.beans.factory.BeanFactory;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @deprecated use AbstractHibernateTestDataPersister instead.
  */
-public abstract class AbstractTestDataPersister {
-
-  private final BeanFactory beanFactory;
+@Deprecated
+public abstract class AbstractTestDataPersister extends AbstractHibernateTestDataPersister {
 
   /**
    * Constructs a new {@code AbstractTestDataPersister} instance.
    *
    * @param beanFactory
-   *          the spring bean factory to use.
+   *     the spring bean factory to use.
    */
   public AbstractTestDataPersister(BeanFactory beanFactory) {
-    this.beanFactory = beanFactory;
-  }
-
-  /**
-   * Creates and persist the test data.
-   */
-  public final void persistTestData() {
-    HibernateBackendController hbc = (HibernateBackendController) BackendControllerHolder
-        .getThreadBackendController();
-    boolean wasNull = false;
-    if (hbc == null) {
-      wasNull = true;
-      hbc = (HibernateBackendController) beanFactory
-          .getBean("applicationBackController");
-      BackendControllerHolder.setThreadBackendController(hbc);
-    }
-    try {
-      createAndPersistTestData();
-    } finally {
-      hbc.cleanupRequestResources();
-      if (wasNull) {
-        BackendControllerHolder.setThreadBackendController(null);
-      }
-    }
-  }
-
-  /**
-   * Creates and persist the test data. This method must be overridden in
-   * subclasses.
-   */
-  protected abstract void createAndPersistTestData();
-
-  /**
-   * Creates a component instance.
-   * 
-   * @param <T>
-   *          the actual component type.
-   * @param componentContract
-   *          the component contract.
-   * @return the created component.
-   */
-  protected <T extends IComponent> T createComponentInstance(
-      Class<T> componentContract) {
-    return getEntityFactory().createComponentInstance(componentContract);
-  }
-
-  /**
-   * Creates an entity instance.
-   * 
-   * @param <T>
-   *          the actual entity type.
-   * @param entityContract
-   *          the entity contract.
-   * @return the created entity.
-   */
-  protected <T extends IEntity> T createEntityInstance(Class<T> entityContract) {
-    return getEntityFactory().createEntityInstance(entityContract);
-  }
-
-  /**
-   * Persists or update an entity.
-   * 
-   * @param entity
-   *          the entity to persist or update.
-   */
-  protected void saveOrUpdate(IEntity entity) {
-    getHibernateSession().saveOrUpdate(entity);
-    getHibernateSession().flush();
-  }
-
-  /**
-   * Query entities.
-   * 
-   * @param queryString
-   *          the HQL query string.
-   * @return the entity list.
-   */
-  protected List<?> find(String queryString) {
-    return getHibernateSession().createQuery(queryString).list();
-  }
-
-  /**
-   * Query entities by criteria.
-   * 
-   * @param criteria
-   *          the Hibernate detached criteria.
-   * @return the entity list.
-   */
-  protected List<?> findByCriteria(DetachedCriteria criteria) {
-    return criteria.getExecutableCriteria(getHibernateSession()).list();
-  }
-
-  /**
-   * Gets the backend controller.
-   * 
-   * @return the backend controller.
-   */
-  protected HibernateBackendController getBackendController() {
-    return (HibernateBackendController) BackendControllerHolder
-        .getCurrentBackendController();
-  }
-
-  /**
-   * Gets the entityFactory.
-   * 
-   * @return the entityFactory.
-   */
-  protected IEntityFactory getEntityFactory() {
-    return getBackendController().getEntityFactory();
-  }
-
-  /**
-   * Gets the hibernateSession.
-   * 
-   * @return the hibernateSession.
-   */
-  protected Session getHibernateSession() {
-    return getBackendController().getHibernateSession();
+    super(beanFactory);
   }
 }

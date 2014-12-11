@@ -1,12 +1,20 @@
 package ${package}.development;
 
-import org.jspresso.framework.application.startup.development.AbstractTestDataPersister;
+#if(${persistence_hibernate_or_mongo}=="hibernate")
+import org.jspresso.framework.application.startup.development.AbstractHibernateTestDataPersister;
+#elseif(${persistence_hibernate_or_mongo}=="mongo")
+import org.jspresso.framework.application.startup.development.AbstractMongoTestDataPersister;
+#end
 import org.springframework.beans.factory.BeanFactory;
 
 /**
  * Persists some test data for the application.
  */
-public class TestDataPersister extends AbstractTestDataPersister {
+#if(${persistence_hibernate_or_mongo}=="hibernate")
+public class TestDataPersister extends AbstractHibernateTestDataPersister {
+#elseif(${persistence_hibernate_or_mongo}=="mongo")
+public class TestDataPersister extends AbstractMongoTestDataPersister {
+#end
 
   /**
    * Constructs a new <code>TestDataPersister</code> instance.

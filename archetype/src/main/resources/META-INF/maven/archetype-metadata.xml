@@ -10,6 +10,9 @@
     <requiredProperty key="companyUrl"/>
     <requiredProperty key="applicationName"/>
     <requiredProperty key="companyName"/>
+    <requiredProperty key="persistence_hibernate_or_mongo">
+      <defaultValue>hibernate</defaultValue>
+    </requiredProperty>
     <requiredProperty key="siteDistributionUrl">
       <defaultValue>file:///tmp/maven-site</defaultValue>
     </requiredProperty>
