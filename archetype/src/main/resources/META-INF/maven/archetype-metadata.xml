@@ -6,23 +6,15 @@
     <requiredProperty key="jspressoVersion">
       <defaultValue>${project.version}</defaultValue>
     </requiredProperty>
-    <requiredProperty key="graphvizExecutable">
-      <defaultValue>C:/envdev/graphviz/bin/dot.exe</defaultValue>
-    </requiredProperty>
-    <requiredProperty key="applicationDescription">
-      <defaultValue>Example Application Description</defaultValue>
-    </requiredProperty>
-    <requiredProperty key="companyUrl">
-      <defaultValue>http://www.example.com</defaultValue>
-    </requiredProperty>
-    <requiredProperty key="applicationName">
-      <defaultValue>Example Application</defaultValue>
-    </requiredProperty>
-    <requiredProperty key="companyName">
-      <defaultValue>Example Company</defaultValue>
-    </requiredProperty>
+    <requiredProperty key="applicationDescription"/>
+    <requiredProperty key="companyUrl"/>
+    <requiredProperty key="applicationName"/>
+    <requiredProperty key="companyName"/>
     <requiredProperty key="siteDistributionUrl">
       <defaultValue>file:///tmp/maven-site</defaultValue>
+    </requiredProperty>
+    <requiredProperty key="graphvizExecutable">
+      <defaultValue>C:/envdev/graphviz/bin/dot.exe</defaultValue>
     </requiredProperty>
   </requiredProperties>
   <fileSets>
