@@ -94,7 +94,8 @@ public class JspressoEntityWriteConverter implements Converter<IEntity, DBObject
             }
           }
           dbo.put(propertyName, convertedCollection);
-        } else {
+        } else if (propertyValue != null) {
+          // Do not store null values
           dbo.put(propertyName, propertyValue);
         }
       }

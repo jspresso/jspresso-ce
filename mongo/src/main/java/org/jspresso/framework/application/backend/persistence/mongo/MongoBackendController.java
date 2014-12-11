@@ -35,6 +35,7 @@ import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 
 import org.jspresso.framework.application.backend.AbstractBackendController;
+import org.jspresso.framework.application.backend.BackendException;
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
@@ -43,6 +44,7 @@ import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescripto
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.persistence.mongo.JspressoMongoEntityProxy;
 import org.jspresso.framework.model.persistence.mongo.JspressoMongoProxy;
+import org.jspresso.framework.util.exception.NestedRuntimeException;
 
 /**
  * This is the default Jspresso implementation of MongoDB-based backend
@@ -57,20 +59,27 @@ public class MongoBackendController extends AbstractBackendController {
   private static final Logger LOG = LoggerFactory.getLogger(MongoBackendController.class);
 
   /**
-   * {@inheritDoc}
+   * Flushes all changes to Mongo which is not transactional anyway...
+   *
+   * @param readOnly the read only
    */
   @Override
-  protected void doCommitUnitOfWork() {
+  public void beforeCommit(boolean readOnly) {
     for (Map<Serializable, IEntity> uowEntities : getUnitOfWorkEntities().values()) {
       for (IEntity uowEntity : uowEntities.values()) {
         if (isEntityRegisteredForDeletion(uowEntity)) {
+          if (readOnly) {
+            throw new BackendException("The transaction is read-only but would lead to a flush in the database.");
+          }
           getMongoTemplate().remove(uowEntity);
         } else if (isDirtyInDepth(uowEntity)) {
+          if (readOnly) {
+            throw new BackendException("The transaction is read-only but would lead to a flush in the database.");
+          }
           getMongoTemplate().save(uowEntity);
         }
       }
     }
-    super.doCommitUnitOfWork();
   }
 
   /**
