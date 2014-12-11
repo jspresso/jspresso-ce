@@ -331,16 +331,26 @@ public abstract class AbstractBackendController extends AbstractController imple
           recordAsSynchronized(deletedEntity);
         }
       }
-      if (unitOfWork.getUpdatedEntities() != null) {
-        List<IEntity> mergedEntities = merge(new ArrayList<>(unitOfWork.getUpdatedEntities()),
-            EMergeMode.MERGE_CLEAN_LAZY);
-        if (recordedMergedEntities != null) {
-          recordedMergedEntities.addAll(mergedEntities);
-        }
-      }
+      Collection<IEntity> updatedEntities = unitOfWork.getUpdatedEntities();
+      mergeBackFlushedEntities(updatedEntities);
     } finally {
       clearPendingOperations();
       unitOfWork.commit();
+    }
+  }
+
+  /**
+   * Merge back flushed entities.
+   *
+   * @param updatedEntities the updated entities
+   */
+  protected void mergeBackFlushedEntities(Collection<IEntity> updatedEntities) {
+    if (updatedEntities != null) {
+      List<IEntity> mergedEntities = merge(new ArrayList<>(updatedEntities),
+          EMergeMode.MERGE_CLEAN_LAZY);
+      if (recordedMergedEntities != null) {
+        recordedMergedEntities.addAll(mergedEntities);
+      }
     }
   }
 

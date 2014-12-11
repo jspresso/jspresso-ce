@@ -19,6 +19,7 @@
 package org.jspresso.framework.application.backend.persistence.mongo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -57,6 +58,7 @@ public class MongoBackendController extends AbstractBackendController {
 
   private MongoTemplate mongoTemplate;
   private static final Logger LOG = LoggerFactory.getLogger(MongoBackendController.class);
+  private Set<IEntity> flushedEntities;
 
   /**
    * Flushes all changes to Mongo which is not transactional anyway...
@@ -65,6 +67,10 @@ public class MongoBackendController extends AbstractBackendController {
    */
   @Override
   public void beforeCommit(boolean readOnly) {
+    // flushed entities must be recorded, because MongoDB is not transactional.
+    if (flushedEntities == null) {
+      flushedEntities = new HashSet<>();
+    }
     for (Map<Serializable, IEntity> uowEntities : getUnitOfWorkEntities().values()) {
       for (IEntity uowEntity : uowEntities.values()) {
         if (isEntityRegisteredForDeletion(uowEntity)) {
@@ -72,14 +78,32 @@ public class MongoBackendController extends AbstractBackendController {
             throw new BackendException("The transaction is read-only but would lead to a flush in the database.");
           }
           getMongoTemplate().remove(uowEntity);
+          flushedEntities.add(uowEntity);
         } else if (isDirtyInDepth(uowEntity)) {
           if (readOnly) {
             throw new BackendException("The transaction is read-only but would lead to a flush in the database.");
           }
           getMongoTemplate().save(uowEntity);
+          flushedEntities.add(uowEntity);
         }
       }
     }
+    super.beforeCommit(readOnly);
+  }
+
+  /**
+   * Cleans flushed entities.
+   *
+   * @param status the status
+   */
+  @Override
+  public void afterCompletion(int status) {
+    if (status == STATUS_ROLLED_BACK) {
+      // In case of rollback, we must still merge back flushed entities, since MongoDB is not transactional.
+      mergeBackFlushedEntities(flushedEntities);
+    }
+    flushedEntities = null;
+    super.afterCompletion(status);
   }
 
   /**
