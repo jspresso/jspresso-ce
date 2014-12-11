@@ -18,13 +18,14 @@
  */
 package org.jspresso.framework.model.persistence.mongo;
 
+import static org.springframework.data.mongodb.core.query.Criteria.*;
+
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -119,7 +120,7 @@ public abstract class JspressoMongoEntityCollectionInvocationHandler implements 
       if (ids == null || ids.isEmpty()) {
         target = createTargetCollection(Collections.<IEntity>emptySet());
       } else {
-        target = createTargetCollection(mongo.find(new Query(Criteria.where("_id").in(ids)), entityContract));
+        target = createTargetCollection(mongo.find(new Query().addCriteria(where("_id").in(ids)), entityContract));
       }
     }
   }
