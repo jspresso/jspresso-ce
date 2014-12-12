@@ -65,9 +65,12 @@ public class JspressoEntityReadConverter
   /**
    * Convert object.
    *
-   * @param source      the generic source
-   * @param sourceType      the source type
-   * @param targetType      the target type
+   * @param source
+   *     the generic source
+   * @param sourceType
+   *     the source type
+   * @param targetType
+   *     the target type
    * @return the object
    */
   @SuppressWarnings("unchecked")
@@ -110,8 +113,8 @@ public class JspressoEntityReadConverter
   }
 
   @SuppressWarnings("unchecked")
-  private Object convertComponent(DBObject source, Class<? extends IComponent> componentType, IEntityRegistry
-      readerRegistry) {
+  private Object convertComponent(DBObject source, Class<? extends IComponent> componentType,
+                                  IEntityRegistry readerRegistry) {
     IComponentDescriptor<? extends IComponent> componentDescriptor = (IComponentDescriptor<? extends IComponent>)
         getEntityFactory()
         .getComponentDescriptor(componentType);
@@ -126,17 +129,18 @@ public class JspressoEntityReadConverter
     for (IPropertyDescriptor propertyDescriptor : entityDescriptor.getPropertyDescriptors()) {
       if (propertyDescriptor != null && !propertyDescriptor.isComputed()) {
         String propertyName = propertyDescriptor.getName();
+        Class<?> propertyType = propertyDescriptor.getModelType();
         if (source.containsField(propertyName)) {
           Object propertyValue = source.get(propertyName);
-          Class<?> targetType = null;
+          Class<?> componentRefType = null;
           if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
             if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
-              targetType = ((IReferencePropertyDescriptor<?>) propertyDescriptor).getReferencedDescriptor()
-                                                                                 .getModelType();
+              componentRefType = ((IReferencePropertyDescriptor<?>) propertyDescriptor).getReferencedDescriptor()
+                                                                                       .getModelType();
             } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
-              targetType = ((ICollectionPropertyDescriptor<?>) propertyDescriptor).getCollectionDescriptor()
-                                                                                  .getElementDescriptor()
-                                                                                  .getModelType();
+              componentRefType = ((ICollectionPropertyDescriptor<?>) propertyDescriptor).getCollectionDescriptor()
+                                                                                        .getElementDescriptor()
+                                                                                        .getModelType();
             }
           }
           if (propertyValue instanceof DBObject) {
@@ -145,22 +149,22 @@ public class JspressoEntityReadConverter
                 Class<? extends Collection<?>> collectionInterface = ((ICollectionPropertyDescriptor)
                     propertyDescriptor)
                     .getCollectionDescriptor().getCollectionInterface();
-                if (IComponent.class.isAssignableFrom(targetType)) {
-                  if (IEntity.class.isAssignableFrom(targetType)) {
+                if (IComponent.class.isAssignableFrom(componentRefType)) {
+                  if (IEntity.class.isAssignableFrom(componentRefType)) {
                     Collection<Serializable> collectionProperty = getCollectionFactory().createComponentCollection(
                         collectionInterface);
                     for (Object element : (BasicDBList) propertyValue) {
                       collectionProperty.add((Serializable) element);
                     }
                     component.straightSetProperty(propertyName, createProxyCollection(collectionProperty,
-                        (Class<IEntity>) targetType, collectionInterface));
+                        (Class<IEntity>) componentRefType, collectionInterface));
                   } else {
                     Collection<Object> collectionProperty = getCollectionFactory().createComponentCollection(
                         collectionInterface);
                     for (Object element : (BasicDBList) propertyValue) {
                       if (element instanceof DBObject) {
                         collectionProperty.add(convertComponent((DBObject) element,
-                            (Class<? extends IComponent>) targetType, readerRegistry));
+                            (Class<? extends IComponent>) componentRefType, readerRegistry));
                       }
                     }
                     component.straightSetProperty(propertyName, collectionProperty);
@@ -178,17 +182,17 @@ public class JspressoEntityReadConverter
               }
             } else if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
               component.straightSetProperty(propertyName, convertComponent((DBObject) propertyValue,
-                  (Class<? extends IComponent>) targetType, readerRegistry));
+                  (Class<? extends IComponent>) componentRefType, readerRegistry));
             } else {
-              Object convertedPropertyValue = getConverter().read(propertyDescriptor.getModelType(),
-                  (DBObject) propertyValue);
+              Object convertedPropertyValue = getConverter().read(propertyType, (DBObject) propertyValue);
               component.straightSetProperty(propertyName, convertedPropertyValue);
             }
-          } else if (targetType != null && propertyValue instanceof Serializable) {
+          } else if (componentRefType != null && propertyValue instanceof Serializable) {
             component.straightSetProperty(propertyName, convertEntity((Serializable) propertyValue,
-                (Class<IEntity>) targetType, readerRegistry));
+                (Class<IEntity>) componentRefType, readerRegistry));
           } else {
-            component.straightSetProperty(propertyName, propertyValue);
+            Object convertedPropertyValue = getConverter().getConversionService().convert(propertyValue, propertyType);
+            component.straightSetProperty(propertyName, convertedPropertyValue);
           }
         }
       }
@@ -208,7 +212,8 @@ public class JspressoEntityReadConverter
   /**
    * Sets entity factory.
    *
-   * @param entityFactory      the entity factory
+   * @param entityFactory
+   *     the entity factory
    */
   public void setEntityFactory(IEntityFactory entityFactory) {
     this.entityFactory = entityFactory;
@@ -217,8 +222,10 @@ public class JspressoEntityReadConverter
   /**
    * Matches boolean.
    *
-   * @param sourceType      the source type
-   * @param targetType      the target type
+   * @param sourceType
+   *     the source type
+   * @param targetType
+   *     the target type
    * @return the boolean
    */
   @Override
@@ -249,7 +256,8 @@ public class JspressoEntityReadConverter
   /**
    * Sets collection factory.
    *
-   * @param collectionFactory      the collection factory
+   * @param collectionFactory
+   *     the collection factory
    */
   public void setCollectionFactory(IComponentCollectionFactory collectionFactory) {
     this.collectionFactory = collectionFactory;
@@ -267,7 +275,8 @@ public class JspressoEntityReadConverter
   /**
    * Sets mongo.
    *
-   * @param mongo      the mongo
+   * @param mongo
+   *     the mongo
    */
   public void setMongo(MongoTemplate mongo) {
     this.mongo = mongo;
@@ -276,7 +285,8 @@ public class JspressoEntityReadConverter
   /**
    * On application event.
    *
-   * @param event the event
+   * @param event
+   *     the event
    */
   @Override
   public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -322,7 +332,8 @@ public class JspressoEntityReadConverter
   /**
    * Sets converter.
    *
-   * @param converter the converter
+   * @param converter
+   *     the converter
    */
   public void setConverter(JspressoMappingMongoConverter converter) {
     this.converter = converter;
