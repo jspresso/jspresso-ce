@@ -18,6 +18,15 @@
  */
 package org.jspresso.framework.model.entity;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.type.filter.AssignableTypeFilter;
+
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 
 /**
@@ -48,5 +57,37 @@ public final class EntityHelper {
       IReferencePropertyDescriptor<?> propertyDescriptor) {
     return !propertyDescriptor.getReferencedDescriptor().isEntity()
         && !propertyDescriptor.getReferencedDescriptor().isPurelyAbstract();
+  }
+
+  /**
+   * Gets entity sub contracts.
+   *
+   * @param entityContract
+   *     the entity contract
+   * @return the entity sub contracts
+   */
+  public static Collection<Class<IEntity>> getEntitySubContracts(Class<IEntity> entityContract) {
+    Collection<Class<IEntity>> entitySubContracts = new HashSet<>();
+    ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(false) {
+      @Override
+      protected boolean isCandidateComponent(AnnotatedBeanDefinition beanDefinition) {
+        // Allow to return superclasses
+        return beanDefinition.getMetadata().isIndependent();
+      }
+    };
+    provider.addIncludeFilter(new AssignableTypeFilter(entityContract));
+    Set<BeanDefinition> components = provider.findCandidateComponents(entityContract.getPackage().getName().replace('.',
+        '/'));
+    for (BeanDefinition component : components) {
+      try {
+        Class<IEntity> entitySubContract = (Class<IEntity>) Class.forName(component.getBeanClassName());
+        if (entitySubContract != entityContract) {
+          entitySubContracts.add(entitySubContract);
+        }
+      } catch (ClassNotFoundException e) {
+        // Ignore
+      }
+    }
+    return entitySubContracts;
   }
 }

@@ -22,15 +22,12 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Set;
+import java.util.Collection;
 
-import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
-import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import org.jspresso.framework.model.component.ComponentException;
+import org.jspresso.framework.model.entity.EntityHelper;
 import org.jspresso.framework.model.entity.IEntity;
 
 /**
@@ -154,7 +151,7 @@ public class JspressoMongoEntityProxyHandler implements InvocationHandler {
 
   private void initializeIfNecessary() {
     if (target == null) {
-      target = findById(id, entityContract);
+      target = findEntityFor(entityContract);
       if (target == null) {
         target = NULL_TARGET;
       }
@@ -162,31 +159,15 @@ public class JspressoMongoEntityProxyHandler implements InvocationHandler {
   }
 
   @SuppressWarnings("unchecked")
-  private IEntity findById(Serializable entityId, Class<IEntity> rootEntityContract) {
-    IEntity entity = mongo.findById(entityId, rootEntityContract);
+  private IEntity findEntityFor(Class<IEntity> rootEntityContract) {
+    IEntity entity = mongo.findById(id, rootEntityContract);
     if (entity == null) {
-      ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(false) {
-        @Override
-        protected boolean isCandidateComponent(AnnotatedBeanDefinition beanDefinition) {
-          // Allow to return superclasses
-          return beanDefinition.getMetadata().isIndependent();
-        }
-      };
-      provider.addIncludeFilter(new AssignableTypeFilter(rootEntityContract));
-      Set<BeanDefinition> components = provider.findCandidateComponents(
-          rootEntityContract.getPackage().getName().replace('.', '/'));
-      for (BeanDefinition component : components) {
+      Collection<Class<IEntity>> entitySubContracts = EntityHelper.getEntitySubContracts(rootEntityContract);
+      for (Class<IEntity> entitySubContract : entitySubContracts) {
         if (entity == null) {
-          try {
-            Class<IEntity> subEntityContract = (Class<IEntity>) Class.forName(component.getBeanClassName());
-            if (subEntityContract != rootEntityContract) {
-              entity = findById(entityId, subEntityContract);
-              if (entity != null) {
-                entityContract = subEntityContract;
-              }
-            }
-          } catch (ClassNotFoundException e) {
-            // Ignore
+          entity = findEntityFor(entitySubContract);
+          if (entity != null) {
+            entityContract = entitySubContract;
           }
         }
       }

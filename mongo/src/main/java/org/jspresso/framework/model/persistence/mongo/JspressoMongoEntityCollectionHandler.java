@@ -24,13 +24,17 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 
+import org.jspresso.framework.model.entity.EntityHelper;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 
@@ -140,9 +144,31 @@ public abstract class JspressoMongoEntityCollectionHandler implements Invocation
       if (ids == null || ids.isEmpty()) {
         target = createTargetCollection(Collections.<IEntity>emptySet());
       } else {
-        target = createTargetCollection(mongo.find(new Query().addCriteria(where("_id").in(ids)), entityContract));
+        Collection<IEntity> foundEntities = findEntitiesFor(entityContract);
+        Map<Serializable, IEntity> foundEntitiesById = new HashMap<>();
+        for (IEntity foundEntity : foundEntities) {
+          foundEntitiesById.put(foundEntity.getId(), foundEntity);
+        }
+        List<IEntity> sourceCollection = new ArrayList<>(ids.size());
+        for (Serializable id : ids) {
+          sourceCollection.add(foundEntitiesById.get(id));
+        }
+        target = createTargetCollection(sourceCollection);
       }
     }
+  }
+
+  private Collection<IEntity> findEntitiesFor(Class<IEntity> rootEntityContract) {
+    List<IEntity> entities = mongo.find(new Query().addCriteria(where("_id").in(ids)), rootEntityContract);
+    if (entities.size() != ids.size()) {
+      Collection<Class<IEntity>> entitySubContracts = EntityHelper.getEntitySubContracts(rootEntityContract);
+      for (Class<IEntity> entitySubContract : entitySubContracts) {
+        if (entities.size() != ids.size()) {
+          entities.addAll(findEntitiesFor(entitySubContract));
+        }
+      }
+    }
+    return entities;
   }
 
   /**
