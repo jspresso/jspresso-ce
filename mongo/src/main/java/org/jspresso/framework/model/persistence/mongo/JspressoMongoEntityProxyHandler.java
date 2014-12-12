@@ -22,11 +22,20 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
+import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import org.jspresso.framework.model.component.ComponentException;
 import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.model.entity.IEntityRegistry;
+import org.jspresso.framework.model.entity.basic.BasicEntityRegistry;
 
 /**
  * A proxy for referenced Jspresso entities in order to support lazy loading.
@@ -53,8 +62,7 @@ public class JspressoMongoEntityProxyHandler implements InvocationHandler {
    * @param mongo
    *     the mongo
    */
-  public JspressoMongoEntityProxyHandler(Serializable id, Class<IEntity> entityContract,
-                                         MongoTemplate mongo) {
+  public JspressoMongoEntityProxyHandler(Serializable id, Class<IEntity> entityContract, MongoTemplate mongo) {
     this.id = id;
     this.entityContract = entityContract;
     this.mongo = mongo;
@@ -134,10 +142,40 @@ public class JspressoMongoEntityProxyHandler implements InvocationHandler {
 
   private void initializeIfNecessary() {
     if (target == null) {
-      target = mongo.findById(id, entityContract);
+      target = findById(id, entityContract);
       if (target == null) {
         target = NULL_TARGET;
       }
     }
+  }
+
+  @SuppressWarnings("unchecked")
+  private IEntity findById(Serializable entityId, Class<IEntity> rootEntityContract) {
+    IEntity entity = mongo.findById(entityId, rootEntityContract);
+    if (entity == null) {
+      ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(false) {
+        @Override
+        protected boolean isCandidateComponent(AnnotatedBeanDefinition beanDefinition) {
+          // Allow to return superclasses
+          return beanDefinition.getMetadata().isIndependent();
+        }
+      };
+      provider.addIncludeFilter(new AssignableTypeFilter(rootEntityContract));
+      Set<BeanDefinition> components = provider.findCandidateComponents(
+          rootEntityContract.getPackage().getName().replace('.', '/'));
+      for (BeanDefinition component : components) {
+        if (entity == null) {
+          try {
+            Class<IEntity> subEntityContract = (Class<IEntity>) Class.forName(component.getBeanClassName());
+            if (subEntityContract != rootEntityContract) {
+              entity = findById(entityId, subEntityContract);
+            }
+          } catch (ClassNotFoundException e) {
+            // Ignore
+          }
+        }
+      }
+    }
+    return entity;
   }
 }

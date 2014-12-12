@@ -19,6 +19,7 @@
 package org.jspresso.framework.application.backend.persistence;
 
 import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.support.AbstractPlatformTransactionManager;
 import org.springframework.transaction.support.DefaultTransactionStatus;
 
@@ -31,6 +32,8 @@ import org.springframework.transaction.support.DefaultTransactionStatus;
 public class FakeTransactionManager extends AbstractPlatformTransactionManager {
   private static final long serialVersionUID = 1L;
 
+  private Object current;
+
   /**
    * Fake return new object.
    *
@@ -38,7 +41,10 @@ public class FakeTransactionManager extends AbstractPlatformTransactionManager {
    */
   @Override
   protected Object doGetTransaction() {
-    return new Object();
+    if (current == null) {
+      return new Object();
+    }
+    return current;
   }
 
   /**
@@ -49,7 +55,7 @@ public class FakeTransactionManager extends AbstractPlatformTransactionManager {
    */
   @Override
   protected void doBegin(Object transaction, TransactionDefinition definition) {
-    // NO-OP
+    current = transaction;
   }
 
   /**
@@ -59,7 +65,7 @@ public class FakeTransactionManager extends AbstractPlatformTransactionManager {
    */
   @Override
   protected void doCommit(DefaultTransactionStatus status) {
-    // NO-OP
+    current = null;
   }
 
   /**
@@ -69,6 +75,11 @@ public class FakeTransactionManager extends AbstractPlatformTransactionManager {
    */
   @Override
   protected void doRollback(DefaultTransactionStatus status) {
-    // NO-OP
+    current = null;
+  }
+
+  @Override
+  protected boolean isExistingTransaction(Object transaction) {
+    return transaction == current;
   }
 }

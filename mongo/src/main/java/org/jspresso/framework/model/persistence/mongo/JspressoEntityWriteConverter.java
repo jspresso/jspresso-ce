@@ -43,12 +43,12 @@ import org.jspresso.framework.model.entity.IEntity;
 public class JspressoEntityWriteConverter implements Converter<IEntity, DBObject> {
 
   private IComponentDescriptorRegistry  descriptorRegistry;
+  private JspressoMappingMongoConverter converter;
 
   /**
    * Convert dB object.
    *
-   * @param entity
-   *     the entity
+   * @param entity      the entity
    * @return the dB object
    */
   @Override
@@ -96,7 +96,8 @@ public class JspressoEntityWriteConverter implements Converter<IEntity, DBObject
           dbo.put(propertyName, convertedCollection);
         } else if (propertyValue != null) {
           // Do not store null values
-          dbo.put(propertyName, propertyValue);
+          Object convertedPropertyValue = getConverter().convertToMongoType(propertyValue);
+          dbo.put(propertyName, convertedPropertyValue);
         }
       }
     }
@@ -115,10 +116,27 @@ public class JspressoEntityWriteConverter implements Converter<IEntity, DBObject
   /**
    * Sets descriptor registry.
    *
-   * @param descriptorRegistry
-   *     the descriptor registry
+   * @param descriptorRegistry      the descriptor registry
    */
   public void setDescriptorRegistry(IComponentDescriptorRegistry descriptorRegistry) {
     this.descriptorRegistry = descriptorRegistry;
+  }
+
+  /**
+   * Gets converter.
+   *
+   * @return the converter
+   */
+  protected JspressoMappingMongoConverter getConverter() {
+    return converter;
+  }
+
+  /**
+   * Sets converter.
+   *
+   * @param converter the converter
+   */
+  public void setConverter(JspressoMappingMongoConverter converter) {
+    this.converter = converter;
   }
 }

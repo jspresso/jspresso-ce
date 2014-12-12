@@ -92,10 +92,12 @@
   <bean id="entityReadConverter" class="org.jspresso.framework.model.persistence.mongo.JspressoEntityReadConverter">
     <property name="entityFactory" ref="controllerAwareEntityFactory"/>
     <property name="collectionFactory" ref="componentCollectionFactory"/>
+    <property name="converter" ref="jspressoMappingConverter"/>
   </bean>
 
   <bean id="entityWriteConverter" class="org.jspresso.framework.model.persistence.mongo.JspressoEntityWriteConverter">
     <property name="descriptorRegistry" ref="componentDescriptorRegistry"/>
+    <property name="converter" ref="jspressoMappingConverter"/>
   </bean>
 
   <bean id="conversions" class="org.springframework.data.mongodb.core.convert.CustomConversions">

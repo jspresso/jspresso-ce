@@ -23,6 +23,8 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
 import org.springframework.beans.factory.BeanFactory;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 
 import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.persistence.hibernate.HibernateBackendController;
@@ -112,9 +114,14 @@ public abstract class AbstractHibernateTestDataPersister {
    * @param entity
    *          the entity to persist or update.
    */
-  protected void saveOrUpdate(IEntity entity) {
-    getHibernateSession().saveOrUpdate(entity);
-    getHibernateSession().flush();
+  protected void saveOrUpdate(final IEntity entity) {
+    final HibernateBackendController hibernateBackendController = getBackendController();
+    hibernateBackendController.getTransactionTemplate().execute(new TransactionCallbackWithoutResult() {
+      @Override
+      protected void doInTransactionWithoutResult(TransactionStatus status) {
+        hibernateBackendController.registerForUpdate(hibernateBackendController.cloneInUnitOfWork(entity));
+      }
+    });
   }
 
   /**

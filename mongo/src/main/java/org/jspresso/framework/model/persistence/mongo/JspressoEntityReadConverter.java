@@ -55,19 +55,17 @@ import org.jspresso.framework.model.entity.IEntityFactory;
 public class JspressoEntityReadConverter
     implements ConditionalGenericConverter, ApplicationListener<ContextRefreshedEvent> {
 
-  private IEntityFactory              entityFactory;
-  private IComponentCollectionFactory collectionFactory;
-  private MongoTemplate               mongo;
+  private IEntityFactory                entityFactory;
+  private IComponentCollectionFactory   collectionFactory;
+  private MongoTemplate                 mongo;
+  private JspressoMappingMongoConverter converter;
 
   /**
    * Convert object.
    *
-   * @param source
-   *     the generic source
-   * @param sourceType
-   *     the source type
-   * @param targetType
-   *     the target type
+   * @param source      the generic source
+   * @param sourceType      the source type
+   * @param targetType      the target type
    * @return the object
    */
   @SuppressWarnings("unchecked")
@@ -170,7 +168,9 @@ public class JspressoEntityReadConverter
               component.straightSetProperty(propertyName, convertComponent((DBObject) propertyValue,
                   (Class<? extends IComponent>) targetType));
             } else {
-              component.straightSetProperty(propertyName, propertyValue);
+              Object convertedPropertyValue = getConverter().read(propertyDescriptor.getModelType(),
+                  (DBObject) propertyValue);
+              component.straightSetProperty(propertyName, convertedPropertyValue);
             }
           } else if (targetType != null && propertyValue instanceof Serializable) {
             component.straightSetProperty(propertyName, convertEntity((Serializable) propertyValue,
@@ -196,8 +196,7 @@ public class JspressoEntityReadConverter
   /**
    * Sets entity factory.
    *
-   * @param entityFactory
-   *     the entity factory
+   * @param entityFactory      the entity factory
    */
   public void setEntityFactory(IEntityFactory entityFactory) {
     this.entityFactory = entityFactory;
@@ -206,10 +205,8 @@ public class JspressoEntityReadConverter
   /**
    * Matches boolean.
    *
-   * @param sourceType
-   *     the source type
-   * @param targetType
-   *     the target type
+   * @param sourceType      the source type
+   * @param targetType      the target type
    * @return the boolean
    */
   @Override
@@ -240,8 +237,7 @@ public class JspressoEntityReadConverter
   /**
    * Sets collection factory.
    *
-   * @param collectionFactory
-   *     the collection factory
+   * @param collectionFactory      the collection factory
    */
   public void setCollectionFactory(IComponentCollectionFactory collectionFactory) {
     this.collectionFactory = collectionFactory;
@@ -259,13 +255,17 @@ public class JspressoEntityReadConverter
   /**
    * Sets mongo.
    *
-   * @param mongo
-   *     the mongo
+   * @param mongo      the mongo
    */
   public void setMongo(MongoTemplate mongo) {
     this.mongo = mongo;
   }
 
+  /**
+   * On application event.
+   *
+   * @param event the event
+   */
   @Override
   public void onApplicationEvent(ContextRefreshedEvent event) {
     setMongo(event.getApplicationContext().getBean("mongoTemplate", MongoTemplate.class));
@@ -296,5 +296,23 @@ public class JspressoEntityReadConverter
    */
   protected IBackendController getBackendController() {
     return BackendControllerHolder.getCurrentBackendController();
+  }
+
+  /**
+   * Gets converter.
+   *
+   * @return the converter
+   */
+  protected JspressoMappingMongoConverter getConverter() {
+    return converter;
+  }
+
+  /**
+   * Sets converter.
+   *
+   * @param converter the converter
+   */
+  public void setConverter(JspressoMappingMongoConverter converter) {
+    this.converter = converter;
   }
 }

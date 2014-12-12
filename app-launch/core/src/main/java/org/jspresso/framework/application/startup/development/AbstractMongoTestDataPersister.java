@@ -23,6 +23,8 @@ import java.util.List;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 
 import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.persistence.mongo.MongoBackendController;
@@ -112,8 +114,14 @@ public abstract class AbstractMongoTestDataPersister {
    * @param entity
    *          the entity to persist or update.
    */
-  protected void saveOrUpdate(IEntity entity) {
-    getMongoTemplate().save(entity);
+  protected void saveOrUpdate(final IEntity entity) {
+    final MongoBackendController mongoBackendController = getBackendController();
+    mongoBackendController.getTransactionTemplate().execute(new TransactionCallbackWithoutResult() {
+      @Override
+      protected void doInTransactionWithoutResult(TransactionStatus status) {
+        getMongoTemplate().save(mongoBackendController.cloneInUnitOfWork(entity));
+      }
+    });
   }
 
   /**
