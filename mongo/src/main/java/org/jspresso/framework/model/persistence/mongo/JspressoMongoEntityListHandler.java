@@ -19,19 +19,13 @@
 package org.jspresso.framework.model.persistence.mongo;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 
 import org.jspresso.framework.model.entity.IEntity;
-import org.jspresso.framework.util.exception.NestedRuntimeException;
 
 /**
  * List proxy invocation handler.
@@ -39,7 +33,7 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$
  */
-public class JspressoMongoEntityListInvocationHandler extends JspressoMongoEntityCollectionInvocationHandler {
+public class JspressoMongoEntityListHandler extends JspressoMongoEntityCollectionHandler {
 
   /**
    * Instantiates a new Jspresso mongo entity list invocation handler.
@@ -51,13 +45,23 @@ public class JspressoMongoEntityListInvocationHandler extends JspressoMongoEntit
    * @param mongo
    *     the mongo
    */
-  public JspressoMongoEntityListInvocationHandler(Collection<Serializable> ids, Class<IEntity> entityContract,
-                                                  MongoTemplate mongo) {
+  public JspressoMongoEntityListHandler(Collection<Serializable> ids, Class<IEntity> entityContract,
+                                        MongoTemplate mongo) {
     super(ids, entityContract, mongo);
   }
 
   @Override
   protected Collection<IEntity> createTargetCollection(Collection<IEntity> sourceCollection) {
     return new ArrayList<>(sourceCollection);
+  }
+
+  /**
+   * Gets collection interface.
+   *
+   * @return the collection interface
+   */
+  @Override
+  protected Class<? extends Collection> getCollectionInterface() {
+    return List.class;
   }
 }

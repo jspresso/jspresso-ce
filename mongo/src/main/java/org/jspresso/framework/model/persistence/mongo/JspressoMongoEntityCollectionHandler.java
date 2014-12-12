@@ -29,7 +29,6 @@ import java.util.Collections;
 import java.util.Set;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 import org.jspresso.framework.model.entity.IEntity;
@@ -41,7 +40,7 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$
  */
-public abstract class JspressoMongoEntityCollectionInvocationHandler implements InvocationHandler {
+public abstract class JspressoMongoEntityCollectionHandler implements InvocationHandler {
 
   private Collection<Serializable> ids;
   private Class<IEntity>           entityContract;
@@ -59,8 +58,8 @@ public abstract class JspressoMongoEntityCollectionInvocationHandler implements 
    * @param mongo
    *     the mongo
    */
-  public JspressoMongoEntityCollectionInvocationHandler(Collection<Serializable> ids,
-                                                        Class<IEntity> entityContract, MongoTemplate mongo) {
+  public JspressoMongoEntityCollectionHandler(Collection<Serializable> ids, Class<IEntity> entityContract,
+                                              MongoTemplate mongo) {
     this.ids = ids;
     this.entityContract = entityContract;
     this.mongo = mongo;
@@ -86,6 +85,8 @@ public abstract class JspressoMongoEntityCollectionInvocationHandler implements 
     switch (methodName) {
       case "size":
         return target != null ? target.size() : ids.size();
+      case "toString":
+        return computeToString();
       case "isInitialized":
         return target != null;
       case "initialize":
@@ -96,6 +97,18 @@ public abstract class JspressoMongoEntityCollectionInvocationHandler implements 
     }
   }
 
+  private Object computeToString() {
+    if (target != null) {
+      return target.toString();
+    }
+    StringBuilder toString = new StringBuilder("JspressoMongoCollectionProxy::").append(entityContract.getName())
+                                                                                .append("[");
+    for (Serializable id : ids) {
+      toString.append(id).append(", ");
+    }
+    return toString.append("]").toString();
+  }
+
   /**
    * Invoke method on .
    * <p/>
@@ -104,7 +117,7 @@ public abstract class JspressoMongoEntityCollectionInvocationHandler implements 
   private Object invokeTargetMethod(Method method, Object... args) throws NoSuchMethodException {
     initializeIfNecessary();
     try {
-      return Set.class.getMethod(method.getName(), method.getParameterTypes()).invoke(target, args);
+      return getCollectionInterface().getMethod(method.getName(), method.getParameterTypes()).invoke(target, args);
     } catch (IllegalArgumentException | IllegalAccessException e) {
       throw new NestedRuntimeException(method.toString() + " is not supported on the Set interface");
     } catch (InvocationTargetException e) {
@@ -114,6 +127,13 @@ public abstract class JspressoMongoEntityCollectionInvocationHandler implements 
       throw new NestedRuntimeException(e.getCause());
     }
   }
+
+  /**
+   * Gets collection interface.
+   *
+   * @return the collection interface
+   */
+  protected abstract Class<? extends Collection> getCollectionInterface();
 
   private void initializeIfNecessary() {
     if (target == null) {

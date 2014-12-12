@@ -24,7 +24,7 @@ package org.jspresso.framework.model.persistence.mongo;
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$
  */
-public interface JspressoMongoEntityProxy {
+public interface JspressoMongoEntityProxy extends JspressoMongoProxy {
 
   /**
    * Is null.

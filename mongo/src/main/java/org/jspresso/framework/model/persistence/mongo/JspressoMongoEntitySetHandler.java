@@ -21,6 +21,7 @@ package org.jspresso.framework.model.persistence.mongo;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
 
@@ -32,7 +33,7 @@ import org.jspresso.framework.model.entity.IEntity;
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$
  */
-public class JspressoMongoEntitySetInvocationHandler extends JspressoMongoEntityCollectionInvocationHandler {
+public class JspressoMongoEntitySetHandler extends JspressoMongoEntityCollectionHandler {
 
   /**
    * Instantiates a new Jspresso mongo entity set invocation handler.
@@ -44,13 +45,23 @@ public class JspressoMongoEntitySetInvocationHandler extends JspressoMongoEntity
    * @param mongo
    *     the mongo
    */
-  public JspressoMongoEntitySetInvocationHandler(Collection<Serializable> ids, Class<IEntity> entityContract,
-                                                  MongoTemplate mongo) {
+  public JspressoMongoEntitySetHandler(Collection<Serializable> ids, Class<IEntity> entityContract, MongoTemplate
+      mongo) {
     super(ids, entityContract, mongo);
   }
 
   @Override
   protected Collection<IEntity> createTargetCollection(Collection<IEntity> sourceCollection) {
     return new LinkedHashSet<>(sourceCollection);
+  }
+
+  /**
+   * Gets collection interface.
+   *
+   * @return the collection interface
+   */
+  @Override
+  protected Class<? extends Collection> getCollectionInterface() {
+    return Set.class;
   }
 }

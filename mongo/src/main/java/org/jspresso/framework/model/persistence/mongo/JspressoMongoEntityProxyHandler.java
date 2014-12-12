@@ -22,8 +22,6 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
@@ -34,8 +32,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 
 import org.jspresso.framework.model.component.ComponentException;
 import org.jspresso.framework.model.entity.IEntity;
-import org.jspresso.framework.model.entity.IEntityRegistry;
-import org.jspresso.framework.model.entity.basic.BasicEntityRegistry;
 
 /**
  * A proxy for referenced Jspresso entities in order to support lazy loading.
@@ -68,7 +64,6 @@ public class JspressoMongoEntityProxyHandler implements InvocationHandler {
     this.mongo = mongo;
   }
 
-
   /**
    * Invoke object.
    *
@@ -89,18 +84,30 @@ public class JspressoMongoEntityProxyHandler implements InvocationHandler {
     switch (methodName) {
       case "hashCode":
         return computeHashCode();
+      case "toString":
+        return computeToString();
       case "equals":
         return computeEquals(proxy, args[0]);
       case "getComponentContract":
         return entityContract;
       case "isInitialized":
         return target != null;
+      case "isNull":
+        return target == NULL_TARGET;
       case "initialize":
         initializeIfNecessary();
         return null;
       default:
         return invokeTargetMethod(method, args);
     }
+  }
+
+  private Object computeToString() {
+    checkNotNull();
+    if (target != null) {
+      return target.toString();
+    }
+    return "JspressoMongoProxy::" + entityContract.getName() + "[" + id + "]";
   }
 
   private boolean computeEquals(Object proxy, Object another) {
@@ -114,7 +121,14 @@ public class JspressoMongoEntityProxyHandler implements InvocationHandler {
     return false;
   }
 
+  private void checkNotNull() {
+    if (target == NULL_TARGET) {
+      throw new NullPointerException("Entity proxy points to a null entity.");
+    }
+  }
+
   private Object computeHashCode() {
+    checkNotNull();
     return id.hashCode();
   }
 
@@ -125,9 +139,7 @@ public class JspressoMongoEntityProxyHandler implements InvocationHandler {
    */
   private Object invokeTargetMethod(Method method, Object... args) throws NoSuchMethodException {
     initializeIfNecessary();
-    if (target == NULL_TARGET) {
-      throw new NullPointerException("Entity proxy points to a null entity.");
-    }
+    checkNotNull();
     try {
       return entityContract.getMethod(method.getName(), method.getParameterTypes()).invoke(target, args);
     } catch (IllegalArgumentException | IllegalAccessException e) {
@@ -169,6 +181,9 @@ public class JspressoMongoEntityProxyHandler implements InvocationHandler {
             Class<IEntity> subEntityContract = (Class<IEntity>) Class.forName(component.getBeanClassName());
             if (subEntityContract != rootEntityContract) {
               entity = findById(entityId, subEntityContract);
+              if (entity != null) {
+                entityContract = subEntityContract;
+              }
             }
           } catch (ClassNotFoundException e) {
             // Ignore
