@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.SimplePropertyHandler;
 import org.springframework.data.mapping.context.PersistentPropertyPath;
+import org.springframework.data.mapping.model.AbstractPersistentProperty;
 import org.springframework.data.mongodb.core.mapping.BasicMongoPersistentEntity;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 import org.springframework.data.mongodb.core.mapping.MongoPersistentProperty;
@@ -40,6 +41,7 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptorRegistry;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
+import org.jspresso.framework.util.reflect.ReflectHelper;
 
 /**
  * Custom Jspresso Mongo mapping context.
@@ -114,7 +116,7 @@ public class JspressoMongoMappingContext extends MongoMappingContext {
   @Override
   protected BasicMongoPersistentEntity<?> addPersistentEntity(TypeInformation<?> typeInformation) {
     final BasicMongoPersistentEntity<?> entity = super.addPersistentEntity(typeInformation);
-    Class<?> entityType = typeInformation.getType();
+    final Class<?> entityType = typeInformation.getType();
     final IComponentDescriptor<? extends IEntity> entityDescriptor = (IComponentDescriptor<? extends IEntity>)
         getDescriptorRegistry()
         .getComponentDescriptor(entityType);
@@ -137,13 +139,26 @@ public class JspressoMongoMappingContext extends MongoMappingContext {
           if (superEntity != null) {
             superEntity.doWithProperties(new SimplePropertyHandler() {
               @Override
-              public void doWithPersistentProperty(PersistentProperty<?> property) {
-                String propertyName = property.getName();
+              public void doWithPersistentProperty(PersistentProperty<?> parentPersistentProperty) {
+                String propertyName = parentPersistentProperty.getName();
                 IPropertyDescriptor propertyDescriptor = parentDescriptor.getPropertyDescriptor(propertyName);
-                if (property instanceof MongoPersistentProperty && entity.getPersistentProperty(propertyName) == null
+                MongoPersistentProperty declaredPersistentProperty = entity.getPersistentProperty(propertyName);
+                if (declaredPersistentProperty != null && declaredPersistentProperty.getSetter() == null &&
+                    parentPersistentProperty.getSetter() != null) {
+                  try {
+                    // Some properties will be writable in parent but not locally, so we must fix their descriptor.
+                    PropertyDescriptor localDescriptor = (PropertyDescriptor) ReflectHelper.getPrivateFieldValue(
+                        AbstractPersistentProperty.class, "propertyDescriptor", declaredPersistentProperty);
+                    localDescriptor.setWriteMethod(parentPersistentProperty.getSetter());
+                  } catch (IllegalAccessException | NoSuchFieldException | IntrospectionException e) {
+                    LOG.error("Could not extract propertyDescriptor {} from persistent class {}", propertyName,
+                        entityType.getName());
+                  }
+                }
+                if (parentPersistentProperty instanceof MongoPersistentProperty && declaredPersistentProperty == null
                     && !entityDeclaredPropertyNames.contains(propertyName) && propertyDescriptor != null
                     && !propertyDescriptor.isComputed()) {
-                  entity.addPersistentProperty((MongoPersistentProperty) property);
+                  entity.addPersistentProperty((MongoPersistentProperty) parentPersistentProperty);
                 }
               }
             });
