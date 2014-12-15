@@ -93,6 +93,11 @@ public class JspressoEntityReadConverter
         entity = getEntityFactory().createEntityInstance(entityType, id);
         readerRegistry.register(entityType, id, entity);
         completeComponent(source, entityDescriptor, entity, readerRegistry);
+        if (entity.getVersion() == null) {
+          // Make sure that even if persistent store does not have a version property, the entity has one and is
+          // considered persistent.
+          entity.setVersion(0);
+        }
       }
     }
     return entity;
