@@ -41,7 +41,8 @@ package ${package};
   </#if>
   <#if componentDescriptor.sqlName??>
     <#global tableName=componentDescriptor.sqlName/>
-  <#else>  
+    <#local documentName=componentDescriptor.sqlName/>
+  <#else>
     <#global tableName=generateSQLName(componentName)/>
   </#if>
   <#global reducedTableName=reduceSQLName(tableName)/>
@@ -77,6 +78,9 @@ package ${package};
  * @version $LastChangedRevision$
  */
 @SuppressWarnings("all")
+<#if isEntity && documentName??>
+@org.springframework.data.mongodb.core.mapping.Document(collection="${documentName}")
+</#if>
 public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 <#list superInterfaceList as superInterface>  ${superInterface?replace("$", ".")}<#if superInterface_has_next>,${"\n"}<#else> {</#if></#list>
 <#else> {
@@ -111,7 +115,8 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#if propertyDescriptor.sqlName??>
     <#local columnName=propertyDescriptor.sqlName/>
     <#local columnNameGenerated = false/>
-  <#else>  
+    <#local fieldName=propertyDescriptor.sqlName/>
+  <#else>
     <#local columnName=generateSQLName(propertyName)/>
     <#local columnNameGenerated = true/>
   </#if>
@@ -222,6 +227,9 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#else>
   <#if propertyDescriptor.name ="version">
   @org.springframework.data.annotation.Version
+  </#if>
+  <#if !propertyDescriptor.computed && fieldName??>
+  @org.springframework.data.mongodb.core.mapping.Field("${fieldName}")
   </#if>
   ${propertyType} get${propertyName?cap_first}();
   </#if>
@@ -344,6 +352,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#if propertyDescriptor.sqlName??>
     <#local propSqlName=propertyDescriptor.sqlName/>
     <#local propSqlNameGenerated = false/>
+    <#local fieldName=propertyDescriptor.sqlName/>
   <#else>
     <#local propSqlName=generateSQLName(propertyName)/>
     <#local propSqlNameGenerated = true/>
@@ -511,6 +520,9 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#if generateAnnotations>
   @org.jspresso.framework.util.bean.ElementClass(${elementType}.class)
   </#if>
+  <#if !propertyDescriptor.computed && fieldName??>
+  @org.springframework.data.mongodb.core.mapping.Field("${fieldName}")
+  </#if>
   ${collectionType}<${elementType?replace("$", ".")}> get${propertyName?cap_first}();
 
 </#macro>
@@ -573,7 +585,8 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#if propertyDescriptor.sqlName??>
     <#local propSqlName=propertyDescriptor.sqlName/>
     <#local propSqlNameGenerated = false/>
-  <#else>  
+    <#local fieldName=propertyDescriptor.sqlName/>
+  <#else>
     <#local propSqlName=generateSQLName(propertyName)/>
     <#local propSqlNameGenerated = true/>
   </#if>
@@ -695,6 +708,9 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   </#if>
    * @return the ${propertyName}.
    */
+  <#if !propertyDescriptor.computed && fieldName??>
+  @org.springframework.data.mongodb.core.mapping.Field("${fieldName}")
+  </#if>
   ${propertyType?replace("$", ".")} get${propertyName?cap_first}();
   
 </#macro>

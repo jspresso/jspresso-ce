@@ -61,19 +61,22 @@ public class JspressoEntityWriteConverter implements Converter<IEntity, DBObject
   @SuppressWarnings("unchecked")
   private DBObject convertComponent(IComponent component) {
     DBObject dbo = new BasicDBObject();
+    Class<? extends IComponent> componentContract = component.getComponentContract();
     IComponentDescriptor<? extends IEntity> entityDescriptor = (IComponentDescriptor<? extends IEntity>)
         getDescriptorRegistry()
-        .getComponentDescriptor(component.getComponentContract());
+        .getComponentDescriptor(componentContract);
     for (Map.Entry<String, Object> propertyEntry : component.straightGetProperties().entrySet()) {
       Object propertyValue = propertyEntry.getValue();
       String propertyName = propertyEntry.getKey();
       IPropertyDescriptor propertyDescriptor = entityDescriptor.getPropertyDescriptor(propertyName);
       if (propertyDescriptor != null && !propertyDescriptor.isComputed() && !IEntity.ID.equals(propertyName)) {
+        String convertedPropertyName = getConverter().getMappingContext().getPersistentEntity(componentContract)
+                                                     .getPersistentProperty(propertyName).getFieldName();
         if (propertyValue instanceof IComponent) {
           if (propertyValue instanceof IEntity) {
-            dbo.put(propertyName, ((IEntity) propertyValue).getId());
+            dbo.put(convertedPropertyName, ((IEntity) propertyValue).getId());
           } else {
-            dbo.put(propertyName, convertComponent((IComponent) propertyValue));
+            dbo.put(convertedPropertyName, convertComponent((IComponent) propertyValue));
           }
         } else if (propertyValue instanceof Collection<?>) {
           Collection<Object> convertedCollection;
@@ -93,11 +96,11 @@ public class JspressoEntityWriteConverter implements Converter<IEntity, DBObject
               convertedCollection.add(element);
             }
           }
-          dbo.put(propertyName, convertedCollection);
+          dbo.put(convertedPropertyName, convertedCollection);
         } else if (propertyValue != null) {
           // Do not store null values
           Object convertedPropertyValue = getConverter().convertToMongoType(propertyValue);
-          dbo.put(propertyName, convertedPropertyValue);
+          dbo.put(convertedPropertyName, convertedPropertyValue);
         }
       }
     }

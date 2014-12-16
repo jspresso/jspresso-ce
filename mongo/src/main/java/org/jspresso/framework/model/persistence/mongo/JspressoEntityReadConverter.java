@@ -131,12 +131,15 @@ public class JspressoEntityReadConverter
   @SuppressWarnings("unchecked")
   private void completeComponent(DBObject source, IComponentDescriptor<? extends IComponent> entityDescriptor,
                                  IComponent component, IEntityRegistry readerRegistry) {
+    Class<? extends IComponent> componentContract = component.getComponentContract();
     for (IPropertyDescriptor propertyDescriptor : entityDescriptor.getPropertyDescriptors()) {
       if (propertyDescriptor != null && !propertyDescriptor.isComputed()) {
         String propertyName = propertyDescriptor.getName();
         Class<?> propertyType = propertyDescriptor.getModelType();
-        if (source.containsField(propertyName)) {
-          Object propertyValue = source.get(propertyName);
+        String convertedPropertyName = getConverter().getMappingContext().getPersistentEntity(componentContract)
+                                                     .getPersistentProperty(propertyName).getFieldName();
+        if (source.containsField(convertedPropertyName)) {
+          Object propertyValue = source.get(convertedPropertyName);
           Class<?> componentRefType = null;
           if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
             if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
