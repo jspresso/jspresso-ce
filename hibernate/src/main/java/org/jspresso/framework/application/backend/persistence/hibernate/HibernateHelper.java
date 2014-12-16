@@ -35,7 +35,6 @@ import org.slf4j.LoggerFactory;
 
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.entity.IEntity;
-import org.jspresso.framework.util.accessor.AbstractPropertyAccessor;
 import org.jspresso.framework.util.bean.MissingPropertyException;
 import org.jspresso.framework.util.bean.PropertyHelper;
 import org.jspresso.framework.util.reflect.ReflectHelper;
@@ -139,7 +138,7 @@ public final class HibernateHelper {
       roleClass = getHighestEntityClassInRole(entityContract,
           propertyDeclaringClass);
     }
-    return roleClass.getName() + "." + AbstractPropertyAccessor.toJavaBeanPropertyName(property);
+    return roleClass.getName() + "." + PropertyHelper.toJavaBeanPropertyName(property);
   }
 
   private static Class<?> getHighestEntityClassInRole(Class<?> entityContract,

@@ -50,7 +50,7 @@ import org.jspresso.framework.model.descriptor.basic.AbstractComponentDescriptor
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.model.entity.EntityHelper;
 import org.jspresso.framework.model.entity.IEntity;
-import org.jspresso.framework.util.accessor.AbstractPropertyAccessor;
+import org.jspresso.framework.util.bean.PropertyHelper;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.view.descriptor.basic.PropertyViewDescriptorHelper;
 
@@ -136,12 +136,11 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
           Sort.Order order;
           switch (orderingProperty.getValue()) {
             case DESCENDING:
-              order = new Sort.Order(Sort.Direction.DESC, AbstractPropertyAccessor.toJavaBeanPropertyName(
-                  propertyName));
+              order = new Sort.Order(Sort.Direction.DESC, PropertyHelper.toJavaBeanPropertyName(propertyName));
               break;
             case ASCENDING:
             default:
-              order = new Sort.Order(Sort.Direction.ASC, AbstractPropertyAccessor.toJavaBeanPropertyName(propertyName));
+              order = new Sort.Order(Sort.Direction.ASC, PropertyHelper.toJavaBeanPropertyName(propertyName));
           }
           sortOrders.add(order);
         }

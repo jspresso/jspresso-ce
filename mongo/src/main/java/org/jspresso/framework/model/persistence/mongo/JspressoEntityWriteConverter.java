@@ -33,6 +33,7 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorRegistry;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.util.bean.PropertyHelper;
 
 /**
  * Custom converter for Jspresso entities.
@@ -48,7 +49,8 @@ public class JspressoEntityWriteConverter implements Converter<IEntity, DBObject
   /**
    * Convert dB object.
    *
-   * @param entity      the entity
+   * @param entity
+   *     the entity
    * @return the dB object
    */
   @Override
@@ -71,7 +73,8 @@ public class JspressoEntityWriteConverter implements Converter<IEntity, DBObject
       IPropertyDescriptor propertyDescriptor = entityDescriptor.getPropertyDescriptor(propertyName);
       if (propertyDescriptor != null && !propertyDescriptor.isComputed() && !IEntity.ID.equals(propertyName)) {
         String convertedPropertyName = getConverter().getMappingContext().getPersistentEntity(componentContract)
-                                                     .getPersistentProperty(propertyName).getFieldName();
+                                                     .getPersistentProperty(PropertyHelper.toJavaBeanPropertyName(propertyName))
+                                                     .getFieldName();
         if (propertyValue instanceof IComponent) {
           if (propertyValue instanceof IEntity) {
             dbo.put(convertedPropertyName, ((IEntity) propertyValue).getId());
@@ -119,7 +122,8 @@ public class JspressoEntityWriteConverter implements Converter<IEntity, DBObject
   /**
    * Sets descriptor registry.
    *
-   * @param descriptorRegistry      the descriptor registry
+   * @param descriptorRegistry
+   *     the descriptor registry
    */
   public void setDescriptorRegistry(IComponentDescriptorRegistry descriptorRegistry) {
     this.descriptorRegistry = descriptorRegistry;
@@ -137,7 +141,8 @@ public class JspressoEntityWriteConverter implements Converter<IEntity, DBObject
   /**
    * Sets converter.
    *
-   * @param converter the converter
+   * @param converter
+   *     the converter
    */
   public void setConverter(JspressoMappingMongoConverter converter) {
     this.converter = converter;

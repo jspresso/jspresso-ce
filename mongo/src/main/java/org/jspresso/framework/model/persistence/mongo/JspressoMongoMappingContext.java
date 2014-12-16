@@ -40,6 +40,7 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorRegistry;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.util.bean.PropertyHelper;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 import org.jspresso.framework.util.reflect.ReflectHelper;
 
@@ -142,7 +143,8 @@ public class JspressoMongoMappingContext extends MongoMappingContext {
               public void doWithPersistentProperty(PersistentProperty<?> parentPersistentProperty) {
                 String propertyName = parentPersistentProperty.getName();
                 IPropertyDescriptor propertyDescriptor = parentDescriptor.getPropertyDescriptor(propertyName);
-                MongoPersistentProperty declaredPersistentProperty = entity.getPersistentProperty(propertyName);
+                MongoPersistentProperty declaredPersistentProperty = entity.getPersistentProperty(
+                    PropertyHelper.toJavaBeanPropertyName(propertyName));
                 if (declaredPersistentProperty != null && declaredPersistentProperty.getSetter() == null &&
                     parentPersistentProperty.getSetter() != null) {
                   try {

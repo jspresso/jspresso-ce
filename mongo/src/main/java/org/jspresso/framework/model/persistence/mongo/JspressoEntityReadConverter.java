@@ -47,6 +47,7 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityRegistry;
 import org.jspresso.framework.model.entity.basic.BasicEntityRegistry;
+import org.jspresso.framework.util.bean.PropertyHelper;
 
 /**
  * Custom converter for Jspresso entities.
@@ -137,7 +138,9 @@ public class JspressoEntityReadConverter
         String propertyName = propertyDescriptor.getName();
         Class<?> propertyType = propertyDescriptor.getModelType();
         String convertedPropertyName = getConverter().getMappingContext().getPersistentEntity(componentContract)
-                                                     .getPersistentProperty(propertyName).getFieldName();
+                                                     .getPersistentProperty(PropertyHelper.toJavaBeanPropertyName(
+                                                         propertyName))
+                                                     .getFieldName();
         if (source.containsField(convertedPropertyName)) {
           Object propertyValue = source.get(convertedPropertyName);
           Class<?> componentRefType = null;

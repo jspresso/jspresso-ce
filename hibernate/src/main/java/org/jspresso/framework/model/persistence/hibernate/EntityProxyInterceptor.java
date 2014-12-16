@@ -32,6 +32,7 @@ import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.accessor.AbstractPropertyAccessor;
+import org.jspresso.framework.util.bean.PropertyHelper;
 
 /**
  * This hibernate interceptor enables hibernate to handle entities which are
@@ -177,7 +178,7 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
     for (int i = 0; i < propertyNames.length; i++) {
       String propertyName = propertyNames[i];
       if (!isHibernateInternal(propertyName)) {
-        Object property = entity.straightGetProperty(AbstractPropertyAccessor
+        Object property = entity.straightGetProperty(PropertyHelper
             .fromJavaBeanPropertyName(propertyName));
         if (!(property instanceof Collection<?>)) {
           state[i] = property;

@@ -53,7 +53,7 @@ import org.jspresso.framework.model.descriptor.basic.AbstractComponentDescriptor
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.model.entity.EntityHelper;
 import org.jspresso.framework.model.entity.IEntity;
-import org.jspresso.framework.util.accessor.AbstractPropertyAccessor;
+import org.jspresso.framework.util.bean.PropertyHelper;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.view.descriptor.basic.PropertyViewDescriptorHelper;
 
@@ -147,11 +147,11 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
           Order order;
           switch (orderingProperty.getValue()) {
             case DESCENDING:
-              order = Order.desc(AbstractPropertyAccessor.toJavaBeanPropertyName(propertyName));
+              order = Order.desc(PropertyHelper.toJavaBeanPropertyName(propertyName));
               break;
             case ASCENDING:
             default:
-              order = Order.asc(AbstractPropertyAccessor.toJavaBeanPropertyName(propertyName));
+              order = Order.asc(PropertyHelper.toJavaBeanPropertyName(propertyName));
           }
           orderingCriteria.addOrder(order);
         }

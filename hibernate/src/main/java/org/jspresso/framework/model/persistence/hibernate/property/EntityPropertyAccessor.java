@@ -27,8 +27,8 @@ import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.property.Getter;
 import org.hibernate.property.PropertyAccessor;
 import org.hibernate.property.Setter;
+
 import org.jspresso.framework.model.component.IComponent;
-import org.jspresso.framework.util.accessor.AbstractPropertyAccessor;
 import org.jspresso.framework.util.bean.PropertyHelper;
 
 /**
@@ -89,7 +89,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
      *          the name of the property to access.
      */
     public EntityPropertyGetter(Class<?> theClass, String propertyName) {
-      this.propertyName = AbstractPropertyAccessor
+      this.propertyName = PropertyHelper
           .fromJavaBeanPropertyName(propertyName);
       this.propertyClass = PropertyHelper.getPropertyType(theClass,
           propertyName);
@@ -177,7 +177,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
      *          the name of the property to access.
      */
     public EntityPropertySetter(Class<?> theClass, String propertyName) {
-      this.propertyName = AbstractPropertyAccessor
+      this.propertyName = PropertyHelper
           .fromJavaBeanPropertyName(propertyName);
       this.setter = PropertyHelper
           .getPropertyDescriptor(theClass, propertyName).getWriteMethod();

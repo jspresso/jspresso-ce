@@ -30,6 +30,9 @@ import org.hibernate.collection.spi.PersistentCollection;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 import org.hibernate.type.Type;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.model.component.ILifecycleCapable;
@@ -38,41 +41,35 @@ import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 import org.jspresso.framework.model.persistence.hibernate.EntityProxyInterceptor;
 import org.jspresso.framework.model.persistence.hibernate.entity.HibernateEntityRegistry;
 import org.jspresso.framework.security.UserPrincipal;
-import org.jspresso.framework.util.accessor.AbstractPropertyAccessor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jspresso.framework.util.bean.PropertyHelper;
 
 /**
  * Hibernate session interceptor aware of a backend controller to deal with
  * uniqueness of entity instances across the JVM.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
 @SuppressWarnings("rawtypes")
-public class ControllerAwareEntityProxyInterceptor extends
-    EntityProxyInterceptor {
+public class ControllerAwareEntityProxyInterceptor extends EntityProxyInterceptor {
 
-  private static final long   serialVersionUID = -6834992000307471098L;
+  private static final long serialVersionUID = -6834992000307471098L;
 
-  private static final Logger LOG              = LoggerFactory
-                                                   .getLogger(ControllerAwareEntityProxyInterceptor.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ControllerAwareEntityProxyInterceptor.class);
 
   /**
    * Uses the backend controller to retrieve the dirty properties of the entity.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
-  public int[] findDirty(Object entity, Serializable id, Object[] currentState,
-      Object[] previousState, String[] propertyNames, Type[] types) {
+  public int[] findDirty(Object entity, Serializable id, Object[] currentState, Object[] previousState,
+                         String[] propertyNames, Type[] types) {
     if (entity instanceof IEntity) {
-      Map<String, Object> dirtyProperties = getBackendController()
-          .getDirtyProperties((IEntity) entity, false);
+      Map<String, Object> dirtyProperties = getBackendController().getDirtyProperties((IEntity) entity, false);
       boolean hasJustBeenSaved = false;
       if (dirtyProperties != null) {
-        hasJustBeenSaved = dirtyProperties.containsKey(IEntity.VERSION)
-            && dirtyProperties.get(IEntity.VERSION) == null;
+        hasJustBeenSaved = dirtyProperties.containsKey(IEntity.VERSION) && dirtyProperties.get(IEntity.VERSION) == null;
         dirtyProperties.remove(IEntity.VERSION);
       }
       if (dirtyProperties == null) {
@@ -92,8 +89,7 @@ public class ControllerAwareEntityProxyInterceptor extends
       int[] indices = new int[propertyNames.length];
       int n = 0;
       for (int i = 0; i < propertyNames.length; i++) {
-        String propertyName = AbstractPropertyAccessor
-            .fromJavaBeanPropertyName(propertyNames[i]);
+        String propertyName = PropertyHelper.fromJavaBeanPropertyName(propertyNames[i]);
         if (dirtyProperties.containsKey(propertyName)) {
           indices[n] = i;
           n++;
@@ -106,8 +102,7 @@ public class ControllerAwareEntityProxyInterceptor extends
       System.arraycopy(indices, 0, shrinkedArray, 0, n);
       return shrinkedArray;
     }
-    return super.findDirty(entity, id, currentState, previousState,
-        propertyNames, types);
+    return super.findDirty(entity, id, currentState, previousState, propertyNames, types);
   }
 
   /**
@@ -119,11 +114,11 @@ public class ControllerAwareEntityProxyInterceptor extends
     IEntity registeredEntity = null;
     try {
       if (getBackendController().isUnitOfWorkActive()) {
-        registeredEntity = getBackendController().getUnitOfWorkEntity(
-            (Class<? extends IEntity>) Class.forName(entityName), id);
+        registeredEntity = getBackendController().getUnitOfWorkEntity((Class<? extends IEntity>) Class.forName(
+            entityName), id);
       } else {
-        registeredEntity = getBackendController().getRegisteredEntity(
-            (Class<? extends IEntity>) Class.forName(entityName), id);
+        registeredEntity = getBackendController().getRegisteredEntity((Class<? extends IEntity>) Class.forName(
+            entityName), id);
         if (registeredEntity instanceof HibernateProxy) {
           HibernateProxy proxy = (HibernateProxy) registeredEntity;
           LazyInitializer li = proxy.getHibernateLazyInitializer();
@@ -134,8 +129,8 @@ public class ControllerAwareEntityProxyInterceptor extends
       LOG.error("Class for entity {} was not found", entityName, ex);
     }
     ((HibernateBackendController) getBackendController()).detachFromHibernateInDepth(registeredEntity,
-        ((HibernateBackendController) getBackendController()).getHibernateSession(),
-        new HibernateEntityRegistry("detachFromHibernateInDepth"));
+        ((HibernateBackendController) getBackendController()).getHibernateSession(), new HibernateEntityRegistry(
+        "detachFromHibernateInDepth"));
     return registeredEntity;
   }
 
@@ -143,15 +138,14 @@ public class ControllerAwareEntityProxyInterceptor extends
    * {@inheritDoc}
    */
   @Override
-  public boolean onLoad(Object entity, Serializable id, Object[] state,
-      String[] propertyNames, Type[] types) {
+  public boolean onLoad(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
     boolean updated = super.onLoad(entity, id, state, propertyNames, types);
     if (entity instanceof IEntity) {
       IBackendController backendController = getBackendController();
       if (backendController.isUnitOfWorkActive()) {
         Map<String, Object> properties = new HashMap<>();
         for (int i = 0; i < propertyNames.length; i++) {
-          String propertyName = AbstractPropertyAccessor.fromJavaBeanPropertyName(propertyNames[i]);
+          String propertyName = PropertyHelper.fromJavaBeanPropertyName(propertyNames[i]);
           if (!isHibernateInternal(propertyName)) {
             properties.put(propertyName, state[i]);
           }
@@ -161,18 +155,16 @@ public class ControllerAwareEntityProxyInterceptor extends
         // See bug #1018
         backendController.registerEntity((IEntity) entity);
       } else {
-        if (backendController.getRegisteredEntity(
-            ((IEntity) entity).getComponentContract(), id) == null) {
+        if (backendController.getRegisteredEntity(((IEntity) entity).getComponentContract(), id) == null) {
           Map<String, Object> properties = new HashMap<>();
           for (int i = 0; i < propertyNames.length; i++) {
             if (state[i] != null) {
-              String propertyName = AbstractPropertyAccessor.fromJavaBeanPropertyName(propertyNames[i]);
+              String propertyName = PropertyHelper.fromJavaBeanPropertyName(propertyNames[i]);
               if (!isHibernateInternal(propertyName)) {
                 if (state[i] instanceof IEntity) {
                   IEntity refEntity = (IEntity) state[i];
-                  IEntity mergedEntity = backendController.getRegisteredEntity(
-                      HibernateHelper.getComponentContract(refEntity),
-                      refEntity.getId());
+                  IEntity mergedEntity = backendController.getRegisteredEntity(HibernateHelper.getComponentContract(
+                      refEntity), refEntity.getId());
                   if (mergedEntity != null && mergedEntity != refEntity) {
                     state[i] = mergedEntity;
                     updated = true;
@@ -193,7 +185,7 @@ public class ControllerAwareEntityProxyInterceptor extends
   /**
    * Registers Entities to be merged back from the uow to the session on
    * commit.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -213,7 +205,7 @@ public class ControllerAwareEntityProxyInterceptor extends
    * might be added to the object tree. It also registers Entities to be merged
    * back from the uow to the session on commit. This last action is done here
    * instead of postFlush. See http://www.jspresso.org/mantis/view.php?id=455.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -222,7 +214,8 @@ public class ControllerAwareEntityProxyInterceptor extends
     if (!getBackendController().isUnitOfWorkActive() && entities.hasNext()) {
       // throw new BackendException(
       // "A save has been attempted outside of any transactional context. Jspresso disallows this bad practice.");
-      LOG.warn("A flush has been attempted outside of any transactional context. Jspresso disallows this bad practice.");
+      LOG.warn(
+          "A flush has been attempted outside of any transactional context. Jspresso disallows this bad practice.");
     }
 
     // To avoid concurrent access modifications
@@ -231,29 +224,25 @@ public class ControllerAwareEntityProxyInterceptor extends
       preFlushedEntities.add(entities.next());
     }
     Set<Object> onUpdatedEntities = new HashSet<>();
-    boolean onUpdateTriggered = triggerOnUpdate(preFlushedEntities,
-        onUpdatedEntities);
+    boolean onUpdateTriggered = triggerOnUpdate(preFlushedEntities, onUpdatedEntities);
     while (onUpdateTriggered) {
       // Until the state is stable.
       onUpdateTriggered = triggerOnUpdate(preFlushedEntities, onUpdatedEntities);
     }
   }
 
-  private boolean triggerOnUpdate(Set<Object> preFlushedEntities,
-      Set<Object> onUpdatedEntities) {
+  private boolean triggerOnUpdate(Set<Object> preFlushedEntities, Set<Object> onUpdatedEntities) {
     boolean onUpdateTriggered = false;
     for (Object entity : preFlushedEntities) {
-      if (entity instanceof ILifecycleCapable
-          && !onUpdatedEntities.contains(entity)) {
+      if (entity instanceof ILifecycleCapable && !onUpdatedEntities.contains(entity)) {
         if (entity instanceof IEntity) {
           if (((IEntity) entity).isPersistent()) {
             boolean isClean = false;
-            Map<String, Object> dirtyProperties = getBackendController()
-                .getDirtyProperties((IEntity) entity, false);
+            Map<String, Object> dirtyProperties = getBackendController().getDirtyProperties((IEntity) entity, false);
             boolean hasJustBeenSaved = false;
             if (dirtyProperties != null) {
-              hasJustBeenSaved = dirtyProperties.containsKey(IEntity.VERSION)
-                  && dirtyProperties.get(IEntity.VERSION) == null;
+              hasJustBeenSaved = dirtyProperties.containsKey(IEntity.VERSION) && dirtyProperties.get(IEntity.VERSION)
+                  == null;
               dirtyProperties.remove(IEntity.VERSION);
             }
             if (dirtyProperties == null) {
@@ -267,13 +256,10 @@ public class ControllerAwareEntityProxyInterceptor extends
               // considered dirty.
               isClean = true;
             }
-            if (!onUpdatedEntities.contains(entity)
-                && !isClean
-                && !getBackendController().isEntityRegisteredForDeletion(
-                    (IEntity) entity)) {
+            if (!onUpdatedEntities.contains(entity) && !isClean && !getBackendController()
+                .isEntityRegisteredForDeletion((IEntity) entity)) {
               // the entity is dirty and is going to be flushed.
-              ((ILifecycleCapable) entity).onUpdate(getEntityFactory(),
-                  getPrincipal(), getEntityLifecycleHandler());
+              ((ILifecycleCapable) entity).onUpdate(getEntityFactory(), getPrincipal(), getEntityLifecycleHandler());
               onUpdatedEntities.add(entity);
               onUpdateTriggered = true;
             }
@@ -286,7 +272,7 @@ public class ControllerAwareEntityProxyInterceptor extends
 
   /**
    * Gets the getBackendController().
-   * 
+   *
    * @return the backendController.
    */
   protected IBackendController getBackendController() {
@@ -303,7 +289,7 @@ public class ControllerAwareEntityProxyInterceptor extends
 
   /**
    * Gets the principal of the application session.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override

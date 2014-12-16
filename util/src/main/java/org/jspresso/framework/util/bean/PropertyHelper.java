@@ -156,4 +156,41 @@ public final class PropertyHelper {
     return getPropertyDescriptor(beanClass, property).getPropertyType();
   }
 
+  /**
+   * Whenever a property name starts with a single lowercase letter, the actual
+   * java bean property starts with an upper case letter.
+   *
+   * @param prop
+   *     the property name.
+   * @return the fixed java bean property name.
+   */
+  public static String toJavaBeanPropertyName(String prop) {
+    if (prop != null && prop.length() >= 2) {
+      if (Character.isLowerCase(prop.charAt(0)) && Character.isUpperCase(prop.charAt(1))) {
+        StringBuilder fixedProp = new StringBuilder(prop.substring(0, 1).toUpperCase());
+        fixedProp.append(prop.substring(1));
+        return fixedProp.toString();
+      }
+    }
+    return prop;
+  }
+
+  /**
+   * Whenever a property name starts with a single lowercase letter, the actual
+   * java bean property starts with an upper case letter.
+   *
+   * @param prop
+   *     the property name.
+   * @return the fixed java bean property name.
+   */
+  public static String fromJavaBeanPropertyName(String prop) {
+    if (prop != null && prop.length() >= 2) {
+      if (Character.isUpperCase(prop.charAt(0)) && Character.isUpperCase(prop.charAt(1))) {
+        StringBuilder fixedProp = new StringBuilder(prop.substring(0, 1).toLowerCase());
+        fixedProp.append(prop.substring(1));
+        return fixedProp.toString();
+      }
+    }
+    return prop;
+  }
 }
