@@ -308,8 +308,7 @@ public class DefaultFlexViewFactory {
     component = decorateWithActions(remoteComponent, component);
     if (remoteComponent.borderType == "TITLED") {
       var decorator:Panel = createPanelComponent();
-      decorator.percentWidth = component.percentWidth;
-      decorator.percentHeight = component.percentHeight;
+      syncSizes(decorator, component);
       component.percentWidth = 100.0;
       component.percentHeight = 100.0;
       decorator.addChild(component);
@@ -682,6 +681,7 @@ public class DefaultFlexViewFactory {
   }
 
   protected function decorateWithActions(remoteComponent:RComponent, component:UIComponent):UIComponent {
+    var decorator:UIComponent;
     if(remoteComponent is RTextField
         || remoteComponent is RDateField
         || remoteComponent is RNumericComponent
@@ -689,9 +689,39 @@ public class DefaultFlexViewFactory {
         || remoteComponent is RTimeField
         || remoteComponent is RComboBox
         || remoteComponent is RCheckBox) {
-      return decorateWithAsideActions(component, remoteComponent, false);
+      decorator = decorateWithAsideActions(component, remoteComponent, false);
     } else {
-      return decorateWithToolbars(component, remoteComponent);
+      decorator = decorateWithToolbars(component, remoteComponent);
+    }
+    return decorator;
+  }
+
+  protected function syncSizes(decorator:UIComponent, component:UIComponent):void {
+    if (decorator != component) {
+      if (component.percentWidth > 0) {
+        decorator.percentWidth = component.percentWidth;
+      }
+      if (component.percentHeight > 0) {
+        decorator.percentHeight = component.percentHeight;
+      }
+      if (component.width > 0) {
+        decorator.width = component.width;
+      }
+      if (component.height > 0) {
+        decorator.height = component.height;
+      }
+      if (component.minWidth > 0) {
+        decorator.minWidth = component.minWidth;
+      }
+      if (component.minHeight > 0) {
+        decorator.minHeight = component.minHeight;
+      }
+      if (component.maxWidth > 0) {
+        decorator.maxWidth = component.maxWidth;
+      }
+      if (component.maxHeight > 0) {
+        decorator.maxHeight = component.maxHeight;
+      }
     }
   }
 
@@ -709,6 +739,7 @@ public class DefaultFlexViewFactory {
     }
     if (toolBar || secondaryToolBar) {
       var surroundingBox:VBox = new VBox();
+      syncSizes(surroundingBox, component);
       component.percentWidth = 100.0;
       component.percentHeight = 100.0;
 
@@ -1046,6 +1077,7 @@ public class DefaultFlexViewFactory {
     var decorated:UIComponent = component;
     if(remoteComponent.actionLists) {
       var actionField:HBox = new HBox();
+      syncSizes(actionField, component);
       actionField.styleName = "actionField";
       actionField.regenerateStyleCache(false);
       actionField.horizontalScrollPolicy = ScrollPolicy.OFF;
@@ -1923,37 +1955,53 @@ public class DefaultFlexViewFactory {
     var splitContainer:DividedBox = new DividedBox();
     splitContainer.resizeToContent = !(remoteSplitContainer.preferredSize != null
         && (remoteSplitContainer.preferredSize.height > 0 || remoteSplitContainer.preferredSize.width > 0));
-    splitContainer.liveDragging = true;
+//      splitContainer.liveDragging = true;
 
-    var component:UIComponent;
+    var leftTopComponent:UIComponent;
+    var rightBottomComponent:UIComponent;
     if (remoteSplitContainer.orientation == "VERTICAL") {
       splitContainer.direction = BoxDirection.VERTICAL;
     } else {
       splitContainer.direction = BoxDirection.HORIZONTAL;
     }
     if (remoteSplitContainer.leftTop != null) {
-      component = createComponent(remoteSplitContainer.leftTop);
-      if (remoteSplitContainer.orientation == "VERTICAL") {
-        component.percentWidth = 100.0;
-      } else {
-        component.percentHeight = 100.0;
-      }
-      splitContainer.addChild(component);
+      leftTopComponent = createComponent(remoteSplitContainer.leftTop);
     }
     if (remoteSplitContainer.rightBottom != null) {
-      component = createComponent(remoteSplitContainer.rightBottom);
-      if (remoteSplitContainer.orientation == "VERTICAL") {
-        component.percentWidth = 100.0;
-      } else {
-        component.percentHeight = 100.0;
-      }
-
-      splitContainer.addChild(component);
+      rightBottomComponent = createComponent(remoteSplitContainer.rightBottom);
     }
+
+      if (remoteSplitContainer.orientation == "VERTICAL") {
+      if (leftTopComponent) {
+        leftTopComponent.percentWidth = 100.0;
+        splitContainer.addChild(leftTopComponent);
+      }
+      if (rightBottomComponent) {
+        rightBottomComponent.percentWidth = 100.0;
+        splitContainer.addChild(rightBottomComponent);
+    }
+      } else {
+      if (leftTopComponent) {
+        leftTopComponent.percentHeight = 100.0;
+        splitContainer.addChild(leftTopComponent);
+      }
+      if (rightBottomComponent) {
+        rightBottomComponent.percentHeight = 100.0;
+        splitContainer.addChild(rightBottomComponent);
+    }
+    }
+    computeRelativeSizes(splitContainer, remoteSplitContainer);
     splitContainer.addEventListener(FlexEvent.CREATION_COMPLETE, function (event:FlexEvent):void {
       var splitC:DividedBox = event.currentTarget as DividedBox;
-      var leftTop:UIComponent = (splitC.getChildAt(0) as UIComponent);
-      var rightBottom:UIComponent = (splitC.getChildAt(1) as UIComponent);
+      computeRelativeSizes(splitC, remoteSplitContainer);
+    });
+    return splitContainer;
+  }
+
+  private function computeRelativeSizes(splitContainer:DividedBox, remoteSplitContainer:RSplitContainer):void {
+    if (splitContainer.getChildren().length > 1) {
+      var leftTop:UIComponent = (splitContainer.getChildAt(0) as UIComponent);
+      var rightBottom:UIComponent = (splitContainer.getChildAt(1) as UIComponent);
       if (leftTop && rightBottom) {
         if (remoteSplitContainer.orientation == "VERTICAL") {
           var topHeight:Number;
@@ -1968,8 +2016,10 @@ public class DefaultFlexViewFactory {
           } else {
             bottomHeight = rightBottom.measuredHeight;
           }
+          if ((topHeight + bottomHeight) > 0) {
           leftTop.percentHeight = (topHeight * 100.0) / (topHeight + bottomHeight);
           rightBottom.percentHeight = (bottomHeight * 100.0) / (topHeight + bottomHeight);
+          }
         } else {
           var leftWidth:Number;
           var rightWidth:Number;
@@ -1983,12 +2033,13 @@ public class DefaultFlexViewFactory {
           } else {
             rightWidth = rightBottom.measuredWidth;
           }
+          if ((leftWidth + rightWidth) > 0) {
           leftTop.percentWidth = (leftWidth * 100.0) / (leftWidth + rightWidth);
           rightBottom.percentWidth = (rightWidth * 100.0) / (leftWidth + rightWidth);
         }
       }
-    });
-    return splitContainer;
+      }
+  }
   }
 
   protected function createTabContainer(remoteTabContainer:RTabContainer):Container {
@@ -2357,6 +2408,7 @@ public class DefaultFlexViewFactory {
 
   protected function createTable(remoteTable:RTable):UIComponent {
     var table:EnhancedDataGrid = new EnhancedDataGrid();
+
     table.showDataTips = true;
 
     var columns:Array = [];
@@ -2370,6 +2422,7 @@ public class DefaultFlexViewFactory {
         == "MULTIPLE_INTERVAL_CUMULATIVE_SELECTION" || remoteTable.selectionMode == "SINGLE_CUMULATIVE_SELECTION") {
       table.cbMultiSelection = true;
     }
+    var width:Number = 0;
     if (table.cbMultiSelection) {
       var selectionColumn:DataGridColumn = new DataGridColumn();
       selectionColumn.itemRenderer = new ClassFactory(SelectionCheckBoxRenderer);
@@ -2379,6 +2432,7 @@ public class DefaultFlexViewFactory {
       selectionColumn.dataField = "guid";
       selectionColumn.headerText = " ";
       selectionColumn.headerRenderer = new ClassFactory(SelectionHeaderRenderer);
+      width += selectionColumn.width;
       columns.push(selectionColumn);
     }
     table.draggableColumns = remoteTable.columnReorderingAllowed;
@@ -2512,6 +2566,7 @@ public class DefaultFlexViewFactory {
                                            editorComponent.maxWidth), table.measureText(column.headerText).width + 16);
         }
       }
+      width += column.width;
       editorComponent.maxWidth = UIComponent.DEFAULT_MAX_WIDTH;
       column.editorDataField = "state";
 
@@ -2609,6 +2664,8 @@ public class DefaultFlexViewFactory {
       table.addEventListener(DataGridEvent.COLUMN_STRETCH, notifyTableChanged);
       table.addEventListener(IndexChangedEvent.HEADER_SHIFT, notifyTableChanged);
     }
+    // This is to deal with NPE occurring in horizontal split panes with 2 tables.
+    table.width = width + 20;
     table.minWidth = 0;
     table.minHeight = table.headerHeight * 2;
     return table;
