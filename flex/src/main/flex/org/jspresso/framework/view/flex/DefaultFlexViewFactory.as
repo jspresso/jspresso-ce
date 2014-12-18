@@ -1951,7 +1951,7 @@ public class DefaultFlexViewFactory {
     }
   }
 
-  protected override function createSplitContainer(remoteSplitContainer:RSplitContainer):Container {
+  protected function createSplitContainer(remoteSplitContainer:RSplitContainer):Container {
     var splitContainer:DividedBox = new DividedBox();
     splitContainer.resizeToContent = !(remoteSplitContainer.preferredSize != null
     && (remoteSplitContainer.preferredSize.height > 0 || remoteSplitContainer.preferredSize.width > 0));
