@@ -19,7 +19,7 @@
 
     <junit.version>4.11</junit.version>
     <mockito.version>1.9.5-rc1</mockito.version>
-    <flex.version>4.12.0.20140303</flex.version>
+    <flex.version>4.13.0.20140701</flex.version>
     <flexunit.version>4.1.0</flexunit.version>
     <blazeds.version>4.0.0.14931</blazeds.version>
     <flexlib.version>2.5</flexlib.version>
