@@ -254,6 +254,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      */
     __createManager: function () {
       this.__managerContainer = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
+      this.__managerContainer.addCssClass("jspresso-root");
       this.__applicationContainer.add(this.__managerContainer, {flex: 1});
       var manager = new org.jspresso.framework.application.frontend.controller.qx.mobile.EnhancedManager(this.isTablet(),
           this.__managerContainer);

@@ -123,7 +123,7 @@
           class="org.jspresso.framework.application.frontend.action.FrontendAction">
         <property name="wrappedAction">
           <bean
-              class="org.jspresso.framework.application.backend.action.persistence.hibernate.DeleteEntityAction" />
+              class="org.jspresso.framework.application.backend.action.persistence.DeleteEntityAction" />
         </property>
         <property name="nextAction" ref="savePageFrontAction" />
       </bean>

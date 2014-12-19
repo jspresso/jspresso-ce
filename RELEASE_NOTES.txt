@@ -1,5 +1,25 @@
 4.1
 ===
+
+- Due to migration to Qooxdoo 4.1, you should change startup/qooxdoo/client/src/main/py/config.json the following way :
+
+    delete the line :
+      "CSSMIN_CMD"           : "${PYTHON_CMD} ${QOOXDOO_PATH}/tool/bin/cssmin.py",
+
+    replace all occurences of "minify-css" by "combine-css"
+
+    replace :
+      "${CATCMD} ${BUILD_PATH_CSS}/${MOBILE_CSS_PATH} ${RESOURCES}/${APPLICATION_CSS} > ${TARGET}/cache-sass/tmp.css",
+      "${CSSMIN_CMD} < ${TARGET}/cache-sass/tmp.css > ${BUILD_PATH}/resource/${APPLICATION_CSS}"
+    by :
+      "${CATCMD} ${BUILD_PATH_CSS}/${MOBILE_CSS_PATH} ${RESOURCES}/${APPLICATION_CSS} > ${BUILD_PATH}/resource/${APPLICATION_CSS}"
+
+    replace all occurrences :
+      ${SCSS_CMD}
+    by :
+      ${SCSS_CMD} --style compressed
+
+
 - Following our will to support other perstsient stores (e.g. MongoDB, see RFE #1234), AbstractHibernateAction and
   AbstractHibernateCollectionAction have been deleted. Your actions should inherit BackendAction and
   AbstractCollectionAction. Persistences methods, thate were generic, have been migrated to these classes. The only
