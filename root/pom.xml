@@ -1433,7 +1433,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -1462,7 +1462,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -1491,7 +1491,7 @@
                     <versionRange>[2.0,)</versionRange>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -1513,27 +1513,8 @@
             </lifecycleMappingMetadata>
           </configuration>
         </plugin>
-        <plugin>
-          <groupId>org.zeroturnaround</groupId>
-          <artifactId>jrebel-maven-plugin</artifactId>
-          <version>${jrebel-plugin.version}</version>
-        </plugin>
       </plugins>
     </pluginManagement>
-    <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
-    <testSourceDirectory>${basedir}/src/test/java</testSourceDirectory>
-    <resources>
-      <resource>
-        <directory>${basedir}/src/main/resources</directory>
-        <filtering>false</filtering>
-      </resource>
-    </resources>
-    <testResources>
-      <testResource>
-        <directory>${basedir}/src/test/resources</directory>
-        <filtering>false</filtering>
-      </testResource>
-    </testResources>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -1548,10 +1529,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.zeroturnaround</groupId>
-        <artifactId>jrebel-maven-plugin</artifactId>
       </plugin>
     </plugins>
     <extensions>

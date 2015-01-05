@@ -365,11 +365,6 @@
           <artifactId>maven-dependency-plugin</artifactId>
           <version>${dependency-plugin.version}</version>
         </plugin>
-        <plugin>
-          <groupId>org.zeroturnaround</groupId>
-          <artifactId>jrebel-maven-plugin</artifactId>
-          <version>${jrebel-plugin.version}</version>
-        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
@@ -510,10 +505,6 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.zeroturnaround</groupId>
-        <artifactId>jrebel-maven-plugin</artifactId>
       </plugin>
     </plugins>
     <extensions>
