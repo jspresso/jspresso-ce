@@ -26,24 +26,27 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang.LocaleUtils;
+
 import org.jspresso.framework.application.launch.batch.BatchLauncher;
 import org.jspresso.framework.application.startup.BackendActionStartup;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * A simple batch process starter. The batch itself is coded as a backend action
  * that is executed by the backend controller.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
 public class BatchStartup extends BackendActionStartup implements IBatchStartup {
 
-  private static final String ACTION_ID       = "action";
-  private static final String APP_CONTEXT     = "applicationContext";
-  private static final String BATCH_USER_NAME = "batchUserName";
-  private static final String LOCALE          = "locale";
+  private static final String ACTION_ID             = "action";
+  private static final String APP_CONTEXT           = "applicationContext";
+  private static final String BEAN_FACTORY_SELECTOR = "beanFactorySelector";
+  private static final String BATCH_USER_NAME       = "batchUserName";
+  private static final String LOCALE                = "locale";
 
   private static final Logger LOG = LoggerFactory.getLogger(BatchStartup.class);
 
@@ -79,37 +82,36 @@ public class BatchStartup extends BackendActionStartup implements IBatchStartup 
 
   /**
    * Creates the CLI options.
-   * 
+   *
    * @return the CLI options.
    */
   @SuppressWarnings("static-access")
   protected Options createOptions() {
     Options options = new Options();
-    options.addOption(OptionBuilder.withArgName(APP_CONTEXT).hasArg()
-        .isRequired().withDescription("use given Spring application context.")
-        .create(APP_CONTEXT));
-    options.addOption(OptionBuilder.withArgName(LOCALE).hasArg()
-        .withDescription("use given language (defaults to 'en').")
-        .create(LOCALE));
-    options.addOption(OptionBuilder.withArgName(ACTION_ID).hasArg()
-        .isRequired().withDescription("use the specified backend action.")
-        .create(ACTION_ID));
-    options.addOption(OptionBuilder.withArgName(BATCH_USER_NAME).hasArg()
-        .withDescription("use the specified batch user name.")
-        .create(BATCH_USER_NAME));
+    options.addOption(OptionBuilder.withArgName(APP_CONTEXT).hasArg().isRequired().withDescription(
+        "use given Spring application context.").create(APP_CONTEXT));
+    options.addOption(OptionBuilder.withArgName(BEAN_FACTORY_SELECTOR).hasArg().withDescription(
+        "use given Spring bean factory selector.").create(BEAN_FACTORY_SELECTOR));
+    options.addOption(OptionBuilder.withArgName(LOCALE).hasArg().withDescription(
+        "use given language (defaults to 'en').").create(LOCALE));
+    options.addOption(OptionBuilder.withArgName(ACTION_ID).hasArg().isRequired().withDescription(
+        "use the specified backend action.").create(ACTION_ID));
+    options.addOption(OptionBuilder.withArgName(BATCH_USER_NAME).hasArg().withDescription(
+        "use the specified batch user name.").create(BATCH_USER_NAME));
     return options;
   }
 
   /**
    * Processes the command line.
-   * 
+   *
    * @param cmd
-   *          the parsed command line.
+   *     the parsed command line.
    * @throws ParseException
-   *           whenever an error occurs parsing the command line.
+   *     whenever an error occurs parsing the command line.
    */
   protected void processCommandLine(CommandLine cmd) throws ParseException {
     setApplicationContextKey(cmd.getOptionValue(APP_CONTEXT));
+    setBeanFactorySelector(cmd.getOptionValue(BEAN_FACTORY_SELECTOR));
     setStartupLocale(LocaleUtils.toLocale(cmd.getOptionValue(LOCALE, "en")));
     setActionBeanId(cmd.getOptionValue(ACTION_ID));
     setUserName(cmd.getOptionValue(BATCH_USER_NAME, "batch"));

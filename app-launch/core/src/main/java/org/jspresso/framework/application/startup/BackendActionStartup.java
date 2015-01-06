@@ -37,11 +37,12 @@ public class BackendActionStartup extends AbstractBackendStartup {
   private String              actionBeanId;
   private Map<String, Object> actionContext;
   private String              applicationContextKey;
+  private String              beanFactorySelector;
   private String              userName;
 
   /**
    * Sets the actionBeanId.
-   * 
+   *
    * @param actionBeanId
    *          the actionBeanId to set.
    */
@@ -51,7 +52,7 @@ public class BackendActionStartup extends AbstractBackendStartup {
 
   /**
    * Sets the actionContext.
-   * 
+   *
    * @param actionContext
    *          the actionContext to set.
    */
@@ -61,7 +62,7 @@ public class BackendActionStartup extends AbstractBackendStartup {
 
   /**
    * Sets the applicationContextKey.
-   * 
+   *
    * @param applicationContextKey
    *          the applicationContextKey to set.
    */
@@ -70,8 +71,17 @@ public class BackendActionStartup extends AbstractBackendStartup {
   }
 
   /**
+   * Sets bean factory selector.
+   *
+   * @param beanFactorySelector the bean factory selector
+   */
+  public void setBeanFactorySelector(String beanFactorySelector) {
+    this.beanFactorySelector = beanFactorySelector;
+  }
+
+  /**
    * Sets the batchUserName.
-   * 
+   *
    * @param batchUserName
    *          the batchUserName to set.
    * @deprecated use setUserName instead.
@@ -83,7 +93,7 @@ public class BackendActionStartup extends AbstractBackendStartup {
 
   /**
    * Sets the userName.
-   * 
+   *
    * @param userName
    *          the userName to set.
    */
@@ -162,6 +172,14 @@ public class BackendActionStartup extends AbstractBackendStartup {
   @Override
   protected String getApplicationContextKey() {
     return applicationContextKey;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getBeanFactorySelector() {
+    return beanFactorySelector;
   }
 
   /**
