@@ -28,7 +28,7 @@ import org.jspresso.framework.application.backend.action.BackendAction;
 
 /**
  * A backend startup implementation whose implementation is a backend action.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -119,7 +119,7 @@ public class BackendActionStartup extends AbstractBackendStartup {
 
   /**
    * Creates a user subject.
-   * 
+   *
    * @return a user subject.
    */
   protected Subject createSubject() {
@@ -128,7 +128,7 @@ public class BackendActionStartup extends AbstractBackendStartup {
 
   /**
    * Executes the backend action.
-   * 
+   *
    * @return the action execution status.
    */
   protected boolean executeAction() {
@@ -138,7 +138,7 @@ public class BackendActionStartup extends AbstractBackendStartup {
 
   /**
    * Retrieves the backend action to execute.
-   * 
+   *
    * @return the backend action to execute.
    */
   protected BackendAction getAction() {
@@ -147,7 +147,7 @@ public class BackendActionStartup extends AbstractBackendStartup {
 
   /**
    * The bean id of the backend action to execute.
-   * 
+   *
    * @return bean id of the backend action to execute.
    */
   protected String getActionBeanId() {
@@ -156,7 +156,7 @@ public class BackendActionStartup extends AbstractBackendStartup {
 
   /**
    * Gets the initial parametrized action context.
-   * 
+   *
    * @return the initial parametrized action context.
    */
   protected Map<String, Object> getActionContext() {
@@ -178,13 +178,13 @@ public class BackendActionStartup extends AbstractBackendStartup {
    * {@inheritDoc}
    */
   @Override
-  public String getBeanFactorySelector() {
+  protected String getBeanFactorySelector() {
     return beanFactorySelector;
   }
 
   /**
    * Gets the batchUserName.
-   * 
+   *
    * @return the batchUserName.
    * @deprecated use getUserName instead
    */
@@ -195,7 +195,7 @@ public class BackendActionStartup extends AbstractBackendStartup {
 
   /**
    * Gets the userName.
-   * 
+   *
    * @return the userName.
    */
   protected String getUserName() {
