@@ -697,7 +697,7 @@ public class DefaultFlexViewFactory {
   }
 
   protected function syncSizes(decorator:UIComponent, component:UIComponent):void {
-    if (decorator != component) {
+    if (component && decorator != component) {
       if (component.percentWidth > 0) {
         decorator.percentWidth = component.percentWidth;
       }
