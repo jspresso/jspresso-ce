@@ -55,13 +55,14 @@ public class OkLovAction<E, F, G> extends FrontendAction<E, F, G> {
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     if (!context.containsKey(LovAction.LOV_SELECTED_ITEM)) {
-      ICollectionConnector resultConnector;
-      IValueConnector viewConnector = getViewConnector(context);
+      ICollectionConnector resultConnector = null;
+      // Do not use getViewConnector(context) since, on the table, it will return the cell connector
+      IValueConnector viewConnector = getView(context).getConnector();
       // to support double click on the table
       if (viewConnector instanceof ICollectionConnector) {
         // this is from the table itself
         resultConnector = (ICollectionConnector) viewConnector;
-      } else {
+      } else if (viewConnector instanceof ICompositeValueConnector) {
         // this is from the dialog.
         resultConnector = (ICollectionConnector) ((ICompositeValueConnector) viewConnector)
             .getChildConnector(IQueryComponent.QUERIED_COMPONENTS);
