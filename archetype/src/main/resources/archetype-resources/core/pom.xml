@@ -111,6 +111,11 @@
 #end
   </profiles>
   <build>
+    <resources>
+      <resource>
+        <directory>${symbol_dollar}{project.build.directory}/generated-resources/jasperreports</directory>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <groupId>org.jspresso.maven</groupId>
