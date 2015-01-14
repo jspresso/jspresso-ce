@@ -113,6 +113,9 @@
   <build>
     <resources>
       <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
         <directory>${symbol_dollar}{project.build.directory}/generated-resources/jasperreports</directory>
       </resource>
     </resources>
