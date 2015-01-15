@@ -42,6 +42,11 @@ import org.slf4j.LoggerFactory;
  */
 public class BatchStartup extends BackendActionStartup implements IBatchStartup {
 
+  /**
+   * The constant RETURN_CODE is &quot;RETURN_CODE&quot;.
+   */
+  public static final String RETURN_CODE = "RETURN_CODE";
+
   private static final String ACTION_ID             = "action";
   private static final String APP_CONTEXT           = "applicationContext";
   private static final String BEAN_FACTORY_SELECTOR = "beanFactorySelector";
@@ -75,9 +80,19 @@ public class BatchStartup extends BackendActionStartup implements IBatchStartup 
   @Override
   public void start() {
     startController();
-    if (!executeAction()) {
-      System.exit(1);
+    boolean actionSuccess = executeAction();
+    int returnCode;
+    Object contextReturnCode = getActionContext().get(RETURN_CODE);
+    if (contextReturnCode instanceof Integer) {
+      returnCode = (Integer) contextReturnCode;
+    } else {
+      if (actionSuccess) {
+        returnCode = 0;
+      } else {
+        returnCode = 1;
+      }
     }
+    System.exit(returnCode);
   }
 
   /**
