@@ -128,6 +128,10 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
     } catch (ClassNotFoundException ex) {
       LOG.error("Class for entity {} was not found", entityName, ex);
     }
+    // getEntity should never return transient instances, see #1244
+    if (registeredEntity != null && !registeredEntity.isPersistent()) {
+      registeredEntity = null;
+    }
     ((HibernateBackendController) getBackendController()).detachFromHibernateInDepth(registeredEntity,
         ((HibernateBackendController) getBackendController()).getHibernateSession(), new HibernateEntityRegistry(
         "detachFromHibernateInDepth"));
