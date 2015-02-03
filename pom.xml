@@ -54,19 +54,13 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:svn:https://svn.jspresso.org/jspresso/framework/branches/jspresso-framework-4.0.x</connection>
+    <connection>scm:git:https://github.com/jspresso/jspresso-ce.git</connection>
   </scm>
   <issueManagement>
-    <system>Jspresso Tracker</system>
-    <url>http://mantis.jspresso.org</url>
+    <system>Jspresso CE Issue Tracker</system>
+    <url>https://github.com/jspresso/jspresso-ce/issues</url>
   </issueManagement>
-  <mailingLists>
-    <mailingList>
-      <name>Jspresso users</name>
-      <subscribe>http://lists.sourceforge.net/mailman/listinfo/jspresso-users</subscribe>
-      <unsubscribe>http://lists.sourceforge.net/mailman/listinfo/jspresso-users</unsubscribe>
-    </mailingList>
-  </mailingLists>
+
   <developers>
     <developer>
       <name>Vincent Vandenschrick</name>
