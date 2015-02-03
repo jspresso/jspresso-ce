@@ -29,7 +29,6 @@ import org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescr
 /**
  * The model descriptor for bean modules.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BeanModuleDescriptor extends ModuleDescriptor {

@@ -21,7 +21,6 @@ package org.jspresso.framework.util.scripting;
 /**
  * Interface implemented by ny scriptable object.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IScript {

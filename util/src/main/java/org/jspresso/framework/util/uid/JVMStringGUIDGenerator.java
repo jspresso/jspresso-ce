@@ -21,7 +21,6 @@ package org.jspresso.framework.util.uid;
 /**
  * An instance that creates unique ids sequentially for a JVM.
  * 
- * @version $LastChangedRevision: 2529 $
  * @author Vincent Vandenschrick
  */
 public class JVMStringGUIDGenerator implements IGUIDGenerator<String> {

@@ -25,7 +25,6 @@ import org.jspresso.framework.application.backend.session.IApplicationSession;
 /**
  * A NO-OP translation plugin.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class MockTranslationPlugin implements ITranslationPlugin {

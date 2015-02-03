@@ -38,7 +38,6 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * icon used for the graphical representation are all computed out of the
  * configured {@code elementEntityDescriptor}.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

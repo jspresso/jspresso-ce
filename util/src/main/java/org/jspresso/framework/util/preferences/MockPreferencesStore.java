@@ -21,7 +21,6 @@ package org.jspresso.framework.util.preferences;
 /**
  * A no-op preference store.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class MockPreferencesStore implements IPreferencesStore {
