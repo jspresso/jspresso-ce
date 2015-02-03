@@ -45,7 +45,6 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
  * module content initialized through a startup action depending on the session
  * state.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BeanCollectionModule extends Module {

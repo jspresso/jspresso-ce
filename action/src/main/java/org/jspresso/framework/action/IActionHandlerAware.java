@@ -22,7 +22,6 @@ package org.jspresso.framework.action;
  * Simple interface that is implemented by objects that can be assigned an
  * action handler.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IActionHandlerAware {

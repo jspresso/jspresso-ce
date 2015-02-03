@@ -26,7 +26,6 @@ import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 /**
  * A connector on an independent model collection.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ModelCollectionConnector extends ModelCollectionPropertyConnector {

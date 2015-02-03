@@ -25,7 +25,6 @@ import java.beans.PropertyChangeListener;
  * registering a {@code PropertyChangeListener}. See also java beans
  * specifications.
  *
- * @version $LastChangedRevision$
  * @see java.beans.PropertyChangeSupport
  * @author Vincent Vandenschrick
  */

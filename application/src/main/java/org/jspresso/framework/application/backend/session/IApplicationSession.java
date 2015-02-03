@@ -30,7 +30,6 @@ import org.jspresso.framework.security.UserPrincipal;
  * This interface establishes the contract of an application session. This
  * application session represents the backend application state.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IApplicationSession {

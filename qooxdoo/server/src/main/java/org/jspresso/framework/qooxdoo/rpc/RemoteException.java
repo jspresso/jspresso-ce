@@ -23,7 +23,6 @@ import net.sf.qooxdoo.rpc.RemoteServiceException;
 /**
  * Indirection Exception class for Qooxdoo remote service exceptions.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteException extends RemoteServiceException {

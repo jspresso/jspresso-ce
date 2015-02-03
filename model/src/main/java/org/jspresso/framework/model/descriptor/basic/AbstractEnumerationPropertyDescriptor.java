@@ -36,7 +36,6 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * values can be codes that are translated for inclusion in the UI. Such
  * properties are usually rendered as combo-boxes.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractEnumerationPropertyDescriptor extends

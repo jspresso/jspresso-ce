@@ -25,7 +25,6 @@ import org.springframework.ldap.core.support.DirContextSource;
  * stored in an LDAP directory. The user DN to use to connect to the LDAP
  * directory is the one stored in the user principal from the login process.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class LdapChangePasswordAction extends AbstractChangePasswordAction {

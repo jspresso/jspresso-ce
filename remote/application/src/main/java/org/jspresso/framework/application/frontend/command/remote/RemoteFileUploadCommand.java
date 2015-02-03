@@ -23,7 +23,6 @@ import org.jspresso.framework.gui.remote.RAction;
 /**
  * This command is used to upload a file from the client peer.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteFileUploadCommand extends RemoteFileCommand {

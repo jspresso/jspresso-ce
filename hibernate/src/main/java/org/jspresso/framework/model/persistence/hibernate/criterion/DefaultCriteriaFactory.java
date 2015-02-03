@@ -61,7 +61,6 @@ import org.jspresso.framework.view.descriptor.basic.PropertyViewDescriptorHelper
  * Default implementation of a criteria factory.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class DefaultCriteriaFactory extends AbstractActionContextAware implements ICriteriaFactory {
 

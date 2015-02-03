@@ -50,7 +50,6 @@ import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
  * and {@code cancelAction}) can be configured to react to the user
  * decision.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

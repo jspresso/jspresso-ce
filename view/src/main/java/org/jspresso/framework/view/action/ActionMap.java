@@ -42,7 +42,6 @@ import org.jspresso.framework.util.lang.ICloneable;
  * the frontend controller might be represented as a menu bar on the main
  * application frame.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ActionMap implements ISecurable, IPermIdSource, ICloneable {

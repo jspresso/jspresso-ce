@@ -21,7 +21,6 @@ package org.jspresso.framework.util.bean.integrity;
 /**
  * Empty implementation of a property integrity processor.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          The type of the target.

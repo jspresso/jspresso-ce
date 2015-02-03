@@ -40,7 +40,6 @@ import org.jspresso.framework.model.entity.IEntity;
  * the classic {@code add/removePropertyChangeListener} methods; Jspresso
  * binding architecture leverages this behaviour.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the concrete entity type.

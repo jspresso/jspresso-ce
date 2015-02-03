@@ -41,7 +41,6 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
  * a successful commit.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
 

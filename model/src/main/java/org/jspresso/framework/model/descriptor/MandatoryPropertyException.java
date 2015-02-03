@@ -27,7 +27,6 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 /**
  * An exception occurring whenever a mandatory property constraint is violated.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class MandatoryPropertyException extends IntegrityException {

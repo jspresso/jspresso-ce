@@ -35,7 +35,6 @@ import org.jspresso.framework.model.entity.IEntity;
  * template</i>&quot;. It provides also protected utility methods for various
  * standard persistence operations on Jspresso managed entities.
  *
- * @version $LastChangedRevision: 7856 $
  * @author Vincent Vandenschrick
  *
  * @deprecated directly use BackendAction and perform appropriate casts.

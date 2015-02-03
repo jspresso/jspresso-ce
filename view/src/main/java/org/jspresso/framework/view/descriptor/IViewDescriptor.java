@@ -30,7 +30,6 @@ import org.jspresso.framework.view.action.IActionable;
 /**
  * This public interface is the super-interface of all view descriptors.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IViewDescriptor extends IIconDescriptor, IStylable,

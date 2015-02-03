@@ -32,7 +32,6 @@ import org.springframework.context.support.ResourceBundleMessageSource;
  * find a translation, e.g. : to translate address.city.zip, it will try, in
  * order : <li>address.city.zip <li>city.zip <li>zip
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class EnhancedResourceBundleMessageSource extends

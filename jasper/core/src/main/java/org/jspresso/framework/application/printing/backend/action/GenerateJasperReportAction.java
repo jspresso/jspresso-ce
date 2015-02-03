@@ -52,7 +52,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
  * context as action parameter for further processing (like PDF production for
  * instance).
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class GenerateJasperReportAction extends BackendAction {

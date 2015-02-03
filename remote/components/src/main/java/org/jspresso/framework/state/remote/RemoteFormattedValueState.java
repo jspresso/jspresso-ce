@@ -23,7 +23,6 @@ import java.io.Serializable;
 /**
  * The state of a remote formatted value.
  * 
- * @version $LastChangedRevision: 2669 $
  * @author Vincent Vandenschrick
  */
 public class RemoteFormattedValueState extends RemoteValueState {

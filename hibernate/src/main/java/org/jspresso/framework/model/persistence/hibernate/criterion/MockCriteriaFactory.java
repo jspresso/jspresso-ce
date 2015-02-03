@@ -26,7 +26,6 @@ import org.jspresso.framework.model.component.IQueryComponent;
  * Empty criteria factory.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class MockCriteriaFactory implements ICriteriaFactory {
 

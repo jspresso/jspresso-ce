@@ -33,7 +33,6 @@ import gnu.trove.set.hash.THashSet;
  * garbage collected, if there is no strong reference to this element.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  *
  * @param <E> the type of stored element
  */

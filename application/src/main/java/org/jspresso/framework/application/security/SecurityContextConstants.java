@@ -21,7 +21,6 @@ package org.jspresso.framework.application.security;
 /**
  * Well-known action context keys.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class SecurityContextConstants {

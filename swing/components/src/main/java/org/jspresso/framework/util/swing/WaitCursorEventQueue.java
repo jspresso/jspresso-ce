@@ -26,7 +26,6 @@ import java.awt.EventQueue;
  * implements a automated hourglass management.
  * <p>
  * 
- * @version $LastChangedRevision$
  * @author Kyle Davis
  */
 public class WaitCursorEventQueue extends EventQueue {

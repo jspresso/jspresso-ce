@@ -28,7 +28,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 /**
  * A simple class used to dump the application template Spring elements.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class AppTemplateContextLister {

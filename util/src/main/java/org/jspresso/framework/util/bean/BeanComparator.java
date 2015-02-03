@@ -32,7 +32,6 @@ import org.jspresso.framework.util.collection.ESort;
  * A bean comparator which compare beans based on a list of properties using
  * their natural order.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BeanComparator implements Comparator<Object> {

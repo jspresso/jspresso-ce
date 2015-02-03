@@ -34,7 +34,6 @@ import org.jspresso.framework.util.descriptor.IDescriptor;
 /**
  * Basic implementation of a report descriptor.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @internal
  */

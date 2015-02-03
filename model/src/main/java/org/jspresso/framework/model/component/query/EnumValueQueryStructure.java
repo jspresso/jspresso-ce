@@ -24,7 +24,6 @@ import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
  * A simple query structure which holds selection tick, a value and a
  * translation.
  * 
- * @version $LastChangedRevision: 5621 $
  * @author Vincent Vandenschrick
  */
 public class EnumValueQueryStructure extends AbstractPropertyChangeCapable {

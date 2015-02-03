@@ -24,7 +24,6 @@ import java.util.EventObject;
  * An event notifying an item selection change. It contains the object at the
  * source of the event and the newly selected item (or null if none).
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ItemSelectionEvent extends EventObject {

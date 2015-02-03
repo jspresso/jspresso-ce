@@ -38,7 +38,6 @@ import org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescript
 /**
  * A query structure used to implement enumeration disjunctions in filters.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class EnumQueryStructureDescriptor extends

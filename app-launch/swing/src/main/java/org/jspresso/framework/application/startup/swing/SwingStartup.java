@@ -30,7 +30,6 @@ import org.jspresso.framework.application.startup.AbstractFrontendStartup;
 /**
  * Default swing startup class.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class SwingStartup extends

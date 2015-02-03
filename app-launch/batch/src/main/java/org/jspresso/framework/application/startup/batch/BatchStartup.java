@@ -38,7 +38,6 @@ import org.slf4j.LoggerFactory;
  * that is executed by the backend controller.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class BatchStartup extends BackendActionStartup implements IBatchStartup {
 

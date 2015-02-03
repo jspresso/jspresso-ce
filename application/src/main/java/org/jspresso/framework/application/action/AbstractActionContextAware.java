@@ -47,7 +47,6 @@ import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
  * context internal knowledge. Action developers can (should) use these helper
  * methods (for reference manual readers, give an eye to the linked javadoc).
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractActionContextAware {

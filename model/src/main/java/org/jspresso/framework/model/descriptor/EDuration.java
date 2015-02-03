@@ -21,7 +21,6 @@ package org.jspresso.framework.model.descriptor;
 /**
  * Duration constants.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public enum EDuration {

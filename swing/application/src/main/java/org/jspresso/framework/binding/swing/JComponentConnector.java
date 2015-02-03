@@ -32,7 +32,6 @@ import org.jspresso.framework.util.swing.SwingUtil;
  * {@code getConnectedJComponent()} which returns the parametrized type of
  * the class.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          The actual class of the subclass of {@code JComponent}.

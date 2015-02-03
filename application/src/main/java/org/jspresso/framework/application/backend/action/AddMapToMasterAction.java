@@ -36,7 +36,6 @@ import org.jspresso.framework.util.collection.ObjectEqualityMap;
  * Default property values as well as {@code onCreate} lifecycle
  * interceptors registered on the component descriptor are supported.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class AddMapToMasterAction extends AbstractAddCollectionToMasterAction {

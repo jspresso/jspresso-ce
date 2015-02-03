@@ -23,7 +23,6 @@ import org.jspresso.framework.gui.remote.RMap;
 /**
  * A remote mobile map component.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RMobileMap extends RMap {

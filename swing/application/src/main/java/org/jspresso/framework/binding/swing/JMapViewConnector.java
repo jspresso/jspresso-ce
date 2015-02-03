@@ -28,7 +28,6 @@ import org.jspresso.framework.util.event.ValueChangeEvent;
 /**
  * JMapViewConnector connector.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class JMapViewConnector extends BasicCompositeConnector {

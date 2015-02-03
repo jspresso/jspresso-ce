@@ -21,7 +21,6 @@ package org.jspresso.framework.state.remote;
 /**
  * The factory interface for remote value states.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IRemoteValueStateFactory {

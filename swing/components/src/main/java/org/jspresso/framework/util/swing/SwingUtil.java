@@ -51,7 +51,6 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
 /**
  * A helper class for Swing.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class SwingUtil {

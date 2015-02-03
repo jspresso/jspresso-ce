@@ -30,7 +30,6 @@ import org.jspresso.framework.model.entity.IEntity;
  * Check current selected module object. If it is transient, removes it from the current module and go back.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class CleanModuleAndGoBackIfTransientAction extends AbstractRemoteAction {
 

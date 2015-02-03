@@ -21,7 +21,6 @@ package org.jspresso.framework.model.descriptor;
 /**
  * This interface is the super-interface of all scalar properties descriptors.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @see org.jspresso.framework.model.descriptor.IComponentDescriptor
  */

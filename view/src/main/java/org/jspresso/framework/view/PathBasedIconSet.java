@@ -23,7 +23,6 @@ import org.jspresso.framework.util.gui.Dimension;
 /**
  * Implements a icon set that can be variabilized using a root path.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class PathBasedIconSet implements IIconSet {

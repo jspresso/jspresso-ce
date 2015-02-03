@@ -21,7 +21,6 @@ package org.jspresso.framework.gui.remote;
 /**
  * A remote actionable component.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface RActionable {

@@ -37,7 +37,6 @@ import org.springframework.jdbc.core.ConnectionCallback;
  * This is the concrete implementation of the Fusionchart display action used in
  * standalone UI channels (Swing).
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

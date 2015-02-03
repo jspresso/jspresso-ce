@@ -26,7 +26,6 @@ import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 /**
  * Basic map view.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the type of component this view uses.

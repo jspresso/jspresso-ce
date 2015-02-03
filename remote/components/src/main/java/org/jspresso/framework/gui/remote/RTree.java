@@ -22,7 +22,6 @@ package org.jspresso.framework.gui.remote;
  * A remote tree component.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class RTree extends RComponent {
 

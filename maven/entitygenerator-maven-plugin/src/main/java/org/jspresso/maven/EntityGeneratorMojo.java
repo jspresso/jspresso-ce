@@ -41,7 +41,6 @@ import org.jspresso.framework.tools.entitygenerator.EntityGenerator;
  * Goal which generates entities for a Jspresso project.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 @Mojo(name = "generate-entities", defaultPhase = LifecyclePhase.GENERATE_SOURCES,
     requiresDependencyResolution = ResolutionScope.COMPILE, threadSafe = true)

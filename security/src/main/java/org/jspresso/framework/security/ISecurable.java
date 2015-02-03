@@ -23,7 +23,6 @@ import java.util.Collection;
 /**
  * Marks a resource as capable of holding security restrictions.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface ISecurable {

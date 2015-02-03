@@ -80,7 +80,6 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
  * controller.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class HibernateBackendController extends AbstractBackendController {
 

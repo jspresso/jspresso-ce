@@ -24,7 +24,6 @@ import java.util.List;
  * Interface of a configurable collection connector list provider. Should be
  * used by view factories.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IConfigurableCollectionConnectorListProvider extends

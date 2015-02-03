@@ -24,7 +24,6 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * Interface for mobile view descriptors that are aware of page end events.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public interface IMobilePageAware {
 

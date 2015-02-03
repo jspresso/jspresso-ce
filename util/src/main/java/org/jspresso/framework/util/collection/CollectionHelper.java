@@ -30,7 +30,6 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
 /**
  * Helper class for collections management.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class CollectionHelper {

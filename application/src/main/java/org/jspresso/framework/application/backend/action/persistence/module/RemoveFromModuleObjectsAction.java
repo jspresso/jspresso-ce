@@ -45,7 +45,6 @@ import org.jspresso.framework.model.entity.IEntity;
  * are also removed accordingly. It is versatile enough to work on mobile collection module
  * details.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoveFromModuleObjectsAction extends BackendAction {

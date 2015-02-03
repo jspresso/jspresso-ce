@@ -30,7 +30,6 @@ import javax.swing.RootPaneContainer;
  * implements a automated hourglass management.
  * <p>
  * 
- * @version $LastChangedRevision$
  * @author Kyle Davis
  */
 public class WaitCursorTimer extends Thread {

@@ -49,7 +49,6 @@ import org.jspresso.framework.view.descriptor.mobile.MobileNavPageViewDescriptor
  * operations.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class MobileFilterableBeanCollectionModule extends FilterableBeanCollectionModule {
 

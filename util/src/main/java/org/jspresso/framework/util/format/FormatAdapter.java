@@ -24,7 +24,6 @@ import java.text.ParseException;
 /**
  * An adapter for the {@code Format} jdk objects.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class FormatAdapter implements IFormatter<Object, String> {

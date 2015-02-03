@@ -35,7 +35,6 @@ import org.jspresso.framework.model.entity.IEntityFactory;
 /**
  * A utility class used to persist some test data.
  * 
- * @version $LastChangedRevision: 7856 $
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractMongoTestDataPersister {

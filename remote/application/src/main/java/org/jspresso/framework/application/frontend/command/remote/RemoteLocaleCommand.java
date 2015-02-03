@@ -23,7 +23,6 @@ import java.util.Map;
 /**
  * Changes the locale of the remote peer.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteLocaleCommand extends RemoteCommand {

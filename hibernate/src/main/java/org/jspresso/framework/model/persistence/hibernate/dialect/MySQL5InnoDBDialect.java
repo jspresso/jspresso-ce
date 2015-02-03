@@ -23,7 +23,6 @@ import java.sql.Types;
 /**
  * Mysql5 InnoDB dialect.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class MySQL5InnoDBDialect extends

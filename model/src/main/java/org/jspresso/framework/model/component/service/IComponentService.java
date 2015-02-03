@@ -22,7 +22,6 @@ package org.jspresso.framework.model.component.service;
  * This is an interface used to identify classes responsible for providing
  * entity services.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IComponentService {

@@ -28,7 +28,6 @@ import org.jspresso.framework.view.AbstractActionFactory;
  * An intermediate view factory abstract class used to handle session DI on
  * gates.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

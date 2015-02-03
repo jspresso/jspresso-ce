@@ -42,7 +42,6 @@ import org.jspresso.framework.util.bean.MissingPropertyException;
  * Proxy entity factory aware of a backend controller to deal with uniqueness of
  * entity instances across the JVM.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ControllerAwareProxyEntityFactory extends BasicProxyEntityFactory {

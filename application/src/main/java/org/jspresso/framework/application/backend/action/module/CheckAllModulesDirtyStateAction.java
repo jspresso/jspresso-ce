@@ -32,7 +32,6 @@ import org.jspresso.framework.application.model.Workspace;
  * hierarchy. This action is typically triggered before a user exists the
  * application to bring up a notification of potentially lost pending changes.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

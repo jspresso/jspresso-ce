@@ -22,7 +22,6 @@ package org.jspresso.framework.binding;
  * Interface of a configurable collection connector provider. Should be used by
  * view factories.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IConfigurableCollectionConnectorProvider extends

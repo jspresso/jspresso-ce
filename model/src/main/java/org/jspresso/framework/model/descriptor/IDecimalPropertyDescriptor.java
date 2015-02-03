@@ -21,7 +21,6 @@ package org.jspresso.framework.model.descriptor;
 /**
  * This interface is implemented by descriptors of decimal properties.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IDecimalPropertyDescriptor extends INumberPropertyDescriptor {

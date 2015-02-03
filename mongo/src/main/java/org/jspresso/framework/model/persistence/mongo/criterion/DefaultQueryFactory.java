@@ -58,7 +58,6 @@ import org.jspresso.framework.view.descriptor.basic.PropertyViewDescriptorHelper
  * Default implementation of a query factory.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class DefaultQueryFactory extends AbstractActionContextAware implements IQueryFactory {
 

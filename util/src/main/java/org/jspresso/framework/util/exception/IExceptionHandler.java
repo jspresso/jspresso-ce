@@ -24,7 +24,6 @@ import java.util.Map;
  * This interface establishes the general contract of an object able to
  * intercept and handle exceptions.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IExceptionHandler {

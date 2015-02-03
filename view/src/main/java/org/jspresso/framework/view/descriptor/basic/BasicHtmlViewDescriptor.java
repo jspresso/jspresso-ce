@@ -25,7 +25,6 @@ import org.jspresso.framework.view.descriptor.IHtmlViewDescriptor;
  * containing HTML text. The objective is to be able to configure scrollability
  * of the HTML component.
  * 
- * @version $LastChangedRevision: 7120 $
  * @author Vincent Vandenschrick
  */
 public class BasicHtmlViewDescriptor extends BasicPropertyViewDescriptor

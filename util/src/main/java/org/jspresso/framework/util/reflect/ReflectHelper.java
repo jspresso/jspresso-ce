@@ -23,7 +23,6 @@ import java.lang.reflect.Field;
 /**
  * Helper class for reflection.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class ReflectHelper {

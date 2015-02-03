@@ -29,7 +29,6 @@ import org.jspresso.framework.application.frontend.action.swing.AbstractSwingAct
 /**
  * A simple action to display a Jasper report.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class DisplayJasperReportAction extends AbstractSwingAction {

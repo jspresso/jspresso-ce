@@ -25,7 +25,6 @@ import org.jspresso.framework.util.gui.CellConstraints;
  * This kind of described container view might typically be implemented by a
  * swing JPanel with a GridBagLayout.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IConstrainedGridViewDescriptor extends IGridViewDescriptor {

@@ -36,7 +36,6 @@ import org.jspresso.framework.binding.ICollectionConnector;
  *     Map&lt;String, Object&gt; context)
  * </pre>
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractCloneCollectionAction extends

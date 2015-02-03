@@ -24,7 +24,6 @@ import org.jspresso.framework.util.gui.Icon;
  * This interface is implemented by anything which is graphically identifiable
  * by an icon.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IIconDescriptor extends IDescriptor {

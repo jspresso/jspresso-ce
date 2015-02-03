@@ -28,7 +28,6 @@ import org.jspresso.framework.util.bean.AccessorInfo;
 /**
  * This class is the default implementation of list property accessors.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BeanListAccessor extends BeanCollectionAccessor implements

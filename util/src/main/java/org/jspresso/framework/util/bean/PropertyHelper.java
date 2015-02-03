@@ -34,7 +34,6 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
 /**
  * This helper class contains utility methods to work with bean properties.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class PropertyHelper {

@@ -33,7 +33,6 @@ import org.jspresso.framework.view.descriptor.basic.BasicSimpleTreeLevelDescript
 /**
  * This is the default implementation of a simple module view descriptor.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @internal
  */

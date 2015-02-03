@@ -23,7 +23,6 @@ import java.io.IOException;
 /**
  * This interface is implemented by web resources.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IResourceBase {

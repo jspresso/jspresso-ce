@@ -28,7 +28,6 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
  * If the action is configured with {@code anonymous = true}, then an anonymous login is attempted. If not,
  * a normal login is performed.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

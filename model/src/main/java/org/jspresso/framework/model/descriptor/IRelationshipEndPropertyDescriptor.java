@@ -21,7 +21,6 @@ package org.jspresso.framework.model.descriptor;
 /**
  * This is the super-interface of all inter-component relationship descriptors.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IRelationshipEndPropertyDescriptor extends IPropertyDescriptor {

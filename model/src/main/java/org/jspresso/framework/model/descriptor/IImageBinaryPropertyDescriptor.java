@@ -23,7 +23,6 @@ import org.jspresso.framework.util.image.IScalableImageAware;
 /**
  * This interface is implemented by descriptors of image binary properties.
  * 
- * @version $LastChangedRevision: 3701 $
  * @author Vincent Vandenschrick
  */
 public interface IImageBinaryPropertyDescriptor extends

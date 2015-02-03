@@ -33,7 +33,6 @@ import org.jspresso.framework.util.format.IFormatter;
 /**
  * This connector factory implementation creates basic connectors.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicConnectorFactory implements IConfigurableConnectorFactory {

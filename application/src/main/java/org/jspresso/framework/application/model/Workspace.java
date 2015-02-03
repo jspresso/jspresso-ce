@@ -55,7 +55,6 @@ import org.jspresso.framework.view.descriptor.basic.AbstractTreeViewDescriptor;
  * internal frame or the expanded accordion section.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class Workspace extends AbstractPropertyChangeCapable implements ISecurable, IPermIdSource {
 

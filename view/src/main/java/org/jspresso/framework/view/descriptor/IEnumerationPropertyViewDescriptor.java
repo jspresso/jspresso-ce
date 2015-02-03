@@ -26,7 +26,6 @@ import org.jspresso.framework.util.gui.Dimension;
  * A property view descriptor used to refine (filter) values that are displayed
  * in enumeration property views.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IEnumerationPropertyViewDescriptor extends

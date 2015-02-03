@@ -27,7 +27,6 @@ import org.jspresso.framework.view.descriptor.basic.BasicTabViewDescriptor;
  * A composite view descriptor that aggregates mobile views.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class MobileTabViewDescriptor extends BasicTabViewDescriptor implements IMobilePageSectionViewDescriptor {
 

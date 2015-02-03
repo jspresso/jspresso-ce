@@ -27,7 +27,6 @@ import org.jspresso.framework.util.event.ValueChangeEvent;
  * connectors. It keeps track of the children connectors that were potentially
  * removed during the notification process.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class CollectionConnectorValueChangeEvent extends ValueChangeEvent {

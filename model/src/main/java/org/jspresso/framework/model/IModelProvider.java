@@ -26,7 +26,6 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
  * {@code IModelChangeListener} which can keep track of model object
  * changes.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IModelProvider {

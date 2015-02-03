@@ -27,7 +27,6 @@ import org.jspresso.framework.util.accessor.ICollectionAccessor;
 /**
  * This class is the default implementation of collection property accessors.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class MapCollectionAccessor extends MapPropertyAccessor implements

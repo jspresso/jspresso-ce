@@ -6,7 +6,6 @@ package org.jspresso.framework.view.action;
 /**
  * An actionable object.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IActionable {

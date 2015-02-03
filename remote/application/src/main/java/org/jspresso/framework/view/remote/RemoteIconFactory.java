@@ -27,7 +27,6 @@ import org.jspresso.framework.view.AbstractIconFactory;
 /**
  * A factory to create (and cache) remote icons.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteIconFactory extends AbstractIconFactory<RIcon> {

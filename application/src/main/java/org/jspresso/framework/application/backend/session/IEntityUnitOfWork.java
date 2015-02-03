@@ -32,7 +32,6 @@ import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
  * commit the changes or rollback them upon work completion. A unit of work is
  * reusable.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IEntityUnitOfWork extends IEntityLifecycleHandler {

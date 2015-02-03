@@ -25,7 +25,6 @@ import org.jspresso.framework.util.lang.ICloneable;
 /**
  * Icon representation.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class Icon implements Serializable, ICloneable {

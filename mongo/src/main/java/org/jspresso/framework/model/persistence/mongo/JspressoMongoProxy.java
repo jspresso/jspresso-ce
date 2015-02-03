@@ -22,7 +22,6 @@ package org.jspresso.framework.model.persistence.mongo;
  * Interface implemented by all Jspresso mongo proxies.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public interface JspressoMongoProxy {
 

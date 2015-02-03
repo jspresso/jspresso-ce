@@ -21,7 +21,6 @@ package org.jspresso.framework.util.event;
 /**
  * Interface implemented by listeners on selectable selection.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface ISelectionChangeListener {

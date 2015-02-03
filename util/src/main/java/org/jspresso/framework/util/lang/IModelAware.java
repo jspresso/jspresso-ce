@@ -21,7 +21,6 @@ package org.jspresso.framework.util.lang;
 /**
  * A simple interface for objects that support a model.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IModelAware {

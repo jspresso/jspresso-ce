@@ -28,7 +28,6 @@ import org.jspresso.framework.action.IActionHandler;
  * answer, another action is triggered. The Yes - No - Cancel alternative
  * actions are parametrized statically.
  * 
- * @version $LastChangedRevision: 2097 $
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

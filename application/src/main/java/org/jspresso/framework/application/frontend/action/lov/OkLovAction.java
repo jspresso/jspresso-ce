@@ -37,7 +37,6 @@ import org.jspresso.framework.model.entity.IEntity;
  * This action augments the context by setting the action parameter to the
  * selected entity of the LOV result list (or null if none is selected).
  * 
- * @version $LastChangedRevision: 1442 $
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

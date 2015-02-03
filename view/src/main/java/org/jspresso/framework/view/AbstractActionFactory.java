@@ -58,7 +58,6 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 /**
  * Abstract base class for action factories.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual action class created.

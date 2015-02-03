@@ -27,7 +27,6 @@ import gnu.trove.set.hash.TLinkedHashSet;
 /**
  * Helper class to ease the {@code ISelectionChangeListener} management.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class SelectionChangeSupport implements ISelectable {

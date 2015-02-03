@@ -27,7 +27,6 @@ import org.jspresso.framework.action.IActionHandler;
 /**
  * A callback handler which triggers an arbitrary action.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ActionExecutorCallback extends FileToByteArrayCallback {

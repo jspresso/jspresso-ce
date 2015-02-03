@@ -42,7 +42,6 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * value.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class ComparableQueryStructure extends QueryComponent {
 

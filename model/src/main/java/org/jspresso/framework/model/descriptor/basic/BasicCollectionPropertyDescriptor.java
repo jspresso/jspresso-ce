@@ -33,7 +33,6 @@ import org.jspresso.framework.util.collection.ESort;
  * This descriptor is used to describe collection properties that are used
  * either as &quot;1-N&quot; or &quot;N-N&quot; &quot;N&quot; relationship end.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the concrete collection component element type.

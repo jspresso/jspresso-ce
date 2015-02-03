@@ -38,7 +38,6 @@ import org.jspresso.framework.view.descriptor.mobile.MobileBorderViewDescriptor;
 /**
  * A default implementation for lov view factories.
  * 
- * @version $LastChangedRevision: 4321 $
  * @author Vincent Vandenschrick
  */
 public class MobileLovViewDescriptorFactory extends AbstractLovViewDescriptorFactory

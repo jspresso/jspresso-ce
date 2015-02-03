@@ -25,7 +25,6 @@ import org.jspresso.framework.util.html.HtmlHelper;
 /**
  * A table cell renderer based on a formatter.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class FormattedTableCellRenderer extends EvenOddTableCellRenderer {

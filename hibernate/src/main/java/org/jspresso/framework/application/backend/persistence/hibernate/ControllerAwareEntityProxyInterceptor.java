@@ -48,7 +48,6 @@ import org.jspresso.framework.util.bean.PropertyHelper;
  * uniqueness of entity instances across the JVM.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 @SuppressWarnings("rawtypes")
 public class ControllerAwareEntityProxyInterceptor extends EntityProxyInterceptor {

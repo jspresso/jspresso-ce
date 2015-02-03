@@ -26,7 +26,6 @@ import org.jspresso.framework.model.descriptor.IPercentPropertyDescriptor;
  * configured accordingly, i.e. displaying/editing properties as percentage
  * instead of their raw decimal values.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicPercentPropertyDescriptor extends

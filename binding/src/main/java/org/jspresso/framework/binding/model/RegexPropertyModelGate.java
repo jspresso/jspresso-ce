@@ -24,7 +24,6 @@ import java.util.regex.Pattern;
  * This gate opens and closes based on the value of a string property matching a
  * regular expression.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RegexPropertyModelGate extends AbstractPropertyModelGate<String> {

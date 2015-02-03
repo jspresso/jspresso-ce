@@ -40,7 +40,6 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 /**
  * A swing action factory.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class SwingActionFactory extends

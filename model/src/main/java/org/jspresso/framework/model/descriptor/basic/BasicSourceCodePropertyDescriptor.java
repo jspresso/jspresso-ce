@@ -27,7 +27,6 @@ import org.jspresso.framework.model.descriptor.ISourceCodePropertyDescriptor;
  * format the property text content may be defined explicitly using the
  * {@code language} property.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicSourceCodePropertyDescriptor extends

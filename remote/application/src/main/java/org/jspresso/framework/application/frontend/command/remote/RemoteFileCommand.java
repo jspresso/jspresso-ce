@@ -25,7 +25,6 @@ import org.jspresso.framework.gui.remote.RAction;
 /**
  * This command is the base class for file commands.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteFileCommand extends RemoteCommand {

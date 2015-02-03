@@ -25,7 +25,6 @@ import org.jspresso.framework.model.component.IQueryComponent;
 /**
  * A factory used to create a criteria based on a query component.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("UnusedParameters")

@@ -31,7 +31,6 @@ import org.jspresso.framework.util.scripting.IScriptHandler;
  * {@code IScriptHandler} configured through the {@code scriptHandler}
  * property.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ScriptedBackendAction extends BackendAction {

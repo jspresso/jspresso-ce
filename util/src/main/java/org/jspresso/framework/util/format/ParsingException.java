@@ -23,7 +23,6 @@ import org.jspresso.framework.util.exception.BusinessException;
 /**
  * A parsing exception.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ParsingException extends BusinessException {

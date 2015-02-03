@@ -60,7 +60,6 @@ import org.jspresso.framework.util.url.UrlHelper;
  * This servlet class returns the web resource which matches the specified id
  * request parameter requesting it to the resource manager.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class ResourceProviderServlet extends HttpServlet {

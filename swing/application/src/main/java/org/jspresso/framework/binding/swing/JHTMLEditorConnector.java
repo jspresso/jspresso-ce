@@ -29,7 +29,6 @@ import org.jspresso.framework.gui.swing.components.JHTMLEditor;
 /**
  * This class is a JHTMLEditor connector.
  * 
- * @version $LastChangedRevision: 2097 $
  * @author Vincent Vandenschrick
  */
 public class JHTMLEditorConnector extends JComponentConnector<JHTMLEditor> {

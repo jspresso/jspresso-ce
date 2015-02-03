@@ -30,7 +30,6 @@ import org.jspresso.framework.view.descriptor.IEnumerationPropertyViewDescriptor
  * can configure a set of allowed values from which the user can choose.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class BasicEnumerationPropertyViewDescriptor extends BasicPropertyViewDescriptor
     implements IEnumerationPropertyViewDescriptor {

@@ -37,7 +37,6 @@ import org.jspresso.framework.util.swing.SwingUtil;
 /**
  * Default implementation of {@code IListSelectionModelBinder}.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class DefaultListSelectionModelBinder implements

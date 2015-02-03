@@ -21,7 +21,6 @@ package org.jspresso.framework.util.gate;
 /**
  * Base class for all collection based selection tracking gates.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @internal
  */

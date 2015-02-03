@@ -21,7 +21,6 @@ package org.jspresso.framework.util.ldap;
 /**
  * Constants for Jspresso LDAP attributes naming.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class LdapConstants {

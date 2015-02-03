@@ -25,7 +25,6 @@ import org.jspresso.framework.model.component.IComponentFactory;
 /**
  * This interface defines the contract of an entities factory.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IEntityFactory extends IComponentFactory {

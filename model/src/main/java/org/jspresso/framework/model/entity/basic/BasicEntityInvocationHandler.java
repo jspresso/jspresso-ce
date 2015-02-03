@@ -42,7 +42,6 @@ import org.jspresso.framework.util.accessor.IAccessorFactory;
  * This is the core implementation of all entities in the application. Instances
  * of this class serve as handlers for proxies representing the entities.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicEntityInvocationHandler extends

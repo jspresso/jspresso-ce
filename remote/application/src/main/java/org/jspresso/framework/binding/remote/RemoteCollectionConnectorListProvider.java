@@ -35,7 +35,6 @@ import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 /**
  * The server peer of a remote collection connector list provider.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteCollectionConnectorListProvider extends

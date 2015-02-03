@@ -37,7 +37,6 @@ import org.jspresso.framework.application.frontend.file.IFileCallback;
  * {@code org.jspresso.framework.application.frontend.action.}<b>
  * {@code [ui]}</b>{@code .file.SaveFileAction}
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class ChooseFileAction extends AbstractRemoteAction {

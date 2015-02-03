@@ -29,7 +29,6 @@ import java.lang.annotation.Target;
  * Allows to configure computed properties dependencies.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

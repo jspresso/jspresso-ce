@@ -23,7 +23,6 @@ import java.util.Collection;
 /**
  * Accessible using gates.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IGateAccessible {

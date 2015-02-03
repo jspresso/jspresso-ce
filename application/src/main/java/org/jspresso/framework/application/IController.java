@@ -34,7 +34,6 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * Controllers implement the interface since their main role is to execute
  * application actions.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IController extends IActionHandler, IPropertyChangeCapable {

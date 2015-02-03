@@ -21,7 +21,6 @@ package org.jspresso.framework.util.gate;
 /**
  * An always closed gate.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class ClosedGate extends AbstractGate {

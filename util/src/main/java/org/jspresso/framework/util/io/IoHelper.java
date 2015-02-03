@@ -25,7 +25,6 @@ import java.io.OutputStream;
 /**
  * This is a simple helper class for IO operations.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class IoHelper {

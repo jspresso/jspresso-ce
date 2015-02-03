@@ -21,7 +21,6 @@ package org.jspresso.framework.util.gui;
 /**
  * This is a simple helper class to deal with color representations.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class ColorHelper {

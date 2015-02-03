@@ -23,7 +23,6 @@ import java.sql.Timestamp;
 /**
  * Helper class for objects operations.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class ObjectUtils {

@@ -23,7 +23,6 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
 /**
  * This exception is thrown whenever an exception occurs during connector usage.
  * 
- * @version $LastChangedRevision$
  * @see org.jspresso.framework.binding.IValueConnector#getConnectorValue()
  * @see org.jspresso.framework.binding.IValueConnector#setConnectorValue(Object)
  * @author Vincent Vandenschrick

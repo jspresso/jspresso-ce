@@ -27,7 +27,6 @@ import org.jspresso.framework.view.descriptor.basic.BasicTreeViewDescriptor;
 /**
  * This is a default implementation of a simple workspace view descriptor.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @internal
  */

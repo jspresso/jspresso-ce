@@ -43,7 +43,6 @@ import org.slf4j.LoggerFactory;
 /**
  * This connector is a model property connector.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class ModelPropertyConnector extends AbstractValueConnector

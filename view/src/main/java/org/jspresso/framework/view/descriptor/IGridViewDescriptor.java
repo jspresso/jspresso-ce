@@ -22,7 +22,6 @@ package org.jspresso.framework.view.descriptor;
  * This public interface is implemented by any composite view descriptor
  * organizing their contained descriptors in a grid way.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IGridViewDescriptor extends ICompositeViewDescriptor {

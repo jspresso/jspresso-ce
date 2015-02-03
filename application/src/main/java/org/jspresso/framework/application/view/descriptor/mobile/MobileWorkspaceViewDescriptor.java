@@ -29,7 +29,6 @@ import org.jspresso.framework.view.descriptor.mobile.MobileTreeViewDescriptor;
 /**
  * This is a default implementation of a mobile workspace view descriptor.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @internal
  */

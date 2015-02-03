@@ -23,7 +23,6 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
 /**
  * A command to request back navigation.
  * 
- * @version $LastChangedRevision: 5621 $
  * @author Vincent Vandenschrick
  */
 public class RemoteBackCommand extends RemoteCommand {

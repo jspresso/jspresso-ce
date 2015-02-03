@@ -25,7 +25,6 @@ import org.jspresso.framework.util.automation.IPermIdSource;
 /**
  * An object remote server peer.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class RemotePeer implements IRemotePeer, IPermIdSource,

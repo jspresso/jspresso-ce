@@ -22,7 +22,6 @@ package org.jspresso.framework.application.backend.session;
  * Simple interface that is implemented by objects that can be assigned an
  * application session.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IApplicationSessionAware {

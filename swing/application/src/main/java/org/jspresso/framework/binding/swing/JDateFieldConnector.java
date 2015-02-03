@@ -30,7 +30,6 @@ import org.jspresso.framework.gui.swing.components.JDateField;
 /**
  * JDateField connector.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class JDateFieldConnector extends JComponentConnector<JDateField> {

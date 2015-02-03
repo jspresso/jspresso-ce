@@ -21,7 +21,6 @@ package org.jspresso.framework.application.frontend.command.remote;
 /**
  * A command to trigger a modal remote dialog pop-up to display a flash movie.
  * 
- * @version $LastChangedRevision: 1873 $
  * @author Vincent Vandenschrick
  */
 public class RemoteFlashDisplayCommand extends RemoteAbstractDialogCommand {

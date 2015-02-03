@@ -25,7 +25,6 @@ import org.jspresso.framework.util.i18n.basic.MessageSourceTranslationProvider;
 /**
  * Mock implementation returning the passed key.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class MockTranslationProvider extends MessageSourceTranslationProvider {

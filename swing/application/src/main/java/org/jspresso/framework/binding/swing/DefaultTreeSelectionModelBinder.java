@@ -41,7 +41,6 @@ import org.jspresso.framework.util.swing.SwingUtil;
 /**
  * Default implementation of {@code ITreeSelectionModelBinder}.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class DefaultTreeSelectionModelBinder implements

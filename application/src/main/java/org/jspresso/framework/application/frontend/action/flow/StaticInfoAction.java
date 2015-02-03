@@ -12,7 +12,6 @@ import org.jspresso.framework.action.IActionHandler;
  * instead of being extracted out of the context, is parametrized statically
  * into the action through its internationalization key.
  * 
- * @version $LastChangedRevision: 2097 $
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

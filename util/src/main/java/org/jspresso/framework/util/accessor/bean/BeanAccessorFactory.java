@@ -28,7 +28,6 @@ import org.jspresso.framework.util.bean.PropertyHelper;
 /**
  * This is the default implementation of the accessor factory.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BeanAccessorFactory extends AbstractAccessorFactory {

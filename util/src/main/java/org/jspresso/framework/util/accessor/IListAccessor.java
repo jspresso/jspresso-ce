@@ -23,7 +23,6 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * This interface is implemented by any bean value accessor on a list property.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IListAccessor extends ICollectionAccessor {

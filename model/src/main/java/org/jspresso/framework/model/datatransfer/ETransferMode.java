@@ -21,7 +21,6 @@ package org.jspresso.framework.model.datatransfer;
 /**
  * This enumeration defines all the supported transfer types.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public enum ETransferMode {

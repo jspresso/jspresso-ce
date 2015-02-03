@@ -28,7 +28,6 @@ import org.jspresso.framework.model.component.IComponent;
  * providing id accessors.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public interface IEntity extends IComponent {
 

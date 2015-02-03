@@ -15,7 +15,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
  * Concrete backend implementation of a change password action where password is
  * stored in a relational database.
  * 
- * @version $LastChangedRevision: 2097 $
  * @author Vincent Vandenschrick
  */
 public class DatabaseChangePasswordAction extends AbstractChangePasswordAction {

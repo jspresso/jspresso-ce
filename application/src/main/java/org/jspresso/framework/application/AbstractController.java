@@ -47,7 +47,6 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * session as well as transactions and persistence operations.</li>
  * </ul>
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractController extends AbstractPropertyChangeCapable

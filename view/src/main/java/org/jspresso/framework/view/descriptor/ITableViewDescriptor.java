@@ -27,7 +27,6 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * instance, the described view can be a swing JTable presenting a collection of
  * java beans.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface ITableViewDescriptor extends ICollectionViewDescriptor {

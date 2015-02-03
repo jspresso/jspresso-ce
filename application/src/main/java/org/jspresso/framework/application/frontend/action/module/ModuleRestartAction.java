@@ -32,7 +32,6 @@ import org.jspresso.framework.application.model.Module;
  * This action is used to restart a module. It cleans its children and executes
  * its startup action.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

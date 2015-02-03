@@ -27,7 +27,6 @@ import org.jspresso.framework.util.url.UrlHelper;
 /**
  * An URL resource.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class UrlResource extends AbstractResource {

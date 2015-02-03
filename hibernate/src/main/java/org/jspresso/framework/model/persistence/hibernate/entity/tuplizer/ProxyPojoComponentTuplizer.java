@@ -30,7 +30,6 @@ import org.jspresso.framework.model.component.IComponentFactory;
 /**
  * A specialized hibernate tuplizer to handle proxy components.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ProxyPojoComponentTuplizer extends PojoComponentTuplizer {

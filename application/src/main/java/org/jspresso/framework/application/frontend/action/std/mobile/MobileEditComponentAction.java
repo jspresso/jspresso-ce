@@ -34,7 +34,6 @@ import org.jspresso.framework.view.descriptor.mobile.MobileBorderViewDescriptor;
  * This is the mobile version of the edit component action.
  * {@code okAction} and {@code cancelAction}) are added as page actions instead of dialog ones.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

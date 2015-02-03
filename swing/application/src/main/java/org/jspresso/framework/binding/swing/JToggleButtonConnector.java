@@ -26,7 +26,6 @@ import javax.swing.JToggleButton;
 /**
  * JToggleButton connector.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual toggle button class.

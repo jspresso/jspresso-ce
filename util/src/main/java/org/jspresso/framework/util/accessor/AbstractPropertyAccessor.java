@@ -30,7 +30,6 @@ import org.jspresso.framework.util.bean.PropertyHelper;
  * Abstract class for property accessors.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public abstract class AbstractPropertyAccessor implements IAccessor {
 

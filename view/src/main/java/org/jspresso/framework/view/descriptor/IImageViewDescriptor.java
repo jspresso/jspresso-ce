@@ -24,7 +24,6 @@ import org.jspresso.framework.util.image.IScalableImageAware;
  * This public interface is implemented by any image view descriptor.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public interface IImageViewDescriptor extends IScrollableViewDescriptor, IPropertyViewDescriptor, IScalableImageAware {
 

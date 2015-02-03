@@ -32,7 +32,6 @@ import org.jspresso.framework.util.remote.RemotePeer;
 /**
  * This class is the generic server peer of a client GUI component.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class RComponent extends RemotePeer implements

@@ -25,7 +25,6 @@ import org.jspresso.framework.util.bean.SinglePropertyChangeSupport;
 /**
  * A container with tabbed children views.
  * 
- * @version $LastChangedRevision: 1486 $
  * @author Vincent Vandenschrick
  */
 public class RTabContainer extends RContainer {

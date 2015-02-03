@@ -46,7 +46,6 @@ import org.jspresso.framework.model.entity.IEntity;
  * This class is a model property connector which manages a model reference
  * property.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 

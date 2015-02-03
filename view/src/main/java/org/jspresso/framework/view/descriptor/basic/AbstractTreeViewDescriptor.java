@@ -38,7 +38,6 @@ import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
  * {@code grantedRoles}) on its descriptor.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public abstract class AbstractTreeViewDescriptor extends BasicViewDescriptor implements ITreeViewDescriptor {
 

@@ -31,7 +31,6 @@ import org.jspresso.framework.binding.IValueConnector;
 /**
  * This is a utility class to help connector tree management.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class ConnectorTreeHelper {

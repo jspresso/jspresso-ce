@@ -30,7 +30,6 @@ import java.util.EventObject;
  * (such as Integer or Boolean). Null values may be provided for the old and the
  * new values if their true values are not known.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ModelChangeEvent extends EventObject {

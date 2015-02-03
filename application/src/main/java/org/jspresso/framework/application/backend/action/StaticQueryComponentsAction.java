@@ -28,7 +28,6 @@ import org.jspresso.framework.model.component.query.QueryComponentMatcher;
  * This action filters an arbitrary component list against the query component using a query component matcher.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision: 9079 $
  */
 public class StaticQueryComponentsAction extends AbstractQueryComponentsAction {
 

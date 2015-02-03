@@ -26,7 +26,6 @@ import java.util.List;
 /**
  * This is a utility class to easily work on connector trees.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class ConnectorHelper {

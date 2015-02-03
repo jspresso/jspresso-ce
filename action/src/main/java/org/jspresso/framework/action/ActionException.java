@@ -24,7 +24,6 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
  * This exception is thrown whenever an unexpected exception occurs on an
  * action.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ActionException extends NestedRuntimeException {

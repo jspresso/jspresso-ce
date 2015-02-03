@@ -21,7 +21,6 @@ package org.jspresso.framework.view.descriptor;
 /**
  * Enumeration for horizontal alignment constants.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public enum EHorizontalAlignment {

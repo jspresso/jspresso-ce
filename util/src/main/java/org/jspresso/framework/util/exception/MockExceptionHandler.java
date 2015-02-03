@@ -23,7 +23,6 @@ import java.util.Map;
 /**
  * A no-op exception handler.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class MockExceptionHandler implements IExceptionHandler {

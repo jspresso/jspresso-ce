@@ -59,7 +59,6 @@ import org.jspresso.framework.view.IView;
  * editor.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class SwingViewCellEditorAdapter extends AbstractCellEditor implements TableCellEditor, TreeCellEditor {
 

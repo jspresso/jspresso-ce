@@ -31,7 +31,6 @@ import freemarker.template.TemplateModelException;
  * Dedups the SQL identifiers.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision: 5621 $
  */
 @SuppressWarnings("rawtypes")
 public class DedupSqlName implements TemplateMethodModelEx {

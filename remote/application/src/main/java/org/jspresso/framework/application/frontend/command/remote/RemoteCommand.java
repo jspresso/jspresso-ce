@@ -23,7 +23,6 @@ import java.io.Serializable;
 /**
  * A remote command to pilot the remote frontend.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class RemoteCommand implements Serializable {

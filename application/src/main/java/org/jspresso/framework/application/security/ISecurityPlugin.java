@@ -25,7 +25,6 @@ import org.jspresso.framework.security.ISecurable;
 /**
  * A delegate plugin used to implement dynamic security algorithm.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("UnusedParameters")

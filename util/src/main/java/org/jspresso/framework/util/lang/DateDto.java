@@ -23,7 +23,6 @@ import java.io.Serializable;
 /**
  * A date DTO that is insensible to timezones.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class DateDto implements Serializable {

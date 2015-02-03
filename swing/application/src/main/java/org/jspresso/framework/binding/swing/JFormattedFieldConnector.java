@@ -33,7 +33,6 @@ import org.jspresso.framework.util.format.IFormatter;
  * representation contained in the text component will be used "as is" as the
  * connector value.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class JFormattedFieldConnector extends JTextFieldConnector {

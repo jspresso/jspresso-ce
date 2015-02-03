@@ -36,7 +36,6 @@ import org.jspresso.framework.application.backend.session.EMergeMode;
  * A specialized thread dedicated to executing asynchronous actions. It is able
  * to record the action progress.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class AsyncActionExecutor extends Thread {

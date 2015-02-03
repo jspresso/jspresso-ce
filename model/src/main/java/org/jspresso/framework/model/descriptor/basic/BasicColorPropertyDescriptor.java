@@ -28,7 +28,6 @@ import org.jspresso.framework.model.descriptor.IColorPropertyDescriptor;
  * {@code ColorHelper} helper class eases colors manipulation and helps
  * converting to/from their hexadecimal representation.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicColorPropertyDescriptor extends BasicScalarPropertyDescriptor

@@ -21,7 +21,6 @@ package org.jspresso.framework.util.scripting;
 /**
  * Utility class helping to bring scripting capability in an object.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ScriptMixin implements IScript {

@@ -26,7 +26,6 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
 /**
  * A mock for SaveFileAction.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

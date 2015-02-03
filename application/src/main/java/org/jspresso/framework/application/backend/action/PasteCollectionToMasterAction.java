@@ -38,7 +38,6 @@ import org.jspresso.framework.model.entity.IEntityCloneFactory;
  * components have been previously <i>cut</i>, the paste action will simply use
  * the exact same instances as the one placed on the clipboard.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class PasteCollectionToMasterAction extends

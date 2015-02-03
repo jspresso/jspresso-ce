@@ -34,7 +34,6 @@ import org.jspresso.framework.util.gate.IGateAccessible;
  * This interface is implemented by descriptors of components (java bean style).
  * Its is basically a composite of {@code IPropertyDescriptor}s.
  *
- * @version $LastChangedRevision$
  * @see IPropertyDescriptor
  * @author Vincent Vandenschrick
  * @param <E>

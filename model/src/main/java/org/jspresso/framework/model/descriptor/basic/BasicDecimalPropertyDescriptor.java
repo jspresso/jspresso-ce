@@ -28,7 +28,6 @@ import org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor;
  * {@code Double} or as a {@code BigDecimal} depending on the
  * {@code usingBigDecimal} property.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicDecimalPropertyDescriptor extends

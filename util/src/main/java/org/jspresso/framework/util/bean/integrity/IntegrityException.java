@@ -24,7 +24,6 @@ import org.jspresso.framework.util.exception.BusinessException;
  * This exception is thrown whenever an integrity problem occurs on an component
  * modification.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class IntegrityException extends BusinessException {

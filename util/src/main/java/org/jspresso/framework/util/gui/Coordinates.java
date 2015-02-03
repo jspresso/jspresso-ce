@@ -23,7 +23,6 @@ import java.io.Serializable;
 /**
  * a simple holder for 2D coordinates.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class Coordinates implements Serializable {

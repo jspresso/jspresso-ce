@@ -23,7 +23,6 @@ import org.jspresso.framework.gui.remote.RTabContainer;
 /**
  * A remote mobile tab component.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RMobileTabContainer extends RTabContainer {

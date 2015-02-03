@@ -22,7 +22,6 @@ package org.jspresso.framework.view.descriptor;
  * This public interface is implemented by view descriptors which are
  * scrollable.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IScrollableViewDescriptor extends IViewDescriptor {

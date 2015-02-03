@@ -13,7 +13,6 @@ import org.jspresso.framework.application.frontend.action.std.EditComponentActio
  * controller itself. It is used, for instance, to display the running
  * asynchronous actions.
  * 
- * @version $LastChangedRevision: 5621 $
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

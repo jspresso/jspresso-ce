@@ -30,7 +30,6 @@ import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
 /**
  * Used to register Jspresso global filter.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class JspressoLocalSessionFactoryBean extends LocalSessionFactoryBean {

@@ -33,7 +33,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * Default cascading order follows the order of nested view registrations in the
  * container.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor

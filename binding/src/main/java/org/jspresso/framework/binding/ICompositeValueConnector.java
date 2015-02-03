@@ -24,7 +24,6 @@ import java.util.Collection;
  * This is the interface implemented by connectors nesting other connectors
  * (composite).
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface ICompositeValueConnector extends IValueConnector {

@@ -25,7 +25,6 @@ import org.jspresso.framework.security.ISecurable;
 /**
  * A very permissive security plugin.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class MockSecurityPlugin implements ISecurityPlugin {

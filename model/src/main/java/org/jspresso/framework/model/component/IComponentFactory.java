@@ -27,7 +27,6 @@ import org.jspresso.framework.util.accessor.IAccessorFactory;
 /**
  * This interface defines the contract of a component factory.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IComponentFactory extends IComponentDescriptorRegistry {

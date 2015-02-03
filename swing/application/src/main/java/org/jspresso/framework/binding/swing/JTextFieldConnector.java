@@ -26,7 +26,6 @@ import javax.swing.JTextField;
 /**
  * JTextField connector.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class JTextFieldConnector extends JTextComponentConnector<JTextField> {

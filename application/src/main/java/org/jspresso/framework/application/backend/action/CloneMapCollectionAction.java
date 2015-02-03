@@ -32,7 +32,6 @@ import org.jspresso.framework.util.collection.ObjectEqualityMap;
  * contains the same key/value pairs as the maps to clone. Executing this action
  * will result in adding the cloned map to the underlying model collection.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class CloneMapCollectionAction extends AddMapToMasterAction {

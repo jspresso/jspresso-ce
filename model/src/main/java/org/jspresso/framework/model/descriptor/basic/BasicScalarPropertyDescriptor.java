@@ -28,7 +28,6 @@ import org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor;
  * not relationship end properties. This includes, for instance, strings,
  * numbers, dates, binary content, and so on.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class BasicScalarPropertyDescriptor extends

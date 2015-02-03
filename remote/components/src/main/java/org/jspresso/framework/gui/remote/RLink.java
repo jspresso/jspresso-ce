@@ -21,7 +21,6 @@ package org.jspresso.framework.gui.remote;
 /**
  * A remote link component.
  * 
- * @version $LastChangedRevision: 2669 $
  * @author Vincent Vandenschrick
  */
 public class RLink extends RLabel implements RActionable {

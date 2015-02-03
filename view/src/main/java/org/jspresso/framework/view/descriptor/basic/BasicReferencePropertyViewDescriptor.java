@@ -29,7 +29,6 @@ import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
  * or field in a component view.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class BasicReferencePropertyViewDescriptor extends BasicStringPropertyViewDescriptor
     implements IReferencePropertyViewDescriptor {

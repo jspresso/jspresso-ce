@@ -33,7 +33,6 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptorRegistry;
  * Default implementation based on spring application context.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class BasicComponentDescriptorRegistry implements IComponentDescriptorRegistry, ApplicationContextAware {
 

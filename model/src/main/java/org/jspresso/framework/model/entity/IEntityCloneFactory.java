@@ -23,7 +23,6 @@ import org.jspresso.framework.model.component.IComponent;
 /**
  * A factory to clone entities.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IEntityCloneFactory {

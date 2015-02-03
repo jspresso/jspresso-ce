@@ -27,7 +27,6 @@ import org.jspresso.framework.model.component.IQueryComponent;
 /**
  * Empty refiner.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class MockQueryRefiner implements IQueryRefiner {

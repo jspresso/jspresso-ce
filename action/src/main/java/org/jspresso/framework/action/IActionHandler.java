@@ -33,7 +33,6 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * actions (controllers for instance). No assumption is made on whether this
  * action is to be executed (a)synchronously, transactionally, ...
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IActionHandler extends IExceptionHandler, ISecurityHandler,

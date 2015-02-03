@@ -21,7 +21,6 @@ package org.jspresso.framework.view.descriptor;
 /**
  * Axis grid view constants.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public enum EAxis {

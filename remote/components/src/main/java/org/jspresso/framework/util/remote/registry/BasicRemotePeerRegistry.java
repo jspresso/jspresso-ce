@@ -38,7 +38,6 @@ import org.slf4j.LoggerFactory;
  * The basic implementation of a remote peer registry. It is stored by a
  * reference map so that it is memory neutral.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicRemotePeerRegistry implements IRemotePeerRegistry {

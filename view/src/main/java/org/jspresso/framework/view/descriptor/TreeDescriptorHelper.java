@@ -23,7 +23,6 @@ import java.util.List;
 /**
  * This is a helper class for tree descriptor management.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class TreeDescriptorHelper {

@@ -11,7 +11,6 @@ import java.util.Map;
  * filled using files. Typically, binary property descriptors and text property
  * descriptors implement this interface.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IFileFilterable {

@@ -38,7 +38,6 @@ import org.jspresso.framework.model.entity.IEntity;
  * object from the persistent store</b>. The bean module is also removed from
  * it's parent accordingly.
  * 
- * @version $LastChangedRevision: 3905 $
  * @author Vincent Vandenschrick
  */
 public class RemoveModuleObjectAction extends AbstractCollectionAction {

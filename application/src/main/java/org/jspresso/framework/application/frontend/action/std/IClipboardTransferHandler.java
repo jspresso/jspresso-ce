@@ -24,7 +24,6 @@ import java.util.List;
  * An interface to handle various string flavors of a component collection in
  * order to transfer them to the clipboard.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IClipboardTransferHandler {

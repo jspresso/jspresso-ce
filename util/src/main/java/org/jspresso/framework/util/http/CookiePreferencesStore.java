@@ -25,7 +25,6 @@ import org.jspresso.framework.util.preferences.IPreferencesStore;
 /**
  * An implementation of preference store relying on browser cookies.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class CookiePreferencesStore implements IPreferencesStore {

@@ -22,7 +22,6 @@ package org.jspresso.framework.util.gui;
  * This interface is implemented by classes which provide a mapping between two
  * sets of indices (identified as model and view index sets).
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IIndexMapper {

@@ -25,7 +25,6 @@ import org.jspresso.framework.gui.remote.RComponent;
  * A mobile nav page.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class RMobileCompositePage extends RMobilePage {
 

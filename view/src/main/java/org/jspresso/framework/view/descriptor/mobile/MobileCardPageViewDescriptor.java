@@ -28,7 +28,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * A card view descriptor that aggregates other pages as card.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class MobileCardPageViewDescriptor  extends AbstractMobilePageViewDescriptor {
 

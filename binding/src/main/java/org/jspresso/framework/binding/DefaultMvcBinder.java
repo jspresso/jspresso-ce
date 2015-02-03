@@ -21,7 +21,6 @@ package org.jspresso.framework.binding;
 /**
  * This class is a helper for connector bindings for an MVC relationship.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class DefaultMvcBinder implements IMvcBinder {

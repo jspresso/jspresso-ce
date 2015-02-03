@@ -33,7 +33,6 @@ import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
 /**
  * Helper class for property view descriptors.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class PropertyViewDescriptorHelper {

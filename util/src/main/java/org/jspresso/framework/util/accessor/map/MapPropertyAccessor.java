@@ -26,7 +26,6 @@ import org.jspresso.framework.util.accessor.AbstractPropertyAccessor;
  * This class is the default implementation of property accessors. It relies on
  * Jakarta commons beanutils.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class MapPropertyAccessor extends AbstractPropertyAccessor {

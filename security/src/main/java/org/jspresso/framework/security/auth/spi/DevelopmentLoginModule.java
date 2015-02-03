@@ -44,7 +44,6 @@ import org.jspresso.framework.util.security.LoginUtils;
  * A development login module with configuration parametrized user, password,
  * roles and custom properties.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class DevelopmentLoginModule implements LoginModule {

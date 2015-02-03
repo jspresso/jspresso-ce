@@ -42,7 +42,6 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
  * @param <T>
  *     the parametrized component class on which these extensions work on.
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public abstract class AbstractComponentExtension<T extends IComponent>
     implements IComponentExtension<T>, IComponentFactoryAware {

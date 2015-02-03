@@ -44,7 +44,6 @@ import org.jspresso.framework.util.bean.PropertyHelper;
  * strategy which update the property values without firing anything but a
  * {@code PropertyChangeEvent} in case the actual property value changed.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("rawtypes")
@@ -70,8 +69,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
    * Implements the getter strategy on the entity proxy implementation to be
    * used by hibernate.
    * 
-   * @version $LastChangedRevision$
-   * @author Vincent Vandenschrick
+     * @author Vincent Vandenschrick
    */
   private static final class EntityPropertyGetter implements Getter {
 
@@ -159,8 +157,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
    * Implements the setter strategy on the entity proxy implementation to be
    * used by hibernate.
    * 
-   * @version $LastChangedRevision$
-   * @author Vincent Vandenschrick
+     * @author Vincent Vandenschrick
    */
   private static final class EntityPropertySetter implements Setter {
 

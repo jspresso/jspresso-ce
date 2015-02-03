@@ -26,7 +26,6 @@ import org.jspresso.framework.util.descriptor.IDescriptor;
 /**
  * Defines the contract of a report instance.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IReport extends IDescriptor {

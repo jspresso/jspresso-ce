@@ -25,7 +25,6 @@ import org.jspresso.framework.util.bean.AccessorInfo;
 /**
  * This interface specify the contract of property accessor factories.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IAccessorFactory {

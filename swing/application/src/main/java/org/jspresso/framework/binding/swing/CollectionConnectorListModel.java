@@ -36,7 +36,6 @@ import org.jspresso.framework.util.swing.SwingUtil;
  * expected, this list model will fire necessary events depending on connectors
  * received events.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class CollectionConnectorListModel extends AbstractListModel<IValueConnector> {

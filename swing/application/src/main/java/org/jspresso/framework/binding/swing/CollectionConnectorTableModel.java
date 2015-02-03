@@ -43,7 +43,6 @@ import org.jspresso.framework.util.swing.SwingUtil;
  * received events. Its column are determined by the prototype connector which
  * serves as model for the table rows.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class CollectionConnectorTableModel extends AbstractTableModel {

@@ -30,7 +30,6 @@ import org.jspresso.framework.util.collection.IPageable;
 /**
  * PageableDescriptor singleton.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class PageableDescriptor {

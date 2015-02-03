@@ -53,7 +53,6 @@ import org.jspresso.framework.util.bean.PropertyHelper;
  * Custom converter for Jspresso entities.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class JspressoEntityReadConverter
     implements ConditionalGenericConverter, ApplicationListener<ContextRefreshedEvent> {

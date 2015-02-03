@@ -28,7 +28,6 @@ import java.lang.annotation.Target;
 /**
  * Make a backend action asynchronous.
  * 
- * @version $LastChangedRevision: 5621 $
  * @author Vincent Vandenschrick
  */
 @Retention(RetentionPolicy.RUNTIME)

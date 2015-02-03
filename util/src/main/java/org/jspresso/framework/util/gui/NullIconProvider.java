@@ -21,7 +21,6 @@ package org.jspresso.framework.util.gui;
 /**
  * Always return null icons.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class NullIconProvider implements IconProvider {

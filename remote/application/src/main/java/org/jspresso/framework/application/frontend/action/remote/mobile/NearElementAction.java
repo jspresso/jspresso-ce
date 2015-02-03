@@ -30,7 +30,6 @@ import org.jspresso.framework.binding.ICollectionConnectorProvider;
  * Selects next / previous element.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class NearElementAction extends AbstractRemoteAction {
 

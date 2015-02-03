@@ -30,7 +30,6 @@ import org.jspresso.framework.util.format.ParsingException;
  * This is a basic implementation of a formatted value connector built with a
  * formatter.
  * 
- * @version $LastChangedRevision: 1249 $
  * @author Vincent Vandenschrick
  */
 public class BasicFormattedValueConnector extends BasicValueConnector implements

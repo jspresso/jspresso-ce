@@ -9,7 +9,6 @@ import org.springframework.ldap.core.LdapTemplate;
  * Root abstract class of actions that deal with LDAP directory. It's only
  * purpose is to standardize the use of Spring {@code LdapTemplate}.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractLdapAction extends BackendAction implements

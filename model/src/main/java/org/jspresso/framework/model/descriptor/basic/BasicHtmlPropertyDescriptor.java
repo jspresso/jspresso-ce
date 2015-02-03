@@ -24,7 +24,6 @@ import org.jspresso.framework.model.descriptor.IHtmlPropertyDescriptor;
  * Describes a property as handing HTML content. This instructs Jspresso to
  * display the property value as HTML instead of raw text content.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicHtmlPropertyDescriptor extends BasicTextPropertyDescriptor

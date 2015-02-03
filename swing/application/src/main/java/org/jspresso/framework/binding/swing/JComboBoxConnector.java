@@ -26,7 +26,6 @@ import javax.swing.JComboBox;
 /**
  * JComboBox connector.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class JComboBoxConnector extends JComponentConnector<JComboBox<String>> {

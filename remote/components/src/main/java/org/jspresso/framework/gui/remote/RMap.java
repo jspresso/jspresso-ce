@@ -21,7 +21,6 @@ package org.jspresso.framework.gui.remote;
 /**
  * A remote map component.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RMap extends RComponent {

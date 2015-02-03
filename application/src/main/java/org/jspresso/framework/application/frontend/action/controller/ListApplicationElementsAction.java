@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
  * available along with their permIds. This is particularly useful to set-up the
  * base of security referential setup.
  * 
- * @version $LastChangedRevision: 3701 $
  * @author Vincent Vandenschrick
 
  * @param <E>

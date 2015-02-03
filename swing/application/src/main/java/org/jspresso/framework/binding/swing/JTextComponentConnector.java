@@ -30,7 +30,6 @@ import org.apache.commons.lang.StringUtils;
  * This abstract class serves as the base class for all JTextComponent
  * connectors.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          The actual class of the subclass of {@code JTextComponent}.

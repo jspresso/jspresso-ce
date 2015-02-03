@@ -23,7 +23,6 @@ package org.jspresso.framework.view.descriptor;
  * implementation of the described view could be a swing JPanel using a card
  * layout.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface ICardViewDescriptor extends IViewDescriptor,

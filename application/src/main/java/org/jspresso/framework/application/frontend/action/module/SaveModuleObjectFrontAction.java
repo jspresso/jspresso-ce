@@ -41,7 +41,6 @@ import org.jspresso.framework.util.gate.IGate;
  * @param <G>
  *     the actual action type used.
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision: 7120 $
  */
 public class SaveModuleObjectFrontAction<E, F, G> extends FrontendAction<E, F, G> {
 

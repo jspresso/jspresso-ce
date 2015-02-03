@@ -32,7 +32,6 @@ import org.jspresso.framework.model.entity.IEntityRegistry;
  * Basic implementation of an entity registry backed by an HashMap of weak
  * reference values.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicEntityRegistry implements IEntityRegistry {

@@ -12,7 +12,6 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * the method "getI18nMessage" might be overridden.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public abstract class BusinessException extends RuntimeException {
 

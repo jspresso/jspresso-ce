@@ -33,7 +33,6 @@ import org.jspresso.framework.view.descriptor.mobile.MobileListViewDescriptor;
 /**
  * A default implementation for lov result view factories.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class MobileLovResultViewDescriptorFactory extends

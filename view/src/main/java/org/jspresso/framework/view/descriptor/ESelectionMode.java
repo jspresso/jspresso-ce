@@ -21,7 +21,6 @@ package org.jspresso.framework.view.descriptor;
 /**
  * Selection mode constants.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public enum ESelectionMode {

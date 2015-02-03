@@ -33,7 +33,6 @@ import org.jspresso.framework.model.entity.IEntity;
  * a problem with determination of the subclass entity name when using dynamic
  * proxies.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class EntityProxyUnionSubclassEntityPersister extends

@@ -22,7 +22,6 @@ package org.jspresso.framework.util.uid;
  * Default implementation of IGUIDGenerator based on Marc A. Mnich RandomGUID
  * implementation.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RandomStringGUIDGenerator implements IGUIDGenerator<String> {

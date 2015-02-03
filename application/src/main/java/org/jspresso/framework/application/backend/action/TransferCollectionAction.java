@@ -30,7 +30,6 @@ import org.jspresso.framework.model.datatransfer.ETransferMode;
  * An action used to register a collection of domain objects into the
  * application's clipboard along with a transfer mode semantics.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class TransferCollectionAction extends BackendAction {

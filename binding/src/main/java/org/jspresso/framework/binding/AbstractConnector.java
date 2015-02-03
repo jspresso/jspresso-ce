@@ -24,7 +24,6 @@ import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
  * This abstract class holds some default implementation for connector. All the
  * default connectors inherit from this default behaviour.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 

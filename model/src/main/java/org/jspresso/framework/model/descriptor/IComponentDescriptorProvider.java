@@ -25,7 +25,6 @@ import org.jspresso.framework.security.ISecurable;
 /**
  * Marks classes capable of providing a component descriptor.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the concrete component type.

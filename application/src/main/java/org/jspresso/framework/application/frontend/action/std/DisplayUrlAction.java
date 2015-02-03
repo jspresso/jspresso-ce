@@ -29,7 +29,6 @@ import org.jspresso.framework.util.url.UrlHelper;
  * URL is a composition of a static parametrized prefix ({@code baseUrl})
  * and a dynamic part taken from the action context parameter.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

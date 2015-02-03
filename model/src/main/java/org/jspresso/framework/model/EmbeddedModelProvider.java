@@ -8,7 +8,6 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 /**
  * A simple standalone model provider.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class EmbeddedModelProvider implements IModelProvider {

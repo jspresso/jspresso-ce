@@ -29,7 +29,6 @@ import org.jspresso.framework.util.gui.Dimension;
 /**
  * A factory for actions.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual action class created.

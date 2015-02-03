@@ -30,7 +30,6 @@ import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescripto
  * Does a "carbon" copy of the entity including its id and version. This factory
  * is used only for technical purposes.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class CarbonEntityCloneFactory implements IEntityCloneFactory {

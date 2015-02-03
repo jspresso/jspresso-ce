@@ -23,7 +23,6 @@ import java.util.Map;
 /**
  * The interface implemented by script executors.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IScriptHandler {

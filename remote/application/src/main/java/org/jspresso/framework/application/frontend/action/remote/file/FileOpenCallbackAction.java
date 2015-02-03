@@ -32,7 +32,6 @@ import org.jspresso.framework.util.resources.server.ResourceManager;
  * An (internal) action to trigger the file open callback.
  * 
  * @internal
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class FileOpenCallbackAction extends AbstractRemoteAction {

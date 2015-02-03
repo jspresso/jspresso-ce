@@ -29,7 +29,6 @@ import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
  * A principal to represent a application user. This principal is able to store
  * some extra properties.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class UserPrincipal extends AbstractPropertyChangeCapable implements

@@ -23,7 +23,6 @@ package org.jspresso.framework.model.descriptor;
  * stored as hex string in the form "0xFFFFFF" if alpha (transparency) is not
  * used and "0xFFFFFFFF" if alpha is used.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IColorPropertyDescriptor extends IScalarPropertyDescriptor {

@@ -21,7 +21,6 @@ package org.jspresso.framework.model.descriptor.basic;
 /**
  * Relationship fetch policy.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public enum EFetchType {

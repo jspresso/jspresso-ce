@@ -23,7 +23,6 @@ import java.io.Serializable;
 /**
  * A remote action event.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RActionEvent implements Serializable {

@@ -29,7 +29,6 @@ import org.jspresso.framework.util.gui.ColorHelper;
 /**
  * JColorPickerConnector connector.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class JColorPickerConnector extends JComponentConnector<JColorPicker> {

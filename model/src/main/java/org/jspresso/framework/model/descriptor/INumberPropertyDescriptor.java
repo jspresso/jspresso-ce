@@ -23,7 +23,6 @@ import java.math.BigDecimal;
 /**
  * This interface is the super-interface of all number property descriptors.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface INumberPropertyDescriptor extends IScalarPropertyDescriptor {

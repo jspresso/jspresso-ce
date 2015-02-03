@@ -80,7 +80,6 @@ import org.jspresso.framework.util.sql.SqlHelper;
  * @param <E>
  *     the concrete type of components.
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescriptor
     implements IComponentDescriptor<E>, BeanFactoryAware {

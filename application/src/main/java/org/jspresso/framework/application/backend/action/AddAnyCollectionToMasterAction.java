@@ -30,7 +30,6 @@ import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
  * object. The details to add are taken from the action context through the
  * {@code ActionParameter} context value.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class AddAnyCollectionToMasterAction extends

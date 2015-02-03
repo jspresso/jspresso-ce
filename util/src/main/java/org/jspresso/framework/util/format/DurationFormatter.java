@@ -30,7 +30,6 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 /**
  * A formatter / parser to deal with duration properties.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class DurationFormatter implements IFormatter<Number, String> {

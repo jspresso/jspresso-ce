@@ -21,7 +21,6 @@ package org.jspresso.framework.util.preferences;
 /**
  * The generic contract for a preferences store.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IPreferencesStore {

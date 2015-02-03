@@ -48,7 +48,6 @@ import org.jspresso.framework.util.swing.SwingUtil;
  * component is represented by a text field and a button. Actioning the button
  * or the text field triggers the action.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class JActionField extends JPanel {

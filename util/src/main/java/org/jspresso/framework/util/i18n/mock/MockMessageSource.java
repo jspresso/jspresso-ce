@@ -26,7 +26,6 @@ import org.springframework.context.MessageSourceResolvable;
 /**
  * Mock implementation of a spring message source.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class MockMessageSource implements MessageSource {

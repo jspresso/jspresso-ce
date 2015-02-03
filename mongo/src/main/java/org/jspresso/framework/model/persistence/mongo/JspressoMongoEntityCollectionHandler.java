@@ -42,7 +42,6 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
  * Collection proxy invocation handler.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public abstract class JspressoMongoEntityCollectionHandler implements InvocationHandler {
 

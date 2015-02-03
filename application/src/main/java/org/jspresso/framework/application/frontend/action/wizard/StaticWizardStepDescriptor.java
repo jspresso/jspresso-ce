@@ -14,7 +14,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 /**
  * A static wizard step.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class StaticWizardStepDescriptor implements IWizardStepDescriptor {

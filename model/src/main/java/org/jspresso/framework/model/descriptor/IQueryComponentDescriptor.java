@@ -23,7 +23,6 @@ import org.jspresso.framework.model.component.IComponent;
 /**
  * Component descriptor of query components.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IQueryComponentDescriptor {

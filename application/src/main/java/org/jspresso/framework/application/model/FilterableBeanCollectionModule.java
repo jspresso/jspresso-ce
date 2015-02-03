@@ -49,7 +49,6 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
  * with a generic, built-in, action map is perfectly suited for CRUD-like
  * operations.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class FilterableBeanCollectionModule extends BeanCollectionModule

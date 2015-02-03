@@ -39,7 +39,6 @@ import org.jspresso.framework.util.swing.SwingUtil;
  * This tree model maps a connector hierarchy.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
     TreeModelListener {

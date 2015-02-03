@@ -24,7 +24,6 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
  * This exception is thrown whenever an unexpected exception occurs on a
  * descriptor.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class DescriptorException extends NestedRuntimeException {

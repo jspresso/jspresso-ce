@@ -27,7 +27,6 @@ import org.jspresso.framework.view.IView;
  * This action is meant to trigger editing on the current collection view
  * whenever a single element is selected.
  * 
- * @version $LastChangedRevision: 5814 $
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

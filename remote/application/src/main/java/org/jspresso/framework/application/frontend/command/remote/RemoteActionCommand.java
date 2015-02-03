@@ -23,7 +23,6 @@ import org.jspresso.framework.gui.remote.RActionEvent;
 /**
  * A command to trigger a remote action.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteActionCommand extends RemoteCommand {

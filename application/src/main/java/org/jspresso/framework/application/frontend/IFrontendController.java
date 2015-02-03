@@ -47,7 +47,6 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * @param <G>
  *     the actual action type used.
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public interface IFrontendController<E, F, G> extends IController, IIconDescriptor, IActionable {
 

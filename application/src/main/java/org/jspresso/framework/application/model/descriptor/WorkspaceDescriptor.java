@@ -33,7 +33,6 @@ import org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescript
 /**
  * The model descriptor of workspace objects.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @internal
  */

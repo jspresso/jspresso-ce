@@ -37,7 +37,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * descriptor so that the collection to display is directly inferred from the
  * collection property value through the binding layer.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor

@@ -25,7 +25,6 @@ import org.jspresso.framework.util.accessor.ICollectionAccessor;
 /**
  * This is the map implementation of the accessor factory.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class MapAccessorFactory extends AbstractAccessorFactory {

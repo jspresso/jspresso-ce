@@ -29,7 +29,6 @@ import org.jspresso.framework.binding.IValueConnector;
  * assigns it as value to the targeted connector. The connector to target is
  * itself retrieved from the action context using a parametrized key.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

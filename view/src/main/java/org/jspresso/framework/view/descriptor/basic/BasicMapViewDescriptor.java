@@ -23,7 +23,6 @@ import org.jspresso.framework.view.descriptor.IMapViewDescriptor;
 /**
  * This descriptor is used to implement a map view.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicMapViewDescriptor extends BasicViewDescriptor

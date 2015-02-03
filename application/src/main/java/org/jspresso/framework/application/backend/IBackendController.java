@@ -51,7 +51,6 @@ import org.jspresso.framework.util.accessor.IAccessorFactory;
  * opposed to frontend controllers which act on the application view).
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public interface IBackendController
     extends IController, IEntityLifecycleHandler, TransactionSynchronization, IBackendControllerFactory {

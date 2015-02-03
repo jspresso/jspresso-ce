@@ -28,7 +28,6 @@ import java.util.List;
  * 
  * @see org.jspresso.framework.binding.model.ModelCollectionPropertyConnector
  * @see org.jspresso.framework.binding.AbstractCollectionConnector
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class CollectionConnectorHelper {

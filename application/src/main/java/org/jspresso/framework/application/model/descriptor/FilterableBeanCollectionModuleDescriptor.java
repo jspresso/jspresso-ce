@@ -30,7 +30,6 @@ import org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescr
 /**
  * The model descriptor for filterable bean collection modules.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class FilterableBeanCollectionModuleDescriptor extends

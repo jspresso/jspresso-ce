@@ -34,7 +34,6 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * A simple query structure which holds selection tick, a value and a
  * translation.
  * 
- * @version $LastChangedRevision: 5621 $
  * @author Vincent Vandenschrick
  */
 public class EnumQueryStructure extends AbstractPropertyChangeCapable {

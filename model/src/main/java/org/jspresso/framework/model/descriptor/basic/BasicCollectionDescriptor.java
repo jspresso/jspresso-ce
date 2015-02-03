@@ -41,7 +41,6 @@ import org.jspresso.framework.util.descriptor.DefaultDescriptor;
  * index column</li>
  * </ul>
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the concrete collection component element type.

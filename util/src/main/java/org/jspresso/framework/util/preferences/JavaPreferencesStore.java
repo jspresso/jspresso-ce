@@ -23,7 +23,6 @@ import java.util.prefs.Preferences;
 /**
  * An implementation of preference store relying on the Java preferences API.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class JavaPreferencesStore implements IPreferencesStore {

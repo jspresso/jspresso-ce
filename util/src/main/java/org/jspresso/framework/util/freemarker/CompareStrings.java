@@ -30,7 +30,6 @@ import freemarker.template.TemplateScalarModel;
 /**
  * Compares two strings using java rules.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("rawtypes")

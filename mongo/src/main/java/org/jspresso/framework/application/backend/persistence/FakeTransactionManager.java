@@ -27,7 +27,6 @@ import org.springframework.transaction.support.DefaultTransactionStatus;
  * Fake transaction manager to use when the application is MongoDB only.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class FakeTransactionManager extends AbstractPlatformTransactionManager {
   private static final long serialVersionUID = 1L;

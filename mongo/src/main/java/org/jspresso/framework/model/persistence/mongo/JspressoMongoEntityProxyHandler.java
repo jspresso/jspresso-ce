@@ -34,7 +34,6 @@ import org.jspresso.framework.model.entity.IEntity;
  * A proxy for referenced Jspresso entities in order to support lazy loading.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class JspressoMongoEntityProxyHandler implements InvocationHandler {
 

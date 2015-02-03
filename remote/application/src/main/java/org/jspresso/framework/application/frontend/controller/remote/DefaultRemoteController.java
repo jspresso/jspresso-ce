@@ -43,7 +43,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * the network.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class DefaultRemoteController extends AbstractRemoteController {
 

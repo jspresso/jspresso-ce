@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 /**
  * This class wraps a method object and helps analyzing it as an accessor.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class AccessorInfo {

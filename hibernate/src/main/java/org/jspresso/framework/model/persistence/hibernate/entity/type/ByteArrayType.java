@@ -34,7 +34,6 @@ import org.jspresso.framework.util.uid.ByteArray;
 /**
  * A user type to be able to use byte arrays as entity identifiers.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ByteArrayType implements UserType {

@@ -42,7 +42,6 @@ import org.springframework.transaction.support.TransactionTemplate;
  * the context elements that are generally used through the action execution
  * process.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BackendAction extends AbstractAction {

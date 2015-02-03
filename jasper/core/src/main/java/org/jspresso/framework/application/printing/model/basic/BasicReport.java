@@ -28,7 +28,6 @@ import org.jspresso.framework.util.descriptor.DefaultDescriptor;
 /**
  * A basic report execution instance.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @internal
  */

@@ -35,7 +35,6 @@ import org.jspresso.framework.security.UserPrincipal;
  * Basic implementation of an application session.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class BasicApplicationSession implements IApplicationSession {
 

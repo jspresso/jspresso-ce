@@ -22,7 +22,6 @@ package org.jspresso.framework.util.descriptor;
  * This interface is implemented by anything which can be assigned a graphical
  * style name. The way it is actually leveraged depends on the UI channel.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IStylable {

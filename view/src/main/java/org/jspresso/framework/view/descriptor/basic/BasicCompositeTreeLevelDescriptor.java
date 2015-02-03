@@ -63,7 +63,6 @@ import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
  * You can notice the intermediary grouping nodes that are installed to visually
  * separate the 2 collection families (<i>Y</i> and <i>Z</i>).
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicCompositeTreeLevelDescriptor extends BasicTreeLevelDescriptor

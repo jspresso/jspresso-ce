@@ -21,7 +21,6 @@ package org.jspresso.framework.gui.remote;
 /**
  * A container with stacked children views.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RCardContainer extends RContainer {

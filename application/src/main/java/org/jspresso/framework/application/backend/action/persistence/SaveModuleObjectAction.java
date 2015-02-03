@@ -34,7 +34,6 @@ import org.jspresso.framework.model.entity.IEntity;
  * recursively. All previously registered persistence operations are also
  * performed.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class SaveModuleObjectAction extends SaveAction {

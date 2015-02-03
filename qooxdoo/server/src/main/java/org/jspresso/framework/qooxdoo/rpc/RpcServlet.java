@@ -25,7 +25,6 @@ import net.sf.qooxdoo.rpc.RemoteCallUtils;
 /**
  * Subclass of Qooxdoo rpc servlet to handle JSON <-> Java more finely.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RpcServlet extends net.sf.qooxdoo.rpc.RpcServlet {

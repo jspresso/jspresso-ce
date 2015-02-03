@@ -25,7 +25,6 @@ import org.jspresso.framework.util.lang.ICloneable;
 /**
  * a simple holder for 2D dimension.
  * 
- * @version $LastChangedRevision: 1249 $
  * @author Vincent Vandenschrick
  */
 public class Dimension implements Serializable, ICloneable {

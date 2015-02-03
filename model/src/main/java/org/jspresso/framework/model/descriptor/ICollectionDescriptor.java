@@ -25,7 +25,6 @@ import org.jspresso.framework.util.collection.ESort;
 /**
  * This interface is implemented by descriptors of collections.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the concrete component element type.

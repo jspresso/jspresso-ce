@@ -23,7 +23,6 @@ import org.springframework.jdbc.support.incrementer.DataFieldMaxValueIncrementer
 /**
  * A simple GUID generator based on a database sequence.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class SequenceGUIDGenerator implements IGUIDGenerator<Long> {

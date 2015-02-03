@@ -23,7 +23,6 @@ import java.util.Collection;
 /**
  * This helper class contains utility methods to work with gates.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class GateHelper {

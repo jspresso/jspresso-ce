@@ -15,7 +15,6 @@ import org.jspresso.framework.util.accessor.map.MapPropertyAccessor;
  * A map property accessor that receives a model descriptor to handle the model
  * integrity.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class DescriptorAwareMapPropertyAccessor extends MapPropertyAccessor

@@ -27,7 +27,6 @@ import java.util.Properties;
 /**
  * Jspresso version.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class Build {

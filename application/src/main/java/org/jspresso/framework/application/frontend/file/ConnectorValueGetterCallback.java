@@ -32,7 +32,6 @@ import org.jspresso.framework.model.descriptor.IModelDescriptor;
  * Default handler implementation to deal with getting binary properties storing
  * them in files.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ConnectorValueGetterCallback extends AbstractActionContextAware

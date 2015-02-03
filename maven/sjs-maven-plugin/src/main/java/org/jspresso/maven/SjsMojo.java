@@ -48,7 +48,6 @@ import org.slf4j.impl.StaticLoggerBinder;
  * Goal which performs SJS compilation for a Jspresso project.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 @Mojo(name = "compile-sjs", defaultPhase = LifecyclePhase.GENERATE_SOURCES,
     requiresDependencyResolution = ResolutionScope.COMPILE, threadSafe = true)

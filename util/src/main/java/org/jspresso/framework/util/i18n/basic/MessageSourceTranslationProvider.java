@@ -30,7 +30,6 @@ import org.springframework.context.MessageSource;
  * A translation provider which relies on a spring message source. It will
  * typically be configured with a resource bundle message source.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class MessageSourceTranslationProvider extends

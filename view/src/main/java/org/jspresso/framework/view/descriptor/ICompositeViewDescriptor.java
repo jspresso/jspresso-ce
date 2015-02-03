@@ -24,7 +24,6 @@ import java.util.List;
  * This public interface is the super-interface of all view descriptors used as
  * containers for others.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface ICompositeViewDescriptor extends IViewDescriptor {

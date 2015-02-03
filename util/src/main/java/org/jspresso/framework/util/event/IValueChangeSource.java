@@ -23,7 +23,6 @@ import java.util.Set;
 /**
  * Source of value change events.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IValueChangeSource {

@@ -31,7 +31,6 @@ import org.jspresso.framework.util.gui.Icon;
 /**
  * JReferenceFieldConnector connector.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class JReferenceFieldConnector extends JActionFieldConnector implements

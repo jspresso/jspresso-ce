@@ -32,7 +32,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 /**
  * Abstract class for application startup.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractStartup implements IStartup {

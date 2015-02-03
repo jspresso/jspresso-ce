@@ -31,7 +31,6 @@ import org.jspresso.framework.binding.ConnectorBindingException;
 /**
  * JFormattedTextFieldConnector connector.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class JFormattedTextFieldConnector extends

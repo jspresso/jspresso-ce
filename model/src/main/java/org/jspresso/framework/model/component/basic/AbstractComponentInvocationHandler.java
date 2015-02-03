@@ -87,7 +87,6 @@ import org.jspresso.framework.util.lang.ObjectUtils;
  * components.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public abstract class AbstractComponentInvocationHandler implements
     InvocationHandler, Serializable {

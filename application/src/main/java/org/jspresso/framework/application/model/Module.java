@@ -55,7 +55,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptorProvider;
  * A module can also be as simple as a grouping structure for other modules
  * (intermediary nodes).
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class Module extends AbstractPropertyChangeCapable implements

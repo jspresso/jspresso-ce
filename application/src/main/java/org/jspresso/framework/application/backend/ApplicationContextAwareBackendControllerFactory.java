@@ -25,7 +25,6 @@ import org.springframework.context.ApplicationContextAware;
  * A simple backend controller factory that leverages a Spring application
  * context to create a new backend controller.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ApplicationContextAwareBackendControllerFactory implements

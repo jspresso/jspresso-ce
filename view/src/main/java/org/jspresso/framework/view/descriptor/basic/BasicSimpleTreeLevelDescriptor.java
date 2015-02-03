@@ -41,7 +41,6 @@ import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
  *     <b>B</b>-3.2
  * </pre>
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicSimpleTreeLevelDescriptor extends BasicTreeLevelDescriptor

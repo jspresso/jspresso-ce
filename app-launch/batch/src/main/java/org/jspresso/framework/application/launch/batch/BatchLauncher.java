@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 /**
  * Batch launcher.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class BatchLauncher {

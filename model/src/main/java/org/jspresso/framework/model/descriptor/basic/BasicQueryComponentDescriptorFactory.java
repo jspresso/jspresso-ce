@@ -31,7 +31,6 @@ import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
 /**
  * Basic implementation. Creates basic query component descriptors.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicQueryComponentDescriptorFactory implements

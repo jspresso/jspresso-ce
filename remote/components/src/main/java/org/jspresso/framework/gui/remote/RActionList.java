@@ -23,7 +23,6 @@ import org.jspresso.framework.util.remote.RemotePeer;
 /**
  * This class is the generic server peer of a client GUI action list.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RActionList extends RemotePeer {

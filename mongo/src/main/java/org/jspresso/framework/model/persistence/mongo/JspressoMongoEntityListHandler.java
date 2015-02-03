@@ -31,7 +31,6 @@ import org.jspresso.framework.model.entity.IEntity;
  * List proxy invocation handler.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class JspressoMongoEntityListHandler extends JspressoMongoEntityCollectionHandler {
 

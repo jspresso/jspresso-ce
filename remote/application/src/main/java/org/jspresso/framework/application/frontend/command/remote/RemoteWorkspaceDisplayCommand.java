@@ -23,7 +23,6 @@ import org.jspresso.framework.gui.remote.RComponent;
 /**
  * A command to trigger workspace display on the remote peer.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteWorkspaceDisplayCommand extends RemoteCommand {

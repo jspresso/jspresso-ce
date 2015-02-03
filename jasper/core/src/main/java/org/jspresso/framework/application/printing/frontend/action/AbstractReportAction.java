@@ -29,7 +29,6 @@ import org.jspresso.framework.application.printing.model.IReportFactory;
 /**
  * Abstract base class for Jasper report actions.
  * 
- * @version $LastChangedRevision: 1332 $
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

@@ -26,7 +26,6 @@ import javax.servlet.http.HttpSession;
 /**
  * A simple servlet to receive browser disconnect commands.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteUtilServlet extends HttpServlet {

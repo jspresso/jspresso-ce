@@ -28,7 +28,6 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 /**
  * This is the abstract base descriptor of all numeric based properties.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class BasicNumberPropertyDescriptor extends

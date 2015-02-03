@@ -34,7 +34,6 @@ import org.jspresso.framework.application.frontend.file.IFileCallback;
  * Initiates a file choosing action.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public abstract class ChooseFileAction extends AbstractSwingAction {
 

@@ -21,7 +21,6 @@ package org.jspresso.framework.model.descriptor;
 /**
  * Implementing classes are able to provide a collection descriptor.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the concrete collection component type.

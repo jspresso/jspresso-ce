@@ -121,7 +121,6 @@ import org.jspresso.framework.util.preferences.IPreferencesStore;
  * getters. Those getters should be used by the service layer.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public abstract class AbstractBackendController extends AbstractController implements IBackendController {
 

@@ -22,7 +22,6 @@ package org.jspresso.framework.gui.remote.mobile;
  * A mobile page.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public abstract class RMobilePage extends RMobilePageAware {
 

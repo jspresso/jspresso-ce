@@ -26,7 +26,6 @@ import org.jspresso.framework.model.component.IQueryComponent;
  * This interface is used to refine query components and can be injected in
  * {@code QueryEntitiesAction}.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("UnusedParameters")

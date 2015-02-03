@@ -29,7 +29,6 @@ import org.jspresso.framework.util.preferences.IPreferencesStore;
 /**
  * A mock for FrontendController.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

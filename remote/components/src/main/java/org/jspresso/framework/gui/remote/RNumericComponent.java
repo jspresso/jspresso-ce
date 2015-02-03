@@ -23,7 +23,6 @@ import java.math.BigDecimal;
 /**
  * A remote number field component.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class RNumericComponent extends RComponent {

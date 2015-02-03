@@ -36,7 +36,6 @@ import java.io.StringReader;
  * Strongly inspired from javax.swing.plaf.basic.BasicTransferable.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class BasicTransferable implements Transferable, ClipboardOwner {
 

@@ -23,7 +23,6 @@ import org.jspresso.framework.gui.remote.RAction;
 /**
  * Yes - No - Cancel remote flow action.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteYesNoCancelCommand extends RemoteYesNoCommand {

@@ -21,7 +21,6 @@ package org.jspresso.framework.util.resources;
 /**
  * Base implementation class for active web resources.
  * 
- * @version $LastChangedRevision: 2529 $
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractActiveResource extends AbstractResourceBase

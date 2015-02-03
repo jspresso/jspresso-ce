@@ -29,7 +29,6 @@ import org.jspresso.framework.model.descriptor.IObjectPropertyDescriptor;
  * the type can be explicitly declared.
  * 
  * @internal
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicObjectPropertyDescriptor extends

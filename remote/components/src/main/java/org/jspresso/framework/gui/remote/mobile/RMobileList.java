@@ -23,7 +23,6 @@ import org.jspresso.framework.gui.remote.RList;
 /**
  * A remote mobile list component.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RMobileList extends RList {

@@ -49,7 +49,6 @@ import org.slf4j.LoggerFactory;
 /**
  * Default remote startup class.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class RemoteStartup extends

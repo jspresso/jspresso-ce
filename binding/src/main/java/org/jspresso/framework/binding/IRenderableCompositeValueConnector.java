@@ -24,7 +24,6 @@ import org.jspresso.framework.util.gui.Icon;
  * This is the interface implemented by displayable composite connectors.
  * (composite).
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IRenderableCompositeValueConnector extends

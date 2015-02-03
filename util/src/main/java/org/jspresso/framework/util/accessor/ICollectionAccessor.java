@@ -24,7 +24,6 @@ import java.lang.reflect.InvocationTargetException;
  * This interface is implemented by any bean value accessor on a collection
  * property.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface ICollectionAccessor extends IAccessor {

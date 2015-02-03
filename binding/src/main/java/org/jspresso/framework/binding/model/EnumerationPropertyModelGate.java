@@ -24,7 +24,6 @@ import java.util.Collection;
  * This gate opens and closes based on the value of an enumeration property
  * matching a set of allowed values.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class EnumerationPropertyModelGate extends

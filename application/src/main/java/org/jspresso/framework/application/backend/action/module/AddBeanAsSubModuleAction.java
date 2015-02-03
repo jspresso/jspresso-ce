@@ -49,7 +49,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * the created modules projected view descriptor is taken from the bean
  * collection module ({@code elementViewDescriptor}).
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class AddBeanAsSubModuleAction extends BackendAction {

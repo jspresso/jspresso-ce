@@ -34,7 +34,6 @@ import org.codehaus.jettison.json.JSONObject;
 /**
  * Refines the way Qooxdoo rpc handles JSON types.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {

@@ -24,7 +24,6 @@ import org.jspresso.framework.util.automation.IPermIdSource;
 /**
  * This interface is implemented by descriptors of a subtree.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface ITreeLevelDescriptor extends ISecurable, IPermIdSource {

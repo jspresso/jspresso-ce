@@ -28,7 +28,6 @@ import org.springframework.data.mongodb.core.mapping.MongoPersistentProperty;
  * Custom mapping converter.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class JspressoMappingMongoConverter extends MappingMongoConverter {
 

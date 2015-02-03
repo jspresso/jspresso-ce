@@ -23,7 +23,6 @@ import java.util.List;
 /**
  * Pageable models.
  * 
- * @version $LastChangedRevision: 1826 $
  * @author Vincent Vandenschrick
  */
 public interface IPageable {

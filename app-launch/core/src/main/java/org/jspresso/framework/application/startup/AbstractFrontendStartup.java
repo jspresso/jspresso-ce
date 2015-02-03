@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 /**
  * Abstract class for application startup including all layers.
  * 
- * @version $LastChangedRevision: 2097 $
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

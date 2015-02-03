@@ -28,7 +28,6 @@ import org.jspresso.framework.util.remote.IRemotePeer;
 /**
  * The server peer of a remote value connector.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteValueConnector extends BasicValueConnector implements

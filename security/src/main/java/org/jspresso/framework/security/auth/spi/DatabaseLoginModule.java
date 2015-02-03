@@ -36,7 +36,6 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
  * An extended database login module to complement the user principal with
  * custom values.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class DatabaseLoginModule extends DatabaseServerLoginModule {

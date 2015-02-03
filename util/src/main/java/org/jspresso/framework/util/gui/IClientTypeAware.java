@@ -23,7 +23,6 @@ import java.util.List;
 /**
  * Implementations of this interface are designed to provide visibility based on client type.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IClientTypeAware {

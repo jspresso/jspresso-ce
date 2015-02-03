@@ -27,7 +27,6 @@ import java.util.Set;
 /**
  * Creates new empty components collections.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class DefaultComponentCollectionFactory implements

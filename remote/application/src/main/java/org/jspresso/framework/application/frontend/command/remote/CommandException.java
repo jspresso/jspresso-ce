@@ -24,7 +24,6 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
  * This exception is thrown whenever an unexpected exception occurs when
  * handling a command.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class CommandException extends NestedRuntimeException {

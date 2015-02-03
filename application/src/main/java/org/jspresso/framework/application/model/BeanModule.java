@@ -51,7 +51,6 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
  * This type of module is definitely the one that offers maximum flexibility to
  * handle arbitrary models.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BeanModule extends Module implements PropertyChangeListener {

@@ -47,7 +47,6 @@ import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
  * file, ...). In that case, defining a property view alone on the text property
  * of the owning component might be a good solution.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements

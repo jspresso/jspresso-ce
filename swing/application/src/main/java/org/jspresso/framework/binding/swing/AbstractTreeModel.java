@@ -29,7 +29,6 @@ import javax.swing.tree.TreePath;
 /**
  * Abstract class for tree models. It mainly manages listeners on the model.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractTreeModel implements TreeModel {

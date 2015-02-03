@@ -24,7 +24,6 @@ import org.jspresso.framework.util.gui.ERenderingOptions;
  * This public interface is implemented by "Tab" view descriptors. A typical
  * implementation of the described view could be a swing JTabPane.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface ITabViewDescriptor extends ICompositeViewDescriptor {

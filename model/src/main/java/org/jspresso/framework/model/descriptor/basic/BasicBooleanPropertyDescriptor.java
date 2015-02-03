@@ -23,7 +23,6 @@ import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
 /**
  * Describes a boolean property.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicBooleanPropertyDescriptor extends

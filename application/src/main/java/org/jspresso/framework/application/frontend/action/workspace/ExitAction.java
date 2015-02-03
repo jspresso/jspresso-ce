@@ -33,7 +33,6 @@ import org.jspresso.framework.application.model.Workspace;
  * to the persistent store. Whenever the dirty checking is positive, then the
  * user is notified and given a chance to cancel the exit.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

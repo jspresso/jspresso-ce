@@ -36,7 +36,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * This action serves as a base class for actions that pop-pup a dialog to edit
  * a component.
  * 
- * @version $LastChangedRevision: 2601 $
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

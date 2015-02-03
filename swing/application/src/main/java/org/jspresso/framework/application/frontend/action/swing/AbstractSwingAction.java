@@ -28,7 +28,6 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
  * This class serves as base class for swing actions. It provides accessors on
  * commonly used artifacts.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @internal
  */

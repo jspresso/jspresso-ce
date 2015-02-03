@@ -44,7 +44,6 @@ import org.jspresso.framework.model.entity.IEntity;
  * An implementation used for query components.
  * 
  * @internal
- * @version $LastChangedRevision: 5787 $
  * @author Vincent Vandenschrick
  * @param <E>
  *          the concrete type of components.

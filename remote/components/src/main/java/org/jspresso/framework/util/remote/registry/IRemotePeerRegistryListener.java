@@ -23,7 +23,6 @@ import org.jspresso.framework.util.remote.IRemotePeer;
 /**
  * This interface has to be implemented by listeners of remote peer registries.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("EmptyMethod")

@@ -24,7 +24,6 @@ import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
  * This is the base abstract class of all Jspresso built-in gates. Open/close
  * rule is delegated to concrete implementations.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractGate extends AbstractPropertyChangeCapable

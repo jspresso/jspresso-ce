@@ -29,7 +29,6 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
  * traversed modules so that a user can go back and forward his navigation
  * history, much like for a web navigation.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

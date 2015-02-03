@@ -38,7 +38,6 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * This action allows the user to choose a report among a list and print it. The
  * list of available reports is statically configured into the action.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

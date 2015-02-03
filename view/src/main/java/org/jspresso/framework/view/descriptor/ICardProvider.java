@@ -22,7 +22,6 @@ package org.jspresso.framework.view.descriptor;
  * This interface is implemented by strategies providing card descriptors based
  * on their names.
  * 
- * @version $LastChangedRevision: 7120 $
  * @author Vincent Vandenschrick
  */
 public interface ICardProvider {

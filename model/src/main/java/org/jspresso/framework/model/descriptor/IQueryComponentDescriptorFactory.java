@@ -24,7 +24,6 @@ import org.jspresso.framework.model.component.IQueryComponent;
 /**
  * Interface contract for factories creating query component descriptors.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IQueryComponentDescriptorFactory {

@@ -28,7 +28,6 @@ import org.jspresso.framework.util.lang.StringUtils;
 /**
  * Describes an enumerated property containing arbitrary values.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicEnumerationPropertyDescriptor extends

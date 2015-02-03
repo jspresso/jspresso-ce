@@ -26,7 +26,6 @@ import org.syntax.jedit.JEditTextArea;
 /**
  * This class is a JEditTextArea connector.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class JEditTextAreaConnector extends JComponentConnector<JEditTextArea> {

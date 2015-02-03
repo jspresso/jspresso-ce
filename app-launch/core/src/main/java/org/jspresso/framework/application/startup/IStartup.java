@@ -21,7 +21,6 @@ package org.jspresso.framework.application.startup;
 /**
  * Application startup interface.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IStartup {

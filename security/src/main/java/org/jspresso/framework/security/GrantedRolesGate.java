@@ -29,7 +29,6 @@ import org.jspresso.framework.util.gate.AbstractGate;
  * disables the artifact whereas the artifact granted roles prevent the artifact
  * from being created at all.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class GrantedRolesGate extends AbstractGate implements

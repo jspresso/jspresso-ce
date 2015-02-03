@@ -34,7 +34,6 @@ import org.jspresso.framework.model.component.IComponent;
  * and move them in the collection using a configured offset. It allows for
  * re-ordering the list.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class CollectionElementMoveAction extends AbstractCollectionAction {

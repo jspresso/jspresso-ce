@@ -32,7 +32,6 @@ import org.jspresso.framework.model.entity.IEntity;
  * recursively. The whole entities graphs are reloaded from the persistent
  * store.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ReloadModuleObjectAction extends ReloadAction {

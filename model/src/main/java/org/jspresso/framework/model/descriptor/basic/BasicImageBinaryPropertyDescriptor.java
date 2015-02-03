@@ -29,7 +29,6 @@ import org.jspresso.framework.util.image.ImageHelper;
  * type of property.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision: 4431 $
  */
 public class BasicImageBinaryPropertyDescriptor extends BasicBinaryPropertyDescriptor
     implements IImageBinaryPropertyDescriptor {

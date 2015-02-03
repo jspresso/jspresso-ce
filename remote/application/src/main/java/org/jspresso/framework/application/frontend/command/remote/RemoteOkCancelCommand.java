@@ -23,7 +23,6 @@ import org.jspresso.framework.gui.remote.RAction;
 /**
  * OK - Cancel remote flow action.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteOkCancelCommand extends RemoteMessageCommand {

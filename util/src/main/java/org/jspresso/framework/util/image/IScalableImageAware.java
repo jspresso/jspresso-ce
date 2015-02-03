@@ -22,7 +22,6 @@ package org.jspresso.framework.util.image;
  * Scalable image aware interface.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public interface IScalableImageAware {
   /**

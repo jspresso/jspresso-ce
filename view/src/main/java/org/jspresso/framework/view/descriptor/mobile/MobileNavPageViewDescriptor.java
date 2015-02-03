@@ -37,7 +37,6 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
  * Navigation page view descriptors that are able to navigate to another page based on a selection component.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescriptor {
 

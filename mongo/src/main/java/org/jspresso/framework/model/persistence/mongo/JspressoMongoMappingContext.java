@@ -48,7 +48,6 @@ import org.jspresso.framework.util.reflect.ReflectHelper;
  * Custom Jspresso Mongo mapping context.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class JspressoMongoMappingContext extends MongoMappingContext {
 

@@ -30,7 +30,6 @@ import org.jspresso.framework.view.descriptor.basic.AbstractComponentViewDescrip
  * A mobile form view descriptor.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class MobileComponentViewDescriptor extends AbstractComponentViewDescriptor
     implements IMobilePageSectionViewDescriptor {

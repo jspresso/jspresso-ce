@@ -23,7 +23,6 @@ import java.util.List;
 /**
  * The state of a composite remote value.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteCompositeValueState extends RemoteValueState {

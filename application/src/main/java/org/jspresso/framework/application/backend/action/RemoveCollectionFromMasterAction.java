@@ -34,7 +34,6 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
  * master domain object. No further operation (like actual removal from a
  * persistent store) is performed by this action.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {

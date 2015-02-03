@@ -28,7 +28,6 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
  * instance itself. This implies that the {@code getConnectorValue} method
  * returns the model instance itself.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ModelConnector extends ModelRefPropertyConnector {

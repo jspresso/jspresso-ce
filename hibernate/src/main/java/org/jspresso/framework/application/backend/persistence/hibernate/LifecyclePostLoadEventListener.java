@@ -25,7 +25,6 @@ import org.jspresso.framework.model.component.ILifecycleCapable;
 /**
  * This hibernate event listener is used to trigger the onLoad lifecycle method.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class LifecyclePostLoadEventListener implements PostLoadEventListener {

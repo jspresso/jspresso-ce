@@ -44,7 +44,6 @@ import org.jspresso.framework.security.UserPrincipal;
  * Entity Mongo lifecycle listener.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class JspressoMongoEventListener extends AbstractMongoEventListener<IEntity> {
 

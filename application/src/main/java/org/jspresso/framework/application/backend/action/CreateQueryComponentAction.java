@@ -39,7 +39,6 @@ import org.slf4j.LoggerFactory;
  * {@code IQueryComponent.QUERY_COMPONENT}. Further explanations are given
  * about query components in the {@code QueryEntitiesAction} documentation.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class CreateQueryComponentAction extends BackendAction {

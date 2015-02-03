@@ -21,7 +21,6 @@ package org.jspresso.framework.gui.remote;
 /**
  * A remote check box component.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RCheckBox extends RComponent {

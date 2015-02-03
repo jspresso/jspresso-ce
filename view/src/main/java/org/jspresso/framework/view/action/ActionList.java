@@ -21,7 +21,6 @@ import org.jspresso.framework.util.gui.ERenderingOptions;
  * them will be leveraged. The name of the action list is also used to identify
  * the sibling action lists to be merged when inheriting action map together.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ActionList extends DefaultIconDescriptor implements ISecurable,

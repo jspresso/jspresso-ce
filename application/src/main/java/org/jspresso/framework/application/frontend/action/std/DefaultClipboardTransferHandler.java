@@ -25,7 +25,6 @@ import org.jspresso.framework.util.html.HtmlHelper;
 /**
  * Default implementation of clipboard transfer handler.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class DefaultClipboardTransferHandler implements

@@ -23,7 +23,6 @@ package org.jspresso.framework.view.descriptor;
  * This public interface is implemented by any object capable of priding a
  * collection view descriptor.
  * 
- * @version $LastChangedRevision: 5621 $
  * @author Vincent Vandenschrick
  */
 public interface ICollectionViewDescriptorProvider {

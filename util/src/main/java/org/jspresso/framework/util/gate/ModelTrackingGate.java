@@ -21,7 +21,6 @@ package org.jspresso.framework.util.gate;
 /**
  * A simple gate that opens whenever its model is not empty.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @internal
  */

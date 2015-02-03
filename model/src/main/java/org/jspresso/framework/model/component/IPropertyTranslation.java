@@ -21,7 +21,6 @@ package org.jspresso.framework.model.component;
 /**
  * This interface is implemented by component property translations.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("EmptyMethod")

@@ -31,7 +31,6 @@ import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescripto
  * </ul>
  * Other type of properties are named <i>scalar</i> properties.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class BasicRelationshipEndPropertyDescriptor extends

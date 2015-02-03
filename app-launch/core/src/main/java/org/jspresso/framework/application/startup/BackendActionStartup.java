@@ -29,7 +29,6 @@ import org.jspresso.framework.application.backend.action.BackendAction;
 /**
  * A backend startup implementation whose implementation is a backend action.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BackendActionStartup extends AbstractBackendStartup {

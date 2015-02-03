@@ -38,7 +38,6 @@ import org.jspresso.framework.view.IView;
  * write some content to. What is done with the file content is determined by
  * the configured {@code fileSaveCallback} instance.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class SaveFileAction extends ChooseFileAction {

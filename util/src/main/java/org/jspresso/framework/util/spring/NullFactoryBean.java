@@ -23,7 +23,6 @@ import org.springframework.beans.factory.FactoryBean;
 /**
  * This is a simple utility bean to get a named null bean.
  * 
- * @version $LastChangedRevision: 7120 $
  * @author Vincent Vandenschrick
  */
 public class NullFactoryBean implements FactoryBean<Object> {

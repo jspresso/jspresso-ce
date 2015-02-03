@@ -88,7 +88,6 @@ import org.jspresso.framework.util.lang.StringUtils;
  * configuration), but this is all for using in different places in the
  * application.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("UnusedParameters")

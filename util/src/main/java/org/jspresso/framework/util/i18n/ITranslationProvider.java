@@ -23,7 +23,6 @@ import java.util.Locale;
 /**
  * The interface being implemented by all i18n string providers.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface ITranslationProvider {

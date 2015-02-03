@@ -23,7 +23,6 @@ import org.jspresso.framework.util.gui.CellConstraints;
 /**
  * A constraint distribution grid container.
  * 
- * @version $LastChangedRevision: 1486 $
  * @author Vincent Vandenschrick
  */
 public class RConstrainedGridContainer extends RContainer {

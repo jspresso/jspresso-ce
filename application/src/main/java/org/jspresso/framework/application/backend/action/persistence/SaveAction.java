@@ -33,7 +33,6 @@ import org.jspresso.framework.model.entity.IEntity;
  * Saves the entities provided by the context {@code ActionParameter}. All
  * previously registered persistence operations are also performed.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class SaveAction extends BackendAction {

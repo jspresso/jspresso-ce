@@ -21,7 +21,6 @@ package org.jspresso.framework.util.gui;
 /**
  * This is a simple helper class to deal with font representations.
  * 
- * @version $LastChangedRevision: 1249 $
  * @author Vincent Vandenschrick
  */
 public final class FontHelper {

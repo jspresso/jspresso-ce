@@ -27,7 +27,6 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
  * This interface must be implemented by all model components in the application
  * domain. It establishes the minimal contract of a model component.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("EmptyMethod")

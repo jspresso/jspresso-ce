@@ -23,7 +23,6 @@ import java.util.List;
 /**
  * Basic indexed view.
  * 
- * @version $LastChangedRevision: 2808 $
  * @author Vincent Vandenschrick
  * @param <E>
  *          the type of component this view uses.

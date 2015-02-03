@@ -47,7 +47,6 @@ import org.springframework.jdbc.core.ConnectionCallback;
  * {@code .DisplayChartAction} whereas standalone UI channels (Swing) will
  * use <i>{@code standalone}</i>{@code .DisplayChartAction}.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

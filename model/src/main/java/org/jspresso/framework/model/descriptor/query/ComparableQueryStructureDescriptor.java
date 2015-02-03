@@ -36,7 +36,6 @@ import org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescript
  * The component descriptor of comparable property query structures.
  * 
  * @internal
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ComparableQueryStructureDescriptor extends

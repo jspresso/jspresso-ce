@@ -27,7 +27,6 @@ import org.jspresso.framework.view.descriptor.basic.BasicMapViewDescriptor;
  * A mobile map view descriptor.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class MobileMapViewDescriptor extends BasicMapViewDescriptor implements IMobilePageSectionViewDescriptor {
 

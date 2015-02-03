@@ -28,7 +28,6 @@ import org.jspresso.framework.application.backend.session.IApplicationSession;
  * bundle-based, static one. For instance, one can implement different i18n
  * schemes based on the logged-in user (or its memberships).
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("UnusedParameters")

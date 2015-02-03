@@ -23,7 +23,6 @@ import org.jspresso.framework.util.gui.Dimension;
 /**
  * Defines the contract of an icon set.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IIconSet {

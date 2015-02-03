@@ -101,7 +101,6 @@ import org.jspresso.framework.view.swing.BasicTransferable;
  * useful for the development/debugging phases. Workspaces are displayed using
  * an MDI UI using internal frames.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class DefaultSwingController extends

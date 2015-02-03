@@ -49,7 +49,6 @@ import org.jspresso.framework.util.swing.SwingUtil;
 /**
  * Dialog used for reporting detailed messages (and errors).
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class JErrorDialog extends JDialog {

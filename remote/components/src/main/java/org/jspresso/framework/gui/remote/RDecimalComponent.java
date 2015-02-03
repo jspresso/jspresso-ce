@@ -21,7 +21,6 @@ package org.jspresso.framework.gui.remote;
 /**
  * A remote number field component.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class RDecimalComponent extends RNumericComponent {

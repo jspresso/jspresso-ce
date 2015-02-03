@@ -23,7 +23,6 @@ import java.util.List;
 /**
  * The interface for remote command handlers.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IRemoteCommandHandler {

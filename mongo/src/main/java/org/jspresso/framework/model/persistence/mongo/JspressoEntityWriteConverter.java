@@ -39,7 +39,6 @@ import org.jspresso.framework.util.bean.PropertyHelper;
  * Custom converter for Jspresso entities.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class JspressoEntityWriteConverter implements Converter<IEntity, DBObject> {
 

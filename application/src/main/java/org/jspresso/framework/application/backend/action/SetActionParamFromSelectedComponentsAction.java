@@ -27,7 +27,6 @@ import org.jspresso.framework.action.IActionHandler;
  * {@code ActionParameter} with the selected components of the underlying
  * model.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class SetActionParamFromSelectedComponentsAction extends

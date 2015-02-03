@@ -23,7 +23,6 @@ import java.util.Map;
 /**
  * A formatter for translated enumerations. Does not support parsing.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class EnumerationFormatter implements IFormatter<Object, String> {

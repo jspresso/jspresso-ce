@@ -33,7 +33,6 @@ import javax.servlet.http.HttpServletResponse;
  * This filter needs to be installed on any broker servlet so that iot keeps
  * track of the current HTTP request.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class HttpRequestHolder implements Filter {

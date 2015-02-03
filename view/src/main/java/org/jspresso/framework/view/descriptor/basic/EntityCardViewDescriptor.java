@@ -37,7 +37,6 @@ import org.slf4j.LoggerFactory;
  * the bound model type. This strategy pulls up the card whose model descriptor
  * matches the type of the bound model.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class EntityCardViewDescriptor extends AbstractCardViewDescriptor {

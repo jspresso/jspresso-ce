@@ -24,7 +24,6 @@ import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
  * This interface establishes the general contract of a composite view which has
  * child views which are keyed by a string.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  */

@@ -31,7 +31,6 @@ import org.jspresso.framework.util.lang.ObjectUtils;
  * java.lang.* Object type (such as Integer or Boolean). Null values may be
  * provided for the old and the new values if their true values are not known.
  * 
- * @version $LastChangedRevision: 1249 $
  * @author Vincent Vandenschrick
  */
 public class ValueChangeEvent extends EventObject {

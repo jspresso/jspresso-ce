@@ -22,7 +22,6 @@ package org.jspresso.framework.binding;
  * This exception is thrown whenever a binding requires a connector that does
  * not exist.
  * 
- * @version $LastChangedRevision$
  * @see org.jspresso.framework.binding.DefaultMvcBinder#bind(IValueConnector,
  *      IValueConnector)
  * @author Vincent Vandenschrick
