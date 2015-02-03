@@ -23,7 +23,6 @@ package org.jspresso.framework.view.descriptor;
  * organizes 2 view descriptors in a split manner. The described view can
  * typically be implemented using a swing JSplitPane.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface ISplitViewDescriptor extends ICompositeViewDescriptor {

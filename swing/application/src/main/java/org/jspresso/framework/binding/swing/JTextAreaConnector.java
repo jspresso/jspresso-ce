@@ -23,7 +23,6 @@ import javax.swing.JTextArea;
 /**
  * JTextArea connector.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class JTextAreaConnector extends JTextComponentConnector<JTextArea> {

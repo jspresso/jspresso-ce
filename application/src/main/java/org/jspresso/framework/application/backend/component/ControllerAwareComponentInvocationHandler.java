@@ -44,7 +44,6 @@ import org.jspresso.framework.util.accessor.IAccessorFactory;
  * properties like collections an entity references, delegating the
  * initialization job to the backend controller.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ControllerAwareComponentInvocationHandler extends

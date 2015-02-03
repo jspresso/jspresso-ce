@@ -23,7 +23,6 @@ import java.io.Serializable;
 /**
  * Simple holder of cell constraints.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class CellConstraints implements Serializable {

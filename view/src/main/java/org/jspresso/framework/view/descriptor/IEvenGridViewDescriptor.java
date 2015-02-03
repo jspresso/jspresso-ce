@@ -23,7 +23,6 @@ package org.jspresso.framework.view.descriptor;
  * cells. This kind of described container view might typically be implemented
  * by a swing JPanel with a GridLayout.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IEvenGridViewDescriptor extends IGridViewDescriptor {

@@ -26,7 +26,6 @@ import java.util.Set;
  * {@code java.util.Set}. Using this descriptor prevents messing up with
  * technical implementation details.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the concrete collection component element type.

@@ -38,7 +38,6 @@ import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
  * instance), produce a PDF output and open a browser window (tab) to display
  * it.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class DisplayJasperReportAction extends AbstractRemoteAction {

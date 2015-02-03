@@ -44,7 +44,6 @@ import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
  * individual list of components (i.e. the {@code nodeGroupDescriptor}
  * property).
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicTreeLevelDescriptor implements ITreeLevelDescriptor {

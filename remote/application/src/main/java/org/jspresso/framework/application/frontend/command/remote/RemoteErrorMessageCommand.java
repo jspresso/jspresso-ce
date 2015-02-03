@@ -21,7 +21,6 @@ package org.jspresso.framework.application.frontend.command.remote;
 /**
  * This command is used pop-up an error message with potentially detailed trace to the end user.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteErrorMessageCommand extends RemoteMessageCommand {

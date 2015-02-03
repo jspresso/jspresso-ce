@@ -33,7 +33,6 @@ import org.jspresso.framework.view.IView;
  * read some content from. What is done with the file content is determined by
  * the configured {@code fileOpenCallback} instance.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class OpenFileAction extends ChooseFileAction {

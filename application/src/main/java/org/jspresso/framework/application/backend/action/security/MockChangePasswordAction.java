@@ -24,7 +24,6 @@ import org.jspresso.framework.security.UserPrincipal;
 /**
  * Mocks up password change.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class MockChangePasswordAction extends AbstractChangePasswordAction {

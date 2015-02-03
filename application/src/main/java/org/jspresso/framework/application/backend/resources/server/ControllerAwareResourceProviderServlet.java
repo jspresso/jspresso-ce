@@ -38,7 +38,6 @@ import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
  * A resource provider servlet subclass that cleans up backend controller after
  * an active resource download.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ControllerAwareResourceProviderServlet extends

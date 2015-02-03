@@ -27,7 +27,6 @@ import org.jspresso.framework.util.gui.Icon;
 /**
  * A factory for icons.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual icon class created.

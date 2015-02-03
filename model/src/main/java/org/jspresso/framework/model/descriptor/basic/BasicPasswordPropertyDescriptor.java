@@ -12,7 +12,6 @@ import org.jspresso.framework.model.descriptor.IPasswordPropertyDescriptor;
  * change password action. Jspresso will automatically adapt view fields
  * accordingly, using password fields, to interact with password properties.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicPasswordPropertyDescriptor extends

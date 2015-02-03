@@ -29,7 +29,6 @@ import org.jspresso.framework.util.gate.IGate;
  * This interface must be implemented by any displayable action of the
  * application.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IDisplayableAction extends IAction, IIconDescriptor, IStylable {

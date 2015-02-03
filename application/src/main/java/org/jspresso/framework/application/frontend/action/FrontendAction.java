@@ -54,7 +54,6 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * user, and so on. A frontend action can chain a backend action but the
  * opposite will be prevented.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

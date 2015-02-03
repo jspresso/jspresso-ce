@@ -106,7 +106,6 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
  * place where you define the top-level application structure like the workspace
  * list, the name, the application-wide actions, ...
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

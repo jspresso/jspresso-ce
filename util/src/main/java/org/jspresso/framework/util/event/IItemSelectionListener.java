@@ -22,7 +22,6 @@ package org.jspresso.framework.util.event;
  * This interface is implemented by listeners willing to be notified of an item
  * selection change.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IItemSelectionListener {

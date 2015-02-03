@@ -25,7 +25,6 @@ import org.apache.commons.lang.StringEscapeUtils;
 /**
  * This is a simple helper class to be able to cope with html.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class HtmlHelper {

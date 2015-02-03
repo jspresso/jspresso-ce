@@ -21,7 +21,6 @@ package org.jspresso.framework.application.backend.session;
 /**
  * This enumeration defines all the supported merge modes of a session.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public enum EMergeMode {

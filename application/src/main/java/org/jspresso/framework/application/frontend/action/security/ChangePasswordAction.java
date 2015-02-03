@@ -30,7 +30,6 @@ import org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor
  * backend</li>
  * </ul>
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

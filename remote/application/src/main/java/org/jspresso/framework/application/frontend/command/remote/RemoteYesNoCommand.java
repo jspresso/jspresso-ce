@@ -23,7 +23,6 @@ import org.jspresso.framework.gui.remote.RAction;
 /**
  * Yes - No remote flow action.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteYesNoCommand extends RemoteMessageCommand {

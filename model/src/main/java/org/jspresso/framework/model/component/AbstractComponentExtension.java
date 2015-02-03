@@ -35,10 +35,9 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
  * Developers should inherit from it and use the {@code getComponent()} to
  * access the extended component instance.
  *
- * @version $LastChangedRevision$
- * @author Vincent Vandenschrick
  * @param <T>
- *          the parametrized component class on which these extensions work on.
+ *     the parametrized component class on which these extensions work on.
+ * @author Vincent Vandenschrick
  */
 public abstract class AbstractComponentExtension<T extends IComponent>
     implements IComponentExtension<T>, IComponentFactoryAware {

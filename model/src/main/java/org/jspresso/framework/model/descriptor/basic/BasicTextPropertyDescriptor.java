@@ -28,7 +28,6 @@ import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
  * Jspresso to use a multi-line text component to interact with this type of
  * property.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor

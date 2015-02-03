@@ -30,7 +30,6 @@ import org.jspresso.framework.util.remote.IRemotePeer;
  * The server peer of a remote value connector that formats its value back and
  * forth as strings.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteFormattedValueConnector extends BasicFormattedValueConnector

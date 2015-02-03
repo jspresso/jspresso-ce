@@ -28,7 +28,6 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
  * This generic action takes another arbitrary action out of the context
  * parameter and executes it.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

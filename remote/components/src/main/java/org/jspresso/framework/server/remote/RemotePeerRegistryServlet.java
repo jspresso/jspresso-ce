@@ -52,7 +52,6 @@ import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
  * states.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class RemotePeerRegistryServlet extends HttpServlet {
 

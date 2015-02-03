@@ -23,7 +23,6 @@ import org.jspresso.framework.gui.remote.RTree;
 /**
  * A remote mobile tree component.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RMobileTree extends RTree {

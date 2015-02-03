@@ -28,7 +28,6 @@ import org.jspresso.framework.util.accessor.ICollectionAccessor;
 /**
  * This is the default implementation of the accessor factory.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("UnusedParameters")

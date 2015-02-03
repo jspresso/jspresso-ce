@@ -28,7 +28,6 @@ import org.apache.commons.lang.RandomStringUtils;
 /**
  * Customized Oracle 10g dialect.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class Oracle10gDialect extends org.hibernate.dialect.Oracle10gDialect {

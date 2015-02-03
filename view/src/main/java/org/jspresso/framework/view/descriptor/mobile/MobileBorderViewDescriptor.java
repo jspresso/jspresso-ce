@@ -29,7 +29,6 @@ import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
  * A composite view descriptor that aggregates mobile views.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class MobileBorderViewDescriptor extends BasicBorderViewDescriptor
     implements IMobilePageSectionViewDescriptor, IMobilePageAware {

@@ -39,7 +39,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * it cannot be used directly, is to factorize common properties.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public abstract class BasicViewDescriptor extends DefaultIconDescriptor implements IViewDescriptor {
 

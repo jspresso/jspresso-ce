@@ -23,7 +23,6 @@ import org.jspresso.framework.gui.remote.RComponent;
 /**
  * A command to trigger a modal remote dialog pop-up.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteDialogCommand extends RemoteAbstractDialogCommand {

@@ -23,7 +23,6 @@ import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 /**
  * Helper class for entities utility methods.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class EntityHelper {

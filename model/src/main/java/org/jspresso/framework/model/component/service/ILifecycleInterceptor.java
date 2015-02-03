@@ -25,7 +25,6 @@ import org.jspresso.framework.security.UserPrincipal;
 /**
  * Defines all the components lifecycle hooks.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the class of the intercepted entity.

@@ -22,7 +22,6 @@ package org.jspresso.framework.util.gui;
  * Implementations of this interface are designed to provide icons based on an
  * object.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IconProvider {

@@ -25,7 +25,6 @@ import org.jspresso.framework.action.IActionHandler;
 /**
  * Purges completed asynchronous action executors.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class PurgeCompletedAsynExecutorsAction extends BackendAction {

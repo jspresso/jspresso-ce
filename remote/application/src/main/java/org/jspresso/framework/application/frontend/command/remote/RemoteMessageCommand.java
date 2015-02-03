@@ -23,7 +23,6 @@ import org.jspresso.framework.gui.remote.RIcon;
 /**
  * This command is used pop-up a message to the end user.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteMessageCommand extends RemoteCommand {

@@ -32,7 +32,6 @@ import org.springframework.beans.factory.BeanFactory;
 /**
  * A utility class used to persist some test data.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractTestDataPersister {

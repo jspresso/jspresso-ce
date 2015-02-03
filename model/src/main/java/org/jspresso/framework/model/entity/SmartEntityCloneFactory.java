@@ -38,7 +38,6 @@ import org.jspresso.framework.util.accessor.ICollectionAccessor;
  * Performs a copy of the entity. It may be used in application actions to
  * smartly duplicate an entity.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {

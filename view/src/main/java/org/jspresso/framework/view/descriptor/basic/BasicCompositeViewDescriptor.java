@@ -41,7 +41,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * activated, all nested views share the same model than their parent composite
  * unless specified otherwise.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class BasicCompositeViewDescriptor extends BasicViewDescriptor

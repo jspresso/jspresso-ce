@@ -31,7 +31,6 @@ import org.jspresso.framework.action.IActionHandler;
  * that once the URL is translated, it is still appended to the
  * {@code baseUrl}.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

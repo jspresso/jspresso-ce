@@ -21,7 +21,6 @@ package org.jspresso.framework.gui.remote;
 /**
  * A container. Its children are indexed by their view names.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class RContainer extends RComponent {

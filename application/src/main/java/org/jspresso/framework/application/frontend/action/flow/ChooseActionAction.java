@@ -42,7 +42,6 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * {@code ChooseComponentAction} so that the action list is actually
  * displayed.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

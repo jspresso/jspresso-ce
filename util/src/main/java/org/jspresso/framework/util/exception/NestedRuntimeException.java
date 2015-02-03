@@ -22,7 +22,6 @@ package org.jspresso.framework.util.exception;
  * This class is for throwing any throwable (checked and unchecked) over
  * non-checked methods.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class NestedRuntimeException extends RuntimeException {

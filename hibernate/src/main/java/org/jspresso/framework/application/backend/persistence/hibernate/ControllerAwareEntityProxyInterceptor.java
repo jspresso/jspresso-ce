@@ -45,8 +45,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Hibernate session interceptor aware of a backend controller to deal with
  * uniqueness of entity instances across the JVM.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("rawtypes")

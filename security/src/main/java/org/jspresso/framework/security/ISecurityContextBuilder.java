@@ -23,7 +23,6 @@ import java.util.Map;
 /**
  * This interface is implemented by Jspresso security context builders.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface ISecurityContextBuilder {

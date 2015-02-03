@@ -122,7 +122,6 @@ import org.springframework.transaction.support.TransactionTemplate;
  * getters. Those getters should be used by the service layer.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public abstract class AbstractBackendController extends AbstractController
     implements IBackendController {

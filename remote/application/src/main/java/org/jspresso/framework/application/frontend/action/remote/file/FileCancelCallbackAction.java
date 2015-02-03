@@ -29,7 +29,6 @@ import org.jspresso.framework.util.resources.server.ResourceManager;
  * An (internal) action to trigger the file open cancel callback.
  * 
  * @internal
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class FileCancelCallbackAction extends AbstractRemoteAction {

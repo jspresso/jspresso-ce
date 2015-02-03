@@ -39,7 +39,6 @@ import org.jspresso.framework.security.UserPrincipal;
  * Extends the JBoss LdapExtLoginModule to keep track of the authenticated
  * distinguished name.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class LdapLoginModule extends LdapExtLoginModule {

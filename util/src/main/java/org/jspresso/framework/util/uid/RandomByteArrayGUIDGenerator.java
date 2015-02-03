@@ -26,7 +26,6 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
  * An implementation of IGUIDGenerator based on Marc A. Mnich RandomGUID
  * implementation that returns a byte array.
  * 
- * @version $LastChangedRevision: 5396 $
  * @author Vincent Vandenschrick
  */
 public class RandomByteArrayGUIDGenerator implements IGUIDGenerator<ByteArray> {

@@ -24,7 +24,6 @@ import org.jspresso.framework.util.gui.Dimension;
 /**
  * Base class to dialog pop-up based commands.
  * 
- * @version $LastChangedRevision: 1873 $
  * @author Vincent Vandenschrick
  */
 public abstract class RemoteAbstractDialogCommand extends RemoteCommand {

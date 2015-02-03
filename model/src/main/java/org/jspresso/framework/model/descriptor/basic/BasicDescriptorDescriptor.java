@@ -28,7 +28,6 @@ import org.jspresso.framework.util.descriptor.IDescriptor;
 /**
  * Basic implementation of an action descriptor.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class BasicDescriptorDescriptor {

@@ -46,7 +46,6 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
  *           getAddedComponents(Map&lt;String, Object&gt; context)
  * </pre>
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractAddCollectionToMasterAction extends

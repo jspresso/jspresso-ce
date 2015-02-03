@@ -31,7 +31,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * determination strategy. Cards are registered with a name key that is used to
  * retrieve the card to display based on the card selector selected name key.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicCardViewDescriptor extends AbstractCardViewDescriptor {

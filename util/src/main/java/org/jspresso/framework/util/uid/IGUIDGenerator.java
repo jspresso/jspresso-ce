@@ -23,7 +23,6 @@ import java.io.Serializable;
 /**
  * This interface has to be implemented by generators of GUID.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual UID type generated.

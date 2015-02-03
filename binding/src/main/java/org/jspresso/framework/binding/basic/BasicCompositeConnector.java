@@ -29,7 +29,6 @@ import org.jspresso.framework.binding.IValueConnector;
  * technical view models (e.g. TableModel where each row model would be an
  * instance of {@code BasicCompositeConnector}).
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicCompositeConnector extends AbstractCompositeValueConnector {

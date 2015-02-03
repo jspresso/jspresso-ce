@@ -43,7 +43,6 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * size of the content view.</li>
  * </ul>
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

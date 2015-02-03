@@ -26,7 +26,6 @@ import org.jspresso.framework.security.UserPrincipal;
  * Empty interceptor for component lifecycle. It is designed to be subclassed
  * and used as an component service.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the class of the intercepted entity.

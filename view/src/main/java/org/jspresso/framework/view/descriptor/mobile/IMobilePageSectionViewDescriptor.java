@@ -25,7 +25,6 @@ import org.jspresso.framework.view.descriptor.EPosition;
  * Marker interface for mobile view descriptors.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public interface IMobilePageSectionViewDescriptor extends IMobileViewDescriptor, IClientTypeAware {
 

@@ -24,7 +24,6 @@ import java.util.Collection;
  * This is an interface used to identify classes responsible for providing
  * component collection property integrity processors.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          The type of the target.

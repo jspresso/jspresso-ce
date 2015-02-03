@@ -23,7 +23,6 @@ import org.jspresso.framework.util.event.ISelectionChangeListener;
 /**
  * This is the interface implemented by connectors on collections.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface ICollectionConnector extends ISelectionChangeListener,

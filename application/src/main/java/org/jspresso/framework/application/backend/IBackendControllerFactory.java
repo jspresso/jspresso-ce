@@ -21,7 +21,6 @@ package org.jspresso.framework.application.backend;
 /**
  * This interface establishes the contract of a backend controller factory.
  * 
- * @version $LastChangedRevision: 6082 $
  * @author Vincent Vandenschrick
  */
 public interface IBackendControllerFactory {

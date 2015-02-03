@@ -27,7 +27,6 @@ import javax.script.ScriptEngineManager;
  * This is the default implementation of the script handler interface. It relies
  * on Jakarta's "Bean Scripting Framework".
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class DefaultScriptHandler implements IScriptHandler {

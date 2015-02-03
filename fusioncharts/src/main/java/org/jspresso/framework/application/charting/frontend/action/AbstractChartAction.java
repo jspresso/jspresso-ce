@@ -30,7 +30,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
  * library) display actions. It holds several common properties that are
  * independent from the actual, concrete, implementations.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

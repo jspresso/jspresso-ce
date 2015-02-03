@@ -50,7 +50,6 @@ import org.jspresso.framework.view.descriptor.basic.BasicReferencePropertyViewDe
  * @param <G>
  *     the actual action type used.
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public abstract class ControllerAwareViewFactory<E, F, G> extends AbstractViewFactory<E, F, G> {
 

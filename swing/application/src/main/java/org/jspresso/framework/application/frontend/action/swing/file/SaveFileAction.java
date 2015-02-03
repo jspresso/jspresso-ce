@@ -36,7 +36,6 @@ import org.jspresso.framework.util.swing.SwingUtil;
 /**
  * Initiates a file save action.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class SaveFileAction extends ChooseFileAction {

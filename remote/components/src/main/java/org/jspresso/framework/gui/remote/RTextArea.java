@@ -21,7 +21,6 @@ package org.jspresso.framework.gui.remote;
 /**
  * A remote text area component.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RTextArea extends RTextComponent {

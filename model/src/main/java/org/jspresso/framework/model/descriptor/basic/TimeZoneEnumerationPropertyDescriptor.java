@@ -26,7 +26,6 @@ import java.util.TimeZone;
 /**
  * This is a special enumeration descriptor that holds all available timezones.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class TimeZoneEnumerationPropertyDescriptor extends

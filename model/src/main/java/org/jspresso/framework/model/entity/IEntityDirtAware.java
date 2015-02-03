@@ -23,7 +23,6 @@ import java.util.Map;
 /**
  * This interface is implemented by classes aware of entities states dirtiness.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IEntityDirtAware {

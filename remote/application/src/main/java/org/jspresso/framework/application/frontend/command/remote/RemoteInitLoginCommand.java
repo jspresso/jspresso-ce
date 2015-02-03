@@ -25,7 +25,6 @@ import org.jspresso.framework.gui.remote.RComponent;
  * This command initiates the login phase.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class RemoteInitLoginCommand extends RemoteCommand {
 

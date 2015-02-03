@@ -24,7 +24,6 @@ import org.jspresso.framework.application.frontend.file.IFileOpenCallback;
 /**
  * A mock for SaveFileAction.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

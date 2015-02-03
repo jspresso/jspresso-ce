@@ -24,7 +24,6 @@ import chrriis.dj.swingsuite.JTriStateCheckBox.CheckState;
 /**
  * JTriStateCheckbox connector.
  * 
- * @version $LastChangedRevision: 2529 $
  * @author Vincent Vandenschrick
  */
 public class JTriStateCheckBoxConnector extends

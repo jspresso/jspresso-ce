@@ -26,7 +26,6 @@ import java.util.List;
  * values out of a list of integer values. Obviously, no icon is provided for a
  * given value.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RangeEnumerationPropertyDescriptor extends

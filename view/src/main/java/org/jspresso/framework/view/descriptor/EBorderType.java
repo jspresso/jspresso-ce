@@ -21,7 +21,6 @@ package org.jspresso.framework.view.descriptor;
 /**
  * View border type constants.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public enum EBorderType {

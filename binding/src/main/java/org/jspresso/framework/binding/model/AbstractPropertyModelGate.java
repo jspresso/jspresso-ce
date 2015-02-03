@@ -34,7 +34,6 @@ import org.jspresso.framework.util.gate.AbstractModelGate;
  * This is the base abstract class of gates whose opening rules are based on a
  * single model property value.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick the actual type of property.
  * @param <E>
  *          the actual property type.

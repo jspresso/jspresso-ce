@@ -22,7 +22,6 @@ package org.jspresso.framework.binding;
  * This public interface is implemented by connectors whose value can be parsed
  * and formatted as string.
  * 
- * @version $LastChangedRevision: 1249 $
  * @author Vincent Vandenschrick
  */
 public interface IFormattedValueConnector extends IValueConnector {

@@ -29,7 +29,6 @@ import org.jspresso.framework.util.event.ValueChangeEvent;
 /**
  * JActionFieldConnector connector.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class JActionFieldConnector extends JComponentConnector<JActionField> {

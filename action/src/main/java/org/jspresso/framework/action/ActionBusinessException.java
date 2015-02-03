@@ -23,7 +23,6 @@ import org.jspresso.framework.util.exception.BusinessException;
 /**
  * This exception is thrown whenever a business exception occurs on an action.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ActionBusinessException extends BusinessException {

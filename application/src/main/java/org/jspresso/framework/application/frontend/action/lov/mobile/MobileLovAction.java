@@ -42,7 +42,6 @@ import org.jspresso.framework.view.descriptor.mobile.IMobilePageAware;
  * @param <G>
  *     the actual action type used.
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class MobileLovAction<E, F, G> extends LovAction<E, F, G> {
 

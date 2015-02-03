@@ -27,7 +27,6 @@ import org.jspresso.framework.action.IActionHandler;
  * dialog. The dialog is actually closed between the <i>wrapped</i> action and
  * the <i>next</i> action if and only if the wrapped action succeeds.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

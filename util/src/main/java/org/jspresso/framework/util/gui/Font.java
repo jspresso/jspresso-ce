@@ -23,7 +23,6 @@ import java.io.Serializable;
 /**
  * A simple class to represent a font.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class Font implements Serializable {

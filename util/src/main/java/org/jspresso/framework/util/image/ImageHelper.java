@@ -31,7 +31,6 @@ import org.jspresso.framework.util.url.UrlHelper;
  * This is a simple helper class to be able to deal with images.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public final class ImageHelper {
 

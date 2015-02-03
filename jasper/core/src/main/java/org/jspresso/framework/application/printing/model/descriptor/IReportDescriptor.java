@@ -26,7 +26,6 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
  * The descriptor of a report. It points to the report design resource as well a
  * the definition of the contextual report parameters.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IReportDescriptor extends IComponentDescriptor<IReport> {

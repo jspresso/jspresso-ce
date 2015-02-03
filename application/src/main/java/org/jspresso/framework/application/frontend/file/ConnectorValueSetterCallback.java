@@ -31,7 +31,6 @@ import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
  * Default handler implementation to deal with setting binary properties using
  * files.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ConnectorValueSetterCallback extends FileToByteArrayCallback {

@@ -25,7 +25,6 @@ import org.jspresso.framework.model.descriptor.IModelDescriptor;
  * This public interface is implemented by any collection view descriptor. For
  * example, a collection view is a table view, a list view, ...
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface ICollectionViewDescriptor extends IScrollableViewDescriptor,

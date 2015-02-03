@@ -26,7 +26,6 @@ import org.jspresso.framework.application.model.Module;
 /**
  * A simple structure to represent an entry in the modules navigation history.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ModuleHistoryEntry {

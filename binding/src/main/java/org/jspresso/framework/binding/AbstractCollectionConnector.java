@@ -40,7 +40,6 @@ import org.jspresso.framework.util.event.ValueChangeEvent;
  * implements the dynamic management of the child connectors which represent the
  * collection.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractCollectionConnector extends

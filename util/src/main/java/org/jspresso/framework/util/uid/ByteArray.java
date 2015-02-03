@@ -27,7 +27,6 @@ import org.apache.commons.codec.binary.Hex;
 /**
  * Wrapper class around a byte array.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class ByteArray implements Serializable, Comparable<ByteArray> {

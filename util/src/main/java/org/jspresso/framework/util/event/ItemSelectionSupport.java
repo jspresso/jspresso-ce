@@ -25,7 +25,6 @@ import gnu.trove.set.hash.TLinkedHashSet;
 /**
  * Helper class to ease the IItemSelectionListener management.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ItemSelectionSupport {

@@ -23,7 +23,6 @@ import org.jspresso.framework.util.lang.IModelAware;
 /**
  * A model based gate.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IModelGate extends IGate, IModelAware {

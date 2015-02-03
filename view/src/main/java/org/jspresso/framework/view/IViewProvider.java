@@ -21,7 +21,6 @@ package org.jspresso.framework.view;
 /**
  * A simple interface to implement an indirection on a view.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          The root class of the view peers.

@@ -40,7 +40,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * <p>
  * north -> west -> center -> east -> south
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor

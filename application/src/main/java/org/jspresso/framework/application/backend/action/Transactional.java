@@ -28,7 +28,6 @@ import java.lang.annotation.Target;
 /**
  * Make a backend action transactional.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 @Retention(RetentionPolicy.RUNTIME)

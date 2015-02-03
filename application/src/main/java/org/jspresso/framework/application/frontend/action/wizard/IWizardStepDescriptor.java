@@ -12,7 +12,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 /**
  * The descriptor contract for a wizard view step.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("UnusedParameters")

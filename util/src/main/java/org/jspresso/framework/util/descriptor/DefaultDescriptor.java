@@ -27,7 +27,6 @@ import org.jspresso.framework.util.lang.ICloneable;
  * This is a utility class from which most named descriptors inherit for
  * factorization purpose. It provides translatable name and description.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class DefaultDescriptor implements IDescriptor, ICloneable {

@@ -21,7 +21,6 @@ package org.jspresso.framework.model.entity;
 /**
  * Implemented by classes that can be injected with an entity lifecycle handler.
  * 
- * @version $LastChangedRevision: 3701 $
  * @author Vincent Vandenschrick
  */
 public interface IEntityLifecycleHandlerAware {

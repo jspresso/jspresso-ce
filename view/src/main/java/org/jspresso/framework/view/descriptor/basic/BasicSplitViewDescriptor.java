@@ -36,7 +36,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * <p>
  * left -> right or top -> bottom depending on the split orientation.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor

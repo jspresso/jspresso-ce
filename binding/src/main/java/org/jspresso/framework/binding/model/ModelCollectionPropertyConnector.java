@@ -42,7 +42,6 @@ import org.jspresso.framework.util.event.SelectionChangeSupport;
 /**
  * This class is a model property connector which manages a collection property.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ModelCollectionPropertyConnector extends ModelPropertyConnector

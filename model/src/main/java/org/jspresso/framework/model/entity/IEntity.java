@@ -26,8 +26,7 @@ import org.jspresso.framework.model.component.IComponent;
  * This interface must be implemented by all persistent entities in the
  * application domain. It establishes the minimal contract of an entity which is
  * providing id accessors.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
  */
 public interface IEntity extends IComponent {

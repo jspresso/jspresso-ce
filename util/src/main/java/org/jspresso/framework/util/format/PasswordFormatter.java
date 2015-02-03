@@ -21,7 +21,6 @@ package org.jspresso.framework.util.format;
 /**
  * A 1-way formatter for passwords.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class PasswordFormatter implements IFormatter<String, String> {

@@ -59,7 +59,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 /**
  * Generates Jspresso powered component java code based on its descriptor.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ViewTester {
@@ -245,8 +244,7 @@ public class ViewTester {
   /**
    * Specialized exception handler for the tester event dispatch thread.
    *
-   * @version $LastChangedRevision$
-   * @author Vincent Vandenschrick
+     * @author Vincent Vandenschrick
    */
   public static class TesterExceptionHandler {
 

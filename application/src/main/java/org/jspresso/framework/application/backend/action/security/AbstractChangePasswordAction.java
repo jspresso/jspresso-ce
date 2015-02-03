@@ -52,7 +52,6 @@ import org.jspresso.framework.util.lang.ObjectUtils;
  *           String currentPassword, String newPassword)
  * </pre>
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractChangePasswordAction extends BackendAction {

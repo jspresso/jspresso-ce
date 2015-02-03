@@ -74,7 +74,6 @@ import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
  * data. Moreover, this rule is available for the table rows tooltip, but also
  * for each individual column (property view) in the table.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor

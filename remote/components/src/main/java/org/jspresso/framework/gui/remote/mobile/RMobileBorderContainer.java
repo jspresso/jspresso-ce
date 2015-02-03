@@ -23,7 +23,6 @@ import org.jspresso.framework.gui.remote.RBorderContainer;
 /**
  * A remote mobile border container component.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RMobileBorderContainer extends RBorderContainer {

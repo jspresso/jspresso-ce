@@ -35,7 +35,6 @@ import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
  * Abstract class for component view descriptors.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public abstract class AbstractComponentViewDescriptor extends BasicViewDescriptor implements IComponentViewDescriptor {
 

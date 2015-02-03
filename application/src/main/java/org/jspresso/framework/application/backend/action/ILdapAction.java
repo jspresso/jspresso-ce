@@ -8,7 +8,6 @@ import org.springframework.ldap.core.LdapTemplate;
 /**
  * Configuration contract for an ldap action.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface ILdapAction {

@@ -144,7 +144,6 @@ import org.jspresso.framework.view.descriptor.basic.PropertyViewDescriptorHelper
 /**
  * Abstract base class factory for views.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.
@@ -3404,8 +3403,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Connector action adapter.
    *
-   * @version $LastChangedRevision$
-   * @author Vincent Vandenschrick
+     * @author Vincent Vandenschrick
    * @param <E>
    *          the actual component type.
    * @param <F>

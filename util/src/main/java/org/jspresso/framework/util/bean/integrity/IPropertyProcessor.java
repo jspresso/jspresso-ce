@@ -22,7 +22,6 @@ package org.jspresso.framework.util.bean.integrity;
  * This is an interface used to identify classes responsible for providing
  * component property integrity processors.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          The type of the target.

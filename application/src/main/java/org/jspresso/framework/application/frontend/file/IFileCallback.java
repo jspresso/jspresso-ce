@@ -26,7 +26,6 @@ import org.jspresso.framework.action.IActionHandler;
  * This interface is the base interface used to react to file manipulation
  * (open/save).
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("UnusedParameters")

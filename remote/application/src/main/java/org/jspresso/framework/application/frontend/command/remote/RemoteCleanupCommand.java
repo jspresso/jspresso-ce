@@ -21,7 +21,6 @@ package org.jspresso.framework.application.frontend.command.remote;
 /**
  * A command to cleanup garbage collected remote peers.
  * 
- * @version $LastChangedRevision: 2529 $
  * @author Vincent Vandenschrick
  */
 public class RemoteCleanupCommand extends RemoteCommand {

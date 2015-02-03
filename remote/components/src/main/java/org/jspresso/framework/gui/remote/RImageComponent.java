@@ -21,7 +21,6 @@ package org.jspresso.framework.gui.remote;
 /**
  * A remote image component.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RImageComponent extends RComponent implements RActionable {

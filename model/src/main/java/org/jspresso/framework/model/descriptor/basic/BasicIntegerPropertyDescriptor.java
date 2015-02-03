@@ -27,7 +27,6 @@ import org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor;
  * {@code Integer} or a {@code Long} depending on the
  * {@code usingLong} property.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicIntegerPropertyDescriptor extends

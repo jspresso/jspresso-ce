@@ -21,7 +21,6 @@ package org.jspresso.framework.gui.remote;
 /**
  * A component containing enumerated values.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class REnumBox extends RComponent {

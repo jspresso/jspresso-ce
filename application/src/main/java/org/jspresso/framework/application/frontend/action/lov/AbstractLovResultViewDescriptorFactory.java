@@ -24,7 +24,6 @@ import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
 /**
  * The base abstract implementation for lov result view factories.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractLovResultViewDescriptorFactory extends

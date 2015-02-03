@@ -22,7 +22,6 @@ package org.jspresso.framework.util.automation;
  * Components implementing this interface can provide a permanent id for cross
  * application run retrieval.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IPermIdSource {

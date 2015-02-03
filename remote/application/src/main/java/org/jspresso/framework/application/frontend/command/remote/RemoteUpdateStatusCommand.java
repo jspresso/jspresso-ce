@@ -21,7 +21,6 @@ package org.jspresso.framework.application.frontend.command.remote;
 /**
  * A command to update the remote application frame status bar.
  * 
- * @version $LastChangedRevision: 3701 $
  * @author Vincent Vandenschrick
  */
 public class RemoteUpdateStatusCommand extends RemoteCommand {

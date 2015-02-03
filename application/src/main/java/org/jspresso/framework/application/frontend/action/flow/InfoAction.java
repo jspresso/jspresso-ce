@@ -25,7 +25,6 @@ import org.jspresso.framework.action.IActionHandler;
 /**
  * This action pops-up an informational message to the user.
  * 
- * @version $LastChangedRevision: 2097 $
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

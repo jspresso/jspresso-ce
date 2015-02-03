@@ -25,7 +25,6 @@ import java.util.Date;
 /**
  * This is a simple helper class to be able to cope with ldap.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class LdapUtils {

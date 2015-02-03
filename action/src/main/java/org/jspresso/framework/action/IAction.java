@@ -27,7 +27,6 @@ import org.jspresso.framework.util.lang.ICloneable;
 /**
  * This interface establishes the contract of any action in the application.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IAction extends ISecurable, IPermIdSource, ICloneable {

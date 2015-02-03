@@ -33,7 +33,6 @@ import org.jboss.security.SimplePrincipal;
 /**
  * Helper class for security management.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class SecurityHelper {

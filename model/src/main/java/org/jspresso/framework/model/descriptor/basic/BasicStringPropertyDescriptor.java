@@ -28,7 +28,6 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 /**
  * Describes a string based property.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicStringPropertyDescriptor extends

@@ -47,7 +47,6 @@ import org.jspresso.framework.view.descriptor.basic.BasicCollectionViewDescripto
  * module objects collection.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class InitModuleFilterAction extends BackendAction {
 

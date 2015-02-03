@@ -32,7 +32,6 @@ import org.jspresso.framework.model.persistence.hibernate.property.EntityPropert
 /**
  * A specialized hibernate tuplizer to handle proxy entities.
  * 
- * @version $LastChangedRevision: 4321 $
  * @author Vincent Vandenschrick
  */
 public class DynamicPojoEntityTuplizer extends PojoEntityTuplizer {

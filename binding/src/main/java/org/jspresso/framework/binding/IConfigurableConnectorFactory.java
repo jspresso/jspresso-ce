@@ -24,7 +24,6 @@ import org.jspresso.framework.util.format.IFormatter;
  * This is the interface defining the contract of a configurable connector
  * factory. These factories are designed to be used by view factories.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IConfigurableConnectorFactory {

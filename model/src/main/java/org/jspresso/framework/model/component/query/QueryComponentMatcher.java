@@ -36,7 +36,6 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
  * This is a utility service that knows how to match an arbitrary bean or map against a query component.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class QueryComponentMatcher {
 

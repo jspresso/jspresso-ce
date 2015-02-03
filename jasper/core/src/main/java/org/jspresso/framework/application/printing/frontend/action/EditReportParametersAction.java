@@ -30,7 +30,6 @@ import org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor
  * {@code REPORT_ACTION_PARAM} key) and pops-up a form to allow for the
  * report input parameters customization.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

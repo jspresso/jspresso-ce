@@ -23,7 +23,6 @@ import org.jspresso.framework.gui.remote.RImageComponent;
 /**
  * A remote mobile image component.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RMobileImageComponent extends RImageComponent {

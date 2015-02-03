@@ -23,7 +23,6 @@ import java.util.Locale;
 /**
  * Abstract base class for {@code ITranslationProvider} implementation.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractTranslationProvider implements

@@ -23,7 +23,6 @@ import org.jspresso.framework.util.image.IScalableImageAware;
 /**
  * This interface is implemented by descriptors of image url properties.
  * 
- * @version $LastChangedRevision: 3701 $
  * @author Vincent Vandenschrick
  */
 public interface IImageUrlPropertyDescriptor extends IStringPropertyDescriptor, IScalableImageAware {

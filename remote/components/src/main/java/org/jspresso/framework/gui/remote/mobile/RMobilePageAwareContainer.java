@@ -24,7 +24,6 @@ import org.jspresso.framework.gui.remote.RComponent;
  * A mobile page.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class RMobilePageAwareContainer extends RMobilePageAware {
 

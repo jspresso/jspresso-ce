@@ -47,7 +47,6 @@ import org.springframework.beans.factory.BeanFactoryAware;
  * you name it &quot;MyProperty&quot;, it will actually end up to
  * &quot;myProperty&quot;.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor

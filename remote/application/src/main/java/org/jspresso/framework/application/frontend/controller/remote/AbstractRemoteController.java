@@ -112,7 +112,6 @@ import org.jspresso.framework.view.remote.RemoteActionFactory;
  * controller.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public abstract class AbstractRemoteController extends AbstractFrontendController<RComponent, RIcon, RAction>
     implements IRemoteCommandHandler, IRemotePeerRegistry, IRemotePeerRegistryListener {

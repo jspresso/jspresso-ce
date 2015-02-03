@@ -28,7 +28,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * A composite view descriptor that aggregates view sections on a single page.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class MobileCompositePageViewDescriptor extends AbstractMobilePageViewDescriptor {
 

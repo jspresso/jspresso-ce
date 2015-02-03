@@ -44,7 +44,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * detail in a master-detail view. The detail view may then change dynamically
  * based on the selected master.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractCardViewDescriptor extends BasicViewDescriptor

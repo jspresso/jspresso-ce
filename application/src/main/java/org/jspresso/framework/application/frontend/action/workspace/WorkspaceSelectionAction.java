@@ -26,7 +26,6 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
 /**
  * This action displays a workspace using its (untranslated) name.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

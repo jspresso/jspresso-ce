@@ -43,7 +43,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * @param <G>
  *     the actual action type used.
  * @author Maxime HAMM
- * @version $LastChangedRevision: 5946 $
  * @see org.jspresso.framework.application.backend.action.module.AddBeanAsSubModuleAction
  */
 @SuppressWarnings("UnusedParameters")

@@ -27,7 +27,6 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 /**
  * Factory interface for LOV result view factories.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface ILovResultViewDescriptorFactory {

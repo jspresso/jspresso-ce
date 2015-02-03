@@ -23,7 +23,6 @@ import javax.swing.JTextPane;
 /**
  * JTextPane connector.
  * 
- * @version $LastChangedRevision: 2097 $
  * @author Vincent Vandenschrick
  */
 public class JTextPaneConnector extends JTextComponentConnector<JTextPane> {

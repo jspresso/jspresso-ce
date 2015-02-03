@@ -35,7 +35,6 @@ import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 /**
  * The server peer of a remote composite connector.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteCompositeConnector extends BasicCompositeConnector implements

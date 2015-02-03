@@ -11,7 +11,6 @@ import org.jspresso.framework.util.accessor.ICollectionAccessor;
  * A map accessor factory that create descriptor aware accessors. They are able
  * to handle the underlying model integrity.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class DescriptorAwareMapAccessorFactory extends AbstractAccessorFactory {

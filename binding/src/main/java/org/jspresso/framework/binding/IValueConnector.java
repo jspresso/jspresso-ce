@@ -33,7 +33,6 @@ import org.jspresso.framework.util.gate.IGate;
  * {@code IValueChangeEvent} accordingly). <li>is able to update peer value
  * <li>can attach to other connectors as {@code IValueChangeListener}
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IValueConnector extends IConnector, IValueChangeListener,

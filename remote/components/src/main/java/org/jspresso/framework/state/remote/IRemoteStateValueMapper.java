@@ -22,7 +22,6 @@ package org.jspresso.framework.state.remote;
  * A simple interface to establish the transformation contract to fill in a
  * remote state value.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IRemoteStateValueMapper {

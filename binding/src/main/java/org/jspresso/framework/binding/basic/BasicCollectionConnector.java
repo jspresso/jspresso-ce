@@ -28,7 +28,6 @@ import org.jspresso.framework.binding.IMvcBinder;
  * building complex technical view models (e.g. TableModel where the underlying
  * structure would be a {@code BasicCollectionConnector}).
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicCollectionConnector extends AbstractCollectionConnector {

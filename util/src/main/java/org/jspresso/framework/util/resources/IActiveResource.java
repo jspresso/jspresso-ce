@@ -24,7 +24,6 @@ import java.io.OutputStream;
 /**
  * This interface is implemented by active web resources.
  * 
- * @version $LastChangedRevision: 2587 $
  * @author Vincent Vandenschrick
  */
 public interface IActiveResource extends IResourceBase {

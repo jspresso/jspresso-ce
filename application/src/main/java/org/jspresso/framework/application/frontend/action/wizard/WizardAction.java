@@ -82,7 +82,6 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * (label and icon).</li>
  * </ol>
  *
- * @version $LastChangedRevision: 1302 $
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

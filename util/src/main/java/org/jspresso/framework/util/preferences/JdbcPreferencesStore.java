@@ -32,7 +32,6 @@ import org.springframework.jdbc.core.RowCallbackHandler;
 /**
  * A JDBC based preference store.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class JdbcPreferencesStore implements IPreferencesStore {

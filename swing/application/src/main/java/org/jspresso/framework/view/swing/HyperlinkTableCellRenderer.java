@@ -35,7 +35,6 @@ import javax.swing.table.TableCellRenderer;
  * Used as an adapter around table cell renderer to be able to render
  * hyperlinks.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 class HyperlinkTableCellRenderer extends DefaultTableCellRenderer implements

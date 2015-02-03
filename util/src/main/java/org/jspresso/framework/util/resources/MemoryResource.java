@@ -24,7 +24,6 @@ import java.io.InputStream;
 /**
  * a byte array resource.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class MemoryResource extends AbstractResource {

@@ -33,7 +33,6 @@ import org.jspresso.framework.application.model.Module;
  * is an entity which is dirty. On the other hand, a bean module is marked dirty
  * if and only if its (single) module object is an entity and is dirty.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

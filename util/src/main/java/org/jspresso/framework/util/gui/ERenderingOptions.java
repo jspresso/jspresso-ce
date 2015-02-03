@@ -21,7 +21,6 @@ package org.jspresso.framework.util.gui;
 /**
  * Enumeration to define various rendering options.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public enum ERenderingOptions {

@@ -24,7 +24,6 @@ package org.jspresso.framework.util.event;
  * together (in a MVC relationship for instance) where the 2 connectors will
  * listen for each other value.
  * 
- * @version $LastChangedRevision: 1249 $
  * @author Vincent Vandenschrick
  */
 public interface IValueChangeListener {

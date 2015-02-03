@@ -45,7 +45,6 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 /**
  * A remote action factory.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteActionFactory extends

@@ -78,7 +78,6 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
  * This is the default Jspresso implementation of Hibernate-based backend
  * controller.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class HibernateBackendController extends AbstractBackendController {

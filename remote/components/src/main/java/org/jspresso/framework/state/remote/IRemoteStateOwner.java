@@ -21,7 +21,6 @@ package org.jspresso.framework.state.remote;
 /**
  * Implemented by classes that are remote value state aware.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IRemoteStateOwner {

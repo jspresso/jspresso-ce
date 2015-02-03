@@ -28,7 +28,6 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteEditComm
  * Triggers editing of current page.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class EditCurrentPageAction extends AbstractRemoteAction {
 

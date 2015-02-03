@@ -30,7 +30,6 @@ package org.jspresso.framework.model.descriptor.basic;
  * only contain property accessors. The latter can be achieved using service
  * delegates and the {@code serviceDelegates[Bean|Class]Names} property.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the concrete type of components.

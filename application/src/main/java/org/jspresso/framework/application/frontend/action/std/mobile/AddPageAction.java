@@ -29,7 +29,6 @@ import org.jspresso.framework.util.collection.IPageable;
  * A special mobile pagination action that adds a page to the current results.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  * @param <E>
  *          the actual gui component type used.
  * @param <F>

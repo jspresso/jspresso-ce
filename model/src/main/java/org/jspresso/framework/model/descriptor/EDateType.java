@@ -21,7 +21,6 @@ package org.jspresso.framework.model.descriptor;
 /**
  * Constants for date types.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public enum EDateType {

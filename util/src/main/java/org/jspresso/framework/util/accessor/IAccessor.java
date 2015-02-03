@@ -23,7 +23,6 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * This interface is implemented by any bean value accessor.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IAccessor {

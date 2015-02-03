@@ -16,7 +16,6 @@ import org.jspresso.framework.util.lang.ICloneable;
 /**
  * Abstract class to build a property change capable bean.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @internal
  */

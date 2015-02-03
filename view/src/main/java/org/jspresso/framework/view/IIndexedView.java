@@ -22,7 +22,6 @@ package org.jspresso.framework.view;
  * This interface establishes the general contract of a composite view which
  * owns indexed child views.
  * 
- * @version $LastChangedRevision: 2808 $
  * @author Vincent Vandenschrick
  * @param <E>
  */

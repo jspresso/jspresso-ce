@@ -22,7 +22,6 @@ package org.jspresso.framework.view.descriptor;
  * This public interface is implemented by objects capable of providing a
  * reference on a IViewDescriptor.
  * 
- * @version $LastChangedRevision: 1827 $
  * @author Vincent Vandenschrick
  */
 public interface IViewDescriptorProvider {

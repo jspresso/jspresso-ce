@@ -31,7 +31,6 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
  * can be useful in the UI if you want to visually indicate the actual type of a
  * element contained in a polymorphic collection.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class TypeEnumerationPropertyDescriptor extends

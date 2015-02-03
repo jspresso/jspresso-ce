@@ -26,7 +26,6 @@ import org.jspresso.framework.model.persistence.hibernate.criterion.EnhancedDeta
 /**
  * Empty refiner.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class MockCriteriaRefiner implements ICriteriaRefiner {

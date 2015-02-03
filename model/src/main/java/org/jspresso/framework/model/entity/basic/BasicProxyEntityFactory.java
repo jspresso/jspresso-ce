@@ -53,7 +53,6 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
  * proxies which delegate to {@code BasicEntityInvocationHandler}s.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class BasicProxyEntityFactory extends AbstractComponentFactory implements IEntityFactory {
 

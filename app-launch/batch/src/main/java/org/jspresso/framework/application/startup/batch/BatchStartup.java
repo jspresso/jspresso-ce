@@ -34,8 +34,7 @@ import org.slf4j.LoggerFactory;
 /**
  * A simple batch process starter. The batch itself is coded as a backend action
  * that is executed by the backend controller.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
  */
 public class BatchStartup extends BackendActionStartup implements IBatchStartup {

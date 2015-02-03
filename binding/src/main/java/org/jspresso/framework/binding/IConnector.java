@@ -29,7 +29,6 @@ import org.jspresso.framework.util.lang.ICloneable;
  * server. Another kind of connector might be a view connector connected to a
  * model connector with both connectors' states kept synchronized.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IConnector extends IPropertyChangeCapable, ICloneable {

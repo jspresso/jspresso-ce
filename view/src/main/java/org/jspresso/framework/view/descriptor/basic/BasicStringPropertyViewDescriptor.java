@@ -25,7 +25,6 @@ import org.jspresso.framework.view.descriptor.IStringPropertyViewDescriptor;
  * This type of view descriptor is used to display a a string property.
  * The objective is to be able to configure an action bound to character typing.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicStringPropertyViewDescriptor extends BasicPropertyViewDescriptor

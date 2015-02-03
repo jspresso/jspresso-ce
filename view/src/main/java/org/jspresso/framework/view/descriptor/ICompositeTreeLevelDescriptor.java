@@ -25,7 +25,6 @@ import java.util.List;
  * composite tree levels are tree levels where children are organised into sub
  * groups.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface ICompositeTreeLevelDescriptor extends ITreeLevelDescriptor {

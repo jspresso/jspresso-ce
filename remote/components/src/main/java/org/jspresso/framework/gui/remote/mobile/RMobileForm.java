@@ -23,7 +23,6 @@ import org.jspresso.framework.gui.remote.RForm;
 /**
  * A remote mobile form component.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RMobileForm extends RForm {

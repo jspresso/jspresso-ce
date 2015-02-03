@@ -113,7 +113,6 @@ import org.jspresso.framework.view.remote.AbstractRemoteViewFactory;
  * Factory for mobile remote views.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision: 1463 $
  */
 @SuppressWarnings("UnusedParameters")
 public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {

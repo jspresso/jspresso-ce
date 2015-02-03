@@ -23,7 +23,6 @@ import java.util.Map;
 /**
  * A command to trigger a sort action.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteSortCommand extends RemoteCommand {

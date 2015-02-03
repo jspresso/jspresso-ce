@@ -28,7 +28,6 @@ import org.springframework.transaction.support.TransactionTemplate;
  * A specialized transaction template that takes care of checking that the unit
  * of work is started when executing a transaction callback.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ControllerAwareTransactionTemplate extends TransactionTemplate {

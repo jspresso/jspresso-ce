@@ -24,7 +24,6 @@ import org.jspresso.framework.util.lang.ICloneable;
 /**
  * A simple open / close, true / false interface.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IGate extends IPropertyChangeCapable, ICloneable {

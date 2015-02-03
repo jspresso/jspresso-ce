@@ -27,7 +27,6 @@ import org.jspresso.framework.util.accessor.IAccessorFactory;
 /**
  * Interface for all factories of model connectors.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IModelConnectorFactory {

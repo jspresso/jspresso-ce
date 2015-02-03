@@ -27,7 +27,6 @@ import java.util.Map;
  * A filtered input stream that replaces placeholders on the fly based on a
  * substitution map.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class PlaceholderInputStream extends FilterInputStream {

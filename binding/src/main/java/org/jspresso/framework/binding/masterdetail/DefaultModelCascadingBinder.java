@@ -30,7 +30,6 @@ import org.jspresso.framework.util.event.ItemSelectionEvent;
 /**
  * Default implementation of {@code IModelCascadingBinder}.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class DefaultModelCascadingBinder implements IModelCascadingBinder {

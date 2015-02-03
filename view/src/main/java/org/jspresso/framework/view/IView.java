@@ -25,7 +25,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * This interface establishes the general contract of a view. Its main role is
  * to provide a pair of (visible peer , connector) used by the framework.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          The root class of the view peers.

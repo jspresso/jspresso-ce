@@ -24,7 +24,6 @@ import org.jspresso.framework.model.descriptor.IImageUrlPropertyDescriptor;
  * Describes an image URL property. This type of descriptor instructs Jspresso
  * to use an image component to interact with this type of property.
  * 
- * @version $LastChangedRevision: 4321 $
  * @author Vincent Vandenschrick
  */
 public class BasicImageUrlPropertyDescriptor extends

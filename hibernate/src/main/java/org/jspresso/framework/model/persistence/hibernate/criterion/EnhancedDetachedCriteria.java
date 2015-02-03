@@ -37,7 +37,6 @@ import org.slf4j.LoggerFactory;
 /**
  * An enhanced detached criteria that holds a sub-criteria registry.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("rawtypes")

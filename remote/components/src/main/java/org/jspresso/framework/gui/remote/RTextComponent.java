@@ -21,7 +21,6 @@ package org.jspresso.framework.gui.remote;
 /**
  * A remote text component.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class RTextComponent extends RComponent {

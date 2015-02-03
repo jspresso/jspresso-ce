@@ -23,7 +23,6 @@ import net.sf.qooxdoo.rpc.RemoteService;
 /**
  * Indirection interface for Qooxdoo remote services.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface Remote extends RemoteService {

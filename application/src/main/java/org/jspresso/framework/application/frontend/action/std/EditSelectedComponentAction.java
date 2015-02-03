@@ -37,7 +37,6 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * component and edit it in a modal dialog. Editing happens in a &quot;Unit of
  * Work&quot; meaning that it can be rolled-back when canceling.
  * 
- * @version $LastChangedRevision: 2601 $
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.
@@ -126,8 +125,7 @@ public class EditSelectedComponentAction<E, F, G> extends
   /**
    * Default OK action.
    * 
-   * @version $LastChangedRevision$
-   * @author Vincent Vandenschrick
+     * @author Vincent Vandenschrick
    * @param <E>
    *          the actual gui component type used.
    * @param <F>
@@ -156,8 +154,7 @@ public class EditSelectedComponentAction<E, F, G> extends
    * A wrapper action that roll backs the current UOW before delegating to its
    * delegate.
    * 
-   * @version $LastChangedRevision$
-   * @author Vincent Vandenschrick
+     * @author Vincent Vandenschrick
    * @param <E>
    *          the actual gui component type used.
    * @param <F>

@@ -27,7 +27,6 @@ import org.jspresso.framework.util.gui.IClientTypeAware;
  * This public interface is implemented by view descriptors which are just
  * presenting a property.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IPropertyViewDescriptor extends IViewDescriptor, IClientTypeAware {

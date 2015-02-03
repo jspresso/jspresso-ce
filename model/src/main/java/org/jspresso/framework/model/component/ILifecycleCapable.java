@@ -25,7 +25,6 @@ import org.jspresso.framework.security.UserPrincipal;
 /**
  * Defines the component lifecycle hooks.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface ILifecycleCapable {

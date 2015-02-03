@@ -26,7 +26,6 @@ import java.io.InputStream;
 /**
  * A file resource.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class FileResource extends AbstractResource {

@@ -32,7 +32,6 @@ import java.net.URLConnection;
  * constructor. See RFE #1218
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class ProxyAuthenticatorInit {
 

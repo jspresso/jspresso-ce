@@ -25,7 +25,6 @@ import org.jspresso.framework.binding.IValueConnector;
  * connectors in a master / detail relationship where the master connector is
  * determined by the selection in a {@code ISelectableConnector}.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IModelCascadingBinder {

@@ -38,7 +38,6 @@ import org.jspresso.framework.util.accessor.AbstractPropertyAccessor;
  * implemented by proxies. Its main goal is to provide hibernate with new
  * instances of entities based on their core interface contract.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class EntityProxyInterceptor extends EmptyInterceptor {

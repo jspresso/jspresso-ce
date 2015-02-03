@@ -21,7 +21,6 @@ package org.jspresso.framework.gui.remote;
 /**
  * A component used to fill an empty area.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class REmptyComponent extends RComponent {

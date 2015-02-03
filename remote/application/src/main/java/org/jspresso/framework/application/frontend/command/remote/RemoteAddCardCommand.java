@@ -23,7 +23,6 @@ import org.jspresso.framework.gui.remote.RComponent;
 /**
  * This command is used to add a card in a remote card container.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteAddCardCommand extends RemoteCommand {

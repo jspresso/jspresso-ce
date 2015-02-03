@@ -29,7 +29,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 /**
  * Factory for list-of-value views.
  * 
- * @version $LastChangedRevision: 3703 $
  * @author Vincent Vandenschrick
  */
 public interface ILovViewDescriptorFactory {

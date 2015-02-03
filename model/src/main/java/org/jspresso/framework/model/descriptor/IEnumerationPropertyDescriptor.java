@@ -29,7 +29,6 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * type of properties is constrained by a fixed value enumeration like
  * MALE/FEMALE or MONDAY/TUESDAY/WEDNESDAY/...
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IEnumerationPropertyDescriptor extends

@@ -26,7 +26,6 @@ import org.jspresso.framework.action.IActionHandler;
 /**
  * This interface is used react to file open.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IFileOpenCallback extends IFileCallback {

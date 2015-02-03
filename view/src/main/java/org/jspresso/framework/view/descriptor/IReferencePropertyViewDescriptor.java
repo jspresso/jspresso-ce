@@ -24,7 +24,6 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * A property view descriptor used to refine reference property views.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public interface IReferencePropertyViewDescriptor extends IStringPropertyViewDescriptor {
 

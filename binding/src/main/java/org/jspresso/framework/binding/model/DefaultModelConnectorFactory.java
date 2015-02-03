@@ -39,7 +39,6 @@ import org.jspresso.framework.util.gate.IGateAccessible;
 /**
  * Default implementation for model connectors factory.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class DefaultModelConnectorFactory implements IModelConnectorFactory {

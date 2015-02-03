@@ -21,7 +21,6 @@ package org.jspresso.framework.util.event;
 /**
  * this interface is implemented by components supporting selection.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface ISelectable {

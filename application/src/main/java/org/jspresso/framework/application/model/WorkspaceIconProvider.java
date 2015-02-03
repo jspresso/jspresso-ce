@@ -25,7 +25,6 @@ import org.jspresso.framework.util.gui.IconProvider;
  * This image url provider uses a delegate provider to look up the rendering
  * image of a bean module based on its projected object.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class WorkspaceIconProvider implements IconProvider {

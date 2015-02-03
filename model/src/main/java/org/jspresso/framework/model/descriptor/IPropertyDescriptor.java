@@ -29,7 +29,6 @@ import org.jspresso.framework.util.lang.ICloneable;
 /**
  * This interface is the super-interface of all properties descriptors.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @see org.jspresso.framework.model.descriptor.IComponentDescriptor
  */

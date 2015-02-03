@@ -26,7 +26,6 @@ import org.jspresso.framework.util.gui.IconProvider;
  * of java beans described by one of their property.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public interface IListViewDescriptor extends ICollectionViewDescriptor {
 

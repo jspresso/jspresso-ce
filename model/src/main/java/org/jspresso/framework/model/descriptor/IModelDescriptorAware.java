@@ -22,7 +22,6 @@ package org.jspresso.framework.model.descriptor;
  * This interface is implemented by objects which might be interested by an
  * underlying model descriptor..
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IModelDescriptorAware {

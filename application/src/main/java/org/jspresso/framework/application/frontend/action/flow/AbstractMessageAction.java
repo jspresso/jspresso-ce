@@ -31,7 +31,6 @@ import org.jspresso.framework.util.html.HtmlHelper;
  * message to be interpreted as HTML, it must be surrounded by
  * {@code &lt;HTML&gt;} tags.
  *
- * @version $LastChangedRevision: 2097 $
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

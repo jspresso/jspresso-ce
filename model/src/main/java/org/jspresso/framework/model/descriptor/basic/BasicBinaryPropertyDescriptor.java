@@ -30,7 +30,6 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * Describes a property used to store a binary value in the form of a byte
  * array.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicBinaryPropertyDescriptor extends

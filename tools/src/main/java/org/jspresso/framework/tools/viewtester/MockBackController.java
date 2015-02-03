@@ -9,7 +9,6 @@ import org.jspresso.framework.model.entity.IEntity;
 /**
  * A mock backend controller.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class MockBackController extends AbstractBackendController {

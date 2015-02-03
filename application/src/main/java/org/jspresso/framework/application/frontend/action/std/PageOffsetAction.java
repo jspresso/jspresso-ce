@@ -35,7 +35,6 @@ import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
  * {@code PAGE_OFFSET}). It is meant to be linked to a find/query action
  * that will further leverage this offset to navigate a pageable result set.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

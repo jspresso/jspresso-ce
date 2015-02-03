@@ -35,7 +35,6 @@ import freemarker.template.TemplateScalarModel;
  * </ul>
  * The result is made uppercase.
  * 
- * @version $LastChangedRevision: 5621 $
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("rawtypes")

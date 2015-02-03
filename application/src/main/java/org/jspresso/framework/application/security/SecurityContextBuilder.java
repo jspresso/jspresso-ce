@@ -41,7 +41,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 /**
  * Security context builder that helps building a security context.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class SecurityContextBuilder implements ISecurityContextBuilder {

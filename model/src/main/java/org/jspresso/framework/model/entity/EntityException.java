@@ -24,7 +24,6 @@ import org.jspresso.framework.model.component.ComponentException;
  * This exception is thrown whenever an unexpected exception occurs on an
  * entity.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class EntityException extends ComponentException {

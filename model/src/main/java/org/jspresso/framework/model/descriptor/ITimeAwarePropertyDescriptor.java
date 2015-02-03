@@ -21,7 +21,6 @@ package org.jspresso.framework.model.descriptor;
 /**
  * This interface is implemented by descriptors containing a time information.
  * 
- * @version $LastChangedRevision: 3701 $
  * @author Vincent Vandenschrick
  */
 public interface ITimeAwarePropertyDescriptor {

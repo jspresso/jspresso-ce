@@ -28,7 +28,6 @@ import org.jspresso.framework.util.format.IFormatter;
 /**
  * Automatically adds a '%' character at the end of the passed string if needed.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class JPercentFieldConnector extends JFormattedFieldConnector {

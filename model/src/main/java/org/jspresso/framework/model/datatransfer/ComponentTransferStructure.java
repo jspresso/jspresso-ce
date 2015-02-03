@@ -9,7 +9,6 @@ import java.util.List;
  * A simple container for transferring component(s). Its usage is targeting at
  * copy/cut/paste operations.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the concrete component type.

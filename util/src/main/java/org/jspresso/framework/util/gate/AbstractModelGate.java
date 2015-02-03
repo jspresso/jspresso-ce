@@ -21,7 +21,6 @@ package org.jspresso.framework.util.gate;
 /**
  * This is the base abstract implementation for gates that are model-based.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractModelGate extends AbstractGate implements

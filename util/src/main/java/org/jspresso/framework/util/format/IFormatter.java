@@ -23,7 +23,6 @@ import java.text.ParseException;
 /**
  * Generic contract of a formatter object.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the source type.

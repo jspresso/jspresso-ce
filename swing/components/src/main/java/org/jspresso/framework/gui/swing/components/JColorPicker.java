@@ -38,7 +38,6 @@ import javax.swing.event.EventListenerList;
 /**
  * A swing component used to choose or reset to null a color.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class JColorPicker extends JPanel {

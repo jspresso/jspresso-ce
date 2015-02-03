@@ -37,7 +37,6 @@ package org.jspresso.framework.model.descriptor;
  *      of the GNU Lesser General Public License along with Jspresso. If not,
  *      see <http://www.gnu.org/licenses/>.
  *      <p>
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IDurationPropertyDescriptor extends IScalarPropertyDescriptor {

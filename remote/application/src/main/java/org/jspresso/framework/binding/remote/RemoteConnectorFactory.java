@@ -60,7 +60,6 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
 /**
  * This connector factory implementation creates remote connector server peers.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteConnectorFactory implements IConfigurableConnectorFactory,

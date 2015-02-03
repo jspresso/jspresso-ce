@@ -24,7 +24,6 @@ package org.jspresso.framework.model.component;
  * component instance and responsible for providing access on computed
  * properties.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IComponentExtensionFactory {

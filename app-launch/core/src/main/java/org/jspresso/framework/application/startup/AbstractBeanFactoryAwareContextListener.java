@@ -31,7 +31,6 @@ import org.springframework.context.ConfigurableApplicationContext;
  * A simple listener to hook in webapp startup that can provide the application
  * bean factory into an arbitrary callback method.
  * 
- * @version $LastChangedRevision: 3701 $
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractBeanFactoryAwareContextListener implements

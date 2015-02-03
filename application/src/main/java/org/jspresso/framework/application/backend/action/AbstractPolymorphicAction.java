@@ -27,7 +27,6 @@ import java.util.Map;
  *
  * @deprecated since {@code getSelectedModels} does exactly what the class
  *             was meant for and is available to all actions.
- * @version $LastChangedRevision: 1671 $
  * @author Vincent Vandenschrick
  */
 @Deprecated

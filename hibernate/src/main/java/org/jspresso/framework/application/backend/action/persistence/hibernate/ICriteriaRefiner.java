@@ -27,7 +27,6 @@ import org.jspresso.framework.model.persistence.hibernate.criterion.EnhancedDeta
  * This interface is used to refine hibernate queries and can be injected in
  * {@code QueryEntitiesAction}.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("UnusedParameters")

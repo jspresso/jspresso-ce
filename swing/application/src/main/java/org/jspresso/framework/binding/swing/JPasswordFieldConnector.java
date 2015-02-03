@@ -8,7 +8,6 @@ import javax.swing.JPasswordField;
 /**
  * JPasswordField connector.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class JPasswordFieldConnector extends JTextFieldConnector {

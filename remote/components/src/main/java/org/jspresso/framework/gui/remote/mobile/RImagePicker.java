@@ -21,7 +21,6 @@ package org.jspresso.framework.gui.remote.mobile;
 /**
  * A remote mobile image picker.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RImagePicker extends RMobileImageComponent {

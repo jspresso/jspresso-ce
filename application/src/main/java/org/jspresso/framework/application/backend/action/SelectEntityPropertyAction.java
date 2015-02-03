@@ -14,7 +14,6 @@ import org.jspresso.framework.model.entity.IEntity;
  * A generic action to fill-in the context {@code ActionParameter} with the
  * value of an entity property.
  *
- * @version $LastChangedRevision: 475 $
  * @author Vincent Vandenschrick
  */
 public class SelectEntityPropertyAction extends BackendAction {

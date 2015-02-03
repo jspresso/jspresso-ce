@@ -25,7 +25,6 @@ import org.jspresso.framework.model.entity.SmartEntityCloneFactory;
  * A smart entity clone factory that uses hibernate to determine if an entity or
  * collection is initialized.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class HibernateAwareSmartEntityCloneFactory extends

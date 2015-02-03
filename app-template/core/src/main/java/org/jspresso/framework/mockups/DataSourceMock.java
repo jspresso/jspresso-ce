@@ -27,7 +27,6 @@ import javax.sql.DataSource;
 /**
  * Mock for DataSource.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class DataSourceMock implements DataSource {

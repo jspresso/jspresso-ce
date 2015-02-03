@@ -26,7 +26,6 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 /**
  * A factory to create report instances out of report descriptors.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IReportFactory {

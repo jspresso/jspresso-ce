@@ -38,7 +38,6 @@ import org.jspresso.framework.util.accessor.IAccessorFactory;
  * Instances of this class serve as handlers for proxies representing the
  * inline components.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicComponentInvocationHandler extends

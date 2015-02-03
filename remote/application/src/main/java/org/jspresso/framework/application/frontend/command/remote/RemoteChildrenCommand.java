@@ -25,7 +25,6 @@ import org.jspresso.framework.state.remote.RemoteValueState;
 /**
  * A command to update the children of a remote peer.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteChildrenCommand extends RemoteCommand {

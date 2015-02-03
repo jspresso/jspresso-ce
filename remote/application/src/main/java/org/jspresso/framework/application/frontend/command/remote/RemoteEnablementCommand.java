@@ -21,7 +21,6 @@ package org.jspresso.framework.application.frontend.command.remote;
 /**
  * A command to enable / disable a remote peer.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteEnablementCommand extends RemoteCommand {

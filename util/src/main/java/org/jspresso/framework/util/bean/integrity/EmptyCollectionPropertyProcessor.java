@@ -23,7 +23,6 @@ import java.util.Collection;
 /**
  * Empty implementation of a collection property integrity processor.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          The type of the target.

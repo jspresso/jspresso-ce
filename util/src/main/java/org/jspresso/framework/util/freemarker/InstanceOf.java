@@ -31,7 +31,6 @@ import freemarker.template.TemplateScalarModel;
 /**
  * Tells whether an object is instance of a class.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("rawtypes")

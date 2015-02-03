@@ -15,7 +15,6 @@ import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
 /**
  * A map which equality is based on object identity.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <K>
  *          the key class.

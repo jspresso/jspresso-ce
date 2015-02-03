@@ -27,7 +27,6 @@ import javax.security.auth.callback.PasswordCallback;
  * A simplistic JAAS callback handler that auto handles user and password
  * callback.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class UsernamePasswordHandler implements CallbackHandler {

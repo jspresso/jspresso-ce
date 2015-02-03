@@ -28,7 +28,6 @@ import org.jspresso.framework.action.IActionHandler;
  * A very simple frontend action that uses the puts the context
  * action param as selected model.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

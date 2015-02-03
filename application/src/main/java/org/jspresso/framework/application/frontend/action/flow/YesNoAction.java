@@ -28,7 +28,6 @@ import org.jspresso.framework.action.IActionHandler;
  * action is triggered. The Yes - No alternative actions are parametrized
  * statically.
  * 
- * @version $LastChangedRevision: 2097 $
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

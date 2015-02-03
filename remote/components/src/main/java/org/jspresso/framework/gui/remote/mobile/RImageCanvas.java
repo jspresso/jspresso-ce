@@ -23,7 +23,6 @@ import org.jspresso.framework.util.gui.Dimension;
 /**
  * A remote mobile image canvas to draw to.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RImageCanvas extends RMobileImageComponent {

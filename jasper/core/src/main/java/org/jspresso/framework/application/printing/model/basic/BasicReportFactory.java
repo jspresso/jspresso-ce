@@ -29,7 +29,6 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * Basic implementation of report factory returning instances of
  * {@code BasicReport}.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicReportFactory implements IReportFactory {

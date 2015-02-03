@@ -24,7 +24,6 @@ import java.util.List;
  * This interface establishes the general contract of a composite view which has
  * child views.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  */

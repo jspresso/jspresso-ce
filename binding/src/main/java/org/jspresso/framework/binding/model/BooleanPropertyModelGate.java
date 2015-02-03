@@ -22,7 +22,6 @@ package org.jspresso.framework.binding.model;
  * This gate opens and closes based on the value of a boolean property of the
  * assigned model.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BooleanPropertyModelGate extends AbstractPropertyModelGate<Object> {

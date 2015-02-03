@@ -32,7 +32,6 @@ import org.jspresso.framework.model.descriptor.IFileFilterable;
  * installed upon action instantiation and thus, nothing has to be configured
  * for the action to be immediately operational.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class SaveBinaryPropertyAsFileAction extends SaveFileAction {

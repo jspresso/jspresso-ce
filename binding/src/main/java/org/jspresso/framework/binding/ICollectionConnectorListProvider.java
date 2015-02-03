@@ -23,7 +23,6 @@ import java.util.List;
 /**
  * Marks objects being able to provide a list of collection connectors.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface ICollectionConnectorListProvider extends

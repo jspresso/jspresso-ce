@@ -32,7 +32,6 @@ import org.jspresso.framework.util.event.ItemSelectionEvent;
  * A composite connector holding a reference on a collection connector to easily
  * play a role in a parent/children relationship.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicCollectionConnectorListProvider extends

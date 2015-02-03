@@ -23,7 +23,6 @@ import org.jspresso.framework.util.event.ISelectable;
 /**
  * Marks objects being able to provide a collection connector.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface ICollectionConnectorProvider extends

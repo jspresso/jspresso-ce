@@ -59,7 +59,6 @@ import chrriis.dj.nativeswing.swtimpl.components.JFlashPlayer;
  * Default implementation of a mock swing frontend controller. This
  * implementation is usable "as-is".
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class MockSwingController extends

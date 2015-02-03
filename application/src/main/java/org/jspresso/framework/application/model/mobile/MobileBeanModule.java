@@ -45,7 +45,6 @@ import org.jspresso.framework.view.descriptor.mobile.MobileCompositePageViewDesc
  * handle arbitrary models.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class MobileBeanModule extends BeanModule {
 

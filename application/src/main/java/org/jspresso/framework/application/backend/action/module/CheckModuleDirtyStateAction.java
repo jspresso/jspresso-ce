@@ -29,7 +29,6 @@ import org.jspresso.framework.application.model.Module;
  * typically triggered when the user navigates (leaves) out of the module to
  * compute a visual notification of a pending change.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

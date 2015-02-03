@@ -23,7 +23,6 @@ import org.jspresso.framework.gui.remote.RCardContainer;
 /**
  * A mobile card page.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RMobileCardPage extends RMobilePage {

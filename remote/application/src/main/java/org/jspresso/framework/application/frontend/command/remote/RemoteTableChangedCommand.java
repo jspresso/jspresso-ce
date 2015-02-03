@@ -21,7 +21,6 @@ package org.jspresso.framework.application.frontend.command.remote;
 /**
  * A command to notify of table columns reordering / resize.
  * 
- * @version $LastChangedRevision: 3945 $
  * @author Vincent Vandenschrick
  */
 public class RemoteTableChangedCommand extends RemoteCommand {

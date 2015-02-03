@@ -27,7 +27,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 /**
  * Factory for views.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

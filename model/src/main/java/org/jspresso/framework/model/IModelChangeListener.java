@@ -22,7 +22,6 @@ package org.jspresso.framework.model;
  * This public interface must be implemented by classes willing to keep track of
  * {@code IModelProvider} model changes.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IModelChangeListener {

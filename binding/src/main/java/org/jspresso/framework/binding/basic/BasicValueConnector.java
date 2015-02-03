@@ -26,7 +26,6 @@ import org.jspresso.framework.binding.AbstractValueConnector;
  * TableModel where each cell model would be an instance of
  * {@code BasicValueConnector}).
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicValueConnector extends AbstractValueConnector {

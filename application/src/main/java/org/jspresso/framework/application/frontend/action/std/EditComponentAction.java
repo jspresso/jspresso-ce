@@ -34,7 +34,6 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * {@code okAction} and {@code cancelAction}) can be configured to
  * take care of user decision when closing the dialog.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

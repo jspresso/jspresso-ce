@@ -22,7 +22,6 @@ package org.jspresso.framework.view.descriptor;
  * Enumeration for position constants.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public enum EPosition {
 

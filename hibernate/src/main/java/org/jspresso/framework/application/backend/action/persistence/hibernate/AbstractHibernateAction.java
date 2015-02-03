@@ -35,7 +35,6 @@ import org.jspresso.framework.model.entity.IEntity;
  * template</i>&quot;. It provides also protected utility methods for various
  * standard persistence operations on Jspresso managed entities.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractHibernateAction extends BackendAction {

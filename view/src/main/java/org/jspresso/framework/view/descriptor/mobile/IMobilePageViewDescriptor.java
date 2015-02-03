@@ -22,7 +22,6 @@ package org.jspresso.framework.view.descriptor.mobile;
  * Marker interface for mobile page view descriptors.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public interface IMobilePageViewDescriptor extends IMobilePageSectionViewDescriptor, IMobilePageAware {
 

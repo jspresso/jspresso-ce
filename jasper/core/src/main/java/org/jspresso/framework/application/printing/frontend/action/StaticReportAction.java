@@ -31,7 +31,6 @@ import org.jspresso.framework.model.entity.IEntity;
  * augmented with the identifier of the entity that is selected in the view were
  * the action is installed, under the key {@code ENTITY_ID}.
  *
- * @version $LastChangedRevision: 1332 $
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

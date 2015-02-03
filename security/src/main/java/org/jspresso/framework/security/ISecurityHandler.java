@@ -21,7 +21,6 @@ package org.jspresso.framework.security;
 /**
  * This interface is implemented by Jspresso security handlers.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface ISecurityHandler extends ISecurityContextBuilder {

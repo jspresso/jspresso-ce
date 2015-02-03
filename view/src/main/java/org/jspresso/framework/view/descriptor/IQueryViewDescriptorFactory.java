@@ -28,7 +28,6 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 /**
  * Factory for query component view descriptor.
  * 
- * @version $LastChangedRevision: 959 $
  * @author Vincent Vandenschrick
  */
 public interface IQueryViewDescriptorFactory {

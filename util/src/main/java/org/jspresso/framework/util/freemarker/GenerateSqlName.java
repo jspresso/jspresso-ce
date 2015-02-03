@@ -30,7 +30,6 @@ import org.jspresso.framework.util.sql.SqlHelper;
 /**
  * Infers a SQL column name from a property name.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @author Pierre-m Raoul (atao)
  */

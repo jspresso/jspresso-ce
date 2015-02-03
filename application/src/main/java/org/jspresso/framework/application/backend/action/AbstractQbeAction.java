@@ -33,7 +33,6 @@ import org.jspresso.framework.util.collection.ESort;
 /**
  * Abstract base class for QBE find actions.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractQbeAction extends BackendAction {

@@ -28,7 +28,6 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 /**
  * Defines a chart.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IChartDescriptor {

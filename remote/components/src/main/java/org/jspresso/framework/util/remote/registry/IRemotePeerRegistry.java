@@ -23,7 +23,6 @@ import org.jspresso.framework.util.remote.IRemotePeer;
 /**
  * This interface is implemented by remote peer registries.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IRemotePeerRegistry {

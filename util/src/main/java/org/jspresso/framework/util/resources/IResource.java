@@ -24,7 +24,6 @@ import java.io.InputStream;
 /**
  * This interface is implemented by passive web resources.
  * 
- * @version $LastChangedRevision: 2587 $
  * @author Vincent Vandenschrick
  */
 public interface IResource extends IResourceBase {

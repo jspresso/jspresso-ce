@@ -24,7 +24,6 @@ package org.jspresso.framework.application.backend.action;
  * accessors on components which are generally used through the action execution
  * process.
  * 
- * @version $LastChangedRevision: 2054 $
  * @author Vincent Vandenschrick
  * @deprecated use concrete BackendAction instead.
  */

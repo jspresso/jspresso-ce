@@ -29,7 +29,6 @@ import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
  * Base class for backend actions acting on collection models. This class is
  * just used to refine certain protected methods return types.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractCollectionAction extends BackendAction {

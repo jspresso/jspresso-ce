@@ -30,7 +30,6 @@ import freemarker.template.TemplateModelException;
 /**
  * Reduces the SQL identifiers to apply a maximum length.
  * 
- * @version $LastChangedRevision: 5621 $
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("rawtypes")

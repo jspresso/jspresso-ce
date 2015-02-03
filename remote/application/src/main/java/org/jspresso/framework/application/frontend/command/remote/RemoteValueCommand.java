@@ -23,7 +23,6 @@ import java.io.Serializable;
 /**
  * This command is used to update a remote peer value.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteValueCommand extends RemoteCommand {

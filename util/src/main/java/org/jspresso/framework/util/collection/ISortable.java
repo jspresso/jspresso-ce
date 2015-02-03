@@ -23,7 +23,6 @@ import java.util.Map;
 /**
  * Defines the contract for sortable bean collections.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface ISortable {

@@ -24,7 +24,6 @@ import org.jspresso.framework.application.backend.session.EMergeMode;
 /**
  * A mock for query entities action.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("EmptyMethod")

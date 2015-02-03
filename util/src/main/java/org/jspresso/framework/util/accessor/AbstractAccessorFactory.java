@@ -27,7 +27,6 @@ import org.jspresso.framework.util.bean.AccessorInfo;
 /**
  * Base class for accessor factories.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractAccessorFactory implements IAccessorFactory {

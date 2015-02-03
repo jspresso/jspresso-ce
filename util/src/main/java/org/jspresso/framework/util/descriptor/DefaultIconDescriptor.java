@@ -24,7 +24,6 @@ import org.jspresso.framework.util.gui.Icon;
  * This is a utility class from which most displayable descriptors inherit for
  * factorization purpose. It provides an icon image URL.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class DefaultIconDescriptor extends DefaultDescriptor implements

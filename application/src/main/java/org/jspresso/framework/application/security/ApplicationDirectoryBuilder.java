@@ -50,7 +50,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * A Directory builder to list the application various application elements
  * available along with their permId.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ApplicationDirectoryBuilder {

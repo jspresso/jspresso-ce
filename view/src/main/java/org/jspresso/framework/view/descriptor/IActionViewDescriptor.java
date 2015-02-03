@@ -24,7 +24,6 @@ import org.jspresso.framework.util.gui.ERenderingOptions;
 /**
  * An action view descriptor.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IActionViewDescriptor extends IViewDescriptor {

@@ -26,7 +26,6 @@ import org.jspresso.framework.util.html.HtmlHelper;
 /**
  * A connector for label.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class JLabelConnector extends JComponentConnector<JLabel> {

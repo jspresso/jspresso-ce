@@ -14,7 +14,6 @@ import java.util.Locale;
  * A simple date format that returns null whenever a null or empty string is
  * parsed instead of throwing a ParseException.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class NullableSimpleDateFormat extends SimpleDateFormat {

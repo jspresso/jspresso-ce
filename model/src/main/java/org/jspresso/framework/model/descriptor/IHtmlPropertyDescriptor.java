@@ -21,7 +21,6 @@ package org.jspresso.framework.model.descriptor;
 /**
  * A property descriptor for HTML code.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IHtmlPropertyDescriptor extends ITextPropertyDescriptor {

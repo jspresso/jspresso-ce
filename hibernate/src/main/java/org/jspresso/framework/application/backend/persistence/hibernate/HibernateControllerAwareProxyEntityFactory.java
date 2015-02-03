@@ -27,7 +27,6 @@ import org.jspresso.framework.model.component.IComponent;
  * An Hibernate aware entity factory that ensures that all sorted PersistentSets
  * are backed by LinkedHashSets.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class HibernateControllerAwareProxyEntityFactory extends

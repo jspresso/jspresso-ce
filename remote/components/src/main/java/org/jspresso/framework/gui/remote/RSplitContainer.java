@@ -21,7 +21,6 @@ package org.jspresso.framework.gui.remote;
 /**
  * A split container.
  * 
- * @version $LastChangedRevision: 1486 $
  * @author Vincent Vandenschrick
  */
 public class RSplitContainer extends RContainer {

@@ -27,7 +27,6 @@ import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
  * Describes a date based property. Whether the date property should include time
  * information or not, can be configured using the type property.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor

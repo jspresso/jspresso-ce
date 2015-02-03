@@ -35,7 +35,6 @@ import org.jspresso.framework.binding.ICollectionConnector;
  * the removed objects are also used in children bean modules, the corresponding
  * children bean modules are also removed accordingly.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoveFromModuleObjectsAction extends AbstractCollectionAction {

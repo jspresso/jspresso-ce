@@ -23,7 +23,6 @@ import org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBea
 /**
  * An Hibernate session factory bean supporting interfaces inheritance.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class DynamicAnnotationSessionFactoryBean extends

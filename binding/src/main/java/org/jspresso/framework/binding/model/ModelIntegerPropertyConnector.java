@@ -26,7 +26,6 @@ import org.jspresso.framework.util.accessor.IAccessorFactory;
  * setting java.lang.Long and java.lang.Integer values based on the connector
  * value and the property type.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 

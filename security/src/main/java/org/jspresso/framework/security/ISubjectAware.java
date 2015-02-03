@@ -23,7 +23,6 @@ import javax.security.auth.Subject;
 /**
  * Implemented by classes that can be injected with a JAAS subject.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface ISubjectAware {

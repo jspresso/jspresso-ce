@@ -31,7 +31,6 @@ import org.jspresso.framework.model.component.IQueryComponent;
  * with an actual backend action to perform the query (like
  * {@code QueryEntitiesAction}).
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class FindAction extends AbstractQbeAction {

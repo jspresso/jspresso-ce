@@ -21,7 +21,6 @@ package org.jspresso.framework.gui.remote;
 /**
  * A remote text field component.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RTextField extends RTextComponent {

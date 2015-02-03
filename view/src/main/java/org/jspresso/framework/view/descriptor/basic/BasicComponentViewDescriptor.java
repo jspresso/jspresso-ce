@@ -64,7 +64,6 @@ import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
  * data. Moreover, this rule is available for the form tooltip, but also for
  * each individual field (property view) in the form.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicComponentViewDescriptor extends AbstractComponentViewDescriptor

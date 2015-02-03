@@ -48,8 +48,7 @@ import org.springframework.transaction.support.TransactionTemplate;
  * This interface establishes the contract of the backend controllers. Backend
  * controllers are controllers which act on the application domain model (as
  * opposed to frontend controllers which act on the application view).
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
  */
 public interface IBackendController extends IController,

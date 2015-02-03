@@ -24,7 +24,6 @@ import java.util.Collection;
  * A simple gate that tracks collection selection (actually the sub-collection
  * is set as model) and opens whenever the selection is a singleton.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @internal
  */

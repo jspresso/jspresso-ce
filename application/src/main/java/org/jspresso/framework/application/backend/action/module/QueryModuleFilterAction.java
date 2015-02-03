@@ -34,7 +34,6 @@ import org.jspresso.framework.model.entity.IEntity;
  * (defaulted to {@code QueryEntitiesAction}) that can be configured
  * through the {@code queryAction} property.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class QueryModuleFilterAction extends AbstractQbeAction {

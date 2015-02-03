@@ -21,7 +21,6 @@ package org.jspresso.framework.gui.remote;
 /**
  * A remote password field component.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RPasswordField extends RTextField {

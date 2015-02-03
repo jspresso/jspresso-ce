@@ -21,7 +21,6 @@ package org.jspresso.framework.gui.remote;
 /**
  * A remote button component.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RActionComponent extends RComponent {

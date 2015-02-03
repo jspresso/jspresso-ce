@@ -21,7 +21,6 @@ package org.jspresso.framework.util.bean;
 /**
  * Accessor constants.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public enum EAccessorType {

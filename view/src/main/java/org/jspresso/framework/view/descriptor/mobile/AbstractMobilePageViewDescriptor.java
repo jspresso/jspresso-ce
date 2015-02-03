@@ -28,7 +28,6 @@ import org.jspresso.framework.view.descriptor.basic.BasicCompositeViewDescriptor
  * Abstract base class for mobile page view descriptors.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public abstract class AbstractMobilePageViewDescriptor extends BasicCompositeViewDescriptor
     implements IMobilePageViewDescriptor {

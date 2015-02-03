@@ -21,7 +21,6 @@ package org.jspresso.framework.gui.remote;
 /**
  * A form component.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RForm extends RComponent {

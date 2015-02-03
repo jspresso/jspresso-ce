@@ -22,7 +22,6 @@ package org.jspresso.framework.security;
  * Implemented by classes that can be injected with a Jspresso security
  * handler.
  * 
- * @version $LastChangedRevision: 3701 $
  * @author Vincent Vandenschrick
  */
 public interface ISecurityHandlerAware {

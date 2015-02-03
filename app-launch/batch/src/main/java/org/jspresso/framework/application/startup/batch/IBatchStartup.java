@@ -23,7 +23,6 @@ import org.jspresso.framework.application.startup.IStartup;
 /**
  * Batch startup interface supporting command line arguments.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IBatchStartup extends IStartup {

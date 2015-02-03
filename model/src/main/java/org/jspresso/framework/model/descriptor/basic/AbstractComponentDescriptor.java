@@ -73,10 +73,9 @@ import org.jspresso.framework.util.sql.SqlHelper;
  * make use of it in Jspresso UIs.</li>
  * </ul>
  *
- * @version $LastChangedRevision$
- * @author Vincent Vandenschrick
  * @param <E>
- *          the concrete type of components.
+ *     the concrete type of components.
+ * @author Vincent Vandenschrick
  */
 public abstract class AbstractComponentDescriptor<E> extends
     DefaultIconDescriptor implements IComponentDescriptor<E>, BeanFactoryAware {

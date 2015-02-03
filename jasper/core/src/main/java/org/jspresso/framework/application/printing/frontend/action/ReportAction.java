@@ -32,7 +32,6 @@ import org.jspresso.framework.binding.ICollectionConnector;
  * the latter situation, the corresponding {@code IReport} instances are
  * created on the fly using the configured report factory.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

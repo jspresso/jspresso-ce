@@ -39,7 +39,6 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 /**
  * A default implementation for lov view factories.
  * 
- * @version $LastChangedRevision: 4321 $
  * @author Vincent Vandenschrick
  */
 public class BasicLovViewDescriptorFactory extends AbstractLovViewDescriptorFactory

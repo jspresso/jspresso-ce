@@ -21,7 +21,6 @@ package org.jspresso.framework.util.event;
 /**
  * This interface is implemented by any structure capable of selecting an item.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IItemSelectable {

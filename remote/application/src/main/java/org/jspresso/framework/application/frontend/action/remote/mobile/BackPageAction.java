@@ -28,7 +28,6 @@ import org.jspresso.framework.application.frontend.controller.remote.mobile.Mobi
  * Triggers back navigation of current page.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class BackPageAction extends AbstractRemoteAction {
 

@@ -21,7 +21,6 @@ package org.jspresso.framework.gui.remote;
 /**
  * A remote label component.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RLabel extends RTextComponent {

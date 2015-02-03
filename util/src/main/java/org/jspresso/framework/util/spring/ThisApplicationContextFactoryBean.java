@@ -26,7 +26,6 @@ import org.springframework.context.ApplicationContextAware;
  * This is a simple utility bean to get a reference on the bean factory which
  * loaded it.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ThisApplicationContextFactoryBean implements

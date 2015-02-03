@@ -32,7 +32,6 @@ import org.jspresso.framework.model.entity.IEntityCloneFactory;
  * perform the actual component cloning. Executing this action will result in
  * setting the cloned component to the underlying view.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class CloneComponentAction extends

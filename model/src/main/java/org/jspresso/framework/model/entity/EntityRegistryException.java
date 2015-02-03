@@ -24,7 +24,6 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
  * This exception is thrown whenever an unexpected exception occurs on an entity
  * registry.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class EntityRegistryException extends NestedRuntimeException {

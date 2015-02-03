@@ -38,7 +38,6 @@ import org.jspresso.framework.model.entity.IEntity;
  * underlying collection descriptor.</li>
  * </ol>
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class AddComponentCollectionToMasterAction extends

@@ -56,7 +56,6 @@ import org.jspresso.framework.model.entity.IEntity;
  * the performed query : {@code queryComponentRefiner}.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public abstract class AbstractQueryComponentsAction extends BackendAction {
 

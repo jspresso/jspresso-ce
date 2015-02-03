@@ -158,7 +158,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * Abstract base implementation for remote views.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision: 1463 $
  */
 @SuppressWarnings("UnusedParameters")
 public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFactory<RComponent, RIcon, RAction> {

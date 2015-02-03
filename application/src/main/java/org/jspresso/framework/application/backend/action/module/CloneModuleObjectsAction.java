@@ -35,7 +35,6 @@ import org.jspresso.framework.model.entity.IEntityCloneFactory;
 /**
  * This action clones the selected objects in the projected collection.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @deprecated use CloneComponentCollectionAction
  */

@@ -27,7 +27,6 @@ import gnu.trove.set.hash.TLinkedHashSet;
 /**
  * Helper class to ease the IValueChangeListener management.
  * 
- * @version $LastChangedRevision: 1249 $
  * @author Vincent Vandenschrick
  */
 public class ValueChangeSupport implements IValueChangeSource {

@@ -36,7 +36,6 @@ import org.jspresso.framework.util.swing.SwingUtil;
  * A default table cell renderer rendering even and odd rows background slightly
  * differently.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class EvenOddTableCellRenderer extends DefaultTableCellRenderer

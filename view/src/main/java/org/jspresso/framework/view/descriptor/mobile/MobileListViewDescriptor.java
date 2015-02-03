@@ -35,7 +35,6 @@ import org.jspresso.framework.view.descriptor.basic.AbstractListViewDescriptor;
  * In the latter case, the {@code renderedProperty} property will be used
  * to label the tree nodes.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class MobileListViewDescriptor extends AbstractListViewDescriptor implements IMobileViewDescriptor {

@@ -21,7 +21,6 @@ package org.jspresso.framework.view.swing;
 /**
  * Interface implemented by dynamic style capable renderers.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface DynamicStyleRenderer {

@@ -37,7 +37,6 @@ import org.slf4j.LoggerFactory;
 /**
  * Swing launcher.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class SwingLauncher {

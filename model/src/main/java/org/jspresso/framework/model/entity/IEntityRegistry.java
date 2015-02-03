@@ -28,7 +28,6 @@ import java.io.Serializable;
  * being garbage collected. Given this point implementations should leverage on
  * weak references.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IEntityRegistry {

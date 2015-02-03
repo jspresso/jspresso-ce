@@ -27,7 +27,6 @@ import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
  * {@code Date} to store their value but only the time part of the value is
  * relevant.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicTimePropertyDescriptor extends BasicScalarPropertyDescriptor

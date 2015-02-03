@@ -24,7 +24,6 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * This public interface is implemented by any string view descriptor.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public interface IStringPropertyViewDescriptor extends IPropertyViewDescriptor {
 

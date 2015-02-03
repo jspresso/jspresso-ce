@@ -24,7 +24,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 /**
  * The basic implementation of the IView interface.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the type of component this view uses.

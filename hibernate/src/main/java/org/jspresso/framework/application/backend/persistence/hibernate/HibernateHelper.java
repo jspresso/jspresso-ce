@@ -43,7 +43,6 @@ import org.jspresso.framework.util.reflect.ReflectHelper;
 /**
  * A utility class for Hibernate.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class HibernateHelper {

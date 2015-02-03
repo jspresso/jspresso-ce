@@ -37,7 +37,6 @@ import javax.servlet.http.HttpSession;
  * request and store them in a map into the HTTP session for later use by
  * subsequent requests.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RequestParamsHttpFilter implements Filter {

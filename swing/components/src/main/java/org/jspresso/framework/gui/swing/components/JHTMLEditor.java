@@ -43,7 +43,6 @@ import javax.swing.text.html.HTMLEditorKit;
 /**
  * A rich HTML text editor based on Swing JEditorPane.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class JHTMLEditor extends JPanel {

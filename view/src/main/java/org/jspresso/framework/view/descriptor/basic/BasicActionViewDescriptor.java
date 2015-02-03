@@ -29,7 +29,6 @@ import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
  * action away from the toolbar/context menu it is located when registered in an
  * action map and makes it a primary citizen of the UI.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicActionViewDescriptor extends BasicViewDescriptor implements

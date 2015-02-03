@@ -45,7 +45,6 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
  * implement it automatically but the developer must ensure it for other types
  * of components.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the concrete type of components.

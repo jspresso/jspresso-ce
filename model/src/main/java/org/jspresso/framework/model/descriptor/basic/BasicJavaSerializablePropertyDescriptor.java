@@ -28,7 +28,6 @@ import org.jspresso.framework.model.descriptor.IJavaSerializablePropertyDescript
  * operation is completely transparent to the developer, i.e. the developer
  * never plays with the serialized form.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicJavaSerializablePropertyDescriptor extends

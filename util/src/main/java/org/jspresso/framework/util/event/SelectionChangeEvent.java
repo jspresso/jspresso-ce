@@ -25,7 +25,6 @@ import java.util.EventObject;
  * This kind of events gets delivered whenever a selectable detects a change in
  * its selection.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class SelectionChangeEvent extends EventObject {

@@ -26,7 +26,6 @@ import java.util.List;
  * {@code java.util.List}. Using this descriptor prevents messing up with
  * technical implementation details.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the concrete collection component element type.

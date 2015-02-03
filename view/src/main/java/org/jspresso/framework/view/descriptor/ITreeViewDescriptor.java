@@ -24,7 +24,6 @@ import org.jspresso.framework.util.gui.IconProvider;
 /**
  * This public interface is implemented by any tree view descriptor.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface ITreeViewDescriptor extends IViewDescriptor {

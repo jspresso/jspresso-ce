@@ -8,7 +8,6 @@ import org.springframework.ldap.core.LdapTemplate;
 /**
  * A dao used to access ldap to retrieve objects.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractLdapDao {

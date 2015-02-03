@@ -29,7 +29,6 @@ import java.util.Set;
 /**
  * Helper class for string operations.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class StringUtils {

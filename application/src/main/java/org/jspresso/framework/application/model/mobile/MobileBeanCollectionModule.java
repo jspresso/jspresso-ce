@@ -42,7 +42,6 @@ import org.jspresso.framework.view.descriptor.mobile.MobileNavPageViewDescriptor
  * state.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class MobileBeanCollectionModule extends BeanCollectionModule {
 

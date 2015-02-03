@@ -27,7 +27,6 @@ import org.jspresso.framework.action.IActionHandler;
 /**
  * This interface is used react to file save.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("UnusedParameters")

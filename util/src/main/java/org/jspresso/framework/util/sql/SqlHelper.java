@@ -27,7 +27,6 @@ import java.util.Set;
  * Simple helper class for formatting SQL names.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public final class SqlHelper {
 

@@ -23,7 +23,6 @@ import javax.swing.JRadioButton;
 /**
  * JRadioButton connector.
  * 
- * @version $LastChangedRevision: 5621 $
  * @author Vincent Vandenschrick
  */
 public class JRadioButtonConnector extends JToggleButtonConnector<JRadioButton> {

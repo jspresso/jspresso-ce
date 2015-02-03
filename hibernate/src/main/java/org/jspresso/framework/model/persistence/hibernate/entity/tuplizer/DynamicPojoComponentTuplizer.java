@@ -23,7 +23,6 @@ import org.hibernate.mapping.Component;
 /**
  * A specialized hibernate tuplizer to handle proxy components.
  * 
- * @version $LastChangedRevision: 4321 $
  * @author Vincent Vandenschrick
  */
 public class DynamicPojoComponentTuplizer extends ProxyPojoComponentTuplizer {

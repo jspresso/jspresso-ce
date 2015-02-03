@@ -238,7 +238,6 @@ import org.jspresso.framework.view.descriptor.TreeDescriptorHelper;
 /**
  * Factory for swing views.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("UnusedParameters")

@@ -22,7 +22,6 @@ package org.jspresso.framework.util.gui;
  * An enumeration for identifying the session client type.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public enum EClientType {
   /**

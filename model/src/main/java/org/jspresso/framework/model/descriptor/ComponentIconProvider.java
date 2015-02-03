@@ -31,7 +31,6 @@ import org.jspresso.framework.util.gui.IconProvider;
  * iterates over the descriptor collection and returns the image url of the
  * first compatible descriptor.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ComponentIconProvider implements IconProvider {

@@ -25,7 +25,6 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 /**
  * This interface is implemented by anything which can be described.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IDescriptor {

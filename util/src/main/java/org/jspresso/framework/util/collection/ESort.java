@@ -21,7 +21,6 @@ package org.jspresso.framework.util.collection;
 /**
  * Sorting constants.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public enum ESort {

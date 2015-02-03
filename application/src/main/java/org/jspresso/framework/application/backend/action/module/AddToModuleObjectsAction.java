@@ -33,7 +33,6 @@ import org.jspresso.framework.model.entity.IEntity;
 /**
  * This action adds a new object in the projected collection.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @deprecated use AddComponentCollectionToMasterAction instead
  */

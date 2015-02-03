@@ -23,7 +23,6 @@ import org.jspresso.framework.application.startup.remote.RemoteStartup;
 /**
  * Remote mobile application startup class.
  * 
- * @version $LastChangedRevision: 9125 $
  * @author Vincent Vandenschrick
  */
 public class RemoteMobileApplicationStartup extends RemoteStartup {

@@ -27,7 +27,6 @@ import javax.swing.Scrollable;
 /**
  * Scrollable panel.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class JScrollablePanel extends JPanel implements Scrollable {

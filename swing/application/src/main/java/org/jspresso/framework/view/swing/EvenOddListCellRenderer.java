@@ -38,7 +38,6 @@ import org.jspresso.framework.view.IIconFactory;
  * A list cell renderer alternating background color.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class EvenOddListCellRenderer extends DefaultListCellRenderer {
 

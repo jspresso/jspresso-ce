@@ -32,7 +32,6 @@ import org.jspresso.framework.util.remote.RemotePeer;
 /**
  * The state of a remote value.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoteValueState extends RemotePeer {

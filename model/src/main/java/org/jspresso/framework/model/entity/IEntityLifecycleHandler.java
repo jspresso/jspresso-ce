@@ -25,7 +25,6 @@ import org.jspresso.framework.model.component.IComponent;
 /**
  * Defines the contract of any component able to handle entities lifecycle.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IEntityLifecycleHandler extends IEntityDirtAware {

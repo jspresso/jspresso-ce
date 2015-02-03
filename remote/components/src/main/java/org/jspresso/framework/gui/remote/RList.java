@@ -21,7 +21,6 @@ package org.jspresso.framework.gui.remote;
 /**
  * A remote list component.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RList extends RCollectionComponent {

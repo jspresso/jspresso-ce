@@ -45,7 +45,6 @@ import org.jspresso.framework.util.swing.SwingUtil;
  * A subclass of Nacho calendar date field with some default values and
  * behaviour.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class JDateField extends DateField {

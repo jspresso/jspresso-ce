@@ -30,7 +30,6 @@ import java.util.WeakHashMap;
  * A simple class used to record bean property changes. Original values of
  * changed properties are also kept.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BeanPropertyChangeRecorder implements PropertyChangeListener {

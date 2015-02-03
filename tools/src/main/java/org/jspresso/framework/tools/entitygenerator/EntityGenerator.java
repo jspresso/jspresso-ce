@@ -60,7 +60,6 @@ import freemarker.template.TemplateException;
 /**
  * Generates Jspresso powered component java code based on its descriptor.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("UseOfSystemOutOrSystemErr")

@@ -21,7 +21,6 @@ package org.jspresso.framework.util.lang;
 /**
  * Enforces the presence of a clone() method.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface ICloneable extends Cloneable {

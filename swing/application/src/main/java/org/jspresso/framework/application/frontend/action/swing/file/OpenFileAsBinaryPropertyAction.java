@@ -29,7 +29,6 @@ import org.jspresso.framework.model.descriptor.IFileFilterable;
  * content of a binary property. Files are filtered based on the file filter
  * defined in the binary property descriptor.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class OpenFileAsBinaryPropertyAction extends OpenFileAction {

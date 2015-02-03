@@ -29,7 +29,6 @@ import org.jspresso.framework.util.lang.StringUtils;
 /**
  * Default implementation of a reference descriptor.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the concrete component type.

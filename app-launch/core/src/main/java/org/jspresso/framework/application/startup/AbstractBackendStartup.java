@@ -37,7 +37,6 @@ import org.slf4j.LoggerFactory;
  * Abstract class for application startup including only the backend layer. This
  * serves for batch processes for instance.
  * 
- * @version $LastChangedRevision: 2097 $
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractBackendStartup extends AbstractStartup {

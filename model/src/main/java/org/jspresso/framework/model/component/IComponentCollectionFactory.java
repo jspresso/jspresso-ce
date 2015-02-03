@@ -23,7 +23,6 @@ import java.util.Collection;
 /**
  * This interface is implemented by factories of component collections.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IComponentCollectionFactory {

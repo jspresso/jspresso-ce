@@ -51,7 +51,6 @@ import org.jspresso.framework.util.lang.ObjectUtils;
  * connectee since the way the value is retrieved by from the connectee is left
  * to the implementer.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 

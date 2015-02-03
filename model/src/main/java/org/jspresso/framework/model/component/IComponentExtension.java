@@ -23,7 +23,6 @@ package org.jspresso.framework.model.component;
  * component accessors which are not directly related to the core properties.
  * Such classes provide derived (computed) properties of the component.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <T>
  *          The class of the extended component.

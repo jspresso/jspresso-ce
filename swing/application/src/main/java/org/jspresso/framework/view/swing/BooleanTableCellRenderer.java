@@ -38,7 +38,6 @@ import org.jspresso.framework.util.swing.SwingUtil;
 /**
  * Renders a table cell using a checkbox.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BooleanTableCellRenderer extends JCheckBox implements

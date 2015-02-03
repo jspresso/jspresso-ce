@@ -29,7 +29,6 @@ import org.jspresso.framework.view.descriptor.basic.AbstractTreeViewDescriptor;
  * node collection can be secured by using role-based authorization (i.e.
  * {@code grantedRoles}) on its descriptor.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class MobileTreeViewDescriptor extends AbstractTreeViewDescriptor implements IMobileViewDescriptor {

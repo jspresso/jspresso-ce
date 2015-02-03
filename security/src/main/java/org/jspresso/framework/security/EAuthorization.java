@@ -21,7 +21,6 @@ package org.jspresso.framework.security;
 /**
  * The type of authorization.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public enum EAuthorization {

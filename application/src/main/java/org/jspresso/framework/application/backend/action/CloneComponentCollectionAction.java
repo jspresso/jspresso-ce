@@ -32,7 +32,6 @@ import org.jspresso.framework.model.entity.IEntityCloneFactory;
  * perform the actual component cloning. Executing this action will result in
  * adding the cloned component(s) to the underlying model collection.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class CloneComponentCollectionAction extends

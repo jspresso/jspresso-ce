@@ -23,7 +23,6 @@ import java.util.Collection;
 /**
  * A registry mapping the component contracts with their descriptors.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IComponentDescriptorRegistry {

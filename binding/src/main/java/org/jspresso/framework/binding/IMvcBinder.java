@@ -22,7 +22,6 @@ package org.jspresso.framework.binding;
  * This is the interface which has to be implemented by classes which bind model
  * connectors to view connectors in a MVC relationship.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IMvcBinder {

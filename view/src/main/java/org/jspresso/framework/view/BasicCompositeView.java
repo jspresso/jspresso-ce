@@ -23,7 +23,6 @@ import java.util.List;
 /**
  * Basic composite view.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the type of component this view uses.

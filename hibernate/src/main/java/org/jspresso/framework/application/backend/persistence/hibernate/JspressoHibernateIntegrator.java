@@ -31,7 +31,6 @@ import org.hibernate.service.spi.SessionFactoryServiceRegistry;
  * A new Hibernate 4 integrator used to register the default Jspresso post-load
  * listener.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class JspressoHibernateIntegrator implements Integrator {

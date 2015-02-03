@@ -28,7 +28,6 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
  * displayed information mainly consists in the content size. The action must be
  * installed on a property view and supports textual and binary properties.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

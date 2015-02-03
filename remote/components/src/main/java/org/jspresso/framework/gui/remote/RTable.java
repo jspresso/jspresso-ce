@@ -23,7 +23,6 @@ import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 /**
  * A tabular component.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RTable extends RCollectionComponent {

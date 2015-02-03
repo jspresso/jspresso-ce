@@ -32,7 +32,6 @@ import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
  * display the image whose content is stored in the binary property directly in
  * the UI.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicImageViewDescriptor extends BasicPropertyViewDescriptor

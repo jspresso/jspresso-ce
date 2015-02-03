@@ -25,7 +25,6 @@ import org.jspresso.framework.util.http.HttpRequestHolder;
 /**
  * Holds the current thread backend controller.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class BackendControllerHolder {

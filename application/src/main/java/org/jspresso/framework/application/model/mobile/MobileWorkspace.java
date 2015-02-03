@@ -38,7 +38,6 @@ import org.jspresso.framework.view.descriptor.basic.AbstractTreeViewDescriptor;
  * workspace active at a time for a user session - either the active (focused)
  * internal frame or the expanded accordion section.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class MobileWorkspace extends Workspace {

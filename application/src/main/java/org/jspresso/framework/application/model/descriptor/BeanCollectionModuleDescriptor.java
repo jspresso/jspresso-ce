@@ -30,7 +30,6 @@ import org.jspresso.framework.model.descriptor.basic.BasicListDescriptor;
 /**
  * The model descriptor for bean collection modules.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BeanCollectionModuleDescriptor extends ModuleDescriptor {

@@ -23,7 +23,6 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
 /**
  * This exception is thrown whenever a looked-up property does not exist.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class MissingPropertyException extends NestedRuntimeException {

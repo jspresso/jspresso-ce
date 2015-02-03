@@ -31,7 +31,6 @@ import org.jspresso.framework.view.AbstractIconFactory;
 /**
  * A factory to create (and cache) swing icons.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class SwingIconFactory extends AbstractIconFactory<Icon> {

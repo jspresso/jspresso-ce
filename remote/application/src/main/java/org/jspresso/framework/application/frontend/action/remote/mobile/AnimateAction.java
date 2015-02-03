@@ -32,7 +32,6 @@ import org.jspresso.framework.view.IView;
  * Selects animates current page.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class AnimateAction extends AbstractRemoteAction {
 

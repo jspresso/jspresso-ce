@@ -73,7 +73,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * Default factory for remote views.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision: 1463 $
  */
 @SuppressWarnings("UnusedParameters")
 public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {

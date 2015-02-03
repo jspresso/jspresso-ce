@@ -23,7 +23,6 @@ import java.util.Map;
 /**
  * This interface is implemented by descriptors of reference properties.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the concrete component type.

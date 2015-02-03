@@ -33,7 +33,6 @@ import javax.servlet.http.HttpServletResponse;
  * A simple filter to ensure that the session is authenticated and contains a
  * Subject.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class SecurityContextFilter implements Filter {

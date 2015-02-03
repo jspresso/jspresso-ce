@@ -28,7 +28,6 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
  * An action used to transfer textual representation(s) of selected models to
  * the system clipboard.
  * 
- * @version $LastChangedRevision: 3701 $
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

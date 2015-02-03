@@ -23,7 +23,6 @@ import org.jspresso.framework.util.gui.Dimension;
 /**
  * Basic implementation of a chart descriptor.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractChartDescriptor implements IChartDescriptor {

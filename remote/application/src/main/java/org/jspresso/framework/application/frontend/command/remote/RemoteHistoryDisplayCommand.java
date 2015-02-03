@@ -21,7 +21,6 @@ package org.jspresso.framework.application.frontend.command.remote;
 /**
  * A command to exchange history navigation on both sides.
  * 
- * @version $LastChangedRevision: 7120 $
  * @author Vincent Vandenschrick
  */
 public class RemoteHistoryDisplayCommand extends RemoteCommand {

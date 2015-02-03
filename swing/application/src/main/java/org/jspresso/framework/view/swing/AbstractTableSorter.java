@@ -483,8 +483,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
   /**
    * Decorates a table cell renderer with sorting state.
    * 
-   * @version $LastChangedRevision$
-   * @author Vincent Vandenschrick
+     * @author Vincent Vandenschrick
    */
   public static class SortableHeaderRenderer implements TableCellRenderer {
 

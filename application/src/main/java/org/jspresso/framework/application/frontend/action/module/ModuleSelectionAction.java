@@ -30,7 +30,6 @@ import org.jspresso.framework.application.model.Workspace;
  * their names. It can be used as startup action to select and display a module
  * when the application launches.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

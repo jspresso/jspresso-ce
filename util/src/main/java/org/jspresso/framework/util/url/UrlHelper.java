@@ -26,7 +26,6 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
 /**
  * This is a simple helper class to be able to cope with "classpath:" urls.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class UrlHelper {

@@ -21,7 +21,6 @@ package org.jspresso.framework.util.security;
 /**
  * Some i18n utils for login.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class LoginUtils {

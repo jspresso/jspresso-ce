@@ -30,7 +30,6 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * by Jspresso UI layer for both displaying / editing duration properties in a
  * convenient human format.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicDurationPropertyDescriptor extends

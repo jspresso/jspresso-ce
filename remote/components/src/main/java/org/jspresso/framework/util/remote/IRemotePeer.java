@@ -21,7 +21,6 @@ package org.jspresso.framework.util.remote;
 /**
  * Interface for remote server peers.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public interface IRemotePeer {

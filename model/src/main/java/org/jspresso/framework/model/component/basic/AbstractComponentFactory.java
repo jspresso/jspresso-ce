@@ -46,7 +46,6 @@ import org.jspresso.framework.util.collection.ESort;
 /**
  * Base class for component factories.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractComponentFactory implements IComponentFactory {
