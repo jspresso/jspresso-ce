@@ -34,7 +34,6 @@ import org.jspresso.framework.model.component.IComponent;
  * The second one performs the actual cleaning.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class DeleteEntityAction extends AbstractHibernateAction {
 

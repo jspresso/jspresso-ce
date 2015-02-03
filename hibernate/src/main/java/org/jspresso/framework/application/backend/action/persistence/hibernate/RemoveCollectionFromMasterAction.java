@@ -43,7 +43,6 @@ import org.jspresso.framework.util.accessor.ICollectionAccessor;
  * The second one performs the actual cleaning.
  *
  * @author Vincent Vandenschrick
- * @version $LastChangedRevision$
  */
 public class RemoveCollectionFromMasterAction extends AbstractHibernateCollectionAction {
 

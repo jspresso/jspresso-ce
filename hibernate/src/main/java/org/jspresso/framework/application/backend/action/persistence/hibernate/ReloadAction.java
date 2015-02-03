@@ -31,7 +31,6 @@ import org.springframework.dao.ConcurrencyFailureException;
  * Reloads the entities provided by the context {@code ActionParameter}.
  * The whole entities graphs are reloaded from the persistent store.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ReloadAction extends AbstractHibernateAction {

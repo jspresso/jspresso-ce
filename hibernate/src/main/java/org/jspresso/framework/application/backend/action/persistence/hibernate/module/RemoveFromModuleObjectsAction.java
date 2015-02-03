@@ -45,7 +45,6 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
  * are also removed accordingly. It is versatile enough to work on mobile collection module
  * details.
  * 
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class RemoveFromModuleObjectsAction extends AbstractHibernateAction {

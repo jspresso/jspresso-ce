@@ -31,7 +31,6 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
  * Saves the entities provided by the context {@code ActionParameter}. All
  * previously registered persistence operations are also performed.
  *
- * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class SaveAction extends AbstractHibernateAction {
