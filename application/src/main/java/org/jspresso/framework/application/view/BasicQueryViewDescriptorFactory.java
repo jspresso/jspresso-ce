@@ -325,7 +325,7 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
    * {@inheritDoc}
    */
   @Override
-  public void adaptExistingViewDescriptor(IViewDescriptor viewDescriptor) {
+  public <V extends IViewDescriptor> V adaptExistingViewDescriptor(V viewDescriptor) {
     if (viewDescriptor instanceof BasicComponentViewDescriptor) {
       List<IPropertyViewDescriptor> propertyViews = ((BasicComponentViewDescriptor) viewDescriptor)
           .getPropertyViewDescriptors(false);
@@ -389,5 +389,6 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
         }
       }
     }
+    return viewDescriptor;
   }
 }

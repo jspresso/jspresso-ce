@@ -48,9 +48,9 @@ public interface IQueryViewDescriptorFactory {
   /**
    * Performs necessary adaptations to an existing view descriptor in order to
    * make it support query component model.
-   * 
-   * @param viewDescriptor
-   *          the view descriptor to adapt.
+   *
+   * @param viewDescriptor           the view descriptor to adapt.
+   * @return the adapted view descriptor (same instance as the parameter)
    */
-  void adaptExistingViewDescriptor(IViewDescriptor viewDescriptor);
+  <V extends IViewDescriptor> V adaptExistingViewDescriptor(V viewDescriptor);
 }
