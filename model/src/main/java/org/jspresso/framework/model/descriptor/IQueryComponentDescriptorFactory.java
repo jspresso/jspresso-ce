@@ -23,19 +23,29 @@ import org.jspresso.framework.model.component.IQueryComponent;
 
 /**
  * Interface contract for factories creating query component descriptors.
- * 
- * @version $LastChangedRevision$
+ *
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
 public interface IQueryComponentDescriptorFactory {
 
   /**
    * Creates a query component descriptor.
-   * 
+   *
    * @param componentDescriptorProvider
-   *          the source for the component descriptor.
+   *     the source for the component descriptor.
    * @return the created query component descriptor.
    */
   IComponentDescriptor<IQueryComponent> createQueryComponentDescriptor(
       IComponentDescriptorProvider<IComponent> componentDescriptorProvider);
+
+  /**
+   * Create query component reference descriptor.
+   *
+   * @param referencePropertyName the reference property name
+   * @param componentDescriptorProvider the component descriptor provider
+   * @return the reference property descriptor that is usable in model as a filter reference.
+   */
+  IReferencePropertyDescriptor<IQueryComponent> createQueryComponentReferenceDescriptor(
+      String referencePropertyName, IComponentDescriptorProvider<IComponent> componentDescriptorProvider);
 }
