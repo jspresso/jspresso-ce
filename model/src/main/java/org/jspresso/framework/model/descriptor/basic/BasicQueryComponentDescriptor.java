@@ -58,8 +58,8 @@ public class BasicQueryComponentDescriptor<E> extends
   /**
    * Constructs a new {@code BasicQueryComponentDescriptor} instance.
    *
-   * @param componentDescriptorProvider
-   *          the provider for delegate entity descriptor.
+   * @param componentDescriptorProvider           the provider for delegate entity descriptor.
+   * @param registry the registry
    */
   public BasicQueryComponentDescriptor(
       IComponentDescriptorProvider<? extends IComponent> componentDescriptorProvider,
