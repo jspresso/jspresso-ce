@@ -42,7 +42,6 @@ import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicReferencePropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileBorderViewDescriptor;
@@ -218,7 +217,7 @@ public class MobileQueryViewDescriptorFactory<E, F, G> extends BasicQueryViewDes
    * {@inheritDoc}
    */
   @Override
-  public void adaptExistingViewDescriptor(IViewDescriptor viewDescriptor) {
+  public <V extends IViewDescriptor> V adaptExistingViewDescriptor(V viewDescriptor) {
     if (viewDescriptor instanceof MobileComponentViewDescriptor) {
       List<IPropertyViewDescriptor> propertyViews = ((MobileComponentViewDescriptor) viewDescriptor)
           .getPropertyViewDescriptors(false);
@@ -277,5 +276,6 @@ public class MobileQueryViewDescriptorFactory<E, F, G> extends BasicQueryViewDes
         }
       }
     }
+    return viewDescriptor;
   }
 }

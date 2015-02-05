@@ -27,17 +27,19 @@ import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
+import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 
 /**
  * Basic implementation. Creates basic query component descriptors.
  * 
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision$
  */
-public class BasicQueryComponentDescriptorFactory implements
-    IQueryComponentDescriptorFactory {
+public class BasicQueryComponentDescriptorFactory implements IQueryComponentDescriptorFactory {
 
   private final Map<IComponentDescriptorProvider<? extends IComponent>, IComponentDescriptor<IQueryComponent>> registry;
   private final Map<Class<? extends IComponent>, IComponentDescriptor<? extends IComponent>> refRegistry;
+
   /**
    * Instantiates a new Basic query component descriptor factory.
    */
@@ -48,7 +50,7 @@ public class BasicQueryComponentDescriptorFactory implements
 
   /**
    * Creates basic query component descriptors.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -62,6 +64,22 @@ public class BasicQueryComponentDescriptorFactory implements
       realComponentDescriptorProvider = componentDescriptorProvider;
     }
     return createOrGetQueryComponentDescriptor(realComponentDescriptorProvider);
+  }
+
+  /**
+   * Create a basic query component reference descriptor.
+   * <p/>
+   * {@inheritDoc}
+   */
+  @Override
+  public IReferencePropertyDescriptor<IQueryComponent> createQueryComponentReferenceDescriptor(
+      String referencePropertyName, IComponentDescriptorProvider<IComponent> componentDescriptorProvider) {
+    BasicReferencePropertyDescriptor<IQueryComponent> referencePropertyDescriptor =
+        new BasicReferencePropertyDescriptor<>();
+    referencePropertyDescriptor.setName(referencePropertyName);
+    referencePropertyDescriptor.setMandatory(false); // since it cannot be auto-created by the framework
+    referencePropertyDescriptor.setReferencedDescriptor(createQueryComponentDescriptor(componentDescriptorProvider));
+    return referencePropertyDescriptor;
   }
 
   private IComponentDescriptor<IQueryComponent> createOrGetQueryComponentDescriptor(
