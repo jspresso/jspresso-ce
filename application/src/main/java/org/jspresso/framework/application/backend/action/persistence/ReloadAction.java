@@ -21,6 +21,9 @@ package org.jspresso.framework.application.backend.action.persistence;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.model.entity.IEntity;
@@ -33,30 +36,69 @@ import org.jspresso.framework.model.entity.IEntity;
  */
 public class ReloadAction extends BackendAction {
 
+  private boolean transactional;
+
+  /**
+   * Instantiates a new Reload action.
+   */
+  public ReloadAction() {
+    this.transactional = true;
+  }
+
   /**
    * Reloads the object(s) provided by the action context in a transaction.
    * <p>
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler,
-      final Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, final Map<String, Object> context) {
     getController(context).clearPendingOperations();
-    List<IEntity> entitiesToReload = getEntitiesToReload(context);
-    for (IEntity entity : entitiesToReload) {
-      reloadEntity(entity, context);
+    final List<IEntity> entitiesToReload = getEntitiesToReload(context);
+    if (isTransactional()) {
+      getTransactionTemplate(context).execute(new TransactionCallbackWithoutResult() {
+        @Override
+        protected void doInTransactionWithoutResult(TransactionStatus status) {
+          iterateAndReload(entitiesToReload, context);
+        }
+      });
+    } else {
+      iterateAndReload(entitiesToReload, context);
     }
     return super.execute(actionHandler, context);
   }
 
+  private void iterateAndReload(List<IEntity> entitiesToReload, Map<String, Object> context) {
+    for (IEntity entity : entitiesToReload) {
+      reloadEntity(entity, context);
+    }
+  }
+
   /**
    * Gets the list of entities to reload.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the list of entities to save.
    */
   protected List<IEntity> getEntitiesToReload(Map<String, Object> context) {
     return getActionParameter(context);
+  }
+
+  /**
+   * Is transactional.
+   *
+   * @return the boolean
+   */
+  public boolean isTransactional() {
+    return transactional;
+  }
+
+  /**
+   * Sets transactional.
+   *
+   * @param transactional the transactional
+   */
+  public void setTransactional(boolean transactional) {
+    this.transactional = transactional;
   }
 }

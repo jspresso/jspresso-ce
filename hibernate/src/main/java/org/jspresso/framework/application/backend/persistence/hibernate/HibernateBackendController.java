@@ -867,7 +867,8 @@ public class HibernateBackendController extends AbstractBackendController {
           } catch (ObjectNotFoundException ex) {
             deletedObjectEx = ex;
           }
-          status.setRollbackOnly();
+          // if reloadObject is part of a pre-existing transaction, do not rollback the TX
+          // status.setRollbackOnly();
           if (deletedObjectEx != null) {
             throw new ConcurrencyFailureException(deletedObjectEx.getMessage(), deletedObjectEx);
           }
