@@ -52,7 +52,7 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:svn:https://svn.jspresso.org/jspresso/framework/branches/jspresso-framework-3.7.x</connection>
+    <connection>scm:git:https://github.com/jspresso/jspresso-ce.git</connection>
   </scm>
   <issueManagement>
     <system>Jspresso Tracker</system>
