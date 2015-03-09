@@ -2780,7 +2780,10 @@ public class DefaultFlexViewFactory {
               as RemoteCompositeValueState;
           var cell:RemoteValueState = row.children[currentEditor.index] as RemoteValueState;
 
-          cell.value = state.value;
+          table.callLater(function():void {
+            // Let the editor binding complete before setting the cell value.
+            cell.value = state.value;
+          });
         }
       }
     });
@@ -3129,12 +3132,16 @@ public class DefaultFlexViewFactory {
       var text:String = event.text;
       if (isNewline(text)) {
         event.preventDefault();
+      } else if(endsWithNewline(event.text)) {
+        if (textInput.text == StringUtil.trim(event.text)) {
+          event.preventDefault();
+        }
       }
     };
     textInput.addEventListener(TextEvent.TEXT_INPUT, blockNewLine);
 
     var trimLastLine:Function = function (evt:Event):void {
-      while (textInput.text && isNewline(textInput.text.substr(textInput.text.length-1))) {
+      while (textInput.text && endsWithNewline(textInput.text)) {
         textInput.text = StringUtil.trim(textInput.text);
       }
     };
@@ -3165,6 +3172,22 @@ public class DefaultFlexViewFactory {
 
   protected function isNewline(text:String):Boolean {
     return text == "\n" || text == "\r\n" || text == "\r";
+  }
+
+  protected function endsWithNewline(text:String):Boolean {
+    if (text) {
+      if (text.length > 0) {
+        if (isNewline(text.substr(text.length - 1))) {
+          return true;
+        }
+      }
+      if (text.length > 1) {
+        if (isNewline(text.substr(text.length - 2))) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   protected function bindColorPicker(colorPicker:ColorPicker, remoteState:RemoteValueState):void {
