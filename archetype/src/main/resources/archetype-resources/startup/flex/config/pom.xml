@@ -11,26 +11,26 @@
     <relativePath>../../../pom.xml</relativePath>
   </parent>
   <artifactId>${artifactId}</artifactId>
-  <packaging>pom</packaging>
+  <packaging>jar</packaging>
   <name>${applicationName} - Startup - Flex - Config</name>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
+        <artifactId>maven-resources-plugin</artifactId>
         <executions>
           <execution>
-            <id>make shared resources</id>
+            <id>package webapp resources</id>
+            <phase>prepare-package</phase>
             <goals>
-              <goal>single</goal>
+              <goal>resources</goal>
             </goals>
-            <phase>generate-resources</phase>
-            <configuration>
-              <descriptors>
-                <descriptor>${symbol_dollar}{basedir}/src/main/assembly/resources.xml</descriptor>
-              </descriptors>
-            </configuration>
           </execution>
         </executions>
       </plugin>
