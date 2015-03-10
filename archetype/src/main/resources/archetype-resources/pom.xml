@@ -68,8 +68,6 @@
         <groupId>${groupId}</groupId>
         <artifactId>${rootArtifactId}-startup-flex-config</artifactId>
         <version>${symbol_dollar}{project.version}</version>
-        <classifier>resources</classifier>
-        <type>zip</type>
       </dependency>
       <dependency>
         <groupId>${groupId}</groupId>
@@ -81,8 +79,6 @@
         <groupId>${groupId}</groupId>
         <artifactId>${rootArtifactId}-startup-qooxdoo-client</artifactId>
         <version>${symbol_dollar}{project.version}</version>
-        <classifier>web-resources</classifier>
-        <type>zip</type>
       </dependency>
     </dependencies>
   </dependencyManagement>

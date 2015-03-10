@@ -19,8 +19,6 @@
     <dependency>
       <groupId>${groupId}</groupId>
       <artifactId>${rootArtifactId}-startup-flex-config</artifactId>
-      <classifier>resources</classifier>
-      <type>zip</type>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -31,8 +29,6 @@
     <dependency>
       <groupId>${groupId}</groupId>
       <artifactId>${rootArtifactId}-startup-qooxdoo-client</artifactId>
-      <classifier>web-resources</classifier>
-      <type>zip</type>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -93,19 +89,22 @@
         <configuration>
           <warName>${symbol_dollar}{project.artifactId}</warName>
           <webappDirectory>${symbol_dollar}{project.build.directory}/${symbol_dollar}{project.artifactId}</webappDirectory>
+          <webResources>
+            <resource>
+              <directory>${symbol_dollar}{project.build.directory}/flex-client</directory>
+            </resource>
+          </webResources>
           <overlays>
             <overlay>
               <groupId>${groupId}</groupId>
               <artifactId>${rootArtifactId}-startup-flex-config</artifactId>
-              <type>zip</type>
-              <classifier>resources</classifier>
+              <type>jar</type>
               <targetPath>WEB-INF/flex</targetPath>
             </overlay>
             <overlay>
               <groupId>${groupId}</groupId>
               <artifactId>${rootArtifactId}-startup-qooxdoo-client</artifactId>
-              <type>zip</type>
-              <classifier>web-resources</classifier>
+              <type>jar</type>
               <targetPath>html5</targetPath>
             </overlay>
           </overlays>
@@ -123,7 +122,8 @@
             <configuration>
               <stripVersion>true</stripVersion>
               <includeTypes>swf</includeTypes>
-              <outputDirectory>${symbol_dollar}{project.build.directory}/${symbol_dollar}{project.artifactId}/flex</outputDirectory>
+              <outputDirectory>${project.build.directory}/flex-client/flex
+              </outputDirectory>
             </configuration>
           </execution>
         </executions>
