@@ -120,8 +120,7 @@
             <configuration>
               <stripVersion>true</stripVersion>
               <includeTypes>swf</includeTypes>
-              <outputDirectory>${project.build.directory}/flex-client/flex
-              </outputDirectory>
+              <outputDirectory>${symbol_dollar}{project.build.directory}/flex-client/flex</outputDirectory>
             </configuration>
           </execution>
         </executions>
