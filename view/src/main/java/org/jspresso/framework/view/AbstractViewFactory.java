@@ -956,24 +956,26 @@ public abstract class AbstractViewFactory<E, F, G> implements
   @Override
   public void refreshCardView(IMapView<E> cardView, boolean unbindPrevious,
       IActionHandler actionHandler, Locale locale) {
-    Object cardModel = cardView.getConnector().getConnectorValue();
+    IValueConnector cardViewConnector = cardView.getConnector();
+    Object cardModel = cardViewConnector.getConnectorValue();
     E cardsPeer = cardView.getPeer();
     IView<E> currentChildCardView = cardView.getCurrentView();
-    String cardName = cardView.getDescriptor().getCardNameForModel(cardModel,
-        actionHandler.getSubject());
+    ICardViewDescriptor cardViewDescriptor = cardView.getDescriptor();
+    String cardName = cardViewDescriptor.getCardNameForModel(cardModel, actionHandler.getSubject());
     if (cardName != null) {
       IView<E> childCardView = cardView.getChild(cardName);
       if (childCardView == null) {
-        IViewDescriptor cardViewDescriptor = cardView.getDescriptor()
+        IViewDescriptor childCardViewDescriptor = cardViewDescriptor
             .getCardViewDescriptor(cardName);
-        if (cardViewDescriptor != null) {
-          childCardView = createView(cardViewDescriptor, actionHandler, locale);
+        if (childCardViewDescriptor != null) {
+          childCardView = createView(childCardViewDescriptor, actionHandler, locale);
           addCard(cardView, childCardView, cardName);
         }
       }
       if (childCardView != null) {
         cardView.setCurrentView(childCardView);
-        boolean accessGranted = actionHandler.isAccessGranted(childCardView.getDescriptor());
+        IViewDescriptor childCardViewDescriptor = childCardView.getDescriptor();
+        boolean accessGranted = actionHandler.isAccessGranted(childCardViewDescriptor);
         if (cardModel instanceof ISecurable) {
           accessGranted = accessGranted
               && actionHandler.isAccessGranted((ISecurable) cardModel);
@@ -993,16 +995,14 @@ public abstract class AbstractViewFactory<E, F, G> implements
         if (childCardConnector != null) {
           // To handle polymorphism, especially for modules, we refine
           // the model descriptor.
-          IValueConnector modelConnector = cardView.getConnector()
+          IValueConnector modelConnector = cardViewConnector
               .getModelConnector();
           if (modelConnector != null
-              && modelConnector
+              && cardViewConnector
                   .getModelDescriptor()
                   .getModelType()
-                  .isAssignableFrom(
-                      childCardView.getDescriptor().getModelDescriptor()
-                          .getModelType())) {
-            modelConnector.setModelDescriptor(childCardView.getDescriptor()
+                  .isAssignableFrom(childCardViewDescriptor.getModelDescriptor().getModelType())) {
+            modelConnector.setModelDescriptor(childCardViewDescriptor
                 .getModelDescriptor());
           }
           if (unbindPrevious && currentChildCardView != null
