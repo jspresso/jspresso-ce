@@ -38,12 +38,12 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
       if (!org.jspresso.framework.util.html.HtmlUtil.isHtml(cellInfo.value) && (typeof(cellInfo.value) == "string"
           || cellInfo.value instanceof String)) {
         if (cellInfo.value.indexOf("\n") >= 0) {
-          cellInfo.value = "<html>" + cellInfo.value.replace(new RegExp("\n", 'g'), "<br>") + "</html>";
+          cellInfo.value = org.jspresso.framework.util.html.HtmlUtil.toHtml(
+              org.jspresso.framework.util.html.HtmlUtil.replaceNewlines(cellInfo.value)
+          );
         }
       }
-      if ((typeof(cellInfo.value) == "string" || cellInfo.value instanceof String) && (cellInfo.value.indexOf("<br>")
-          >= 0 || cellInfo.value.indexOf("<p>") >= 0 || cellInfo.value.indexOf("\n") >= 0
-          || cellInfo.value.indexOf("\r") >= 0) && this.__table.getRowHeight() < 150) {
+      if (org.jspresso.framework.util.html.HtmlUtil.isHtml(cellInfo.value) && this.__table.getRowHeight() < 150) {
         var contentHeight = qx.bom.Label.getHtmlSize(cellInfo.value).height;
         if (contentHeight > 150) {
           contentHeight = 150;

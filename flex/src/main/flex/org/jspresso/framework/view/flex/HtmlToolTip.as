@@ -12,7 +12,7 @@ public class HtmlToolTip extends ToolTip {
   override protected function commitProperties():void {
     super.commitProperties();
     if (HtmlUtil.isHtml(text)) {
-      textField.htmlText = HtmlUtil.convertHtmlEntities(text);
+      textField.htmlText = HtmlUtil.sanitizeHtml(text);
     }
   }
 }

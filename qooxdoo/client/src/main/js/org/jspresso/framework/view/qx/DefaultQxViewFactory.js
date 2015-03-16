@@ -2005,12 +2005,14 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var modelController = new qx.data.controller.Object(state);
       modelController.addTarget(tableModel, "editable", "writable", false);
       var columnIds = remoteTable.getColumnIds();
-      var columnNames = [];
+      var columnLabels = [];
       var columnToolTips = [];
       for (var i = 0; i < remoteTable.getColumnIds().length; i++) {
-        columnNames[i] = remoteTable.getColumns()[i].getLabel();
+        var columnLabel = remoteTable.getColumns()[i].getLabel();
+        columnLabel = org.jspresso.framework.util.html.HtmlUtil.replaceNewlines(columnLabel);
+        columnLabels[i] = columnLabel;
       }
-      tableModel.setColumns(columnNames, columnIds);
+      tableModel.setColumns(columnLabels, columnIds);
 
       /** @type {qx.ui.table.Table} */
       var table;
@@ -2146,7 +2148,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           columnWidth = rColumn.getPreferredSize().getWidth();
         } else {
           var tableFont = qx.theme.manager.Font.getInstance().resolve("default");
-          var headerWidth = qx.bom.Label.getTextSize(columnNames[i], tableFont.getStyles()).width;
+          var headerWidth = qx.bom.Label.getTextSize(columnLabels[i], tableFont.getStyles()).width;
           if (rColumn instanceof org.jspresso.framework.gui.remote.RCheckBox) {
             columnWidth = headerWidth + 16;
           } else {
@@ -2466,8 +2468,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           });
         }
       } else {
-        atom.setLabel(remoteLabel.getLabel());
-        atom.setRich(org.jspresso.framework.util.html.HtmlUtil.isHtml(remoteLabel.getLabel()));
+        var labelText = remoteLabel.getLabel();
+        labelText = org.jspresso.framework.util.html.HtmlUtil.replaceNewlines(labelText);
+        atom.setLabel(labelText);
+        atom.setRich(org.jspresso.framework.util.html.HtmlUtil.isHtml(labelText));
       }
       this._configureHorizontalAlignment(label, remoteLabel.getHorizontalAlignment());
       if (remoteLabel.getIcon()) {

@@ -2977,7 +2977,7 @@ public class DefaultFlexViewFactory {
       if (remoteLabel.label != null) {
         if (HtmlUtil.isHtml(remoteLabel.label)) {
           label.text = null;
-          label.htmlText = HtmlUtil.convertHtmlEntities(remoteLabel.label);
+          label.htmlText = HtmlUtil.sanitizeHtml(remoteLabel.label);
         } else {
           label.htmlText = null;
           label.text = remoteLabel.label;
@@ -3020,7 +3020,7 @@ public class DefaultFlexViewFactory {
         } else {
           var labelText:String = remoteState.value.toString();
           if (HtmlUtil.isHtml(labelText)) {
-            labelText = HtmlUtil.convertHtmlEntities(labelText);
+            labelText = HtmlUtil.sanitizeHtml(labelText);
           }
           if (((remoteLabel as RLink).action).enabled) {
             label.htmlText = "<u><a href='event:action'>" + labelText + "</a></u>";
@@ -3042,7 +3042,7 @@ public class DefaultFlexViewFactory {
         } else {
           if (HtmlUtil.isHtml(value.toString())) {
             label.text = null;
-            label.htmlText = HtmlUtil.convertHtmlEntities(value.toString());
+            label.htmlText = HtmlUtil.sanitizeHtml(value.toString());
           } else {
             label.htmlText = null;
             label.text = value.toString();
@@ -3331,7 +3331,7 @@ public class DefaultFlexViewFactory {
     var toolTip:String = action.description;
     if (action.acceleratorAsString) {
       toolTip = "<html>" + toolTip + " <i>[" + action.acceleratorAsString.split(" ").join("+") + "]</i>" + "</html>";
-      toolTip = HtmlUtil.convertHtmlEntities(toolTip);
+      toolTip = HtmlUtil.sanitizeHtml(toolTip);
     }
     return toolTip;
   }

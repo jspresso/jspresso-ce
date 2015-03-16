@@ -21,7 +21,9 @@ qx.Class.define("org.jspresso.framework.util.html.HtmlUtil", {
      */
     isHtml: function (content) {
       if (typeof content === "string" || content instanceof String) {
-        return content.toLowerCase().indexOf("<html>") > -1 || content.toLowerCase().indexOf("<p") > -1;
+        return content.toLowerCase().indexOf("<html>") > -1
+            || content.toLowerCase().indexOf("<p") > -1
+            || content.toLowerCase().indexOf("<br") > -1;
       }
       return false;
     },
@@ -35,7 +37,21 @@ qx.Class.define("org.jspresso.framework.util.html.HtmlUtil", {
 
     toHtml: function (message) {
       if (message != null) {
-        return "<html>" + message + "</html>";
+        return "<html>" + org.jspresso.framework.util.html.HtmlUtil.sanitizeHtml(message) + "</html>";
+      }
+      return message;
+    },
+
+    sanitizeHtml: function(message) {
+      if (message != null) {
+        return qx.bom.String.escape(message);
+      }
+      return message;
+    },
+
+    replaceNewlines: function(message) {
+      if (message != null) {
+        return message.replace(new RegExp("\n", 'g'), "<br/>");
       }
       return message;
     }

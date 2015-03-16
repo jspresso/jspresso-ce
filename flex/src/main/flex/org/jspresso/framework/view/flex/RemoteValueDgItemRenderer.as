@@ -240,12 +240,12 @@ public class RemoteValueDgItemRenderer extends ListItemRenderer implements IColu
     var cellText:String = label.text;
     if (_action != null) {
       if (HtmlUtil.isHtml(cellText)) {
-        cellText = HtmlUtil.convertHtmlEntities(cellText);
+        cellText = HtmlUtil.sanitizeHtml(cellText);
       }
       label.htmlText = "<u><a href='event:action'>" + cellText + "</a></u>";
     } else {
       if (HtmlUtil.isHtml(cellText)) {
-        label.htmlText = HtmlUtil.convertHtmlEntities(cellText);
+        label.htmlText = HtmlUtil.sanitizeHtml(cellText);
       }
     }
     if (index != -1 && index != 1 && toolTipIndex < 0) {

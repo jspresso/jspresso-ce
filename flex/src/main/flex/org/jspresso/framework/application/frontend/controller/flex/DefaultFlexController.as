@@ -409,7 +409,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
       if (status != null && status.length > 0) {
         if (HtmlUtil.isHtml(status)) {
           _statusBar.text = null;
-          _statusBar.htmlText = HtmlUtil.convertHtmlEntities(status);
+          _statusBar.htmlText = HtmlUtil.sanitizeHtml(status);
         } else {
           _statusBar.htmlText = null;
           _statusBar.text = status;
@@ -825,7 +825,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
       alert = Alert.show(message, messageCommand.title, Alert.OK, alertParent, null, null, Alert.OK);
     }
     if (isHtml) {
-      alert.mx_internal::alertForm.mx_internal::textField.htmlText = HtmlUtil.convertHtmlEntities(messageCommand.message);
+      alert.mx_internal::alertForm.mx_internal::textField.htmlText = HtmlUtil.sanitizeHtml(messageCommand.message);
     }
     return alert;
   }

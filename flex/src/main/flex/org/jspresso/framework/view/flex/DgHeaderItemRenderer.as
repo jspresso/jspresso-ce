@@ -59,7 +59,7 @@ public class DgHeaderItemRenderer extends HBox implements IColumnIndexProvider, 
     super.commitProperties();
     var cellText:String = _text.text;
     if (HtmlUtil.isHtml(cellText)) {
-      _text.htmlText = HtmlUtil.convertHtmlEntities(cellText);
+      _text.htmlText = HtmlUtil.sanitizeHtml(cellText);
     }
     _text.setTextFieldWordWrap(false);
   }

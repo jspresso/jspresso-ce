@@ -62,7 +62,7 @@ public class RemoteValueTreeItemRenderer extends TreeItemRenderer {
     if (listData) {
       if (HtmlUtil.isHtml(listData.label)) {
         label.text = null;
-        label.htmlText = HtmlUtil.convertHtmlEntities(listData.label);
+        label.htmlText = HtmlUtil.sanitizeHtml(listData.label);
       } else {
         label.htmlText = null;
         label.text = listData.label;

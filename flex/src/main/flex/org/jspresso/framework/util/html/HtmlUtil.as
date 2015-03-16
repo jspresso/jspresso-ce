@@ -104,7 +104,7 @@ public class HtmlUtil {
     HTML_ENTITIES["&yuml;"] = "\u00FF"; // Latin small letter y with diaeresis
   }
 
-  public static function convertHtmlEntities(source:String):String {
+  public static function sanitizeHtml(source:String):String {
     var buf:String = source;
     var finished:Boolean = false;
     for (var entity:String in HTML_ENTITIES) {
