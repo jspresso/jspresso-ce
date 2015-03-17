@@ -159,7 +159,11 @@ public class QueryEntitiesAction extends AbstractQueryComponentsAction {
           queryComponent.setPage(page);
         }
         if (queryComponent.getRecordCount() == null) {
-          totalCount = (int) mongo.count(query, entityClass);
+          if (isUseCountForPagination()) {
+            totalCount = (int) mongo.count(query, entityClass);
+          } else {
+            totalCount = IQueryComponent.UNKNOWN_COUNT;
+          }
         }
         qFactory.completeQueryWithOrdering(query, queryComponent, context);
         entities = mongo.find(query.skip(page * pageSize).limit(pageSize), entityClass);

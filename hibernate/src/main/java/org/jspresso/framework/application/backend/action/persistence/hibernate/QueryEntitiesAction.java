@@ -187,8 +187,12 @@ public class QueryEntitiesAction extends AbstractQueryComponentsAction {
           queryComponent.setPage(page);
         }
         if (queryComponent.getRecordCount() == null) {
-          criteria.setProjection(Projections.rowCount());
-          totalCount = ((Number) criteria.getExecutableCriteria(hibernateSession).list().get(0)).intValue();
+          if (isUseCountForPagination()) {
+            criteria.setProjection(Projections.rowCount());
+            totalCount = ((Number) criteria.getExecutableCriteria(hibernateSession).list().get(0)).intValue();
+          } else {
+            totalCount = IQueryComponent.UNKNOWN_COUNT;
+          }
         }
         if (refinerOrders != null) {
           for (Order order : refinerOrders) {

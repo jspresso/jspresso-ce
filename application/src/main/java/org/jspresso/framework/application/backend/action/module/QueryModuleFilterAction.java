@@ -86,6 +86,6 @@ public class QueryModuleFilterAction extends AbstractQbeAction {
       }
     }
     module.setModuleObjects(targetModuleObjects);
-    queryComponent.setQueriedComponents(null);
+    //queryComponent.setQueriedComponents(null);
   }
 }

@@ -69,11 +69,11 @@
           <property name="horizontalAlignment" value="LEFT" />
         </bean>
         <bean class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor">
-          <property name="name" value="pageCount" />
+          <property name="name" value="displayPageCount" />
           <property name="horizontalAlignment" value="LEFT" />
         </bean>
         <bean class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor">
-          <property name="name" value="recordCount" />
+          <property name="name" value="displayRecordCount" />
           <property name="horizontalAlignment" value="LEFT" />
         </bean>
         <bean class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor">

@@ -22,7 +22,7 @@ import java.util.List;
 
 /**
  * Pageable models.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IPageable {
@@ -30,22 +30,27 @@ public interface IPageable {
   /**
    * "nextPageEnabled" string constant.
    */
-  String NEXT_PAGE_ENABLED       = "nextPageEnabled";
+  String NEXT_PAGE_ENABLED = "nextPageEnabled";
 
   /**
    * "page" string constant.
    */
-  String PAGE                    = "page";
+  String PAGE = "page";
 
   /**
    * "displayPageIndex" string constant.
    */
-  String DISPLAY_PAGE_INDEX      = "displayPageIndex";
+  String DISPLAY_PAGE_INDEX = "displayPageIndex";
 
   /**
    * "pageCount" string constant.
    */
-  String PAGE_COUNT              = "pageCount";
+  String PAGE_COUNT = "pageCount";
+
+  /**
+   * "displayPageCount" string constant.
+   */
+  String DISPLAY_PAGE_COUNT = "displayPageCount";
 
   /**
    * "pageNavigationEnabled" string constant.
@@ -55,40 +60,50 @@ public interface IPageable {
   /**
    * "pageSize" string constant.
    */
-  String PAGE_SIZE               = "pageSize";
+  String PAGE_SIZE = "pageSize";
 
   /**
    * "previousPageEnabled" string constant.
    */
-  String PREVIOUS_PAGE_ENABLED   = "previousPageEnabled";
+  String PREVIOUS_PAGE_ENABLED = "previousPageEnabled";
 
   /**
    * "recordCount" string constant.
    */
-  String RECORD_COUNT            = "recordCount";
+  String RECORD_COUNT = "recordCount";
+
+  /**
+   * "displayRecordCount" string constant.
+   */
+  String DISPLAY_RECORD_COUNT = "displayRecordCount";
 
   /**
    * "selectedRecordCount" string constant.
    */
-  String SELECTED_RECORD_COUNT            = "selectedRecordCount";
+  String SELECTED_RECORD_COUNT = "selectedRecordCount";
+
+  /**
+   * {@code Integer.MIN_VALUE} constant.
+   */
+  Integer UNKNOWN_COUNT = Integer.MIN_VALUE;
 
   /**
    * Gets the page number used for query actions.
-   * 
+   *
    * @return the page number used for query actions.
    */
   Integer getPage();
 
   /**
    * Gets the page index to display.
-   * 
+   *
    * @return the page index to display graphically.
    */
   Integer getDisplayPageIndex();
 
   /**
    * Sets the page index to display.
-   * 
+   *
    * @param displayPageIndex
    *          the page index to display.
    */
@@ -96,49 +111,63 @@ public interface IPageable {
 
   /**
    * Gets the current page count.
-   * 
+   *
    * @return the the current page count.
    */
   Integer getPageCount();
 
   /**
+   * Gets the displayed page count.
+   *
+   * @return the the displayed page count.
+   */
+  String getDisplayPageCount();
+
+  /**
    * Gets the page size used for query actions.
-   * 
+   *
    * @return the page size used for query actions.
    */
   Integer getPageSize();
 
   /**
    * Gets the current record count.
-   * 
+   *
    * @return the the current record count.
    */
   Integer getRecordCount();
 
   /**
+   * Gets the displayed record count.
+   *
+   * @return the the displayed record count.
+   */
+  String getDisplayRecordCount();
+
+  /**
    * Whether navigation to next page is enabled.
-   * 
+   *
    * @return true if navigation to next page is enabled, false otherwise.
    */
   boolean isNextPageEnabled();
 
   /**
    * Whether page navigation is enabled.
-   * 
+   *
    * @return true if page navigation is enabled, false otherwise.
    */
   boolean isPageNavigationEnabled();
 
   /**
    * Whether navigation to previous page is enabled.
-   * 
+   *
    * @return true if navigation to previous page is enabled, false otherwise.
    */
   boolean isPreviousPageEnabled();
 
   /**
    * Sets the page number used for query actions.
-   * 
+   *
    * @param page
    *          the page number used for query actions.
    */
@@ -146,7 +175,7 @@ public interface IPageable {
 
   /**
    * Sets the page size used for query actions.
-   * 
+   *
    * @param pageSize
    *          the page size used for query actions.
    */
@@ -154,7 +183,7 @@ public interface IPageable {
 
   /**
    * Sets the current record count.
-   * 
+   *
    * @param recordCount
    *          current record count.
    */
@@ -162,7 +191,7 @@ public interface IPageable {
 
   /**
    * Gets the collection of sticky results.
-   * 
+   *
    * @param stickyResults
    *          the collection of sticky results.
    */
@@ -170,7 +199,7 @@ public interface IPageable {
 
   /**
    * Sets the collection of sticky results.
-   * 
+   *
    * @return the collection of sticky results.
    */
   List<?> getStickyResults();

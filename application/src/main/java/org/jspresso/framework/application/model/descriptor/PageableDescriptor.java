@@ -25,6 +25,7 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicIntegerPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicInterfaceDescriptor;
+import org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor;
 import org.jspresso.framework.util.collection.IPageable;
 
 /**
@@ -64,9 +65,17 @@ public final class PageableDescriptor {
     pageCountDesc.setName(IPageable.PAGE_COUNT);
     pageCountDesc.setReadOnly(true);
 
+    BasicStringPropertyDescriptor displayPageCountDesc = new BasicStringPropertyDescriptor();
+    displayPageCountDesc.setName(IPageable.DISPLAY_PAGE_COUNT);
+    displayPageCountDesc.setReadOnly(true);
+
     BasicIntegerPropertyDescriptor recordCountDesc = new BasicIntegerPropertyDescriptor();
     recordCountDesc.setName(IPageable.RECORD_COUNT);
     recordCountDesc.setReadOnly(true);
+
+    BasicStringPropertyDescriptor displayRecordCountDesc = new BasicStringPropertyDescriptor();
+    displayRecordCountDesc.setName(IPageable.DISPLAY_RECORD_COUNT);
+    displayRecordCountDesc.setReadOnly(true);
 
     BasicIntegerPropertyDescriptor selectedRecordCountDesc = new BasicIntegerPropertyDescriptor();
     selectedRecordCountDesc.setName(IPageable.SELECTED_RECORD_COUNT);
@@ -76,7 +85,9 @@ public final class PageableDescriptor {
     propertyDescriptors.add(pageDesc);
     propertyDescriptors.add(displayPageIndexDesc);
     propertyDescriptors.add(pageCountDesc);
+    propertyDescriptors.add(displayPageCountDesc);
     propertyDescriptors.add(recordCountDesc);
+    propertyDescriptors.add(displayRecordCountDesc);
     propertyDescriptors.add(selectedRecordCountDesc);
 
     descriptor.setPropertyDescriptors(propertyDescriptors);

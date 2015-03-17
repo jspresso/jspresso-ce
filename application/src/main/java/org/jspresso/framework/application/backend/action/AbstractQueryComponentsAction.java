@@ -62,12 +62,14 @@ public abstract class AbstractQueryComponentsAction extends BackendAction {
   private static final String COMPONENT_REFINER = "COMPONENT_REFINER";
   private IQueryComponentRefiner queryComponentRefiner;
   private EMergeMode             mergeMode;
+  private boolean                useCountForPagination;
 
   /**
    * Constructs a new {@code AbstractQueryComponentsAction} instance.
    */
   public AbstractQueryComponentsAction() {
     mergeMode = EMergeMode.MERGE_LAZY;
+    useCountForPagination = true;
   }
 
   /**
@@ -227,4 +229,21 @@ public abstract class AbstractQueryComponentsAction extends BackendAction {
     this.mergeMode = mergeMode;
   }
 
+  /**
+   * Sets use count for pagination.
+   *
+   * @param useCountForPagination the use count for pagination
+   */
+  public void setUseCountForPagination(boolean useCountForPagination) {
+    this.useCountForPagination = useCountForPagination;
+  }
+
+  /**
+   * Is use count for pagination.
+   *
+   * @return the boolean
+   */
+  protected boolean isUseCountForPagination() {
+    return useCountForPagination;
+  }
 }

@@ -415,6 +415,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   public Integer getPageCount() {
     if (getRecordCount() == null) {
       return null;
+    } else if (getRecordCount() == UNKNOWN_COUNT) {
+      return UNKNOWN_COUNT;
     }
     if (getPageSize() == null || getPageSize() <= 0) {
       return 1;
@@ -430,8 +432,21 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
-   * @return the page size
+   *
+   * @return the displayed page count
    */
+  @Override
+  public String getDisplayPageCount() {
+    if (getPageCount() == null || getPageCount() == UNKNOWN_COUNT) {
+      return "";
+    }
+    return getPageCount().toString();
+  }
+
+    /**
+     * {@inheritDoc}
+     * @return the page size
+     */
   @Override
   public Integer getPageSize() {
     if (pageSize == null) {
@@ -475,6 +490,19 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   *
+   * @return the displayed record count
+   */
+  @Override
+  public String getDisplayRecordCount() {
+    if (getRecordCount() == null || getRecordCount() == UNKNOWN_COUNT) {
+      return "";
+    }
+    return getRecordCount().toString();
+  }
+
+  /**
+   * {@inheritDoc}
    * @return the boolean
    */
   @Override
@@ -489,7 +517,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    */
   @Override
   public boolean isPageNavigationEnabled() {
-    return getPageCount() != null && getPageCount() > 1;
+    return getPageCount() != null && (getPageCount() > 1 || getPageCount() == UNKNOWN_COUNT);
   }
 
   /**
@@ -498,8 +526,17 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    */
   @Override
   public boolean isNextPageEnabled() {
-    return getPageCount() != null && getPage() != null
-        && getPage() < getPageCount() - 1;
+    if (getPage() == null || getPageSize() == null || getResults() == null) {
+      return false;
+    }
+    int currentPageSize = getResults().size();
+    if (getStickyResults() != null) {
+      currentPageSize -= getStickyResults().size();
+    }
+    return getPageCount() != null
+        && ((getPageCount() == UNKNOWN_COUNT && currentPageSize >= getPageSize())
+        // We are on a complete page
+        || (getPageCount() > 0 && getPage() < getPageCount() - 1));
   }
 
   /**
@@ -546,7 +583,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     if (getPageCount() != null) {
       pc = getPageCount();
     }
-    if (pc > 0) {
+    if (getPageCount() != UNKNOWN_COUNT && pc > 0) {
       if (page == null || page < 0) {
         this.page = 0;
       } else if (page >= pc) {
@@ -593,9 +630,20 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   @Override
   public void setQueriedComponents(List<?> queriedComponents) {
     List<?> oldQueriedComponents = getQueriedComponents();
+    boolean oldNextPageEnabled = isNextPageEnabled();
     this.queriedComponents = queriedComponents;
+    if (queriedComponents != null && getPageCount() == UNKNOWN_COUNT && getPageSize() != null) {
+      int currentPageSize = queriedComponents.size();
+      if (getStickyResults() != null) {
+        currentPageSize -= getStickyResults().size();
+      }
+      if (currentPageSize < getPageSize()) {
+        setRecordCount(getPage() * getPageSize() + currentPageSize);
+      }
+    }
     firePropertyChange(QUERIED_COMPONENTS, oldQueriedComponents,
         getQueriedComponents());
+    firePropertyChange(NEXT_PAGE_ENABLED, oldNextPageEnabled, isNextPageEnabled());
   }
 
   /**
@@ -606,13 +654,17 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   @Override
   public void setRecordCount(Integer recordCount) {
     Integer oldValue = getRecordCount();
+    String oldDisplayRecordCount = getDisplayRecordCount();
     Integer oldPageCount = getPageCount();
+    String oldDisplayPageCount = getDisplayPageCount();
     Integer oldDisplayPageIndex = getDisplayPageIndex();
     boolean oldNextPageEnabled = isNextPageEnabled();
     boolean oldPageNavigationEnabled = isPageNavigationEnabled();
     this.recordCount = recordCount;
     firePropertyChange(RECORD_COUNT, oldValue, getRecordCount());
+    firePropertyChange(DISPLAY_RECORD_COUNT, oldDisplayRecordCount, getDisplayRecordCount());
     firePropertyChange(PAGE_COUNT, oldPageCount, getPageCount());
+    firePropertyChange(DISPLAY_PAGE_COUNT, oldDisplayPageCount, getDisplayPageCount());
     firePropertyChange(DISPLAY_PAGE_INDEX, oldDisplayPageIndex,
         getDisplayPageIndex());
     firePropertyChange(IPageable.NEXT_PAGE_ENABLED,

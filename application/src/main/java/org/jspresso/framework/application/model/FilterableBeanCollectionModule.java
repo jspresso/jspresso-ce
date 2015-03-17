@@ -357,9 +357,11 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
           || IPageable.NEXT_PAGE_ENABLED.equals(evt.getPropertyName())
           || IPageable.PAGE.equals(evt.getPropertyName())
           || IPageable.PAGE_COUNT.equals(evt.getPropertyName())
+          || IPageable.DISPLAY_PAGE_COUNT.equals(evt.getPropertyName())
           || IPageable.PAGE_SIZE.equals(evt.getPropertyName())
           || IPageable.PREVIOUS_PAGE_ENABLED.equals(evt.getPropertyName())
           || IPageable.RECORD_COUNT.equals(evt.getPropertyName())
+          || IPageable.DISPLAY_RECORD_COUNT.equals(evt.getPropertyName())
           || IPageable.SELECTED_RECORD_COUNT.equals(evt.getPropertyName())
           || IPageable.PAGE_NAVIGATION_ENABLED.equals(evt.getPropertyName())) {
         target.firePropertyChange(evt.getPropertyName(), evt.getOldValue(),
@@ -428,13 +430,26 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
 
   /**
    * Delegates to filter.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
   public Integer getPageCount() {
     if (filter != null) {
       return filter.getPageCount();
+    }
+    return null;
+  }
+
+  /**
+   * Delegates to filter.
+   * <p/>
+   * {@inheritDoc}
+   */
+  @Override
+  public String getDisplayPageCount() {
+    if (filter != null) {
+      return filter.getDisplayPageCount();
     }
     return null;
   }
@@ -448,6 +463,19 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   public Integer getRecordCount() {
     if (filter != null) {
       return filter.getRecordCount();
+    }
+    return null;
+  }
+
+  /**
+   * Delegates to filter.
+   * <p/>
+   * {@inheritDoc}
+   */
+  @Override
+  public String getDisplayRecordCount() {
+    if (filter != null) {
+      return filter.getDisplayRecordCount();
     }
     return null;
   }
