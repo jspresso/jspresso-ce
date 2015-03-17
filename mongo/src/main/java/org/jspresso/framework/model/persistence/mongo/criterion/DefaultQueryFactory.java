@@ -508,6 +508,9 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
         .isUpperCase()) {
       regex = regex.toUpperCase();
     }
+    if (!regex.startsWith("%")) {
+      regex = "^" + regex; // make sure that the index is used
+    }
     regex = regex.replaceAll("%", ".*");
     if (!regex.endsWith(".*")) {
       regex += ".*";
