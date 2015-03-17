@@ -42,6 +42,8 @@ public abstract class AbstractComponentViewDescriptor extends BasicViewDescripto
   private List<String>                    renderedProperties;
   private List<IPropertyViewDescriptor>   propertyViewDescriptors;
   private AbstractComponentViewDescriptor readOnlyClone;
+  private String                          labelFont;
+  private String                          valueFont;
 
   /**
    * Instantiates a new Abstract component view descriptor.
@@ -98,6 +100,8 @@ public abstract class AbstractComponentViewDescriptor extends BasicViewDescripto
         propertyViewDescriptor.setWidth(getPropertyWidth(renderedProperty));
         propertyViewDescriptor.setRenderedChildProperties(computeDefaultRenderedChildProperties(renderedProperty));
         propertyViewDescriptor.setModelDescriptor(componentDescriptor.getPropertyDescriptor(renderedProperty));
+        propertyViewDescriptor.setLabelFont(getLabelFont());
+        propertyViewDescriptor.setFont(getValueFont());
         declaredPropertyViewDescriptors.add(propertyViewDescriptor);
       }
     } else {
@@ -105,6 +109,12 @@ public abstract class AbstractComponentViewDescriptor extends BasicViewDescripto
         if (pvd.getModelDescriptor() == null && pvd instanceof BasicPropertyViewDescriptor) {
           ((BasicPropertyViewDescriptor) pvd).setModelDescriptor(componentDescriptor.getPropertyDescriptor(
               pvd.getName()));
+          if (pvd.getLabelFont() == null) {
+            ((BasicPropertyViewDescriptor) pvd).setLabelFont(getLabelFont());
+          }
+          if (pvd.getFont() == null) {
+            ((BasicPropertyViewDescriptor) pvd).setFont(getValueFont());
+          }
         }
       }
     }
@@ -299,5 +309,72 @@ public abstract class AbstractComponentViewDescriptor extends BasicViewDescripto
       readOnlyClone.setPropertyViewDescriptors(readOnlyDescriptors);
     }
     return readOnlyClone;
+  }
+
+  /**
+   * Gets label font.
+   *
+   * @return the label font
+   */
+  @Override
+  public String getLabelFont() {
+    return labelFont;
+  }
+
+  /**
+   * This property defines the font of the property labels. It might differ from
+   * the field component one. The font must be string encoded using the pattern
+   * <b>&quot;[name];[style];[size]&quot;</b> :
+   * <ul>
+   * <li><b>[name]</b> is the name of the font, e.g. <i>arial</i>.</li>
+   * <li><b>[style]</b> is PLAIN, BOLD, ITALIC or a union of BOLD and ITALIC
+   * combined with the '|' character, e.g. <i>BOLD|ITALIC</i>.</li>
+   * <li><b>[size]</b> is the size of the font, e.g. <i>10</i>.</li>
+   * </ul>
+   * Any of the above pattern section can be left empty, thus falling back to
+   * the component default.
+   * <p/>
+   * This property can be overridden on a field basis using an explicit property view definition.
+   * <p/>
+   * Default value is {@code null}, meaning use default component font.
+   *
+   * @param labelFont
+   *     the labelFont to set.
+   */
+  public void setLabelFont(String labelFont) {
+    this.labelFont = labelFont;
+  }
+
+  /**
+   * Gets value font.
+   *
+   * @return the value font
+   */
+  @Override
+  public String getValueFont() {
+    return valueFont;
+  }
+
+  /**
+   * This property defines the font of the property values. The font must be string encoded using the pattern
+   * <b>&quot;[name];[style];[size]&quot;</b> :
+   * <ul>
+   * <li><b>[name]</b> is the name of the font, e.g. <i>arial</i>.</li>
+   * <li><b>[style]</b> is PLAIN, BOLD, ITALIC or a union of BOLD and ITALIC
+   * combined with the '|' character, e.g. <i>BOLD|ITALIC</i>.</li>
+   * <li><b>[size]</b> is the size of the font, e.g. <i>10</i>.</li>
+   * </ul>
+   * Any of the above pattern section can be left empty, thus falling back to
+   * the component default.
+   * <p/>
+   * This property can be overridden on a field basis using an explicit property view definition.
+   * <p/>
+   * Default value is {@code null}, meaning use default component font.
+   *
+   * @param valueFont
+   *     the valueFont to set.
+   */
+  public void setValueFont(String valueFont) {
+    this.valueFont = valueFont;
   }
 }

@@ -67,4 +67,18 @@ public interface IComponentViewDescriptor extends IScrollableViewDescriptor {
    * @return the label horizontal position
    */
   EHorizontalPosition getLabelsHorizontalPosition();
+
+  /**
+   * Gets label font.
+   *
+   * @return the label font
+   */
+  String getLabelFont();
+
+  /**
+   * Gets value font.
+   *
+   * @return the value font
+   */
+  String getValueFont();
 }
