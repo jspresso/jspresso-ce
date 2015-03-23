@@ -143,7 +143,7 @@ public class ComparableQueryStructure extends QueryComponent {
    */
   @Override
   public boolean isRestricting() {
-    return getComparator() != null && getInfValue() != null || getSupValue() != null
+    return getComparator() != null && (getInfValue() != null || getSupValue() != null)
         || ComparableQueryStructureDescriptor.NU.equals(getComparator())
         || ComparableQueryStructureDescriptor.NN.equals(getComparator());
   }
