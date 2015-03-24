@@ -2534,8 +2534,20 @@ public abstract class AbstractBackendController extends AbstractController
    *     the entity registry name.
    * @return a new entity registry.
    */
-  protected IEntityRegistry createEntityRegistry(String name) {
-    return new BasicEntityRegistry(name);
+  protected final IEntityRegistry createEntityRegistry(String name) {
+    return createEntityRegistry(name, new HashMap<Class<? extends IEntity>, Map<Serializable, IEntity>>());
+  }
+
+  /**
+   * Creates an entity registry.
+   *
+   * @param name      the entity registry name.
+   * @param backingStore the backing store
+   * @return a new entity registry.
+   */
+  protected IEntityRegistry createEntityRegistry(String name, Map<Class<? extends IEntity>,
+      Map<Serializable, IEntity>> backingStore) {
+    return new BasicEntityRegistry(name, backingStore);
   }
 
   /**

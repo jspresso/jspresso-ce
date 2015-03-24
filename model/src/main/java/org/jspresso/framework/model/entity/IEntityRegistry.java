@@ -19,6 +19,7 @@
 package org.jspresso.framework.model.entity;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * This interface defines the contract of an application session entity
@@ -60,4 +61,11 @@ public interface IEntityRegistry {
    * Clears the registry.
    */
   void clear();
+
+  /**
+   * Gets registered entities.
+   *
+   * @return the registered entities
+   */
+  Map<Class<? extends IEntity>,Map<Serializable,IEntity>> getRegisteredEntities();
 }
