@@ -186,17 +186,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
     if (nestedUnitOfWork != null) {
       return nestedUnitOfWork.getRegisteredEntities();
     }
-    Map<Class<? extends IEntity>, Map<Serializable, IEntity>> registeredEntities = new HashMap<>();
-    for (IPropertyChangeCapable entity : dirtRecorder.getRegistered()) {
-      Class<? extends IEntity> entityContract = ((IEntity) entity).getComponentContract();
-      Map<Serializable, IEntity> contractBuffer = registeredEntities.get(entityContract);
-      if (contractBuffer == null) {
-        contractBuffer = new HashMap<>();
-        registeredEntities.put(entityContract, contractBuffer);
-      }
-      contractBuffer.put(((IEntity) entity).getId(), (IEntity) entity);
-    }
-    return registeredEntities;
+    return entityRegistry.getRegisteredEntities();
   }
 
   /**

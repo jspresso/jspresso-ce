@@ -1060,8 +1060,9 @@ public class HibernateBackendController extends AbstractBackendController {
    * {@inheritDoc}
    */
   @Override
-  protected IEntityRegistry createEntityRegistry(String name) {
-    return new HibernateEntityRegistry(name);
+  protected IEntityRegistry createEntityRegistry(String name,
+                                                 Map<Class<? extends IEntity>, Map<Serializable, IEntity>> backingStore) {
+    return new HibernateEntityRegistry(name, backingStore);
   }
 
   /**

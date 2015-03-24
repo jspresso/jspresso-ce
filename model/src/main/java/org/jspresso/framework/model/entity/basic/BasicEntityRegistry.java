@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.apache.commons.collections.map.AbstractReferenceMap;
 import org.apache.commons.collections.map.ReferenceMap;
+
 import org.jspresso.framework.model.entity.EntityRegistryException;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityRegistry;
@@ -31,7 +32,7 @@ import org.jspresso.framework.model.entity.IEntityRegistry;
 /**
  * Basic implementation of an entity registry backed by an HashMap of weak
  * reference values.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BasicEntityRegistry implements IEntityRegistry {
@@ -43,11 +44,21 @@ public class BasicEntityRegistry implements IEntityRegistry {
    * Constructs a new {@code BasicEntityRegistry} instance.
    *
    * @param name
-   *          the name of the registry;
+   *     the name of the registry;
    */
   public BasicEntityRegistry(String name) {
+    this(name, new HashMap<Class<? extends IEntity>, Map<Serializable, IEntity>>());
+  }
+
+  /**
+   * Constructs a new {@code BasicEntityRegistry} instance.
+   *
+   * @param name      the name of the registry;
+   * @param backingStore the backing store
+   */
+  public BasicEntityRegistry(String name, Map<Class<? extends IEntity>, Map<Serializable, IEntity>> backingStore) {
     this.name = name;
-    backingStore = new HashMap<>();
+    this.backingStore = backingStore;
   }
 
   /**
@@ -105,8 +116,7 @@ public class BasicEntityRegistry implements IEntityRegistry {
       Map<Serializable, IEntity> contractStore = backingStore
           .get(entityContract);
       if (contractStore == null) {
-        contractStore = new ReferenceMap(AbstractReferenceMap.HARD,
-            AbstractReferenceMap.WEAK, true);
+        contractStore = createContractStoreMap();
         backingStore.put(entityContract, contractStore);
       }
       contractStore.put(id, entity);
@@ -116,7 +126,7 @@ public class BasicEntityRegistry implements IEntityRegistry {
   /**
    * Checks that the entity being registered is the &quot;same&quot; that the
    * already registered entity.
-   * 
+   *
    * @param entity
    *          the entity to test.
    * @param existingRegisteredEntity
@@ -140,8 +150,29 @@ public class BasicEntityRegistry implements IEntityRegistry {
   }
 
   /**
+   * Gets registered entities.
+   *
+   * @return the registered entities
+   */
+  @Override
+  public Map<Class<? extends IEntity>, Map<Serializable, IEntity>> getRegisteredEntities() {
+    Map<Class<? extends IEntity>, Map<Serializable, IEntity>> defensiveBackingStoreCopy = new HashMap<>();
+    for (Map.Entry<Class<? extends IEntity>, Map<Serializable, IEntity>> backingStoreEntry : backingStore.entrySet()) {
+      Map<Serializable, IEntity> defensiveContractStoreCopy = createContractStoreMap();
+      defensiveContractStoreCopy.putAll(backingStoreEntry.getValue());
+      defensiveBackingStoreCopy.put(backingStoreEntry.getKey(), defensiveContractStoreCopy);
+    }
+    return defensiveBackingStoreCopy;
+  }
+
+  @SuppressWarnings("unchecked")
+  private Map<Serializable, IEntity> createContractStoreMap() {
+    return new ReferenceMap(AbstractReferenceMap.HARD, AbstractReferenceMap.WEAK, true);
+  }
+
+  /**
    * Gets the name.
-   * 
+   *
    * @return the name.
    */
   public String getName() {
