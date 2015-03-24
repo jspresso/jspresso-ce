@@ -270,12 +270,7 @@ public abstract class AbstractBackendController extends AbstractController
     }
     List<E> uowEntities = new ArrayList<>();
     Map<Class<? extends IEntity>, Map<Serializable, IEntity>> uowExistingEntities = unitOfWork.getRegisteredEntities();
-    IEntityRegistry alreadyCloned = createEntityRegistry("cloneInUnitOfWork");
-    for (Entry<Class<? extends IEntity>, Map<Serializable, IEntity>> contractStore : uowExistingEntities.entrySet()) {
-      for (Entry<Serializable, IEntity> entityEntry : contractStore.getValue().entrySet()) {
-        alreadyCloned.register(contractStore.getKey(), entityEntry.getKey(), entityEntry.getValue());
-      }
-    }
+    IEntityRegistry alreadyCloned = createEntityRegistry("cloneInUnitOfWork", uowExistingEntities);
     for (E entity : entities) {
       uowEntities.add(cloneInUnitOfWork(entity, allowOuterScopeUpdate, alreadyCloned));
     }
