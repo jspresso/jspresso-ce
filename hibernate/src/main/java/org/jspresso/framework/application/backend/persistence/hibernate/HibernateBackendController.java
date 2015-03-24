@@ -548,14 +548,13 @@ public class HibernateBackendController extends AbstractBackendController {
       throw new IllegalArgumentException("Passed entity cannot be null");
     }
     if (isUnitOfWorkActive()) {
-      Set<IEntity> deletedEntitiesSnapshot = new HashSet<>(
-          deletedEntities);
+      Collection<IEntity> deletedEntitiesSnapshot = new ArrayList<>(deletedEntities);
       try {
         deletedEntities.add(entity);
         getHibernateSession().delete(entity);
         updatedEntities.remove(entity);
       } catch (RuntimeException re) {
-        deletedEntities = deletedEntitiesSnapshot;
+        deletedEntities = new HashSet<>(deletedEntitiesSnapshot);
         throw re;
       }
     } else {
@@ -581,13 +580,12 @@ public class HibernateBackendController extends AbstractBackendController {
       throw new IllegalArgumentException("Passed entity cannot be null");
     }
     if (isUnitOfWorkActive()) {
-      Set<IEntity> updatedEntitiesSnapshot = new HashSet<>(
-          updatedEntities);
+      Collection<IEntity> updatedEntitiesSnapshot = new ArrayList<>(updatedEntities);
       try {
         updatedEntities.add(entity);
         getHibernateSession().saveOrUpdate(entity);
       } catch (RuntimeException re) {
-        updatedEntities = updatedEntitiesSnapshot;
+        updatedEntities = new HashSet<>(updatedEntitiesSnapshot);
         throw re;
       }
     } else {
