@@ -35,7 +35,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -515,7 +514,7 @@ public abstract class AbstractBackendController extends AbstractController imple
       dirtyProperties = dirtRecorder.getChangedProperties(entity);
     }
     if (dirtyProperties != null) {
-      for (Iterator<Map.Entry<String, Object>> ite = dirtyProperties.entrySet().iterator(); ite.hasNext(); ) {
+      for (Iterator<Map.Entry<String, Object>> ite = dirtyProperties.entrySet().iterator(); ite.hasNext();) {
         Map.Entry<String, Object> property = ite.next();
         boolean include = true;
         if (!includeComputed) {
@@ -527,7 +526,7 @@ public abstract class AbstractBackendController extends AbstractController imple
         if (include) {
           Object propertyValue = property.getValue();
           Object currentProperty = entity.straightGetProperty(property.getKey());
-          if ((currentProperty != null && !(currentProperty instanceof Collection) && areEqualWithoutInitializing(
+          if ((currentProperty != null && !(currentProperty instanceof Collection<?>) && areEqualWithoutInitializing(
               currentProperty, property.getValue())) || (currentProperty == null && propertyValue == null)) {
             // Unfortunately, we cannot ignore collections that have been
             // changed but reset to their original state. This prevents the
@@ -1121,13 +1120,13 @@ public abstract class AbstractBackendController extends AbstractController imple
    * Creates a transient collection instance, in respect to the type of
    * collection passed as parameter.
    *
-   * @param collection
-   *     the collection to take the type from (List, Set, ...)
+   * @param <E>  the type parameter
+   * @param collection      the collection to take the type from (List, Set, ...)
    * @return a transient collection instance with the same interface type as the
    * parameter.
    */
-  protected Collection<IComponent> createTransientEntityCollection(Collection<?> collection) {
-    Collection<IComponent> uowEntityCollection = null;
+  protected <E> Collection<E> createTransientEntityCollection(Collection<E> collection) {
+    Collection<E> uowEntityCollection = null;
     if (collection instanceof Set<?>) {
       uowEntityCollection = collectionFactory.createComponentCollection(Set.class);
     } else if (collection instanceof List<?>) {
@@ -1214,20 +1213,17 @@ public abstract class AbstractBackendController extends AbstractController imple
    * Gives a chance to the session to wrap a collection before making it part of
    * the unit of work.
    *
-   * @param owner
-   *     the entity the collection belongs to.
-   * @param detachedCollection
-   *     the transient collection to make part of the unit of work.
-   * @param snapshotCollection
-   *     the original collection state as reported by the dirt recorder.
-   * @param role
-   *     the name of the property represented by the collection in its
+   * @param <E>  the type parameter
+   * @param owner      the entity the collection belongs to.
+   * @param detachedCollection      the transient collection to make part of the unit of work.
+   * @param snapshotCollection      the original collection state as reported by the dirt recorder.
+   * @param role      the name of the property represented by the collection in its
    *     owner.
    * @return the wrapped collection if any (it may be the collection itself as
    * in this implementation).
    */
-  protected Collection<IComponent> wrapDetachedCollection(IEntity owner, Collection<IComponent> detachedCollection,
-                                                          Collection<IComponent> snapshotCollection, String role) {
+  protected <E> Collection<E> wrapDetachedCollection(IEntity owner, Collection<E> detachedCollection,
+                                                          Collection<E> snapshotCollection, String role) {
     return detachedCollection;
   }
 
@@ -1310,36 +1306,40 @@ public abstract class AbstractBackendController extends AbstractController imple
               // and detachedEntities (see bug # 1130)
               && (propertyDescriptor == null || propertyDescriptor instanceof ICollectionPropertyDescriptor<?>)) {
             if (isInitialized(propertyValue)) {
-              Collection<IComponent> uowCollection = createTransientEntityCollection(
-                  (Collection<IComponent>) property.getValue());
-              for (IComponent collectionElement : (Collection<IComponent>) property.getValue()) {
+              Collection<Object> uowCollection = createTransientEntityCollection(
+                  (Collection<Object>) property.getValue());
+              for (Object collectionElement : (Collection<?>) property.getValue()) {
                 if (collectionElement != null) {
                   if (collectionElement instanceof IEntity) {
                     uowCollection.add(cloneInUnitOfWork((IEntity) collectionElement, allowOuterScopeUpdate,
                         alreadyCloned));
-                  } else {
-                    uowCollection.add(cloneComponentInUnitOfWork(collectionElement, allowOuterScopeUpdate,
+                  } else if (collectionElement instanceof IComponent) {
+                    uowCollection.add(cloneComponentInUnitOfWork((IComponent) collectionElement, allowOuterScopeUpdate,
                         alreadyCloned));
+                  } else {
+                    uowCollection.add(collectionElement);
                   }
                 } else {
                   uowCollection.add(null);
                 }
               }
               if (propertyDescriptor == null || !propertyDescriptor.isComputed()) {
-                Collection<IComponent> snapshotCollection = null;
+                Collection<Object> snapshotCollection = null;
                 Object originalProperty = dirtyProperties.get(propertyName);
                 // Workaround bug #1148
                 if (originalProperty != null && originalProperty instanceof Collection<?>) {
-                  snapshotCollection = (Collection<IComponent>) originalProperty;
-                  Collection<IComponent> clonedSnapshotCollection = createTransientEntityCollection(snapshotCollection);
-                  for (IComponent snapshotCollectionElement : snapshotCollection) {
+                  snapshotCollection = (Collection<Object>) originalProperty;
+                  Collection<Object> clonedSnapshotCollection = createTransientEntityCollection(snapshotCollection);
+                  for (Object snapshotCollectionElement : snapshotCollection) {
                     if (snapshotCollectionElement != null) {
                       if (snapshotCollectionElement instanceof IEntity) {
                         clonedSnapshotCollection.add(cloneInUnitOfWork((IEntity) snapshotCollectionElement,
                             allowOuterScopeUpdate, alreadyCloned));
-                      } else {
-                        clonedSnapshotCollection.add(cloneComponentInUnitOfWork(snapshotCollectionElement,
+                      } else if (snapshotCollectionElement instanceof IComponent) {
+                        clonedSnapshotCollection.add(cloneComponentInUnitOfWork((IComponent) snapshotCollectionElement,
                             allowOuterScopeUpdate, alreadyCloned));
+                      } else {
+                        clonedSnapshotCollection.add(snapshotCollectionElement);
                       }
                     } else {
                       clonedSnapshotCollection.add(null);
@@ -1516,11 +1516,11 @@ public abstract class AbstractBackendController extends AbstractController imple
               // if (isInitialized(registeredProperty)) {
               mergedProperties.put(propertyName, merge((IEntity) propertyValue, mergeMode, alreadyMerged));
             }
-          } else if (propertyValue instanceof Collection
+          } else if (propertyValue instanceof Collection<?>
               // to support collections stored as java serializable blob.
               // and detachedEntities (see bug # 1130)
               && (propertyDescriptor == null || propertyDescriptor instanceof ICollectionPropertyDescriptor<?>)) {
-            Collection<IComponent> registeredCollection = (Collection<IComponent>) registeredEntityProperties.get(
+            Collection<Object> registeredCollection = (Collection<Object>) registeredEntityProperties.get(
                 propertyName);
             if (!newlyRegistered && (mergeMode == EMergeMode.MERGE_EAGER || mergeMode == EMergeMode.MERGE_LAZY)) {
               if (isInitialized(propertyValue)) {
@@ -1533,8 +1533,8 @@ public abstract class AbstractBackendController extends AbstractController imple
               if (newlyRegistered && !isInitialized(propertyValue)) {
                 // Must have another collection instance.
                 // See bug #902
-                registeredCollection = (Collection<IComponent>) cloneUninitializedProperty(registeredEntity,
-                    propertyValue);
+                registeredCollection = cloneUninitializedProperty(registeredEntity,
+                    (Collection<Object>) propertyValue);
               } else {
                 if (propertyValue instanceof List) {
                   registeredCollection = collectionFactory.createComponentCollection(List.class);
@@ -1542,15 +1542,18 @@ public abstract class AbstractBackendController extends AbstractController imple
                   registeredCollection = collectionFactory.createComponentCollection(Set.class);
                 }
                 initializePropertyIfNeeded(entity, propertyName);
-                for (IComponent collectionElement : (Collection<IComponent>) propertyValue) {
+                for (Object collectionElement : (Collection<?>) propertyValue) {
                   if (collectionElement instanceof IEntity) {
                     registeredCollection.add(merge((IEntity) collectionElement, mergeMode, alreadyMerged));
+                  } else if (collectionElement instanceof IComponent) {
+                    registeredCollection.add(mergeComponent((IComponent) collectionElement, null, mergeMode,
+                        alreadyMerged));
                   } else {
-                    registeredCollection.add(mergeComponent(collectionElement, null, mergeMode, alreadyMerged));
+                    registeredCollection.add(collectionElement);
                   }
                 }
               }
-              Collection<IComponent> mergedCollection = mergeCollection(propertyName, propertyValue, registeredEntity,
+              Collection<?> mergedCollection = mergeCollection(propertyName, propertyValue, registeredEntity,
                   registeredCollection);
               mergedProperties.put(propertyName, mergedCollection);
               if (isInitialized(registeredCollection)) {
@@ -1624,9 +1627,9 @@ public abstract class AbstractBackendController extends AbstractController imple
    *     the registered collection
    * @return the collection
    */
-  protected <E extends IEntity> Collection<IComponent> mergeCollection(String propertyName, Object propertyValue,
+  protected <E extends IEntity> Collection<?> mergeCollection(String propertyName, Object propertyValue,
                                                                        E registeredEntity,
-                                                                       Collection<IComponent> registeredCollection) {
+                                                                       Collection<?> registeredCollection) {
     return registeredCollection;
   }
 
@@ -1728,7 +1731,7 @@ public abstract class AbstractBackendController extends AbstractController imple
     }
   }
 
-  @SuppressWarnings({"unchecked", "ThrowableResultOfMethodCallIgnored", "ConstantConditions"})
+  @SuppressWarnings({"unchecked", "ThrowableResultOfMethodCallIgnored", "ConstantConditions", "SuspiciousMethodCalls"})
   private void cleanRelationshipsOnDeletion(IComponent componentOrProxy, boolean dryRun,
                                             Set<IComponent> clearedEntities,
                                             Map<IComponent, RuntimeException> integrityViolations)
@@ -1805,16 +1808,18 @@ public abstract class AbstractBackendController extends AbstractController imple
               }
             } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
               if (((ICollectionPropertyDescriptor<?>) propertyDescriptor).isComposition()) {
-                for (IComponent composedEntity : new ArrayList<>((Collection<IComponent>) propertyValue)) {
-                  cleanRelationshipsOnDeletion(composedEntity, dryRun, clearedEntities, integrityViolations);
+                for (Object composedElement : new ArrayList<>((Collection<?>) propertyValue)) {
+                  if (composedElement instanceof IComponent) {
+                    cleanRelationshipsOnDeletion((IComponent) composedElement, dryRun, clearedEntities, integrityViolations);
+                  }
                 }
               } else if (propertyDescriptor.isModifiable() && !((Collection<?>) propertyValue).isEmpty()) {
                 if (((ICollectionPropertyDescriptor<?>) propertyDescriptor).getReverseRelationEnd() != null) {
                   IPropertyDescriptor reversePropertyDescriptor = ((ICollectionPropertyDescriptor<?>)
                       propertyDescriptor)
                       .getReverseRelationEnd();
-                  for (IComponent collectionElement : new ArrayList<>((Collection<IComponent>) property.getValue())) {
-                    if (!clearedEntities.contains(collectionElement)) {
+                  for (Object collectionElement : new ArrayList<>((Collection<?>) propertyValue)) {
+                    if (collectionElement instanceof IComponent && !clearedEntities.contains(collectionElement)) {
                       try {
                         if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
                           if (dryRun) {
@@ -1822,24 +1827,24 @@ public abstract class AbstractBackendController extends AbstractController imple
                             reversePropertyDescriptor.preprocessSetter(collectionElement, null);
                           } else {
                             getAccessorFactory().createPropertyAccessor(reversePropertyDescriptor.getName(),
-                                getComponentContract(collectionElement)).setValue(collectionElement, null);
+                                getComponentContract((IComponent) collectionElement)).setValue(collectionElement, null);
                           }
                         } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
                           if (dryRun) {
                             // manually trigger reverse relations preprocessors.
-                            Collection<Object> reverseCollection = getAccessorFactory().createPropertyAccessor(
-                                reversePropertyDescriptor.getName(), getComponentContract(collectionElement)).getValue(
-                                collectionElement);
+                            Collection<Object> reverseCollection = getAccessorFactory()
+                                .createPropertyAccessor(reversePropertyDescriptor.getName(), getComponentContract(
+                                    (IComponent) collectionElement)).getValue(collectionElement);
                             ((ICollectionPropertyDescriptor<?>) reversePropertyDescriptor).preprocessRemover(
                                 collectionElement, reverseCollection, component);
                           } else {
                             getAccessorFactory().createCollectionPropertyAccessor(reversePropertyDescriptor.getName(),
-                                getComponentContract(collectionElement), componentContract).removeFromValue(
-                                collectionElement, component);
+                                getComponentContract((IComponent) collectionElement),
+                                componentContract).removeFromValue(collectionElement, component);
                           }
                         }
                       } catch (RuntimeException ex) {
-                        integrityViolations.put(collectionElement, ex);
+                        integrityViolations.put((IComponent) collectionElement, ex);
                       }
                     }
                   }
@@ -1868,13 +1873,12 @@ public abstract class AbstractBackendController extends AbstractController imple
   /**
    * Clones an uninitialized (proxied) property.
    *
-   * @param owner
-   *     the property owner.
-   * @param propertyValue
-   *     the propertyValue.
+   * @param <E>  the type parameter
+   * @param owner      the property owner.
+   * @param propertyValue      the propertyValue.
    * @return the property clone.
    */
-  protected Object cloneUninitializedProperty(Object owner, Object propertyValue) {
+  protected <E> E cloneUninitializedProperty(Object owner, E propertyValue) {
     return propertyValue;
   }
 
