@@ -21,11 +21,14 @@ package org.jspresso.framework.application.backend.persistence.hibernate;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.transaction.TransactionManager;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.engine.spi.FilterDefinition;
 import org.hibernate.type.Type;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
+import org.springframework.transaction.jta.JtaTransactionManager;
 
 /**
  * Used to register Jspresso global filter.
@@ -54,4 +57,16 @@ public class JspressoLocalSessionFactoryBean extends LocalSessionFactoryBean {
     return super.buildSessionFactory(sfb);
   }
 
+  /**
+   * Receives a transaction manager. It will apply it if and only if it is a Spring supported JTA TX manager.
+   * @param transactionManager the transaction manager.
+   */
+  @Override
+  public void setJtaTransactionManager(Object transactionManager) {
+    if (transactionManager instanceof JtaTransactionManager
+        || transactionManager instanceof TransactionManager) {
+      super.setJtaTransactionManager(transactionManager);
+    }
+    // Do nothing if it's not supported.
+  }
 }

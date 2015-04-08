@@ -31,6 +31,8 @@
       </list>
     </property>
     <property name="entityInterceptor" ref="entityInterceptor" />
+    <!-- The following will only be applied if the transaction manager is a JTA compatible one -->
+    <property name="jtaTransactionManager" ref="transactionManager" />
   </bean>
 
   <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
