@@ -493,6 +493,7 @@
         <entry key="tr" value="classpath:org/jspresso/framework/application/images/i18n/tr.png"/>
         <entry key="bg" value="classpath:org/jspresso/framework/application/images/i18n/bg.png"/>
         <entry key="ru" value="classpath:org/jspresso/framework/application/images/i18n/ru.png"/>
+        <entry key="ro" value="classpath:org/jspresso/framework/application/images/i18n/ro.png"/>
         <entry key="cs" value="classpath:org/jspresso/framework/application/images/i18n/cs.png"/>
         <entry key="sk" value="classpath:org/jspresso/framework/application/images/i18n/sk.png"/>
       </map>
