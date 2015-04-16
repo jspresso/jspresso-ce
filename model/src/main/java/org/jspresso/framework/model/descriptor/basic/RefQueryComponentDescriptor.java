@@ -82,6 +82,9 @@ public class RefQueryComponentDescriptor<E> extends
     this.registry.put((Class<IComponent>) componentContract, (IComponentDescriptor<IComponent>) this);
     this.queryComponentsDescriptorProvider = componentDescriptorProvider;
     this.componentContract = componentContract;
+    if (getI18nNameKey() == null && componentContract != null) {
+      setI18nNameKey(componentContract.getName());
+    }
     Collection<IPropertyDescriptor> propertyDescriptors = new ArrayList<>();
     for (IPropertyDescriptor propertyDescriptor : getQueriedComponentsDescriptor().getPropertyDescriptors()) {
       propertyDescriptors.add(propertyDescriptor.createQueryDescriptor());
