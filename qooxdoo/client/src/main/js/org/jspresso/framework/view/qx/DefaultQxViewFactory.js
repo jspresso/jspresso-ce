@@ -418,8 +418,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       remoteTimeField.useDateDto(true);
       dateTimeField.add(this.createComponent(remoteTimeField, false));
       this._sizeMaxComponentWidth(dateTimeField, remoteDateField,
-              org.jspresso.framework.view.qx.DefaultQxViewFactory.__DATE_CHAR_COUNT
-              + org.jspresso.framework.view.qx.DefaultQxViewFactory.__TIME_CHAR_COUNT + 4);
+          org.jspresso.framework.view.qx.DefaultQxViewFactory.__DATE_CHAR_COUNT
+          + org.jspresso.framework.view.qx.DefaultQxViewFactory.__TIME_CHAR_COUNT + 4);
       return dateTimeField;
     },
 
@@ -977,7 +977,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 
     /**
      *
-     * @return {qx.ui.core.Command}
+     * @return {qx.ui.command.Command}
      * @param remoteAction {org.jspresso.framework.gui.remote.RAction}
      */
     createCommand: function (remoteAction) {
@@ -985,7 +985,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       if (accel) {
         accel = accel.replace(/ /g, "+");
       }
-      var command = new qx.ui.core.Command(accel);
+      var command = new qx.ui.command.Command(accel);
       this.setIcon(command, remoteAction.getIcon());
       if (remoteAction.getName()) {
         command.setLabel(remoteAction.getName());
@@ -1433,11 +1433,22 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     },
 
     /**
+     * @return {qx.ui.form.TextField}
+     */
+    _createTextFieldComponent: function () {
+      var tf = new qx.ui.form.TextField();
+      tf.addListener("focus", function () {
+        tf.selectAllText();
+      });
+      return tf;
+    },
+
+    /**
      * @return {qx.ui.core.Widget}
      * @param remoteTextField  {org.jspresso.framework.gui.remote.RTextField}
      */
     _createTextField: function (remoteTextField) {
-      var textField = new qx.ui.form.TextField();
+      var textField = this._createTextFieldComponent();
       if (window.clipboardData) {
         // We are in IE
         textField.addListener("appear", function (appearEvent) {
@@ -1866,7 +1877,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       /** @type {qx.ui.form.TextField} */
       var textField;
       if (remoteActionField.getShowTextField()) {
-        textField = new qx.ui.form.TextField();
+        textField = this._createTextFieldComponent();
         this._sizeMaxComponentWidth(textField, remoteActionField);
       }
       var actionField = this._decorateWithAsideActions(textField, remoteActionField, true);
@@ -1909,7 +1920,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           }
         };
         textField.addListener("blur", triggerAction, this);
-        // textField.addListener("changeValue", triggerAction, this);
 
         modelController.addTarget(textField, "value", "value", false, {
           converter: this._modelToViewFieldConverter
@@ -2153,7 +2163,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             columnWidth = headerWidth + 16;
           } else {
             var maxColumnWidth = qx.bom.Label.getTextSize(org.jspresso.framework.view.qx.DefaultQxViewFactory.__TEMPLATE_CHAR,
-                tableFont.getStyles()).width
+                    tableFont.getStyles()).width
                 * org.jspresso.framework.view.qx.DefaultQxViewFactory.__COLUMN_MAX_CHAR_COUNT;
             var editorComponent = this.createComponent(rColumn, false);
             columnWidth = maxColumnWidth;
@@ -2379,7 +2389,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @param rComponent {org.jspresso.framework.gui.remote.RComponent}
      */
     _createFormattedField: function (rComponent) {
-      var formattedField = new qx.ui.form.TextField();
+      var formattedField = this._createTextFieldComponent();
       this._bindFormattedField(formattedField, rComponent);
       return formattedField;
     },
@@ -2547,8 +2557,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         alignX: "center",
         alignY: "middle"
       });
-      colorWidget.addListener("mousedown", function (e) {
-        colorPopup.placeToMouse(e);
+      colorWidget.addListener("tap", function (e) {
+        colorPopup.placeToPointer(e);
         colorPopup.setValue(this.getBackgroundColor());
         colorPopup.show();
       });

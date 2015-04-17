@@ -21,7 +21,7 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedTable", {
     var tt = new qx.ui.tooltip.ToolTip("");
     tt.setRich(true);
     this.setToolTip(tt);
-    this.addListener("mousemove", this._refineToolTip, this);
+    this.addListener("pointermove", this._refineToolTip, this);
   },
 
   members: {
@@ -55,6 +55,21 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedTable", {
       } else {
         tt.hide();
       }
+    },
+
+    _onKeyPress: function (evt) {
+      if (evt.getKeyIdentifier() == "Tab") {
+        var newIdentifier;
+        if (evt.isShiftPressed()) {
+          newIdentifier = "Left";
+        } else {
+          newIdentifier = "Right";
+        }
+        evt.init(evt.getNativeEvent(), evt.getTarget(), newIdentifier);
+      } else if (!evt.getModifiers() && evt.isPrintable()) {
+        this.startEditing()
+      }
+      this.base(arguments, evt);
     }
   }
 });

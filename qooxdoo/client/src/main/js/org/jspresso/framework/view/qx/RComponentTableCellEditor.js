@@ -13,8 +13,7 @@
  */
 
 qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
-  extend: qx.core.Object,
-  implement: [qx.ui.table.ICellEditorFactory],
+  extend: qx.core.Object, implement: [qx.ui.table.ICellEditorFactory],
 
 
   /**
@@ -32,11 +31,7 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
 
 
   members: {
-    __viewFactory: null,
-    __rComponent: null,
-    __actionHandler: null,
-    __currentBinding: null,
-    __currentCellState: null,
+    __viewFactory: null, __rComponent: null, __actionHandler: null, __currentBinding: null, __currentCellState: null,
 
     // interface implementation
     createCellEditor: function (cellInfo) {
@@ -68,14 +63,13 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
       var editorWidget = this.__viewFactory.createComponent(this.__rComponent, false);
       editorWidget.addListener("disappear", this.__cleanCurrentCellBinding, this);
       state.addListener("changeValue", function () {
-        cellInfo.table.stopEditing();
+        table.stopEditing();
       }, this);
 
       var editor;
       if (!(editorWidget instanceof qx.ui.container.Composite) && !(editorWidget instanceof qx.ui.form.TextArea)) {
         editor = new qx.ui.container.Composite(new qx.ui.layout.VBox().set({
-          alignX: "center",
-          alignY: "middle"
+          alignX: "center", alignY: "middle"
         })).set({
               focusable: true
             });
@@ -94,7 +88,6 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
         editorWidget.setMaxWidth(null);
         editorWidget.setWidth(null);
         editorWidget.setMinWidth(0);
-        //editorWidget.setAlignX("center");
         editorWidget.setAlignY("middle");
         editor.add(editorWidget);
       } else {
@@ -111,6 +104,45 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
           });
         }
       }
+      editor.addListener("keypress", function (e) {
+        var timer = qx.util.TimerManager.getInstance();
+        var iden = e.getKeyIdentifier();
+        if (iden == "Tab") {
+          e.stop();
+          editorWidget.blur();
+          timer.start(function (userData, timerId) {
+            if (table.isEditing()) {
+              table.stopEditing();
+            }
+            var columnCount = table.getTableModel().getColumnCount();
+            var rowCount = table.getTableModel().getRowCount();
+            col += (e.isShiftPressed() ? -1 : 1);
+            if (col < 0) {
+              row -= 1;
+              col = columnCount - 1;
+            } else if (col > columnCount - 1) {
+              row += 1;
+              col = 0;
+            }
+            if (row >= 0 && row < rowCount && col >= 0 && col < columnCount) {
+              table.setFocusedCell(col, row, true);
+              table.updateContent();
+              // Breaks LOVs
+              //table.startEditing();
+            }
+          }, 0, this, null, 0);
+          e.stopPropagation();
+        } else if (iden == 'Enter') {
+          e.stop();
+          editorWidget.blur();
+          timer.start(function (userData, timerId) {
+            if (table.isEditing()) {
+              table.stopEditing();
+            }
+          }, 0, this, null, 0);
+          e.stopPropagation();
+        }
+      }, this);
       return editor;
     },
 

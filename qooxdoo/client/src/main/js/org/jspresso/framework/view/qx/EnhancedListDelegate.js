@@ -25,6 +25,7 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedListDelegate", {
       var toolTip = new qx.ui.tooltip.ToolTip();
       toolTip.setRich(true);
       item.setToolTip(toolTip);
+      item.setRich(true);
     },
 
     /**
