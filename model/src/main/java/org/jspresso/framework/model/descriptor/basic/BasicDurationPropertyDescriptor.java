@@ -120,4 +120,14 @@ public class BasicDurationPropertyDescriptor extends
   public void setMaxMillis(Long maxMillis) {
     this.maxMillis = maxMillis;
   }
+
+  /**
+   * Is default filter comparable.
+   *
+   * @return {@code true}
+   */
+  @Override
+  protected boolean isDefaultFilterComparable() {
+    return true;
+  }
 }

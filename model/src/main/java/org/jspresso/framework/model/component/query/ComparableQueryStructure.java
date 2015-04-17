@@ -250,8 +250,7 @@ public class ComparableQueryStructure extends QueryComponent {
           if (compareValue == null) {
             compareValue = supValue;
           }
-          assert format != null;
-          String formattedCompareValue = format.format(compareValue);
+          String formattedCompareValue = format != null ? format.format(compareValue) : compareValue.toString();
           switch (comparator) {
             case ComparableQueryStructureDescriptor.EQ:
               buf.append("= ").append(formattedCompareValue);
@@ -270,11 +269,12 @@ public class ComparableQueryStructure extends QueryComponent {
               break;
             case ComparableQueryStructureDescriptor.BE:
               if (infValue != null && supValue != null) {
-                buf.append(">= ").append(format.format(infValue)).append(", <= ").append(format.format(supValue));
+                buf.append(">= ").append(format != null ? format.format(infValue) : infValue.toString())
+                   .append(", <= ").append(format != null ? format.format(supValue) : supValue.toString());
               } else if (infValue != null) {
-                buf.append(">= ").append(format.format(infValue));
+                buf.append(">= ").append(format != null ? format.format(infValue) : infValue.toString());
               } else if (supValue != null) {
-                buf.append("<= ").append(format.format(supValue));
+                buf.append("<= ").append(format != null ? format.format(supValue) : supValue.toString());
               }
               break;
             default:

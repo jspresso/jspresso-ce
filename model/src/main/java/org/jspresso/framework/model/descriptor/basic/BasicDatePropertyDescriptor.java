@@ -150,4 +150,14 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
   public void setFormatPattern(String formatPattern) {
     this.formatPattern = formatPattern;
   }
+
+  /**
+   * Is default filter comparable.
+   *
+   * @return {@code true}
+   */
+  @Override
+  protected boolean isDefaultFilterComparable() {
+    return true;
+  }
 }
