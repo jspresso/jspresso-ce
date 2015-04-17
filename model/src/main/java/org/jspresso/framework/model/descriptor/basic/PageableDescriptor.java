@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.application.model.descriptor;
+package org.jspresso.framework.model.descriptor.basic;
 
 import java.util.ArrayList;
 import java.util.List;

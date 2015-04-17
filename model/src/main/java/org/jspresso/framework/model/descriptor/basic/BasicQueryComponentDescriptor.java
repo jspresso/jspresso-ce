@@ -19,7 +19,10 @@
 package org.jspresso.framework.model.descriptor.basic;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import gnu.trove.map.hash.THashMap;
@@ -63,9 +66,10 @@ public class BasicQueryComponentDescriptor<E> extends
   public BasicQueryComponentDescriptor(
       IComponentDescriptorProvider<? extends IComponent> componentDescriptorProvider,
       Map<Class<? extends IComponent>, IComponentDescriptor<? extends IComponent>> registry) {
-    super(
-        componentDescriptorProvider,
-        IQueryComponent.class, registry);
+    super(componentDescriptorProvider, IQueryComponent.class, registry);
+    List<IComponentDescriptor<?>> ancestors = new ArrayList<>();
+    ancestors.add(PageableDescriptor.INSTANCE);
+    setAncestorDescriptors(ancestors);
     finishConfiguration();
   }
 
@@ -87,35 +91,6 @@ public class BasicQueryComponentDescriptor<E> extends
     qCPDescriptor.setReferencedDescriptor(queriedEntitiesCollectionDescriptor);
 
     extraPropertyDescriptors.add(qCPDescriptor);
-
-    BasicIntegerPropertyDescriptor pagePropertyDescriptor = new BasicIntegerPropertyDescriptor();
-    pagePropertyDescriptor.setName(IPageable.PAGE);
-    pagePropertyDescriptor.setReadOnly(true);
-    extraPropertyDescriptors.add(pagePropertyDescriptor);
-
-    BasicIntegerPropertyDescriptor displayPageIndexPropertyDescriptor = new BasicIntegerPropertyDescriptor();
-    displayPageIndexPropertyDescriptor.setName(IPageable.DISPLAY_PAGE_INDEX);
-    extraPropertyDescriptors.add(displayPageIndexPropertyDescriptor);
-
-    BasicIntegerPropertyDescriptor pageSizePropertyDescriptor = new BasicIntegerPropertyDescriptor();
-    pageSizePropertyDescriptor.setName(IPageable.PAGE_SIZE);
-    pageSizePropertyDescriptor.setReadOnly(true);
-    extraPropertyDescriptors.add(pageSizePropertyDescriptor);
-
-    BasicIntegerPropertyDescriptor pageCountPropertyDescriptor = new BasicIntegerPropertyDescriptor();
-    pageCountPropertyDescriptor.setName(IPageable.PAGE_COUNT);
-    pageCountPropertyDescriptor.setReadOnly(true);
-    extraPropertyDescriptors.add(pageCountPropertyDescriptor);
-
-    BasicIntegerPropertyDescriptor recordCountPropertyDescriptor = new BasicIntegerPropertyDescriptor();
-    recordCountPropertyDescriptor.setName(IPageable.RECORD_COUNT);
-    recordCountPropertyDescriptor.setReadOnly(true);
-    extraPropertyDescriptors.add(recordCountPropertyDescriptor);
-
-    BasicIntegerPropertyDescriptor selectedRecordCountPropertyDescriptor = new BasicIntegerPropertyDescriptor();
-    selectedRecordCountPropertyDescriptor.setName(IPageable.SELECTED_RECORD_COUNT);
-    selectedRecordCountPropertyDescriptor.setReadOnly(true);
-    extraPropertyDescriptors.add(selectedRecordCountPropertyDescriptor);
 
     return extraPropertyDescriptors;
   }

@@ -26,6 +26,7 @@ import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor;
+import org.jspresso.framework.model.descriptor.basic.PageableDescriptor;
 
 /**
  * The model descriptor for filterable bean collection modules.
