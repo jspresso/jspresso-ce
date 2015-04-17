@@ -184,4 +184,14 @@ public abstract class BasicNumberPropertyDescriptor extends
   public void setThousandsGroupingUsed(boolean thousandsGroupingUsed) {
     this.thousandsGroupingUsed = thousandsGroupingUsed;
   }
+
+  /**
+   * Is default filter comparable.
+   *
+   * @return {@code true}
+   */
+  @Override
+  protected boolean isDefaultFilterComparable() {
+    return true;
+  }
 }

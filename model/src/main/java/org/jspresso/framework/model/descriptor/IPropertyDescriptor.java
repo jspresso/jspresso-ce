@@ -28,16 +28,15 @@ import org.jspresso.framework.util.lang.ICloneable;
 
 /**
  * This interface is the super-interface of all properties descriptors.
- * 
+ *
  * @author Vincent Vandenschrick
  * @see org.jspresso.framework.model.descriptor.IComponentDescriptor
  */
-public interface IPropertyDescriptor extends IModelDescriptor, ICloneable,
-    ISecurable, IGateAccessible, IPermIdSource {
+public interface IPropertyDescriptor extends IModelDescriptor, ICloneable, ISecurable, IGateAccessible, IPermIdSource {
 
   /**
    * Clones this descriptor.
-   * 
+   *
    * @return the descriptor clone.
    */
   @Override
@@ -45,9 +44,9 @@ public interface IPropertyDescriptor extends IModelDescriptor, ICloneable,
 
   /**
    * Creates a new property descriptor to allow for querying.
-   * 
+   *
    * @return a new property descriptor that allows for expressing constraints on
-   *         this property.
+   * this property.
    */
   IPropertyDescriptor createQueryDescriptor();
 
@@ -78,25 +77,25 @@ public interface IPropertyDescriptor extends IModelDescriptor, ICloneable,
 
   /**
    * Gives a preferred width hint for representing the property.
-   * 
+   *
    * @return a preferred width hint for representing the property.
    */
   Integer getPreferredWidth();
 
   /**
    * Gets the scope on which the property is unique.
-   * 
+   *
    * @return the unicity scope.
    */
   String getUnicityScope();
 
   /**
    * Triggers all setter interceptors.
-   * 
+   *
    * @param component
-   *          the component targeted by the setter.
+   *     the component targeted by the setter.
    * @param newValue
-   *          the property new value.
+   *     the property new value.
    * @return the result of the interception.
    */
   Object interceptSetter(Object component, Object newValue);
@@ -105,14 +104,14 @@ public interface IPropertyDescriptor extends IModelDescriptor, ICloneable,
    * Gets whether this property is computed (derived). Most of the time a
    * property is computed whenever it has a delegate to compute its value by
    * opposition to properties handled by the ORM.
-   * 
+   *
    * @return true if the property is computed.
    */
   boolean isComputed();
 
   /**
    * Whether the underlying property is mandatory.
-   * 
+   *
    * @return true if mandatory
    */
   boolean isMandatory();
@@ -121,44 +120,44 @@ public interface IPropertyDescriptor extends IModelDescriptor, ICloneable,
    * Whether the underlying property has a modifier. This is only useful
    * whenever the property is computed by delegation. In this case the delegate
    * should be analyzed to check whether it has a modifier on the property.
-   * 
+   *
    * @return true if the property has a modifier.
    */
   boolean isModifiable();
 
   /**
    * Gets whether this kind of property descriptor is queryable.
-   * 
+   *
    * @return true if this kind of property descriptor is queryable.
    */
   boolean isQueryable();
 
   /**
    * Triggers all setter post processors.
-   * 
+   *
    * @param component
-   *          the component targeted by the setter.
+   *     the component targeted by the setter.
    * @param oldValue
-   *          the property old value.
+   *     the property old value.
    * @param newValue
-   *          the property new value.
+   *     the property new value.
    */
   void postprocessSetter(Object component, Object oldValue, Object newValue);
 
   /**
    * Triggers all setter preprocessors.
-   * 
+   *
    * @param component
-   *          the component targeted by the setter.
+   *     the component targeted by the setter.
    * @param newValue
-   *          the property new value.
+   *     the property new value.
    */
   void preprocessSetter(final Object component, final Object newValue);
 
   /**
    * Gets the formula used to represent this property in the persistent store.
    * This can be used to order / group by computed properties.
-   * 
+   *
    * @return the persistence formula.
    */
   String getPersistenceFormula();
@@ -179,4 +178,14 @@ public interface IPropertyDescriptor extends IModelDescriptor, ICloneable,
    * @return {@code true} if this property is cacheable.
    */
   boolean isCacheable();
+
+  /**
+   * Gets whether this property is filter comparable, i.e. a comparator is installed in any filter view based on this
+   * property.
+   * By default naturally comparable property types are filter comparable. But there are case when you might want to
+   * override this behaviour in a sense or another. see {@link <a href="https://github.com/jspresso/jspresso-ce/issues/12"> this bug report </a>}
+   *
+   * @return {@code true} if this property is comparable.
+   */
+  boolean isFilterComparable();
 }

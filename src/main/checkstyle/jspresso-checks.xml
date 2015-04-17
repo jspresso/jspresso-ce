@@ -19,9 +19,11 @@
     <module name="ArrayTypeStyle">
       <property name="severity" value="info" />
     </module>
+<!--
     <module name="AvoidInlineConditionals">
       <property name="severity" value="info" />
     </module>
+-->
     <module name="AvoidNestedBlocks">
       <property name="severity" value="warning" />
     </module>
