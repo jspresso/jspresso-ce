@@ -87,6 +87,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       })));
 
       if (message) {
+        message = org.jspresso.framework.util.html.HtmlUtil.sanitizeHtml(message);
+        message = org.jspresso.framework.util.html.HtmlUtil.replaceNewlines(message);
         var messageLabel = new qx.ui.basic.Label(message);
         messageLabel.setRich(org.jspresso.framework.util.html.HtmlUtil.isHtml(message));
         dialogBox.add(messageLabel);
@@ -363,7 +365,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      */
     createMessageDialogContent: function (messageCommand) {
       var message = messageCommand.getMessage();
-      message = org.jspresso.framework.util.html.HtmlUtil.toHtml(org.jspresso.framework.util.html.HtmlUtil.preformat(message));
+      if (!org.jspresso.framework.util.html.HtmlUtil.isHtml(message)) {
+        message = org.jspresso.framework.util.html.HtmlUtil.sanitizeHtml(message);
+        message = org.jspresso.framework.util.html.HtmlUtil.replaceNewlines(message);
+        message = org.jspresso.framework.util.html.HtmlUtil.preformat(message);
+        message = org.jspresso.framework.util.html.HtmlUtil.toHtml(message);
+      }
       var messageComponent = new qx.ui.basic.Atom(message);
       messageComponent.setRich(org.jspresso.framework.util.html.HtmlUtil.isHtml(message));
       this._getViewFactory().setIcon(messageComponent, messageCommand.getMessageIcon());
