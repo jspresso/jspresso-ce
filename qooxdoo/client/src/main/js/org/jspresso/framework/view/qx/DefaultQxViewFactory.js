@@ -977,7 +977,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 
     /**
      *
-     * @return {qx.ui.command.Command}
+     * @return {qx.ui.core.Command}
      * @param remoteAction {org.jspresso.framework.gui.remote.RAction}
      */
     createCommand: function (remoteAction) {
@@ -985,7 +985,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       if (accel) {
         accel = accel.replace(/ /g, "+");
       }
-      var command = new qx.ui.command.Command(accel);
+      var command = new qx.ui.core.Command(accel);
       this.setIcon(command, remoteAction.getIcon());
       if (remoteAction.getName()) {
         command.setLabel(remoteAction.getName());
