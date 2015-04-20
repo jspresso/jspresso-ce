@@ -49,8 +49,6 @@ public class ModuleRestartAction<E, F, G> extends FrontendAction<E, F, G> {
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     Module module = getModule(context);
-    if (module instanceof BeanCollectionModule
-        && module.getSubModules() != null) {
       List<Module> beanModulesToRemove = new ArrayList<>();
       for (Module beanModule : module.getSubModules()) {
         if (beanModule instanceof BeanModule) {
@@ -59,7 +57,6 @@ public class ModuleRestartAction<E, F, G> extends FrontendAction<E, F, G> {
         }
       }
       module.removeSubModules(beanModulesToRemove);
-    }
     boolean startupResult = true;
     if (module.getStartupAction() != null) {
       startupResult = actionHandler.execute(module.getStartupAction(), context);
