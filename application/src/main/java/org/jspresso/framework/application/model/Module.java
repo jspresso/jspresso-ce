@@ -20,6 +20,7 @@ package org.jspresso.framework.application.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -46,24 +47,24 @@ import org.jspresso.framework.view.descriptor.IViewDescriptorProvider;
  * workspace UI will reflect the change seamlessly, as with any Jspresso model
  * (in fact workspaces and modules are regular beans that are used as model in
  * standard Jspresso views).
- * <p>
+ * <p/>
  * Modules, among other features, are capable of providing a view to be
  * installed in the UI wen they are selected. This makes Jspresso applications
  * really modular and their architecture flexible enough to embed and run a
  * large variety of different module types.
- * <p>
+ * <p/>
  * A module can also be as simple as a grouping structure for other modules
  * (intermediary nodes).
- * 
+ *
  * @author Vincent Vandenschrick
  */
-public class Module extends AbstractPropertyChangeCapable implements
-    IViewDescriptorProvider, ISecurable, IPermIdSource {
+public class Module extends AbstractPropertyChangeCapable
+    implements IViewDescriptorProvider, ISecurable, IPermIdSource {
 
   /**
    * {@code DESCRIPTION} is "description".
    */
-  public static final String DESCRIPTION      = "description";
+  public static final String DESCRIPTION = "description";
 
   /**
    * {@code I18N_DESCRIPTION} is "i18nDescription".
@@ -73,34 +74,33 @@ public class Module extends AbstractPropertyChangeCapable implements
   /**
    * {@code I18N_NAME} is "i18nName".
    */
-  public static final String I18N_NAME        = "i18nName";
+  public static final String I18N_NAME = "i18nName";
 
   /**
    * {@code NAME} is "name".
    */
-  public static final String NAME             = "name";
+  public static final String NAME = "name";
 
   /**
    * {@code PARENT} is "parent".
    */
-  public static final String PARENT           = "parent";
+  public static final String PARENT = "parent";
 
   /**
    * {@code SUB_MODULES} is "subModules".
    */
-  public static final String SUB_MODULES      = "subModules";
+  public static final String SUB_MODULES = "subModules";
 
   /**
    * {@code DIRTY} is "dirty".
    */
-  public static final String DIRTY      = "dirty";
+  public static final String DIRTY = "dirty";
 
   private String             description;
   private boolean            dirty;
   private IAction            entryAction;
   private IAction            exitAction;
   private Collection<String> grantedRoles;
-
   private String             i18nDescription;
   private String             i18nName;
   private Icon               icon;
@@ -109,11 +109,9 @@ public class Module extends AbstractPropertyChangeCapable implements
   private IViewDescriptor    projectedViewDescriptor;
   private boolean            started;
   private IAction            startupAction;
-
   private ISecurityHandler   securityHandler;
-
   private List<Module>       subModules;
-
+  private Collection<Module> stickySubModules;
   private String             permId;
 
   /**
@@ -126,7 +124,7 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * Equality based on projected object.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -150,12 +148,13 @@ public class Module extends AbstractPropertyChangeCapable implements
     }
     return equalsBuilder.isEquals();
   }
+
   /**
    * Adds a child module.
    *
    * @param child
-   *          the child module to add. It will fire a &quot;subModules&quot;
-   *          property change event.
+   *     the child module to add. It will fire a &quot;subModules&quot;
+   *     property change event.
    * @return {@code true} if the module was successfully added.
    */
   public boolean addSubModule(Module child) {
@@ -175,9 +174,9 @@ public class Module extends AbstractPropertyChangeCapable implements
    * property change event.
    *
    * @param children
-   *          the modules modules to add.
+   *     the modules modules to add.
    * @return {@code true} if the modules module collection was successfully
-   *         added.
+   * added.
    */
   public boolean addSubModules(Collection<? extends Module> children) {
     if (subModules == null) {
@@ -193,7 +192,7 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * Gets the module's description. It may serve for the module's view.
-   * 
+   *
    * @return the module's description.
    */
   public String getDescription() {
@@ -202,7 +201,7 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * Gets the entryAction.
-   * 
+   *
    * @return the entryAction.
    */
   public IAction getEntryAction() {
@@ -211,7 +210,7 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * Gets the exitAction.
-   * 
+   *
    * @return the exitAction.
    */
   public IAction getExitAction() {
@@ -220,7 +219,7 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * Gets the grantedRoles.
-   * 
+   *
    * @return the grantedRoles.
    */
   @Override
@@ -233,7 +232,7 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * Gets the i18nDescription.
-   * 
+   *
    * @return the i18nDescription.
    */
   public String getI18nDescription() {
@@ -245,7 +244,7 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * Gets the i18nName.
-   * 
+   *
    * @return the i18nName.
    */
   public String getI18nName() {
@@ -261,7 +260,7 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * Gets the icon.
-   * 
+   *
    * @return the icon.
    */
   public Icon getIcon() {
@@ -270,7 +269,7 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * Gets the module's name. It may serve for the module's view.
-   * 
+   *
    * @return the module's name.
    */
   public String getName() {
@@ -279,7 +278,7 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * Gets the module's parent module.
-   * 
+   *
    * @return the parent module or null if none.
    */
   public Module getParent() {
@@ -288,12 +287,11 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * Gets the projectedViewDescriptor.
-   * 
+   *
    * @return the projectedViewDescriptor.
    */
   public IViewDescriptor getProjectedViewDescriptor() {
-    if (projectedViewDescriptor != null
-        && projectedViewDescriptor.getPermId() == null) {
+    if (projectedViewDescriptor != null && projectedViewDescriptor.getPermId() == null) {
       projectedViewDescriptor.setPermId(getPermId() + ".projectedView");
     }
     return projectedViewDescriptor;
@@ -301,7 +299,7 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * Gets the startupAction.
-   * 
+   *
    * @return the startupAction.
    */
   public IAction getStartupAction() {
@@ -310,7 +308,7 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * Gets the modules sub-modules.
-   * 
+   *
    * @return the list of modules modules.
    */
   public List<Module> getSubModules() {
@@ -319,9 +317,9 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * Gets the modules sub-modules.
-   * 
+   *
    * @param bypassSecurity
-   *          bypasses security restrictions imposed to the user.
+   *     bypasses security restrictions imposed to the user.
    * @return the list of modules modules.
    */
   public List<Module> getSubModules(boolean bypassSecurity) {
@@ -330,7 +328,7 @@ public class Module extends AbstractPropertyChangeCapable implements
     }
     ISecurityHandler sh = getSecurityHandler();
     if (sh != null) {
-      for (Iterator<Module> ite = subModules.iterator(); ite.hasNext();) {
+      for (Iterator<Module> ite = subModules.iterator(); ite.hasNext(); ) {
         Module nextModule = ite.next();
         if (!bypassSecurity && !sh.isAccessGranted(nextModule)) {
           try {
@@ -347,7 +345,7 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * Returns unmodified projected view descriptor.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -357,7 +355,7 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * Hash code based on name.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -367,7 +365,7 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * Gets the dirty.
-   * 
+   *
    * @return the dirty.
    */
   public boolean isDirty() {
@@ -376,7 +374,7 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * Gets the started.
-   * 
+   *
    * @return the started.
    */
   public boolean isStarted() {
@@ -388,7 +386,7 @@ public class Module extends AbstractPropertyChangeCapable implements
    * change event.
    *
    * @param module
-   *          the child module to remove.
+   *     the child module to remove.
    * @return {@code true} if the module was successfully removed.
    */
   public boolean removeSubModule(Module module) {
@@ -408,9 +406,9 @@ public class Module extends AbstractPropertyChangeCapable implements
    * property change event.
    *
    * @param children
-   *          the modules modules to remove.
+   *     the modules modules to remove.
    * @return {@code true} if the modules module collection was successfully
-   *         removed.
+   * removed.
    */
   public boolean removeSubModules(Collection<Module> children) {
     if (subModules != null) {
@@ -428,9 +426,9 @@ public class Module extends AbstractPropertyChangeCapable implements
    * Configures the key used to translate actual internationalized module
    * description. The resulting translation will generally be leveraged as a
    * toolTip on the UI side but its use may be extended for online help.
-   * 
+   *
    * @param description
-   *          the module's description.
+   *     the module's description.
    */
   public void setDescription(String description) {
     if (ObjectUtils.equals(this.description, description)) {
@@ -446,9 +444,9 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * Sets the dirty.
-   * 
+   *
    * @param dirty
-   *          the dirty to set.
+   *     the dirty to set.
    * @internal
    */
   protected void setDirty(boolean dirty) {
@@ -464,9 +462,9 @@ public class Module extends AbstractPropertyChangeCapable implements
    * current selected module (either through a user explicit navigation or a
    * programmatic selection). The action will execute in the context of the
    * current workspace, this module being the current selected module.
-   * 
+   *
    * @param entryAction
-   *          the entryAction to set.
+   *     the entryAction to set.
    */
   public void setEntryAction(IAction entryAction) {
     this.entryAction = entryAction;
@@ -478,9 +476,9 @@ public class Module extends AbstractPropertyChangeCapable implements
    * deselection). The action will execute in the context of the current
    * workspace, this module being the current selected module (i.e. the action
    * occurs before the module is actually left).
-   * 
+   *
    * @param exitAction
-   *          the exitAction to set.
+   *     the exitAction to set.
    */
   public void setExitAction(IAction exitAction) {
     this.exitAction = exitAction;
@@ -492,13 +490,13 @@ public class Module extends AbstractPropertyChangeCapable implements
    * granted sufficient privileges, the module is simply not installed in the
    * workspace. Setting the collection of granted roles to {@code null}
    * (default value) disables role based authorization on this module.
-   * <p>
+   * <p/>
    * Some specific modules that are component/entity model based i.e.
    * {@code Bean(Collection)Module} also inherit their authorizations from
    * their model.
    *
    * @param grantedRoles
-   *          the grantedRoles to set.
+   *     the grantedRoles to set.
    */
   public void setGrantedRoles(Collection<String> grantedRoles) {
     this.grantedRoles = StringUtils.ensureSpaceFree(grantedRoles);
@@ -507,9 +505,9 @@ public class Module extends AbstractPropertyChangeCapable implements
   /**
    * Stores the internationalized workspace description for use in the UI as
    * toolTip for instance.
-   * 
+   *
    * @param i18nDescription
-   *          the i18nDescription to set.
+   *     the i18nDescription to set.
    * @internal
    */
   public void setI18nDescription(String i18nDescription) {
@@ -527,9 +525,9 @@ public class Module extends AbstractPropertyChangeCapable implements
   /**
    * Stores the internationalized workspace name for use in the UI as workspace
    * label.
-   * 
+   *
    * @param i18nName
-   *          the i18nName to set.
+   *     the i18nName to set.
    * @internal
    */
   public void setI18nName(String i18nName) {
@@ -555,9 +553,9 @@ public class Module extends AbstractPropertyChangeCapable implements
    * <li>the <b>jar:/</b> pseudo URL protocol</li>
    * <li>the <b>classpath:/</b> pseudo URL protocol</li>
    * </ul>
-   * 
+   *
    * @param iconImageURL
-   *          the iconImageURL to set.
+   *     the iconImageURL to set.
    */
   public void setIconImageURL(String iconImageURL) {
     if (icon == null) {
@@ -568,9 +566,9 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * Sets the icon preferred width.
-   * 
+   *
    * @param iconPreferredWidth
-   *          the iconPreferredWidth to set.
+   *     the iconPreferredWidth to set.
    */
   public void setIconPreferredWidth(int iconPreferredWidth) {
     if (icon == null) {
@@ -581,9 +579,9 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * Sets the icon preferred width.
-   * 
+   *
    * @param iconPreferredHeight
-   *          the iconPreferredHeight to set.
+   *     the iconPreferredHeight to set.
    */
   public void setIconPreferredHeight(int iconPreferredHeight) {
     if (icon == null) {
@@ -594,9 +592,9 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * Sets the icon.
-   * 
+   *
    * @param icon
-   *          the icon to set.
+   *     the icon to set.
    */
   public void setIcon(Icon icon) {
     this.icon = icon;
@@ -606,9 +604,9 @@ public class Module extends AbstractPropertyChangeCapable implements
    * Configures the key used to translate actual internationalized module name.
    * The resulting translation will be leveraged as the module label on the UI
    * side.
-   * 
+   *
    * @param name
-   *          the module's name.
+   *     the module's name.
    */
   public void setName(String name) {
     if (ObjectUtils.equals(this.name, name)) {
@@ -625,9 +623,9 @@ public class Module extends AbstractPropertyChangeCapable implements
   /**
    * Assigns the parent module and potentially move itself out of previous
    * parent children. It will fire a &quot;parent&quot; property change event.
-   * 
+   *
    * @param parent
-   *          the parent module to set or null if none.
+   *     the parent module to set or null if none.
    * @internal
    */
   public void setParent(Module parent) {
@@ -648,9 +646,9 @@ public class Module extends AbstractPropertyChangeCapable implements
   /**
    * Configures the view descriptor used to construct the view that will be
    * displayed when this module is selected.
-   * 
+   *
    * @param projectedViewDescriptor
-   *          the projectedViewDescriptor to set.
+   *     the projectedViewDescriptor to set.
    */
   public void setProjectedViewDescriptor(IViewDescriptor projectedViewDescriptor) {
     this.projectedViewDescriptor = projectedViewDescriptor;
@@ -658,12 +656,16 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * Sets the started.
-   * 
+   *
    * @param started
-   *          the started to set.
+   *     the started to set.
    * @internal
    */
   public void setStarted(boolean started) {
+    // Take a snapshot of the existing sub-modules
+    if (!isStarted() && started && subModules != null) {
+      stickySubModules = new HashSet<>(subModules);
+    }
     this.started = started;
   }
 
@@ -672,9 +674,9 @@ public class Module extends AbstractPropertyChangeCapable implements
    * &quot;started&quot; by the user. The action will execute in the context of
    * the current workspace, this module being the current selected module. It
    * will help initializing module values, notify user, ....
-   * 
+   *
    * @param startupAction
-   *          the startupAction to set.
+   *     the startupAction to set.
    */
   public void setStartupAction(IAction startupAction) {
     this.startupAction = startupAction;
@@ -682,9 +684,9 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * Configures the security handler used to secure this module.
-   * 
+   *
    * @param securityHandler
-   *          the security handler.
+   *     the security handler.
    * @internal
    */
   public void setSecurityHandler(ISecurityHandler securityHandler) {
@@ -694,9 +696,9 @@ public class Module extends AbstractPropertyChangeCapable implements
   /**
    * Installs a list of module(s) as sub-modules of this one. It will fire a
    * &quot;subModules&quot; property change event.
-   * 
+   *
    * @param children
-   *          the modules modules to set.
+   *     the modules modules to set.
    * @internal
    */
   public void setSubModules(List<Module> children) {
@@ -710,7 +712,7 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * based on name.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -725,14 +727,13 @@ public class Module extends AbstractPropertyChangeCapable implements
    * This method will set the parent module to the new modules modules and
    * remove the parent of the old removed modules modules. It will fire the
    * &quot;subModules&quot; property change event.
-   * 
+   *
    * @param oldChildren
-   *          the old modules collection property.
+   *     the old modules collection property.
    * @param newChildren
-   *          the new modules collection property.
+   *     the new modules collection property.
    */
-  protected void updateParentsAndFireSubModulesChanged(
-      List<Module> oldChildren, List<Module> newChildren) {
+  protected void updateParentsAndFireSubModulesChanged(List<Module> oldChildren, List<Module> newChildren) {
     if (oldChildren != null) {
       for (Module oldChild : oldChildren) {
         if (newChildren == null || !newChildren.contains(oldChild)) {
@@ -762,7 +763,7 @@ public class Module extends AbstractPropertyChangeCapable implements
 
   /**
    * Gets the permId.
-   * 
+   *
    * @return the permId.
    */
   @Override
@@ -779,9 +780,9 @@ public class Module extends AbstractPropertyChangeCapable implements
    * record/replay controllers to uniquely identify an application element.
    * Permanent identifiers are generated by the SJS build based on the element
    * id but must be explicitly set if Spring XML is used.
-   * 
+   *
    * @param permId
-   *          the permId to set.
+   *     the permId to set.
    */
   @Override
   public void setPermId(String permId) {
@@ -810,7 +811,8 @@ public class Module extends AbstractPropertyChangeCapable implements
   /**
    * Compute dirtiness in depth.
    *
-   * @param backendController the backend controller
+   * @param backendController
+   *     the backend controller
    * @return true if the module or one of its sub-module is dirty
    */
   public final boolean refreshDirtinessInDepth(IBackendController backendController) {
@@ -830,11 +832,21 @@ public class Module extends AbstractPropertyChangeCapable implements
   /**
    * Is this module locally dirty.
    *
-   * @param backendController the backend controller
+   * @param backendController
+   *     the backend controller
    * @return {@code true} if this module is dirty itself (without considering its children)
    */
   protected boolean isLocallyDirty(IBackendController backendController) {
     return false;
   }
 
+  /**
+   * Is sub module sticky and should not be removed when the module is restarted.
+   *
+   * @param subModule the sub module
+   * @return the boolean
+   */
+  public boolean isSubModuleSticky(Module subModule) {
+    return stickySubModules != null && stickySubModules.contains(subModule);
+  }
 }
