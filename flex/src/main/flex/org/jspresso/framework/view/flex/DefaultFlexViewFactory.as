@@ -18,9 +18,11 @@ import flash.display.DisplayObject;
 import flash.events.Event;
 import flash.events.FocusEvent;
 import flash.events.KeyboardEvent;
+import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 import flash.events.TextEvent;
 import flash.sensors.Geolocation;
+import flash.ui.Keyboard;
 
 import flex.utils.ui.resize.ResizablePanel;
 
@@ -1154,7 +1156,7 @@ public class DefaultFlexViewFactory {
             tf.text = remoteState.value.toString();
           }
         }
-      }
+      };
 
       var triggerAction:Function = function (event:Event):void {
         var tf:TextInput = (event.currentTarget as TextInput);
@@ -1182,8 +1184,12 @@ public class DefaultFlexViewFactory {
       textInput.addEventListener(FlexEvent.ENTER, triggerAction);
       textInput.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE, triggerAction);
       textInput.addEventListener(FocusEvent.KEY_FOCUS_CHANGE, triggerAction);
-      // Do not trigger action since it might be triggered twice.
-      textInput.addEventListener(FocusEvent.FOCUS_OUT, resetFieldValue);
+      textInput.addEventListener(FocusEvent.FOCUS_OUT, triggerAction);
+      textInput.addEventListener(KeyboardEvent.KEY_DOWN, function (event:KeyboardEvent):void {
+        if (event.keyCode == Keyboard.ESCAPE) {
+          resetFieldValue(event);
+        }
+      });
     }
   }
 
@@ -2771,7 +2777,6 @@ public class DefaultFlexViewFactory {
 
     table.addEventListener(DataGridEvent.ITEM_EDIT_END, function (event:DataGridEvent):void {
       var table:DataGrid = event.currentTarget as DataGrid;
-      _actionHandler.setCurrentViewStateGuid(table, null, null);
       if (event.reason != DataGridEventReason.CANCELLED) {
         if (table.itemEditorInstance is RemoteValueDgItemEditor) {
           var currentEditor:RemoteValueDgItemEditor = table.itemEditorInstance as RemoteValueDgItemEditor;
@@ -2786,6 +2791,10 @@ public class DefaultFlexViewFactory {
           });
         }
       }
+      // Let all actions be triggered before resetting the currnt view state.
+      table.callLater(function():void {
+        _actionHandler.setCurrentViewStateGuid(table, null, null);
+      });
     });
     table.addEventListener(DataGridEvent.ITEM_EDIT_BEGINNING, function (event:DataGridEvent):void {
       if (event.itemRenderer is SelectionCheckBoxRenderer) {
@@ -3168,6 +3177,11 @@ public class DefaultFlexViewFactory {
     textInput.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE, updateModel);
     textInput.addEventListener(FocusEvent.KEY_FOCUS_CHANGE, updateModel);
     textInput.addEventListener(FocusEvent.FOCUS_OUT, updateModel);
+    textInput.addEventListener(KeyboardEvent.KEY_DOWN, function (event:KeyboardEvent):void {
+      if (event.keyCode == Keyboard.ESCAPE) {
+        updateView(remoteState.value);
+      }
+    });
   }
 
   protected function isNewline(text:String):Boolean {
