@@ -23,13 +23,6 @@
       <scope>external</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.flex.framework</groupId>
-      <artifactId>spark</artifactId>
-      <type>swc</type>
-      <!--<scope>merged</scope>-->
-      <scope>theme</scope>
-    </dependency>
-    <dependency>
       <groupId>flexlib</groupId>
       <artifactId>flexlib</artifactId>
       <type>swc</type>
@@ -54,14 +47,6 @@
       <type>swc</type>
       <scope>merged</scope>
     </dependency>
-<!--
-    <dependency>
-      <groupId>org.openscales</groupId>
-      <artifactId>openscales-fx</artifactId>
-      <type>swc</type>
-      <scope>merged</scope>
-    </dependency>
--->
   </dependencies>
 
   <build>

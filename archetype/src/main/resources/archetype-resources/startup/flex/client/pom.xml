@@ -21,8 +21,8 @@
       <type>swc</type>
     </dependency>
     <dependency>
-      <groupId>org.apache.flex.framework</groupId>
-      <artifactId>spark</artifactId>
+      <groupId>org.jspresso.framework</groupId>
+      <artifactId>jspresso-flex-theme</artifactId>
       <type>swc</type>
       <scope>theme</scope>
     </dependency>

@@ -1,5 +1,34 @@
 4.1
 ===
+- We have reworked the Flex themes in Jspresso CE and EE. If you want to benefit from the new themes, please update
+  your application startup/flex/client/src/main/flex/FlexApplicationStartup.mxml the following way :
+
+  add for Jspresso CE :
+    import org.jspresso.framework.flex.controller.ThemedFlexController;
+  or  for Jspresso EE :
+    import org.jspresso.framework.ext.flex.controller.ThemedFlexController;
+
+  and replace :
+    flexController = new (Enhanced|Default)FlexController(remoteController, new Locale(resourceManager.localeChain[0]).language);
+  by :
+    flexController = new ThemedFlexController(remoteController, new Locale(resourceManager.localeChain[0]).language);
+
+  For CE only, you also have to rework the startup/flex/client/pom.xml. Replace :
+      <dependency>
+        <groupId>org.apache.flex.framework</groupId>
+        <artifactId>spark</artifactId>
+        <type>swc</type>
+        <scope>theme</scope>
+      </dependency>
+  by :
+      <dependency>
+        <groupId>org.jspresso.framework</groupId>
+        <artifactId>jspresso-flex-theme</artifactId>
+        <type>swc</type>
+        <scope>theme</scope>
+      </dependency>
+
+
 
 - Due to migration to Qooxdoo 4.1, you should change startup/qooxdoo/client/src/main/py/config.json the following way :
 

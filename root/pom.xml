@@ -383,6 +383,12 @@
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
+        <artifactId>jspresso-flex-theme</artifactId>
+        <version>${jspresso.version}</version>
+        <type>swc</type>
+      </dependency>
+      <dependency>
+        <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-qooxdoo-client</artifactId>
         <version>${jspresso.version}</version>
         <type>zip</type>
@@ -812,11 +818,16 @@
         <type>swc</type>
       </dependency>
       <dependency>
-        <groupId>org.apache.flex.framework</groupId>
+        <groupId>org.apache.flex.framework.themes</groupId>
+        <artifactId>spark</artifactId>
+        <version>${flex.version}</version>
+        <type>swc</type>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.flex.framework.themes</groupId>
         <artifactId>halo</artifactId>
         <version>${flex.version}</version>
         <type>swc</type>
-        <classifier>theme</classifier>
       </dependency>
       <dependency>
         <groupId>org.qooxdoo</groupId>

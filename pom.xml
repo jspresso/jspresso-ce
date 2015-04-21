@@ -264,6 +264,7 @@
     <module>swing</module>
     <module>remote</module>
     <module>flex</module>
+    <module>flex-theme</module>
     <module>qooxdoo</module>
     <module>jasper</module>
     <module>fusioncharts</module>

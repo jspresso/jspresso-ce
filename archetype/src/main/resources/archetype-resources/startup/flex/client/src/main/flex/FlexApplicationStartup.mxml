@@ -6,35 +6,36 @@
   
   <mx:Script>
     <![CDATA[
-      import mx.messaging.ChannelSet;
-      import mx.messaging.channels.AMFChannel;
-      import mx.messaging.channels.SecureAMFChannel;
-      import mx.resources.Locale;
-      
-      import org.jspresso.framework.application.frontend.controller.flex.DefaultFlexController;
-      
-      private var flexController:DefaultFlexController;
-      
-      private function init():void {
-        var rootURL:String = ExternalInterface.call("getRootURL");
-        if(rootURL != null) {
-          var channelSet:ChannelSet = new ChannelSet();
-          if(rootURL.indexOf("https://") >= 0) {
-            var secureAmfChannel:SecureAMFChannel = new SecureAMFChannel("my-secure-amf", rootURL+"/messagebroker/amfsecure");
-            channelSet.addChannel(secureAmfChannel);
-          } else {
-            var amfChannel:AMFChannel = new AMFChannel("my-amf", rootURL+"/messagebroker/amf");
-            channelSet.addChannel(amfChannel);
-          }
-          remoteController.channelSet = channelSet;
+    import mx.messaging.ChannelSet;
+    import mx.messaging.channels.AMFChannel;
+    import mx.messaging.channels.SecureAMFChannel;
+    import mx.resources.Locale;
+
+    import org.jspresso.framework.application.frontend.controller.flex.DefaultFlexController;
+    import org.jspresso.framework.flex.controller.ThemedFlexController;
+
+    private var flexController:DefaultFlexController;
+
+    private function init():void {
+      var rootURL:String = ExternalInterface.call("getRootURL");
+      if (rootURL != null) {
+        var channelSet:ChannelSet = new ChannelSet();
+        if (rootURL.indexOf("https://") >= 0) {
+          var secureAmfChannel:SecureAMFChannel = new SecureAMFChannel("my-secure-amf",
+                                                                       rootURL + "/messagebroker/amfsecure");
+          channelSet.addChannel(secureAmfChannel);
+        } else {
+          var amfChannel:AMFChannel = new AMFChannel("my-amf", rootURL + "/messagebroker/amf");
+          channelSet.addChannel(amfChannel);
         }
-        flexController = new DefaultFlexController(remoteController,
-          new Locale(resourceManager.localeChain[0]).language);
+        remoteController.channelSet = channelSet;
       }
-      
-      private function start():void {
-        flexController.start();
-      }
+      flexController = new ThemedFlexController(remoteController, new Locale(resourceManager.localeChain[0]).language);
+    }
+
+    private function start():void {
+      flexController.start();
+    }
     ]]>
   </mx:Script>
 
