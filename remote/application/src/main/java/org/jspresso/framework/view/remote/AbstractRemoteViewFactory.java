@@ -162,12 +162,14 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 @SuppressWarnings("UnusedParameters")
 public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFactory<RComponent, RIcon, RAction> {
 
-  private boolean                dateServerParse;
-  private boolean                durationServerParse;
-  private IRemoteCommandHandler  remoteCommandHandler;
-  private IGUIDGenerator<String> guidGenerator;
-  private boolean                numberServerParse;
-  private IRemotePeerRegistry    remotePeerRegistry;
+  private boolean                 dateServerParse;
+  private boolean                 durationServerParse;
+  private IRemoteCommandHandler   remoteCommandHandler;
+  private IGUIDGenerator<String>  guidGenerator;
+  private boolean                 numberServerParse;
+  private IRemotePeerRegistry     remotePeerRegistry;
+  private IRemoteStateValueMapper binaryStateValueMapper;
+  private IRemoteStateValueMapper enumerationStateValueMapper;
 
   /**
    * Instantiates a new Abstract remote view factory.
@@ -176,6 +178,44 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     numberServerParse = false;
     dateServerParse = false;
     durationServerParse = false;
+    binaryStateValueMapper = new IRemoteStateValueMapper() {
+      @Override
+      public Object getValueForState(RemoteValueState state, Object originalValue) {
+        if (originalValue instanceof byte[]) {
+          String valueForStateUrl = RemotePeerRegistryServlet.computeDownloadUrl(state.getGuid());
+          Checksum checksumEngine = new CRC32();
+          checksumEngine.update((byte[]) originalValue, 0, ((byte[]) originalValue).length);
+          // we must add a check sum so that the client knows when the url
+          // content changes.
+          valueForStateUrl += ("&cs=" + checksumEngine.getValue());
+          return valueForStateUrl;
+        }
+        return originalValue;
+      }
+
+      @Override
+      public Object getValueFromState(RemoteValueState state, Object originalValue) {
+        return originalValue;
+      }
+    };
+    enumerationStateValueMapper = new IRemoteStateValueMapper() {
+      @Override
+      public Object getValueForState(RemoteValueState state, Object originalValue) {
+        if (originalValue == null) {
+          return "";
+        }
+        return originalValue;
+      }
+
+      @Override
+      public Object getValueFromState(RemoteValueState state, Object originalValue) {
+        if ("".equals(originalValue)) {
+          return null;
+        }
+        return originalValue;
+      }
+    };
+
   }
 
   /**
@@ -683,27 +723,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     IValueConnector connector = getConnectorFactory().createValueConnector(propertyDescriptor.getName());
     if (connector instanceof RemoteValueConnector) {
       final RemoteValueConnector rConnector = (RemoteValueConnector) connector;
-      rConnector.setRemoteStateValueMapper(new IRemoteStateValueMapper() {
-
-        @Override
-        public Object getValueForState(RemoteValueState state, Object originalValue) {
-          if (originalValue instanceof byte[]) {
-            String valueForStateUrl = RemotePeerRegistryServlet.computeDownloadUrl(state.getGuid());
-            Checksum checksumEngine = new CRC32();
-            checksumEngine.update((byte[]) originalValue, 0, ((byte[]) originalValue).length);
-            // we must add a check sum so that the client knows when the url
-            // content changes.
-            valueForStateUrl += ("&cs=" + checksumEngine.getValue());
-            return valueForStateUrl;
-          }
-          return originalValue;
-        }
-
-        @Override
-        public Object getValueFromState(RemoteValueState state, Object originalValue) {
-          return originalValue;
-        }
-      });
+      rConnector.setRemoteStateValueMapper(getBinaryStateValueMapper());
     }
     connector.setExceptionHandler(actionHandler);
     RActionField viewComponent = createRActionField(propertyViewDescriptor, false);
@@ -713,6 +733,15 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     actionList.setActions(binaryActions.toArray(new RAction[binaryActions.size()]));
     viewComponent.setActionLists(actionList);
     return propertyView;
+  }
+
+  /**
+   * Gets binary state value mapper.
+   *
+   * @return the binary state value mapper
+   */
+  protected IRemoteStateValueMapper getBinaryStateValueMapper() {
+    return binaryStateValueMapper;
   }
 
   /**
@@ -759,49 +788,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
       } else {
         connector = getConnectorFactory().createValueConnector(propertyDescriptor.getName());
-        ((RemoteValueConnector) connector).setRemoteStateValueMapper(new IRemoteStateValueMapper() {
-
-          @SuppressWarnings("MagicConstant")
-          @Override
-          public Object getValueFromState(RemoteValueState state, Object originalValue) {
-            // We have to use a Date DTO to avoid any
-            // transformation by the network layer
-            Calendar fieldCalendar = Calendar.getInstance(timeZone);
-            if (originalValue instanceof DateDto) {
-              DateDto stateDate = (DateDto) originalValue;
-              fieldCalendar.set(stateDate.getYear(), stateDate.getMonth(), stateDate.getDate(), stateDate.getHour(),
-                  stateDate.getMinute(), stateDate.getSecond());
-              fieldCalendar.set(Calendar.MILLISECOND, 0);
-              if (fieldCalendar.getTime().getTime() >= 0 && fieldCalendar.getTime().getTime() < 24 * 3600 * 1000) {
-                // This is a default date. Set it today.
-                Calendar today = Calendar.getInstance(timeZone);
-                fieldCalendar.set(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DATE));
-              }
-              Date connectorDate = fieldCalendar.getTime();
-              return connectorDate;
-            }
-            return originalValue;
-          }
-
-          @Override
-          public Object getValueForState(RemoteValueState state, Object originalValue) {
-            if (originalValue instanceof Date) {
-              Date connectorDate = (Date) originalValue;
-              Calendar fieldCalendar = Calendar.getInstance(timeZone);
-              fieldCalendar.setTime(connectorDate);
-
-              DateDto stateDate = new DateDto();
-              stateDate.setYear(fieldCalendar.get(Calendar.YEAR));
-              stateDate.setMonth(fieldCalendar.get(Calendar.MONTH));
-              stateDate.setDate(fieldCalendar.get(Calendar.DATE));
-              stateDate.setHour(fieldCalendar.get(Calendar.HOUR_OF_DAY));
-              stateDate.setMinute(fieldCalendar.get(Calendar.MINUTE));
-              stateDate.setSecond(fieldCalendar.get(Calendar.SECOND));
-              return stateDate;
-            }
-            return originalValue;
-          }
-        });
+        ((RemoteValueConnector) connector).setRemoteStateValueMapper(getDateStateValueMapper(timeZone));
       }
       viewComponent = createRDateField(propertyViewDescriptor);
       ((RDateField) viewComponent).setType(propertyDescriptor.getType().name());
@@ -811,6 +798,58 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
     return view;
+  }
+
+  /**
+   * Gets date state value mapper.
+   *
+   * @param timeZone the time zone
+   * @return the date state value mapper
+   */
+  protected IRemoteStateValueMapper getDateStateValueMapper(final TimeZone timeZone) {
+    return new IRemoteStateValueMapper() {
+
+      @SuppressWarnings("MagicConstant")
+      @Override
+      public Object getValueFromState(RemoteValueState state, Object originalValue) {
+        // We have to use a Date DTO to avoid any
+        // transformation by the network layer
+        Calendar fieldCalendar = Calendar.getInstance(timeZone);
+        if (originalValue instanceof DateDto) {
+          DateDto stateDate = (DateDto) originalValue;
+          fieldCalendar.set(stateDate.getYear(), stateDate.getMonth(), stateDate.getDate(), stateDate.getHour(),
+              stateDate.getMinute(), stateDate.getSecond());
+          fieldCalendar.set(Calendar.MILLISECOND, 0);
+          if (fieldCalendar.getTime().getTime() >= 0 && fieldCalendar.getTime().getTime() < 24 * 3600 * 1000) {
+            // This is a default date. Set it today.
+            Calendar today = Calendar.getInstance(timeZone);
+            fieldCalendar.set(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DATE));
+          }
+          Date connectorDate = fieldCalendar.getTime();
+          return connectorDate;
+        }
+        return originalValue;
+      }
+
+      @Override
+      public Object getValueForState(RemoteValueState state, Object originalValue) {
+        if (originalValue instanceof Date) {
+          Date connectorDate = (Date) originalValue;
+          Calendar fieldCalendar = Calendar.getInstance(timeZone);
+          fieldCalendar.setTime(connectorDate);
+
+          DateDto stateDate = new DateDto();
+          stateDate.setYear(fieldCalendar.get(Calendar.YEAR));
+          stateDate.setMonth(fieldCalendar.get(Calendar.MONTH));
+          stateDate.setDate(fieldCalendar.get(Calendar.DATE));
+          stateDate.setHour(fieldCalendar.get(Calendar.HOUR_OF_DAY));
+          stateDate.setMinute(fieldCalendar.get(Calendar.MINUTE));
+          stateDate.setSecond(fieldCalendar.get(Calendar.SECOND));
+          return stateDate;
+        }
+        return originalValue;
+      }
+    };
   }
 
   /**
@@ -949,26 +988,19 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
       ((REnumBox) viewComponent).setValues(values.toArray(new String[values.size()]));
       ((REnumBox) viewComponent).setTranslations(translations.toArray(new String[translations.size()]));
     }
-    ((IRemoteStateOwner) connector).setRemoteStateValueMapper(new IRemoteStateValueMapper() {
-      @Override
-      public Object getValueForState(RemoteValueState state, Object originalValue) {
-        if (originalValue == null) {
-          return "";
-        }
-        return originalValue;
-      }
-
-      @Override
-      public Object getValueFromState(RemoteValueState state, Object originalValue) {
-        if ("".equals(originalValue)) {
-          return null;
-        }
-        return originalValue;
-      }
-    });
+    ((IRemoteStateOwner) connector).setRemoteStateValueMapper(getEnumerationStateValueMapper());
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
     return view;
+  }
+
+  /**
+   * Gets enumeration state value mapper.
+   *
+   * @return the enumeration state value mapper
+   */
+  protected IRemoteStateValueMapper getEnumerationStateValueMapper() {
+    return enumerationStateValueMapper;
   }
 
   /**
