@@ -85,8 +85,9 @@ public abstract class AbstractAddCollectionToMasterAction extends
       ICollectionAccessor collectionAccessor = getAccessorFactory(context)
           .createCollectionPropertyAccessor(
               collectionConnector.getId(),
-              collectionConnector.getModelProvider().getModelDescriptor()
-                  .getComponentDescriptor().getComponentContract(),
+              master.getClass()
+              /*collectionConnector.getModelProvider().getModelDescriptor()
+                  .getComponentDescriptor().getComponentContract()*/,
               newComponentContract);
       if (collectionAccessor instanceof IModelDescriptorAware) {
         ((IModelDescriptorAware) collectionAccessor)

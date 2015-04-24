@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.entity.IEntity;
 
 /**
@@ -28,11 +29,17 @@ public class SelectEntityPropertyAction extends BackendAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    IEntity model = getModelConnector(context).getConnectorValue();
+    Object model = getModelConnector(context).getConnectorValue();
     if (model != null) {
+      Class<?> targetContract;
+      if (model instanceof IComponent) {
+        targetContract = ((IComponent) model).getComponentContract();
+      } else {
+        targetContract = model.getClass();
+      }
       try {
         Object propertyValue = getAccessorFactory(context)
-            .createPropertyAccessor(property, model.getComponentContract())
+            .createPropertyAccessor(property, targetContract)
             .getValue(model);
         setActionParameter(propertyValue, context);
       } catch (IllegalAccessException | NoSuchMethodException ex) {
