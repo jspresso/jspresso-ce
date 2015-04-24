@@ -135,6 +135,8 @@ mx|Alert {
   paddingRight:          2px;
   messageStyleName:      "alertMessage";
   titleStyleName:        "alertHeader";
+  buttonStyleName:       "borderButton";
+  titleBackgroundSkin:    ClassReference("org.jspresso.framework.theme.panel.TitleBackground");
   /*noinspection CssInvalidPropertyValue*/
   headerColors:          #8DB03E, #8DB03E;
 }

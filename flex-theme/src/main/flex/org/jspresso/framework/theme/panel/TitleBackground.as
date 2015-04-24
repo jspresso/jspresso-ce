@@ -42,7 +42,7 @@ public class TitleBackground extends mx.skins.halo.TitleBackground {
     g.clear();
 
     g.beginFill(backgroundColor, 1.0);
-    g.drawRoundRectComplex(10, 0, w - 10, h, cornerRadius, cornerRadius, 0, 0);
+    g.drawRoundRectComplex(0, 0, w, h, cornerRadius, cornerRadius, 0, 0);
 
     g.beginGradientFill(GradientType.LINEAR, [0x000000, 0x000000], [0.0, 0.1], [0, 255], m);
     g.drawRect(0, h - 5, w, 5);
