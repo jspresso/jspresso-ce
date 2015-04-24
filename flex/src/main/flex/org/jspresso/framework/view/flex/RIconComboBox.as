@@ -66,11 +66,6 @@ public class RIconComboBox extends ComboBox {
     return _showIcon;
   }
 
-  override public function get measuredHeight():Number {
-    return super.measuredHeight + getStyle("cornerRadius");
-  }
-
-
   override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
     super.updateDisplayList(unscaledWidth, unscaledHeight);
     if (_showIcon) {
@@ -124,9 +119,9 @@ public class RIconComboBox extends ComboBox {
       if (_rIcon.dimension.width > measuredWidth) {
         measuredWidth += _rIcon.dimension.width;
       }
-      if (_rIcon.dimension.height > measuredHeight) {
-        measuredHeight += _rIcon.dimension.height - textInput.measuredHeight / 2;
-      }
+      var cornerRadius:Number = getStyle("cornerRadius");
+      var borderThickness:Number = getStyle("borderThickness");
+      measuredHeight = Math.max(_rIcon.dimension.height + (cornerRadius + borderThickness) * 2, measuredHeight);
     }
   }
 }
