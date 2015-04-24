@@ -1,0 +1,31 @@
+{
+  "info" : 
+  {
+    "name" : "jspresso-ext-qooxdoo-theme",
+
+    "summary" : "Jspresso Framework Qooxdoo theme",
+    "description" : "This is a Jspresso theme based on Qooxdoo theme.",
+    
+    "homepage" : "http://www.jspresso.org/",
+
+    "license" : "LGPL V3",
+    "authors" : 
+    [
+      {
+        "name" : "Vincent Vandenschrick (vvandens)",
+        "email" : "vvandens@jspresso.org"
+      }
+    ]
+  },
+  
+  "provides" : 
+  {
+    "namespace"   : "org.jspresso.framework.theme",
+    "encoding"    : "utf-8",
+    "class"       : "js",
+    "resource"    : "resources",
+    "translation" : "translations",
+    "type"        : "theme"
+  }
+}
+
