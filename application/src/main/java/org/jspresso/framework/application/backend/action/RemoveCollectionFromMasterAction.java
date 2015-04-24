@@ -25,6 +25,7 @@ import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.model.ModelPropertyConnector;
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.IModelDescriptorAware;
 import org.jspresso.framework.util.accessor.ICollectionAccessor;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
@@ -58,11 +59,19 @@ public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
           .getComponentContract();
       Object master = collectionConnector.getParentConnector()
           .getConnectorValue();
+      Class<?> targetContract;
+      if (master instanceof IComponent) {
+        targetContract = ((IComponent) master).getComponentContract();
+      } else {
+        targetContract = master.getClass();
+      }
       ICollectionAccessor collectionAccessor = getAccessorFactory(context)
           .createCollectionPropertyAccessor(
               collectionConnector.getId(),
-              collectionConnector.getModelProvider().getModelDescriptor()
-                  .getComponentDescriptor().getComponentContract(),
+              targetContract
+              // Do not use the view model descriptor. It does not work for map models
+              /*collectionConnector.getModelProvider().getModelDescriptor()
+                  .getComponentDescriptor().getComponentContract()*/,
               elementComponentContract);
       if (collectionAccessor instanceof IModelDescriptorAware) {
         ((IModelDescriptorAware) collectionAccessor)

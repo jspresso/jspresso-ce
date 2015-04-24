@@ -24,6 +24,7 @@ import java.util.Map;
 
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.backend.action.AbstractCollectionAction;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
@@ -70,9 +71,17 @@ public class RemoveCollectionFromMasterAction extends AbstractHibernateCollectio
     int[] selectedIndices = getSelectedIndices(context);
     if (selectedIndices != null) {
       Object master = collectionConnector.getParentConnector().getConnectorValue();
+      Class<?> targetContract;
+      if (master instanceof IComponent) {
+        targetContract = ((IComponent) master).getComponentContract();
+      } else {
+        targetContract = master.getClass();
+      }
       ICollectionAccessor collectionAccessor = getAccessorFactory(context).createCollectionPropertyAccessor(
-          collectionConnector.getId(),
-          collectionConnector.getModelProvider().getModelDescriptor().getComponentDescriptor().getComponentContract(),
+          collectionConnector.getId(), targetContract
+          // Do not use the view model descriptor. It does not work for map models
+          /*collectionConnector.getModelProvider().getModelDescriptor()
+              .getComponentDescriptor().getComponentContract()*/,
           elementComponentContract);
       if (collectionAccessor instanceof IModelDescriptorAware) {
         ((IModelDescriptorAware) collectionAccessor).setModelDescriptor(getModelDescriptor(context));
