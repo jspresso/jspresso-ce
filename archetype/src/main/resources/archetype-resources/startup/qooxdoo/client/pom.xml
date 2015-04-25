@@ -24,6 +24,12 @@
       <type>zip</type>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.jspresso.framework</groupId>
+      <artifactId>jspresso-qooxdoo-theme</artifactId>
+      <type>zip</type>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
   
   <build>

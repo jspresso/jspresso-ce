@@ -10,7 +10,7 @@
 
 qx.Theme.define("org.jspresso.framework.theme.Appearance",
 {
-  extend : qx.theme.indigo.Appearance,
+  extend : qx.theme.simple.Appearance,
   
   appearances :
   {
