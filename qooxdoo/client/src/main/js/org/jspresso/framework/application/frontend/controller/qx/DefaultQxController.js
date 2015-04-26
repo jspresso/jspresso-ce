@@ -17,11 +17,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
 
   extend: org.jspresso.framework.application.frontend.controller.qx.AbstractQxController,
 
-  implement: [
-  ],
+  implement: [],
 
-  statics: {
-  },
+  statics: {},
 
   /**
    * @param remoteController {qx.io.remote.Rpc}
@@ -88,8 +86,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       })));
 
       if (message) {
-        message = org.jspresso.framework.util.html.HtmlUtil.sanitizeHtml(message);
-        message = org.jspresso.framework.util.html.HtmlUtil.replaceNewlines(message);
+        // message = org.jspresso.framework.util.html.HtmlUtil.sanitizeHtml(message);
+        // message = org.jspresso.framework.util.html.HtmlUtil.replaceNewlines(message);
         var messageLabel = new qx.ui.basic.Label(message);
         messageLabel.setRich(org.jspresso.framework.util.html.HtmlUtil.isHtml(message));
         dialogBox.add(messageLabel);
@@ -148,7 +146,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         dialog.addListener("keypress", function (e) {
           if (e.getKeyIdentifier() == "Enter" && !qx.ui.core.FocusHandler.getInstance().isFocused(actions[0])
               && (!(qx.ui.core.FocusHandler.getInstance().getFocusedWidget() instanceof qx.ui.form.AbstractField)
-                  || qx.ui.core.FocusHandler.getInstance().getFocusedWidget() instanceof qx.ui.form.PasswordField)) {
+              || qx.ui.core.FocusHandler.getInstance().getFocusedWidget() instanceof qx.ui.form.PasswordField)) {
             actions[0].focus();
             new qx.util.DeferredCall(function () {
               actions[0].execute(); // and call the default button's
