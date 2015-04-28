@@ -25,11 +25,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
   extend: org.jspresso.framework.view.qx.AbstractQxViewFactory,
 
   statics: {
-    __TEMPLATE_CHAR: "O",
+    __TEMPLATE_CHAR: "0",
     __FIELD_MAX_CHAR_COUNT: 32,
     __NUMERIC_FIELD_MAX_CHAR_COUNT: 16,
     __COLUMN_MAX_CHAR_COUNT: 12,
-    __DATE_CHAR_COUNT: 12,
+    __DATE_CHAR_COUNT: 10,
     __TIME_CHAR_COUNT: 6,
 
     _hexColorToQxColor: function (hexColor) {
@@ -395,7 +395,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @param remoteDateField {org.jspresso.framework.gui.remote.RDateField}
      */
     _createDateTimeField: function (remoteDateField) {
-      var dateTimeField = new qx.ui.container.Composite(new qx.ui.layout.HBox())
+      var dateTimeField = new qx.ui.container.Composite(new qx.ui.layout.HBox());
       var oldType = remoteDateField.getType();
       try {
         remoteDateField.setType("DATE");
@@ -1191,7 +1191,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @param icon {org.jspresso.framework.gui.remote.RIcon}
      */
     createToolBarButton: function (label, toolTip, icon) {
-      return this.createButton(label, toolTip, icon);
+      var button = this.createButton(label, toolTip, icon);
+      return button;
     },
 
     /**
@@ -1229,7 +1230,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      */
     _createForm: function (remoteForm) {
       var form = new qx.ui.container.Composite();
-      var formLayout = new qx.ui.layout.Grid(5, 5);
+      form.setPadding(2);
+      var formLayout = new qx.ui.layout.Grid(2, 0);
       var columnCount = remoteForm.getColumnCount();
       var col = 0;
       var row = 0;
@@ -1341,7 +1343,14 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         } else {
           compRowSpan = 1;
         }
-
+        if (component instanceof org.jspresso.framework.gui.remote.RColorField
+            || rComponent instanceof org.jspresso.framework.gui.remote.RActionField
+            || rComponent instanceof org.jspresso.framework.gui.remote.RDateField) {
+          component.setPadding([2, 2]);
+        } else {
+          //component.set
+          component.setMargin(2);
+        }
         form.add(component, {
           row: compRow,
           column: compCol,
@@ -1617,7 +1626,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       if (root instanceof qx.ui.form.TextField || root instanceof qx.ui.form.CheckBox || root
           instanceof qx.ui.form.SelectBox || root instanceof qx.ui.form.TextArea || root instanceof qx.ui.form.DateField
           || root instanceof qx.ui.table.Table) {
-        if (root.getEnabled()) {
+        if (root.isFocusable()) {
           return root;
         }
       }
@@ -1887,7 +1896,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       if (textField) {
         // propagate focus
         actionField.addListener("focus", function () {
-          textField.focus();
+          if (textField.isFocusable()) {
+            textField.focus();
+          }
         });
 
         // propagate active state
@@ -1958,7 +1969,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _decorateWithAsideActions: function (component, remoteComponent, disableActionsWithField) {
       var decorated = component;
       if (remoteComponent.getActionLists()) {
-        var actionField = new qx.ui.container.Composite(new qx.ui.layout.HBox());
+        var actionField = new qx.ui.container.Composite(new qx.ui.layout.HBox(0));
         actionField.setFocusable(true);
         actionField.setAllowStretchY(false, false);
 
@@ -2334,6 +2345,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       }
       if (toolBar || secondaryToolBar) {
         var surroundingBox = new qx.ui.container.Composite(new qx.ui.layout.VBox())
+        surroundingBox.setPadding(2);
         var slideBar;
         if (toolBar) {
           slideBar = new qx.ui.container.SlideBar();
@@ -2552,7 +2564,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var colorWidget = new qx.ui.basic.Label();
       colorWidget.setBackgroundColor(org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(remoteColorField.getDefaultColor()));
       colorWidget.set({
-        decorator: "main",
+        appearance: "textfield",
         textAlign: "center",
         alignX: "center",
         alignY: "middle"
@@ -2574,15 +2586,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       resetButton.setAllowStretchX(false, false);
       resetButton.setAllowStretchY(false, false);
       resetButton.setAlignY("middle");
-
-      // colorWidget.addListener("resize", function(e) {
-      // var dim = e.getData().height;
-      // resetButton.getChildControl("icon").set({
-      // scale : true,
-      // width : dim - resetButton.getPaddingLeft(),
-      // height : dim - resetButton.getPaddingLeft()
-      // });
-      // });
 
       // colorWidget.setWidth(resetButton.getWidth());
       this._sizeMaxComponentWidth(colorWidget, remoteColorField);
@@ -2659,7 +2662,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      */
     _createSplitContainer: function (remoteSplitContainer) {
       var splitContainer = new qx.ui.splitpane.Pane();
-
       if (remoteSplitContainer.getOrientation() == "VERTICAL") {
         splitContainer.setOrientation("vertical");
       } else {

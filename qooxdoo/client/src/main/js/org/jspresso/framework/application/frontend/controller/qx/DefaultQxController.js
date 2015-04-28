@@ -199,7 +199,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         for (var i = 0; i < actions.length; i++) {
           var splitButton = this._getViewFactory().createSplitButton(actions[i]);
           if (splitButton) {
-            toolBar.add(splitButton);
+            var part = new qx.ui.toolbar.Part();
+            part.add(splitButton);
+            toolBar.add(part);
           }
         }
       }
@@ -254,11 +256,17 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
 
       var workspaceAccordion = new qx.ui.container.Composite(new qx.ui.layout.VBox(5));
       var logo = new qx.ui.basic.Image("logo.png");
+      logo.set({
+        decorator: "panel-box",
+        padding: 4
+      });
       workspaceAccordion.add(logo, {flex: 1});
       this.__workspaceAccordionGroup = new qx.ui.form.RadioGroup();
       this.__workspaceAccordionGroup.setAllowEmptySelection(false);
       for (var i = 0; i < workspaceActions.getActions().length; i++) {
-        var workspacePanel = new org.jspresso.framework.view.qx.EnhancedCollapsiblePanel(workspaceActions.getActions()[i].getName());
+        var workspacePanel = new org.jspresso.framework.view.qx.EnhancedCollapsiblePanel(
+            workspaceActions.getActions()[i].getName());
+        workspacePanel.setDecorator("accordion-box");
         if (i == 0) {
           workspacePanel.setValue(true);
         } else {
@@ -276,6 +284,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       }
 
       this.__workspaceStack = new qx.ui.container.Stack();
+      this.__workspaceStack.set({
+        decorator: "accordion-box",
+        margin: 2,
+        padding: 2
+      });
 
       var splitContainer = new qx.ui.splitpane.Pane("horizontal");
       splitContainer.add(workspaceAccordion, 0.15);

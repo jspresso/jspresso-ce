@@ -22,8 +22,8 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MCellAdditionalStyle", {
     },
 
     _getAdditionalCellStyle: function (cellInfo) {
+      var styleString = ["padding-top:" + (cellInfo.styleHeight / 5) + "px;"];
       if (this.__attributes) {
-        var styleString = [];
         for (var key in this.__attributes) {
           if (key == "backgroundIndex" || key == "foregroundIndex") {
             //noinspection JSUnfilteredForInLoop
@@ -62,9 +62,8 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MCellAdditionalStyle", {
             }
           }
         }
-        return styleString.join("");
       }
-      return "";
+      return styleString.join("");
     }
   }
 });

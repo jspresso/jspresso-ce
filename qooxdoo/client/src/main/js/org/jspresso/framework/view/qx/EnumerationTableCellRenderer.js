@@ -46,8 +46,10 @@ qx.Class.define("org.jspresso.framework.view.qx.EnumerationTableCellRenderer", {
           position: "relative",
           width: w + "px",
           height: h + "px",
-          "margin-right": "3px",
-          "vertical-align": "middle"
+          "margin-right": "4px",
+          "margin-left": "-1px",
+          "vertical-align": "middle",
+          "margin-top": cellInfo.styleHeight / (-5) + "px"
         });
         if (this.__table.getRowHeight() < h) {
           this.__table.setRowHeight(h + 4);
