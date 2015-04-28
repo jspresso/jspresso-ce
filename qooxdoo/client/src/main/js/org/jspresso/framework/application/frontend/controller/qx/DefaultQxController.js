@@ -267,6 +267,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         var workspacePanel = new org.jspresso.framework.view.qx.EnhancedCollapsiblePanel(
             workspaceActions.getActions()[i].getName());
         workspacePanel.setDecorator("accordion-box");
+        workspacePanel.setPadding(4);
         if (i == 0) {
           workspacePanel.setValue(true);
         } else {

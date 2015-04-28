@@ -1348,7 +1348,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             || rComponent instanceof org.jspresso.framework.gui.remote.RDateField) {
           component.setPadding([2, 2]);
         } else {
-          //component.set
           component.setMargin(2);
         }
         form.add(component, {
@@ -2668,7 +2667,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         splitContainer.setOrientation("horizontal");
       }
 
-      var component;
+      var component, wrapper;
       if (remoteSplitContainer.getLeftTop() != null) {
         component = this.createComponent(remoteSplitContainer.getLeftTop());
         var lflex;
@@ -2677,7 +2676,16 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         } else {
           lflex = component.getSizeHint().width;
         }
-        splitContainer.add(component, lflex);
+        wrapper = new qx.ui.container.Composite(new qx.ui.layout.Grow());
+        component.syncAppearance();
+        wrapper.setPadding([
+          component.getMarginTop(),
+          component.getMarginRight(),
+          component.getMarginBottom(),
+          component.getMarginLeft()
+        ]);
+        wrapper.add(component);
+        splitContainer.add(wrapper, lflex);
       }
       if (remoteSplitContainer.getRightBottom() != null) {
         component = this.createComponent(remoteSplitContainer.getRightBottom());
@@ -2687,7 +2695,16 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         } else {
           rflex = component.getSizeHint().width;
         }
-        splitContainer.add(component, rflex);
+        wrapper = new qx.ui.container.Composite(new qx.ui.layout.Grow());
+        component.syncAppearance();
+        wrapper.setPadding([
+          component.getMarginTop(),
+          component.getMarginRight(),
+          component.getMarginBottom(),
+          component.getMarginLeft()
+        ]);
+        wrapper.add(component);
+        splitContainer.add(wrapper, rflex);
       }
       return splitContainer;
     },

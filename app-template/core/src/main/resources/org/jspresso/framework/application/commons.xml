@@ -451,6 +451,11 @@
                 </bean>
               </list>
             </property>
+            <property name="iconImageURL">
+              <bean parent="abstractFwIconImageURL">
+                <constructor-arg index="0" value="flags"/>
+              </bean>
+            </property>
             <property name="serviceDelegateClassNames">
               <map>
                 <entry key="org.jspresso.framework.model.component.IPropertyTranslation">

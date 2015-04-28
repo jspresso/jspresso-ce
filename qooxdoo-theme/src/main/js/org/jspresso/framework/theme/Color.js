@@ -22,6 +22,6 @@ qx.Theme.define("org.jspresso.framework.theme.Color",
     "table-row-background-even": "white",
     "table-row-background-odd": "#FAFAFA",
 
-    "border-main": "button-border"
+    "border-main": "border-light"
   }
 });
