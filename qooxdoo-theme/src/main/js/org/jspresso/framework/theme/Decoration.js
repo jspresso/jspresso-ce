@@ -36,7 +36,8 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
             color: "background-selected",
             shadowBlurRadius: 3,
             shadowColor: "background-selected",
-            shadowLength: 0
+            shadowLength: 0,
+            transition: "all 200ms ease-out"
           }
         },
 
@@ -47,7 +48,8 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
             color: "background-selected",
             shadowBlurRadius: 3,
             shadowColor: "background-selected",
-            shadowLength: 0
+            shadowLength: 0,
+            transition: "all 200ms ease-out"
           }
         },
 
@@ -66,7 +68,8 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
             color: "background-selected",
             shadowBlurRadius: 2,
             shadowColor: "background-selected",
-            shadowLength: 0
+            shadowLength: 0,
+            transition: "all 200ms ease-out"
           }
         },
 

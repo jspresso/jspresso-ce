@@ -92,6 +92,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.Application", {
       qx.Theme.include(qx.theme.modern.Appearance, collapsablepanel.theme.modern.Appearance);
       qx.Theme.include(qx.theme.classic.Appearance, collapsablepanel.theme.classic.Appearance);
 
+      // patch the original decorator class
+      qx.Class.patch(qx.ui.decoration.Decorator, org.jspresso.framework.patch.MTransition);
+
       // Enable logging in debug variant
       if (qx.core.Environment.get("qx.debug")) {
         {

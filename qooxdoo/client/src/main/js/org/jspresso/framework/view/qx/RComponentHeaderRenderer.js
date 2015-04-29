@@ -38,6 +38,7 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentHeaderRenderer", {
     createHeaderCell: function (cellInfo) {
       var widget = new org.jspresso.framework.view.qx.MultilineHeaderCell();
       this.updateHeaderCell(cellInfo, widget);
+      this.__table.syncAppearance();
       this.__viewFactory.applyComponentStyle(widget, this.__rComponent);
       var heightHint = widget.getSizeHint()["height"];
       if (this.__table.getHeaderCellHeight() < heightHint) {
