@@ -1,5 +1,5 @@
 {
-  "name"    : "jspresso-ext-qooxdoo-theme",
+  "name"    : "jspresso-qooxdoo-theme",
 
   "include" :
   [
@@ -8,7 +8,7 @@
     },
     {
       "path" : "library.json",
-      "as"   : "jspresso-qooxdoo"
+      "as"   : "jspresso-qooxdoo-theme"
     }
   ],
 
@@ -44,7 +44,7 @@
 
   "jobs" :
   {
-    "common" : 
+    "common" :
     {
       "cache" :
       {
@@ -57,7 +57,9 @@
         "${APPLICATION_CLASS_NAME}"
       ]
     },
-
+    "libraries": {
+      "extend": ["jspresso-qooxdoo-theme::libraries"]
+    },
     "build" :
     {
       "=run" :
