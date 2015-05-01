@@ -26,6 +26,7 @@
       <groupId>org.apache.flex.framework</groupId>
       <artifactId>framework</artifactId>
       <type>swc</type>
+      <scope>external</scope>
     </dependency>
   </dependencies>
 

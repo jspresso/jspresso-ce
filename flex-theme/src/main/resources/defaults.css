@@ -253,8 +253,8 @@ mx|ApplicationControlBar {
   paddingRight:      5px;
   verticalAlign:     middle;
   horizontalAlign:   left;
-  borderAlpha:       0;
-  dropShadowEnabled: false;
+  /*borderAlpha:       0;*/
+  /*dropShadowEnabled: false;*/
   cornerRadius:      0;
 }
 
