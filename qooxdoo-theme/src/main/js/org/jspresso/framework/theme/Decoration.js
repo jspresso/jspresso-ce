@@ -33,11 +33,13 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
           include: "button-box",
 
           style: {
-            color: "background-selected",
-            shadowBlurRadius: 3,
-            shadowColor: "background-selected",
-            shadowLength: 0,
-            transition: "all 200ms ease-out"
+            /*
+             color: "background-selected",
+             shadowBlurRadius: 3,
+             shadowColor: "background-selected",
+             shadowLength: 0,
+             transition: "all 200ms ease-out"
+             */
           }
         },
 
@@ -45,11 +47,13 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
           include: "button-box-pressed",
 
           style: {
-            color: "background-selected",
-            shadowBlurRadius: 3,
-            shadowColor: "background-selected",
-            shadowLength: 0,
-            transition: "all 200ms ease-out"
+            /*
+             color: "background-selected",
+             shadowBlurRadius: 3,
+             shadowColor: "background-selected",
+             shadowLength: 0,
+             transition: "all 200ms ease-out"
+             */
           }
         },
 
@@ -82,6 +86,14 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
           }
         },
 
+        "header-box": {
+          style: {
+            gradientStart: ["header", 0],
+            gradientEnd: ["app-background", 100],
+            transition: "all 300ms ease-in"
+          }
+        },
+
         "accordion-box": {
           style: {
             radius: 2,
@@ -90,7 +102,8 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
             color: "border-main",
             shadowBlurRadius: 2,
             shadowColor: "border-light",
-            shadowLength: 0
+            shadowLength: 0,
+            transition: "all 300ms ease-in"
           }
         },
 
@@ -161,6 +174,28 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
           include: "panel-box-top-angled",
           style: {
             radius: [0, 0, 2, 2]
+          }
+        },
+
+        "window": {
+          style: {
+            radius: 2,
+            width: 1,
+            color: "window-border",
+            innerWidth: 2,
+            innerColor: "window-border-inner",
+            shadowLength: 1,
+            shadowBlurRadius: 3,
+            shadowColor: "shadow",
+            backgroundColor: "background"
+          }
+        },
+
+        "window-caption": {
+          style: {
+            width: [0, 0, 2, 0],
+            color: "window-border-inner",
+            backgroundColor: "window-caption-background"
           }
         }
       }

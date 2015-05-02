@@ -103,12 +103,14 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       } else {
         allActions = actions;
       }
+      var buttons = [];
       for (var i = 0; i < allActions.length; i++) {
         if (allActions[i] instanceof org.jspresso.framework.gui.remote.RAction) {
-          buttonBox.add(this._getViewFactory().createAction(allActions[i]));
+          buttons[i] = this._getViewFactory().createAction(allActions[i]);
         } else {
-          buttonBox.add(allActions[i]);
+          buttons[i] = allActions[i];
         }
+        buttonBox.add(buttons[i]);
       }
       dialogBox.add(buttonBox);
 
@@ -144,12 +146,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       this._getViewFactory().setIcon(dialog, icon);
       if (actions.length > 0) {
         dialog.addListener("keypress", function (e) {
-          if (e.getKeyIdentifier() == "Enter" && !qx.ui.core.FocusHandler.getInstance().isFocused(actions[0])
+          if (e.getKeyIdentifier() == "Enter" && !qx.ui.core.FocusHandler.getInstance().isFocused(buttons[0])
               && (!(qx.ui.core.FocusHandler.getInstance().getFocusedWidget() instanceof qx.ui.form.AbstractField)
               || qx.ui.core.FocusHandler.getInstance().getFocusedWidget() instanceof qx.ui.form.PasswordField)) {
-            actions[0].focus();
+            buttons[0].focus();
             new qx.util.DeferredCall(function () {
-              actions[0].execute(); // and call the default button's
+              buttons[0].execute(); // and call the default button's
             }).schedule();
           }
         });
@@ -194,6 +196,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       //var menuBar = this._createApplicationMenuBar(workspaceActions, actions, helpActions);
       //applicationFrame.add(menuBar);
       var toolBar = new qx.ui.toolbar.ToolBar();
+      toolBar.setAppearance("application-bar");
       this._getViewFactory().installActionLists(toolBar, navigationActions);
       if (actions) {
         for (var i = 0; i < actions.length; i++) {
@@ -209,11 +212,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       toolBar.addSpacer();
       if (this._getName()) {
         var appNameLabel = new qx.ui.basic.Label(this._getName());
-        var font = qx.theme.manager.Font.getInstance().resolve("default");
-        font = new qx.bom.Font(16, font.getFamily());
-        font.setBold(true);
-        appNameLabel.setFont(font);
-        appNameLabel.setTextColor("#777777");
+        appNameLabel.setFont(qx.theme.manager.Font.getInstance().resolve("header"));
+        appNameLabel.setTextColor(qx.theme.manager.Color.getInstance().resolve("header-text"));
         appNameLabel.setAlignY("middle");
         toolBar.add(appNameLabel);
       }
@@ -256,18 +256,14 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
 
       var workspaceAccordion = new qx.ui.container.Composite(new qx.ui.layout.VBox(5));
       var logo = new qx.ui.basic.Image("logo.png");
-      logo.set({
-        decorator: "panel-box",
-        padding: 4
-      });
+      logo.setAppearance("logo");
       workspaceAccordion.add(logo, {flex: 1});
       this.__workspaceAccordionGroup = new qx.ui.form.RadioGroup();
       this.__workspaceAccordionGroup.setAllowEmptySelection(false);
       for (var i = 0; i < workspaceActions.getActions().length; i++) {
         var workspacePanel = new org.jspresso.framework.view.qx.EnhancedCollapsiblePanel(
             workspaceActions.getActions()[i].getName());
-        workspacePanel.setDecorator("accordion-box");
-        workspacePanel.setPadding(4);
+        workspacePanel.setAppearance("accordion-section");
         if (i == 0) {
           workspacePanel.setValue(true);
         } else {
@@ -285,15 +281,32 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       }
 
       this.__workspaceStack = new qx.ui.container.Stack();
-      this.__workspaceStack.set({
-        decorator: "accordion-box",
-        margin: 2,
-        padding: 2
-      });
+      this.__workspaceStack.setAppearance("workspace-panel");
 
       var splitContainer = new qx.ui.splitpane.Pane("horizontal");
-      splitContainer.add(workspaceAccordion, 0.15);
-      splitContainer.add(this.__workspaceStack, 0.85);
+      splitContainer.setAppearance("application-split");
+      splitContainer.add(workspaceAccordion, 0);
+      var workspaceStackWrapper = new qx.ui.container.Composite(new qx.ui.layout.Grow());
+      this.__workspaceStack.syncAppearance();
+      workspaceStackWrapper.setPadding([
+        this.__workspaceStack.getMarginTop(),
+        this.__workspaceStack.getMarginRight(),
+        this.__workspaceStack.getMarginBottom(),
+        this.__workspaceStack.getMarginLeft()
+      ]);
+      workspaceStackWrapper.add(this.__workspaceStack);
+      splitContainer.add(workspaceStackWrapper, 1);
+      logo.setAllowStretchX(true);
+      logo.addListener("tap", function (e) {
+        var widthToRestore = workspaceAccordion.getUserData("widthToRestore");
+        if (widthToRestore) {
+          workspaceAccordion.setUserData("widthToRestore", 0);
+          workspaceAccordion.setWidth(widthToRestore);
+        } else {
+          workspaceAccordion.setUserData("widthToRestore", workspaceAccordion.getSizeHint().width);
+          workspaceAccordion.setWidth(0);
+        }
+      });
 
       applicationFrame.add(splitContainer, {flex: 1});
       if (secondaryActions && secondaryActions.length > 0) {
@@ -592,10 +605,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       this._getApplication().getRoot().add(uploadDialog);
 
       var uploadForm = new uploadwidget.UploadForm('uploadForm', uploadCommand.getFileUrl());
-      uploadForm.set({
-        decorator: "main",
-        padding: 8
-      });
+      uploadForm.setAppearance("upload-form");
       uploadForm.setLayout(new qx.ui.layout.VBox(10));
 
       var uploadField = new uploadwidget.UploadField('uploadFile', 'Select File', 'icon/16/actions/document-save.png');

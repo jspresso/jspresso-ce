@@ -58,6 +58,72 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           }
         },
 
+        "application-bar": {
+          alias: "toolbar",
+          include: "toolbar",
+          style: function (states) {
+            return {
+              paddingBottom: 20,
+              backgroundColor: undefined,
+              decorator: "header-box"
+            };
+          }
+        },
+
+        "application-split": {
+          alias: "splitpane",
+          include: "splitpane",
+          style: function (states) {
+            return {
+              backgroundColor: "app-background"
+            };
+          }
+        },
+
+        "application-split/splitter": {
+          alias: "splitpane/splitter",
+          include: "splitpane/splitter",
+          style: function (states) {
+            return {
+              backgroundColor: "app-background"
+            };
+          }
+        },
+
+        "logo": {
+          alias: "image",
+          include: "image",
+          style: function (state) {
+            return {
+              minWidth: 60,
+              decorator: "accordion-box",
+              margin: [0, 2, 2, 2],
+              padding: 4
+            }
+          }
+        },
+
+        "accordion-section": {
+          include: "collapsable-panel",
+          alias: "collapsable-panel",
+          style: function (state) {
+            return {
+              padding: 4,
+              decorator: "accordion-box"
+            }
+          }
+        },
+
+        "workspace-panel": {
+          style: function (state) {
+            return {
+              margin: [0, 2, 2, 2],
+              padding: 2,
+              decorator: "accordion-box"
+            }
+          }
+        },
+
         "button-frame": {
           base: true,
           style: function (states) {
@@ -279,6 +345,24 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
               textColor: states.disabled ? "text-disabled" : states.checked ? undefined : "gray",
               padding: padding,
               font: states.disabled ? undefined : states.checked ? "bold" : undefined
+            };
+          }
+        },
+
+        "upload-form": {
+          style: function (states) {
+            return {
+              padding: 8,
+              decorator: "main"
+            }
+          }
+        },
+
+        "window/captionbar": {
+          base: true,
+          style: function (states) {
+            return {
+              backgroundColor: states.active ? "window-caption-background" : "background-disabled"
             };
           }
         }
