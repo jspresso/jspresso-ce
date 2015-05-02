@@ -19,13 +19,14 @@ qx.Theme.define("org.jspresso.framework.theme.Color",
         "button-border-hovered": "#BBBBBB",
 
         "table-row-background-even": "white",
-        "table-row-background-odd": "#FAFAFA",
+        "table-row-background-odd": "app-background",
 
         "border-main": "border-light",
 
-        "header": "#A8A8A8",
-        "header-text": "#666666",
+        "header": "#157DC0",
+        "header-text": "white",
         "light-background": "#F7F7F7",
+        "app-foreground": "#157DC0",
         "app-background": "light-background",
         "window-caption-background": "light-background",
         "window-border": "#979797",

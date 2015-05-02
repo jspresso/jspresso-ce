@@ -33,13 +33,11 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
           include: "button-box",
 
           style: {
-            /*
              color: "background-selected",
              shadowBlurRadius: 3,
              shadowColor: "background-selected",
              shadowLength: 0,
              transition: "all 200ms ease-out"
-             */
           }
         },
 
@@ -54,6 +52,17 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
              shadowLength: 0,
              transition: "all 200ms ease-out"
              */
+          }
+        },
+
+        "checkbox-focused": {
+          include: "checkbox",
+          style: {
+            color: "background-selected",
+            shadowBlurRadius: 3,
+            shadowColor: "background-selected",
+            shadowLength: 0,
+            transition: "all 200ms ease-out"
           }
         },
 
@@ -187,7 +196,7 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
             shadowLength: 1,
             shadowBlurRadius: 3,
             shadowColor: "shadow",
-            backgroundColor: "background"
+            backgroundColor: "app-background"
           }
         },
 

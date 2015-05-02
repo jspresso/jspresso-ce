@@ -13,11 +13,11 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
       extend: qx.theme.simple.Appearance,
 
       appearances: {
-        "splitpane/splitter": {
+        "widget": {
           base: true,
           style: function (states) {
             return {
-              backgroundColor: "white"
+              backgroundColor: "app-background"
             };
           }
         },
@@ -26,7 +26,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           base: true,
           style: function (states) {
             return {
-              backgroundColor: "white"
+              backgroundColor: "app-background"
             };
           }
         },
@@ -35,7 +35,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           base: true,
           style: function (states) {
             return {
-              backgroundColor: "white"
+              backgroundColor: "app-background"
             };
           }
         },
@@ -120,7 +120,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
               margin: [0, 2, 2, 2],
               padding: 2,
               decorator: "accordion-box",
-              backgroundColor: "white"
+              backgroundColor: "app-background"
             }
           }
         },
@@ -155,14 +155,22 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           }
         },
 
+        "checkbox": {
+          base: true,
+          style: function (states) {
+            return {
+              padding: 2
+            };
+          }
+        },
+
         "table": {
           base: true,
           style: function (states) {
             return {
               decorator: "panel-box",
               headerCellHeight: 25,
-              rowHeight: 25,
-              backgroundColor: "white"
+              rowHeight: 25
             };
           }
         },
@@ -186,6 +194,15 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
             return {
               padding: 5,
               margin: [0, 5]
+            };
+          }
+        },
+
+        "groupbox/frame": {
+          base: true,
+          style: function (states) {
+            return {
+              backgroundColor: "app-background"
             };
           }
         },
@@ -262,20 +279,10 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           }
         },
 
-        "selectbox": {
-          base: true,
-          alias: "button-frame",
-          include: "button-frame",
-          style: function (states) {
-            return {
-              margin: 0,
-              padding: [2, 4]
-            };
-          }
-        },
-
         "tabview/bar": {
+          alias: "slidebar",
           base: true,
+
           style: function (states) {
             var margin = 2;
             var marginTop = margin, marginRight = margin, marginBottom = margin, marginLeft = margin;
@@ -294,9 +301,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
               marginBottom: marginBottom,
               marginTop: marginTop,
               marginLeft: marginLeft,
-              marginRight: marginRight,
-              backgroundColor: "white",
-              decorator: "panel-box-bottom-angled"
+              marginRight: marginRight
             };
           }
         },
@@ -328,8 +333,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
               marginTop: marginTop,
               marginLeft: marginLeft,
               marginRight: marginRight,
-              backgroundColor: "background",
-              decorator: "panel-box-" + decoratorSelector + "-angled"
+              decorator: "panel-box-" + decoratorSelector + "-angled",
+              backgroundColor: "app-background"
             };
           }
         },
@@ -346,6 +351,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
 
             return {
               textColor: states.disabled ? "text-disabled" : states.checked ? undefined : "gray",
+              backgroundColor: states.checked ? "app-background" : undefined,
               padding: padding,
               font: states.disabled ? undefined : states.checked ? "bold" : undefined
             };
@@ -361,11 +367,29 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           }
         },
 
+        "window": {
+          base: true,
+          style: function (states) {
+            return {
+              backgroundColor: "app-background"
+            };
+          }
+        },
+
         "window/captionbar": {
           base: true,
           style: function (states) {
             return {
               backgroundColor: states.active ? "window-caption-background" : "background-disabled"
+            };
+          }
+        },
+
+        "list" : {
+          base: true,
+          style: function (states) {
+            return {
+              backgroundColor: "app-background"
             };
           }
         }
