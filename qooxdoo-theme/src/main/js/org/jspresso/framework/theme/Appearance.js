@@ -119,7 +119,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
             return {
               margin: [0, 2, 2, 2],
               padding: 2,
-              decorator: "accordion-box"
+              decorator: "accordion-box",
+              backgroundColor: "white"
             }
           }
         },
@@ -293,7 +294,9 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
               marginBottom: marginBottom,
               marginTop: marginTop,
               marginLeft: marginLeft,
-              marginRight: marginRight
+              marginRight: marginRight,
+              backgroundColor: "white",
+              decorator: "panel-box-bottom-angled"
             };
           }
         },
