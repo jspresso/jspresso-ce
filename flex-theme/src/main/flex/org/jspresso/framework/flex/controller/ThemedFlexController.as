@@ -45,7 +45,7 @@ import org.jspresso.framework.view.flex.DefaultFlexViewFactory;
 
 public class ThemedFlexController extends DefaultFlexController {
 
-  [Embed(source="../../../../../../resources/images/Logo.png", mimeType="image/png")]
+  [Embed(source="../../../../../../resources/images/logo.png", mimeType="image/png")]
   private static const _logo:Class;
 
   public function ThemedFlexController(remoteController:RemoteObject, userLanguage:String) {
