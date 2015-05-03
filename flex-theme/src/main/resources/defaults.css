@@ -49,8 +49,19 @@ mx|Button.top {
   fontWeight:        bold;
   paddingLeft:       0;
   paddingRight:      0;
-  skin:              ClassReference("mx.skins.ProgrammaticSkin");
+  skin:              ClassReference("org.jspresso.framework.theme.buttons.TopButtonSkin");
   textRollOverColor: #FFFFFF;
+}
+
+mx|PopUpButton.top {
+  color:             #FFFFFF;
+  fontSize:          12px;
+  fontWeight:        bold;
+  paddingLeft:       0;
+  paddingRight:      0;
+  skin:              ClassReference("org.jspresso.framework.theme.buttons.TopPopUpButtonSkin");
+  textRollOverColor: #FFFFFF;
+  iconColor:         #FFFFFF;
 }
 
 .applicationName {
