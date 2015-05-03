@@ -63,7 +63,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           include: "toolbar",
           style: function (states) {
             return {
-              paddingBottom: 20,
+              paddingBottom: 50,
               backgroundColor: undefined,
               decorator: "header-box"
             };
@@ -75,7 +75,16 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           include: "splitpane",
           style: function (states) {
             return {
-              backgroundColor: "app-background"
+              backgroundColor: "app-background",
+              decorator: "transition-box"
+            };
+          }
+        },
+
+        "application-accordion": {
+          style: function (states) {
+            return {
+              decorator: "transition-box"
             };
           }
         },

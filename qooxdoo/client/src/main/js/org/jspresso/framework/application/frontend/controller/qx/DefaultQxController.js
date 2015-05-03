@@ -197,7 +197,25 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       //applicationFrame.add(menuBar);
       var toolBar = new qx.ui.toolbar.ToolBar();
       toolBar.setAppearance("application-bar");
+      toolBar.addListener("tap", function (e) {
+        var paddingBottomToRestore = toolBar.getUserData("paddingBottomToRestore");
+        if (paddingBottomToRestore) {
+          toolBar.setUserData("paddingBottomToRestore", 0);
+          toolBar.setPaddingBottom(paddingBottomToRestore);
+        } else {
+          toolBar.setUserData("paddingBottomToRestore", toolBar.getPaddingBottom());
+          toolBar.setPaddingBottom(0);
+        }
+      });
       this._getViewFactory().installActionLists(toolBar, navigationActions);
+      if (this._getName()) {
+        var appNameLabel = new qx.ui.basic.Label(this._getName());
+        appNameLabel.setFont(qx.theme.manager.Font.getInstance().resolve("header"));
+        appNameLabel.setTextColor(qx.theme.manager.Color.getInstance().resolve("header-text"));
+        appNameLabel.setAlignY("middle");
+        toolBar.add(appNameLabel);
+      }
+      toolBar.addSpacer();
       if (actions) {
         for (var i = 0; i < actions.length; i++) {
           var splitButton = this._getViewFactory().createSplitButton(actions[i]);
@@ -207,15 +225,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
             toolBar.add(part);
           }
         }
-      }
-      //this._getViewFactory().installActionLists(toolBar, actions);
-      toolBar.addSpacer();
-      if (this._getName()) {
-        var appNameLabel = new qx.ui.basic.Label(this._getName());
-        appNameLabel.setFont(qx.theme.manager.Font.getInstance().resolve("header"));
-        appNameLabel.setTextColor(qx.theme.manager.Color.getInstance().resolve("header-text"));
-        appNameLabel.setAlignY("middle");
-        toolBar.add(appNameLabel);
       }
       toolBar.addSpacer();
       toolBar.add(this._getStatusBar());

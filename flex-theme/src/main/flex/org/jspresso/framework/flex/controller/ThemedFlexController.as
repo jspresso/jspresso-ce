@@ -101,12 +101,6 @@ public class ThemedFlexController extends DefaultFlexController {
     appNameNextPrevHBox.percentHeight = 100.0;
     appNameNextPrevHBox.styleName = "appNameNextPrevHBox";
 
-    var appName:Label = new Label();
-    appNameNextPrevHBox.addChild(appName);
-    appName.styleName = "applicationName";
-    appName.filters = [ThemeFilterUtils.onePixelDarkShadow()];
-    appName.text = name;
-
     var nextPreviousButtonBar:ButtonBar = new ButtonBar();
     appNameNextPrevHBox.addChild(nextPreviousButtonBar);
     nextPreviousButtonBar.styleName = "nextPreviousButtonBar";
@@ -125,6 +119,12 @@ public class ThemedFlexController extends DefaultFlexController {
     nextPreviousButtonBar.addEventListener(ItemClickEvent.ITEM_CLICK, function (event:ItemClickEvent):void {
       execute(event.item["action"] as RAction);
     });
+
+    var appName:Label = new Label();
+    appNameNextPrevHBox.addChild(appName);
+    appName.styleName = "applicationName";
+    appName.filters = [ThemeFilterUtils.onePixelDarkShadow()];
+    appName.text = name;
 
     var centeredHBox:HBox = new HBox();
     header.addChild(centeredHBox);

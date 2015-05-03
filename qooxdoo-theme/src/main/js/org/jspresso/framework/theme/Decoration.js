@@ -91,7 +91,8 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
             radius: 2,
             width: 1,
             inset: true,
-            color: "border-main"
+            color: "border-main",
+            transition: "all 300ms ease-in"
           }
         },
 
@@ -99,6 +100,12 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
           style: {
             gradientStart: ["header", 0],
             gradientEnd: ["app-background", 100],
+            transition: "all 300ms ease-in"
+          }
+        },
+
+        "transition-box": {
+          style: {
             transition: "all 300ms ease-in"
           }
         },
