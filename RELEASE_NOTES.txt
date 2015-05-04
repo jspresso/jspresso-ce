@@ -1,5 +1,33 @@
 4.1
 ===
+- We have created new Qooxdoo themes in Jspresso CE and EE. If you want to benefit from the new themes, please update
+  your application startup/qooxdoo/client/src/main/py/config.json :
+  for Jspresso EE :
+    replace :
+      {
+        "path": "${TARGET}/jspresso-ext-qooxdoo-zip/py/library.json",
+        "as": "jspresso-ext-qooxdoo"
+      }
+    by :
+      {
+        "path": "${TARGET}/jspresso-ext-qooxdoo-zip/py/library.json",
+        "as": "jspresso-ext-qooxdoo"
+      }
+      ,
+      {
+        "path": "${TARGET}/jspresso-qooxdoo-theme-zip/py/library.json",
+        "as": "jspresso-qooxdoo-theme"
+      }
+
+    replace :
+      "extend" : ["jspresso-ext-qooxdoo::libraries"],
+    by :
+      "extend" : [
+        "jspresso-ext-qooxdoo::libraries",
+        "jspresso-ext-qooxdoo-theme::libraries"
+      ],
+
+
 - We have reworked the Flex themes in Jspresso CE and EE. If you want to benefit from the new themes, please update
   your application startup/flex/client/src/main/flex/FlexApplicationStartup.mxml the following way :
 
@@ -13,7 +41,7 @@
   by :
     flexController = new ThemedFlexController(remoteController, new Locale(resourceManager.localeChain[0]).language);
 
-  For CE only, you also have to rework the startup/flex/client/pom.xml. Replace :
+  For CE, you also have to rework the startup/flex/client/pom.xml. Replace :
       <dependency>
         <groupId>org.apache.flex.framework</groupId>
         <artifactId>spark</artifactId>
@@ -22,12 +50,31 @@
       </dependency>
   by :
       <dependency>
+        <groupId>org.apache.flex.framework</groupId>
+        <artifactId>halo</artifactId>
+        <type>swc</type>
+        <scope>theme</scope>
+      </dependency>
+      <dependency>
         <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-flex-theme</artifactId>
         <type>swc</type>
         <scope>theme</scope>
       </dependency>
 
+  For EE, you also have to rework the startup/flex/client/pom.xml. Add :
+      <dependency>
+        <groupId>org.apache.flex.framework.themes</groupId>
+        <artifactId>halo</artifactId>
+        <type>swc</type>
+        <scope>theme</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.jspresso.framework</groupId>
+        <artifactId>jspresso-flex-theme</artifactId>
+        <type>swc</type>
+        <scope>theme</scope>
+      </dependency>
 
 
 - Due to migration to Qooxdoo 4.1, you should change startup/qooxdoo/client/src/main/py/config.json the following way :
@@ -185,10 +232,10 @@ org.jspresso.framework.ext (sub)package(s)
     </localesCompiled>
 
 - In startup/flex/client/pom.xml, remove all <localesCompiled> nested elements except <locale>en_US</locale>
-    
+
 - In your startup/flex/client/pom.xml files, delete :
     <mergeResourceBundle>true</mergeResourceBundle>
-  
+
 - All references to stylesheets, if any, sould be made relative to the mxml file. For example, change :
     <mx:Style source="/org/jspresso/hrsample/theme.css" />
   to
@@ -249,7 +296,7 @@ org.jspresso.framework.ext (sub)package(s)
   getSelectedModel(context) for instance. The return type is now parameterized.
 
 - New locales : IT, CS, SK, RU, BG, TR
-In order to use the new translation locales in existing projects : 
+In order to use the new translation locales in existing projects :
 
 Edit startup/qooxdoo/client/src/main/py/config.json and change :
   "LOCALES"      : ["en","fr",...],
@@ -262,7 +309,7 @@ Edit startup/flex/client/pom.xml and change :
             <locale>fr_FR</locale>
             ...
           </locales>
-  to  
+  to
           <locales>
             <locale>en_US</locale>
             <locale>fr_FR</locale>
@@ -296,7 +343,7 @@ Create the it_IT, cs_CZ, sk_SK, ru_RU, bg_BG, tr_TR directories in startup/flex/
   generator so that they can be finely controlled by M2E (Maven Eclipe integration). Existing projects should migrate to
   these new maven plugins by changing the following in core/pom.xml (example taken from HRSample, please adapt to your
   project names) :
-  
+
   * delete * :
   ------------
     <execution>
@@ -339,7 +386,7 @@ Create the it_IT, cs_CZ, sk_SK, ru_RU, bg_BG, tr_TR directories in startup/flex/
         </execution>
       </executions>
     </plugin>
-    
+
   * delete * :
   ------------
     <plugin>
@@ -387,7 +434,7 @@ Create the it_IT, cs_CZ, sk_SK, ru_RU, bg_BG, tr_TR directories in startup/flex/
         </execution>
       </executions>
     </plugin>
-  
+
   * add * :
   ---------
     <plugin>
@@ -411,17 +458,17 @@ Create the it_IT, cs_CZ, sk_SK, ru_RU, bg_BG, tr_TR directories in startup/flex/
         </execution>
       </executions>
     </plugin>
-  
+
   * delete * :
   ------------
     <source>${project.build.directory}/generated-sources/entitygenerator</source> from the build-helper plugin configuration
-    
+
   * delete * :
   ------------
     <resources>
     ...
-    </resources>  
-  
+    </resources>
+
 - Ensure that antrun plugin and ant versions are at least the following. Otherwise, add the properties below to your
   root pom.xml :
     <antrun-plugin.version>1.7</antrun-plugin.version>
@@ -433,7 +480,7 @@ Create the it_IT, cs_CZ, sk_SK, ru_RU, bg_BG, tr_TR directories in startup/flex/
   At the end of the antrun tasks, add :
     <delete dir="${project.build.directory}/antrun" />
   Replace each <tasks>...</tasks> by <target>...</target>
- 
+
 - We have leveraged Spring session synchronization instead of Hibernate's one. This is now much more accurate and flexible
   and we don't need to keep track anymore of the underlying transaction. So the API has been reverted for all UOW methods
   that don't take any parameter anymore. You can safely get rid of them in your use.
@@ -452,7 +499,7 @@ Create the it_IT, cs_CZ, sk_SK, ru_RU, bg_BG, tr_TR directories in startup/flex/
 ======
 - Starting from Jspresso 3.5.15, there is no need to augment the service delegates implementation signature with the target
   component/entity as first parameter. Jspresso will inject it in the implementation instance in a thread-safe manner so that
-  it is now accessible using the getComponent() method, exactly like an extension. All you have to do is inherit the abstract class 
+  it is now accessible using the getComponent() method, exactly like an extension. All you have to do is inherit the abstract class
   org.jspresso.framework.model.component.service.AbstractComponentServiceDelegate. This way, service delegates implementation classes
   can implement the service interface and everything is cleaner regarding IDE suppport as well as compile-time checks. Note that the old
   legacy service delegates are still supported seamlessly.
@@ -472,10 +519,10 @@ Create the it_IT, cs_CZ, sk_SK, ru_RU, bg_BG, tr_TR directories in startup/flex/
 - AbstractTestDataPersister now implements with a final method createTestData(). This is because it has to perform some
   mandatory operations around the actual creation of data. The method to override is now called createAndPersistTestData().
   You have to rename the existing createTestData method to createAndPersistTestData.
-  
+
 - BackendControllerHolder.setCurrentBackendController() has been splitted in two :
    - setSessionBackendController : that should be used by the frontend controller to set the session-wide backend controller
-   - setThreadBackendController : that should be used by (sub)threads in order to override the session-wide backend controller. 
+   - setThreadBackendController : that should be used by (sub)threads in order to override the session-wide backend controller.
 
 - A new sanity check has been introduced in order to check that an action chain does not modify its internal state during its execution.
   Doing so would break the action chain thread-safety and thus produce very undesirable effects in multi-user environments. As a reminder
@@ -492,7 +539,7 @@ Create the it_IT, cs_CZ, sk_SK, ru_RU, bg_BG, tr_TR directories in startup/flex/
     <bean id="addAnyToMasterFrontAction" parent="addToMasterFrontAction">
       <property name="wrappedAction" ref="addAnyToMasterBackAction"/>
     </bean>
-    
+
     <bean id="checkAllModulesDirtyStateFrontAction" class="org.jspresso.framework.application.backend.action.module.CheckAllModulesDirtyStateAction" />
   changed to :
     <bean id="checkAllModulesDirtyStateBackAction" class="org.jspresso.framework.application.backend.action.module.CheckAllModulesDirtyStateAction" />
@@ -507,7 +554,7 @@ Create the it_IT, cs_CZ, sk_SK, ru_RU, bg_BG, tr_TR directories in startup/flex/
       <property name="wrappedAction" ref="checkModuleDirtyStateBackAction" />
     </bean>
 
-  
+
 - The instance used as session entity registry by the backend controller is now directly created by the controller instead
   of being injected by the DI container. The setter has been removed. In the (rather unexpected) eventuality you have overriden the
   "entityRegistry" property on a specific backend controller definition, you should get rid of it.
@@ -517,30 +564,30 @@ Create the it_IT, cs_CZ, sk_SK, ru_RU, bg_BG, tr_TR directories in startup/flex/
 
 - getNext/WrappedAction have been made public in order to allow exploring the action chain programmatically.
   If you've overridden those methods in subclasses, please align visibility.
-  
+
 - controller onModuleEnter action executes now before the module entry action. This makes the order
   of actions executions more coherent, i.e. :
     controller.onModuleEnter
     module.entry
     module.exit
     controller.onModuleExit
-  
+
 - in webapp/flex/index.html, replace :
-  
+
   onLoad="window.document['hrsample-startup-flex-client'].focus()"
-  
+
   by
-  
+
   onLoad="focusFlex()"
 
 - in webapp/flex/index.html, replace the whole section (replace ${application} by your application name):
-  
+
   <script langugage='javascript' type="text/javascript">
     function getRootURL()
     {
         return location.href.substring(0,location.href.indexOf("/flex")); ;
     }
-    
+
     function stop()
     {
         // Here you'll need to provide the id of your Flex swf
@@ -548,14 +595,14 @@ Create the it_IT, cs_CZ, sk_SK, ru_RU, bg_BG, tr_TR directories in startup/flex/
         //alert("Disconnected!");
     }
   </script>
-  
+
   by
-  
+
   <script langugage='javascript' type="text/javascript">
     function getRootURL() {
       return location.href.substring(0,location.href.indexOf("/flex"));
     }
-  
+
     function stop() {
       if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
         var xmlhttp = new XMLHttpRequest();
@@ -567,7 +614,7 @@ Create the it_IT, cs_CZ, sk_SK, ru_RU, bg_BG, tr_TR directories in startup/flex/
       };
       xmlhttp.send();
     }
-    
+
     function focusFlex() {
       var flexApp = document.getElementById("${application}-startup-flex-client");
       if(flexApp) {
@@ -628,14 +675,14 @@ Create the it_IT, cs_CZ, sk_SK, ru_RU, bg_BG, tr_TR directories in startup/flex/
 - In order to garantee that async action always execute in a brand new context (e.g. using a slave backend controller),
   the backend controller is always retrieved from the BackendControllerHolder, i.e. the Frontend controller does not hold any
   direct reference to it anymore.
- 
+
 - A subclass of ResourceProviderServlet has been created in order to take care of resources cleaning after
   the download of an active resource in order to avoid JDBC connection leaks. The original ResourceProviderServlet
   has been made abstract to force the migration. Please replace in your existing web.xml :
     org.jspresso.framework.util.resources.server.ResourceProviderServlet
   by
     org.jspresso.framework.application.backend.resources.server.ControllerAwareResourceProviderServlet
-  
+
 - The API has been changed to include the Icon class that is a wrapper around an iconImageUrl and a dimension  properties.
   This was necessary to fulfill evolution #628. Setters for dependency injection remain unchanged but the getIconImageUrl() getters
   have been removed in favor of a getIcon() getter. The view factory will respect as much as possible the overriden dimension
@@ -683,7 +730,7 @@ Create the it_IT, cs_CZ, sk_SK, ru_RU, bg_BG, tr_TR directories in startup/flex/
   AddBeanAsSubModuleFrontAction instances.
 
 - New locale : DE
-In order to use the new translation locales in existing projects : 
+In order to use the new translation locales in existing projects :
 
 Edit startup/qooxdoo/client/src/main/py/config.json and change :
   "LOCALES"      : ["en","fr","es","pt"],
@@ -697,7 +744,7 @@ Edit startup/flex/client/pom.xml and change :
             <locale>es_ES</locale>
             <locale>pt_BR</locale>
           </locales>
-  to  
+  to
           <locales>
             <locale>en_US</locale>
             <locale>fr_FR</locale>
@@ -712,7 +759,7 @@ Create the de_DE directories in startup/flex/client/src/main/locales.
 A straightforward API alignement will be needed when upgrading.
 
 - All ControllerAware artifacts are now Spring singletons which will ease a lot 3rd party products integration.
-see http://mantis.jspresso.org/view.php?id=533 
+see http://mantis.jspresso.org/view.php?id=533
 
 - To prepare for Hibernate 4 migration, the HibernateTemplate usage is now deprectated. From now on, you should use
 the equivalent getHibernateSession(...) that leverages the Hibernate getCurrentSession() method. As soon as Jspresso migrates
@@ -725,20 +772,20 @@ to   <prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvi
 - Libraries version update :
   Spring: 3.1.0-RELEASE
   Hibernate: 3.6.9.Final
-  
+
 - In order to give the opportunity to ignore missing translation keys, we have added 2 methods to the ITranslationProvider
   interface, containing a default value :
 
   String getTranslation(String key, String defaultMessage, Locale locale);
   String getTranslation(String key, Object[] args, String defaultMessage, Locale locale);
-  
+
   The default message is returned when no translation can be found for the key.
-  
-  
+
+
 - Whenever you want to use the new direct access feature described in this feature request
   http://mantis.jspresso.org/view.php?id=524
   you should add the following filter definition in your web.xml descriptor :
-  
+
     <!-- Request params filter section -->
     <filter>
       <filter-name>RequestParamsHttpFilter</filter-name>
@@ -761,7 +808,7 @@ to   <prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvi
   onUnload="stop()"
   by
   onBeforeUnload="stop()"
-  
+
 - Filter views have been reworked in order to improve the aspect of comparable properties sub-forms (operator/min/max values).
 For the min and max value fields to stick better to the operator field, the max field value has been assigned a with of 2. This has an
 impact on overloaded query views since default property width is now 4 instead of 3. Existing forms used as filter view should take care
@@ -780,19 +827,19 @@ For instance, this allows to introduce multi-selection on result view when the m
   <groupId>hsqldb</groupId>
     to
   <groupId>org.hsqldb</groupId>
-  
+
 - Due to the introduction of server-side client translation, the following change must be applied on the
   existing projects that use the Qooxdoo frontend :
-  
+
   Edit the source file QooxdooApplicationStartup.java and replace
 
   public List<RemoteCommand> startQx(String startupLanguage, int timezoneOffset)
       throws RemoteException {
     return super.start(startupLanguage, timezoneOffset);
   }
-  
+
   by
-  
+
   public List<RemoteCommand> startQx(String startupLanguage,
       String[] clientKeysToTranslate, int timeZoneOffset)
       throws RemoteException {
@@ -801,16 +848,16 @@ For instance, this allows to introduce multi-selection on result view when the m
 
 3.5.10
 ======
-- Setting an action on a property view has an improved behaviour; There are 2 cases : 
+- Setting an action on a property view has an improved behaviour; There are 2 cases :
    - If the property is read-only, then assigning an action turns the property into a clickable hyperlink (original behaviour)
    - If the property is read-write, the registered action will be trigerred when the user changes the value of the field.
      Note thet in that case, the action is executed after the model has been updated. However the old property value can
-     be retrieved from the context action param. 
+     be retrieved from the context action param.
 
 3.5.9
 =====
 - New locales : ES and PT
-In order to use the new translation locales in existing projects : 
+In order to use the new translation locales in existing projects :
 
 Edit startup/qooxdoo/client/src/main/py/config.json and change :
   "LOCALES"      : ["en","fr"],
@@ -822,7 +869,7 @@ Edit startup/flex/client/pom.xml and change :
             <locale>en_US</locale>
             <locale>fr_FR</locale>
           </locales>
-  to  
+  to
           <locales>
             <locale>en_US</locale>
             <locale>fr_FR</locale>
@@ -887,7 +934,7 @@ Edit startup/qooxdoo/client/src/main/py/config.json and replace the following se
     {
       "compile-options" :
       {
-        "uris" : 
+        "uris" :
         {
           "add-nocache-param" : false
         }
@@ -897,7 +944,7 @@ Edit startup/qooxdoo/client/src/main/py/config.json and replace the following se
     {
       "compile-options" :
       {
-        "uris" : 
+        "uris" :
         {
           "add-nocache-param" : false
         }
@@ -920,7 +967,7 @@ by
         {
           "file" : "${TARGET}/web-debug/script/${APPLICATION}.js"
         },
-        "uris" : 
+        "uris" :
         {
           "add-nocache-param" : false
         }
@@ -940,7 +987,7 @@ by
         {
           "file" : "${TARGET}/web-debug/script/${APPLICATION}.js"
         },
-        "uris" : 
+        "uris" :
         {
           "add-nocache-param" : false
         }
@@ -1003,12 +1050,12 @@ ${title} => Wathever you want
     bsf => 2.4.0
     stax-api => 1.0.1
 
-- Due to the migration to BlazeDS 4, you must comment the following section 
+- Due to the migration to BlazeDS 4, you must comment the following section
 in startup/flex/config/src/main/resources/services-config.xml :
 
         <login-command class="flex.messaging.security.TomcatLoginCommand" server="Tomcat"/>
 
-- Due to the migration to BlazeDS 4, you must delete the following section 
+- Due to the migration to BlazeDS 4, you must delete the following section
 in webapp/pom.xml :
     <dependency>
       <groupId>com.adobe.blazeds</groupId>
@@ -1024,7 +1071,7 @@ webapp pom.xml as "provided". So add the following dependency section in webapp/
       <artifactId>servlet-api</artifactId>
       <scope>provided</scope>
     </dependency>
- 
+
 
 3.5.3
 =====
@@ -1040,7 +1087,7 @@ by
       throws RemoteException {
     return super.start(startupLanguage, timezoneOffset);
   }
-  
+
 - Wings and ULC frontends have been removed. There are almost nobody using them now and it
 is useless maintaining them. It is strongly recommended to re-generate existing project using
 the up-to-date archetype. If you want to manually update your projects poms, here are the steps
@@ -1111,7 +1158,7 @@ must perform a general search and replace in all pom.xml :
 3.5.2
 =====
 - Controllers now implement themselves the ITranslationProvider interface. Thus, the
-getTranslationProvider() method has been deprecated. the migrationn is simply to remove 
+getTranslationProvider() method has been deprecated. the migrationn is simply to remove
 these method calls and use the controller as translation providers when needed.
 
 - A new onClone(IEntity) lifecycle method has been added to the entity lifecycle.
@@ -1141,7 +1188,7 @@ eclipse projects, i.e. in .classpath, add :
         value="" />
     </attributes>
   </classpathentry>
-  
+
 - The file save/open callback API has been improved by adding the file name in the method
 signature.
 
@@ -1150,7 +1197,7 @@ given a Parent-Child 1-N relationship named children, the previously generated c
 CHILDREN_SEQ and it is now PARENT_CHILDREN_SEQ. Schemas must be updated accordingly.
 
 
-  
+
 3.5.0
 =====
 - nesting view descriptors (BasicNestingViewDescriptor) have been removed.
@@ -1177,7 +1224,7 @@ be fixed in the next 1.9 release. Until then, the workaround is to disable jdbc 
 by completing the context.xml files of existing projects, adding in the hibernateSessionFactory
 definition :
    <prop key="hibernate.jdbc.batch_size">0</prop>
-  
+
 - To benefit from the new translation mechanism for nested property names, you should change view.xml
 in the existing Jspresso applications :
 
@@ -1194,10 +1241,10 @@ updated definition :
 - Project created with the updated archetype require Maven 2.1+ to compile due tothe use
 of the new "prepare-package" phase.
 
-- In order to be able to add item selection listeners to view descriptors, we had to refactor 
+- In order to be able to add item selection listeners to view descriptors, we had to refactor
 org.jspresso.framework.binding.IConnectorSelectionListener and its peer classes to
 org.jspresso.framework.util.event.IItemSelectionListener. This allows to avoid a circular
-dependency between the view module and the binding module. The same applies for the 
+dependency between the view module and the binding module. The same applies for the
 org.jspresso.framework.binding.IConnectorValueChangeListener and its peer classes that have been
 refactored to org.jspresso.framework.util.event.IValueChangeListener.
 
@@ -1289,11 +1336,11 @@ For instance instead of referring to static beans definitions like :
     ref="HORIZONTAL" />
 
 You will now use direct enum injection :
-  
+
   <property
     name="orientation"
     value="HORIZONTAL" />
-    
+
 see http://sourceforge.net/tracker2/index.php?func=detail&aid=2319923&group_id=231671&atid=1083851
 
 
@@ -1325,7 +1372,7 @@ with :
       <value>org.jspresso.hrsample.model.service.TraceableLifecycleInterceptor</value>
     </list>
   </property>
-  
+
 Same kind of modification for property processors :
   <property
     name="integrityProcessors">
@@ -1364,7 +1411,7 @@ becomes :
         value="org.jspresso.hrsample.model.service.EmployeeServiceDelegate"/>
     </map>
   </property>
-  
+
 
 
 
