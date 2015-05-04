@@ -212,6 +212,7 @@ public abstract class AbstractBackendController extends AbstractController imple
         registerForDeletion(uowEntity);
       }
     }
+    clearPendingOperations();
   }
 
   /**
