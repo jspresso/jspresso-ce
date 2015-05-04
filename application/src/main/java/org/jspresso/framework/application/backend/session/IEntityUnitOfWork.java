@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.backend.session;
 
+import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
@@ -31,18 +32,26 @@ import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
  * track of entity creations, updates, deletions and which is able to either
  * commit the changes or rollback them upon work completion. A unit of work is
  * reusable.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IEntityUnitOfWork extends IEntityLifecycleHandler {
 
   /**
    * Registers an entity as being updated.
-   * 
+   *
    * @param entity
-   *          the entity to register.
+   *     the entity to register.
    */
   void addUpdatedEntity(IEntity entity);
+
+  /**
+   * Registers an entity as being deleted.
+   *
+   * @param entity
+   *     the entity to register.
+   */
+  void addDeletedEntity(IEntity entity);
 
   /**
    * Begins a new unit of work.
@@ -62,11 +71,27 @@ public interface IEntityUnitOfWork extends IEntityLifecycleHandler {
 
   /**
    * Clears the dirty state of the entity in this unit of work.
-   * 
+   *
    * @param flushedEntity
    *          the entity that was flushed and cleaned.
    */
   void clearDirtyState(IEntity flushedEntity);
+
+  /**
+   * Adds a new dirt interceptor that will be notified every time an entity is made dirty.
+   *
+   * @param interceptor
+   *     the interceptor.
+   */
+  void addDirtInterceptor(PropertyChangeListener interceptor);
+
+  /**
+   * Removes a dirt interceptor that was previously added.
+   *
+   * @param interceptor
+   *     the interceptor.
+   */
+  void removeDirtInterceptor(PropertyChangeListener interceptor);
 
   /**
    * Commits the unit of work. It should clear it state and be ready for another
@@ -76,14 +101,14 @@ public interface IEntityUnitOfWork extends IEntityLifecycleHandler {
 
   /**
    * Gets the entitiesRegisteredForDeletion.
-   * 
+   *
    * @return the entitiesRegisteredForDeletion.
    */
   Collection<IEntity> getEntitiesRegisteredForDeletion();
 
   /**
    * Gets the entitiesRegisteredForUpdate.
-   * 
+   *
    * @return the entitiesRegisteredForUpdate.
    */
   Collection<IEntity> getEntitiesRegisteredForUpdate();
@@ -91,21 +116,28 @@ public interface IEntityUnitOfWork extends IEntityLifecycleHandler {
   /**
    * Gets a map of entities already part of the unit of work. Entities are first
    * keyed by their contract, then their id.
-   * 
+   *
    * @return a map of entities already part of the unit of work
    */
   Map<Class<? extends IEntity>, Map<Serializable, IEntity>> getRegisteredEntities();
 
   /**
    * Gets the entitiesToMergeBack.
-   * 
+   *
    * @return the entitiesToMergeBack.
    */
   Collection<IEntity> getUpdatedEntities();
 
   /**
+   * Gets the entitiesToMergeBack.
+   *
+   * @return the entitiesToMergeBack.
+   */
+  Collection<IEntity> getDeletedEntities();
+
+  /**
    * Tests whether this unit of work is currently in use.
-   * 
+   *
    * @return true if the unit of work is active.
    */
   boolean isActive();
@@ -113,7 +145,7 @@ public interface IEntityUnitOfWork extends IEntityLifecycleHandler {
   /**
    * Tests whether the passed entity already updated in the current unit of work and waits
    * for commit.
-   * 
+   *
    * @param entity
    *          the entity to test.
    * @return true if the passed entity already updated in the current unit of
@@ -123,7 +155,7 @@ public interface IEntityUnitOfWork extends IEntityLifecycleHandler {
 
   /**
    * Registers an entity in the unit of work.
-   * 
+   *
    * @param entity
    *          the entity to register.
    * @param initialChangedProperties
@@ -146,7 +178,7 @@ public interface IEntityUnitOfWork extends IEntityLifecycleHandler {
 
   /**
    * Gets a previously registered entity in the unit of work.
-   * 
+   *
    * @param entityContract
    *          the entity contract.
    * @param entityId

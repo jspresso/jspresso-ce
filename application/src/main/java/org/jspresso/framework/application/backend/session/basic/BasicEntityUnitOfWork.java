@@ -18,9 +18,9 @@
  */
 package org.jspresso.framework.application.backend.session.basic;
 
+import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +32,6 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityRegistry;
 import org.jspresso.framework.model.entity.basic.BasicEntityRegistry;
 import org.jspresso.framework.util.bean.BeanPropertyChangeRecorder;
-import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 
 /**
  * An implementation helps an application session in managing unit of works. It
@@ -49,6 +48,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   private       Set<IEntity>               entitiesRegisteredForDeletion;
   private       List<IEntity>              entitiesRegisteredForUpdate;
   private       Set<IEntity>               updatedEntities;
+  private       Set<IEntity>               deletedEntities;
   private       BasicEntityUnitOfWork      parentUnitOfWork;
   private       BasicEntityUnitOfWork      nestedUnitOfWork;
   private       boolean                    suspended;
@@ -73,6 +73,21 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
         updatedEntities = new LinkedHashSet<>();
       }
       updatedEntities.add(entity);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void addDeletedEntity(IEntity entity) {
+    if (nestedUnitOfWork != null) {
+      nestedUnitOfWork.addDeletedEntity(entity);
+    } else {
+      if (deletedEntities == null) {
+        deletedEntities = new LinkedHashSet<>();
+      }
+      deletedEntities.add(entity);
     }
   }
 
@@ -204,6 +219,17 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    * {@inheritDoc}
    */
   @Override
+  public Set<IEntity> getDeletedEntities() {
+    if (nestedUnitOfWork != null) {
+      return nestedUnitOfWork.getDeletedEntities();
+    }
+    return deletedEntities;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public boolean isActive() {
     if (nestedUnitOfWork != null && nestedUnitOfWork.isActive()) {
       return true;
@@ -317,6 +343,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
     }
     dirtRecorder = null;
     updatedEntities = null;
+    deletedEntities = null;
     entityRegistry.clear();
   }
 
@@ -362,6 +389,22 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
       return nestedUnitOfWork.isDirtyTrackingEnabled();
     }
     return dirtRecorder.isEnabled();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void addDirtInterceptor(PropertyChangeListener interceptor) {
+    dirtRecorder.addInterceptor(interceptor);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void removeDirtInterceptor(PropertyChangeListener interceptor) {
+    dirtRecorder.removeInterceptor(interceptor);
   }
 
   /**

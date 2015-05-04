@@ -94,7 +94,6 @@ import org.jspresso.framework.security.ISecurityContextBuilder;
 import org.jspresso.framework.security.SecurityHelper;
 import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
-import org.jspresso.framework.util.bean.BeanPropertyChangeRecorder;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.preferences.IPreferencesStore;
 
@@ -124,9 +123,12 @@ import org.jspresso.framework.util.preferences.IPreferencesStore;
 public abstract class AbstractBackendController extends AbstractController implements IBackendController {
 
   private static final Logger LOG = LoggerFactory.getLogger(AbstractBackendController.class);
+/*
   private final BeanPropertyChangeRecorder             dirtRecorder;
   private final IEntityRegistry                        entityRegistry;
+*/
   private final IEntityUnitOfWork                      unitOfWork;
+  private final IEntityUnitOfWork                      sessionUnitOfWork;
   private final LRUMap                                 moduleConnectors;
   private final ISecurityContextBuilder                securityContextBuilder;
   private final Map<Serializable, IEntity>             entitiesExcludedFromSessionSanityChecks;
@@ -157,12 +159,11 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   @SuppressWarnings("unchecked")
   protected AbstractBackendController() {
-    dirtRecorder = new BeanPropertyChangeRecorder();
     unitOfWork = createUnitOfWork();
-    // moduleConnectors = new HashMap<Module, IValueConnector>();
+    sessionUnitOfWork = createUnitOfWork();
+    sessionUnitOfWork.begin();
     moduleConnectors = new LRUMap(20);
     securityContextBuilder = new SecurityContextBuilder();
-    entityRegistry = createEntityRegistry("sessionEntityRegistry");
     entitiesExcludedFromSessionSanityChecks = new ReferenceMap(AbstractReferenceMap.WEAK, AbstractReferenceMap.WEAK);
     throwExceptionOnBadUsage = true;
     asyncExecutors = new LinkedHashSet<>();
@@ -195,8 +196,8 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   @Override
   public void performPendingOperations() {
-    Collection<IEntity> entitiesToUpdate = getEntitiesRegisteredForUpdate();
-    Collection<IEntity> entitiesToDelete = getEntitiesRegisteredForDeletion();
+    Collection<IEntity> entitiesToUpdate = sessionUnitOfWork.getEntitiesRegisteredForUpdate();
+    Collection<IEntity> entitiesToDelete = sessionUnitOfWork.getEntitiesRegisteredForDeletion();
     if (entitiesToUpdate != null) {
       List<IEntity> uowEntitiesToUpdate = cloneInUnitOfWork(new ArrayList<>(entitiesToUpdate));
       for (IEntity uowEntity : uowEntitiesToUpdate) {
@@ -253,7 +254,7 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   @Override
   public void clearPendingOperations() {
-    unitOfWork.clearPendingOperations();
+    sessionUnitOfWork.clearPendingOperations();
   }
 
   /**
@@ -317,16 +318,25 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   protected void doCommitUnitOfWork() {
     try {
-      Collection<IEntity> deletedEntities = unitOfWork.getEntitiesRegisteredForDeletion();
-      if (deletedEntities != null) {
-        for (IEntity deletedEntity : deletedEntities) {
-          recordAsSynchronized(deletedEntity);
+      Collection<IEntity> uowEntitiesRegisteredForDeletion = unitOfWork.getEntitiesRegisteredForDeletion();
+      if (uowEntitiesRegisteredForDeletion != null) {
+        // manually trigger the fact that deleted entities are synchronized since flush interceptor does not do it.
+        for (IEntity uowEntityRegisteredForDeletion : uowEntitiesRegisteredForDeletion) {
+          recordAsSynchronized(uowEntityRegisteredForDeletion);
         }
       }
+      Collection<IEntity> flushedEntities = new LinkedHashSet<>();
       Collection<IEntity> updatedEntities = unitOfWork.getUpdatedEntities();
-      mergeBackFlushedEntities(updatedEntities);
+      if (updatedEntities != null) {
+        flushedEntities.addAll(updatedEntities);
+      }
+      Collection<IEntity> deletedEntities = unitOfWork.getDeletedEntities();
+      if (deletedEntities != null) {
+        flushedEntities.addAll(deletedEntities);
+      }
+      mergeBackFlushedEntities(flushedEntities);
     } finally {
-      clearPendingOperations();
+      unitOfWork.clearPendingOperations();
       unitOfWork.commit();
     }
   }
@@ -338,8 +348,7 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   protected void mergeBackFlushedEntities(Collection<IEntity> updatedEntities) {
     if (updatedEntities != null) {
-      List<IEntity> mergedEntities = merge(new ArrayList<>(updatedEntities),
-          EMergeMode.MERGE_CLEAN_LAZY);
+      List<IEntity> mergedEntities = merge(new ArrayList<>(updatedEntities), EMergeMode.MERGE_CLEAN_LAZY);
       if (recordedMergedEntities != null) {
         recordedMergedEntities.addAll(mergedEntities);
       }
@@ -511,7 +520,7 @@ public abstract class AbstractBackendController extends AbstractController imple
     if (isUnitOfWorkActive()) {
       dirtyProperties = unitOfWork.getDirtyProperties(entity);
     } else {
-      dirtyProperties = dirtRecorder.getChangedProperties(entity);
+      dirtyProperties = sessionUnitOfWork.getDirtyProperties(entity);
     }
     if (dirtyProperties != null) {
       for (Iterator<Map.Entry<String, Object>> ite = dirtyProperties.entrySet().iterator(); ite.hasNext();) {
@@ -609,7 +618,7 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   @Override
   public IEntity getRegisteredEntity(Class<? extends IEntity> entityContract, Serializable entityId) {
-    return entityRegistry.get(entityContract, entityId);
+    return sessionUnitOfWork.getRegisteredEntity(entityContract, entityId);
   }
 
   /**
@@ -772,7 +781,11 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   @Override
   public boolean isEntityRegisteredForDeletion(IEntity entity) {
-    return unitOfWork.isEntityRegisteredForDeletion(entity);
+    if (isUnitOfWorkActive()) {
+      return unitOfWork.isEntityRegisteredForDeletion(entity);
+    } else {
+      return sessionUnitOfWork.isEntityRegisteredForDeletion(entity);
+    }
   }
 
   /**
@@ -780,7 +793,11 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   @Override
   public boolean isEntityRegisteredForUpdate(IEntity entity) {
-    return unitOfWork.isEntityRegisteredForUpdate(entity);
+    if (isUnitOfWorkActive()) {
+      return unitOfWork.isEntityRegisteredForUpdate(entity);
+    } else {
+      return sessionUnitOfWork.isEntityRegisteredForUpdate(entity);
+    }
   }
 
   /**
@@ -846,8 +863,10 @@ public abstract class AbstractBackendController extends AbstractController imple
                 + flushedEntity);
       }
       unitOfWork.clearDirtyState(flushedEntity);
-      if (!hasActuallyBeenFlushed.isEmpty() || isEntityRegisteredForDeletion(flushedEntity)) {
+      if (!hasActuallyBeenFlushed.isEmpty()) {
         unitOfWork.addUpdatedEntity(flushedEntity);
+      } else if (isEntityRegisteredForDeletion(flushedEntity)) {
+        unitOfWork.addDeletedEntity(flushedEntity);
       }
     }
   }
@@ -857,9 +876,6 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   @Override
   public void registerEntity(IEntity entity) {
-    if (!isUnitOfWorkActive()) {
-      entityRegistry.register(getComponentContract(entity), entity.getId(), entity);
-    }
     Map<String, Object> initialDirtyProperties = null;
     if (!entity.isPersistent()) {
       initialDirtyProperties = new HashMap<>();
@@ -875,7 +891,7 @@ public abstract class AbstractBackendController extends AbstractController imple
     if (isUnitOfWorkActive()) {
       unitOfWork.register(entity, initialDirtyProperties);
     } else {
-      dirtRecorder.register(entity, initialDirtyProperties);
+      sessionUnitOfWork.register(entity, initialDirtyProperties);
     }
   }
 
@@ -887,7 +903,11 @@ public abstract class AbstractBackendController extends AbstractController imple
     if (entity == null) {
       throw new IllegalArgumentException("Passed entity cannot be null");
     }
-    unitOfWork.registerForDeletion(entity);
+    if (isUnitOfWorkActive()) {
+      unitOfWork.registerForDeletion(entity);
+    } else {
+      sessionUnitOfWork.registerForDeletion(entity);
+    }
   }
 
   /**
@@ -898,7 +918,11 @@ public abstract class AbstractBackendController extends AbstractController imple
     if (entity == null) {
       throw new IllegalArgumentException("Passed entity cannot be null");
     }
-    unitOfWork.registerForUpdate(entity);
+    if (isUnitOfWorkActive()) {
+      unitOfWork.registerForUpdate(entity);
+    } else {
+      sessionUnitOfWork.registerForUpdate(entity);
+    }
   }
 
   /**
@@ -1087,9 +1111,9 @@ public abstract class AbstractBackendController extends AbstractController imple
     if (getUserPreferencesStore() != null) {
       getUserPreferencesStore().setStorePath(IPreferencesStore.GLOBAL_STORE);
     }
-    dirtRecorder.clear();
-    if (entityRegistry != null) {
-      entityRegistry.clear();
+    if (sessionUnitOfWork != null) {
+      sessionUnitOfWork.clear();
+      sessionUnitOfWork.begin();
     }
     if (entitiesExcludedFromSessionSanityChecks != null) {
       entitiesExcludedFromSessionSanityChecks.clear();
@@ -1133,33 +1157,6 @@ public abstract class AbstractBackendController extends AbstractController imple
       uowEntityCollection = collectionFactory.createComponentCollection(List.class);
     }
     return uowEntityCollection;
-  }
-
-  /**
-   * Gets the entity dirt recorder. To be used by subclasses.
-   *
-   * @return the entity dirt recorder.
-   */
-  protected BeanPropertyChangeRecorder getDirtRecorder() {
-    return dirtRecorder;
-  }
-
-  /**
-   * Gets the entities that are registered for deletion.
-   *
-   * @return the entities that are registered for deletion.
-   */
-  protected Collection<IEntity> getEntitiesRegisteredForDeletion() {
-    return unitOfWork.getEntitiesRegisteredForDeletion();
-  }
-
-  /**
-   * Gets the entities that are registered for update.
-   *
-   * @return the entities that are registered for update.
-   */
-  protected Collection<IEntity> getEntitiesRegisteredForUpdate() {
-    return unitOfWork.getEntitiesRegisteredForUpdate();
   }
 
   /**
@@ -1228,7 +1225,7 @@ public abstract class AbstractBackendController extends AbstractController imple
   }
 
   private void cleanDirtyProperties(IEntity entity) {
-    dirtRecorder.resetChangedProperties(entity, null);
+    sessionUnitOfWork.clearDirtyState(entity);
   }
 
   private IComponent cloneComponentInUnitOfWork(IComponent component, boolean allowOuterScopeUpdate,
@@ -1280,7 +1277,7 @@ public abstract class AbstractBackendController extends AbstractController imple
       }
       Map<String, Object> dirtyProperties;
       if (isInitialized(entity)) {
-        dirtyProperties = dirtRecorder.getChangedProperties(entity);
+        dirtyProperties = sessionUnitOfWork.getDirtyProperties(entity);
         if (dirtyProperties == null) {
           dirtyProperties = new HashMap<>();
         }
@@ -1465,8 +1462,7 @@ public abstract class AbstractBackendController extends AbstractController imple
           return mergeUninitializedEntity(entity);
         }
         registeredEntity = carbonEntityCloneFactory.cloneEntity(entity, entityFactory);
-        entityRegistry.register(entityContract, entity.getId(), registeredEntity);
-        dirtRecorder.register(registeredEntity, null);
+        sessionUnitOfWork.register(registeredEntity, null);
         newlyRegistered = true;
       } else if (mergeMode == EMergeMode.MERGE_KEEP || (
           (mergeMode == EMergeMode.MERGE_LAZY || mergeMode == EMergeMode.MERGE_CLEAN_LAZY) && !isInitialized(entity))) {
@@ -2495,7 +2491,7 @@ public abstract class AbstractBackendController extends AbstractController imple
     if (isUnitOfWorkActive()) {
       return unitOfWork.isDirtyTrackingEnabled();
     }
-    return dirtRecorder.isEnabled();
+    return sessionUnitOfWork.isDirtyTrackingEnabled();
   }
 
   /**
@@ -2503,9 +2499,10 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   @Override
   public void setDirtyTrackingEnabled(boolean enabled) {
-    dirtRecorder.setEnabled(enabled);
     if (isUnitOfWorkActive()) {
       unitOfWork.setDirtyTrackingEnabled(enabled);
+    } else {
+      sessionUnitOfWork.setDirtyTrackingEnabled(enabled);
     }
   }
 
@@ -2514,7 +2511,7 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   @Override
   public void addDirtInterceptor(PropertyChangeListener interceptor) {
-    getDirtRecorder().addInterceptor(interceptor);
+    sessionUnitOfWork.addDirtInterceptor(interceptor);
   }
 
   /**
@@ -2522,7 +2519,7 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   @Override
   public void removeDirtInterceptor(PropertyChangeListener interceptor) {
-    getDirtRecorder().removeInterceptor(interceptor);
+    sessionUnitOfWork.removeDirtInterceptor(interceptor);
   }
 
   /**
