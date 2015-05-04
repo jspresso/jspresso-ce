@@ -31,7 +31,6 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
 
         "button-box-focused": {
           include: "button-box",
-
           style: {
              color: "background-selected",
              shadowBlurRadius: 3,
@@ -42,17 +41,7 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
         },
 
         "button-box-pressed-focused": {
-          include: "button-box-pressed",
-
-          style: {
-            /*
-             color: "background-selected",
-             shadowBlurRadius: 3,
-             shadowColor: "background-selected",
-             shadowLength: 0,
-             transition: "all 200ms ease-out"
-             */
-          }
+          include: "button-box-pressed"
         },
 
         "checkbox-focused": {
@@ -91,35 +80,7 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
             radius: 2,
             width: 1,
             inset: true,
-            color: "border-main",
-            transition: "all 300ms ease-in"
-          }
-        },
-
-        "header-box": {
-          style: {
-            gradientStart: ["header", 0],
-            gradientEnd: ["app-background", 100],
-            transition: "all 300ms ease-in"
-          }
-        },
-
-        "transition-box": {
-          style: {
-            transition: "all 300ms ease-in"
-          }
-        },
-
-        "accordion-box": {
-          style: {
-            radius: 2,
-            width: 1,
-            inset: true,
-            color: "border-main",
-            shadowBlurRadius: 2,
-            shadowColor: "border-light",
-            shadowLength: 0,
-            transition: "all 300ms ease-in"
+            color: "border-main"
           }
         },
 
@@ -193,6 +154,35 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
           }
         },
 
+        "panel-box-top-only": {
+          include: "panel-box",
+          style: {
+            radius: 0,
+            width: [1, 0, 0, 0]
+          }
+        },
+
+        "panel-box-right-only": {
+          include: "panel-box-top-only",
+          style: {
+            width: [0, 1, 0, 0]
+          }
+        },
+
+        "panel-box-bottom-only": {
+          include: "panel-box-top-only",
+          style: {
+            width: [0, 0, 1, 0]
+          }
+        },
+
+        "panel-box-left-only": {
+          include: "panel-box-top-only",
+          style: {
+            width: [0, 0, 0, 1]
+          }
+        },
+
         "window": {
           style: {
             radius: 2,
@@ -212,6 +202,36 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
             width: [0, 0, 2, 0],
             color: "window-border-inner",
             backgroundColor: "window-caption-background"
+          }
+        },
+
+        "transition-box": {
+          style: {
+            transition: "all 300ms ease-in"
+          }
+        },
+
+        "header-box": {
+          include: "transition-box",
+          style: {
+            gradientStart: ["header", 0],
+            gradientEnd: ["app-background", 100]
+          }
+        },
+
+        "accordion-box": {
+          include: "transition-box",
+          style: {
+            width: [0, 1, 0, 0],
+            color: "border-main"
+          }
+        },
+
+        "accordion-section-box": {
+          include: "transition-box",
+          style: {
+            width: [1, 0],
+            color: "border-main"
           }
         }
       }

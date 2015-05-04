@@ -185,6 +185,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     /**
      *
      * @param applicationFrame {qx.ui.container.Composite}
+     * @param logo {qx.ui.basic.Image}
      * @param exitAction {org.jspresso.framework.gui.remote.RAction}
      * @param navigationActions {org.jspresso.framework.gui.remote.RActionList[]}
      * @param actions {org.jspresso.framework.gui.remote.RActionList[]}
@@ -192,7 +193,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @return {undefined}
      *
      */
-    _decorateApplicationFrame: function (applicationFrame, exitAction, navigationActions, actions, helpActions) {
+    _decorateApplicationFrame: function (applicationFrame, logo, exitAction, navigationActions, actions, helpActions) {
       //var menuBar = this._createApplicationMenuBar(workspaceActions, actions, helpActions);
       //applicationFrame.add(menuBar);
       var toolBar = new qx.ui.toolbar.ToolBar();
@@ -207,18 +208,25 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           toolBar.setPaddingBottom(0);
         }
       });
-      this._getViewFactory().installActionLists(toolBar, navigationActions);
+      toolBar.add(logo);
+      if (navigationActions) {
+        for (var i = 0; i < navigationActions.length; i++) {
+          for (var j = 0; j < navigationActions[i].getActions().length; j++) {
+            navigationActions[i].getActions()[j].setStyleName("navigation-button");
+          }
+        }
+        this._getViewFactory().installActionLists(toolBar, navigationActions);
+      }
       if (this._getName()) {
         var appNameLabel = new qx.ui.basic.Label(this._getName());
-        appNameLabel.setFont(qx.theme.manager.Font.getInstance().resolve("header"));
-        appNameLabel.setTextColor(qx.theme.manager.Color.getInstance().resolve("header-text"));
-        appNameLabel.setAlignY("middle");
+        appNameLabel.setAppearance("application-label")
         toolBar.add(appNameLabel);
       }
       toolBar.addSpacer();
       if (actions) {
         for (var i = 0; i < actions.length; i++) {
           var splitButton = this._getViewFactory().createSplitButton(actions[i]);
+          splitButton.setAppearance("top-splitbutton");
           if (splitButton) {
             var part = new qx.ui.toolbar.Part();
             part.add(splitButton);
@@ -226,18 +234,20 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           }
         }
       }
-      toolBar.addSpacer();
       toolBar.add(this._getStatusBar());
       //toolBar.addSpacer();
       if (helpActions) {
         for (var i = 0; i < helpActions.length; i++) {
           var splitButton = this._getViewFactory().createSplitButton(helpActions[i]);
+          splitButton.setAppearance("top-splitbutton");
           if (splitButton) {
             toolBar.add(splitButton);
           }
         }
       }
       //this._getViewFactory().installActionLists(toolBar, helpActions);
+      exitAction.setStyleName("exit-button");
+      exitAction.setName(null);
       toolBar.add(this._getViewFactory().createAction(exitAction));
       applicationFrame.add(toolBar);
     },
@@ -261,18 +271,20 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
 
       this.__statusBar = new qx.ui.basic.Label();
       this.__statusBar.setVisibility("excluded");
-      this._decorateApplicationFrame(applicationFrame, exitAction, navigationActions, actions, helpActions);
 
-      var workspaceAccordion = new qx.ui.container.Composite(new qx.ui.layout.VBox(5));
       var logo = new qx.ui.basic.Image("logo.png");
       logo.setAppearance("logo");
-      workspaceAccordion.add(logo, {flex: 1});
+      this._decorateApplicationFrame(applicationFrame, logo, exitAction, navigationActions, actions, helpActions);
+
+      var workspaceAccordion = new qx.ui.container.Composite(new qx.ui.layout.VBox());
+      workspaceAccordion.setAppearance("application-accordion");
       this.__workspaceAccordionGroup = new qx.ui.form.RadioGroup();
       this.__workspaceAccordionGroup.setAllowEmptySelection(false);
       for (var i = 0; i < workspaceActions.getActions().length; i++) {
         var workspacePanel = new org.jspresso.framework.view.qx.EnhancedCollapsiblePanel(
             workspaceActions.getActions()[i].getName());
         workspacePanel.setAppearance("accordion-section");
+        workspacePanel._getLayout().setSeparator("accordion-section-box");
         if (i == 0) {
           workspacePanel.setValue(true);
         } else {
@@ -290,7 +302,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       }
 
       this.__workspaceStack = new qx.ui.container.Stack();
-      this.__workspaceStack.setAppearance("workspace-panel");
+      this.__workspaceStack.setAppearance("application-panel");
 
       var splitContainer = new qx.ui.splitpane.Pane("horizontal");
       splitContainer.setAppearance("application-split");
@@ -305,7 +317,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       ]);
       workspaceStackWrapper.add(this.__workspaceStack);
       splitContainer.add(workspaceStackWrapper, 1);
-      logo.setAllowStretchX(true);
       logo.addListener("tap", function (e) {
         var widthToRestore = workspaceAccordion.getUserData("widthToRestore");
         if (widthToRestore) {

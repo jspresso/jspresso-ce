@@ -1416,7 +1416,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           decorator = new org.jspresso.framework.view.qx.EnhancedCollapsiblePanel(remoteComponent.getLabel());
           this.setIcon(decorator.getChildControl("bar"), remoteComponent.getIcon())
         } else {
-          decorator = new qx.ui.groupbox.GroupBox();
+          decorator = new qx.ui.container.Composite();
+          decorator.setAppearance("bordered-container");
         }
         decorator.setLayout(new qx.ui.layout.Grow());
         decorator.add(component);
@@ -2718,6 +2719,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      */
     _createList: function (remoteList) {
       var list = new qx.ui.form.List();
+      list.setAppearance("list");
       if (remoteList.getSelectionMode() == "SINGLE_SELECTION" || remoteList.getSelectionMode()
           == "SINGLE_CUMULATIVE_SELECTION") {
         list.setSelectionMode("single");

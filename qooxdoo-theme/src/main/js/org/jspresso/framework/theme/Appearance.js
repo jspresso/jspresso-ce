@@ -58,82 +58,6 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           }
         },
 
-        "application-bar": {
-          alias: "toolbar",
-          include: "toolbar",
-          style: function (states) {
-            return {
-              paddingBottom: 50,
-              backgroundColor: undefined,
-              decorator: "header-box"
-            };
-          }
-        },
-
-        "application-split": {
-          alias: "splitpane",
-          include: "splitpane",
-          style: function (states) {
-            return {
-              backgroundColor: "app-background",
-              decorator: "transition-box"
-            };
-          }
-        },
-
-        "application-accordion": {
-          style: function (states) {
-            return {
-              decorator: "transition-box"
-            };
-          }
-        },
-
-        "application-split/splitter": {
-          alias: "splitpane/splitter",
-          include: "splitpane/splitter",
-          style: function (states) {
-            return {
-              backgroundColor: "app-background"
-            };
-          }
-        },
-
-        "logo": {
-          alias: "image",
-          include: "image",
-          style: function (state) {
-            return {
-              minWidth: 60,
-              decorator: "accordion-box",
-              margin: [0, 2, 2, 2],
-              padding: 4
-            }
-          }
-        },
-
-        "accordion-section": {
-          include: "collapsable-panel",
-          alias: "collapsable-panel",
-          style: function (state) {
-            return {
-              padding: 4,
-              decorator: "accordion-box"
-            }
-          }
-        },
-
-        "workspace-panel": {
-          style: function (state) {
-            return {
-              margin: [0, 2, 2, 2],
-              padding: 2,
-              decorator: "accordion-box",
-              backgroundColor: "app-background"
-            }
-          }
-        },
-
         "button-frame": {
           base: true,
           style: function (states) {
@@ -217,21 +141,38 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         },
 
         "collapsable-panel": {
-          include: "groupbox/frame",
+          include: "groupbox",
+          alias: "groupbox",
           style: function (states) {
             return {
               showSeparator: true,
-              gap: 2,
-              decorator: "panel-box",
-              margin: 2,
+              gap: 5,
+              decorator: undefined,
+              marginTop: 10,
               padding: 0
             };
           }
         },
 
-        "collapsable-panel/bar/icon": {
+        "collapsable-panel/bar": {
           include: "groupbox/legend",
-          alias: "groupbox/legend"
+          alias: "groupbox/legend",
+          style: function (states) {
+            return {
+              show: "label",
+              textColor: "gray",
+              font: "headline-bold",
+              paddingLeft: 10
+            };
+          }
+        },
+
+        "bordered-container": {
+          style: function (states) {
+            return {
+              decorator: "panel-box"
+            };
+          }
         },
 
         "tree": {
@@ -272,8 +213,20 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           base: true,
           style: function (states) {
             return {
+              backgroundColor: "app-background",
               margin: 0,
               padding: 0
+            };
+          }
+        },
+
+        "splitpane/splitter": {
+          base:true,
+          style: function (states) {
+            return {
+              backgroundColor: "app-background",
+              width: 10,
+              height: 10
             };
           }
         },
@@ -342,7 +295,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
               marginTop: marginTop,
               marginLeft: marginLeft,
               marginRight: marginRight,
-              decorator: "panel-box-" + decoratorSelector + "-angled",
+              //decorator: "panel-box-" + decoratorSelector + "-angled",
+              decorator: "panel-box-" + decoratorSelector + "-only",
               backgroundColor: "app-background"
             };
           }
@@ -401,6 +355,173 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
               backgroundColor: "app-background"
             };
           }
+        },
+
+        "application-bar": {
+          alias: "toolbar",
+          include: "toolbar",
+          style: function (states) {
+            return {
+              paddingBottom: 40,
+              backgroundColor: undefined,
+              decorator: "header-box"
+            };
+          }
+        },
+
+        "application-label": {
+          alias: "label",
+          include: "label",
+          style: function (states) {
+            return {
+              font: "header",
+              textColor: "header-text",
+              alignY: "middle"
+            };
+          }
+        },
+
+        "application-split": {
+          alias: "splitpane",
+          include: "splitpane",
+          style: function (states) {
+            return {
+              decorator: "transition-box"
+            };
+          }
+        },
+
+        "application-split/splitter": {
+          alias: "splitpane/splitter",
+          include: "splitpane/splitter",
+          style: function (states) {
+            return {
+              width: 20,
+              height: 20
+            };
+          }
+        },
+
+        "logo": {
+          alias: "image",
+          include: "image",
+          style: function (states) {
+            return {
+              margin: 0,
+              padding: 4
+            }
+          }
+        },
+
+        "accordion-section": {
+          include: "collapsable-panel",
+          alias: "collapsable-panel",
+          style: function (states) {
+            return {
+              margin: 0,
+              padding: 0,
+              gap: 0,
+              decorator: "accordion-section-box"
+            }
+          }
+        },
+
+        "accordion-section/bar": {
+          style: function (states) {
+            return {
+              height: 30,
+              padding: [0, 10],
+              gap: 35,
+              backgroundColor: "dark-background",
+              font: "headline-bold"
+            }
+          }
+        },
+
+        "application-panel": {
+          style: function (states) {
+            return {
+              backgroundColor: "app-background",
+              decorator: "transition-box"
+            }
+          }
+        },
+
+        "application-accordion": {
+          include: "application-panel",
+          style: function (states) {
+            return {
+              margin: 0,
+              padding: 0,
+              minWidth: 40,
+              width: 230,
+              decorator: "accordion-box"
+            }
+          }
+        },
+
+        "top-splitbutton": {
+          include: "splitbutton",
+          alias: "splitbutton",
+          style: function (states) {
+          }
+        },
+
+        "top-splitbutton/arrow": {
+          include: "splitbutton/arrow",
+          alias: "splitbutton/arrow",
+          style: function (states) {
+            return {
+              margin: [0, 10, 0, 5],
+              padding: 0,
+              decorator: undefined
+            }
+          }
+        },
+
+        "top-splitbutton/button": {
+          include: "splitbutton/button",
+          alias: "splitbutton/button",
+          style: function (states) {
+            return {
+              margin: [0, 0, 0, 10],
+              padding: 0,
+              decorator: undefined
+            }
+          }
+        },
+
+        "top-button": {
+          include: "button",
+          alias: "button",
+          style: function (states) {
+            return {
+              show: "icon",
+              margin: [0, 10],
+              padding: 0,
+              decorator: undefined
+            }
+          }
+        },
+
+        "navigation-button": {
+          include: "top-button",
+          alias: "top-button",
+          style: function (states) {
+            return {
+            }
+          }
+        },
+
+        "exit-button": {
+          include: "top-button",
+          alias: "top-button",
+          style: function (states) {
+            return {
+              show: "icon"
+            }
+          }
         }
+
       }
     });

@@ -43,7 +43,12 @@ qx.Theme.define("org.jspresso.framework.theme.Font",
         "headline": {
           include: "default",
           size: ((qx.core.Environment.get("os.name") === "win" && qx.core.Environment.get("os.version") === "vista")
-          || (qx.core.Environment.get("os.name") === "win" && qx.core.Environment.get("os.version") === "7")) ? 14 : 13
+          || (qx.core.Environment.get("os.name") === "win" && qx.core.Environment.get("os.version") === "7")) ? 15 : 14
+        },
+
+        "headline-bold": {
+          include: "headline",
+          bold: true
         },
 
         "header": {
