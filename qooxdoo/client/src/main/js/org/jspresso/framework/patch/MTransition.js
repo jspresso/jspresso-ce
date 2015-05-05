@@ -18,6 +18,11 @@
  */
 qx.Mixin.define("org.jspresso.framework.patch.MTransition", {
 
+  statics: {
+    // Transition
+    TRANSITION_PROPERTY_NAME: qx.bom.Style.getCssName(qx.core.Environment.get("css.transition").name)
+  },
+
   properties: {
     transition: {
       nullable: true,
@@ -31,7 +36,7 @@ qx.Mixin.define("org.jspresso.framework.patch.MTransition", {
       if (transition === null) {
         return;
       }
-      styles["transition"] = transition;
+      styles[org.jspresso.framework.patch.MTransition.TRANSITION_PROPERTY_NAME] = transition;
     }
   }
 });
