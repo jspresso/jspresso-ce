@@ -22,6 +22,15 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           }
         },
 
+        label: {
+          base: true,
+          style: function (states) {
+            return {
+              textColor: "label"
+            };
+          }
+        },
+
         "menubar": {
           base: true,
           style: function (states) {
@@ -44,7 +53,9 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           base: true,
           style: function (states) {
             return {
-              height: 30
+              minHeight: 30,
+              padding: [0, 15, 0, 0],
+              margin: 0
             };
           }
         },
@@ -116,6 +127,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
               hovered = "-hovered";
             }
             return {
+              textColor: "header-text",
               decorator: states.first ? "table-header-cell-first" + hovered : "table-header-cell" + hovered
             };
           }
@@ -146,9 +158,9 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             return {
               showSeparator: true,
-              gap: 5,
+              gap: 0,
               decorator: undefined,
-              marginTop: 10,
+              margin: [10, 5, 0, 5],
               padding: 0
             };
           }
@@ -160,9 +172,9 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             return {
               show: "label",
-              textColor: "gray",
+              textColor: "header-text",
               font: "headline-bold",
-              paddingLeft: 10
+              paddingLeft: 0
             };
           }
         },
@@ -179,8 +191,34 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           base: true,
           style: function (states) {
             return {
-              decorator: undefined,
-              padding: 0
+              decorator: undefined
+            };
+          }
+        },
+
+        "tree-folder": {
+          base: true,
+          style: function (states) {
+            var backgroundColor;
+            if (states.selected) {
+              backgroundColor = "background-selected-dark";
+              if (states.disabled) {
+                backgroundColor += "-disabled";
+              }
+            }
+            return {
+              textColor: "label",
+              backgroundColor: backgroundColor,
+              decorator: states.selected ? "lead-item" : states.dragover ? "dragover" : undefined
+            };
+          }
+        },
+
+        "tree-folder/icon": {
+          base:true,
+          style: function (states) {
+            return {
+              padding: [0, 4, 0, 10]
             };
           }
         },
@@ -225,8 +263,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             return {
               backgroundColor: "app-background",
-              width: 10,
-              height: 10
+              minWidth: 10,
+              minHeight: 10
             };
           }
         },
@@ -238,6 +276,15 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
               margin: 0,
               padding: 0
             };
+          }
+        },
+
+        "tabview": {
+          base:true,
+          style: function (states) {
+            return {
+              margin: [10, 5, 0, 5]
+            }
           }
         },
 
@@ -313,7 +360,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
             }
 
             return {
-              textColor: states.disabled ? "text-disabled" : states.checked ? undefined : "gray",
+              textColor: states.disabled ? "text-disabled" : states.checked ? "header-text-selected" : "header-text",
               backgroundColor: states.checked ? "app-background" : undefined,
               padding: padding,
               font: states.disabled ? undefined : states.checked ? "bold" : undefined
@@ -357,6 +404,23 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           }
         },
 
+        "listitem": {
+          alias: "atom",
+          base:true,
+          style: function (states) {
+            var backgroundColor;
+            if (states.selected) {
+              backgroundColor = "background-selected-dark"
+              if (states.disabled) {
+                backgroundColor += "-disabled";
+              }
+            }
+            return {
+              backgroundColor: backgroundColor
+            };
+          }
+        },
+
         "application-bar": {
           alias: "toolbar",
           include: "toolbar",
@@ -396,8 +460,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           include: "splitpane/splitter",
           style: function (states) {
             return {
-              width: 20,
-              height: 20
+              minWidth: 20,
+              minHeight: 20
             };
           }
         },
@@ -429,12 +493,44 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         "accordion-section/bar": {
           style: function (states) {
             return {
-              height: 30,
+              minHeight: 30,
               padding: [0, 10],
-              gap: 35,
-              backgroundColor: "dark-background",
+              gap: 20,
+              backgroundColor: "light-background",
+              textColor: "header-text",
               font: "headline-bold"
             }
+          }
+        },
+
+        "accordion-section/container": {
+          style: function (states) {
+            return {
+              margin: 0,
+              padding: 0
+            };
+          }
+        },
+
+        "workspace-tree": {
+          alias: "tree",
+          incude: "tree",
+          style: function (states) {
+            return {
+              margin: 0,
+              padding: 0
+            };
+          }
+        },
+
+        "workspace-tree-folder": {
+          alias: "tree-folder",
+          incude: "tree-folder",
+          style: function (states) {
+            return {
+              margin: 0,
+              padding: [0, 0, 0, 10]
+            };
           }
         },
 
@@ -497,7 +593,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             return {
               show: "icon",
-              margin: [0, 10],
+              margin: [0, 20],
               padding: 0,
               decorator: undefined
             }

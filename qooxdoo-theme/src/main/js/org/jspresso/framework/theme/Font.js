@@ -15,7 +15,7 @@ qx.Theme.define("org.jspresso.framework.theme.Font",
       fonts: {
         "default": {
           size: ((qx.core.Environment.get("os.name") === "win" && qx.core.Environment.get("os.version") === "vista")
-          || (qx.core.Environment.get("os.name") === "win" && qx.core.Environment.get("os.version") === "7")) ? 12 : 11,
+          || (qx.core.Environment.get("os.name") === "win" && qx.core.Environment.get("os.version") === "7")) ? 13 : 12,
           lineHeight: 1.4,
           family: (qx.core.Environment.get("os.name") === "osx") ? ["Lucida Grande"] :
               ((qx.core.Environment.get("os.name") === "win" && qx.core.Environment.get("os.version") === "vista")
@@ -32,18 +32,18 @@ qx.Theme.define("org.jspresso.framework.theme.Font",
         "small": {
           include: "default",
           size: ((qx.core.Environment.get("os.name") === "win" && qx.core.Environment.get("os.version") === "vista")
-          || (qx.core.Environment.get("os.name") === "win" && qx.core.Environment.get("os.version") === "7")) ? 11 : 10
+          || (qx.core.Environment.get("os.name") === "win" && qx.core.Environment.get("os.version") === "7")) ? 12 : 11
         },
 
         "monospace": {
           include: "default",
-          size: 11
+          size: 12
         },
 
         "headline": {
           include: "default",
           size: ((qx.core.Environment.get("os.name") === "win" && qx.core.Environment.get("os.version") === "vista")
-          || (qx.core.Environment.get("os.name") === "win" && qx.core.Environment.get("os.version") === "7")) ? 15 : 14
+          || (qx.core.Environment.get("os.name") === "win" && qx.core.Environment.get("os.version") === "7")) ? 16 : 15
         },
 
         "headline-bold": {
@@ -53,7 +53,7 @@ qx.Theme.define("org.jspresso.framework.theme.Font",
 
         "header": {
           include: "bold",
-          size: 20
+          size: 30
         }
 
       }

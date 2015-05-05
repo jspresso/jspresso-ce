@@ -369,6 +369,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           var workspaceNavigatorUI = this.createComponent(workspaceNavigator);
           if (workspaceNavigatorUI instanceof qx.ui.tree.Tree) {
             workspaceNavigatorUI.setHideRoot(true);
+            workspaceNavigatorUI.setAppearance("workspace-tree");
           }
           var existingChildren = this.__workspaceAccordionGroup.getChildren();
           var existingChild;

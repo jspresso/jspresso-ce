@@ -84,6 +84,13 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
           }
         },
 
+        "lead-item": {
+          style: {
+            width: 2,
+            color: "border-lead"
+          }
+        },
+
         "table-header": {
           include: "button-box",
 
@@ -222,7 +229,7 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
         "accordion-box": {
           include: "transition-box",
           style: {
-            width: [0, 1, 0, 0],
+            width: [1, 1, 1, 0],
             color: "border-main"
           }
         },
