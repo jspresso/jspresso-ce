@@ -86,8 +86,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       })));
 
       if (message) {
-        // message = org.jspresso.framework.util.html.HtmlUtil.sanitizeHtml(message);
-        // message = org.jspresso.framework.util.html.HtmlUtil.replaceNewlines(message);
         var messageLabel = new qx.ui.basic.Label(message);
         messageLabel.setRich(org.jspresso.framework.util.html.HtmlUtil.isHtml(message));
         dialogBox.add(messageLabel);
@@ -198,17 +196,23 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       //applicationFrame.add(menuBar);
       var toolBar = new qx.ui.toolbar.ToolBar();
       toolBar.setAppearance("application-bar");
-      toolBar.addListener("tap", function (e) {
-        var paddingBottomToRestore = toolBar.getUserData("paddingBottomToRestore");
-        if (paddingBottomToRestore) {
-          toolBar.setUserData("paddingBottomToRestore", 0);
-          toolBar.setPaddingBottom(paddingBottomToRestore);
-        } else {
-          toolBar.setUserData("paddingBottomToRestore", toolBar.getPaddingBottom());
-          toolBar.setPaddingBottom(0);
-        }
-      });
-      toolBar.add(logo);
+      /*
+       toolBar.addListener("tap", function (e) {
+       var paddingBottomToRestore = toolBar.getUserData("paddingBottomToRestore");
+       if (paddingBottomToRestore) {
+       toolBar.setUserData("paddingBottomToRestore", 0);
+       toolBar.setPaddingBottom(paddingBottomToRestore);
+       } else {
+       toolBar.setUserData("paddingBottomToRestore", toolBar.getPaddingBottom());
+       toolBar.setPaddingBottom(0);
+       }
+       });
+       */
+      var logoContainer = new qx.ui.container.Composite(new qx.ui.layout.Dock())
+      logoContainer.setAppearance("logo-container");
+      logoContainer.add(logo, {edge: "center"});
+      toolBar.add(logoContainer);
+
       if (navigationActions) {
         for (var i = 0; i < navigationActions.length; i++) {
           for (var j = 0; j < navigationActions[i].getActions().length; j++) {
@@ -228,9 +232,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           var splitButton = this._getViewFactory().createSplitButton(actions[i]);
           splitButton.setAppearance("top-splitbutton");
           if (splitButton) {
-            var part = new qx.ui.toolbar.Part();
-            part.add(splitButton);
-            toolBar.add(part);
+            toolBar.add(splitButton);
           }
         }
       }

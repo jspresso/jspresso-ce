@@ -36,7 +36,7 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
              shadowBlurRadius: 3,
              shadowColor: "background-selected",
              shadowLength: 0,
-             transition: "all 200ms ease-out"
+            transition: "box-shadow 200ms ease-out"
           }
         },
 
@@ -51,7 +51,7 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
             shadowBlurRadius: 3,
             shadowColor: "background-selected",
             shadowLength: 0,
-            transition: "all 200ms ease-out"
+            transition: "box-shadow 200ms ease-out"
           }
         },
 
@@ -71,7 +71,7 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
             shadowBlurRadius: 2,
             shadowColor: "background-selected",
             shadowLength: 0,
-            transition: "all 200ms ease-out"
+            transition: "box-shadow 200ms ease-out"
           }
         },
 
@@ -229,7 +229,7 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
         "accordion-box": {
           include: "transition-box",
           style: {
-            width: [1, 1, 1, 0],
+            width: [0, 1, 0, 0],
             color: "border-main"
           }
         },
@@ -237,7 +237,7 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
         "accordion-section-box": {
           include: "transition-box",
           style: {
-            width: [1, 0],
+            width: [0, 0],
             color: "border-main"
           }
         }

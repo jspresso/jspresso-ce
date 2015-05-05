@@ -225,7 +225,7 @@
     <property name="description" value="quit.description" />
     <property name="iconImageURL">
       <bean parent="abstractFwIconImageURL">
-        <constructor-arg index="0" value="cancel" />
+        <constructor-arg index="0" value="exit" />
       </bean>
     </property>
     <property name="checkCurrentModuleDirtyStateAction" ref="checkModuleDirtyStateFrontAction" />

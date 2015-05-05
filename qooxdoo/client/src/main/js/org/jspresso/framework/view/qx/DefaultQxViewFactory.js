@@ -1343,10 +1343,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         } else {
           compRowSpan = 1;
         }
-        if (component instanceof org.jspresso.framework.gui.remote.RColorField
-            || rComponent instanceof org.jspresso.framework.gui.remote.RActionField
-            || rComponent instanceof org.jspresso.framework.gui.remote.RDateField) {
+        if (rComponent instanceof org.jspresso.framework.gui.remote.RColorField
+            || rComponent instanceof org.jspresso.framework.gui.remote.RActionField) {
           component.setPadding([2, 2]);
+        } else if (rComponent instanceof org.jspresso.framework.gui.remote.RLabel) {
+          component.setMargin([2, 6]);
         } else {
           component.setMargin(2);
         }

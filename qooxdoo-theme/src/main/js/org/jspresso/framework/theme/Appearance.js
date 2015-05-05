@@ -209,7 +209,6 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
             return {
               textColor: "label",
               backgroundColor: backgroundColor,
-              decorator: states.selected ? "lead-item" : states.dragover ? "dragover" : undefined
             };
           }
         },
@@ -283,7 +282,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           base:true,
           style: function (states) {
             return {
-              margin: [10, 5, 0, 5]
+              margin: [8, 5, 0, 5]
             }
           }
         },
@@ -410,13 +409,22 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             var backgroundColor;
             if (states.selected) {
-              backgroundColor = "background-selected-dark"
+              backgroundColor = "background-selected-dark";
               if (states.disabled) {
                 backgroundColor += "-disabled";
               }
             }
             return {
-              backgroundColor: backgroundColor
+              backgroundColor: backgroundColor,
+              decorator: undefined
+            };
+          }
+        },
+
+        "listitem/label": {
+          style: function (states) {
+            return {
+              textColor: states.selected ? "white" : "text"
             };
           }
         },
@@ -426,7 +434,6 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           include: "toolbar",
           style: function (states) {
             return {
-              paddingBottom: 40,
               backgroundColor: undefined,
               decorator: "header-box"
             };
@@ -460,8 +467,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           include: "splitpane/splitter",
           style: function (states) {
             return {
-              minWidth: 20,
-              minHeight: 20
+              minWidth: 15,
+              minHeight: 15
             };
           }
         },
@@ -471,8 +478,21 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           include: "image",
           style: function (states) {
             return {
+              alignX: "center",
+              alignY: "middle",
               margin: 0,
-              padding: 4
+              padding: 15,
+              scale: false
+            }
+          }
+        },
+
+        "logo-container": {
+          alias: "toolbar/part",
+          include: "toolbar/part",
+          style: function (states) {
+            return {
+              width: 250
             }
           }
         },
@@ -538,7 +558,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             return {
               backgroundColor: "app-background",
-              decorator: "transition-box"
+              decorator: "transition-box",
+              paddingBottom: 10
             }
           }
         },
@@ -549,7 +570,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
             return {
               margin: 0,
               padding: 0,
-              minWidth: 40,
+              minWidth: 0,
               width: 230,
               decorator: "accordion-box"
             }
@@ -560,6 +581,9 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           include: "splitbutton",
           alias: "splitbutton",
           style: function (states) {
+            return {
+              maxHeight: 30
+            }
           }
         },
 
@@ -593,7 +617,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             return {
               show: "icon",
-              margin: [0, 20],
+              margin: [0, 10],
               padding: 0,
               decorator: undefined
             }
@@ -614,6 +638,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           alias: "top-button",
           style: function (states) {
             return {
+              maxHeight: 30,
               show: "icon"
             }
           }
