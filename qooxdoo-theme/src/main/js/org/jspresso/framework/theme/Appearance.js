@@ -208,7 +208,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
             }
             return {
               textColor: "label",
-              backgroundColor: backgroundColor,
+              backgroundColor: backgroundColor
             };
           }
         },
