@@ -1343,9 +1343,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         } else {
           compRowSpan = 1;
         }
-        if (rComponent instanceof org.jspresso.framework.gui.remote.RColorField
-            || rComponent instanceof org.jspresso.framework.gui.remote.RActionField) {
-          component.setPadding([2, 2]);
+        if (component instanceof qx.ui.container.Composite) {
+          component.setPadding(2);
         } else if (rComponent instanceof org.jspresso.framework.gui.remote.RLabel) {
           component.setMargin([2, 6]);
         } else {

@@ -44,7 +44,10 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedCollapsiblePanel", {
         control.removeListener("click", this.toggleValue, this);
         control.addListener("click", function (e) {
           if (this.getCollapsible()) {
-            this.toggleValue();
+            // do not close an open panel that belongs to an accordion.
+            if (!this.getGroup() || !this.getValue()) {
+              this.toggleValue();
+            }
           }
         }, this);
       }
