@@ -446,7 +446,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         "listitem/label": {
           style: function (states) {
             return {
-              textColor: states.selected ? "white" : "text"
+              textColor: states.selected ? "white" : "label"
             };
           }
         },
