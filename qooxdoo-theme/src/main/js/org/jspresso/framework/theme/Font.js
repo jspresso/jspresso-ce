@@ -1,12 +1,18 @@
-/* ************************************************************************
-
- Copyright:
-
- License:
-
- Authors:
-
- ************************************************************************ */
+/**
+ * Copyright (c) 2005-2015 Vincent Vandenschrick. All rights reserved.
+ * <p>
+ * This file is part of the Jspresso framework. Jspresso is free software: you
+ * can redistribute it and/or modify it under the terms of the GNU Lesser
+ * General Public License as published by the Free Software Foundation, either
+ * version 3 of the License, or (at your option) any later version. Jspresso is
+ * distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details. You should have received a copy of the GNU Lesser General Public
+ * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @asset(fonts/*.ttf)
+ */
 
 qx.Theme.define("org.jspresso.framework.theme.Font",
     {
@@ -14,14 +20,17 @@ qx.Theme.define("org.jspresso.framework.theme.Font",
 
       fonts: {
         "default": {
-          size: ((qx.core.Environment.get("os.name") === "win" && qx.core.Environment.get("os.version") === "vista")
-          || (qx.core.Environment.get("os.name") === "win" && qx.core.Environment.get("os.version") === "7")) ? 13 : 12,
+          size: 13,
           lineHeight: 1.4,
-          family: (qx.core.Environment.get("os.name") === "osx") ? ["Lucida Grande"] :
-              ((qx.core.Environment.get("os.name") === "win" && qx.core.Environment.get("os.version") === "vista")
-              || (qx.core.Environment.get("os.name") === "win" && qx.core.Environment.get("os.version") === "7")) ?
-                  ["Segoe UI", "Candara"] :
-                  ["Tahoma", "Liberation Sans", "Arial", "sans-serif"]
+          family: ["Arial"],
+          sources: [
+            {
+              family: "Sansation",
+              source: [
+                "fonts/Sansation-Regular.ttf"
+              ]
+            }
+          ]
         },
 
         "bold": {
@@ -29,10 +38,20 @@ qx.Theme.define("org.jspresso.framework.theme.Font",
           bold: true
         },
 
+        "italic": {
+          include: "default",
+          italic: true
+        },
+
+        "bolditalic": {
+          include: "default",
+          bold: true,
+          italic: true
+        },
+
         "small": {
           include: "default",
-          size: ((qx.core.Environment.get("os.name") === "win" && qx.core.Environment.get("os.version") === "vista")
-          || (qx.core.Environment.get("os.name") === "win" && qx.core.Environment.get("os.version") === "7")) ? 12 : 11
+          size: 11
         },
 
         "monospace": {
@@ -42,8 +61,7 @@ qx.Theme.define("org.jspresso.framework.theme.Font",
 
         "headline": {
           include: "default",
-          size: ((qx.core.Environment.get("os.name") === "win" && qx.core.Environment.get("os.version") === "vista")
-          || (qx.core.Environment.get("os.name") === "win" && qx.core.Environment.get("os.version") === "7")) ? 16 : 15
+          size: 15
         },
 
         "headline-bold": {
