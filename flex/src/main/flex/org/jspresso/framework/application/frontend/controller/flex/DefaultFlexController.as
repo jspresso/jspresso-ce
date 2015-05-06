@@ -523,10 +523,11 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     var browserManager:IBrowserManager = BrowserManager.getInstance();
     browserManager.init();
     browserManager.addEventListener(BrowserChangeEvent.BROWSER_URL_CHANGE, function (event:BrowserChangeEvent):void {
-      var decodedFragment:Object = URLUtil.stringToObject(browserManager.fragment);
-      if (decodedFragment["snapshotId"]) {
+      var oldSnapshotId:String = URLUtil.stringToObject(event.lastURL.substr(event.lastURL.lastIndexOf("#") + 1))["snapshotId"];
+      var newSnapshotId:String = URLUtil.stringToObject(event.url.substr(event.url.lastIndexOf("#") + 1))["snapshotId"];
+      if (oldSnapshotId && newSnapshotId && oldSnapshotId != newSnapshotId) {
         var command:RemoteHistoryDisplayCommand = new RemoteHistoryDisplayCommand();
-        command.snapshotId = decodedFragment["snapshotId"];
+        command.snapshotId = newSnapshotId;
         registerCommand(command);
       }
     });

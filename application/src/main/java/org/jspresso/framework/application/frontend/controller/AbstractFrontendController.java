@@ -105,7 +105,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
  * More than a behavioural adapter, the frontend controller will also be the
  * place where you define the top-level application structure like the workspace
  * list, the name, the application-wide actions, ...
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.
@@ -358,6 +358,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
             displayNextPinnedModule();
           } else {
             displayModule(nextWorkspaceName, nextModule);
+            pinnedModuleDisplayed(nextEntry, false);
           }
         } else {
           displayNextPinnedModule();
@@ -390,6 +391,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
             displayPreviousPinnedModule();
           } else {
             displayModule(previousWorkspaceName, previousModule);
+            pinnedModuleDisplayed(previousEntry, false);
           }
         } else {
           displayPreviousPinnedModule();
@@ -404,7 +406,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Retrieves a pinned module in the backward or forward history and pins it.
-   * 
+   *
    * @param snapshotId
    *          the snapshot id of the module history to display.
    * @return the history entry actually displayed or null if no change.
@@ -449,7 +451,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Displays a workspace.
-   * 
+   *
    * @param workspaceName
    *          the workspace identifier.
    * @param bypassModuleBoundaryActions
@@ -1292,7 +1294,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Creates a new login callback handler.
-   * 
+   *
    * @return a new login callback handler
    */
   protected UsernamePasswordHandler createLoginCallbackHandler() {
@@ -1325,7 +1327,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Creates a UsernamePassword handler instance.
-   * 
+   *
    * @return a new UsernamePassword handler instance.
    */
   protected UsernamePasswordHandler createUsernamePasswordHandler() {
@@ -1335,7 +1337,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Reads a client preference.
-   * 
+   *
    * @param key
    *          the key under which the preference as been stored.
    * @return the stored preference or null.
@@ -1350,7 +1352,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Stores a client preference.
-   * 
+   *
    * @param key
    *          the key under which the preference as to be stored.
    * @param value
@@ -1365,7 +1367,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Deletes a client preference.
-   * 
+   *
    * @param key
    *          the key under which the preference is stored.
    */
@@ -1378,7 +1380,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Creates and binds the login view.
-   * 
+   *
    * @return the login view
    */
   protected IView<E> createLoginView() {
@@ -1397,7 +1399,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Creates the module area view to display the modules content.
-   * 
+   *
    * @param workspaceName
    *          the workspace to create the module area view for.
    * @return the the module area view to display the modules content.
@@ -1411,7 +1413,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Creates the workspace action list.
-   * 
+   *
    * @return the workspace action list.
    */
   protected ActionList createWorkspaceActionList() {
@@ -1446,7 +1448,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Creates the workspace action map.
-   * 
+   *
    * @return the workspace action map.
    */
   protected ActionMap createWorkspaceActionMap() {
@@ -1469,7 +1471,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Creates a workspace navigator based on the workspace definition.
-   * 
+   *
    * @param workspaceName
    *          the workspace to create the navigator for.
    * @param workspaceNavigatorViewDescriptor
@@ -1523,7 +1525,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Executes a backend action.
-   * 
+   *
    * @param action
    *          the backend action to execute.
    * @param context
@@ -1536,7 +1538,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Executes a frontend action.
-   * 
+   *
    * @param action
    *          the frontend action to execute.
    * @param context
@@ -1549,7 +1551,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Whenever the loginContextName is not configured, creates a default subject.
-   * 
+   *
    * @return the default Subject in case the login configuration is not set.
    */
   protected Subject getAnonymousSubject() {
@@ -1558,7 +1560,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Creates the exit action.
-   * 
+   *
    * @return the exit action.
    */
   @Override
@@ -1576,7 +1578,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the forcedStartingLocale.
-   * 
+   *
    * @return the forcedStartingLocale.
    */
   protected String getForcedStartingLocale() {
@@ -1585,7 +1587,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the iconFactory.
-   * 
+   *
    * @return the iconFactory.
    */
   protected IIconFactory<F> getIconFactory() {
@@ -1594,7 +1596,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the loginCallbackHandler.
-   * 
+   *
    * @return the loginCallbackHandler.
    */
   protected UsernamePasswordHandler getLoginCallbackHandler() {
@@ -1606,7 +1608,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the loginContextName.
-   * 
+   *
    * @return the loginContextName.
    */
   protected String getLoginContextName() {
@@ -1626,7 +1628,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the loginViewDescriptor.
-   * 
+   *
    * @return the loginViewDescriptor.
    */
   protected IViewDescriptor getLoginViewDescriptor() {
@@ -1635,7 +1637,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the onModuleEnterAction.
-   * 
+   *
    * @return the onModuleEnterAction.
    */
   protected IAction getOnModuleEnterAction() {
@@ -1644,7 +1646,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the onModuleStartupAction.
-   * 
+   *
    * @return the onModuleStartupAction.
    */
   protected IAction getOnModuleStartupAction() {
@@ -1653,7 +1655,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the onModuleExitAction.
-   * 
+   *
    * @return the onModuleExitAction.
    */
   protected IAction getOnModuleExitAction() {
@@ -1662,7 +1664,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the selected module.
-   * 
+   *
    * @param workspaceName
    *          the workspace name to query the selected module for.
    * @return the selected module.
@@ -1673,7 +1675,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the workspacesMenuIconImageUrl.
-   * 
+   *
    * @return the workspacesMenuIconImageUrl.
    */
   protected String getWorkspacesMenuIconImageUrl() {
@@ -1747,7 +1749,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * Constructs the context to call the login action. Defaults to
    * {@link AbstractFrontendController#getInitialActionContext()}.
-   * 
+   *
    * @return the login action context.
    */
   protected Map<String, Object> getLoginActionContext() {
@@ -1757,7 +1759,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * Constructs the context to call the startup action. Defaults to
    * {@link AbstractFrontendController#getInitialActionContext()}.
-   * 
+   *
    * @return the startup action context.
    */
   protected Map<String, Object> getStartupActionContext() {
@@ -1777,7 +1779,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Performs the actual JAAS login.
-   * 
+   *
    * @return true if login succeeded.
    */
   protected boolean performLogin() {
@@ -1833,7 +1835,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * Pins a module in the history navigation thus allowing the user to navigate
    * back.
-   * 
+   *
    * @param workspaceName
    *          the workspace to pin the module for.
    * @param module
@@ -1854,25 +1856,25 @@ public abstract class AbstractFrontendController<E, F, G> extends
       ModuleHistoryEntry historyEntry = new ModuleHistoryEntry(workspaceName,
           module, historyEntryName);
       backwardHistoryEntries.add(historyEntry);
-      modulePinned(historyEntry);
+      pinnedModuleDisplayed(historyEntry, true);
       forwardHistoryEntries.clear();
     }
   }
 
   /**
    * Callback when a module is actually pinned in history.
-   * 
-   * @param historyEntry
-   *          the pinned module history entry.
+   *
+   * @param historyEntry           the pinned module history entry.
+   * @param addToHistory the add to history
    */
-  protected void modulePinned(ModuleHistoryEntry historyEntry) {
+  protected void pinnedModuleDisplayed(ModuleHistoryEntry historyEntry, boolean addToHistory) {
     // NO-OP. Managed by subclasses when needed.
   }
 
   /**
    * Refines the data integrity violation exception to determine the translation
    * key from which the user message will be constructed.
-   * 
+   *
    * @param exception
    *          the DataIntegrityViolationException.
    * @return the translation key to use.
@@ -1899,7 +1901,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * Computes a user friendly exception message if this exception is known and
    * can be cleanly handled by the framework.
-   * 
+   *
    * @param exception
    *          the exception to compute the message for.
    * @return the user friendly message or null if this exception is unexpected.
@@ -2029,7 +2031,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the frameWidth.
-   * 
+   *
    * @return the frameWidth.
    */
   protected Integer getFrameWidth() {
@@ -2039,7 +2041,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * Sets the preferred application frame width. How this dimension is leveraged
    * depends on the UI channel.
-   * 
+   *
    * @param frameWidth
    *          the frameWidth to set.
    */
@@ -2049,7 +2051,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the frameHeight.
-   * 
+   *
    * @return the frameHeight.
    */
   protected Integer getFrameHeight() {
@@ -2059,7 +2061,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * Sets the preferred application frame height. How this dimension is
    * leveraged depends on the UI channel.
-   * 
+   *
    * @param frameHeight
    *          the frameHeight to set.
    */
@@ -2069,7 +2071,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the secondaryActionMap.
-   * 
+   *
    * @return the secondaryActionMap.
    */
   @Override
@@ -2081,7 +2083,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Assigns the view secondary action map. Same rules as the primary action map
    * apply except that actions in this map should be visually distinguished from
    * the main action map, e.g. placed in another toolbar.
-   * 
+   *
    * @param secondaryActionMap
    *          the secondaryActionMap to set.
    */
@@ -2102,7 +2104,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * Encodes username / password into a string for storing. The stored string is
    * used later for "remember me" function.
-   * 
+   *
    * @param username
    *          the user name.
    * @param password
@@ -2133,7 +2135,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * Decodes username / password from a string for restoring into original
    * values. This is used in "remember me" function.
-   * 
+   *
    * @param encodedUserPass
    *          the encoded username/password string.
    * @return an string array of username/password strings
@@ -2170,7 +2172,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the client preferences store.
-   * 
+   *
    * @return the client preferences store.
    */
   protected synchronized IPreferencesStore getClientPreferencesStore() {
@@ -2183,14 +2185,14 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Creates the clientPreferenceStore.
-   * 
+   *
    * @return the clientPreferenceStore.
    */
   protected abstract IPreferencesStore createClientPreferencesStore();
 
   /**
    * Sets the clientPreferenceStore.
-   * 
+   *
    * @param clientPreferencesStore
    *          the clientPreferenceStore to set.
    */
@@ -2340,7 +2342,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Traces unexpected exceptions properly.
-   * 
+   *
    * @param ex
    *          the exception to trace.
    */
@@ -2357,7 +2359,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the checkActionThreadSafety.
-   * 
+   *
    * @return the checkActionThreadSafety.
    */
   public boolean isCheckActionThreadSafety() {
@@ -2366,7 +2368,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Sets the checkActionThreadSafety.
-   * 
+   *
    * @param checkActionThreadSafety
    *          the checkActionThreadSafety to set.
    */

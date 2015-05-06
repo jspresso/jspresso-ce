@@ -342,6 +342,8 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
     } else if (command instanceof RemoteRefreshCommand) {
       // do nothing. Previously buffered commands will simply be sent to the client.
     } else if (command instanceof RemoteHistoryDisplayCommand) {
+      displayPinnedModule(((RemoteHistoryDisplayCommand) command).getSnapshotId());
+      /*
       ModuleHistoryEntry historyEntry = displayPinnedModule(((RemoteHistoryDisplayCommand) command).getSnapshotId());
       if (historyEntry != null) {
         // Update the name on client side.
@@ -349,6 +351,7 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
         reply.setName(historyEntry.getName());
         registerCommand(reply);
       }
+      */
     } else if (command instanceof RemoteTableChangedCommand) {
       Object[][] columnPrefs = new Object[((RemoteTableChangedCommand) command).getColumnIds().length][2];
       for (int i = 0; i < ((RemoteTableChangedCommand) command).getColumnIds().length; i++) {
@@ -978,10 +981,12 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
    * {@inheritDoc}
    */
   @Override
-  protected void modulePinned(ModuleHistoryEntry historyEntry) {
-    super.modulePinned(historyEntry);
+  protected void pinnedModuleDisplayed(ModuleHistoryEntry historyEntry, boolean addToHistory) {
+    super.pinnedModuleDisplayed(historyEntry, addToHistory);
     RemoteHistoryDisplayCommand historyCommand = new RemoteHistoryDisplayCommand();
-    historyCommand.setSnapshotId(historyEntry.getId());
+    if (addToHistory) {
+      historyCommand.setSnapshotId(historyEntry.getId());
+    }
     historyCommand.setName(historyEntry.getName());
     registerCommand(historyCommand);
   }

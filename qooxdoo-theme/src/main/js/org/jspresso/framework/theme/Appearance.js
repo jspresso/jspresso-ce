@@ -31,6 +31,24 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           }
         },
 
+        atom: {
+          base: true,
+          style: function (states) {
+            return {
+              textColor: "label"
+            };
+          }
+        },
+
+        "atom/label": {
+          base: true,
+          style: function (states) {
+            return {
+              textColor: undefined
+            };
+          }
+        },
+
         "menubar": {
           base: true,
           style: function (states) {
@@ -214,7 +232,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         },
 
         "tree-folder/icon": {
-          base:true,
+          base: true,
           style: function (states) {
             return {
               padding: [0, 4, 0, 10]
@@ -258,7 +276,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         },
 
         "splitpane/splitter": {
-          base:true,
+          base: true,
           style: function (states) {
             return {
               backgroundColor: "app-background",
@@ -279,7 +297,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         },
 
         "tabview": {
-          base:true,
+          base: true,
           style: function (states) {
             return {
               margin: [8, 5, 0, 5]
@@ -394,7 +412,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           }
         },
 
-        "list" : {
+        "list": {
           base: true,
           style: function (states) {
             return {
@@ -405,7 +423,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
 
         "listitem": {
           alias: "atom",
-          base:true,
+          base: true,
           style: function (states) {
             var backgroundColor;
             if (states.selected) {
@@ -582,7 +600,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           alias: "splitbutton",
           style: function (states) {
             return {
-              maxHeight: 30
+              allowStretchY: false,
+              marginTop: 5
             }
           }
         },
@@ -628,8 +647,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           include: "top-button",
           alias: "top-button",
           style: function (states) {
-            return {
-            }
+            return {}
           }
         },
 
@@ -638,8 +656,9 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           alias: "top-button",
           style: function (states) {
             return {
-              maxHeight: 30,
-              show: "icon"
+              allowStretchY: false,
+              show: "icon",
+              marginTop: 5
             }
           }
         }

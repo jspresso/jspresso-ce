@@ -32,10 +32,10 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
         "button-box-focused": {
           include: "button-box",
           style: {
-             color: "background-selected",
-             shadowBlurRadius: 3,
-             shadowColor: "background-selected",
-             shadowLength: 0,
+            color: "background-selected",
+            shadowBlurRadius: 3,
+            shadowColor: "background-selected",
+            shadowLength: 0,
             transition: "box-shadow 200ms ease-out"
           }
         },

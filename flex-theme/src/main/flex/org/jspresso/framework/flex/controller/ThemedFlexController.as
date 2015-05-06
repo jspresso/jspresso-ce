@@ -97,28 +97,11 @@ public class ThemedFlexController extends DefaultFlexController {
 
     var appNameNextPrevHBox:HBox = new HBox();
     header.addChild(appNameNextPrevHBox);
-    appNameNextPrevHBox.x = 245;
+    appNameNextPrevHBox.x = 300;
     appNameNextPrevHBox.percentHeight = 100.0;
     appNameNextPrevHBox.styleName = "appNameNextPrevHBox";
 
-    var nextPreviousButtonBar:ButtonBar = new ButtonBar();
-    appNameNextPrevHBox.addChild(nextPreviousButtonBar);
-    nextPreviousButtonBar.styleName = "nextPreviousButtonBar";
-    var nextPrevDp:Array = [];
-    var index:int = 0;
-    for (var i:int = 0; i < navigationActions.length; i++) {
-      var al:RActionList = navigationActions[i];
-      for (var j:int = 0; j < al.actions.length; j++) {
-        var item:Object = {};
-        item["action"] = al.actions[j];
-        nextPrevDp[index] = item;
-        index++;
-      }
-    }
-    nextPreviousButtonBar.dataProvider = nextPrevDp;
-    nextPreviousButtonBar.addEventListener(ItemClickEvent.ITEM_CLICK, function (event:ItemClickEvent):void {
-      execute(event.item["action"] as RAction);
-    });
+    // No need to install the navigation actions since browser correctly handle them
 
     var appName:Label = new Label();
     appNameNextPrevHBox.addChild(appName);
@@ -131,7 +114,7 @@ public class ThemedFlexController extends DefaultFlexController {
     centeredHBox.styleName = "topCenteredHBox";
     centeredHBox.height = 35;
     if (actions != null) {
-      for (i = 0; i < actions.length; i++) {
+      for (var i = 0; i < actions.length; i++) {
         var popupB:Button = getViewFactory().createPopupButton(actions[i] as RActionList, applicationFrame, true);
         popupB.styleName = "top";
         centeredHBox.addChild(popupB);

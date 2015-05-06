@@ -192,35 +192,14 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      *
      */
     _decorateApplicationFrame: function (applicationFrame, logo, exitAction, navigationActions, actions, helpActions) {
-      //var menuBar = this._createApplicationMenuBar(workspaceActions, actions, helpActions);
-      //applicationFrame.add(menuBar);
       var toolBar = new qx.ui.toolbar.ToolBar();
       toolBar.setAppearance("application-bar");
-      /*
-       toolBar.addListener("tap", function (e) {
-       var paddingBottomToRestore = toolBar.getUserData("paddingBottomToRestore");
-       if (paddingBottomToRestore) {
-       toolBar.setUserData("paddingBottomToRestore", 0);
-       toolBar.setPaddingBottom(paddingBottomToRestore);
-       } else {
-       toolBar.setUserData("paddingBottomToRestore", toolBar.getPaddingBottom());
-       toolBar.setPaddingBottom(0);
-       }
-       });
-       */
       var logoContainer = new qx.ui.container.Composite(new qx.ui.layout.Dock())
       logoContainer.setAppearance("logo-container");
       logoContainer.add(logo, {edge: "center"});
       toolBar.add(logoContainer);
 
-      if (navigationActions) {
-        for (var i = 0; i < navigationActions.length; i++) {
-          for (var j = 0; j < navigationActions[i].getActions().length; j++) {
-            navigationActions[i].getActions()[j].setStyleName("navigation-button");
-          }
-        }
-        this._getViewFactory().installActionLists(toolBar, navigationActions);
-      }
+      // Do not install navigation actions since browser integration works fine.
       if (this._getName()) {
         var appNameLabel = new qx.ui.basic.Label(this._getName());
         appNameLabel.setAppearance("application-label")
@@ -847,6 +826,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           decodedFragment[tmp[0]] = tmp[1];
         }
         if (decodedFragment.snapshotId && decodedFragment.snapshotId != this.__lastReceivedSnapshotId) {
+          this.__lastReceivedSnapshotId = decodedFragment.snapshotId;
           var command = new org.jspresso.framework.application.frontend.command.remote.RemoteHistoryDisplayCommand();
           command.setSnapshotId(decodedFragment.snapshotId);
           this.registerCommand(command);
