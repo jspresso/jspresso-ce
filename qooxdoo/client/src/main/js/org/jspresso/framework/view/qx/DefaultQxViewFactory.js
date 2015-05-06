@@ -11,14 +11,8 @@
  * details. You should have received a copy of the GNU Lesser General Public
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  *
- * @asset(qx/icon/Oxygen/16/actions/dialog-close.png)
- * @asset(qx/icon/Oxygen/16/actions/format-*.png)
- * @asset(qx/icon/Oxygen/16/actions/edit-*.png)
- * @asset(qx/icon/Oxygen/16/actions/insert-image.png)
- * @asset(qx/icon/Oxygen/16/actions/insert-link.png)
- * @asset(qx/icon/Oxygen/16/actions/insert-text.png)
- *
- * @asset(org/jspresso/framework/htmleditor/list-*.png)
+ * @asset(org/jspresso/framework/*.png)
+ * @asset(org/jspresso/framework/htmleditor/*.png)
  */
 
 qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
@@ -781,27 +775,27 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         {
           bold: {
             text: this._getActionHandler().translate("format_bold"),
-            image: "qx/icon/Oxygen/16/actions/format-text-bold.png",
+            image: "org/jspresso/framework/htmleditor/format-text-bold.png",
             action: htmlEditor.setBold
           },
           italic: {
             text: this._getActionHandler().translate("format_italic"),
-            image: "qx/icon/Oxygen/16/actions/format-text-italic.png",
+            image: "org/jspresso/framework/htmleditor/format-text-italic.png",
             action: htmlEditor.setItalic
           },
           underline: {
             text: this._getActionHandler().translate("format_underline"),
-            image: "qx/icon/Oxygen/16/actions/format-text-underline.png",
+            image: "org/jspresso/framework/htmleditor/format-text-underline.png",
             action: htmlEditor.setUnderline
           },
           strikethrough: {
             text: this._getActionHandler().translate("format_strikethrough"),
-            image: "qx/icon/Oxygen/16/actions/format-text-strikethrough.png",
+            image: "org/jspresso/framework/htmleditor/format-text-strikethrough.png",
             action: htmlEditor.setStrikeThrough
           },
           removeFormat: {
             text: this._getActionHandler().translate("remove_format"),
-            image: "qx/icon/Oxygen/16/actions/edit-clear.png",
+            image: "org/jspresso/framework/htmleditor/edit-clear.png",
             action: htmlEditor.removeFormat
           }
         },
@@ -809,22 +803,22 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         {
           alignLeft: {
             text: this._getActionHandler().translate("align_left"),
-            image: "qx/icon/Oxygen/16/actions/format-justify-left.png",
+            image: "org/jspresso/framework/htmleditor/format-justify-left.png",
             action: htmlEditor.setJustifyLeft
           },
           alignCenter: {
             text: this._getActionHandler().translate("align_center"),
-            image: "qx/icon/Oxygen/16/actions/format-justify-center.png",
+            image: "org/jspresso/framework/htmleditor/format-justify-center.png",
             action: htmlEditor.setJustifyCenter
           },
           alignRight: {
             text: this._getActionHandler().translate("align_right"),
-            image: "qx/icon/Oxygen/16/actions/format-justify-right.png",
+            image: "org/jspresso/framework/htmleditor/format-justify-right.png",
             action: htmlEditor.setJustifyRight
           },
           alignJustify: {
             text: this._getActionHandler().translate("align_justify"),
-            image: "qx/icon/Oxygen/16/actions/format-justify-fill.png",
+            image: "org/jspresso/framework/htmleditor/format-justify-fill.png",
             action: htmlEditor.setJustifyFull
           }
         },
@@ -836,38 +830,20 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           fontSize: {
             custom: this._fontSizeToolbarEntry
           }
-          // ,
-          // fontColor: { text: "Set Text Color", image:
-          // "demobrowser/demo/icons/htmlarea/format-text-color.png",
-          // action: this._fontColorHandler },
-          // textBackgroundColor: { text: "Set Text Background Color",
-          // image:
-          // "demobrowser/demo/icons/htmlarea/format-fill-color.png",
-          // action: this._textBackgroundColorHandler }
         },
 
         {
           indent: {
             text: this._getActionHandler().translate("indent_more"),
-            image: "qx/icon/Oxygen/16/actions/format-indent-more.png",
+            image: "org/jspresso/framework/htmleditor/format-indent-more.png",
             action: htmlEditor.insertIndent
           },
           outdent: {
             text: this._getActionHandler().translate("indent_less"),
-            image: "qx/icon/Oxygen/16/actions/format-indent-less.png",
+            image: "org/jspresso/framework/htmleditor/format-indent-less.png",
             action: htmlEditor.insertOutdent
           }
         },
-
-        // {
-        // insertImage: { text: "Insert Image", image:
-        // "qx/icon/Oxygen/16/actions/insert-image.png", action:
-        // this._insertImageHandler },
-        // insertLink: { text: "Insert Link", image:
-        // "qx/icon/Oxygen/16/actions/insert-link.png", action:
-        // this._insertLinkHandler }
-        // },
-
         {
           ol: {
             text: this._getActionHandler().translate("insert_ordered_list"),
@@ -880,15 +856,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             action: htmlEditor.insertUnorderedList
           }
         }
-        // ,
-        // {
-        // undo: { text: this._getActionHandler().translate("undo"), image:
-        // "qx/icon/Oxygen/16/actions/edit-undo.png", action:
-        // htmlEditor.undo },
-        // redo: { text: this._getActionHandler().translate("redo"), image:
-        // "qx/icon/Oxygen/16/actions/edit-redo.png", action:
-        // htmlEditor.redo }
-        // }
       ];
       var toolbar = new qx.ui.toolbar.ToolBar();
       toolbar.setDecorator("main");
@@ -1319,6 +1286,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             rowSpan: 1,
             colSpan: labelColSpan
           });
+          if (componentLabel.getLabel() == "") {
+            formLayout.setColumnFlex(labelCol - 1, 0);
+          }
         }
         component.setAllowShrinkX(true);
         if (remoteForm.getLabelsPosition() == "ASIDE") {
@@ -1387,6 +1357,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         scrollContainer.setHeight(form.getHeight());
         decoratedForm = scrollContainer;
       }
+      var lefter = new qx.ui.container.Composite(new qx.ui.layout.Grow());
+      decoratedForm.setAllowGrowX(false);
+      decoratedForm.setAllowShrinkX(true);
+      lefter.add(decoratedForm);
+      decoratedForm = lefter;
       return decoratedForm;
     },
 
@@ -2578,7 +2553,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       });
 
       var resetButton = new qx.ui.form.Button();
-      resetButton.setIcon("qx/icon/Oxygen/16/actions/dialog-close.png");
+      resetButton.setIcon("org/jspresso/framework/dialog-close.png");
       if (!remoteColorField.getResetEnabled()) {
         resetButton.setEnabled(false);
       }

@@ -11,7 +11,7 @@
  * details. You should have received a copy of the GNU Lesser General Public
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  *
- * @asset(qx/icon/Oxygen/16/actions/document-save.png)
+ * @asset(org/jspresso/framework/*.png)
  */
 qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.DefaultQxController", {
 
@@ -610,7 +610,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       uploadForm.setAppearance("upload-form");
       uploadForm.setLayout(new qx.ui.layout.VBox(10));
 
-      var uploadField = new uploadwidget.UploadField('uploadFile', 'Select File', 'icon/16/actions/document-save.png');
+      var uploadField = new uploadwidget.UploadField('uploadFile', 'Select File', 'org/jspresso/framework/cloud_upload.png');
       uploadForm.add(uploadField);
 
       uploadDialog.add(uploadForm, {flex: 1});
