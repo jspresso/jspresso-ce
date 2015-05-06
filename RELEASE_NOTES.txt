@@ -78,7 +78,7 @@
       </dependency>
   by :
       <dependency>
-        <groupId>org.apache.flex.framework</groupId>
+        <groupId>org.apache.flex.framework.themes</groupId>
         <artifactId>halo</artifactId>
         <type>swc</type>
         <scope>theme</scope>
