@@ -114,7 +114,7 @@ public class ThemedFlexController extends DefaultFlexController {
     centeredHBox.styleName = "topCenteredHBox";
     centeredHBox.height = 35;
     if (actions != null) {
-      for (var i = 0; i < actions.length; i++) {
+      for (var i:int = 0; i < actions.length; i++) {
         var popupB:Button = getViewFactory().createPopupButton(actions[i] as RActionList, applicationFrame, true);
         popupB.styleName = "top";
         centeredHBox.addChild(popupB);
