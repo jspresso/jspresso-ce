@@ -40,6 +40,9 @@ qx.Class.define("org.jspresso.framework.gui.remote.RForm", {
     },
     verticallyScrollable: {
       check: "Boolean"
+    },
+    widthResizeable: {
+      check: "Boolean"
     }
   }
 });

@@ -29,6 +29,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.Panel;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
@@ -237,7 +238,7 @@ import org.jspresso.framework.view.descriptor.TreeDescriptorHelper;
 
 /**
  * Factory for swing views.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("UnusedParameters")
@@ -251,7 +252,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Sets the listSelectionModelBinder.
-   * 
+   *
    * @param listSelectionModelBinder
    *          the listSelectionModelBinder to set.
    */
@@ -262,7 +263,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Sets the treeSelectionModelBinder.
-   * 
+   *
    * @param treeSelectionModelBinder
    *          the treeSelectionModelBinder to set.
    */
@@ -286,7 +287,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Finds the first card panel starting from a root component.
-   * 
+   *
    * @param root
    *          the root component to start for searching.
    * @return the 1st found card panel or null if none.
@@ -397,9 +398,8 @@ public class DefaultSwingViewFactory extends
     connector.setExceptionHandler(actionHandler);
     IView<JComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
-    viewComponent.setAction(getActionFactory().createAction(
-        viewDescriptor.getAction(), viewDescriptor.getPreferredSize(),
-        actionHandler, view, locale));
+    viewComponent.setAction(getActionFactory().createAction(viewDescriptor.getAction(),
+        viewDescriptor.getPreferredSize(), actionHandler, view, locale));
     viewComponent.setBorderPainted(false);
     switch (viewDescriptor.getRenderingOptions()) {
       case ICON:
@@ -519,8 +519,7 @@ public class DefaultSwingViewFactory extends
     JPanel viewComponent = createJPanel();
     CardLayout layout = new CardLayout();
     viewComponent.setLayout(layout);
-    BasicMapView<JComponent> view = constructMapView(viewComponent,
-        viewDescriptor);
+    BasicMapView<JComponent> view = constructMapView(viewComponent, viewDescriptor);
 
     viewComponent.add(createEmptyComponent(), ICardViewDescriptor.DEFAULT_CARD);
     viewComponent.add(createSecurityComponent(),
@@ -720,6 +719,11 @@ public class DefaultSwingViewFactory extends
     completePropertyViewsWithDynamicFonts(connector, propertyViews,
         modelDescriptor);
     applyComponentViewScrollability(viewDescriptor, viewComponent, view);
+    if (!viewDescriptor.isWidthResizeable()) {
+      JPanel lefter = new JPanel(new BorderLayout());
+      lefter.add(viewComponent, BorderLayout.WEST);
+      view.setPeer(lefter);
+    }
     return view;
   }
 
@@ -922,7 +926,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Attaches a dynamic tooltip listener.
-   * 
+   *
    * @param viewComponent
    *          the view component to attach the tooltip to
    * @param connector
@@ -948,7 +952,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Attaches a dynamic background listener.
-   * 
+   *
    * @param viewComponent
    *          the view component to attach the background to
    * @param connector
@@ -974,7 +978,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Attaches a dynamic foreground listener.
-   * 
+   *
    * @param viewComponent
    *          the view component to attach the foreground to
    * @param connector
@@ -1000,7 +1004,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Attaches a dynamic font listener.
-   * 
+   *
    * @param viewComponent
    *          the view component to attach the font to
    * @param connector
@@ -1572,7 +1576,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates an action field.
-   * 
+   *
    * @param viewDescriptor
    *          the component view descriptor.
    * @param showTextField
@@ -1586,7 +1590,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates a button.
-   * 
+   *
    * @return the created button.
    */
   protected JButton createJButton() {
@@ -1597,7 +1601,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates a button.
-   * 
+   *
    * @return the created button.
    */
   protected JComboButton createJComboButton() {
@@ -1608,7 +1612,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates a check box.
-   * 
+   *
    * @param viewDescriptor
    *          the component view descriptor.
    * @return the created check box.
@@ -1619,7 +1623,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates a radio button.
-   * 
+   *
    * @param viewDescriptor
    *          the component view descriptor.
    * @return the created radio button.
@@ -1631,7 +1635,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates a tri-state check box.
-   * 
+   *
    * @param viewDescriptor
    *          the component view descriptor.
    * @return the created tri-state check box.
@@ -1643,7 +1647,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates an color picker.
-   * 
+   *
    * @param viewDescriptor
    *          the component view descriptor.
    * @return the created color picker.
@@ -1655,7 +1659,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates a combo box.
-   * 
+   *
    * @param viewDescriptor
    *          the component view descriptor.
    * @return the created combo box.
@@ -1667,7 +1671,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates a date field.
-   * 
+   *
    * @param viewDescriptor
    *          the component view descriptor.
    * @param locale
@@ -1682,7 +1686,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates a JEdit text area.
-   * 
+   *
    * @param viewDescriptor
    *          the component view descriptor.
    * @param language
@@ -1704,7 +1708,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates an HTML editor.
-   * 
+   *
    * @param viewDescriptor
    *          the component view descriptor.
    * @param locale
@@ -1719,7 +1723,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates a label.
-   * 
+   *
    * @param viewDescriptor
    *          the component view descriptor.
    * @param bold
@@ -1747,7 +1751,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Created an action link.
-   * 
+   *
    * @param viewDescriptor
    *          the component view descriptor.
    * @return the created action link.
@@ -1774,7 +1778,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates a list.
-   * 
+   *
    * @param viewDescriptor
    *          the component view descriptor.
    * @return the created list.
@@ -1788,7 +1792,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates a menu item.
-   * 
+   *
    * @return the created menu item.
    */
   protected JMenuItem createJMenuItem() {
@@ -1797,7 +1801,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates a panel.
-   * 
+   *
    * @return the created panel.
    */
   protected JPanel createJPanel() {
@@ -1807,7 +1811,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates a password field.
-   * 
+   *
    * @param viewDescriptor
    *          the component view descriptor.
    * @return the created password field.
@@ -1820,7 +1824,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates a popup menu.
-   * 
+   *
    * @return the created popup menu.
    */
   protected JPopupMenu createJPopupMenu() {
@@ -1829,7 +1833,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates a scroll pane.
-   * 
+   *
    * @return the created scroll pane.
    */
   protected JScrollPane createJScrollPane() {
@@ -1839,7 +1843,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates a split pane.
-   * 
+   *
    * @param viewDescriptor
    *          the component view descriptor.
    * @return the created split pane.
@@ -1853,7 +1857,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates a tabbed pane.
-   * 
+   *
    * @param viewDescriptor
    *          the component view descriptor.
    * @return the created tabbed pane.
@@ -1864,7 +1868,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates a table.
-   * 
+   *
    * @param viewDescriptor
    *          the component view descriptor.
    * @return the created table.
@@ -1922,7 +1926,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates a text area.
-   * 
+   *
    * @param viewDescriptor
    *          the component view descriptor.
    * @return the created text area.
@@ -1936,7 +1940,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates a text field.
-   * 
+   *
    * @param viewDescriptor
    *          the component view descriptor.
    * @return the created text field.
@@ -1951,7 +1955,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates a text pane.
-   * 
+   *
    * @param viewDescriptor
    *          the component view descriptor.
    * @return the created text pane.
@@ -1965,7 +1969,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates a tool bar.
-   * 
+   *
    * @return the created tool bar.
    */
   protected JToolBar createJToolBar() {
@@ -1978,7 +1982,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates a tree.
-   * 
+   *
    * @param viewDescriptor
    *          the component view descriptor.
    * @return the created tree.
@@ -2105,7 +2109,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates a property label.
-   * 
+   *
    * @param propertyViewDescriptor
    *          the property view descriptor.
    * @param propertyComponent
@@ -2220,7 +2224,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Creates a security panel.
-   * 
+   *
    * @return the created security panel.
    */
   @Override
@@ -3266,7 +3270,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Decorates the created view with the appropriate border.
-   * 
+   *
    * @param view
    *          the view to decorate.
    *          @param translationProvider the translation provider.
@@ -4115,7 +4119,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Finds the first focusable component in the hierarchy.
-   * 
+   *
    * @param root
    *          th hierarchy root to explore.
    * @return the first focusable component or null if none.
@@ -4140,7 +4144,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Finds the first editable component in the hierarchy.
-   * 
+   *
    * @param root
    *          th hierarchy root to explore.
    * @return the first editable component or null if none.
@@ -4197,7 +4201,7 @@ public class DefaultSwingViewFactory extends
 
   /**
    * Configures a property view action by initializing its static context.
-   * 
+   *
    * @param propertyViewDescriptor
    *          the property view descriptor the action is attached to.
    * @param propertyViewAction

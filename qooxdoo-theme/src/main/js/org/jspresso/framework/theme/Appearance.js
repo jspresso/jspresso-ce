@@ -53,6 +53,16 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           }
         },
 
+        dynamicatom: {
+          include: "atom",
+          alias: "atom",
+          style: function (states) {
+            return {
+              textColor: undefined
+            };
+          }
+        },
+
         "menubar": {
           base: true,
           style: function (states) {
@@ -446,7 +456,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         "listitem/label": {
           style: function (states) {
             return {
-              textColor: states.selected ? "white" : "label"
+              textColor: states.selected ? "text-selected" : "label"
             };
           }
         },

@@ -11,10 +11,7 @@
  * details. You should have received a copy of the GNU Lesser General Public
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  *
- * @asset(qx/icon/Oxygen/22/actions/dialog-ok.png)
- * @asset(qx/icon/Oxygen/22/actions/dialog-close.png)
- * @asset(qx/icon/Oxygen/22/actions/dialog-cancel.png)
- *
+ * @asset(org/jspresso/framework/*.png)
  */
 
 qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
@@ -240,7 +237,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
     createOkButton: function () {
       var b = this.createButton(this.__actionHandler.translate("ok"), null,
           new org.jspresso.framework.gui.remote.RIcon().set({
-            imageUrlSpec: "qx/icon/Oxygen/22/actions/dialog-ok.png"
+            imageUrlSpec: "org/jspresso/framework/dialog-ok.png"
           }));
       return b;
     },
@@ -251,7 +248,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
     createCancelButton: function () {
       var b = this.createButton(this.__actionHandler.translate("cancel"), null,
           new org.jspresso.framework.gui.remote.RIcon().set({
-            imageUrlSpec: "qx/icon/Oxygen/22/actions/dialog-cancel.png"
+            imageUrlSpec: "org/jspresso/framework/dialog-cancel.png"
           }));
       return b;
     },
@@ -262,7 +259,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
     createYesButton: function () {
       var b = this.createButton(this.__actionHandler.translate("yes"), null,
           new org.jspresso.framework.gui.remote.RIcon().set({
-            imageUrlSpec: "qx/icon/Oxygen/22/actions/dialog-ok.png"
+            imageUrlSpec: "org/jspresso/framework/dialog-ok.png"
           }));
       return b;
     },
@@ -273,7 +270,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
     createNoButton: function () {
       var b = this.createButton(this.__actionHandler.translate("no"), null,
           new org.jspresso.framework.gui.remote.RIcon().set({
-            imageUrlSpec: "qx/icon/Oxygen/22/actions/dialog-close.png"
+            imageUrlSpec: "org/jspresso/framework/dialog-close.png"
           }));
       return b;
     },

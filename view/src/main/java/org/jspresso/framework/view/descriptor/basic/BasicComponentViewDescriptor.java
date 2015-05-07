@@ -74,6 +74,7 @@ public class BasicComponentViewDescriptor extends AbstractComponentViewDescripto
   private Map<String, Integer>          propertyWidths;
   private Map<String, List<String>>     renderedChildProperties;
   private boolean                       verticallyScrollable;
+  private boolean                       widthResizeable;
 
   /**
    * Constructs a new {@code BasicComponentViewDescriptor} instance.
@@ -82,6 +83,7 @@ public class BasicComponentViewDescriptor extends AbstractComponentViewDescripto
     super();
     columnCount = 1;
     verticallyScrollable = false;
+    widthResizeable = true;
     labelsHorizontalPosition = EHorizontalPosition.LEFT;
   }
 
@@ -111,7 +113,7 @@ public class BasicComponentViewDescriptor extends AbstractComponentViewDescripto
    * <p>
    * Default value is 1, meaning that all rendered fields will be stacked in a
    * single column.
-   * 
+   *
    * @param columnCount
    *          the columnCount to set.
    */
@@ -214,7 +216,7 @@ public class BasicComponentViewDescriptor extends AbstractComponentViewDescripto
 
   /**
    * Gets the verticallyScrollable.
-   * 
+   *
    * @return the verticallyScrollable.
    */
   @Override
@@ -242,6 +244,27 @@ public class BasicComponentViewDescriptor extends AbstractComponentViewDescripto
   @Override
   public boolean isHorizontallyScrollable() {
     return false;
+  }
+
+  /**
+   * This property allows to define the form horizontal fill behaviour.
+   * Whenever it is set to true, the corresponding UI component will fill all its available horizontal space.
+   * <p/>
+   * Default value is {@code true}.
+   *
+   * @param widthResizeable
+   *     the widthResizeable to set.
+   */
+  public void setWidthResizeable(boolean widthResizeable) {
+    this.widthResizeable = widthResizeable;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isWidthResizeable() {
+    return widthResizeable;
   }
 
   /**

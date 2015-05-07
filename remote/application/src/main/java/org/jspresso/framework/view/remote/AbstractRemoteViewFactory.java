@@ -1446,6 +1446,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         viewDescriptor), toolTipProperty);
     RForm viewComponent = createRForm(viewDescriptor);
     viewComponent.setVerticallyScrollable(viewDescriptor.isVerticallyScrollable());
+    viewComponent.setWidthResizeable(viewDescriptor.isWidthResizeable());
     viewComponent.setColumnCount(viewDescriptor.getColumnCount());
     viewComponent.setLabelsPosition(viewDescriptor.getLabelsPosition().name());
 

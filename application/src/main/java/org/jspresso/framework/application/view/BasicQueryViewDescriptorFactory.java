@@ -54,7 +54,6 @@ import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
 public class BasicQueryViewDescriptorFactory<E, F, G> implements
     IQueryViewDescriptorFactory {
 
-  private boolean            horizontallyResizable;
   private boolean            useCompactComparableQueryStructures;
 
   private IDisplayableAction okCloseDialogAction;
@@ -65,7 +64,6 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
    * Constructs a new {@code BasicQueryViewDescriptorFactory} instance.
    */
   public BasicQueryViewDescriptorFactory() {
-    horizontallyResizable = true;
   }
 
   /**
@@ -142,28 +140,9 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
         .setPropertyViewDescriptors(propertyViewDescriptors);
     queryComponentViewDescriptor.setColumnCount(8);
 
-    IViewDescriptor queryViewDescriptor;
-    if (horizontallyResizable) {
-      queryComponentViewDescriptor.setModelDescriptor(queryComponentDescriptor);
-      queryViewDescriptor = queryComponentViewDescriptor;
-    } else {
-      BasicBorderViewDescriptor borderViewDescriptor = new BasicBorderViewDescriptor();
-      borderViewDescriptor.setWestViewDescriptor(queryComponentViewDescriptor);
-      borderViewDescriptor.setModelDescriptor(queryComponentDescriptor);
-      queryViewDescriptor = borderViewDescriptor;
-    }
-
-    return queryViewDescriptor;
-  }
-
-  /**
-   * Sets the horizontallyResizable.
-   * 
-   * @param horizontallyResizable
-   *          the horizontallyResizable to set.
-   */
-  public void setHorizontallyResizable(boolean horizontallyResizable) {
-    this.horizontallyResizable = horizontallyResizable;
+    queryComponentViewDescriptor.setModelDescriptor(queryComponentDescriptor);
+    queryComponentViewDescriptor.setWidthResizeable(false);
+    return queryComponentViewDescriptor;
   }
 
   /**
@@ -216,7 +195,7 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
 
   /**
    * Creates the enumSelectAction.
-   * 
+   *
    * @param enumPropertyDescriptor
    *          the enumeration property descriptor to create the LOV action for.
    * @return the enumSelectAction.
@@ -248,7 +227,7 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
 
   /**
    * Gets the okCloseDialogAction.
-   * 
+   *
    * @return the okCloseDialogAction.
    */
   protected IDisplayableAction getOkCloseDialogAction() {
@@ -257,7 +236,7 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
 
   /**
    * Sets the okCloseDialogAction.
-   * 
+   *
    * @param okCloseDialogAction
    *          the okCloseDialogAction to set.
    */
@@ -267,7 +246,7 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
 
   /**
    * Gets the modalDialogAction.
-   * 
+   *
    * @return the modalDialogAction.
    */
   protected IDisplayableAction getModalDialogAction() {
@@ -276,7 +255,7 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
 
   /**
    * Sets the modalDialogAction.
-   * 
+   *
    * @param modalDialogAction
    *          the modalDialogAction to set.
    */
@@ -286,7 +265,7 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
 
   /**
    * Gets the defaultFindIconImageUrl.
-   * 
+   *
    * @return the defaultFindIconImageUrl.
    */
   protected String getDefaultFindIconImageUrl() {
@@ -295,7 +274,7 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
 
   /**
    * Sets the defaultFindIconImageUrl.
-   * 
+   *
    * @param defaultFindIconImageUrl
    *          the defaultFindIconImageUrl to set.
    */

@@ -26,6 +26,7 @@ public class RForm extends RComponent {
   private var _labelHorizontalPositions:Array;
   private var _labelsPosition:String;
   private var _verticallyScrollable:Boolean;
+  private var _widthResizeable:Boolean;
 
   public function RForm() {
     //default constructor.
@@ -85,6 +86,14 @@ public class RForm extends RComponent {
 
   public function set labelHorizontalPositions(value:Array):void {
     _labelHorizontalPositions = value;
+  }
+
+  public function get widthResizeable():Boolean {
+    return _widthResizeable;
+  }
+
+  public function set widthResizeable(value:Boolean):void {
+    _widthResizeable = value;
   }
 }
 }

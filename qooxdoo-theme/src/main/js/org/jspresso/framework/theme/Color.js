@@ -23,6 +23,7 @@ qx.Theme.define("org.jspresso.framework.theme.Color",
         "button-border-hovered": "#BBBBBB",
 
         "table-row": "gray",
+        "table-row-selected": "text-selected",
         "table-row-background-even": "white",
         "table-row-background-odd": "light-background",
 
@@ -33,8 +34,11 @@ qx.Theme.define("org.jspresso.framework.theme.Color",
         "header-text-selected": "gray",
         "light-background": "#F2F2F2",
         "dark-background": "#E2E2E2",
+
         "app-foreground": "#4568BB",
         "app-background": "white",
+        "text-selected": "white",
+
         "window-caption-background": "light-background",
         "window-border": "#979797",
         "window-border-inner": "#B7B7B7",

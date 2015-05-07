@@ -25,7 +25,7 @@ import java.util.List;
  * display a model in a form way. A form view will typically display a
  * subset of a bean simple properties. For instance, this might be implemented
  * by a swing JPanel containing a set of arranged label/widget pairs.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IComponentViewDescriptor extends IScrollableViewDescriptor {
@@ -33,7 +33,7 @@ public interface IComponentViewDescriptor extends IScrollableViewDescriptor {
   /**
    * Gets the number of properties displayed in a row. This is actually a
    * maximum value since a property might span multiple columns.
-   * 
+   *
    * @return the number of properties displayed in a row of this view.
    */
   int getColumnCount();
@@ -48,7 +48,7 @@ public interface IComponentViewDescriptor extends IScrollableViewDescriptor {
 
   /**
    * Gets the property view descriptors.
-   * 
+   *
    * @return the property view descriptors.
    */
   List<IPropertyViewDescriptor> getPropertyViewDescriptors();
@@ -81,4 +81,11 @@ public interface IComponentViewDescriptor extends IScrollableViewDescriptor {
    * @return the value font
    */
   String getValueFont();
+
+  /**
+   * Should the form width fill avalable width.
+   *
+   * @return the boolean
+   */
+  boolean isWidthResizeable();
 }

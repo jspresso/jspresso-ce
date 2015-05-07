@@ -1352,18 +1352,24 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         converter: this._modelToViewFieldConverter
       });
       form.setToolTip(toolTip);
+      // Before decoration happen
+      this._applyPreferredSize(remoteForm, form);
+      // Since it's not resizeable anymore
+      form.setMinWidth(form.getWidth());
+
       var decoratedForm = form;
       if (remoteForm.getVerticallyScrollable()) {
         var scrollContainer = new qx.ui.container.Scroll();
         scrollContainer.setScrollbarX("off");
         scrollContainer.setScrollbarY("auto");
         scrollContainer.add(form);
+        scrollContainer.setMinWidth(form.getMinWidth());
         scrollContainer.setWidth(form.getWidth());
         scrollContainer.setHeight(form.getHeight());
         decoratedForm = scrollContainer;
       }
       var lefter = new qx.ui.container.Composite(new qx.ui.layout.Grow());
-      decoratedForm.setAllowGrowX(false);
+      decoratedForm.setAllowGrowX(remoteForm.getWidthResizeable());
       decoratedForm.setAllowShrinkX(true);
       lefter.add(decoratedForm);
       decoratedForm = lefter;
@@ -2448,6 +2454,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var label = atom.getChildControl("label");
       var state = remoteLabel.getState();
       if (state) {
+        atom.setAppearance("dynamicatom");
+        atom.getChildControl("label").setSelectable(true);
         var modelController = new qx.data.controller.Object(state);
         if (remoteLabel instanceof org.jspresso.framework.gui.remote.RLink && remoteLabel.getAction()) {
           this._getRemotePeerRegistry().register(remoteLabel.getAction());
@@ -2471,6 +2479,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             }
           });
         }
+        this._sizeMaxComponentWidth(atom, remoteLabel, remoteLabel.getMaxLength())
       } else {
         var labelText = remoteLabel.getLabel();
         labelText = org.jspresso.framework.util.html.HtmlUtil.replaceNewlines(labelText);

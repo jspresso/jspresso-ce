@@ -20,27 +20,27 @@ package org.jspresso.framework.gui.remote;
 
 /**
  * A form component.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RForm extends RComponent {
 
   private static final long serialVersionUID = -5376646056261143239L;
 
-  private int               columnCount;
-  private RComponent[]      elementLabels;
-  private RComponent[]      elements;
-  private Integer[]         elementWidths;
-  private String[]          labelHorizontalPositions;
-
-  private boolean           verticallyScrollable;
-  private String            labelsPosition;
+  private int          columnCount;
+  private RComponent[] elementLabels;
+  private RComponent[] elements;
+  private Integer[]    elementWidths;
+  private String[]     labelHorizontalPositions;
+  private boolean      verticallyScrollable;
+  private boolean      widthResizeable;
+  private String       labelsPosition;
 
   /**
    * Constructs a new {@code RForm} instance.
    *
    * @param guid
-   *          the guid
+   *     the guid
    */
   public RForm(String guid) {
     super(guid);
@@ -56,7 +56,7 @@ public class RForm extends RComponent {
 
   /**
    * Gets the columnCount.
-   * 
+   *
    * @return the columnCount.
    */
   public int getColumnCount() {
@@ -65,7 +65,7 @@ public class RForm extends RComponent {
 
   /**
    * Gets the elementLabels.
-   * 
+   *
    * @return the elementLabels.
    */
   public RComponent[] getElementLabels() {
@@ -74,7 +74,7 @@ public class RForm extends RComponent {
 
   /**
    * Gets the elements.
-   * 
+   *
    * @return the elements.
    */
   public RComponent[] getElements() {
@@ -83,7 +83,7 @@ public class RForm extends RComponent {
 
   /**
    * Gets the elementWidths.
-   * 
+   *
    * @return the elementWidths.
    */
   public Integer[] getElementWidths() {
@@ -92,7 +92,7 @@ public class RForm extends RComponent {
 
   /**
    * Gets the labelsPosition.
-   * 
+   *
    * @return the labelsPosition.
    */
   public String getLabelsPosition() {
@@ -101,9 +101,9 @@ public class RForm extends RComponent {
 
   /**
    * Sets the columnCount.
-   * 
+   *
    * @param columnCount
-   *          the columnCount to set.
+   *     the columnCount to set.
    */
   public void setColumnCount(int columnCount) {
     this.columnCount = columnCount;
@@ -111,9 +111,9 @@ public class RForm extends RComponent {
 
   /**
    * Sets the elementLabels.
-   * 
+   *
    * @param elementLabels
-   *          the elementLabels to set.
+   *     the elementLabels to set.
    */
   public void setElementLabels(RComponent... elementLabels) {
     this.elementLabels = elementLabels;
@@ -121,9 +121,9 @@ public class RForm extends RComponent {
 
   /**
    * Sets the elements.
-   * 
+   *
    * @param elements
-   *          the elements to set.
+   *     the elements to set.
    */
   public void setElements(RComponent... elements) {
     this.elements = elements;
@@ -131,9 +131,9 @@ public class RForm extends RComponent {
 
   /**
    * Sets the elementWidths.
-   * 
+   *
    * @param elementWidths
-   *          the elementWidths to set.
+   *     the elementWidths to set.
    */
   public void setElementWidths(Integer... elementWidths) {
     this.elementWidths = elementWidths;
@@ -141,9 +141,9 @@ public class RForm extends RComponent {
 
   /**
    * Sets the labelsPosition.
-   * 
+   *
    * @param labelsPosition
-   *          the labelsPosition to set.
+   *     the labelsPosition to set.
    */
   public void setLabelsPosition(String labelsPosition) {
     this.labelsPosition = labelsPosition;
@@ -151,7 +151,7 @@ public class RForm extends RComponent {
 
   /**
    * Gets the verticallyScrollable.
-   * 
+   *
    * @return the verticallyScrollable.
    */
   public boolean isVerticallyScrollable() {
@@ -160,9 +160,9 @@ public class RForm extends RComponent {
 
   /**
    * Sets the verticallyScrollable.
-   * 
+   *
    * @param verticallyScrollable
-   *          the verticallyScrollable to set.
+   *     the verticallyScrollable to set.
    */
   public void setVerticallyScrollable(boolean verticallyScrollable) {
     this.verticallyScrollable = verticallyScrollable;
@@ -180,9 +180,28 @@ public class RForm extends RComponent {
   /**
    * Sets label horizontal positions.
    *
-   * @param labelHorizontalPositions the label horizontal positions
+   * @param labelHorizontalPositions
+   *     the label horizontal positions
    */
   public void setLabelHorizontalPositions(String... labelHorizontalPositions) {
     this.labelHorizontalPositions = labelHorizontalPositions;
+  }
+
+  /**
+   * Is width resizeable.
+   *
+   * @return the boolean
+   */
+  public boolean isWidthResizeable() {
+    return widthResizeable;
+  }
+
+  /**
+   * Sets width resizeable.
+   *
+   * @param widthResizeable the width resizeable
+   */
+  public void setWidthResizeable(boolean widthResizeable) {
+    this.widthResizeable = widthResizeable;
   }
 }

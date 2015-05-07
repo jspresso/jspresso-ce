@@ -248,4 +248,14 @@ public class MobileComponentViewDescriptor extends AbstractComponentViewDescript
   public void setExcludedWritingProperties(List<String> excludedWritingProperties) {
     this.excludedWritingProperties = excludedWritingProperties;
   }
+
+  /**
+   * Always true.
+   *
+   * @return the boolean
+   */
+  @Override
+  public boolean isWidthResizeable() {
+    return true;
+  }
 }
