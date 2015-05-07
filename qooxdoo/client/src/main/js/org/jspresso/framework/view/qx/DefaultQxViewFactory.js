@@ -1198,7 +1198,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _createForm: function (remoteForm) {
       var form = new qx.ui.container.Composite();
       form.setPadding(2);
-      var formLayout = new qx.ui.layout.Grid(2, 0);
+      var formLayout = new qx.ui.layout.Grid(0, 0);
       var columnCount = remoteForm.getColumnCount();
       var col = 0;
       var row = 0;
@@ -1270,8 +1270,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           if (remoteForm.getLabelsPosition() == "ASIDE") {
             if (labelHorizontalPosition == "RIGHT") {
               componentLabel.setAlignX("left");
+              componentLabel.setMarginRight(10);
             } else {
               componentLabel.setAlignX("right");
+              componentLabel.setMarginLeft(10);
             }
             componentLabel.setAlignY("middle");
           } else {
@@ -1280,14 +1282,17 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           }
           componentLabel.setAllowStretchX(false);
           componentLabel.setAllowStretchY(false);
-          form.add(componentLabel, {
-            row: labelRow,
-            column: labelCol,
-            rowSpan: 1,
-            colSpan: labelColSpan
-          });
           if (componentLabel.getLabel() == "") {
             formLayout.setColumnFlex(labelCol - 1, 0);
+            compColSpan++;
+            compCol--;
+          } else {
+            form.add(componentLabel, {
+              row: labelRow,
+              column: labelCol,
+              rowSpan: 1,
+              colSpan: labelColSpan
+            });
           }
         }
         component.setAllowShrinkX(true);

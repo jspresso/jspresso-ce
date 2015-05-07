@@ -298,7 +298,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       ]);
       workspaceStackWrapper.add(this.__workspaceStack);
       splitContainer.add(workspaceStackWrapper, 1);
-      logo.addListener("tap", function (e) {
+      var collapser = function (e) {
         var widthToRestore = workspaceAccordion.getUserData("widthToRestore");
         if (widthToRestore) {
           workspaceAccordion.setUserData("widthToRestore", 0);
@@ -307,7 +307,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           workspaceAccordion.setUserData("widthToRestore", workspaceAccordion.getSizeHint().width);
           workspaceAccordion.setWidth(0);
         }
-      });
+      };
+      splitContainer.getBlocker().addListener("tap", collapser);
 
       applicationFrame.add(splitContainer, {flex: 1});
       if (secondaryActions && secondaryActions.length > 0) {
@@ -610,7 +611,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       uploadForm.setAppearance("upload-form");
       uploadForm.setLayout(new qx.ui.layout.VBox(10));
 
-      var uploadField = new uploadwidget.UploadField('uploadFile', 'Select File', 'org/jspresso/framework/cloud_upload.png');
+      var uploadField = new uploadwidget.UploadField('uploadFile', 'Select File',
+          'org/jspresso/framework/cloud_upload.png');
       uploadForm.add(uploadField);
 
       uploadDialog.add(uploadForm, {flex: 1});
