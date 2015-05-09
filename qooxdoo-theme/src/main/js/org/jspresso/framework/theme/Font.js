@@ -11,7 +11,7 @@
  * details. You should have received a copy of the GNU Lesser General Public
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  *
- * @asset(fonts/*.ttf)
+ * @asset(org/jspresso/framework/theme/fonts/*.ttf)
  */
 
 qx.Theme.define("org.jspresso.framework.theme.Font",
@@ -27,7 +27,7 @@ qx.Theme.define("org.jspresso.framework.theme.Font",
             {
               family: "Sansation",
               source: [
-                "fonts/Sansation-Regular.ttf"
+                "org/jspresso/framework/theme/fonts/Sansation-Regular.ttf"
               ]
             }
           ]
