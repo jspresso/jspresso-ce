@@ -10,7 +10,7 @@
 
 qx.Theme.define("${package}.startup.qooxdoo.theme.Appearance",
 {
-  extend : qx.theme.modern.Appearance,
+  extend : org.jspresso.framework.theme.Appearance,
 
   appearances :
   {

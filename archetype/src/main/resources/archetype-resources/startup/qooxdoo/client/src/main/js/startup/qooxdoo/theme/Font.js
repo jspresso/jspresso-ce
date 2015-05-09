@@ -10,7 +10,7 @@
 
 qx.Theme.define("${package}.startup.qooxdoo.theme.Font",
 {
-  extend : qx.theme.modern.Font,
+  extend : org.jspresso.framework.theme.Font,
 
   fonts :
   {
