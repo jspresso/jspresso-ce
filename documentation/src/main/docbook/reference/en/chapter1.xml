@@ -1763,13 +1763,13 @@ Entity('Team',
 
 Entity('Company'...) {
   ...
-  <emphasis role="bold">refId 'contact'</emphasis><co id="contact_2" />
+  <emphasis role="bold">refId 'contact', id: 'contact'</emphasis><co id="contact_2" />
   ...
 }
 
 Entity('OrganizationalUnit'...) {
   ...
-  <emphasis role="bold">refId 'contact'</emphasis><co id="contact_3" />
+  <emphasis role="bold">refId 'contact', id: 'contact'</emphasis><co id="contact_3" />
   ...
 }</programlisting><calloutlist>
           <callout arearefs="contact_1">
