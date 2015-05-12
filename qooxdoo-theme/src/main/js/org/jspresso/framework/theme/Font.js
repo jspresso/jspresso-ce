@@ -26,10 +26,36 @@ qx.Theme.define("org.jspresso.framework.theme.Font",
           sources: [
             {
               family: "Sansation",
+              bold: false,
+              italic: false,
               source: [
                 "org/jspresso/framework/theme/fonts/Sansation-Regular.ttf"
               ]
-            }
+            },
+            {
+              family: "Sansation",
+              bold: true,
+              italic: false,
+              source: [
+                "org/jspresso/framework/theme/fonts/Sansation-Bold.ttf"
+              ]
+            },
+            {
+              family: "Sansation",
+              bold: false,
+              italic: true,
+              source: [
+                "org/jspresso/framework/theme/fonts/Sansation-Italic.ttf"
+              ]
+            },
+            {
+              family: "Sansation",
+              bold: true,
+              italic: true,
+              source: [
+                "org/jspresso/framework/theme/fonts/Sansation-BoldItalic.ttf"
+              ]
+            },
           ]
         },
 
