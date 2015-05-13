@@ -298,14 +298,19 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       ]);
       workspaceStackWrapper.add(this.__workspaceStack);
       splitContainer.add(workspaceStackWrapper, 1);
+      var forwardStates = {"collapsed": true};
+      splitContainer._forwardStates = forwardStates;
+      splitContainer.getChildControl("splitter")._forwardStates = forwardStates;
       var collapser = function (e) {
         var widthToRestore = workspaceAccordion.getUserData("widthToRestore");
         if (widthToRestore) {
           workspaceAccordion.setUserData("widthToRestore", 0);
           workspaceAccordion.setWidth(widthToRestore);
+          splitContainer.removeState("collapsed");
         } else {
           workspaceAccordion.setUserData("widthToRestore", workspaceAccordion.getSizeHint().width);
           workspaceAccordion.setWidth(0);
+          splitContainer.addState("collapsed");
         }
       };
       splitContainer.getBlocker().addListener("tap", collapser);

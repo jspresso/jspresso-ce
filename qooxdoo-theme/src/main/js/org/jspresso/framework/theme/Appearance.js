@@ -10,6 +10,8 @@
  * PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details. You should have received a copy of the GNU Lesser General Public
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @asset(org/jspresso/framework/theme/icons/*.png)
  */
 
 qx.Theme.define("org.jspresso.framework.theme.Appearance",
@@ -501,6 +503,16 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
             return {
               minWidth: 15,
               minHeight: 15
+            };
+          }
+        },
+
+        "application-split/splitter/knob": {
+          alias: "splitpane/splitter/knob",
+          include: "splitpane/splitter/knob",
+          style: function (states) {
+            return {
+              source: "org/jspresso/framework/theme/icons/toggle-" + (states.collapsed ? "right" : "left") + ".png"
             };
           }
         },
