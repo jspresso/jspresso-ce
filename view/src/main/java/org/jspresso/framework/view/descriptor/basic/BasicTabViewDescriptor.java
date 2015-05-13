@@ -32,7 +32,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * <p>
  * Default cascading order follows the order of nested view registrations in the
  * container.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor
@@ -66,7 +66,7 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor
 
   /**
    * Gets the renderingOptions.
-   * 
+   *
    * @return the renderingOptions.
    */
   @Override
@@ -97,7 +97,7 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * Registers the list of views to be displayed as tabs. The tabs order follows
    * the children views order of this list.
-   * 
+   *
    * @param tabs
    *          the tabs to set.
    */
@@ -107,7 +107,7 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor
 
   /**
    * Sets the viewDescriptors.
-   * 
+   *
    * @param viewDescriptors
    *          the viewDescriptors to set.
    * @deprecated use setTabs instead.
@@ -119,7 +119,7 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor
 
   /**
    * Gets the lazy.
-   * 
+   *
    * @return the lazy.
    */
   @Override
@@ -130,7 +130,7 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * When set to true, this parameter configures the tabs to be lazy bound
    * (binding occurs only for the selected tab). This feature is only supported
-   * for tab views with {@code cascadingModel} set to true. default value
+   * for tab views with {@code cascadingModel} set to false. default value
    * is {@code true}.
    *
    * @param lazy
