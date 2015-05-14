@@ -512,6 +512,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           include: "splitpane/splitter/knob",
           style: function (states) {
             return {
+              paddingLeft: 0,
               source: "org/jspresso/framework/theme/icons/toggle-" + (states.collapsed ? "right" : "left") + ".png"
             };
           }
