@@ -23,7 +23,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           base: true,
           style: function (states) {
             return {
-              backgroundColor: "app-background"
+              //backgroundColor: "app-background"
             };
           }
         },
@@ -469,7 +469,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             return {
               backgroundColor: undefined,
-              decorator: "header-box"
+              decorator: "header-box",
+              height: 80
             };
           }
         },
@@ -537,7 +538,9 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           include: "toolbar/part",
           style: function (states) {
             return {
-              width: 250
+              width: 250,
+              height: 80,
+              backgroundColor: "navigator-header"
             }
           }
         },
@@ -561,9 +564,16 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
               minHeight: 30,
               padding: [0, 10],
               gap: 20,
-              backgroundColor: "light-background",
-              textColor: "header-text",
+              backgroundColor: "navigator-header",
               font: "headline-bold"
+            }
+          }
+        },
+
+        "accordion-section/bar/label": {
+          style: function (states) {
+            return {
+              textColor: "navigator-header-text"
             }
           }
         },
@@ -583,7 +593,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             return {
               margin: 0,
-              padding: 0
+              padding: 0,
+              backgroundColor: "navigator"
             };
           }
         },
@@ -592,9 +603,24 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           alias: "tree-folder",
           incude: "tree-folder",
           style: function (states) {
+            var backgroundColor;
+            if (states.selected) {
+              backgroundColor = "navigator-selected";
+            }
             return {
               margin: 0,
-              padding: [0, 0, 0, 10]
+              padding: [0, 0, 0, 10],
+              backgroundColor: backgroundColor
+            };
+          }
+        },
+
+        "workspace-tree-folder/label": {
+          alias: "tree-folder/label",
+          incude: "tree-folder/label",
+          style: function (states) {
+            return {
+              textColor: states.selected && !states.disabled ? "navigator-text-selected" : "navigator-text"
             };
           }
         },
@@ -617,7 +643,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
               padding: 0,
               minWidth: 0,
               width: 230,
-              decorator: "accordion-box"
+              decorator: "accordion-box",
+              backgroundColor: "navigator"
             }
           }
         },

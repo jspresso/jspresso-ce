@@ -1672,6 +1672,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       treeController.setDelegate({
         createItem: function () {
           var item = new qx.ui.tree.TreeFolder();
+          if (remoteTree.getStyleName()) {
+            item.setAppearance(remoteTree.getStyleName() + "-folder");
+          }
           item.getChildControl("label").setRich(true);
           return item;
         },

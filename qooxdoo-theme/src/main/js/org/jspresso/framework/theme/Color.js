@@ -57,6 +57,13 @@ qx.Theme.define("org.jspresso.framework.theme.Color",
         "tooltip": "light-background",
         "tooltip-text": "gray",
 
-        "label": "gray"
+        "label": "gray",
+
+        "navigator": "background-selected-dark",
+        "navigator-text": "white",
+        "navigator-header": "navigator",
+        "navigator-header-text": "white",
+        "navigator-selected": "background-selected",
+        "navigator-text-selected": "white"
       }
     });

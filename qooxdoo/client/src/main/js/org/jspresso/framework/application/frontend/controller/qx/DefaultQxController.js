@@ -180,24 +180,24 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       }
     },
 
-    /**
-     *
-     * @param applicationFrame {qx.ui.container.Composite}
-     * @param logo {qx.ui.basic.Image}
-     * @param exitAction {org.jspresso.framework.gui.remote.RAction}
-     * @param navigationActions {org.jspresso.framework.gui.remote.RActionList[]}
-     * @param actions {org.jspresso.framework.gui.remote.RActionList[]}
-     * @param helpActions {org.jspresso.framework.gui.remote.RActionList[]}
-     * @return {undefined}
-     *
-     */
-    _decorateApplicationFrame: function (applicationFrame, logo, exitAction, navigationActions, actions, helpActions) {
-      var toolBar = new qx.ui.toolbar.ToolBar();
-      toolBar.setAppearance("application-bar");
+    __createLogoContainer: function (logo) {
       var logoContainer = new qx.ui.container.Composite(new qx.ui.layout.Dock())
       logoContainer.setAppearance("logo-container");
       logoContainer.add(logo, {edge: "center"});
-      toolBar.add(logoContainer);
+      return logoContainer;
+    },
+
+    /**
+     * @param actions {org.jspresso.framework.gui.remote.RActionList[]}
+     * @param navigationActions {org.jspresso.framework.gui.remote.RActionList[]}
+     * @param helpActions {org.jspresso.framework.gui.remote.RActionList[]}
+     * @param exitAction {org.jspresso.framework.gui.remote.RAction}
+     * @return {qx.ui.toolbar.ToolBar}
+     *
+     */
+    _createApplicationToolBar: function (actions, navigationActions, helpActions, exitAction) {
+      var toolBar = new qx.ui.toolbar.ToolBar();
+      toolBar.setAppearance("application-bar");
 
       // Do not install navigation actions since browser integration works fine.
       if (this._getName()) {
@@ -226,11 +226,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           }
         }
       }
-      //this._getViewFactory().installActionLists(toolBar, helpActions);
       exitAction.setStyleName("exit-button");
       exitAction.setName(null);
       toolBar.add(this._getViewFactory().createAction(exitAction));
-      applicationFrame.add(toolBar);
+      return toolBar;
     },
 
     /**
@@ -255,10 +254,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
 
       var logo = new qx.ui.basic.Image("logo.png");
       logo.setAppearance("logo");
-      this._decorateApplicationFrame(applicationFrame, logo, exitAction, navigationActions, actions, helpActions);
 
       var workspaceAccordion = new qx.ui.container.Composite(new qx.ui.layout.VBox());
       workspaceAccordion.setAppearance("application-accordion");
+
+      var logoContainer = this.__createLogoContainer(logo);
+      workspaceAccordion.add(logoContainer);
+
       this.__workspaceAccordionGroup = new qx.ui.form.RadioGroup();
       this.__workspaceAccordionGroup.setAllowEmptySelection(false);
       for (var i = 0; i < workspaceActions.getActions().length; i++) {
@@ -288,15 +290,20 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       var splitContainer = new qx.ui.splitpane.Pane("horizontal");
       splitContainer.setAppearance("application-split");
       splitContainer.add(workspaceAccordion, 0);
-      var workspaceStackWrapper = new qx.ui.container.Composite(new qx.ui.layout.Grow());
-      this.__workspaceStack.syncAppearance();
-      workspaceStackWrapper.setPadding([
-        this.__workspaceStack.getMarginTop(),
-        this.__workspaceStack.getMarginRight(),
-        this.__workspaceStack.getMarginBottom(),
-        this.__workspaceStack.getMarginLeft()
-      ]);
-      workspaceStackWrapper.add(this.__workspaceStack);
+      var workspaceStackWrapper = new qx.ui.container.Composite(new qx.ui.layout.VBox());
+      var toolBar = this._createApplicationToolBar(actions, navigationActions, helpActions, exitAction);
+      workspaceStackWrapper.add(toolBar);
+      /*
+       this.__workspaceStack.syncAppearance();
+       workspaceStackWrapper.setPadding([
+       this.__workspaceStack.getMarginTop(),
+       this.__workspaceStack.getMarginRight(),
+       this.__workspaceStack.getMarginBottom(),
+       this.__workspaceStack.getMarginLeft()
+       ]);
+       */
+      workspaceStackWrapper.add(this.__workspaceStack, {flex: 1});
+
       splitContainer.add(workspaceStackWrapper, 1);
       var forwardStates = {"collapsed": true};
       splitContainer._forwardStates = forwardStates;
@@ -353,10 +360,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         workspaceViewUI.setUserData("workspaceName", workspaceName);
         this.__workspaceStack.add(workspaceViewUI);
         if (workspaceNavigator) {
+          workspaceNavigator.setStyleName("workspace-tree");
           var workspaceNavigatorUI = this.createComponent(workspaceNavigator);
           if (workspaceNavigatorUI instanceof qx.ui.tree.Tree) {
             workspaceNavigatorUI.setHideRoot(true);
-            workspaceNavigatorUI.setAppearance("workspace-tree");
+            //workspaceNavigatorUI.setAppearance("workspace-tree");
           }
           var existingChildren = this.__workspaceAccordionGroup.getChildren();
           var existingChild;
