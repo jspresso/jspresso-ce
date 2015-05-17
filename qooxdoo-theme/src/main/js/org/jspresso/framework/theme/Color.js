@@ -60,9 +60,9 @@ qx.Theme.define("org.jspresso.framework.theme.Color",
         "label": "gray",
 
         "navigator": "background-selected-dark",
-        "navigator-text": "white",
+        "navigator-text": "text-selected",
         "navigator-header": "navigator",
-        "navigator-header-text": "white",
+        "navigator-header-text": "text-selected",
         "navigator-selected": "background-selected",
         "navigator-text-selected": "white"
       }
