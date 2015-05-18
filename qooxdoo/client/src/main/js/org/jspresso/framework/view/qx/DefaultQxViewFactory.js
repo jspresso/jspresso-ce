@@ -1433,8 +1433,13 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _createTextFieldComponent: function () {
       var tf = new qx.ui.form.TextField();
       tf.addListener("focus", function () {
+        tf.selectAllText();
+        var oldValue = tf.getValue();
         new qx.util.DeferredCall(function () {
-          tf.selectAllText();
+          var newValue = tf.getValue();
+          if (newValue && oldValue && newValue == oldValue) {
+            tf.selectAllText();
+          }
         }).schedule();
       });
       return tf;
