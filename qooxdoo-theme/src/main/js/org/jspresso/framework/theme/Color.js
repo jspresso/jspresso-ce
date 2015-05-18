@@ -60,10 +60,10 @@ qx.Theme.define("org.jspresso.framework.theme.Color",
         "label": "gray",
 
         "navigator": "background-selected-dark",
-        "navigator-text": "text-selected",
+        "navigator-text": "white",
         "navigator-header": "navigator",
-        "navigator-header-text": "text-selected",
+        "navigator-header-text": "white",
         "navigator-selected": "background-selected",
-        "navigator-text-selected": "white"
+        "navigator-text-selected": "text-selected"
       }
     });
