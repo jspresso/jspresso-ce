@@ -147,8 +147,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             return {
               decorator: "panel-box",
-              headerCellHeight: 25,
-              rowHeight: 25
+              headerCellHeight: 27,
+              rowHeight: 27
             };
           }
         },
