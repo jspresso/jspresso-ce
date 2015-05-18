@@ -66,7 +66,7 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedTable", {
           newIdentifier = "Right";
         }
         evt.init(evt.getNativeEvent(), evt.getTarget(), newIdentifier);
-      } else if (!evt.getModifiers() && evt.isPrintable()) {
+      } else if (/*!evt.getModifiers() &&*/ evt.isPrintable()) {
         this.startEditing()
       }
       this.base(arguments, evt);
