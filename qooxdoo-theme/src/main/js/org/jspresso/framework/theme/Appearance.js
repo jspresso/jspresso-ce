@@ -11,7 +11,7 @@
  * details. You should have received a copy of the GNU Lesser General Public
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  *
- * @asset(org/jspresso/framework/theme/icons/*.png)
+ * @asset(org/jspresso/framework/theme/icons/*.*)
  */
 
 qx.Theme.define("org.jspresso.framework.theme.Appearance",

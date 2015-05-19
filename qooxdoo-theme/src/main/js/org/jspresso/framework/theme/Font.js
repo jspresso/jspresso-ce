@@ -11,7 +11,7 @@
  * details. You should have received a copy of the GNU Lesser General Public
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  *
- * @asset(org/jspresso/framework/theme/fonts/*.ttf)
+ * @asset(org/jspresso/framework/theme/fonts/*.*)
  */
 
 qx.Theme.define("org.jspresso.framework.theme.Font",
@@ -25,37 +25,49 @@ qx.Theme.define("org.jspresso.framework.theme.Font",
           family: ["Arial"],
           sources: [
             {
-              family: "Sansation",
+              family: "Exo",
               bold: false,
               italic: false,
               source: [
-                "org/jspresso/framework/theme/fonts/Sansation-Regular.ttf"
+                "org/jspresso/framework/theme/fonts/Exo2.0-Regular-webfont.eot",
+                "org/jspresso/framework/theme/fonts/Exo2.0-Regular-webfont.svg#exo_2.0",
+                "org/jspresso/framework/theme/fonts/Exo2.0-Regular-webfont.ttf",
+                "org/jspresso/framework/theme/fonts/Exo2.0-Regular-webfont.woff"
               ]
             },
             {
-              family: "Sansation",
+              family: "Exo",
               bold: true,
               italic: false,
               source: [
-                "org/jspresso/framework/theme/fonts/Sansation-Bold.ttf"
+                "org/jspresso/framework/theme/fonts/Exo2.0-Bold-webfont.eot",
+                "org/jspresso/framework/theme/fonts/Exo2.0-Bold-webfont.svg#exo_2.0bold",
+                "org/jspresso/framework/theme/fonts/Exo2.0-Bold-webfont.ttf",
+                "org/jspresso/framework/theme/fonts/Exo2.0-Bold-webfont.woff"
               ]
             },
             {
-              family: "Sansation",
+              family: "Exo",
               bold: false,
               italic: true,
               source: [
-                "org/jspresso/framework/theme/fonts/Sansation-Italic.ttf"
+                "org/jspresso/framework/theme/fonts/Exo2.0-Italic-webfont.eot",
+                "org/jspresso/framework/theme/fonts/Exo2.0-Italic-webfont.svg#exo_2.0italic",
+                "org/jspresso/framework/theme/fonts/Exo2.0-Italic-webfont.ttf",
+                "org/jspresso/framework/theme/fonts/Exo2.0-Italic-webfont.woff"
               ]
             },
             {
-              family: "Sansation",
+              family: "Exo",
               bold: true,
               italic: true,
               source: [
-                "org/jspresso/framework/theme/fonts/Sansation-BoldItalic.ttf"
+                "org/jspresso/framework/theme/fonts/Exo2.0-BoldItalic-webfont.eot",
+                "org/jspresso/framework/theme/fonts/Exo2.0-BoldItalic-webfont.svg#exo_2.0bold_italic",
+                "org/jspresso/framework/theme/fonts/Exo2.0-BoldItalic-webfont.ttf",
+                "org/jspresso/framework/theme/fonts/Exo2.0-BoldItalic-webfont.woff"
               ]
-            },
+            }
           ]
         },
 

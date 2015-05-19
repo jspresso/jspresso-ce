@@ -20,7 +20,9 @@ qx.Mixin.define("org.jspresso.framework.patch.MTransition", {
 
   statics: {
     // Transition
-    TRANSITION_PROPERTY_NAME: qx.bom.Style.getCssName(qx.core.Environment.get("css.transition").name)
+    TRANSITION_PROPERTY_NAME: qx.core.Environment.get("css.transition") ?
+        qx.bom.Style.getCssName(qx.core.Environment.get("css.transition").name) :
+        undefined
   },
 
   properties: {
@@ -32,11 +34,13 @@ qx.Mixin.define("org.jspresso.framework.patch.MTransition", {
 
   members: {
     _styleTransition: function (styles) {
-      var transition = this.getTransition();
-      if (transition === null) {
-        return;
+      if (org.jspresso.framework.patch.MTransition.TRANSITION_PROPERTY_NAME) {
+        var transition = this.getTransition();
+        if (transition === null) {
+          return;
+        }
+        styles[org.jspresso.framework.patch.MTransition.TRANSITION_PROPERTY_NAME] = transition;
       }
-      styles[org.jspresso.framework.patch.MTransition.TRANSITION_PROPERTY_NAME] = transition;
     }
   }
 });
