@@ -57,7 +57,11 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
       if (state.getBindings()) {
         state.removeAllBindings();
       }
-      this.__currentBinding = this.__currentCellState.bind("value", state, "value");
+      this.__currentBinding = this.__currentCellState.bind("value", state, "value", {
+        converter: function (value) {
+          return value == "" ? null : value;
+        }
+      });
       this.__actionHandler.setCurrentViewStateGuid(this.__currentCellState.getGuid(),
           this.__currentCellState.getPermId());
       var editorWidget = this.__viewFactory.createComponent(this.__rComponent, false);
