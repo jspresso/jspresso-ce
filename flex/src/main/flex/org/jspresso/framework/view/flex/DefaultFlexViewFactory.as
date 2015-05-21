@@ -1150,7 +1150,7 @@ public class DefaultFlexViewFactory {
         var tf:TextInput = (event.currentTarget as TextInput);
         var inputText:String = tf.text;
         if (inputText != remoteState.value) {
-          if (remoteState.value == null) {
+          if (remoteState.value == null || remoteState.value == "") {
             tf.text = null;
           } else {
             tf.text = remoteState.value.toString();
@@ -1166,7 +1166,7 @@ public class DefaultFlexViewFactory {
             remoteState.value = null;
           }
         } else if (inputText != remoteState.value) {
-          if (remoteState.value == null) {
+          if (remoteState.value == null || remoteState.value == "") {
             tf.text = null;
           } else {
             tf.text = remoteState.value.toString();
@@ -2785,16 +2785,24 @@ public class DefaultFlexViewFactory {
               as RemoteCompositeValueState;
           var cell:RemoteValueState = row.children[currentEditor.index] as RemoteValueState;
 
-          table.callLater(function():void {
-            // Let the editor binding complete before setting the cell value.
+          if (event.reason == DataGridEventReason.OTHER) {
+            table.callLater(function ():void {
+              // Let the editor binding complete before setting the cell value.
+              cell.value = state.value;
+            });
+          } else {
             cell.value = state.value;
-          });
+          }
         }
       }
-      // Let all actions be triggered before resetting the currnt view state.
-      table.callLater(function():void {
+      if (event.reason == DataGridEventReason.OTHER) {
+        // Let all actions be triggered before resetting the current view state.
+        table.callLater(function ():void {
+          _actionHandler.setCurrentViewStateGuid(table, null, null);
+        });
+      } else {
         _actionHandler.setCurrentViewStateGuid(table, null, null);
-      });
+      }
     });
     table.addEventListener(DataGridEvent.ITEM_EDIT_BEGINNING, function (event:DataGridEvent):void {
       if (event.itemRenderer is SelectionCheckBoxRenderer) {
