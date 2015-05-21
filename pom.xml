@@ -9,11 +9,11 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <jspresso.version>4.1-SNAPSHOT</jspresso.version>
-    <sjs.version>2.0</sjs.version>
+    <sjs.version>2.1</sjs.version>
 
     <ant-contrib.version>1.0b3</ant-contrib.version>
     <spring-beandoc.version>0.8.1</spring-beandoc.version>
-    
+
     <!-- Plugins versions -->
     <compiler-plugin.version>3.1</compiler-plugin.version>
     <resources-plugin.version>2.6</resources-plugin.version>
