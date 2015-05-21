@@ -101,7 +101,7 @@ public class RemoteValueDgItemEditor extends Canvas implements IColumnIndexProvi
         tf = (_editor as Container).getChildByName("tf") as UIComponent;
       }
       if (tf is TextInput) {
-        (tf as TextInput).text = "";
+        (tf as TextInput).text = null;
       }
     }
   }
