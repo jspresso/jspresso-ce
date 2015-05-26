@@ -2046,6 +2046,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         table = new org.jspresso.framework.view.qx.EnhancedTable(tableModel, custom);
       }
       table.setStatusBarVisible(false);
+      table.highlightFocusedRow(false);
+      table.setResetSelectionOnHeaderTap(false);
       if (!remoteTable.getColumnReorderingAllowed()) {
         table.getPaneScroller(0)._startMoveHeader = function (moveCol, pageX) {
         };
@@ -2268,6 +2270,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           try {
             selectionModel.setBatchMode(true);
             selectionModel.resetSelection();
+            table.setFocusedCell(null, null);
             if (stateSelection.length > 0) {
               var minIndex = -1;
               var maxIndex = minIndex;

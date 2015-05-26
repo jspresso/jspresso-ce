@@ -206,9 +206,16 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             return {
               show: "label",
-              textColor: "header-text",
               font: "headline-bold",
               paddingLeft: 0
+            };
+          }
+        },
+
+        "collapsable-panel/bar/label": {
+          style: function (states) {
+            return {
+              textColor: "section-header-text"
             };
           }
         },
@@ -424,6 +431,15 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             return {
               backgroundColor: states.active ? "window-caption-background" : "background-disabled"
+            };
+          }
+        },
+
+        "window/title": {
+          base: true,
+          style: function (states) {
+            return {
+              textColor: "label"
             };
           }
         },
