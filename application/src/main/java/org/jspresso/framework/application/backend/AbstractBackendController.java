@@ -2489,9 +2489,7 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   @Override
   public boolean isDirtyTrackingEnabled() {
-    if (isUnitOfWorkActive()) {
-      return unitOfWork.isDirtyTrackingEnabled();
-    }
+    // Since both session and UOW dirty tracker are synchronized, we can only query session one.
     return sessionUnitOfWork.isDirtyTrackingEnabled();
   }
 
@@ -2500,11 +2498,9 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   @Override
   public void setDirtyTrackingEnabled(boolean enabled) {
-    if (isUnitOfWorkActive()) {
-      unitOfWork.setDirtyTrackingEnabled(enabled);
-    } else {
-      sessionUnitOfWork.setDirtyTrackingEnabled(enabled);
-    }
+    // Both session AND UOW dirty tracker should be disabled at the same time. See bug #jspresso-ce-21.
+    sessionUnitOfWork.setDirtyTrackingEnabled(enabled);
+    unitOfWork.setDirtyTrackingEnabled(enabled);
   }
 
   /**
