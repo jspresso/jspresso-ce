@@ -2500,7 +2500,9 @@ public abstract class AbstractBackendController extends AbstractController imple
   public void setDirtyTrackingEnabled(boolean enabled) {
     // Both session AND UOW dirty tracker should be disabled at the same time. See bug #jspresso-ce-21.
     sessionUnitOfWork.setDirtyTrackingEnabled(enabled);
-    unitOfWork.setDirtyTrackingEnabled(enabled);
+    if (isUnitOfWorkActive()) {
+      unitOfWork.setDirtyTrackingEnabled(enabled);
+    }
   }
 
   /**
