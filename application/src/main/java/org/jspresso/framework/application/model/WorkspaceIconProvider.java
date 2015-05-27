@@ -18,47 +18,61 @@
  */
 package org.jspresso.framework.application.model;
 
+import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.gui.IconProvider;
 
 /**
  * This image url provider uses a delegate provider to look up the rendering
  * image of a bean module based on its projected object.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class WorkspaceIconProvider implements IconProvider {
 
   private IconProvider delegateProvider;
+  private Dimension    defaultDimension;
+
 
   /**
    * {@inheritDoc}
    */
   @Override
   public Icon getIconForObject(Object userObject) {
+    Icon icon = null;
     if (delegateProvider != null && userObject instanceof BeanModule
-        && ((BeanModule) userObject).getModuleObject() != null
-        && ((BeanModule) userObject).getIcon() == null) {
-      return delegateProvider.getIconForObject(((BeanModule) userObject)
-          .getModuleObject());
+        && ((BeanModule) userObject).getModuleObject() != null && ((BeanModule) userObject).getIcon() == null) {
+      icon = delegateProvider.getIconForObject(((BeanModule) userObject).getModuleObject());
     }
     if (userObject instanceof Module) {
-      return ((Module) userObject).getIcon();
+      icon = ((Module) userObject).getIcon();
     }
     if (userObject instanceof Workspace) {
-      return ((Workspace) userObject).getIcon();
+      icon = ((Workspace) userObject).getIcon();
     }
-    return null;
+    if (icon != null && icon.getDimension() == null) {
+      icon.setDimension(defaultDimension);
+    }
+    return icon;
   }
 
   /**
    * Sets the delegateProvider.
-   * 
+   *
    * @param delegateProvider
-   *          the delegateProvider to set.
+   *     the delegateProvider to set.
    */
   public void setDelegateProvider(IconProvider delegateProvider) {
     this.delegateProvider = delegateProvider;
   }
 
+  /**
+   * Sets default dimension.
+   *
+   * @param defaultDimension
+   *     the default dimension
+   */
+  public void setDefaultDimension(Dimension defaultDimension) {
+    this.defaultDimension = defaultDimension;
+  }
 }
