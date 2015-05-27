@@ -1172,6 +1172,7 @@
   <!-- Workspaces -->
   <bean id="defaultModuleIconProvider" class="org.jspresso.framework.application.model.WorkspaceIconProvider">
     <property name="delegateProvider" ref="defaultDomainIconProvider" />
+    <property name="defaultDimension" ref="defaultIconDimension"/>
   </bean>
 
   <bean abstract="true" id="abstractWorkspace" class="org.jspresso.framework.application.model.Workspace">

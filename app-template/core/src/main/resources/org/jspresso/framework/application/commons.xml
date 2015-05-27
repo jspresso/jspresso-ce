@@ -71,15 +71,15 @@
   <!-- The implementation used as ComponentDescriptorRegistry. -->
   <bean id="componentDescriptorRegistry" class="org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptorRegistry" />
 
+  <bean id="defaultIconDimension" class="org.jspresso.framework.util.gui.Dimension">
+    <property name="width" value="16"/>
+    <property name="height" value="16"/>
+  </bean>
+
   <!-- The implementation used as ComponentIconProvider. -->
   <bean id="defaultDomainIconProvider" class="org.jspresso.framework.model.descriptor.ComponentIconProvider">
     <property name="componentDescriptorRegistry" ref="componentDescriptorRegistry" />
-    <property name="defaultDimension">
-      <bean class="org.jspresso.framework.util.gui.Dimension">
-        <property name="width" value="16" />
-        <property name="height" value="16" />
-      </bean>
-    </property>
+    <property name="defaultDimension" ref="defaultIconDimension"/>
   </bean>
 
   <!-- The implementation used as ComponentFactory. -->
