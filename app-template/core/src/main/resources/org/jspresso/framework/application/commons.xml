@@ -4,7 +4,7 @@
   default-lazy-init="true">
 
   <!-- Root application context for the Jspresso framework. -->
-  
+
   <bean id="null" class="org.jspresso.framework.util.spring.NullFactoryBean"/>
 
   <bean id="mockMessageSource" class="org.jspresso.framework.util.i18n.mock.MockMessageSource" />
@@ -74,6 +74,12 @@
   <!-- The implementation used as ComponentIconProvider. -->
   <bean id="defaultDomainIconProvider" class="org.jspresso.framework.model.descriptor.ComponentIconProvider">
     <property name="componentDescriptorRegistry" ref="componentDescriptorRegistry" />
+    <property name="defaultDimension">
+      <bean class="org.jspresso.framework.util.gui.Dimension">
+        <property name="width" value="16" />
+        <property name="height" value="16" />
+      </bean>
+    </property>
   </bean>
 
   <!-- The implementation used as ComponentFactory. -->
@@ -89,14 +95,14 @@
     <property name="queryComponentDescriptorFactory" ref="queryComponentDescriptorFactory" />
     <property name="entityGUIDGenerator" ref="entityGUIDGenerator" />
   </bean>
-  
+
   <alias name="basicEntityFactory" alias="basicComponentFactory"/>
 
   <bean id="controllerAwareEntityFactory" parent="basicEntityFactory"
     class="org.jspresso.framework.application.backend.entity.ControllerAwareProxyEntityFactory"/>
-  
+
   <alias name="controllerAwareEntityFactory" alias="controllerAwareComponentFactory"/>
-  
+
   <!-- Root action beans. -->
 
   <bean id="applicationQueryComponentRefiner" class="org.jspresso.framework.application.backend.action.MockQueryComponentRefiner" />
@@ -114,7 +120,7 @@
 
   <bean id="initModuleFilterAction" parent="initModuleFilterActionBase" />
 
-  <!-- The implementation used as view factory. View factory is not defined as singleton since it can implement some cache 
+  <!-- The implementation used as view factory. View factory is not defined as singleton since it can implement some cache
     a the session level. -->
   <bean id="abstractViewFactory" class="org.jspresso.framework.view.AbstractViewFactory" abstract="true">
     <property name="connectorFactory" ref="connectorFactory" />
@@ -144,7 +150,7 @@
 
   <!-- The scriptHandler. -->
   <bean id="scriptHandler" class="org.jspresso.framework.util.scripting.DefaultScriptHandler" />
- 
+
   <!-- Custom exception handler -->
   <bean id="customExceptionHandler" class="org.jspresso.framework.util.exception.MockExceptionHandler" />
 
@@ -287,7 +293,7 @@
   </bean>
 
   <bean abstract="true" id="abstractBackController" parent="abstractBackControllerBase" />
-  
+
   <!-- Utility beans for model. -->
   <bean id="basicReportDescriptor_INSTANCE" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
     <property name="staticField"
@@ -384,7 +390,7 @@
   <bean id="rootEntityVersion" class="org.jspresso.framework.model.descriptor.basic.BasicIntegerPropertyDescriptor">
     <property name="name" value="version" />
   </bean>
-  
+
   <bean id="rootEntityDescriptor" class="org.jspresso.framework.model.descriptor.basic.BasicInterfaceDescriptor">
     <constructor-arg value="org.jspresso.framework.model.entity.IEntity" />
     <property name="propertyDescriptors">
@@ -409,7 +415,7 @@
       <list />
     </property>
   </bean>
-  
+
   <alias name="rootEntityDescriptor" alias="IEntity"/>
 
   <bean id="entityDescriptorInit" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean" lazy-init="false">
