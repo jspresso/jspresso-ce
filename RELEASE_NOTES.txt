@@ -12,7 +12,6 @@
       <dependency>
         <groupId>commons-dbcp</groupId>
         <artifactId>commons-dbcp</artifactId>
-        <version>${commons-dbcp.version}</version>
       </dependency>
     by :
       <dependency>
@@ -124,7 +123,7 @@
       ${SCSS_CMD} --style compressed
 
 
-- Following our will to support other perstsient stores (e.g. MongoDB, see RFE #1234), AbstractHibernateAction and
+- Following our will to support other persistent stores (e.g. MongoDB, see RFE #1234), AbstractHibernateAction and
   AbstractHibernateCollectionAction have been deleted. Your actions should inherit BackendAction and
   AbstractCollectionAction. Persistences methods, thate were generic, have been migrated to these classes. The only
   things that will change are that you will be forced to implicitely cast backend controller to
