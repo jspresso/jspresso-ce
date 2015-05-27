@@ -249,7 +249,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
             }
             return {
               textColor: "label",
-              backgroundColor: backgroundColor
+              backgroundColor: backgroundColor,
+              minHeight: 25
             };
           }
         },
@@ -627,7 +628,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
             return {
               margin: 0,
               padding: [0, 0, 0, 10],
-              backgroundColor: backgroundColor
+              backgroundColor: backgroundColor,
+              minHeight: 25
             };
           }
         },
