@@ -486,7 +486,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
             return {
               backgroundColor: undefined,
               decorator: "header-box",
-              height: 80
+              height: 80,
+              spacing: 20
             };
           }
         },
