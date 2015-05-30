@@ -383,7 +383,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
     Set<String> inListValues = new HashSet<>();
     boolean nullAllowed = false;
     for (EnumValueQueryStructure inListValue : enumQueryStructure.getSelectedEnumerationValues()) {
-      if (inListValue.getValue() == null || "".equals(inListValue.getValue())) {
+      if (inListValue.getValue() == null || "" .equals(inListValue.getValue())) {
         nullAllowed = true;
       } else {
         inListValues.add(inListValue.getValue());
@@ -519,11 +519,16 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
   /**
    * Creates a criterion by processing a comparable query structure.
    *
-   * @param path      the path to the comparable property.
-   * @param queryStructure      the comparable query structure.
-   * @param componentDescriptor the component descriptor
-   * @param queryComponent the query component
-   * @param context the context
+   * @param path
+   *     the path to the comparable property.
+   * @param queryStructure
+   *     the comparable query structure.
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param queryComponent
+   *     the query component
+   * @param context
+   *     the context
    * @return the created criterion or null if no criterion necessary.
    */
   protected Criterion createComparableQueryStructureRestriction(String path, ComparableQueryStructure queryStructure,
@@ -604,7 +609,9 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
   }
 
   /**
-   * Sets the triStateBooleanSupported.
+   * Configures the criteria factory whether to consider use 3-states booleans, i.e. true, false or undefined. If
+   * <strong>triStateBooleanSupported</strong> is set to false, then a {@code false} boolean value will simply be
+   * ignored in the generated criteria.
    *
    * @param triStateBooleanSupported
    *     the triStateBooleanSupported to set.
