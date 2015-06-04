@@ -372,6 +372,9 @@
                   <arg line="pull"/>
                 </exec>
                 <exec executable="git" dir="${gitbook-root}" failonerror="false">
+                  <arg line="add *"/>
+                </exec>
+                <exec executable="git" dir="${gitbook-root}" failonerror="false">
                   <arg line="commit -a -m 'Generated documentation updated'"/>
                 </exec>
                 <exec executable="git" dir="${gitbook-root}" failonerror="false">
