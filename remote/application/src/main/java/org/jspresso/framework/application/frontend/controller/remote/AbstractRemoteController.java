@@ -897,6 +897,7 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
   public boolean disposeModalDialog(RComponent sourceWidget, Map<String, Object> context) {
     if (super.disposeModalDialog(sourceWidget, context)) {
       registerCommand(new RemoteCloseDialogCommand());
+      transferFocus(context);
       return true;
     }
     return false;

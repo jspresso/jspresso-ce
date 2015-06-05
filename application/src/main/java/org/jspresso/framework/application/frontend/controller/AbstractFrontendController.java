@@ -501,11 +501,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
         LOG.debug("Trying to dispose a dialog that is not the top one. Ignoring.");
         return false;
       }
-      @SuppressWarnings("unchecked")
-      E componentToFocus = (E) context.get(FrontendAction.COMPONENT_TO_FOCUS);
-      if (componentToFocus != null) {
-        focus(componentToFocus);
-      }
       // preserve action param
       Object actionParam = context.get(ActionContextConstants.ACTION_PARAM);
       context.putAll(savedContext);
@@ -515,6 +510,19 @@ public abstract class AbstractFrontendController<E, F, G> extends
       LOG.debug("Trying to dispose a modal dialog while there is no dialog left.");
     }
     return false;
+  }
+
+  /**
+   * Transfer focus.
+   *
+   * @param context the context
+   */
+  protected void transferFocus(Map<String, Object> context) {
+    @SuppressWarnings("unchecked")
+    E componentToFocus = (E) context.get(FrontendAction.COMPONENT_TO_FOCUS);
+    if (componentToFocus != null) {
+      focus(componentToFocus);
+    }
   }
 
   private boolean isParentOf(E parentView, IView<E> view) {
