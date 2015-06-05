@@ -64,8 +64,8 @@ public class CreateQueryComponentAction extends BackendAction {
 
   private static final Logger              LOG                      = LoggerFactory
                                                                         .getLogger(CreateQueryComponentAction.class);
-  
-  
+
+
   /**
    * Constructs a new {@code CreateQueryComponentAction} instance.
    */
@@ -111,13 +111,6 @@ public class CreateQueryComponentAction extends BackendAction {
             erqDescriptor));
     context.put(QUERY_MODEL_CONNECTOR, modelConnector);
     modelConnector.setConnectorValue(queryComponent);
-    String queryPropertyValue = getActionCommand(context);
-    if (queryPropertyValue != null && !queryPropertyValue.equals("*")
-        && queryPropertyValue.length() > 0) {
-      modelConnector.getChildConnector(
-          erqDescriptor.getComponentDescriptor().getAutoCompleteProperty())
-          .setConnectorValue(queryPropertyValue);
-    }
     context.put(IQueryComponent.QUERY_COMPONENT, queryComponent);
     return super.execute(actionHandler, context);
   }
@@ -126,7 +119,7 @@ public class CreateQueryComponentAction extends BackendAction {
    * Completes the query component before passing it along the chain. This
    * default implementation handles the reference property descriptor
    * initialization mapping.
-   * 
+   *
    * @param queryComponent
    *          the query component.
    * @param erqDescriptor
@@ -167,7 +160,7 @@ public class CreateQueryComponentAction extends BackendAction {
 
   /**
    * Gets the queryComponentDescriptorFactory.
-   * 
+   *
    * @return the queryComponentDescriptorFactory.
    */
   protected IQueryComponentDescriptorFactory getQueryComponentDescriptorFactory() {
@@ -176,7 +169,7 @@ public class CreateQueryComponentAction extends BackendAction {
 
   /**
    * Sets the queryComponentDescriptorFactory.
-   * 
+   *
    * @param queryComponentDescriptorFactory
    *          the queryComponentDescriptorFactory to set.
    */
@@ -187,7 +180,7 @@ public class CreateQueryComponentAction extends BackendAction {
 
   /**
    * Sets the queryComponentRefiner.
-   * 
+   *
    * @param queryComponentRefiner
    *          the queryComponentRefiner to set.
    */

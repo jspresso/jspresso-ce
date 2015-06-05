@@ -196,4 +196,9 @@ public interface IQueryComponent extends Map<String, Object>, IPageable, ISortab
    */
   void setPrefetchProperties(List<String> prefetchProperties);
 
+  /**
+   * Resets the query component.
+   */
+  void reset();
+
 }

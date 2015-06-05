@@ -101,6 +101,10 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   public static final  String LOV_SELECTED_ITEM        = "LOV_SELECTED_ITEM";
   private static final String NON_LOV_TRIGGERING_CHARS =
       "%" + IQueryComponent.DISJUNCT + IQueryComponent.NOT_VAL + IQueryComponent.NULL_VAL;
+  /**
+   * {@code REF_VIEW_DESCRIPTOR}.
+   */
+  public static final  String REF_VIEW_DESCRIPTOR      = "REF_VIEW_DESCRIPTOR";
   private boolean                                    autoquery;
   private Integer                                    pageSize;
   private IDisplayableAction                         cancelAction;
@@ -141,6 +145,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     }
     IReferencePropertyDescriptor<IComponent> erqDescriptor = getEntityRefQueryDescriptor(context);
     context.put(CreateQueryComponentAction.COMPONENT_REF_DESCRIPTOR, erqDescriptor);
+    context.put(REF_VIEW_DESCRIPTOR, getView(context).getDescriptor());
     IValueConnector viewConnector = getViewConnector(context);
     Object preselectedItem = context.get(LOV_PRESELECTED_ITEM);
     String autoCompletePropertyValue = getActionCommand(context);
@@ -180,13 +185,22 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     if (viewConnector instanceof IRenderableCompositeValueConnector
         && ((IRenderableCompositeValueConnector) viewConnector).getRenderingConnector() != null) {
       Map<String, ESort> lovOrderingProperties = new LinkedHashMap<>();
-      autoCompletePropertyName = ((IRenderableCompositeValueConnector) viewConnector).getRenderingConnector()
-                                                                                     .getModelDescriptor().getName();
+      IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) ((IRenderableCompositeValueConnector)
+          viewConnector)
+          .getRenderingConnector().getModelDescriptor();
+      if (propertyDescriptor.isModifiable()) {
+        autoCompletePropertyName = propertyDescriptor.getName();
+      } else {
+        autoCompletePropertyName = erqDescriptor.getReferencedDescriptor().getAutoCompleteProperty();
+      }
       if (autoCompletePropertyValue != null && autoCompletePropertyValue.length() > 0 && !autoCompletePropertyValue
-          .equals("*") && !containsNonLovTriggeringChar(autoCompletePropertyValue)) {
-        // only modify sort ordering if we are in auto complete mode
-        // see bug #549
-        lovOrderingProperties.put(autoCompletePropertyName, ESort.ASCENDING);
+          .equals("*")) {
+        queryComponent.put(autoCompletePropertyName, autoCompletePropertyValue);
+        if (!containsNonLovTriggeringChar(autoCompletePropertyValue)) {
+          // only modify sort ordering if we are in auto complete mode
+          // see bug #549
+          lovOrderingProperties.put(autoCompletePropertyName, ESort.ASCENDING);
+        }
       }
       Map<String, ESort> legacyOrderingProperties = queryComponent.getOrderingProperties();
       if (legacyOrderingProperties != null) {
