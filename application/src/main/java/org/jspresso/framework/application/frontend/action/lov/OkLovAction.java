@@ -24,26 +24,33 @@ import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.IBackendController;
+import org.jspresso.framework.application.backend.action.CreateQueryComponentAction;
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.binding.CollectionConnectorHelper;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
+import org.jspresso.framework.model.component.query.QueryComponent;
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
+import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
  * This action augments the context by setting the action parameter to the
  * selected entity of the LOV result list (or null if none is selected).
- * 
- * @author Vincent Vandenschrick
+ *
  * @param <E>
- *          the actual gui component type used.
+ *     the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *     the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *     the actual action type used.
+ * @author Vincent Vandenschrick
  */
 public class OkLovAction<E, F, G> extends FrontendAction<E, F, G> {
 
@@ -51,8 +58,23 @@ public class OkLovAction<E, F, G> extends FrontendAction<E, F, G> {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler,
-      Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+    Object masterComponent = context.get(CreateQueryComponentAction.MASTER_COMPONENT);
+    IViewDescriptor viewDescriptor = (IViewDescriptor) context.get(LovAction.REF_VIEW_DESCRIPTOR);
+    String refProperty = null;
+    String tsProperty = null;
+    List<String> childPropertiesToExtract = null;
+    if (masterComponent instanceof QueryComponent && viewDescriptor instanceof IPropertyViewDescriptor) {
+      IModelDescriptor modelDescriptor = viewDescriptor.getModelDescriptor();
+      refProperty = modelDescriptor.getName();
+      if (modelDescriptor instanceof IReferencePropertyDescriptor<?>) {
+        tsProperty = ((IReferencePropertyDescriptor) modelDescriptor).getReferencedDescriptor().getToStringProperty();
+      }
+      if (((IPropertyViewDescriptor) viewDescriptor).getRenderedChildProperties() != null
+          && ((IPropertyViewDescriptor) viewDescriptor).getRenderedChildProperties().size() > 0) {
+        childPropertiesToExtract = ((IPropertyViewDescriptor) viewDescriptor).getRenderedChildProperties();
+      }
+    }
     if (!context.containsKey(LovAction.LOV_SELECTED_ITEM)) {
       ICollectionConnector resultConnector = null;
       // Do not use getViewConnector(context) since, on the table, it will return the cell connector
@@ -63,8 +85,8 @@ public class OkLovAction<E, F, G> extends FrontendAction<E, F, G> {
         resultConnector = (ICollectionConnector) viewConnector;
       } else if (viewConnector instanceof ICompositeValueConnector) {
         // this is from the dialog.
-        resultConnector = (ICollectionConnector) ((ICompositeValueConnector) viewConnector)
-            .getChildConnector(IQueryComponent.QUERIED_COMPONENTS);
+        resultConnector = (ICollectionConnector) ((ICompositeValueConnector) viewConnector).getChildConnector(
+            IQueryComponent.QUERIED_COMPONENTS);
         if (resultConnector == null) {
           resultConnector = CollectionConnectorHelper.extractMainCollectionConnector(viewConnector);
         }
@@ -75,20 +97,24 @@ public class OkLovAction<E, F, G> extends FrontendAction<E, F, G> {
         if (resultSelectedIndices != null && resultSelectedIndices.length > 0) {
           List<Object> selectedElements = new ArrayList<>();
           for (int resultSelectedIndex : resultSelectedIndices) {
-            Object selectedElement = resultConnector.getChildConnector(
-                resultSelectedIndex).getConnectorValue();
+            Object selectedElement = resultConnector.getChildConnector(resultSelectedIndex).getConnectorValue();
             if (selectedElement instanceof IEntity) {
               if (!bc.isUnitOfWorkActive()) {
-                selectedElement = bc.merge((IEntity) selectedElement,
-                    EMergeMode.MERGE_LAZY);
+                selectedElement = bc.merge((IEntity) selectedElement, EMergeMode.MERGE_LAZY);
               }
             }
             selectedElements.add(selectedElement);
           }
-          if (selectedElements.size() == 1) {
-            setActionParameter(selectedElements.get(0), context);
+          if (childPropertiesToExtract != null) {
+            Object nextActionParam = ((QueryComponent) masterComponent).buildNestedQueryComponent(refProperty, selectedElements,
+                tsProperty, childPropertiesToExtract);
+            setActionParameter(nextActionParam, context);
           } else {
-            setActionParameter(selectedElements, context);
+            if (selectedElements.size() == 1) {
+              setActionParameter(selectedElements.get(0), context);
+            } else {
+              setActionParameter(selectedElements, context);
+            }
           }
         } else {
           setActionParameter(null, context);
@@ -99,7 +125,12 @@ public class OkLovAction<E, F, G> extends FrontendAction<E, F, G> {
         return false;
       }
     } else {
-      setActionParameter(context.get(LovAction.LOV_SELECTED_ITEM), context);
+      Object selectedElement = context.get(LovAction.LOV_SELECTED_ITEM);
+      if (childPropertiesToExtract != null) {
+        selectedElement = ((QueryComponent) masterComponent).buildNestedQueryComponent(refProperty, selectedElement, tsProperty,
+            childPropertiesToExtract);
+      }
+      setActionParameter(selectedElement, context);
     }
     return super.execute(actionHandler, context);
   }

@@ -97,11 +97,13 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   /**
    * {@code LOV_SELECTED_ITEM}.
    */
-  public static final String                         LOV_SELECTED_ITEM        = "LOV_SELECTED_ITEM";
-  private static final String                        NON_LOV_TRIGGERING_CHARS = "%"
-                                                                                  + IQueryComponent.DISJUNCT
-                                                                                  + IQueryComponent.NOT_VAL
-                                                                                  + IQueryComponent.NULL_VAL;
+  public static final  String LOV_SELECTED_ITEM        = "LOV_SELECTED_ITEM";
+  private static final String NON_LOV_TRIGGERING_CHARS =
+      "%" + IQueryComponent.DISJUNCT + IQueryComponent.NOT_VAL + IQueryComponent.NULL_VAL;
+  /**
+   * {@code REF_VIEW_DESCRIPTOR}.
+   */
+  public static final  String REF_VIEW_DESCRIPTOR      = "REF_VIEW_DESCRIPTOR";
   private boolean                                    autoquery;
   private Integer                                    pageSize;
   private IDisplayableAction                         cancelAction;
@@ -135,8 +137,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
       context.put(StaticQueryComponentsAction.COMPONENT_STORE_KEY, getStaticComponentStore());
     }
     IReferencePropertyDescriptor<IComponent> erqDescriptor = getEntityRefQueryDescriptor(context);
-    context.put(CreateQueryComponentAction.COMPONENT_REF_DESCRIPTOR,
-        erqDescriptor);
+    context.put(CreateQueryComponentAction.COMPONENT_REF_DESCRIPTOR, erqDescriptor);
+    context.put(REF_VIEW_DESCRIPTOR, getView(context).getDescriptor());
     IValueConnector viewConnector = getViewConnector(context);
     Object preselectedItem = context.get(LOV_PRESELECTED_ITEM);
     String autoCompletePropertyValue = getActionCommand(context);
@@ -184,15 +186,22 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
         && ((IRenderableCompositeValueConnector) viewConnector)
             .getRenderingConnector() != null) {
       Map<String, ESort> lovOrderingProperties = new LinkedHashMap<>();
-      autoCompletePropertyName = ((IRenderableCompositeValueConnector) viewConnector)
-          .getRenderingConnector().getModelDescriptor().getName();
-      if (autoCompletePropertyValue != null
-          && autoCompletePropertyValue.length() > 0
-          && !autoCompletePropertyValue.equals("*")
-          && !containsNonLovTriggeringChar(autoCompletePropertyValue)) {
-        // only modify sort ordering if we are in auto complete mode
-        // see bug #549
-        lovOrderingProperties.put(autoCompletePropertyName, ESort.ASCENDING);
+      IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) ((IRenderableCompositeValueConnector)
+          viewConnector)
+          .getRenderingConnector().getModelDescriptor();
+      if (propertyDescriptor.isModifiable()) {
+        autoCompletePropertyName = propertyDescriptor.getName();
+      } else {
+        autoCompletePropertyName = erqDescriptor.getReferencedDescriptor().getAutoCompleteProperty();
+      }
+      if (autoCompletePropertyValue != null && autoCompletePropertyValue.length() > 0 && !autoCompletePropertyValue
+          .equals("*")) {
+        queryComponent.put(autoCompletePropertyName, autoCompletePropertyValue);
+        if (!containsNonLovTriggeringChar(autoCompletePropertyValue)) {
+          // only modify sort ordering if we are in auto complete mode
+          // see bug #549
+          lovOrderingProperties.put(autoCompletePropertyName, ESort.ASCENDING);
+        }
       }
       Map<String, ESort> legacyOrderingProperties = queryComponent
           .getOrderingProperties();
@@ -468,7 +477,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   /**
    * Configures the action to be executed whenever the user cancels the LOV
    * dialog.
-   * 
+   *
    * @param cancelAction
    *          the cancelAction to set.
    */
@@ -488,7 +497,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   /**
    * Configures the action used to create the filter query component based on
    * the type of entities backing the LOV.
-   * 
+   *
    * @param createQueryComponentAction
    *          the createQueryComponentAction to set.
    */
@@ -501,7 +510,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    * Configures explicitly the type of entities the LOV relies on. This is
    * automatically determined when installed on a reference field but must be set
    * in any other case.
-   * 
+   *
    * @param entityDescriptor
    *          the entityDescriptor to set.
    */
@@ -516,7 +525,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    * Gets the entity descriptor to execute the LOV action for from the context.
    * It allows sub classes to override in order to define the descriptor at
    * runtime.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the entity descriptor to execute the LOV action for.
@@ -545,7 +554,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    * Configures the action to be executed whenever the user queries the
    * persistent store, either explicitly when using the action installed in the
    * LOV dialog or implicitly through the auto query feature.
-   * 
+   *
    * @param findAction
    *          the findAction to set.
    */
@@ -582,7 +591,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   /**
    * Configures the factory to be used to create the QBE view used in the
    * dialog.
-   * 
+   *
    * @param lovViewDescriptorFactory
    *          the lovViewDescriptorFactory to set.
    */
@@ -594,7 +603,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   /**
    * Configures the action to be executed whenever the user validates the LOV
    * selection.
-   * 
+   *
    * @param okAction
    *          the okAction to set.
    */
@@ -613,7 +622,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Gets the entityRefQueryDescriptor.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the entityRefQueryDescriptor.
@@ -646,7 +655,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Sets the pagingAction.
-   * 
+   *
    * @param pagingAction
    *          the pagingAction to set.
    */
@@ -665,7 +674,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Gets the selectionMode of the result view.
-   * 
+   *
    * @param lovContext
    *          the LOV action context.
    * @return the selectionMode.
@@ -690,7 +699,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Determines the default selection mode for the result view.
-   * 
+   *
    * @param lovContext
    *          the LOV context.
    * @return the default selection mode for the result view.
@@ -705,7 +714,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Gets the defaultIconImageURL.
-   * 
+   *
    * @return the defaultIconImageURL.
    */
   protected String getDefaultIconImageURL() {
@@ -714,7 +723,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Sets the defaultIconImageURL.
-   * 
+   *
    * @param defaultIconImageURL
    *          the defaultIconImageURL to set.
    */

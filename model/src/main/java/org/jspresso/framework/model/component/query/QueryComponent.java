@@ -22,7 +22,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -47,11 +50,10 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 /**
  * The default implementation of a query component.
  *
- * @version $LastChangedRevision : 9452 $
  * @author Vincent Vandenschrick
+ * @version $LastChangedRevision : 9452 $
  */
-public class QueryComponent extends ObjectEqualityMap<String, Object> implements
-    IQueryComponent {
+public class QueryComponent extends ObjectEqualityMap<String, Object> implements IQueryComponent {
 
   private static final long serialVersionUID = 1467135566962366855L;
 
@@ -74,8 +76,10 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   /**
    * Constructs a new {@code QueryComponent} instance.
    *
-   * @param componentDescriptor           the query componentDescriptor.
-   * @param componentFactory           the component factory.
+   * @param componentDescriptor
+   *     the query componentDescriptor.
+   * @param componentFactory
+   *     the component factory.
    */
   public QueryComponent(IComponentDescriptor<?> componentDescriptor, IComponentFactory componentFactory) {
     this.componentDescriptor = componentDescriptor;
@@ -106,10 +110,13 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   /**
    * Assigns translation provider as well as session locale to enumeration query
    * structures.
-   * <p>
+   * <p/>
    * {@inheritDoc}
-   * @param aTranslationProvider the a translation provider
-   * @param aLocale the a locale
+   *
+   * @param aTranslationProvider
+   *     the a translation provider
+   * @param aLocale
+   *     the a locale
    */
   @Override
   public void translate(ITranslationProvider aTranslationProvider, Locale aLocale) {
@@ -123,15 +130,16 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
         ((ComparableQueryStructure) value).setTranslationProvider(aTranslationProvider);
         ((ComparableQueryStructure) value).setLocale(aLocale);
       } else if (value instanceof QueryComponent) {
-        ((QueryComponent) value)
-            .translate(aTranslationProvider, aLocale);
+        ((QueryComponent) value).translate(aTranslationProvider, aLocale);
       }
     }
   }
 
   /**
    * {@inheritDoc}
-   * @param key the key
+   *
+   * @param key
+   *     the key
    * @return the object
    */
   @SuppressWarnings("unchecked")
@@ -141,24 +149,19 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     if (firstDotIndex > 0) {
       Object nested = get(((String) key).substring(0, firstDotIndex));
       if (nested instanceof Map<?, ?>) {
-        return ((Map<String, Object>) nested).get(((String) key)
-            .substring(firstDotIndex + 1));
+        return ((Map<String, Object>) nested).get(((String) key).substring(firstDotIndex + 1));
       }
     }
-    IPropertyDescriptor propertyDescriptor = componentDescriptor
-        .getPropertyDescriptor((String) key);
+    IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor((String) key);
     Object actualValue = super.get(key);
-    if (actualValue == null
-        && propertyDescriptor instanceof IReferencePropertyDescriptor<?>
+    if (actualValue == null && propertyDescriptor instanceof IReferencePropertyDescriptor<?>
         && !(propertyDescriptor instanceof ComparableQueryStructureDescriptor)
         && !(propertyDescriptor instanceof EnumQueryStructureDescriptor)) {
       IComponentDescriptor<?> referencedDescriptor = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
           .getReferencedDescriptor();
-      QueryComponent referencedQueryComponent = new QueryComponent(referencedDescriptor,
-            getComponentFactory());
+      QueryComponent referencedQueryComponent = new QueryComponent(referencedDescriptor, getComponentFactory());
       referencedQueryComponent.translate(translationProvider, locale);
-      referencedQueryComponent
-          .addPropertyChangeListener(new InlinedComponentTracker(propertyDescriptor.getName()));
+      referencedQueryComponent.addPropertyChangeListener(new InlinedComponentTracker(propertyDescriptor.getName()));
       put((String) key, referencedQueryComponent);
       return referencedQueryComponent;
     }
@@ -167,8 +170,11 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
-   * @param key the key
-   * @param value the value
+   *
+   * @param key
+   *     the key
+   * @param value
+   *     the value
    * @return the object
    */
   @SuppressWarnings("unchecked")
@@ -178,100 +184,18 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     if (firstDotIndex > 0) {
       Object nested = get(key.substring(0, firstDotIndex));
       if (nested instanceof Map<?, ?>) {
-        return ((Map<String, Object>) nested).put(
-            key.substring(firstDotIndex + 1), value);
+        return ((Map<String, Object>) nested).put(key.substring(firstDotIndex + 1), value);
       }
     }
-    IPropertyDescriptor propertyDescriptor = componentDescriptor
-        .getPropertyDescriptor(key);
+    IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor(key);
     if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
       IComponentDescriptor<?> referencedDescriptor = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
           .getReferencedDescriptor();
       if (referencedDescriptor.isEntity()) {
         if (!(value instanceof IQueryComponent)) {
-          IQueryComponent actualValue = (IQueryComponent) /* super. */get(key);
           String tsProp = referencedDescriptor.getToStringProperty();
           String acProp = referencedDescriptor.getAutoCompleteProperty();
-          if (value != null) {
-            if (value instanceof IEntity) {
-              Serializable[] queryPropertyValues = extractQueryPropertyValues(
-                  (IEntity) value, acProp);
-              actualValue.put(IEntity.ID, queryPropertyValues[0]);
-              actualValue.put(tsProp, queryPropertyValues[1]);
-              if (acProp != null) {
-                actualValue.put(acProp, queryPropertyValues[2]);
-              }
-            } else if (value instanceof Collection<?>) {
-              if (((Collection<?>) value).size() == 1) {
-                return put(key, ((Collection<?>) value).iterator().next());
-              }
-              StringBuilder idValue = null;
-              StringBuilder tsValue = null;
-              StringBuilder acValue = null;
-              for (Object element : (Collection<?>) value) {
-                if (element instanceof IEntity) {
-                  Serializable[] queryPropertyValues = extractQueryPropertyValues(
-                      (IEntity) element, acProp);
-                  if (queryPropertyValues[0] instanceof CharSequence) {
-                    if (idValue == null) {
-                      idValue = new StringBuilder(
-                          queryPropertyValues[0].toString());
-                    } else {
-                      idValue.append(IQueryComponent.DISJUNCT).append(
-                          queryPropertyValues[0].toString());
-                    }
-                  }
-                  if (queryPropertyValues[1] instanceof CharSequence) {
-                    if (tsValue == null) {
-                      tsValue = new StringBuilder(
-                          queryPropertyValues[1].toString());
-                    } else {
-                      tsValue.append(IQueryComponent.DISJUNCT).append(
-                          queryPropertyValues[1].toString());
-                    }
-                  }
-                  if (acProp != null
-                      && queryPropertyValues[2] instanceof CharSequence) {
-                    if (acValue == null) {
-                      acValue = new StringBuilder(
-                          queryPropertyValues[2].toString());
-                    } else {
-                      acValue.append(IQueryComponent.DISJUNCT).append(
-                          queryPropertyValues[2].toString());
-                    }
-                  }
-                }
-              }
-              if (idValue != null) {
-                actualValue.put(IEntity.ID, idValue.toString());
-              } else {
-                actualValue.remove(IEntity.ID);
-              }
-              if (tsValue != null) {
-                actualValue.put(tsProp, tsValue.toString());
-              } else {
-                actualValue.remove(tsProp);
-              }
-              if (acProp != null) {
-                if (acValue != null) {
-                  actualValue.put(acProp, acValue.toString());
-                } else {
-                  actualValue.remove(acProp);
-                }
-              }
-            } else if (value instanceof String) {
-              if (acProp != null) {
-                actualValue.put(acProp, value);
-              }
-            }
-          } else {
-            actualValue.remove(IEntity.ID);
-            actualValue.remove(tsProp);
-            if (acProp != null) {
-              actualValue.remove(acProp);
-            }
-          }
-          return actualValue;
+          return buildNestedQueryComponent(key, value, tsProp, Collections.singletonList(acProp));
         }
       } else if (propertyDescriptor instanceof EnumQueryStructureDescriptor) {
         Object actualValue = /* super. */get(key);
@@ -290,29 +214,151 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     return super.put(key, refinedValue);
   }
 
-  private Serializable[] extractQueryPropertyValues(IEntity entity,
-      String acProp) {
-    String acPropValue = null;
-    if (acProp != null) {
-      try {
-        acPropValue = getComponentFactory().getAccessorFactory()
-            .createPropertyAccessor(acProp, entity.getComponentContract())
-            .getValue(entity);
-      } catch (IllegalAccessException | NoSuchMethodException ex) {
-        throw new NestedRuntimeException(ex, "Invalid property: " + acProp);
-      } catch (InvocationTargetException ex) {
-        throw new NestedRuntimeException(ex.getTargetException(),
-            "Invalid property: " + acProp);
+  /**
+   * Build nested query component.
+   *
+   * @param nestedQueryComponentKey
+   *     the nested query component key
+   * @param incomingValue
+   *     the incoming value
+   * @param tsProp
+   *     the toString property
+   * @param extraProps
+   *     the extra properties to feed
+   * @return the object
+   */
+  public Object buildNestedQueryComponent(String nestedQueryComponentKey, Object incomingValue, String tsProp,
+                                          List<String> extraProps) {
+    IQueryComponent actualValue = (IQueryComponent) /* super. */get(nestedQueryComponentKey);
+    if (incomingValue != null) {
+      if (incomingValue instanceof IEntity) {
+        List<Serializable> queryPropertyValues = extractQueryPropertyValues((IEntity) incomingValue, extraProps);
+        actualValue.put(IEntity.ID, queryPropertyValues.get(0));
+        actualValue.put(tsProp, queryPropertyValues.get(1));
+        if (extraProps != null) {
+          for (int i = 0; i < extraProps.size(); i++) {
+            actualValue.put(extraProps.get(i), queryPropertyValues.get(i + 2));
+          }
+        }
+      } else if (incomingValue instanceof Collection<?>) {
+        if (((Collection<?>) incomingValue).size() == 1) {
+          return put(nestedQueryComponentKey, ((Collection<?>) incomingValue).iterator().next());
+        }
+        StringBuilder idValue = null;
+        StringBuilder tsValue = null;
+        List<StringBuilder> extraPropValues = null;
+        if (extraProps != null) {
+          extraPropValues = new ArrayList<>(extraProps.size());
+          for (int i = 0; i < extraProps.size(); i++) {
+            extraPropValues.add(null);
+          }
+        }
+        new ArrayList<>();
+        for (Object element : (Collection<?>) incomingValue) {
+          if (element instanceof IEntity) {
+            List<Serializable> queryPropertyValues = extractQueryPropertyValues((IEntity) element, extraProps);
+            if (queryPropertyValues.get(0) instanceof CharSequence) {
+              if (idValue == null) {
+                idValue = new StringBuilder(queryPropertyValues.get(0).toString());
+              } else {
+                idValue.append(IQueryComponent.DISJUNCT).append(queryPropertyValues.get(0).toString());
+              }
+            }
+            if (queryPropertyValues.get(1) instanceof CharSequence) {
+              if (tsValue == null) {
+                tsValue = new StringBuilder(queryPropertyValues.get(1).toString());
+              } else {
+                tsValue.append(IQueryComponent.DISJUNCT).append(queryPropertyValues.get(1).toString());
+              }
+            }
+            if (extraProps != null) {
+              for (int i = 0; i < extraProps.size(); i++) {
+                StringBuilder extraPropValue = extraPropValues.get(i);
+                if (queryPropertyValues.get(i + 2) instanceof CharSequence) {
+                  if (extraPropValue == null) {
+                    extraPropValue = new StringBuilder(queryPropertyValues.get(i + 2).toString());
+                    extraPropValues.set(i, extraPropValue);
+                  } else {
+                    extraPropValue.append(IQueryComponent.DISJUNCT).append(queryPropertyValues.get(i + 2).toString());
+                  }
+                }
+              }
+            }
+          }
+        }
+        if (idValue != null) {
+          actualValue.put(IEntity.ID, idValue.toString());
+        } else {
+          actualValue.remove(IEntity.ID);
+        }
+        if (tsValue != null) {
+          actualValue.put(tsProp, tsValue.toString());
+        } else {
+          actualValue.remove(tsProp);
+        }
+        if (extraProps != null) {
+          for (int i = 0; i < extraProps.size(); i++) {
+            if (extraPropValues.get(i) != null) {
+              actualValue.put(extraProps.get(i), extraPropValues.get(i).toString());
+            } else {
+              actualValue.remove(extraProps.get(i));
+            }
+          }
+        }
+      } else if (incomingValue instanceof String) {
+        if (extraProps != null) {
+          for (String extraProp : extraProps) {
+            actualValue.put(extraProp, incomingValue);
+          }
+        }
       }
+    } else {
+      actualValue.reset();
     }
-    return new Serializable[] {
-        entity.getId(), entity.toString(), acPropValue
-    };
+    return actualValue;
   }
 
   /**
    * {@inheritDoc}
-   * @param key the key
+   */
+  @Override
+  public void reset() {
+    for (Map.Entry<String, Object> entry : new HashSet<>(entrySet())) {
+      if (entry.getValue() instanceof IQueryComponent) {
+        ((IQueryComponent) entry.getValue()).reset();
+      } else if (entry.getValue() instanceof EnumQueryStructure) {
+        ((EnumQueryStructure) entry.getValue()).clear();
+      } else {
+        remove(entry.getKey());
+      }
+    }
+  }
+
+  private List<Serializable> extractQueryPropertyValues(IEntity entity, List<String> extraProps) {
+    List<Serializable> values = new ArrayList<>();
+    values.add(entity.getId());
+    values.add(entity.toString());
+    if (extraProps != null) {
+      for (String extraProp : extraProps) {
+        try {
+          Serializable extraPropValue = getComponentFactory().getAccessorFactory().createPropertyAccessor(extraProp,
+              entity.getComponentContract()).getValue(entity);
+          values.add(extraPropValue);
+        } catch (IllegalAccessException | NoSuchMethodException ex) {
+          throw new NestedRuntimeException(ex, "Invalid property: " + extraProp);
+        } catch (InvocationTargetException ex) {
+          throw new NestedRuntimeException(ex.getTargetException(), "Invalid property: " + extraProp);
+        }
+      }
+    }
+    return values;
+  }
+
+  /**
+   * {@inheritDoc}
+   *
+   * @param key
+   *     the key
    * @return the object
    */
   @SuppressWarnings("unchecked")
@@ -322,8 +368,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     if (firstDotIndex > 0) {
       Object nested = get(((String) key).substring(0, firstDotIndex));
       if (nested instanceof Map<?, ?>) {
-        return ((Map<String, Object>) nested).remove(((String) key)
-            .substring(firstDotIndex + 1));
+        return ((Map<String, Object>) nested).remove(((String) key).substring(firstDotIndex + 1));
       }
     }
     return super.remove(key);
@@ -367,6 +412,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   *
    * @return the page
    */
   @Override
@@ -376,6 +422,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   *
    * @return the display page index
    */
   @Override
@@ -396,7 +443,9 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
-   * @param displayPageIndex the display page index
+   *
+   * @param displayPageIndex
+   *     the display page index
    */
   @Override
   public void setDisplayPageIndex(Integer displayPageIndex) {
@@ -409,6 +458,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   *
    * @return the page count
    */
   @Override
@@ -424,8 +474,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     if (remainder > 0) {
       lastIncompletePage = 1;
     }
-    return getRecordCount()
-        / getPageSize() + lastIncompletePage;
+    return getRecordCount() / getPageSize() + lastIncompletePage;
   }
 
   /**
@@ -442,6 +491,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   *
    * @return the queried components
    */
   @Override
@@ -451,6 +501,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   *
    * @return the query contract
    */
   @Override
@@ -464,6 +515,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   *
    * @return the record count
    */
   @Override
@@ -477,12 +529,12 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    */
   @Override
   public boolean isInlineComponent() {
-    return !IEntity.class.isAssignableFrom(getQueryContract())
-        && !componentDescriptor.isPurelyAbstract();
+    return !IEntity.class.isAssignableFrom(getQueryContract()) && !componentDescriptor.isPurelyAbstract();
   }
 
   /**
    * {@inheritDoc}
+   *
    * @return the boolean
    */
   @Override
@@ -492,6 +544,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   *
    * @return the boolean
    */
   @Override
@@ -502,6 +555,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   *
    * @return the boolean
    */
   @Override
@@ -511,18 +565,20 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
-   * @param defaultOrderingProperties the default ordering properties
+   *
+   * @param defaultOrderingProperties
+   *     the default ordering properties
    */
   @Override
-  public void setDefaultOrderingProperties(
-      Map<String, ESort> defaultOrderingProperties) {
+  public void setDefaultOrderingProperties(Map<String, ESort> defaultOrderingProperties) {
     this.defaultOrderingProperties = defaultOrderingProperties;
   }
 
   /**
    * Sets the sortingAttributes.
    *
-   * @param orderingProperties           the sortingAttributes to set.
+   * @param orderingProperties
+   *     the sortingAttributes to set.
    */
   @Override
   public void setOrderingProperties(Map<String, ESort> orderingProperties) {
@@ -531,7 +587,9 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
-   * @param page the page
+   *
+   * @param page
+   *     the page
    */
   @Override
   public void setPage(Integer page) {
@@ -557,19 +615,18 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     }
 
     firePropertyChange(PAGE, oldValue, getPage());
-    firePropertyChange(DISPLAY_PAGE_INDEX, oldDisplayPageIndex,
-        getDisplayPageIndex());
-    firePropertyChange(IPageable.PREVIOUS_PAGE_ENABLED,
-        Boolean.valueOf(oldPreviousPageEnabled),
-        Boolean.valueOf(isPreviousPageEnabled()));
-    firePropertyChange(IPageable.NEXT_PAGE_ENABLED,
-        Boolean.valueOf(oldNextPageEnabled),
-        Boolean.valueOf(isNextPageEnabled()));
+    firePropertyChange(DISPLAY_PAGE_INDEX, oldDisplayPageIndex, getDisplayPageIndex());
+    firePropertyChange(IPageable.PREVIOUS_PAGE_ENABLED, Boolean.valueOf(oldPreviousPageEnabled), Boolean.valueOf(
+        isPreviousPageEnabled()));
+    firePropertyChange(IPageable.NEXT_PAGE_ENABLED, Boolean.valueOf(oldNextPageEnabled), Boolean.valueOf(
+        isNextPageEnabled()));
   }
 
   /**
    * {@inheritDoc}
-   * @param pageSize the page size
+   *
+   * @param pageSize
+   *     the page size
    */
   @Override
   public void setPageSize(Integer pageSize) {
@@ -579,14 +636,15 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     this.pageSize = pageSize;
     firePropertyChange(PAGE_SIZE, oldValue, getPageSize());
     firePropertyChange(PAGE_COUNT, oldPageCount, getPageCount());
-    firePropertyChange(PAGE_NAVIGATION_ENABLED,
-        Boolean.valueOf(oldPageNavigationEnabled),
-        Boolean.valueOf(isPageNavigationEnabled()));
+    firePropertyChange(PAGE_NAVIGATION_ENABLED, Boolean.valueOf(oldPageNavigationEnabled), Boolean.valueOf(
+        isPageNavigationEnabled()));
   }
 
   /**
    * {@inheritDoc}
-   * @param queriedComponents the queried components
+   *
+   * @param queriedComponents
+   *     the queried components
    */
   @Override
   public void setQueriedComponents(List<?> queriedComponents) {
@@ -599,7 +657,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   /**
    * Sets the recordCount.
    *
-   * @param recordCount           the recordCount to set.
+   * @param recordCount
+   *     the recordCount to set.
    */
   @Override
   public void setRecordCount(Integer recordCount) {
@@ -634,7 +693,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   /**
    * Sets selected record count.
    *
-   * @param selectedRecordCount the selected record count
+   * @param selectedRecordCount
+   *     the selected record count
    */
   @Override
   public void setSelectedRecordCount(Integer selectedRecordCount) {
@@ -650,7 +710,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     /**
      * Constructs a new {@code InnerComponentTracker} instance.
      *
-     * @param componentName           the name of the component to track the properties.
+     * @param componentName
+     *     the name of the component to track the properties.
      */
     public InlinedComponentTracker(String componentName) {
       this.componentName = componentName;
@@ -658,13 +719,14 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
     /**
      * {@inheritDoc}
-     * @param evt the evt
+     *
+     * @param evt
+     *     the evt
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
       firePropertyChange(componentName, null, evt.getSource());
-      firePropertyChange(componentName + "." + evt.getPropertyName(),
-          evt.getOldValue(), evt.getNewValue());
+      firePropertyChange(componentName + "." + evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
     }
   }
 
@@ -679,6 +741,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   *
    * @return the query component
    */
   @Override
@@ -700,7 +763,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   /**
    * Sets the distinctEnforced.
    *
-   * @param distinctEnforced           the distinctEnforced to set.
+   * @param distinctEnforced
+   *     the distinctEnforced to set.
    */
   public void setDistinctEnforced(boolean distinctEnforced) {
     this.distinctEnforced = distinctEnforced;
@@ -708,6 +772,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   *
    * @return the string
    */
   @Override
@@ -717,7 +782,9 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
-   * @param stickyResults the sticky results
+   *
+   * @param stickyResults
+   *     the sticky results
    */
   @Override
   public void setStickyResults(List<?> stickyResults) {
@@ -726,6 +793,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
+   *
    * @return the sticky results
    */
   @Override
@@ -737,7 +805,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    * Hydrates a query component with a hierarchical map holding bare filter
    * values.
    *
-   * @param state           the hierarchical map holding bare filter values.
+   * @param state
+   *     the hierarchical map holding bare filter values.
    */
   @SuppressWarnings("unchecked")
   @Override
@@ -745,10 +814,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     if (state != null) {
       for (Map.Entry<String, Object> stateEntry : state.entrySet()) {
         Object value = get(stateEntry.getKey());
-        if (value instanceof IQueryComponent
-            && stateEntry.getValue() instanceof Map<?, ?>) {
-          ((IQueryComponent) value).hydrate((Map<String, Object>) stateEntry
-              .getValue());
+        if (value instanceof IQueryComponent && stateEntry.getValue() instanceof Map<?, ?>) {
+          ((IQueryComponent) value).hydrate((Map<String, Object>) stateEntry.getValue());
         } else {
           put(stateEntry.getKey(), stateEntry.getValue());
         }
@@ -758,20 +825,22 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
 
   /**
    * {@inheritDoc}
-   * @param <T>  the type parameter
-   * @param value the value
-   * @param propertyDescriptor the property descriptor
+   *
+   * @param <T>
+   *     the type parameter
+   * @param value
+   *     the value
+   * @param propertyDescriptor
+   *     the property descriptor
    * @return the t
    */
   @SuppressWarnings("unchecked")
   @Override
   public <T> T refineValue(T value, IPropertyDescriptor propertyDescriptor) {
-    if (value instanceof String
-        && !(propertyDescriptor instanceof ITextPropertyDescriptor)) {
+    if (value instanceof String && !(propertyDescriptor instanceof ITextPropertyDescriptor)) {
       String disjunction = ((String) value).replaceAll("(\\r|\\n)+", DISJUNCT);
       if (disjunction.endsWith(DISJUNCT)) {
-        disjunction = disjunction.substring(0,
-            disjunction.length() - DISJUNCT.length());
+        disjunction = disjunction.substring(0, disjunction.length() - DISJUNCT.length());
       }
       return (T) disjunction;
     }
@@ -790,13 +859,11 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
     }
     IComponentDescriptor<?> qDesc = getQueryDescriptor();
     for (Map.Entry<String, Object> property : entrySet()) {
-      IPropertyDescriptor propertyDescriptor = qDesc
-          .getPropertyDescriptor(property.getKey());
+      IPropertyDescriptor propertyDescriptor = qDesc.getPropertyDescriptor(property.getKey());
       if (propertyDescriptor != null) {
         if (property.getValue() != null) {
           if (property.getValue() instanceof ComparableQueryStructure) {
-            if (((ComparableQueryStructure) property.getValue())
-                .isRestricting()) {
+            if (((ComparableQueryStructure) property.getValue()).isRestricting()) {
               return true;
             }
           } else if (property.getValue() instanceof EnumQueryStructure) {
@@ -839,7 +906,8 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   /**
    * Sets prefetch properties.
    *
-   * @param prefetchProperties the prefetch properties
+   * @param prefetchProperties
+   *     the prefetch properties
    */
   @Override
   public void setPrefetchProperties(List<String> prefetchProperties) {
