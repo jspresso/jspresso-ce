@@ -58,7 +58,7 @@ import chrriis.dj.nativeswing.swtimpl.components.JFlashPlayer;
 /**
  * Default implementation of a mock swing frontend controller. This
  * implementation is usable "as-is".
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class MockSwingController extends
@@ -166,6 +166,7 @@ public class MockSwingController extends
       if (actionWindow instanceof JDialog) {
         actionWindow.dispose();
       }
+      transferFocus(context);
       return true;
     }
     return false;

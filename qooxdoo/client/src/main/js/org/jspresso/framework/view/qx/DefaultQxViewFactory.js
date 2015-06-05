@@ -1891,16 +1891,20 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var mainAction = remoteActionField.getActionLists()[0].getActions()[0];
       if (textField) {
         // propagate focus
-        actionField.addListener("focus", function () {
+        actionField.addListener("focus", function (e) {
           if (textField.isFocusable()) {
             textField.focus();
           }
         });
 
         // propagate active state
-        actionField.addListener("activate", function () {
+        // This is a very bad idea since it produces an infinite loop.
+        /*
+        actionField.addListener("activate", function (e) {
           textField.activate();
         });
+        */
+
         if (remoteActionField.getFieldEditable()) {
           modelController.addTarget(textField, "readOnly", "writable", false, {
             converter: this._readOnlyFieldConverter
@@ -1927,6 +1931,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           }
         };
         textField.addListener("blur", triggerAction, this);
+        textField.addListener("keypress", function(e) {
+          if (e.getKeyIdentifier() == "Enter") {
+            triggerAction.call(this, e);
+          }
+        }, this);
 
         modelController.addTarget(textField, "value", "value", false, {
           converter: this._modelToViewFieldConverter

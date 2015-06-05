@@ -100,7 +100,7 @@ import org.jspresso.framework.view.swing.BasicTransferable;
  * controller. It will implement a 2-tier architecture that is particularly
  * useful for the development/debugging phases. Workspaces are displayed using
  * an MDI UI using internal frames.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class DefaultSwingController extends
@@ -282,6 +282,7 @@ public class DefaultSwingController extends
       if (actionWindow instanceof JDialog) {
         actionWindow.dispose();
       }
+      transferFocus(context);
       return true;
     }
     return false;
@@ -676,7 +677,7 @@ public class DefaultSwingController extends
 
   /**
    * Creates a new JInternalFrame and populates it with a view.
-   * 
+   *
    * @param view
    *          the view to be set into the internal frame.
    * @return the constructed internal frame.
@@ -802,7 +803,7 @@ public class DefaultSwingController extends
 
   /**
    * Callback after a failed login.
-   * 
+   *
    * @param dialog
    *          the login dialog if any.
    */
