@@ -20,8 +20,10 @@ package org.jspresso.framework.application.backend.action.persistence;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.BeanModule;
@@ -33,7 +35,7 @@ import org.jspresso.framework.model.entity.IEntity;
  * Saves all the module entities as well as all its sub-modules entities
  * recursively. All previously registered persistence operations are also
  * performed.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class SaveModuleObjectAction extends SaveAction {
@@ -41,7 +43,7 @@ public class SaveModuleObjectAction extends SaveAction {
   /**
    * All the module entities as well as all its sub-modules entities
    * recursively.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -52,12 +54,9 @@ public class SaveModuleObjectAction extends SaveAction {
     return entitiesToSave;
   }
 
-  private void completeEntitiesToSave(Module module,
-      List<IEntity> entitiesToSave) {
-    if (module instanceof BeanCollectionModule
-        && ((BeanCollectionModule) module).getModuleObjects() != null) {
-      for (Object moduleObject : ((BeanCollectionModule) module)
-          .getModuleObjects()) {
+  private void completeEntitiesToSave(Module module, List<IEntity> entitiesToSave) {
+    if (module instanceof BeanCollectionModule && ((BeanCollectionModule) module).getModuleObjects() != null) {
+      for (Object moduleObject : ((BeanCollectionModule) module).getModuleObjects()) {
         if (moduleObject instanceof IComponent) {
           completeEntitiesToSave((IComponent) moduleObject, entitiesToSave);
         }
@@ -76,16 +75,27 @@ public class SaveModuleObjectAction extends SaveAction {
   }
 
   private void completeEntitiesToSave(IComponent component, List<IEntity> entitiesToSave) {
+    completeEntitiesToSave(component, entitiesToSave, new HashSet<IComponent>());
+  }
+
+  private void completeEntitiesToSave(IComponent component, List<IEntity> entitiesToSave, Set<IComponent> traversed) {
     if (component instanceof IEntity) {
       entitiesToSave.add((IEntity) component);
     } else {
       for (Map.Entry<String, Object> propertyEntry : component.straightGetProperties().entrySet()) {
-        if (propertyEntry.getValue() instanceof IComponent) {
-          completeEntitiesToSave((IComponent) propertyEntry.getValue(), entitiesToSave);
-        } else if (propertyEntry.getValue() instanceof Collection<?>) {
-          for (Object element : (Collection<?>) propertyEntry.getValue()) {
+        Object property = propertyEntry.getValue();
+        if (property instanceof IComponent) {
+          if (!traversed.contains(property)) {
+            traversed.add((IComponent) property);
+            completeEntitiesToSave((IComponent) property, entitiesToSave);
+          }
+        } else if (property instanceof Collection<?>) {
+          for (Object element : (Collection<?>) property) {
             if (element instanceof IComponent) {
-              completeEntitiesToSave((IComponent) element, entitiesToSave);
+              if (!traversed.contains(element)) {
+                traversed.add((IComponent) element);
+                completeEntitiesToSave((IComponent) element, entitiesToSave);
+              }
             }
           }
         }
