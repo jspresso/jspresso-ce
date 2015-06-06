@@ -101,15 +101,19 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel", {
 
     // overridden
     getValue: function (columnIndex, rowIndex) {
-      var cellState = this.getRowData(rowIndex).getChildren().getItem(columnIndex + 1);
-      this.__setupCellListeners(columnIndex, rowIndex, cellState);
-      return cellState.getValue();
+      if (this.getRowData(rowIndex)) {
+        var cellState = this.getRowData(rowIndex).getChildren().getItem(columnIndex + 1);
+        this.__setupCellListeners(columnIndex, rowIndex, cellState);
+        return cellState.getValue();
+      }
     },
 
     // overridden
     setValue: function (columnIndex, rowIndex, value) {
-      var cellState = this.getRowData(rowIndex).getChildren().getItem(columnIndex + 1);
-      cellState.setValue(value);
+      if (this.getRowData(rowIndex)) {
+        var cellState = this.getRowData(rowIndex).getChildren().getItem(columnIndex + 1);
+        cellState.setValue(value);
+      }
     },
 
     // overridden
