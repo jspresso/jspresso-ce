@@ -964,7 +964,7 @@
         <ref local="saveModuleObjectFrontAction" />
         <ref local="removeModuleObjectFrontAction" />
         <ref local="reloadModuleObjectFrontAction" />
-        <ref local="parentModuleConnectorSelectionFrontAction" />
+        <!--<ref local="parentModuleConnectorSelectionFrontAction" />-->
       </list>
     </property>
   </bean>
