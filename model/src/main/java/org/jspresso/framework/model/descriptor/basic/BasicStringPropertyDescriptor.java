@@ -27,7 +27,7 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
  * Describes a string based property.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BasicStringPropertyDescriptor extends
@@ -55,7 +55,8 @@ public class BasicStringPropertyDescriptor extends
   @Override
   public BasicStringPropertyDescriptor createQueryDescriptor() {
     BasicStringPropertyDescriptor queryDescriptor = (BasicStringPropertyDescriptor) super.createQueryDescriptor();
-    queryDescriptor.setMaxLength(null);
+    // Don't set it to null because in that case, the default max length will apply.
+    queryDescriptor.setMaxLength(-1);
     queryDescriptor.setRegexpPattern(null);
     queryDescriptor.setTranslatable(false);
     return queryDescriptor;
@@ -141,8 +142,9 @@ public class BasicStringPropertyDescriptor extends
   public void preprocessSetter(final Object component, final Object newValue) {
     super.preprocessSetter(component, newValue);
     final String propertyValueAsString = getValueAsString(newValue);
-    if (propertyValueAsString != null && getMaxLength() != null
-        && propertyValueAsString.length() > getMaxLength()) {
+    final Integer maxL = getMaxLength();
+    if (propertyValueAsString != null && maxL != null && maxL > 0
+        && propertyValueAsString.length() > maxL) {
       IntegrityException ie = new IntegrityException("[" + getName()
           + "] value (" + propertyValueAsString + ") is too long on ["
           + component + "].") {
@@ -153,8 +155,8 @@ public class BasicStringPropertyDescriptor extends
         public String getI18nMessage(ITranslationProvider translationProvider,
             Locale locale) {
           StringBuilder boundsSpec = new StringBuilder("l");
-          if (getMaxLength() != null) {
-            boundsSpec.append(" <= ").append(getMaxLength());
+          if (maxL != null) {
+            boundsSpec.append(" <= ").append(maxL);
           }
           return translationProvider.getTranslation(
               "integrity.property.toolong", new Object[] {
@@ -216,7 +218,7 @@ public class BasicStringPropertyDescriptor extends
    * pattern. This human-readable example is used when the end-user has to be
    * notified that the incoming property value does not match the pattern
    * constraint.
-   * 
+   *
    * @param regexpPatternSample
    *          the regexpPatternSample to set.
    */
@@ -228,7 +230,7 @@ public class BasicStringPropertyDescriptor extends
    * This is a shortcut to implement the common use-case of handling upper-case
    * only properties. all incoming values will be transformed to uppercase as if
    * a property processor was registered to perform the transformation.
-   * 
+   *
    * @param upperCase
    *          the upperCase to set.
    */
@@ -253,7 +255,7 @@ public class BasicStringPropertyDescriptor extends
   /**
    * Performs the necessary transformations to build a string out of a property
    * value.
-   * 
+   *
    * @param value
    *          the raw property value.
    * @return the resulting string.

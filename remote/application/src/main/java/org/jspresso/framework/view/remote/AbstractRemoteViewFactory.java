@@ -1324,8 +1324,9 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         .getModelDescriptor();
     IView<RComponent> view = super.createTextualPropertyView(propertyViewDescriptor, actionHandler, locale);
     if (view.getPeer() instanceof RTextComponent) {
-      if (propertyDescriptor.getMaxLength() != null) {
-        ((RTextComponent) view.getPeer()).setMaxLength(propertyDescriptor.getMaxLength());
+      Integer maxLength = propertyDescriptor.getMaxLength();
+      if (maxLength != null && maxLength > 0) {
+        ((RTextComponent) view.getPeer()).setMaxLength(maxLength);
       }
     }
     return view;
