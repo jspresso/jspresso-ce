@@ -36,7 +36,9 @@ qx.Class.define("org.jspresso.framework.view.qx.BooleanTableCellRenderer", {
 
     _getCellStyle: function (cellInfo) {
       var superStyle = this.base(arguments, cellInfo);
-      return superStyle + this._getAdditionalCellStyle(cellInfo);
+      superStyle += this._getAdditionalCellStyle(cellInfo);
+      var pattern = /padding-top:[\d|\.]*px;/g;
+      return superStyle.replace(pattern, "") + "padding-top:7px;"
     }
   }
 });

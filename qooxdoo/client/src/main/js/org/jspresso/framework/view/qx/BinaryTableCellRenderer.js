@@ -13,9 +13,7 @@
  */
 
 qx.Class.define("org.jspresso.framework.view.qx.BinaryTableCellRenderer", {
-  extend: qx.ui.table.cellrenderer.Boolean,
-  include: [org.jspresso.framework.view.qx.MCellAdditionalStyle],
-
+  extend: org.jspresso.framework.view.qx.BooleanTableCellRenderer,
 
   construct: function () {
     this.base(arguments);
@@ -23,20 +21,5 @@ qx.Class.define("org.jspresso.framework.view.qx.BinaryTableCellRenderer", {
 
 
   members: {
-    // overridden
-    _identifyImage: function (cellInfo) {
-      //noinspection RedundantIfStatementJS
-      if (cellInfo.value) {
-        cellInfo.value = true;
-      } else {
-        cellInfo.value = false;
-      }
-      return this.base(arguments, cellInfo);
-    },
-
-    _getCellStyle: function (cellInfo) {
-      var superStyle = this.base(arguments, cellInfo);
-      return superStyle + this._getAdditionalCellStyle(cellInfo);
-    }
   }
 });
