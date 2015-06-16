@@ -36,8 +36,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.TimePicker", {
   statics: {
   },
 
-  construct: function (anchor, showSeconds) {
-    this.base(arguments, anchor);
+  construct: function (showSeconds) {
+    this.base(arguments);
     this.addSlot(this._createHourPickerSlot());
     this.addSlot(this._createMinutePickerSlot());
     if (showSeconds) {
@@ -53,7 +53,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.TimePicker", {
     _createHourPickerSlot : function() {
       var slotData = [];
       for (var i = 0; i < 24; i++) {
-        slotData.push(org.jspresso.framework.util.format.StringUtils.lpad("" + i, "0", 2));
+        slotData.push({title: org.jspresso.framework.util.format.StringUtils.lpad("" + i, "0", 2)});
       }
       return new qx.data.Array(slotData);
     },
@@ -64,7 +64,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.TimePicker", {
     _createMinutePickerSlot : function() {
       var slotData = [];
       for (var i = 0; i < 59; i++) {
-        slotData.push(org.jspresso.framework.util.format.StringUtils.lpad("" + i, "0", 2));
+        slotData.push({title: org.jspresso.framework.util.format.StringUtils.lpad("" + i, "0", 2)});
       }
       return new qx.data.Array(slotData);
     },
@@ -75,7 +75,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.TimePicker", {
     _createSecondPickerSlot : function() {
       var slotData = [];
       for (var i = 0; i < 59; i++) {
-        slotData.push(org.jspresso.framework.util.format.StringUtils.lpad("" + i, "0", 2));
+        slotData.push({title: org.jspresso.framework.util.format.StringUtils.lpad("" + i, "0", 2)});
       }
       return new qx.data.Array(slotData);
     }

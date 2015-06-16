@@ -36,8 +36,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.DatePicker", {
   statics: {
   },
 
-  construct: function (anchor, monthNames) {
-    this.base(arguments, anchor);
+  construct: function (monthNames) {
+    this.base(arguments);
     this.__monthNames = monthNames;
     this.__pickerDaySlotData = this._createDayPickerSlot(1, new Date().getFullYear());
 
@@ -66,7 +66,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.DatePicker", {
 
       var slotData = [];
       for (var i = 1; i <= daysInMonth; i++) {
-        slotData.push(org.jspresso.framework.util.format.StringUtils.lpad("" + i, "0", 2));
+        slotData.push({title: org.jspresso.framework.util.format.StringUtils.lpad("" + i, "0", 2)});
       }
       return new qx.data.Array(slotData);
     },
@@ -79,7 +79,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.DatePicker", {
       var names = this.__monthNames;
       var slotData = [];
       for (var i = 0; i < names.length; i++) {
-        slotData.push("" + names[i]);
+        slotData.push({title: "" + names[i]});
       }
       return new qx.data.Array(slotData);
     },
@@ -91,7 +91,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.DatePicker", {
     _createYearPickerSlot : function() {
       var slotData = [];
       for (var i = 1950; i < new Date().getFullYear() + 50 ; i++) {
-        slotData.push("" + i);
+        slotData.push({title: "" + i});
       }
       return new qx.data.Array(slotData);
     },
