@@ -2061,6 +2061,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         table.getPaneScroller(0)._startMoveHeader = function (moveCol, pageX) {
         };
       }
+      table.addListener("cellTap", function (e) {
+        if (columnModel.getDataCellRenderer(e.getColumn())
+            instanceof org.jspresso.framework.view.qx.BooleanTableCellRenderer) {
+          this.startEditing();
+        }
+      }, table);
       var columnModel = table.getTableColumnModel();
       for (var i = 0; i < remoteTable.getColumnIds().length; i++) {
         var rColumn = remoteTable.getColumns()[i];
@@ -2068,12 +2074,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         var editor = new org.jspresso.framework.view.qx.RComponentTableCellEditor(this, rColumn,
             this._getActionHandler());
         columnModel.setCellEditorFactory(i, editor);
-        table.addListener("cellTap", function (e) {
-          if (columnModel.getDataCellRenderer(e.getColumn())
-              instanceof org.jspresso.framework.view.qx.BooleanTableCellRenderer) {
-            this.startEditing();
-          }
-        }, table);
         var bgIndex = -1;
         var fgIndex = -1;
         var foIndex = -1;
