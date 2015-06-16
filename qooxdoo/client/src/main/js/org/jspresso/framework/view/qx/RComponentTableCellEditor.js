@@ -147,6 +147,12 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
           e.stopPropagation();
         }
       }, this);
+      editor.addListener("focusout", function (e) {
+        var relatedTarget = e.getRelatedTarget();
+        if (relatedTarget != null && relatedTarget != table) {
+          table.stopEditing();
+        }
+      });
       return editor;
     },
 
