@@ -59,7 +59,7 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
       }
       this.__currentBinding = this.__currentCellState.bind("value", state, "value", {
         converter: function (value) {
-          return value == "" ? null : value;
+          return value === "" ? null : value;
         }
       });
       this.__actionHandler.setCurrentViewStateGuid(this.__currentCellState.getGuid(),
