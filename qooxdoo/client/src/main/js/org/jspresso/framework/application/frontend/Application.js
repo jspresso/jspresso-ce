@@ -87,10 +87,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.Application", {
       this.base(arguments);
 
       qx.Class.patch(qx.ui.form.CheckBox, org.jspresso.framework.patch.MCheckBox);
-      qx.Class.patch(qx.data.Array, org.jspresso.framework.patch.MArray);
-
-      qx.Theme.include(qx.theme.modern.Appearance, collapsablepanel.theme.modern.Appearance);
-      qx.Theme.include(qx.theme.classic.Appearance, collapsablepanel.theme.classic.Appearance);
 
       // patch the original decorator class
       qx.Class.patch(qx.ui.decoration.Decorator, org.jspresso.framework.patch.MTransition);
