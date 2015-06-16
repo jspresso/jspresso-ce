@@ -32,7 +32,7 @@
     <ldapbp.version>1.0</ldapbp.version>
     <hibernate.version>4.3.4.Final</hibernate.version>
     <jbosssx.version>4.0.20.Final</jbosssx.version>
-    <qooxdoo.version>4.1</qooxdoo.version>
+    <qooxdoo.version>5.0</qooxdoo.version>
     <jasper.version>5.1.2</jasper.version>
     <jfree.version>1.0.13</jfree.version>
     <itext.version>4.2.1</itext.version>

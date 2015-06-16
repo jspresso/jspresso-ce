@@ -31,7 +31,7 @@
  */
 
 qx.Class.define("org.jspresso.framework.view.qx.mobile.DatePicker", {
-  extend: qx.ui.mobile.dialog.Picker,
+  extend: qx.ui.mobile.control.Picker,
 
   statics: {
   },
