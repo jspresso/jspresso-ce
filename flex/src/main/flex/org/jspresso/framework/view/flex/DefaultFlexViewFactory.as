@@ -1960,8 +1960,9 @@ public class DefaultFlexViewFactory {
   protected function createSplitContainer(remoteSplitContainer:RSplitContainer):Container {
     var splitContainer:DividedBox = new DividedBox();
     splitContainer.resizeToContent = !(remoteSplitContainer.preferredSize != null
-        && (remoteSplitContainer.preferredSize.height > 0 || remoteSplitContainer.preferredSize.width > 0));
-//      splitContainer.liveDragging = true;
+    && (remoteSplitContainer.preferredSize.height > 0 || remoteSplitContainer.preferredSize.width > 0));
+
+    splitContainer.liveDragging = true;
 
     var leftTopComponent:UIComponent;
     var rightBottomComponent:UIComponent;
@@ -2671,9 +2672,11 @@ public class DefaultFlexViewFactory {
       table.addEventListener(IndexChangedEvent.HEADER_SHIFT, notifyTableChanged);
     }
     // This is to deal with NPE occurring in horizontal split panes with 2 tables.
-    table.width = width + 20;
     table.minWidth = 0;
+    table.width = width + 20;
     table.minHeight = table.headerHeight * 2;
+    // This is to deal with NPE occurring in vertical split panes with 2 tables.
+    table.height = table.minHeight * 8;
     return table;
   }
 
