@@ -149,7 +149,7 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
       }, this);
       editor.addListener("focusout", function (e) {
         var relatedTarget = e.getRelatedTarget();
-        if (relatedTarget != null && relatedTarget != table) {
+        if (relatedTarget != null && relatedTarget != table && !qx.ui.core.Widget.contains(editor, relatedTarget)) {
           table.stopEditing();
         }
       });
