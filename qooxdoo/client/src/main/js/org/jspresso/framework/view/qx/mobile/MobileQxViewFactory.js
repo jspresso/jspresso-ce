@@ -322,6 +322,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       }
     },
 
+    _getPageEndScroll: function (page) {
+      var pageEndScroll = page.getUserData("pageEndScroll");
+      if (!pageEndScroll) {
+        pageEndScroll = page._getScrollContainer();
+      }
+      return pageEndScroll;
+    },
+
     /**
      * @param page {qx.ui.mobile.page.NavigationPage}
      * @param pageEndAction {org.jspresso.framework.gui.remote.RAction}
@@ -329,22 +337,16 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     installPageEndAction: function (page, pageEndAction) {
       if (pageEndAction) {
         page.addListener("initialize", function (e) {
-          var pageEndScroll = page.getUserData("pageEndScroll");
-          if (!pageEndScroll) {
-            pageEndScroll = page._getScrollContainer();
-          }
-          if (qx.core.Environment.get("qx.mobile.nativescroll") == false) {
-            pageEndScroll.addListener("pageEnd", function (e) {
-              this._getActionHandler().execute(pageEndAction);
-            }, this);
-          } else {
-            qx.bom.Event.addNativeListener(pageEndScroll._getContentElement(), "scroll",
-                qx.lang.Function.bind(function (e) {
-                  if ((e.currentTarget.scrollTop + e.currentTarget.clientHeight) > e.currentTarget.scrollHeight - 200) {
-                    this._getActionHandler().execute(pageEndAction);
-                  }
-                }, this));
-          }
+          var pageEndScroll = this._getPageEndScroll(page);
+          pageEndScroll.setWaypointsY(["100%"]);
+          pageEndScroll.addListener("waypoint", function (e) {
+            var data = e.getData();
+            if (data.index == 0 && data.axis == "y" && data.direction == "down") {
+              this._getActionHandler().execute(pageEndAction, null, function () {
+                pageEndScroll.refresh();
+              });
+            }
+          }, this);
         }, this);
       }
     },

@@ -73,6 +73,7 @@
  * @use(org.jspresso.framework.application.frontend.command.remote.RemoteWritabilityCommand)
  * @use(org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCancelCommand)
  * @use(org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCommand)
+ * @use(org.jspresso.framework.application.frontend.command.remote.RemoteErrorMessageCommand)
  *
  */
 

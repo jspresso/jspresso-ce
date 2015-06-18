@@ -32,11 +32,14 @@ qx.Mixin.define("org.jspresso.framework.patch.MIScroll", {
         hScrollbar: false,
         scrollbarClass: "scrollbar",
         useTransform: true,
+        useTransition: true,
         onScrollEnd: function () {
           // Alert interested parties that we scrolled to end of page.
           if (qx.core.Environment.get("qx.mobile.nativescroll") == false) {
-            container.__currentX = -this.x;
-            container.__currentY = -this.y;
+
+            container._setCurrentX(-this.x);
+            container._setCurrentY(-this.y);
+            container.fireEvent("scrollEnd");
             if (this.y == this.maxScrollY) {
               container.fireEvent("pageEnd");
             }
@@ -49,6 +52,9 @@ qx.Mixin.define("org.jspresso.framework.patch.MIScroll", {
           }
           // Alert interested parties that we scrolled to end of page.
           if (qx.core.Environment.get("qx.mobile.nativescroll") == false) {
+
+            container._setCurrentX(-this.x);
+            container._setCurrentY(-this.y);
             if (this.y == this.maxScrollY) {
               container.fireEvent("pageEnd");
             }
@@ -82,12 +88,6 @@ qx.Mixin.define("org.jspresso.framework.patch.MIScroll", {
             }
 
             e.preventDefault();
-          }
-
-          // we also want to alert interested parties that we are starting scrolling
-          if (qx.core.Environment.get("qx.mobile.nativescroll") == false) {
-            var iScrollStartEvent = new qx.event.message.Message('iscrollstart');
-            qx.event.message.Bus.getInstance().dispatch(iScrollStartEvent);
           }
         }
       };
