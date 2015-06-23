@@ -38,13 +38,13 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
  * This type of module keeps a reference on a beans collection. There is no
  * assumption made on whether these beans are actually persistent entities or any
  * other type of java beans.
- * <p>
+ * <p/>
  * Simple bean collection modules must have their collection of referenced beans
  * initialized somehow. There is no standard built-in action to do so, since it
  * is highly dependent on what's needed. So it's rather common to have the
  * module content initialized through a startup action depending on the session
  * state.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BeanCollectionModule extends Module {
@@ -52,7 +52,7 @@ public class BeanCollectionModule extends Module {
   /**
    * {@code MODULE_OBJECTS} is "moduleObjects".
    */
-  public static final String           MODULE_OBJECTS = "moduleObjects";
+  public static final String MODULE_OBJECTS = "moduleObjects";
 
   private IComponentDescriptor<Object> elementComponentDescriptor;
   private IViewDescriptor              elementViewDescriptor;
@@ -62,11 +62,11 @@ public class BeanCollectionModule extends Module {
    * Adds an element to the module's projected object collection at the
    * specified index. If the index is out of the list bounds, the element is
    * simply added at the end of the list.
-   * 
+   *
    * @param index
-   *          the index to add the events element at.
+   *     the index to add the events element at.
    * @param element
-   *          the element to add.
+   *     the element to add.
    */
   public void addToModuleObjects(int index, Object element) {
     List<Object> newModuleObjects;
@@ -87,9 +87,9 @@ public class BeanCollectionModule extends Module {
 
   /**
    * Adds an element to the module's projected object collection.
-   * 
+   *
    * @param element
-   *          the element to add.
+   *     the element to add.
    */
   public void addToModuleObjects(Object element) {
     List<Object> newModuleObjects;
@@ -104,16 +104,15 @@ public class BeanCollectionModule extends Module {
 
   /**
    * Gets the elementComponentDescriptor.
-   * 
+   *
    * @return the elementComponentDescriptor.
    */
   public IComponentDescriptor<?> getElementComponentDescriptor() {
     if (elementComponentDescriptor == null) {
       if (getProjectedViewDescriptor() instanceof ICollectionViewDescriptor
           && getProjectedViewDescriptor().getModelDescriptor() != null) {
-        return ((ICollectionDescriptorProvider<?>) getProjectedViewDescriptor()
-            .getModelDescriptor()).getCollectionDescriptor()
-            .getElementDescriptor();
+        return ((ICollectionDescriptorProvider<?>) getProjectedViewDescriptor().getModelDescriptor())
+            .getCollectionDescriptor().getElementDescriptor();
       }
     }
     return elementComponentDescriptor;
@@ -121,7 +120,7 @@ public class BeanCollectionModule extends Module {
 
   /**
    * Gets the elementViewDescriptor.
-   * 
+   *
    * @return the elementViewDescriptor.
    */
   public IViewDescriptor getElementViewDescriptor() {
@@ -158,7 +157,7 @@ public class BeanCollectionModule extends Module {
 
   /**
    * Gets the module's projected objects.
-   * 
+   *
    * @return the projected objects.
    */
   public List<?> getModuleObjects() {
@@ -171,12 +170,11 @@ public class BeanCollectionModule extends Module {
   @Override
   public IViewDescriptor getViewDescriptor() {
     IViewDescriptor projectedViewDescriptor = getProjectedViewDescriptor();
-    IViewDescriptor moduleObjectsView = BasicCollectionViewDescriptor
-        .extractMainCollectionView(projectedViewDescriptor);
+    IViewDescriptor moduleObjectsView = BasicCollectionViewDescriptor.extractMainCollectionView(
+        projectedViewDescriptor);
     BeanCollectionModuleDescriptor moduleDescriptor = getDescriptor();
-    ((BasicViewDescriptor) moduleObjectsView)
-        .setModelDescriptor(moduleDescriptor
-            .getPropertyDescriptor(BeanCollectionModule.MODULE_OBJECTS));
+    ((BasicViewDescriptor) moduleObjectsView).setModelDescriptor(moduleDescriptor.getPropertyDescriptor(
+        BeanCollectionModule.MODULE_OBJECTS));
     BasicBorderViewDescriptor moduleViewDescriptor = new BasicBorderViewDescriptor();
     moduleViewDescriptor.setCenterViewDescriptor(projectedViewDescriptor);
     moduleViewDescriptor.setModelDescriptor(moduleDescriptor);
@@ -186,9 +184,9 @@ public class BeanCollectionModule extends Module {
 
   /**
    * Removes an element from the the module's projected object collection.
-   * 
+   *
    * @param element
-   *          the element to remove.
+   *     the element to remove.
    */
   public void removeFromModuleObjects(Object element) {
     if (getModuleObjects() != null) {
@@ -207,16 +205,15 @@ public class BeanCollectionModule extends Module {
    * or even granted roles. The latter means that bean collection modules based
    * on forbidden entities will automatically be excluded from the workspace of
    * the logged-in user.
-   * <p>
+   * <p/>
    * if not explicitly configured, the element component descriptor can be
    * inferred from the collection view descriptor configured as projected view
    * descriptor.
-   * 
+   *
    * @param elementComponentDescriptor
-   *          the elementComponentDescriptor to set.
+   *     the elementComponentDescriptor to set.
    */
-  public void setElementComponentDescriptor(
-      IComponentDescriptor<Object> elementComponentDescriptor) {
+  public void setElementComponentDescriptor(IComponentDescriptor<Object> elementComponentDescriptor) {
     this.elementComponentDescriptor = elementComponentDescriptor;
   }
 
@@ -224,14 +221,14 @@ public class BeanCollectionModule extends Module {
    * This property is not used by the module itself, but by built-in actions
    * that maybe registered on this module. One of these actions is
    * {@code AddBeanAsSubModuleAction}.
-   * <p>
+   * <p/>
    * This property indicates the view to use whenever the user requests a
    * &quot;form-like&quot; view on a collection element. Naturally the
    * configured element view descriptor must be backed by a model matching the
    * type of the module managed beans.
    *
    * @param elementViewDescriptor
-   *          the elementViewDescriptor to set.
+   *     the elementViewDescriptor to set.
    */
   public void setElementViewDescriptor(IViewDescriptor elementViewDescriptor) {
     this.elementViewDescriptor = elementViewDescriptor;
@@ -241,9 +238,9 @@ public class BeanCollectionModule extends Module {
    * Assigns the list of beans this module manages. The projected view will
    * automatically reflect this change since a &quot;moduleObjects&quot;
    * property change will be fired.
-   * 
+   *
    * @param moduleObjects
-   *          the projected object collection.
+   *     the projected object collection.
    */
   public void setModuleObjects(List<?> moduleObjects) {
     if (ObjectUtils.equals(this.moduleObjects, moduleObjects)) {
@@ -256,7 +253,7 @@ public class BeanCollectionModule extends Module {
 
   /**
    * Gets the module descriptor.
-   * 
+   *
    * @return the module descriptor.
    */
   protected BeanCollectionModuleDescriptor getDescriptor() {
@@ -278,8 +275,30 @@ public class BeanCollectionModule extends Module {
    */
   @Override
   protected boolean isLocallyDirty(IBackendController backendController) {
-    boolean locallyDirty = backendController
-        .isAnyDirtyInDepth(getModuleObjects());
+    boolean locallyDirty = backendController.isAnyDirtyInDepth(getModuleObjects());
     return locallyDirty;
+  }
+
+  /**
+   * Is sub module sticky. Never consider a bean module sticky if it holds a component that is a detail of the
+   * collection module.
+   *
+   * @param subModule
+   *     the sub module
+   * @return the boolean
+   */
+  @Override
+  public boolean isSubModuleSticky(Module subModule) {
+    if (!isStarted()) {
+      if (subModule instanceof BeanModule) {
+        IComponentDescriptor<?> subModuleComponentDescriptor = ((BeanModule) subModule).getComponentDescriptor();
+        IComponentDescriptor<?> elementComponentDescriptor = getElementComponentDescriptor();
+        if (subModuleComponentDescriptor != null && elementComponentDescriptor != null && subModuleComponentDescriptor
+            .getComponentContract().isAssignableFrom(elementComponentDescriptor.getComponentContract())) {
+          return false;
+        }
+      }
+    }
+    return super.isSubModuleSticky(subModule);
   }
 }
