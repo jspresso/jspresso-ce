@@ -27,6 +27,7 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -721,29 +722,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
       final ITabViewDescriptor descriptor) {
     BasicIndexedView<E> indexedView = new BasicIndexedView<E>(viewComponent) {
 
-      @Override
-      public void setConnector(IValueConnector connector) {
-        super.setConnector(connector);
-        if (descriptor.isLazy() && connector != null) {
-          // Only keep the selected tab connector bound
-          connector.addValueChangeListener(new IValueChangeListener() {
-            @Override
-            public void valueChange(ValueChangeEvent evt) {
-              ICompositeValueConnector parentConnector = (AbstractCompositeValueConnector) getConnector();
-              for (IView<E> tabView : getChildren()) {
-                IValueConnector tabViewConnector = tabView.getConnector();
-                if (tabViewConnector.getParentConnector() != null) {
-                  getMvcBinder().bind(tabViewConnector, null);
-                  parentConnector.removeChildConnector(tabViewConnector.getId());
-                  tabViewConnector.setParentConnector(null);
-                }
-              }
-              rebindTabViewIfNecessary(getChildView(getCurrentViewIndex()));
-            }
-          });
-        }
-      }
-
       /**
        * {@inheritDoc}
        */
@@ -760,27 +738,42 @@ public abstract class AbstractViewFactory<E, F, G> implements
           IView<E> newSelectedView = getChildView(index);
 
           if (newSelectedView != null && oldSelectedView != null) {
-            rebindTabViewIfNecessary(newSelectedView);
+            IValueConnector oldChildConnector = oldSelectedView.getConnector();
+            IValueConnector childConnector = newSelectedView.getConnector();
+            ICompositeValueConnector parentConnector = (AbstractCompositeValueConnector) getConnector();
+            if (parentConnector != null && oldChildConnector != null) {
+              getMvcBinder().bind(oldChildConnector, null);
+              parentConnector.removeChildConnector(oldChildConnector.getId());
+              oldChildConnector.setParentConnector(null);
+            }
+            if (parentConnector != null && childConnector != null) {
+              parentConnector.addChildConnector(childConnector.getId(),
+                  childConnector);
+              if (parentConnector.getModelConnector() != null) {
+                getMvcBinder().bind(
+                    childConnector,
+                    ((ICompositeValueConnector) parentConnector
+                        .getModelConnector()).getChildConnector(childConnector
+                        .getId()));
+              } else {
+                getMvcBinder().bind(childConnector, null);
+              }
+            }
           }
         }
       }
 
-      private void rebindTabViewIfNecessary(IView<E> tabView) {
-        IValueConnector childConnector = tabView.getConnector();
-        ICompositeValueConnector parentConnector = (AbstractCompositeValueConnector) getConnector();
-        if (parentConnector != null && childConnector != null && childConnector.getParentConnector() == null) {
-          parentConnector.addChildConnector(childConnector.getId(),
-              childConnector);
-          if (parentConnector.getModelConnector() != null) {
-            getMvcBinder().bind(
-                childConnector,
-                ((ICompositeValueConnector) parentConnector
-                    .getModelConnector()).getChildConnector(childConnector
-                    .getId()));
-          } else {
-            getMvcBinder().bind(childConnector, null);
-          }
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public List<IView<E>> getChildren() {
+        List<IView<E>> superChildren = super.getChildren();
+        if (superChildren != null && !superChildren.isEmpty()
+            && descriptor.isLazy()) {
+          return Collections.singletonList(getChildView(getCurrentViewIndex()));
         }
+        return superChildren;
       }
     };
     indexedView.setDescriptor(descriptor);
