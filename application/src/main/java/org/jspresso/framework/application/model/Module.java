@@ -664,7 +664,12 @@ public class Module extends AbstractPropertyChangeCapable
   public void setStarted(boolean started) {
     // Take a snapshot of the existing sub-modules
     if (!isStarted() && started && subModules != null) {
-      stickySubModules = new HashSet<>(subModules);
+      stickySubModules = new HashSet<>();
+      for (Module subModule : subModules) {
+        if (isSubModuleSticky(subModule)) {
+          stickySubModules.add(subModule);
+        }
+      }
     }
     this.started = started;
   }
@@ -847,6 +852,9 @@ public class Module extends AbstractPropertyChangeCapable
    * @return the boolean
    */
   public boolean isSubModuleSticky(Module subModule) {
-    return stickySubModules != null && stickySubModules.contains(subModule);
+    if (isStarted()) {
+      return stickySubModules != null && stickySubModules.contains(subModule);
+    }
+    return true;
   }
 }
