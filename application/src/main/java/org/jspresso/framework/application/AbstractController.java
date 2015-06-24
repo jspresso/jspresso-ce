@@ -29,6 +29,10 @@ import java.util.Map;
 
 import javax.security.auth.Subject;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
@@ -46,7 +50,7 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * <li>The backend controller is responsible for managing the application
  * session as well as transactions and persistence operations.</li>
  * </ul>
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractController extends AbstractPropertyChangeCapable
@@ -54,6 +58,8 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable
 
   private final List<Map.Entry<IAction, Map<String, Object>>> delayedActions;
   private       IExceptionHandler                             customExceptionHandler;
+
+  private final static Logger LOG = LoggerFactory.getLogger(AbstractController.class);
 
 
   /**
@@ -95,6 +101,7 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable
    */
   @Override
   public boolean handleException(Throwable ex, Map<String, Object> context) {
+    LOG.debug("An exception was received on controller with context {} ", context, ex);
     if (customExceptionHandler != null) {
       return customExceptionHandler.handleException(ex, context);
     }
@@ -138,8 +145,7 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable
    */
   @Override
   public int getFirstDayOfWeek(Locale locale) {
-    return Integer.parseInt(getTranslation(FIRST_DAY_OF_WEEK_KEY,
-        Integer.toString(1), locale));
+    return Integer.parseInt(getTranslation(FIRST_DAY_OF_WEEK_KEY, Integer.toString(1), locale));
   }
 
   /**
@@ -180,7 +186,7 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable
    * order guarantee that the internal state of an action has not changed during
    * it's execution since actions are meant to be singletons this would violate
    * thread-safety.
-   * 
+   *
    * @param action
    *          the action to extract the internal state for.
    * @return the internal action chain state.
@@ -248,5 +254,15 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable
   @Override
   public EClientType getClientType() {
     return getApplicationSession().getClientType();
+  }
+
+  /**
+   * To string.
+   *
+   * @return original toString completed with user name.
+   */
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this).append("user", getApplicationSession().getUsername()).toString();
   }
 }

@@ -18,15 +18,17 @@
  */
 package org.jspresso.framework.view;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
  * The basic implementation of the IView interface.
- * 
- * @author Vincent Vandenschrick
+ *
  * @param <E>
- *          the type of component this view uses.
+ *     the type of component this view uses.
+ * @author Vincent Vandenschrick
  */
 public class BasicView<E> implements IView<E> {
 
@@ -39,7 +41,7 @@ public class BasicView<E> implements IView<E> {
    * Constructs a new {@code BasicView} instance.
    *
    * @param peer
-   *          the peer component.
+   *     the peer component.
    */
   public BasicView(E peer) {
     this.peer = peer;
@@ -47,7 +49,7 @@ public class BasicView<E> implements IView<E> {
 
   /**
    * Returns the {@code IValueConnector} connected to the view.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -57,7 +59,7 @@ public class BasicView<E> implements IView<E> {
 
   /**
    * Gets the descriptor.
-   * 
+   *
    * @return the descriptor.
    */
   @Override
@@ -67,7 +69,7 @@ public class BasicView<E> implements IView<E> {
 
   /**
    * Gets the parent.
-   * 
+   *
    * @return the parent.
    */
   @Override
@@ -77,7 +79,7 @@ public class BasicView<E> implements IView<E> {
 
   /**
    * Gets the component responsible for implementing the view.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -87,7 +89,7 @@ public class BasicView<E> implements IView<E> {
 
   /**
    * Returns this view.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -97,9 +99,9 @@ public class BasicView<E> implements IView<E> {
 
   /**
    * Sets the connector.
-   * 
+   *
    * @param connector
-   *          the connector to set.
+   *     the connector to set.
    */
   @Override
   public void setConnector(IValueConnector connector) {
@@ -108,9 +110,9 @@ public class BasicView<E> implements IView<E> {
 
   /**
    * Sets the descriptor.
-   * 
+   *
    * @param descriptor
-   *          the descriptor to set.
+   *     the descriptor to set.
    */
   public void setDescriptor(IViewDescriptor descriptor) {
     this.descriptor = descriptor;
@@ -118,9 +120,9 @@ public class BasicView<E> implements IView<E> {
 
   /**
    * Sets the parent.
-   * 
+   *
    * @param parent
-   *          the parent to set.
+   *     the parent to set.
    */
   @Override
   public void setParent(IView<E> parent) {
@@ -129,13 +131,23 @@ public class BasicView<E> implements IView<E> {
 
   /**
    * Sets the peer.
-   * 
+   *
    * @param peer
-   *          the peer to set.
+   *     the peer to set.
    */
   @Override
   public void setPeer(E peer) {
     this.peer = peer;
   }
 
+  /**
+   * To string.
+   *
+   * @return original toString completed with user name.
+   */
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this).append("descriptor", getDescriptor()).append("peer", getPeer()).append("connector",
+        getConnector()).toString();
+  }
 }
