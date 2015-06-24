@@ -150,7 +150,23 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
       editor.addListener("focusout", function (e) {
         var relatedTarget = e.getRelatedTarget();
         if (relatedTarget != null && relatedTarget != table && !qx.ui.core.Widget.contains(editor, relatedTarget)) {
+          var timer = qx.util.TimerManager.getInstance();
+          timer.start(function (userData, timerId) {
+            if (table.isEditing()) {
           table.stopEditing();
+        }
+          }, 0, this, null, 0);
+        } else if (relatedTarget == table) {
+          // This is a hack to prevent default stopEditing() to occur before the state of the editor is actually
+          // updated.
+          table.setEnabled(false);
+          var timer = qx.util.TimerManager.getInstance();
+          timer.start(function (userData, timerId) {
+            table.setEnabled(true);
+            if (table.isEditing()) {
+              table.stopEditing();
+            }
+          }, 0, this, null, 0);
         }
       });
       return editor;
