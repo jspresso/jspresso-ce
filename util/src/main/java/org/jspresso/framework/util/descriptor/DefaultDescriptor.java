@@ -18,7 +18,10 @@
  */
 package org.jspresso.framework.util.descriptor;
 
+import java.text.MessageFormat;
 import java.util.Locale;
+
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.lang.ICloneable;
@@ -26,7 +29,7 @@ import org.jspresso.framework.util.lang.ICloneable;
 /**
  * This is a utility class from which most named descriptors inherit for
  * factorization purpose. It provides translatable name and description.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class DefaultDescriptor implements IDescriptor, ICloneable {
@@ -51,7 +54,7 @@ public class DefaultDescriptor implements IDescriptor, ICloneable {
 
   /**
    * The description getter.
-   * 
+   *
    * @return the description.
    */
   @Override
@@ -82,7 +85,7 @@ public class DefaultDescriptor implements IDescriptor, ICloneable {
 
   /**
    * The name getter.
-   * 
+   *
    * @return the name.
    */
   @Override
@@ -97,7 +100,7 @@ public class DefaultDescriptor implements IDescriptor, ICloneable {
    * translation. Description is mainly used for UI (in toolTips for instance)
    * but may also be used for project technical documentation, contextual help,
    * and so on.
-   * 
+   *
    * @param description
    *          the description to set.
    */
@@ -107,7 +110,7 @@ public class DefaultDescriptor implements IDescriptor, ICloneable {
 
   /**
    * Sets the I18N key used for translation if it differs from the name itself.
-   * 
+   *
    * @param nameKey
    *          the i18nNameKey to set.
    */
@@ -122,7 +125,7 @@ public class DefaultDescriptor implements IDescriptor, ICloneable {
    * semantic may vary depending on the actual descriptor type. For instance, a
    * property descriptor name is the name of the property and a component
    * descriptor name is the fully qualified name of the underlying class.
-   * 
+   *
    * @param name
    *          the name to set.
    */
@@ -132,7 +135,7 @@ public class DefaultDescriptor implements IDescriptor, ICloneable {
 
   /**
    * Gets the i18nNameKey.
-   * 
+   *
    * @return the i18nNameKey.
    */
   public String getI18nNameKey() {
@@ -141,7 +144,7 @@ public class DefaultDescriptor implements IDescriptor, ICloneable {
 
   /**
    * Gets the lastUpdated.
-   * 
+   *
    * @return the lastUpdated.
    */
   @Override
@@ -151,12 +154,22 @@ public class DefaultDescriptor implements IDescriptor, ICloneable {
 
   /**
    * Sets the lastUpdated.
-   * 
+   *
    * @param lastUpdated
    *          the lastUpdated to set.
    * @internal
    */
   public void setLastUpdated(long lastUpdated) {
     this.lastUpdated = lastUpdated;
+  }
+
+  /**
+   * To string.
+   *
+   * @return original toString completed with name.
+   */
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this).append("name", getName()).toString();
   }
 }
