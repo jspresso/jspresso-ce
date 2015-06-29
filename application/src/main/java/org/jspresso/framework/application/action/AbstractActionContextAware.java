@@ -46,7 +46,7 @@ import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
  * contains helper methods that takes the developer away from the standard
  * context internal knowledge. Action developers can (should) use these helper
  * methods (for reference manual readers, give an eye to the linked javadoc).
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractActionContextAware {
@@ -132,12 +132,16 @@ public abstract class AbstractActionContextAware {
    * Retrieves the locale the action has to use to execute. This method
    * delegates to the context backend controller that in turn will delegate to
    * the session.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the locale the action executes in.
    */
   protected Locale getLocale(Map<String, Object> context) {
+    IFrontendController<?, ?, ?> frontController = getFrontendController(context);
+    if (frontController != null) {
+      return frontController.getLocale();
+    }
     return getBackendController(context).getLocale();
   }
 
@@ -156,7 +160,7 @@ public abstract class AbstractActionContextAware {
 
   /**
    * Gets the model this action was triggered on.
-   * 
+   *
    * @param <T>
    *     type inference return.
    * @param viewPath
@@ -267,7 +271,7 @@ public abstract class AbstractActionContextAware {
 
   /**
    * Gets the parent model this action was triggered on.
-   * 
+   *
    * @param <T>
    *     type inference return.
    * @param context
@@ -289,7 +293,7 @@ public abstract class AbstractActionContextAware {
    * component (table, list, ...). More accurately, the selected indices are
    * taken from the view connector that adapts the UI component to the Jspresso
    * binding architecture.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the selected indices stored in the action context.
@@ -303,7 +307,7 @@ public abstract class AbstractActionContextAware {
    * component (table, list, ...). More accurately, the selected indices are
    * taken from the view connector that adapts the UI component to the Jspresso
    * binding architecture.
-   * 
+   *
    * @param viewPath
    *          the view index path to follow.
    *          <ul>
@@ -332,7 +336,7 @@ public abstract class AbstractActionContextAware {
    * This is a versatile helper method that retrieves the selected model either
    * from the 1st selected child connector if the action was triggered on a
    * collection connector or from the connector itself.
-   * 
+   *
    * @param <T>
    *     type inference return.
    * @param context
@@ -347,7 +351,7 @@ public abstract class AbstractActionContextAware {
    * This is a versatile helper method that retrieves the selected model either
    * from the 1st selected child connector if the action was triggered on a
    * collection connector or from the connector itself.
-   * 
+   *
    * @param <T>
    *     type inference return.
    * @param viewPath
@@ -378,7 +382,7 @@ public abstract class AbstractActionContextAware {
    * This is a versatile helper method that retrieves the selected models model
    * either from the selected child connectors if the action was triggered on a
    * collection connector or from the connector itself.
-   * 
+   *
    * @param <T>
    *     type inference return.
    * @param context
@@ -393,7 +397,7 @@ public abstract class AbstractActionContextAware {
    * This is a versatile helper method that retrieves the selected models model
    * either from the selected child connectors if the action was triggered on a
    * collection connector or from the connector itself.
-   * 
+   *
    * @param <T>
    *     type inference return.
    * @param viewPath
@@ -435,7 +439,7 @@ public abstract class AbstractActionContextAware {
   /**
    * Gets he application translation provider out of the action context. This
    * method simply delegates to the context backend controller.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the translation provider.
@@ -466,7 +470,7 @@ public abstract class AbstractActionContextAware {
    * component (table, list, ...). More accurately, the selected indices are set
    * to the view connector that adapts the UI component to the Jspresso binding
    * architecture.
-   * 
+   *
    * @param selectedIndices
    *          the selected indices to store in the action context.
    * @param context
@@ -482,7 +486,7 @@ public abstract class AbstractActionContextAware {
    * component (table, list, ...). More accurately, the selected indices are set
    * to the view connector that adapts the UI component to the Jspresso binding
    * architecture.
-   * 
+   *
    * @param viewPath
    *          the view index path to follow.
    *          <ul>
@@ -510,7 +514,7 @@ public abstract class AbstractActionContextAware {
    * Retrieves the selected models indices out of the model connector if it's a
    * collection connector and set them as selected indices in the action
    * context.
-   * 
+   *
    * @param selectedModels
    *          the list of models to select in the view connector.
    * @param context
@@ -525,7 +529,7 @@ public abstract class AbstractActionContextAware {
    * Retrieves the selected models indices out of the model connector if it's a
    * collection connector and set them as selected indices in the action
    * context.
-   * 
+   *
    * @param viewPath
    *          the view index path to follow.
    *          <ul>
@@ -551,7 +555,7 @@ public abstract class AbstractActionContextAware {
    * descriptor is only filled when an action is triggered from a table column
    * or a form field. It contains a reference to the column/field descriptor the
    * action was triggered from.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the property view descriptor.
@@ -672,7 +676,7 @@ public abstract class AbstractActionContextAware {
   /**
    * Starts from a view and navigates the view hierarchy following an index
    * navigation path.
-   * 
+   *
    * @param <T>
    *     The root class of the view peers.
    * @param fromView
