@@ -87,14 +87,14 @@ public class SaveModuleObjectAction extends SaveAction {
         if (property instanceof IComponent) {
           if (!traversed.contains(property)) {
             traversed.add((IComponent) property);
-            completeEntitiesToSave((IComponent) property, entitiesToSave);
+            completeEntitiesToSave((IComponent) property, entitiesToSave, traversed);
           }
         } else if (property instanceof Collection<?>) {
           for (Object element : (Collection<?>) property) {
             if (element instanceof IComponent) {
               if (!traversed.contains(element)) {
                 traversed.add((IComponent) element);
-                completeEntitiesToSave((IComponent) element, entitiesToSave);
+                completeEntitiesToSave((IComponent) element, entitiesToSave, traversed);
               }
             }
           }
