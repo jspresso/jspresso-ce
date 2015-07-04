@@ -15,7 +15,7 @@
 
     <!-- Jspresso dependencies versions -->
     <jspresso.version>4.2-SNAPSHOT</jspresso.version>
-    <sjs.version>2.1</sjs.version>
+    <sjs.version>2.2-SNAPSHOT</sjs.version>
 
     <junit.version>4.11</junit.version>
     <mockito.version>1.9.5-rc1</mockito.version>
@@ -114,9 +114,9 @@
     <flexmojos-plugin.version>7.0.0</flexmojos-plugin.version>
     <exec-plugin.version>1.4.0</exec-plugin.version>
     <gmaven-plugin.version>1.5</gmaven-plugin.version>
-    <groovy.version>2.2.2</groovy.version>
+    <groovy.version>2.3.10</groovy.version>
     <groovy-eclipse-compiler.version>2.9.1-01</groovy-eclipse-compiler.version>
-    <groovy-eclipse-batch.version>2.4.3-01</groovy-eclipse-batch.version>
+    <groovy-eclipse-batch.version>2.3.7-01</groovy-eclipse-batch.version>
     <jetty-plugin.version>8.1.16.v20140903</jetty-plugin.version>
     <appassembler-plugin.version>1.10</appassembler-plugin.version>
   </properties>
