@@ -2431,10 +2431,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _sizeMaxComponentWidth: function (component, remoteComponent, expectedCharCount, maxCharCount) {
       var w;
       this.applyComponentStyle(component, remoteComponent);
-      if (expectedCharCount == null) {
+      if (expectedCharCount == null || expectedCharCount < 0) {
         expectedCharCount = org.jspresso.framework.view.qx.DefaultQxViewFactory.__FIELD_MAX_CHAR_COUNT;
       }
-      if (maxCharCount == null) {
+      if (maxCharCount == null || maxCharCount < 0) {
         maxCharCount = org.jspresso.framework.view.qx.DefaultQxViewFactory.__FIELD_MAX_CHAR_COUNT;
       }
       var charCount = maxCharCount;
