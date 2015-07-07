@@ -2505,7 +2505,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             }
           });
         }
-        this._sizeMaxComponentWidth(atom, remoteLabel, remoteLabel.getMaxLength())
+        // Do not size dynamic labels
+        // this._sizeMaxComponentWidth(atom, remoteLabel, remoteLabel.getMaxLength())
       } else {
         var labelText = remoteLabel.getLabel();
         labelText = org.jspresso.framework.util.html.HtmlUtil.replaceNewlines(labelText);
