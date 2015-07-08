@@ -27,7 +27,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 /**
  * A specialized transaction template that takes care of checking that the unit
  * of work is started when executing a transaction callback.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class ControllerAwareTransactionTemplate extends TransactionTemplate {
@@ -80,6 +80,8 @@ public class ControllerAwareTransactionTemplate extends TransactionTemplate {
           boolean nested = getPropagationBehavior() == TransactionDefinition
               .PROPAGATION_REQUIRES_NEW && backendController.isUnitOfWorkActive();
           backendController.joinTransaction(nested);
+        } else {
+          backendController.joinTransaction();
         }
         return action.doInTransaction(status);
       }
