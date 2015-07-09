@@ -18,10 +18,8 @@ import flash.display.DisplayObject;
 import flash.events.Event;
 import flash.events.FocusEvent;
 import flash.events.KeyboardEvent;
-import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 import flash.events.TextEvent;
-import flash.sensors.Geolocation;
 import flash.ui.Keyboard;
 
 import flex.utils.ui.resize.ResizablePanel;
@@ -67,7 +65,6 @@ import mx.core.Container;
 import mx.core.IFlexDisplayObject;
 import mx.core.ScrollPolicy;
 import mx.core.UIComponent;
-import mx.core.UITextField;
 import mx.events.CollectionEvent;
 import mx.events.CollectionEventKind;
 import mx.events.ColorPickerEvent;
@@ -154,7 +151,6 @@ import org.jspresso.framework.util.lang.DateDto;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
 import org.openscales.core.Map;
 import org.openscales.core.basetypes.Resolution;
-import org.openscales.core.control.Zoom;
 import org.openscales.core.feature.PointFeature;
 import org.openscales.core.handler.mouse.DragHandler;
 import org.openscales.core.handler.mouse.WheelHandler;
@@ -543,9 +539,20 @@ public class DefaultFlexViewFactory {
   }
 
   public function createTextInputComponent():TextInput {
-    var tf:EnhancedTextInput = new EnhancedTextInput();
-    tf.preventDefaultButton = true;
-    return tf;
+    var textInput:EnhancedTextInput = new EnhancedTextInput();
+    textInput.preventDefaultButton = true;
+    var blockNewLine:Function = function (event:TextEvent):void {
+      var text:String = event.text;
+      if (isNewline(text)) {
+        event.preventDefault();
+      } else if (endsWithNewline(event.text)) {
+        if (textInput.text == StringUtil.trim(event.text)) {
+          event.preventDefault();
+        }
+      }
+    };
+    textInput.addEventListener(TextEvent.TEXT_INPUT, blockNewLine);
+    return textInput;
   }
 
   public function getIconForComponent(component:UIComponent, rIcon:RIcon):Class {
@@ -3156,18 +3163,6 @@ public class DefaultFlexViewFactory {
       }
     };
     BindingUtils.bindSetter(updateView, remoteState, "value", true);
-
-    var blockNewLine:Function = function (event:TextEvent):void {
-      var text:String = event.text;
-      if (isNewline(text)) {
-        event.preventDefault();
-      } else if(endsWithNewline(event.text)) {
-        if (textInput.text == StringUtil.trim(event.text)) {
-          event.preventDefault();
-        }
-      }
-    };
-    textInput.addEventListener(TextEvent.TEXT_INPUT, blockNewLine);
 
     var trimLastLine:Function = function (evt:Event):void {
       while (textInput.text && endsWithNewline(textInput.text)) {
