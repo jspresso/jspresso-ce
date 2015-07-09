@@ -67,6 +67,7 @@ import mx.core.Container;
 import mx.core.IFlexDisplayObject;
 import mx.core.ScrollPolicy;
 import mx.core.UIComponent;
+import mx.core.UITextField;
 import mx.events.CollectionEvent;
 import mx.events.CollectionEventKind;
 import mx.events.ColorPickerEvent;
@@ -1184,7 +1185,15 @@ public class DefaultFlexViewFactory {
       textInput.addEventListener(FlexEvent.ENTER, triggerAction);
       textInput.addEventListener(FocusEvent.MOUSE_FOCUS_CHANGE, triggerAction);
       textInput.addEventListener(FocusEvent.KEY_FOCUS_CHANGE, triggerAction);
-      textInput.addEventListener(FocusEvent.FOCUS_OUT, triggerAction);
+      // do not trigger event on focus out. It can produce double LOV dialogs when pressing the enter key.
+      // see bug #32. However, in order to fix bug #15, when editing a table, the listener has to be installed
+      // specifically.
+      // textInput.addEventListener(FocusEvent.FOCUS_OUT, triggerAction);
+      textInput.addEventListener(FocusEvent.FOCUS_OUT, function (event:FocusEvent):void {
+        if (event.relatedObject is DataGrid) {
+          triggerAction(event);
+        }
+      });
       textInput.addEventListener(KeyboardEvent.KEY_DOWN, function (event:KeyboardEvent):void {
         if (event.keyCode == Keyboard.ESCAPE) {
           resetFieldValue(event);
