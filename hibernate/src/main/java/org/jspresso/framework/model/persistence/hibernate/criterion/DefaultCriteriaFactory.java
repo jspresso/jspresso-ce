@@ -67,12 +67,14 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
   private static final Logger LOG = LoggerFactory.getLogger(DefaultCriteriaFactory.class);
 
   private boolean triStateBooleanSupported;
+  private boolean useAliasesForJoins;
 
   /**
    * Constructs a new {@code DefaultCriteriaFactory} instance.
    */
   public DefaultCriteriaFactory() {
     triStateBooleanSupported = false;
+    useAliasesForJoins = false;
   }
 
   /**
@@ -126,7 +128,12 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
             }
             if (sortable) {
               for (String pathElt : path) {
-                orderingCriteria = criteria.getSubCriteriaFor(orderingCriteria, pathElt, JoinType.LEFT_OUTER_JOIN);
+                if (isUseAliasesForJoins()) {
+                  orderingCriteria = criteria.getSubCriteriaFor(orderingCriteria, pathElt, pathElt,
+                      JoinType.LEFT_OUTER_JOIN);
+                } else {
+                  orderingCriteria = criteria.getSubCriteriaFor(orderingCriteria, pathElt, JoinType.LEFT_OUTER_JOIN);
+                }
               }
               propertyName = name.toString();
             }
@@ -267,8 +274,14 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
                     }
                   }
                   if (digDeeper) {
-                    DetachedCriteria joinCriteria = rootCriteria.getSubCriteriaFor(currentCriteria, prefixedProperty,
-                        JoinType.INNER_JOIN);
+                    DetachedCriteria joinCriteria;
+                    if (isUseAliasesForJoins()) {
+                      joinCriteria = rootCriteria.getSubCriteriaFor(currentCriteria, prefixedProperty, prefixedProperty,
+                          JoinType.INNER_JOIN);
+                    } else {
+                      joinCriteria = rootCriteria.getSubCriteriaFor(currentCriteria, prefixedProperty,
+                          JoinType.INNER_JOIN);
+                    }
                     abort = abort || completeCriteria(rootCriteria, joinCriteria, null, joinedComponent, context);
                   }
                 }
@@ -383,7 +396,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
     Set<String> inListValues = new HashSet<>();
     boolean nullAllowed = false;
     for (EnumValueQueryStructure inListValue : enumQueryStructure.getSelectedEnumerationValues()) {
-      if (inListValue.getValue() == null || "" .equals(inListValue.getValue())) {
+      if (inListValue.getValue() == null || "".equals(inListValue.getValue())) {
         nullAllowed = true;
       } else {
         inListValues.add(inListValue.getValue());
@@ -604,7 +617,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
    *
    * @return the triStateBooleanSupported.
    */
-  public boolean isTriStateBooleanSupported() {
+  protected boolean isTriStateBooleanSupported() {
     return triStateBooleanSupported;
   }
 
@@ -620,4 +633,22 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
     this.triStateBooleanSupported = triStateBooleanSupported;
   }
 
+  /**
+   * Is use aliases for joins.
+   *
+   * @return the boolean
+   */
+  protected boolean isUseAliasesForJoins() {
+    return useAliasesForJoins;
+  }
+
+  /**
+   * Sets use aliases for joins.
+   *
+   * @param useAliasesForJoins
+   *     the use aliases for joins
+   */
+  public void setUseAliasesForJoins(boolean useAliasesForJoins) {
+    this.useAliasesForJoins = useAliasesForJoins;
+  }
 }
