@@ -40,12 +40,6 @@ import javax.security.auth.login.LoginException;
 import org.apache.commons.lang.LocaleUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.exception.ConstraintViolationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.dao.ConcurrencyFailureException;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.orm.hibernate4.SessionFactoryUtils;
-
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IAction;
@@ -94,6 +88,11 @@ import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.ConcurrencyFailureException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
 
 /**
  * Base class for frontend application controllers. Frontend controllers are
@@ -463,19 +462,19 @@ public abstract class AbstractFrontendController<E, F, G> extends
         || ObjectUtils.equals(getSelectedWorkspaceName(), workspaceName)) {
       return;
     }
-    if (bypassModuleBoundaryActions) {
-      Workspace oldSelectedWorkspace = getSelectedWorkspace();
-      if (workspaceName != null) {
-        Workspace workspace = getWorkspace(workspaceName);
-        if (!workspace.isStarted()) {
-          if (workspace.getStartupAction() != null) {
-            Map<String, Object> actionContext = getInitialActionContext();
-            actionContext.put(ActionContextConstants.ACTION_PARAM, workspace);
-            execute(workspace.getStartupAction(), actionContext);
-            workspace.setStarted(true);
-          }
+    Workspace workspace = null;
+    boolean startingWorkspace = false;
+    if (workspaceName != null) {
+      workspace = getWorkspace(workspaceName);
+      if (workspace != null) {
+        startingWorkspace = !workspace.isStarted();
+        if (startingWorkspace) {
+          workspace.setStarted(true);
         }
       }
+    }
+    if (bypassModuleBoundaryActions) {
+      Workspace oldSelectedWorkspace = getSelectedWorkspace();
       this.selectedWorkspaceName = workspaceName;
       firePropertyChange(SELECTED_WORKSPACE, oldSelectedWorkspace, getSelectedWorkspace());
     } else {
@@ -483,6 +482,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
       // so that module boundary actions get triggered
       // see bug #538
       displayModule(workspaceName, getSelectedModule(workspaceName));
+    }
+    // Delay until the end of the very 1st execution. See bug #42.
+    if (workspace != null && startingWorkspace && workspace.getStartupAction() != null) {
+      Map<String, Object> actionContext = getInitialActionContext();
+      actionContext.put(ActionContextConstants.ACTION_PARAM, workspace);
+      execute(workspace.getStartupAction(), actionContext);
     }
   }
 
