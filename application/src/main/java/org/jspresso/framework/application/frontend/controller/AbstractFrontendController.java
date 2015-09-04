@@ -461,19 +461,19 @@ public abstract class AbstractFrontendController<E, F, G> extends
         || ObjectUtils.equals(getSelectedWorkspaceName(), workspaceName)) {
       return;
     }
-    if (bypassModuleBoundaryActions) {
-      Workspace oldSelectedWorkspace = getSelectedWorkspace();
+    Workspace workspace = null;
+    boolean startingWorkspace = false;
       if (workspaceName != null) {
-        Workspace workspace = getWorkspace(workspaceName);
-        if (!workspace.isStarted()) {
-          if (workspace.getStartupAction() != null) {
-            Map<String, Object> actionContext = getInitialActionContext();
-            actionContext.put(ActionContextConstants.ACTION_PARAM, workspace);
-            execute(workspace.getStartupAction(), actionContext);
+      workspace = getWorkspace(workspaceName);
+      if (workspace != null) {
+        startingWorkspace = !workspace.isStarted();
+        if (startingWorkspace) {
             workspace.setStarted(true);
           }
         }
       }
+    if (bypassModuleBoundaryActions) {
+      Workspace oldSelectedWorkspace = getSelectedWorkspace();
       this.selectedWorkspaceName = workspaceName;
       firePropertyChange(SELECTED_WORKSPACE, oldSelectedWorkspace, getSelectedWorkspace());
     } else {
@@ -481,6 +481,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
       // so that module boundary actions get triggered
       // see bug #538
       displayModule(workspaceName, getSelectedModule(workspaceName));
+    }
+    // Delay until the end of the very 1st execution. See bug #42.
+    if (workspace != null && startingWorkspace && workspace.getStartupAction() != null) {
+      Map<String, Object> actionContext = getInitialActionContext();
+      actionContext.put(ActionContextConstants.ACTION_PARAM, workspace);
+      execute(workspace.getStartupAction(), actionContext);
     }
   }
 
