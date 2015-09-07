@@ -674,14 +674,21 @@ public class DefaultFlexViewFactory {
 
   protected function applyComponentPreferredSize(component:UIComponent, preferredSize:Dimension):void {
     if (preferredSize) {
+      // Might be used before the component is actually rendered.
+      setComponentSize(component, preferredSize);
+      // Restore the preferred size once the component is rendered.
       component.addEventListener(FlexEvent.CREATION_COMPLETE, function (e:FlexEvent):void {
-        if (preferredSize.width > 0) {
-          component.width = preferredSize.width;
-        }
-        if (preferredSize.height > 0) {
-          component.height = preferredSize.height;
-        }
+        setComponentSize(component, preferredSize);
       });
+    }
+  }
+
+  private function setComponentSize(component:UIComponent, preferredSize:Dimension):void {
+    if (preferredSize.width > 0) {
+      component.width = preferredSize.width;
+    }
+    if (preferredSize.height > 0) {
+      component.height = preferredSize.height;
     }
   }
 
@@ -1397,8 +1404,8 @@ public class DefaultFlexViewFactory {
     if (remoteBorderContainer.north != null) {
       row = new GridRow();
       row.percentWidth = 100.0;
-//        row.setStyle("borderStyle","solid");
-//        row.setStyle("borderColor","0x00FF00");
+//      row.setStyle("borderStyle","solid");
+//      row.setStyle("borderColor","0x00FF00");
       borderContainer.addChild(row);
 
       cell = new GridItem();
