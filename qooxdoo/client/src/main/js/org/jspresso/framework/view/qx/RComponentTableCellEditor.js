@@ -149,26 +149,30 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
       }, this);
       editor.addListener("focusout", function (e) {
         var relatedTarget = e.getRelatedTarget();
+        var timer = qx.util.TimerManager.getInstance();
         if (relatedTarget != null && relatedTarget != table && !qx.ui.core.Widget.contains(editor, relatedTarget)) {
-          var timer = qx.util.TimerManager.getInstance();
           timer.start(function (userData, timerId) {
-            if (table.isEditing()) {
-          table.stopEditing();
-        }
-          }, 0, this, null, 0);
-        } else if (relatedTarget == table) {
-          // This is a hack to prevent default stopEditing() to occur before the state of the editor is actually
-          // updated.
-          table.setEnabled(false);
-          var timer = qx.util.TimerManager.getInstance();
-          timer.start(function (userData, timerId) {
-            table.setEnabled(true);
             if (table.isEditing()) {
               table.stopEditing();
             }
           }, 0, this, null, 0);
+        } else if (relatedTarget == table) {
+          if (this.__rComponent instanceof org.jspresso.framework.gui.remote.RActionField) {
+            // Edition is completely handled by the action field and the value will be updated afterwards.
+            table.cancelEditing();
+          } else {
+            // This is a hack to prevent default stopEditing() to occur before the state of the editor is actually
+            // updated.
+            table.setEnabled(false);
+            timer.start(function (userData, timerId) {
+              table.setEnabled(true);
+              if (table.isEditing()) {
+                table.stopEditing();
+              }
+            }, 0, this, null, 0);
+          }
         }
-      });
+      }, this);
       return editor;
     },
 
