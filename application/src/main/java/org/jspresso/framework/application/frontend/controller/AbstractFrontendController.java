@@ -1511,8 +1511,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
         navigatorSelectionChanged(workspaceName, (ICompositeValueConnector) event.getSelectedItem());
       }
     });
-    workspaceNavigatorConnectors.put(workspaceName,
-        (ICompositeValueConnector) workspaceNavigatorView.getConnector());
+    workspaceNavigatorConnectors.put(workspaceName, (ICompositeValueConnector) workspaceNavigatorView.getConnector());
     return workspaceNavigatorView;
   }
 
@@ -1791,57 +1790,66 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
+   * Perform JAAS login.
+   *
+   * @return the logged-in subject or null if login failed.
+   */
+  protected Subject performJAASLogin() {
+    CallbackHandler lch = getLoginCallbackHandler();
+    try {
+      LoginContext lc;
+      try {
+        lc = new LoginContext(getLoginContextName(), lch);
+      } catch (LoginException le) {
+        LOG.error("Cannot create LoginContext.", le);
+        return null;
+      } catch (SecurityException se) {
+        LOG.error("Cannot create LoginContext.", se);
+        return null;
+      }
+      lc.login();
+      return lc.getSubject();
+    } catch (LoginException le) {
+      // le.getCause() is always null, so cannot rely on it.
+      // see bug #1019
+      if (!(le instanceof FailedLoginException)) {
+        String message = le.getMessage();
+        if (message.indexOf(':') > 0) {
+          String exceptionClassName = message.substring(0, message.indexOf(':'));
+          try {
+            if (Throwable.class.isAssignableFrom(Class.forName(exceptionClassName))) {
+              LOG.error("A technical exception occurred on login module.", le);
+            }
+          } catch (ClassNotFoundException ignored) {
+            // ignored.
+          }
+        }
+      }
+      return null;
+    }
+  }
+
+  /**
    * Performs the actual JAAS login.
    *
    * @return true if login succeeded.
    */
   protected boolean performLogin() {
+    Subject subject;
     String lcName = getLoginContextName();
     if (lcName != null) {
-      CallbackHandler lch = getLoginCallbackHandler();
-      try {
-        LoginContext lc;
-        try {
-          lc = new LoginContext(lcName, lch);
-        } catch (LoginException le) {
-          LOG.error("Cannot create LoginContext.", le);
-          return false;
-        } catch (SecurityException se) {
-          LOG.error("Cannot create LoginContext.", se);
-          return false;
-        }
-        lc.login();
-        loggedIn(lc.getSubject());
-      } catch (LoginException le) {
-        // le.getCause() is always null, so cannot rely on it.
-        // see bug #1019
-        if (!(le instanceof FailedLoginException)) {
-          String message = le.getMessage();
-          if (message.indexOf(':') > 0) {
-            String exceptionClassName = message.substring(0,
-                message.indexOf(':'));
-            try {
-              if (Throwable.class.isAssignableFrom(Class
-                  .forName(exceptionClassName))) {
-                LOG.error("A technical exception occurred on login module.", le);
-              }
-            } catch (ClassNotFoundException ignored) {
-              // ignored.
-            }
-          }
-        }
-        if (lch != null) {
-          LOG.info("User {} failed to log in for session {}.",
-              ((UsernamePasswordHandler) lch).getUsername(),
-              getApplicationSession().getId());
-        }
-        return false;
-      }
+      subject = performJAASLogin();
     } else {
-      loggedIn(getAnonymousSubject());
+      subject = getAnonymousSubject();
     }
-    LOG.info("User {} logged in  for session {}.", getApplicationSession()
-        .getUsername(), getApplicationSession().getId());
+    if (subject == null) {
+      LOG.info("User {} failed to log in for session {}.", getLoginCallbackHandler().getUsername(),
+          getApplicationSession().getId());
+      return false;
+    }
+    LOG.info("User {} logged in  for session {}.", getApplicationSession().getUsername(),
+        getApplicationSession().getId());
+    loggedIn(subject);
     return true;
   }
 
