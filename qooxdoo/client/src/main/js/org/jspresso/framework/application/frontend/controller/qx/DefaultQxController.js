@@ -175,6 +175,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         /** @type {qx.ui.window.Window} */
         var topDialog = this._dialogStack.pop()[0];
         this._getApplication().getRoot().remove(topDialog);
+        topDialog.removeAll();
         topDialog.close();
         topDialog.destroy();
       }
