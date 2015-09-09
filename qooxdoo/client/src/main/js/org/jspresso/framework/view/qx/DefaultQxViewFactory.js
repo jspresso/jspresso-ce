@@ -2244,6 +2244,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           }
         }
         selectedIndices = tableModel.viewIndicesToModelIndices(selectedIndices);
+        if (selectedIndices) {
+          selectedIndices.sort(function (a, b) {
+            return a - b;
+          });
+        }
+
         if (selectedIndices.length == 0) {
           leadingIndex = -1;
         }
@@ -2265,6 +2271,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         if (!stateSelection) {
           stateSelection = [];
         }
+        stateSelection.sort(function (a, b) {
+          return a - b;
+        });
 
         var selectedRanges = selectionModel.getSelectedRanges();
         var selectedIndices = [];
