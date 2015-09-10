@@ -229,6 +229,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         },
 
         "tree": {
+          alias: "list",
           base: true,
           style: function (states) {
             return {
@@ -330,9 +331,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         },
 
         "tabview/bar": {
-          alias: "slidebar",
           base: true,
-
+          alias: "slidebar",
           style: function (states) {
             var margin = 2;
             var marginTop = margin, marginRight = margin, marginBottom = margin, marginLeft = margin;
@@ -447,6 +447,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
 
         "list": {
           base: true,
+          alias: "scrollarea",
           style: function (states) {
             return {
               backgroundColor: "app-background"
@@ -455,8 +456,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         },
 
         "listitem": {
-          alias: "atom",
           base: true,
+          alias: "atom",
           style: function (states) {
             var backgroundColor;
             if (states.selected) {
@@ -734,7 +735,30 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
               marginTop: 5
             }
           }
-        }
+        },
 
+        "scrollarea/corner": {
+          style: function (states) {
+            return {}
+          }
+        },
+
+        "scrollbar/slider/knob": {
+          base: true,
+          style: function (states) {
+            return {
+              height: 8,
+              width: 8,
+              minHeight: states.horizontal ? undefined : 5,
+              minWidth: states.horizontal ? 5 : undefined
+            }
+          }
+        },
+
+        "scrollbar/button": {
+          style: function (states) {
+            return {}
+          }
+        }
       }
     });

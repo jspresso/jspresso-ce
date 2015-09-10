@@ -175,6 +175,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         /** @type {qx.ui.window.Window} */
         var topDialog = this._dialogStack.pop()[0];
         this._getApplication().getRoot().remove(topDialog);
+        topDialog.removeAll();
         topDialog.close();
         topDialog.destroy();
       }
@@ -426,6 +427,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         message = org.jspresso.framework.util.html.HtmlUtil.toHtml(message);
       }
       var messageComponent = new qx.ui.basic.Atom(message);
+      messageComponent.setSelectable(true);
       messageComponent.setRich(org.jspresso.framework.util.html.HtmlUtil.isHtml(message));
       this._getViewFactory().setIcon(messageComponent, messageCommand.getMessageIcon());
       if (messageCommand

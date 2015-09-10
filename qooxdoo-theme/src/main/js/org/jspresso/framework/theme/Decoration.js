@@ -244,6 +244,14 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
             width: [0, 0],
             color: "border-main"
           }
+        },
+
+        "scroll-knob": {
+          style: {
+            radius: 3,
+            width: 1,
+            color: "button-border"
+          }
         }
       }
     });
