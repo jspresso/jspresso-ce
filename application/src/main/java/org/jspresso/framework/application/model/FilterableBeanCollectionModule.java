@@ -20,15 +20,25 @@ package org.jspresso.framework.application.model;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.application.model.descriptor.BeanCollectionModuleDescriptor;
 import org.jspresso.framework.application.model.descriptor.FilterableBeanCollectionModuleDescriptor;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
+import org.jspresso.framework.model.component.query.EnumQueryStructure;
+import org.jspresso.framework.model.component.query.EnumValueQueryStructure;
+import org.jspresso.framework.model.component.query.QueryComponent;
+import org.jspresso.framework.model.component.query.QueryComponentSerializationUtil;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
@@ -643,5 +653,70 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   @Override
   public List<?> getResults() {
     return getModuleObjects();
+  }
+  
+  /**
+   * Serialize filter criterias.
+   * 
+   * @return the serialized form of the filter criteria component
+   * @throws IOException 
+   */
+  public String serializeCriterias() throws IOException {
+    return QueryComponentSerializationUtil.serializeFilter(getFilter(), new LinkedHashMap<String, Serializable>());
+  }
+  
+  
+  
+  /**
+   * Deserialize filter criterias from base 64 from 
+   * and hydrate que query component.
+   * 
+   * @param filterAsBase64 the serialized form of the filter criterias
+   * 
+   * @throws ClassNotFoundException
+   * @throws IOException
+   */
+  public void deserializeCriterias(String filterAsBase64) throws ClassNotFoundException, IOException {
+    Serializable[] criterias = QueryComponentSerializationUtil.deserializeFilter(getFilter(), filterAsBase64);
+    hydrateCriterias(getFilter(), criterias);
+  }
+  
+  /**
+   * Hydrate filter criterias.
+   * 
+   * @param filters as table of {@code Serializable} 
+   *        - Odd indexes : parameter key 
+   *        - Even indexes : parameter value
+   * @throws IOException
+   * @throws ClassNotFoundException
+   */
+  protected void hydrateCriterias(IQueryComponent query, Serializable[] filters) throws IOException, ClassNotFoundException {
+    
+    for (int i = 0; i < filters.length; i += 2) {
+      String key = (String) filters[i];
+      Serializable value = filters[i + 1];
+
+      if (value instanceof Serializable[]) {
+        Serializable[] delegate = (Serializable[]) value;
+        QueryComponent qc = (QueryComponent) query.get(key);
+
+        // recurse
+        if (qc!=null)
+          hydrateCriterias(qc, delegate);
+      } 
+      else if (value instanceof String && ((String) value).startsWith("[[")) {
+        // This is an EnumQueryStructure serialized value
+        Set<String> enumValues = new HashSet<>(Arrays.asList(((String) value).substring(2,
+            ((String) value).length() - 2).split("§")));
+        EnumQueryStructure eqs = (EnumQueryStructure) query.get(key);
+        for (EnumValueQueryStructure evqs : eqs.getEnumerationValues()) {
+          evqs.setSelected(enumValues.contains(evqs.getValue()));
+        }
+      } 
+      else {
+        query.put(key, value);
+      }
+    }
+    
   }
 }
