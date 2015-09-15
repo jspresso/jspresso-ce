@@ -249,7 +249,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
    * This property allows to configure a custom filter model descriptor. If not
    * set, which is the default value, the filter model is built out of the
    * element component descriptor (QBE filter model).
-   * 
+   *
    * @param filterComponentDescriptor
    *          the filterComponentDescriptor to set.
    */
@@ -264,7 +264,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
    * assigned a model descriptor since they will be at runtime. This is because
    * the filter component descriptor must be reworked - to adapt comparable
    * field structures for instance.
-   * 
+   *
    * @param filterViewDescriptor
    *          the filterViewDescriptor to set.
    */
@@ -297,7 +297,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   /**
    * Configures a custom page size for the result set. If not set, which is the
    * default, the elements default page size is used.
-   * 
+   *
    * @param pageSize
    *          the pageSize to set.
    */
@@ -308,7 +308,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
 
   /**
    * Sets the queryViewDescriptorFactory.
-   * 
+   *
    * @param queryViewDescriptorFactory
    *          the queryViewDescriptorFactory to set.
    */
@@ -319,7 +319,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
 
   /**
    * Gets the module descriptor.
-   * 
+   *
    * @return the module descriptor.
    */
   @Override
@@ -332,7 +332,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   /**
    * Gets the query component descriptor factory used to create the filter model
    * descriptor.
-   * 
+   *
    * @return the query component descriptor factory used to create the filter
    *         model descriptor.
    */
@@ -382,7 +382,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
 
   /**
    * Configures the sub view used to navigate between the pages.
-   * 
+   *
    * @param paginationViewDescriptor
    *          the paginationViewDescriptor to set.
    */
@@ -594,7 +594,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
 
   /**
    * Gets the pagingAction.
-   * 
+   *
    * @return the pagingAction.
    */
   public BackendAction getPagingAction() {
@@ -603,7 +603,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
 
   /**
    * Sets the pagingAction.
-   * 
+   *
    * @param pagingAction
    *          the pagingAction to set.
    */
@@ -636,7 +636,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
 
   /**
    * Sets the queryComponentDescriptorFactory.
-   * 
+   *
    * @param queryComponentDescriptorFactory
    *          the queryComponentDescriptorFactory to set.
    */
@@ -654,44 +654,43 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   public List<?> getResults() {
     return getModuleObjects();
   }
-  
+
   /**
-   * Serialize filter criterias.
-   * 
+   * Serialize filter criteria.
+   *
    * @return the serialized form of the filter criteria component
-   * @throws IOException 
+   * @throws IOException the iO exception
    */
-  public String serializeCriterias() throws IOException {
+  public String serializeCriteria() throws IOException {
     return QueryComponentSerializationUtil.serializeFilter(getFilter(), new LinkedHashMap<String, Serializable>());
   }
-  
-  
-  
+
+
   /**
-   * Deserialize filter criterias from base 64 from 
+   * Deserialize filter criteria from base 64 from
    * and hydrate que query component.
-   * 
-   * @param filterAsBase64 the serialized form of the filter criterias
-   * 
-   * @throws ClassNotFoundException
-   * @throws IOException
+   *
+   * @param filterAsBase64 the serialized form of the filter criteria
+   * @throws ClassNotFoundException the class not found exception
+   * @throws IOException the iO exception
    */
-  public void deserializeCriterias(String filterAsBase64) throws ClassNotFoundException, IOException {
-    Serializable[] criterias = QueryComponentSerializationUtil.deserializeFilter(getFilter(), filterAsBase64);
-    hydrateCriterias(getFilter(), criterias);
+  public void deserializeCriteria(String filterAsBase64) throws ClassNotFoundException, IOException {
+    Serializable[] criteria = QueryComponentSerializationUtil.deserializeFilter(filterAsBase64);
+    hydrateCriteria(getFilter(), criteria);
   }
-  
+
   /**
-   * Hydrate filter criterias.
-   * 
-   * @param filters as table of {@code Serializable} 
-   *        - Odd indexes : parameter key 
+   * Hydrate filter criteria.
+   *
+   * @param query the query
+   * @param filters as table of
+   *        - Odd indexes : parameter key
    *        - Even indexes : parameter value
-   * @throws IOException
-   * @throws ClassNotFoundException
+   * @throws IOException the iO exception
+   * @throws ClassNotFoundException the class not found exception
    */
-  protected void hydrateCriterias(IQueryComponent query, Serializable[] filters) throws IOException, ClassNotFoundException {
-    
+  protected void hydrateCriteria(IQueryComponent query, Serializable... filters) throws IOException, ClassNotFoundException {
+
     for (int i = 0; i < filters.length; i += 2) {
       String key = (String) filters[i];
       Serializable value = filters[i + 1];
@@ -702,8 +701,8 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
 
         // recurse
         if (qc!=null)
-          hydrateCriterias(qc, delegate);
-      } 
+          hydrateCriteria(qc, delegate);
+      }
       else if (value instanceof String && ((String) value).startsWith("[[")) {
         // This is an EnumQueryStructure serialized value
         Set<String> enumValues = new HashSet<>(Arrays.asList(((String) value).substring(2,
@@ -712,11 +711,11 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
         for (EnumValueQueryStructure evqs : eqs.getEnumerationValues()) {
           evqs.setSelected(enumValues.contains(evqs.getValue()));
         }
-      } 
+      }
       else {
         query.put(key, value);
       }
     }
-    
+
   }
 }

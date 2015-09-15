@@ -26,28 +26,27 @@ import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.util.io.SerializationUtil;
 
 /**
- * Helper class to manage {@code IQueryComponent} 
+ * Helper class to manage {@code IQueryComponent}
  * serialization and deserialization.
- * 
+ *
  * @author Maxime
  */
 public abstract class QueryComponentSerializationUtil {
 
   /**
    * Serialize a query component content to a Base64 form.
-   * 
+   *
    * @param query component to serialize
-   * @param complement additional map of string to serialize 
-   * @return the string reprensentation of the query component
-   * 
-   * @throws IOException
+   * @param complement additional map of string to serialize
+   * @return the string representation of the query component
+   * @throws IOException the iO exception
    */
-  public static String serializeFilter(IQueryComponent query, 
+  public static String serializeFilter(IQueryComponent query,
       LinkedHashMap<String, Serializable> complement)
   throws IOException {
 
     // temporary map (too heavy to be serialized, will use a simple table)
-    LinkedHashMap<String, Serializable> map = new LinkedHashMap<String, Serializable>();
+    LinkedHashMap<String, Serializable> map = new LinkedHashMap<>();
     for (String key : query.keySet()) {
       Object value = query.get(key);
       if (value instanceof QueryComponent) {
@@ -60,11 +59,11 @@ public abstract class QueryComponentSerializationUtil {
         map.put(key, (Serializable) value);
       }
     }
-    
+
     // manage additional fields
-    for (String k : complement.keySet()) 
+    for (String k : complement.keySet())
       map.put(k, complement.get(k));
-    
+
     // prepare non heavy table
     Serializable[] simple = new Serializable[map.keySet().size() * 2];
     int i = 0;
@@ -108,21 +107,19 @@ public abstract class QueryComponentSerializationUtil {
   }
 
   /**
-   * Deserialize a base 64 representation of a query component 
+   * Deserialize a base 64 representation of a query component
    * representation and hydrate the given query component instance.
-   * 
-   * @param query component to hydrate
+   *
    * @param filterBase64 the base 64 representation of a query component.
-   * 
-   * @throws IOException
-   * @throws ClassNotFoundException
+   * @return the serializable [ ]
+   * @throws IOException the iO exception
+   * @throws ClassNotFoundException the class not found exception
    */
-  public static Serializable[] deserializeFilter(IQueryComponent query,
-      String filterBase64) throws IOException, ClassNotFoundException {
-    
-    Serializable[] filters = 
+  public static Serializable[] deserializeFilter(String filterBase64) throws IOException, ClassNotFoundException {
+
+    Serializable[] filters =
         (Serializable[]) SerializationUtil.deserializeFromBase64(filterBase64, true);
-    
+
     return filters;
   }
 

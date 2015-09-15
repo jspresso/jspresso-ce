@@ -32,9 +32,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Helper class to manage object serialization 
+ * Helper class to manage object serialization
  * and deserialization.
- * 
+ *
  * @author Maxime
  */
 public abstract class SerializationUtil {
@@ -42,16 +42,16 @@ public abstract class SerializationUtil {
   private static final Logger logger = LoggerFactory.getLogger(SerializationUtil.class);
 
   /**
-   * Serialize one object
-   * 
+   * Serialize one object.
+   *
    * @param object to serialize
    * @param zipped or not
    * @return the serialized object
-   * @throws IOException
+   * @throws IOException the iO exception
    */
   public static byte[] serialize(Object object, boolean zipped) throws IOException {
     ByteArrayOutputStream bo = new ByteArrayOutputStream();
-    
+
     ObjectOutputStream oo;
     if (zipped) {
       oo = new ObjectOutputStream(new GZIPOutputStream(bo));
@@ -59,7 +59,7 @@ public abstract class SerializationUtil {
     else {
       oo = new ObjectOutputStream(bo);
     }
-    
+
     oo.writeObject(object);
     oo.close();
     return bo.toByteArray();
@@ -67,17 +67,16 @@ public abstract class SerializationUtil {
 
   /**
    * Deserialize a table of bytes to an Object instance.
-   * 
+   *
    * @param bytes serialized representation of the object
    * @param zipped or not
    * @return the Object created after
-   * 
-   * @throws IOException
-   * @throws ClassNotFoundException
+   * @throws IOException the iO exception
+   * @throws ClassNotFoundException the class not found exception
    */
   public static Object deserialize(byte[] bytes, boolean zipped) throws IOException,
       ClassNotFoundException {
-    
+
     ByteArrayInputStream bi = new ByteArrayInputStream(bytes);
     ObjectInputStream oi;
     if (zipped) {
@@ -93,7 +92,7 @@ public abstract class SerializationUtil {
 
   /**
    * Translate a a String to a base 64 table of bytes.
-   * 
+   *
    * @param data table of bytes
    * @return the base 64 representation
    */
@@ -104,8 +103,8 @@ public abstract class SerializationUtil {
 
   /**
    * Translate a base 64 table of bytes to a String.
-   * 
-   * @param base64 retprensentation
+   *
+   * @param base64 representation
    * @return the String after translation
    */
   public static byte[] fromBase64String(String base64) {
@@ -114,12 +113,11 @@ public abstract class SerializationUtil {
 
   /**
    * Serialize object to Base64 string representation.
-   * 
-   * @param object to serialiaze
+   *
+   * @param object to serialize
    * @param zipped or not
-   * 
    * @return base 64 string representation
-   * @throws IOException
+   * @throws IOException the iO exception
    */
   public static String serializeToBase64(Object object, boolean zipped) throws IOException {
     byte[] data;
@@ -129,18 +127,17 @@ public abstract class SerializationUtil {
       logger.warn("Unable to serialize object '" + object + "' ");
       return null;
     }
-    return SerializationUtil.toBase64String(data); 
+    return SerializationUtil.toBase64String(data);
   }
 
   /**
-   * Deserialize Base64 string represention to Object
-   * 
-   * @param base64
+   * Deserialize Base64 string representation to Object.
+   *
+   * @param base64 the base 64
    * @param zipped or not
    * @return the deserialized object
-   * 
-   * @throws IOException
-   * @throws ClassNotFoundException
+   * @throws IOException the iO exception
+   * @throws ClassNotFoundException the class not found exception
    */
   public static Object deserializeFromBase64(String base64, boolean zipped) throws IOException, ClassNotFoundException {
     byte[] data = SerializationUtil.fromBase64String(base64);
