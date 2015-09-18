@@ -44,7 +44,7 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
  * A remote action factory.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteActionFactory extends
@@ -104,7 +104,7 @@ public class RemoteActionFactory extends
 
   /**
    * Sets the guidGenerator.
-   * 
+   *
    * @param guidGenerator
    *          the guidGenerator to set.
    */
@@ -114,7 +114,7 @@ public class RemoteActionFactory extends
 
   /**
    * Sets the remoteCommandHandler.
-   * 
+   *
    * @param remoteCommandHandler
    *          the remoteCommandHandler to set.
    */
@@ -124,7 +124,7 @@ public class RemoteActionFactory extends
 
   /**
    * Sets the remotePeerRegistry.
-   * 
+   *
    * @param remotePeerRegistry
    *          the remotePeerRegistry to set.
    */
@@ -184,19 +184,136 @@ public class RemoteActionFactory extends
       this.view = view;
     }
 
+    // Always keep in sync the delegate state.
+    /**
+     * Forward to delegate.
+     * {@inheritDoc}
+     */
     @Override
     public Object getValue(String key) {
       return delegate.getValue(key);
     }
 
+    /**
+     * Forward to delegate.
+     * {@inheritDoc}
+     */
     @Override
     public void putValue(String key, Object value) {
       delegate.putValue(key, value);
     }
 
     /**
+     * Forward to delegate.
+     * {@inheritDoc}
+     */
+    @Override
+    public String getAcceleratorAsString() {
+      return delegate.getAcceleratorAsString();
+    }
+
+    /**
+     * Forward to delegate.
+     * {@inheritDoc}
+     */
+    @Override
+    public String getDescription() {
+      return delegate.getDescription();
+    }
+
+    /**
+     * Forward to delegate.
+     * {@inheritDoc}
+     */
+    @Override
+    public RIcon getIcon() {
+      return delegate.getIcon();
+    }
+
+    /**
+     * Forward to delegate.
+     * {@inheritDoc}
+     */
+    @Override
+    public String getMnemonicAsString() {
+      return delegate.getMnemonicAsString();
+    }
+
+    /**
+     * Forward to delegate.
+     * {@inheritDoc}
+     */
+    @Override
+    public String getName() {
+      return delegate.getName();
+    }
+
+    /**
+     * Forward to delegate.
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isEnabled() {
+      return delegate.isEnabled();
+    }
+
+    /**
+     * Forward to delegate.
+     * {@inheritDoc}
+     */
+    @Override
+    public void setAcceleratorAsString(String acceleratorAsString) {
+      delegate.setAcceleratorAsString(acceleratorAsString);
+    }
+
+    /**
+     * Forward to delegate.
+     * {@inheritDoc}
+     */
+    @Override
+    public void setDescription(String description) {
+      delegate.setDescription(description);
+    }
+
+    /**
+     * Forward to delegate.
+     * {@inheritDoc}
+     */
+    @Override
+    public void setEnabled(boolean enabled) {
+      delegate.setEnabled(enabled);
+    }
+
+    /**
+     * Forward to delegate.
+     * {@inheritDoc}
+     */
+    @Override
+    public void setIcon(RIcon icon) {
+      delegate.setIcon(icon);
+    }
+
+    /**
+     * Forward to delegate.
+     * {@inheritDoc}
+     */
+    @Override
+    public void setMnemonicAsString(String mnemonicAsString) {
+      delegate.setMnemonicAsString(mnemonicAsString);
+    }
+
+    /**
+     * Forward to delegate.
+     * {@inheritDoc}
+     */
+    @Override
+    public void setName(String name) {
+      delegate.setName(name);
+    }
+
+    /**
      * Triggers the action execution on the action handler.
-     * 
+     *
      * @param actionEvent
      *          the action event.
      */

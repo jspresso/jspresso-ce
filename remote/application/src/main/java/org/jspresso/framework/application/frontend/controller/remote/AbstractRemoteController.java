@@ -429,15 +429,20 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
         }
       } else if (command instanceof RemoteActionCommand) {
         RAction action = (RAction) targetPeer;
-        RActionEvent actionEvent = ((RemoteActionCommand) command).getActionEvent();
-        String viewStatePermId = actionEvent.getViewStatePermId();
-        if (viewStatePermId != null) {
-          IRemotePeer viewPeer = getRegisteredForPermId(viewStatePermId);
-          if (viewPeer != null) {
-            actionEvent.setViewStateGuid(viewPeer.getGuid());
+        // action state might have been changed by previous command. We must re-check it before executing since the
+        // client is not aware of it yet.
+        // See bug #52
+        if (action.isEnabled()) {
+          RActionEvent actionEvent = ((RemoteActionCommand) command).getActionEvent();
+          String viewStatePermId = actionEvent.getViewStatePermId();
+          if (viewStatePermId != null) {
+            IRemotePeer viewPeer = getRegisteredForPermId(viewStatePermId);
+            if (viewPeer != null) {
+              actionEvent.setViewStateGuid(viewPeer.getGuid());
+            }
           }
+          action.actionPerformed(actionEvent, null);
         }
-        action.actionPerformed(actionEvent, null);
       } else if (command instanceof RemoteSortCommand) {
         RAction sortAction = (RAction) targetPeer;
         Map<String, String> orderingProperties = ((RemoteSortCommand) command).getOrderingProperties();
