@@ -35,7 +35,7 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * (for &quot;Male&quot;) or <i>F</i> (for &quot;Female&quot;). Actual property
  * values can be codes that are translated for inclusion in the UI. Such
  * properties are usually rendered as combo-boxes.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractEnumerationPropertyDescriptor extends
@@ -65,7 +65,7 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
 
   /**
    * Gets the maxLength.
-   * 
+   *
    * @return the maxLength.
    */
   @Override
@@ -99,7 +99,7 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
    * translations named &quot;GENDER_M&quot; and &quot;GENDER_F&quot;. This
    * would allow for using <i>M</i> and <i>F</i> in other enumeration domains
    * with different semantics and translations.
-   * 
+   *
    * @param enumerationName
    *          the enumerationName to set.
    */
@@ -109,7 +109,7 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
 
   /**
    * Sets the maxLength.
-   * 
+   *
    * @param maxLength
    *          the maxLength to set.
    */
@@ -155,7 +155,7 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
 
   /**
    * Computes an enumeration key.
-   * 
+   *
    * @param value
    *          the enumeration value.
    * @return the enumeration key.
@@ -172,7 +172,7 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
    */
   @SuppressWarnings("SuspiciousMethodCalls")
   @Override
-  public void preprocessSetter(final Object component, Object newValue) {
+  public void preprocessSetter(final Object component, final Object newValue) {
     if (newValue  != null && !"".equals(newValue) && !getEnumerationValues().contains(newValue)) {
       IntegrityException ie = new IntegrityException("[" + getName()
           + "] value (" + newValue + ") is not allowed on ["
@@ -185,6 +185,7 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
                                      Locale locale) {
           return translationProvider.getTranslation(
               "integrity.property.outOfRange", new Object[] {
+              getI18nValue(String.valueOf(newValue), translationProvider, locale),
               getI18nName(translationProvider, locale), getEnumerationValues(),
               component
           }, locale);
