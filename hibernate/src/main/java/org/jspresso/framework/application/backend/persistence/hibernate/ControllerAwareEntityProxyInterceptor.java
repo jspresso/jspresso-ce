@@ -133,7 +133,7 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
     }
     ((HibernateBackendController) getBackendController()).detachFromHibernateInDepth(registeredEntity,
         ((HibernateBackendController) getBackendController()).getHibernateSession(), new HibernateEntityRegistry(
-        "detachFromHibernateInDepth"));
+            "detachFromHibernateInDepth"));
     return registeredEntity;
   }
 
@@ -227,44 +227,40 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
       preFlushedEntities.add(entities.next());
     }
     Set<Object> onUpdatedEntities = new HashSet<>();
-    boolean onUpdateTriggered = triggerOnUpdate(preFlushedEntities, onUpdatedEntities);
+    boolean onUpdateTriggered = triggerLifecycle(preFlushedEntities, onUpdatedEntities);
     while (onUpdateTriggered) {
       // Until the state is stable.
-      onUpdateTriggered = triggerOnUpdate(preFlushedEntities, onUpdatedEntities);
+      onUpdateTriggered = triggerLifecycle(preFlushedEntities, onUpdatedEntities);
     }
   }
 
-  private boolean triggerOnUpdate(Set<Object> preFlushedEntities, Set<Object> onUpdatedEntities) {
+  private boolean triggerLifecycle(Set<Object> preFlushedEntities, Set<Object> traversedEntities) {
     boolean onUpdateTriggered = false;
     for (Object entity : preFlushedEntities) {
-      if (entity instanceof ILifecycleCapable && !onUpdatedEntities.contains(entity)) {
+      if (entity instanceof ILifecycleCapable && !traversedEntities.contains(entity)) {
         if (entity instanceof IEntity) {
           if (((IEntity) entity).isPersistent()) {
             boolean isClean = false;
-            Map<String, Object> dirtyProperties = getBackendController().getDirtyProperties((IEntity) entity, false);
             boolean hasJustBeenSaved = false;
-            if (dirtyProperties != null) {
-              hasJustBeenSaved = dirtyProperties.containsKey(IEntity.VERSION) && dirtyProperties.get(IEntity.VERSION)
-                  == null;
-              dirtyProperties.remove(IEntity.VERSION);
-            }
+            Map<String, Object> dirtyProperties = getBackendController().getDirtyProperties((IEntity) entity, false);
             if (dirtyProperties == null) {
               isClean = true;
             } else if (dirtyProperties.isEmpty()) {
               isClean = true;
-            } else if (hasJustBeenSaved) {
-              // whenever an entity has just been saved, its state is in the
-              // dirty store. Hibernate might ask to check dirtiness especially
-              // for collection members. Those just saved entities must not be
-              // considered dirty.
-              isClean = true;
+            } else {
+              hasJustBeenSaved = dirtyProperties.containsKey(IEntity.VERSION) && dirtyProperties.get(IEntity.VERSION)
+                  == null;
             }
-            if (!onUpdatedEntities.contains(entity) && !isClean && !getBackendController()
-                .isEntityRegisteredForDeletion((IEntity) entity)) {
-              // the entity is dirty and is going to be flushed.
-              ((ILifecycleCapable) entity).onUpdate(getEntityFactory(), getPrincipal(), getEntityLifecycleHandler());
-              onUpdatedEntities.add(entity);
-              onUpdateTriggered = true;
+            if (!traversedEntities.contains(entity)) {
+              if (getBackendController().isEntityRegisteredForDeletion((IEntity) entity)) {
+                ((ILifecycleCapable) entity).onDelete(getEntityFactory(), getPrincipal(), getEntityLifecycleHandler());
+              } else if (hasJustBeenSaved) {
+                ((ILifecycleCapable) entity).onPersist(getEntityFactory(), getPrincipal(), getEntityLifecycleHandler());
+              } else if (!isClean) {
+                ((ILifecycleCapable) entity).onUpdate(getEntityFactory(), getPrincipal(), getEntityLifecycleHandler());
+                traversedEntities.add(entity);
+                onUpdateTriggered = true;
+              }
             }
           }
         }

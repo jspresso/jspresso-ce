@@ -19,26 +19,22 @@
 package org.jspresso.framework.model.persistence.hibernate;
 
 import java.io.Serializable;
-import java.util.Collection;
 
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.EntityMode;
 import org.hibernate.Hibernate;
-import org.hibernate.type.Type;
-import org.jspresso.framework.model.component.ILifecycleCapable;
+
 import org.jspresso.framework.model.entity.EntityException;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 import org.jspresso.framework.security.UserPrincipal;
-import org.jspresso.framework.util.accessor.AbstractPropertyAccessor;
-import org.jspresso.framework.util.bean.PropertyHelper;
 
 /**
  * This hibernate interceptor enables hibernate to handle entities which are
  * implemented by proxies. Its main goal is to provide hibernate with new
  * instances of entities based on their core interface contract.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class EntityProxyInterceptor extends EmptyInterceptor {
@@ -83,37 +79,6 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
   /**
    * {@inheritDoc}
    */
-
-  @Override
-  public void onDelete(Object entity, Serializable id, Object[] state,
-      String[] propertyNames, Type[] types) {
-    if (entity instanceof ILifecycleCapable) {
-      ((ILifecycleCapable) entity).onDelete(getEntityFactory(), getPrincipal(),
-          getEntityLifecycleHandler());
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-
-  @Override
-  public boolean onSave(Object entity, Serializable id, Object[] state,
-      String[] propertyNames, Type[] types) {
-    boolean stateUpdated = false;
-    if (entity instanceof IEntity && entity instanceof ILifecycleCapable) {
-      if (((ILifecycleCapable) entity).onPersist(getEntityFactory(),
-          getPrincipal(), getEntityLifecycleHandler())) {
-        extractState((IEntity) entity, propertyNames, state);
-        stateUpdated = true;
-      }
-    }
-    return stateUpdated;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public Boolean isTransient(Object entity) {
     if (!Hibernate.isInitialized(entity)) {
@@ -124,7 +89,7 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
 
   /**
    * Sets the entityFactory.
-   * 
+   *
    * @param entityFactory
    *          the entityFactory to set.
    */
@@ -134,7 +99,7 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
 
   /**
    * Gets the entityFactory.
-   * 
+   *
    * @return the entityFactory.
    */
   protected IEntityFactory getEntityFactory() {
@@ -143,7 +108,7 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
 
   /**
    * Gets the lifecycle handler.
-   * 
+   *
    * @return the entity lifecycle handler.
    */
   protected IEntityLifecycleHandler getEntityLifecycleHandler() {
@@ -152,7 +117,7 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
 
   /**
    * Gets the principal owning the session.
-   * 
+   *
    * @return the principal owning the session.
    */
   protected UserPrincipal getPrincipal() {
@@ -163,7 +128,7 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
    * Hibernate uses "extra" properties to cope with relationships e.g.
    * _[collectionName]BackRef or _[collectionName]IndexBackRef Those properties
    * are not known by the entity and thus cannot be extracted.
-   * 
+   *
    * @param propertyName
    *          the property name to test.
    * @return true if this property is an Hibernate internal managed one.
@@ -171,53 +136,4 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
   protected boolean isHibernateInternal(String propertyName) {
     return propertyName.startsWith("_");
   }
-
-  private void extractState(IEntity entity, String[] propertyNames,
-      Object... state) {
-    for (int i = 0; i < propertyNames.length; i++) {
-      String propertyName = propertyNames[i];
-      if (!isHibernateInternal(propertyName)) {
-        Object property = entity.straightGetProperty(PropertyHelper
-            .fromJavaBeanPropertyName(propertyName));
-        if (!(property instanceof Collection<?>)) {
-          state[i] = property;
-        }
-      }
-    }
-  }
-
-  // Kept in Oracle dialect only.
-  // /**
-  // * Eliminates duplicate aliases. See bug #716
-  // * <p>
-  // * {@inheritDoc}
-  // */
-  // @Override
-  // public String onPrepareStatement(String sql) {
-  // return eliminateDuplicateColumnAliases(sql);
-  // }
-  //
-  // private String eliminateDuplicateColumnAliases(String sql) {
-  // Set<String> usedAliases = new HashSet<String>();
-  // String[] aliasesSplit = sql.split(" as ");
-  // StringBuilder buff = new StringBuilder(aliasesSplit[0]);
-  // if (aliasesSplit.length > 1) {
-  // for (int i = 1; i < aliasesSplit.length; i++) {
-  // StringTokenizer aliasTokenizer = new StringTokenizer(aliasesSplit[i],
-  // ", ", true);
-  // String alias = aliasTokenizer.nextToken();
-  // int offset = aliasesSplit[i].indexOf(alias) + alias.length();
-  // while (usedAliases.contains(alias)) {
-  // alias = alias.substring(0, alias.length() - 2)
-  // + RandomStringUtils.randomAlphanumeric(1).toLowerCase() + "_";
-  // }
-  // usedAliases.add(alias);
-  // buff.append(" as ");
-  // buff.append(alias);
-  // buff.append(aliasesSplit[i].substring(offset));
-  // }
-  // }
-  // return buff.toString();
-  // }
-
 }
