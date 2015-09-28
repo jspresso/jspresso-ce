@@ -2510,7 +2510,11 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   @Override
   public void addDirtInterceptor(PropertyChangeListener interceptor) {
-    sessionUnitOfWork.addDirtInterceptor(interceptor);
+    if (isUnitOfWorkActive()) {
+      unitOfWork.addDirtInterceptor(interceptor);
+    } else {
+      sessionUnitOfWork.addDirtInterceptor(interceptor);
+    }
   }
 
   /**
@@ -2518,7 +2522,11 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   @Override
   public void removeDirtInterceptor(PropertyChangeListener interceptor) {
-    sessionUnitOfWork.removeDirtInterceptor(interceptor);
+    if (isUnitOfWorkActive()) {
+      unitOfWork.removeDirtInterceptor(interceptor);
+    } else {
+      sessionUnitOfWork.removeDirtInterceptor(interceptor);
+    }
   }
 
   /**
