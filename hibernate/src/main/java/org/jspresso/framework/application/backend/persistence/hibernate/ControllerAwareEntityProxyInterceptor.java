@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.application.backend.persistence.hibernate;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
@@ -228,22 +230,37 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
     while (entities.hasNext()) {
       preFlushedEntities.add(entities.next());
     }
+    final Set<Object> persistedEntities = new HashSet<>();
     final Set<Object> lifecycledEntities = new HashSet<>();
 
-    boolean lifeCycleTriggered = triggerLifecycle(preFlushedEntities, lifecycledEntities);
-    while (lifeCycleTriggered) {
-      try {
-        // Because new entities might have been added to the underlying map of the original iterator.
-        preFlushedEntities = ((Map) ReflectHelper.getPrivateFieldValue(LazyIterator.class, "map", entities)).values();
-      } catch (IllegalAccessException | NoSuchFieldException e) {
-        LOG.warn("Unable to extract the underlying iterator map", e);
+    PropertyChangeListener dirtInterceptor = new PropertyChangeListener() {
+      @Override
+      public void propertyChange(PropertyChangeEvent evt) {
+        Object source = evt.getSource();
+        if (source instanceof IEntity) {
+          lifecycledEntities.remove(source);
+        }
       }
-      // Until the state is stable.
-      lifeCycleTriggered = triggerLifecycle(preFlushedEntities, lifecycledEntities);
+    };
+    try {
+      backendController.addDirtInterceptor(dirtInterceptor);
+      boolean lifeCycleTriggered = triggerLifecycle(preFlushedEntities, persistedEntities, lifecycledEntities);
+      while (lifeCycleTriggered) {
+        try {
+          // Because new entities might have been added to the underlying map of the original iterator.
+          preFlushedEntities = ((Map) ReflectHelper.getPrivateFieldValue(LazyIterator.class, "map", entities)).values();
+        } catch (IllegalAccessException | NoSuchFieldException e) {
+          LOG.warn("Unable to extract the underlying iterator map", e);
+        }
+        // Until the state is stable.
+        lifeCycleTriggered = triggerLifecycle(preFlushedEntities, persistedEntities, lifecycledEntities);
+      }
+    } finally {
+      backendController.removeDirtInterceptor(dirtInterceptor);
     }
   }
 
-  private boolean triggerLifecycle(Collection<Object> preFlushedEntities, Set<Object> lifecycledEntities) {
+  private boolean triggerLifecycle(Collection<Object> preFlushedEntities, Set<Object> persistedEntities, Set<Object> lifecycledEntities) {
     boolean lifecycleTriggered = false;
     for (Object entity : preFlushedEntities) {
       if (entity instanceof ILifecycleCapable && !lifecycledEntities.contains(entity)) {
@@ -258,13 +275,14 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
               isClean = true;
             } else {
               hasJustBeenSaved = dirtyProperties.containsKey(IEntity.VERSION) && dirtyProperties.get(IEntity.VERSION)
-                  == null;
+                  == null && !persistedEntities.contains(entity);
             }
             if (getBackendController().isEntityRegisteredForDeletion((IEntity) entity)) {
               ((ILifecycleCapable) entity).onDelete(getEntityFactory(), getPrincipal(), getEntityLifecycleHandler());
               lifecycledEntities.add(entity);
               lifecycleTriggered = true;
             } else if (hasJustBeenSaved) {
+              persistedEntities.add(entity);
               ((ILifecycleCapable) entity).onPersist(getEntityFactory(), getPrincipal(), getEntityLifecycleHandler());
               lifecycledEntities.add(entity);
               lifecycleTriggered = true;
