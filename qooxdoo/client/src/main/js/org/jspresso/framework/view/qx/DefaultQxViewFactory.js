@@ -1538,6 +1538,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         var iconDim;
         var width = 0;
         for (var i = 0; i < remoteComboBox.getValues().length; i++) {
+          /* // Seems that there is no problem wit recent versions of qooxdoo
           if (i == 0 && remoteComboBox.getValues()[i].length > 0) {
             // Qx combos do not support null values
             var fallbackLi = new qx.ui.form.ListItem(String.fromCharCode(0x00A0));
@@ -1545,6 +1546,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             this.setIcon(fallbackLi, null);
             comboBox.add(fallbackLi);
           }
+          */
           var tr = remoteComboBox.getTranslations()[i];
           if (tr == " ") {
             tr = String.fromCharCode(0x00A0);
