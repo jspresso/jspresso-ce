@@ -46,6 +46,7 @@ import org.jspresso.framework.model.persistence.hibernate.EntityProxyInterceptor
 import org.jspresso.framework.model.persistence.hibernate.entity.HibernateEntityRegistry;
 import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.bean.PropertyHelper;
+import org.jspresso.framework.util.exception.NestedRuntimeException;
 import org.jspresso.framework.util.reflect.ReflectHelper;
 
 /**
@@ -218,6 +219,16 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
    */
   @Override
   public void preFlush(Iterator entities) {
+    if (!entities.hasNext()) {
+      return;
+    }
+    //This is a hack to be informed of new additions to the flush during the flush
+    Map<?, ?> underlyingHibernateMap;
+    try {
+      underlyingHibernateMap = (Map<?, ?>) ReflectHelper.getPrivateFieldValue(LazyIterator.class, "map", entities);
+    } catch (IllegalAccessException | NoSuchFieldException e) {
+      throw new NestedRuntimeException("Could not extract the underlying Hibernate map.");
+    }
     IBackendController backendController = getBackendController();
     if (!backendController.isUnitOfWorkActive() && entities.hasNext()) {
       // throw new BackendException(
@@ -226,10 +237,7 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
           "A flush has been attempted outside of any transactional context. Jspresso disallows this bad practice.");
     }
     // To avoid concurrent access modifications
-    Collection<Object> preFlushedEntities = new LinkedHashSet<>();
-    while (entities.hasNext()) {
-      preFlushedEntities.add(entities.next());
-    }
+    Collection<Object> preFlushedEntities = new LinkedHashSet<>(underlyingHibernateMap.values());
     final Set<Object> persistedEntities = new HashSet<>();
     final Set<Object> lifecycledEntities = new HashSet<>();
 
@@ -246,12 +254,8 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
       backendController.addDirtInterceptor(dirtInterceptor);
       boolean lifeCycleTriggered = triggerLifecycle(preFlushedEntities, persistedEntities, lifecycledEntities);
       while (lifeCycleTriggered) {
-        try {
-          // Because new entities might have been added to the underlying map of the original iterator.
-          preFlushedEntities = ((Map) ReflectHelper.getPrivateFieldValue(LazyIterator.class, "map", entities)).values();
-        } catch (IllegalAccessException | NoSuchFieldException e) {
-          LOG.warn("Unable to extract the underlying iterator map", e);
-        }
+        // Because new entities might have been added to the underlying map of the original iterator.
+        preFlushedEntities = new LinkedHashSet<>(underlyingHibernateMap.values());
         // Until the state is stable.
         lifeCycleTriggered = triggerLifecycle(preFlushedEntities, persistedEntities, lifecycledEntities);
       }
@@ -260,7 +264,8 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
     }
   }
 
-  private boolean triggerLifecycle(Collection<Object> preFlushedEntities, Set<Object> persistedEntities, Set<Object> lifecycledEntities) {
+  private boolean triggerLifecycle(Collection<Object> preFlushedEntities, Set<Object> persistedEntities,
+                                   Set<Object> lifecycledEntities) {
     boolean lifecycleTriggered = false;
     for (Object entity : preFlushedEntities) {
       if (entity instanceof ILifecycleCapable && !lifecycledEntities.contains(entity)) {
