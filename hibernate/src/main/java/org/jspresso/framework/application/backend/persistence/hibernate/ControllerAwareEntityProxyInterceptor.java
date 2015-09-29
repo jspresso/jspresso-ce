@@ -72,9 +72,7 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
                          String[] propertyNames, Type[] types) {
     if (entity instanceof IEntity) {
       Map<String, Object> dirtyProperties = getBackendController().getDirtyProperties((IEntity) entity, false);
-      boolean hasJustBeenSaved = false;
       if (dirtyProperties != null) {
-        hasJustBeenSaved = dirtyProperties.containsKey(IEntity.VERSION) && dirtyProperties.get(IEntity.VERSION) == null;
         dirtyProperties.remove(IEntity.VERSION);
       }
       if (dirtyProperties == null) {
@@ -83,7 +81,7 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
       if (dirtyProperties.isEmpty()) {
         return new int[0];
       }
-      if (hasJustBeenSaved) {
+      if (!((IEntity) entity).isPersistent()) {
         // whenever an entity has just been saved, its state is in the dirty
         // store. Hibernate might ask to check dirtiness especially for
         // collection members. Those just saved entities must not be considered
@@ -270,23 +268,19 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
     for (Object entity : preFlushedEntities) {
       if (entity instanceof ILifecycleCapable && !lifecycledEntities.contains(entity)) {
         if (entity instanceof IEntity) {
-          if (((IEntity) entity).isPersistent()) {
+          if (((IEntity) entity).getVersion() != null) {
             boolean isClean = false;
-            boolean hasJustBeenSaved = false;
             Map<String, Object> dirtyProperties = getBackendController().getDirtyProperties((IEntity) entity, false);
             if (dirtyProperties == null) {
               isClean = true;
             } else if (dirtyProperties.isEmpty()) {
               isClean = true;
-            } else {
-              hasJustBeenSaved = dirtyProperties.containsKey(IEntity.VERSION) && dirtyProperties.get(IEntity.VERSION)
-                  == null && !persistedEntities.contains(entity);
             }
             if (getBackendController().isEntityRegisteredForDeletion((IEntity) entity)) {
               ((ILifecycleCapable) entity).onDelete(getEntityFactory(), getPrincipal(), getEntityLifecycleHandler());
               lifecycledEntities.add(entity);
               lifecycleTriggered = true;
-            } else if (hasJustBeenSaved) {
+            } else if (!((IEntity) entity).isPersistent() && !persistedEntities.contains(entity)) {
               persistedEntities.add(entity);
               ((ILifecycleCapable) entity).onPersist(getEntityFactory(), getPrincipal(), getEntityLifecycleHandler());
               lifecycledEntities.add(entity);

@@ -53,49 +53,46 @@ import org.jspresso.framework.util.accessor.IAccessorFactory;
  * This entity invocation handler handles initialization of lazy loaded
  * properties like collections an entity references, delegating the
  * initialization job to the backend controller.
- * 
+ *
  * @author Vincent Vandenschrick
  */
-public class ControllerAwareEntityInvocationHandler extends
-    BasicEntityInvocationHandler {
+public class ControllerAwareEntityInvocationHandler extends BasicEntityInvocationHandler {
 
-  private static final long   serialVersionUID                = 3663517052427878204L;
+  private static final long serialVersionUID = 3663517052427878204L;
 
   private static final String DETACHED_ENTITIES_PROPERTY_NAME = "detachedEntities";
 
-  private Set<IEntity>        detachedEntities;
+  private Set<IEntity> detachedEntities;
 
   /**
    * Constructs a new {@code ControllerAwareEntityInvocationHandler}
    * instance.
    *
    * @param entityDescriptor
-   *          The descriptor of the proxy entity.
+   *     The descriptor of the proxy entity.
    * @param inlineComponentFactory
-   *          the factory used to create inline components.
+   *     the factory used to create inline components.
    * @param collectionFactory
-   *          The factory used to create empty entity collections from
-   *          collection getters.
+   *     The factory used to create empty entity collections from
+   *     collection getters.
    * @param accessorFactory
-   *          The factory used to access proxy properties.
+   *     The factory used to access proxy properties.
    * @param extensionFactory
-   *          The factory used to create entity extensions based on their
-   *          classes.
+   *     The factory used to create entity extensions based on their
+   *     classes.
    */
-  public ControllerAwareEntityInvocationHandler(
-      IComponentDescriptor<IEntity> entityDescriptor,
-      IComponentFactory inlineComponentFactory,
-      IComponentCollectionFactory collectionFactory,
-      IAccessorFactory accessorFactory,
-      IComponentExtensionFactory extensionFactory) {
-    super(entityDescriptor, inlineComponentFactory, collectionFactory,
-        accessorFactory, extensionFactory);
+  public ControllerAwareEntityInvocationHandler(IComponentDescriptor<IEntity> entityDescriptor,
+                                                IComponentFactory inlineComponentFactory,
+                                                IComponentCollectionFactory collectionFactory,
+                                                IAccessorFactory accessorFactory,
+                                                IComponentExtensionFactory extensionFactory) {
+    super(entityDescriptor, inlineComponentFactory, collectionFactory, accessorFactory, extensionFactory);
   }
 
   /**
    * Sets the JAAS subject to subject aware extensions. Sets the backend
    * controller to entity lifecycle handler aware extensions.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -103,18 +100,14 @@ public class ControllerAwareEntityInvocationHandler extends
     super.configureExtension(extension);
     if (getBackendController() != null) {
       if (extension instanceof ISubjectAware) {
-        ((ISubjectAware) extension).setSubject(getBackendController()
-            .getApplicationSession().getSubject());
+        ((ISubjectAware) extension).setSubject(getBackendController().getApplicationSession().getSubject());
       }
       if (extension instanceof IApplicationSessionAware) {
-        ((IApplicationSessionAware) extension)
-            .setApplicationSession(getBackendController()
-                .getApplicationSession());
+        ((IApplicationSessionAware) extension).setApplicationSession(getBackendController().getApplicationSession());
       }
     }
     if (extension instanceof IEntityLifecycleHandlerAware) {
-      ((IEntityLifecycleHandlerAware) extension)
-          .setEntityLifecycleHandler(getBackendController());
+      ((IEntityLifecycleHandlerAware) extension).setEntityLifecycleHandler(getBackendController());
     }
   }
 
@@ -122,8 +115,7 @@ public class ControllerAwareEntityInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
-  protected void entityDetached(IEntity parent, IEntity child,
-      IRelationshipEndPropertyDescriptor propertyDescriptor) {
+  protected void entityDetached(IEntity parent, IEntity child, IRelationshipEndPropertyDescriptor propertyDescriptor) {
     if (detachedEntities == null) {
       detachedEntities = new LinkedHashSet<>();
     }
@@ -145,7 +137,7 @@ public class ControllerAwareEntityInvocationHandler extends
 
   /**
    * Gets the backendController.
-   * 
+   *
    * @return the backendController.
    */
   protected IBackendController getBackendController() {
@@ -157,9 +149,8 @@ public class ControllerAwareEntityInvocationHandler extends
    */
   @Override
   protected Object getCollectionProperty(Object proxy,
-      ICollectionPropertyDescriptor<? extends IComponent> propertyDescriptor) {
-    getBackendController().initializePropertyIfNeeded((IEntity) proxy,
-        propertyDescriptor.getName());
+                                         ICollectionPropertyDescriptor<? extends IComponent> propertyDescriptor) {
+    getBackendController().initializePropertyIfNeeded((IEntity) proxy, propertyDescriptor.getName());
     return super.getCollectionProperty(proxy, propertyDescriptor);
   }
 
@@ -167,11 +158,9 @@ public class ControllerAwareEntityInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
-  protected Object getReferenceProperty(Object proxy,
-      IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
+  protected Object getReferenceProperty(Object proxy, IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
     String propertyName = propertyDescriptor.getName();
-    getBackendController().initializePropertyIfNeeded((IComponent) proxy,
-        propertyName);
+    getBackendController().initializePropertyIfNeeded((IComponent) proxy, propertyName);
     return super.getReferenceProperty(proxy, propertyDescriptor);
   }
 
@@ -185,36 +174,46 @@ public class ControllerAwareEntityInvocationHandler extends
 
   /**
    * Registers detached entities for update.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
-  protected void onPersist(IEntityFactory entityFactory,
-                          UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
+  protected void onPersist(IEntityFactory entityFactory, UserPrincipal principal,
+                           IEntityLifecycleHandler entityLifecycleHandler) {
     flushDetachedEntities(entityLifecycleHandler);
     super.onPersist(entityFactory, principal, entityLifecycleHandler);
   }
 
   /**
    * Registers detached entities for update.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
-  protected void onUpdate(IEntityFactory entityFactory,
-                          UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
+  protected void onUpdate(IEntityFactory entityFactory, UserPrincipal principal,
+                          IEntityLifecycleHandler entityLifecycleHandler) {
     flushDetachedEntities(entityLifecycleHandler);
     super.onUpdate(entityFactory, principal, entityLifecycleHandler);
+  }
+
+  @Override
+  protected boolean isPersistent(Object proxy) {
+    if (super.isPersistent(proxy)) {
+      Map<String, Object> dirtyProperties = getBackendController().getDirtyProperties((IEntity) proxy, false);
+      if (dirtyProperties != null && dirtyProperties.containsKey(IEntity.VERSION) && dirtyProperties.get(
+          IEntity.VERSION) == null) {
+        return false;
+      }
+      return true;
+    }
+    return false;
   }
 
   private void flushDetachedEntities(IEntityLifecycleHandler entityLifecycleHandler) {
     if (detachedEntities != null) {
       for (IEntity detachedEntity : detachedEntities) {
-        if (detachedEntity.isPersistent()
-            && !entityLifecycleHandler
-            .isEntityRegisteredForDeletion(detachedEntity)
-            && !entityLifecycleHandler
-            .isEntityRegisteredForUpdate(detachedEntity)) {
+        if (detachedEntity.isPersistent() && !entityLifecycleHandler.isEntityRegisteredForDeletion(detachedEntity)
+            && !entityLifecycleHandler.isEntityRegisteredForUpdate(detachedEntity)) {
           entityLifecycleHandler.registerForUpdate(detachedEntity);
         }
       }
@@ -226,30 +225,22 @@ public class ControllerAwareEntityInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
-  protected void storeReferenceProperty(Object proxy,
-      IReferencePropertyDescriptor<?> propertyDescriptor,
-      Object oldPropertyValue, Object newPropertyValue) {
-    if (newPropertyValue != null
-        && EntityHelper.isInlineComponentReference(propertyDescriptor)
-        && !propertyDescriptor.isComputed()) {
-      if (Proxy.isProxyClass(newPropertyValue.getClass())
-          && Proxy.getInvocationHandler(newPropertyValue) instanceof BasicComponentInvocationHandler
-          && !(Proxy.getInvocationHandler(newPropertyValue) instanceof ControllerAwareComponentInvocationHandler)) {
-        IComponent sessionAwareComponent = getInlineComponentFactory()
-            .createComponentInstance(
-                ((IComponent) newPropertyValue).getComponentContract());
-        sessionAwareComponent
-            .straightSetProperties(((IComponent) newPropertyValue)
-                .straightGetProperties());
-        super.storeReferenceProperty(proxy, propertyDescriptor,
-            oldPropertyValue, sessionAwareComponent);
+  protected void storeReferenceProperty(Object proxy, IReferencePropertyDescriptor<?> propertyDescriptor,
+                                        Object oldPropertyValue, Object newPropertyValue) {
+    if (newPropertyValue != null && EntityHelper.isInlineComponentReference(propertyDescriptor) && !propertyDescriptor
+        .isComputed()) {
+      if (Proxy.isProxyClass(newPropertyValue.getClass()) && Proxy.getInvocationHandler(
+          newPropertyValue) instanceof BasicComponentInvocationHandler && !(Proxy.getInvocationHandler(
+          newPropertyValue) instanceof ControllerAwareComponentInvocationHandler)) {
+        IComponent sessionAwareComponent = getInlineComponentFactory().createComponentInstance(
+            ((IComponent) newPropertyValue).getComponentContract());
+        sessionAwareComponent.straightSetProperties(((IComponent) newPropertyValue).straightGetProperties());
+        super.storeReferenceProperty(proxy, propertyDescriptor, oldPropertyValue, sessionAwareComponent);
       } else {
-        super.storeReferenceProperty(proxy, propertyDescriptor,
-            oldPropertyValue, newPropertyValue);
+        super.storeReferenceProperty(proxy, propertyDescriptor, oldPropertyValue, newPropertyValue);
       }
     } else {
-      super.storeReferenceProperty(proxy, propertyDescriptor, oldPropertyValue,
-          newPropertyValue);
+      super.storeReferenceProperty(proxy, propertyDescriptor, oldPropertyValue, newPropertyValue);
     }
   }
 
@@ -279,8 +270,7 @@ public class ControllerAwareEntityInvocationHandler extends
    */
   @SuppressWarnings("unchecked")
   @Override
-  protected void straightSetProperty(Object proxy, String propertyName,
-      Object newPropertyValue) {
+  protected void straightSetProperty(Object proxy, String propertyName, Object newPropertyValue) {
     if (DETACHED_ENTITIES_PROPERTY_NAME.equals(propertyName)) {
       detachedEntities = (Set<IEntity>) newPropertyValue;
     } else {
@@ -299,26 +289,24 @@ public class ControllerAwareEntityInvocationHandler extends
 
   /**
    * Performs necessary checks in order to ensure isolation on unit of work.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
-  protected Object sanitizeModifierParam(Object target,
-      IPropertyDescriptor propertyDescriptor, Object param) {
-    return getBackendController().sanitizeModifierParam(target,
-        propertyDescriptor, param);
+  protected Object sanitizeModifierParam(Object target, IPropertyDescriptor propertyDescriptor, Object param) {
+    return getBackendController().sanitizeModifierParam(target, propertyDescriptor, param);
   }
-  
+
   /**
    * Delegates to backend controller.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
   protected boolean isDirtyTrackingEnabled() {
     return getBackendController().isDirtyTrackingEnabled();
   }
-  
+
   /**
    * Delegates to backend controller.
    * {@inheritDoc}
