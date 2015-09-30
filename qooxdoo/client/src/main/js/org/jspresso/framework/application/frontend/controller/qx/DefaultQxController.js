@@ -81,7 +81,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       buttonBox.setLayout(new qx.ui.layout.HBox(10, "right"));
 
       var dialogBox = new qx.ui.container.Composite();
-      dialogBox.setLayout(new qx.ui.layout.VBox(10, null, new qx.ui.decoration.Decorator().set({
+      dialogBox.setLayout(new qx.ui.layout.VBox(0, null, new qx.ui.decoration.Decorator().set({
         width: 1
       })));
 
