@@ -19,16 +19,20 @@
 package org.jspresso.framework.model.persistence.hibernate;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.EntityMode;
 import org.hibernate.Hibernate;
+import org.hibernate.type.Type;
 
+import org.jspresso.framework.model.component.ILifecycleCapable;
 import org.jspresso.framework.model.entity.EntityException;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 import org.jspresso.framework.security.UserPrincipal;
+import org.jspresso.framework.util.bean.PropertyHelper;
 
 /**
  * This hibernate interceptor enables hibernate to handle entities which are
@@ -41,11 +45,11 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
 
   private static final long serialVersionUID = -7357726538191018694L;
 
-  private IEntityFactory    entityFactory;
+  private IEntityFactory entityFactory;
 
   /**
    * Returns the fully qualified name of the entity passed as parameter.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
@@ -61,19 +65,42 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
    * from the bean factory. The entityName which is the fully qualified name of
    * the entity interface contract is used as the lookup key in the bean
    * factory.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
   @Override
-  public Object instantiate(String entityName, EntityMode entityMode,
-      Serializable id) {
+  public Object instantiate(String entityName, EntityMode entityMode, Serializable id) {
     try {
-      return entityFactory.createEntityInstance(
-          (Class<? extends IEntity>) Class.forName(entityName), id);
+      return entityFactory.createEntityInstance((Class<? extends IEntity>) Class.forName(entityName), id);
     } catch (ClassNotFoundException ex) {
       throw new EntityException(ex);
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void onDelete(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
+    if (entity instanceof ILifecycleCapable) {
+      ((ILifecycleCapable) entity).onDelete(getEntityFactory(), getPrincipal(), getEntityLifecycleHandler());
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean onSave(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types) {
+    boolean stateUpdated = false;
+    if (entity instanceof IEntity && entity instanceof ILifecycleCapable) {
+      if (((ILifecycleCapable) entity).onPersist(getEntityFactory(), getPrincipal(), getEntityLifecycleHandler())) {
+        extractState((IEntity) entity, propertyNames, state);
+        stateUpdated = true;
+      }
+    }
+    return stateUpdated;
   }
 
   /**
@@ -91,7 +118,7 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
    * Sets the entityFactory.
    *
    * @param entityFactory
-   *          the entityFactory to set.
+   *     the entityFactory to set.
    */
   public void setEntityFactory(IEntityFactory entityFactory) {
     this.entityFactory = entityFactory;
@@ -130,10 +157,22 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
    * are not known by the entity and thus cannot be extracted.
    *
    * @param propertyName
-   *          the property name to test.
+   *     the property name to test.
    * @return true if this property is an Hibernate internal managed one.
    */
   protected boolean isHibernateInternal(String propertyName) {
     return propertyName.startsWith("_");
+  }
+
+  private void extractState(IEntity entity, String[] propertyNames, Object... state) {
+    for (int i = 0; i < propertyNames.length; i++) {
+      String propertyName = propertyNames[i];
+      if (!isHibernateInternal(propertyName)) {
+        Object property = entity.straightGetProperty(PropertyHelper.fromJavaBeanPropertyName(propertyName));
+        if (!(property instanceof Collection<?>)) {
+          state[i] = property;
+        }
+      }
+    }
   }
 }

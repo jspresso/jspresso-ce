@@ -277,12 +277,14 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
               isClean = true;
             }
             if (getBackendController().isEntityRegisteredForDeletion((IEntity) entity)) {
-              ((ILifecycleCapable) entity).onDelete(getEntityFactory(), getPrincipal(), getEntityLifecycleHandler());
+              // already performed onDelete
+              //((ILifecycleCapable) entity).onDelete(getEntityFactory(), getPrincipal(), getEntityLifecycleHandler());
               lifecycledEntities.add(entity);
               lifecycleTriggered = true;
             } else if (!((IEntity) entity).isPersistent() && !persistedEntities.contains(entity)) {
               persistedEntities.add(entity);
-              ((ILifecycleCapable) entity).onPersist(getEntityFactory(), getPrincipal(), getEntityLifecycleHandler());
+              // already performed onSave
+              //((ILifecycleCapable) entity).onPersist(getEntityFactory(), getPrincipal(), getEntityLifecycleHandler());
               lifecycledEntities.add(entity);
               lifecycleTriggered = true;
             } else if (!isClean) {
