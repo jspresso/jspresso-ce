@@ -86,7 +86,11 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
           editorWidget.activate();
         });
         editorWidget.setAllowStretchY(false, false);
-        if (!editorWidget instanceof qx.ui.form.CheckBox) {
+        if (editorWidget instanceof qx.ui.form.CheckBox) {
+          editorWidget.addListenerOnce("appear", function (e) {
+            editorWidget.setValue(!editorWidget.getValue());
+          });
+        } else {
           editorWidget.setAllowStretchX(true, true);
         }
         editorWidget.setMaxWidth(null);
