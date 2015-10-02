@@ -33,7 +33,6 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.classworlds.ClassWorld;
 import org.codehaus.plexus.classworlds.realm.ClassRealm;
-import org.slf4j.impl.StaticLoggerBinder;
 
 import org.jspresso.framework.tools.entitygenerator.EntityGenerator;
 
@@ -148,8 +147,6 @@ public class EntityGeneratorMojo extends AbstractMojo {
       sourceDirs = new File[]{new File(project.getBasedir(), "src/main/resources"), new File(project.getBasedir(),
           "target/generated-resources/dsl")};
     }
-    // bind slf4j to maven log
-    StaticLoggerBinder.getSingleton().setLog(getLog());
     if (isChangeDetected()) {
       ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
       //create a new class loading space

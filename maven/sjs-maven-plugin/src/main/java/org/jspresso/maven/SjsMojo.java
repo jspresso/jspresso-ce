@@ -19,12 +19,6 @@ package org.jspresso.maven;
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import groovy.lang.Binding;
-import groovy.lang.Closure;
-import groovy.util.GroovyScriptEngine;
-import groovy.util.ResourceException;
-import groovy.util.ScriptException;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -33,6 +27,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
+import groovy.lang.Binding;
+import groovy.lang.Closure;
+import groovy.util.GroovyScriptEngine;
+import groovy.util.ResourceException;
+import groovy.util.ScriptException;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
@@ -42,7 +41,6 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
-import org.slf4j.impl.StaticLoggerBinder;
 
 /**
  * Goal which performs SJS compilation for a Jspresso project.
@@ -109,8 +107,6 @@ public class SjsMojo extends AbstractMojo {
    */
   @Override
   public void execute() throws MojoExecutionException {
-    // bind slf4j to maven log
-    StaticLoggerBinder.getSingleton().setLog(getLog());
     if (isChangeDetected()) {
       try {
         runSjsCompilation();
