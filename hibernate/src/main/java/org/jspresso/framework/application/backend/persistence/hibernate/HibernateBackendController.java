@@ -355,6 +355,12 @@ public class HibernateBackendController extends AbstractBackendController {
         if (((IEntity) componentOrEntity).isPersistent()) {
           detachFromHibernateInDepth(componentOrEntity, hibernateSession, alreadyDetached);
           lockInHibernate((IEntity) componentOrEntity, hibernateSession);
+        } else if (IEntity.DELETED_VERSION.equals(((IEntity) componentOrEntity).getVersion())) {
+          LOG.error("Trying to initialize a property ({}) on a deleted object ({} : {}).", propertyName,
+              componentOrEntity.getComponentContract().getName(), componentOrEntity);
+          throw new RuntimeException(
+              "Trying to initialize a property (" + propertyName + ") on a deleted object (" + componentOrEntity
+                  .getComponentContract().getName() + " : " + componentOrEntity + ")");
         } else if (propertyValue instanceof IEntity) {
           detachFromHibernateInDepth((IEntity) propertyValue, hibernateSession, alreadyDetached);
           lockInHibernate((IEntity) propertyValue, hibernateSession);
@@ -371,6 +377,18 @@ public class HibernateBackendController extends AbstractBackendController {
         if (li.getSession() == null) {
           try {
             li.setSession((SessionImplementor) hibernateSession);
+          } catch (Exception ex) {
+            LOG.error(
+                "An internal error occurred when re-associating Hibernate session for {} reference initialization.",
+                propertyName);
+            LOG.error("Source exception", ex);
+          }
+        }
+      } else if (propertyValue instanceof AbstractPersistentCollection) {
+        AbstractPersistentCollection apc = (AbstractPersistentCollection) propertyValue;
+        if (apc.getSession() == null) {
+          try {
+            apc.setCurrentSession((SessionImplementor) hibernateSession);
           } catch (Exception ex) {
             LOG.error(
                 "An internal error occurred when re-associating Hibernate session for {} reference initialization.",
