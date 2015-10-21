@@ -26,6 +26,7 @@ import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.module.AddBeanAsSubModuleAction;
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
@@ -142,7 +143,13 @@ public class AddBeanAsSubModuleFrontAction<E, F, G> extends FrontendAction<E, F,
       IAccessorFactory accessorFactory = getBackendController(context).getAccessorFactory();
       List<Object> references = new ArrayList<>();
       for (Object component : componentsToAdd) {
-        IAccessor accessor = accessorFactory.createPropertyAccessor(getReferencePath(), component.getClass());
+        Class<?> componentContract;
+        if (component instanceof IComponent) {
+          componentContract = ((IComponent) component).getComponentContract();
+        } else {
+          componentContract = component.getClass();
+        }
+        IAccessor accessor = accessorFactory.createPropertyAccessor(getReferencePath(), componentContract);
         Object reference = accessor.getValue(component);
         if (reference instanceof Collection<?>) {
           references.addAll((Collection<?>) reference);

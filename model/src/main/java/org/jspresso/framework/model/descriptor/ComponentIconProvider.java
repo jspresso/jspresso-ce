@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.gui.IconProvider;
@@ -56,7 +57,12 @@ public class ComponentIconProvider implements IconProvider {
     if (userObject == null) {
       return null;
     }
-    Class<?> modelClass = userObject.getClass();
+    Class<?> modelClass;
+    if (userObject instanceof IComponent) {
+      modelClass = ((IComponent) userObject).getComponentContract();
+    } else {
+      modelClass = userObject.getClass();
+    }
     if (cache.containsKey(modelClass)) {
       return cache.get(modelClass);
     }
