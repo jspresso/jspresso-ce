@@ -23,6 +23,7 @@ import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
@@ -33,7 +34,7 @@ import org.jspresso.framework.util.gate.AbstractModelGate;
 /**
  * This is the base abstract class of gates whose opening rules are based on a
  * single model property value.
- * 
+ *
  * @author Vincent Vandenschrick the actual type of property.
  * @param <E>
  *          the actual property type.
@@ -69,7 +70,7 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
 
   /**
    * Gets the grantedRoles.
-   * 
+   *
    * @return the grantedRoles.
    */
   @Override
@@ -115,7 +116,7 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
   /**
    * Configures the accessor factory to use to access the underlying model
    * property.
-   * 
+   *
    * @param accessorFactory
    *          the accessorFactory to set.
    */
@@ -126,7 +127,7 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
   /**
    * Configures the roles for which the gate is installed. It supports
    * &quot;<b>!</b>&quot; prefix to negate the role(s).
-   * 
+   *
    * @param grantedRoles
    *          the grantedRoles to set.
    */
@@ -136,7 +137,7 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @internal
    */
   @Override
@@ -172,8 +173,14 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
           if (model instanceof Collection<?>) {
             this.open = computeCollectionOpenState((Collection<?>) model);
           } else {
+            Class<?> modelContract;
+            if (model instanceof IComponent) {
+              modelContract = ((IComponent) model).getComponentContract();
+            } else {
+              modelContract = model.getClass();
+            }
             IAccessor accessor = accessorFactory.createPropertyAccessor(
-                propertyName, model.getClass());
+                propertyName, modelContract);
             E modelValue = accessor.getValue(model);
             this.open = shouldOpen(modelValue);
             if (!openOnTrue) {
@@ -198,7 +205,7 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
   /**
    * This property allows to revert the standard behaviour of the gate, i.e.
    * close when it should normally have opened and the other way around.
-   * 
+   *
    * @param openOnTrue
    *          the openOnTrue to set.
    */
@@ -210,7 +217,7 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
    * Configures the model property name to which this gate is attached. How the
    * property value is actually linked to the gate state is delegated to the
    * concrete implementations.
-   * 
+   *
    * @param propertyName
    *          the propertyName to set.
    */
@@ -221,7 +228,7 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
   /**
    * Based on the underlying property value, determines if the gate should open
    * or close. The return value might be later changed by the openOnTrue value.
-   * 
+   *
    * @param propertyValue
    *          the model property value.
    * @return true if the gate should open (before applying the openOnTrue
@@ -238,8 +245,14 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
     for (Object elt : model) {
       boolean eltOpen;
       if (elt != null) {
+        Class<?> elementContract;
+        if (elt instanceof IComponent) {
+          elementContract = ((IComponent) elt).getComponentContract();
+        } else {
+          elementContract = elt.getClass();
+        }
         IAccessor accessor = accessorFactory.createPropertyAccessor(
-            propertyName, elt.getClass());
+            propertyName, elementContract);
         E modelValue = accessor.getValue(elt);
         eltOpen = shouldOpen(modelValue);
         if (!openOnTrue) {

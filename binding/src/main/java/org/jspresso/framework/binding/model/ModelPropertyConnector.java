@@ -29,6 +29,7 @@ import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.model.IModelChangeListener;
 import org.jspresso.framework.model.IModelProvider;
 import org.jspresso.framework.model.ModelChangeEvent;
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptorAware;
 import org.jspresso.framework.util.accessor.IAccessor;
@@ -42,7 +43,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This connector is a model property connector.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class ModelPropertyConnector extends AbstractValueConnector
@@ -90,7 +91,7 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
 
   /**
    * Gets the modelProvider.
-   * 
+   *
    * @return the modelProvider.
    */
   @Override
@@ -169,7 +170,11 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
       Class<?> modelType = null;
       try {
         if (newModel != null) {
-          modelType = newModel.getClass();
+          if (newModel instanceof IComponent) {
+            modelType = ((IComponent) newModel).getComponentContract();
+          } else {
+            modelType = newModel.getClass();
+          }
         } else {
           modelType = getModelProvider().getModelDescriptor().getModelType();
         }
@@ -240,7 +245,7 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
 
   /**
    * Whether this is a 'real' property connector (a opposed to a ModelConnector).
-   * 
+   *
    * @return true if this is a 'real' property connector.
    */
   protected boolean isValueAccessedAsProperty() {
@@ -251,7 +256,7 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
    * This method must be called whenever the connector's model provider changes.
    * This method performs any necessary cleaning, attachments and notification
    * needed.
-   * 
+   *
    * @param oldModelProvider
    *          the old model provider or null if none.
    */
