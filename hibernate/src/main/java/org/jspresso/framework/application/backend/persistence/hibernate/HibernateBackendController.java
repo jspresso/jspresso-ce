@@ -1330,6 +1330,11 @@ public class HibernateBackendController extends AbstractBackendController {
     if (getTransactionTemplate().getTransactionManager() instanceof JtaTransactionManager) {
       TransactionSynchronizationManager.unbindResourceIfPossible(getHibernateSessionFactory());
     }
+    // This is to avoid having entities attached to 2 open sessions
+    // and to periodically clear the noTxSession cache.
+    if (noTxSession != null) {
+      noTxSession.clear();
+    }
   }
 
 }
