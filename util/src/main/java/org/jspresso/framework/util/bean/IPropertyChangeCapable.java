@@ -134,9 +134,22 @@ public interface IPropertyChangeCapable {
   boolean hasListeners(String propertyName);
 
   /**
+   * Notifies its {@code PropertyChangeListener}s on a specific property
+   * change.
+   *
+   * @param property
+   *     The property which changed.
+   * @param oldValue
+   *     The old value of the property.
+   * @param newValue
+   *     The new value of the property or {@code UNKNOWN}.
+   */
+  void firePropertyChange(String property, Object oldValue, Object newValue);
+
+  /**
    * Delays events propagation by buffering them. When events are unblocked,
    * they get fired in the order they were recorded.
-   * 
+   *
    * @return true if the method call actually blocked the events. False if it
    *         was already blocked before.
    */

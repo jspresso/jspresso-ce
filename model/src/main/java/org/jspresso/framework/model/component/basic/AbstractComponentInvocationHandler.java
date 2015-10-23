@@ -52,6 +52,7 @@ import org.jspresso.framework.model.component.IComponentFactoryAware;
 import org.jspresso.framework.model.component.ILifecycleCapable;
 import org.jspresso.framework.model.component.IPropertyTranslation;
 import org.jspresso.framework.model.component.service.AbstractComponentServiceDelegate;
+import org.jspresso.framework.model.component.service.DependsOnHelper;
 import org.jspresso.framework.model.component.service.IComponentService;
 import org.jspresso.framework.model.component.service.ILifecycleInterceptor;
 import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
@@ -144,13 +145,11 @@ public abstract class AbstractComponentInvocationHandler implements
    * @param inlineComponentFactory
    *     the factory used to create inline components.
    * @param collectionFactory
-   *     The factory used to create empty component collections from
-   *     collection getters.
+   *     The factory used to create empty component collections from     collection getters.
    * @param accessorFactory
    *     The factory used to access proxy properties.
    * @param extensionFactory
-   *     The factory used to create component extensions based on their
-   *     classes.
+   *     The factory used to create component extensions based on their     classes.
    */
   protected AbstractComponentInvocationHandler(IComponentDescriptor<? extends IComponent> componentDescriptor,
                                                IComponentFactory inlineComponentFactory,
@@ -363,8 +362,10 @@ public abstract class AbstractComponentInvocationHandler implements
   /**
    * Invoke nls getter.
    *
-   * @param proxy the proxy
-   * @param propertyDescriptor the property descriptor
+   * @param proxy
+   *     the proxy
+   * @param propertyDescriptor
+   *     the property descriptor
    * @return the translated value
    */
   protected String invokeNlsGetter(Object proxy, IStringPropertyDescriptor propertyDescriptor) {
@@ -374,8 +375,10 @@ public abstract class AbstractComponentInvocationHandler implements
   /**
    * Invoke nls or raw getter.
    *
-   * @param proxy the proxy
-   * @param propertyDescriptor the property descriptor
+   * @param proxy
+   *     the proxy
+   * @param propertyDescriptor
+   *     the property descriptor
    * @return the translated value or raw if non-existent.
    */
   protected String invokeNlsOrRawGetter(Object proxy, IStringPropertyDescriptor propertyDescriptor) {
@@ -390,9 +393,12 @@ public abstract class AbstractComponentInvocationHandler implements
   /**
    * Invoke nls setter.
    *
-   * @param proxy the proxy
-   * @param propertyDescriptor the property descriptor
-   * @param translatedValue the translated value
+   * @param proxy
+   *     the proxy
+   * @param propertyDescriptor
+   *     the property descriptor
+   * @param translatedValue
+   *     the translated value
    */
   protected void invokeNlsSetter(Object proxy, IStringPropertyDescriptor propertyDescriptor, String translatedValue) {
     straightSetProperty(proxy, propertyDescriptor.getName() + IComponentDescriptor.RAW_SUFFIX, translatedValue);
@@ -401,9 +407,12 @@ public abstract class AbstractComponentInvocationHandler implements
   /**
    * Invoke nls or raw setter.
    *
-   * @param proxy the proxy
-   * @param propertyDescriptor the property descriptor
-   * @param translatedValue the translated value
+   * @param proxy
+   *     the proxy
+   * @param propertyDescriptor
+   *     the property descriptor
+   * @param translatedValue
+   *     the translated value
    */
   protected void invokeNlsOrRawSetter(Object proxy, IStringPropertyDescriptor propertyDescriptor,
                                    String translatedValue) {
@@ -545,8 +554,7 @@ public abstract class AbstractComponentInvocationHandler implements
       Object property = straightGetProperty(proxy, propertyName);
       if (property == null) {
         property = collectionFactory
-            .createComponentCollection(propertyDescriptor
-                .getReferencedDescriptor().getCollectionInterface());
+            .createComponentCollection(propertyDescriptor.getReferencedDescriptor().getCollectionInterface());
         storeProperty(propertyName, property);
       }
       if (property instanceof List<?>) {
@@ -807,17 +815,35 @@ public abstract class AbstractComponentInvocationHandler implements
   }
 
   /**
-   * An empty hook that gets called whenever an entity is to be persisted.
+   * An empty hook that gets called when an component is created (still transient).
    *
+   * @param proxy
+   *     the proxy
    * @param entityFactory
-   *     an entity factory instance which can be used to complete the
-   *     lifecycle step.
+   *     an entity factory instance which can be used to complete the     lifecycle step.
    * @param principal
    *     the principal triggering the action.
    * @param entityLifecycleHandler
    *     entityLifecycleHandler.
    */
-  protected void onPersist(IEntityFactory entityFactory,
+  protected void onCreate(Object proxy, IEntityFactory entityFactory,
+                          UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
+    registerServicesForwardingListenersIfNecessary(proxy);
+  }
+
+  /**
+   * An empty hook that gets called whenever an entity is to be persisted.
+   *
+   * @param proxy
+   *     the proxy
+   * @param entityFactory
+   *     an entity factory instance which can be used to complete the     lifecycle step.
+   * @param principal
+   *     the principal triggering the action.
+   * @param entityLifecycleHandler
+   *     entityLifecycleHandler.
+   */
+  protected void onPersist(Object proxy, IEntityFactory entityFactory,
                           UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
     // defaults to no-op.
   }
@@ -825,17 +851,75 @@ public abstract class AbstractComponentInvocationHandler implements
   /**
    * An empty hook that gets called whenever an entity is to be updated.
    *
+   * @param proxy
+   *     the proxy
    * @param entityFactory
-   *     an entity factory instance which can be used to complete the
-   *     lifecycle step.
+   *     an entity factory instance which can be used to complete the     lifecycle step.
    * @param principal
    *     the principal triggering the action.
    * @param entityLifecycleHandler
    *     entityLifecycleHandler.
    */
-  protected void onUpdate(IEntityFactory entityFactory,
+  protected void onUpdate(Object proxy, IEntityFactory entityFactory,
       UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
     // defaults to no-op.
+  }
+
+  /**
+   * An empty hook that gets called just before an component is deleted (delete).
+   *
+   * @param proxy
+   *     the proxy
+   * @param entityFactory
+   *     an entity factory instance which can be used to complete the     lifecycle step.
+   * @param principal
+   *     the principal triggering the action.
+   * @param entityLifecycleHandler
+   *     entityLifecycleHandler.
+   * @return true if the state of the component has been updated.
+   */
+  protected boolean onDelete(Object proxy, IEntityFactory entityFactory, UserPrincipal principal,
+                   IEntityLifecycleHandler entityLifecycleHandler) {
+    // defaults to no-op.
+    return false;
+  }
+
+  /**
+   * An empty hook that gets called when an component is loaded from the persistent store or merged back
+   * from the unit of work.
+   *
+   * @param proxy
+   *     the proxy
+   */
+  protected void onLoad(Object proxy) {
+    registerServicesForwardingListenersIfNecessary(proxy);
+  }
+
+  /**
+   * An empty hook that gets called whenever an entity is cloned to the unit of work.
+   *
+   * @param <E>
+   *     tha actual component type.
+   * @param proxy
+   *     the proxy
+   * @param sourceComponent
+   *     the component that is the source of the cloning.
+   */
+  protected <E extends IComponent> void onClone(Object proxy, E sourceComponent) {
+    registerServicesForwardingListenersIfNecessary(proxy);
+  }
+
+  private boolean servicesForwardingListenersRegistered = false;
+  private void registerServicesForwardingListenersIfNecessary(Object proxy) {
+    if (!servicesForwardingListenersRegistered) {
+      servicesForwardingListenersRegistered = true;
+      Collection<Class<?>> serviceContracts = componentDescriptor.getServiceContracts();
+      if (serviceContracts != null) {
+        for (Class<?> serviceContract : serviceContracts) {
+          DependsOnHelper.registerDependsOnListeners(serviceContract, (IPropertyChangeCapable) proxy, accessorFactory);
+        }
+      }
+    }
   }
 
   /**
@@ -857,8 +941,7 @@ public abstract class AbstractComponentInvocationHandler implements
    * @param propertyValue
    *     the property value.
    */
-  protected abstract void storeProperty(String propertyName,
-      Object propertyValue);
+  protected abstract void storeProperty(String propertyName, Object propertyValue);
 
   /**
    * Performs necessary registration on inline components before actually
@@ -873,9 +956,8 @@ public abstract class AbstractComponentInvocationHandler implements
    * @param newPropertyValue
    *     the new reference property value.
    */
-  protected void storeReferenceProperty(Object proxy,
-      IReferencePropertyDescriptor<?> propertyDescriptor,
-      Object oldPropertyValue, Object newPropertyValue) {
+  protected void storeReferenceProperty(Object proxy, IReferencePropertyDescriptor<?> propertyDescriptor, Object
+      oldPropertyValue, Object newPropertyValue) {
     String propertyName = propertyDescriptor.getName();
 
     NestedReferenceTracker referenceTracker = null;
@@ -884,33 +966,28 @@ public abstract class AbstractComponentInvocationHandler implements
     }
 
     // Handle owning component.
-    if (oldPropertyValue instanceof IComponent
-        && EntityHelper.isInlineComponentReference(propertyDescriptor)
+    if (oldPropertyValue instanceof IComponent && EntityHelper.isInlineComponentReference(propertyDescriptor)
         && isInitialized(oldPropertyValue)) {
       ((IComponent) oldPropertyValue).setOwningComponent(null, null);
     }
-    if (newPropertyValue instanceof IComponent
-        && EntityHelper.isInlineComponentReference(propertyDescriptor)
+    if (newPropertyValue instanceof IComponent && EntityHelper.isInlineComponentReference(propertyDescriptor)
         && isInitialized(newPropertyValue)) {
-      ((IComponent) newPropertyValue).setOwningComponent((IComponent) proxy,
-          propertyDescriptor);
+      ((IComponent) newPropertyValue).setOwningComponent((IComponent) proxy, propertyDescriptor);
     }
 
     if (oldPropertyValue instanceof IPropertyChangeCapable) {
       if (isInitialized(oldPropertyValue)) {
         if (referenceTracker != null) {
-          ((IPropertyChangeCapable) oldPropertyValue)
-              .removePropertyChangeListener(referenceTracker);
+          ((IPropertyChangeCapable) oldPropertyValue).removePropertyChangeListener(referenceTracker);
         }
         Set<String> nestedPropertyListening = null;
         if (fakePclAttachements != null) {
-          nestedPropertyListening = fakePclAttachements
-              .get(propertyName);
+          nestedPropertyListening = fakePclAttachements.get(propertyName);
         }
         if (nestedPropertyListening != null) {
           for (String nestedPropertyName : nestedPropertyListening) {
-            ((IPropertyChangeCapable) oldPropertyValue)
-                .removePropertyChangeListener(nestedPropertyName, createOrGetFakePcl());
+            ((IPropertyChangeCapable) oldPropertyValue).removePropertyChangeListener(nestedPropertyName,
+                createOrGetFakePcl());
           }
         }
         if (delayedFakePclAttachements != null) {
@@ -922,14 +999,13 @@ public abstract class AbstractComponentInvocationHandler implements
     if (newPropertyValue instanceof IPropertyChangeCapable) {
       Set<String> nestedPropertyListening = null;
       if (fakePclAttachements != null) {
-        nestedPropertyListening = fakePclAttachements
-            .get(propertyName);
+        nestedPropertyListening = fakePclAttachements.get(propertyName);
       }
       if (nestedPropertyListening != null) {
         if (isInitialized(newPropertyValue)) {
           for (String nestedPropertyName : nestedPropertyListening) {
-            ((IPropertyChangeCapable) newPropertyValue)
-                .addWeakPropertyChangeListener(nestedPropertyName, createOrGetFakePcl());
+            ((IPropertyChangeCapable) newPropertyValue).addWeakPropertyChangeListener(nestedPropertyName,
+                createOrGetFakePcl());
           }
         } else {
           if (delayedFakePclAttachements == null) {
@@ -939,29 +1015,24 @@ public abstract class AbstractComponentInvocationHandler implements
         }
       }
       if (referenceTracker == null) {
-        referenceTracker = new NestedReferenceTracker(proxy, propertyName,
-            EntityHelper.isInlineComponentReference(propertyDescriptor)
-                && !propertyDescriptor.isComputed());
+        referenceTracker = new NestedReferenceTracker(proxy, propertyName, EntityHelper.isInlineComponentReference(
+            propertyDescriptor) && !propertyDescriptor.isComputed());
         if (referenceTrackers == null) {
           referenceTrackers = new THashMap<>(1, 1.0f);
         }
         referenceTrackers.put(propertyName, referenceTracker);
       }
       referenceTracker.setInitialized(false);
-      initializeInlineTrackerIfNeeded(
-          (IPropertyChangeCapable) newPropertyValue,
-          propertyName,
+      initializeInlineTrackerIfNeeded((IPropertyChangeCapable) newPropertyValue, propertyName,
           // To avoid breaking lazy initialization of oldPropertyValue
-          !isInitialized(oldPropertyValue)
-              || (isInitialized(newPropertyValue) && !ObjectUtils.equals(
-              oldPropertyValue, newPropertyValue)));
+          !isInitialized(oldPropertyValue) || (isInitialized(newPropertyValue) && !ObjectUtils.equals(oldPropertyValue,
+              newPropertyValue)));
     } else if (referenceTracker != null) {
       if (oldPropertyValue instanceof IComponent
-          && /* To avoid breaking lazy initialization optim */isInitialized(oldPropertyValue)) {
-        for (Map.Entry<String, Object> property : ((IComponent) oldPropertyValue)
-            .straightGetProperties().entrySet()) {
-          referenceTracker.propertyChange(new PropertyChangeEvent(
-              oldPropertyValue, property.getKey(), property.getValue(), null));
+          // To avoid breaking lazy initialization optimisation
+          && isInitialized(oldPropertyValue)) {
+        for (Map.Entry<String, Object> property : ((IComponent) oldPropertyValue).straightGetProperties().entrySet()) {
+          referenceTracker.propertyChange(new PropertyChangeEvent(oldPropertyValue, property.getKey(), property.getValue(), null));
         }
       }
     }
@@ -979,9 +1050,7 @@ public abstract class AbstractComponentInvocationHandler implements
    *     Whenever the initialization is performed, does a first set of
    *     property change events be fired ?
    */
-  private void initializeInlineTrackerIfNeeded(
-      IPropertyChangeCapable referenceProperty, String propertyName,
-      boolean fireNestedPropertyChange) {
+  private void initializeInlineTrackerIfNeeded(IPropertyChangeCapable referenceProperty, String propertyName, boolean fireNestedPropertyChange) {
     if (referenceProperty != null && isInitialized(referenceProperty)) {
       NestedReferenceTracker storedTracker = null;
       if (referenceTrackers != null) {
@@ -1011,13 +1080,10 @@ public abstract class AbstractComponentInvocationHandler implements
    */
   protected Map<String, Object> straightGetProperties(Object proxy) {
     Map<String, Object> allProperties = new HashMap<>();
-    for (IPropertyDescriptor propertyDescriptor : componentDescriptor
-        .getPropertyDescriptors()) {
+    for (IPropertyDescriptor propertyDescriptor : componentDescriptor.getPropertyDescriptors()) {
       String propertyName = propertyDescriptor.getName();
-      if (!(propertyDescriptor.isComputed() && propertyDescriptor
-          .getPersistenceFormula() == null)) {
-        allProperties.put(propertyName,
-            straightGetProperty(proxy, propertyName));
+      if (!(propertyDescriptor.isComputed() && propertyDescriptor.getPersistenceFormula() == null)) {
+        allProperties.put(propertyName, straightGetProperty(proxy, propertyName));
       }
     }
     return allProperties;
@@ -1034,16 +1100,13 @@ public abstract class AbstractComponentInvocationHandler implements
    * @return the property value or null.
    */
   protected Object straightGetProperty(Object proxy, String propertyName) {
-    IPropertyDescriptor propertyDescriptor = componentDescriptor
-        .getPropertyDescriptor(propertyName);
-    if (propertyDescriptor == null
-        || (propertyDescriptor.isComputed() && propertyDescriptor
-        .getPersistenceFormula() == null)) {
+    IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor(propertyName);
+    if (propertyDescriptor == null || (propertyDescriptor.isComputed() && propertyDescriptor.getPersistenceFormula() == null)) {
+
       return null;
     }
     Object propertyValue = retrievePropertyValue(propertyName);
-    if (propertyValue == null
-        && propertyDescriptor instanceof IBooleanPropertyDescriptor) {
+    if (propertyValue == null && propertyDescriptor instanceof IBooleanPropertyDescriptor) {
       return Boolean.FALSE;
     }
     return propertyValue;
@@ -1060,46 +1123,33 @@ public abstract class AbstractComponentInvocationHandler implements
    * @param newPropertyValue
    *     the property value or null.
    */
-  protected void straightSetProperty(Object proxy, String propertyName,
-      Object newPropertyValue) {
-    IPropertyDescriptor propertyDescriptor = componentDescriptor
-        .getPropertyDescriptor(propertyName);
-    if (propertyDescriptor == null
-        || (propertyDescriptor.isComputed() && propertyDescriptor
-        .getPersistenceFormula() == null)) {
+  protected void straightSetProperty(Object proxy, String propertyName, Object newPropertyValue) {
+    IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor(propertyName);
+    if (propertyDescriptor == null || (propertyDescriptor.isComputed() && propertyDescriptor.getPersistenceFormula() == null)) {
       return;
     }
     Object currentPropertyValue = straightGetProperty(proxy, propertyName);
     if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
       // reference must change sometimes even if entities are equal.
       if (/* !ObjectUtils.equals(currentPropertyValue, newPropertyValue) */currentPropertyValue != newPropertyValue) {
-        storeReferenceProperty(proxy,
-            (IReferencePropertyDescriptor<?>) propertyDescriptor,
-            currentPropertyValue, newPropertyValue);
+        storeReferenceProperty(proxy, (IReferencePropertyDescriptor<?>) propertyDescriptor, currentPropertyValue,
+            newPropertyValue);
       }
     } else {
       storeProperty(propertyName, newPropertyValue);
     }
     if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
-      if (currentPropertyValue != null
-          && currentPropertyValue == newPropertyValue
-          && isInitialized(currentPropertyValue)) {
-        currentPropertyValue = Proxy.newProxyInstance(
-            Thread.currentThread().getContextClassLoader(),
-            new Class<?>[]{
-                ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
-                    .getReferencedDescriptor().getCollectionInterface()
-            },
-            new NeverEqualsInvocationHandler(CollectionHelper
-                .cloneCollection((Collection<?>) currentPropertyValue)));
+      if (currentPropertyValue != null && currentPropertyValue == newPropertyValue && isInitialized(currentPropertyValue)) {
+        currentPropertyValue = Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class<?>[]{
+                ((ICollectionPropertyDescriptor<?>) propertyDescriptor).getReferencedDescriptor()
+                                                                       .getCollectionInterface()},
+            new NeverEqualsInvocationHandler(CollectionHelper.cloneCollection((Collection<?>) currentPropertyValue)));
       }
     }
-    doFirePropertyChange(proxy, propertyName, currentPropertyValue,
-        newPropertyValue);
+    doFirePropertyChange(proxy, propertyName, currentPropertyValue, newPropertyValue);
   }
 
-  private synchronized void addPropertyChangeListener(Object proxy,
-      PropertyChangeListener listener) {
+  private synchronized void addPropertyChangeListener(Object proxy, PropertyChangeListener listener) {
     if (listener == null) {
       return;
     }
@@ -1109,8 +1159,7 @@ public abstract class AbstractComponentInvocationHandler implements
     propertyChangeSupport.addPropertyChangeListener(listener);
   }
 
-  private synchronized void addWeakPropertyChangeListener(Object proxy,
-      PropertyChangeListener listener) {
+  private synchronized void addWeakPropertyChangeListener(Object proxy, PropertyChangeListener listener) {
     if (listener == null) {
       return;
     }
@@ -1120,8 +1169,7 @@ public abstract class AbstractComponentInvocationHandler implements
     weakPropertyChangeSupport.addPropertyChangeListener(listener);
   }
 
-  private synchronized void addPropertyChangeListener(Object proxy,
-      String propertyName, PropertyChangeListener listener) {
+  private synchronized void addPropertyChangeListener(Object proxy, String propertyName, PropertyChangeListener listener) {
     if (listener == null) {
       return;
     }
@@ -1132,8 +1180,7 @@ public abstract class AbstractComponentInvocationHandler implements
     propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
   }
 
-  private synchronized void addWeakPropertyChangeListener(Object proxy,
-      String propertyName, PropertyChangeListener listener) {
+  private synchronized void addWeakPropertyChangeListener(Object proxy, String propertyName, PropertyChangeListener listener) {
     if (listener == null) {
       return;
     }
@@ -1144,23 +1191,20 @@ public abstract class AbstractComponentInvocationHandler implements
     weakPropertyChangeSupport.addPropertyChangeListener(propertyName, listener);
   }
 
-  private void handleNestedPropertyChangeListening(Object proxy,
-      String propertyName) {
+  private void handleNestedPropertyChangeListening(Object proxy, String propertyName) {
     int nestedDelimIndex = propertyName.indexOf(IAccessor.NESTED_DELIM);
     if (nestedDelimIndex >= 0) {
       String rootProperty = propertyName.substring(0, nestedDelimIndex);
       String nestedPropertyName = propertyName.substring(nestedDelimIndex + 1);
       NestedReferenceTracker referenceTracker = null;
       if (referenceTrackers != null) {
-        referenceTracker = referenceTrackers
-            .get(rootProperty);
+        referenceTracker = referenceTrackers.get(rootProperty);
       }
       if (referenceTracker == null) {
         IReferencePropertyDescriptor<?> rootPropertyDescriptor = (IReferencePropertyDescriptor<?>) componentDescriptor
             .getPropertyDescriptor(rootProperty);
-        referenceTracker = new NestedReferenceTracker(proxy, rootProperty,
-            EntityHelper.isInlineComponentReference(rootPropertyDescriptor)
-                && !rootPropertyDescriptor.isComputed());
+        referenceTracker = new NestedReferenceTracker(proxy, rootProperty, EntityHelper.isInlineComponentReference(
+            rootPropertyDescriptor) && !rootPropertyDescriptor.isComputed());
         if (referenceTrackers == null) {
           referenceTrackers = new THashMap<>(1, 1.0f);
         }
@@ -1169,12 +1213,11 @@ public abstract class AbstractComponentInvocationHandler implements
       Object currentRootProperty = straightGetProperty(proxy, rootProperty);
       if (currentRootProperty instanceof IPropertyChangeCapable) {
         if (isInitialized(currentRootProperty)) {
-          ((IPropertyChangeCapable) currentRootProperty)
-              .addWeakPropertyChangeListener(nestedPropertyName, createOrGetFakePcl());
+          ((IPropertyChangeCapable) currentRootProperty).addWeakPropertyChangeListener(nestedPropertyName,
+              createOrGetFakePcl());
           Set<String> nestedPropertyListening = null;
           if (fakePclAttachements != null) {
-            nestedPropertyListening = fakePclAttachements
-                .get(propertyName);
+            nestedPropertyListening = fakePclAttachements.get(propertyName);
           }
           if (nestedPropertyListening == null) {
             nestedPropertyListening = new THashSet<>(1);
@@ -1187,16 +1230,14 @@ public abstract class AbstractComponentInvocationHandler implements
         } else {
           Set<String> delayedNestedPropertyListening = null;
           if (delayedFakePclAttachements != null) {
-            delayedNestedPropertyListening = delayedFakePclAttachements
-                .get(propertyName);
+            delayedNestedPropertyListening = delayedFakePclAttachements.get(propertyName);
           }
           if (delayedNestedPropertyListening == null) {
             delayedNestedPropertyListening = new THashSet<>(1);
             if (delayedFakePclAttachements == null) {
               delayedFakePclAttachements = new THashMap<>(1, 1.0f);
             }
-            delayedFakePclAttachements.put(rootProperty,
-                delayedNestedPropertyListening);
+            delayedFakePclAttachements.put(rootProperty, delayedNestedPropertyListening);
           }
           delayedNestedPropertyListening.add(nestedPropertyName);
         }
@@ -1206,15 +1247,12 @@ public abstract class AbstractComponentInvocationHandler implements
   }
 
   @SuppressWarnings("unchecked")
-  private void addToProperty(Object proxy,
-      ICollectionPropertyDescriptor<?> propertyDescriptor, int index,
-      Object value) {
+  private void addToProperty(Object proxy, ICollectionPropertyDescriptor<?> propertyDescriptor, int index, Object value) {
     String propertyName = propertyDescriptor.getName();
     Collection<Object> collectionProperty;
     try {
-      collectionProperty = accessorFactory
-          .createPropertyAccessor(propertyName,
-              componentDescriptor.getComponentContract()).getValue(proxy);
+      collectionProperty = accessorFactory.createPropertyAccessor(propertyName,
+          componentDescriptor.getComponentContract()).getValue(proxy);
     } catch (IllegalAccessException | NoSuchMethodException ex) {
       throw new ComponentException(ex);
     } catch (InvocationTargetException ex) {
@@ -1226,13 +1264,11 @@ public abstract class AbstractComponentInvocationHandler implements
     if (value instanceof IEntity && collectionProperty.contains(value)) {
       if (collectionProperty instanceof Set<?>) {
         LOG.warn(
-            "You have added twice the same element to the following collection property : {}.{}"
-                + componentDescriptor.getComponentContract().getName(),
-            propertyName);
+            "You have added twice the same element to the following collection property : {}.{}" + componentDescriptor
+                .getComponentContract().getName(), propertyName);
       } else {
         throw new ComponentException(
-            "Collection property does not allow duplicates : "
-                + componentDescriptor.getComponentContract().getName() + "."
+            "Collection property does not allow duplicates : " + componentDescriptor.getComponentContract().getName() + "."
                 + propertyName);
       }
     }
@@ -1240,36 +1276,28 @@ public abstract class AbstractComponentInvocationHandler implements
       if (propertyProcessorsEnabled) {
         propertyDescriptor.preprocessAdder(proxy, collectionProperty, value);
       }
-      IRelationshipEndPropertyDescriptor reversePropertyDescriptor = propertyDescriptor
-          .getReverseRelationEnd();
+      IRelationshipEndPropertyDescriptor reversePropertyDescriptor = propertyDescriptor.getReverseRelationEnd();
       if (reversePropertyDescriptor != null) {
         if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
-          accessorFactory.createPropertyAccessor(
-              reversePropertyDescriptor.getName(),
-              propertyDescriptor.getReferencedDescriptor()
-                  .getElementDescriptor().getComponentContract()).setValue(
+          accessorFactory.createPropertyAccessor(reversePropertyDescriptor.getName(),
+              propertyDescriptor.getReferencedDescriptor().getElementDescriptor().getComponentContract()).setValue(
               value, proxy);
         } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
-          ICollectionAccessor collectionAccessor = accessorFactory
-              .createCollectionPropertyAccessor(
-                  reversePropertyDescriptor.getName(),
-                  propertyDescriptor.getReferencedDescriptor()
-                      .getElementDescriptor().getComponentContract(),
-                  ((ICollectionPropertyDescriptor<?>) reversePropertyDescriptor)
-                      .getCollectionDescriptor().getElementDescriptor()
-                      .getComponentContract());
+          ICollectionAccessor collectionAccessor = accessorFactory.createCollectionPropertyAccessor(
+              reversePropertyDescriptor.getName(),
+              propertyDescriptor.getReferencedDescriptor().getElementDescriptor().getComponentContract(),
+              ((ICollectionPropertyDescriptor<?>) reversePropertyDescriptor).getCollectionDescriptor()
+                                                                            .getElementDescriptor()
+                                                                            .getComponentContract());
           if (collectionAccessor instanceof IModelDescriptorAware) {
-            ((IModelDescriptorAware) collectionAccessor)
-                .setModelDescriptor(reversePropertyDescriptor);
+            ((IModelDescriptorAware) collectionAccessor).setModelDescriptor(reversePropertyDescriptor);
           }
           collectionAccessor.addToValue(value, proxy);
         }
       }
-      Collection<?> oldCollectionSnapshot = CollectionHelper
-          .cloneCollection((Collection<?>) collectionProperty);
+      Collection<?> oldCollectionSnapshot = CollectionHelper.cloneCollection((Collection<?>) collectionProperty);
       boolean inserted;
-      if (collectionProperty instanceof List<?> && index >= 0
-          && index < collectionProperty.size()) {
+      if (collectionProperty instanceof List<?> && index >= 0 && index < collectionProperty.size()) {
         ((List<Object>) collectionProperty).add(index, value);
         inserted = true;
       } else {
@@ -1277,11 +1305,9 @@ public abstract class AbstractComponentInvocationHandler implements
       }
       if (inserted) {
         if (collectionSortEnabled) {
-          inlineComponentFactory.sortCollectionProperty((IComponent) proxy,
-              propertyName);
+          inlineComponentFactory.sortCollectionProperty((IComponent) proxy, propertyName);
         }
-        doFirePropertyChange(proxy, propertyName, oldCollectionSnapshot,
-            collectionProperty);
+        doFirePropertyChange(proxy, propertyName, oldCollectionSnapshot, collectionProperty);
         if (propertyProcessorsEnabled) {
           propertyDescriptor.postprocessAdder(proxy, collectionProperty, value);
         }
@@ -1300,19 +1326,16 @@ public abstract class AbstractComponentInvocationHandler implements
     }
   }
 
-  private void addToProperty(Object proxy,
-      ICollectionPropertyDescriptor<?> propertyDescriptor, Object value) {
+  private void addToProperty(Object proxy, ICollectionPropertyDescriptor<?> propertyDescriptor, Object value) {
     addToProperty(proxy, propertyDescriptor, -1, value);
   }
 
   private void checkIntegrity(Object proxy) {
     checkMandatoryProperties(proxy);
     if (propertyProcessorsEnabled) {
-      for (IPropertyDescriptor propertyDescriptor : componentDescriptor
-          .getPropertyDescriptors()) {
+      for (IPropertyDescriptor propertyDescriptor : componentDescriptor.getPropertyDescriptors()) {
         if (!propertyDescriptor.isComputed()) {
-          propertyDescriptor.preprocessSetter(proxy,
-              straightGetProperty(proxy, propertyDescriptor.getName()));
+          propertyDescriptor.preprocessSetter(proxy, straightGetProperty(proxy, propertyDescriptor.getName()));
         }
       }
     }
@@ -1329,8 +1352,9 @@ public abstract class AbstractComponentInvocationHandler implements
               throw new MandatoryPropertyException(propertyDescriptor, proxy);
             }
           }
-          if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?> && !((ICollectionPropertyDescriptor<?>)
-              propertyDescriptor).getReferencedDescriptor().isNullElementAllowed()) {
+          if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>
+              && !((ICollectionPropertyDescriptor<?>) propertyDescriptor).getReferencedDescriptor()
+                                                                         .isNullElementAllowed()) {
             Object newValue = straightGetProperty(proxy, propertyDescriptor.getName());
             if (isInitialized(newValue) && newValue instanceof Collection<?>) {
               for (Object element : ((Collection<?>) newValue)) {
@@ -1346,16 +1370,13 @@ public abstract class AbstractComponentInvocationHandler implements
   }
 
   @SuppressWarnings({"unused", "UnusedParameters"})
-  private boolean hasListeners(Object proxy,
-      String propertyName) {
+  private boolean hasListeners(Object proxy, String propertyName) {
     if (computedPropertiesCache != null && computedPropertiesCache.containsKey(propertyName)) {
       // this is necessary in order to force cache re-computation
       computedPropertiesCache.remove(propertyName);
     }
-    if (propertyChangeSupport != null
-        && propertyChangeSupport.hasListeners(propertyName)) {
-      PropertyChangeListener[] listeners = propertyChangeSupport
-          .getPropertyChangeListeners(propertyName);
+    if (propertyChangeSupport != null && propertyChangeSupport.hasListeners(propertyName)) {
+      PropertyChangeListener[] listeners = propertyChangeSupport.getPropertyChangeListeners(propertyName);
       if (listeners != null && listeners.length > 0) {
         return true;
       }
@@ -1367,10 +1388,8 @@ public abstract class AbstractComponentInvocationHandler implements
         }
       }
     }
-    if (weakPropertyChangeSupport != null
-        && weakPropertyChangeSupport.hasListeners(propertyName)) {
-      PropertyChangeListener[] listeners = weakPropertyChangeSupport
-          .getPropertyChangeListeners(propertyName);
+    if (weakPropertyChangeSupport != null && weakPropertyChangeSupport.hasListeners(propertyName)) {
+      PropertyChangeListener[] listeners = weakPropertyChangeSupport.getPropertyChangeListeners(propertyName);
       if (listeners != null && listeners.length > 0) {
         return true;
       }
@@ -1378,11 +1397,9 @@ public abstract class AbstractComponentInvocationHandler implements
       for (PropertyChangeListener listener : listeners) {
         if (listener instanceof NestedReferenceTracker
             && ((NestedReferenceTracker) listener).source instanceof IComponent) {
-          if (!propertyName
-              .contains(((NestedReferenceTracker) listener).referencePropertyName)
-              && ((IComponent) ((NestedReferenceTracker) listener).source)
-              .hasListeners(((NestedReferenceTracker) listener).referencePropertyName
-                  + "." + propertyName)) {
+          if (!propertyName.contains(((NestedReferenceTracker) listener).referencePropertyName)
+              && ((IComponent) ((NestedReferenceTracker) listener).source).hasListeners(
+              ((NestedReferenceTracker) listener).referencePropertyName + "." + propertyName)) {
             // Query nested component but prevent
             // stack overflows with 1-1 relationships
             return true;
@@ -1396,12 +1413,10 @@ public abstract class AbstractComponentInvocationHandler implements
   }
 
   @SuppressWarnings({"unused", "UnusedParameters"})
-  private PropertyChangeListener[] getPropertyChangeListeners(
-      Object proxy) {
+  private PropertyChangeListener[] getPropertyChangeListeners(Object proxy) {
     List<PropertyChangeListener> listeners = new ArrayList<>();
     if (propertyChangeSupport != null) {
-      for (PropertyChangeListener pcl : propertyChangeSupport
-          .getPropertyChangeListeners()) {
+      for (PropertyChangeListener pcl : propertyChangeSupport.getPropertyChangeListeners()) {
         // Avoid single property change listeners
         if (!(pcl instanceof PropertyChangeListenerProxy)) {
           listeners.add(pcl);
@@ -1409,23 +1424,19 @@ public abstract class AbstractComponentInvocationHandler implements
       }
     }
     if (weakPropertyChangeSupport != null) {
-      Collections.addAll(listeners, weakPropertyChangeSupport
-          .getPropertyChangeListeners());
+      Collections.addAll(listeners, weakPropertyChangeSupport.getPropertyChangeListeners());
     }
     return listeners.toArray(new PropertyChangeListener[listeners.size()]);
   }
 
   @SuppressWarnings({"unused", "UnusedParameters"})
-  private PropertyChangeListener[] getPropertyChangeListeners(
-      Object proxy, String propertyName) {
+  private PropertyChangeListener[] getPropertyChangeListeners(Object proxy, String propertyName) {
     List<PropertyChangeListener> listeners = new ArrayList<>();
     if (propertyChangeSupport != null) {
-      Collections.addAll(listeners, propertyChangeSupport
-          .getPropertyChangeListeners(propertyName));
+      Collections.addAll(listeners, propertyChangeSupport.getPropertyChangeListeners(propertyName));
     }
     if (weakPropertyChangeSupport != null) {
-      Collections.addAll(listeners, weakPropertyChangeSupport
-          .getPropertyChangeListeners(propertyName));
+      Collections.addAll(listeners, weakPropertyChangeSupport.getPropertyChangeListeners(propertyName));
     }
     return listeners.toArray(new PropertyChangeListener[listeners.size()]);
   }
@@ -1433,13 +1444,16 @@ public abstract class AbstractComponentInvocationHandler implements
   /**
    * Fire property change.
    *
-   * @param proxy the proxy
-   * @param propertyName the property name
-   * @param oldValue the old value
-   * @param newValue the new value
+   * @param proxy
+   *     the proxy
+   * @param propertyName
+   *     the property name
+   * @param oldValue
+   *     the old value
+   * @param newValue
+   *     the new value
    */
-  protected void firePropertyChange(Object proxy, String propertyName,
-      Object oldValue, Object newValue) {
+  protected void firePropertyChange(Object proxy, String propertyName, Object oldValue, Object newValue) {
     Object actualNewValue = newValue;
     if (computedPropertiesCache != null && computedPropertiesCache.containsKey(propertyName)
         && oldValue != IPropertyChangeCapable.UNKNOWN) {
@@ -1453,12 +1467,10 @@ public abstract class AbstractComponentInvocationHandler implements
       if (lastIndexOfDelim > 0) {
         Object propertyHolder;
         try {
-          propertyHolder = getAccessorFactory().createPropertyAccessor(
-              propertyName.substring(0, lastIndexOfDelim),
+          propertyHolder = getAccessorFactory().createPropertyAccessor(propertyName.substring(0, lastIndexOfDelim),
               getComponentContract()).getValue(proxy);
           if (propertyHolder != null && propertyHolder instanceof IComponent) {
-            ((IComponent) propertyHolder).firePropertyChange(
-                propertyName.substring(lastIndexOfDelim + 1), oldValue,
+            ((IComponent) propertyHolder).firePropertyChange(propertyName.substring(lastIndexOfDelim + 1), oldValue,
                 actualNewValue);
           }
         } catch (IllegalAccessException | NoSuchMethodException ex) {
@@ -1473,18 +1485,15 @@ public abstract class AbstractComponentInvocationHandler implements
     }
   }
 
-  private void doFirePropertyChange(Object proxy, String propertyName,
-      Object oldValue, Object newValue) {
+  private void doFirePropertyChange(Object proxy, String propertyName, Object oldValue, Object newValue) {
     if (propertyChangeEnabled) {
       if ((oldValue == null && newValue == null) || (oldValue == newValue)) {
         return;
       }
       if (!isInitialized(oldValue) || !isInitialized(newValue)) {
-        doFirePropertyChange(new PropertyChangeEvent(proxy, propertyName,
-            IPropertyChangeCapable.UNKNOWN, newValue));
+        doFirePropertyChange(new PropertyChangeEvent(proxy, propertyName, IPropertyChangeCapable.UNKNOWN, newValue));
       } else {
-        doFirePropertyChange(new PropertyChangeEvent(proxy, propertyName,
-            oldValue, newValue));
+        doFirePropertyChange(new PropertyChangeEvent(proxy, propertyName, oldValue, newValue));
       }
     }
   }
@@ -1512,9 +1521,14 @@ public abstract class AbstractComponentInvocationHandler implements
 
     private static final long serialVersionUID = -3661229785535176973L;
 
+    /**
+     * Instantiates a new Dirty free property change event.
+     *
+     * @param pce
+     *     the pce
+     */
     public DirtyFreePropertyChangeEvent(PropertyChangeEvent pce) {
-      super(pce.getSource(), pce.getPropertyName(), pce.getOldValue(), pce
-          .getNewValue());
+      super(pce.getSource(), pce.getPropertyName(), pce.getOldValue(), pce.getNewValue());
     }
   }
 
@@ -1528,8 +1542,7 @@ public abstract class AbstractComponentInvocationHandler implements
 
   private void releaseEvents() {
     if (delayedEvents != null) {
-      List<PropertyChangeEvent> delayedEventsCopy = new ArrayList<>(
-          delayedEvents);
+      List<PropertyChangeEvent> delayedEventsCopy = new ArrayList<>(delayedEvents);
       delayedEvents = null;
       for (PropertyChangeEvent evt : delayedEventsCopy) {
         boolean wasDirtyTrackingEnabled = isDirtyTrackingEnabled();
@@ -1546,17 +1559,15 @@ public abstract class AbstractComponentInvocationHandler implements
   }
 
   @SuppressWarnings("unchecked")
-  private synchronized Object accessComputedProperty(
-      IPropertyDescriptor propertyDescriptor, AccessorInfo accessorInfo,
-      Class<IComponentExtension<IComponent>> extensionClass, Object proxy,
-      Method method, Object... args) {
+  private synchronized Object accessComputedProperty(IPropertyDescriptor propertyDescriptor, AccessorInfo accessorInfo,
+                                                     Class<IComponentExtension<IComponent>> extensionClass, Object proxy,
+                                                     Method method, Object... args) {
     try {
       String propertyName = propertyDescriptor.getName();
       Object computedPropertyValue = null;
       if (accessorInfo.isModifier()) {
-        computedPropertyValue = getAccessorFactory().createPropertyAccessor(
-            propertyDescriptor.getName(), getComponentContract()).getValue(
-            proxy);
+        computedPropertyValue = getAccessorFactory().createPropertyAccessor(propertyDescriptor.getName(),
+            getComponentContract()).getValue(proxy);
         Object interceptedValue = args[args.length - 1];
         if (propertyProcessorsEnabled) {
           switch (accessorInfo.getAccessorType()) {
@@ -1565,14 +1576,12 @@ public abstract class AbstractComponentInvocationHandler implements
               propertyDescriptor.preprocessSetter(proxy, interceptedValue);
               break;
             case ADDER:
-              ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
-                  .preprocessAdder(proxy,
-                      (Collection<Object>) computedPropertyValue, interceptedValue);
+              ((ICollectionPropertyDescriptor<?>) propertyDescriptor).preprocessAdder(proxy,
+                  (Collection<Object>) computedPropertyValue, interceptedValue);
               break;
             case REMOVER:
-              ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
-                  .preprocessRemover(proxy,
-                      (Collection<Object>) computedPropertyValue, interceptedValue);
+              ((ICollectionPropertyDescriptor<?>) propertyDescriptor).preprocessRemover(proxy,
+                  (Collection<Object>) computedPropertyValue, interceptedValue);
               break;
             default:
               break;
@@ -1585,35 +1594,27 @@ public abstract class AbstractComponentInvocationHandler implements
           return computedPropertyValue;
         }
       }
-      IComponentExtension<? extends IComponent> extensionDelegate = getExtensionInstance(
-          extensionClass, (IComponent) proxy);
+      IComponentExtension<? extends IComponent> extensionDelegate = getExtensionInstance(extensionClass, (IComponent) proxy);
       if (accessorInfo.isModifier()) {
         // do not change computed property value
         invokeExtensionMethod(extensionDelegate, method, args);
       } else {
-        computedPropertyValue = invokeExtensionMethod(extensionDelegate,
-            method, args);
+        computedPropertyValue = invokeExtensionMethod(extensionDelegate, method, args);
       }
       if (accessorInfo.isModifier()) {
-        Object newComputedPropertyValue = getAccessorFactory()
-            .createPropertyAccessor(propertyDescriptor.getName(),
-                getComponentContract()).getValue(proxy);
+        Object newComputedPropertyValue = getAccessorFactory().createPropertyAccessor(propertyDescriptor.getName(),
+            getComponentContract()).getValue(proxy);
         switch (accessorInfo.getAccessorType()) {
           case SETTER:
-            propertyDescriptor.postprocessSetter(proxy, computedPropertyValue,
-                newComputedPropertyValue);
+            propertyDescriptor.postprocessSetter(proxy, computedPropertyValue, newComputedPropertyValue);
             break;
           case ADDER:
-            ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
-                .postprocessAdder(proxy,
-                    (Collection<Object>) newComputedPropertyValue,
-                    args[args.length - 1]);
+            ((ICollectionPropertyDescriptor<?>) propertyDescriptor).postprocessAdder(proxy,
+                (Collection<Object>) newComputedPropertyValue, args[args.length - 1]);
             break;
           case REMOVER:
-            ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
-                .postprocessRemover(proxy,
-                    (Collection<Object>) newComputedPropertyValue,
-                    args[args.length - 1]);
+            ((ICollectionPropertyDescriptor<?>) propertyDescriptor).postprocessRemover(proxy,
+                (Collection<Object>) newComputedPropertyValue, args[args.length - 1]);
             break;
           default:
             break;
@@ -1635,28 +1636,30 @@ public abstract class AbstractComponentInvocationHandler implements
     }
   }
 
-  private Object invokeExtensionMethod(
-      IComponentExtension<? extends IComponent> componentExtension,
-      Method method, Object... args) throws NoSuchMethodException,
-      IllegalAccessException, InvocationTargetException {
-    return MethodUtils.invokeMethod(componentExtension, method.getName(), args,
-        method.getParameterTypes());
+  private Object invokeExtensionMethod(IComponentExtension<? extends IComponent> componentExtension, Method method,
+                                       Object... args)
+      throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    return MethodUtils.invokeMethod(componentExtension, method.getName(), args, method.getParameterTypes());
   }
 
   @SuppressWarnings({"unchecked", "ConstantConditions"})
-  private boolean invokeLifecycleInterceptors(Object proxy,
-      Method lifecycleMethod, Object... args) {
+  private boolean invokeLifecycleInterceptors(Object proxy, Method lifecycleMethod, Object... args) {
     String methodName = lifecycleMethod.getName()/* .intern() */;
-    if (ILifecycleCapable.ON_PERSIST_METHOD_NAME.equals(methodName)) {
-      onPersist((IEntityFactory) args[0], (UserPrincipal) args[1],
-          (IEntityLifecycleHandler) args[2]);
+    if (ILifecycleCapable.ON_CREATE_METHOD_NAME.equals(methodName)) {
+      onCreate(proxy, (IEntityFactory) args[0], (UserPrincipal) args[1], (IEntityLifecycleHandler) args[2]);
+    } else if (ILifecycleCapable.ON_PERSIST_METHOD_NAME.equals(methodName)) {
+      onPersist(proxy, (IEntityFactory) args[0], (UserPrincipal) args[1], (IEntityLifecycleHandler) args[2]);
     } else if (ILifecycleCapable.ON_UPDATE_METHOD_NAME.equals(methodName)) {
-      onUpdate((IEntityFactory) args[0], (UserPrincipal) args[1],
-          (IEntityLifecycleHandler) args[2]);
+      onUpdate(proxy, (IEntityFactory) args[0], (UserPrincipal) args[1], (IEntityLifecycleHandler) args[2]);
+    } else if (ILifecycleCapable.ON_LOAD_METHOD_NAME.equals(methodName)) {
+      onLoad(proxy);
+    } else if (ILifecycleCapable.ON_CLONE_METHOD_NAME.equals(methodName)) {
+      onClone(proxy, (IComponent) args[0]);
+    } else if (ILifecycleCapable.ON_DELETE_METHOD_NAME.equals(methodName)) {
+      onDelete(proxy, (IEntityFactory) args[0], (UserPrincipal) args[1], (IEntityLifecycleHandler) args[2]);
     }
     boolean interceptorResults = false;
-    for (ILifecycleInterceptor<?> lifecycleInterceptor : componentDescriptor
-        .getLifecycleInterceptors()) {
+    for (ILifecycleInterceptor<?> lifecycleInterceptor : componentDescriptor.getLifecycleInterceptors()) {
       int signatureSize = lifecycleMethod.getParameterTypes().length + 1;
       Class<?>[] parameterTypes = new Class<?>[signatureSize];
       Object[] parameters = new Object[signatureSize];
@@ -1669,11 +1672,9 @@ public abstract class AbstractComponentInvocationHandler implements
         parameters[i] = args[i - 1];
       }
       try {
-        Object interceptorResult = MethodUtils.invokeMethod(
-            lifecycleInterceptor, methodName, parameters, parameterTypes);
+        Object interceptorResult = MethodUtils.invokeMethod(lifecycleInterceptor, methodName, parameters, parameterTypes);
         if (interceptorResult instanceof Boolean) {
-          interceptorResults = interceptorResults
-              || (Boolean) interceptorResult;
+          interceptorResults = interceptorResults || (Boolean) interceptorResult;
         }
       } catch (IllegalAccessException | NoSuchMethodException ex) {
         throw new ComponentException(ex);
@@ -1768,8 +1769,7 @@ public abstract class AbstractComponentInvocationHandler implements
     Collection<Object> collectionProperty;
     try {
       collectionProperty = accessorFactory
-          .createPropertyAccessor(propertyName,
-              componentDescriptor.getComponentContract()).getValue(proxy);
+          .createPropertyAccessor(propertyName, componentDescriptor.getComponentContract()).getValue(proxy);
     } catch (IllegalAccessException | NoSuchMethodException ex) {
       throw new ComponentException(ex);
     } catch (InvocationTargetException ex) {
@@ -1794,13 +1794,11 @@ public abstract class AbstractComponentInvocationHandler implements
                 value, null);
           } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
             ICollectionAccessor collectionAccessor = accessorFactory
-                .createCollectionPropertyAccessor(
-                    reversePropertyDescriptor.getName(),
-                    propertyDescriptor.getReferencedDescriptor()
-                        .getElementDescriptor().getComponentContract(),
-                    ((ICollectionPropertyDescriptor<?>) reversePropertyDescriptor)
-                        .getCollectionDescriptor().getElementDescriptor()
-                        .getComponentContract());
+                .createCollectionPropertyAccessor(reversePropertyDescriptor.getName(),
+                    propertyDescriptor.getReferencedDescriptor().getElementDescriptor().getComponentContract(),
+                    ((ICollectionPropertyDescriptor<?>) reversePropertyDescriptor).getCollectionDescriptor()
+                                                                                  .getElementDescriptor()
+                                                                                  .getComponentContract());
             if (collectionAccessor instanceof IModelDescriptorAware) {
               ((IModelDescriptorAware) collectionAccessor)
                   .setModelDescriptor(reversePropertyDescriptor);
@@ -1927,8 +1925,8 @@ public abstract class AbstractComponentInvocationHandler implements
               }
               IAccessor reversePropertyAccessor = accessorFactory
                   .createPropertyAccessor(reversePropertyDescriptor.getName(),
-                      ((IReferencePropertyDescriptor<?>) propertyDescriptor)
-                          .getReferencedDescriptor().getComponentContract());
+                      ((IReferencePropertyDescriptor<?>) propertyDescriptor).getReferencedDescriptor()
+                                                                            .getComponentContract());
               if (oldProperty != null) {
                 reversePropertyAccessor.setValue(oldProperty, null);
               }
@@ -1938,13 +1936,12 @@ public abstract class AbstractComponentInvocationHandler implements
             } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor) {
               // It's a one-to-many relationship
               ICollectionAccessor reversePropertyAccessor = accessorFactory
-                  .createCollectionPropertyAccessor(
-                      reversePropertyDescriptor.getName(),
-                      ((IReferencePropertyDescriptor<?>) propertyDescriptor)
-                          .getReferencedDescriptor().getComponentContract(),
-                      ((ICollectionPropertyDescriptor<?>) reversePropertyDescriptor)
-                          .getCollectionDescriptor().getElementDescriptor()
-                          .getComponentContract());
+                  .createCollectionPropertyAccessor(reversePropertyDescriptor.getName(),
+                      ((IReferencePropertyDescriptor<?>) propertyDescriptor).getReferencedDescriptor()
+                                                                            .getComponentContract(),
+                      ((ICollectionPropertyDescriptor<?>) reversePropertyDescriptor).getCollectionDescriptor()
+                                                                                    .getElementDescriptor()
+                                                                                    .getComponentContract());
               if (reversePropertyAccessor instanceof IModelDescriptorAware) {
                 ((IModelDescriptorAware) reversePropertyAccessor)
                     .setModelDescriptor(reversePropertyDescriptor);
@@ -1976,11 +1973,9 @@ public abstract class AbstractComponentInvocationHandler implements
           oldPropertyElementsToRemove.removeAll(propertyElementsToKeep);
           newPropertyElementsToAdd.removeAll(propertyElementsToKeep);
           ICollectionAccessor propertyAccessor = accessorFactory
-              .createCollectionPropertyAccessor(propertyName,
-                  componentDescriptor.getComponentContract(),
-                  ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
-                      .getCollectionDescriptor().getElementDescriptor()
-                      .getComponentContract());
+              .createCollectionPropertyAccessor(propertyName, componentDescriptor.getComponentContract(),
+                  ((ICollectionPropertyDescriptor<?>) propertyDescriptor).getCollectionDescriptor()
+                                                                         .getElementDescriptor().getComponentContract());
           boolean oldCollectionSortEnabled = collectionSortEnabled;
           boolean oldPropertyChangeEnabled = propertyChangeEnabled;
           boolean oldPropertyProcessorsEnabled = propertyProcessorsEnabled;
@@ -2073,7 +2068,8 @@ public abstract class AbstractComponentInvocationHandler implements
   /**
    * To string.
    *
-   * @param proxy the proxy
+   * @param proxy
+   *     the proxy
    * @return the to string
    */
   protected String toString(Object proxy) {
@@ -2332,8 +2328,7 @@ public abstract class AbstractComponentInvocationHandler implements
                   if (evt.getNewValue() != null) {
                     try {
                       Object newValue = getAccessorFactory()
-                          .createPropertyAccessor(remainderProperty,
-                              evt.getNewValue().getClass()).getValue(
+                          .createPropertyAccessor(remainderProperty, evt.getNewValue().getClass()).getValue(
                               evt.getNewValue());
                       doFirePropertyChange(source, referencePropertyName
                           + IAccessor.NESTED_DELIM + trackedProperty,

@@ -21,7 +21,6 @@ package org.jspresso.framework.model.descriptor.basic;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -1102,13 +1101,12 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
       for (String propertyName : propertyNames) {
         IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor(propertyName);
         if (propertyDescriptor instanceof IReferencePropertyDescriptor<?> && EntityHelper.isInlineComponentReference(
-          (IReferencePropertyDescriptor<?>) propertyDescriptor)) {
+            (IReferencePropertyDescriptor<?>) propertyDescriptor)) {
           if (watchDog.contains(componentDescriptor.getComponentContract())) {
             // Whenever there are circular references between inline components, do not try to resolve them since it's
             // impossible, but log the warning.
             LOG.warn("A circular reference has been detected on inline {} components. You should explicitly declare "
-                    + "their rendered properties since they cannot be computed automatically.",
-                watchDog);
+                    + "their rendered properties since they cannot be computed automatically.", watchDog);
           } else {
             watchDog.add(componentDescriptor.getComponentContract());
             List<String> nestedProperties = new ArrayList<>();
@@ -1230,13 +1228,16 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
   private void registerDelegateServicesIfNecessary() {
     synchronized (delegateServicesLock) {
       if (serviceDelegateClassNames != null) {
-        for (Entry<String, String> nextPair : serviceDelegateClassNames.entrySet()) {
+        for (Entry<String, String> nextEntry : serviceDelegateClassNames.entrySet()) {
           try {
             IComponentService delegate = null;
-            if (!("".equals(nextPair.getValue()) || "null".equalsIgnoreCase(nextPair.getValue()))) {
-              delegate = (IComponentService) Class.forName(nextPair.getValue()).newInstance();
+            String serviceClassName = nextEntry.getKey();
+            String serviceDelegateClassName = nextEntry.getValue();
+            if (!(serviceDelegateClassName == null || "".equals(serviceDelegateClassName) || "null".equalsIgnoreCase(
+                serviceDelegateClassName))) {
+              delegate = (IComponentService) Class.forName(serviceDelegateClassName).newInstance();
             }
-            registerService(Class.forName(ObjectUtils.extractRawClassName(nextPair.getKey())), delegate);
+            registerService(Class.forName(ObjectUtils.extractRawClassName(serviceClassName)), delegate);
           } catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
             throw new DescriptorException(ex);
           }
@@ -1246,10 +1247,15 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
     }
     synchronized (delegateServicesLock) {
       if (serviceDelegateBeanNames != null && beanFactory != null) {
-        for (Entry<String, String> nextPair : serviceDelegateBeanNames.entrySet()) {
+        for (Entry<String, String> nextEntry : serviceDelegateBeanNames.entrySet()) {
           try {
-            registerService(Class.forName(ObjectUtils.extractRawClassName(nextPair.getKey())), beanFactory.getBean(
-                nextPair.getValue(), IComponentService.class));
+            String serviceClassName = nextEntry.getKey();
+            String serviceDelegateBeanName = nextEntry.getValue();
+            if (!(serviceDelegateBeanName == null || "".equals(serviceDelegateBeanName) || "null".equalsIgnoreCase(
+                serviceDelegateBeanName))) {
+              registerService(Class.forName(ObjectUtils.extractRawClassName(serviceClassName)), beanFactory.getBean(
+                  serviceDelegateBeanName, IComponentService.class));
+            }
           } catch (ClassNotFoundException ex) {
             throw new DescriptorException(ex);
           }

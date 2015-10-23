@@ -178,10 +178,10 @@ public class ControllerAwareEntityInvocationHandler extends BasicEntityInvocatio
    * {@inheritDoc}
    */
   @Override
-  protected void onPersist(IEntityFactory entityFactory, UserPrincipal principal,
+  protected void onPersist(Object proxy, IEntityFactory entityFactory, UserPrincipal principal,
                            IEntityLifecycleHandler entityLifecycleHandler) {
     flushDetachedEntities(entityLifecycleHandler);
-    super.onPersist(entityFactory, principal, entityLifecycleHandler);
+    super.onPersist(proxy, entityFactory, principal, entityLifecycleHandler);
   }
 
   /**
@@ -190,10 +190,10 @@ public class ControllerAwareEntityInvocationHandler extends BasicEntityInvocatio
    * {@inheritDoc}
    */
   @Override
-  protected void onUpdate(IEntityFactory entityFactory, UserPrincipal principal,
+  protected void onUpdate(Object proxy, IEntityFactory entityFactory, UserPrincipal principal,
                           IEntityLifecycleHandler entityLifecycleHandler) {
     flushDetachedEntities(entityLifecycleHandler);
-    super.onUpdate(entityFactory, principal, entityLifecycleHandler);
+    super.onUpdate(proxy, entityFactory, principal, entityLifecycleHandler);
   }
 
   @Override

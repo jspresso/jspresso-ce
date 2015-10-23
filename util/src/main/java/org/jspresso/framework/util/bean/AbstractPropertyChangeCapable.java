@@ -195,7 +195,8 @@ public abstract class AbstractPropertyChangeCapable implements IPropertyChangeCa
    * @see java.beans.PropertyChangeSupport#firePropertyChange(java.lang.String,
    *      java.lang.Object, java.lang.Object)
    */
-  protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
+  @Override
+  public void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
     firePropertyChange(new PropertyChangeEvent(this, propertyName, oldValue, newValue));
   }
 

@@ -22,7 +22,7 @@ import java.lang.reflect.Method;
 
 /**
  * This class wraps a method object and helps analyzing it as an accessor.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class AccessorInfo {
@@ -64,6 +64,7 @@ public class AccessorInfo {
    *          the method supposed to be an accessor.
    */
   public AccessorInfo(Method method) {
+    accessorType = EAccessorType.NONE;
     String methodName = method.getName();
     Class<?>[] methodArguments = method.getParameterTypes();
     if (methodArguments.length == 0) {
@@ -102,7 +103,7 @@ public class AccessorInfo {
 
   /**
    * Gets the accessedPropertyName.
-   * 
+   *
    * @return the accessedPropertyName.
    */
   public String getAccessedPropertyName() {
@@ -111,7 +112,7 @@ public class AccessorInfo {
 
   /**
    * Gets the accessorType.
-   * 
+   *
    * @return the accessorType.
    */
   public EAccessorType getAccessorType() {
@@ -121,7 +122,7 @@ public class AccessorInfo {
   /**
    * Returns whether the underlying accessor is a modifier (setter, adder or
    * remover).
-   * 
+   *
    * @return true if the underlying accessor is a modifier.
    */
   public boolean isModifier() {
