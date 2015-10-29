@@ -20,6 +20,7 @@ package org.jspresso.framework.model.component;
 
 import org.jspresso.framework.model.component.service.DependsOnHelper;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
+import org.jspresso.framework.util.accessor.IAccessorFactoryProvider;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 
 /**
@@ -32,7 +33,7 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractComponentExtension<T extends IComponent>
-    implements IComponentExtension<T>, IComponentFactoryAware {
+    implements IComponentExtension<T>, IComponentFactoryAware, IAccessorFactoryProvider {
 
   private       IComponentFactory componentFactory;
   private final T                 extendedComponent;
@@ -82,7 +83,20 @@ public abstract class AbstractComponentExtension<T extends IComponent>
    */
   @Override
   public void postCreate() {
-    DependsOnHelper.registerDependsOnListeners(getClass(), getComponent(), getAccessorFactory());
+    DependsOnHelper.registerDependsOnListeners(getClass(), getComponent(), this);
+  }
+
+  /**
+   * Registers a property change listener to forward property changes.
+   *
+   * @param sourceProperty
+   *     the name of the source property.
+   * @param forwardedProperty
+   *     the name of the forwarded property.
+   */
+  protected void registerNotificationForwarding(String sourceProperty,
+                                                String forwardedProperty) {
+    DependsOnHelper.registerNotificationForwarding(getComponent(), this, sourceProperty, forwardedProperty);
   }
 
   /**
@@ -97,7 +111,20 @@ public abstract class AbstractComponentExtension<T extends IComponent>
    */
   protected void registerNotificationForwarding(IPropertyChangeCapable sourceBean, String sourceProperty,
                                                 String forwardedProperty) {
-    DependsOnHelper.registerNotificationForwarding(sourceBean, getAccessorFactory(), sourceProperty, forwardedProperty);
+    DependsOnHelper.registerNotificationForwarding(sourceBean, this, sourceProperty, forwardedProperty);
+  }
+
+  /**
+   * Registers a property change listener to forward property changes.
+   *
+   * @param sourceProperty
+   *     the name of the source property.
+   * @param forwardedProperty
+   *     the name of the forwarded property.
+   */
+  protected void registerNotificationForwarding(String sourceProperty,
+                                                String... forwardedProperty) {
+    DependsOnHelper.registerNotificationForwarding(getComponent(), this, sourceProperty, forwardedProperty);
   }
 
   /**
@@ -112,7 +139,23 @@ public abstract class AbstractComponentExtension<T extends IComponent>
    */
   protected void registerNotificationForwarding(IPropertyChangeCapable sourceBean, String sourceProperty,
                                                 String... forwardedProperty) {
-    DependsOnHelper.registerNotificationForwarding(sourceBean, getAccessorFactory(), sourceProperty, forwardedProperty);
+    DependsOnHelper.registerNotificationForwarding(sourceBean, this, sourceProperty, forwardedProperty);
+  }
+
+  /**
+   * Registers notification forwarding from a collection's child property.
+   *
+   * @param sourceCollectionProperty
+   *     the collection property to listen to.
+   * @param sourceElementProperty
+   *     the collection elements property to listen to.
+   * @param forwardedProperty
+   *     the name of the forwarded property.
+   */
+  protected void registerNotificationCollectionForwarding(String sourceCollectionProperty, String sourceElementProperty,
+                                                          String forwardedProperty) {
+    DependsOnHelper.registerNotificationForwarding(getComponent(), this, sourceCollectionProperty, sourceElementProperty,
+        forwardedProperty);
   }
 
   /**
@@ -130,7 +173,25 @@ public abstract class AbstractComponentExtension<T extends IComponent>
   protected void registerNotificationCollectionForwarding(IPropertyChangeCapable sourceBean,
                                                           String sourceCollectionProperty, String sourceElementProperty,
                                                           String forwardedProperty) {
-    DependsOnHelper.registerNotificationForwarding(sourceBean, getAccessorFactory(), sourceCollectionProperty,
+    DependsOnHelper.registerNotificationForwarding(sourceBean, this, sourceCollectionProperty, sourceElementProperty,
+        forwardedProperty);
+  }
+
+  /**
+   * Registers notification forwarding from a collection's child property.
+   *
+   * @param sourceCollectionProperty
+   *     the collection property to listen to.
+   * @param sourceElementProperty
+   *     the collection elements property to listen to.
+   * @param forwardedProperty
+   *     the name of the forwarded property.
+   */
+  @SuppressWarnings("unchecked")
+  protected void registerNotificationCollectionForwarding(String sourceCollectionProperty,
+                                                          String sourceElementProperty,
+                                                          String... forwardedProperty) {
+    DependsOnHelper.registerNotificationCollectionForwarding(getComponent(), this, sourceCollectionProperty,
         sourceElementProperty, forwardedProperty);
   }
 
@@ -151,11 +212,17 @@ public abstract class AbstractComponentExtension<T extends IComponent>
                                                           final String sourceCollectionProperty,
                                                           final String sourceElementProperty,
                                                           final String... forwardedProperty) {
-    DependsOnHelper.registerNotificationCollectionForwarding(sourceBean, getAccessorFactory(), sourceCollectionProperty,
+    DependsOnHelper.registerNotificationCollectionForwarding(sourceBean, this, sourceCollectionProperty,
         sourceElementProperty, forwardedProperty);
   }
 
-  private IAccessorFactory getAccessorFactory() {
+  /**
+   * Gets accessor factory.
+   *
+   * @return the accessor factory
+   */
+  @Override
+  public IAccessorFactory getAccessorFactory() {
     IAccessorFactory accessorFactory = null;
     if (getComponentFactory() != null) {
       accessorFactory = getComponentFactory().getAccessorFactory();

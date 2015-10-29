@@ -24,14 +24,14 @@ import org.jspresso.framework.util.bean.AccessorInfo;
 
 /**
  * This interface specify the contract of property accessor factories.
- * 
+ *
  * @author Vincent Vandenschrick
  */
-public interface IAccessorFactory {
+public interface IAccessorFactory extends IAccessorFactoryProvider {
 
   /**
    * Creates a new java bean collection property accessor.
-   * 
+   *
    * @param property
    *          the property to be accessed.
    * @param beanClass
@@ -45,7 +45,7 @@ public interface IAccessorFactory {
 
   /**
    * Creates a new java bean property accessor .
-   * 
+   *
    * @param property
    *          the property to be accessed.
    * @param beanClass
@@ -56,7 +56,7 @@ public interface IAccessorFactory {
 
   /**
    * Retrieves accessor information from a method.
-   * 
+   *
    * @param method
    *          the method to retrieve info for.
    * @return the accessor info.
