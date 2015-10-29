@@ -493,10 +493,11 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
         }
       }
     }
-    if (disjunctions.size() == 1) {
+    int disjunctionCount = disjunctions.size();
+    if (disjunctionCount == 1) {
       return disjunctions.get(0);
     }
-    return where(prefixedProperty).orOperator(disjunctions.toArray(new Criteria[disjunctions.size()]));
+    return new Criteria().orOperator(disjunctions.toArray(new Criteria[disjunctionCount]));
   }
 
   /**
