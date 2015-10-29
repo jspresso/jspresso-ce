@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,6 +63,8 @@ import org.jspresso.framework.view.descriptor.basic.PropertyViewDescriptorHelper
 public class DefaultQueryFactory extends AbstractActionContextAware implements IQueryFactory {
 
   private static final Logger LOG = LoggerFactory.getLogger(DefaultQueryFactory.class);
+
+  private static final String SPECIAL_CHARS = "${}*^";
 
   private boolean triStateBooleanSupported;
 
@@ -177,53 +180,54 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
     } else {
       String translationsPath = AbstractComponentDescriptor.getComponentTranslationsDescriptorTemplate().getName();
       for (Map.Entry<String, Object> property : aQueryComponent.entrySet()) {
-        IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor(property.getKey());
+        String propertyName = property.getKey();
+        Object propertyValue = property.getValue();
+        IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor(propertyName);
         if (propertyDescriptor != null) {
           boolean isEntityRef = false;
           if (componentDescriptor.isEntity() && aQueryComponent.containsKey(IEntity.ID)) {
             isEntityRef = true;
           }
-          if ((!PropertyViewDescriptorHelper.isComputed(componentDescriptor, property.getKey()) || (
+          if ((!PropertyViewDescriptorHelper.isComputed(componentDescriptor, propertyName) || (
               propertyDescriptor instanceof IStringPropertyDescriptor
                   && ((IStringPropertyDescriptor) propertyDescriptor).isTranslatable())) && (!isEntityRef || IEntity.ID
-              .equals(property.getKey()))) {
+              .equals(propertyName))) {
             String prefixedProperty;
             if (path != null) {
-              prefixedProperty = path + "." + property.getKey();
+              prefixedProperty = path + "." + propertyName;
             } else {
-              prefixedProperty = property.getKey();
+              prefixedProperty = propertyName;
             }
-            if (property.getValue() instanceof IEntity) {
-              if (!((IEntity) property.getValue()).isPersistent()) {
+            if (propertyValue instanceof IEntity) {
+              if (!((IEntity) propertyValue).isPersistent()) {
                 abort = true;
               } else {
-                completeQuery(query, where(prefixedProperty).is(property.getValue()));
+                completeQuery(query, where(prefixedProperty).is(propertyValue));
               }
-            } else if (property.getValue() instanceof Boolean && (isTriStateBooleanSupported() || (Boolean) property
-                .getValue())) {
-              completeQuery(query, where(prefixedProperty).is(property.getValue()));
-            } else if (property.getValue() instanceof String) {
-              if (IEntity.ID.equalsIgnoreCase(property.getKey())) {
-                completeQuery(query, createIdRestriction(propertyDescriptor, prefixedProperty, property.getValue(),
+            } else if (propertyValue instanceof Boolean && (isTriStateBooleanSupported() || (Boolean) propertyValue)) {
+              completeQuery(query, where(prefixedProperty).is(propertyValue));
+            } else if (propertyValue instanceof String) {
+              if (IEntity.ID.equalsIgnoreCase(propertyName)) {
+                completeQuery(query, createIdRestriction(propertyDescriptor, prefixedProperty, propertyValue,
                     componentDescriptor, aQueryComponent, context));
               } else {
                 completeQueryWithTranslations(query, translationsPath, translationsPath, property, propertyDescriptor,
                     prefixedProperty, getBackendController(context).getLocale(), componentDescriptor, aQueryComponent,
                     context);
               }
-            } else if (property.getValue() instanceof Number || property.getValue() instanceof Date) {
-              completeQuery(query, where(prefixedProperty).is(property.getValue()));
-            } else if (property.getValue() instanceof EnumQueryStructure) {
+            } else if (propertyValue instanceof Number || propertyValue instanceof Date) {
+              completeQuery(query, where(prefixedProperty).is(propertyValue));
+            } else if (propertyValue instanceof EnumQueryStructure) {
               completeQuery(query, createEnumQueryStructureRestriction(prefixedProperty,
-                  ((EnumQueryStructure) property.getValue())));
-            } else if (property.getValue() instanceof IQueryComponent) {
-              IQueryComponent joinedComponent = ((IQueryComponent) property.getValue());
+                  ((EnumQueryStructure) propertyValue)));
+            } else if (propertyValue instanceof IQueryComponent) {
+              IQueryComponent joinedComponent = ((IQueryComponent) propertyValue);
               if (!isQueryComponentEmpty(joinedComponent, propertyDescriptor)) {
                 if (joinedComponent.isInlineComponent()/* || path != null */) {
                   // the joined component is an inline component so we must use
                   // dot nested properties. Same applies if we are in a nested
                   // path i.e. already on an inline component.
-                  abort = abort || completeQuery(query, prefixedProperty, (IQueryComponent) property.getValue(),
+                  abort = abort || completeQuery(query, prefixedProperty, (IQueryComponent) propertyValue,
                       context);
                 } else {
                   // the joined component is an entity so we must use
@@ -256,9 +260,9 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
                   }
                 }
               }
-            } else if (property.getValue() != null) {
+            } else if (propertyValue != null) {
               // Unknown property type. Assume equals.
-              completeQuery(query, where(prefixedProperty).is(property.getValue()));
+              completeQuery(query, where(prefixedProperty).is(propertyValue));
             }
           }
         }
@@ -372,10 +376,12 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
                                                IPropertyDescriptor propertyDescriptor, String prefixedProperty,
                                                Locale locale, IComponentDescriptor<?> componentDescriptor,
                                                IQueryComponent queryComponent, Map<String, Object> context) {
+    String propertyValue = (String) property.getValue();
+    propertyValue = sanitizeStringValue(propertyValue);
     if (propertyDescriptor instanceof IStringPropertyDescriptor && ((IStringPropertyDescriptor) propertyDescriptor)
         .isTranslatable()) {
       String nlsOrRawValue = null;
-      String nlsValue = (String) property.getValue();
+      String nlsValue = propertyValue;
       String barePropertyName = property.getKey();
       if (property.getKey().endsWith(IComponentDescriptor.NLS_SUFFIX)) {
         barePropertyName = barePropertyName.substring(0,
@@ -417,8 +423,19 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
       }
     } else {
       completeQuery(currentQuery, createStringRestriction(propertyDescriptor, prefixedProperty,
-          (String) property.getValue(), componentDescriptor, queryComponent, context));
+          propertyValue, componentDescriptor, queryComponent, context));
     }
+  }
+
+  private String sanitizeStringValue(String propertyValue) {
+    String sanitizedValue = propertyValue;
+    if (propertyValue != null) {
+      for (char specialChar : SPECIAL_CHARS.toCharArray()) {
+        String toReplace = "\\" + String.valueOf(specialChar);
+        sanitizedValue = sanitizedValue.replaceAll(toReplace, Matcher.quoteReplacement(toReplace));
+      }
+    }
+    return sanitizedValue;
   }
 
   /**
