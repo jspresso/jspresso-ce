@@ -28,6 +28,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mapping.PersistentProperty;
+import org.springframework.data.mapping.PropertyPath;
 import org.springframework.data.mapping.SimplePropertyHandler;
 import org.springframework.data.mapping.context.PersistentPropertyPath;
 import org.springframework.data.mapping.model.AbstractPersistentProperty;
@@ -90,7 +91,37 @@ public class JspressoMongoMappingContext extends MongoMappingContext {
    */
   @Override
   public PersistentPropertyPath<MongoPersistentProperty> getPersistentPropertyPath(String propertyPath, Class<?> type) {
-    return super.getPersistentPropertyPath(propertyPath, getEntityContractFromType(type));
+    StringBuilder fixedPropertyPath = new StringBuilder();
+    Class<?> entityContract = getEntityContractFromType(type);
+    IComponentDescriptor<?> baseComponentDescriptor = descriptorRegistry.getComponentDescriptor(entityContract);
+    for (String propertyName : propertyPath.split("\\.")) {
+      IPropertyDescriptor propertyDescriptor = baseComponentDescriptor.getPropertyDescriptor(propertyName);
+      String fixedPropertyName = propertyName;
+      if (propertyDescriptor == null) {
+        for (IPropertyDescriptor pd : baseComponentDescriptor.getPropertyDescriptors()) {
+          if (propertyName.equals(pd.getPersistenceFormula())) {
+            fixedPropertyName = pd.getName();
+          }
+        }
+      }
+      if (fixedPropertyPath.length() > 0) {
+        fixedPropertyPath.append(".");
+      }
+      fixedPropertyPath.append(fixedPropertyName);
+    }
+    return super.getPersistentPropertyPath(fixedPropertyPath.toString(), entityContract);
+  }
+
+  /**
+   * Gets persistent property path.
+   *
+   * @param propertyPath
+   *     the property path
+   * @return the persistent property path
+   */
+  @Override
+  public PersistentPropertyPath<MongoPersistentProperty> getPersistentPropertyPath(PropertyPath propertyPath) {
+    return getPersistentPropertyPath(propertyPath.toDotPath(), propertyPath.getOwningType().getType());
   }
 
   /**
