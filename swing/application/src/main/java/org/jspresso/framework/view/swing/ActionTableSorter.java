@@ -35,7 +35,7 @@ import org.jspresso.framework.util.collection.ESort;
 
 /**
  * A table sorter that triggers an action whenever the sorting state changes.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class ActionTableSorter extends AbstractTableSorter {
@@ -94,29 +94,27 @@ public class ActionTableSorter extends AbstractTableSorter {
    */
   @Override
   protected void sortingStatusChanged() {
-    if (getTableModel().getRowCount() > 1) {
-      Map<String, Object> actionContext = new HashMap<>();
-      Map<String, ESort> orderingProperties = new LinkedHashMap<>();
-      for (Directive directive : getSortingColumns()) {
-        TableColumnModel columnModel = getTableHeader().getColumnModel();
-        String property = String.valueOf(columnModel.getColumn(
-            convertColumnIndexToView(directive.getColumn())).getIdentifier());
-        ESort direction;
-        if (directive.getDirection() == ASCENDING) {
-          direction = ESort.ASCENDING;
-        } else if (directive.getDirection() == DESCENDING) {
-          direction = ESort.DESCENDING;
-        } else {
-          direction = null;
-        }
-        if (direction != null) {
-          orderingProperties.put(property, direction);
-        }
+    Map<String, Object> actionContext = new HashMap<>();
+    Map<String, ESort> orderingProperties = new LinkedHashMap<>();
+    for (Directive directive : getSortingColumns()) {
+      TableColumnModel columnModel = getTableHeader().getColumnModel();
+      String property = String.valueOf(columnModel.getColumn(
+          convertColumnIndexToView(directive.getColumn())).getIdentifier());
+      ESort direction;
+      if (directive.getDirection() == ASCENDING) {
+        direction = ESort.ASCENDING;
+      } else if (directive.getDirection() == DESCENDING) {
+        direction = ESort.DESCENDING;
+      } else {
+        direction = null;
       }
-      actionContext
-          .put(IQueryComponent.ORDERING_PROPERTIES, orderingProperties);
-      actionHandler.execute(sortingAction, actionContext);
+      if (direction != null) {
+        orderingProperties.put(property, direction);
+      }
     }
+    actionContext
+        .put(IQueryComponent.ORDERING_PROPERTIES, orderingProperties);
+    actionHandler.execute(sortingAction, actionContext);
   }
 
   private class TableModelHandler implements TableModelListener {

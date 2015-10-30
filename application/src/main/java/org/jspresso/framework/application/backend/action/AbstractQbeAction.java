@@ -32,7 +32,7 @@ import org.jspresso.framework.util.collection.ESort;
 
 /**
  * Abstract base class for QBE find actions.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractQbeAction extends BackendAction {
@@ -42,37 +42,39 @@ public abstract class AbstractQbeAction extends BackendAction {
    */
   public static final String PAGINATE = "PAGINATE";
 
-  private IAction            queryAction;
-  private boolean            sortOnly = false;
+  private IAction queryAction;
+  private boolean sortOnly = false;
 
   /**
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
   @Override
-  public boolean execute(IActionHandler actionHandler,
-      Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     if (getQueryAction() != null) {
       IQueryComponent queryComponent = getQueryComponent(context);
       if (queryComponent != null) {
         context.put(IQueryComponent.QUERY_COMPONENT, queryComponent);
         if (context.containsKey(IQueryComponent.ORDERING_PROPERTIES)) {
-          queryComponent.setOrderingProperties((Map<String, ESort>) context
-              .get(IQueryComponent.ORDERING_PROPERTIES));
+          queryComponent.setOrderingProperties((Map<String, ESort>) context.get(IQueryComponent.ORDERING_PROPERTIES));
         }
-        if (isSortOnly() && queryComponent.getPageCount() != null
-            && queryComponent.getPageCount() == 1) {
-          List<?> existingResultList = getExistingResultList(queryComponent,
-              context);
-          if (existingResultList != null && !existingResultList.isEmpty()) {
-            List<Object> sortedList = new ArrayList<>(existingResultList);
-            Comparator<Object> beanComparator = new BeanComparator(
-                queryComponent.getOrderingProperties(), getBackendController(
-                    context).getAccessorFactory(),
-                queryComponent.getQueryContract());
-            Collections.sort(sortedList, beanComparator);
-            queryComponent.setQueriedComponents(sortedList);
-            queryPerformed(queryComponent, context);
+        if (isSortOnly()) {
+          if (queryComponent.getPageCount() != null) {
+            if (queryComponent.getPageCount() == 1) {
+              List<?> existingResultList = getExistingResultList(queryComponent, context);
+              if (existingResultList != null && !existingResultList.isEmpty()) {
+                List<Object> sortedList = new ArrayList<>(existingResultList);
+                Comparator<Object> beanComparator = new BeanComparator(queryComponent.getOrderingProperties(),
+                    getBackendController(context).getAccessorFactory(), queryComponent.getQueryContract());
+                Collections.sort(sortedList, beanComparator);
+                queryComponent.setQueriedComponents(sortedList);
+                queryPerformed(queryComponent, context);
+              }
+            } else {
+              if (actionHandler.execute(getQueryAction(), context)) {
+                queryPerformed(queryComponent, context);
+              }
+            }
           }
         } else {
           if (!context.containsKey(AbstractQbeAction.PAGINATE)) {
@@ -80,8 +82,7 @@ public abstract class AbstractQbeAction extends BackendAction {
             queryComponent.setPage(null);
             queryComponent.setRecordCount(null);
           } else {
-            if (queryComponent.getRecordCount() == null
-                || queryComponent.getPageSize() == null) {
+            if (queryComponent.getRecordCount() == null || queryComponent.getPageSize() == null) {
               // do not navigate into pages unless a 1st query has been done or
               // pagination is disabled.
               return false;
@@ -98,40 +99,37 @@ public abstract class AbstractQbeAction extends BackendAction {
 
   /**
    * Retrieves the query component to use out of the context.
-   * 
+   *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the query component to use for QBE.
    */
-  protected abstract IQueryComponent getQueryComponent(
-      Map<String, Object> context);
+  protected abstract IQueryComponent getQueryComponent(Map<String, Object> context);
 
   /**
    * Retrieves the existing result list out of the action context.
-   * 
+   *
    * @param queryComponent
-   *          the query component.
+   *     the query component.
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the existing result list if any.
    */
-  protected abstract List<?> getExistingResultList(
-      IQueryComponent queryComponent, Map<String, Object> context);
+  protected abstract List<?> getExistingResultList(IQueryComponent queryComponent, Map<String, Object> context);
 
   /**
    * post query hook. The result list is contained by the query component.
-   * 
+   *
    * @param queryComponent
-   *          the query component.
+   *     the query component.
    * @param context
-   *          the action context.
+   *     the action context.
    */
-  protected abstract void queryPerformed(IQueryComponent queryComponent,
-      Map<String, Object> context);
+  protected abstract void queryPerformed(IQueryComponent queryComponent, Map<String, Object> context);
 
   /**
    * Gets the queryAction.
-   * 
+   *
    * @return the queryAction.
    */
   public IAction getQueryAction() {
@@ -140,9 +138,9 @@ public abstract class AbstractQbeAction extends BackendAction {
 
   /**
    * Configures the query action used to actually perform the entity query.
-   * 
+   *
    * @param queryAction
-   *          the queryAction to set.
+   *     the queryAction to set.
    */
   public void setQueryAction(IAction queryAction) {
     this.queryAction = queryAction;
@@ -150,7 +148,7 @@ public abstract class AbstractQbeAction extends BackendAction {
 
   /**
    * Gets the sortOnly.
-   * 
+   *
    * @return the sortOnly.
    */
   protected boolean isSortOnly() {
@@ -159,9 +157,9 @@ public abstract class AbstractQbeAction extends BackendAction {
 
   /**
    * Sets the sortOnly.
-   * 
+   *
    * @param sortOnly
-   *          the sortOnly to set.
+   *     the sortOnly to set.
    */
   public void setSortOnly(boolean sortOnly) {
     this.sortOnly = sortOnly;

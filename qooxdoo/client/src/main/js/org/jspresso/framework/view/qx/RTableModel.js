@@ -154,17 +154,15 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel", {
       this.__sortColumnIndex = columnIndex;
       this.__sortAscending = ascending;
       if (this.__sortingAction) {
-        if (this.getRowCount() > 1) {
-          var orderingProperties = {};
-          orderingProperties[property] = ascending ? "ASCENDING" : "DESCENDING";
-          var sortCommand = new org.jspresso.framework.application.frontend.command.remote.RemoteSortCommand();
-          sortCommand.setOrderingProperties(orderingProperties);
-          sortCommand.setViewStateGuid(this.__state.getGuid());
-          sortCommand.setViewStatePermId(this.__state.getPermId());
-          sortCommand.setTargetPeerGuid(this.__sortingAction.getGuid());
-          sortCommand.setPermId(this.__sortingAction.getPermId());
-          this.__commandHandler.registerCommand(sortCommand);
-        }
+        var orderingProperties = {};
+        orderingProperties[property] = ascending ? "ASCENDING" : "DESCENDING";
+        var sortCommand = new org.jspresso.framework.application.frontend.command.remote.RemoteSortCommand();
+        sortCommand.setOrderingProperties(orderingProperties);
+        sortCommand.setViewStateGuid(this.__state.getGuid());
+        sortCommand.setViewStatePermId(this.__state.getPermId());
+        sortCommand.setTargetPeerGuid(this.__sortingAction.getGuid());
+        sortCommand.setPermId(this.__sortingAction.getPermId());
+        this.__commandHandler.registerCommand(sortCommand);
       } else {
         if (this.__state.getChildren()) {
           var comparator = (ascending ? org.jspresso.framework.view.qx.RTableModel._defaultSortComparatorAscending :

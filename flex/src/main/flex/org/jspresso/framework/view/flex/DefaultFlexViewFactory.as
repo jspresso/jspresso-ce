@@ -2727,17 +2727,16 @@ public class DefaultFlexViewFactory {
           }
           column.sortDescending = !column.sortDescending;
           table.displaySort(event.columnIndex, column.sortDescending);
-          if (state.children.length > 1) {
-            var orderingProperties:Object = {};
-            orderingProperties[property] = column.sortDescending ? "DESCENDING" : "ASCENDING";
-            var sortCommand:RemoteSortCommand = new RemoteSortCommand();
-            sortCommand.orderingProperties = orderingProperties;
-            sortCommand.viewStateGuid = remoteTable.state.guid;
-            sortCommand.viewStatePermId = remoteTable.state.permId;
-            sortCommand.targetPeerGuid = remoteTable.sortingAction.guid;
-            sortCommand.permId = remoteTable.sortingAction.permId;
-            _commandHandler.registerCommand(sortCommand);
-          }
+
+          var orderingProperties:Object = {};
+          orderingProperties[property] = column.sortDescending ? "DESCENDING" : "ASCENDING";
+          var sortCommand:RemoteSortCommand = new RemoteSortCommand();
+          sortCommand.orderingProperties = orderingProperties;
+          sortCommand.viewStateGuid = remoteTable.state.guid;
+          sortCommand.viewStatePermId = remoteTable.state.permId;
+          sortCommand.targetPeerGuid = remoteTable.sortingAction.guid;
+          sortCommand.permId = remoteTable.sortingAction.permId;
+          _commandHandler.registerCommand(sortCommand);
         });
       } else {
         table.addEventListener(DataGridEvent.HEADER_RELEASE, function (event:DataGridEvent):void {
