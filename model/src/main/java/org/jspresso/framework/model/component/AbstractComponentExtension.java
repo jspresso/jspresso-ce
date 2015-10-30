@@ -173,7 +173,7 @@ public abstract class AbstractComponentExtension<T extends IComponent>
   protected void registerNotificationCollectionForwarding(IPropertyChangeCapable sourceBean,
                                                           String sourceCollectionProperty, String sourceElementProperty,
                                                           String forwardedProperty) {
-    DependsOnHelper.registerNotificationForwarding(sourceBean, this, sourceCollectionProperty, sourceElementProperty,
+    DependsOnHelper.registerNotificationCollectionForwarding(sourceBean, this, sourceCollectionProperty, sourceElementProperty,
         forwardedProperty);
   }
 

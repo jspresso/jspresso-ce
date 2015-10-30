@@ -154,7 +154,18 @@ public class DependsOnHelper {
   public static void registerNotificationForwarding(IPropertyChangeCapable sourceBean,
                                                     IAccessorFactoryProvider accessorFactoryProvider,
                                                     String sourceProperty, String... forwardedProperty) {
-    sourceBean.addPropertyChangeListener(sourceProperty, new ForwardingPropertyChangeListener(sourceBean,
+    registerNotificationForwarding(sourceBean, sourceBean, accessorFactoryProvider, sourceProperty, forwardedProperty);
+  }
+
+  private static void registerNotificationForwarding(IPropertyChangeCapable sourceBean,
+                                                     IPropertyChangeCapable targetBean,
+                                                     IAccessorFactoryProvider accessorFactoryProvider,
+                                                     String sourceProperty, String... forwardedProperty) {
+    if (sourceBean == targetBean && Arrays.binarySearch(forwardedProperty, sourceProperty) >= 0) {
+      throw new IllegalArgumentException("Forwarded properties " + Arrays.asList(forwardedProperty)
+          + " cannot contain source property " + sourceProperty + " when registering notification forwarding");
+    }
+    sourceBean.addPropertyChangeListener(sourceProperty, new ForwardingPropertyChangeListener(targetBean,
         accessorFactoryProvider, forwardedProperty));
   }
 
@@ -173,7 +184,14 @@ public class DependsOnHelper {
   public static void registerNotificationForwarding(IPropertyChangeCapable sourceBean,
                                                     IAccessorFactoryProvider accessorFactoryProvider,
                                                     String sourceProperty, Method... forwardedMethod) {
-    sourceBean.addPropertyChangeListener(sourceProperty, new ForwardingPropertyChangeListener(sourceBean,
+    registerNotificationForwarding(sourceBean, sourceBean, accessorFactoryProvider, sourceProperty, forwardedMethod);
+  }
+
+  private static void registerNotificationForwarding(IPropertyChangeCapable sourceBean,
+                                                     IPropertyChangeCapable targetBean,
+                                                     IAccessorFactoryProvider accessorFactoryProvider,
+                                                     String sourceProperty, Method... forwardedMethod) {
+    sourceBean.addPropertyChangeListener(sourceProperty, new ForwardingPropertyChangeListener(targetBean,
         accessorFactoryProvider, forwardedMethod));
   }
 
@@ -320,11 +338,11 @@ public class DependsOnHelper {
           }
           for (IPropertyChangeCapable child : newChildren) {
             if (forwardedProperties != null) {
-              registerNotificationForwarding(child, accessorFactoryProvider, sourceElementProperty,
+              registerNotificationForwarding(child, sourceBean, accessorFactoryProvider, sourceElementProperty,
                   forwardedProperties);
             }
             if (forwardedMethods != null) {
-              registerNotificationForwarding(child, accessorFactoryProvider, sourceElementProperty, forwardedMethods);
+              registerNotificationForwarding(child, sourceBean, accessorFactoryProvider, sourceElementProperty, forwardedMethods);
             }
           }
         }
@@ -370,14 +388,15 @@ public class DependsOnHelper {
     }
     if (initialChildren != null && Hibernate.isInitialized(initialChildren)) {
       for (IPropertyChangeCapable child : initialChildren) {
-        registerNotificationForwarding(child, accessorFactoryProvider, sourceElementProperty, forwardedProperties);
+        registerNotificationForwarding(child, sourceBean, accessorFactoryProvider, sourceElementProperty,
+            forwardedProperties);
       }
     }
   }
 
   private static class ForwardingPropertyChangeListener implements PropertyChangeListener {
 
-    private IPropertyChangeCapable   sourceBean;
+    private IPropertyChangeCapable   targetBean;
     private String[]                 forwardedProperties;
     private Method[]                 forwardedMethods;
     private IAccessorFactoryProvider accessorFactoryProvider;
@@ -385,17 +404,17 @@ public class DependsOnHelper {
     /**
      * Constructs a new {@code ForwardingPropertyChangeListener} instance.
      *
-     * @param sourceBean
-     *     the source bean
+     * @param targetBean
+     *     the target bean
      * @param accessorFactoryProvider
      *     the accessor factory
      * @param forwardedProperties
      *     the list of forwarded property names.
      */
-    public ForwardingPropertyChangeListener(IPropertyChangeCapable sourceBean,
+    public ForwardingPropertyChangeListener(IPropertyChangeCapable targetBean,
                                             IAccessorFactoryProvider accessorFactoryProvider,
                                             String... forwardedProperties) {
-      this.sourceBean = sourceBean;
+      this.targetBean = targetBean;
       this.accessorFactoryProvider = accessorFactoryProvider;
       this.forwardedProperties = forwardedProperties;
     }
@@ -403,17 +422,17 @@ public class DependsOnHelper {
     /**
      * Constructs a new {@code ForwardingPropertyChangeListener} instance.
      *
-     * @param sourceBean
-     *     the source bean
+     * @param targetBean
+     *     the target bean
      * @param accessorFactoryProvider
      *     the accessor factory
      * @param forwardedMethods
      *     the list of forwarded methods.
      */
-    public ForwardingPropertyChangeListener(IPropertyChangeCapable sourceBean,
+    public ForwardingPropertyChangeListener(IPropertyChangeCapable targetBean,
                                             IAccessorFactoryProvider accessorFactoryProvider,
                                             Method... forwardedMethods) {
-      this.sourceBean = sourceBean;
+      this.targetBean = targetBean;
       this.accessorFactoryProvider = accessorFactoryProvider;
       this.forwardedMethods = forwardedMethods;
     }
@@ -423,18 +442,18 @@ public class DependsOnHelper {
       if (forwardedProperties != null) {
         if (accessorFactoryProvider != null) {
           for (String prop : forwardedProperties) {
-            if (sourceBean.hasListeners(prop)) {
-              Class<?> sourceBeanComponentContract;
-              if (sourceBean instanceof IComponent) {
-                sourceBeanComponentContract = ((IComponent) sourceBean).getComponentContract();
+            if (targetBean.hasListeners(prop)) {
+              Class<?> targetBeanComponentContract;
+              if (targetBean instanceof IComponent) {
+                targetBeanComponentContract = ((IComponent) targetBean).getComponentContract();
               } else {
-                sourceBeanComponentContract = sourceBean.getClass();
+                targetBeanComponentContract = targetBean.getClass();
               }
               try {
                 IAccessorFactory accessorFactory = accessorFactoryProvider.getAccessorFactory();
-                Object newValue = accessorFactory.createPropertyAccessor(prop,
-                    sourceBeanComponentContract).getValue(sourceBean);
-                sourceBean.firePropertyChange(prop, IPropertyChangeCapable.UNKNOWN, newValue);
+                Object newValue = accessorFactory.createPropertyAccessor(prop, targetBeanComponentContract).getValue(
+                    targetBean);
+                targetBean.firePropertyChange(prop, IPropertyChangeCapable.UNKNOWN, newValue);
               } catch (IllegalAccessException | NoSuchMethodException ex) {
                 throw new NestedRuntimeException(ex);
               } catch (InvocationTargetException ex) {
@@ -450,7 +469,7 @@ public class DependsOnHelper {
       if (forwardedMethods != null) {
         for (Method method : forwardedMethods) {
           try {
-            method.invoke(sourceBean);
+            method.invoke(targetBean);
           } catch (IllegalAccessException ex) {
             throw new NestedRuntimeException(ex);
           } catch (InvocationTargetException ex) {
