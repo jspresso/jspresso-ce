@@ -126,11 +126,12 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     <#local columnName=generateSQLName(propertyName)/>
     <#local columnNameGenerated = true/>
   </#if>
+  <#if !propertyDescriptor.computed>
   /**
    * Column name used to store the ${propertyName} property.
    */
   String ${generateSQLName(propertyName)}_COL = "${reduceSQLName(columnName)}";
-
+  </#if>
   /**
    * Gets the ${propertyName}.
    *
