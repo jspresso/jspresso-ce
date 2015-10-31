@@ -38,6 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.jspresso.framework.application.action.AbstractActionContextAware;
+import org.jspresso.framework.application.backend.persistence.hibernate.HibernateHelper;
 import org.jspresso.framework.model.component.IPropertyTranslation;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.component.query.ComparableQueryStructure;
@@ -211,11 +212,9 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
               propertyDescriptor instanceof IStringPropertyDescriptor
                   && ((IStringPropertyDescriptor) propertyDescriptor).isTranslatable())) && (!isEntityRef || IEntity.ID
               .equals(property.getKey()))) {
-            String prefixedProperty;
+            String prefixedProperty = PropertyHelper.toJavaBeanPropertyName(property.getKey());
             if (path != null) {
-              prefixedProperty = path + "." + property.getKey();
-            } else {
-              prefixedProperty = property.getKey();
+              prefixedProperty = path + "." + prefixedProperty;
             }
             if (property.getValue() instanceof IEntity) {
               if (!((IEntity) property.getValue()).isPersistent()) {
