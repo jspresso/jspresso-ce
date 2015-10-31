@@ -17,14 +17,14 @@ package ${package};
 	        <#local superEntity=ancestorDescriptor/>
 	        <#if superEntity.sqlName??>
 	          <#local superEntityTableName=superEntity.sqlName/>
-	        <#else>  
+	        <#else>
 	          <#local superEntityName=superEntity.name[superEntity.name?last_index_of(".")+1..]/>
 	          <#local superEntityTableName=generateSQLName(superEntityName)/>
 	        </#if>
 	        <#local idDescriptor = componentDescriptor.getPropertyDescriptor("id")/>
 	        <#if idDescriptor.sqlName??>
             <#local idColumnName=idDescriptor.sqlName/>
-	        <#else>  
+	        <#else>
 	          <#local idColumnName=generateSQLName(idDescriptor.name)/>
 	        </#if>
 	      </#if>
@@ -84,9 +84,16 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 <#list superInterfaceList as superInterface>  ${superInterface?replace("$", ".")}<#if superInterface_has_next>,${"\n"}<#else> {</#if></#list>
 <#else> {
 </#if>
-  <#if isEntity && !superEntity??>
-    <@generateScalarGetter componentDescriptor=componentDescriptor propertyDescriptor=componentDescriptor.getPropertyDescriptor("id")/>
-    <@generateScalarGetter componentDescriptor=componentDescriptor propertyDescriptor=componentDescriptor.getPropertyDescriptor("version")/>
+  <#if isEntity>
+
+  /**
+   * Table name used for storing the entity.
+   */
+  String TABLE = "${reducedTableName}";
+    <#if !superEntity??>
+      <@generateScalarGetter componentDescriptor=componentDescriptor propertyDescriptor=componentDescriptor.getPropertyDescriptor("id")/>
+      <@generateScalarGetter componentDescriptor=componentDescriptor propertyDescriptor=componentDescriptor.getPropertyDescriptor("version")/>
+    </#if>
   </#if>
 
 </#macro>
@@ -120,6 +127,11 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     <#local columnNameGenerated = true/>
   </#if>
   /**
+   * Column name used to store the ${propertyName} property.
+   */
+  String ${generateSQLName(propertyName)}_COL = "${reduceSQLName(columnName)}";
+
+  /**
    * Gets the ${propertyName}.
    *
   <#if !propertyDescriptor.computed>
@@ -129,7 +141,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
       <#if hibernateTypeRegistry.getRegisteredType(propertyDescriptor.modelTypeName)??>
         <#if instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor")>
           <#assign idTypeName="org.jspresso.framework.model.persistence.hibernate.entity.type.ByteArrayType"/>
-        <#else> 
+        <#else>
           <#local hibernateType=hibernateTypeRegistry.getRegisteredType(propertyDescriptor.modelTypeName)/>
           <#if hibernateType??>
             <#assign idTypeName=hibernateType.name/>
@@ -536,7 +548,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *          the ${propertyName} to set.
    */
   void set${propertyName?cap_first}(${propertyType?replace("$", ".")} ${propertyName});
-  
+
 </#macro>
 
 <#macro generateComponentRefGetter componentDescriptor propertyDescriptor>
@@ -547,7 +559,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#local propertyType=propertyDescriptor.referencedDescriptor.name/>
   <#if propertyDescriptor.referencedDescriptor.sqlName??>
     <#local refSqlName=propertyDescriptor.referencedDescriptor.sqlName/>
-  <#else>  
+  <#else>
     <#local refSqlName=generateSQLName(propertyDescriptor.referencedDescriptor.name[propertyDescriptor.referencedDescriptor.name?last_index_of(".")+1..])/>
   </#if>
   <#local isReferenceEntity=propertyDescriptor.referencedDescriptor.entity/>
@@ -711,7 +723,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   @org.springframework.data.mongodb.core.mapping.Field("${fieldName}")
   </#if>
   ${propertyType?replace("$", ".")} get${propertyName?cap_first}();
-  
+
 </#macro>
 
 <#macro generatePropertyNameConstant propertyDescriptor>
