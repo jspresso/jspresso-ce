@@ -1278,7 +1278,7 @@ public abstract class AbstractBackendController extends AbstractController imple
       }
       Map<String, Object> dirtyProperties;
       if (isInitialized(entity)) {
-        dirtyProperties = sessionUnitOfWork.getDirtyProperties(entity);
+        dirtyProperties = unitOfWork.getParentDirtyProperties(entity, sessionUnitOfWork);
         if (dirtyProperties == null) {
           dirtyProperties = new HashMap<>();
         }
