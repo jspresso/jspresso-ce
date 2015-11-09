@@ -75,18 +75,18 @@ public class ControllerAwareTransactionTemplate extends TransactionTemplate {
 
       @Override
       public T doInTransaction(TransactionStatus status) {
-        IBackendController backendController = BackendControllerHolder.getCurrentBackendController();
-        if (status.isNewTransaction()) {
-          boolean nested = getPropagationBehavior() == TransactionDefinition
-              .PROPAGATION_REQUIRES_NEW && backendController.isUnitOfWorkActive();
-          backendController.joinTransaction(nested);
-        } else {
-          backendController.joinTransaction();
-        }
+        joinTransaction(status);
         return action.doInTransaction(status);
       }
     };
     return super.execute(wrapper);
+  }
+
+  protected void joinTransaction(TransactionStatus status) {
+    IBackendController backendController = BackendControllerHolder.getCurrentBackendController();
+    // In case of 1st Tx or REQUIRES_NEW propagation behaviour, status.isNewTransaction() will be true,
+    // thus instantiating a nested UOW is one is already started.
+    backendController.joinTransaction(status.isNewTransaction());
   }
 
 }

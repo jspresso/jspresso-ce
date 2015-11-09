@@ -197,4 +197,18 @@ public interface IEntityUnitOfWork extends IEntityLifecycleHandler {
    * Resumes the unit of work.
    */
   void resume();
+
+  /**
+   * Gets the entity dirty properties (changed properties that need to be
+   * updated to the persistent store as well as computed properties) from the enclosing (parent)
+   * unit of work.
+   *
+   * @param entity
+   *     the entity to get the dirty properties of.
+   * @return an empty map if the entity is not dirty. The collection of dirty
+   * properties with their original values. null if dirty recording has
+   * not been started for this entity instance. In the latter case, the
+   * dirty state is unknown.
+   */
+  Map<String, Object> getParentDirtyProperties(IEntity entity, IEntityUnitOfWork fallbackUOW);
 }

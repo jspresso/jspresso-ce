@@ -154,6 +154,18 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   @Override
   public void commit() {
     if (nestedUnitOfWork != null) {
+      Set<IEntity> nestedUnitOfWorkUpdatedEntities = nestedUnitOfWork.getUpdatedEntities();
+      if (nestedUnitOfWorkUpdatedEntities != null) {
+        for (IEntity updatedEntity : nestedUnitOfWorkUpdatedEntities) {
+          addUpdatedEntity(updatedEntity);
+        }
+      }
+      Set<IEntity> nestedUnitOfWorkDeletedEntities = nestedUnitOfWork.getDeletedEntities();
+      if (nestedUnitOfWorkDeletedEntities != null) {
+        for (IEntity deletedEntity : nestedUnitOfWorkDeletedEntities) {
+          addDeletedEntity(deletedEntity);
+        }
+      }
       nestedUnitOfWork.commit();
     } else {
       cleanup();
@@ -450,6 +462,22 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
       nestedUnitOfWork.resume();
     } else {
       suspended = false;
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Map<String, Object> getParentDirtyProperties(IEntity entity, IEntityUnitOfWork fallbackUOW) {
+    if (nestedUnitOfWork != null) {
+      return nestedUnitOfWork.getParentDirtyProperties(entity, fallbackUOW);
+    } else {
+      if (parentUnitOfWork != null) {
+        return parentUnitOfWork.dirtRecorder.getChangedProperties(entity);
+      } else {
+        return fallbackUOW.getDirtyProperties(entity);
+      }
     }
   }
 }
