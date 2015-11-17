@@ -118,7 +118,9 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
 
   private static final Logger LOG = LoggerFactory.getLogger(AbstractRemoteController.class);
 
-  private List<RemoteCommand>    commandQueue;
+  private List<RemoteCommand>                                       commandQueue;
+  private Map<Class<? extends RemoteCommand>, Map<String, Integer>> commandIndices;
+
   private IGUIDGenerator<String> guidGenerator;
   private int                    commandLowPriorityOffset;
   private List<String>           removedPeersGuids;
@@ -222,6 +224,7 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
   private List<RemoteCommand> resetCommandQueue() {
     List<RemoteCommand> copy = commandQueue;
     commandQueue = new ArrayList<>();
+    commandIndices = new HashMap<>();
     commandLowPriorityOffset = 0;
     return copy;
   }
@@ -271,8 +274,8 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
     initCommand.setSecondaryActions(createRActionLists(getSecondaryActionMap(), null));
     initCommand.setHelpActions(createRActionLists(getHelpActions(), null));
     initCommand.setNavigationActions(createRActionLists(getNavigationActions(), null));
-    initCommand.setExitAction(getViewFactory().getActionFactory().createAction(getExitAction(), this, null,
-        getLocale()));
+    initCommand.setExitAction(
+        getViewFactory().getActionFactory().createAction(getExitAction(), this, null, getLocale()));
     int w = 0;
     if (getFrameWidth() != null) {
       w = getFrameWidth();
@@ -331,8 +334,8 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
         initLoginCommand.setLoginView(loginView.getPeer());
         IViewDescriptor loginViewDescriptor = getLoginViewDescriptor();
         initLoginCommand.setLoginActionLists(createRActionLists(loginViewDescriptor.getActionMap(), loginView));
-        initLoginCommand.setSecondaryLoginActionLists(createRActionLists(loginViewDescriptor.getSecondaryActionMap(),
-            loginView));
+        initLoginCommand.setSecondaryLoginActionLists(
+            createRActionLists(loginViewDescriptor.getSecondaryActionMap(), loginView));
         registerCommand(initLoginCommand);
       } else {
         login();
@@ -368,8 +371,8 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
         targetPeer = getRegistered(command.getTargetPeerGuid());
       }
       if (targetPeer == null) {
-        LOG.warn("No target peer registered for GUID {} in session {}",
-            command.getTargetPeerGuid(), getApplicationSession().getId());
+        LOG.warn("No target peer registered for GUID {} in session {}", command.getTargetPeerGuid(),
+            getApplicationSession().getId());
         throw new CommandException(getTranslation("session.unsynced", getApplicationSession().getLocale()));
       }
       if (command instanceof RemoteValueCommand) {
@@ -640,8 +643,31 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
       commandQueue.add(commandLowPriorityOffset, command);
       commandLowPriorityOffset++;
     } else {
-      commandQueue.add(command);
+      if (isIdempotent(command)) {
+        Class<? extends RemoteCommand> commandClass = command.getClass();
+        Map<String, Integer> guidToIndex = commandIndices.get(commandClass);
+        if (guidToIndex == null) {
+          guidToIndex = new HashMap<>();
+          commandIndices.put(commandClass, guidToIndex);
+        }
+        String guid = command.getTargetPeerGuid();
+        Integer oldIndex = guidToIndex.get(guid);
+        if (oldIndex != null) {
+          RemoteCommand oldCommand = commandQueue.set(oldIndex + commandLowPriorityOffset, command);
+          assert ObjectUtils.equals(oldCommand.getClass(), command.getClass()) : "Different command types";
+          assert ObjectUtils.equals(oldCommand.getTargetPeerGuid(), command.getTargetPeerGuid()) : "Different command targets";
+        } else {
+          guidToIndex.put(guid, commandQueue.size() - commandLowPriorityOffset);
+          commandQueue.add(command);
+        }
+      } else {
+        commandQueue.add(command);
+      }
     }
+  }
+
+  public boolean isIdempotent(RemoteCommand command) {
+    return !(command instanceof RemoteWorkspaceDisplayCommand);
   }
 
   /**
@@ -1042,7 +1068,8 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
   /**
    * Create workspace view.
    *
-   * @param workspaceName the workspace name
+   * @param workspaceName
+   *     the workspace name
    * @return the r component
    */
   protected abstract RComponent createWorkspaceView(String workspaceName);

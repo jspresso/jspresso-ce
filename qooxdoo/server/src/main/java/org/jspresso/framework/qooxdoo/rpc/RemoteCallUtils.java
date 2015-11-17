@@ -24,53 +24,77 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.BidiMap;
+import org.apache.commons.collections.bidimap.DualHashBidiMap;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 /**
  * Refines the way Qooxdoo rpc handles JSON types.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
 
+  private final static ThreadLocal<BidiMap> CODEC = new ThreadLocal<>();
+
   /**
    * Handles Lists.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
-  public Object fromJava(Object obj) throws IllegalAccessException,
-      InvocationTargetException, NoSuchMethodException, JSONException {
-    if (obj instanceof List<?>) {
-      List<?> list = (List<?>) obj;
-      JSONObject jsonObject = new JSONObject();
-      jsonObject.put("class", "qx.data.Array");
-      jsonObject.put("array", fromJava(list.toArray()));
-      return jsonObject;
+  public Object fromJava(Object obj)
+      throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, JSONException {
+    BidiMap codec = CODEC.get();
+    boolean initialCall = false;
+    if (codec == null) {
+      initialCall = true;
+      codec = new DualHashBidiMap();
+      CODEC.set(codec);
     }
-    if (obj instanceof BigDecimal) {
-      return super.fromJava(((BigDecimal) obj).doubleValue());
+    try {
+      Object returnValue;
+      if (obj instanceof List<?>) {
+        List<?> list = (List<?>) obj;
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(encode("class"), encode("qx.data.Array"));
+        jsonObject.put(encode("array"), fromJava(list.toArray()));
+        returnValue = jsonObject;
+      } else if (obj instanceof BigDecimal) {
+        returnValue = super.fromJava(((BigDecimal) obj).doubleValue());
+      } else if (obj instanceof BigInteger) {
+        returnValue = super.fromJava(((BigInteger) obj).longValue());
+      } else {
+        returnValue = super.fromJava(obj);
+      }
+      if (initialCall) {
+        JSONObject wrapper = new JSONObject();
+        wrapper.put("codec", new JSONObject(codec));
+        wrapper.put("payload", returnValue);
+        returnValue = wrapper;
+      }
+      return returnValue;
+    } finally {
+      if (initialCall) {
+        CODEC.remove();
+      }
     }
-    if (obj instanceof BigInteger) {
-      return super.fromJava(((BigInteger) obj).longValue());
-    }
-    return super.fromJava(obj);
   }
 
   /**
    * Handles qx.data.Array <-> lists. Handles polymorphism in arrays.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
   @Override
-  public Object toJava(Object obj,
-      @SuppressWarnings("rawtypes") Class targetType) {
+  public Object toJava(Object obj, @SuppressWarnings("rawtypes") Class targetType) {
     if (obj instanceof JSONObject) {
       JSONObject jsonObject = (JSONObject) obj;
       String requestedTypeName = jsonObject.optString("class", null);
@@ -104,24 +128,26 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings({
-      "unchecked", "rawtypes"
-  })
+  @SuppressWarnings({"unchecked", "rawtypes"})
   @Override
   protected Map filter(Object obj, Map map) {
-    Map filteredMap = super.filter(obj, map);
-    filteredMap.put("class", obj.getClass().getName());
+    Map<String, Object> filteredMap = super.filter(obj, map);
+    filteredMap.put("class", encode(obj.getClass().getName()));
     // Prevents recursion on JSON serialization
     filteredMap.remove("parent");
-    return filteredMap;
+    Map<String, Object> encodedMap = new HashMap();
+    for (Map.Entry<String, Object> entry : filteredMap.entrySet()) {
+      encodedMap.put(encode(entry.getKey()), entry.getValue());
+    }
+    return encodedMap;
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  protected Class<?> resolveClassHint(String requestedTypeName,
-      @SuppressWarnings("rawtypes") Class targetType) throws Exception {
+  protected Class<?> resolveClassHint(String requestedTypeName, @SuppressWarnings("rawtypes") Class targetType)
+      throws Exception {
     Class<?> clazz = super.resolveClassHint(requestedTypeName, targetType);
     if (clazz == null) {
       return Class.forName(requestedTypeName);
@@ -132,7 +158,7 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
   /**
    * Make the Rpc java lib more permissive, i.e. do not impose any signature
    * constraint on public method.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
 
@@ -140,5 +166,22 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
   protected boolean throwsExpectedException(Method method) {
     // Removes the exception constraints on method signature.
     return true;
+  }
+
+  /**
+   * Encode string.
+   *
+   * @param original
+   *     the original
+   * @return the string
+   */
+  protected String encode(String original) {
+    BidiMap codec = CODEC.get();
+    String key = (String) codec.getKey(original);
+    if (key == null) {
+      key = Integer.toHexString(codec.size());
+      codec.put(key, original);
+    }
+    return key;
   }
 }
