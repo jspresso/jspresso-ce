@@ -34,14 +34,16 @@ qx.Class.define("org.jspresso.framework.util.object.ObjectUtil", {
           untypedRoot = {};
           untypedRoot["class"] = (/** @type{qx.core.Object}*/ root).classname;
           if (qx.Class.implementsInterface(root, qx.data.IListData)) {
-            untypedRoot["array"] = org.jspresso.framework.util.object.ObjectUtil.untypeObjectGraph((/** @type{qx.data.IListData}*/root).toArray());
+            untypedRoot["array"] = org.jspresso.framework.util.object.ObjectUtil.untypeObjectGraph(
+                (/** @type{qx.data.IListData}*/root).toArray());
           } else {
             var clazz = root.constructor;
             var properties = qx.Class.getProperties(clazz);
             for (i = 0; i < properties.length; i++) {
               var propertyName = properties[i];
               if (propertyName.charAt(0) != "_") {
-                untypedRoot[propertyName] = org.jspresso.framework.util.object.ObjectUtil.untypeObjectGraph((/** @type{qx.core.Object}*/ root).get(propertyName));
+                untypedRoot[propertyName] = org.jspresso.framework.util.object.ObjectUtil.untypeObjectGraph(
+                    (/** @type{qx.core.Object}*/ root).get(propertyName));
               }
             }
           }
@@ -70,69 +72,97 @@ qx.Class.define("org.jspresso.framework.util.object.ObjectUtil", {
      * @return {var} the corresponding object graph containing typed Qooxdoo objects.
      */
     typeObjectGraph: function (root) {
-      return org.jspresso.framework.util.object.ObjectUtil._typeAndDedupObjectGraph(root,
+      var codec = {};
+      var payload = root;
+      if (root.hasOwnProperty("codec")) {
+        codec = root["codec"];
+        payload = root["payload"];
+      }
+      return org.jspresso.framework.util.object.ObjectUtil._typeAndDedupObjectGraph(payload, codec,
           new org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry());
     },
 
-    _typeAndDedupObjectGraph: function (root, registry) {
+    _typeAndDedupObjectGraph: function (payload, codec, registry) {
       var typedRoot = null;
-      if (root != null) {
-        if (root instanceof Array) {
+      if (payload != null) {
+        if (payload instanceof Array) {
           typedRoot = [];
-          var l = root.length;
+          var l = payload.length;
           for (var i = 0; i < l; i++) {
-            typedRoot[i] = org.jspresso.framework.util.object.ObjectUtil._typeAndDedupObjectGraph(root[i], registry);
+            typedRoot[i] = org.jspresso.framework.util.object.ObjectUtil._typeAndDedupObjectGraph(payload[i], codec,
+                registry);
           }
-        } else if (root instanceof Object) {
-          var className = root["class"];
+        } else if (payload instanceof Object) {
+          var decodedPayload = {};
+          for (var member in payload) {
+            var decodedKey = member;
+            var decodedValue = payload[member];
+            delete payload[member];
+            if (codec.hasOwnProperty(member)) {
+              decodedKey = codec[decodedKey];
+              if (decodedKey == "class") {
+                if (codec.hasOwnProperty(decodedValue)) {
+                  decodedValue = codec[decodedValue];
+                }
+              }
+            }
+            decodedPayload[decodedKey] = decodedValue;
+          }
+          var className = decodedPayload["class"];
+          delete decodedPayload["class"];
           if (className) {
             var typedClass = qx.Class.getByName(className);
             if (typedClass) {
               typedRoot = new typedClass();
-              if (root["guid"] && typedRoot instanceof org.jspresso.framework.util.remote.RemotePeer) {
-                if (registry.isRegistered(root["guid"])) {
-                  typedRoot = registry.getRegistered(root["guid"]);
+              var guid = decodedPayload["guid"];
+              if (guid && typedRoot instanceof org.jspresso.framework.util.remote.RemotePeer) {
+                delete decodedPayload["guid"];
+                if (registry.isRegistered(guid)) {
+                  typedRoot = registry.getRegistered(guid);
                   return typedRoot;
                 } else {
-                  typedRoot.setGuid(root["guid"]);
+                  typedRoot.setGuid(guid);
                   registry.register(typedRoot);
                 }
               }
-              var a = root["array"];
-              if (a) {
-                typedRoot.append(org.jspresso.framework.util.object.ObjectUtil._typeAndDedupObjectGraph(a, registry));
+              var array = decodedPayload["array"];
+              if (array) {
+                delete decodedPayload["array"];
+                typedRoot.append(
+                    org.jspresso.framework.util.object.ObjectUtil._typeAndDedupObjectGraph(array, codec, registry));
               } else {
-                delete root["class"];
-                for (var propertyName in root) {
+                for (var propertyName in decodedPayload) {
+                  var propertyValue = decodedPayload[propertyName];
+                  delete decodedPayload[propertyName];
                   //noinspection JSUnfilteredForInLoop
                   typedRoot.set(propertyName,
-                      org.jspresso.framework.util.object.ObjectUtil._typeAndDedupObjectGraph(root[propertyName],
+                      org.jspresso.framework.util.object.ObjectUtil._typeAndDedupObjectGraph(propertyValue, codec,
                           registry));
                 }
               }
             } else {
               throw Error(className + " cannot be de-serialized. Please include the class in meta.")
             }
-          } else if (root instanceof Date) {
-            typedRoot = root;
+          } else if (decodedPayload instanceof Date) {
+            typedRoot = decodedPayload;
           } else {
             typedRoot = {};
-            for (var member in root) {
+            for (var member in decodedPayload) {
               //noinspection JSUnfilteredForInLoop
-              typedRoot[member] = org.jspresso.framework.util.object.ObjectUtil._typeAndDedupObjectGraph(root[member],
-                  registry);
+              typedRoot[member] = org.jspresso.framework.util.object.ObjectUtil._typeAndDedupObjectGraph(
+                  decodedPayload[member], codec, registry);
             }
           }
-        } else if (typeof root === "string") {
+        } else if (typeof payload === "string") {
           var iso8601regexp = "^([0-9]{4})-([0-9]{2})-([0-9]{2})" + "T([0-9]{2}):([0-9]{2})(:([0-9]{2})(\.([0-9]+))?)?"
               + "(Z|(([-+])([0-9]{2}):([0-9]{2})))?$";
-          if (root.match(iso8601regexp)) {
-            typedRoot = new Date(root);
+          if (payload.match(iso8601regexp)) {
+            typedRoot = new Date(payload);
           } else {
-            typedRoot = root
+            typedRoot = payload
           }
         } else {
-          typedRoot = root;
+          typedRoot = payload;
         }
       }
       return typedRoot;
