@@ -166,6 +166,19 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
           addDeletedEntity(deletedEntity);
         }
       }
+
+      List<IEntity> nestedUnitOfWorkRegisteredForUpdateEntities = nestedUnitOfWork.getEntitiesRegisteredForUpdate();
+      if (nestedUnitOfWorkRegisteredForUpdateEntities != null) {
+        for (IEntity toUpdateEntity : nestedUnitOfWorkRegisteredForUpdateEntities) {
+          registerForUpdate(toUpdateEntity);
+        }
+      }
+      Set<IEntity> nestedUnitOfWorkRegisteredForDeletionEntities = nestedUnitOfWork.getEntitiesRegisteredForDeletion();
+      if (nestedUnitOfWorkRegisteredForDeletionEntities != null) {
+        for (IEntity toDeleteEntity : nestedUnitOfWorkDeletedEntities) {
+          registerForDeletion(toDeleteEntity);
+        }
+      }
       nestedUnitOfWork.commit();
     } else {
       cleanup();

@@ -840,10 +840,15 @@ public abstract class AbstractBackendController extends AbstractController imple
                 + flushedEntity);
       }
       unitOfWork.clearDirtyState(flushedEntity);
-      if (!hasActuallyBeenFlushed.isEmpty()) {
+      if (isEntityRegisteredForDeletion(flushedEntity)) {
+        if (IEntity.DELETED_VERSION.equals(flushedEntity.getVersion())) {
+          unitOfWork.addDeletedEntity(flushedEntity);
+        } else {
+          // To support in-memory TX deletions
+          sessionUnitOfWork.registerForDeletion(flushedEntity);
+        }
+      } else if (!hasActuallyBeenFlushed.isEmpty()) {
         unitOfWork.addUpdatedEntity(flushedEntity);
-      } else if (isEntityRegisteredForDeletion(flushedEntity)) {
-        unitOfWork.addDeletedEntity(flushedEntity);
       }
     }
   }
@@ -1416,7 +1421,7 @@ public abstract class AbstractBackendController extends AbstractController imple
         }
         registeredEntity = carbonEntityCloneFactory.cloneEntity(entity, entityFactory);
         if (mergeMode == EMergeMode.MERGE_EAGER) {
-          sessionUnitOfWork.register(registeredEntity, getDirtyProperties(registeredEntity));
+          sessionUnitOfWork.register(registeredEntity, getDirtyProperties(entity));
         } else {
           sessionUnitOfWork.register(registeredEntity, null);
         }
@@ -1426,7 +1431,7 @@ public abstract class AbstractBackendController extends AbstractController imple
         alreadyMerged.register(entityContract, entity.getId(), registeredEntity);
         return registeredEntity;
       } else if (mergeMode == EMergeMode.MERGE_EAGER) {
-        sessionUnitOfWork.register(registeredEntity, getDirtyProperties(registeredEntity));
+        sessionUnitOfWork.register(registeredEntity, getDirtyProperties(entity));
       }
       if (isInitialized(registeredEntity)) {
         eventsBlocked = registeredEntity.blockEvents();

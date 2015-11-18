@@ -449,7 +449,11 @@ public class HibernateBackendController extends AbstractBackendController {
   public void registerForDeletion(IEntity entity) {
     super.registerForDeletion(entity);
     if (isUnitOfWorkActive()) {
-      getHibernateSession().delete(entity);
+      Session hibernateSession = getHibernateSession();
+      if (hibernateSession != getNoTxSession()) {
+        // we are in an real tx
+        hibernateSession.delete(entity);
+      }
     }
   }
 
@@ -460,7 +464,11 @@ public class HibernateBackendController extends AbstractBackendController {
   public void registerForUpdate(IEntity entity) {
     super.registerForUpdate(entity);
     if (isUnitOfWorkActive()) {
-      getHibernateSession().saveOrUpdate(entity);
+      Session hibernateSession = getHibernateSession();
+      if (hibernateSession != getNoTxSession()) {
+        // we are in an real tx
+        hibernateSession.saveOrUpdate(entity);
+      }
     }
   }
 
