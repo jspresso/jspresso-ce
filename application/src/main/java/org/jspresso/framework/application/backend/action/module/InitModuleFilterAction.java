@@ -92,6 +92,10 @@ public class InitModuleFilterAction extends BackendAction {
     if (queryComponentRefiner != null) {
       queryComponentRefiner.refineQueryComponent(queryComponent, context);
     }
+    IQueryComponent previousFilter = filterableBeanCollectionModule.getFilter();
+    if (previousFilter != null) {
+      queryComponent.setOrderingProperties(previousFilter.getOrderingProperties());
+    }
     filterableBeanCollectionModule.setFilter(queryComponent);
     filterableBeanCollectionModule.setModuleObjects(null);
 
