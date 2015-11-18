@@ -106,8 +106,8 @@ public class HibernateBackendController extends AbstractBackendController {
    * {@inheritDoc}
    */
   @Override
-  public <E extends IEntity> List<E> cloneInUnitOfWork(List<E> entities, boolean allowOuterScopeUpdate) {
-    final List<E> uowEntities = super.cloneInUnitOfWork(entities, allowOuterScopeUpdate);
+  public <E extends IEntity> List<E> cloneInUnitOfWork(List<E> entities) {
+    final List<E> uowEntities = super.cloneInUnitOfWork(entities);
     IEntityRegistry alreadyDetached = createEntityRegistry("detachFromHibernateInDepth");
     IEntityRegistry alreadyLocked = createEntityRegistry("lockInHibernateInDepth");
     for (IEntity uowEntity : uowEntities) {
@@ -821,7 +821,7 @@ public class HibernateBackendController extends AbstractBackendController {
 
   private <T extends IEntity> List<T> find(final DetachedCriteria criteria, final int firstResult, final int maxResults,
                                            final EMergeMode mergeMode) {
-    return getTransactionTemplate().execute(new TransactionCallback<List<T>>() {
+    List<T> entities =  getTransactionTemplate().execute(new TransactionCallback<List<T>>() {
 
       @SuppressWarnings("unchecked")
       @Override
@@ -840,6 +840,10 @@ public class HibernateBackendController extends AbstractBackendController {
         return entities;
       }
     });
+    if (isUnitOfWorkActive()) {
+      entities = cloneInUnitOfWork(entities);
+    }
+    return entities;
   }
 
   /**

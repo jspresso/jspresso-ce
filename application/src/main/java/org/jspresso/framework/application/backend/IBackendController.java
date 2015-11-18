@@ -99,28 +99,6 @@ public interface IBackendController
   <E extends IEntity> E cloneInUnitOfWork(E entity);
 
   /**
-   * Registers an entity (actually a clone of it) and all its graph as taking
-   * part in the unit of work. The second parameter allows in-session
-   * modification of clones without prior registration. This parameter must be
-   * set to true in order to disable sanitization checks on modification of the
-   * clones not being registered in session after the end of the UOW, so that
-   * in-memory only transactions can be implemented.
-   *
-   * @param <E>
-   *     the actual entity type.
-   * @param entity
-   *     the entity to make part of the unit of work.
-   * @param allowOuterScopeUpdate
-   *     when set to true, this third parameter disables sanitization
-   *     checks on modification of the clones not being registered in
-   *     session after the end of the UOW, so that in-memory only
-   *     transactions can be implemented.
-   * @return the entity (clone of the original one) actually registered in the
-   * unit of work.
-   */
-  <E extends IEntity> E cloneInUnitOfWork(E entity, boolean allowOuterScopeUpdate);
-
-  /**
    * Registers an list of entities (actually a clone of it) and all their graphs
    * as taking part in the unit of work.
    *
@@ -132,28 +110,6 @@ public interface IBackendController
    * unit of work.
    */
   <E extends IEntity> List<E> cloneInUnitOfWork(List<E> entities);
-
-  /**
-   * Registers an list of entities (actually a clone of it) and all their graphs
-   * as taking part in the unit of work. The second parameter allows in-session
-   * modification of clones without prior registration. This parameter must be
-   * set to true in order to disable sanitization checks on modification of the
-   * clones not being registered in session after the end of the UOW, so that
-   * in-memory only transactions can be implemented.
-   *
-   * @param <E>
-   *     the actual entity type.
-   * @param entities
-   *     the entities to make part of the unit of work.
-   * @param allowOuterScopeUpdate
-   *     when set to true, this third parameter disables sanitization
-   *     checks on modification of the clones not being registered in
-   *     session after the end of the UOW, so that in-memory only
-   *     transactions can be implemented.
-   * @return the entity (clone of the original one) actually registered in the
-   * unit of work.
-   */
-  <E extends IEntity> List<E> cloneInUnitOfWork(List<E> entities, boolean allowOuterScopeUpdate);
 
   /**
    * Commits the current unit of work.

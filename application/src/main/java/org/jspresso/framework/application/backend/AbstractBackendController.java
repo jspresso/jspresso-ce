@@ -40,9 +40,7 @@ import java.util.TimeZone;
 
 import javax.security.auth.Subject;
 
-import org.apache.commons.collections.map.AbstractReferenceMap;
 import org.apache.commons.collections.map.LRUMap;
-import org.apache.commons.collections.map.ReferenceMap;
 import org.apache.commons.lang.LocaleUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -123,15 +121,10 @@ import org.jspresso.framework.util.preferences.IPreferencesStore;
 public abstract class AbstractBackendController extends AbstractController implements IBackendController {
 
   private static final Logger LOG = LoggerFactory.getLogger(AbstractBackendController.class);
-/*
-  private final BeanPropertyChangeRecorder             dirtRecorder;
-  private final IEntityRegistry                        entityRegistry;
-*/
   private final IEntityUnitOfWork                      unitOfWork;
   private final IEntityUnitOfWork                      sessionUnitOfWork;
   private final LRUMap                                 moduleConnectors;
   private final ISecurityContextBuilder                securityContextBuilder;
-  private final Map<Serializable, IEntity>             entitiesExcludedFromSessionSanityChecks;
   private final Set<AsyncActionExecutor>               asyncExecutors;
   private       ThreadGroup                            asyncActionsThreadGroup;
   private       ThreadGroup                            controllerAsyncActionsThreadGroup;
@@ -164,7 +157,6 @@ public abstract class AbstractBackendController extends AbstractController imple
     sessionUnitOfWork.begin();
     moduleConnectors = new LRUMap(20);
     securityContextBuilder = new SecurityContextBuilder();
-    entitiesExcludedFromSessionSanityChecks = new ReferenceMap(AbstractReferenceMap.WEAK, AbstractReferenceMap.WEAK);
     throwExceptionOnBadUsage = true;
     asyncExecutors = new LinkedHashSet<>();
     setAsyncExecutorsMaxCount(10);
@@ -263,30 +255,14 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   @Override
   public final <E extends IEntity> E cloneInUnitOfWork(E entity) {
-    return cloneInUnitOfWork(entity, false);
+    return cloneInUnitOfWork(Collections.singletonList(entity)).get(0);
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public final <E extends IEntity> E cloneInUnitOfWork(E entity, boolean allowOuterScopeUpdate) {
-    return cloneInUnitOfWork(Collections.singletonList(entity), allowOuterScopeUpdate).get(0);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public final <E extends IEntity> List<E> cloneInUnitOfWork(List<E> entities) {
-    return cloneInUnitOfWork(entities, false);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public <E extends IEntity> List<E> cloneInUnitOfWork(List<E> entities, boolean allowOuterScopeUpdate) {
+  public <E extends IEntity> List<E> cloneInUnitOfWork(List<E> entities) {
     if (!isUnitOfWorkActive()) {
       throw new BackendException("Cannot use a unit of work that has not begun.");
     }
@@ -294,7 +270,7 @@ public abstract class AbstractBackendController extends AbstractController imple
     Map<Class<? extends IEntity>, Map<Serializable, IEntity>> uowExistingEntities = unitOfWork.getRegisteredEntities();
     IEntityRegistry alreadyCloned = createEntityRegistry("cloneInUnitOfWork", uowExistingEntities);
     for (E entity : entities) {
-      uowEntities.add(cloneInUnitOfWork(entity, allowOuterScopeUpdate, alreadyCloned));
+      uowEntities.add(cloneInUnitOfWork(entity, alreadyCloned));
     }
     return uowEntities;
   }
@@ -1116,9 +1092,6 @@ public abstract class AbstractBackendController extends AbstractController imple
       sessionUnitOfWork.clear();
       sessionUnitOfWork.begin();
     }
-    if (entitiesExcludedFromSessionSanityChecks != null) {
-      entitiesExcludedFromSessionSanityChecks.clear();
-    }
     if (unitOfWork != null) {
       unitOfWork.clear();
     }
@@ -1225,12 +1198,7 @@ public abstract class AbstractBackendController extends AbstractController imple
     return detachedCollection;
   }
 
-  private void cleanDirtyProperties(IEntity entity) {
-    sessionUnitOfWork.clearDirtyState(entity);
-  }
-
-  private IComponent cloneComponentInUnitOfWork(IComponent component, boolean allowOuterScopeUpdate,
-                                                IEntityRegistry alreadyCloned) {
+  private IComponent cloneComponentInUnitOfWork(IComponent component, IEntityRegistry alreadyCloned) {
     IComponent uowComponent = carbonEntityCloneFactory.cloneComponent(component, entityFactory);
     Map<String, Object> componentProperties = component.straightGetProperties();
     for (Map.Entry<String, Object> property : componentProperties.entrySet()) {
@@ -1238,22 +1206,20 @@ public abstract class AbstractBackendController extends AbstractController imple
       Object propertyValue = property.getValue();
       if (propertyValue instanceof IEntity) {
         if (isInitialized(propertyValue)) {
-          uowComponent.straightSetProperty(propertyName, cloneInUnitOfWork((IEntity) propertyValue,
-              allowOuterScopeUpdate, alreadyCloned));
+          uowComponent.straightSetProperty(propertyName, cloneInUnitOfWork((IEntity) propertyValue, alreadyCloned));
         } else {
           uowComponent.straightSetProperty(propertyName, cloneUninitializedProperty(uowComponent, propertyValue));
         }
       } else if (propertyValue instanceof IComponent) {
         uowComponent.straightSetProperty(propertyName, cloneComponentInUnitOfWork((IComponent) propertyValue,
-            allowOuterScopeUpdate, alreadyCloned));
+            alreadyCloned));
       }
     }
     return uowComponent;
   }
 
   @SuppressWarnings({"unchecked", "ConstantConditions"})
-  private <E extends IEntity> E cloneInUnitOfWork(E entity, boolean allowOuterScopeUpdate,
-                                                  IEntityRegistry alreadyCloned) {
+  private <E extends IEntity> E cloneInUnitOfWork(E entity, IEntityRegistry alreadyCloned) {
     if (entity == null) {
       return null;
     }
@@ -1261,10 +1227,6 @@ public abstract class AbstractBackendController extends AbstractController imple
     IComponentDescriptor<?> entityDescriptor = getEntityFactory().getComponentDescriptor(entityContract);
     E uowEntity = (E) alreadyCloned.get(entityContract, entity.getId());
     if (uowEntity != null) {
-      if (allowOuterScopeUpdate) {
-        // Make sure that the entity is correctly ignored
-        excludeFromSanityChecks(uowEntity);
-      }
       return uowEntity;
     }
     uowEntity = performUowEntityCloning(entity);
@@ -1272,9 +1234,6 @@ public abstract class AbstractBackendController extends AbstractController imple
     try {
       if (isInitialized(uowEntity)) {
         eventsBlocked = uowEntity.blockEvents();
-      }
-      if (allowOuterScopeUpdate) {
-        excludeFromSanityChecks(uowEntity);
       }
       Map<String, Object> dirtyProperties;
       if (isInitialized(entity)) {
@@ -1294,8 +1253,7 @@ public abstract class AbstractBackendController extends AbstractController imple
           IPropertyDescriptor propertyDescriptor = entityDescriptor.getPropertyDescriptor(propertyName);
           if (propertyValue instanceof IEntity) {
             if (isInitialized(propertyValue)) {
-              uowEntity.straightSetProperty(propertyName, cloneInUnitOfWork((IEntity) propertyValue,
-                  allowOuterScopeUpdate, alreadyCloned));
+              uowEntity.straightSetProperty(propertyName, cloneInUnitOfWork((IEntity) propertyValue, alreadyCloned));
             } else {
               uowEntity.straightSetProperty(propertyName, cloneUninitializedProperty(uowEntity, propertyValue));
             }
@@ -1309,11 +1267,9 @@ public abstract class AbstractBackendController extends AbstractController imple
               for (Object collectionElement : (Collection<?>) property.getValue()) {
                 if (collectionElement != null) {
                   if (collectionElement instanceof IEntity) {
-                    uowCollection.add(cloneInUnitOfWork((IEntity) collectionElement, allowOuterScopeUpdate,
-                        alreadyCloned));
+                    uowCollection.add(cloneInUnitOfWork((IEntity) collectionElement, alreadyCloned));
                   } else if (collectionElement instanceof IComponent) {
-                    uowCollection.add(cloneComponentInUnitOfWork((IComponent) collectionElement, allowOuterScopeUpdate,
-                        alreadyCloned));
+                    uowCollection.add(cloneComponentInUnitOfWork((IComponent) collectionElement, alreadyCloned));
                   } else {
                     uowCollection.add(collectionElement);
                   }
@@ -1332,10 +1288,10 @@ public abstract class AbstractBackendController extends AbstractController imple
                     if (snapshotCollectionElement != null) {
                       if (snapshotCollectionElement instanceof IEntity) {
                         clonedSnapshotCollection.add(cloneInUnitOfWork((IEntity) snapshotCollectionElement,
-                            allowOuterScopeUpdate, alreadyCloned));
+                            alreadyCloned));
                       } else if (snapshotCollectionElement instanceof IComponent) {
                         clonedSnapshotCollection.add(cloneComponentInUnitOfWork((IComponent) snapshotCollectionElement,
-                            allowOuterScopeUpdate, alreadyCloned));
+                            alreadyCloned));
                       } else {
                         clonedSnapshotCollection.add(snapshotCollectionElement);
                       }
@@ -1356,19 +1312,18 @@ public abstract class AbstractBackendController extends AbstractController imple
           } else if (propertyValue instanceof IEntity[]) {
             IEntity[] uowArray = new IEntity[((IEntity[]) propertyValue).length];
             for (int i = 0; i < uowArray.length; i++) {
-              uowArray[i] = cloneInUnitOfWork(((IEntity[]) propertyValue)[i], allowOuterScopeUpdate, alreadyCloned);
+              uowArray[i] = cloneInUnitOfWork(((IEntity[]) propertyValue)[i], alreadyCloned);
             }
             uowEntity.straightSetProperty(propertyName, uowArray);
           } else if (propertyValue instanceof IComponent[]) {
             IComponent[] uowArray = new IComponent[((IComponent[]) property.getValue()).length];
             for (int i = 0; i < uowArray.length; i++) {
-              uowArray[i] = cloneComponentInUnitOfWork(((IComponent[]) propertyValue)[i], allowOuterScopeUpdate,
-                  alreadyCloned);
+              uowArray[i] = cloneComponentInUnitOfWork(((IComponent[]) propertyValue)[i], alreadyCloned);
             }
             uowEntity.straightSetProperty(propertyName, uowArray);
           } else if (propertyValue instanceof IComponent) {
             uowEntity.straightSetProperty(propertyName, cloneComponentInUnitOfWork((IComponent) propertyValue,
-                allowOuterScopeUpdate, alreadyCloned));
+                alreadyCloned));
           }
         }
         if (eventsBlocked && uowEntity != null && isInitialized(uowEntity)) {
@@ -1385,10 +1340,6 @@ public abstract class AbstractBackendController extends AbstractController imple
       }
     }
     return uowEntity;
-  }
-
-  private <E extends IEntity> void excludeFromSanityChecks(E entity) {
-    entitiesExcludedFromSessionSanityChecks.put(entity.getId(), entity);
   }
 
   /**
@@ -1448,14 +1399,15 @@ public abstract class AbstractBackendController extends AbstractController imple
     if (alreadyMergedEntity != null) {
       return alreadyMergedEntity;
     }
-    checkBadMergeUsage(entity);
-    boolean dirtRecorderWasEnabled = isDirtyTrackingEnabled();
+    // Allow for merging eagerly dirty entities
+    if (mergeMode != EMergeMode.MERGE_EAGER) {
+      checkBadMergeUsage(entity);
+    }
+    boolean dirtyTrackingEnabled = isDirtyTrackingEnabled();
     E registeredEntity = null;
     boolean eventsBlocked = false;
     try {
-      if (mergeMode != EMergeMode.MERGE_EAGER) {
-        setDirtyTrackingEnabled(false);
-      }
+      setDirtyTrackingEnabled(false);
       registeredEntity = (E) getRegisteredEntity(getComponentContract(entity), entity.getId());
       boolean newlyRegistered = false;
       if (registeredEntity == null) {
@@ -1463,12 +1415,18 @@ public abstract class AbstractBackendController extends AbstractController imple
           return mergeUninitializedEntity(entity);
         }
         registeredEntity = carbonEntityCloneFactory.cloneEntity(entity, entityFactory);
-        sessionUnitOfWork.register(registeredEntity, null);
+        if (mergeMode == EMergeMode.MERGE_EAGER) {
+          sessionUnitOfWork.register(registeredEntity, getDirtyProperties(registeredEntity));
+        } else {
+          sessionUnitOfWork.register(registeredEntity, null);
+        }
         newlyRegistered = true;
       } else if (mergeMode == EMergeMode.MERGE_KEEP || (
           (mergeMode == EMergeMode.MERGE_LAZY || mergeMode == EMergeMode.MERGE_CLEAN_LAZY) && !isInitialized(entity))) {
         alreadyMerged.register(entityContract, entity.getId(), registeredEntity);
         return registeredEntity;
+      } else if (mergeMode == EMergeMode.MERGE_EAGER) {
+        sessionUnitOfWork.register(registeredEntity, getDirtyProperties(registeredEntity));
       }
       if (isInitialized(registeredEntity)) {
         eventsBlocked = registeredEntity.blockEvents();
@@ -1478,7 +1436,7 @@ public abstract class AbstractBackendController extends AbstractController imple
           || registeredEntity.getVersion() == null || !registeredEntity.getVersion().equals(entity.getVersion())) {
         if (mergeMode == EMergeMode.MERGE_CLEAN_EAGER || mergeMode == EMergeMode.MERGE_CLEAN_LAZY
             || mergeMode == EMergeMode.MERGE_LAZY) {
-          cleanDirtyProperties(registeredEntity);
+          sessionUnitOfWork.clearDirtyState(entity);
         }
         IComponentDescriptor<?> entityDescriptor = getEntityFactory().getComponentDescriptor(getComponentContract(
             entity));
@@ -1572,7 +1530,7 @@ public abstract class AbstractBackendController extends AbstractController imple
       } else if (mergeMode == EMergeMode.MERGE_CLEAN_LAZY) {
         // version has not evolved but we must still reset dirty properties in
         // case only versionControl false properties have changed.
-        cleanDirtyProperties(registeredEntity);
+        sessionUnitOfWork.clearDirtyState(entity);
       }
       if (registeredEntity instanceof ILifecycleCapable) {
         ((ILifecycleCapable) registeredEntity).onClone(entity);
@@ -1592,7 +1550,7 @@ public abstract class AbstractBackendController extends AbstractController imple
           }
         }
       }
-      setDirtyTrackingEnabled(dirtRecorderWasEnabled);
+      setDirtyTrackingEnabled(dirtyTrackingEnabled);
     }
   }
 
@@ -2239,20 +2197,16 @@ public abstract class AbstractBackendController extends AbstractController imple
     } else {
       if (targetEntity != null && !objectEquals(targetEntity, sessionTargetEntity)) {
         // We are working on an entity that has not been registered in the
-        // session. This is not legal unless this entity has explicitly been
-        // excluded from sanity checks.
-        IEntity excludedEntity = getExcludedFromSanityChecks(targetEntity);
-        if (excludedEntity == null || !objectEquals(targetEntity, excludedEntity)) {
-          LOG.error(
-              "*BAD SESSION USAGE* You are modifying an entity ({})[{}] that has not been previously merged in the "
-                  + "session.\n" + "You should 1st merge your entities in the session by using the "
-                  + "backendController.merge(...) method.\n" + "The property being modified is [{}].", targetEntity,
-              getComponentContract(targetEntity).getSimpleName(), propertyDescriptor.getName());
-          if (isThrowExceptionOnBadUsage()) {
-            throw new BackendException(
-                "An invalid modification of an entity that was not previously registered in the session has been "
-                    + "detected. " + "Please check the logs.");
-          }
+        // session. This is not legal.
+        LOG.error(
+            "*BAD SESSION USAGE* You are modifying an entity ({})[{}] that has not been previously merged in the "
+                + "session.\n" + "You should 1st merge your entities in the session by using the "
+                + "backendController.merge(...) method.\n" + "The property being modified is [{}].", targetEntity,
+            getComponentContract(targetEntity).getSimpleName(), propertyDescriptor.getName());
+        if (isThrowExceptionOnBadUsage()) {
+          throw new BackendException(
+              "An invalid modification of an entity that was not previously registered in the session has been "
+                  + "detected. " + "Please check the logs.");
         }
       }
       if (paramEntity != null && !objectEquals(paramEntity, sessionParamEntity)) {
@@ -2290,10 +2244,6 @@ public abstract class AbstractBackendController extends AbstractController imple
       return refineEntity(target.getOwningComponent(), traversed);
     }
     return null;
-  }
-
-  private IEntity getExcludedFromSanityChecks(IEntity entity) {
-    return entitiesExcludedFromSessionSanityChecks.get(entity.getId());
   }
 
   /**
