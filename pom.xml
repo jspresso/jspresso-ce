@@ -8,32 +8,20 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <jspresso.version>4.2-SNAPSHOT</jspresso.version>
-    <sjs.version>2.2</sjs.version>
-
     <ant-contrib.version>1.0b3</ant-contrib.version>
     <spring-beandoc.version>0.8.1</spring-beandoc.version>
 
     <!-- Plugins versions -->
-    <compiler-plugin.version>3.1</compiler-plugin.version>
-    <resources-plugin.version>2.6</resources-plugin.version>
-    <jar-plugin.version>2.4</jar-plugin.version>
-    <surefire-plugin.version>2.17</surefire-plugin.version>
-    <failsafe-plugin.version>2.17</failsafe-plugin.version>
     <assembly-plugin.version>2.4</assembly-plugin.version>
     <javadoc-plugin.version>2.9.1</javadoc-plugin.version>
     <deploy-plugin.version>2.8.1</deploy-plugin.version>
     <site-plugin.version>3.3</site-plugin.version>
-    <install-plugin.version>2.5.1</install-plugin.version>
     <release-plugin.version>2.5.1</release-plugin.version>
-    <clean-plugin.version>2.5</clean-plugin.version>
-    <archetype-plugin.version>2.2</archetype-plugin.version>
     <source-plugin.version>2.2.1</source-plugin.version>
     <antrun-plugin.version>1.7</antrun-plugin.version>
     <info-reports-plugin.version>2.7</info-reports-plugin.version>
     <webdav-jackrabbit.version>2.4</webdav-jackrabbit.version>
     <dependency-plugin.version>2.8</dependency-plugin.version>
-    <jrebel-plugin.version>1.1.5</jrebel-plugin.version>
 
   </properties>
 
@@ -218,38 +206,6 @@
       </snapshots>
     </repository>
   </repositories>
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.jspresso.framework</groupId>
-        <artifactId>jspresso-documentation</artifactId>
-        <version>${jspresso.version}</version>
-        <classifier>archive</classifier>
-        <type>zip</type>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso.contrib</groupId>
-        <artifactId>jspresso-sjs-documentation</artifactId>
-        <version>${sjs.version}</version>
-        <classifier>archive</classifier>
-        <type>zip</type>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-  <dependencies>
-    <dependency>
-      <groupId>org.jspresso.framework</groupId>
-      <artifactId>jspresso-documentation</artifactId>
-      <classifier>archive</classifier>
-      <type>zip</type>
-    </dependency>
-    <dependency>
-      <groupId>org.jspresso.contrib</groupId>
-      <artifactId>jspresso-sjs-documentation</artifactId>
-      <classifier>archive</classifier>
-      <type>zip</type>
-    </dependency>
-  </dependencies>
   <modules>
     <module>root</module>
     <module>application</module>
@@ -281,39 +237,6 @@
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>${compiler-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-resources-plugin</artifactId>
-          <version>${resources-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-jar-plugin</artifactId>
-          <version>${jar-plugin.version}</version>
-          <configuration>
-            <archive>
-              <manifest>
-                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-              </manifest>
-            </archive>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>${surefire-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-failsafe-plugin</artifactId>
-          <version>${failsafe-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-assembly-plugin</artifactId>
           <version>${assembly-plugin.version}</version>
         </plugin>
@@ -334,16 +257,6 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-archetype-plugin</artifactId>
-          <version>${archetype-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-install-plugin</artifactId>
-          <version>${install-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
           <version>${release-plugin.version}</version>
         </plugin>
@@ -351,16 +264,6 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-source-plugin</artifactId>
           <version>${source-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-clean-plugin</artifactId>
-          <version>${clean-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-dependency-plugin</artifactId>
-          <version>${dependency-plugin.version}</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -425,39 +328,6 @@
             <version>${spring-beandoc.version}</version>
           </dependency>
         </dependencies>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <inherited>false</inherited>
-        <executions>
-          <execution>
-            <id>unpack-documentation</id>
-            <phase>pre-site</phase>
-            <goals>
-              <goal>unpack-dependencies</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.reporting.outputDirectory}/docs/reference</outputDirectory>
-              <includeArtifactIds>jspresso-documentation</includeArtifactIds>
-              <includeClassifiers>archive</includeClassifiers>
-              <excludeTransitive>true</excludeTransitive>
-            </configuration>
-          </execution>
-          <execution>
-            <id>unpack-sjs-documentation</id>
-            <phase>pre-site</phase>
-            <goals>
-              <goal>unpack-dependencies</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.reporting.outputDirectory}/docs/sjs-reference</outputDirectory>
-              <includeArtifactIds>jspresso-sjs-documentation</includeArtifactIds>
-              <includeClassifiers>archive</includeClassifiers>
-              <excludeTransitive>true</excludeTransitive>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
