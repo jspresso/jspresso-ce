@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.jspresso.framework</groupId>
     <artifactId>jspresso-root</artifactId>
-    <version>4.3-SNAPSHOT</version>
+    <version>4.2-SNAPSHOT</version>
     <relativePath>../root/pom.xml</relativePath>
   </parent>
   <artifactId>jspresso-documentation</artifactId>
@@ -357,27 +357,28 @@
             </goals>
             <configuration>
               <target>
-                <property name="gitbook-root" value="${basedir}/../../jspresso-doc" />
+                <property name="gitbook-root"
+                          value="${basedir}/../../jspresso-doc"/>
                 <copy todir="${gitbook-root}">
                   <fileset dir="${project.build.directory}/staging/reference">
-                    <include name="**/*.md" />
-                    <include name="**/*.jpg" />
-                    <include name="**/*.JPG" />
-                    <include name="**/*.png" />
-                    <include name="**/*.PNG" />
+                    <include name="**/*.md"/>
+                    <include name="**/*.jpg"/>
+                    <include name="**/*.JPG"/>
+                    <include name="**/*.png"/>
+                    <include name="**/*.PNG"/>
                   </fileset>
                 </copy>
                 <exec executable="git" dir="${gitbook-root}" failonerror="false">
-                  <arg line="pull" />
+                  <arg line="pull"/>
                 </exec>
                 <exec executable="git" dir="${gitbook-root}" failonerror="false">
-                  <arg line="add *" />
+                  <arg line="add *"/>
                 </exec>
                 <exec executable="git" dir="${gitbook-root}" failonerror="false">
-                  <arg line="commit -a -m 'Generated documentation updated'" />
+                  <arg line="commit -a -m 'Generated documentation updated'"/>
                 </exec>
                 <exec executable="git" dir="${gitbook-root}" failonerror="false">
-                  <arg line="push" />
+                  <arg line="push"/>
                 </exec>
               </target>
             </configuration>
