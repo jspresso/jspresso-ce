@@ -1691,35 +1691,30 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           controller.bindProperty(controller.getIconPath(), "icon", controller.getIconOptions(), treeNode, modelNode);
           if (modelNode) {
             modelNode.addListener("changeSelectedIndices", function (e) {
-              /** @type {qx.data.Array} */
-              var viewSelection = controller.getSelection();
-              var stateSelection = e.getTarget().getSelectedIndices();
-              var stateChildren = e.getTarget().getChildren();
-              var selIndex = 0;
-              for (var i = 0; i < stateChildren.length; i++) {
-                var child = stateChildren.getItem(i);
-                if (stateSelection && qx.lang.Array.contains(stateSelection, i)) {
-                  if (!viewSelection.contains(child)) {
+              if (controller.getUserData("blockSelectionEvents")) {
+                return;
+              }
+              var blockSelectionEvents = controller.getUserData("blockSelectionEvents");
+              try {
+                controller.setUserData("blockSelectionEvents", true);
+                /** @type {qx.data.Array} */
+                var viewSelection = controller.getSelection();
+                var stateSelection = e.getTarget().getSelectedIndices();
+                var stateChildren = e.getTarget().getChildren();
+                var selIndex = 0;
+                var newViewSelection = new qx.data.Array();
+                for (var i = 0; i < stateChildren.length; i++) {
+                  var child = stateChildren.getItem(i);
+                  if (stateSelection && qx.lang.Array.contains(stateSelection, i)) {
                     if (!treeNode.getOpen()) {
                       treeNode.setOpen(true);
                     }
-                    // viewSelection.push(child);
-                    if (selIndex == 0/*
-                     * ||
-                     * tree.getSelectionMode() ==
-                     * "multi" ||
-                     * tree.getSelectionMode() ==
-                     * "additive"
-                     */) {
-                      viewSelection.setItem(selIndex, child);
-                      selIndex++;
-                    }
-                  }
-                } else {
-                  if (viewSelection.contains(child)) {
-                    viewSelection.remove(child);
+                    newViewSelection.push(child);
                   }
                 }
+                controller.setSelection(newViewSelection);
+              } finally {
+                controller.setUserData("blockSelectionEvents", blockSelectionEvents);
               }
             }, this);
           }
@@ -1734,24 +1729,34 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       }
 
       treeController.addListener("changeSelection", function (e) {
-        /** @type {qx.data.Array} */
-        var selectedItems = e.getData();
-        /** @type {org.jspresso.framework.state.remote.RemoteCompositeValueState} */
-        var rootState = e.getTarget().getModel();
-        var deselectedStates = [];
-        var selectedStates = [];
-        this._synchTreeViewSelection(rootState, selectedItems, deselectedStates, selectedStates);
-        for (var i = 0; i < deselectedStates.length; i++) {
-          var deselectedState = deselectedStates[i];
-          deselectedState.setLeadingIndex(-1);
-          deselectedState.setSelectedIndices(null);
+        if (treeController.getUserData("blockSelectionEvents")) {
+          return;
         }
-        for (var i = 0; i < selectedStates.length; i += 3) {
-          var selectedState = selectedStates[i];
-          selectedState.setLeadingIndex(selectedStates[i + 1]);
-          selectedState.setSelectedIndices(selectedStates[i + 2]);
+        var blockSelectionEvents = treeController.getUserData("blockSelectionEvents");
+        try {
+          treeController.setUserData("blockSelectionEvents", true);
+          /** @type {qx.data.Array} */
+          var selectedItems = e.getData();
+          /** @type {org.jspresso.framework.state.remote.RemoteCompositeValueState} */
+          var rootState = e.getTarget().getModel();
+          var deselectedStates = [];
+          var selectedStates = [];
+          this._synchTreeViewSelection(rootState, selectedItems, deselectedStates, selectedStates);
+          for (var i = 0; i < deselectedStates.length; i++) {
+            var deselectedState = deselectedStates[i];
+            deselectedState.setLeadingIndex(-1);
+            deselectedState.setSelectedIndices(null);
+          }
+          for (var i = 0; i < selectedStates.length; i += 3) {
+            var selectedState = selectedStates[i];
+            selectedState.setLeadingIndex(selectedStates[i + 1]);
+            selectedState.setSelectedIndices(selectedStates[i + 2]);
+          }
+        } finally {
+          treeController.setUserData("blockSelectionEvents", blockSelectionEvents);
         }
       }, this);
+
       if (remoteTree.getRowAction()) {
         this._getRemotePeerRegistry().register(remoteTree.getRowAction());
         tree.addListener("dbltap", function (e) {
