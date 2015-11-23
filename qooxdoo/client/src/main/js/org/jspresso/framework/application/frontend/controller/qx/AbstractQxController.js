@@ -63,7 +63,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     /** @type {Object} */
     __postponedCommands: null,
     /** @type {Object} */
-    __postponedNotificationBuffer: null,
+    __postponedChildrenNotificationBuffer: null,
+    /** @type {Object} */
+    __postponedSelectionCommands: null,
+    /** @type {Object} */
+    __postponedEditionCommands: null,
     /** @type {String} */
     __userLanguage: null,
     /** @type {Object} */
@@ -328,7 +332,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      * @return {undefined}
      */
     _handleChildrenCommand: function (compositeValueState, childrenCommand) {
-      this.__postponedNotificationBuffer[compositeValueState.getGuid()] = null;
+      this.__postponedChildrenNotificationBuffer[compositeValueState.getGuid()] = null;
 
       /** @type {qx.data.Array} */
       var children = compositeValueState.getChildren();
@@ -340,7 +344,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
           /** @type {org.jspresso.framework.state.remote.RemoteValueState} */
           var child = commandChildren[i];
           if (this.isRegistered(child.getGuid())) {
-            child = /** @type {org.jspresso.framework.state.remote.RemoteValueState} */ this.getRegistered(child.getGuid());
+            child = /** @type {org.jspresso.framework.state.remote.RemoteValueState} */ this.getRegistered(
+                child.getGuid());
             children.remove(child);
             child.setParent(null);
           }
@@ -356,7 +361,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
           /** @type {org.jspresso.framework.state.remote.RemoteValueState} */
           var child = commandChildren[i];
           if (this.isRegistered(child.getGuid())) {
-            child = /** @type {org.jspresso.framework.state.remote.RemoteValueState} */ this.getRegistered(child.getGuid());
+            child = /** @type {org.jspresso.framework.state.remote.RemoteValueState} */ this.getRegistered(
+                child.getGuid());
           } else {
             this.register(child);
           }
@@ -380,10 +386,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     _handleValueCommand: function (valueState, valueCommand) {
       valueState.setValue(valueCommand.getValue());
       if (valueState instanceof org.jspresso.framework.state.remote.RemoteFormattedValueState) {
-        (/**@type {org.jspresso.framework.state.remote.RemoteFormattedValueState} */valueState).setValueAsObject(valueCommand.getValueAsObject());
+        (/**@type {org.jspresso.framework.state.remote.RemoteFormattedValueState} */valueState).setValueAsObject(
+            valueCommand.getValueAsObject());
       } else if (valueState instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
-        (/**@type {org.jspresso.framework.state.remote.RemoteCompositeValueState} */valueState).setDescription(valueCommand.getDescription());
-        (/**@type {org.jspresso.framework.state.remote.RemoteCompositeValueState} */valueState).setIconImageUrl(valueCommand.getIconImageUrl());
+        (/**@type {org.jspresso.framework.state.remote.RemoteCompositeValueState} */valueState).setDescription(
+            valueCommand.getDescription());
+        (/**@type {org.jspresso.framework.state.remote.RemoteCompositeValueState} */valueState).setIconImageUrl(
+            valueCommand.getIconImageUrl());
       }
     },
 
@@ -393,8 +402,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      * @return {undefined}
      */
     _handleSelectionCommand: function (compositeValueState, selectionCommand) {
-      compositeValueState.setLeadingIndex(selectionCommand.getLeadingIndex());
-      compositeValueState.setSelectedIndices(selectionCommand.getSelectedIndices());
+      if (this.__postponedChildrenNotificationBuffer.hasOwnProperty(compositeValueState.getGuid())) {
+        this.__postponedSelectionCommands[compositeValueState.getGuid()] = selectionCommand;
+      } else {
+        compositeValueState.setLeadingIndex(selectionCommand.getLeadingIndex());
+        compositeValueState.setSelectedIndices(selectionCommand.getSelectedIndices());
+      }
     },
 
     /**
@@ -447,8 +460,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
         c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteHistoryDisplayCommand} */
             command;
         this._handleHistoryDisplayCommand(c);
-      } else if (command
-          instanceof org.jspresso.framework.application.frontend.command.remote.RemoteRestartCommand) {
+      } else if (command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteRestartCommand) {
         this._restart();
       } else if (command
           instanceof org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand) {
@@ -460,18 +472,15 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
         c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteFileDownloadCommand} */
             command;
         this._handleFileDownload(c);
-      } else if (command
-          instanceof org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand) {
+      } else if (command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand) {
         c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand} */
             command;
         this._handleRemoteLocaleCommand(c);
-      } else if (command
-          instanceof org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand) {
+      } else if (command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand) {
         c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand} */
             command;
         this._handleInitLoginCommmand(c);
-      } else if (command
-          instanceof org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand) {
+      } else if (command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand) {
         c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand} */
             command;
         this._handleCleanupCommand(c);
@@ -492,8 +501,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
         c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteWorkspaceDisplayCommand} */
             command;
         this._displayWorkspace(c.getWorkspaceName(), c.getWorkspaceView());
-      } else if (command
-          instanceof org.jspresso.framework.application.frontend.command.remote.RemoteOpenUrlCommand) {
+      } else if (command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteOpenUrlCommand) {
         c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteOpenUrlCommand} */
             command;
         this._handleOpenUrlCommand(c);
@@ -502,8 +510,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
         c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteUpdateStatusCommand} */
             command;
         this._updateStatusCommand(c);
-      } else if (command
-          instanceof org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand) {
+      } else if (command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand) {
         c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand} */
             command;
         this._handleClipboardCommand(c);
@@ -549,21 +556,18 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
           c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand} */
               command;
           this._handleChildrenCommand(targetPeer, c);
-        } else if (command
-            instanceof org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand) {
+        } else if (command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand) {
           c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand} */
               command;
           this._handleAddCardCommand(targetPeer, c);
-        } else if (command
-            instanceof org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand) {
+        } else if (command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand) {
           c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand} */
               command;
           this._handleFocusCommand(targetPeer, c);
-        } else if (command
-            instanceof org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand) {
+        } else if (command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand) {
           c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand} */
               command;
-          this._handleEditCommand(targetPeer, c);
+          this.__postponedEditionCommands[targetPeerGuid] = c;
         }
       }
     },
@@ -623,7 +627,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
       startCommand.setLanguage(this.__userLanguage);
       startCommand.setKeysToTranslate(this._getKeysToTranslate());
       startCommand.setTimezoneOffset(new Date().getTimezoneOffset() * (-60000));
-      startCommand.setVersion(org.jspresso.framework.application.frontend.controller.qx.AbstractQxController.__JSPRESSO_VERSION);
+      startCommand.setVersion(
+          org.jspresso.framework.application.frontend.controller.qx.AbstractQxController.__JSPRESSO_VERSION);
       startCommand.setClientType(this._getClientType());
       this.__remoteController.callAsyncListeners(true,
           org.jspresso.framework.application.frontend.controller.qx.AbstractQxController.__START_METHOD,
@@ -704,7 +709,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
        */
       var commandsHandler = function (result) {
         this.__postponedCommands = {};
-        this.__postponedNotificationBuffer = {};
+        this.__postponedChildrenNotificationBuffer = {};
+        this.__postponedSelectionCommands = {};
+        this.__postponedEditionCommands = {};
         try {
           var data = result.getData();
           var typedResult = org.jspresso.framework.util.object.ObjectUtil.typeObjectGraph(data["result"]);
@@ -718,7 +725,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
           this.__roundTrip = false;
           this._checkPostponedCommandsCompletion();
           this.__postponedCommands = null;
-          this.__postponedNotificationBuffer = null;
+          this.__postponedChildrenNotificationBuffer = null;
+          this.__postponedSelectionCommands = null;
+          this.__postponedEditionCommands = null;
           if (this.__nextActionCallback != null) {
             try {
               this.__nextActionCallback();
@@ -788,12 +797,21 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
           }
         }
       }
-      for (var guid in this.__postponedNotificationBuffer) {
+      for (var guid in this.__postponedChildrenNotificationBuffer) {
         //noinspection JSUnfilteredForInLoop
         var peer = this.getRegistered(guid);
         if (peer instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
           peer.notifyChildrenChanged();
+          if (this.__postponedSelectionCommands.hasOwnProperty(guid)) {
+            var delayedSelectionCommand = this.__postponedSelectionCommands[guid];
+            peer.setLeadingIndex(delayedSelectionCommand.getLeadingIndex());
+            peer.setSelectedIndices(delayedSelectionCommand.getSelectedIndices());
+          }
         }
+      }
+      for (var guid in this.__postponedEditionCommands) {
+        var delayedEditionCommand = this.__postponedEditionCommands[guid];
+        this._handleEditCommand(this.getRegistered(delayedEditionCommand.getTargetPeerGuid()).retrievePeer());
       }
     },
 
