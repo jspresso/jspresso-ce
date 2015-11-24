@@ -23,6 +23,8 @@ import java.io.Serializable;
 import java.util.LinkedHashMap;
 
 import org.jspresso.framework.model.component.IQueryComponent;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.util.io.SerializationUtil;
 
 /**
@@ -48,6 +50,9 @@ public abstract class QueryComponentSerializationUtil {
     // temporary map (too heavy to be serialized, will use a simple table)
     LinkedHashMap<String, Serializable> map = new LinkedHashMap<>();
     for (String key : query.keySet()) {
+      if (isComputed(query, key)) 
+        continue;
+      
       Object value = query.get(key);
       if (value instanceof QueryComponent) {
         QueryComponent qc = (QueryComponent) value;
@@ -75,6 +80,18 @@ public abstract class QueryComponentSerializationUtil {
     byte[] data = SerializationUtil.serialize(simple, true);
 
     return SerializationUtil.toBase64String(data); // data.length
+  }
+
+  private static boolean isComputed(IQueryComponent query, String key) {
+    IComponentDescriptor<?> componentDescriptor = query.getComponentDescriptor();
+    if (componentDescriptor == null) 
+      return false;
+   
+    IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor(key);
+    if (propertyDescriptor == null)
+      return false;
+    
+    return propertyDescriptor.isComputed();
   }
 
   private static Serializable[] componentToTable(QueryComponent query) {
