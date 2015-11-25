@@ -41,6 +41,7 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.frontend.command.remote.CommandException;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteCloseDialogCommand;
@@ -667,7 +668,8 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
   }
 
   public boolean isIdempotent(RemoteCommand command) {
-    return !(command instanceof RemoteWorkspaceDisplayCommand);
+    return !(command instanceof RemoteWorkspaceDisplayCommand)
+        && !(command instanceof RemoteAddCardCommand);
   }
 
   /**
