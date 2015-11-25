@@ -633,14 +633,14 @@ public class Module extends AbstractPropertyChangeCapable
       return;
     }
     Module oldParent = getParent();
-    if (getParent() != null) {
-      getParent().removeSubModule(this);
+    if (oldParent != null) {
+      oldParent.removeSubModule(this);
     }
     this.parent = parent;
-    if (getParent() != null && !getParent().getSubModules().contains(this)) {
-      getParent().addSubModule(this);
+    if (parent != null && parent.getSubModules()!= null && !parent.getSubModules().contains(this)) {
+      parent.addSubModule(this);
     }
-    firePropertyChange(PARENT, oldParent, getParent());
+    firePropertyChange(PARENT, oldParent, parent);
   }
 
   /**
