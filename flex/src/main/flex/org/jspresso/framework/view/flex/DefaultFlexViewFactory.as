@@ -940,16 +940,12 @@ public class DefaultFlexViewFactory {
     tree.minWidth = 200;
     tree.horizontalScrollPolicy = ScrollPolicy.AUTO;
     tree.verticalScrollPolicy = ScrollPolicy.AUTO;
+    tree.selectionTrackingEnabled = false;
     bindTree(tree, remoteTree.state as RemoteCompositeValueState);
-    if (remoteTree.expanded) {
-      tree.addEventListener(FlexEvent.CREATION_COMPLETE, function (event:FlexEvent):void {
-        expandItem(tree, remoteTree.state as RemoteCompositeValueState, true);
-      });
-    } else {
-      tree.addEventListener(FlexEvent.CREATION_COMPLETE, function (event:FlexEvent):void {
-        expandItem(tree, remoteTree.state as RemoteCompositeValueState, false);
-      });
-    }
+    tree.addEventListener(FlexEvent.CREATION_COMPLETE, function (event:FlexEvent):void {
+      finalizeItems(tree, remoteTree.state as RemoteCompositeValueState, remoteTree.expanded);
+      tree.selectionTrackingEnabled = true;
+    });
     if (remoteTree.rowAction) {
       getRemotePeerRegistry().register(remoteTree.rowAction);
       tree.doubleClickEnabled = true;
@@ -960,16 +956,41 @@ public class DefaultFlexViewFactory {
     return tree;
   }
 
-  protected function expandItem(tree:SelectionTrackingTree, remoteState:RemoteCompositeValueState,
-                                recurse:Boolean):void {
-    tree.expandItem(remoteState, true, true, true);
-    if (recurse) {
-      if (remoteState.children != null) {
-        tree.fixListeners(remoteState.children);
-        for (var i:int = 0; i < remoteState.children.length; i++) {
-          if (remoteState.children[i] is RemoteCompositeValueState) {
-            expandItem(tree, remoteState.children[i], recurse);
+  protected function finalizeItems(tree:SelectionTrackingTree, remoteState:RemoteCompositeValueState,
+                                   expandAll:Boolean):void {
+    try {
+      tree.selectionTrackingEnabled = false;
+      var newSelectedItems:Array = [];
+      tree.expandItem(remoteState, true, true, true);
+      finalizeSubItems(tree, remoteState, expandAll, newSelectedItems);
+      if (!ArrayUtil.areUnorderedArraysEqual(tree.selectedItems, newSelectedItems)) {
+        for each(var item:RemoteCompositeValueState in newSelectedItems) {
+          if (item.parent) {
+            tree.expandItem(item.parent, true);
           }
+        }
+        tree.selectedItems = newSelectedItems;
+      }
+    } finally {
+      tree.selectionTrackingEnabled = true;
+    }
+  }
+
+  private function finalizeSubItems(tree:SelectionTrackingTree, remoteState:RemoteCompositeValueState, expandAll:Boolean,
+                             newSelectedItems:Array):void {
+    if (expandAll) {
+      tree.expandItem(remoteState, true, true, true);
+    }
+    if (remoteState.children != null) {
+      if (remoteState.selectedIndices) {
+        for each(var index:int in remoteState.selectedIndices) {
+          newSelectedItems.push(remoteState.children[index]);
+        }
+      }
+      tree.fixListeners(remoteState.children);
+      for (var i:int = 0; i < remoteState.children.length; i++) {
+        if (remoteState.children[i] is RemoteCompositeValueState) {
+          finalizeSubItems(tree, remoteState.children[i], expandAll, newSelectedItems);
         }
       }
     }
@@ -977,23 +998,26 @@ public class DefaultFlexViewFactory {
 
   protected function bindTree(tree:SelectionTrackingTree, rootState:RemoteCompositeValueState):void {
     var updateModel:Function = function (selectedItems:Array):void {
-      var parentsOfSelectedNodes:Array = [];
-      var i:int;
-      var node:Object;
-      var parentNode:RemoteCompositeValueState;
-      for (i = 0; i < selectedItems.length; i++) {
-        node = selectedItems[i];
-        parentNode = tree.getParentItem(node);
-        if (parentNode == null && !tree.showRoot) {
-          parentNode = rootState;
-        }
-        if (parentNode != null && parentsOfSelectedNodes.indexOf(parentNode) == -1) {
-          parentsOfSelectedNodes.push(parentNode);
-        }
+      if (!tree.selectionTrackingEnabled) {
+        return;
       }
       var oldSelectionTrackingEnabled:Boolean = tree.selectionTrackingEnabled;
       try {
         tree.selectionTrackingEnabled = false;
+        var parentsOfSelectedNodes:Array = [];
+        var i:int;
+        var node:Object;
+        var parentNode:RemoteCompositeValueState;
+        for (i = 0; i < selectedItems.length; i++) {
+          node = selectedItems[i];
+          parentNode = tree.getParentItem(node);
+          if (parentNode == null && !tree.showRoot) {
+            parentNode = rootState;
+          }
+          if (parentNode != null && parentsOfSelectedNodes.indexOf(parentNode) == -1) {
+            parentsOfSelectedNodes.push(parentNode);
+          }
+        }
         clearStateSelection(rootState, parentsOfSelectedNodes);
         for (i = 0; i < selectedItems.length; i++) {
           node = selectedItems[i];
