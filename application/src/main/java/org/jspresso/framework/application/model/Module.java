@@ -637,7 +637,7 @@ public class Module extends AbstractPropertyChangeCapable
       oldParent.removeSubModule(this);
     }
     this.parent = parent;
-    if (parent != null && parent.getSubModules()!= null && !parent.getSubModules().contains(this)) {
+    if (parent != null && (parent.getSubModules() == null || !parent.getSubModules().contains(this))) {
       parent.addSubModule(this);
     }
     firePropertyChange(PARENT, oldParent, parent);
