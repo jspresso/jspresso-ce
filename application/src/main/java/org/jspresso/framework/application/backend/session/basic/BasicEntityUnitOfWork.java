@@ -154,19 +154,34 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   @Override
   public void commit() {
     if (nestedUnitOfWork != null) {
-      Set<IEntity> nestedUnitOfWorkUpdatedEntities = nestedUnitOfWork.getUpdatedEntities();
+      BasicEntityUnitOfWork nestedUowToCommit = nestedUnitOfWork;
+      nestedUnitOfWork = null;
+      Set<IEntity> nestedUnitOfWorkUpdatedEntities = nestedUowToCommit.getUpdatedEntities();
       if (nestedUnitOfWorkUpdatedEntities != null) {
         for (IEntity updatedEntity : nestedUnitOfWorkUpdatedEntities) {
           addUpdatedEntity(updatedEntity);
         }
       }
-      Set<IEntity> nestedUnitOfWorkDeletedEntities = nestedUnitOfWork.getDeletedEntities();
+      Set<IEntity> nestedUnitOfWorkDeletedEntities = nestedUowToCommit.getDeletedEntities();
       if (nestedUnitOfWorkDeletedEntities != null) {
         for (IEntity deletedEntity : nestedUnitOfWorkDeletedEntities) {
           addDeletedEntity(deletedEntity);
         }
       }
-      nestedUnitOfWork.commit();
+
+      List<IEntity> nestedUnitOfWorkRegisteredForUpdateEntities = nestedUowToCommit.getEntitiesRegisteredForUpdate();
+      if (nestedUnitOfWorkRegisteredForUpdateEntities != null) {
+        for (IEntity toUpdateEntity : nestedUnitOfWorkRegisteredForUpdateEntities) {
+          registerForUpdate(toUpdateEntity);
+        }
+      }
+      Set<IEntity> nestedUnitOfWorkRegisteredForDeletionEntities = nestedUowToCommit.getEntitiesRegisteredForDeletion();
+      if (nestedUnitOfWorkRegisteredForDeletionEntities != null) {
+        for (IEntity toDeleteEntity : nestedUnitOfWorkDeletedEntities) {
+          registerForDeletion(toDeleteEntity);
+        }
+      }
+      nestedUowToCommit.commit();
     } else {
       cleanup();
     }
