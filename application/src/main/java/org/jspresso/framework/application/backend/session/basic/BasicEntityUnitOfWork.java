@@ -154,34 +154,33 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   @Override
   public void commit() {
     if (nestedUnitOfWork != null) {
-      BasicEntityUnitOfWork nestedUowToCommit = nestedUnitOfWork;
-      nestedUnitOfWork = null;
-      Set<IEntity> nestedUnitOfWorkUpdatedEntities = nestedUowToCommit.getUpdatedEntities();
+      Set<IEntity> nestedUnitOfWorkUpdatedEntities = nestedUnitOfWork.getUpdatedEntities();
+      Set<IEntity> nestedUnitOfWorkDeletedEntities = nestedUnitOfWork.getDeletedEntities();
+      List<IEntity> nestedUnitOfWorkRegisteredForUpdateEntities = nestedUnitOfWork.getEntitiesRegisteredForUpdate();
+      Set<IEntity> nestedUnitOfWorkRegisteredForDeletionEntities = nestedUnitOfWork.getEntitiesRegisteredForDeletion();
+      nestedUnitOfWork.commit();
+
       if (nestedUnitOfWorkUpdatedEntities != null) {
         for (IEntity updatedEntity : nestedUnitOfWorkUpdatedEntities) {
           addUpdatedEntity(updatedEntity);
+          clearDirtyState(updatedEntity);
         }
       }
-      Set<IEntity> nestedUnitOfWorkDeletedEntities = nestedUowToCommit.getDeletedEntities();
       if (nestedUnitOfWorkDeletedEntities != null) {
         for (IEntity deletedEntity : nestedUnitOfWorkDeletedEntities) {
           addDeletedEntity(deletedEntity);
         }
       }
-
-      List<IEntity> nestedUnitOfWorkRegisteredForUpdateEntities = nestedUowToCommit.getEntitiesRegisteredForUpdate();
       if (nestedUnitOfWorkRegisteredForUpdateEntities != null) {
         for (IEntity toUpdateEntity : nestedUnitOfWorkRegisteredForUpdateEntities) {
           registerForUpdate(toUpdateEntity);
         }
       }
-      Set<IEntity> nestedUnitOfWorkRegisteredForDeletionEntities = nestedUowToCommit.getEntitiesRegisteredForDeletion();
       if (nestedUnitOfWorkRegisteredForDeletionEntities != null) {
         for (IEntity toDeleteEntity : nestedUnitOfWorkDeletedEntities) {
           registerForDeletion(toDeleteEntity);
         }
       }
-      nestedUowToCommit.commit();
     } else {
       cleanup();
     }
