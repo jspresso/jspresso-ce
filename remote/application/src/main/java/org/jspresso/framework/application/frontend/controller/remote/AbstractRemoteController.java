@@ -656,7 +656,8 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
         if (oldIndex != null) {
           RemoteCommand oldCommand = commandQueue.set(oldIndex + commandLowPriorityOffset, command);
           assert ObjectUtils.equals(oldCommand.getClass(), command.getClass()) : "Different command types";
-          assert ObjectUtils.equals(oldCommand.getTargetPeerGuid(), command.getTargetPeerGuid()) : "Different command targets";
+          assert ObjectUtils.equals(oldCommand.getTargetPeerGuid(), command.getTargetPeerGuid()) :
+              "Different command targets";
         } else {
           guidToIndex.put(guid, commandQueue.size() - commandLowPriorityOffset);
           commandQueue.add(command);
@@ -668,8 +669,8 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
   }
 
   public boolean isIdempotent(RemoteCommand command) {
-    return !(command instanceof RemoteWorkspaceDisplayCommand)
-        && !(command instanceof RemoteAddCardCommand);
+    return !(command instanceof RemoteWorkspaceDisplayCommand) && !(command instanceof RemoteAddCardCommand)
+        && getRegistered(command.getTargetPeerGuid()) != null;
   }
 
   /**
