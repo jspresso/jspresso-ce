@@ -50,6 +50,7 @@ import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.view.descriptor.EBorderType;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactory;
+import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicCollectionViewDescriptor;
@@ -229,8 +230,17 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
         tabs.add(v);
       }
       
-      tabs.add(filterViewDesc);
-      ((BasicViewDescriptor) filterViewDesc).setBorderType(EBorderType.NONE);
+      if (filterViewDesc instanceof ITabViewDescriptor) {
+        for (IViewDescriptor view : ((ICompositeViewDescriptor) filterViewDesc).getChildViewDescriptors()) {
+          BasicViewDescriptor v = ((BasicViewDescriptor) view).clone();
+          v.setModelDescriptor(filterModelDescriptorProvider);
+          tabs.add(v);
+        }
+      }
+      else {
+        ((BasicViewDescriptor) filterViewDesc).setBorderType(EBorderType.NONE);
+        tabs.add(filterViewDesc);
+      }
       
       BasicTabViewDescriptor tabView = new BasicTabViewDescriptor();
       tabView.setRenderingOptions(ERenderingOptions.LABEL);
