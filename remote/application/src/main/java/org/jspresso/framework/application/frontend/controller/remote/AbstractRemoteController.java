@@ -664,8 +664,7 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
   }
 
   public boolean isIdempotent(RemoteCommand command) {
-    return !(command instanceof RemoteWorkspaceDisplayCommand) && !(command instanceof RemoteAddCardCommand)
-        && getRegistered(command.getTargetPeerGuid()) != null;
+    return getRegistered(command.getTargetPeerGuid()) != null;
   }
 
   /**
