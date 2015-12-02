@@ -71,7 +71,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   private       List<?>                 queriedComponents;
   private       List<?>                 stickyResults;
   private       ITranslationProvider    translationProvider;
-  private       Locale                  locale; 
+  private       Locale                  locale;
 
   /**
    * Constructs a new {@code QueryComponent} instance.
