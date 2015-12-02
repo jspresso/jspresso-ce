@@ -49,6 +49,7 @@ import org.jspresso.framework.util.gui.ERenderingOptions;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.view.descriptor.EBorderType;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
+import org.jspresso.framework.view.descriptor.IQueryExtraViewDescriptorFactory;
 import org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactory;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
@@ -73,15 +74,15 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   private PropertyChangeListener           filterComponentTracker;
   private IViewDescriptor                  filterViewDescriptor;
   private BasicTabViewDescriptor           filterExtraViewDescriptor;
-  
 
   private Map<String, ESort>               orderingProperties;
   private Integer                          pageSize;
   private IQueryComponentDescriptorFactory queryComponentDescriptorFactory;
   private IQueryViewDescriptorFactory      queryViewDescriptorFactory;
-
-  private IViewDescriptor paginationViewDescriptor;
-  private BackendAction   pagingAction;
+  private IQueryExtraViewDescriptorFactory queryExtraViewDescriptorFactory;
+  
+  private IViewDescriptor                  paginationViewDescriptor;
+  private BackendAction                    pagingAction;
 
   /**
    * Gets the queryViewDescriptorFactory.
@@ -97,6 +98,15 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
    */
   public FilterableBeanCollectionModule() {
     filterComponentTracker = new FilterComponentTracker(this);
+  }
+  
+  /**
+   * Gest the queryExtraViewDescriptorFactory.
+   * 
+   * @return the queryExtraViewDescriptorFactory.
+   */
+  public IQueryExtraViewDescriptorFactory getQueryExtraViewDescriptorFactory() {
+    return queryExtraViewDescriptorFactory;
   }
 
   /**
@@ -135,7 +145,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
    *
    * @return the filterExtraViewDescriptor.
    */
-  public BasicTabViewDescriptor getFilterExtraViewDescriptor() {
+  protected BasicTabViewDescriptor getFilterExtraViewDescriptor() {
     return filterExtraViewDescriptor;
   }
 
@@ -221,8 +231,16 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
     }
     
     BasicTabViewDescriptor tabFilterView = getFilterExtraViewDescriptor();
+    if (tabFilterView == null) {
+      IQueryExtraViewDescriptorFactory extraViewFactory = getQueryExtraViewDescriptorFactory();
+      if (extraViewFactory != null) {
+        tabFilterView = extraViewFactory.createQueryExtraViewDescriptor(
+            getProjectedViewDescriptor(),
+            realComponentDesc,
+            filterModelDescriptorProvider.getComponentDescriptor());
+      }
+    }
     if (tabFilterView!=null) {
-      
       List<IViewDescriptor> tabs = new ArrayList<>();
       for (IViewDescriptor view : tabFilterView.getChildViewDescriptors()) {
         BasicViewDescriptor v = ((BasicViewDescriptor) view).clone();
@@ -387,6 +405,16 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
     this.queryViewDescriptorFactory = queryViewDescriptorFactory;
   }
 
+  /**
+   * Sets the queryExtraViewDescriptorFactory.
+   *
+   * @param queryExtraViewDescriptorFactory
+   *          the queryExtraViewDescriptorFactory to set.
+   */
+  public void setQueryExtraViewDescriptorFactory(IQueryExtraViewDescriptorFactory queryExtraViewDescriptorFactory) {
+    this.queryExtraViewDescriptorFactory = queryExtraViewDescriptorFactory;
+  }
+  
   /**
    * Gets the module descriptor.
    *
