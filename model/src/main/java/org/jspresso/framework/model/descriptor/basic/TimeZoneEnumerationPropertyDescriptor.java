@@ -25,13 +25,29 @@ import java.util.TimeZone;
 
 /**
  * This is a special enumeration descriptor that holds all available timezones.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class TimeZoneEnumerationPropertyDescriptor extends
     AbstractEnumerationPropertyDescriptor {
 
   private List<String> enumerationValues;
+
+  /**
+   * Instantiates a new Time zone enumeration property descriptor.
+   */
+  public TimeZoneEnumerationPropertyDescriptor() {
+    enumerationValues = new ArrayList<>();
+    for (String timezoneId : TimeZone.getAvailableIDs()) {
+      if (timezoneId.matches(
+          "(Africa/|America/|Antarctica/|Arctic/|Asia/" + "|Atlantic/|Australia/|Europe/|Indian/|Pacific/).*")) {
+        if (!timezoneId.startsWith("Asia/Riyadh8")) {
+          enumerationValues.add(timezoneId);
+        }
+      }
+    }
+    Collections.sort(enumerationValues);
+  }
 
   /**
    * {@inheritDoc}
@@ -48,18 +64,6 @@ public class TimeZoneEnumerationPropertyDescriptor extends
    */
   @Override
   public List<String> getEnumerationValues() {
-    if (enumerationValues == null) {
-      enumerationValues = new ArrayList<>();
-      for (String timezoneId : TimeZone.getAvailableIDs()) {
-        if (timezoneId.matches("(Africa/|America/|Antarctica/|Arctic/|Asia/" +
-            "|Atlantic/|Australia/|Europe/|Indian/|Pacific/).*")) {
-          if (!timezoneId.startsWith("Asia/Riyadh8")) {
-            enumerationValues.add(timezoneId);
-          }
-        }
-      }
-      Collections.sort(enumerationValues);
-    }
     return enumerationValues;
   }
 
