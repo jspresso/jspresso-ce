@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentFactory;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
@@ -72,7 +73,24 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   private       List<?>                 stickyResults;
   private       ITranslationProvider    translationProvider;
   private       Locale                  locale; 
+  private       IComponent              extra;
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setExtra(IComponent extra) {
+    this.extra = extra;
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public IComponent getExtra() {
+    return extra;
+  }
+  
   /**
    * Constructs a new {@code QueryComponent} instance.
    *
