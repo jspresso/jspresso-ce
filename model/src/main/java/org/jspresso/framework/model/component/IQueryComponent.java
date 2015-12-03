@@ -132,6 +132,7 @@ public interface IQueryComponent extends Map<String, Object>, IPageable, ISortab
    *
    * @return the query component clone.
    */
+  @Override
   IQueryComponent clone();
 
   /**
@@ -200,5 +201,17 @@ public interface IQueryComponent extends Map<String, Object>, IPageable, ISortab
    * Resets the query component.
    */
   void reset();
+  
+  /**
+   * Set the extra component.
+   * @param extra The component.
+   */
+  void setExtra(IComponent extra);
 
+  /**
+   * Get the extra component.
+   * @return the extra component.
+   */
+  IComponent getExtra() ;
+  
 }

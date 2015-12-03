@@ -77,8 +77,7 @@ public class FilterableBeanCollectionModuleDescriptor extends
     filterDescriptor.setReferencedDescriptor(moduleFilterReferencedDescriptor);
     filterDescriptor.setName(FILTER);
 
-    List<IPropertyDescriptor> propertyDescriptors = new ArrayList<>(
-        getPropertyDescriptors());
+    List<IPropertyDescriptor> propertyDescriptors = new ArrayList<>(getPropertyDescriptors());
     propertyDescriptors.add(filterDescriptor);
 
     setPropertyDescriptors(propertyDescriptors);

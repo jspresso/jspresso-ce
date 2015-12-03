@@ -88,11 +88,29 @@ public class BasicQueryComponentDescriptorFactory implements IQueryComponentDesc
     synchronized (registry) {
       queryComponentDescriptor = registry.get(componentDescriptorProvider);
       if (queryComponentDescriptor == null) {
-        queryComponentDescriptor = new BasicQueryComponentDescriptor<IQueryComponent>(componentDescriptorProvider,
-            refRegistry);
+        queryComponentDescriptor = instanciateQueryComponentDescriptor(componentDescriptorProvider, refRegistry);
         registry.put(componentDescriptorProvider, queryComponentDescriptor);
       }
     }
+    return queryComponentDescriptor;
+  }
+
+  /**
+   * Instanciate query component descriptor.
+   * 
+   * @param componentDescriptorProvider
+   *    the provider for delegate entity descriptor.
+   * @param registry 
+   *    the registry. 
+   * @return the query component descriptor
+   */
+  protected IComponentDescriptor<IQueryComponent> instanciateQueryComponentDescriptor(
+      IComponentDescriptorProvider<? extends IComponent> componentDescriptorProvider,
+      Map<Class<? extends IComponent>, IComponentDescriptor<? extends IComponent>> registry) {
+    
+    IComponentDescriptor<IQueryComponent> queryComponentDescriptor
+      = new BasicQueryComponentDescriptor<IQueryComponent>(componentDescriptorProvider, registry);
+   
     return queryComponentDescriptor;
   }
 }
