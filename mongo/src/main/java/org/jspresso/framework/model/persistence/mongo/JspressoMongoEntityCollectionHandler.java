@@ -136,7 +136,7 @@ public abstract class JspressoMongoEntityCollectionHandler implements Invocation
    *
    * @return the collection interface
    */
-  protected abstract Class<? extends Collection<?>> getCollectionInterface();
+  protected abstract Class<? extends Collection> getCollectionInterface();
 
   private void initializeIfNecessary() {
     if (target == null) {

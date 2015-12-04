@@ -181,10 +181,7 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
         accessor = accessorFactory.createPropertyAccessor(getId(), modelType);
       } catch (Exception ex) {
         LOG.error(
-            "An error occurred when creating the accessor for the {} property on {} class.",
-            new Object[] {
-                getId(), modelType, ex
-            });
+            "An error occurred when creating the accessor for the {} property on {} class.", getId(), modelType, ex);
       }
       if (accessor instanceof IModelDescriptorAware) {
         ((IModelDescriptorAware) accessor)

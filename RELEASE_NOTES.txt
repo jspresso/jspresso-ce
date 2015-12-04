@@ -63,6 +63,14 @@
     https://logging.apache.org/log4j/2.x/manual/configuration.html
     https://logging.apache.org/log4j/2.x/manual/migration.html
 
+- All slf4j (e.g. slf4j-log4j12, log4j) binding dependencies have been removed from the framework. Only the api
+  dependency remains. This means that, depending on the actual logging framework to use (e.g. log4j), the corresponding
+  slf4j binding must be provided either as a project dependency or as a runtime dependency (e.g. provided by the
+  application server).
+
+- commons-lang dependency management has been removed from the root pom in favor of commons-lang3.
+
+
 4.2
 ===
 

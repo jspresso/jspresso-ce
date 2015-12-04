@@ -18,22 +18,21 @@
  */
 package org.jspresso.framework.application.launch.swing;
 
-import org.apache.commons.cli.BasicParser;
+import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.jspresso.framework.application.startup.IStartup;
 import org.jspresso.framework.util.swing.SwingUtil;
 import org.jspresso.framework.util.swing.splash.SplashWindow;
 import org.jspresso.framework.util.url.UrlHelper;
-
-import chrriis.dj.nativeswing.swtimpl.NativeInterface;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Swing launcher.
@@ -65,10 +64,10 @@ public final class SwingLauncher {
         .desc(
             "use given image URL for splash (Supports classpath: pseudo URLs)")
         .build());
-    options.addOption(Option.builder().argName("applicationClass").hasArg()
+    options.addOption(Option.builder("applicationClass").argName("applicationClass").hasArg()
         .desc("use given class name as startup class.").required()
         .build());
-    CommandLineParser parser = new BasicParser();
+    CommandLineParser parser = new DefaultParser();
     boolean splashed = false;
     try {
       CommandLine cmd = parser.parse(options, args);
