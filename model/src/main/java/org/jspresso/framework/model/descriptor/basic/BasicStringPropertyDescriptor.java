@@ -155,9 +155,7 @@ public class BasicStringPropertyDescriptor extends
         public String getI18nMessage(ITranslationProvider translationProvider,
             Locale locale) {
           StringBuilder boundsSpec = new StringBuilder("l");
-          if (maxL != null) {
-            boundsSpec.append(" <= ").append(maxL);
-          }
+          boundsSpec.append(" <= ").append(maxL);
           return translationProvider.getTranslation(
               "integrity.property.toolong", new Object[] {
                   getI18nName(translationProvider, locale), boundsSpec,

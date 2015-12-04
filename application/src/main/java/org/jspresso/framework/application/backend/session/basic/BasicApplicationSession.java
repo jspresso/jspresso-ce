@@ -179,9 +179,7 @@ public class BasicApplicationSession implements IApplicationSession {
    */
   @Override
   public void clear() {
-    if (customValues != null) {
-      customValues.clear();
-    }
+    customValues.clear();
     locale = null;
     timeZone = null;
     subject = null;

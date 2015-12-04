@@ -72,7 +72,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   private       List<?>                 queriedComponents;
   private       List<?>                 stickyResults;
   private       ITranslationProvider    translationProvider;
-  private       Locale                  locale; 
+  private       Locale                  locale;
   private       IComponent              extra;
 
   /**
@@ -82,7 +82,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   public void setExtra(IComponent extra) {
     this.extra = extra;
   }
-  
+
   /**
    * {@inheritDoc}
    */
@@ -90,7 +90,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   public IComponent getExtra() {
     return extra;
   }
-  
+
   /**
    * Constructs a new {@code QueryComponent} instance.
    *
@@ -468,7 +468,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   @Override
   public void setDisplayPageIndex(Integer displayPageIndex) {
     if (displayPageIndex != null) {
-      setPage(Integer.valueOf(displayPageIndex - 1));
+      setPage(displayPageIndex - 1);
     } else {
       setPage(null);
     }

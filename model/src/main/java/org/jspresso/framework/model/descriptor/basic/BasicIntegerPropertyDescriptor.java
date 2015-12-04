@@ -126,7 +126,7 @@ public class BasicIntegerPropertyDescriptor extends
       return boundValue.intValue() == Integer.MAX_VALUE
           || boundValue.intValue() == Integer.MIN_VALUE;
     }
-    return super.isDefault(boundValue);
+    return super.isDefault(null);
   }
 
 }

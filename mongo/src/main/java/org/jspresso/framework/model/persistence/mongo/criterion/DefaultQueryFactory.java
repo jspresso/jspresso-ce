@@ -381,21 +381,20 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
     if (propertyDescriptor instanceof IStringPropertyDescriptor && ((IStringPropertyDescriptor) propertyDescriptor)
         .isTranslatable()) {
       String nlsOrRawValue = null;
-      String nlsValue = propertyValue;
       String barePropertyName = property.getKey();
       if (property.getKey().endsWith(IComponentDescriptor.NLS_SUFFIX)) {
         barePropertyName = barePropertyName.substring(0,
             barePropertyName.length() - IComponentDescriptor.NLS_SUFFIX.length());
       } else {
-        nlsOrRawValue = nlsValue;
+        nlsOrRawValue = propertyValue;
       }
-      if (nlsValue != null) {
+      if (propertyValue != null) {
         List<Criteria> translationRestriction = new ArrayList<>();
         translationRestriction.add(createStringRestriction(
             ((ICollectionPropertyDescriptor<IPropertyTranslation>) componentDescriptor.getPropertyDescriptor(
                 translationsPath)).getCollectionDescriptor().getElementDescriptor().getPropertyDescriptor(
                 IPropertyTranslation.TRANSLATED_VALUE), translationsAlias + "." + IPropertyTranslation.TRANSLATED_VALUE,
-            nlsValue, componentDescriptor, queryComponent, context));
+            propertyValue, componentDescriptor, queryComponent, context));
         String languagePath = translationsAlias + "." + IPropertyTranslation.LANGUAGE;
         translationRestriction.add(where(languagePath).is(locale.getLanguage()));
         translationRestriction.add(where(translationsAlias + "." + IPropertyTranslation.PROPERTY_NAME).is(

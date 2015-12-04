@@ -34,6 +34,7 @@ import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
@@ -85,33 +86,33 @@ public class ViewTester {
   public static void main(String... args) {
     Options options = new Options();
     options
-        .addOption(OptionBuilder
-            .withArgName(APPLICATION_CONTEXT_KEY)
-            .isRequired()
+        .addOption(Option.builder(APPLICATION_CONTEXT_KEY)
+            .argName(APPLICATION_CONTEXT_KEY)
+            .required()
             .hasArg()
-            .withDescription(
+            .desc(
                 "use given applicationContextKey as registered in the Spring BeanFactoryLocator.")
-            .create(APPLICATION_CONTEXT_KEY));
+            .build());
     options
-        .addOption(OptionBuilder
-            .withArgName(BEAN_FACTORY_SELECTOR)
+        .addOption(Option.builder(BEAN_FACTORY_SELECTOR)
+            .argName(BEAN_FACTORY_SELECTOR)
             .hasArg()
-            .withDescription(
+            .desc(
                 "use given resource path to lookup the Spring BeanFactoryLocator. If not set, defaults to beanRefFactory.xml")
-            .create(BEAN_FACTORY_SELECTOR));
-    options.addOption(OptionBuilder
-        .withArgName(VIEW_ID)
-        .isRequired()
+            .build());
+    options.addOption(Option.builder(VIEW_ID)
+        .argName(VIEW_ID)
+        .required()
         .hasArg()
-        .withDescription(
+        .desc(
             "use given view identifier to instantiate and display the view.")
-        .create(VIEW_ID));
-    options.addOption(OptionBuilder
-        .withArgName(LANGUAGE)
+        .build());
+    options.addOption(Option.builder(LANGUAGE)
+        .argName(LANGUAGE)
         .hasArg()
-        .withDescription(
+        .desc(
             "use given locale to instantiate and display the view.")
-        .create(LANGUAGE));
+        .build());
     CommandLineParser parser = new BasicParser();
     CommandLine cmd;
     try {

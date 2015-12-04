@@ -200,11 +200,8 @@ public class ControllerAwareEntityInvocationHandler extends BasicEntityInvocatio
   protected boolean isPersistent(Object proxy) {
     if (super.isPersistent(proxy)) {
       Map<String, Object> dirtyProperties = getBackendController().getDirtyProperties((IEntity) proxy, false);
-      if (dirtyProperties != null && dirtyProperties.containsKey(IEntity.VERSION) && dirtyProperties.get(
-          IEntity.VERSION) == null) {
-        return false;
-      }
-      return true;
+      return !(dirtyProperties != null && dirtyProperties.containsKey(IEntity.VERSION) && dirtyProperties.get(
+          IEntity.VERSION) == null);
     }
     return false;
   }

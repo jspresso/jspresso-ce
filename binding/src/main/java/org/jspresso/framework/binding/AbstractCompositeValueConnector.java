@@ -36,7 +36,7 @@ import org.jspresso.framework.util.gui.IconProvider;
 /**
  * This is a simple connector implementation which allows the management of child
  * connectors. It can be used for straight view connector implementation.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 
@@ -141,7 +141,7 @@ public abstract class AbstractCompositeValueConnector extends
 
   /**
    * Gets the displayDescription.
-   * 
+   *
    * @return the displayDescription.
    */
   @Override
@@ -215,7 +215,7 @@ public abstract class AbstractCompositeValueConnector extends
 
   /**
    * Sets the displayDescription.
-   * 
+   *
    * @param displayDescription
    *          the displayDescription to set.
    */
@@ -225,7 +225,7 @@ public abstract class AbstractCompositeValueConnector extends
 
   /**
    * Sets the static displayIcon.
-   * 
+   *
    * @param displayIcon
    *          the displayIcon to set.
    */
@@ -235,7 +235,7 @@ public abstract class AbstractCompositeValueConnector extends
 
   /**
    * Sets the static displayValue.
-   * 
+   *
    * @param displayValue
    *          the displayValue to set.
    */
@@ -245,7 +245,7 @@ public abstract class AbstractCompositeValueConnector extends
 
   /**
    * Sets the iconImageURLProvider.
-   * 
+   *
    * @param iconImageURLProvider
    *          the iconImageURLProvider to set.
    */
@@ -255,7 +255,7 @@ public abstract class AbstractCompositeValueConnector extends
 
   /**
    * Sets the renderingChildConnectorId.
-   * 
+   *
    * @param renderingChildConnectorId
    *          the renderingChildConnectorId to set.
    */
@@ -287,7 +287,7 @@ public abstract class AbstractCompositeValueConnector extends
   /**
    * Adds a new child connector to this composite. The key used as storage key
    * is the child connector id.
-   * 
+   *
    * @param childConnector
    *          the added connector.
    */
@@ -298,7 +298,7 @@ public abstract class AbstractCompositeValueConnector extends
 
   /**
    * Adds a new child connector using a specified storage key.
-   * 
+   *
    * @param storageKey
    *          the key to use to store the child connector. It may be different
    *          from its id.
@@ -400,7 +400,7 @@ public abstract class AbstractCompositeValueConnector extends
 
   /**
    * Gets the trackingChildrenSelection.
-   * 
+   *
    * @return the trackingChildrenSelection.
    */
   protected boolean isTrackingChildrenSelection() {
@@ -429,7 +429,7 @@ public abstract class AbstractCompositeValueConnector extends
       IValueConnector renderingConnector = getRenderingConnector();
       if (renderingConnector instanceof AbstractValueConnector) {
         ((AbstractValueConnector) renderingConnector)
-            .fireValueChange(new ValueChangeEvent(renderingConnector, badValue,
+            .fireValueChange(new ValueChangeEvent(renderingConnector, null,
                 renderingConnector.getConnectorValue()));
       }
     }

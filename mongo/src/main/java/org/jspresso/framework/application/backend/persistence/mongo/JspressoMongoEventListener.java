@@ -28,8 +28,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.mapping.event.AbstractDeleteEvent;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
+import org.springframework.data.mongodb.core.mapping.event.AfterConvertEvent;
 import org.springframework.data.mongodb.core.mapping.event.AfterDeleteEvent;
+import org.springframework.data.mongodb.core.mapping.event.AfterLoadEvent;
+import org.springframework.data.mongodb.core.mapping.event.AfterSaveEvent;
+import org.springframework.data.mongodb.core.mapping.event.BeforeConvertEvent;
 import org.springframework.data.mongodb.core.mapping.event.BeforeDeleteEvent;
+import org.springframework.data.mongodb.core.mapping.event.BeforeSaveEvent;
 import org.springframework.data.mongodb.core.mapping.event.MongoMappingEvent;
 
 import org.jspresso.framework.application.backend.BackendControllerHolder;
@@ -54,12 +59,13 @@ public class JspressoMongoEventListener extends AbstractMongoEventListener<IEnti
   /**
    * On before convert.
    *
-   * @param entity
-   *     the entity
+   * @param event
+   *     the event
    */
   @Override
-  public void onBeforeConvert(IEntity entity) {
-    super.onBeforeConvert(entity);
+  public void onBeforeConvert(BeforeConvertEvent<IEntity> event) {
+    IEntity entity = event.getSource();
+    super.onBeforeConvert(event);
     // Version has already been changed.
     if (entity.isPersistent() && entity.getVersion() > 0) {
       ((ILifecycleCapable) entity).onUpdate(getEntityFactory(), getPrincipal(), getEntityLifecycleHandler());
@@ -69,80 +75,43 @@ public class JspressoMongoEventListener extends AbstractMongoEventListener<IEnti
   }
 
   /**
-   * On before save.
-   *
-   * @param entity
-   *     the entity
-   * @param dbo
-   *     the dbo
-   */
-  @Override
-  public void onBeforeSave(IEntity entity, DBObject dbo) {
-    super.onBeforeSave(entity, dbo);
-  }
-
-  /**
    * On after save.
    *
-   * @param entity
-   *     the entity
-   * @param dbo
-   *     the dbo
+   * @param event
+   *     the event
    */
   @Override
-  public void onAfterSave(IEntity entity, DBObject dbo) {
-    super.onAfterSave(entity, dbo);
+  public void onAfterSave(AfterSaveEvent<IEntity> event) {
+    super.onAfterSave(event);
+    IEntity entity = event.getSource();
     getBackendController().recordAsSynchronized(entity);
-  }
-
-  /**
-   * On after load.
-   *
-   * @param dbo
-   *     the dbo
-   */
-  @Override
-  public void onAfterLoad(DBObject dbo) {
-    super.onAfterLoad(dbo);
   }
 
   /**
    * On after convert.
    *
-   * @param dbo
-   *     the dbo
-   * @param entity
-   *     the entity
+   * @param event
+   *     the event
    */
   @Override
-  public void onAfterConvert(DBObject dbo, IEntity entity) {
-    super.onAfterConvert(dbo, entity);
+  public void onAfterConvert(AfterConvertEvent<IEntity> event) {
+    super.onAfterConvert(event);
+    IEntity entity = event.getSource();
     getBackendController().registerEntity(entity);
     ((ILifecycleCapable) entity).onLoad();
   }
 
   /**
-   * On before delete.
-   *
-   * @param entityType
-   *     the entity type
-   * @param dbo
-   *     the dbo
-   */
-  public void onBeforeDelete(@SuppressWarnings("unused") Class<?> entityType, DBObject dbo) {
-    super.onBeforeDelete(dbo);
-  }
-
-  /**
    * On after delete.
    *
-   * @param entityType
-   *     the entity type
-   * @param dbo
-   *     the dbo
+   * @param event
+   *     the event
    */
-  public void onAfterDelete(Class<?> entityType, DBObject dbo) {
-    super.onAfterDelete(dbo);
+  @Override
+  public void onAfterDelete(AfterDeleteEvent<IEntity> event) {
+    super.onAfterDelete(event);
+    DBObject dbo = event.getSource();
+    Class<?> entityType = event.getType();
     Class<?> entityContract = entityType;
     if (Proxy.isProxyClass(entityType)) {
       for (Class<?> superInterface : entityType.getInterfaces()) {
@@ -234,28 +203,5 @@ public class JspressoMongoEventListener extends AbstractMongoEventListener<IEnti
    */
   public void setEntityFactory(IEntityFactory entityFactory) {
     this.entityFactory = entityFactory;
-  }
-
-  /**
-   * On application event.
-   *
-   * @param event
-   *     the event
-   */
-  @Override
-  public void onApplicationEvent(MongoMappingEvent<?> event) {
-    if (event instanceof AbstractDeleteEvent) {
-      Class<?> eventDomainType = ((AbstractDeleteEvent) event).getType();
-      if (eventDomainType != null && IEntity.class.isAssignableFrom(eventDomainType)) {
-        if (event instanceof BeforeDeleteEvent) {
-          onBeforeDelete(eventDomainType, event.getDBObject());
-        }
-        if (event instanceof AfterDeleteEvent) {
-          onAfterDelete(eventDomainType, event.getDBObject());
-        }
-      }
-    } else {
-      super.onApplicationEvent(event);
-    }
   }
 }

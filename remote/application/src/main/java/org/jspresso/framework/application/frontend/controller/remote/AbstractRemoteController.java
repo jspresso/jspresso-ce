@@ -668,6 +668,13 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
     }
   }
 
+  /**
+   * Is idempotent boolean.
+   *
+   * @param command
+   *     the command
+   * @return the boolean
+   */
   public boolean isIdempotent(RemoteCommand command) {
     return getRegistered(command.getTargetPeerGuid()) != null;
   }

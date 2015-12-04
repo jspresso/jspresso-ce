@@ -41,7 +41,7 @@ public class DefaultComponentExtensionFactory implements
       Class<IComponentExtension<E>> extensionClass,
       Class<? extends E> componentContract, E component) {
     try {
-      IComponentExtension<E> extension = (IComponentExtension<E>) ConstructorUtils
+      IComponentExtension<E> extension = ConstructorUtils
           .invokeConstructor(extensionClass, new Object[] {
             component
           }, new Class<?>[] {

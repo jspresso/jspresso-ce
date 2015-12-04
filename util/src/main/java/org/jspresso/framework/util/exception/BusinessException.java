@@ -75,7 +75,7 @@ public abstract class BusinessException extends RuntimeException {
           locale);
     }
     return translationProvider
-        .getTranslation(staticI18nKey, i18nParams, locale);
+        .getTranslation(staticI18nKey, (String) null, locale);
   }
 
 }

@@ -191,14 +191,14 @@ public class MockSwingController extends
     String userFriendlyExceptionMessage = computeUserFriendlyExceptionMessage(ex);
     Component sourceComponent = null;
     if (userFriendlyExceptionMessage != null) {
-      JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
+      JOptionPane.showMessageDialog(null, HtmlHelper
           .toHtml(HtmlHelper.emphasis(HtmlHelper
               .escapeForHTML(userFriendlyExceptionMessage))),
           getTranslation("error", getLocale()), JOptionPane.ERROR_MESSAGE,
           getIconFactory().getErrorIcon(getIconFactory().getLargeIconSize()));
     } else {
       traceUnexpectedException(ex);
-      JErrorDialog dialog = JErrorDialog.createInstance(sourceComponent, this,
+      JErrorDialog dialog = JErrorDialog.createInstance(null, this,
           getLocale());
       dialog.setMessageIcon(getIconFactory().getErrorIcon(
           getIconFactory().getMediumIconSize()));

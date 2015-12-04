@@ -92,6 +92,7 @@ public class DefaultRemoteController extends AbstractRemoteController {
   /**
    * {@inheritDoc}
    */
+  @Override
   protected RComponent createWorkspaceView(String workspaceName) {
     RSplitContainer viewComponent = new RSplitContainer(workspaceName + "_split");
     viewComponent.setOrientation(EOrientation.HORIZONTAL.toString());
@@ -109,6 +110,7 @@ public class DefaultRemoteController extends AbstractRemoteController {
   /**
    * User logged in.
    */
+  @Override
   protected void userLoggedIn() {
     if (getWorkspaceNames() != null && getWorkspaceNames().size() > 0) {
       displayWorkspace(getWorkspaceNames().get(0));

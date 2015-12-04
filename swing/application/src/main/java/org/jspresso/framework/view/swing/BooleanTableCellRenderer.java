@@ -37,7 +37,7 @@ import org.jspresso.framework.util.swing.SwingUtil;
 
 /**
  * Renders a table cell using a checkbox.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BooleanTableCellRenderer extends JCheckBox implements
@@ -93,8 +93,7 @@ public class BooleanTableCellRenderer extends JCheckBox implements
       if (unselectedBackground != null) {
         actualBackground = unselectedBackground;
       }
-      super.setBackground(SwingUtil.computeEvenOddBackground(actualBackground,
-          isSelected, row));
+      super.setBackground(SwingUtil.computeEvenOddBackground(actualBackground, false, row));
     }
     setValue(value);
     if (hasFocus) {
@@ -147,7 +146,7 @@ public class BooleanTableCellRenderer extends JCheckBox implements
 
   /**
    * Sets the renderer value.
-   * 
+   *
    * @param value
    *          the model value.
    */
@@ -294,7 +293,7 @@ public class BooleanTableCellRenderer extends JCheckBox implements
 
   /**
    * Gets the toolTipProperty.
-   * 
+   *
    * @return the toolTipProperty.
    */
   protected String getToolTipProperty() {
@@ -303,7 +302,7 @@ public class BooleanTableCellRenderer extends JCheckBox implements
 
   /**
    * Sets the toolTipProperty.
-   * 
+   *
    * @param toolTipProperty
    *          the toolTipProperty to set.
    */
@@ -314,7 +313,7 @@ public class BooleanTableCellRenderer extends JCheckBox implements
 
   /**
    * Gets the backgroundProperty.
-   * 
+   *
    * @return the backgroundProperty.
    */
   protected String getBackgroundProperty() {
@@ -323,7 +322,7 @@ public class BooleanTableCellRenderer extends JCheckBox implements
 
   /**
    * Sets the backgroundProperty.
-   * 
+   *
    * @param backgroundProperty
    *          the backgroundProperty to set.
    */
@@ -334,7 +333,7 @@ public class BooleanTableCellRenderer extends JCheckBox implements
 
   /**
    * Gets the foregroundProperty.
-   * 
+   *
    * @return the foregroundProperty.
    */
   protected String getForegroundProperty() {
@@ -343,7 +342,7 @@ public class BooleanTableCellRenderer extends JCheckBox implements
 
   /**
    * Sets the foregroundProperty.
-   * 
+   *
    * @param foregroundProperty
    *          the foregroundProperty to set.
    */
@@ -354,7 +353,7 @@ public class BooleanTableCellRenderer extends JCheckBox implements
 
   /**
    * Gets the fontProperty.
-   * 
+   *
    * @return the fontProperty.
    */
   protected String getFontProperty() {
@@ -363,7 +362,7 @@ public class BooleanTableCellRenderer extends JCheckBox implements
 
   /**
    * Sets the fontProperty.
-   * 
+   *
    * @param fontProperty
    *          the fontProperty to set.
    */

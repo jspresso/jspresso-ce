@@ -58,6 +58,7 @@ public class SingleWeakPropertyChangeSupport extends WeakPropertyChangeSupport {
    *
    * @return the property change support
    */
+  @Override
   protected WeakPropertyChangeSupport createChild() {
     return new SingleWeakPropertyChangeSupport(getSource());
   }

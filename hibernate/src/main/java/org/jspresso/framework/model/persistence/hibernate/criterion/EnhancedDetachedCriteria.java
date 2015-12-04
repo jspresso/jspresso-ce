@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * An enhanced detached criteria that holds a sub-criteria registry.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("rawtypes")
@@ -87,7 +87,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
 
   /**
    * Creates a new enhanced detached criteria.
-   * 
+   *
    * @param clazz
    *          class.
    * @return the new enhanced detached criteria.
@@ -98,7 +98,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
 
   /**
    * Creates a new enhanced detached criteria.
-   * 
+   *
    * @param clazz
    *          class.
    * @param alias
@@ -111,7 +111,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
 
   /**
    * Creates a new enhanced detached criteria.
-   * 
+   *
    * @param entityName
    *          entity name.
    * @return the new enhanced detached criteria.
@@ -122,7 +122,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
 
   /**
    * Creates a new enhanced detached criteria.
-   * 
+   *
    * @param entityName
    *          entity name.
    * @param alias
@@ -136,7 +136,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
 
   /**
    * Creates or gets a previously registered sub-criteria.
-   * 
+   *
    * @param masterCriteria
    *          the parent criteria holding the sub-criteria.
    * @param associationPath
@@ -156,7 +156,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
 
   /**
    * Creates or gets a previously registered sub-criteria.
-   * 
+   *
    * @param masterCriteria
    *          the parent criteria holding the sub-criteria.
    * @param associationPath
@@ -177,7 +177,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
 
   /**
    * Creates or gets a previously registered sub-criteria.
-   * 
+   *
    * @param masterCriteria
    *          the parent criteria holding the sub-criteria.
    * @param associationPath
@@ -199,7 +199,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
 
   /**
    * Creates or gets a previously registered sub-criteria.
-   * 
+   *
    * @param masterCriteria
    *          the parent criteria holding the sub-criteria.
    * @param associationPath
@@ -221,7 +221,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
 
   /**
    * Creates or gets a previously registered sub-criteria.
-   * 
+   *
    * @param masterCriteria
    *          the parent criteria holding the sub-criteria.
    * @param associationPath
@@ -244,7 +244,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
 
   /**
    * Creates or gets a previously registered sub-criteria.
-   * 
+   *
    * @param masterCriteria
    *          the parent criteria holding the sub-criteria.
    * @param associationPath
@@ -293,7 +293,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
 
   /**
    * Gets the current criteria projection.
-   * 
+   *
    * @return the current criteria projection.
    */
   public Projection getProjection() {
@@ -302,7 +302,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
 
   /**
    * Gets the current criteria result transformer.
-   * 
+   *
    * @return the current criteria result transformer.
    */
   public ResultTransformer getResultTransformer() {
@@ -324,7 +324,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
 
   /**
    * Gets the current criteria orders.
-   * 
+   *
    * @return the current criteria orders.
    */
   public List<Order> getOrders() {
@@ -340,7 +340,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
   public void removeAllOrders() {
     try {
       List<Order> orders = privateGetOrders();
-      orders.removeAll(orders);
+      orders.clear();
       currentOrders = null;
     } catch (Throwable ex) {
       LOG.error("An error occurred when removing orders.", ex);

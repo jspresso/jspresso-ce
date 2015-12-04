@@ -80,7 +80,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   private IQueryComponentDescriptorFactory queryComponentDescriptorFactory;
   private IQueryViewDescriptorFactory      queryViewDescriptorFactory;
   private IQueryExtraViewDescriptorFactory queryExtraViewDescriptorFactory;
-  
+
   private IViewDescriptor                  paginationViewDescriptor;
   private BackendAction                    pagingAction;
 
@@ -99,10 +99,10 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   public FilterableBeanCollectionModule() {
     filterComponentTracker = new FilterComponentTracker(this);
   }
-  
+
   /**
    * Gest the queryExtraViewDescriptorFactory.
-   * 
+   *
    * @return the queryExtraViewDescriptorFactory.
    */
   public IQueryExtraViewDescriptorFactory getQueryExtraViewDescriptorFactory() {
@@ -139,7 +139,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   public IViewDescriptor getFilterViewDescriptor() {
     return filterViewDescriptor;
   }
-  
+
   /**
    * Gets the filterExtraViewDescriptor.
    *
@@ -182,7 +182,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
     IViewDescriptor superViewDescriptor = super.getViewDescriptor();
     IComponentDescriptor<?> moduleDescriptor = (IComponentDescriptor<?>) superViewDescriptor.getModelDescriptor();
     IViewDescriptor filterViewDesc = buildFilterViewDescriptor(moduleDescriptor);
-    
+
     BasicBorderViewDescriptor decorator = new BasicBorderViewDescriptor();
     decorator.setNorthViewDescriptor(filterViewDesc);
     decorator.setCenterViewDescriptor(superViewDescriptor);
@@ -201,14 +201,14 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
 
   /**
    * Build the filter view descriptor.
-   * @param moduleDescriptor 
+   * @param moduleDescriptor
    *     The module descriptor
-   * 
+   *
    * @return the filter view descriptor
    */
   @SuppressWarnings("unchecked")
   protected IViewDescriptor buildFilterViewDescriptor(IComponentDescriptor<?> moduleDescriptor) {
-    
+
     IComponentDescriptor<IComponent> realComponentDesc = getFilterComponentDescriptor();
     IViewDescriptor filterViewDesc = getFilterViewDescriptor();
     IComponentDescriptorProvider<IQueryComponent> filterModelDescriptorProvider =
@@ -229,7 +229,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
     if (customFilterView) {
       getQueryViewDescriptorFactory().adaptExistingViewDescriptor(filterViewDesc);
     }
-    
+
     BasicTabViewDescriptor tabFilterView = getFilterExtraViewDescriptor();
     if (tabFilterView == null) {
       IQueryExtraViewDescriptorFactory extraViewFactory = getQueryExtraViewDescriptorFactory();
@@ -247,7 +247,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
         v.setModelDescriptor(filterModelDescriptorProvider);
         tabs.add(v);
       }
-      
+
       if (filterViewDesc instanceof ITabViewDescriptor) {
         for (IViewDescriptor view : ((ICompositeViewDescriptor) filterViewDesc).getChildViewDescriptors()) {
           BasicViewDescriptor v = ((BasicViewDescriptor) view).clone();
@@ -255,20 +255,20 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
           tabs.add(v);
         }
       }
-      else {
+      else if (filterViewDesc instanceof BasicViewDescriptor) {
         ((BasicViewDescriptor) filterViewDesc).setBorderType(EBorderType.NONE);
         tabs.add(filterViewDesc);
       }
-      
+
       BasicTabViewDescriptor tabView = new BasicTabViewDescriptor();
       tabView.setRenderingOptions(ERenderingOptions.LABEL);
       tabView.setTabs(tabs);
-      
+
       filterViewDesc = tabView;
     }
     return filterViewDesc;
   }
-  
+
   /**
    * Cleanup filter view descriptor.
    *
@@ -344,15 +344,15 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   public void setFilterViewDescriptor(IViewDescriptor filterViewDescriptor) {
     this.filterViewDescriptor = filterViewDescriptor;
   }
-  
+
   /**
-   * This property allow to refine the filter view. If this field is not empty 
-   * the filter view will be replaced by a tab view containing this view and the 
+   * This property allow to refine the filter view. If this field is not empty
+   * the filter view will be replaced by a tab view containing this view and the
    * view defined bu the {@link #setFilterViewDescriptor(IViewDescriptor)} method.
-   * 
+   *
    * If the extra filter view or the filter view is already a tab view, then tab
    * views will be merged to a single tab view.
-   * 
+   *
    * @param filterExtraViewDescriptor
    *          the filterExtraViewDescriptor to set.
    */
@@ -414,7 +414,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
   public void setQueryExtraViewDescriptorFactory(IQueryExtraViewDescriptorFactory queryExtraViewDescriptorFactory) {
     this.queryExtraViewDescriptorFactory = queryExtraViewDescriptorFactory;
   }
-  
+
   /**
    * Gets the module descriptor.
    *

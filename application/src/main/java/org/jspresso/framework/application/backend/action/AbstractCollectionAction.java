@@ -28,7 +28,7 @@ import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 /**
  * Base class for backend actions acting on collection models. This class is
  * just used to refine certain protected methods return types.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractCollectionAction extends BackendAction {
@@ -64,7 +64,7 @@ public abstract class AbstractCollectionAction extends BackendAction {
   /**
    * Gets the selected objects from the backend collection connector and the
    * selected indices.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the list of selected objects.
@@ -89,7 +89,7 @@ public abstract class AbstractCollectionAction extends BackendAction {
    *
    * @param viewPath the view path
    */
-  public void setViewPath(int[] viewPath) {
+  public void setViewPath(int... viewPath) {
     this.viewPath = viewPath;
   }
 }

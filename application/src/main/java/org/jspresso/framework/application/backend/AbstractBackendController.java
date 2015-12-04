@@ -123,7 +123,7 @@ public abstract class AbstractBackendController extends AbstractController imple
   private static final Logger LOG = LoggerFactory.getLogger(AbstractBackendController.class);
   private final IEntityUnitOfWork                      unitOfWork;
   private final IEntityUnitOfWork                      sessionUnitOfWork;
-  private final LRUMap                                 moduleConnectors;
+  private final LRUMap<Module, IValueConnector>        moduleConnectors;
   private final ISecurityContextBuilder                securityContextBuilder;
   private final Set<AsyncActionExecutor>               asyncExecutors;
   private       ThreadGroup                            asyncActionsThreadGroup;
@@ -155,7 +155,7 @@ public abstract class AbstractBackendController extends AbstractController imple
     unitOfWork = createUnitOfWork();
     sessionUnitOfWork = createUnitOfWork();
     sessionUnitOfWork.begin();
-    moduleConnectors = new LRUMap(20);
+    moduleConnectors = new LRUMap<>(20);
     securityContextBuilder = new SecurityContextBuilder();
     throwExceptionOnBadUsage = true;
     asyncExecutors = new LinkedHashSet<>();
@@ -673,7 +673,7 @@ public abstract class AbstractBackendController extends AbstractController imple
     buff.putAll(moduleConnectors);
     moduleConnectors.clear();
     moduleConnectors.putAll(buff);
-    IValueConnector moduleConnector = (IValueConnector) moduleConnectors.get(module);
+    IValueConnector moduleConnector = moduleConnectors.get(module);
     if (moduleConnector == null) {
       moduleConnector = createModelConnector(module.getName(), ModuleDescriptor.MODULE_DESCRIPTOR);
       moduleConnectors.put(module, moduleConnector);

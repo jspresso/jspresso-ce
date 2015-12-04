@@ -30,21 +30,20 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.apache.commons.cli.BasicParser;
+import freemarker.ext.beans.BeansWrapper;
+import freemarker.template.Configuration;
+import freemarker.template.DefaultObjectWrapper;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import freemarker.template.Version;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.hibernate.type.BasicTypeRegistry;
-import org.jspresso.framework.model.descriptor.IComponentDescriptor;
-import org.jspresso.framework.util.freemarker.CompactString;
-import org.jspresso.framework.util.freemarker.CompareStrings;
-import org.jspresso.framework.util.freemarker.DedupSqlName;
-import org.jspresso.framework.util.freemarker.GenerateSqlName;
-import org.jspresso.framework.util.freemarker.InstanceOf;
-import org.jspresso.framework.util.freemarker.ReduceSqlName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.access.BeanFactoryLocator;
@@ -52,15 +51,17 @@ import org.springframework.beans.factory.access.BeanFactoryReference;
 import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
 import org.springframework.context.ApplicationContext;
 
-import freemarker.ext.beans.BeansWrapper;
-import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapper;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.util.freemarker.CompactString;
+import org.jspresso.framework.util.freemarker.CompareStrings;
+import org.jspresso.framework.util.freemarker.DedupSqlName;
+import org.jspresso.framework.util.freemarker.GenerateSqlName;
+import org.jspresso.framework.util.freemarker.InstanceOf;
+import org.jspresso.framework.util.freemarker.ReduceSqlName;
 
 /**
  * Generates Jspresso powered component java code based on its descriptor.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("UseOfSystemOutOrSystemErr")
@@ -99,83 +100,83 @@ public class EntityGenerator {
 
   /**
    * Starts Code generation for an component.
-   * 
+   *
    * @param args
    *          the command line arguments.
    */
   @SuppressWarnings("static-access")
   public static void main(String... args) {
     Options options = new Options();
-    options.addOption(OptionBuilder
-        .withArgName(BEAN_FACTORY_SELECTOR)
+    options.addOption(Option.builder(BEAN_FACTORY_SELECTOR)
+        .argName(BEAN_FACTORY_SELECTOR)
         .hasArg()
-        .withDescription(
+        .desc(
             "uses given selector too lookup the bean ref factory context file."
                 + " If not set, defaults to classpath*:beanRefFactory.xml .")
-        .create(BEAN_FACTORY_SELECTOR));
+        .build());
     options
-        .addOption(OptionBuilder
-            .withArgName(APPLICATION_CONTEXT_KEY)
-            .isRequired()
+        .addOption(Option.builder(APPLICATION_CONTEXT_KEY)
+            .argName(APPLICATION_CONTEXT_KEY)
+            .required()
             .hasArg()
-            .withDescription(
+            .desc(
                 "uses given applicationContextKey as registered in the spring BeanFactoryLocator.")
-            .create(APPLICATION_CONTEXT_KEY));
-    options.addOption(OptionBuilder
-        .withArgName(TEMPLATE_RESOURCE_PATH)
-        .isRequired()
+            .build());
+    options.addOption(Option.builder(TEMPLATE_RESOURCE_PATH)
+        .argName(TEMPLATE_RESOURCE_PATH)
+        .required()
         .hasArg()
-        .withDescription(
+        .desc(
             "sets the resource path of the directory containing the templates.")
-        .create(TEMPLATE_RESOURCE_PATH));
-    options.addOption(OptionBuilder.withArgName(TEMPLATE_NAME).isRequired()
-        .hasArg().withDescription("sets the used component code template.")
-        .create(TEMPLATE_NAME));
-    options.addOption(OptionBuilder.withArgName(OUTPUT_DIR).hasArg()
-        .withDescription("sets the output directory for generated source.")
-        .create(OUTPUT_DIR));
-    options.addOption(OptionBuilder.withArgName(FILE_EXTENSION).hasArg()
-        .withDescription("sets the file extension for generated source.")
-        .create(FILE_EXTENSION));
-    options.addOption(OptionBuilder.withArgName(CLASSNAME_PREFIX).hasArg()
-        .withDescription("prepends a prefix to generated class names.")
-        .create(CLASSNAME_PREFIX));
-    options.addOption(OptionBuilder.withArgName(CLASSNAME_SUFFIX).hasArg()
-        .withDescription("appends a suffix to generated class names.")
-        .create(CLASSNAME_SUFFIX));
-    options.addOption(OptionBuilder.withArgName(MAX_SQL_NAME_SIZE).hasArg()
-        .withDescription("limits the size of the generated SQL names.")
-        .create(MAX_SQL_NAME_SIZE));
+        .build());
+    options.addOption(Option.builder(TEMPLATE_NAME).argName(TEMPLATE_NAME).required()
+        .hasArg().desc("sets the used component code template.")
+        .build());
+    options.addOption(Option.builder(OUTPUT_DIR).argName(OUTPUT_DIR).hasArg()
+        .desc("sets the output directory for generated source.")
+        .build());
+    options.addOption(Option.builder().argName(FILE_EXTENSION).hasArg()
+        .desc("sets the file extension for generated source.")
+        .build());
+    options.addOption(Option.builder(CLASSNAME_PREFIX).argName(CLASSNAME_PREFIX).hasArg()
+        .desc("prepends a prefix to generated class names.")
+        .build());
+    options.addOption(Option.builder(CLASSNAME_SUFFIX).argName(CLASSNAME_SUFFIX).hasArg()
+        .desc("appends a suffix to generated class names.")
+        .build());
+    options.addOption(Option.builder(MAX_SQL_NAME_SIZE).argName(MAX_SQL_NAME_SIZE).hasArg()
+        .desc("limits the size of the generated SQL names.")
+        .build());
     options
-        .addOption(OptionBuilder
-            .withArgName(INCLUDE_PACKAGES)
+        .addOption(Option.builder(INCLUDE_PACKAGES)
+            .argName(INCLUDE_PACKAGES)
             .hasArgs()
-            .withValueSeparator(',')
-            .withDescription(
+            .valueSeparator(',')
+            .desc(
                 "generates code for the component descriptors declared in the listed packages.")
-            .create(INCLUDE_PACKAGES));
-    options.addOption(OptionBuilder
-        .withArgName(EXCLUDE_PATTERN)
+            .build());
+    options.addOption(Option.builder(EXCLUDE_PATTERN)
+        .argName(EXCLUDE_PATTERN)
         .hasArgs()
-        .withValueSeparator(',')
-        .withDescription(
+        .valueSeparator(',')
+        .desc(
             "excludes classes whose names match the regular expression.")
-        .create(EXCLUDE_PATTERN));
+        .build());
     options
-        .addOption(OptionBuilder
-            .withArgName(GENERATE_ANNOTATIONS)
-            .withDescription(
+        .addOption(Option.builder(GENERATE_ANNOTATIONS)
+            .argName(GENERATE_ANNOTATIONS)
+            .desc(
                 "generates java5 annotations (incompatible with XDoclet as of now).")
-            .create(GENERATE_ANNOTATIONS));
+            .build());
     options
-        .addOption(OptionBuilder
-            .withArgName(COMPONENT_IDS)
+        .addOption(Option.builder(COMPONENT_IDS)
+            .argName(COMPONENT_IDS)
             .hasArgs()
-            .withValueSeparator(',')
-            .withDescription(
+            .valueSeparator(',')
+            .desc(
                 "generates code for the given component descriptor identifiers in the application context.")
-            .create(COMPONENT_IDS));
-    CommandLineParser parser = new BasicParser();
+            .build());
+    CommandLineParser parser = new DefaultParser();
     CommandLine cmd;
     try {
       cmd = parser.parse(options, args);
@@ -267,10 +268,11 @@ public class EntityGenerator {
       LOG.debug("{} components filtered.",
           componentDescriptors.size());
       LOG.debug("Initializing Freemarker template");
-      Configuration cfg = new Configuration();
+      Version version = new Version(2, 3, 23);
+      Configuration cfg = new Configuration(version);
       cfg.setClassForTemplateLoading(getClass(), templateResourcePath);
-      BeansWrapper wrapper = new DefaultObjectWrapper();
-      cfg.setObjectWrapper(new DefaultObjectWrapper());
+      BeansWrapper wrapper = new DefaultObjectWrapper(version);
+      cfg.setObjectWrapper(new DefaultObjectWrapper(version));
       Template template;
       try {
         template = cfg.getTemplate(templateName);
@@ -326,11 +328,9 @@ public class EntityGenerator {
               out = new FileOutputStream(outFile);
             } else {
               LOG.debug("No change detected for {} : {} <= {}",
-                  new Object[] {
-                      componentDescriptor.getName(),
-                      new Date(componentDescriptor.getLastUpdated()),
-                      new Date(outFile.lastModified())
-                  });
+                  componentDescriptor.getName(),
+                  new Date(componentDescriptor.getLastUpdated()),
+                  new Date(outFile.lastModified()));
             }
           } catch (IOException ex) {
             LOG.error("Error while writing output", ex);
@@ -370,7 +370,7 @@ public class EntityGenerator {
 
   /**
    * Sets the beanFactorySelector.
-   * 
+   *
    * @param beanFactorySelector
    *          the beanFactorySelector to set.
    */
@@ -380,7 +380,7 @@ public class EntityGenerator {
 
   /**
    * Sets the applicationContextKey.
-   * 
+   *
    * @param applicationContextKey
    *          the applicationContextKey to set.
    */
@@ -390,7 +390,7 @@ public class EntityGenerator {
 
   /**
    * Sets the componentIds.
-   * 
+   *
    * @param componentIds
    *          the componentIds to set.
    */
@@ -400,7 +400,7 @@ public class EntityGenerator {
 
   /**
    * Sets the excludePatterns.
-   * 
+   *
    * @param excludePatterns
    *          the excludePatterns to set.
    */
@@ -410,7 +410,7 @@ public class EntityGenerator {
 
   /**
    * Sets the generateAnnotations.
-   * 
+   *
    * @param generateAnnotations
    *          the generateAnnotations to set.
    */
@@ -420,7 +420,7 @@ public class EntityGenerator {
 
   /**
    * Sets the includePackages.
-   * 
+   *
    * @param includePackages
    *          the includePackages to set.
    */
@@ -430,7 +430,7 @@ public class EntityGenerator {
 
   /**
    * Sets the outputDir.
-   * 
+   *
    * @param outputDir
    *          the outputDir to set.
    */
@@ -440,7 +440,7 @@ public class EntityGenerator {
 
   /**
    * Sets the classnamePrefix.
-   * 
+   *
    * @param classnamePrefix
    *          the classnamePrefix to set.
    */
@@ -450,7 +450,7 @@ public class EntityGenerator {
 
   /**
    * Sets the classnameSuffix.
-   * 
+   *
    * @param classnameSuffix
    *          the classnameSuffix to set.
    */
@@ -460,7 +460,7 @@ public class EntityGenerator {
 
   /**
    * Sets the maxSqlNameSize.
-   * 
+   *
    * @param maxSqlNameSize
    *          the maxSqlNameSize to set.
    */
@@ -470,7 +470,7 @@ public class EntityGenerator {
 
   /**
    * Sets the templateName.
-   * 
+   *
    * @param templateName
    *          the templateName to set.
    */
@@ -480,7 +480,7 @@ public class EntityGenerator {
 
   /**
    * Sets the templateResourcePath.
-   * 
+   *
    * @param templateResourcePath
    *          the templateResourcePath to set.
    */
@@ -497,7 +497,7 @@ public class EntityGenerator {
 
   /**
    * Sets the fileExtension.
-   * 
+   *
    * @param fileExtension
    *          the fileExtension to set.
    */

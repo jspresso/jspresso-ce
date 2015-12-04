@@ -54,7 +54,7 @@ public final class HtmlHelper {
     if (message != null) {
       return "<b>" + message + "</b>";
     }
-    return message;
+    return null;
   }
 
   /**
@@ -148,7 +148,7 @@ public final class HtmlHelper {
     if (message != null) {
       return "<pre>" + message + "</pre>";
     }
-    return message;
+    return null;
   }
 
   /**
@@ -162,6 +162,6 @@ public final class HtmlHelper {
     if (message != null) {
       return HTML_START + message + HTML_END;
     }
-    return message;
+    return null;
   }
 }

@@ -137,7 +137,7 @@ public class BasicDecimalPropertyDescriptor extends
       return boundValue.doubleValue() == Double.MAX_VALUE
           || boundValue.doubleValue() == -Double.MAX_VALUE;
     }
-    return super.isDefault(boundValue);
+    return super.isDefault(null);
   }
 
   /**

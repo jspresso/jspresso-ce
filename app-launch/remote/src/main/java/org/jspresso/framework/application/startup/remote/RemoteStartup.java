@@ -158,7 +158,7 @@ public abstract class RemoteStartup extends
       } else {
         String[] availableIds = TimeZone.getAvailableIDs(startCommand
             .getTimezoneOffset());
-        if (availableIds != null && availableIds.length > 0) {
+        if (availableIds.length > 0) {
           for (int i = 0; i < availableIds.length && clientTz == null; i++) {
             TimeZone tz = TimeZone.getTimeZone(availableIds[i]);
             if (tz.useDaylightTime() == serverTimeZone.useDaylightTime()) {

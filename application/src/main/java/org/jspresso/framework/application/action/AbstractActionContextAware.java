@@ -147,7 +147,7 @@ public abstract class AbstractActionContextAware {
 
   /**
    * Gets the model this action was triggered on.
-   * 
+   *
    * @param <T>
    *     type inference return.
    * @param context
@@ -410,8 +410,9 @@ public abstract class AbstractActionContextAware {
    *          the action context.
    * @return the list of selected models.
    */
+  @SuppressWarnings("unchecked")
   protected <T> List<T> getSelectedModels(int[] viewPath,
-      Map<String, Object> context) {
+                                          Map<String, Object> context) {
     IValueConnector modelConnector = getModelConnector(viewPath, context);
     if (modelConnector == null) {
       return null;

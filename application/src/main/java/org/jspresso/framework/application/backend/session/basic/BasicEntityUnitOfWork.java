@@ -177,7 +177,7 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
         }
       }
       if (nestedUnitOfWorkRegisteredForDeletionEntities != null) {
-        for (IEntity toDeleteEntity : nestedUnitOfWorkDeletedEntities) {
+        for (IEntity toDeleteEntity : nestedUnitOfWorkRegisteredForDeletionEntities) {
           registerForDeletion(toDeleteEntity);
         }
       }

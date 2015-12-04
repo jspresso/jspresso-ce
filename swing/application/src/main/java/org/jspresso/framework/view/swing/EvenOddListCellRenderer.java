@@ -54,6 +54,8 @@ public class EvenOddListCellRenderer extends DefaultListCellRenderer {
    *     the icon factory.
    * @param cellConnectorKey
    *     the key used to retrieve the child cell connector.
+   * @param displayIcon
+   *     the display icon
    */
   public EvenOddListCellRenderer(IIconFactory<Icon> iconFactory, String cellConnectorKey, boolean displayIcon) {
     super();

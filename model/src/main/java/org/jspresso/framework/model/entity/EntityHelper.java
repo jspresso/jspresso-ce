@@ -31,7 +31,7 @@ import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 
 /**
  * Helper class for entities utility methods.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public final class EntityHelper {
@@ -65,6 +65,7 @@ public final class EntityHelper {
    *     the entity contract
    * @return the entity sub contracts
    */
+  @SuppressWarnings("unchecked")
   public static Collection<Class<IEntity>> getEntitySubContracts(Class<IEntity> entityContract) {
     Collection<Class<IEntity>> entitySubContracts = new HashSet<>();
     ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(false) {

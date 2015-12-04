@@ -42,7 +42,7 @@ import javax.swing.text.html.HTMLEditorKit;
 
 /**
  * A rich HTML text editor based on Swing JEditorPane.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class JHTMLEditor extends JPanel {
@@ -83,7 +83,7 @@ public class JHTMLEditor extends JPanel {
 
   /**
    * Gets the editorPane.
-   * 
+   *
    * @return the editorPane.
    */
   public JTextPane getEditorPane() {
@@ -214,7 +214,7 @@ public class JHTMLEditor extends JPanel {
     fontSizeActions.add(createDisplayableAction(editorActions, "font-size-18"));
     fontSizeActions.add(createDisplayableAction(editorActions, "font-size-24"));
     fontSizeActions.add(createDisplayableAction(editorActions, "font-size-48"));
-    JComboBox<Action> fontSizeCb = new JComboBox<Action>(fontSizeActions.toArray(new Action[fontSizeActions.size()]));
+    JComboBox<Action> fontSizeCb = new JComboBox<>(fontSizeActions.toArray(new Action[fontSizeActions.size()]));
     fontSizeCb.addActionListener(new ActionListener() {
 
       @SuppressWarnings("unchecked")

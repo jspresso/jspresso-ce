@@ -41,7 +41,7 @@ import org.codehaus.jettison.json.JSONObject;
  */
 public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
 
-  private final static ThreadLocal<BidiMap> CODEC = new ThreadLocal<>();
+  private final static ThreadLocal<BidiMap<String, String>> CODEC = new ThreadLocal<>();
 
   /**
    * Handles Lists.
@@ -51,11 +51,11 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
   @Override
   public Object fromJava(Object obj)
       throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, JSONException {
-    BidiMap codec = CODEC.get();
+    BidiMap<String, String> codec = CODEC.get();
     boolean initialCall = false;
     if (codec == null) {
       initialCall = true;
-      codec = new DualHashBidiMap();
+      codec = new DualHashBidiMap<>();
       CODEC.set(codec);
     }
     try {
@@ -176,8 +176,8 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
    * @return the string
    */
   protected String encode(String original) {
-    BidiMap codec = CODEC.get();
-    String key = (String) codec.getKey(original);
+    BidiMap<String, String> codec = CODEC.get();
+    String key = codec.getKey(original);
     if (key == null) {
       key = Integer.toHexString(codec.size());
       codec.put(key, original);

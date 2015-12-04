@@ -204,7 +204,8 @@ public interface IEntityUnitOfWork extends IEntityLifecycleHandler {
    * unit of work.
    *
    * @param entity
-   *     the entity to get the dirty properties of.
+   *     the entity to get the dirty properties of
+   * @param fallbackUOW UOW to fall back to if unknown
    * @return an empty map if the entity is not dirty. The collection of dirty
    * properties with their original values. null if dirty recording has
    * not been started for this entity instance. In the latter case, the

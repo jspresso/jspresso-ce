@@ -951,7 +951,7 @@ import org.openscales.proj4as.ProjProjection;
   public override function set visible(value:Boolean):void {
     super.visible = value;
     if (this.map != null) {
-      var event:LayerEvent = new LayerEvent(LayerEvent.LAYER_VISIBLE_CHANGED, this)
+      var event:LayerEvent = new LayerEvent(LayerEvent.LAYER_VISIBLE_CHANGED, this);
       this.map.dispatchEvent(event);
     }
   }

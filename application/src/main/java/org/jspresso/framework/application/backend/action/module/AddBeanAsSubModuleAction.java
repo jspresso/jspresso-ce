@@ -107,7 +107,7 @@ public class AddBeanAsSubModuleAction extends BackendAction {
         if (moduleToSelect == null) {
           moduleToSelect = nextSubModule;
         }
-      } else if (moduleToSelect == null && childModules != null) {
+      } else if (moduleToSelect == null) {
         moduleToSelect = childModules.get(nextSubModuleIndex);
       }
 
@@ -124,7 +124,7 @@ public class AddBeanAsSubModuleAction extends BackendAction {
 
   /**
    * Retrieves the bean component descriptor to create the child bean module.
-   * 
+   *
    * @param parentModule
    *          the parent module to add the child bean module to.
    * @param context
@@ -149,7 +149,7 @@ public class AddBeanAsSubModuleAction extends BackendAction {
 
   /**
    * Sets the childModuleProjectedViewDescriptor.
-   * 
+   *
    * @param childModuleProjectedViewDescriptor
    *          the childModuleProjectedViewDescriptor to set.
    */
@@ -160,7 +160,7 @@ public class AddBeanAsSubModuleAction extends BackendAction {
 
   /**
    * Creates a module to be added to the currently selected module as child.
-   * 
+   *
    * @param parentModule
    *          the parent module.
    * @param childComponentDescriptor
@@ -193,7 +193,7 @@ public class AddBeanAsSubModuleAction extends BackendAction {
 
   /**
    * Gets the childModuleProjectedViewDescriptor.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the childModuleProjectedViewDescriptor.
@@ -209,7 +209,7 @@ public class AddBeanAsSubModuleAction extends BackendAction {
   /**
    * Gets the parent workspace if found in context using key
    * {@link AddBeanAsSubModuleAction#PARENT_WORKSPACE}.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the target workspace name.
@@ -221,7 +221,7 @@ public class AddBeanAsSubModuleAction extends BackendAction {
   /**
    * Gets parent module name if found in context using key
    * {@link AddBeanAsSubModuleAction#PARENT_MODULE_NAME}.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the target parent module name.
@@ -232,7 +232,7 @@ public class AddBeanAsSubModuleAction extends BackendAction {
 
   /**
    * Finds the parent module where to add the selected component.
-   * 
+   *
    * @param component
    *          the component to add as module object.
    * @param context
@@ -259,7 +259,7 @@ public class AddBeanAsSubModuleAction extends BackendAction {
   /**
    * Notifies that a module object is going to been selected. Does nothing by
    * default. Override if needed.
-   * 
+   *
    * @param moduleObject
    *          the module object that will been selected.
    * @param context
@@ -274,7 +274,7 @@ public class AddBeanAsSubModuleAction extends BackendAction {
   /**
    * Notifies that a module object has been selected. Does nothing by default.
    * Override if needed.
-   * 
+   *
    * @param moduleObject
    *          the module object that has been selected.
    * @param context
@@ -288,7 +288,7 @@ public class AddBeanAsSubModuleAction extends BackendAction {
 
   /**
    * Finds the existing module for a module object.
-   * 
+   *
    * @param rootModule
    *          the root module to start the search from.
    * @param moduleObject
@@ -328,7 +328,7 @@ public class AddBeanAsSubModuleAction extends BackendAction {
 
   /**
    * Finds the existing module for a module object or name.
-   * 
+   *
    * @param rootModule
    *          the root module to start the search from.
    * @param moduleObject

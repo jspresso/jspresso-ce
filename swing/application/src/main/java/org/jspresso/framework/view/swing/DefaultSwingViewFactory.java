@@ -3539,7 +3539,7 @@ public class DefaultSwingViewFactory extends
       cellRenderer = createCollectionTableCellRenderer(
           (ICollectionPropertyDescriptor<?>) propertyDescriptor, locale);
     }
-    return cellRenderer;
+    return null;
   }
 
   private TableCellRenderer createBinaryTableCellRenderer(

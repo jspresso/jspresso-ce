@@ -89,7 +89,7 @@ public class EnumerationDgItemRenderer extends RemoteValueDgItemRenderer {
         icon.width = _selectedIcon.dimension.width;
         icon.height = _selectedIcon.dimension.height;
         _image.source = _selectedIcon.imageUrlSpec;
-        label.x += (_selectedIcon.dimension.width - icon.measuredHeight)
+        label.x += (_selectedIcon.dimension.width - icon.measuredHeight);
         label.y += ((_selectedIcon.dimension.height - icon.measuredWidth) /2);
       } else {
         _image.source = null;

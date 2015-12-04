@@ -18,20 +18,19 @@
  */
 package org.jspresso.framework.application.startup.batch;
 
-import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.LocaleUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.jspresso.framework.application.launch.batch.BatchLauncher;
 import org.jspresso.framework.application.startup.BackendActionStartup;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * A simple batch process starter. The batch itself is coded as a backend action
@@ -60,7 +59,7 @@ public class BatchStartup extends BackendActionStartup implements IBatchStartup 
   @Override
   public boolean parseCmdLine(String[] args) {
     Options options = createOptions();
-    CommandLineParser parser = new BasicParser();
+    CommandLineParser parser = new DefaultParser();
     try {
       CommandLine cmd = parser.parse(options, args);
       processCommandLine(cmd);
@@ -102,16 +101,16 @@ public class BatchStartup extends BackendActionStartup implements IBatchStartup 
   @SuppressWarnings("static-access")
   protected Options createOptions() {
     Options options = new Options();
-    options.addOption(OptionBuilder.withArgName(APP_CONTEXT).hasArg().isRequired().withDescription(
-        "use given Spring application context.").create(APP_CONTEXT));
-    options.addOption(OptionBuilder.withArgName(BEAN_FACTORY_SELECTOR).hasArg().withDescription(
-        "use given Spring bean factory selector.").create(BEAN_FACTORY_SELECTOR));
-    options.addOption(OptionBuilder.withArgName(LOCALE).hasArg().withDescription(
-        "use given language (defaults to 'en').").create(LOCALE));
-    options.addOption(OptionBuilder.withArgName(ACTION_ID).hasArg().isRequired().withDescription(
-        "use the specified backend action.").create(ACTION_ID));
-    options.addOption(OptionBuilder.withArgName(BATCH_USER_NAME).hasArg().withDescription(
-        "use the specified batch user name.").create(BATCH_USER_NAME));
+    options.addOption(Option.builder(APP_CONTEXT).argName(APP_CONTEXT).hasArg().required()
+                            .desc("use given Spring application context.").build());
+    options.addOption(Option.builder(BEAN_FACTORY_SELECTOR).argName(BEAN_FACTORY_SELECTOR).hasArg()
+                            .desc("use given Spring bean factory selector.").build());
+    options.addOption(Option.builder(LOCALE).argName(LOCALE).hasArg().desc("use given language (defaults to 'en').")
+                            .build());
+    options.addOption(Option.builder(ACTION_ID).argName(ACTION_ID).hasArg().required()
+                            .desc("use the specified backend action.").build());
+    options.addOption(Option.builder(BATCH_USER_NAME).argName(BATCH_USER_NAME).hasArg()
+                            .desc("use the specified batch user name.").build());
     return options;
   }
 

@@ -82,6 +82,12 @@ public class ControllerAwareTransactionTemplate extends TransactionTemplate {
     return super.execute(wrapper);
   }
 
+  /**
+   * Join transaction.
+   *
+   * @param status
+   *     the status
+   */
   protected void joinTransaction(TransactionStatus status) {
     IBackendController backendController = BackendControllerHolder.getCurrentBackendController();
     // In case of 1st Tx or REQUIRES_NEW propagation behaviour, status.isNewTransaction() will be true,

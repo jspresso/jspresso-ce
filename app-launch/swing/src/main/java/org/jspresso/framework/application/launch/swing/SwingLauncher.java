@@ -22,6 +22,7 @@ import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
@@ -36,7 +37,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Swing launcher.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public final class SwingLauncher {
@@ -49,7 +50,7 @@ public final class SwingLauncher {
 
   /**
    * Main method.
-   * 
+   *
    * @param args
    *          arguments.
    */
@@ -58,15 +59,15 @@ public final class SwingLauncher {
     NativeInterface.open();
     SwingUtil.installDefaults();
     Options options = new Options();
-    options.addOption(OptionBuilder
-        .withArgName("splash")
+    options.addOption(Option.builder("splash")
+        .argName("splash")
         .hasArg()
-        .withDescription(
+        .desc(
             "use given image URL for splash (Supports classpath: pseudo URLs)")
-        .create("splash"));
-    options.addOption(OptionBuilder.withArgName("applicationClass").hasArg()
-        .withDescription("use given class name as startup class.").isRequired()
-        .create("applicationClass"));
+        .build());
+    options.addOption(Option.builder().argName("applicationClass").hasArg()
+        .desc("use given class name as startup class.").required()
+        .build());
     CommandLineParser parser = new BasicParser();
     boolean splashed = false;
     try {

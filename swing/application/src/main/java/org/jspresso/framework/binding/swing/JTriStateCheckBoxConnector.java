@@ -23,7 +23,7 @@ import chrriis.dj.swingsuite.JTriStateCheckBox.CheckState;
 
 /**
  * JTriStateCheckbox connector.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class JTriStateCheckBoxConnector extends
@@ -65,7 +65,7 @@ public class JTriStateCheckBoxConnector extends
     if (aValue == null) {
       getConnectedJComponent().setState(CheckState.INDETERMINATE);
     } else {
-      getConnectedJComponent().setSelected(((Boolean) aValue).booleanValue());
+      getConnectedJComponent().setSelected((Boolean) aValue);
     }
   }
 }

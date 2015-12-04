@@ -20,7 +20,7 @@ package org.jspresso.framework.model.descriptor;
 
 /**
  * Duration constants.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public enum EDuration {
@@ -52,13 +52,13 @@ public enum EDuration {
 
   private final int millis;
 
-  private EDuration(int millis) {
+  EDuration(int millis) {
     this.millis = millis;
   }
 
   /**
    * get milliseconds value.
-   * 
+   *
    * @return milliseconds value;
    */
   public int getMillis() {

@@ -57,7 +57,7 @@ import org.jspresso.framework.util.lang.StringUtils;
  * same type (i.e. 2 frontend actions or 2 backend actions). Using this scheme
  * helps keeping layer dependencies clear. Of course, this dual chaining
  * mechanism is completely recursive thus allowing to compose small (generic)
- * actions into larger composite ones and promoting reusability.
+ * actions into larger composite ones and promoting reuse.
  * <p>
  * Actions execute on a context (an arbitrary map of objects keyed by
  * "well-known" character strings) that is initialized by the controller when

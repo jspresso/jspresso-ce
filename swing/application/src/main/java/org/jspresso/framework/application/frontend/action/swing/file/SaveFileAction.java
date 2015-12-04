@@ -35,7 +35,7 @@ import org.jspresso.framework.util.swing.SwingUtil;
 
 /**
  * Initiates a file save action.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class SaveFileAction extends ChooseFileAction {
@@ -55,7 +55,7 @@ public class SaveFileAction extends ChooseFileAction {
     if (returnVal == JFileChooser.APPROVE_OPTION) {
       File file = currentFileChooser.getSelectedFile();
       if (file != null) {
-        if (file.getName() != null && !file.getName().contains(".")) {
+        if (!file.getName().contains(".")) {
           Map<String, List<String>> fileFilter = getFileFilter(context);
           if (fileFilter != null && !fileFilter.isEmpty()) {
             List<String> extensions = fileFilter.values().iterator().next();
@@ -129,7 +129,7 @@ public class SaveFileAction extends ChooseFileAction {
   /**
    * Computes a file name to save the file. Queries the file save callback for a
    * file name and defaults to the action default one if none is returned.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the file name to save the file under.

@@ -104,10 +104,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
     if (getName() == null) {
       return false;
     }
-    if (!getName().equals(other.getName())) {
-      return false;
-    }
-    return true;
+    return getName().equals(other.getName());
   }
 
   /**

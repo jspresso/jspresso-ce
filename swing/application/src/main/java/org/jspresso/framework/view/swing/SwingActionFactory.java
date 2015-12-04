@@ -39,7 +39,7 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
  * A swing action factory.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class SwingActionFactory extends
@@ -122,9 +122,7 @@ public class SwingActionFactory extends
         if (((IDisplayableAction) action).getMnemonicAsString() != null) {
           putValue(
               Action.MNEMONIC_KEY,
-              Integer.valueOf(KeyStroke.getKeyStroke(
-                  ((IDisplayableAction) action).getMnemonicAsString())
-                  .getKeyCode()));
+              KeyStroke.getKeyStroke(((IDisplayableAction) action).getMnemonicAsString()).getKeyCode());
         }
       }
     }

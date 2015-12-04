@@ -37,7 +37,7 @@ import javax.swing.event.EventListenerList;
 
 /**
  * A swing component used to choose or reset to null a color.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class JColorPicker extends JPanel {
@@ -102,8 +102,8 @@ public class JColorPicker extends JPanel {
 
       @Override
       public void propertyChange(PropertyChangeEvent evt) {
-        chooseButton.setEnabled(((Boolean) evt.getNewValue()).booleanValue());
-        resetButton.setEnabled(((Boolean) evt.getNewValue()).booleanValue());
+        chooseButton.setEnabled((Boolean) evt.getNewValue());
+        resetButton.setEnabled((Boolean) evt.getNewValue());
       }
     });
 
@@ -136,7 +136,7 @@ public class JColorPicker extends JPanel {
 
   /**
    * Gets the resetValue.
-   * 
+   *
    * @return the resetValue.
    */
   public Color getResetValue() {
@@ -145,7 +145,7 @@ public class JColorPicker extends JPanel {
 
   /**
    * Gets the value.
-   * 
+   *
    * @return the value.
    */
   public Color getValue() {
@@ -164,7 +164,7 @@ public class JColorPicker extends JPanel {
 
   /**
    * Sets the resetValue.
-   * 
+   *
    * @param resetValue
    *          the resetValue to set.
    */
@@ -174,7 +174,7 @@ public class JColorPicker extends JPanel {
 
   /**
    * Sets the value.
-   * 
+   *
    * @param value
    *          the value to set.
    */
@@ -187,7 +187,7 @@ public class JColorPicker extends JPanel {
   /**
    * Notifies all listeners that have registered interest for notification on
    * this event type. The event instance is created lazily.
-   * 
+   *
    * @see EventListenerList
    */
   protected void fireStateChanged() {
@@ -208,7 +208,7 @@ public class JColorPicker extends JPanel {
 
   /**
    * Enables / disable the reset button.
-   * 
+   *
    * @param enabled
    *          should the reset button be enabled ?
    */

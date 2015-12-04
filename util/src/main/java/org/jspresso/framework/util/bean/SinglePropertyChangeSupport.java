@@ -30,7 +30,7 @@ import org.jspresso.framework.util.collection.TWeakHashSet;
 /**
  * This property change support prevents from adding twice the same property
  * change listener.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class SinglePropertyChangeSupport extends PropertyChangeSupport {
@@ -57,6 +57,7 @@ public class SinglePropertyChangeSupport extends PropertyChangeSupport {
    *
    * @return the property change support
    */
+  @Override
   protected PropertyChangeSupport createChild() {
     return new SinglePropertyChangeSupport(getSource());
   }
