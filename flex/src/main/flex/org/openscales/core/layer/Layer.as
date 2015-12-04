@@ -142,7 +142,7 @@ import org.openscales.proj4as.ProjProjection;
     this._originators = new Vector.<DataOriginator>();
 
     // Build default grayscale matrix
-    var matrix:Array = new Array();
+    var matrix:Array = [];
     matrix = matrix.concat([0.21, 0.72, 0.125, 0, 0]);// red
     matrix = matrix.concat([0.21, 0.72, 0.125, 0, 0]);// green
     matrix = matrix.concat([0.21, 0.72, 0.125, 0, 0]);// blue
@@ -299,7 +299,7 @@ import org.openscales.proj4as.ProjProjection;
       numZoomLevels = 1;
     }
     // Generate default resolutions
-    this._resolutions = new Array();
+    this._resolutions = [];
     this._resolutions.push(nominalResolution);
     var i:int = 1;
     for (i; i < numZoomLevels; ++i) {
