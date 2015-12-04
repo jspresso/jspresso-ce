@@ -38,8 +38,8 @@
       <artifactId>hibernate-ehcache</artifactId>
     </dependency>
     <dependency>
-      <groupId>commons-collections</groupId>
-      <artifactId>commons-collections</artifactId>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-collections4</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -50,24 +50,16 @@
       <artifactId>hsqldb</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.adobe.blazeds</groupId>
-      <artifactId>blazeds-common</artifactId>
+      <groupId>org.apache.flex.blazeds</groupId>
+      <artifactId>flex-messaging-remoting</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.adobe.blazeds</groupId>
-      <artifactId>blazeds-core</artifactId>
+      <groupId>org.apache.flex.blazeds</groupId>
+      <artifactId>flex-messaging-proxy</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.adobe.blazeds</groupId>
-      <artifactId>blazeds-remoting</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.adobe.blazeds</groupId>
-      <artifactId>blazeds-proxy</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>commons-httpclient</groupId>
-      <artifactId>commons-httpclient</artifactId>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>

@@ -16,17 +16,6 @@
       <artifactId>jspresso-flex</artifactId>
       <type>swc</type>
     </dependency>
-    <dependency>
-      <groupId>org.apache.flex.framework</groupId>
-      <artifactId>flex-framework</artifactId>
-      <type>pom</type>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.flex.framework</groupId>
-      <artifactId>framework</artifactId>
-      <type>swc</type>
-      <scope>external</scope>
-    </dependency>
   </dependencies>
 
   <build>

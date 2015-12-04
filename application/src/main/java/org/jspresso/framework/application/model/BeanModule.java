@@ -23,8 +23,8 @@ import java.beans.PropertyChangeListener;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.model.descriptor.BeanModuleDescriptor;
@@ -86,7 +86,7 @@ public class BeanModule extends Module implements PropertyChangeListener {
 
   /**
    * Gets the componentDescriptor.
-   * 
+   *
    * @return the componentDescriptor.
    */
   @SuppressWarnings("unchecked")
@@ -115,7 +115,7 @@ public class BeanModule extends Module implements PropertyChangeListener {
 
   /**
    * Gets the module's projected object.
-   * 
+   *
    * @return the projected object.
    */
   public Object getModuleObject() {
@@ -203,7 +203,7 @@ public class BeanModule extends Module implements PropertyChangeListener {
    * <p>
    * However, when not set, the component descriptor it self can be inferred from
    * the configured projected view descriptor model.
-   * 
+   *
    * @param componentDescriptor
    *          the componentDescriptor to set.
    */
@@ -216,7 +216,7 @@ public class BeanModule extends Module implements PropertyChangeListener {
    * Assigns the bean this module manages. The projected view will automatically
    * reflect this change since a &quot;moduleObject&quot; property change will
    * be fired.
-   * 
+   *
    * @param moduleObject
    *          the projected object.
    */
@@ -252,7 +252,7 @@ public class BeanModule extends Module implements PropertyChangeListener {
 
   /**
    * Gets the module descriptor.
-   * 
+   *
    * @return the module descriptor.
    */
   protected BeanModuleDescriptor getDescriptor() {

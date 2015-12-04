@@ -23,7 +23,7 @@ import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.application.action.AbstractAction;
 import org.jspresso.framework.application.frontend.IFrontendController;

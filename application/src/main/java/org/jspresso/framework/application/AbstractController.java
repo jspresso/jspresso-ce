@@ -29,7 +29,7 @@ import java.util.Map;
 
 import javax.security.auth.Subject;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

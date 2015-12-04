@@ -24,7 +24,7 @@ import java.awt.event.FocusEvent;
 
 import javax.swing.text.JTextComponent;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * This abstract class serves as the base class for all JTextComponent

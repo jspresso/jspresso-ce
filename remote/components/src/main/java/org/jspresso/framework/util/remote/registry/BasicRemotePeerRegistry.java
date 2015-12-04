@@ -27,41 +27,42 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.collections.map.AbstractReferenceMap;
-import org.apache.commons.collections.map.ReferenceMap;
-import org.jspresso.framework.util.automation.IPermIdSource;
-import org.jspresso.framework.util.remote.IRemotePeer;
+import org.apache.commons.collections4.map.AbstractReferenceMap;
+import org.apache.commons.collections4.map.ReferenceMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.jspresso.framework.util.automation.IPermIdSource;
+import org.jspresso.framework.util.reflect.ReflectHelper;
+import org.jspresso.framework.util.remote.IRemotePeer;
 
 /**
  * The basic implementation of a remote peer registry. It is stored by a
  * reference map so that it is memory neutral.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
 
-  private static final Logger              LOG = LoggerFactory
-                                                   .getLogger(BasicRemotePeerRegistry.class);
+  private static final Logger LOG = LoggerFactory.getLogger(BasicRemotePeerRegistry.class);
 
-  private final Map<String, String>              automationBackingStore;
-  private final Map<String, Integer>             automationIndices;
-  private final Map<String, IRemotePeer>         backingStore;
+  private final Map<String, String>      automationBackingStore;
+  private final Map<String, Integer>     automationIndices;
+  private final Map<String, IRemotePeer> backingStore;
 
   private Set<IRemotePeerRegistryListener> rprListeners;
 
-  private boolean                          automationEnabled;
+  private boolean automationEnabled;
 
   /**
    * Constructs a new {@code BasicRemotePeerRegistry} instance.
    */
   @SuppressWarnings("unchecked")
   public BasicRemotePeerRegistry() {
-    backingStore = new RemotePeerReferenceMap(AbstractReferenceMap.WEAK,
-        AbstractReferenceMap.WEAK, true);
-    automationBackingStore = new ReferenceMap(AbstractReferenceMap.WEAK,
-        AbstractReferenceMap.WEAK, true);
+    backingStore = new RemotePeerReferenceMap(AbstractReferenceMap.ReferenceStrength.WEAK,
+        AbstractReferenceMap.ReferenceStrength.WEAK, true);
+    automationBackingStore = new ReferenceMap(AbstractReferenceMap.ReferenceStrength.WEAK,
+        AbstractReferenceMap.ReferenceStrength.WEAK, true);
     automationIndices = new HashMap<>();
     setAutomationEnabled(false);
   }
@@ -115,7 +116,8 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
       backingStore.put(guid, remotePeer);
     } else if (remotePeer != backingStore.get(guid)) {
       LOG.error(
-          "The server is trying to register a remote peer ({}) having the same GUID as an existing registered one ({}).",
+          "The server is trying to register a remote peer ({}) having the same GUID as an existing registered one "
+              + "({}).",
           remotePeer, backingStore.get(guid));
     }
     // if (remotePeer instanceof IPermIdSource) {
@@ -177,14 +179,14 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
     return seed;
   }
 
-  private class RemotePeerReferenceMap extends ReferenceMap {
+  private class RemotePeerReferenceMap<K, V> extends ReferenceMap<K,V> {
 
-    private static final long                     serialVersionUID = 1494465151770293403L;
+    private static final long serialVersionUID = 1494465151770293403L;
 
     private transient ReferenceQueue<IRemotePeer> remotePeerQueue;
 
-    public RemotePeerReferenceMap(int keyType, int valueType,
-        boolean purgeValues) {
+    public RemotePeerReferenceMap(AbstractReferenceMap.ReferenceStrength keyType,
+                                  AbstractReferenceMap.ReferenceStrength valueType, boolean purgeValues) {
       super(keyType, valueType, purgeValues);
     }
 
@@ -214,31 +216,35 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
     }
 
     @Override
-    protected HashEntry createEntry(HashEntry next, int hashCode, Object key,
-        Object value) {
+    protected AbstractReferenceMap.ReferenceEntry<K, V> createEntry(HashEntry<K, V> next, int hashCode, K key, V value) {
       if (value instanceof IRemotePeer) {
         return new RemotePeerReferenceEntry(this, next, hashCode, key, value);
       }
       return super.createEntry(next, hashCode, key, value);
     }
 
-    private class RemotePeerReferenceEntry extends ReferenceEntry {
+    private class RemotePeerReferenceEntry extends ReferenceEntry<K, V> {
 
-      public RemotePeerReferenceEntry(RemotePeerReferenceMap parent,
-          HashEntry next, int hashCode, Object key, Object value) {
+      public RemotePeerReferenceEntry(RemotePeerReferenceMap<K, V> parent, HashEntry<K, V> next, int hashCode, K key,
+                                      V value) {
         super(parent, next, hashCode, key, value);
       }
 
       @Override
-      protected Object toReference(int type, Object referent, int hash) {
+      protected <T> Object toReference(AbstractReferenceMap.ReferenceStrength type, T referent, int hash) {
         if (referent instanceof IRemotePeer) {
+          RemotePeerReferenceMap<?,?> parent;
+          try {
+            parent = (RemotePeerReferenceMap) ReflectHelper.getPrivateFieldValue(
+                AbstractReferenceMap.ReferenceEntry.class, "parent", this);
+          } catch (Exception e) {
+            throw new RuntimeException("An unexpected runtime exception occurred", e);
+          }
           switch (type) {
             case SOFT:
-              return new RemotePeerSoftRef(hash, (IRemotePeer) referent,
-                  ((RemotePeerReferenceMap) parent).remotePeerQueue);
+              return new RemotePeerSoftRef(hash, (IRemotePeer) referent, parent.remotePeerQueue);
             case WEAK:
-              return new RemotePeerWeakRef(hash, (IRemotePeer) referent,
-                  ((RemotePeerReferenceMap) parent).remotePeerQueue);
+              return new RemotePeerWeakRef(hash, (IRemotePeer) referent, parent.remotePeerQueue);
             default:
               break;
           }
@@ -248,14 +254,12 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
     }
   }
 
-  private class RemotePeerSoftRef extends SoftReference<IRemotePeer> implements
-      IRemotePeer {
+  private class RemotePeerSoftRef extends SoftReference<IRemotePeer> implements IRemotePeer {
 
     private final int    hash;
     private final String guid;
 
-    public RemotePeerSoftRef(int hash, IRemotePeer r,
-        ReferenceQueue<IRemotePeer> q) {
+    public RemotePeerSoftRef(int hash, IRemotePeer r, ReferenceQueue<IRemotePeer> q) {
       super(r, q);
       this.hash = hash;
       this.guid = r.getGuid();
@@ -278,14 +282,12 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
     }
   }
 
-  private class RemotePeerWeakRef extends WeakReference<IRemotePeer> implements
-      IRemotePeer {
+  private class RemotePeerWeakRef extends WeakReference<IRemotePeer> implements IRemotePeer {
 
     private final int    hash;
     private final String guid;
 
-    public RemotePeerWeakRef(int hash, IRemotePeer r,
-        ReferenceQueue<IRemotePeer> q) {
+    public RemotePeerWeakRef(int hash, IRemotePeer r, ReferenceQueue<IRemotePeer> q) {
       super(r, q);
       this.hash = hash;
       this.guid = r.getGuid();
@@ -325,8 +327,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
    * {@inheritDoc}
    */
   @Override
-  public void removeRemotePeerRegistryListener(
-      IRemotePeerRegistryListener listener) {
+  public void removeRemotePeerRegistryListener(IRemotePeerRegistryListener listener) {
     if (rprListeners == null || listener == null) {
       return;
     }
@@ -335,9 +336,9 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
 
   /**
    * Notifies the listeners that a remote peer has been added.
-   * 
+   *
    * @param peer
-   *          the added remote peer.
+   *     the added remote peer.
    */
   protected void fireRemotePeerAdded(IRemotePeer peer) {
     if (rprListeners != null) {
@@ -349,14 +350,12 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
 
   /**
    * Notifies the listeners that a remote peer has been removed.
-   * 
+   *
    * @param guid
-   *          the removed remote peer guid.
+   *     the removed remote peer guid.
    */
   protected void fireRemotePeerRemoved(String guid) {
-    LOG.trace(
-        "Notifying listeners that GUID {} has been removed from the registry.",
-        guid);
+    LOG.trace("Notifying listeners that GUID {} has been removed from the registry.", guid);
     if (rprListeners != null) {
       for (IRemotePeerRegistryListener listener : rprListeners) {
         listener.remotePeerRemoved(guid);
@@ -366,9 +365,9 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
 
   /**
    * Sets the automationEnabled.
-   * 
+   *
    * @param automationEnabled
-   *          the automationEnabled to set.
+   *     the automationEnabled to set.
    */
   public void setAutomationEnabled(boolean automationEnabled) {
     this.automationEnabled = automationEnabled;

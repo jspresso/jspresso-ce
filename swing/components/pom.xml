@@ -24,7 +24,7 @@
     </dependency>
     <dependency>
       <groupId>foxtrot</groupId>
-      <artifactId>foxtrot</artifactId>
+      <artifactId>foxtrot-core</artifactId>
     </dependency>
   </dependencies>
 </project>

@@ -40,8 +40,8 @@ import java.util.TimeZone;
 
 import javax.security.auth.Subject;
 
-import org.apache.commons.collections.map.LRUMap;
-import org.apache.commons.lang.LocaleUtils;
+import org.apache.commons.collections4.map.LRUMap;
+import org.apache.commons.lang3.LocaleUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.TransactionStatus;

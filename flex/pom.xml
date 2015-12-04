@@ -13,37 +13,60 @@
   <dependencies>
     <dependency>
       <groupId>org.apache.flex.framework</groupId>
-      <artifactId>flex-framework</artifactId>
-      <type>pom</type>
+      <artifactId>framework</artifactId>
+      <type>swc</type>
     </dependency>
     <dependency>
       <groupId>org.apache.flex.framework</groupId>
-      <artifactId>framework</artifactId>
+      <artifactId>mx</artifactId>
       <type>swc</type>
-      <scope>external</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.flex.framework</groupId>
+      <artifactId>textLayout</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>com.adobe.flash.framework</groupId>
+      <artifactId>playerglobal</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.flex.framework</groupId>
+      <artifactId>rpc</artifactId>
+      <type>swc</type>
     </dependency>
     <dependency>
       <groupId>flexlib</groupId>
       <artifactId>flexlib</artifactId>
       <type>swc</type>
       <classifier>flex3</classifier>
-      <scope>merged</scope>
     </dependency>
     <dependency>
       <groupId>resizecontainers</groupId>
       <artifactId>resizecontainers</artifactId>
       <type>swc</type>
-      <scope>merged</scope>
     </dependency>
     <dependency>
       <groupId>sephiroth</groupId>
       <artifactId>checkbox3state</artifactId>
       <type>swc</type>
-      <scope>merged</scope>
     </dependency>
     <dependency>
       <groupId>org.openscales</groupId>
       <artifactId>openscales-core</artifactId>
+      <type>swc</type>
+      <scope>merged</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openscales</groupId>
+      <artifactId>openscales-geometry</artifactId>
+      <type>swc</type>
+      <scope>merged</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.openscales</groupId>
+      <artifactId>openscales-proj4as</artifactId>
       <type>swc</type>
       <scope>merged</scope>
     </dependency>

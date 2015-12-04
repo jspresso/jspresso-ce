@@ -21,14 +21,14 @@ package org.jspresso.framework.binding.swing;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jspresso.framework.gui.swing.components.JActionField;
 import org.jspresso.framework.util.event.IValueChangeListener;
 import org.jspresso.framework.util.event.ValueChangeEvent;
 
 /**
  * JActionFieldConnector connector.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class JActionFieldConnector extends JComponentConnector<JActionField> {
@@ -96,7 +96,7 @@ public class JActionFieldConnector extends JComponentConnector<JActionField> {
 
   /**
    * Gets the action text to display in the action field.
-   * 
+   *
    * @return the action text to display in the action field.
    */
   protected String getActionText() {

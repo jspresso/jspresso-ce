@@ -26,7 +26,7 @@ import java.util.TimeZone;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.LocaleUtils;
+import org.apache.commons.lang3.LocaleUtils;
 import org.jspresso.framework.application.frontend.IFrontendController;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;

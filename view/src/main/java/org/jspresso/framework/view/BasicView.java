@@ -18,7 +18,7 @@
  */
 package org.jspresso.framework.view;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;

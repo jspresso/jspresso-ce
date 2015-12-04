@@ -132,14 +132,12 @@
               <directory>src/main/resources</directory>
               <excludes>
                 <exclude>ehcache.xml</exclude>
-                <exclude>log4j.properties</exclude>
               </excludes>
             </fileSet>
             <fileSet filtered="true" packaged="false" encoding="UTF-8">
               <directory>src/main/resources</directory>
               <includes>
                 <include>ehcache.xml</include>
-                <include>log4j.properties</include>
               </includes>
             </fileSet>
             <fileSet filtered="true" packaged="true" encoding="UTF-8">
@@ -275,14 +273,12 @@
           <directory>src/main/resources</directory>
           <excludes>
             <exclude>ehcache.xml</exclude>
-            <exclude>log4j.properties</exclude>
           </excludes>
         </fileSet>
         <fileSet filtered="true" packaged="false" encoding="UTF-8">
           <directory>src/main/resources</directory>
           <includes>
             <include>ehcache.xml</include>
-            <include>log4j.properties</include>
           </includes>
         </fileSet>
         <fileSet filtered="true" packaged="true" encoding="UTF-8">

@@ -17,58 +17,61 @@
     <jspresso.version>4.3-SNAPSHOT</jspresso.version>
     <sjs.version>2.2</sjs.version>
 
-    <junit.version>4.11</junit.version>
-    <mockito.version>1.9.5-rc1</mockito.version>
-    <flex.version>4.13.0.20140701</flex.version>
+    <junit.version>4.12</junit.version>
+    <mockito.version>1.10.19</mockito.version>
+    <flex.version>4.14.1.20150325</flex.version>
+    <playerglobal.version>19.0</playerglobal.version>
     <flexunit.version>4.1.0</flexunit.version>
-    <blazeds.version>4.0.0.14931</blazeds.version>
+    <blazeds.version>4.7.2</blazeds.version>
     <flexlib.version>2.5</flexlib.version>
     <resizecontainers.version>1.0</resizecontainers.version>
     <checkbox3state.version>1.0</checkbox3state.version>
-    <spring.version>4.0.7.RELEASE</spring.version>
-    <spring-data-commons.version>1.8.4.RELEASE</spring-data-commons.version>
+    <spring.version>4.2.3.RELEASE</spring.version>
+    <spring-data-commons.version>1.11.1.RELEASE</spring-data-commons.version>
     <spring-ldap.version>2.0.1.RELEASE</spring-ldap.version>
-    <spring-data-mongodb.version>1.5.4.RELEASE</spring-data-mongodb.version>
+    <spring-data-mongodb.version>1.8.1.RELEASE</spring-data-mongodb.version>
     <ldapbp.version>1.0</ldapbp.version>
-    <hibernate.version>4.3.4.Final</hibernate.version>
-    <jbosssx.version>4.0.20.Final</jbosssx.version>
+    <hibernate.version>4.3.11.Final</hibernate.version>
+    <jboss-logging.version>3.3.0.Final</jboss-logging.version>
+    <jbosssx.version>4.9.3.Final</jbosssx.version>
     <qooxdoo.version>5.0.1</qooxdoo.version>
-    <jasper.version>5.1.2</jasper.version>
-    <jfree.version>1.0.13</jfree.version>
+    <jasper.version>6.2.0</jasper.version>
+    <jfree.version>1.0.19</jfree.version>
     <itext.version>4.2.1</itext.version>
-    <commons-collections.version>3.2.1</commons-collections.version>
-    <commons-codec.version>1.9</commons-codec.version>
-    <commons-logging.version>1.1.3</commons-logging.version>
+    <commons-collections.version>3.2.2</commons-collections.version>
+    <commons-collections4.version>4.1</commons-collections4.version>
+    <commons-codec.version>1.10</commons-codec.version>
+    <commons-logging.version>1.2</commons-logging.version>
     <commons-lang.version>2.6</commons-lang.version>
-    <commons-beanutils.version>1.9.1</commons-beanutils.version>
+    <commons-lang3.version>3.4</commons-lang3.version>
+    <commons-beanutils.version>1.9.2</commons-beanutils.version>
     <commons-io.version>2.4</commons-io.version>
     <commons-httpclient.version>3.1</commons-httpclient.version>
+    <commons-httpclient4.version>4.5.1</commons-httpclient4.version>
     <commons-fileupload.version>1.3.1</commons-fileupload.version>
-    <commons-cli.version>1.2</commons-cli.version>
-    <commons-dbcp2.version>2.1</commons-dbcp2.version>
-    <commons-digester.version>2.1</commons-digester.version>
+    <commons-cli.version>1.3.1</commons-cli.version>
+    <commons-dbcp2.version>2.1.1</commons-dbcp2.version>
+    <slf4j.version>1.7.13</slf4j.version>
     <log4j.version>1.2.17</log4j.version>
-    <javassist.version>3.18.1-GA</javassist.version>
-    <slf4j.version>1.7.6</slf4j.version>
-    <joda-time.version>2.3</joda-time.version>
-    <jython.version>2.5.3</jython.version>
-    <bsh.version>2.0b5</bsh.version>
-    <foxtrot.version>2.0</foxtrot.version>
+    <log4j2.version>2.4.1</log4j2.version>
+    <javassist.version>3.20.0-GA</javassist.version>
+    <joda-time.version>2.9.1</joda-time.version>
+    <foxtrot.version>4.0</foxtrot.version>
     <swingx.version>1.6.1</swingx.version>
     <dj-nativeswing.version>1.0.2.20120308</dj-nativeswing.version>
     <dj-swingsuite.version>0.9.1</dj-swingsuite.version>
     <nachocalendar.version>0.23</nachocalendar.version>
     <jedit-syntax.version>2.2.2</jedit-syntax.version>
     <substance.version>4.3</substance.version>
-    <freemarker.version>2.3.20</freemarker.version>
+    <freemarker.version>2.3.23</freemarker.version>
     <fusioncharts.version>2.2</fusioncharts.version>
     <qx-collapsable-panel.version>0.6</qx-collapsable-panel.version>
     <qx-htmlarea.version>1.0</qx-htmlarea.version>
     <qx-upload-widget.version>0.7</qx-upload-widget.version>
     <qx-dark-theme.version>0.6</qx-dark-theme.version>
     <qx-java-rpc.version>0.8</qx-java-rpc.version>
-    <jettison.version>1.3</jettison.version>
-    <hsql.version>2.3.2</hsql.version>
+    <jettison.version>1.3.7</jettison.version>
+    <hsql.version>2.3.3</hsql.version>
     <jnlp-servlet.version>1.1</jnlp-servlet.version>
     <servlet.version>2.5</servlet.version>
     <docbook.version>4.4</docbook.version>
@@ -77,47 +80,47 @@
     <ant-nodeps.version>1.8.1</ant-nodeps.version>
     <stax-api.version>1.0.1</stax-api.version>
     <trove.version>3.0.3</trove.version>
-    <openscales.version>2.2</openscales.version>
+    <openscales.version>3.0.0-2015-30</openscales.version>
     <openmap.version>5.0.3</openmap.version>
     <javaxt.version>1.6.2</javaxt.version>
+    <jta.version>1.1</jta.version>
 
     <!-- Plugins versions common to Jspresso root pom-->
     <compiler-plugin.version>3.3</compiler-plugin.version>
     <resources-plugin.version>2.7</resources-plugin.version>
     <jar-plugin.version>2.6</jar-plugin.version>
-    <surefire-plugin.version>2.18.1</surefire-plugin.version>
-    <failsafe-plugin.version>2.18.1</failsafe-plugin.version>
-    <assembly-plugin.version>2.5.5</assembly-plugin.version>
+    <surefire-plugin.version>2.19</surefire-plugin.version>
+    <failsafe-plugin.version>2.19</failsafe-plugin.version>
+    <assembly-plugin.version>2.6</assembly-plugin.version>
     <javadoc-plugin.version>2.10.3</javadoc-plugin.version>
     <deploy-plugin.version>2.8.2</deploy-plugin.version>
     <site-plugin.version>3.4</site-plugin.version>
     <install-plugin.version>2.5.2</install-plugin.version>
-    <release-plugin.version>2.5.2</release-plugin.version>
-    <clean-plugin.version>2.6.1</clean-plugin.version>
+    <release-plugin.version>2.5.3</release-plugin.version>
+    <clean-plugin.version>3.0.0</clean-plugin.version>
     <archetype-plugin.version>2.4</archetype-plugin.version>
     <source-plugin.version>2.4</source-plugin.version>
     <antrun-plugin.version>1.8</antrun-plugin.version>
-    <info-reports-plugin.version>2.8</info-reports-plugin.version>
-    <webdav-jackrabbit.version>2.9</webdav-jackrabbit.version>
+    <info-reports-plugin.version>2.8.1</info-reports-plugin.version>
+    <webdav-jackrabbit.version>2.10</webdav-jackrabbit.version>
     <dependency-plugin.version>2.10</dependency-plugin.version>
     <jrebel-plugin.version>1.1.5</jrebel-plugin.version>
 
     <!-- Other plugins versions -->
     <war-plugin.version>2.6</war-plugin.version>
-    <shade-plugin.version>2.4</shade-plugin.version>
-    <docbkx-plugin.version>2.0.15</docbkx-plugin.version>
+    <shade-plugin.version>2.4.2</shade-plugin.version>
+    <docbkx-plugin.version>2.0.16</docbkx-plugin.version>
     <xdoclet2-plugin.version>2.0.7.3</xdoclet2-plugin.version>
     <xdoclet2-hibernate-plugin.version>1.0.5</xdoclet2-hibernate-plugin.version>
-    <build-helper-plugin.version>1.9.1</build-helper-plugin.version>
+    <build-helper-plugin.version>1.10</build-helper-plugin.version>
     <hibernate3-plugin.version>2.2</hibernate3-plugin.version>
     <jasperreports-plugin.version>1.0-beta-2</jasperreports-plugin.version>
-    <flexmojos-plugin.version>7.0.0</flexmojos-plugin.version>
+    <flexmojos-plugin.version>7.0.1</flexmojos-plugin.version>
     <exec-plugin.version>1.4.0</exec-plugin.version>
-    <gmaven-plugin.version>1.5</gmaven-plugin.version>
-    <groovy.version>2.3.10</groovy.version>
-    <groovy-eclipse-compiler.version>2.9.1-01</groovy-eclipse-compiler.version>
-    <groovy-eclipse-batch.version>2.3.7-01</groovy-eclipse-batch.version>
-    <jetty-plugin.version>8.1.16.v20140903</jetty-plugin.version>
+    <groovy.version>2.4.5</groovy.version>
+    <groovy-eclipse-compiler.version>2.9.2-01</groovy-eclipse-compiler.version>
+    <groovy-eclipse-batch.version>2.4.3-01</groovy-eclipse-batch.version>
+    <jetty-plugin.version>9.3.6.v20151106</jetty-plugin.version>
     <appassembler-plugin.version>1.10</appassembler-plugin.version>
   </properties>
 
@@ -529,14 +532,14 @@
         </exclusions>
       </dependency>
       <dependency>
-        <groupId>log4j</groupId>
-        <artifactId>log4j</artifactId>
-        <version>${log4j.version}</version>
-      </dependency>
-      <dependency>
         <groupId>commons-lang</groupId>
         <artifactId>commons-lang</artifactId>
         <version>${commons-lang.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>${commons-lang3.version}</version>
       </dependency>
       <dependency>
         <groupId>org.hibernate</groupId>
@@ -554,15 +557,40 @@
         <version>${javassist.version}</version>
       </dependency>
       <dependency>
+        <!-- In order to support log4j2 for Hibernate logging -->
+        <groupId>org.jboss.logging</groupId>
+        <artifactId>jboss-logging</artifactId>
+        <version>${jboss-logging.version}</version>
+      </dependency>
+
+      <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
         <version>${slf4j.version}</version>
       </dependency>
+
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-log4j12</artifactId>
         <version>${slf4j.version}</version>
       </dependency>
+      <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>${log4j.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-core</artifactId>
+        <version>${log4j2.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-slf4j-impl</artifactId>
+        <version>${log4j2.version}</version>
+      </dependency>
+
       <dependency>
         <groupId>commons-beanutils</groupId>
         <artifactId>commons-beanutils</artifactId>
@@ -577,6 +605,11 @@
         <groupId>commons-httpclient</groupId>
         <artifactId>commons-httpclient</artifactId>
         <version>${commons-httpclient.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient</artifactId>
+        <version>${commons-httpclient4.version}</version>
       </dependency>
       <dependency>
         <groupId>commons-fileupload</groupId>
@@ -639,29 +672,19 @@
         <version>${ldapbp.version}</version>
       </dependency>
       <dependency>
+        <groupId>javax.transaction</groupId>
+        <artifactId>jta</artifactId>
+        <version>${jta.version}</version>
+      </dependency>
+      <dependency>
         <groupId>joda-time</groupId>
         <artifactId>joda-time</artifactId>
         <version>${joda-time.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.python</groupId>
-        <artifactId>jython</artifactId>
-        <version>${jython.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.beanshell</groupId>
-        <artifactId>bsh</artifactId>
-        <version>${bsh.version}</version>
-      </dependency>
-      <dependency>
         <groupId>foxtrot</groupId>
-        <artifactId>foxtrot</artifactId>
+        <artifactId>foxtrot-core</artifactId>
         <version>${foxtrot.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.swinglabs</groupId>
-        <artifactId>swingx</artifactId>
-        <version>${swingx.version}</version>
       </dependency>
       <dependency>
         <groupId>chrriis</groupId>
@@ -692,6 +715,11 @@
         <groupId>commons-collections</groupId>
         <artifactId>commons-collections</artifactId>
         <version>${commons-collections.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-collections4</artifactId>
+        <version>${commons-collections4.version}</version>
       </dependency>
       <dependency>
         <groupId>commons-codec</groupId>
@@ -739,7 +767,7 @@
         <version>${itext.version}</version>
       </dependency>
       <dependency>
-        <groupId>jfree</groupId>
+        <groupId>org.jfree</groupId>
         <artifactId>jfreechart</artifactId>
         <version>${jfree.version}</version>
       </dependency>
@@ -759,23 +787,13 @@
         <version>${jnlp-servlet.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.adobe.blazeds</groupId>
-        <artifactId>blazeds-common</artifactId>
+        <groupId>org.apache.flex.blazeds</groupId>
+        <artifactId>flex-messaging-remoting</artifactId>
         <version>${blazeds.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.adobe.blazeds</groupId>
-        <artifactId>blazeds-core</artifactId>
-        <version>${blazeds.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.adobe.blazeds</groupId>
-        <artifactId>blazeds-remoting</artifactId>
-        <version>${blazeds.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.adobe.blazeds</groupId>
-        <artifactId>blazeds-proxy</artifactId>
+        <groupId>org.apache.flex.blazeds</groupId>
+        <artifactId>flex-messaging-proxy</artifactId>
         <version>${blazeds.version}</version>
       </dependency>
       <dependency>
@@ -798,10 +816,10 @@
         <type>swc</type>
       </dependency>
       <dependency>
-        <groupId>org.apache.flex.framework</groupId>
-        <artifactId>flex-framework</artifactId>
-        <version>${flex.version}</version>
-        <type>pom</type>
+        <groupId>com.adobe.flash.framework</groupId>
+        <artifactId>playerglobal</artifactId>
+        <version>${playerglobal.version}</version>
+        <type>swc</type>
       </dependency>
       <dependency>
         <groupId>org.apache.flex.framework</groupId>
@@ -818,6 +836,18 @@
       <dependency>
         <groupId>org.apache.flex.framework</groupId>
         <artifactId>mx</artifactId>
+        <version>${flex.version}</version>
+        <type>swc</type>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.flex.framework</groupId>
+        <artifactId>rpc</artifactId>
+        <version>${flex.version}</version>
+        <type>swc</type>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.flex.framework</groupId>
+        <artifactId>textLayout</artifactId>
         <version>${flex.version}</version>
         <type>swc</type>
       </dependency>
@@ -892,6 +922,38 @@
       <dependency>
         <groupId>org.openscales</groupId>
         <artifactId>openscales-fx</artifactId>
+        <version>${openscales.version}</version>
+        <type>swc</type>
+        <exclusions>
+          <exclusion>
+            <groupId>com.adobe.flex.framework</groupId>
+            <artifactId>flex-framework</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>com.adobe.flex.framework</groupId>
+            <artifactId>playerglobal</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.openscales</groupId>
+        <artifactId>openscales-geometry</artifactId>
+        <version>${openscales.version}</version>
+        <type>swc</type>
+        <exclusions>
+          <exclusion>
+            <groupId>com.adobe.flex.framework</groupId>
+            <artifactId>flex-framework</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>com.adobe.flex.framework</groupId>
+            <artifactId>playerglobal</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.openscales</groupId>
+        <artifactId>openscales-proj4as</artifactId>
         <version>${openscales.version}</version>
         <type>swc</type>
         <exclusions>
@@ -1282,7 +1344,7 @@
               <version>${jasper.version}</version>
             </dependency>
             <dependency>
-              <groupId>jfree</groupId>
+              <groupId>org.jfree</groupId>
               <artifactId>jfreechart</artifactId>
               <version>${jfree.version}</version>
             </dependency>
@@ -1292,19 +1354,9 @@
               <version>${commons-collections.version}</version>
             </dependency>
             <dependency>
-              <groupId>commons-digester</groupId>
-              <artifactId>commons-digester</artifactId>
-              <version>${commons-digester.version}</version>
-            </dependency>
-            <dependency>
               <groupId>com.lowagie</groupId>
               <artifactId>itext</artifactId>
               <version>${itext.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>log4j</groupId>
-              <artifactId>log4j</artifactId>
-              <version>${log4j.version}</version>
             </dependency>
             <dependency>
               <groupId>org.springframework</groupId>
@@ -1366,7 +1418,7 @@
               <version>${jspresso.version}</version>
             </dependency>
             <dependency>
-              <groupId>jfree</groupId>
+              <groupId>org.jfree</groupId>
               <artifactId>jfreechart</artifactId>
               <version>${jfree.version}</version>
             </dependency>
@@ -1404,15 +1456,6 @@
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>exec-maven-plugin</artifactId>
           <version>${exec-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.codehaus.gmaven</groupId>
-          <artifactId>gmaven-plugin</artifactId>
-          <version>${gmaven-plugin.version}</version>
-          <configuration>
-            <sourceEncoding>UTF-8</sourceEncoding>
-            <providerSelection>2.0</providerSelection>
-          </configuration>
         </plugin>
         <plugin>
           <groupId>org.mortbay.jetty</groupId>

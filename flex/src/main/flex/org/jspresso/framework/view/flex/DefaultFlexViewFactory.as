@@ -882,19 +882,17 @@ public class DefaultFlexViewFactory {
   }
 
   protected function createMap(remoteMap:RMap):UIComponent {
-    var map:Map = new Map();
-    map.size = new Size(1200, 1000);
-    map.projection = "EPSG:900913";
+    var map:Map = new Map(1200, 1000, "EPSG:900913");
     map.center = new Location(2.3470, 48.8590, "EPSG:4326");
     map.resolution = new Resolution(12, "EPSG:900913");
     map.maxExtent = new Bounds(-20037508.34, -20037508.34, 20037508.34, 20037508.34, "EPSG:900913");
 
     var mapnik:Mapnik = new Mapnik("Mapnik");
-    mapnik.maxExtent = new Bounds(-20037508.34, -20037508.34, 20037508.34, 20037508.34, mapnik.projection);
+    // mapnik.maxExtent = new Bounds(-20037508.34, -20037508.34, 20037508.34, 20037508.34, mapnik.projection);
     map.addLayer(mapnik);
 
     var markers:VectorLayer = new VectorLayer("markers");
-    markers.projection = new ProjProjection("EPSG:4326");
+    //markers.projection = new ProjProjection("EPSG:4326");
     markers.generateResolutions(19);
     markers.style = Style.getDefaultPointStyle();
     map.addLayer(markers);

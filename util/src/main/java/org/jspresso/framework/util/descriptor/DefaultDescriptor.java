@@ -21,7 +21,7 @@ package org.jspresso.framework.util.descriptor;
 import java.text.MessageFormat;
 import java.util.Locale;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.lang.ICloneable;

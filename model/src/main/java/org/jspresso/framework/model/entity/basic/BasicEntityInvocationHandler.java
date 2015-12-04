@@ -24,8 +24,8 @@ import java.lang.reflect.Proxy;
 import java.util.Map;
 
 import gnu.trove.map.hash.THashMap;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import org.jspresso.framework.model.component.ComponentException;
 import org.jspresso.framework.model.component.IComponent;
@@ -41,7 +41,7 @@ import org.jspresso.framework.util.accessor.IAccessorFactory;
 /**
  * This is the core implementation of all entities in the application. Instances
  * of this class serve as handlers for proxies representing the entities.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BasicEntityInvocationHandler extends

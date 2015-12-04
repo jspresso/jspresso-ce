@@ -41,8 +41,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Map;
 
-import org.apache.commons.collections.map.AbstractReferenceMap;
-import org.apache.commons.collections.map.ReferenceMap;
+import org.apache.commons.collections4.map.AbstractReferenceMap;
+import org.apache.commons.collections4.map.ReferenceMap;
+
 import org.jspresso.framework.util.resources.IResourceBase;
 
 /**
@@ -55,20 +56,20 @@ public final class ResourceManager {
 
   private static final ResourceManager INSTANCE = new ResourceManager();
 
-  private final SecureRandom                 random;
-  private final Map<String, IResourceBase>   resources;
+  private final SecureRandom               random;
+  private final Map<String, IResourceBase> resources;
 
   @SuppressWarnings("unchecked")
   private ResourceManager() {
     // resources = new HashMap<String, IResource>();
-    resources = new ReferenceMap(AbstractReferenceMap.SOFT,
-        AbstractReferenceMap.SOFT, true);
+    resources = new ReferenceMap(AbstractReferenceMap.ReferenceStrength.SOFT,
+        AbstractReferenceMap.ReferenceStrength.SOFT, true);
     random = new SecureRandom();
   }
 
   /**
    * Singleton pattern.
-   * 
+   *
    * @return the singleton instance.
    */
   public static ResourceManager getInstance() {
@@ -77,9 +78,9 @@ public final class ResourceManager {
 
   /**
    * Returns the registered resource or null.
-   * 
+   *
    * @param id
-   *          the identifier under which the resource has been registered.
+   *     the identifier under which the resource has been registered.
    * @return the registered resource or null.
    */
   public IResourceBase getRegistered(String id) {
@@ -92,11 +93,11 @@ public final class ResourceManager {
 
   /**
    * Registers a resource.
-   * 
+   *
    * @param resource
-   *          the resource to be registered.
+   *     the resource to be registered.
    * @return the generated identifier under which the resource has been
-   *         registered.
+   * registered.
    */
   public String register(IResourceBase resource) {
     try {
@@ -104,18 +105,17 @@ public final class ResourceManager {
       resources.put(id, resource);
       return id;
     } catch (NoSuchAlgorithmException nsae) {
-      throw new IllegalStateException("Could not generate random id: "
-          + nsae.getLocalizedMessage());
+      throw new IllegalStateException("Could not generate random id: " + nsae.getLocalizedMessage());
     }
   }
 
   /**
    * Registers a resource.
-   * 
+   *
    * @param id
-   *          the identifier under which the resource must be registered.
+   *     the identifier under which the resource must be registered.
    * @param resource
-   *          the resource to be registered.
+   *     the resource to be registered.
    */
   public void register(String id, IResourceBase resource) {
     resources.put(id, resource);
@@ -123,9 +123,9 @@ public final class ResourceManager {
 
   /**
    * Un-registers a resource.
-   * 
+   *
    * @param id
-   *          the identifier under which the resource is registered.
+   *     the identifier under which the resource is registered.
    */
   public void unregister(String id) {
     resources.remove(id);

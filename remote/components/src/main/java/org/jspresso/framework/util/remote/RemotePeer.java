@@ -20,7 +20,7 @@ package org.jspresso.framework.util.remote;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import org.jspresso.framework.util.automation.IPermIdSource;
 
