@@ -93,6 +93,9 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel", {
     __editable: true,
     /** @type {Array} */
     __dynamicToolTipIndices: null,
+    /** @type {Object} */
+    __dynamicStylesIndices: null,
+
 
     // overridden
     getRowCount: function () {
@@ -119,6 +122,10 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel", {
     // overridden
     setDynamicToolTipIndices: function (value) {
       this.__dynamicToolTipIndices = value;
+    },
+
+    setDynamicStylesIndices: function (value) {
+      this.__dynamicStylesIndices = value;
     },
 
     // overridden
@@ -231,7 +238,7 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel", {
      */
     __setupCellListeners: function (columnIndex, rowIndex, cellState) {
       if (!cellState.getUserData(this.toHashCode())) {
-        cellState.addListener("changeValue", function (e) {
+        var refreshCell = function (e) {
           var data = {
             firstRow: rowIndex,
             lastRow: rowIndex,
@@ -239,7 +246,12 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel", {
             lastColumn: columnIndex
           };
           this.fireDataEvent("dataChanged", data);
-        }, this);
+        };
+        cellState.addListener("changeValue", refreshCell, this);
+        for (var i = 0; i < this.__dynamicStylesIndices[columnIndex].length; i++) {
+          cellState.getParent().getChildren().getItem(
+              this.__dynamicStylesIndices[columnIndex][i]).addListener("changeValue", refreshCell, this);
+        }
         cellState.setUserData(this.toHashCode(), true)
       }
     },

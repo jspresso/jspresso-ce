@@ -2074,8 +2074,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           this.startEditing();
         }
       }, table);
+      var dynamicStylesIndices = {};
       var columnModel = table.getTableColumnModel();
       for (var i = 0; i < remoteTable.getColumnIds().length; i++) {
+        dynamicStylesIndices[i] = [];
         var rColumn = remoteTable.getColumns()[i];
         var rColumnHeader = remoteTable.getColumnHeaders()[i];
         var editor = new org.jspresso.framework.view.qx.RComponentTableCellEditor(this, rColumn,
@@ -2150,16 +2152,19 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           }
           if (bgIndex >= 0) {
             additionalAttributes["backgroundIndex"] = bgIndex;
+            dynamicStylesIndices[i].push(bgIndex);
           } else if (rColumn.getBackground()) {
             additionalAttributes["background-color"] = org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(rColumn.getBackground());
           }
           if (fgIndex >= 0) {
             additionalAttributes["foregroundIndex"] = fgIndex;
+            dynamicStylesIndices[i].push(fgIndex);
           } else if (rColumn.getForeground()) {
             additionalAttributes["color"] = org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(rColumn.getForeground());
           }
           if (foIndex >= 0) {
             additionalAttributes["fontIndex"] = foIndex;
+            dynamicStylesIndices[i].push(foIndex);
           } else {
             var rFont = rColumn.getFont();
             if (rFont) {
@@ -2184,6 +2189,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           columnModel.setHeaderCellRenderer(i,
               new org.jspresso.framework.view.qx.RComponentHeaderRenderer(table, this, rColumnHeader));
         }
+        tableModel.setDynamicStylesIndices(dynamicStylesIndices);
         var columnWidth;
         if (rColumn.getPreferredSize() && rColumn.getPreferredSize().getWidth() > 0) {
           columnWidth = rColumn.getPreferredSize().getWidth();
