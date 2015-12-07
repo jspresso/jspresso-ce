@@ -1847,7 +1847,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
           getApplicationSession().getId());
       return false;
     }
-    LOG.info("User {} logged in  for session {}.", getApplicationSession().getUsername(),
+    LOG.info("User {} logged in  for session {}.", getLoginCallbackHandler().getUsername(),
         getApplicationSession().getId());
     loggedIn(subject);
     return true;
