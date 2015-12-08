@@ -70,6 +70,24 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedTable", {
         this.startEditing()
       }
       this.base(arguments, evt);
+    },
+
+    _onSelectionChanged: function (evt) {
+      this.base(arguments, evt);
+      var selectedRanges = this.getSelectionModel().getSelectedRanges();
+      if (selectedRanges) {
+        for (var i = 0; i < selectedRanges.length; i++) {
+          var data = {
+            firstRow: selectedRanges[i].minIndex,
+            lastRow: selectedRanges[i].maxIndex,
+            firstColumn: 0,
+            lastColumn: this.getTableModel().getColumnCount() - 1
+          };
+          // For the cell to repaint itself and provide different programmatic rendering based on selection.
+          this.getTableModel().fireDataEvent("dataChanged", data);
+        }
+      }
     }
+
   }
 });

@@ -26,13 +26,16 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MCellAdditionalStyle", {
       if (this.__attributes) {
         for (var key in this.__attributes) {
           if (key == "backgroundIndex" || key == "foregroundIndex") {
-            //noinspection JSUnfilteredForInLoop
-            var color = org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(cellInfo.rowData.getChildren().getItem(this.__attributes[key]).getValue());
-            if (color) {
-              if (key == "backgroundIndex") {
-                styleString.push("background-color:", color, ";");
-              } else {
-                styleString.push("color:", color, ";");
+            if (!cellInfo.selected) {
+              //noinspection JSUnfilteredForInLoop
+              var color = org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(
+                  cellInfo.rowData.getChildren().getItem(this.__attributes[key]).getValue());
+              if (color) {
+                if (key == "backgroundIndex") {
+                  styleString.push("background-color:", color, ";");
+                } else {
+                  styleString.push("color:", color, ";");
+                }
               }
             }
           } else if (key == "fontIndex") {
@@ -55,7 +58,7 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MCellAdditionalStyle", {
           } else {
             //noinspection JSUnfilteredForInLoop
             if (this.__attributes[key]) {
-              if (!cellInfo.selected || ( cellInfo.selected && !("background-color" == key || "color" == key))) {
+              if (!cellInfo.selected || !("background-color" == key || "color" == key)) {
                 //noinspection JSUnfilteredForInLoop
                 styleString.push(key, ":", this.__attributes[key], ";");
               }
