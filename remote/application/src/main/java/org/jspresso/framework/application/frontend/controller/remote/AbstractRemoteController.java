@@ -381,9 +381,25 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
           if (targetPeer instanceof IFormattedValueConnector) {
             ((IFormattedValueConnector) targetPeer).setFormattedValue(((RemoteValueCommand) command).getValue());
           } else if (targetPeer instanceof IRemoteStateOwner) {
-            ((IRemoteStateOwner) targetPeer).setValueFromState(((RemoteValueCommand) command).getValue());
+            IRemoteStateOwner remoteStateOwner = (IRemoteStateOwner) targetPeer;
+            RemoteValueCommand valueCommand = (RemoteValueCommand) command;
+            remoteStateOwner.setValueFromState(valueCommand.getValue());
+            if (!ObjectUtils.equals(remoteStateOwner.getState().getValue(), valueCommand.getValue())) {
+              // There are rare cases (e.g. due to interceptSetter that resets the command value to the connector
+              // actual state), when the connector and the state are not synced.
+              valueCommand.setValue(remoteStateOwner.getState().getValue());
+              registerCommand(valueCommand);
+            }
           } else if (targetPeer instanceof IValueConnector) {
-            ((IValueConnector) targetPeer).setConnectorValue(((RemoteValueCommand) command).getValue());
+            IValueConnector connector = (IValueConnector) targetPeer;
+            RemoteValueCommand valueCommand = (RemoteValueCommand) command;
+            connector.setConnectorValue(valueCommand.getValue());
+            if (!ObjectUtils.equals(connector.getConnectorValue(), valueCommand.getValue())) {
+              // There are rare cases (e.g. due to interceptSetter that resets the command value to the connector
+              // actual state), when the connector and the state are not synced.
+              valueCommand.setValue(connector.getConnectorValue());
+              registerCommand(valueCommand);
+            }
           } else {
             throw new CommandException("Target peer type cannot be handled : " + targetPeer.getClass().getName());
           }
