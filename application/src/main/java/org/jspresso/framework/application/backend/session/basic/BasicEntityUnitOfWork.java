@@ -96,6 +96,9 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   @Override
   public void begin() {
+    if (suspended) {
+      return;
+    }
     dirtRecorder = new BeanPropertyChangeRecorder();
   }
 
@@ -153,6 +156,9 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   @Override
   public void commit() {
+    if (suspended) {
+      return;
+    }
     if (nestedUnitOfWork != null) {
       Set<IEntity> nestedUnitOfWorkUpdatedEntities = nestedUnitOfWork.getUpdatedEntities();
       Set<IEntity> nestedUnitOfWorkDeletedEntities = nestedUnitOfWork.getDeletedEntities();
@@ -356,6 +362,9 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   @Override
   public void rollback() {
+    if (suspended) {
+      return;
+    }
     if (nestedUnitOfWork != null) {
       nestedUnitOfWork.rollback();
     } else {
