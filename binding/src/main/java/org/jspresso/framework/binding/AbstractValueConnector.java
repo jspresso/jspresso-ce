@@ -86,7 +86,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * Constructs a new AbstractValueConnector using an identifier. In case of a
    * bean connector, this identifier must be the bean property the connector
    * connects.
-   * 
+   *
    * @param id
    *          The connector identifier.
    */
@@ -292,7 +292,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Gets the modelConnector.
-   * 
+   *
    * @return the modelConnector.
    */
   @Override
@@ -302,7 +302,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Gets the modelDescriptor.
-   * 
+   *
    * @return the modelDescriptor.
    */
   @Override
@@ -329,7 +329,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Gets the parentConnector.
-   * 
+   *
    * @return the parentConnector.
    */
   @Override
@@ -339,7 +339,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Gets the readability gates listener.
-   * 
+   *
    * @return the readability gates listener.
    */
   public PropertyChangeListener getReadabilityGatesListener() {
@@ -357,7 +357,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Gets the writability gates listener.
-   * 
+   *
    * @return the writability gates listener.
    */
   public PropertyChangeListener getWritabilityGatesListener() {
@@ -375,7 +375,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Gets the readable.
-   * 
+   *
    * @return the readable.
    */
   @Override
@@ -392,7 +392,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Gets the writable.
-   * 
+   *
    * @return the writable.
    */
   @Override
@@ -489,7 +489,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
         }
       }
     }
-    if (!ObjectUtils.equals(actualValue, oldConnectorValue)) {
+    if (!ObjectUtils.equals(actualValue, getConnecteeValue())) {
       setConnecteeValue(actualValue);
       fireConnectorValueChange();
     }
@@ -505,7 +505,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Gets the exception handler.
-   * 
+   *
    * @return the exception handler.
    */
   protected IExceptionHandler getExceptionHandler() {
@@ -532,7 +532,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Sets the modelConnector.
-   * 
+   *
    * @param modelConnector
    *          the modelConnector to set.
    */
@@ -594,7 +594,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Sets the modelDescriptor.
-   * 
+   *
    * @param modelDescriptor
    *          the modelDescriptor to set.
    */
@@ -605,7 +605,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Sets the parentConnector.
-   * 
+   *
    * @param parentConnector
    *          the parentConnector to set.
    */
@@ -616,7 +616,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Configures accessibility gates with the security handler.
-   * 
+   *
    * @param securityHandler
    *          the security handler responsible for managing authorizations.
    */
@@ -705,7 +705,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * Gives a chance to the connector to create a specific subclass of connector
    * value change event.
-   * 
+   *
    * @param oldValue
    *          the old connector value.
    * @param newValue
@@ -748,7 +748,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Fires a value change, delegating to the value change support.
-   * 
+   *
    * @param changeEvent
    *          the change event to propagate.
    */
@@ -761,7 +761,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * Handles a runtime exception, trying to delegate it to the exception handler
    * if any.
-   * 
+   *
    * @param ex
    *          the runtime exception.
    */
@@ -775,7 +775,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Retrieves the value from the peer connectee.
-   * 
+   *
    * @return the connectee value.
    */
   protected abstract Object getConnecteeValue();
@@ -790,7 +790,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Gets the readabilityGates.
-   * 
+   *
    * @return the readabilityGates.
    */
   protected Collection<IGate> getReadabilityGates() {
@@ -799,7 +799,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Gets the writabilityGates.
-   * 
+   *
    * @return the writabilityGates.
    */
   protected Collection<IGate> getWritabilityGates() {
@@ -808,7 +808,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Gets the locallyReadable.
-   * 
+   *
    * @return the locallyReadable.
    */
   protected boolean isLocallyReadable() {
@@ -817,7 +817,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Gets the locallyWritable.
-   * 
+   *
    * @return the locallyWritable.
    */
   protected boolean isLocallyWritable() {
@@ -826,7 +826,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Sets the value to the peer connectee.
-   * 
+   *
    * @param connecteeValue
    *          the connectee value to set
    */
@@ -932,7 +932,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Gets the securityHandler.
-   * 
+   *
    * @return the securityHandler.
    */
   protected ISecurityHandler getSecurityHandler() {
