@@ -489,7 +489,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
         }
       }
     }
-    if (!ObjectUtils.equals(actualValue, getConnecteeValue())) {
+    if (!ObjectUtils.equals(actualValue, oldConnectorValue)) {
       setConnecteeValue(actualValue);
       fireConnectorValueChange();
     }
