@@ -218,6 +218,9 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
       valueFromState = stateValue;
     }
     setConnectorValue(valueFromState);
+    // There are rare cases (e.g. due to interceptSetter that resets the command value to the connector
+    // actual state), when the connector and the state are not synced.
+    synchRemoteState();
   }
 
   /**
