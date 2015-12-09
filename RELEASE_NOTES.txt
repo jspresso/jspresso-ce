@@ -1,5 +1,25 @@
 4.3
 ===
+- JasperReports plugin changed from codehaus to to alexnederlof
+  (https://github.com/alexnederlof/Jasper-report-maven-plugin).
+
+  Replace your JasperReports compilation section in core/pom.xml by the following one :
+      <plugin>
+        <groupId>com.alexnederlof</groupId>
+        <artifactId>jasperreports-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>jasper</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <outputDirectory>${project.build.directory}/generated-resources/jasperreports</outputDirectory>
+        </configuration>
+      </plugin>
+
 - Flex has been upgraded to the latest 4.14.1 version
 
 - We have moved to Apache BlazeDS implementation, so replace all blazeds dependencies sections in your webapp modules

@@ -114,7 +114,7 @@
     <xdoclet2-hibernate-plugin.version>1.0.5</xdoclet2-hibernate-plugin.version>
     <build-helper-plugin.version>1.10</build-helper-plugin.version>
     <hibernate3-plugin.version>2.2</hibernate3-plugin.version>
-    <jasperreports-plugin.version>1.0-beta-2</jasperreports-plugin.version>
+    <jasperreports-plugin.version>2.0</jasperreports-plugin.version>
     <flexmojos-plugin.version>7.0.1</flexmojos-plugin.version>
     <exec-plugin.version>1.4.0</exec-plugin.version>
     <groovy.version>2.4.5</groovy.version>
@@ -1382,36 +1382,9 @@
           </dependencies>
         </plugin>
         <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>jasperreports-maven-plugin</artifactId>
+          <groupId>com.alexnederlof</groupId>
+          <artifactId>jasperreports-plugin</artifactId>
           <version>${jasperreports-plugin.version}</version>
-          <dependencies>
-            <dependency>
-              <groupId>net.sf.jasperreports</groupId>
-              <artifactId>jasperreports</artifactId>
-              <version>${jasper.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>org.jfree</groupId>
-              <artifactId>jfreechart</artifactId>
-              <version>${jfree.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>commons-collections</groupId>
-              <artifactId>commons-collections</artifactId>
-              <version>${commons-collections.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>com.lowagie</groupId>
-              <artifactId>itext</artifactId>
-              <version>${itext.version}</version>
-            </dependency>
-            <dependency>
-              <groupId>org.springframework</groupId>
-              <artifactId>spring-beans</artifactId>
-              <version>${spring.version}</version>
-            </dependency>
-          </dependencies>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
