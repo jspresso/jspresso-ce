@@ -489,7 +489,10 @@ public abstract class AbstractValueConnector extends AbstractConnector
         }
       }
     }
-    if (!ObjectUtils.equals(actualValue, oldConnectorValue)) {
+    if (!ObjectUtils.equals(actualValue, oldConnectorValue)
+        // There are rare cases (e.g. due to interceptSetter that resets the command value to the connector
+        // actual state), when the connector and the state are not synced.
+        || !ObjectUtils.equals(actualValue, computeOldConnectorValue(getConnecteeValue()))) {
       setConnecteeValue(actualValue);
       fireConnectorValueChange();
     }
