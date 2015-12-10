@@ -293,8 +293,22 @@ public abstract class AbstractBackendController extends AbstractController imple
     List<E> uowEntities = new ArrayList<>();
     Map<Class<? extends IEntity>, Map<Serializable, IEntity>> uowExistingEntities = unitOfWork.getRegisteredEntities();
     IEntityRegistry alreadyCloned = createEntityRegistry("cloneInUnitOfWork", uowExistingEntities);
-    for (E entity : entities) {
-      uowEntities.add(cloneInUnitOfWork(entity, allowOuterScopeUpdate, alreadyCloned));
+    Set<IEntity> eventsToRelease = new LinkedHashSet<>();
+    boolean wasDirtyTrackingEnabled = isDirtyTrackingEnabled();
+    try {
+      setDirtyTrackingEnabled(false);
+      for (E entity : entities) {
+        uowEntities.add(cloneInUnitOfWork(entity, allowOuterScopeUpdate, alreadyCloned, eventsToRelease));
+      }
+    } finally {
+      for (IEntity entity : eventsToRelease) {
+        try {
+          entity.releaseEvents();
+        } catch (Throwable t) {
+          LOG.error("An unexpected exception occurred when releasing events after a merge", t);
+        }
+      }
+      setDirtyTrackingEnabled(wasDirtyTrackingEnabled);
     }
     return uowEntities;
   }
@@ -831,7 +845,7 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   @Override
   public <E extends IEntity> E merge(E entity, EMergeMode mergeMode) {
-    return merge(entity, mergeMode, createEntityRegistry("merge"));
+    return merge(Collections.singletonList(entity), mergeMode).get(0);
   }
 
   /**
@@ -840,9 +854,33 @@ public abstract class AbstractBackendController extends AbstractController imple
   @Override
   public <E extends IEntity> List<E> merge(List<E> entities, EMergeMode mergeMode) {
     IEntityRegistry alreadyMerged = createEntityRegistry("merge");
+    Set<IEntity> eventsToRelease = new LinkedHashSet<>();
     List<E> mergedList = new ArrayList<>();
-    for (E entity : entities) {
-      mergedList.add(merge(entity, mergeMode, alreadyMerged));
+    boolean wasDirtyTrackingEnabled = isDirtyTrackingEnabled();
+    try {
+      setDirtyTrackingEnabled(false);
+      for (E entity : entities) {
+        mergedList.add(merge(entity, mergeMode, alreadyMerged, eventsToRelease));
+      }
+    } finally {
+      boolean suspendUnitOfWork = isUnitOfWorkActive();
+      try {
+        if (suspendUnitOfWork) {
+          suspendUnitOfWork();
+        }
+        for (IEntity entity : eventsToRelease) {
+          try {
+            entity.releaseEvents();
+          } catch (Throwable t) {
+            LOG.error("An unexpected exception occurred when releasing events after a merge", t);
+          }
+        }
+      } finally {
+        if (suspendUnitOfWork) {
+          resumeUnitOfWork();
+        }
+        setDirtyTrackingEnabled(wasDirtyTrackingEnabled);
+      }
     }
     return mergedList;
   }
@@ -1230,7 +1268,7 @@ public abstract class AbstractBackendController extends AbstractController imple
   }
 
   private IComponent cloneComponentInUnitOfWork(IComponent component, boolean allowOuterScopeUpdate,
-                                                IEntityRegistry alreadyCloned) {
+                                                IEntityRegistry alreadyCloned, Set<IEntity> eventsToRelease) {
     IComponent uowComponent = carbonEntityCloneFactory.cloneComponent(component, entityFactory);
     Map<String, Object> componentProperties = component.straightGetProperties();
     for (Map.Entry<String, Object> property : componentProperties.entrySet()) {
@@ -1239,13 +1277,13 @@ public abstract class AbstractBackendController extends AbstractController imple
       if (propertyValue instanceof IEntity) {
         if (isInitialized(propertyValue)) {
           uowComponent.straightSetProperty(propertyName, cloneInUnitOfWork((IEntity) propertyValue,
-              allowOuterScopeUpdate, alreadyCloned));
+              allowOuterScopeUpdate, alreadyCloned, eventsToRelease));
         } else {
           uowComponent.straightSetProperty(propertyName, cloneUninitializedProperty(uowComponent, propertyValue));
         }
       } else if (propertyValue instanceof IComponent) {
         uowComponent.straightSetProperty(propertyName, cloneComponentInUnitOfWork((IComponent) propertyValue,
-            allowOuterScopeUpdate, alreadyCloned));
+            allowOuterScopeUpdate, alreadyCloned, eventsToRelease));
       }
     }
     IComponent owningComponent = component.getOwningComponent();
@@ -1263,7 +1301,7 @@ public abstract class AbstractBackendController extends AbstractController imple
 
   @SuppressWarnings({"unchecked", "ConstantConditions"})
   private <E extends IEntity> E cloneInUnitOfWork(E entity, boolean allowOuterScopeUpdate,
-                                                  IEntityRegistry alreadyCloned) {
+                                                  IEntityRegistry alreadyCloned, Set<IEntity> eventsToRelease) {
     if (entity == null) {
       return null;
     }
@@ -1305,7 +1343,7 @@ public abstract class AbstractBackendController extends AbstractController imple
           if (propertyValue instanceof IEntity) {
             if (isInitialized(propertyValue)) {
               uowEntity.straightSetProperty(propertyName, cloneInUnitOfWork((IEntity) propertyValue,
-                  allowOuterScopeUpdate, alreadyCloned));
+                  allowOuterScopeUpdate, alreadyCloned, eventsToRelease));
             } else {
               uowEntity.straightSetProperty(propertyName, cloneUninitializedProperty(uowEntity, propertyValue));
             }
@@ -1320,10 +1358,10 @@ public abstract class AbstractBackendController extends AbstractController imple
                 if (collectionElement != null) {
                   if (collectionElement instanceof IEntity) {
                     uowCollection.add(cloneInUnitOfWork((IEntity) collectionElement, allowOuterScopeUpdate,
-                        alreadyCloned));
+                        alreadyCloned, eventsToRelease));
                   } else if (collectionElement instanceof IComponent) {
                     uowCollection.add(cloneComponentInUnitOfWork((IComponent) collectionElement, allowOuterScopeUpdate,
-                        alreadyCloned));
+                        alreadyCloned, eventsToRelease));
                   } else {
                     uowCollection.add(collectionElement);
                   }
@@ -1342,10 +1380,10 @@ public abstract class AbstractBackendController extends AbstractController imple
                     if (snapshotCollectionElement != null) {
                       if (snapshotCollectionElement instanceof IEntity) {
                         clonedSnapshotCollection.add(cloneInUnitOfWork((IEntity) snapshotCollectionElement,
-                            allowOuterScopeUpdate, alreadyCloned));
+                            allowOuterScopeUpdate, alreadyCloned, eventsToRelease));
                       } else if (snapshotCollectionElement instanceof IComponent) {
                         clonedSnapshotCollection.add(cloneComponentInUnitOfWork((IComponent) snapshotCollectionElement,
-                            allowOuterScopeUpdate, alreadyCloned));
+                            allowOuterScopeUpdate, alreadyCloned, eventsToRelease));
                       } else {
                         clonedSnapshotCollection.add(snapshotCollectionElement);
                       }
@@ -1366,23 +1404,24 @@ public abstract class AbstractBackendController extends AbstractController imple
           } else if (propertyValue instanceof IEntity[]) {
             IEntity[] uowArray = new IEntity[((IEntity[]) propertyValue).length];
             for (int i = 0; i < uowArray.length; i++) {
-              uowArray[i] = cloneInUnitOfWork(((IEntity[]) propertyValue)[i], allowOuterScopeUpdate, alreadyCloned);
+              uowArray[i] = cloneInUnitOfWork(((IEntity[]) propertyValue)[i], allowOuterScopeUpdate, alreadyCloned,
+                  eventsToRelease);
             }
             uowEntity.straightSetProperty(propertyName, uowArray);
           } else if (propertyValue instanceof IComponent[]) {
             IComponent[] uowArray = new IComponent[((IComponent[]) property.getValue()).length];
             for (int i = 0; i < uowArray.length; i++) {
               uowArray[i] = cloneComponentInUnitOfWork(((IComponent[]) propertyValue)[i], allowOuterScopeUpdate,
-                  alreadyCloned);
+                  alreadyCloned, eventsToRelease);
             }
             uowEntity.straightSetProperty(propertyName, uowArray);
           } else if (propertyValue instanceof IComponent) {
             uowEntity.straightSetProperty(propertyName, cloneComponentInUnitOfWork((IComponent) propertyValue,
-                allowOuterScopeUpdate, alreadyCloned));
+                allowOuterScopeUpdate, alreadyCloned, eventsToRelease));
           }
         }
         if (eventsBlocked && uowEntity != null && isInitialized(uowEntity)) {
-          uowEntity.releaseEvents();
+          eventsToRelease.add(uowEntity);
         }
         unitOfWork.register(uowEntity, new HashMap<>(dirtyProperties));
         if (uowEntity instanceof ILifecycleCapable) {
@@ -1391,7 +1430,7 @@ public abstract class AbstractBackendController extends AbstractController imple
       }
     } finally {
       if (eventsBlocked && uowEntity != null && isInitialized(uowEntity)) {
-        uowEntity.releaseEvents();
+        eventsToRelease.add(uowEntity);
       }
     }
     return uowEntity;
@@ -1449,7 +1488,8 @@ public abstract class AbstractBackendController extends AbstractController imple
   }
 
   @SuppressWarnings({"unchecked", "ConstantConditions"})
-  private <E extends IEntity> E merge(E entity, final EMergeMode mergeMode, IEntityRegistry alreadyMerged) {
+  private <E extends IEntity> E merge(E entity, final EMergeMode mergeMode, IEntityRegistry alreadyMerged,
+                                      Set<IEntity> eventsToRelease) {
     if (entity == null) {
       return null;
     }
@@ -1509,7 +1549,8 @@ public abstract class AbstractBackendController extends AbstractController imple
             Object registeredProperty = getRegisteredEntity(getComponentContract((IEntity) propertyValue),
                 ((IEntity) propertyValue).getId());
             if (registeredProperty == null) {
-              mergedProperties.put(propertyName, merge((IEntity) propertyValue, mergeMode, alreadyMerged));
+              mergedProperties.put(propertyName, merge((IEntity) propertyValue, mergeMode, alreadyMerged,
+                  eventsToRelease));
             } else {
               if (mergeMode == EMergeMode.MERGE_EAGER || mergeMode == EMergeMode.MERGE_LAZY) {
                 if (isInitialized(propertyValue)) {
@@ -1521,7 +1562,8 @@ public abstract class AbstractBackendController extends AbstractController imple
               // Fix for bug #1023 : the referenced entity might have changed
               // int the TX. Merge must happen unconditionally.
               // if (isInitialized(registeredProperty)) {
-              mergedProperties.put(propertyName, merge((IEntity) propertyValue, mergeMode, alreadyMerged));
+              mergedProperties.put(propertyName, merge((IEntity) propertyValue, mergeMode, alreadyMerged,
+                  eventsToRelease));
             }
           } else if (propertyValue instanceof Collection<?>
               // to support collections stored as java serializable blob.
@@ -1557,7 +1599,8 @@ public abstract class AbstractBackendController extends AbstractController imple
                 int i = 0;
                 for (Object collectionElement : (Collection<?>) propertyValue) {
                   if (collectionElement instanceof IEntity) {
-                    registeredCollection.add(merge((IEntity) collectionElement, mergeMode, alreadyMerged));
+                    registeredCollection.add(merge((IEntity) collectionElement, mergeMode, alreadyMerged,
+                        eventsToRelease));
                   } else if (collectionElement instanceof IComponent) {
                     IComponent registeredComponent = null;
                     // We must reuse component instances for binding to operate correctly.
@@ -1582,7 +1625,7 @@ public abstract class AbstractBackendController extends AbstractController imple
           } else if (propertyValue instanceof IComponent) {
             IComponent registeredComponent = (IComponent) registeredEntityProperties.get(propertyName);
             mergedProperties.put(propertyName, mergeComponent((IComponent) propertyValue, registeredComponent,
-                mergeMode, alreadyMerged));
+                mergeMode, alreadyMerged, eventsToRelease));
           } else {
             mergedProperties.put(propertyName, propertyValue);
           }
@@ -1602,17 +1645,7 @@ public abstract class AbstractBackendController extends AbstractController imple
       return registeredEntity;
     } finally {
       if (eventsBlocked && registeredEntity != null && isInitialized(registeredEntity)) {
-        boolean suspendUnitOfWork = isUnitOfWorkActive();
-        try {
-          if (suspendUnitOfWork) {
-            suspendUnitOfWork();
-          }
-          registeredEntity.releaseEvents();
-        } finally {
-          if (suspendUnitOfWork) {
-            resumeUnitOfWork();
-          }
-        }
+        eventsToRelease.add(registeredEntity);
       }
       setDirtyTrackingEnabled(dirtRecorderWasEnabled);
     }
@@ -1670,7 +1703,7 @@ public abstract class AbstractBackendController extends AbstractController imple
   }
 
   private IComponent mergeComponent(IComponent componentToMerge, IComponent registeredComponent, EMergeMode mergeMode,
-                                    IEntityRegistry alreadyMerged) {
+                                    IEntityRegistry alreadyMerged, Set<IEntity> eventsToRelease) {
     IComponent varRegisteredComponent = registeredComponent;
     if (componentToMerge == null) {
       return null;
@@ -1705,7 +1738,7 @@ public abstract class AbstractBackendController extends AbstractController imple
         Object registeredProperty = getRegisteredEntity(getComponentContract((IEntity) propertyValue),
             ((IEntity) propertyValue).getId());
         if (registeredProperty == null) {
-          mergedProperties.put(propertyName, merge((IEntity) propertyValue, mergeMode, alreadyMerged));
+          mergedProperties.put(propertyName, merge((IEntity) propertyValue, mergeMode, alreadyMerged, eventsToRelease));
         } else {
           if (mergeMode == EMergeMode.MERGE_EAGER || mergeMode == EMergeMode.MERGE_LAZY) {
             if (isInitialized(propertyValue)) {
@@ -1717,12 +1750,12 @@ public abstract class AbstractBackendController extends AbstractController imple
           // Fix for bug #1023 : the referenced entity might have changed
           // int the TX. Merge must happen unconditionally.
           // if (isInitialized(registeredProperty)) {
-          mergedProperties.put(propertyName, merge((IEntity) propertyValue, mergeMode, alreadyMerged));
+          mergedProperties.put(propertyName, merge((IEntity) propertyValue, mergeMode, alreadyMerged, eventsToRelease));
         }
       } else if (propertyValue instanceof IComponent) {
         IComponent registeredSubComponent = (IComponent) registeredComponentProperties.get(propertyName);
         mergedProperties.put(propertyName, mergeComponent((IComponent) propertyValue, registeredSubComponent, mergeMode,
-            alreadyMerged));
+            alreadyMerged, eventsToRelease));
       } else {
         mergedProperties.put(propertyName, propertyValue);
       }
