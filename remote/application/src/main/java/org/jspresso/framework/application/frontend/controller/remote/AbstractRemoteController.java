@@ -42,6 +42,7 @@ import org.jspresso.framework.application.frontend.command.remote.CommandExcepti
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteApplicationDescriptionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteCloseDialogCommand;
@@ -1099,5 +1100,15 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
    */
   protected IGUIDGenerator<String> getGuidGenerator() {
     return guidGenerator;
+  }
+
+  @Override
+  public void setName(String name) {
+    super.setName(name);
+    if (isStarted()) {
+      RemoteApplicationDescriptionCommand radCommand = new RemoteApplicationDescriptionCommand();
+      radCommand.setApplicationName(getI18nName(this, getLocale()));
+      registerCommand(radCommand);
+    }
   }
 }
