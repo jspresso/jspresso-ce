@@ -201,11 +201,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       toolBar.setAppearance("application-bar");
 
       // Do not install navigation actions since browser integration works fine.
-      if (this._getName()) {
-        var appNameLabel = new qx.ui.basic.Label(this._getName());
-        appNameLabel.setAppearance("application-label")
-        toolBar.add(appNameLabel);
-      }
+      var appNameLabel = new qx.ui.basic.Label();
+      appNameLabel.setAppearance("application-label");
+      this.bind("name", appNameLabel, "value");
+      toolBar.add(appNameLabel);
       toolBar.addSpacer();
       if (actions) {
         for (var i = 0; i < actions.length; i++) {

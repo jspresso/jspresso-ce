@@ -81,6 +81,7 @@ import org.jspresso.framework.application.frontend.command.remote.IRemoteCommand
 import org.jspresso.framework.application.frontend.command.remote.RemoteAbstractDialogCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteApplicationDescriptionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand;
@@ -355,6 +356,8 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
           unregister(removedPeer);
         }
       }
+    } else if (command is RemoteApplicationDescriptionCommand) {
+      name = (command as RemoteApplicationDescriptionCommand).applicationName;
     } else if (command is RemoteAbstractDialogCommand) {
       var dialogCommand:RemoteAbstractDialogCommand = command as RemoteAbstractDialogCommand;
       var dialogButtons:Array = [];
@@ -395,7 +398,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
       closeDialog();
     } else if (command is RemoteInitCommand) {
       var initCommand:RemoteInitCommand = command as RemoteInitCommand;
-      this._applicationName = initCommand.applicationName;
+      this.name = initCommand.applicationName;
       linkBrowserHistory();
       initApplicationFrame(initCommand);
     } else if (command is RemoteWorkspaceDisplayCommand) {
@@ -1504,7 +1507,12 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     ExternalInterface.call("getGeoLocation");
   }
 
-  protected function get name():String {
+  public function set name(name:String):void {
+    this._applicationName = name;
+  }
+
+  [Bindable]
+  public function get name():String {
     return _applicationName;
   }
 }

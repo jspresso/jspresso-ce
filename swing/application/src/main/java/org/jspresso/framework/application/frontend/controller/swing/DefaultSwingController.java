@@ -951,4 +951,15 @@ public class DefaultSwingController extends
         htmlContent);
     cb.setContents(dataTransferObject, dataTransferObject);
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setName(String name) {
+    super.setName(name);
+    if (isStarted()) {
+      updateFrameTitle();
+    }
+  }
 }
