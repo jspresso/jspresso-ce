@@ -20,6 +20,8 @@ package org.jspresso.framework.flex.controller {
 
 import flash.events.MouseEvent;
 
+import mx.binding.utils.BindingUtils;
+
 import mx.containers.Canvas;
 import mx.containers.HBox;
 import mx.containers.VBox;
@@ -107,7 +109,7 @@ public class ThemedFlexController extends DefaultFlexController {
     appNameNextPrevHBox.addChild(appName);
     appName.styleName = "applicationName";
     appName.filters = [ThemeFilterUtils.onePixelDarkShadow()];
-    appName.text = name;
+    BindingUtils.bindProperty(appName, "text", this, "name");
 
     var centeredHBox:HBox = new HBox();
     header.addChild(centeredHBox);

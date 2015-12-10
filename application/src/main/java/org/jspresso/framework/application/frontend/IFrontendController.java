@@ -67,8 +67,8 @@ public interface IFrontendController<E, F, G> extends IController, IIconDescript
    * @param context
    *     the context to store on the context stack.
    * @param dimension
-   *     the dimension to set the dialog to. If null, the dialog will be
-   *     sized to the preferred size of the contained view.
+   *     the dimension to set the dialog to. If null, the dialog will be sized to the preferred
+   *     size of the contained view.
    * @param reuseCurrent
    *     set to true to reuse an existing modal dialog.
    */
@@ -89,8 +89,8 @@ public interface IFrontendController<E, F, G> extends IController, IIconDescript
    * @param context
    *     the context to store on the context stack.
    * @param dimension
-   *     the dimension to set the dialog to. If null, the dialog will be
-   *     sized to the preferred size of the contained view.
+   *     the dimension to set the dialog to. If null, the dialog will be sized to the preferred
+   *     size of the contained view.
    * @param reuseCurrent
    *     set to true to reuse an existing modal dialog.
    */
@@ -111,8 +111,8 @@ public interface IFrontendController<E, F, G> extends IController, IIconDescript
    * @param context
    *     the context to store on the context stack.
    * @param dimension
-   *     the dimension to set the dialog to. If null, the dialog will be
-   *     sized to the preferred size of the contained view.
+   *     the dimension to set the dialog to. If null, the dialog will be sized to the preferred
+   *     size of the contained view.
    * @param reuseCurrent
    *     set to true to reuse an existing modal dialog.
    * @param modal
@@ -388,8 +388,8 @@ public interface IFrontendController<E, F, G> extends IController, IIconDescript
    * @param backendController
    *     the backend controller to bind to.
    * @param clientLocale
-   *     the locale this controller should use to initiate the login
-   *     session while not knowing yet the user locale.
+   *     the locale this controller should use to initiate the login session while not
+   *     knowing yet the user locale.
    * @param clientTimeZone
    *     the timeZone the client runs in.
    * @return true if the controller successfully started.
@@ -436,8 +436,10 @@ public interface IFrontendController<E, F, G> extends IController, IIconDescript
   /**
    * Remember login.
    *
-   * @param username the username
-   * @param password the password
+   * @param username
+   *     the username
+   * @param password
+   *     the password
    */
   void rememberLogin(String username, String password);
 
@@ -518,4 +520,12 @@ public interface IFrontendController<E, F, G> extends IController, IIconDescript
    * Triggers login to the application anonymously.
    */
   void loginAnonymously();
+
+  /**
+   * Sets name.
+   *
+   * @param name
+   *     the name
+   */
+  void setName(String name);
 }

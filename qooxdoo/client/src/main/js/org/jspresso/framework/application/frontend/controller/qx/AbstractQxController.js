@@ -45,6 +45,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     this._initRemoteController();
   },
 
+  properties: {
+    name: {
+      check: "String",
+      event: "changeName",
+    }
+  },
+
   members: {
     /** @type {qx.io.remote.Rpc} */
     __remoteController: null,
@@ -76,8 +83,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     __nextActionCallback: null,
     /** @type {Array} */
     _dialogStack: null,
-    /** @type {String} */
-    __applicationName: null,
 
     _getApplication: function () {
       return qx.core.Init.getApplication();
@@ -510,6 +515,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
         c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteUpdateStatusCommand} */
             command;
         this._updateStatusCommand(c);
+      } else if (command
+          instanceof org.jspresso.framework.application.frontend.command.remote.RemoteApplicationDescriptionCommand) {
+        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteApplicationDescriptionCommand} */
+            command;
+        this.setName(c.getApplicationName());
       } else if (command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand) {
         c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand} */
             command;
@@ -857,12 +867,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      * @return {undefined}
      */
     _handleInitCommand: function (initCommand) {
-      this.__applicationName = initCommand.getApplicationName();
+      this.setName(initCommand.getApplicationName());
       this._initApplicationFrame(initCommand);
-    },
-
-    _getName: function () {
-      return this.__applicationName;
     }
   }
 });
