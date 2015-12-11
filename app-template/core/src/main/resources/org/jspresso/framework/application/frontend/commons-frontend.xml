@@ -159,7 +159,31 @@
     <property name="componentDescriptorRegistry" ref="componentDescriptorRegistry"/>
   </bean>
 
-  <bean id="lovAction" parent="lovActionBase" />
+  <bean id="lovAction" parent="lovActionBase"/>
+
+  <bean id="createEntityFromLovOkAction"
+        parent="okDialogFrontAction"
+        class="org.jspresso.framework.application.frontend.action.lov.CreateEntityFromLovPersistAction">
+    <property name="wrappedAction" ref="saveBackAction" />
+    <property name="nextAction" ref="closeDialogAction" />
+  </bean>
+
+  <bean id="createEntityFromLovAction"
+        parent="editComponentAction"
+        class="org.jspresso.framework.application.frontend.action.lov.CreateEntityFromLovAction">
+    <property name="name" value="add.name"/>
+    <property name="description" value="add.description"/>
+    <property name="iconImageURL">
+      <bean parent="abstractFwIconImageURL">
+        <constructor-arg index="0" value="edit_add"/>
+      </bean>
+    </property>
+    <property name="okAction" ref="createEntityFromLovOkAction"/>
+  </bean>
+
+  <bean id="lovActionWithCreate" parent="lovActionBase">
+    <property name="createAction" ref="createEntityFromLovAction" />
+  </bean>
 
   <bean id="componentsLovFindFrontAction" parent="lovFindFrontAction">
     <property name="wrappedAction" ref="componentsLovFindBackAction" />

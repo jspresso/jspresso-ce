@@ -120,6 +120,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   private String                                     defaultIconImageURL;
   private List<?>                                    staticComponentStore;
   private IComponentDescriptorRegistry               componentDescriptorRegistry;
+  private IDisplayableAction                         createAction;
+
 
   /**
    * Constructs a new {@code LovAction} instance.
@@ -232,7 +234,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
             viewConnector.setConnectorValue(queryComponent);
           }
           ((IRenderableCompositeValueConnector) viewConnector).getRenderingConnector().setConnectorValue(
-              autoCompletePropertyValue);
+              autoCompletePropertyValue                                                                 );
           return true;
         }
       }
@@ -246,14 +248,14 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
           .clone();
       // we are on a nested LOV => We must retrieve the real Entity descriptor
       ((BasicReferencePropertyDescriptor<IComponent>) refinedErqDescriptor).setReferencedDescriptor(
-          (IComponentDescriptor<? extends IComponent>) getComponentDescriptorRegistry().getComponentDescriptor(
-              erqDescriptor.getModelType()));
+          (IComponentDescriptor<? extends IComponent>) getComponentDescriptorRegistry()
+              .getComponentDescriptor                             (erqDescriptor.getModelType())   );
       erqDescriptor = refinedErqDescriptor;
     }
     IView<E> lovView = getViewFactory(context).createView(createLovViewDescriptor(erqDescriptor, context),
-        actionHandler, getLocale(context));
+        actionHandler, getLocale(context)                );
     IValueConnector queryEntityConnector = (IValueConnector) context.get(
-        CreateQueryComponentAction.QUERY_MODEL_CONNECTOR);
+        CreateQueryComponentAction.QUERY_MODEL_CONNECTOR                );
     getMvcBinder(context).bind(lovView.getConnector(), queryEntityConnector);
 
     if (autoquery) {
@@ -270,12 +272,12 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
             try {
               // Determine if it is a single exact match.
               String firstItemPropertyValue = getBackendController(context).getAccessorFactory().createPropertyAccessor(
-                  autoCompletePropertyName, firstItem.getClass()).getValue(firstItem);
+                  autoCompletePropertyName, firstItem.getClass()                                                       ).getValue(firstItem);
               String secondItemPropertyValue = getBackendController(context).getAccessorFactory()
-                                                                            .createPropertyAccessor(
+                                                                            .createPropertyAccessor (
                                                                                 autoCompletePropertyName,
                                                                                 firstItem.getClass()).getValue(
-                      secondItem);
+                      secondItem                                                                              );
               if (autoCompletePropertyValue.equalsIgnoreCase(firstItemPropertyValue) && !autoCompletePropertyValue
                   .equalsIgnoreCase(secondItemPropertyValue)) {
                 selectedItem = firstItem;
@@ -287,7 +289,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
           if (selectedItem != null) {
             if (selectedItem instanceof IEntity) {
               selectedItem = getController(context).getBackendController().merge((IEntity) selectedItem,
-                  EMergeMode.MERGE_LAZY);
+                  EMergeMode.MERGE_LAZY                                         );
             }
             context.put(LOV_SELECTED_ITEM, selectedItem);
             actionHandler.execute(getOkAction(), context);
@@ -318,7 +320,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   protected IViewDescriptor createLovViewDescriptor(IReferencePropertyDescriptor<IComponent> erqDescriptor,
                                                     Map<String, Object> context) {
     return lovViewDescriptorFactory.createLovViewDescriptor(erqDescriptor, getSelectionMode(context), getOkAction(),
-        context);
+        context                                            );
   }
 
   /**
@@ -369,6 +371,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     if (!context.containsKey(ModalDialogAction.DIALOG_ACTIONS)) {
       List<IDisplayableAction> actions = new ArrayList<>();
       actions.add(getOkAction());
+      if (getCreateAction() != null) {
+        actions.add(getCreateAction());
+      }
       actions.add(getFindAction());
       actions.add(getCancelAction());
       context.put(ModalDialogAction.DIALOG_ACTIONS, actions);
@@ -378,8 +383,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
             .getReferencedDescriptor().getI18nName(getTranslationProvider(context), getLocale(context)));
     context.put(ModalDialogAction.DIALOG_VIEW, lovView);
     if (lovView instanceof ICompositeView<?>) {
-      context.put(ModalDialogAction.DIALOG_FOCUSED_COMPONENT, ((ICompositeView<E>) lovView).getChildren().get(1)
-                                                                                           .getPeer());
+      context.put                                                     (ModalDialogAction.DIALOG_FOCUSED_COMPONENT,
+          ((ICompositeView<E>) lovView).getChildren().get(1).getPeer());
     }
 
     if (pagingAction != null) {
@@ -425,8 +430,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   public String getI18nDescription(ITranslationProvider translationProvider, Locale locale) {
     if (getDescription() == null) {
       if (entityDescriptor != null) {
-        return translationProvider.getTranslation("lov.element.description", new Object[]{entityDescriptor.getI18nName(
-            translationProvider, locale)}, locale);
+        return translationProvider.getTranslation                                          ("lov.element.description",
+            new Object[]{entityDescriptor.getI18nName                            (translationProvider, locale)},
+            locale);
       }
       return translationProvider.getTranslation("lov.description", locale);
     }
@@ -446,8 +452,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   public String getI18nName(ITranslationProvider translationProvider, Locale locale) {
     if (getName() == null) {
       if (entityDescriptor != null) {
-        return translationProvider.getTranslation("lov.element.name", new Object[]{entityDescriptor.getI18nName(
-            translationProvider, locale)}, locale);
+        return translationProvider.getTranslation                                          ("lov.element.name",
+            new Object[]{entityDescriptor.getI18nName                            (translationProvider, locale)},
+            locale);
       }
       return translationProvider.getTranslation("lov.name", locale);
     }
@@ -658,7 +665,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
             (IReferencePropertyDescriptor<IComponent>) modelDescriptor)
             .clone();
         ((BasicReferencePropertyDescriptor<IComponent>) returnedDescriptor).setInitializationMapping(
-            initializationMapping);
+            initializationMapping                                                                   );
       }
       return returnedDescriptor;
     }
@@ -702,9 +709,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    * Allows to force the result view selection mode.
    *
    * @param selectionMode
-   *     the result view selection mode. When
-   *     , the
-   *     default selection mode is applied.
+   *     the result view selection mode. When     , the     default selection mode is applied.
    */
   public void setSelectionMode(ESelectionMode selectionMode) {
     this.selectionMode = selectionMode;
@@ -799,5 +804,24 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    */
   public void setComponentDescriptorRegistry(IComponentDescriptorRegistry componentDescriptorRegistry) {
     this.componentDescriptorRegistry = componentDescriptorRegistry;
+  }
+
+  /**
+   * Gets create action.
+   *
+   * @return the create action
+   */
+  protected IDisplayableAction getCreateAction() {
+    return createAction;
+  }
+
+  /**
+   * Sets create action.
+   *
+   * @param createAction
+   *     the create action
+   */
+  public void setCreateAction(IDisplayableAction createAction) {
+    this.createAction = createAction;
   }
 }
