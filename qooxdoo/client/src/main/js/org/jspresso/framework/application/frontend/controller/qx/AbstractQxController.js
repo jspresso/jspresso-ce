@@ -48,7 +48,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
   properties: {
     name: {
       check: "String",
-      event: "changeName",
+      event: "changeName"
     }
   },
 
