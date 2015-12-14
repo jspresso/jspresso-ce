@@ -37,7 +37,7 @@ import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 /**
  * A resource provider servlet subclass that cleans up backend controller after
  * an active resource download.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class ControllerAwareResourceProviderServlet extends
@@ -57,20 +57,18 @@ public class ControllerAwareResourceProviderServlet extends
         .createBackendController();
     AsyncActionExecutor executor = new AsyncActionExecutor(new AsyncExportAction(resource, outputStream),
         new HashMap<String, Object>(), null, slaveBackendController);
+    // execute synchronously in the thread
     try {
-      // execute synchronously in the thread
-      try {
-        executor.run();
-      } catch (RuntimeException ex) {
-        if (ex.getCause() instanceof IOException) {
-          throw (IOException) ex.getCause();
-        } else {
-          throw ex;
-        }
+      executor.run();
+    } catch (RuntimeException ex) {
+      if (ex.getCause() instanceof IOException) {
+        throw (IOException) ex.getCause();
+      } else {
+        throw ex;
       }
-    } finally {
-      backendController.cleanupRequestResources();
     }
+    // Do not cleanup the session backend controller since it can be used by a GUI thread. See bug #75.
+    // backendController.cleanupRequestResources();
   }
 
   /**
