@@ -114,6 +114,10 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
         if (iden == "Tab") {
           e.stop();
           editorWidget.blur();
+          if (editorWidget instanceof qx.ui.form.DateField) {
+            // Forces synchronization of the date field
+            editorWidget.setValue(editorWidget.getValue());
+          }
           timer.start(function (userData, timerId) {
             if (table.isEditing()) {
               table.stopEditing();
@@ -139,6 +143,10 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
         } else if (iden == 'Enter') {
           e.stop();
           editorWidget.blur();
+          if (editorWidget instanceof qx.ui.form.DateField) {
+            // Forces synchronization of the date field
+            editorWidget.setValue(editorWidget.getValue());
+          }
           timer.start(function (userData, timerId) {
             if (table.isEditing()) {
               table.stopEditing();
