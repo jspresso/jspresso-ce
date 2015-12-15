@@ -21,10 +21,12 @@ package org.jspresso.framework.model.component.query;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
+import java.util.Set;
 
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.util.io.SerializationUtil;
 
 /**
@@ -50,9 +52,6 @@ public abstract class QueryComponentSerializationUtil {
     // temporary map (too heavy to be serialized, will use a simple table)
     LinkedHashMap<String, Serializable> map = new LinkedHashMap<>();
     for (String key : query.keySet()) {
-      if (isComputed(query, key)) 
-        continue;
-      
       Object value = query.get(key);
       if (value instanceof QueryComponent) {
         QueryComponent qc = (QueryComponent) value;
@@ -60,7 +59,14 @@ public abstract class QueryComponentSerializationUtil {
         if (delegate != null) {
           map.put(key, delegate);
         }
-      } else if (value == null || value instanceof Serializable) {
+      } 
+      else if (value instanceof EnumQueryStructure) {
+        Serializable delegate = queryStructureToString((EnumQueryStructure) value);
+        if (delegate != null) {
+          map.put(key, delegate);
+        }
+      }
+      else if (value == null || value instanceof Serializable) {
         map.put(key, (Serializable) value);
       }
     }
@@ -82,18 +88,6 @@ public abstract class QueryComponentSerializationUtil {
     return SerializationUtil.toBase64String(data); // data.length
   }
 
-  private static boolean isComputed(IQueryComponent query, String key) {
-    IComponentDescriptor<?> componentDescriptor = query.getComponentDescriptor();
-    if (componentDescriptor == null) 
-      return false;
-   
-    IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor(key);
-    if (propertyDescriptor == null)
-      return false;
-    
-    return propertyDescriptor.isComputed();
-  }
-
   private static Serializable[] componentToTable(QueryComponent query) {
     if (query.size() == 0) {
       return null;
@@ -105,24 +99,35 @@ public abstract class QueryComponentSerializationUtil {
       Object v = query.get(k);
       if (v == null) {
         delegate[i++] = null;
-      } else if (v instanceof QueryComponent) {
-        // recurse
+      } 
+      else if (v instanceof QueryComponent) {
         delegate[i++] = componentToTable((QueryComponent) query.get(k));
-      } else if (v instanceof EnumQueryStructure) {
-        StringBuilder sb = new StringBuilder("[[");
-        for (EnumValueQueryStructure ev : ((EnumQueryStructure) v).getSelectedEnumerationValues()) {
-          sb.append(ev.getValue());
-          sb.append("§");
-        }
-        sb.append("]]");
-        delegate[i++] = sb.toString();
-      } else if (v instanceof Serializable) {
+      } 
+      else if (v instanceof EnumQueryStructure) {
+        delegate[i++] = queryStructureToString((EnumQueryStructure) v);
+      } 
+      else if (v instanceof Serializable) {
         delegate[i++] = (Serializable) query.get(k);
       }
     }
     return delegate;
   }
 
+  private static String queryStructureToString(EnumQueryStructure value) {
+    Set<EnumValueQueryStructure> selectedValues = value.getSelectedEnumerationValues();
+    if (selectedValues.isEmpty())
+      return null;
+    
+    StringBuilder sb = new StringBuilder("[[");
+    for (EnumValueQueryStructure ev : selectedValues) {
+      sb.append(ev.getValue());
+      sb.append("§");
+    }
+    sb.append("]]");
+    return sb.toString();
+  }
+
+  
   /**
    * Deserialize a base 64 representation of a query component
    * representation and hydrate the given query component instance.
