@@ -9,6 +9,7 @@
 *.as            text
 *.css           text
 *.df            text
+*.groovy        text
 *.htm           text
 *.html          text
 *.java          text
