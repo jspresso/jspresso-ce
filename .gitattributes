@@ -22,6 +22,7 @@
 *.sh            text
 *.svg           text
 *.tld           text
+*.tmar          text
 *.txt           text
 *.xml           text
 *.xsl           text
