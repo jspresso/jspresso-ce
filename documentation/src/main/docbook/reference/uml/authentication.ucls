@@ -1,0 +1,37 @@
+<class-diagram version="1.0.3" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+  realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.security.auth.spi.LdapLoginModule" 
+    project="jspresso-security" 
+    file="/jspresso-security/src/main/java/org/jspresso/framework/security/auth/spi/LdapLoginModule.java" binary="false">    
+    <position height="-1" width="-1" x="88" y="235"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="true" package="false" protected="true" private="false"/>    
+    </display>  
+  </class>  
+  <class id="2" corner="BOTTOM_RIGHT" language="java" 
+    name="org.jspresso.framework.security.auth.spi.DevelopmentLoginModule" project="jspresso-security" 
+    file="/jspresso-security/src/main/java/org/jspresso/framework/security/auth/spi/DevelopmentLoginModule.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="88" y="380"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="true" package="false" protected="true" private="false"/>    
+    </display>  
+  </class>  
+  <class id="3" corner="BOTTOM_RIGHT" language="java" 
+    name="org.jspresso.framework.security.auth.spi.DatabaseLoginModule" project="jspresso-security" 
+    file="/jspresso-security/src/main/java/org/jspresso/framework/security/auth/spi/DatabaseLoginModule.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="472" y="235"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="true" package="false" protected="true" private="false"/>    
+    </display>  
+  </class>  
+  <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    
+    <attributes public="false" package="false" protected="false" private="false"/>    
+    <operations public="true" package="false" protected="true" private="false"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

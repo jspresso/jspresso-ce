@@ -1,0 +1,167 @@
+#set( $symbol_dollar = '$' )
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>${groupId}</groupId>
+    <artifactId>${rootArtifactId}</artifactId>
+    <version>${version}</version>
+    <relativePath>../../pom.xml</relativePath>
+  </parent>
+  <artifactId>${artifactId}</artifactId>
+  <packaging>jar</packaging>
+  <name>${applicationName} - Startup - Swing</name>
+  <dependencies>
+    <dependency>
+      <groupId>${groupId}</groupId>
+      <artifactId>${rootArtifactId}-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jspresso.framework</groupId>
+      <artifactId>jspresso-app-template-swing</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jspresso.framework</groupId>
+      <artifactId>jspresso-app-launch-swing</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-ehcache</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-collections4</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-dbcp2</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-slf4j-impl</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+    </dependency>
+
+    <!-- For View Tester -->
+    <dependency>
+      <groupId>org.jspresso.framework</groupId>
+      <artifactId>jspresso-tools</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>appassembler-maven-plugin</artifactId>
+        <configuration>
+          <programs>
+            <program>
+              <mainClass>org.jspresso.framework.application.launch.swing.SwingLauncher -applicationClass ${package}.startup.swing.SwingApplicationStartup -splash classpath:${packageInPathFormat}/images/icon.png</mainClass>
+              <name>${rootArtifactId}</name>
+            </program>
+            <program>
+              <mainClass>org.jspresso.framework.application.launch.swing.SwingLauncher -applicationClass ${package}.startup.swing.development.SwingDevApplicationStartup -splash classpath:${packageInPathFormat}/images/icon.png</mainClass>
+              <name>${rootArtifactId}-with-testdata</name>
+            </program>
+          </programs>
+          <assembleDirectory>${symbol_dollar}{project.build.directory}/dist</assembleDirectory>
+          <repositoryLayout>flat</repositoryLayout>
+          <repositoryName>lib</repositoryName>
+          <showConsoleWindow>true</showConsoleWindow>
+          <includeConfigurationDirectoryInClasspath>false</includeConfigurationDirectoryInClasspath>
+        </configuration>
+        <executions>
+          <execution>
+            <id>assemble-swing-distribution-windows</id>
+            <phase>package</phase>
+            <goals>
+              <goal>assemble</goal>
+            </goals>
+            <configuration>
+              <extraJvmArguments>-Djava.security.auth.login.config="%BASEDIR%"/conf/jaas.config -Dswing.defaultlaf=org.jvnet.substance.SubstanceLookAndFeel -Dsubstancelaf.watermark.tobleed</extraJvmArguments>
+              <platforms>
+                <platform>windows</platform>
+              </platforms>
+            </configuration>
+          </execution>
+          <execution>
+            <id>assemble-swing-distribution-linux</id>
+            <phase>package</phase>
+            <goals>
+              <goal>assemble</goal>
+            </goals>
+            <configuration>
+              <extraJvmArguments>-Djava.security.auth.login.config="${symbol_dollar}BASEDIR"/conf/jaas.config -Dswing.defaultlaf=org.jvnet.substance.SubstanceLookAndFeel -Dsubstancelaf.watermark.tobleed</extraJvmArguments>
+              <platforms>
+                <platform>unix</platform>
+              </platforms>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>dist-conf</id>
+            <phase>package</phase>
+            <configuration>
+              <target>
+                <copy todir="${symbol_dollar}{project.build.directory}/dist/conf" file="${symbol_dollar}{basedir}/../../conf/jaas.config"/>
+                <delete dir="${project.build.directory}/antrun" />
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <outputFile>${symbol_dollar}{project.build.directory}/${symbol_dollar}{project.artifactId}-all-${symbol_dollar}{project.version}.${symbol_dollar}{project.packaging}</outputFile>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                  <resource>META-INF/spring.handlers</resource>
+                </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                  <resource>META-INF/spring.schemas</resource>
+                </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                  <resource>META-INF/spring.tooling</resource>
+                </transformer>
+              </transformers>
+              <!-- <shadedArtifactAttached>true</shadedArtifactAttached> -->
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

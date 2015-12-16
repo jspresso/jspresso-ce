@@ -1,0 +1,1542 @@
+4.3
+===
+- JasperReports plugin changed from codehaus to to alexnederlof
+  (https://github.com/alexnederlof/Jasper-report-maven-plugin).
+
+  Replace your JasperReports compilation section in core/pom.xml by the following one :
+      <plugin>
+        <groupId>com.alexnederlof</groupId>
+        <artifactId>jasperreports-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>jasper</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <outputDirectory>${project.build.directory}/generated-resources/jasperreports</outputDirectory>
+        </configuration>
+      </plugin>
+
+- Flex has been upgraded to the latest 4.14.1 version
+
+- We have moved to Apache BlazeDS implementation, so replace all blazeds dependencies sections in your webapp modules
+  by the following one :
+      <dependency>
+        <groupId>org.apache.flex.blazeds</groupId>
+        <artifactId>flex-messaging-remoting</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.flex.blazeds</groupId>
+        <artifactId>flex-messaging-proxy</artifactId>
+      </dependency>
+
+- Flex davisualization dependency management has been removed. Most of the time, you should be able to safely delete
+  them. However, whenever necessary, use the following dependencies in your projects Flex modules :
+      <dependency>
+        <groupId>org.apache.flex.framework</groupId>
+        <artifactId>advancedgrids</artifactId>
+        <type>swc</type>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.flex.framework</groupId>
+        <artifactId>charts</artifactId>
+        <type>swc</type>
+      </dependency>
+
+- Migrated to jfreechart 1.0.19. The artifact groupId changed so replace :
+      <dependency>
+        <groupId>jfree</groupId>
+        <artifactId>jfreechart</artifactId>
+      </dependency>
+  by
+      <dependency>
+        <groupId>org.jfree</groupId>
+        <artifactId>jfreechart</artifactId>
+      </dependency>
+
+- Migrated to log4j 2.4.1. If you want to migrate your projects too, log4j and log4j-slf4j binding dependencies
+  should be replaced (keep the scopes) :
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+    </dependency>
+  by
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-slf4j-impl</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+    </dependency>
+
+  Note that Log4j 2.x does not support properties configuration files anymore and that the configuration file should be
+  named log4j2.xml. Please read :
+    https://logging.apache.org/log4j/2.x/manual/configuration.html
+    https://logging.apache.org/log4j/2.x/manual/migration.html
+
+- All slf4j (e.g. slf4j-log4j12, log4j) binding dependencies have been removed from the framework. Only the api
+  dependency remains. This means that, depending on the actual logging framework to use (e.g. log4j), the corresponding
+  slf4j binding must be provided either as a project dependency or as a runtime dependency (e.g. provided by the
+  application server).
+
+- commons-lang dependency management has been removed from the root pom in favor of commons-lang3.
+
+
+4.2
+===
+
+4.1
+===
+- We have migrated to Apache DBCP2.
+  All explicit dependencies to commons-pool must be removed from your pom.xml, i.e. delete in all pom.xml :
+      <dependency>
+        <groupId>commons-pool</groupId>
+        <artifactId>commons-pool</artifactId>
+      </dependency>
+
+  You have to change the dependency on the DBCP artifact :
+    replace in every pom.xml :
+      <dependency>
+        <groupId>commons-dbcp</groupId>
+        <artifactId>commons-dbcp</artifactId>
+      </dependency>
+    by :
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-dbcp2</artifactId>
+      </dependency>
+
+    search and replace globally :
+      org.apache.commons.dbcp.BasicDataSource
+    by :
+      org.apache.commons.dbcp2.BasicDataSource
+
+    adapt any custom configurations of DBCP datasource using the following document :
+      http://commons.apache.org/proper/commons-dbcp/configuration.html
+
+- We have created new Qooxdoo themes in Jspresso CE and EE. If you want to benefit from the new themes, please update
+  your application startup/qooxdoo/client/src/main/py/config.json :
+  for Jspresso EE :
+    replace :
+      {
+        "path": "${TARGET}/jspresso-ext-qooxdoo-zip/py/library.json",
+        "as": "jspresso-ext-qooxdoo"
+      }
+    by :
+      {
+        "path": "${TARGET}/jspresso-ext-qooxdoo-zip/py/library.json",
+        "as": "jspresso-ext-qooxdoo"
+      }
+      ,
+      {
+        "path": "${TARGET}/jspresso-qooxdoo-theme-zip/py/library.json",
+        "as": "jspresso-qooxdoo-theme"
+      }
+
+    replace :
+      "extend" : ["jspresso-ext-qooxdoo::libraries"],
+    by :
+      "extend" : [
+        "jspresso-ext-qooxdoo::libraries",
+        "jspresso-ext-qooxdoo-theme::libraries"
+      ],
+
+
+- We have reworked the Flex themes in Jspresso CE and EE. If you want to benefit from the new themes, please update
+  your application startup/flex/client/src/main/flex/FlexApplicationStartup.mxml the following way :
+
+  add for Jspresso CE :
+    import org.jspresso.framework.flex.controller.ThemedFlexController;
+  or  for Jspresso EE :
+    import org.jspresso.framework.ext.flex.controller.ThemedFlexController;
+
+  and replace :
+    flexController = new (Enhanced|Default)FlexController(remoteController, new Locale(resourceManager.localeChain[0]).language);
+  by :
+    flexController = new ThemedFlexController(remoteController, new Locale(resourceManager.localeChain[0]).language);
+
+  For CE, you also have to rework the startup/flex/client/pom.xml. Replace :
+      <dependency>
+        <groupId>org.apache.flex.framework</groupId>
+        <artifactId>spark</artifactId>
+        <type>swc</type>
+        <scope>theme</scope>
+      </dependency>
+  by :
+      <dependency>
+        <groupId>org.apache.flex.framework.themes</groupId>
+        <artifactId>halo</artifactId>
+        <type>swc</type>
+        <scope>theme</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.jspresso.framework</groupId>
+        <artifactId>jspresso-flex-theme</artifactId>
+        <type>swc</type>
+        <scope>theme</scope>
+      </dependency>
+
+  For EE, you also have to rework the startup/flex/client/pom.xml. Add :
+      <dependency>
+        <groupId>org.apache.flex.framework.themes</groupId>
+        <artifactId>halo</artifactId>
+        <type>swc</type>
+        <scope>theme</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.jspresso.framework</groupId>
+        <artifactId>jspresso-flex-theme</artifactId>
+        <type>swc</type>
+        <scope>theme</scope>
+      </dependency>
+
+
+- Due to migration to Qooxdoo 4.1, you should change startup/qooxdoo/client/src/main/py/config.json the following way :
+
+    delete the line :
+      "CSSMIN_CMD"           : "${PYTHON_CMD} ${QOOXDOO_PATH}/tool/bin/cssmin.py",
+
+    replace all occurences of "minify-css" by "combine-css"
+
+    replace :
+      "${CATCMD} ${BUILD_PATH_CSS}/${MOBILE_CSS_PATH} ${RESOURCES}/${APPLICATION_CSS} > ${TARGET}/cache-sass/tmp.css",
+      "${CSSMIN_CMD} < ${TARGET}/cache-sass/tmp.css > ${BUILD_PATH}/resource/${APPLICATION_CSS}"
+    by :
+      "${CATCMD} ${BUILD_PATH_CSS}/${MOBILE_CSS_PATH} ${RESOURCES}/${APPLICATION_CSS} > ${BUILD_PATH}/resource/${APPLICATION_CSS}"
+
+    replace all occurrences :
+      ${SCSS_CMD}
+    by :
+      ${SCSS_CMD} --style compressed
+
+
+- Following our will to support other persistent stores (e.g. MongoDB, see RFE #1234), AbstractHibernateAction and
+  AbstractHibernateCollectionAction have been deleted. Your actions should inherit BackendAction and
+  AbstractCollectionAction. Persistences methods, thate were generic, have been migrated to these classes. The only
+  things that will change are that you will be forced to implicitely cast backend controller to
+  HibernateBackendController or MongoBackendController, depending on your persistence layer.
+
+- Due to RFE #1221, DefaultCriteriaFactory.createXXXRestriction method signatures have been augmented with
+  componentDescriptor, queryComponent and context in order to be able to take options in subclasses.
+
+4.0
+===
+- Modules do not base their equality on object equality anymore. 2 arbitrary modules are now considedered equal
+  if and only if : they have the same name AND they have the same i18nNameKey AND they have the same view descriptor.
+  BeanModules augment this rule by checking equality of their beans.
+
+- In the webapp/pom.xml replace the whole flexmojos wrapper plugin execution by the following block :
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <stripVersion>true</stripVersion>
+              <includeTypes>swf</includeTypes>
+              <outputDirectory>${project.build.directory}/${project.artifactId}/flex</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+- Wenhever you use the Jetty Maven plugin, please replace the <webApp> configuration tag by <war> in your root pom.xml.
+
+- In order to clarify class usage  between Jspresso CE and Jspresso EE, all Jspresso EE classes now belong to the
+org.jspresso.framework.ext (sub)package(s)
+
+- Migrated to Apache Flex 4.12. Please change all the references in pom.xml except for datavizualization artifact.
+    com.adobe.flex.framework
+    to
+    org.apache.flex.framework
+
+  Whenever you import dependencies that have a transitive dependency towards the old com.adobe.flex.framework
+  artifacts, you might have to exclude the transitive dependencies like below or you might face flexmojos stating
+  that you have incompatible compiler / framework versions :
+
+    <dependency>
+      <groupId>com.example.dependency</groupId>
+      <artifactId>dependency-flex</artifactId>
+      <type>swc</type>
+      <exclusions>
+        <exclusion>
+          <groupId>com.adobe.flex.framework</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+- We have changed the way spec('') get generated in SJS >= 1.3. Now, when spec('xxx') is declared, the context to
+  generate depends on the backend/frontend/view previous node. For instance, when generating a spec('xxx') under a
+  frontend node, the call should be changed from :
+    frontendBuilder.writeOutputFile('xxx',...)
+    to
+    frontendBuilder.writeOutputFile('frontend/xxx',...)
+
+- We have removed the possibility to programmatically set an action to be transactional or asynchronous. Now,
+  the only way to go is using annotations.
+
+- In order to fullfil RFE #1124, the checkPasswordValidity method signature has been augmented with the action
+  context as parameter. This allows to test against the session login in order to enforce password strength.
+
+- Removed dependency towards BSF 2.x and now use the JSR-223 (javax.script) that is included in Java6 and onwards.
+
+- USER is now an SQL protected keyword (it actually is in Oracle), so by default, the generated table name is now
+  appended with an underscore. If you have a USER table in MySQL for instance, either rename it to USER_ or
+  force its sqlName to 'USER' to keep the legacy name. Same apply for all "user" properties.
+
+3.7
+===
+- ICollectionPropertyProcessor now use a third parametrized type in order to define the collection elements type. All
+  your subclasses or implementations should now define this new parametrized type. see RFE #838.
+
+- In your startup/flex/client/pom.xml, make sure that all theme artifacts listed in the dependency section are marked
+  with <scope>theme</scope>. Ther can be more than one.
+
+- Moved to Java 7. Source and target compilation versions moved from 1.6 to 1.7.
+
+- IQueryViewDescriptorFactory API has changed to satisfy RFE #944. The action contaxt, if any,
+  is passed to the factory method.
+
+- DefaultCriteriaFactory properted API has changed for a more consistent naming policy. All createXXXRestriction
+  methods now actually return a criterion and does not have the surrounding detached criteria as parameter.
+
+- If you use jspresso libraries that were not built with Jspresso 3.7+, please add the following lines to
+  core/pom.xml inside the antrun plugin <target> section in order to remove any collection order-by handed by
+  Hibernate :
+
+    <replaceregexp byline="true" flags="mg" preserveLastModified="true">
+      <regexp pattern="order-by=&quot;[^&quot;]*&quot;" />
+      <substitution expression="" />
+      <fileset dir="${xdoclet.dest}">
+        <include name="**/*.hbm.xml" />
+      </fileset>
+    </replaceregexp>
+
+  If you don't do the above and use libraries the were built with previous Jspresso versions,
+  you might recieve errors like "Could not locate table which owns column [ID] referenced in order-by mapping".
+  This is due to bug https://hibernate.atlassian.net/browse/HHH-7630
+
+- In QueryEntitiesAction, getCriteriaFactory(), getCriteriaRefiner, getComponentRefiner now take the action context
+  as parameter to enable feature #1074.
+
+- Deprecated org.jspresso.framework.application.backend.action.persistence.hibernate.IQueryComponentRefiner has been
+  removed in favor of org.jspresso.framework.application.backend.action.IQueryComponentRefiner
+
+- In your index.html, change the background-color values (if any) to #ffffff
+
+- In your webapp/pom.xml, remove <scope>provided</scope> on the following dependency :
+    <dependency>
+      <groupId>your.app.groupId</groupId>
+      <artifactId>artifactId</artifactId>
+      <type>swf</type>
+    </dependency>
+
+- In your startup/flex/client/pom.xml file, change :
+    <locales>
+      ...
+    </locales>
+  to
+    <localesCompiled>
+      ...
+    </localesCompiled>
+
+- In startup/flex/client/pom.xml, remove all <localesCompiled> nested elements except <locale>en_US</locale>
+
+- In your startup/flex/client/pom.xml files, delete :
+    <mergeResourceBundle>true</mergeResourceBundle>
+
+- All references to stylesheets, if any, sould be made relative to the mxml file. For example, change :
+    <mx:Style source="/org/jspresso/hrsample/theme.css" />
+  to
+    <mx:Style source="../resources/org/jspresso/hrsample/theme.css" />
+
+- In your startup/flex/client swf project add either (or both) dependency to switch the used theme to spark or halo
+  unless you have a custom theme :
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>spark</artifactId>
+      <type>swc</type>
+      <scope>theme</scope>
+    </dependency>
+  or
+    <dependency>
+      <groupId>com.adobe.flex.framework</groupId>
+      <artifactId>halo</artifactId>
+      <type>swc</type>
+      <classifier>theme</classifier>
+      <scope>theme</scope>
+    </dependency>
+
+- Migrated to Flex 4.6
+
+- Migrated to FlexMojos 5.0-beta. You have to change all references to the Flexmojos plugin to the new groupId.
+  Search and replace :
+    <groupId>org.sonatype.flexmojos</groupId>
+  by
+    <groupId>net.flexmojos.oss</groupId>
+
+- Search and replace :
+    <targetPlayer>....</targetPlayer>
+  by
+    <targetPlayer>11.1.0</targetPlayer>
+
+- If you use Flex 3 legacy skins / themes, add the following <configuration> entry in the FlexMojos plugin entry in
+  startup/flex/client/pom.xml :
+              <compatibilityVersion>3.0.0</compatibilityVersion>
+
+- Now using the org.picketbox:jbosssx and org.picketbox:picketbox-spi-bare dependencies in place of the JBossAS one.
+  When running under JBoss, it is now the dependencies to exclude by marking them <scope>provided</scope>.
+
+- Migrated to Spring 3.2
+
+- Check that all references to Spring hibernate3 package are removed from your project in java,
+  spring xml and SJS. Do not change any reference to the hibernate3 plugin inside your pom.xml.
+
+- Migrated to Hibernate 4. HibernateTemplate based API has been removed. From now on, you must use
+  the equivalent getHibernateSession(...) that leverages the Hibernate getCurrentSession() method.
+
+- The API for IBackendController.registerEntity(IEntity entity) changed. There is no return value anymore
+  since the passed entity is the one registered (no cloning performed)
+  and the second parameter (isEntityTransient) has been removed since it is now safe to rely on entity.isPersistent().
+
+3.6
+===
+- Some API methods signature have been improved. No cast is required to the target type anymore when doing a
+  getSelectedModel(context) for instance. The return type is now parameterized.
+
+- New locales : IT, CS, SK, RU, BG, TR
+In order to use the new translation locales in existing projects :
+
+Edit startup/qooxdoo/client/src/main/py/config.json and change :
+  "LOCALES"      : ["en","fr",...],
+  to
+  "LOCALES"      : ["en","fr",..., "it", "cs", "sk", "ru", "bg", "tr"],
+
+Edit startup/flex/client/pom.xml and change :
+          <locales>
+            <locale>en_US</locale>
+            <locale>fr_FR</locale>
+            ...
+          </locales>
+  to
+          <locales>
+            <locale>en_US</locale>
+            <locale>fr_FR</locale>
+            ...
+            <locale>it_IT</locale>
+            <locale>cs_CZ</locale>
+            <locale>sk_SK</locale>
+            <locale>ru_RU</locale>
+            <locale>bg_BG</locale>
+            <locale>tr_TR</locale>
+          </locales>
+
+Create the it_IT, cs_CZ, sk_SK, ru_RU, bg_BG, tr_TR directories in startup/flex/client/src/main/locales.
+
+- Flex date fields have  been made un-resizable in order to fix the bug #980. This may introduce changes in form layouts
+  (specially filter forms) containing date fields. Please review them carefully.
+
+- The getPropertyView(context) has been removed since the only thing that is actually useful is the underlying
+  property descriptor. It has been replaced by the getPropertyViewDescriptor(context) method.
+
+- Property processors, if any, will now be invioked on computed properties with delegateWritable=true
+
+- Be sure to install "Jspresso Developer Studio M2E Configurator Feature" along with latest JDS from the Jspresso update-site.
+  As of this writing, it is only available from the Jspresso SNAPSHOT Eclipse update site, i.e. :
+  http://www.jspresso.org/external/updates-snapshot/e37/sjsplug/
+
+- Log4j dependencies have been removed from core Jspresso artifacts to ensure that only SLF4J is used. Please ensure that
+  your code only depends from SLF4J and not from Log4j.
+
+- In order to greatly improve user experience in Eclipse and Jspresso builds speed, we have mavenized SJS and the entity
+  generator so that they can be finely controlled by M2E (Maven Eclipe integration). Existing projects should migrate to
+  these new maven plugins by changing the following in core/pom.xml (example taken from HRSample, please adapt to your
+  project names) :
+
+  * delete * :
+  ------------
+    <execution>
+      <id>generate-dsl-application</id>
+      <phase>generate-sources</phase>
+      <goals>
+        <goal>execute</goal>
+      </goals>
+      <configuration>
+        <source>${basedir}/src/main/dsl/application.groovy</source>
+        <properties>
+          <srcDir>${basedir}/src/main/dsl</srcDir>
+          <outputDir>${project.build.directory}/generated-resources/dsl</outputDir>
+          <modelOutputFileName>dsl-model.xml</modelOutputFileName>
+          <viewOutputFileName>dsl-view.xml</viewOutputFileName>
+          <frontOutputFileName>dsl-frontend.xml</frontOutputFileName>
+          <backOutputFileName>dsl-backend.xml</backOutputFileName>
+        </properties>
+        <classpath>
+          <element>
+            <groupId>org.jspresso.contrib</groupId>
+            <artifactId>jspresso-sjs</artifactId>
+            <version>${sjs.version}</version>
+          </element>
+        </classpath>
+      </configuration>
+    </execution>
+
+  * add * :
+  ---------
+    <plugin>
+      <groupId>org.jspresso.maven</groupId>
+      <artifactId>sjs-maven-plugin</artifactId>
+      <executions>
+        <execution>
+          <id>generate-dsl-application</id>
+          <goals>
+            <goal>compile-sjs</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+
+  * delete * :
+  ------------
+    <plugin>
+      <groupId>org.codehaus.mojo</groupId>
+      <artifactId>exec-maven-plugin</artifactId>
+      <executions>
+        <execution>
+          <id>generate-entities</id>
+          <phase>generate-sources</phase>
+          <goals>
+            <goal>java</goal>
+          </goals>
+        </execution>
+      </executions>
+      <configuration>
+        <mainClass>org.jspresso.framework.tools.entitygenerator.EntityGenerator</mainClass>
+        <arguments>
+          <argument>-beanFactorySelector</argument>
+          <argument>org/jspresso/hrsample/beanRefFactory.xml</argument>
+          <argument>-applicationContextKey</argument>
+          <argument>hrsample-model-context</argument>
+          <argument>-templateResourcePath</argument>
+          <argument>${generator.templateResourcePath}</argument>
+          <argument>-templateName</argument>
+          <argument>${generator.templateName}</argument>
+          <argument>-outputDir</argument>
+          <argument>${project.build.directory}/generated-sources/entitygenerator</argument>
+          <argument>-includePackages</argument>
+          <argument>org.jspresso.hrsample.model</argument>
+        </arguments>
+      </configuration>
+    </plugin>
+
+  * delete * :
+  ------------
+    <plugin>
+      <artifactId>maven-resources-plugin</artifactId>
+      <executions>
+        <execution>
+          <id>pre-process-resources</id>
+          <phase>generate-sources</phase>
+          <goals>
+            <goal>resources</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+
+  * add * :
+  ---------
+    <plugin>
+      <groupId>org.jspresso.maven</groupId>
+      <artifactId>entitygenerator-maven-plugin</artifactId>
+      <executions>
+        <execution>
+          <id>generate-entities</id>
+          <goals>
+            <goal>generate-entities</goal>
+          </goals>
+          <configuration>
+            <beanFactorySelector>org/jspresso/hrsample/beanRefFactory.xml</beanFactorySelector>
+            <applicationContextKey>hrsample-model-context</applicationContextKey>
+            <templateResourcePath>${generator.templateResourcePath}</templateResourcePath>
+            <templateName>${generator.templateName}</templateName>
+            <includePackages>
+              <param>org.jspresso.hrsample.model</param>
+            </includePackages>
+          </configuration>
+        </execution>
+      </executions>
+    </plugin>
+
+  * delete * :
+  ------------
+    <source>${project.build.directory}/generated-sources/entitygenerator</source> from the build-helper plugin configuration
+
+  * delete * :
+  ------------
+    <resources>
+    ...
+    </resources>
+
+- Ensure that antrun plugin and ant versions are at least the following. Otherwise, add the properties below to your
+  root pom.xml :
+    <antrun-plugin.version>1.7</antrun-plugin.version>
+    <ant-nodeps.version>1.8.1</ant-nodeps.version>
+
+- In order to speed up builds in Eclipse, please modify all project pom.xml by adding preserveLastModified="true" at the end
+  of each replaceregexp instruction. For instance :
+    <replaceregexp byline="true" preserveLastModified="true">
+  At the end of the antrun tasks, add :
+    <delete dir="${project.build.directory}/antrun" />
+  Replace each <tasks>...</tasks> by <target>...</target>
+
+- We have leveraged Spring session synchronization instead of Hibernate's one. This is now much more accurate and flexible
+  and we don't need to keep track anymore of the underlying transaction. So the API has been reverted for all UOW methods
+  that don't take any parameter anymore. You can safely get rid of them in your use.
+
+- We have completely reviewed the rules about rounding. Every decimal setters are now intercepted and rounded on the fly using
+  the maxFractionDigit property which is now garanteed to always return non-null value that defaults to 2.
+
+- Mandatory property checks are now only performed at save / update time. This allows for having temporarilly null values on
+  mandatory properties until the save is actually performed. Other value integrity pre-processing are kept at set-time.
+
+- EditSelectedComponentAction does not have default hardcoded values anymore. They are now injected through Spring using the bean
+  "editSelectedComponentActionBase". So whenever you use this class directly in your application, make sure to inherit this parent bean
+  in order to benefit from the defaults.
+
+3.5.15
+======
+- Starting from Jspresso 3.5.15, there is no need to augment the service delegates implementation signature with the target
+  component/entity as first parameter. Jspresso will inject it in the implementation instance in a thread-safe manner so that
+  it is now accessible using the getComponent() method, exactly like an extension. All you have to do is inherit the abstract class
+  org.jspresso.framework.model.component.service.AbstractComponentServiceDelegate. This way, service delegates implementation classes
+  can implement the service interface and everything is cleaner regarding IDE suppport as well as compile-time checks. Note that the old
+  legacy service delegates are still supported seamlessly.
+
+- In order to introduce support for nested transactions, we have augmented the signature of all TX synchronization methods
+  on the backend controller in order to pass the underlying transaction as parameter. It is legal to call those methods
+  with a null parameter when artificially beginnig / committing / rollbacking a UOW in order to manage in-memory only transactions.
+  So all application code like beginUnitOfWork() can safely be changed to beginUnitOfWork(null)
+
+3.5.14
+======
+- Due to RFE #812 we have changed the return type of ILovResultViewDescriptorFactory in order to be able to return
+  an arbitrary view (that must at least be led by a collection view to bind the results). The method createResultViewDescriptor
+  now returns a more generic BasicViewDescriptor that is dig to find the leading collection view. This allows to implement
+  LOVs with master-detail result views for instance.
+
+- AbstractTestDataPersister now implements with a final method createTestData(). This is because it has to perform some
+  mandatory operations around the actual creation of data. The method to override is now called createAndPersistTestData().
+  You have to rename the existing createTestData method to createAndPersistTestData.
+
+- BackendControllerHolder.setCurrentBackendController() has been splitted in two :
+   - setSessionBackendController : that should be used by the frontend controller to set the session-wide backend controller
+   - setThreadBackendController : that should be used by (sub)threads in order to override the session-wide backend controller.
+
+- A new sanity check has been introduced in order to check that an action chain does not modify its internal state during its execution.
+  Doing so would break the action chain thread-safety and thus produce very undesirable effects in multi-user environments. As a reminder
+  all dynamic state depending on a certain execution has to transit through the action context that belongs to the execution and thus
+  is not shared.
+
+- Due to bug #743, the following standard action definitions have been refactored in order to avoid registering a backend action
+  with "Front" in it's name. You should take care of this change if and only if you have overriden these action definitions
+  in your project :
+
+    <bean id="addAnyToMasterFrontAction" class="org.jspresso.framework.application.backend.action.AddAnyCollectionToMasterAction" />
+  changed to :
+    <bean id="addAnyToMasterBackAction" class="org.jspresso.framework.application.backend.action.AddAnyCollectionToMasterAction" />
+    <bean id="addAnyToMasterFrontAction" parent="addToMasterFrontAction">
+      <property name="wrappedAction" ref="addAnyToMasterBackAction"/>
+    </bean>
+
+    <bean id="checkAllModulesDirtyStateFrontAction" class="org.jspresso.framework.application.backend.action.module.CheckAllModulesDirtyStateAction" />
+  changed to :
+    <bean id="checkAllModulesDirtyStateBackAction" class="org.jspresso.framework.application.backend.action.module.CheckAllModulesDirtyStateAction" />
+    <bean id="checkAllModulesDirtyStateFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
+      <property name="wrappedAction" ref="checkAllModulesDirtyStateBackAction" />
+    </bean>
+
+    <bean id="checkModuleDirtyStateFrontAction" class="org.jspresso.framework.application.backend.action.module.CheckModuleDirtyStateAction" />
+  changed to :
+    <bean id="checkModuleDirtyStateBackAction" class="org.jspresso.framework.application.backend.action.module.CheckModuleDirtyStateAction" />
+    <bean id="checkModuleDirtyStateFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
+      <property name="wrappedAction" ref="checkModuleDirtyStateBackAction" />
+    </bean>
+
+
+- The instance used as session entity registry by the backend controller is now directly created by the controller instead
+  of being injected by the DI container. The setter has been removed. In the (rather unexpected) eventuality you have overriden the
+  "entityRegistry" property on a specific backend controller definition, you should get rid of it.
+
+- A new regex has been introduced in order to secure more strongly local resources downlmoad :
+  (classpath|http):[A-Za-z0-9_\-/ ]*\.(png|jpg|jpeg|gif|pdf|swf.?)
+
+- getNext/WrappedAction have been made public in order to allow exploring the action chain programmatically.
+  If you've overridden those methods in subclasses, please align visibility.
+
+- controller onModuleEnter action executes now before the module entry action. This makes the order
+  of actions executions more coherent, i.e. :
+    controller.onModuleEnter
+    module.entry
+    module.exit
+    controller.onModuleExit
+
+- in webapp/flex/index.html, replace :
+
+  onLoad="window.document['hrsample-startup-flex-client'].focus()"
+
+  by
+
+  onLoad="focusFlex()"
+
+- in webapp/flex/index.html, replace the whole section (replace ${application} by your application name):
+
+  <script langugage='javascript' type="text/javascript">
+    function getRootURL()
+    {
+        return location.href.substring(0,location.href.indexOf("/flex")); ;
+    }
+
+    function stop()
+    {
+        // Here you'll need to provide the id of your Flex swf
+        document.getElementById("${application}-startup-flex-client").stop();
+        //alert("Disconnected!");
+    }
+  </script>
+
+  by
+
+  <script langugage='javascript' type="text/javascript">
+    function getRootURL() {
+      return location.href.substring(0,location.href.indexOf("/flex"));
+    }
+
+    function stop() {
+      if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+        var xmlhttp = new XMLHttpRequest();
+      } else {// code for IE6, IE5
+        var xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+      }
+      xmlhttp.open("GET", getRootURL()+"/util/stop",false);
+      xmlhttp.onreadystatechange = function() {
+      };
+      xmlhttp.send();
+    }
+
+    function focusFlex() {
+      var flexApp = document.getElementById("${application}-startup-flex-client");
+      if(flexApp) {
+        flexApp.tabIndex = 0;
+        flexApp.focus();
+      }
+    }
+  </script>
+
+- Add the following servlet definition to your web.xml :
+  <servlet>
+    <servlet-name>RemoteUtilServlet</servlet-name>
+    <servlet-class>org.jspresso.framework.application.startup.remote.RemoteUtilServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RemoteUtilServlet</servlet-name>
+    <url-pattern>/util/*</url-pattern>
+  </servlet-mapping>
+
+- Migrated to Qooxdoo 2.0
+
+- onUpdate() was triggered on an entity even if only computed (transient) properties were detected to be modified.
+  This is not the case anymore. see request #676.
+
+- autoSelectFistRows has been made configurable on charts. Previously, it was always false. Default value is true.
+
+- 2 methods have been added to the IPropertyChangeCapable interface that allow to delay property change notifications.
+  void blockEvents();
+  void releaseEvents();
+  This is used into the UOW cloning / merge process to ensure that the state is completely set before firing such
+  events.
+  AbstractPropertyChangeCapable base class implements them.
+
+- In order to fulfill feature request #664, the signature of the method contained in ILovViewDescriptorFactory
+  has been augmented with a new ESelectionMode parameter that allows to force a selection mode for the LOV result view.
+  The LovAction can now be parameterized with a selectionMode to force the selection mode of the LOV result view.
+  Default (legacy) behaviour is obtained by passing null as value for the new parameter.
+
+- Now, Jspresso managed components are only auto-created when referenced by an entity if the property
+  descriptor referencing them is mandatory. Since a reference property to a Jspresso component has been made mandatory
+  by default, there is nothing to do in order to migrate, but explicitely setting mandatory:false will disable
+  component auto-creation thus allowing the developper to have full control on the component reference.
+
+3.5.13
+======
+- In order to lower coupling between IQueryViewDescriptorFactory and IQueryComponentDescriptorFactory, the signature
+  of createQueryViewDescriptor has changed to :
+      createQueryViewDescriptor(IComponentDescriptorProvider<IComponent> componentDescriptorProvider,
+        IComponentDescriptor<IQueryComponent> queryComponentDescriptor);
+  Instead of having the responsibility to create the actual query filter descriptor, it is now passed as parameter.
+  Whenever you need to create a query view descriptor, 1st create a component descriptor using an (injected) query
+  component descriptor factory, then pass the created query component descriptor as parameter.
+
+- BasicQueryViewDescriptorFactory has changed package
+  from : org.jspresso.framework.view.descriptor.basic
+  to   : org.jspresso.framework.application.view
+
+- In order to garantee that async action always execute in a brand new context (e.g. using a slave backend controller),
+  the backend controller is always retrieved from the BackendControllerHolder, i.e. the Frontend controller does not hold any
+  direct reference to it anymore.
+
+- A subclass of ResourceProviderServlet has been created in order to take care of resources cleaning after
+  the download of an active resource in order to avoid JDBC connection leaks. The original ResourceProviderServlet
+  has been made abstract to force the migration. Please replace in your existing web.xml :
+    org.jspresso.framework.util.resources.server.ResourceProviderServlet
+  by
+    org.jspresso.framework.application.backend.resources.server.ControllerAwareResourceProviderServlet
+
+- The API has been changed to include the Icon class that is a wrapper around an iconImageUrl and a dimension  properties.
+  This was necessary to fulfill evolution #628. Setters for dependency injection remain unchanged but the getIconImageUrl() getters
+  have been removed in favor of a getIcon() getter. The view factory will respect as much as possible the overriden dimension
+  set using setIconWidth(int) and setIconHeight(int).
+
+- The onLoad() lifecycle interceptor was incorectly triggered during entity technical cloning. From now on,
+  only the onClone(IEntity sourceEntity) method is called.
+
+- [get|set]Selected[Models|Index] now directly synchs the selection on the corresponding views. ModuleSelectionAction
+  and ConnectorSelectionAction that were only meant to be chained to apply selection have been suppressed since they
+  are now useless and should simply be removed from your applications.
+
+- for Jspresso EE users, whenever you use web services, you should update your web.xml by changing. This will ensure
+  that the new resource cleanup interceptor gets registered at startup and that JDBC connections are correctly returned
+  to the pool after execution of the web service :
+    <context-param>
+      <param-name>resteasy.scan.resources</param-name>
+      <param-value>true</param-value>
+    </context-param>
+  to
+    <context-param>
+      <param-name>resteasy.scan</param-name>
+      <param-value>true</param-value>
+    </context-param>
+
+- in webapp/src/main/webapp/flex/index.html replace :
+    onUnload
+    by
+    onBeforeUnload
+
+
+3.5.12
+======
+- The methods of ICriteriaFactory now take the action context as extra parameter.
+
+- This release enforces correct usage of transactions (Unit of Work) and session.
+  Please, read carefully bugs :
+    http://mantis.jspresso.org/view.php?id=556
+    http://mantis.jspresso.org/view.php?id=557
+
+- Fixing the bug http://mantis.jspresso.org/view.php?id=541 , SJS does not change the case of
+  the workspaces names and descriptions. It was lowering the case of the 1st char but does not do it anymore.
+  This change might result in missing translations so change your resource bundles property files
+  accordingly. You should also change the parent parentWorkspaceName custom parameter used in
+  AddBeanAsSubModuleFrontAction instances.
+
+- New locale : DE
+In order to use the new translation locales in existing projects :
+
+Edit startup/qooxdoo/client/src/main/py/config.json and change :
+  "LOCALES"      : ["en","fr","es","pt"],
+  to
+  "LOCALES"      : ["en","fr","es","pt","de"],
+
+Edit startup/flex/client/pom.xml and change :
+          <locales>
+            <locale>en_US</locale>
+            <locale>fr_FR</locale>
+            <locale>es_ES</locale>
+            <locale>pt_BR</locale>
+          </locales>
+  to
+          <locales>
+            <locale>en_US</locale>
+            <locale>fr_FR</locale>
+            <locale>es_ES</locale>
+            <locale>pt_BR</locale>
+            <locale>de_DE</locale>
+          </locales>
+
+Create the de_DE directories in startup/flex/client/src/main/locales.
+
+- We have relaxed a lot of interface APIs around List Of Values. Most of them now use Icomponent instead of IEntity.
+A straightforward API alignement will be needed when upgrading.
+
+- All ControllerAware artifacts are now Spring singletons which will ease a lot 3rd party products integration.
+see http://mantis.jspresso.org/view.php?id=533
+
+- To prepare for Hibernate 4 migration, the HibernateTemplate usage is now deprectated. From now on, you should use
+the equivalent getHibernateSession(...) that leverages the Hibernate getCurrentSession() method. As soon as Jspresso migrates
+to Hibernate 4, the Hibernate template access wil be removed.
+
+- To prepare for Hibernate 4 migration, you should change the cache provider in your hibernate configurations (xxx-config.xml)
+from <prop key="hibernate.cache.provider_class">org.hibernate.cache.HashtableCacheProvider</prop>
+to   <prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
+
+- Libraries version update :
+  Spring: 3.1.0-RELEASE
+  Hibernate: 3.6.9.Final
+
+- In order to give the opportunity to ignore missing translation keys, we have added 2 methods to the ITranslationProvider
+  interface, containing a default value :
+
+  String getTranslation(String key, String defaultMessage, Locale locale);
+  String getTranslation(String key, Object[] args, String defaultMessage, Locale locale);
+
+  The default message is returned when no translation can be found for the key.
+
+
+- Whenever you want to use the new direct access feature described in this feature request
+  http://mantis.jspresso.org/view.php?id=524
+  you should add the following filter definition in your web.xml descriptor :
+
+    <!-- Request params filter section -->
+    <filter>
+      <filter-name>RequestParamsHttpFilter</filter-name>
+      <filter-class>org.jspresso.framework.util.http.RequestParamsHttpFilter</filter-class>
+    </filter>
+    <filter-mapping>
+      <filter-name>RequestParamsHttpFilter</filter-name>
+      <url-pattern>/flex/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+      <filter-name>RequestParamsHttpFilter</filter-name>
+      <url-pattern>/qooxdoo/*</url-pattern>
+    </filter-mapping>
+    <!-- End request params filter section -->
+
+
+3.5.11
+======
+- In order for browser close event to be correctly handled, edit all index.html files and replace:
+  onUnload="stop()"
+  by
+  onBeforeUnload="stop()"
+
+- Filter views have been reworked in order to improve the aspect of comparable properties sub-forms (operator/min/max values).
+For the min and max value fields to stick better to the operator field, the max field value has been assigned a with of 2. This has an
+impact on overloaded query views since default property width is now 4 instead of 3. Existing forms used as filter view should take care
+of this change => all explicit property widths on filter forms must be applied a 4/3 factor.
+
+- We have refactored the signature of the ILovViewDescriptorFactory interface method to include the action context as parameter.
+This allows to tailor the LOV view based on the action context, e.g. customize the LOV view based on the actual model it's triggered on.
+For instance, this allows to introduce multi-selection on result view when the model is a a QueryComponent (i.e. in filter views).
+
+- We have changed the package definition of ILovViewDescriptorFactory and BasicLovViewDescriptorFactory
+    from org.jspresso.framework.view.descriptor.basic
+    to   org.jspresso.framework.application.frontend.action.lov
+  and we have moved them from jspresso-view module to jspresso-application module.
+
+- Due to a groupId change of the hsqldb artifact in the central Maven repository, you must change all hsqldb references :
+  <groupId>hsqldb</groupId>
+    to
+  <groupId>org.hsqldb</groupId>
+
+- Due to the introduction of server-side client translation, the following change must be applied on the
+  existing projects that use the Qooxdoo frontend :
+
+  Edit the source file QooxdooApplicationStartup.java and replace
+
+  public List<RemoteCommand> startQx(String startupLanguage, int timezoneOffset)
+      throws RemoteException {
+    return super.start(startupLanguage, timezoneOffset);
+  }
+
+  by
+
+  public List<RemoteCommand> startQx(String startupLanguage,
+      String[] clientKeysToTranslate, int timeZoneOffset)
+      throws RemoteException {
+    return super.start(startupLanguage, clientKeysToTranslate, timeZoneOffset);
+  }
+
+3.5.10
+======
+- Setting an action on a property view has an improved behaviour; There are 2 cases :
+   - If the property is read-only, then assigning an action turns the property into a clickable hyperlink (original behaviour)
+   - If the property is read-write, the registered action will be trigerred when the user changes the value of the field.
+     Note thet in that case, the action is executed after the model has been updated. However the old property value can
+     be retrieved from the context action param.
+
+3.5.9
+=====
+- New locales : ES and PT
+In order to use the new translation locales in existing projects :
+
+Edit startup/qooxdoo/client/src/main/py/config.json and change :
+  "LOCALES"      : ["en","fr"],
+  to
+  "LOCALES"      : ["en","fr","es","pt"],
+
+Edit startup/flex/client/pom.xml and change :
+          <locales>
+            <locale>en_US</locale>
+            <locale>fr_FR</locale>
+          </locales>
+  to
+          <locales>
+            <locale>en_US</locale>
+            <locale>fr_FR</locale>
+            <locale>es_ES</locale>
+            <locale>pt_BR</locale>
+          </locales>
+
+Create the es_ES and pt_BR directories in startup/flex/client/src/main/locales.
+
+
+- Page navigation refactoring :
+nextModuleFilterPageAction and nextLovPageAction have both been relaced by a single action : nextPageFrontAction.
+previousModuleFilterPageAction and previousLovPageAction have both been relaced by a single action : previousPageFrontAction.
+They are backward compatible so it should be sufficient to change the references to the old actions by the new names.
+
+- ICardViewDescriptor changes the following way :
+
+extends ICompositeViewDescripror ->  extends IViewDescripror
+since a card view is not really a composite view (no cascading model for instance).
+This is made possible by a previous evolution that allow for non composite parents.
+
+Map<String, IViewDescriptor> getCardViewDescriptors() -> IViewDescriptor getCardViewDescriptor(String cardName)
+to allow for more flexible card selection and potentially generation.
+
+- Due to the migration to qooxdoo 1.5, there is a manual change to perform on existing projects.
+Edit startup/qooxdoo/client/pom.xml and replace the following section :
+    <execution>
+      <id>web-debug</id>
+      ...
+      ...
+    </execution>
+
+by
+    <execution>
+      <id>web-debug</id>
+      <goals>
+        <goal>run</goal>
+      </goals>
+      <phase>prepare-package</phase>
+      <configuration>
+        <tasks>
+          <property name="web-debug.dir" value="${project.build.directory}/web-debug" />
+          <mkdir dir="" />
+          <replace dir="${web-debug.dir}" token="../../../../target" value="file:///${project.build.directory}">
+            <include name="**/*.js" />
+          </replace>
+          <replace dir="${web-debug.dir}" token="../../" value="file:///${basedir}/src/main/">
+            <include name="**/*.js" />
+          </replace>
+          <replace dir="${web-debug.dir}" token="\" value="/">
+            <include name="**/*.js" />
+          </replace>
+          <replace dir="${web-debug.dir}" token="//(" value="\/(">
+            <include name="**/*.js" />
+          </replace>
+        </tasks>
+      </configuration>
+    </execution>
+
+Edit startup/qooxdoo/client/src/main/py/config.json and replace the following section :
+    "source-script" :
+    {
+      "compile-options" :
+      {
+        "uris" :
+        {
+          "add-nocache-param" : false
+        }
+      }
+    },
+    "source-all-script" :
+    {
+      "compile-options" :
+      {
+        "uris" :
+        {
+          "add-nocache-param" : false
+        }
+      }
+    }
+
+by
+
+    "source-script" :
+    {
+      "copy-files" :
+      {
+        "files" : ["*.html"],
+        "source" : "${ROOT}/html",
+        "target" : "${TARGET}/web-debug"
+      },
+      "compile-options" :
+      {
+        "paths" :
+        {
+          "file" : "${TARGET}/web-debug/script/${APPLICATION}.js"
+        },
+        "uris" :
+        {
+          "add-nocache-param" : false
+        }
+      }
+    },
+    "source-all-script" :
+    {
+      "copy-files" :
+      {
+        "files" : ["*.html"],
+        "source" : "${ROOT}/html",
+        "target" : "${TARGET}/web-debug"
+      },
+      "compile-options" :
+      {
+        "paths" :
+        {
+          "file" : "${TARGET}/web-debug/script/${APPLICATION}.js"
+        },
+        "uris" :
+        {
+          "add-nocache-param" : false
+        }
+      }
+    }
+
+
+3.5.8
+=====
+- We have changed the way bidirectional 1-1 and n-n relationships get mapped in the DB.
+See http://www.jspresso.org/mantis/view.php?id=390.
+A bi-directional 1-1 relationship is conceptually perfectly symmetric.
+However it is mapped as a 1-n relationship (using a foreign key column) with a unique constraint
+enforced on the foreign key column. One side of the relationship has to be "elected" as the "leading" side,
+i.e. the one holding the fk. Since there was no way to tell Jspresso which one it is, the generator compares alphabetically
+the 2 table names (and the 2 property names if it is a reflexive relationship) to "elect" the leading end.
+From now on, the leading end will be the (1st) side that is explicitly assigned with a reverse property.
+This rule might imply a change on which side is assigned the "reverse" end in order to keep an existing
+schema during version migration. Note that this does not change model conceptual design at all.
+
+
+
+
+3.5.5
+=====
+- Got rid of broken flexmojos wrapper plugin.
+Update webapp/src/main/webapp/flex/index.html with the following values :
+${bgcolor} => #869ca7
+${width} => 100%
+${height} => 100%
+${swf} => myproject-startup-flex-client
+${application} => myproject-startup-flex-client
+${version_major} => 9
+${version_minor} => 0
+${version_revision} => 0
+${title} => Wathever you want
+
+- Switch to Maven3
+
+- Framework logging changed from commons-logging to SLF4J
+
+- Libraries versions updated :
+    blazeds =>4.0.0.14931
+    spring => 3.0.5.RELEASE
+    spring-ldap => 1.3.1.RELEASE
+    hibernate => 3.6.4.Final
+    qooxdoo => 1.4.1
+    commons-logging => 1.1.1
+    commons-lang => 2.6
+    commons-beanutils => 1.8.3
+    commons-io => 2.0.1
+    commons-fileupload => 1.2.2
+    commons-pool => 1.5.6
+    commons-dbcp => 1.4
+    commons-digester => 2.1
+    log4j => 1.2.16
+    javassist => 3.12.1.GA
+    slf4j => 1.6.1
+    joda-time => 1.6.2
+    bsf => 2.4.0
+    stax-api => 1.0.1
+
+- Due to the migration to BlazeDS 4, you must comment the following section
+in startup/flex/config/src/main/resources/services-config.xml :
+
+        <login-command class="flex.messaging.security.TomcatLoginCommand" server="Tomcat"/>
+
+- Due to the migration to BlazeDS 4, you must delete the following section
+in webapp/pom.xml :
+    <dependency>
+      <groupId>com.adobe.blazeds</groupId>
+      <artifactId>blazeds-opt</artifactId>
+    </dependency>
+
+- servlet-api dependency was transitively added to the webapp due to a bad dependency declaration in one
+of the used libraries. This is in violation of the servlet specification and resulted in a warning during the
+application startup. We have now excluded this bad servlet-api dependency, but it has to be declared now in the
+webapp pom.xml as "provided". So add the following dependency section in webapp/pom.xml :
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+
+3.5.3
+=====
+- Due to the introduction of client timezone management, the following change must be applied on the
+existing projects that use the Qooxdoo frontend :
+Edit the source file QooxdooApplicationStartup.java and replace
+  public List<RemoteCommand> startQx(String startupLanguage)
+      throws RemoteException {
+    return super.start(startupLanguage);
+  }
+by
+  public List<RemoteCommand> startQx(String startupLanguage, int timezoneOffset)
+      throws RemoteException {
+    return super.start(startupLanguage, timezoneOffset);
+  }
+
+- Wings and ULC frontends have been removed. There are almost nobody using them now and it
+is useless maintaining them. It is strongly recommended to re-generate existing project using
+the up-to-date archetype. If you want to manually update your projects poms, here are the steps
+to perform :
+
+1/ make the root pom inherit from jspresso-root instead of jspresso-dependencies :
+  <parent>
+    <groupId>org.jspresso.framework</groupId>
+    <artifactId>jspresso-root</artifactId>
+    <version>3.5-SNAPSHOT</version>
+  </parent>
+2/ edit the root pom and delete the following lines :
+  <dependency>
+    <groupId>org.jspresso.hrsample</groupId>
+    <artifactId>hrsample-startup-ulc</artifactId>
+    <version>${project.version}</version>
+  </dependency>
+  <dependency>
+    <groupId>org.jspresso.hrsample</groupId>
+    <artifactId>hrsample-startup-wings</artifactId>
+    <version>${project.version}</version>
+  </dependency>
+3/ edit startup/pom.xml and delete the following lines :
+  <module>wings</module>
+and
+  <profiles>
+    <profile>
+      <id>ulc</id>
+      <modules>
+        <module>ulc</module>
+      </modules>
+    </profile>
+  </profiles>
+4/ delete the startup/wings and startup/ulc folders
+5/ edit the webapp/pom.xml and delete the following lines :
+    <dependency>
+      <groupId>org.jspresso.hrsample</groupId>
+      <artifactId>${myproject}-startup-wings</artifactId>
+    </dependency>
+and
+  <profiles>
+    ...
+  </profiles>
+6/ edit webapp/src/main/web.xml and delete the sections :
+  <!-- ULC deployment section -->
+    ...
+  <!-- End ULC deployment section -->
+and
+  <!-- WingS deployment section -->
+    ...
+  <!-- End WingS deployment section -->
+7/ delete the following folders :
+  webapp/src/main/webapp/webstart
+and
+  webapp/src/main/webapp/wings
+8/ edit core/src/main/resources/beanRefFactory.xml and delete both ulc and wings
+contexts sections.
+
+- migrated to java 1.6 minimum
+
+- Due to a change of the groupId of the GMaven plugin used to perform the SJS compilation, all existing projects
+must perform a general search and replace in all pom.xml :
+  <groupId>org.codehaus.groovy.maven</groupId>
+  change to
+  <groupId>org.codehaus.gmaven</groupId>
+
+
+3.5.2
+=====
+- Controllers now implement themselves the ITranslationProvider interface. Thus, the
+getTranslationProvider() method has been deprecated. the migrationn is simply to remove
+these method calls and use the controller as translation providers when needed.
+
+- A new onClone(IEntity) lifecycle method has been added to the entity lifecycle.
+The EmptyLifecycleInterceptor implements it, but if you directly implement
+ILifecycleInterceptor interface, you will have to add the new method.
+
+- For those of you who have derived the BasicLovViewDescriptorFactory to override the
+createResultViewDescriptor method in order to customize the table result view of the list of value dialog,
+the signature has changed from :
+  protected BasicCollectionViewDescriptor createResultViewDescriptor(IComponentDescriptor<IEntity>)
+  to
+  protected BasicCollectionViewDescriptor createResultViewDescriptor(IComponentDescriptorProvider<IEntity>)
+
+
+
+3.5.1
+=====
+- The new hyperlink management requires some extra library (dj-swingsuite + dependencies).
+They are included in the new archetype but you have to update your existing applications
+eclipse projects, i.e. in .classpath, add :
+  <classpathentry
+    kind="var"
+    path="M2_REPO/chrriis/dj-swingsuite/0.9.1/dj-swingsuite-0.9.1.jar">
+    <attributes>
+      <attribute
+        name="org.eclipse.jst.component.nondependency"
+        value="" />
+    </attributes>
+  </classpathentry>
+
+- The file save/open callback API has been improved by adding the file name in the method
+signature.
+
+- Hibernate "list" index column mapping has been modified to avoid duplicates. For instance,
+given a Parent-Child 1-N relationship named children, the previously generated column was
+CHILDREN_SEQ and it is now PARENT_CHILDREN_SEQ. Schemas must be updated accordingly.
+
+
+
+3.5.0
+=====
+- nesting view descriptors (BasicNestingViewDescriptor) have been removed.
+You can safely change their reference to border view descriptors (BasicBorderViewDescriptor)
+setting the "centerViewDescriptor" to the old "nestedViewDescriptor".
+
+- Due to a API refactoring in component view descriptors, all references to
+BasicSubviewDescriptor must be changed to BasicPropertyViewDescriptor.
+
+- Due to introduction of sorting directions in orderingProperties (see 2787655), the API
+has changed on component and collection descriptors. Instead of setting the ordering
+properties as a list, you must now use a map keyed by the ordering properties
+and valued by the sort directions (ESort.ASCENDING or ESort.DESCENDING)
+
+- To avoid naming collisions between framework method names and business methods, the component and
+entity getContract() method has been renamed to getComponentContract().
+
+- HSQL, DBCP, Pool versions are now fixed in Jspresso root Pom. You should get rid of these artifacts
+in the dependencyManagement section of your existing projects root Poms.
+
+- HSQL is known not to correctly report SQL error codes during batch update if a failure occurs
+in one of the batched SQL. This prevents Jspresso to cleanly handle these exceptions. HSQL will
+be fixed in the next 1.9 release. Until then, the workaround is to disable jdbc batching when using HSQL
+by completing the context.xml files of existing projects, adding in the hibernateSessionFactory
+definition :
+   <prop key="hibernate.jdbc.batch_size">0</prop>
+
+- To benefit from the new translation mechanism for nested property names, you should change view.xml
+in the existing Jspresso applications :
+
+original definition :
+  <bean
+    id="applicationMessageSource"
+    class="org.springframework.context.support.ResourceBundleMessageSource">
+
+updated definition :
+  <bean
+    id="applicationMessageSource"
+    parent="abstractApplicationMessageSource">
+
+- Project created with the updated archetype require Maven 2.1+ to compile due tothe use
+of the new "prepare-package" phase.
+
+- In order to be able to add item selection listeners to view descriptors, we had to refactor
+org.jspresso.framework.binding.IConnectorSelectionListener and its peer classes to
+org.jspresso.framework.util.event.IItemSelectionListener. This allows to avoid a circular
+dependency between the view module and the binding module. The same applies for the
+org.jspresso.framework.binding.IConnectorValueChangeListener and its peer classes that have been
+refactored to org.jspresso.framework.util.event.IValueChangeListener.
+
+- Running the flash chart in swing requires some extra library (dj-nativeswing + dependencies).
+They are included in the new archetype but you have to update your existing applications
+eclipse projects, i.e. in .classpath, add :
+  <classpathentry
+    kind="var"
+    path="M2_REPO/chrriis/dj-nativeswing/0.9.8/dj-nativeswing-0.9.8.jar">
+    <attributes>
+      <attribute
+        name="org.eclipse.jst.component.nondependency"
+        value="" />
+    </attributes>
+  </classpathentry>
+  <classpathentry
+    kind="var"
+    path="M2_REPO/chrriis/dj-nativeswing-swt/0.9.8/dj-nativeswing-swt-0.9.8.jar">
+    <attributes>
+      <attribute
+        name="org.eclipse.jst.component.nondependency"
+        value="" />
+    </attributes>
+  </classpathentry>
+  <classpathentry
+    kind="var"
+    path="M2_REPO/org/eclipse/swt/3.5.1/swt-3.5.1-win32-win32-x86.jar">
+    <attributes>
+      <attribute
+        name="org.eclipse.jst.component.nondependency"
+        value="" />
+    </attributes>
+  </classpathentry>
+
+- The way Jspresso retrieves the HTTP session for server-based UIs (all except swing)
+has been refactored. This refactoring requires a change on your existing projects :
+in noulc-web.xml, add :
+  <filter-mapping>
+    <filter-name>HttpRequestHolder</filter-name>
+    <servlet-name>ApplicationWingsServlet</servlet-name>
+  </filter-mapping>
+in ulc-web.xml, add :
+  <filter-mapping>
+    <filter-name>HttpRequestHolder</filter-name>
+    <servlet-name>ApplicationUlcServlet</servlet-name>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>HttpRequestHolder</filter-name>
+    <servlet-name>ApplicationWingsServlet</servlet-name>
+  </filter-mapping>
+
+- The action class hierarchy has been refactored (simplified). Now, all actions inheriting from
+AbstractAction handle a "wrapped" and a "next" action for chaining. The following map
+indicates how classes should be changed if used in your existing projects :
+  WrappingAction         -> FrontendAction
+  AbstractChainedAction  -> FrontendAction
+  AbstractFrontendAction -> FrontendAction
+  AbstractBackendAction  -> BackendAction
+
+- We have re-designed the articulation between the backend controller and the application session.
+Formerly, the session object was responsible for holding the Unit of Work and the merging of the
+in-memory state back and forth during transactions. This behaviour has been transferred back to
+the backend controller (it is how it should have been from the start) using the same API.
+The application session object is then very lightweight and does not adhere anymore to the
+persistence layer. All this coupling is now handled directly in the backend controller.
+This has the following impact on the codebase :
+  * All classes named "ApplicationSessionAwarexxx" have been renamed to "ControllerAwarexxx"
+  * All IApplicationSession methods except getLocale(), getPrincipal() and getSubject()
+    have been moved to the IBackendController interface. Whenever you use them in your actions code,
+    the change should be as simple as changing getApplicationSession(actionContext) to
+    getController(actionContext).
+
+- Jspresso now uses FlexMojos 3.6 (the latest stable release of the plugin). Unfortunately, one of
+the used features (html wrapper in the WAR module) is not backward compatible with 3.2. So when you
+update your existing projects, follow the step by step procedure described here :
+  * http://www.jspresso.org/forum/notice-301-snapshot-migration-flexmojos-36
+  * http://www.jspresso.org/forum/notice-301-snapshot-migration-flexmojos-36-2
+
+
+3.0.0
+=====
+
+- The 3.0 release introduces typesafe enums in place of interface constants.
+This implies a light change in the spring definition files.
+For instance instead of referring to static beans definitions like :
+
+  <property
+    name="orientation"
+    ref="HORIZONTAL" />
+
+You will now use direct enum injection :
+
+  <property
+    name="orientation"
+    value="HORIZONTAL" />
+
+see http://sourceforge.net/tracker2/index.php?func=detail&aid=2319923&group_id=231671&atid=1083851
+
+
+
+
+- The 3.0 release changes the way interceptors are declared in components and properties.
+This is due to the fact the interceptors classes reference their owning component classes, thus
+introducing a circular dependency that is unresolvable during the build whenever entities
+and components are not available yet (not yet generated) making the spring context unable
+to instanciate.
+This leads to a mandatory change in the spring definitions files. Instead of referencing
+interceptors instances directly in the component and property descriptors, the developer
+must register the interceptor class names. The change is actually straightforward  as
+detailed below :
+
+For lifecycle interceptors, you must change definitions like :
+  <property
+    name="lifecycleInterceptorClassNames">
+    <list>
+      <bean
+        class="org.jspresso.hrsample.model.service.TraceableLifecycleInterceptor"/>
+    </list>
+  </property>
+
+with :
+  <property
+    name="lifecycleInterceptors">
+    <list>
+      <value>org.jspresso.hrsample.model.service.TraceableLifecycleInterceptor</value>
+    </list>
+  </property>
+
+Same kind of modification for property processors :
+  <property
+    name="integrityProcessors">
+    <list>
+      <bean
+        class="org.jspresso.hrsample.model.processor.EmployeePropertyProcessors$FirstNameProcessor"/>
+    </list>
+  </property>
+
+becomes :
+  <property
+    name="integrityProcessorClassNames">
+    <list>
+      <value>org.jspresso.hrsample.model.processor.EmployeePropertyProcessors$FirstNameProcessor</value>
+    </list>
+  </property>
+
+And finally, same modification for service delegates :
+  <property
+    name="serviceDelegateClassNames">
+    <map>
+      <entry
+        key="org.jspresso.hrsample.model.service.EmployeeService">
+        <bean
+          class="org.jspresso.hrsample.model.service.EmployeeServiceDelegate"/>
+      </entry>
+    </map>
+  </property>
+
+becomes :
+  <property
+    name="serviceDelegateClassNames">
+    <map>
+      <entry
+        key="org.jspresso.hrsample.model.service.EmployeeService"
+        value="org.jspresso.hrsample.model.service.EmployeeServiceDelegate"/>
+    </map>
+  </property>
+
+
+
+
+- The 3.0 release changes the framework artifacts group from org.jspresso to org.jspresso.framework.
+You must update your POMs accordingly.

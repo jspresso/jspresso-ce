@@ -1,0 +1,31 @@
+<assembly>
+  <id>sources</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>src/main</directory>
+      <outputDirectory></outputDirectory>
+      <includes>
+        <include>**/js/**</include>
+        <include>**/py/library.json</include>
+        <include>**/resources/**</include>
+        <include>**/translations/**</include>
+        <include>Manifest.json</include>
+      </includes>
+      <excludes>
+        <exclude>**/js/**/*QxController.js</exclude>
+      </excludes>
+    </fileSet>
+    <fileSet>
+      <filtered>true</filtered>
+      <directory>src/main</directory>
+      <outputDirectory></outputDirectory>
+      <includes>
+        <include>**/js/**/*QxController.js</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>

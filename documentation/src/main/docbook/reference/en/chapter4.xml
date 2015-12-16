@@ -1,0 +1,867 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<chapter id="chapter4">
+  <title>Actions</title>
+
+  <section>
+    <title>Overview</title>
+
+    <para></para>
+
+    <figure>
+      <title>Actions class diagram</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="60%"
+                     fileref="../uml/actions.PNG" scalefit="1" width="100%" />
+        </imageobject>
+      </mediaobject>
+    </figure>
+  </section>
+
+  <section>
+    <title>Common part</title>
+    <section>
+      <title>Reference</title>
+  
+      <para></para>
+  
+      <xi:include href="../generated/AbstractActionContextAware.xml"
+                  xmlns:xi="http://www.w3.org/2001/XInclude" />
+
+      <xi:include href="../generated/ActionMap.xml"
+                  xmlns:xi="http://www.w3.org/2001/XInclude" />
+
+      <xi:include href="../generated/ActionList.xml"
+                  xmlns:xi="http://www.w3.org/2001/XInclude" />
+    </section>
+  </section>
+
+  <section>
+    <title>Backend actions</title>
+    <section>
+      <title>Reference</title>
+  
+      <para></para>
+  
+      <xi:include href="../generated/BackendAction.xml"
+                  xmlns:xi="http://www.w3.org/2001/XInclude" />
+    </section>
+  </section>
+
+  <section>
+    <title>Frontend actions</title>
+    <section>
+      <title>Reference</title>
+  
+      <para></para>
+  
+      <xi:include href="../generated/FrontendAction.xml"
+                  xmlns:xi="http://www.w3.org/2001/XInclude" />
+    </section>
+  </section>
+
+  <section>
+    <title>Built-in actions</title>
+
+    <para>You will find here the complete list of Jspresso built-in actions
+    along with their Spring id and a short description.</para>
+
+    <table colsep="0" frame="topbot" rowsep="1" tabstyle="splitable">
+      <?dbfo keep-together='auto'?>
+
+      <title>Built-in actions</title>
+
+      <tgroup cols="3">
+        <colspec colname="springId" colwidth="2*" />
+
+        <colspec colname="sjsId" colwidth="2*" />
+
+        <colspec colname="description" colwidth="4*" />
+
+        <thead>
+          <row>
+            <entry align="left">Spring Id</entry>
+
+            <entry align="left">SJS Id</entry>
+
+            <entry align="left">Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry>pasteCollectionBackAction</entry>
+
+            <entry>back.component.paste</entry>
+
+            <entry>Pastes entities/components from the application
+            clipboard.</entry>
+          </row>
+
+          <row>
+            <entry>removeCollectionFromMasterBackAction</entry>
+
+            <entry>back.component.remove</entry>
+
+            <entry>Marks the selected objects for deletion (next save
+            operation) and removes them from the master managed
+            collection.</entry>
+          </row>
+
+          <row>
+            <entry>saveBackAction</entry>
+
+            <entry>back.component.save</entry>
+
+            <entry>Gets a collection of entities to save out of the context
+            and saves them transactionally.</entry>
+          </row>
+
+          <row>
+            <entry>createQueryComponentAction</entry>
+
+            <entry>back.filter.create</entry>
+
+            <entry>Creates a filter model for QBE queries and set it as value
+            of the filter model connector retrieved from the context.</entry>
+          </row>
+
+          <row>
+            <entry>initModuleFilterAction</entry>
+
+            <entry>back.filter.init</entry>
+
+            <entry>Retrieves the current module filter connector and adds it
+            in the context.</entry>
+          </row>
+
+          <row>
+            <entry>queryEntitiesBackAction</entry>
+
+            <entry>back.filter.query</entry>
+
+            <entry>Executes an QBE query based on a filter retrieved from the
+            context. The resulting entity collection is added to the
+            context.</entry>
+          </row>
+
+          <row>
+            <entry>reloadBackAction</entry>
+
+            <entry>back.module.reload</entry>
+
+            <entry>Reloads current module selected objects from the persistent
+            store.</entry>
+          </row>
+
+          <row>
+            <entry>removeFromModuleObjectsAction</entry>
+
+            <entry>back.module.remove</entry>
+
+            <entry>Marks current module selected objects for deletion (next
+            save operation) and removes them from the module managed
+            collection.</entry>
+          </row>
+
+          <row>
+            <entry>saveModuleObjectBackAction</entry>
+
+            <entry>back.module.save</entry>
+
+            <entry>Saves the current module selected objects to the persistent
+            store.</entry>
+          </row>
+
+          <row>
+            <entry>doPrintBackendAction</entry>
+
+            <entry>back.report.generate</entry>
+
+            <entry>Generates a Jasper report and adds it to the
+            context.</entry>
+          </row>
+
+          <row>
+            <entry>scriptedBackAction</entry>
+
+            <entry>back.script.dynamic</entry>
+
+            <entry>Executes a script taken out of the context. Supports any
+            BSF supported language (Groovy, Jython, Beanshell, ...).</entry>
+          </row>
+
+          <row>
+            <entry>staticScriptedBackAction</entry>
+
+            <entry>back.script.static</entry>
+
+            <entry>Executes a script statically defined as an action
+            parameter. Supports any BSF supported language (Groovy, Jython,
+            Beanshell, ...).</entry>
+          </row>
+
+          <row>
+            <entry>lovFindBackAction</entry>
+
+            <entry>back.lov.find</entry>
+
+            <entry>Standard QBE find action for "list of values".</entry>
+          </row>
+
+          <row>
+            <entry>abstractChooseActionAction</entry>
+
+            <entry>front.action.choose</entry>
+
+            <entry>Opens a modal dialog box offering a choice of
+            actions.</entry>
+          </row>
+
+          <row>
+            <entry>executeActionAction</entry>
+
+            <entry>front.action.execute</entry>
+
+            <entry>Takes an action out of the context and executes it.</entry>
+          </row>
+
+          <row>
+            <entry>chooseActionOkFrontAction</entry>
+
+            <entry>front.action.ok</entry>
+
+            <entry>Gets the selected action and places it in the context for
+            execution.</entry>
+          </row>
+
+          <row>
+            <entry>addAnyToMasterFrontAction</entry>
+
+            <entry>front.any.add</entry>
+
+            <entry>Retrieves an object collection from the context and appends
+            it to the master managed collection (no creation).</entry>
+          </row>
+
+          <row>
+            <entry>moveDownFrontAction</entry>
+
+            <entry>front.any.down</entry>
+
+            <entry>Moves downward the selected objects contained in an ordered
+            collection.</entry>
+          </row>
+
+          <row>
+            <entry>moveBottomFrontAction</entry>
+
+            <entry>front.any.bottom</entry>
+
+            <entry>Moves bottom the selected objects contained in an ordered
+            collection.</entry>
+          </row>
+
+          <row>
+            <entry>removeAnyCollectionFromMasterFrontAction</entry>
+
+            <entry>front.any.remove</entry>
+
+            <entry>After user confirmation, retrieves an object collection
+            from the context and removes it from the master managed
+            collection.</entry>
+          </row>
+
+          <row>
+            <entry>moveUpFrontAction</entry>
+
+            <entry>front.any.up</entry>
+
+            <entry>Moves upward the selected objects contained in an ordered
+            collection.</entry>
+          </row>
+
+          <row>
+            <entry>moveTopFrontAction</entry>
+
+            <entry>front.any.top</entry>
+
+            <entry>Moves top the selected objects contained in an ordered
+            collection.</entry>
+          </row>
+
+          <row>
+            <entry>binaryPropertyInfoAction</entry>
+
+            <entry>front.binary.info</entry>
+
+            <entry>Retrieves a binary property value out of the connector and
+            opens a message box displaying the size of the binary
+            content.</entry>
+          </row>
+
+          <row>
+            <entry>openFileAsBinaryPropertyAction</entry>
+
+            <entry>front.binary.load</entry>
+
+            <entry>Let the user browse the local file system to choose a file.
+            The file content is used as the content of a binary
+            property.</entry>
+          </row>
+
+          <row>
+            <entry>saveBinaryPropertyAsFileAction</entry>
+
+            <entry>front.binary.save</entry>
+
+            <entry>Let the user browse the local file system to choose a file.
+            The file is used to save the content of a binary property.</entry>
+          </row>
+
+          <row>
+            <entry>chartAction</entry>
+
+            <entry>front.chart</entry>
+
+            <entry>Computes and displays a fusioncharts chart.</entry>
+          </row>
+
+          <row>
+            <entry>abstractAddToMasterFrontAction</entry>
+
+            <entry>front.component.add.abstract</entry>
+
+            <entry>Creates a new entity/component and adds it to the master
+            managed collection. No icon nor accelerator set.</entry>
+          </row>
+
+          <row>
+            <entry>addToMasterFrontAction</entry>
+
+            <entry>front.component.add</entry>
+
+            <entry>Creates a new entity/component and adds it to the master
+            managed collection.</entry>
+          </row>
+
+          <row>
+            <entry>chooseComponentAction</entry>
+
+            <entry>front.component.choose</entry>
+
+            <entry>Opens a modal dialog to let the user choose an
+            component/entity out of a collection retrieved from the
+            context.</entry>
+          </row>
+
+          <row>
+            <entry>cloneEntityCollectionFrontAction</entry>
+
+            <entry>front.component.clone</entry>
+
+            <entry>Duplicates selected entities/components and adds the clones
+            to the master managed collection.</entry>
+          </row>
+
+          <row>
+            <entry>copyCollectionFrontAction</entry>
+
+            <entry>front.component.copy</entry>
+
+            <entry>Copies the selected entities/components to the application
+            clipboard.</entry>
+          </row>
+
+          <row>
+            <entry>cutCollectionFrontAction</entry>
+
+            <entry>front.component.cut</entry>
+
+            <entry>Cuts the selected entities/components to the application
+            clipboard.</entry>
+          </row>
+
+          <row>
+            <entry>editSelectedComponentAction</entry>
+
+            <entry>front.selected.edit</entry>
+
+            <entry>Opens a dialog box to edit the selected entity/component in an
+            arbitrary view.</entry>
+          </row>
+
+          <row>
+            <entry>editComponentAction</entry>
+
+            <entry>front.component.edit</entry>
+
+            <entry>Opens a dialog box to edit an entity/component in an
+            arbitrary view.</entry>
+          </row>
+
+          <row>
+            <entry>pasteCollectionFrontAction</entry>
+
+            <entry>front.component.paste</entry>
+
+            <entry>Pastes entities/components from the application
+            clipboard.</entry>
+          </row>
+
+          <row>
+            <entry>removeEntityCollectionFromMasterFrontAction</entry>
+
+            <entry>front.component.remove</entry>
+
+            <entry>After user confirmation, marks the selected objects for
+            deletion (next save operation) and removes them from the master
+            managed collection.</entry>
+          </row>
+
+          <row>
+            <entry>viewConnectorSetAction</entry>
+
+            <entry>front.connector.set</entry>
+
+            <entry>Retrieves an arbitrary value from the context and assigns
+            it to the view connector value.</entry>
+          </row>
+
+          <row>
+            <entry>okDialogFrontAction</entry>
+
+            <entry>front.dialog.ok</entry>
+
+            <entry>Closes the top most dialog. Icon and name set.</entry>
+          </row>
+
+          <row>
+            <entry>cancelDialogFrontAction</entry>
+
+            <entry>front.dialog.cancel</entry>
+
+            <entry>Closes the top most dialog. Icon and name set.</entry>
+          </row>
+
+          <row>
+            <entry>closeDialogAction</entry>
+
+            <entry>front.dialog.close</entry>
+
+            <entry>Closes the top most dialog.</entry>
+          </row>
+
+          <row>
+            <entry>modalDialogAction</entry>
+
+            <entry>front.dialog.open</entry>
+
+            <entry>Opens a modal dialog box that is parametrized out of
+            context values (title, view bound to its model, size, secondary
+            action list).</entry>
+          </row>
+
+          <row>
+            <entry>openFileAction</entry>
+
+            <entry>front.file.open</entry>
+
+            <entry>Let the user browse the local file system to choose a file.
+            The selected file content is placed in the context.</entry>
+          </row>
+
+          <row>
+            <entry>saveFileAction</entry>
+
+            <entry>front.file.save</entry>
+
+            <entry>Let the user browse the local file system to choose a file.
+            The selected file is used to save an arbitrary content taken from
+            the context.</entry>
+          </row>
+
+          <row>
+            <entry>nextModuleFilterPageAction</entry>
+
+            <entry>front.filter.next</entry>
+
+            <entry>Moves to the next result page of a filtered module.</entry>
+          </row>
+
+          <row>
+            <entry>previousModuleFilterPageAction</entry>
+
+            <entry>front.filter.previous</entry>
+
+            <entry>Moves to the previous result page of a filtered
+            module.</entry>
+          </row>
+
+          <row>
+            <entry>queryModuleFilterAction</entry>
+
+            <entry>front.filter.query</entry>
+
+            <entry>Performs the QBE query of a filtered module.</entry>
+          </row>
+
+          <row>
+            <entry>infoFrontAction</entry>
+
+            <entry>front.info.dynamic</entry>
+
+            <entry>Retrieves an information message from the context and
+            displays it to the user.</entry>
+          </row>
+
+          <row>
+            <entry>staticInfoFrontAction</entry>
+
+            <entry>front.info.static</entry>
+
+            <entry>Translates an information message statically parametrized
+            in the action and displays it to the user.</entry>
+          </row>
+
+          <row>
+            <entry>lovAction</entry>
+
+            <entry>front.lov</entry>
+
+            <entry>Pops-up a "list of values" dialog.</entry>
+          </row>
+
+          <row>
+            <entry>lovFindFrontAction</entry>
+
+            <entry>front.lov.find</entry>
+
+            <entry>Performs the QBE query of a "list of values".</entry>
+          </row>
+
+          <row>
+            <entry>nextLovPageFrontAction</entry>
+
+            <entry>front.lov.next</entry>
+
+            <entry>Moves to the next result page of a "list of
+            values".</entry>
+          </row>
+
+          <row>
+            <entry>lovOkFrontAction</entry>
+
+            <entry>front.lov.ok</entry>
+
+            <entry>Gets the selected result from a "list of values" and places
+            it in the context.</entry>
+          </row>
+
+          <row>
+            <entry>previousLovPageFrontAction</entry>
+
+            <entry>front.lov.previous</entry>
+
+            <entry>Moves to the previous result page of a "list of
+            values".</entry>
+          </row>
+
+          <row>
+            <entry>addMapToMasterFrontAction</entry>
+
+            <entry>front.map.add</entry>
+
+            <entry>Creates a new map and adds it to the master managed
+            collection.</entry>
+          </row>
+
+          <row>
+            <entry>cloneMapCollectionFrontAction</entry>
+
+            <entry>front.map.clone</entry>
+
+            <entry>Duplicates selected maps and adds the clones to the master
+            managed collection.</entry>
+          </row>
+
+          <row>
+            <entry>cloneMapCollectionFrontAction</entry>
+
+            <entry>front.map.clone</entry>
+
+            <entry>Duplicates selected maps and adds the clones to the master
+            managed collection.</entry>
+          </row>
+
+          <row>
+            <entry>cloneModuleObjectFrontAction</entry>
+
+            <entry>front.module.clone</entry>
+
+            <entry>Duplicates selected entities/components and adds the clones
+            to the module managed collection.</entry>
+          </row>
+
+          <row>
+            <entry>reloadModuleObjectFrontAction</entry>
+
+            <entry>front.module.reload</entry>
+
+            <entry>Reloads the module selected entity/component from the
+            persistent store. entities/components previously marked for
+            deletion are also restored.</entry>
+          </row>
+
+          <row>
+            <entry>removeFromModuleObjectFrontAction</entry>
+
+            <entry>front.module.remove</entry>
+
+            <entry>After user confirmation, marks the selected module
+            entities/components for deletion (next save operation) and removes
+            them from the module managed collection.</entry>
+          </row>
+
+          <row>
+            <entry>restartModuleFrontAction</entry>
+
+            <entry>front.module.reset</entry>
+
+            <entry>Restarts the current module.</entry>
+          </row>
+
+          <row>
+            <entry>saveModuleObjectFrontAction</entry>
+
+            <entry>front.module.save</entry>
+
+            <entry>Saves the module selected entities/components to the
+            persistent store and performs deletion of previously "marked for
+            deletion" entities/components.</entry>
+          </row>
+
+          <row>
+            <entry>saveModuleObjectAndGoBackFrontAction</entry>
+
+            <entry>front.module.save.back</entry>
+
+            <entry>Saves the module selected entities/components to the
+            persistent store and performs deletion of previously "marked for
+            deletion" entities/components. If successful, returns back
+            to the parent module.</entry>
+          </row>
+
+          <row>
+            <entry>parentModuleConnectorSelectionFrontAction</entry>
+
+            <entry>front.module.back</entry>
+
+            <entry>Returns back to the parent module.</entry>
+          </row>
+
+          <row>
+            <entry>moduleConnectorSelectionFrontAction</entry>
+
+            <entry>front.module.select</entry>
+
+            <entry>Gets a module out or the context and selects it in the
+            current workspace.</entry>
+          </row>
+
+          <row>
+            <entry>addAsChildModuleFrontAction</entry>
+
+            <entry>front.module.sub</entry>
+
+            <entry>Gets selected module objects, adds them as current module
+            children then selects them.</entry>
+          </row>
+
+          <row>
+            <entry>nextPinnedModuleAction</entry>
+
+            <entry>front.module.next</entry>
+
+            <entry>Navigates to the next pinned module in history.</entry>
+          </row>
+
+          <row>
+            <entry>previousPinnedModuleAction</entry>
+
+            <entry>front.module.previous</entry>
+
+            <entry>Navigates to the previous pinned module in history.</entry>
+          </row>
+
+          <row>
+            <entry>okCancelFrontAction</entry>
+
+            <entry>front.okcancel.dynamic</entry>
+
+            <entry>Retrieves an ok/cancel message out of the context and
+            displays it to the user.</entry>
+          </row>
+
+          <row>
+            <entry>staticOkCancelFrontAction</entry>
+
+            <entry>front.okcancel.static</entry>
+
+            <entry>Retrieves an ok/cancel message statically parametrized in
+            the action and displays it to the user.</entry>
+          </row>
+
+          <row>
+            <entry>changePasswordAction</entry>
+
+            <entry>front.password.change</entry>
+
+            <entry>Opens a dialog box allowing the user to initiate a password
+            change operation (old, new, check).</entry>
+          </row>
+
+          <row>
+            <entry>printOkFrontAction</entry>
+
+            <entry>front.print.ok</entry>
+
+            <entry>Retrieves the selected Jasper report and puts it in the
+            context for display/print.</entry>
+          </row>
+
+          <row>
+            <entry>resetPropertyFrontAction</entry>
+
+            <entry>front.property.reset</entry>
+
+            <entry>Resets a property to its default value.</entry>
+          </row>
+
+          <row>
+            <entry>displayReportAction</entry>
+
+            <entry>front.report.display</entry>
+
+            <entry>Displays/prints a Jasper report taken out of the context to
+            the user.</entry>
+          </row>
+
+          <row>
+            <entry>reportAction</entry>
+
+            <entry>front.report.dynamic</entry>
+
+            <entry>Retrieves a Jasper report definition out of the context,
+            opens the report parameters entry dialog, then triggers generation
+            and display/print.</entry>
+          </row>
+
+          <row>
+            <entry>editReportParametersAction</entry>
+
+            <entry>front.report.edit</entry>
+
+            <entry>Opens a dialog box for the user to input a Jasper report
+            parameters.</entry>
+          </row>
+
+          <row>
+            <entry>doPrintAction</entry>
+
+            <entry>front.report.print</entry>
+
+            <entry>Triggers generation and display/print of a Jasper report
+            after parameters input.</entry>
+          </row>
+
+          <row>
+            <entry>staticReportAction</entry>
+
+            <entry>front.report.static</entry>
+
+            <entry>Gets a Jasper report definition statically defined as an
+            action parameter, opens the report parameters entry dialog, then
+            triggers generation and display/print.</entry>
+          </row>
+
+          <row>
+            <entry>displayUrlFrontAction</entry>
+
+            <entry>front.url.dynamic</entry>
+
+            <entry>Targets the browser (actually a new browser window/tab) to
+            a URL retrieved from the context.</entry>
+          </row>
+
+          <row>
+            <entry>staticDisplayUrlFrontAction</entry>
+
+            <entry>front.url.static</entry>
+
+            <entry>Targets the browser (actually a new browser window/tab) to
+            a URL statically defined as an action parameter. The URL is
+            previously translated so thant it can be variabilized based on the
+            user language (used for online help for instance).</entry>
+          </row>
+
+          <row>
+            <entry>connectorSelectionFrontAction</entry>
+
+            <entry>front.view.select</entry>
+
+            <entry>Retrieves an object collection out of the context and
+            selects it on the collection view (table, list, tree).</entry>
+          </row>
+
+          <row>
+            <entry>wizardAction</entry>
+
+            <entry>front.wizard</entry>
+
+            <entry>Triggers a wizard dialog.</entry>
+          </row>
+
+          <row>
+            <entry>yesNoFrontAction</entry>
+
+            <entry>front.yesno.dynamic</entry>
+
+            <entry>Retrieves a yes/no binary question out of the context and
+            displays it to the user.</entry>
+          </row>
+
+          <row>
+            <entry>staticYesNoFrontAction</entry>
+
+            <entry>front.yesno.static</entry>
+
+            <entry>Retrieves a yes/no binary question statically parametrized
+            in the action and displays it to the user.</entry>
+          </row>
+
+          <row>
+            <entry>yesNoCancelFrontAction</entry>
+
+            <entry>front.yesnocancel.dynamic</entry>
+
+            <entry>Retrieves a yes/no/cancel binary question out of the
+            context and displays it to the user.</entry>
+          </row>
+
+          <row>
+            <entry>staticYesNoCancelFrontAction</entry>
+
+            <entry>front.yesnocancel.static</entry>
+
+            <entry>Retrieves a yes/no/cancel binary question statically
+            parametrized in the action and displays it to the user.</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </section>
+</chapter>

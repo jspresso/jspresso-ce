@@ -1,0 +1,43 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.jspresso.framework</groupId>
+    <artifactId>jspresso-root</artifactId>
+    <version>4.3-SNAPSHOT</version>
+    <relativePath>../root/pom.xml</relativePath>
+  </parent>
+  <artifactId>jspresso-flex-theme</artifactId>
+  <packaging>swc</packaging>
+  <name>Jspresso Framework - Flex - Theme</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.jspresso.framework</groupId>
+      <artifactId>jspresso-flex</artifactId>
+      <type>swc</type>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <sourceDirectory>${basedir}/src/main/flex</sourceDirectory>
+    <testSourceDirectory>${basedir}/src/test/flex</testSourceDirectory>
+    <plugins>
+      <plugin>
+        <groupId>net.flexmojos.oss</groupId>
+        <artifactId>flexmojos-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>default-compile-swc</id>
+            <phase>package</phase>
+            <goals>
+              <goal>compile-swc</goal>
+            </goals>
+            <configuration>
+              <targetPlayer>11.1.0</targetPlayer>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

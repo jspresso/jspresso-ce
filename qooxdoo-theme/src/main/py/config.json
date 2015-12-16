@@ -1,0 +1,72 @@
+{
+  "name"    : "jspresso-qooxdoo-theme",
+
+  "include" :
+  [
+    {
+      "path" : "${QOOXDOO_PATH}/tool/data/config/application.json"
+    },
+    {
+      "path" : "library.json",
+      "as"   : "jspresso-qooxdoo-theme"
+    }
+  ],
+
+  "export" :
+  [
+    "api",
+    "build",
+    "clean",
+    "distclean",
+    "fix",
+    "inspector",
+    "lint",
+    "migration",
+    "pretty",
+    "profiling",
+    "source",
+    "source-all",
+    "test",
+    "test-source",
+    "translation"
+  ],
+
+  "let" :
+  {
+    "TARGET"       : "../../../target",
+    "APPLICATION"  : "org.jspresso.framework.theme",
+    "QOOXDOO_PATH" : "../../../target/qooxdoo-sdk",
+    "QXTHEME"      : "qx.theme.Indigo",
+    "LOCALES"      : ["en"],
+    "ROOT"         : "..",
+    "BUILD_PATH"   : "${TARGET}/web"
+  },
+
+  "jobs" :
+  {
+    "common" :
+    {
+      "cache" :
+      {
+        "compile"     : "${TARGET}/cache",
+        "downloads"   : "${TARGET}/cache/downloads"
+      }
+      ,
+      "=include" :
+      [
+        "${APPLICATION_CLASS_NAME}"
+      ]
+    },
+    "libraries": {
+      "extend": ["jspresso-qooxdoo-theme::libraries"]
+    },
+    "build" :
+    {
+      "=run" :
+      [
+        "build-resources",
+        "build-script"
+      ]
+    }
+  }
+}

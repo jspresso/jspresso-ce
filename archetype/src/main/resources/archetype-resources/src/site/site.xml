@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Maven">
+  <bannerLeft>
+    <name>${applicationName}</name>
+    <src>images/logo.jpg</src>
+    <href>${companyUrl}</href>
+  </bannerLeft>
+  <body>
+    <links>
+      <item
+        name="${companyName}"
+        href="${companyUrl}" />
+    </links>
+
+    <menu name="${applicationName}">
+      <item
+        name="Introduction"
+        href="index.html" />
+    </menu>
+    <menu name="Beans Doc">
+      <item
+        name="Application beans"
+        href="beandocs/index.html" />
+    </menu>
+    <menu ref="parent" />
+    <menu ref="modules"/>
+    <menu ref="reports" />
+  </body>
+</project>

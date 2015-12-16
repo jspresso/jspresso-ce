@@ -1,0 +1,52 @@
+{
+  "name": "jspresso-qooxdoo",
+
+  "include": [
+    {
+      "path": "${QOOXDOO_PATH}/tool/data/config/application.json"
+    },
+    {
+      "path": "library.json",
+      "as": "jspresso-qooxdoo"
+    }
+  ],
+
+  "export": [
+    "api", "build", "clean", "distclean", "fix", "inspector", "lint", "migration", "pretty", "profiling", "source",
+    "source-all", "test", "test-source", "translation"
+  ],
+
+  "let": {
+    "TARGET": "../../../target",
+    "APPLICATION": "org.jspresso.framework",
+    "APPLICATION_CLASS_NAME": "org.jspresso.framework.application.frontend.Application",
+    "QOOXDOO_PATH": "../../../target/qooxdoo-sdk",
+    "ROOT": "..",
+    "BUILD_PATH": "${TARGET}/web"
+  },
+
+  // You only need to edit the remainder of this file, if you want to customize
+  // specific jobs, or add own job definitions.
+
+  "jobs": {
+    "common": {
+      "cache": {
+        "compile": "${TARGET}/cache",
+        "downloads": "${TARGET}/cache/downloads"
+      },
+      "=include": [
+        "${APPLICATION_CLASS_NAME}"
+      ]
+    },
+
+    "libraries": {
+      "extend": ["jspresso-qooxdoo::libraries"]
+    },
+
+    "build": {
+      "=run": [
+        "build-resources", "build-script"
+      ]
+    }
+  }
+}

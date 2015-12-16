@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.4//EN"
+"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<chapter id="chapter5">
+  <title>Application Structure</title>
+
+  <section>
+    <title>Controllers</title>
+
+    <section>
+      <title>Overview</title>
+
+      <para></para>
+
+      <figure>
+        <title>Controllers class diagram</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="50%"
+                       fileref="../uml/controllers.PNG" scalefit="1"
+                       width="100%" />
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Reference</title>
+
+      <para></para>
+
+      <xi:include href="../generated/AbstractController.xml"
+                  xmlns:xi="http://www.w3.org/2001/XInclude" />
+    </section>
+  </section>
+
+  <section>
+    <title>Modules</title>
+
+    <section>
+      <title>Overview</title>
+
+      <para></para>
+
+      <figure>
+        <title>Modules class diagram</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="50%"
+                       fileref="../uml/modules.PNG" scalefit="1" width="100%" />
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Reference</title>
+
+      <para></para>
+
+      <xi:include href="../generated/Workspace.xml"
+                  xmlns:xi="http://www.w3.org/2001/XInclude" />
+
+      <xi:include href="../generated/Module.xml"
+                  xmlns:xi="http://www.w3.org/2001/XInclude" />
+    </section>
+  </section>
+
+  <section>
+    <title>Enabling/Disabling</title>
+
+    <para>Jspresso goes beyond static, role-based, authorization by
+    introducing the concept of <emphasis>gate</emphasis>. A gate is a simple
+    monitor that can open or close based on certain (dynamic) rules. Jspresso
+    relies on gates to implement dynamic authorization that are most often
+    based on some kind of model sate.</para>
+
+    <para>There are various places in Jspresso where dynamic authorization can
+    be implemented :</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>model writability</emphasis> : once a model instance
+        is determined to be read-only, all views on this model are also
+        made.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>view writability</emphasis> : same as above but only
+        applies to a single view.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>action enablement</emphasis> : enables / disable
+        actions based on the model of the view they are installed in.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Wherever you want to use dynamic authorization, you can always
+    combine gates. The combination is conjunctive, meaning that
+    <emphasis>all</emphasis> gates must be open for the property (writability,
+    actionability) to be allowed. In other words, a single closed gate is
+    sufficient to forbid the property.</para>
+
+    <section>
+      <title>Overview</title>
+
+      <para></para>
+
+      <figure>
+        <title>Gates class diagram</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="60%"
+                       fileref="../uml/enablement.PNG" scalefit="1"
+                       width="100%" />
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Reference</title>
+
+      <para></para>
+
+      <xi:include href="../generated/AbstractGate.xml"
+                  xmlns:xi="http://www.w3.org/2001/XInclude" />
+    </section>
+  </section>
+
+  <section>
+    <title>Startup</title>
+
+    <section>
+      <title>Overview</title>
+
+      <para></para>
+
+      <figure>
+        <title>Startup class diagram</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="60%"
+                       fileref="../uml/startup.PNG" scalefit="1" width="100%" />
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+  </section>
+</chapter>

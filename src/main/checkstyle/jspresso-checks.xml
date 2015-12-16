@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.2//EN" "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
+
+<module name="Checker">
+  <module name="FileLength">
+    <property name="severity" value="warning" />
+    <property name="max" value="4500" />
+  </module>
+  <module name="NewlineAtEndOfFile">
+    <property name="severity" value="info" />
+    <property name="lineSeparator" value="lf" />
+    <property name="fileExtensions" value="java, xml, js, as, mxml, py, properties, txt" />
+  </module>
+  <module name="Translation">
+    <property name="severity" value="info" />
+  </module>
+  <module name="TreeWalker">
+    <property name="tabWidth" value="1" />
+    <module name="ArrayTypeStyle">
+      <property name="severity" value="info" />
+    </module>
+<!--
+    <module name="AvoidInlineConditionals">
+      <property name="severity" value="info" />
+    </module>
+-->
+    <module name="AvoidNestedBlocks">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="AvoidStarImport">
+      <property name="severity" value="info" />
+      <property name="allowClassImports" value="false" />
+      <property name="allowStaticMemberImports" value="true" />
+    </module>
+    <module name="ConstantName">
+      <property name="severity" value="info" />
+    </module>
+    <module name="EmptyBlock">
+      <property name="severity" value="warning" />
+      <property name="option" value="text" />
+    </module>
+    <module name="EmptyForIteratorPad">
+      <property name="severity" value="info" />
+    </module>
+    <module name="EmptyStatement">
+      <property name="severity" value="info" />
+    </module>
+    <module name="EqualsHashCode">
+      <property name="severity" value="error" />
+    </module>
+    <module name="FinalClass">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="HiddenField">
+      <property name="severity" value="warning" />
+      <property name="ignoreConstructorParameter" value="true" />
+      <property name="ignoreSetter" value="true" />
+    </module>
+    <module name="HideUtilityClassConstructor">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="IllegalImport">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="IllegalInstantiation">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="InnerAssignment">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="JavadocMethod">
+      <property name="severity" value="warning" />
+      <property name="scope" value="protected" />
+    </module>
+    <module name="JavadocStyle">
+      <property name="severity" value="warning" />
+      <property name="tokens" value="INTERFACE_DEF,CLASS_DEF,CTOR_DEF,VARIABLE_DEF" />
+    </module>
+    <module name="JavadocType">
+      <property name="severity" value="warning" />
+      <property name="scope" value="protected" />
+    </module>
+    <module name="JavadocVariable">
+      <property name="severity" value="warning" />
+      <property name="scope" value="protected" />
+    </module>
+    <module name="LeftCurly">
+      <property name="severity" value="info" />
+    </module>
+    <module name="LineLength">
+      <property name="severity" value="warning" />
+      <property name="max" value="130" />
+      <property name="tabWidth" value="2" />
+    </module>
+    <module name="LocalFinalVariableName">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="LocalVariableName">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="MemberName">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="MethodLength">
+      <property name="severity" value="warning" />
+      <property name="max" value="200" />
+    </module>
+    <module name="MethodName">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="MethodParamPad">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="MissingSwitchDefault">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="ModifierOrder">
+      <property name="severity" value="info" />
+    </module>
+    <module name="NeedBraces">
+      <property name="severity" value="info" />
+    </module>
+    <module name="NoWhitespaceAfter">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="NoWhitespaceBefore">
+      <property name="severity" value="info" />
+    </module>
+    <module name="OperatorWrap">
+      <property name="severity" value="info" />
+    </module>
+    <module name="PackageName">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="ParameterName">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="ParenPad">
+      <property name="severity" value="info" />
+    </module>
+    <module name="RedundantImport">
+      <property name="severity" value="info" />
+    </module>
+    <module name="RedundantModifier">
+      <property name="severity" value="info" />
+    </module>
+    <module name="RightCurly">
+      <property name="severity" value="info" />
+    </module>
+    <module name="SimplifyBooleanExpression">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="SimplifyBooleanReturn">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="StaticVariableName">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="TodoComment">
+      <property name="severity" value="info" />
+    </module>
+    <module name="TypeName">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="TypecastParenPad">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="UnusedImports">
+      <property name="severity" value="info" />
+      <property name="processJavadoc" value="false" />
+    </module>
+    <module name="UpperEll">
+      <property name="severity" value="info" />
+    </module>
+    <module name="VisibilityModifier">
+      <property name="severity" value="warning" />
+    </module>
+    <module name="WhitespaceAfter">
+      <property name="severity" value="info" />
+    </module>
+    <module name="WhitespaceAround">
+      <property name="severity" value="info" />
+    </module>
+  </module>
+</module>
+

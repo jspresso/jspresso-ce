@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2005-2014 Vincent Vandenschrick. All rights reserved.
+  ~
+  ~  This file is part of the Jspresso framework.
+  ~
+  ~  Jspresso is free software: you can redistribute it and/or modify
+  ~  it under the terms of the GNU Lesser General Public License as published by
+  ~  the Free Software Foundation, either version 3 of the License, or
+  ~  (at your option) any later version.
+  ~
+  ~  Jspresso is distributed in the hope that it will be useful,
+  ~  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~  GNU Lesser General Public License for more details.
+  ~
+  ~  You should have received a copy of the GNU Lesser General Public License
+  ~  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!--suppress SpringModelInspection -->
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+       default-lazy-init="true">
+
+  <!-- MongoDB root application context for the Jspresso framework. -->
+
+  <bean id="transactionManager" class="org.jspresso.framework.application.backend.persistence.FakeTransactionManager"/>
+
+  <bean id="transactionTemplate" class="org.jspresso.framework.application.backend.ControllerAwareTransactionTemplate">
+    <property name="transactionManager" ref="transactionManager"/>
+  </bean>
+
+  <bean id="triStateBooleanSupported" class="java.lang.Boolean">
+    <constructor-arg value="true"/>
+  </bean>
+
+  <bean id="queryFactoryBase" abstract="true"
+        class="org.jspresso.framework.model.persistence.mongo.criterion.DefaultQueryFactory">
+    <property name="triStateBooleanSupported" ref="triStateBooleanSupported"/>
+  </bean>
+
+  <bean id="queryFactory" parent="queryFactoryBase"/>
+
+  <bean id="applicationQueryRefiner"
+        class="org.jspresso.framework.application.backend.action.persistence.mongo.MockQueryRefiner"/>
+
+  <bean id="queryEntitiesBackActionBase" parent="abstractBackendAction"
+        class="org.jspresso.framework.application.backend.action.persistence.mongo.QueryEntitiesAction">
+    <property name="queryFactory" ref="queryFactory"/>
+    <property name="queryRefiner" ref="applicationQueryRefiner"/>
+  </bean>
+
+  <bean id="queryEntitiesBackAction" parent="queryEntitiesBackActionBase"/>
+
+  <bean name="controllerAwareEntityFactory" parent="basicEntityFactory"
+        class="org.jspresso.framework.application.backend.entity.ControllerAwareProxyEntityFactory"/>
+
+  <bean abstract="true" id="abstractMongoBackController" parent="abstractBackController"
+        class="org.jspresso.framework.application.backend.persistence.mongo.MongoBackendController">
+    <property name="mongoTemplate" ref="mongoTemplate"/>
+  </bean>
+
+  <bean id="smartEntityCloneFactoryBase" class="org.jspresso.framework.model.entity.SmartEntityCloneFactory"
+        depends-on="componentTuplizerInit">
+  </bean>
+
+  <bean id="smartEntityCloneFactory" parent="smartEntityCloneFactoryBase"/>
+
+  <bean id="applicationBackController" parent="abstractMongoBackController" scope="prototype"/>
+
+  <bean id="jspressoMappingContext"
+        class="org.jspresso.framework.model.persistence.mongo.JspressoMongoMappingContext">
+    <property name="descriptorRegistry" ref="controllerAwareEntityFactory"/>
+  </bean>
+
+  <bean class="org.jspresso.framework.application.backend.persistence.mongo.JspressoMongoEventListener">
+    <property name="entityFactory" ref="controllerAwareEntityFactory"/>
+  </bean>
+
+  <bean id="jspressoMappingConverter"
+        class="org.jspresso.framework.model.persistence.mongo.JspressoMappingMongoConverter">
+    <constructor-arg>
+      <bean class="org.springframework.data.mongodb.core.convert.DefaultDbRefResolver">
+        <constructor-arg ref="mongoDbFactory"/>
+      </bean>
+    </constructor-arg>
+    <constructor-arg ref="jspressoMappingContext"/>
+    <property name="customConversions" ref="conversions"/>
+  </bean>
+
+  <bean id="entityReadConverter" class="org.jspresso.framework.model.persistence.mongo.JspressoEntityReadConverter">
+    <property name="entityFactory" ref="controllerAwareEntityFactory"/>
+    <property name="collectionFactory" ref="componentCollectionFactory"/>
+    <property name="converter" ref="jspressoMappingConverter"/>
+  </bean>
+
+  <bean id="entityWriteConverter" class="org.jspresso.framework.model.persistence.mongo.JspressoEntityWriteConverter">
+    <property name="descriptorRegistry" ref="componentDescriptorRegistry"/>
+    <property name="converter" ref="jspressoMappingConverter"/>
+  </bean>
+
+  <bean id="conversions" class="org.springframework.data.mongodb.core.convert.CustomConversions">
+    <constructor-arg>
+      <list>
+        <ref bean="entityReadConverter"/>
+        <ref bean="entityWriteConverter"/>
+      </list>
+    </constructor-arg>
+  </bean>
+
+  <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+    <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
+    <constructor-arg name="mongoConverter" ref="jspressoMappingConverter"/>
+  </bean>
+
+</beans>

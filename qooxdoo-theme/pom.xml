@@ -1,0 +1,45 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.jspresso.framework</groupId>
+    <artifactId>jspresso-root</artifactId>
+    <version>4.3-SNAPSHOT</version>
+    <relativePath>../root/pom.xml</relativePath>
+  </parent>
+  <artifactId>jspresso-qooxdoo-theme</artifactId>
+  <packaging>pom</packaging>
+  <name>Jspresso Framework - Qooxdoo - Theme</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.qooxdoo</groupId>
+      <artifactId>qooxdoo-sdk</artifactId>
+      <type>zip</type>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-qooxdoo-sources</id>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <phase>generate-resources</phase>
+            <configuration>
+              <descriptors>
+                <descriptor>${basedir}/src/main/assembly/sources.xml</descriptor>
+              </descriptors>
+              <appendAssemblyId>false</appendAssemblyId>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+ </project>

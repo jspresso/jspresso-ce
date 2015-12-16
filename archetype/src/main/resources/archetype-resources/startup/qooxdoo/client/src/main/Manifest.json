@@ -1,0 +1,31 @@
+{
+  "info" : 
+  {
+    "name" : "${applicationName}",
+
+    "summary" : "",
+    "description" : "",
+    
+    "homepage" : "${companyUrl}",
+
+    "license" : "",
+    "authors" : 
+    [
+      {
+        "name" : "",
+        "email" : ""
+      }
+    ]
+  },
+  
+  "provides" : 
+  {
+    "namespace"   : "${package}",
+    "encoding"    : "utf-8",
+    "class"       : "js",
+    "resource"    : "resources",
+    "translation" : "translations",
+    "type"        : "application"
+  }
+}
+

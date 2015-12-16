@@ -1,0 +1,84 @@
+#set( $symbol_dollar = '$' )
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>${groupId}</groupId>
+    <artifactId>${rootArtifactId}</artifactId>
+    <version>${version}</version>
+    <relativePath>../../../pom.xml</relativePath>
+  </parent>
+  <artifactId>${artifactId}</artifactId>
+  <packaging>swf</packaging>
+  <name>${applicationName} - Startup - Flex - Client</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.jspresso.framework</groupId>
+      <artifactId>jspresso-flex</artifactId>
+      <type>swc</type>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.flex.framework.themes</groupId>
+      <artifactId>halo</artifactId>
+      <type>swc</type>
+      <scope>theme</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jspresso.framework</groupId>
+      <artifactId>jspresso-flex-theme</artifactId>
+      <type>swc</type>
+      <scope>theme</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <sourceDirectory>${symbol_dollar}{basedir}/src/main/flex</sourceDirectory>
+    <testSourceDirectory>${symbol_dollar}{basedir}/src/test/flex</testSourceDirectory>
+    <resources>
+      <resource>
+        <directory>${symbol_dollar}{basedir}/src/main/resources</directory>
+      </resource>
+      <resource>
+        <directory>${symbol_dollar}{project.build.directory}/generated-resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>net.flexmojos.oss</groupId>
+        <artifactId>flexmojos-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>default-compile-swf</id>
+            <phase>package</phase>
+            <goals>
+              <goal>compile-swf</goal>
+            </goals>
+            <configuration>
+             <targetPlayer>11.1.0</targetPlayer>
+            </configuration>
+          </execution>
+          <execution>
+            <id>generate-asdoc</id>
+            <phase>package</phase>
+            <goals>
+              <goal>asdoc</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <localesCompiled>
+            <locale>en_US</locale>
+          </localesCompiled>
+          <parameters>
+            <swf>${symbol_dollar}{project.artifactId}</swf>
+          </parameters>
+          <storepass/>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

@@ -1,0 +1,18 @@
+<assembly>
+  <id>dist-bin</id>
+  <formats>
+    <format>zip</format>
+    <format>tar.gz</format>
+  </formats>
+  <componentDescriptors>
+    <componentDescriptor>src/main/assembly/commons.xml</componentDescriptor>
+  </componentDescriptors>
+  <moduleSets>
+    <moduleSet>
+      <binaries>
+        <includeDependencies>false</includeDependencies>
+        <unpack>false</unpack>
+      </binaries>
+    </moduleSet>
+  </moduleSets>
+</assembly>

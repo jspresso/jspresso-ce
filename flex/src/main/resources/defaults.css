@@ -1,0 +1,227 @@
+/**
+* Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
+* <p>
+* This file is part of the Jspresso framework. Jspresso is free software: you
+* can redistribute it and/or modify it under the terms of the GNU Lesser
+* General Public License as published by the Free Software Foundation, either
+* version 3 of the License, or (at your option) any later version. Jspresso is
+* distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+* PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+* details. You should have received a copy of the GNU Lesser General Public
+* License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+@namespace mx "library://ns.adobe.com/flex/mx";
+@namespace resize "flex.utils.ui.resize.*";
+@namespace sepy "http://www.sephiroth.it/2006/mxml";
+@namespace jspresso "org.jspresso.framework.view.flex.*";
+
+mx|Application {
+  disabledOverlayAlpha: 0;
+}
+
+jspresso|EnhancedRichTextEditor {
+  borderThicknessLeft: 0;
+  borderThicknessRight: 0;
+  borderThicknessTop: 0;
+  borderThicknessBottom: 0;
+  headerHeight: 0;
+  statusStyleName: richTextEditorStatus;
+  textAreaStyleName: richTextEditorTextArea;
+}
+
+jspresso|CollapsiblePanel {
+  collapseDuration: 250;
+  borderAlpha: 1;
+  borderThicknessLeft: 2;
+  borderThicknessRight: 2;
+  borderThicknessBottom: 2;
+}
+
+resize|ResizablePanel {
+  disabledOverlayAlpha: 0;
+}
+
+sepy|CheckBoxExtended {
+  paddingLeft: 0;
+  paddingRight: 0;
+}
+
+.popUpButton {
+  textAlign: left;
+}
+
+.applicationControlBar {
+  fillAlphas: 0.5, 0.5;
+  fillColors: #BBBBBB, #666666;
+  horizontalGap: 2;
+}
+
+.drawerButton {
+  fontSize: 12;
+  textAlign: left;
+  fillAlphas: 1.0, 1.0, 0.82, 0.82;
+  cornerRadius: 4;
+  paddingLeft: 10;
+}
+
+.drawerAccordion {
+  headerStyleName: drawerAccordionHeader;
+}
+
+.drawerAccordionHeader {
+  fontSize: 12;
+  fillAlphas: 1.0, 1.0, 0.82, 0.82;
+  cornerRadius: 4;
+  paddingLeft: 10;
+}
+
+.drawerCloseRight {
+  up-skin: Embed(source="assets/images/closeaccordion2.png");
+  over-skin: Embed(source="assets/images/closeaccordion2.png");
+  down-skin: Embed(source="assets/images/closeaccordion2.png");
+  disabled-skin: Embed(source="assets/images/closeaccordion2.png");
+}
+
+.drawerCloseLeft {
+  up-skin: Embed(source="assets/images/closeaccordion2.png");
+  over-skin: Embed(source="assets/images/closeaccordion2.png");
+  down-skin: Embed(source="assets/images/closeaccordion2.png");
+  disabled-skin: Embed(source="assets/images/closeaccordion2.png");
+}
+
+.richTextEditorStatus {
+}
+
+.richTextEditorTextArea {
+}
+
+.form {
+  paddingLeft: 2;
+  paddingRight: 2;
+  paddingTop: 2;
+  paddingBottom: 2;
+  horizontalGap: 2;
+  verticalGap: 2;
+}
+
+.leftAsideLabelCell {
+  verticalAlign: middle;
+  horizontalAlign: right;
+  paddingTop: 2;
+}
+
+.rightAsideLabelCell {
+  verticalAlign: middle;
+  horizontalAlign: left;
+  paddingTop: 2;
+}
+
+.aboveLabelCell {
+  verticalAlign: middle;
+  horizontalAlign: left;
+}
+
+.leftComponentCell {
+  verticalAlign: middle;
+  horizontalAlign: left;
+}
+.rightComponentCell {
+  verticalAlign: middle;
+  horizontalAlign: right;
+}
+
+.leftLabelComponentCell {
+  verticalAlign: middle;
+  horizontalAlign: left;
+  paddingTop: 2;
+}
+
+.rightLabelComponentCell {
+  verticalAlign: middle;
+  horizontalAlign: right;
+  paddingTop: 2;
+}
+
+.borderContainer {
+  horizontalGap: 1;
+  verticalGap: 1;
+}
+
+.northCell {
+  paddingLeft: 2;
+  paddingRight: 2;
+}
+
+.westCell {
+  horizontalAlign: left;
+  paddingLeft: 2;
+}
+
+.centerCell {
+}
+
+.eastCell {
+  horizontalAlign: right;
+  paddingRight: 2;
+}
+
+.southCell {
+  paddingLeft: 2;
+  paddingRight: 2;
+}
+
+.constrainedGridContainer {
+  horizontalGap: 1;
+  verticalGap: 1;
+}
+
+.evenGridContainer {
+  horizontalGap: 1;
+  verticalGap: 1;
+}
+
+.dateTimeField {
+  horizontalGap: 1;
+  verticalGap: 0;
+  paddingTop: 2;
+  paddingBottom: 2;
+  paddingLeft: 0;
+  paddingRight: 0;
+}
+
+.htmlEditor {
+  headerHeight: 0;
+}
+
+.htmlText {
+  borderStyle: none;
+  focusAlpha: 0;
+}
+
+.actionField {
+  verticalAlign: middle;
+}
+
+.emptyActionField {
+  verticalAlign: middle;
+  borderStyle: none;
+}
+
+.filledActionField {
+  verticalAlign: middle;
+  borderStyle: solid;
+  borderThickness: 1;
+  borderColor: #FF0000;
+}
+
+.scrollableImage {
+  horizontalAlign: left;
+  verticalAlign: top;
+}
+
+.unscrollableImage {
+  horizontalAlign: center;
+  verticalAlign: middle;
+}

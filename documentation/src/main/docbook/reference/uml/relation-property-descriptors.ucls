@@ -1,0 +1,74 @@
+<class-diagram version="0.9.86" automaticImage="PNG" icons="true" always-add-relationships="false" 
+  generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
+  <interface corner="BOTTOM_RIGHT" language="java" 
+    name="org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor" project="jspresso-model" 
+    file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IRelationshipEndPropertyDescriptor.java" 
+    binary="false">    
+    <position x="384" y="-61" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <interface corner="BOTTOM_RIGHT" language="java" 
+    name="org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor" project="jspresso-model" 
+    file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IReferencePropertyDescriptor.java" 
+    binary="false">    
+    <position x="514" y="120" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <interface corner="BOTTOM_RIGHT" language="java" 
+    name="org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor" project="jspresso-model" 
+    file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/ICollectionPropertyDescriptor.java" 
+    binary="false">    
+    <position x="175" y="264" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <interface corner="BOTTOM_RIGHT" language="java" name="org.jspresso.framework.model.descriptor.ICollectionDescriptor" 
+    project="jspresso-model" 
+    file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/ICollectionDescriptor.java" 
+    binary="false">    
+    <position x="593" y="264" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </interface>  
+  <dependency>    
+    <source project="jspresso-model" name="org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/ICollectionPropertyDescriptor.java" 
+      binary="false"/>    
+    <target project="jspresso-model" name="org.jspresso.framework.model.descriptor.ICollectionDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/ICollectionDescriptor.java" 
+      binary="false"/>  
+  </dependency>  
+  <generalization>    
+    <source project="jspresso-model" name="org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/ICollectionPropertyDescriptor.java" 
+      binary="false"/>    
+    <target project="jspresso-model" 
+      name="org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IRelationshipEndPropertyDescriptor.java" 
+      binary="false"/>  
+  </generalization>  
+  <generalization>    
+    <source project="jspresso-model" name="org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IReferencePropertyDescriptor.java" 
+      binary="false"/>    
+    <target project="jspresso-model" 
+      name="org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor" 
+      file="/jspresso-model/src/main/java/org/jspresso/framework/model/descriptor/IRelationshipEndPropertyDescriptor.java" 
+      binary="false"/>  
+  </generalization>  
+  <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

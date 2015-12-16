@@ -1,0 +1,19 @@
+{
+  "name": "jspresso-qooxdoo",
+
+  "jobs": {
+    "libraries": {
+      "library": [
+        {
+          "manifest": "../../../target/qooxdoo-collapsable-panel-zip/Manifest.json"
+        },
+        {
+          "manifest": "../../../target/qooxdoo-htmlarea-zip/Manifest.json"
+        },
+        {
+          "manifest": "../../../target/qooxdoo-upload-widget-zip/Manifest.json"
+        }
+      ]
+    }
+  }
+}

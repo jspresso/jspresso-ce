@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" 
+  xmlns="http://java.sun.com/xml/ns/javaee" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+  <!-- Common web application configuration section -->
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+  <display-name>${applicationName}</display-name>
+  <description>${applicationDescription}</description>
+  <session-config>
+    <session-timeout>5</session-timeout>
+  </session-config>
+  <!-- End common web application configuration section -->
+
+  <!-- Jspresso all deployments section -->
+  <servlet>
+    <servlet-name>ResourceProviderServlet</servlet-name>
+    <servlet-class>org.jspresso.framework.application.backend.resources.server.ControllerAwareResourceProviderServlet</servlet-class>
+    <init-param>
+      <description>The regular expression used to allow proxied download URLs.</description>
+      <param-name>allowedLocalUrlRegex</param-name>
+      <!-- <param-value>(classpath|http):[A-Za-z0-9_\-/ ]*\.(png|jpg|jpeg|gif|pdf|swf.?)(&amp;width=\d*+&amp;height=\d*+)?</param-value> -->
+      <param-value/>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ResourceProviderServlet</servlet-name>
+    <url-pattern>/download</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ResourceProviderServlet</servlet-name>
+    <url-pattern>/upload</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>RemotePeerRegistryServlet</servlet-name>
+    <servlet-class>org.jspresso.framework.server.remote.RemotePeerRegistryServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RemotePeerRegistryServlet</servlet-name>
+    <url-pattern>/registry</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>RemoteUtilServlet</servlet-name>
+    <servlet-class>org.jspresso.framework.application.startup.remote.RemoteUtilServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RemoteUtilServlet</servlet-name>
+    <url-pattern>/util/*</url-pattern>
+  </servlet-mapping>
+
+  <listener>
+    <listener-class>${package}.webapp.TestDataContextListener</listener-class>
+  </listener>
+
+  <context-param>
+    <param-name>beanFactorySelector</param-name>
+    <param-value>${packageInPathFormat}/beanRefFactory.xml</param-value>
+  </context-param>
+  <context-param>
+    <param-name>appContextKey</param-name>
+    <param-value>${parentArtifactId}-remote-context</param-value>
+  </context-param>
+
+  <!-- Jspresso filter -->
+  <filter>
+    <filter-name>HttpRequestHolder</filter-name>
+    <filter-class>org.jspresso.framework.util.http.HttpRequestHolder</filter-class>
+  </filter>
+  <!-- End Jspresso all deployments section -->
+
+  <!-- MessageBroker Servlet -->
+  <servlet>
+    <servlet-name>MessageBrokerServlet</servlet-name>
+    <servlet-class>flex.messaging.MessageBrokerServlet</servlet-class>
+    <init-param>
+      <param-name>services.configuration.file</param-name>
+      <param-value>/WEB-INF/flex/services-config.xml</param-value>
+    </init-param>
+    <init-param>
+      <param-name>flex.write.path</param-name>
+      <param-value>/WEB-INF/flex</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>MessageBrokerServlet</servlet-name>
+    <url-pattern>/messagebroker/*</url-pattern>
+  </servlet-mapping>
+
+  <!-- for WebSphere deployment, please uncomment -->
+  <!--
+    <resource-ref>
+    <description>Flex Messaging WorkManager</description>
+    <res-ref-name>wm/MessagingWorkManager</res-ref-name>
+    <res-type>com.ibm.websphere.asynchbeans.WorkManager</res-type>
+    <res-auth>Container</res-auth>
+    <res-sharing-scope>Shareable</res-sharing-scope>
+  </resource-ref>
+  -->
+  
+  <filter-mapping>
+    <filter-name>HttpRequestHolder</filter-name>
+    <servlet-name>MessageBrokerServlet</servlet-name>
+  </filter-mapping>
+  <!--End Flex/BlazeDS deployment section -->
+
+  <!-- Qooxdoo RPC section -->
+  <servlet>
+    <servlet-name>QooxdooRpcServlet</servlet-name>
+    <servlet-class>org.jspresso.framework.qooxdoo.rpc.RpcServlet</servlet-class>
+    <init-param>
+      <param-name>referrerCheck</param-name>
+      <param-value>public</param-value>
+    </init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>QooxdooRpcServlet</servlet-name>
+    <url-pattern>*.qxrpc</url-pattern>
+  </servlet-mapping>
+
+  <filter-mapping>
+    <filter-name>HttpRequestHolder</filter-name>
+    <servlet-name>QooxdooRpcServlet</servlet-name>
+  </filter-mapping>
+  <!-- End Qooxdoo RPC section -->
+
+  <!-- Request params filter section -->
+  <filter>
+    <filter-name>RequestParamsHttpFilter</filter-name>
+    <filter-class>org.jspresso.framework.util.http.RequestParamsHttpFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>RequestParamsHttpFilter</filter-name>
+    <url-pattern>/flex/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>RequestParamsHttpFilter</filter-name>
+    <url-pattern>/html5/*</url-pattern>
+  </filter-mapping>
+  <!-- End request params filter section -->
+
+</web-app>

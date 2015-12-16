@@ -1,0 +1,604 @@
+/**
+* Copyright (c) 2005-2010 Vincent Vandenschrick. All rights reserved.
+* <p>
+* This file is part of the Jspresso framework. Jspresso is free software: you
+* can redistribute it and/or modify it under the terms of the GNU Lesser
+* General Public License as published by the Free Software Foundation, either
+* version 3 of the License, or (at your option) any later version. Jspresso is
+* distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+* PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+* details. You should have received a copy of the GNU Lesser General Public
+* License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+@namespace mx "library://ns.adobe.com/flex/mx";
+@namespace resize "flex.utils.ui.resize.*";
+@namespace sepy "http://www.sephiroth.it/2006/mxml";
+@namespace jspresso "org.jspresso.framework.view.flex.*";
+
+@font-face {
+  src:        url("fonts/wqy-microhei.ttf");
+  fontFamily: MicroHei;
+}
+
+@font-face {
+  src:        url("fonts/wqy-microhei-Bold.ttf");
+  fontFamily: MicroHei;
+  fontWeight: bold;
+}
+
+global {
+  color:      #3D3D3D;
+  fontFamily: MicroHei;
+}
+
+mx|Application {
+  disabledColor:  #D2D2D2;
+  focusThickness: 1px;
+  fontSize:       11px;
+  themeColor:     #00A0D0;
+}
+
+/*------------------------------------------------------------------------------
+  Header
+  --------------------------------------------------------------------------*/
+mx|Button.top {
+  color:             #FFFFFF;
+  fontSize:          12px;
+  fontWeight:        bold;
+  paddingLeft:       0;
+  paddingRight:      0;
+  skin:              ClassReference("org.jspresso.framework.theme.buttons.TopButtonSkin");
+  textRollOverColor: #FFFFFF;
+}
+
+mx|PopUpButton.top {
+  color:             #FFFFFF;
+  fontSize:          12px;
+  fontWeight:        bold;
+  paddingLeft:       0;
+  paddingRight:      0;
+  skin:              ClassReference("org.jspresso.framework.theme.buttons.TopPopUpButtonSkin");
+  textRollOverColor: #FFFFFF;
+  iconColor:         #FFFFFF;
+}
+
+.applicationName {
+  color:      #FFFFFF;
+  fontSize:   18px;
+  fontWeight: bold;
+  skin:       ClassReference("mx.skins.ProgrammaticSkin");
+  paddingTop: 5px;
+}
+
+.appNameNextPrevHBox {
+  horizontalGap: 10px;
+  verticalAlign: middle;
+}
+
+.header {
+  /*noinspection CssInvalidPropertyValue*/
+  backgroundGradientColors: #7FD0E8, #12A6D3;
+  borderSkin:               ClassReference("org.jspresso.framework.theme.header.HeaderBorderSkin");
+}
+
+.nextPreviousButtonBar {
+  buttonWidth:          24px;
+  arrowColor:           #FFFFFF;
+  color:                #000000;
+  firstButtonStyleName: "nextPreviousButtonBarFirstButton";
+  horizontalGap:        5px;
+  lastButtonStyleName:  "nextPreviousButtonBarLastButton";
+}
+
+.nextPreviousButtonBarFirstButton {
+  skin: ClassReference("org.jspresso.framework.theme.header.PreviousButtonSkin");
+}
+
+.nextPreviousButtonBarLastButton {
+  skin: ClassReference("org.jspresso.framework.theme.header.NextButtonSkin");
+}
+
+.topCenteredHBox {
+  horizontalCenter: 0;
+  horizontalGap:    15px;
+  verticalAlign:    middle;
+  verticalCenter:   0;
+}
+
+.topRightHBox {
+  horizontalGap:  15px;
+  verticalAlign:  middle;
+  verticalCenter: 0;
+}
+
+mx|List {
+  backgroundColor:   #FFFFFF;
+  borderColor:       #9E9E9E;
+  color:             #3D3D3D;
+  cornerRadius:      2px;
+  fontWeight:        normal;
+  rollOverColor:     #D7EFF7;
+  textRollOverColor: #3D3D3D;
+  textSelectedColor: #3D3D3D;
+  shadowDistance:    2px;
+}
+
+/* Alert ---------------------------------------------------------------------*/
+mx|Alert {
+  backgroundColor:       #FFFFFF;
+  borderThicknessBottom: 0;
+  borderThicknessLeft:   0;
+  borderThicknessRight:  0;
+  borderThicknessTop:    0;
+  borderColor:           #9E9E9E;
+  borderSkin:            ClassReference("org.jspresso.framework.theme.panel.PanelSkin");
+  cornerRadius:          2px;
+  headerColor:           #8DB03E;
+  headerHeight:          25px;
+  horizontalAlign:       right;
+  horizontalGap:         0;
+  verticalGap:           0;
+  paddingTop:            35px;
+  paddingBottom:         10px;
+  paddingLeft:           2px;
+  paddingRight:          2px;
+  messageStyleName:      "alertMessage";
+  titleStyleName:        "alertHeader";
+  buttonStyleName:       "borderButton";
+  titleBackgroundSkin:    ClassReference("org.jspresso.framework.theme.panel.TitleBackground");
+  /*noinspection CssInvalidPropertyValue*/
+  headerColors:          #8DB03E, #8DB03E;
+}
+
+.alertMessage {
+  color:       #3D3D3D;
+  fontSize:    12px;
+  fontWeight:  bold;
+  paddingLeft: 30px;
+}
+
+.alertHeader {
+  color:       #FFFFFF;
+  fontSize:    12px;
+  fontWeight:  bold;
+  paddingLeft: 30px;
+}
+
+/* Main Buttons --------------------------------------------------------------*/
+mx|Button {
+  fontSize:       11px;
+  fontWeight:     normal;
+  skin:           ClassReference("org.jspresso.framework.theme.buttons.NoBorderButtonSkin");
+  /*noinspection CssInvalidFunction*/
+  emphasizedSkin: ClassReference(null);
+  cornerRadius:   4px;
+}
+
+jspresso|JsoButton {
+  grayFactor: 0.3;
+}
+
+mx|Button.arrowPrevious {
+  fontSize:     11px;
+  fontWeight:   normal;
+  skin:         ClassReference("org.jspresso.framework.theme.buttons.ArrowPreviousButtonSkin");
+  cornerRadius: 4px;
+}
+
+mx|Button.arrowNext {
+  fontSize:     11px;
+  fontWeight:   normal;
+  skin:         ClassReference("org.jspresso.framework.theme.buttons.ArrowNextButtonSkin");
+  cornerRadius: 4px;
+}
+
+mx|PopUpButton {
+  fontSize:   11px;
+  fontWeight: normal;
+  skin:       ClassReference("org.jspresso.framework.theme.buttons.NoBorderPopUpButtonSkin");
+}
+
+jspresso|JsoPopUpButton {
+  grayFactor: 0.3;
+}
+
+mx|Button.borderButton {
+  fontWeight:   normal;
+  paddingLeft:  2px;
+  paddingRight: 2px;
+  skin:         ClassReference("org.jspresso.framework.theme.buttons.BorderButtonSkin");
+}
+
+mx|PopUpButton.borderPopUp {
+  fontWeight:   normal;
+  paddingLeft:  2px;
+  paddingRight: 2px;
+  skin:         ClassReference("org.jspresso.framework.theme.buttons.BorderPopUpButtonSkin");
+}
+
+mx|Button.quitButton {
+  icon:         Embed(source="images/icon/quit.png");
+  paddingLeft:  0;
+  paddingRight: 0;
+  skin:         ClassReference("org.jspresso.framework.theme.header.CircleButtonSkin");
+}
+
+mx|ComboBox.noBorderComboBox {
+  color:             #3D3D3D;
+  fontSize:          11px;
+  fontWeight:        normal;
+  skin:              ClassReference("org.jspresso.framework.theme.buttons.NoBorderComboBoxArrowSkin");
+  selectionColor:    #EDEDED;
+  textAlign:         left;
+  textRollOverColor: #3D3D3D;
+  textSelectedColor: #3D3D3D;
+  disabledColor:     #6D6D6D;
+}
+
+mx|ComboBox.borderComboBox {
+  color:             #3D3D3D;
+  fontSize:          11px;
+  fontWeight:        normal;
+  skin:              ClassReference("org.jspresso.framework.theme.buttons.BorderComboBoxArrowSkin");
+  selectionColor:    #EDEDED;
+  textAlign:         left;
+  textRollOverColor: #3D3D3D;
+  textSelectedColor: #3D3D3D;
+  disabledColor:     #6D6D6D;
+}
+
+/* CheckBox ------------------------------------------------------------------*/
+mx|CheckBox {
+  icon:              ClassReference("org.jspresso.framework.theme.CheckBoxIcon");
+  textRollOverColor: #3D3D3D;
+  textSelectedColor: #3D3D3D;
+}
+
+/* ControlBar ---------------------------------------------------------------*/
+mx|ApplicationControlBar {
+  paddingTop:        1px;
+  paddingBottom:     1px;
+  paddingLeft:       5px;
+  paddingRight:      5px;
+  verticalAlign:     middle;
+  horizontalAlign:   left;
+  /*borderAlpha:       0;*/
+  /*dropShadowEnabled: false;*/
+  cornerRadius:      0;
+}
+
+.toolBar {
+  /*noinspection CssInvalidPropertyValue*/
+  fillColors: #FFFFFF, #FFFFFF;
+  /*noinspection CssInvalidPropertyValue*/
+  fillAlphas: 1, 1;
+}
+
+/* ColorPicker ---------------------------------------------------------------*/
+mx|ColorPicker {
+  skin:                 ClassReference("org.jspresso.framework.theme.ColorPickerSkin");
+  swatchPanelStyleName: "colorPickerSwatchStyle";
+}
+
+.colorPickerSwatchStyle {
+  backgroundColor:           #FBFBFB;
+  borderColor:               #CCCCCC;
+  borderStyle:               solid;
+  columnCount:               10;
+  cornerRadius:              10px;
+  horizontalGap:             5px;
+  verticalGap:               5px;
+  swatchBorderSize:          0;
+  swatchGridBackgroundColor: #FBFBFB;
+  swatchHighlightColor:      #000000;
+  swatchHighlightSize:       1px;
+  swatchHeight:              14px;
+  swatchWidth:               14px;
+}
+
+/* DataGrid ------------------------------------------------------------------*/
+mx|DataGrid {
+  /*noinspection CssInvalidPropertyValue*/
+  alternatingItemColors: #FFFFFF, #F1F7F7;
+  /*noinspection CssInvalidPropertyValue*/
+  headerColors:          #FFFFFF, #E6E6E6;
+  headerBackgroundSkin:  ClassReference("org.jspresso.framework.theme.datagrid.DataGridHeaderBackgroundSkin");
+  headerSeparatorSkin:   ClassReference("org.jspresso.framework.theme.datagrid.DataGridHeaderSeparator");
+  headerStyleName:       "dataGridHeader";
+  sortArrowSkin:         ClassReference("org.jspresso.framework.theme.datagrid.DataGridSortArrow");
+  rollOverColor:         #D9F1F8;
+  selectionColor:        #D9F1F8;
+  textSelectedColor:     #3D3D3D;
+  verticalGridLines:     true;
+  verticalGridLineColor: #D9D9D9;
+}
+
+.dataGridHeader {
+  fontWeight:  bold;
+  paddingLeft: 5px;
+  textAlign:   left;
+}
+
+mx|AdvancedDataGrid {
+  /*noinspection CssInvalidPropertyValue*/
+  alternatingItemColors: #FFFFFF, #F1F7F7;
+  headerBackgroundSkin:  ClassReference("org.jspresso.framework.theme.datagrid.DataGridHeaderBackgroundSkin");
+  headerSeparatorSkin:   ClassReference("org.jspresso.framework.theme.datagrid.DataGridHeaderSeparator");
+  headerStyleName:       "dataGridHeader";
+  sortArrowSkin:         ClassReference("org.jspresso.framework.theme.datagrid.DataGridSortArrow");
+  rollOverColor:         #D9F1F8;
+  selectionColor:        #D9F1F8;
+  textSelectedColor:     #3D3D3D;
+  verticalGridLines:     true;
+  verticalGridLineColor: #D9D9D9;
+}
+
+/* DividedBox ----------------------------------------------------------------*/
+mx|DividedBox {
+  dividerSkin: ClassReference("org.jspresso.framework.theme.dividedbox.DividedBoxDividerSkin");
+}
+
+/* Panel ---------------------------------------------------------------------*/
+mx|Panel {
+  backgroundColor:       #FFFFFF;
+
+  borderThicknessBottom: 1px;
+  borderThicknessLeft:   1px;
+  borderThicknessRight:  1px;
+  borderThicknessTop:    1px;
+  borderColor:           #9E9E9E;
+  borderSkin:            ClassReference("org.jspresso.framework.theme.panel.PanelSkin");
+  cornerRadius:          5px;
+  headerColor:           #8DB03E;
+  headerHeight:          25px;
+  horizontalAlign:       right;
+  horizontalGap:         0;
+  verticalGap:           0;
+  paddingBottom:         2px;
+  paddingLeft:           2px;
+  paddingRight:          2px;
+  paddingTop:            2px;
+  titleStyleName:        "panelHeader";
+}
+
+jspresso|JsoPanel {
+  grayFactor: 1.0;
+}
+
+.panelHeader {
+  color:       #FFFFFF;
+  fontSize:    12px;
+  fontWeight:  bold;
+  paddingLeft: 30px;
+}
+
+/* RadioButton ---------------------------------------------------------------*/
+mx|RadioButton {
+  icon:              ClassReference("org.jspresso.framework.theme.RadioButtonIcon");
+  textRollOverColor: #3D3D3D;
+  textSelectedColor: #3D3D3D;
+}
+
+/* RichTextEditor ------------------------------------------------------------*/
+jspresso|JsoRichTextEditor {
+  paddingBottom: 0;
+  paddingLeft:   0;
+  paddingRight:  0;
+  paddingTop:    0;
+  borderColor:   #FFFFFF;
+}
+
+/* ScrollBars ----------------------------------------------------------------*/
+mx|HScrollBar {
+  downArrowSkin: ClassReference("mx.skins.ProgrammaticSkin");
+  thumbSkin:     ClassReference("org.jspresso.framework.theme.scrollbars.HScrollThumbSkin");
+  trackSkin:     ClassReference("mx.skins.ProgrammaticSkin");
+  upArrowSkin:   ClassReference("mx.skins.ProgrammaticSkin");
+}
+
+mx|VScrollBar {
+  downArrowSkin: ClassReference("mx.skins.ProgrammaticSkin");
+  thumbSkin:     ClassReference("org.jspresso.framework.theme.scrollbars.VScrollThumbSkin");
+  trackSkin:     ClassReference("mx.skins.ProgrammaticSkin");
+  upArrowSkin:   ClassReference("mx.skins.ProgrammaticSkin");
+}
+
+/* TabNavigator --------------------------------------------------------------------*/
+mx|TabNavigator {
+  paddingTop:    2px;
+  paddingBottom: 2px;
+  verticalGap:   2px;
+  horizontalGap: 2px;
+}
+
+mx|TabBar {
+  buttonHeight:             25px;
+  horizontalGap:            0;
+  lastTabStyleName:         "tab";
+  selectedTabTextStyleName: "tabSelectedButtonTextStyle";
+  tabStyleName:             "tab";
+  paddingBottom:            1px;
+}
+
+.tabBarContainer {
+  borderSkin: ClassReference("org.jspresso.framework.theme.tabbar.TabBarContainerSkin");
+}
+
+.tab {
+  borderColor:   #D0D0D0;
+  cornerRadius:  3px;
+  fontWeight:    bold;
+  paddingBottom: 0;
+  paddingTop:    4px;
+  skin:          ClassReference("org.jspresso.framework.theme.tabbar.TabSkin");
+}
+
+.tabSelectedButtonTextStyle {
+  color:             #FFFFFF;
+  fontWeight:        bold;
+  textRollOverColor: #FFFFFF;
+}
+
+/* Text containers -----------------------------------------------------------*/
+mx|TextArea {
+  borderColor:             #888888;
+  backgroundColor:         #FEFEFE;
+  backgroundDisabledColor: #ECECEC;
+  borderSkin:              ClassReference("org.jspresso.framework.theme.TextAreaSkin");
+  focusSkin:               ClassReference("org.jspresso.framework.theme.TextAreaFocusSkin");
+  fontFamily:              null;
+}
+
+mx|TextInput {
+  borderColor:             #888888;
+  backgroundColor:         #FEFEFE;
+  backgroundDisabledColor: #ECECEC;
+  borderSkin:              ClassReference("org.jspresso.framework.theme.TextInputSkin");
+  focusSkin:               ClassReference("org.jspresso.framework.theme.TextInputFocusSkin");
+  paddingBottom:           0;
+  paddingTop:              3px;
+}
+
+/* Tooltip -------------------------------------------------------------------*/
+mx|ToolTip {
+  backgroundColor: #3D3D3D;
+  borderSkin:      ClassReference("org.jspresso.framework.theme.ToolTipBorder");
+  color:           #FFFFFF;
+  cornerRadius:    2px;
+  fontSize:        12px;
+  paddingBottom:   0;
+  paddingLeft:     6px;
+  paddingRight:    6px;
+  paddingTop:      1px;
+}
+
+/* Misc classes --------------------------------------------------------------*/
+.applicationContent {
+  horizontalGap: 1px;
+  paddingBottom: 0;
+  paddingRight:  0;
+  verticalAlign: top;
+}
+
+.centralViewStack {
+  /*noinspection CssInvalidPropertyValue*/
+  backgroundGradientColors: #FFFFFF, #F2F2F2;
+  borderSkin:               ClassReference("org.jspresso.framework.theme.CentralViewStackBorderSkin");
+  borderStyle:              none;
+  paddingBottom:            10px;
+  paddingLeft:              10px;
+  paddingRight:             10px;
+  paddingTop:               10px;
+}
+
+.clearPadding {
+  paddingBottom: 0;
+  paddingLeft:   0;
+  paddingRight:  0;
+  paddingTop:    0;
+}
+
+/* Left Side -----------------------------------------------------------------*/
+.leftAccordion {
+  backgroundColor: #F6F6F6;
+  borderThickness: 0;
+  headerStyleName: "leftAccordionHeader";
+  headerHeight:    35px;
+  horizontalGap:   0;
+  verticalGap:     0;
+}
+
+.leftAccordionHeader {
+  color:             #D1251D;
+  fontSize:          14px;
+  fontWeight:        bold;
+  paddingLeft:       35px;
+  skin:              ClassReference("org.jspresso.framework.theme.accordion.AccordionHeaderSkin");
+  textRollOverColor: #D1251D;
+  textSelectedColor: #D1251D;
+}
+
+.leftAccordionVerticalHeader {
+  color:             #D1251D;
+  backgroundColor:   #F0F0F0;
+  backgroundAlpha:   1;
+  fontSize:          14px;
+  fontWeight:        bold;
+  paddingLeft:       35px;
+  skin:              ClassReference("org.jspresso.framework.theme.buttons.GreyButtonSkin");
+  textRollOverColor: #D1251D;
+  textSelectedColor: #D1251D;
+  textAlign:         left;
+}
+
+.accordionCloseButton {
+  skin: ClassReference("mx.skins.ProgrammaticSkin");
+  icon: Embed(source="images/icon/circle-icon-minus.png");
+}
+
+mx|Tree {
+  borderStyle:          none;
+  borderThickness:      0;
+  disclosureClosedIcon: Embed(source="images/tree/tree-closed-icon.png");
+  disclosureOpenIcon:   Embed(source="images/tree/tree-open-icon.png");
+  fontSize:             13px;
+  horizontalGap:        10px;
+  paddingLeft:          20px;
+  paddingRight:         10px;
+  rollOverColor:        #EDEDED;
+  textSelectedColor:    #FFFFFF;
+}
+
+jspresso|JsoTreeItemRenderer {
+  grayFactor: 0.3;
+}
+
+.treeJustNormal {
+  fontWeight: normal;
+}
+
+.treeJustBold {
+  fontWeight: bold;
+}
+
+/* -------------------------------------------------------------------------- */
+
+mx|DateChooser {
+  nextMonthDisabledSkin:  Embed(source="images/dateChooser/DateChooser_nextMonthDisabledSkin.png");
+  nextMonthDownSkin:      Embed(source="images/dateChooser/DateChooser_nextMonthDownSkin.png");
+  nextMonthOverSkin:      Embed(source="images/dateChooser/DateChooser_nextMonthOverSkin.png");
+  nextMonthUpSkin:        Embed(source="images/dateChooser/DateChooser_nextMonthUpSkin.png");
+  nextYearDisabledSkin:   Embed(source="images/dateChooser/DateChooser_nextYearDisabledSkin.png");
+  nextYearDownSkin:       Embed(source="images/dateChooser/DateChooser_nextYearDownSkin.png");
+  nextYearOverSkin:       Embed(source="images/dateChooser/DateChooser_nextYearOverSkin.png");
+  nextYearUpSkin:         Embed(source="images/dateChooser/DateChooser_nextYearUpSkin.png");
+  prevMonthDisabledSkin:  Embed(source="images/dateChooser/DateChooser_prevMonthDisabledSkin.png");
+  prevMonthDownSkin:      Embed(source="images/dateChooser/DateChooser_prevMonthDownSkin.png");
+  prevMonthOverSkin:      Embed(source="images/dateChooser/DateChooser_prevMonthOverSkin.png");
+  prevMonthUpSkin:        Embed(source="images/dateChooser/DateChooser_prevMonthUpSkin.png");
+  prevYearDisabledSkin:   Embed(source="images/dateChooser/DateChooser_prevYearDisabledSkin.png");
+  prevYearDownSkin:       Embed(source="images/dateChooser/DateChooser_prevYearDownSkin.png");
+  prevYearOverSkin:       Embed(source="images/dateChooser/DateChooser_prevYearOverSkin.png");
+  prevYearUpSkin:         Embed(source="images/dateChooser/DateChooser_prevYearUpSkin.png");
+  rollOverIndicatorSkin:  Embed(source="images/dateChooser/DateChooser_rollOverIndicatorSkin.png");
+  selectionIndicatorSkin: Embed(source="images/dateChooser/DateChooser_selectionIndicatorSkin.png");
+  todayIndicatorSkin:     Embed(source="images/dateChooser/DateChooser_todayIndicatorSkin.png");
+  color:                  #005B94;
+}
+
+mx|DateField {
+  disabledSkin: Embed(source="images/dateChooser/DateField_disabledSkin.png");
+  downSkin:     Embed(source="images/dateChooser/DateField_downSkin.png");
+  overSkin:     Embed(source="images/dateChooser/DateField_overSkin.png");
+  upSkin:       Embed(source="images/dateChooser/DateField_upSkin.png");
+  /*noinspection CssInvalidFunction*/
+  icon:         ClassReference(null);
+}
+
+/* Boxes */
+mx|Box {
+  verticalGap:   2px;
+  horizontalGap: 2px;
+}

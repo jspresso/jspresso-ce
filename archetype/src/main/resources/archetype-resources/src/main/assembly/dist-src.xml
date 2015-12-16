@@ -1,0 +1,17 @@
+<assembly>
+  <id>dist-src</id>
+  <formats>
+    <format>zip</format>
+    <format>tar.gz</format>
+  </formats>
+  <componentDescriptors>
+    <componentDescriptor>src/main/assembly/commons.xml</componentDescriptor>
+  </componentDescriptors>
+  <moduleSets>
+    <moduleSet>
+      <sources>
+        <includeModuleDirectory>true</includeModuleDirectory>
+      </sources>
+    </moduleSet>
+  </moduleSets>
+</assembly>

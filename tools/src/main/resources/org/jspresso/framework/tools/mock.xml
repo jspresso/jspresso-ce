@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--suppress SpringModelInspection, SpringModelInspection, SpringModelInspection, SpringModelInspection, SpringModelInspection -->
+<beans
+  xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+  default-lazy-init="true">
+
+  <bean
+    id="queryEntitiesBackAction"
+    class="org.jspresso.framework.tools.mockups.QueryEntitiesActionMock" />
+
+  <bean
+    id="removeCollectionFromMasterBackAction"
+    class="org.jspresso.framework.application.backend.action.RemoveCollectionFromMasterAction" />
+
+  <bean
+    id="smartEntityCloneFactory"
+    class="org.jspresso.framework.model.entity.SmartEntityCloneFactory">
+  </bean>
+
+  <bean
+    id="applicationFrontController"
+    parent="abstractFrontController"
+    class="org.jspresso.framework.tools.viewtester.MockSwingController"
+    scope="prototype">
+    <property
+      name="viewFactory"
+      ref="viewFactory" />
+  </bean>
+
+  <bean
+    id="applicationBackController"
+    parent="abstractBackController"
+    class="org.jspresso.framework.tools.viewtester.MockBackController"
+    scope="prototype">
+    <property
+      name="applicationSession"
+      ref="applicationSession" />
+    <property name="transactionTemplate"><null/></property>
+  </bean>
+
+  <!--<bean
+    id="transactionTemplate"
+    class="org.springframework.transaction.support.TransactionTemplate">
+    <property name="transactionManager">
+      <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+      <property name="dataSource" ref="dataSource"/>
+      </bean>
+    </property>
+  </bean>-->
+</beans>

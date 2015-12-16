@@ -1,0 +1,164 @@
+#set( $symbol_dollar = '$' )
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>${groupId}</groupId>
+    <artifactId>${rootArtifactId}</artifactId>
+    <version>${version}</version>
+    <relativePath>../../../pom.xml</relativePath>
+  </parent>
+  <artifactId>${artifactId}</artifactId>
+  <packaging>jar</packaging>
+  <name>${applicationName} - Startup - Qooxdoo - Client</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.qooxdoo</groupId>
+      <artifactId>qooxdoo-sdk</artifactId>
+      <type>zip</type>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jspresso.framework</groupId>
+      <artifactId>jspresso-qooxdoo-client</artifactId>
+      <type>zip</type>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jspresso.framework</groupId>
+      <artifactId>jspresso-qooxdoo-theme</artifactId>
+      <type>zip</type>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+  
+  <build>
+    <resources>
+      <resource>
+        <directory>target/web</directory>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack-qooxdoo-sdk</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <includeArtifactIds>qooxdoo-sdk</includeArtifactIds>
+              <outputDirectory>${symbol_dollar}{project.build.directory}/qooxdoo-sdk</outputDirectory>
+            </configuration>
+          </execution>
+           <execution>
+            <id>unpack-jspresso-qooxdoo</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${symbol_dollar}{project.build.directory}</outputDirectory>
+              <includeGroupIds>org.jspresso.framework</includeGroupIds>
+              <useSubDirectoryPerArtifact>true</useSubDirectoryPerArtifact>
+              <stripVersion>true</stripVersion>
+            </configuration>
+          </execution>
+          <execution>
+            <id>unpack-qooxdoo-contribs</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${symbol_dollar}{project.build.directory}</outputDirectory>
+              <includeGroupIds>org.qooxdoo</includeGroupIds>
+              <excludeArtifactIds>qooxdoo-sdk</excludeArtifactIds>
+              <useSubDirectoryPerArtifact>true</useSubDirectoryPerArtifact>
+              <stripVersion>true</stripVersion>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>compile-qooxdoo</id>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <phase>prepare-package</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <executable>python</executable>
+          <workingDirectory>src/main/py</workingDirectory>
+          <arguments>
+            <argument>${symbol_dollar}{project.build.directory}/qooxdoo-sdk/tool/bin/generator.py</argument>
+            <argument>source,build,source-mobile,build-mobile</argument>
+          </arguments>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>web-debug</id>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <phase>prepare-package</phase>
+            <configuration>
+              <target>
+                <property name="web-debug.dir" value="${symbol_dollar}{project.build.directory}/web-debug"/>
+                <mkdir dir="${symbol_dollar}{web-debug.dir}"/>
+                <replace dir="${symbol_dollar}{web-debug.dir}" token="../../../../target"
+                         value="file:///${symbol_dollar}{project.build.directory}">
+                  <include name="**/*.js"/>
+                </replace>
+                <replace dir="${symbol_dollar}{web-debug.dir}" token="../../../target"
+                         value="file:///${symbol_dollar}{project.build.directory}">
+                  <include name="**/*.js"/>
+                </replace>
+                <replace dir="${symbol_dollar}{web-debug.dir}" token="../../"
+                         value="file:///${symbol_dollar}{basedir}/src/main/">
+                  <include name="**/*.js"/>
+                </replace>
+                <replace dir="${symbol_dollar}{web-debug.dir}" token="../"
+                         value="file:///${symbol_dollar}{basedir}/src/main/">
+                  <include name="**/*.js"/>
+                </replace>
+                <replace dir="${symbol_dollar}{web-debug.dir}" token="\" value="/">
+                  <include name="**/*.js"/>
+                </replace>
+                <replace dir="${symbol_dollar}{web-debug.dir}" token="//(" value="\/(">
+                  <include name="**/*.js"/>
+                </replace>
+                <delete dir="${symbol_dollar}{project.build.directory}/antrun"/>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>package webapp resources</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>resources</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

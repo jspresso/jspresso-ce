@@ -1,0 +1,19 @@
+<component>
+  <fileSets>
+    <fileSet>
+      <includes>
+        <include>README*</include>
+        <include>LICENSE*</include>
+        <include>NOTICE*</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>target/site</directory>
+      <outputDirectory>doc</outputDirectory>
+      <includes>
+        <include>apidocs/**</include>
+        <include>beandocs/**</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</component>

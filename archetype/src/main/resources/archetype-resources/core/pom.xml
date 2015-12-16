@@ -1,0 +1,254 @@
+#set( $symbol_dollar = '$' )
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>${groupId}</groupId>
+    <artifactId>${rootArtifactId}</artifactId>
+    <version>${version}</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+  <artifactId>${artifactId}</artifactId>
+  <packaging>jar</packaging>
+  <name>${applicationName} - Core</name>
+  <dependencies>
+    <dependency>
+      <groupId>org.jspresso.framework</groupId>
+      <artifactId>jspresso-app-template-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jspresso.framework</groupId>
+      <artifactId>jspresso-app-launch-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+  <profiles>
+#if(${persistence_hibernate_or_mongo} == "hibernate")
+    <profile>
+      <id>generate-ddl-scripts</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>hibernate3-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>generate-mysql-schema</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>hbm2ddl</goal>
+                </goals>
+                <configuration>
+                  <components>
+                    <component>
+                      <name>hbm2ddl</name>
+                    </component>
+                  </components>
+                  <componentProperties>
+                    <implementation>configuration</implementation>
+                    <drop>false</drop>
+                    <export>false</export>
+                    <format>true</format>
+                    <propertyfile>conf/schema-export-mysql-innodb.properties</propertyfile>
+                    <outputfilename>${rootArtifactId}-schema-mysql-innodb.sql</outputfilename>
+                    <scan-classes>true</scan-classes>
+                  </componentProperties>
+                </configuration>
+              </execution>
+              <execution>
+                <id>generate-postgresql-schema</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>hbm2ddl</goal>
+                </goals>
+                <configuration>
+                  <components>
+                    <component>
+                      <name>hbm2ddl</name>
+                    </component>
+                  </components>
+                  <componentProperties>
+                    <implementation>configuration</implementation>
+                    <drop>false</drop>
+                    <export>false</export>
+                    <format>true</format>
+                    <propertyfile>conf/schema-export-postgresql.properties</propertyfile>
+                    <outputfilename>${rootArtifactId}-schema-postgresql.sql</outputfilename>
+                    <scan-classes>true</scan-classes>
+                  </componentProperties>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-ddl-scripts</id>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+                <phase>package</phase>
+                <configuration>
+                  <descriptors>
+                    <descriptor>${symbol_dollar}{basedir}/src/main/assembly/ddl-scripts.xml</descriptor>
+                  </descriptors>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+#end
+  </profiles>
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <directory>${symbol_dollar}{project.build.directory}/generated-resources/jasperreports</directory>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.jspresso.maven</groupId>
+        <artifactId>sjs-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-dsl-application</id>
+            <goals>
+              <goal>compile-sjs</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.jspresso.maven</groupId>
+        <artifactId>entitygenerator-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-entities</id>
+            <goals>
+              <goal>generate-entities</goal>
+            </goals>
+            <configuration>
+              <beanFactorySelector>${packageInPathFormat}/beanRefFactory.xml</beanFactorySelector>
+              <applicationContextKey>${rootArtifactId}-model-context</applicationContextKey>
+              <templateResourcePath>${symbol_dollar}{generator.templateResourcePath}</templateResourcePath>
+              <templateName>${symbol_dollar}{generator.templateName}</templateName>
+              <includePackages>
+                <param>${package}.model</param>
+              </includePackages>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+#if(${persistence_hibernate_or_mongo} == "hibernate")
+      <plugin>
+        <groupId>org.codehaus.xdoclet</groupId>
+        <artifactId>maven2-xdoclet2-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>xdoclet-hibernate</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>xdoclet</goal>
+            </goals>
+            <configuration>
+              <configs>
+                <config>
+                  <components>
+                    <component>
+                      <classname>org.xdoclet.plugin.hibernate.HibernateMappingPlugin</classname>
+                      <params>
+                        <version>3.0</version>
+                        <destdir>${symbol_dollar}{project.build.directory}/generated-resources/xdoclet</destdir>
+                        <validate>false</validate>
+                      </params>
+                    </component>
+                  </components>
+                  <includes>**/model/**/**.java</includes>
+                </config>
+              </configs>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>hibernate-descriptors-fix</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <property name="xdoclet.dest" value="${symbol_dollar}{project.build.directory}/generated-resources/xdoclet"/>
+                <mkdir dir="${symbol_dollar}{xdoclet.dest}"/>
+                 <replaceregexp byline="true" preserveLastModified="true">
+                  <regexp pattern="hibernate\.sourceforge\.net" />
+                  <substitution expression="www.hibernate.org/dtd" />
+                  <fileset dir="${xdoclet.dest}">
+                    <include name="**/*.hbm.xml" />
+                  </fileset>
+                </replaceregexp>
+                <replaceregexp byline="true" preserveLastModified="true">
+                  <regexp pattern="&lt;component name=&quot;(.*)&quot;&gt;$" />
+                  <substitution expression="&lt;component name=&quot;\1&quot;&gt;&lt;tuplizer entity-mode=&quot;pojo&quot; class=&quot;org.jspresso.framework.model.persistence.hibernate.entity.tuplizer.ProxyPojoComponentTuplizer&quot; /&gt;" />
+                  <fileset dir="${symbol_dollar}{xdoclet.dest}">
+                    <include name="**/*.hbm.xml" />
+                  </fileset>
+                </replaceregexp>
+                <replaceregexp byline="true" preserveLastModified="true">
+                  <regexp pattern="&lt;composite-element class=&quot;(.*)&quot;&gt;$" />
+                  <substitution expression="&lt;composite-element class=&quot;\1&quot;&gt;&lt;tuplizer entity-mode=&quot;pojo&quot; class=&quot;org.jspresso.framework.model.persistence.hibernate.entity.tuplizer.ProxyPojoComponentTuplizer&quot; /&gt;" />
+                  <fileset dir="${symbol_dollar}{xdoclet.dest}">
+                    <include name="**/*.hbm.xml" />
+                  </fileset>
+                </replaceregexp>
+                <replaceregexp byline="false" flags="mg" preserveLastModified="true">
+                  <regexp pattern="table=&quot;(.*)&quot;&gt;(\r?\n)(.*)&lt;key column=&quot;ID&quot;/&gt;"/>
+                  <substitution expression="table=&quot;\1&quot;&gt;\2\3&lt;key column=&quot;ID&quot; foreign-key=&quot;\1_SUPER_FK&quot;/&gt;"/>
+                  <fileset dir="${symbol_dollar}{xdoclet.dest}">
+                    <include name="**/*.hbm.xml" />
+                  </fileset>
+                </replaceregexp>
+                <delete dir="${project.build.directory}/antrun" />
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+#end
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>jasperreports-maven-plugin</artifactId>
+        <configuration>
+           <outputDirectory>${symbol_dollar}{project.build.directory}/generated-resources/jasperreports</outputDirectory>
+        </configuration>
+        <executions>
+          <execution>
+            <id>compile-jasper-reports</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>compile-reports</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

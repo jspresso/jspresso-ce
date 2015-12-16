@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archetype-descriptor xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                      xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0 http://maven.apache.org/xsd/archetype-descriptor-1.0.0.xsd"
+                      name="Jspresso Application Archetype">
+  <requiredProperties>
+    <requiredProperty key="jspressoVersion">
+      <defaultValue>${project.version}</defaultValue>
+    </requiredProperty>
+    <requiredProperty key="applicationDescription"/>
+    <requiredProperty key="companyUrl"/>
+    <requiredProperty key="applicationName"/>
+    <requiredProperty key="companyName"/>
+    <requiredProperty key="persistence_hibernate_or_mongo">
+      <defaultValue>hibernate</defaultValue>
+    </requiredProperty>
+    <requiredProperty key="siteDistributionUrl">
+      <defaultValue>file:///tmp/maven-site</defaultValue>
+    </requiredProperty>
+    <requiredProperty key="graphvizExecutable">
+      <defaultValue>C:/envdev/graphviz/bin/dot.exe</defaultValue>
+    </requiredProperty>
+  </requiredProperties>
+  <fileSets>
+    <fileSet filtered="true" packaged="false" encoding="UTF-8">
+      <directory>src/main/assembly</directory>
+      <includes>
+        <include>**/*.xml</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" packaged="false" encoding="UTF-8">
+      <directory>src/site</directory>
+      <includes>
+        <include>**/*.xml</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" packaged="false" encoding="UTF-8">
+      <directory>conf</directory>
+      <includes>
+        <include>**/*.config</include>
+        <include>**/*.properties</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="false" packaged="false" encoding="UTF-8">
+      <directory>src/site</directory>
+      <includes>
+        <include>**/*.jpg</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" packaged="false" encoding="UTF-8">
+      <directory>launches</directory>
+      <includes>
+        <include>*.launch</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+  <modules>
+    <module id="${rootArtifactId}-core" dir="core" name="${rootArtifactId}-core">
+      <fileSets>
+        <fileSet filtered="true" packaged="false" encoding="UTF-8">
+          <directory/>
+          <includes>
+            <include>.project</include>
+            <include>.classpath</include>
+            <include>.springBeans</include>
+          </includes>
+        </fileSet>
+        <fileSet filtered="true" packaged="true" encoding="UTF-8">
+          <directory>src/main/resources</directory>
+          <includes>
+            <include>**/*.xml</include>
+            <include>**/*.properties</include>
+          </includes>
+        </fileSet>
+        <fileSet filtered="true" packaged="true" encoding="UTF-8">
+          <directory>src/main/jasperreports</directory>
+          <includes>
+            <include>**/.readme</include>
+            <include>**/*.jrxml</include>
+          </includes>
+        </fileSet>
+        <fileSet filtered="true" packaged="true" encoding="UTF-8">
+          <directory>src/main/java</directory>
+          <includes>
+            <include>**/.readme</include>
+            <include>**/*.java</include>
+          </includes>
+        </fileSet>
+        <fileSet filtered="true" packaged="true" encoding="UTF-8">
+          <directory>src/main/groovy</directory>
+          <includes>
+            <include>**/.readme</include>
+            <include>**/*.groovy</include>
+          </includes>
+        </fileSet>
+        <fileSet filtered="false" packaged="true" encoding="UTF-8">
+          <directory>src/main/resources</directory>
+          <includes>
+            <include>**/*.png</include>
+          </includes>
+        </fileSet>
+        <fileSet filtered="true" packaged="false" encoding="UTF-8">
+          <directory>conf</directory>
+          <includes>
+            <include>**/*.properties</include>
+          </includes>
+        </fileSet>
+        <fileSet filtered="true" packaged="false" encoding="UTF-8">
+          <directory>src/main/assembly</directory>
+          <includes>
+            <include>*.xml</include>
+          </includes>
+        </fileSet>
+        <fileSet filtered="true" packaged="false" encoding="UTF-8">
+          <directory>src/main/dsl</directory>
+          <includes>
+            <include>*.groovy</include>
+          </includes>
+        </fileSet>
+      </fileSets>
+    </module>
+    <module id="${rootArtifactId}-startup" dir="startup" name="${rootArtifactId}-startup">
+      <modules>
+        <module id="${rootArtifactId}-startup-swing" dir="swing" name="${rootArtifactId}-startup-swing">
+          <fileSets>
+            <fileSet filtered="true" packaged="false" encoding="UTF-8">
+              <directory/>
+              <includes>
+                <include>.springBeans</include>
+              </includes>
+            </fileSet>
+            <fileSet filtered="true" packaged="true" encoding="UTF-8">
+              <directory>src/main/resources</directory>
+              <excludes>
+                <exclude>ehcache.xml</exclude>
+              </excludes>
+            </fileSet>
+            <fileSet filtered="true" packaged="false" encoding="UTF-8">
+              <directory>src/main/resources</directory>
+              <includes>
+                <include>ehcache.xml</include>
+              </includes>
+            </fileSet>
+            <fileSet filtered="true" packaged="true" encoding="UTF-8">
+              <directory>src/main/java</directory>
+              <includes>
+                <include>**/*.java</include>
+              </includes>
+            </fileSet>
+          </fileSets>
+        </module>
+        <module id="${rootArtifactId}-startup-remote" dir="remote" name="${rootArtifactId}-startup-remote">
+          <fileSets>
+            <fileSet filtered="true" packaged="false" encoding="UTF-8">
+              <directory/>
+              <includes>
+                <include>.springBeans</include>
+              </includes>
+            </fileSet>
+            <fileSet filtered="true" packaged="true" encoding="UTF-8">
+              <directory>src/main/java</directory>
+              <includes>
+                <include>**/*.java</include>
+              </includes>
+            </fileSet>
+            <fileSet filtered="true" packaged="true" encoding="UTF-8">
+              <directory>src/main/resources</directory>
+            </fileSet>
+          </fileSets>
+        </module>
+        <module id="${rootArtifactId}-startup-flex" dir="flex" name="${rootArtifactId}-startup-flex">
+          <modules>
+            <module id="${rootArtifactId}-startup-flex-config" dir="config" name="${rootArtifactId}-startup-flex-config">
+              <fileSets>
+                <fileSet filtered="true" packaged="false" encoding="UTF-8">
+                  <directory>src/main/assembly</directory>
+                  <includes>
+                    <include>**/*.xml</include>
+                  </includes>
+                </fileSet>
+                <fileSet filtered="true" packaged="false" encoding="UTF-8">
+                  <directory>src/main/resources</directory>
+                  <includes>
+                    <include>**/*.xml</include>
+                  </includes>
+                </fileSet>
+              </fileSets>
+            </module>
+            <module id="${rootArtifactId}-startup-flex-client" dir="client" name="${rootArtifactId}-startup-flex-client">
+              <fileSets>
+                <fileSet filtered="true" packaged="false" encoding="UTF-8">
+                  <directory>src/main/flex</directory>
+                  <includes>
+                    <include>**/*.mxml</include>
+                  </includes>
+                </fileSet>
+                <fileSet filtered="true" packaged="false" encoding="UTF-8">
+                  <directory>src/main/locales</directory>
+                </fileSet>
+                <fileSet filtered="true" packaged="true" encoding="UTF-8">
+                  <directory>src/main/resources</directory>
+                </fileSet>
+                <fileSet filtered="true" packaged="true" encoding="UTF-8">
+                  <directory>src/test/flex</directory>
+                </fileSet>
+                <fileSet filtered="true" packaged="true" encoding="UTF-8">
+                  <directory>src/test/resources</directory>
+                </fileSet>
+              </fileSets>
+            </module>
+          </modules>
+        </module>
+        <module id="${rootArtifactId}-startup-qooxdoo" dir="qooxdoo" name="${rootArtifactId}-startup-qooxdoo">
+          <modules>
+            <module id="${rootArtifactId}-startup-qooxdoo-client" dir="client" name="${rootArtifactId}-startup-qooxdoo-client">
+              <fileSets>
+                <fileSet filtered="true" packaged="false" encoding="UTF-8">
+                  <directory>src/main/assembly</directory>
+                  <includes>
+                    <include>**/*.xml</include>
+                  </includes>
+                </fileSet>
+                <fileSet filtered="true" packaged="false" encoding="UTF-8">
+                  <directory>src/main/html</directory>
+                  <includes>
+                    <include>**/*.html</include>
+                  </includes>
+                </fileSet>
+                <fileSet filtered="false" packaged="false" encoding="UTF-8">
+                  <directory>src/main/html</directory>
+                  <includes>
+                    <include>**/*.png</include>
+                  </includes>
+                </fileSet>
+                <fileSet filtered="true" packaged="true" encoding="UTF-8">
+                  <directory>src/main/js</directory>
+                  <includes>
+                    <include>**/*.js</include>
+                  </includes>
+                </fileSet>
+                <fileSet filtered="true" packaged="false" encoding="UTF-8">
+                  <directory>src/main/py</directory>
+                  <includes>
+                    <include>**/*.json</include>
+                  </includes>
+                </fileSet>
+                <fileSet filtered="true" packaged="true" encoding="UTF-8">
+                  <directory>src/main/resources</directory>
+                </fileSet>
+                <fileSet filtered="true" packaged="false" encoding="UTF-8">
+                  <directory>src/main/translations</directory>
+                </fileSet>
+                <fileSet filtered="true" packaged="false" encoding="UTF-8">
+                  <directory>src/main</directory>
+                  <includes>
+                    <include>*.json</include>
+                  </includes>
+                </fileSet>
+              </fileSets>
+             </module>
+          </modules>
+        </module>
+      </modules>
+    </module>
+    <module id="${rootArtifactId}-webapp" dir="webapp" name="${rootArtifactId}-webapp">
+      <fileSets>
+        <fileSet filtered="true" encoding="UTF-8">
+          <directory/>
+          <includes>
+            <include>.project</include>
+          </includes>
+        </fileSet>
+        <fileSet filtered="true" packaged="true" encoding="UTF-8">
+          <directory>src/main/resources</directory>
+          <excludes>
+            <exclude>ehcache.xml</exclude>
+          </excludes>
+        </fileSet>
+        <fileSet filtered="true" packaged="false" encoding="UTF-8">
+          <directory>src/main/resources</directory>
+          <includes>
+            <include>ehcache.xml</include>
+          </includes>
+        </fileSet>
+        <fileSet filtered="true" packaged="true" encoding="UTF-8">
+          <directory>src/main/java</directory>
+          <includes>
+            <include>**/*.java</include>
+          </includes>
+        </fileSet>
+        <fileSet filtered="true" packaged="false" encoding="UTF-8">
+          <directory>src/main/webapp</directory>
+          <includes>
+            <include>**/*.xml</include>
+            <include>**/jaas.config</include>
+            <include>**/*.html</include>
+          </includes>
+        </fileSet>
+        <fileSet filtered="false" packaged="false" encoding="UTF-8">
+          <directory>src/main/webapp</directory>
+          <includes>
+            <include>**/*.jpg</include>
+            <include>**/*.MF</include>
+            <include>**/*.css</include>
+            <include>**/*.js</include>
+          </includes>
+        </fileSet>
+      </fileSets>
+    </module>
+  </modules>
+</archetype-descriptor>

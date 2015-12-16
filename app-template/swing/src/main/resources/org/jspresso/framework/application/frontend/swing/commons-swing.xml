@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+  default-lazy-init="true">
+
+  <!-- Swing root application context for the Jspresso framework. -->
+
+  <!-- The implementation used as ConnectorFactory. -->
+  <bean id="connectorFactory" class="org.jspresso.framework.binding.basic.BasicConnectorFactory" />
+
+  <!-- The implementation used as ListSelectionModelBinder. -->
+  <bean id="listSelectionModelBinder" class="org.jspresso.framework.binding.swing.DefaultListSelectionModelBinder" />
+
+  <!-- The implementation used as TreeSelectionModelBinder. -->
+  <bean id="treeSelectionModelBinder" class="org.jspresso.framework.binding.swing.DefaultTreeSelectionModelBinder" />
+
+  <!-- Action beans -->
+  <bean id="chartAction" abstract="true" parent="abstractChartAction"
+    class="org.jspresso.framework.application.charting.frontend.action.standalone.DisplayChartAction" />
+
+  <!-- The implementation used as view factory. -->
+  <bean id="iconFactory" parent="iconFactoryBase" class="org.jspresso.framework.view.swing.SwingIconFactory" />
+
+  <bean id="actionFactory" parent="actionFactoryBase" class="org.jspresso.framework.view.swing.SwingActionFactory" />
+
+  <bean id="openFileAction" parent="abstractOpenFileAction" class="org.jspresso.framework.application.frontend.action.swing.file.OpenFileAction" />
+
+  <bean id="openFileAsBinaryPropertyAction" parent="abstractOpenFileAction"
+    class="org.jspresso.framework.application.frontend.action.swing.file.OpenFileAsBinaryPropertyAction" />
+
+  <bean id="saveFileAction" parent="abstractSaveFileAction" class="org.jspresso.framework.application.frontend.action.swing.file.SaveFileAction" />
+
+  <bean id="saveBinaryPropertyAsFileAction" parent="saveFileAction"
+    class="org.jspresso.framework.application.frontend.action.swing.file.SaveBinaryPropertyAsFileAction" />
+
+  <bean id="displayReportAction" class="org.jspresso.framework.application.printing.frontend.action.swing.DisplayJasperReportAction" />
+
+  <bean id="swingViewFactory" abstract="true" class="org.jspresso.framework.view.swing.DefaultSwingViewFactory" parent="viewFactoryBase" />
+
+  <bean id="viewFactory" parent="swingViewFactory" scope="prototype">
+    <property name="listSelectionModelBinder" ref="listSelectionModelBinder" />
+    <property name="treeSelectionModelBinder" ref="treeSelectionModelBinder" />
+  </bean>
+  
+  <!-- QBE customization since swing view supports 3-state checkboxes -->
+  <bean id="triStateBooleanSupported" class="java.lang.Boolean">
+    <constructor-arg value="true"/>
+  </bean>
+
+  <!-- The controllers. -->
+  <bean id="swingFrontController" abstract="true" parent="abstractFrontController"
+    class="org.jspresso.framework.application.frontend.controller.swing.DefaultSwingController" />
+
+  <bean id="frontController" abstract="true" parent="swingFrontController" scope="prototype" />
+
+</beans>
+
