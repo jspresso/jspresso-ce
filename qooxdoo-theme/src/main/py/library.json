@@ -1,9 +1,0 @@
-{
-  "name"    : "jspresso-qooxdoo-theme",
-  "jobs": {
-    "libraries": {
-      "library": [
-      ]
-    }
-  }
-}
