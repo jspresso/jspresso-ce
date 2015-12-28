@@ -679,7 +679,7 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
       for (String integrityProcessorBeanName : integrityProcessorBeanNames) {
         registerIntegrityProcessor(beanFactory.getBean(integrityProcessorBeanName, IPropertyProcessor.class));
       }
-      integrityProcessorClassNames = null;
+      integrityProcessorBeanNames = null;
     }
   }
 
