@@ -1248,6 +1248,16 @@ public abstract class AbstractBackendController extends AbstractController imple
             allowOuterScopeUpdate, alreadyCloned));
       }
     }
+    IComponent owningComponent = component.getOwningComponent();
+    if (owningComponent != null) {
+      IComponent uowOwningComponent;
+      if (owningComponent instanceof IEntity) {
+        uowOwningComponent = cloneInUnitOfWork((IEntity) owningComponent, alreadyCloned, eventsToRelease);
+      } else {
+        uowOwningComponent = cloneComponentInUnitOfWork(owningComponent, alreadyCloned, eventsToRelease);
+      }
+      uowComponent.setOwningComponent(uowOwningComponent, owningComponent.getOwningPropertyDescriptor());
+    }
     return uowComponent;
   }
 
@@ -1539,12 +1549,24 @@ public abstract class AbstractBackendController extends AbstractController imple
                   registeredCollection = collectionFactory.createComponentCollection(Set.class);
                 }
                 initializePropertyIfNeeded(entity, propertyName);
+                List<?> reusedComponentInstances = null;
+                if (registeredEntityProperties.get(propertyName) != null) {
+                  reusedComponentInstances = new ArrayList<>(
+                      (Collection<?>) registeredEntityProperties.get(propertyName));
+                }
+                int i = 0;
                 for (Object collectionElement : (Collection<?>) propertyValue) {
                   if (collectionElement instanceof IEntity) {
                     registeredCollection.add(merge((IEntity) collectionElement, mergeMode, alreadyMerged));
                   } else if (collectionElement instanceof IComponent) {
-                    registeredCollection.add(mergeComponent((IComponent) collectionElement, null, mergeMode,
+                    IComponent registeredComponent = null;
+                    // We must reuse component instances for binding to operate correctly.
+                    if (reusedComponentInstances != null && i < reusedComponentInstances.size()) {
+                      registeredComponent = (IComponent) reusedComponentInstances.get(i);
+                    }
+                    registeredCollection.add(mergeComponent((IComponent) collectionElement, registeredComponent, mergeMode,
                         alreadyMerged));
+                    i++;
                   } else {
                     registeredCollection.add(collectionElement);
                   }
@@ -1655,6 +1677,16 @@ public abstract class AbstractBackendController extends AbstractController imple
     }
     if (varRegisteredComponent == null) {
       varRegisteredComponent = carbonEntityCloneFactory.cloneComponent(componentToMerge, entityFactory);
+      IComponent owningComponent = componentToMerge.getOwningComponent();
+      if (owningComponent != null) {
+        IComponent uowOwningComponent;
+        if (owningComponent instanceof IEntity) {
+          uowOwningComponent = merge((IEntity) owningComponent, mergeMode, alreadyMerged, eventsToRelease);
+        } else {
+          uowOwningComponent = mergeComponent(owningComponent, null, mergeMode, alreadyMerged, eventsToRelease);
+        }
+        varRegisteredComponent.setOwningComponent(uowOwningComponent, owningComponent.getOwningPropertyDescriptor());
+      }
     } else if (mergeMode == EMergeMode.MERGE_KEEP) {
       return varRegisteredComponent;
     }
