@@ -1252,9 +1252,9 @@ public abstract class AbstractBackendController extends AbstractController imple
     if (owningComponent != null) {
       IComponent uowOwningComponent;
       if (owningComponent instanceof IEntity) {
-        uowOwningComponent = cloneInUnitOfWork((IEntity) owningComponent, alreadyCloned, eventsToRelease);
+        uowOwningComponent = cloneInUnitOfWork((IEntity) owningComponent, allowOuterScopeUpdate, alreadyCloned);
       } else {
-        uowOwningComponent = cloneComponentInUnitOfWork(owningComponent, alreadyCloned, eventsToRelease);
+        uowOwningComponent = cloneComponentInUnitOfWork(owningComponent, allowOuterScopeUpdate, alreadyCloned);
       }
       uowComponent.setOwningComponent(uowOwningComponent, owningComponent.getOwningPropertyDescriptor());
     }
@@ -1681,9 +1681,9 @@ public abstract class AbstractBackendController extends AbstractController imple
       if (owningComponent != null) {
         IComponent uowOwningComponent;
         if (owningComponent instanceof IEntity) {
-          uowOwningComponent = merge((IEntity) owningComponent, mergeMode, alreadyMerged, eventsToRelease);
+          uowOwningComponent = merge((IEntity) owningComponent, mergeMode, alreadyMerged);
         } else {
-          uowOwningComponent = mergeComponent(owningComponent, null, mergeMode, alreadyMerged, eventsToRelease);
+          uowOwningComponent = mergeComponent(owningComponent, null, mergeMode, alreadyMerged);
         }
         varRegisteredComponent.setOwningComponent(uowOwningComponent, owningComponent.getOwningPropertyDescriptor());
       }
