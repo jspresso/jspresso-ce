@@ -1,0 +1,62 @@
+# Generated files
+# Binaries
+######################
+*.class
+
+# Eclipse
+######################
+.project
+.settings/
+.classpath
+.springBeans
+.externalToolBuilders/
+.actionScriptProperties
+.flexProperties
+.flexLibProperties
+launches/
+
+# h2 database
+######################
+*.db
+
+# Maven
+######################
+target/
+
+# GWT
+######################
+war
+gwt-unitCache
+
+# Temporary files
+######################
+*.swp
+*.log
+
+build
+
+# IntelliJ
+######################
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Compiled Python files
+######################
+*.pyc
+
+# Folder view configuration files
+######################
+.DS_Store
+Desktop.ini
+
+# Thumbnail cache files
+######################
+._*
+Thumbs.db
+
+# Files that might appear on external disks
+######################
+.Spotlight-V100
+.Trashes
