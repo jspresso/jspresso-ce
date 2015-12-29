@@ -574,6 +574,9 @@ public abstract class AbstractComponentInvocationHandler implements
                   ((IEntity) proxy).getComponentContract().getName(), ((IEntity) proxy).getId(), i);
               LOG.warn("This might be normal but sometimes it reveals a mis-use of indexed collection property accessors.");
             }
+          } else if(EntityHelper.isInlineComponentReference(
+              propertyDescriptor.getReferencedDescriptor().getElementDescriptor())) {
+            decorated.setOwningComponent((IComponent) proxy, propertyDescriptor);
           }
         }
       } else if (property instanceof Set<?>) {
@@ -584,6 +587,10 @@ public abstract class AbstractComponentInvocationHandler implements
               .getComponentDescriptor());
           if (decorated != referent) {
             propertyAsSet.add(decorated);
+          }
+          if (EntityHelper.isInlineComponentReference(
+              propertyDescriptor.getReferencedDescriptor().getElementDescriptor())) {
+            decorated.setOwningComponent((IComponent) proxy, propertyDescriptor);
           }
         }
       }
@@ -944,6 +951,36 @@ public abstract class AbstractComponentInvocationHandler implements
   protected abstract void storeProperty(String propertyName, Object propertyValue);
 
   /**
+   * Store collection property.
+   *
+   * @param proxy
+   *     the proxy
+   * @param propertyDescriptor
+   *     the property descriptor
+   * @param oldPropertyValue
+   *     the old property value
+   * @param newPropertyValue
+   *     the new property value
+   */
+  protected void storeCollectionProperty(Object proxy, ICollectionPropertyDescriptor<?> propertyDescriptor,
+                                        Object oldPropertyValue, Object newPropertyValue) {
+    String propertyName = propertyDescriptor.getName();
+    if (EntityHelper.isInlineComponentReference(propertyDescriptor.getReferencedDescriptor().getElementDescriptor())) {
+      if (oldPropertyValue instanceof Collection<?> && isInitialized(oldPropertyValue)) {
+        for (IComponent component : (Collection<IComponent>) oldPropertyValue) {
+          component.setOwningComponent(null, null);
+        }
+      }
+      if (newPropertyValue instanceof Collection<?> && isInitialized(newPropertyValue)) {
+        for (IComponent component : (Collection<IComponent>) newPropertyValue) {
+          component.setOwningComponent((IComponent) proxy, propertyDescriptor);
+        }
+      }
+    }
+    storeProperty(propertyName, newPropertyValue);
+  }
+
+  /**
    * Performs necessary registration on inline components before actually
    * storing them.
    *
@@ -1135,16 +1172,17 @@ public abstract class AbstractComponentInvocationHandler implements
         storeReferenceProperty(proxy, (IReferencePropertyDescriptor<?>) propertyDescriptor, currentPropertyValue,
             newPropertyValue);
       }
-    } else {
-      storeProperty(propertyName, newPropertyValue);
-    }
-    if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+    } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+      storeCollectionProperty(proxy, (ICollectionPropertyDescriptor<?>) propertyDescriptor, currentPropertyValue,
+          newPropertyValue  );
       if (currentPropertyValue != null && currentPropertyValue == newPropertyValue && isInitialized(currentPropertyValue)) {
-        currentPropertyValue = Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class<?>[]{
-                ((ICollectionPropertyDescriptor<?>) propertyDescriptor).getReferencedDescriptor()
-                                                                       .getCollectionInterface()},
+        currentPropertyValue = Proxy.newProxyInstance
+            (Thread.currentThread().getContextClassLoader(), new Class<?>[]{
+                ((ICollectionPropertyDescriptor<?>) propertyDescriptor).getReferencedDescriptor().getCollectionInterface()},
             new NeverEqualsInvocationHandler(CollectionHelper.cloneCollection((Collection<?>) currentPropertyValue)));
       }
+    } else {
+      storeProperty(propertyName, newPropertyValue);
     }
     doFirePropertyChange(proxy, propertyName, currentPropertyValue, newPropertyValue);
   }
@@ -1304,6 +1342,9 @@ public abstract class AbstractComponentInvocationHandler implements
         inserted = collectionProperty.add(value);
       }
       if (inserted) {
+        if (EntityHelper.isInlineComponentReference(propertyDescriptor.getReferencedDescriptor().getElementDescriptor())) {
+          ((IComponent) value).setOwningComponent((IComponent) proxy, propertyDescriptor);
+        }
         if (collectionSortEnabled) {
           inlineComponentFactory.sortCollectionProperty((IComponent) proxy, propertyName);
         }
@@ -1809,6 +1850,9 @@ public abstract class AbstractComponentInvocationHandler implements
         Collection<?> oldCollectionSnapshot = CollectionHelper
             .cloneCollection((Collection<?>) collectionProperty);
         if (collectionProperty.remove(value)) {
+          if (EntityHelper.isInlineComponentReference(propertyDescriptor.getReferencedDescriptor().getElementDescriptor())) {
+            ((IComponent) value).setOwningComponent(null, null);
+          }
           doFirePropertyChange(proxy, propertyName, oldCollectionSnapshot,
               collectionProperty);
           if (propertyProcessorsEnabled) {
