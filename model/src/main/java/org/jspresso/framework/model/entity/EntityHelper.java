@@ -27,6 +27,7 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 
+import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 
 /**
@@ -53,9 +54,9 @@ public final class EntityHelper {
    *         an inline component.
    */
   public static boolean isInlineComponentReference(
-      IReferencePropertyDescriptor<?> propertyDescriptor) {
-    return !propertyDescriptor.getReferencedDescriptor().isEntity()
-        && !propertyDescriptor.getReferencedDescriptor().isPurelyAbstract();
+      IComponentDescriptorProvider<?> propertyDescriptor) {
+    return !propertyDescriptor.getComponentDescriptor().isEntity()
+        && !propertyDescriptor.getComponentDescriptor().isPurelyAbstract();
   }
 
   /**

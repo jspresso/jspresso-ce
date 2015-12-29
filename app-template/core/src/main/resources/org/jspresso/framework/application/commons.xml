@@ -428,6 +428,23 @@
     </property>
   </bean>
 
+  <bean abstract="true" id="commonTranslationProcessor"
+        class="org.jspresso.framework.model.component.IPropertyTranslation$CommonProcessor">
+    <property name="accessorFactory" ref="accessorFactory" />
+    <property name="componentFactory" ref="controllerAwareEntityFactory" />
+    <property name="translationsPropertyName" value="propertyTranslations" />
+  </bean>
+
+  <bean id="propertyNameTranslationProcessor" parent="commonTranslationProcessor">
+    <property name="processedPropertyName" value="propertyName"/>
+  </bean>
+  <bean id="languageTranslationProcessor" parent="commonTranslationProcessor">
+    <property name="processedPropertyName" value="language"/>
+  </bean>
+  <bean id="translatedValueTranslationProcessor" parent="commonTranslationProcessor">
+    <property name="processedPropertyName" value="translatedValue"/>
+  </bean>
+
   <bean id="componentTranslationsDescriptor"
         class="org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor">
     <property name="name" value="propertyTranslations" />
@@ -447,13 +464,28 @@
                   <property name="name" value="propertyName" />
                   <property name="maxLength" value="64" />
                   <property name="mandatory" value="true" />
+                  <property name="integrityProcessorBeanNames">
+                    <list>
+                      <value>propertyNameTranslationProcessor</value>
+                    </list>
+                  </property>
                 </bean>
                 <bean parent="languagePropertyDescriptor">
                   <property name="mandatory" value="true"/>
+                  <property name="integrityProcessorBeanNames">
+                    <list>
+                      <value>languageTranslationProcessor</value>
+                    </list>
+                  </property>
                 </bean>
                 <bean class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor">
                   <property name="name" value="translatedValue" />
                   <property name="maxLength" value="512" />
+                  <property name="integrityProcessorBeanNames">
+                    <list>
+                      <value>translatedValueTranslationProcessor</value>
+                    </list>
+                  </property>
                 </bean>
               </list>
             </property>

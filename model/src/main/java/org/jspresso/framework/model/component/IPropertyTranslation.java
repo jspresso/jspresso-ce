@@ -18,9 +18,16 @@
  */
 package org.jspresso.framework.model.component;
 
+import java.lang.reflect.InvocationTargetException;
+
+import org.jspresso.framework.util.accessor.IAccessorFactory;
+import org.jspresso.framework.util.accessor.ICollectionAccessor;
+import org.jspresso.framework.util.bean.integrity.EmptyPropertyProcessor;
+import org.jspresso.framework.util.exception.NestedRuntimeException;
+
 /**
  * This interface is implemented by component property translations.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("EmptyMethod")
@@ -43,10 +50,9 @@ public interface IPropertyTranslation extends IComponent {
    * Sets the propertyName.
    *
    * @param propertyName
-   *          the propertyName to set.
+   *     the propertyName to set.
    */
   void setPropertyName(java.lang.String propertyName);
-
 
 
   /**
@@ -56,7 +62,7 @@ public interface IPropertyTranslation extends IComponent {
 
   /**
    * Gets the language.
-
+   *
    * @return the language.
    */
   java.lang.String getLanguage();
@@ -65,10 +71,9 @@ public interface IPropertyTranslation extends IComponent {
    * Sets the language.
    *
    * @param language
-   *          the language to set.
+   *     the language to set.
    */
   void setLanguage(java.lang.String language);
-
 
 
   /**
@@ -87,7 +92,93 @@ public interface IPropertyTranslation extends IComponent {
    * Sets the translatedValue.
    *
    * @param translatedValue
-   *          the translatedValue to set.
+   *     the translatedValue to set.
    */
   void setTranslatedValue(java.lang.String translatedValue);
+
+  /**
+   * The type Common post processor.
+   */
+  class CommonProcessor extends EmptyPropertyProcessor<IPropertyTranslation, String> {
+
+    private IAccessorFactory  accessorFactory;
+    private IComponentFactory componentFactory;
+    private String            translationsPropertyName;
+    private String            processedPropertyName;
+
+    /**
+     * Postprocess setter.
+     *
+     * @param target
+     *     the target
+     * @param newPropertyValue
+     *     the new property value
+     */
+    @Override
+    public void postprocessSetter(IPropertyTranslation target, String oldPropertyValue, String newPropertyValue) {
+      IComponent owningComponent = target.getOwningComponent();
+      if (owningComponent != null) {
+
+        // We cannot just update the property translation component, but we have to replace it by a new one.
+        IPropertyTranslation newPropertyTranslation = (IPropertyTranslation) componentFactory.createComponentInstance(
+            target.getComponentContract());
+        newPropertyTranslation.straightSetProperty(IPropertyTranslation.PROPERTY_NAME, target.getPropertyName());
+        newPropertyTranslation.straightSetProperty(IPropertyTranslation.LANGUAGE, target.getLanguage());
+        newPropertyTranslation.straightSetProperty(IPropertyTranslation.TRANSLATED_VALUE, target.getTranslatedValue());
+
+        // and keep the original value on the old one so that it's hashcode is preserved and it can be removed from the
+        // hash set
+        target.straightSetProperty(processedPropertyName, oldPropertyValue);
+
+        ICollectionAccessor translationsAccessor = accessorFactory.createCollectionPropertyAccessor(
+            translationsPropertyName, owningComponent.getClass(), target.getComponentContract());
+        try {
+          translationsAccessor.removeFromValue(owningComponent, target);
+          translationsAccessor.addToValue(owningComponent, newPropertyTranslation);
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+          throw new NestedRuntimeException(e);
+        }
+      }
+    }
+
+    /**
+     * Sets component factory.
+     *
+     * @param componentFactory
+     *     the component factory
+     */
+    public void setComponentFactory(IComponentFactory componentFactory) {
+      this.componentFactory = componentFactory;
+    }
+
+    /**
+     * Sets accessor factory.
+     *
+     * @param accessorFactory
+     *     the accessor factory
+     */
+    public void setAccessorFactory(IAccessorFactory accessorFactory) {
+      this.accessorFactory = accessorFactory;
+    }
+
+    /**
+     * Sets translations property name.
+     *
+     * @param translationsPropertyName
+     *     the translations property name
+     */
+    public void setTranslationsPropertyName(String translationsPropertyName) {
+      this.translationsPropertyName = translationsPropertyName;
+    }
+
+    /**
+     * Sets processed property name.
+     *
+     * @param processedPropertyName
+     *     the processed property name
+     */
+    public void setProcessedPropertyName(String processedPropertyName) {
+      this.processedPropertyName = processedPropertyName;
+    }
+  }
 }
