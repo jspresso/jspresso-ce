@@ -44,7 +44,7 @@ public class EnhancedDataGrid extends DataGrid {
   private var _customSort:Boolean;
   private var _cbMultiSelection:Boolean;
 
-  private static var H_SCROLL_DELAY_MAX_VISIBLE_CELLS = 500;
+  private static var H_SCROLL_DELAY_MAX_VISIBLE_CELLS:int = 500;
   private var _targetHScrollPosition:Number;
   private var _hScrollTimer:Timer;
 
