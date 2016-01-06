@@ -18,7 +18,9 @@ import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
+import flash.events.TimerEvent;
 import flash.ui.Keyboard;
+import flash.utils.Timer;
 
 import mx.controls.DataGrid;
 import mx.controls.listClasses.IDropInListItemRenderer;
@@ -42,6 +44,10 @@ public class EnhancedDataGrid extends DataGrid {
   private var _customSort:Boolean;
   private var _cbMultiSelection:Boolean;
 
+  private static var H_SCROLL_DELAY_MAX_VISIBLE_CELLS = 500;
+  private var _targetHScrollPosition:Number;
+  private var _hScrollTimer:Timer;
+
   public function EnhancedDataGrid() {
     super();
     doubleClickEnabled = true;
@@ -52,6 +58,8 @@ public class EnhancedDataGrid extends DataGrid {
     _customSort = false;
     _cbMultiSelection = false;
     addEventListener(DataGridEvent.ITEM_EDIT_BEGINNING, itemEditBeginning);
+    _hScrollTimer = new Timer(200, 1);
+    _hScrollTimer.addEventListener(TimerEvent.TIMER_COMPLETE, applyTargetHScroll);
   }
 
   override protected function mouseDoubleClickHandler(event:MouseEvent):void {
@@ -202,6 +210,21 @@ public class EnhancedDataGrid extends DataGrid {
       return 0;
     }
     return uw;
+  }
+
+  override public function set horizontalScrollPosition(value:Number):void {
+    if ((rowCount * columnCount) > H_SCROLL_DELAY_MAX_VISIBLE_CELLS) {
+      _targetHScrollPosition = value;
+      _hScrollTimer.reset();
+      _hScrollTimer.start();
+    } else {
+      super.horizontalScrollPosition = value;
+    }
+  }
+
+  private function applyTargetHScroll(event:TimerEvent):void {
+    super.horizontalScrollPosition = NaN;
+    super.horizontalScrollPosition = _targetHScrollPosition;
   }
 }
 }
