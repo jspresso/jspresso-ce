@@ -1620,7 +1620,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var timePickerButton = this.createButton("...", null, null);
       remoteTimeField.getState().bind("writable", timePickerButton, "enabled");
       timePickerButton.removeCssClass("button");
-      var timePicker = new org.jspresso.framework.view.qx.mobile.TimePicker(remoteTimeField.getSecondsAware());
+      var timePicker = new org.jspresso.framework.view.qx.mobile.TimePicker(remoteTimeField.getSecondsAware(),
+          remoteTimeField.getMillisecondsAware());
       var timePickerPopup = new org.jspresso.framework.view.qx.mobile.PickerPopup(timePicker, timePickerButton);
       timePickerPopup.setConfirmButtonCaption(this._getActionHandler().translate("ok"));
       timePickerPopup.setCancelButtonCaption(this._getActionHandler().translate("cancel"));
@@ -1659,6 +1660,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         if (e.getData().length > 2) {
           second = parseInt(e.getData()[2].item.title);
         }
+        var millisecond = 0;
+        if (e.getData().length > 3) {
+          millisecond = parseInt(e.getData()[3].item.title);
+        }
 
         var dateDto = new org.jspresso.framework.util.lang.DateDto();
         dateDto.setYear(current.getYear());
@@ -1667,6 +1672,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         dateDto.setHour(hour);
         dateDto.setMinute(minute);
         dateDto.setSecond(second);
+        dateDto.setMillisecond(millisecond);
         remoteTimeField.getState().setValue(dateDto);
       }, this);
       return timeFieldWithPicker;
@@ -1935,6 +1941,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       remoteTimeField.setState(remoteDateField.getState());
       remoteTimeField.setToolTip(remoteDateField.getToolTip());
       remoteTimeField.setSecondsAware(remoteDateField.getSecondsAware());
+      remoteTimeField.setMillisecondsAware(remoteDateField.getMillisecondsAware());
       remoteTimeField.useDateDto(true);
       dateTimeField.add(this.createComponent(remoteTimeField, false), {flex: 1});
       return dateTimeField;

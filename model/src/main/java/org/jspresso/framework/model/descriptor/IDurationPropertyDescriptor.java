@@ -39,12 +39,12 @@ package org.jspresso.framework.model.descriptor;
  *      <p>
  * @author Vincent Vandenschrick
  */
-public interface IDurationPropertyDescriptor extends IScalarPropertyDescriptor {
+public interface IDurationPropertyDescriptor extends IScalarPropertyDescriptor, ITimeAwarePropertyDescriptor {
 
   /**
    * Gets the upper bound of this duration property in milliseconds. The method
    * should use the constants defined above.
-   * 
+   *
    * @return the maximum number of milliseconds this duration property can take.
    */
   Long getMaxMillis();

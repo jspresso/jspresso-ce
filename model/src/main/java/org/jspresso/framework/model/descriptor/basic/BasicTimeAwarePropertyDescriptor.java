@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -16,93 +16,58 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.gui.remote;
+package org.jspresso.framework.model.descriptor.basic;
 
 /**
- * A remote date field component.
+ * Abstract superclass for time-aware property descriptors.
  *
  * @author Vincent Vandenschrick
  */
-public class RTimeField extends RComponent {
-
-  private static final long serialVersionUID = 2384664561321144507L;
+public abstract class BasicTimeAwarePropertyDescriptor extends BasicScalarPropertyDescriptor {
 
   private boolean secondsAware;
   private boolean millisecondsAware;
-  private String  formatPattern;
 
   /**
-   * Constructs a new {@code RDateField} instance.
-   *
-   * @param guid
-   *     the guid.
+   * Instantiates a new Basic time aware property descriptor.
    */
-  public RTimeField(String guid) {
-    super(guid);
+  public BasicTimeAwarePropertyDescriptor() {
+    secondsAware = true;
   }
 
   /**
-   * Constructs a new {@code RTimeField} instance. Only used for
-   * serialization support.
-   */
-  public RTimeField() {
-    // For serialization support
-  }
-
-  /**
-   * Gets the secondsAware.
-   *
-   * @return the secondsAware.
+   * {@inheritDoc}
    */
   public boolean isSecondsAware() {
-    return secondsAware;
+    return secondsAware || isMillisecondsAware();
   }
 
   /**
-   * Sets the secondsAware.
+   * Should this time information include seconds.
    *
    * @param secondsAware
-   *     the secondsAware to set.
+   *          Configure to {@code true} if this time information include
+   *          seconds.
    */
   public void setSecondsAware(boolean secondsAware) {
     this.secondsAware = secondsAware;
   }
 
   /**
-   * Is milliseconds aware boolean.
-   *
-   * @return the boolean
+   * {@inheritDoc}
    */
   public boolean isMillisecondsAware() {
     return millisecondsAware;
   }
 
   /**
-   * Sets milliseconds aware.
+   * Should this time information include milliseconds.
    *
    * @param millisecondsAware
-   *     the milliseconds aware
+   *     Configure to {@code true} if this time information include
+   *     milliseconds.
    */
   public void setMillisecondsAware(boolean millisecondsAware) {
     this.millisecondsAware = millisecondsAware;
-  }
-
-  /**
-   * Gets format pattern.
-   *
-   * @return the format pattern
-   */
-  public String getFormatPattern() {
-    return formatPattern;
-  }
-
-  /**
-   * Sets format pattern.
-   *
-   * @param formatPattern
-   *     the format pattern
-   */
-  public void setFormatPattern(String formatPattern) {
-    this.formatPattern = formatPattern;
   }
 }

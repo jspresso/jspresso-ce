@@ -20,22 +20,23 @@ package org.jspresso.framework.gui.remote;
 
 /**
  * A remote date field component.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RDateField extends RComponent {
 
   private static final long serialVersionUID = 8506924046869058069L;
 
-  private String            type;
-  private boolean           secondsAware;
-  private String            formatPattern;
+  private String  type;
+  private boolean secondsAware;
+  private boolean millisecondsAware;
+  private String  formatPattern;
 
   /**
    * Constructs a new {@code RDateField} instance.
    *
    * @param guid
-   *          the guid.
+   *     the guid.
    */
   public RDateField(String guid) {
     super(guid);
@@ -51,7 +52,7 @@ public class RDateField extends RComponent {
 
   /**
    * Gets the type.
-   * 
+   *
    * @return the type.
    */
   public String getType() {
@@ -60,9 +61,9 @@ public class RDateField extends RComponent {
 
   /**
    * Sets the type.
-   * 
+   *
    * @param type
-   *          the type to set.
+   *     the type to set.
    */
   public void setType(String type) {
     this.type = type;
@@ -70,7 +71,7 @@ public class RDateField extends RComponent {
 
   /**
    * Gets the secondsAware.
-   * 
+   *
    * @return the secondsAware.
    */
   public boolean isSecondsAware() {
@@ -79,12 +80,31 @@ public class RDateField extends RComponent {
 
   /**
    * Sets the secondsAware.
-   * 
+   *
    * @param secondsAware
-   *          the secondsAware to set.
+   *     the secondsAware to set.
    */
   public void setSecondsAware(boolean secondsAware) {
     this.secondsAware = secondsAware;
+  }
+
+  /**
+   * Is milliseconds aware boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isMillisecondsAware() {
+    return millisecondsAware;
+  }
+
+  /**
+   * Sets milliseconds aware.
+   *
+   * @param millisecondsAware
+   *     the milliseconds aware
+   */
+  public void setMillisecondsAware(boolean millisecondsAware) {
+    this.millisecondsAware = millisecondsAware;
   }
 
   /**
@@ -99,7 +119,8 @@ public class RDateField extends RComponent {
   /**
    * Sets format pattern.
    *
-   * @param formatPattern the format pattern
+   * @param formatPattern
+   *     the format pattern
    */
   public void setFormatPattern(String formatPattern) {
     this.formatPattern = formatPattern;

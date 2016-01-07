@@ -22,7 +22,7 @@ qx.Class.define("org.jspresso.framework.util.format.DateUtils", {
     fromDateDto: function (source) {
       if (source) {
         return new Date(source.getYear(), source.getMonth(), source.getDate(), source.getHour(), source.getMinute(),
-            source.getSecond());
+            source.getSecond(), source.getMillisecond());
       }
       return null;
     },
@@ -40,6 +40,7 @@ qx.Class.define("org.jspresso.framework.util.format.DateUtils", {
         dateDto.setHour(source.getHours());
         dateDto.setMinute(source.getMinutes());
         dateDto.setSecond(source.getSeconds());
+        dateDto.setMillisecond(source.getMilliseconds());
         return dateDto;
       }
       return null;

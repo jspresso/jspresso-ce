@@ -26,15 +26,13 @@ import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
 /**
  * Describes a date based property. Whether the date property should include time
  * information or not, can be configured using the type property.
- * 
+ *
  * @author Vincent Vandenschrick
  */
-public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
-    implements IDatePropertyDescriptor {
+public class BasicDatePropertyDescriptor extends BasicTimeAwarePropertyDescriptor implements IDatePropertyDescriptor {
 
   private EDateType type;
   private boolean   timeZoneAware;
-  private boolean   secondsAware;
   private String    formatPattern;
 
   /**
@@ -43,7 +41,6 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
   public BasicDatePropertyDescriptor() {
     type = EDateType.DATE;
     timeZoneAware = false;
-    secondsAware = true;
   }
 
   /**
@@ -51,8 +48,7 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
    */
   @Override
   public BasicDatePropertyDescriptor clone() {
-    BasicDatePropertyDescriptor clonedDescriptor = (BasicDatePropertyDescriptor) super
-        .clone();
+    BasicDatePropertyDescriptor clonedDescriptor = (BasicDatePropertyDescriptor) super.clone();
 
     return clonedDescriptor;
   }
@@ -85,7 +81,7 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
    * Default value is {@code EDateType.DATE}.
    *
    * @param type
-   *          the type to set.
+   *     the type to set.
    */
   public void setType(EDateType type) {
     this.type = type;
@@ -94,12 +90,12 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
   /**
    * Sets whether this date property should have its string representation vary
    * depending on the client timezone.
-   * <p>
+   * <p/>
    * Default value is {@code false}, meaning that the date is considered as
    * a string. It is in fact expressed in the server timezone.
    *
    * @param timeZoneAware
-   *          the timeZoneAware to set.
+   *     the timeZoneAware to set.
    */
   public void setTimeZoneAware(boolean timeZoneAware) {
     this.timeZoneAware = timeZoneAware;
@@ -107,31 +103,12 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
 
   /**
    * Gets the timeZoneAware.
-   * 
+   *
    * @return the timeZoneAware.
    */
   @Override
   public boolean isTimeZoneAware() {
     return timeZoneAware;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isSecondsAware() {
-    return secondsAware;
-  }
-
-  /**
-   * Should this time information include seconds.
-   *
-   * @param secondsAware
-   *          Configure to {@code true} if this time information include
-   *          seconds.
-   */
-  public void setSecondsAware(boolean secondsAware) {
-    this.secondsAware = secondsAware;
   }
 
   /**
@@ -145,7 +122,8 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
   /**
    * Sets format pattern. Allows to override the default one.
    *
-   * @param formatPattern the format pattern
+   * @param formatPattern
+   *     the format pattern
    */
   public void setFormatPattern(String formatPattern) {
     this.formatPattern = formatPattern;

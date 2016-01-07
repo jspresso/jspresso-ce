@@ -23,6 +23,9 @@ qx.Class.define("org.jspresso.framework.gui.remote.RTimeField", {
     secondsAware: {
       check: "Boolean"
     },
+    millisecondsAware: {
+      check: "Boolean"
+    },
     formatPattern: {
       check: "String",
       nullable: true

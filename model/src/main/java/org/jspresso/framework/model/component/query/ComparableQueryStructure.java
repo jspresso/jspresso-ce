@@ -47,9 +47,9 @@ public class ComparableQueryStructure extends QueryComponent {
 
   private static final long serialVersionUID = 7831817429580706837L;
 
-  private final IPropertyDescriptor sourceDescriptor;
-  private ITranslationProvider translationProvider;
-  private Locale               locale;
+  private final IPropertyDescriptor  sourceDescriptor;
+  private       ITranslationProvider translationProvider;
+  private       Locale               locale;
 
   /**
    * Constructs a new {@code ComparableQueryStructure} instance.
@@ -139,13 +139,13 @@ public class ComparableQueryStructure extends QueryComponent {
    * Whether the comparable query structure actually holds a restriction.
    *
    * @return {@code true} if the comparable query structure actually holds
-   *         a restriction.
+   * a restriction.
    */
   @Override
   public boolean isRestricting() {
     return getComparator() != null && (getInfValue() != null || getSupValue() != null)
-        || ComparableQueryStructureDescriptor.NU.equals(getComparator())
-        || ComparableQueryStructureDescriptor.NN.equals(getComparator());
+        || ComparableQueryStructureDescriptor.NU.equals(getComparator()) || ComparableQueryStructureDescriptor.NN
+        .equals(getComparator());
   }
 
   /**
@@ -154,7 +154,7 @@ public class ComparableQueryStructure extends QueryComponent {
    * @param value
    *     the value to test.
    * @return {@code true} if the value passed as parameter matches the
-   *         query structure.
+   * query structure.
    */
   public boolean matches(Comparable<Object> value) {
     if (isRestricting()) {
@@ -216,12 +216,18 @@ public class ComparableQueryStructure extends QueryComponent {
           IPropertyDescriptor sd = getSourceDescriptor();
           if (sd instanceof IDatePropertyDescriptor) {
             if (((IDatePropertyDescriptor) sd).getType() == EDateType.DATE_TIME) {
-              if (((IDatePropertyDescriptor) sd).isSecondsAware()) {
-                format = new SimpleDateFormat(getTranslationProvider().getDatePattern(getLocale()) + " "
-                    + getTranslationProvider().getTimePattern(getLocale()));
+              if (((IDatePropertyDescriptor) sd).isMillisecondsAware()) {
+                format = new SimpleDateFormat(
+                    getTranslationProvider().getDatePattern(getLocale()) + " " + getTranslationProvider()
+                        .getLongTimePattern(getLocale()));
+              } else if (((IDatePropertyDescriptor) sd).isSecondsAware()) {
+                format = new SimpleDateFormat(
+                    getTranslationProvider().getDatePattern(getLocale()) + " " + getTranslationProvider()
+                        .getTimePattern(getLocale()));
               } else {
-                format = new SimpleDateFormat(getTranslationProvider().getDatePattern(getLocale()) + " "
-                    + getTranslationProvider().getShortTimePattern(getLocale()));
+                format = new SimpleDateFormat(
+                    getTranslationProvider().getDatePattern(getLocale()) + " " + getTranslationProvider()
+                        .getShortTimePattern(getLocale()));
               }
             } else {
               format = new SimpleDateFormat(getTranslationProvider().getDatePattern(getLocale()));
@@ -269,8 +275,8 @@ public class ComparableQueryStructure extends QueryComponent {
               break;
             case ComparableQueryStructureDescriptor.BE:
               if (infValue != null && supValue != null) {
-                buf.append(">= ").append(format != null ? format.format(infValue) : infValue.toString())
-                   .append(", <= ").append(format != null ? format.format(supValue) : supValue.toString());
+                buf.append(">= ").append(format != null ? format.format(infValue) : infValue.toString()).append(", <= ")
+                   .append(format != null ? format.format(supValue) : supValue.toString());
               } else if (infValue != null) {
                 buf.append(">= ").append(format != null ? format.format(infValue) : infValue.toString());
               } else if (supValue != null) {

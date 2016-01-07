@@ -80,6 +80,14 @@ public abstract class AbstractTranslationProvider implements
    * {@inheritDoc}
    */
   @Override
+  public String getLongTimePattern(Locale locale) {
+    return getTranslation(TIME_FORMAT_LONG_KEY, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public int getFirstDayOfWeek(Locale locale) {
     return Integer.parseInt(getTranslation(FIRST_DAY_OF_WEEK_KEY, Integer.toString(1), locale));
   }
