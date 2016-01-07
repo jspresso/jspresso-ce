@@ -895,6 +895,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _createHtmlText: function (remoteHtmlArea) {
       var htmlText = new qx.ui.basic.Label();
       htmlText.setRich(true);
+      htmlText.setSelectable(true);
       var state = remoteHtmlArea.getState();
       var modelController = new qx.data.controller.Object(state);
       modelController.addTarget(htmlText, "value", "value", false, {
