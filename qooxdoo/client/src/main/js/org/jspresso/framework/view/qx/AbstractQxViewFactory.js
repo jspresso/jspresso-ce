@@ -47,9 +47,13 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
     /** @type {Array} */
     __shortTimeFormats: null,
     /** @type {Array} */
+    __longTimeFormats: null,
+    /** @type {Array} */
     __dateTimeFormats: null,
     /** @type {Array} */
     __shortDateTimeFormats: null,
+    /** @type {Array} */
+    __longDateTimeFormats: null,
     /** @type {Integer} */
     __firstDayOfWeek: null,
 
@@ -383,7 +387,13 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
         }
         if (remoteComponent.getType() == "DATE_TIME") {
           var dateTimeFormat = new org.jspresso.framework.util.format.DateFormatDecorator();
-          if (remoteComponent.getSecondsAware()) {
+          if (remoteComponent.getMillisecondsAware()) {
+            if (!this.__longDateTimeFormats) {
+              this.__longDateTimeFormats = this._createDateFormats(this._createLongDateTimeFormatPatterns());
+            }
+            formatDelegates = formatDelegates.concat(this.__longDateTimeFormats);
+            dateTimeFormat.setFormatDelegates(formatDelegates);
+          } else if (remoteComponent.getSecondsAware()) {
             if (!this.__dateTimeFormats) {
               this.__dateTimeFormats = this._createDateFormats(this._createDateTimeFormatPatterns());
             }
@@ -414,7 +424,12 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
           formatDelegates.push(new qx.util.format.DateFormat(remoteComponent.getFormatPattern()));
         }
         var timeFormat = new org.jspresso.framework.util.format.DateFormatDecorator();
-        if (remoteComponent.getSecondsAware()) {
+        if (remoteComponent.getMillisecondsAware()) {
+          if (!this.__longTimeFormats) {
+            this.__longTimeFormats = this._createDateFormats(this._createLongTimeFormatPatterns());
+          }
+          formatDelegates = formatDelegates.concat(this.__longTimeFormats);
+        } else if (remoteComponent.getSecondsAware()) {
           if (!this.__timeFormats) {
             this.__timeFormats = this._createDateFormats(this._createTimeFormatPatterns());
           }
@@ -466,6 +481,15 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
       return formatPatterns;
     },
 
+    _createLongTimeFormatPatterns: function () {
+      var formatPatterns = [];
+      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HHmmssSSS", "HH:mm:ss.SSS"));
+      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HHmmss", "HH:mm:ss"));
+      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HHmm", "HH:mm"));
+      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HH", "HH"));
+      return formatPatterns;
+    },
+
     _createDateFormatPatterns: function () {
       var formatPatterns = [];
       var defaultFormatPattern = this._getDatePattern();
@@ -487,6 +511,19 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
     _createDateTimeFormatPatterns: function () {
       var dateFormatPatterns = this._createDateFormatPatterns();
       var timeFormatPatterns = this._createTimeFormatPatterns();
+      var formatPatterns = [];
+      for (var i = 0; i < dateFormatPatterns.length; i++) {
+        for (var j = 0; j < timeFormatPatterns.length; j++) {
+          formatPatterns.push(dateFormatPatterns[i] + " " + timeFormatPatterns[j]);
+        }
+        formatPatterns.push(dateFormatPatterns[i]);
+      }
+      return formatPatterns;
+    },
+
+    _createLongDateTimeFormatPatterns: function () {
+      var dateFormatPatterns = this._createDateFormatPatterns();
+      var timeFormatPatterns = this._createLongTimeFormatPatterns();
       var formatPatterns = [];
       for (var i = 0; i < dateFormatPatterns.length; i++) {
         for (var j = 0; j < timeFormatPatterns.length; j++) {

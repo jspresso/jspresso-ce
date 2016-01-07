@@ -174,6 +174,7 @@ public class DefaultFlexViewFactory {
   private static const COLUMN_MAX_CHAR_COUNT:int = 20;
   private static const DATE_TEMPLATE:String = "00/00/0000";
   private static const LONG_TIME_TEMPLATE:String = "00:00:00";
+  private static const TIME_TEMPLATE:String = "00:00:00.000";
   private static const SHORT_TIME_TEMPLATE:String = "00:00";
   private static const ICON_WIDTH:int = 24;
   [Embed(source="../../../../../../resources/assets/images/reset-16x16.png")]
@@ -183,6 +184,7 @@ public class DefaultFlexViewFactory {
   private var _commandHandler:IRemoteCommandHandler;
   private var _remoteValueSorter:RemoteValueSorter;
   private var _timeFormatter:DateFormatter;
+  private var _longTimeFormatter:DateFormatter;
   private var _shortTimeFormatter:DateFormatter;
   private var _passwordFormatter:PasswordFormatter;
   private var _lastActionTimestamp:Date = new Date();
@@ -204,6 +206,8 @@ public class DefaultFlexViewFactory {
     _timeFormatter.formatString = "JJ:NN:SS";
     _shortTimeFormatter = new DateFormatter();
     _shortTimeFormatter.formatString = "JJ:NN";
+    _longTimeFormatter = new DateFormatter();
+    _longTimeFormatter.formatString = "JJ:NN:SS.QQQ";
     ToolTipManager.toolTipClass = HtmlToolTip;
   }
 
@@ -2316,6 +2320,7 @@ public class DefaultFlexViewFactory {
     remoteTimeField.state = remoteDateField.state;
     remoteTimeField.toolTip = remoteDateField.toolTip;
     remoteTimeField.secondsAware = remoteDateField.secondsAware;
+    remoteTimeField.millisecondsAware = remoteDateField.millisecondsAware;
     remoteTimeField.useDateDto(true);
 
     var timeField:TextInput = createComponent(remoteTimeField, false) as TextInput;
@@ -2331,8 +2336,10 @@ public class DefaultFlexViewFactory {
 
   protected function createTimeField(remoteTimeField:RTimeField):UIComponent {
     var timeField:TextInput = createTextInputComponent();
-    if (remoteTimeField.secondsAware) {
+    if (remoteTimeField.millisecondsAware) {
       sizeMaxComponentWidthFromText(timeField, remoteTimeField, LONG_TIME_TEMPLATE);
+    } else if (remoteTimeField.secondsAware) {
+      sizeMaxComponentWidthFromText(timeField, remoteTimeField, TIME_TEMPLATE);
     } else {
       sizeMaxComponentWidthFromText(timeField, remoteTimeField, SHORT_TIME_TEMPLATE);
     }
@@ -3360,7 +3367,9 @@ public class DefaultFlexViewFactory {
         customTimeFormatter.formatString = (remoteComponent as RTimeField).formatPattern;
         return customTimeFormatter;
       } else {
-        if ((remoteComponent as RTimeField).secondsAware) {
+        if ((remoteComponent as RTimeField).millisecondsAware) {
+          return _longTimeFormatter;
+        } else if ((remoteComponent as RTimeField).secondsAware) {
           return _timeFormatter;
         } else {
           return _shortTimeFormatter;

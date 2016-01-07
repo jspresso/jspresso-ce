@@ -22,7 +22,7 @@ import java.util.Locale;
 
 /**
  * The interface being implemented by all i18n string providers.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface ITranslationProvider {
@@ -31,6 +31,10 @@ public interface ITranslationProvider {
    * {@code TIME_FORMAT_SHORT_KEY}.
    */
   String TIME_FORMAT_SHORT_KEY = "time_format_short";
+  /**
+   * {@code TIME_FORMAT_LONG_KEY}.
+   */
+  String TIME_FORMAT_LONG_KEY = "time_format_long";
   /**
    * {@code TIME_FORMAT_KEY}.
    */
@@ -57,7 +61,7 @@ public interface ITranslationProvider {
 
   /**
    * Gets a translated string based on a key.
-   * 
+   *
    * @param key
    *          the i18n key.
    * @param locale
@@ -69,7 +73,7 @@ public interface ITranslationProvider {
   /**
    * Gets a translated string based on a key using a default message when not
    * found.
-   * 
+   *
    * @param key
    *          the i18n key.
    * @param defaultMessage
@@ -82,7 +86,7 @@ public interface ITranslationProvider {
 
   /**
    * Gets a translated message based on a key.
-   * 
+   *
    * @param key
    *          the i18n key.
    * @param args
@@ -96,7 +100,7 @@ public interface ITranslationProvider {
   /**
    * Gets a translated message based on a key using a default message when not
    * found.
-   * 
+   *
    * @param key
    *          the i18n key.
    * @param args
@@ -112,7 +116,7 @@ public interface ITranslationProvider {
 
   /**
    * Return the default date pattern expressed as a SimpleDateFormat pattern.
-   * 
+   *
    * @param locale
    *          the locale.
    * @return the default date pattern.
@@ -121,7 +125,7 @@ public interface ITranslationProvider {
 
   /**
    * Return the default first day of week as 0 for sunday to 6 for saturday.
-   * 
+   *
    * @param locale
    *          the locale.
    * @return the default first day of week.
@@ -131,12 +135,22 @@ public interface ITranslationProvider {
   /**
    * Return the default time pattern (including seconds) expressed as a
    * SimpleDateFormat pattern.
-   * 
+   *
    * @param locale
    *          the locale.
    * @return the default short time pattern.
    */
   String getTimePattern(Locale locale);
+
+  /**
+   * Return the default long time pattern (including seconds and milliseconds) expressed as a
+   * SimpleDateFormat pattern.
+   *
+   * @param locale
+   *     the locale.
+   * @return the default short time pattern.
+   */
+  String getLongTimePattern(Locale locale);
 
   /**
    * Return the default short time pattern (without seconds) expressed as a

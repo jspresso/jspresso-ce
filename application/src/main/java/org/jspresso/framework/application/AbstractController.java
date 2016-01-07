@@ -160,6 +160,14 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable
    * {@inheritDoc}
    */
   @Override
+  public String getLongTimePattern(Locale locale) {
+    return getTranslation(TIME_FORMAT_LONG_KEY, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public String getShortTimePattern(Locale locale) {
     return getTranslation(TIME_FORMAT_SHORT_KEY, locale);
   }

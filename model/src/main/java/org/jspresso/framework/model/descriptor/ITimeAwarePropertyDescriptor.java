@@ -20,7 +20,7 @@ package org.jspresso.framework.model.descriptor;
 
 /**
  * This interface is implemented by descriptors containing a time information.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface ITimeAwarePropertyDescriptor {
@@ -31,4 +31,11 @@ public interface ITimeAwarePropertyDescriptor {
    * @return {@code true} if this time information include seconds.
    */
   boolean isSecondsAware();
+
+  /**
+   * Should this time information include milliseconds.
+   *
+   * @return {@code true} if this time information include milliseconds.
+   */
+  boolean isMillisecondsAware();
 }

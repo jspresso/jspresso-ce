@@ -1637,7 +1637,10 @@ public abstract class AbstractViewFactory<E, F, G> implements
   protected String getTimePattern(
       ITimeAwarePropertyDescriptor propertyDescriptor,
       ITranslationProvider translationProvider, Locale locale) {
-    if (propertyDescriptor.isSecondsAware()) {
+
+    if(propertyDescriptor.isMillisecondsAware()) {
+      return translationProvider.getLongTimePattern(locale);
+    } else if (propertyDescriptor.isSecondsAware()) {
       return translationProvider.getTimePattern(locale);
     }
     return translationProvider.getShortTimePattern(locale);
@@ -1770,7 +1773,8 @@ public abstract class AbstractViewFactory<E, F, G> implements
   protected IFormatter<Number, String> createDurationFormatter(
       IDurationPropertyDescriptor propertyDescriptor,
       ITranslationProvider translationProvider, Locale locale) {
-    return new DurationFormatter(translationProvider, locale);
+    return new DurationFormatter(translationProvider, locale, propertyDescriptor.isSecondsAware(),
+        propertyDescriptor.isMillisecondsAware());
   }
 
   /**

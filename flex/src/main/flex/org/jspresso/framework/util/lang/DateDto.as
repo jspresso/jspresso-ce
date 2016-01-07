@@ -25,6 +25,7 @@ public class DateDto {
   private var _hour:int;
   private var _minute:int;
   private var _second:int;
+  private var _millisecond:int;
 
   public function DateDto() {
     //default constructor.
@@ -78,6 +79,12 @@ public class DateDto {
     _second = value;
   }
 
+  public function get millisecond():int {
+    return _millisecond;
+  }
 
+  public function set millisecond(value:int):void {
+    _millisecond = value;
+  }
 }
 }

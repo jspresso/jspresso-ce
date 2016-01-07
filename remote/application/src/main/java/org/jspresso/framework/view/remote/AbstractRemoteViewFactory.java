@@ -803,12 +803,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
       viewComponent = createRDateField(propertyViewDescriptor);
       ((RDateField) viewComponent).setType(propertyDescriptor.getType().name());
       ((RDateField) viewComponent).setSecondsAware(propertyDescriptor.isSecondsAware());
-      String formatPattern = propertyDescriptor.getFormatPattern();
-      if (propertyViewDescriptor instanceof BasicDatePropertyViewDescriptor
-          && ((BasicDatePropertyViewDescriptor) propertyViewDescriptor).getFormatPattern() != null) {
-        formatPattern = ((BasicDatePropertyViewDescriptor) propertyViewDescriptor).getFormatPattern();
-      }
-      ((RDateField) viewComponent).setFormatPattern(formatPattern);
+      ((RDateField) viewComponent).setMillisecondsAware(propertyDescriptor.isMillisecondsAware());
+      ((RDateField) viewComponent).setFormatPattern(propertyDescriptor.getFormatPattern());
     }
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
@@ -835,7 +831,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
           DateDto stateDate = (DateDto) originalValue;
           fieldCalendar.set(stateDate.getYear(), stateDate.getMonth(), stateDate.getDate(), stateDate.getHour(),
               stateDate.getMinute(), stateDate.getSecond());
-          fieldCalendar.set(Calendar.MILLISECOND, 0);
+          fieldCalendar.set(Calendar.MILLISECOND, stateDate.getMillisecond());
           if (fieldCalendar.getTime().getTime() >= 0 && fieldCalendar.getTime().getTime() < 24 * 3600 * 1000) {
             // This is a default date. Set it today.
             Calendar today = Calendar.getInstance(timeZone);
@@ -861,6 +857,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
           stateDate.setHour(fieldCalendar.get(Calendar.HOUR_OF_DAY));
           stateDate.setMinute(fieldCalendar.get(Calendar.MINUTE));
           stateDate.setSecond(fieldCalendar.get(Calendar.SECOND));
+          stateDate.setMillisecond(fieldCalendar.get(Calendar.MILLISECOND));
           return stateDate;
         }
         return originalValue;
@@ -1388,7 +1385,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
               DateDto stateDate = (DateDto) originalValue;
               serverCalendar.set(stateDate.getYear(), stateDate.getMonth(), stateDate.getDate(), stateDate.getHour(),
                   stateDate.getMinute(), stateDate.getSecond());
-              serverCalendar.set(Calendar.MILLISECOND, 0);
+              serverCalendar.set(Calendar.MILLISECOND, stateDate.getMillisecond());
               Date connectorDate = serverCalendar.getTime();
               return connectorDate;
             }
@@ -1409,6 +1406,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
               stateDate.setHour(serverCalendar.get(Calendar.HOUR_OF_DAY));
               stateDate.setMinute(serverCalendar.get(Calendar.MINUTE));
               stateDate.setSecond(serverCalendar.get(Calendar.SECOND));
+              stateDate.setMillisecond(serverCalendar.get(Calendar.MILLISECOND));
               return stateDate;
             }
             return originalValue;
@@ -1417,6 +1415,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
       }
       viewComponent = createRTimeField(propertyViewDescriptor);
       ((RTimeField) viewComponent).setSecondsAware(propertyDescriptor.isSecondsAware());
+      ((RTimeField) viewComponent).setMillisecondsAware(propertyDescriptor.isMillisecondsAware());
       ((RTimeField) viewComponent).setFormatPattern(propertyDescriptor.getFormatPattern());
     }
     connector.setExceptionHandler(actionHandler);

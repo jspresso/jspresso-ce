@@ -22,23 +22,24 @@ import java.io.Serializable;
 
 /**
  * A date DTO that is insensible to timezones.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class DateDto implements Serializable {
 
   private static final long serialVersionUID = 8543631200164065569L;
 
-  private int               year;
-  private int               month;
-  private int               date;
-  private int               hour;
-  private int               minute;
-  private int               second;
+  private int year;
+  private int month;
+  private int date;
+  private int hour;
+  private int minute;
+  private int second;
+  private int millisecond;
 
   /**
    * Gets the year.
-   * 
+   *
    * @return the year.
    */
   public int getYear() {
@@ -47,9 +48,9 @@ public class DateDto implements Serializable {
 
   /**
    * Sets the year.
-   * 
+   *
    * @param year
-   *          the year to set.
+   *     the year to set.
    */
   public void setYear(int year) {
     this.year = year;
@@ -57,7 +58,7 @@ public class DateDto implements Serializable {
 
   /**
    * Gets the month.
-   * 
+   *
    * @return the month.
    */
   public int getMonth() {
@@ -66,9 +67,9 @@ public class DateDto implements Serializable {
 
   /**
    * Sets the month.
-   * 
+   *
    * @param month
-   *          the month to set.
+   *     the month to set.
    */
   public void setMonth(int month) {
     this.month = month;
@@ -76,9 +77,9 @@ public class DateDto implements Serializable {
 
   /**
    * Sets the date.
-   * 
+   *
    * @param date
-   *          the date to set.
+   *     the date to set.
    */
   public void setDate(int date) {
     this.date = date;
@@ -86,7 +87,7 @@ public class DateDto implements Serializable {
 
   /**
    * Gets the date.
-   * 
+   *
    * @return the date.
    */
   public int getDate() {
@@ -95,7 +96,7 @@ public class DateDto implements Serializable {
 
   /**
    * Gets the hour.
-   * 
+   *
    * @return the hour.
    */
   public int getHour() {
@@ -104,9 +105,9 @@ public class DateDto implements Serializable {
 
   /**
    * Sets the hour.
-   * 
+   *
    * @param hour
-   *          the hour to set.
+   *     the hour to set.
    */
   public void setHour(int hour) {
     this.hour = hour;
@@ -114,7 +115,7 @@ public class DateDto implements Serializable {
 
   /**
    * Gets the minute.
-   * 
+   *
    * @return the minute.
    */
   public int getMinute() {
@@ -123,9 +124,9 @@ public class DateDto implements Serializable {
 
   /**
    * Sets the minute.
-   * 
+   *
    * @param minute
-   *          the minute to set.
+   *     the minute to set.
    */
   public void setMinute(int minute) {
     this.minute = minute;
@@ -133,7 +134,7 @@ public class DateDto implements Serializable {
 
   /**
    * Gets the second.
-   * 
+   *
    * @return the second.
    */
   public int getSecond() {
@@ -142,16 +143,39 @@ public class DateDto implements Serializable {
 
   /**
    * Sets the second.
-   * 
+   *
    * @param second
-   *          the second to set.
+   *     the second to set.
    */
   public void setSecond(int second) {
     this.second = second;
   }
 
   /**
+   * Gets millisecond.
+   *
+   * @return the millisecond
+   */
+  public int getMillisecond() {
+    return millisecond;
+  }
+
+  /**
+   * Sets millisecond.
+   *
+   * @param millisecond
+   *     the millisecond
+   */
+  public void setMillisecond(int millisecond) {
+    this.millisecond = millisecond;
+  }
+
+  /**
    * {@inheritDoc}
+   *
+   * @param obj
+   *     the obj
+   * @return the boolean
    */
   @Override
   public boolean equals(Object obj) {
@@ -162,17 +186,20 @@ public class DateDto implements Serializable {
       return ((DateDto) obj).year == year && ((DateDto) obj).month == month
           && ((DateDto) obj).date == date && ((DateDto) obj).hour == hour
           && ((DateDto) obj).minute == minute
-          && ((DateDto) obj).second == second;
+          && ((DateDto) obj).second == second
+          && ((DateDto) obj).millisecond == millisecond;
     }
     return false;
   }
 
   /**
    * {@inheritDoc}
+   *
+   * @return the int
    */
   @Override
   public int hashCode() {
     return year * 37 + month * 43 + date * 7 + hour * 13 + minute * 23 + second
-        * 17;
+        * 17 + millisecond * 53;
   }
 }

@@ -20,6 +20,7 @@ package org.jspresso.framework.gui.remote {
 public class RTimeField extends RComponent {
 
   private var _secondsAware:Boolean;
+  private var _millisecondsAware:Boolean;
   private var _useDateDto:Boolean;
   private var _formatPattern:String;
 
@@ -36,6 +37,13 @@ public class RTimeField extends RComponent {
     _secondsAware = value;
   }
 
+  public function get millisecondsAware():Boolean {
+    return _millisecondsAware;
+  }
+
+  public function set millisecondsAware(value:Boolean):void {
+    _millisecondsAware = value;
+  }
 
   public function useDateDto(value:Boolean):void {
     _useDateDto = value;
@@ -44,7 +52,6 @@ public class RTimeField extends RComponent {
   public function isUseDateDto():Boolean {
     return _useDateDto;
   }
-
 
   public function get formatPattern():String {
     return _formatPattern;

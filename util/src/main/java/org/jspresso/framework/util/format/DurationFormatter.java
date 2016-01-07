@@ -29,7 +29,7 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
  * A formatter / parser to deal with duration properties.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class DurationFormatter implements IFormatter<Number, String> {
@@ -45,7 +45,7 @@ public class DurationFormatter implements IFormatter<Number, String> {
    *          the locale the formatter must be constructed in.
    */
   public DurationFormatter(ITranslationProvider translationProvider,
-      Locale locale) {
+      Locale locale, boolean secondsAware, boolean millisecondsAware) {
     super();
     PeriodFormatterBuilder builder = new PeriodFormatterBuilder();
     builder.appendDays();
@@ -62,6 +62,16 @@ public class DurationFormatter implements IFormatter<Number, String> {
     builder.appendSuffix(
         " " + translationProvider.getTranslation("minute", locale), " "
             + translationProvider.getTranslation("minutes", locale));
+    if (secondsAware) {
+      builder.appendSeconds();
+      builder.appendSuffix(" " + translationProvider.getTranslation("second", locale),
+          " " + translationProvider.getTranslation("seconds", locale));
+    }
+    if (millisecondsAware) {
+      builder.appendMillis();
+      builder.appendSuffix(" " + translationProvider.getTranslation("millisecond", locale),
+          " " + translationProvider.getTranslation("milliseconds", locale));
+    }
     this.formatter = builder.toFormatter().withLocale(locale);
   }
 

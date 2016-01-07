@@ -29,11 +29,11 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * the form of a number of milliseconds. duration properties are cleanly handled
  * by Jspresso UI layer for both displaying / editing duration properties in a
  * convenient human format.
- * 
+ *
  * @author Vincent Vandenschrick
  */
-public class BasicDurationPropertyDescriptor extends
-    BasicScalarPropertyDescriptor implements IDurationPropertyDescriptor {
+public class BasicDurationPropertyDescriptor extends BasicTimeAwarePropertyDescriptor
+    implements IDurationPropertyDescriptor {
 
   private Long maxMillis;
 
@@ -42,8 +42,7 @@ public class BasicDurationPropertyDescriptor extends
    */
   @Override
   public BasicDurationPropertyDescriptor clone() {
-    BasicDurationPropertyDescriptor clonedDescriptor = (BasicDurationPropertyDescriptor) super
-        .clone();
+    BasicDurationPropertyDescriptor clonedDescriptor = (BasicDurationPropertyDescriptor) super.clone();
 
     return clonedDescriptor;
   }
@@ -53,8 +52,7 @@ public class BasicDurationPropertyDescriptor extends
    */
   @Override
   public BasicPropertyDescriptor createQueryDescriptor() {
-    BasicDurationPropertyDescriptor queryDescriptor = (BasicDurationPropertyDescriptor) super
-        .createQueryDescriptor();
+    BasicDurationPropertyDescriptor queryDescriptor = (BasicDurationPropertyDescriptor) super.createQueryDescriptor();
     queryDescriptor.setMaxMillis(null);
     return queryDescriptor;
   }
@@ -77,32 +75,26 @@ public class BasicDurationPropertyDescriptor extends
 
   /**
    * Handles max value.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
   public void preprocessSetter(final Object component, final Object newValue) {
     super.preprocessSetter(component, newValue);
-    if (newValue != null && getMaxMillis() != null
-        && (Long) newValue > getMaxMillis()) {
-      IntegrityException ie = new IntegrityException("[" + getName()
-          + "] value is too high on [" + component + "].") {
+    if (newValue != null && getMaxMillis() != null && (Long) newValue > getMaxMillis()) {
+      IntegrityException ie = new IntegrityException("[" + getName() + "] value is too high on [" + component + "].") {
 
         private static final long serialVersionUID = 7459823123892198831L;
 
         @Override
-        public String getI18nMessage(ITranslationProvider translationProvider,
-            Locale locale) {
+        public String getI18nMessage(ITranslationProvider translationProvider, Locale locale) {
           StringBuilder boundsSpec = new StringBuilder();
           boundsSpec.append("x");
           if (getMaxMillis() != null) {
             boundsSpec.append(" <= ").append(getMaxMillis());
           }
-          return translationProvider.getTranslation(
-              "integrity.property.toobig", new Object[] {
-                  getI18nName(translationProvider, locale), boundsSpec,
-                  component
-              }, locale);
+          return translationProvider.getTranslation("integrity.property.toobig",
+              new Object[]{getI18nName(translationProvider, locale), boundsSpec, component}, locale);
         }
 
       };
@@ -115,7 +107,7 @@ public class BasicDurationPropertyDescriptor extends
    * milliseconds. Default value is {@code null}, meaning unbound.
    *
    * @param maxMillis
-   *          the maxMillis to set.
+   *     the maxMillis to set.
    */
   public void setMaxMillis(Long maxMillis) {
     this.maxMillis = maxMillis;

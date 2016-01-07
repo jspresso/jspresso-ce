@@ -29,17 +29,15 @@ import org.jspresso.framework.model.descriptor.ITimePropertyDescriptor;
  *
  * @author Vincent Vandenschrick
  */
-public class BasicTimePropertyDescriptor extends BasicScalarPropertyDescriptor
-    implements ITimePropertyDescriptor {
+public class BasicTimePropertyDescriptor extends BasicTimeAwarePropertyDescriptor implements ITimePropertyDescriptor {
 
-  private boolean secondsAware;
-  private String  formatPattern;
+  private String formatPattern;
 
   /**
    * Constructs a new {@code BasicTimePropertyDescriptor} instance.
    */
   public BasicTimePropertyDescriptor() {
-    secondsAware = true;
+    super();
   }
 
   /**
@@ -47,8 +45,7 @@ public class BasicTimePropertyDescriptor extends BasicScalarPropertyDescriptor
    */
   @Override
   public BasicTimePropertyDescriptor clone() {
-    BasicTimePropertyDescriptor clonedDescriptor = (BasicTimePropertyDescriptor) super
-        .clone();
+    BasicTimePropertyDescriptor clonedDescriptor = (BasicTimePropertyDescriptor) super.clone();
 
     return clonedDescriptor;
   }
@@ -65,25 +62,6 @@ public class BasicTimePropertyDescriptor extends BasicScalarPropertyDescriptor
    * {@inheritDoc}
    */
   @Override
-  public boolean isSecondsAware() {
-    return secondsAware;
-  }
-
-  /**
-   * Should this time information include seconds.
-   *
-   * @param secondsAware
-   *          Configure to {@code true} if this time information include
-   *          seconds.
-   */
-  public void setSecondsAware(boolean secondsAware) {
-    this.secondsAware = secondsAware;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   public String getFormatPattern() {
     return formatPattern;
   }
@@ -91,7 +69,8 @@ public class BasicTimePropertyDescriptor extends BasicScalarPropertyDescriptor
   /**
    * Sets format pattern. Allows to override the default one.
    *
-   * @param formatPattern the format pattern
+   * @param formatPattern
+   *     the format pattern
    */
   public void setFormatPattern(String formatPattern) {
     this.formatPattern = formatPattern;
