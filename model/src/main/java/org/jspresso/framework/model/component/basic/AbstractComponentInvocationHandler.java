@@ -576,7 +576,9 @@ public abstract class AbstractComponentInvocationHandler implements
             }
           } else if(EntityHelper.isInlineComponentReference(
               propertyDescriptor.getReferencedDescriptor().getElementDescriptor())) {
-            decorated.setOwningComponent((IComponent) proxy, propertyDescriptor);
+            if (decorated != null) {
+              decorated.setOwningComponent((IComponent) proxy, propertyDescriptor);
+            }
           }
         }
       } else if (property instanceof Set<?>) {
@@ -590,7 +592,9 @@ public abstract class AbstractComponentInvocationHandler implements
           }
           if (EntityHelper.isInlineComponentReference(
               propertyDescriptor.getReferencedDescriptor().getElementDescriptor())) {
-            decorated.setOwningComponent((IComponent) proxy, propertyDescriptor);
+            if (decorated != null) {
+              decorated.setOwningComponent((IComponent) proxy, propertyDescriptor);
+            }
           }
         }
       }
@@ -968,12 +972,16 @@ public abstract class AbstractComponentInvocationHandler implements
     if (EntityHelper.isInlineComponentReference(propertyDescriptor.getReferencedDescriptor().getElementDescriptor())) {
       if (oldPropertyValue instanceof Collection<?> && isInitialized(oldPropertyValue)) {
         for (IComponent component : (Collection<IComponent>) oldPropertyValue) {
-          component.setOwningComponent(null, null);
+          if (component != null) {
+            component.setOwningComponent(null, null);
+          }
         }
       }
       if (newPropertyValue instanceof Collection<?> && isInitialized(newPropertyValue)) {
         for (IComponent component : (Collection<IComponent>) newPropertyValue) {
-          component.setOwningComponent((IComponent) proxy, propertyDescriptor);
+          if (component != null) {
+            component.setOwningComponent((IComponent) proxy, propertyDescriptor);
+          }
         }
       }
     }
@@ -1343,7 +1351,9 @@ public abstract class AbstractComponentInvocationHandler implements
       }
       if (inserted) {
         if (EntityHelper.isInlineComponentReference(propertyDescriptor.getReferencedDescriptor().getElementDescriptor())) {
-          ((IComponent) value).setOwningComponent((IComponent) proxy, propertyDescriptor);
+          if (value != null) {
+            ((IComponent) value).setOwningComponent((IComponent) proxy, propertyDescriptor);
+          }
         }
         if (collectionSortEnabled) {
           inlineComponentFactory.sortCollectionProperty((IComponent) proxy, propertyName);
@@ -1851,7 +1861,9 @@ public abstract class AbstractComponentInvocationHandler implements
             .cloneCollection((Collection<?>) collectionProperty);
         if (collectionProperty.remove(value)) {
           if (EntityHelper.isInlineComponentReference(propertyDescriptor.getReferencedDescriptor().getElementDescriptor())) {
-            ((IComponent) value).setOwningComponent(null, null);
+            if (value != null) {
+              ((IComponent) value).setOwningComponent(null, null);
+            }
           }
           doFirePropertyChange(proxy, propertyName, oldCollectionSnapshot,
               collectionProperty);
