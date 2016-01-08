@@ -66,7 +66,10 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
           this.__currentCellState.getPermId());
       var editorWidget = this.__viewFactory.createComponent(this.__rComponent, false);
       editorWidget.addListener("disappear", this.__cleanCurrentCellBinding, this);
-      state.addListener("changeValue", function () {
+      state.addListenerOnce("changeValue", function (e) {
+        if (e.getData() === null) {
+          this.__currentCellState.setValue(e.getData());
+        }
         table.stopEditing();
       }, this);
 
