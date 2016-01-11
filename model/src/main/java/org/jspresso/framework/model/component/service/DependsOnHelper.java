@@ -161,6 +161,9 @@ public class DependsOnHelper {
                                                      IPropertyChangeCapable targetBean,
                                                      IAccessorFactoryProvider accessorFactoryProvider,
                                                      String sourceProperty, String... forwardedProperty) {
+    if (sourceBean == null) {
+      return;
+    }
     if (sourceBean == targetBean && Arrays.binarySearch(forwardedProperty, sourceProperty) >= 0) {
       throw new IllegalArgumentException("Forwarded properties " + Arrays.asList(forwardedProperty)
           + " cannot contain source property " + sourceProperty + " when registering notification forwarding");
@@ -191,6 +194,9 @@ public class DependsOnHelper {
                                                      IPropertyChangeCapable targetBean,
                                                      IAccessorFactoryProvider accessorFactoryProvider,
                                                      String sourceProperty, Method... forwardedMethod) {
+    if (sourceBean == null) {
+      return;
+    }
     sourceBean.addPropertyChangeListener(sourceProperty, new ForwardingPropertyChangeListener(targetBean,
         accessorFactoryProvider, forwardedMethod));
   }
@@ -310,7 +316,9 @@ public class DependsOnHelper {
                                                               final String sourceElementProperty,
                                                               final String[] forwardedProperties,
                                                               final Method[] forwardedMethods) {
-
+    if (sourceBean == null) {
+      return;
+    }
     // listen normally to collection changes
     if (forwardedProperties != null) {
       registerNotificationForwarding(sourceBean, accessorFactoryProvider, sourceCollectionProperty,
@@ -337,12 +345,15 @@ public class DependsOnHelper {
             newChildren.removeAll((Collection<?>) evt.getOldValue());
           }
           for (IPropertyChangeCapable child : newChildren) {
-            if (forwardedProperties != null) {
-              registerNotificationForwarding(child, sourceBean, accessorFactoryProvider, sourceElementProperty,
-                  forwardedProperties);
-            }
-            if (forwardedMethods != null) {
-              registerNotificationForwarding(child, sourceBean, accessorFactoryProvider, sourceElementProperty, forwardedMethods);
+            if (child != null) {
+              if (forwardedProperties != null) {
+                registerNotificationForwarding(child, sourceBean, accessorFactoryProvider, sourceElementProperty,
+                    forwardedProperties);
+              }
+              if (forwardedMethods != null) {
+                registerNotificationForwarding(child, sourceBean, accessorFactoryProvider, sourceElementProperty,
+                    forwardedMethods);
+              }
             }
           }
         }
@@ -357,14 +368,16 @@ public class DependsOnHelper {
             removedChildren.removeAll((Collection<?>) evt.getNewValue());
           }
           for (IPropertyChangeCapable child : removedChildren) {
-            for (PropertyChangeListener listener : child.getPropertyChangeListeners(sourceElementProperty)) {
-              if (listener instanceof DependsOnHelper.ForwardingPropertyChangeListener) {
-                if (Arrays.equals(
-                    ((DependsOnHelper.ForwardingPropertyChangeListener) listener).getForwardedProperties(),
-                    forwardedProperties) || Arrays.equals(
-                    ((DependsOnHelper.ForwardingPropertyChangeListener) listener).getForwardedMethods(),
-                    forwardedMethods)) {
-                  child.removePropertyChangeListener(sourceElementProperty, listener);
+            if (child != null) {
+              for (PropertyChangeListener listener : child.getPropertyChangeListeners(sourceElementProperty)) {
+                if (listener instanceof DependsOnHelper.ForwardingPropertyChangeListener) {
+                  if (Arrays.equals(
+                      ((DependsOnHelper.ForwardingPropertyChangeListener) listener).getForwardedProperties(),
+                      forwardedProperties) || Arrays.equals(
+                      ((DependsOnHelper.ForwardingPropertyChangeListener) listener).getForwardedMethods(),
+                      forwardedMethods)) {
+                    child.removePropertyChangeListener(sourceElementProperty, listener);
+                  }
                 }
               }
             }
@@ -388,8 +401,10 @@ public class DependsOnHelper {
     }
     if (initialChildren != null && Hibernate.isInitialized(initialChildren)) {
       for (IPropertyChangeCapable child : initialChildren) {
-        registerNotificationForwarding(child, sourceBean, accessorFactoryProvider, sourceElementProperty,
-            forwardedProperties);
+        if (child != null) {
+          registerNotificationForwarding(child, sourceBean, accessorFactoryProvider, sourceElementProperty,
+              forwardedProperties);
+        }
       }
     }
   }
