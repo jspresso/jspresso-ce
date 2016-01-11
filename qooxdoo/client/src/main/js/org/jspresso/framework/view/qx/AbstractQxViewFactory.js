@@ -490,10 +490,15 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
       var formatPatterns = [];
       var defaultFormatPattern = this._getDatePattern();
       formatPatterns.push(defaultFormatPattern);
+      formatPatterns.push(defaultFormatPattern.replace(/\//g, ""));
       for (var i = defaultFormatPattern.length; i > 0; i--) {
         var subPattern = defaultFormatPattern.substring(0, i);
         if (subPattern.charAt(subPattern.length - 1) == "/") {
-          formatPatterns.push(subPattern.substring(0, subPattern.length - 1));
+          var truncated = subPattern.substring(0, subPattern.length - 1);
+          formatPatterns.push(truncated);
+          if (truncated.indexOf("/") >= 0) {
+            formatPatterns.push(truncated.replace(/\//g, ""));
+          }
         }
       }
       return formatPatterns;
