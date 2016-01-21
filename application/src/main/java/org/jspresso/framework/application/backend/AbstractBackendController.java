@@ -1290,9 +1290,11 @@ public abstract class AbstractBackendController extends AbstractController imple
     if (owningComponent != null) {
       IComponent uowOwningComponent;
       if (owningComponent instanceof IEntity) {
-        uowOwningComponent = cloneInUnitOfWork((IEntity) owningComponent, allowOuterScopeUpdate, alreadyCloned);
+        uowOwningComponent = cloneInUnitOfWork((IEntity) owningComponent, allowOuterScopeUpdate, alreadyCloned,
+            eventsToRelease);
       } else {
-        uowOwningComponent = cloneComponentInUnitOfWork(owningComponent, allowOuterScopeUpdate, alreadyCloned);
+        uowOwningComponent = cloneComponentInUnitOfWork(owningComponent, allowOuterScopeUpdate, alreadyCloned,
+            eventsToRelease);
       }
       uowComponent.setOwningComponent(uowOwningComponent, owningComponent.getOwningPropertyDescriptor());
     }
@@ -1608,7 +1610,7 @@ public abstract class AbstractBackendController extends AbstractController imple
                       registeredComponent = (IComponent) reusedComponentInstances.get(i);
                     }
                     registeredCollection.add(mergeComponent((IComponent) collectionElement, registeredComponent, mergeMode,
-                        alreadyMerged));
+                        alreadyMerged, eventsToRelease));
                     i++;
                   } else {
                     registeredCollection.add(collectionElement);
@@ -1714,9 +1716,9 @@ public abstract class AbstractBackendController extends AbstractController imple
       if (owningComponent != null) {
         IComponent uowOwningComponent;
         if (owningComponent instanceof IEntity) {
-          uowOwningComponent = merge((IEntity) owningComponent, mergeMode, alreadyMerged);
+          uowOwningComponent = merge((IEntity) owningComponent, mergeMode, alreadyMerged, eventsToRelease);
         } else {
-          uowOwningComponent = mergeComponent(owningComponent, null, mergeMode, alreadyMerged);
+          uowOwningComponent = mergeComponent(owningComponent, null, mergeMode, alreadyMerged, eventsToRelease);
         }
         varRegisteredComponent.setOwningComponent(uowOwningComponent, owningComponent.getOwningPropertyDescriptor());
       }
