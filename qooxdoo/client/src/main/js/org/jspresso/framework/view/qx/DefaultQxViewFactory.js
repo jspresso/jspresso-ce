@@ -1344,11 +1344,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         scrollContainer.setHeight(form.getHeight());
         decoratedForm = scrollContainer;
       }
-      var lefter = new qx.ui.container.Composite(new qx.ui.layout.Grow());
-      decoratedForm.setAllowGrowX(remoteForm.getWidthResizeable());
-      decoratedForm.setAllowShrinkX(true);
-      lefter.add(decoratedForm);
-      decoratedForm = lefter;
+      if (!remoteForm.getWidthResizeable()) {
+        var lefter = new qx.ui.container.Composite(new qx.ui.layout.Dock());
+        lefter.add(decoratedForm, {edge: "west"});
+        decoratedForm = lefter;
+      }
       return decoratedForm;
     },
 
@@ -1382,6 +1382,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           decorator.setAppearance("bordered-container");
         }
         decorator.setLayout(new qx.ui.layout.Grow());
+        decorator.setAllowGrowX(component.getAllowGrowX());
+        decorator.setAllowShrinkX(component.getAllowShrinkX());
+        decorator.setAllowGrowY(component.getAllowGrowY());
+        decorator.setAllowShrinkY(component.getAllowShrinkY());
+        component.setAllowStretchX(true, true);
+        component.setAllowStretchY(true, true);
         decorator.add(component);
       }
       return decorator;
