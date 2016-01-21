@@ -75,6 +75,7 @@ import mx.events.IndexChangedEvent;
 import mx.events.ItemClickEvent;
 import mx.events.ListEvent;
 import mx.events.MenuEvent;
+import mx.events.ResizeEvent;
 import mx.formatters.Formatter;
 import mx.formatters.NumberBase;
 import mx.formatters.NumberBaseRoundType;
@@ -1559,7 +1560,6 @@ public class DefaultFlexViewFactory {
     for (var i:int = 0; i < remoteCardContainer.cardNames.length; i++) {
       var rCardComponent:RComponent = remoteCardContainer.cards[i] as RComponent;
       var cardName:String = remoteCardContainer.cardNames[i] as String;
-
       addCard(cardContainer, rCardComponent, cardName);
     }
     bindCardContainer(cardContainer, remoteCardContainer.state);
@@ -2120,16 +2120,22 @@ public class DefaultFlexViewFactory {
       if (rTab.toolTip != null) {
         tabCanvas.toolTip = rTab.toolTip;
       }
-      var fixTabSize:Function = function (event:FlexEvent):void {
-        if (event.target is Canvas) {
-          var tabC:Canvas = event.target as Canvas;
-          tabC.measuredWidth = (tabC.getChildAt(0) as UIComponent).measuredWidth;
-          tabC.measuredHeight = (tabC.getChildAt(0) as UIComponent).measuredHeight;
-          //noinspection JSReferencingMutableVariableFromClosure
-          tabC.removeEventListener(FlexEvent.CREATION_COMPLETE, fixTabSize);
+      var fixTabSize:Function = function (event:Event):void {
+        var tabContent:UIComponent = event.target as UIComponent;
+        var tabCanvas:UIComponent = tabContent.parent as UIComponent;
+        if (tabContent is ViewStack && (tabContent as ViewStack).selectedChild) {
+          tabContent = (tabContent as ViewStack).selectedChild as UIComponent;
+        }
+        if (tabCanvas.measuredWidth < tabContent.measuredWidth) {
+          tabCanvas.measuredWidth = tabContent.measuredWidth;
+          tabContainer.invalidateSize();
+        }
+        if (tabCanvas.measuredHeight < tabContent.measuredHeight) {
+          tabCanvas.measuredHeight = tabContent.measuredHeight;
+          tabContainer.invalidateSize();
         }
       };
-      tabCanvas.addEventListener(FlexEvent.CREATION_COMPLETE, fixTabSize);
+      tabContent.addEventListener(ResizeEvent.RESIZE, fixTabSize);
       tabCanvas.addChild(tabContent);
     }
 
