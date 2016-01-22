@@ -3597,6 +3597,41 @@ public abstract class AbstractViewFactory<E, F, G> implements
   }
 
   /**
+   * Store tab selection preference.
+   *
+   * @param tabViewDescriptor
+   *     the tab view descriptor
+   * @param selectedTabIndex
+   *     the selected tab index
+   * @param actionHandler
+   *     the action handler
+   */
+  protected void storeTabSelectionPreference(ITabViewDescriptor tabViewDescriptor, int selectedTabIndex, IActionHandler actionHandler) {
+    if (tabViewDescriptor.getPermId() != null) {
+      actionHandler.putUserPreference(tabViewDescriptor.getPermId(), Integer.toString(selectedTabIndex));
+    }
+  }
+
+  /**
+   * Gets tab selection preference.
+   *
+   * @param tabViewDescriptor
+   *     the tab view descriptor
+   * @param actionHandler
+   *     the action handler
+   * @return the tab selection preference
+   */
+  protected int getTabSelectionPreference(ITabViewDescriptor tabViewDescriptor, IActionHandler actionHandler) {
+    if (tabViewDescriptor.getPermId() != null) {
+      String tabSelectionPreference = actionHandler.getUserPreference(tabViewDescriptor.getPermId());
+      if (tabSelectionPreference != null) {
+        return Integer.parseInt(tabSelectionPreference);
+      }
+    }
+    return 0;
+  }
+
+  /**
    * Filters enumeration values if refined.
    *
    * @param enumerationValues

@@ -558,8 +558,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
    */
   protected RCardContainer createRCardContainer(ICardViewDescriptor viewDescriptor) {
     RCardContainer cardContainer = new RCardContainer(getGuidGenerator().generateGUID());
-    cardContainer.setState(((IRemoteValueStateFactory) getConnectorFactory()).createRemoteValueState(
-        getGuidGenerator().generateGUID(), viewDescriptor.getPermId()));
+    cardContainer.setState(((IRemoteValueStateFactory) getConnectorFactory())
+        .createRemoteValueState(getGuidGenerator().generateGUID(), viewDescriptor.getPermId()));
     return cardContainer;
   }
 
@@ -618,9 +618,9 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     if (viewComponent instanceof RTextField) {
       if (propertyViewDescriptor instanceof IStringPropertyViewDescriptor
           && ((IStringPropertyViewDescriptor) propertyViewDescriptor).getCharacterAction() != null) {
-        ((RTextField) viewComponent).setCharacterAction(getActionFactory().createAction(
-            ((IStringPropertyViewDescriptor) propertyViewDescriptor).getCharacterAction(), actionHandler, view,
-            locale));
+        ((RTextField) viewComponent).setCharacterAction(getActionFactory()
+            .createAction(((IStringPropertyViewDescriptor) propertyViewDescriptor).getCharacterAction(), actionHandler,
+                view, locale));
       }
     }
     return view;
@@ -804,7 +804,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
   /**
    * Gets date state value mapper.
    *
-   * @param timeZone the time zone
+   * @param timeZone
+   *     the time zone
    * @return the date state value mapper
    */
   protected IRemoteStateValueMapper getDateStateValueMapper(final TimeZone timeZone) {
@@ -945,8 +946,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     if (propertyViewDescriptor.isReadOnly() && propertyViewDescriptor.getAction() != null) {
       connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
       viewComponent = createRLink(propertyViewDescriptor, false);
-      ((RLabel) viewComponent).setMaxLength(getFormatLength(formatter, getEnumerationTemplateValue(propertyDescriptor,
-          actionHandler, locale)));
+      ((RLabel) viewComponent).setMaxLength(
+          getFormatLength(formatter, getEnumerationTemplateValue(propertyDescriptor, actionHandler, locale)));
     } else {
       connector = getConnectorFactory().createValueConnector(propertyDescriptor.getName());
       List<String> values = new ArrayList<>();
@@ -982,8 +983,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         ((RComboBox) viewComponent).setReadOnly(propertyViewDescriptor.isReadOnly());
         List<RIcon> icons = new ArrayList<>();
         for (String value : enumerationValues) {
-          icons.add(getIconFactory().getIcon(propertyDescriptor.getIconImageURL(value),
-              getIconFactory().getTinyIconSize()));
+          icons.add(
+              getIconFactory().getIcon(propertyDescriptor.getIconImageURL(value), getIconFactory().getTinyIconSize()));
         }
         ((RComboBox) viewComponent).setIcons(icons.toArray(new RIcon[icons.size()]));
       }
@@ -1447,8 +1448,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         .getComponentDescriptor();
     // Dynamic toolTips
     String toolTipProperty = computeComponentDynamicToolTip(viewDescriptor, modelDescriptor);
-    ICompositeValueConnector connector = getConnectorFactory().createCompositeValueConnector(getConnectorIdForBeanView(
-        viewDescriptor), toolTipProperty);
+    ICompositeValueConnector connector = getConnectorFactory().createCompositeValueConnector(
+        getConnectorIdForBeanView(viewDescriptor), toolTipProperty);
     RForm viewComponent = createRForm(viewDescriptor);
     viewComponent.setVerticallyScrollable(viewDescriptor.isVerticallyScrollable());
     viewComponent.setWidthResizeable(viewDescriptor.isWidthResizeable());
@@ -1470,9 +1471,9 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor.getModelDescriptor())
             .getComponentDescriptor().getPropertyDescriptor(propertyName);
         if (propertyDescriptor == null) {
-          throw new ViewException("Property descriptor [" + propertyName + "] does not exist for model descriptor " + viewDescriptor
-              .getModelDescriptor().getName() + "."
-          );
+          throw new ViewException(
+              "Property descriptor [" + propertyName + "] does not exist for model descriptor " + viewDescriptor
+                  .getModelDescriptor().getName() + ".");
         }
         IView<RComponent> propertyView = createView(propertyViewDescriptor, actionHandler, locale);
         // Fix bug 782
@@ -1488,8 +1489,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
           propertyViews.add(propertyView);
         }
         elements.add(propertyView.getPeer());
-        RLabel propertyLabel = createFormPropertyLabel(actionHandler, locale, propertyViewDescriptor, propertyDescriptor,
-            propertyView, forbidden);
+        RLabel propertyLabel = createFormPropertyLabel(actionHandler, locale, propertyViewDescriptor,
+            propertyDescriptor, propertyView, forbidden);
         elementLabels.add(propertyLabel);
         elementWidths.add(propertyViewDescriptor.getWidth());
         EHorizontalPosition labelHorizontalPosition = propertyViewDescriptor.getLabelHorizontalPosition();
@@ -1513,8 +1514,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
           } else {
             targetView = view;
           }
-          RAction action = getActionFactory().createAction(propertyViewDescriptor.getAction(), actionHandler, targetView,
-              locale);
+          RAction action = getActionFactory().createAction(propertyViewDescriptor.getAction(), actionHandler,
+              targetView, locale);
           configurePropertyViewAction(propertyViewDescriptor, action);
           ((RActionable) propertyView.getPeer()).setAction(action);
         }
@@ -1527,8 +1528,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     viewComponent.setElementWidths(elementWidths.toArray(new Integer[elementWidths.size()]));
     viewComponent.setElements(elements.toArray(new RComponent[elements.size()]));
     viewComponent.setElementLabels(elementLabels.toArray(new RComponent[elementLabels.size()]));
-    viewComponent.setLabelHorizontalPositions(labelHorizontalPositions.toArray(
-        new String[labelHorizontalPositions.size()]));
+    viewComponent.setLabelHorizontalPositions(
+        labelHorizontalPositions.toArray(new String[labelHorizontalPositions.size()]));
     return view;
   }
 
@@ -1584,8 +1585,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
       propertyLabel.setBackground(propertyViewDescriptor.getLabelBackground());
     }
     if (propertyViewDescriptor.getIcon() != null) {
-      propertyLabel.setIcon(getIconFactory().getIcon(propertyViewDescriptor.getIcon(),
-          getIconFactory().getTinyIconSize()));
+      propertyLabel.setIcon(
+          getIconFactory().getIcon(propertyViewDescriptor.getIcon(), getIconFactory().getTinyIconSize()));
     }
   }
 
@@ -1709,17 +1710,17 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
           new Object[]{propertyDescriptor.getReferencedDescriptor().getI18nName(actionHandler, locale)}, locale)
           + IActionFactory.TOOLTIP_ELLIPSIS);
       if (propertyDescriptor.getReferencedDescriptor().getIcon() != null) {
-        lovAction.setIcon(getIconFactory().getIcon(propertyDescriptor.getReferencedDescriptor().getIcon(),
-            getIconFactory().getTinyIconSize()));
+        lovAction.setIcon(getIconFactory()
+            .getIcon(propertyDescriptor.getReferencedDescriptor().getIcon(), getIconFactory().getTinyIconSize()));
       }
       RActionList actionList = new RActionList(getGuidGenerator().generateGUID());
       actionList.setActions(lovAction);
       viewComponent.setActionLists(actionList);
       if (propertyViewDescriptor instanceof IStringPropertyViewDescriptor
           && ((IStringPropertyViewDescriptor) propertyViewDescriptor).getCharacterAction() != null) {
-        ((RActionField) viewComponent).setCharacterAction(getActionFactory().createAction(
-            ((IStringPropertyViewDescriptor) propertyViewDescriptor).getCharacterAction(), actionHandler, view,
-            locale));
+        ((RActionField) viewComponent).setCharacterAction(getActionFactory()
+            .createAction(((IStringPropertyViewDescriptor) propertyViewDescriptor).getCharacterAction(), actionHandler,
+                view, locale));
       }
     }
     return view;
@@ -1754,8 +1755,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     }
     viewComponent.setSelectionMode(viewDescriptor.getSelectionMode().name());
     if (viewDescriptor.getRowAction() != null) {
-      viewComponent.setRowAction(getActionFactory().createAction(viewDescriptor.getRowAction(), actionHandler, view,
-          locale));
+      viewComponent.setRowAction(
+          getActionFactory().createAction(viewDescriptor.getRowAction(), actionHandler, view, locale));
     }
     return view;
   }
@@ -2042,8 +2043,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     viewComponent.setExpanded(viewDescriptor.isExpanded());
     IView<RComponent> view = constructView(viewComponent, viewDescriptor, connector);
     if (viewDescriptor.getRowAction() != null) {
-      viewComponent.setRowAction(getActionFactory().createAction(viewDescriptor.getRowAction(), actionHandler, view,
-          locale));
+      viewComponent.setRowAction(
+          getActionFactory().createAction(viewDescriptor.getRowAction(), actionHandler, view, locale));
     }
     return view;
   }
@@ -2080,8 +2081,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
    * {@inheritDoc}
    */
   @Override
-  protected ICompositeView<RComponent> createTabView(ITabViewDescriptor viewDescriptor, IActionHandler actionHandler,
-                                                     Locale locale) {
+  protected ICompositeView<RComponent> createTabView(final ITabViewDescriptor viewDescriptor,
+                                                     final IActionHandler actionHandler, Locale locale) {
     final RTabContainer viewComponent = createRTabContainer(viewDescriptor);
     final BasicIndexedView<RComponent> view = constructIndexedView(viewComponent, viewDescriptor);
 
@@ -2090,7 +2091,9 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
       @Override
       public void propertyChange(PropertyChangeEvent evt) {
         RTabContainer source = (RTabContainer) evt.getSource();
-        view.setCurrentViewIndex(source.getSelectedIndex());
+        int selectedIndex = source.getSelectedIndex();
+        view.setCurrentViewIndex(selectedIndex);
+        storeTabSelectionPreference(viewDescriptor, selectedIndex, actionHandler);
       }
     });
     List<RComponent> tabs = new ArrayList<>();
@@ -2116,6 +2119,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     }
     viewComponent.setTabs(tabs.toArray(new RComponent[tabs.size()]));
     view.setChildren(childrenViews);
+    view.setCurrentViewIndex(getTabSelectionPreference(viewDescriptor, actionHandler));
     return view;
   }
 
