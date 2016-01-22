@@ -2675,7 +2675,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         command.setLeadingIndex(index);
         this._getCommandHandler().registerCommand(command);
       }, this);
-
+      tabContainer.setSelection([tabContainer.getChildren()[remoteTabContainer.getSelectedIndex()]]);
       return tabContainer;
     },
 

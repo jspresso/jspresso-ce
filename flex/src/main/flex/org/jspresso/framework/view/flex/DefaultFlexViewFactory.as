@@ -2166,6 +2166,7 @@ public class DefaultFlexViewFactory {
       command.leadingIndex = index;
       _commandHandler.registerCommand(command);
     }, tabContainer, "selectedIndex", true);
+    tabContainer.selectedIndex = remoteTabContainer.selectedIndex;
     return tabContainer;
   }
 
