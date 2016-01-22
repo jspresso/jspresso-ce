@@ -2562,6 +2562,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
         int selectedIndex = source.getSelectedIndex();
         view.setCurrentViewIndex(selectedIndex);
         storeTabSelectionPreference(viewDescriptor, selectedIndex, actionHandler);
+        triggerTabSelectionAction(selectedIndex, source, viewDescriptor,  view,  actionHandler);
       }
     });
     List<IView<JComponent>> childrenViews = new ArrayList<>();

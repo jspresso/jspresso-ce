@@ -3764,4 +3764,31 @@ public abstract class AbstractViewFactory<E, F, G> implements
     }
     return false;
   }
+
+  /**
+   * Trigger tab selection action.
+   *
+   * @param selectedIndex
+   *     the selected index
+   * @param tabComponent
+   *     the tab component
+   * @param tabViewDescriptor
+   *     the tab view descriptor
+   * @param tabView
+   *     the tab view
+   * @param actionHandler
+   *     the action handler
+   */
+  protected void triggerTabSelectionAction(int selectedIndex, E tabComponent,
+                                           ITabViewDescriptor tabViewDescriptor, BasicIndexedView<E> tabView,
+                                           IActionHandler actionHandler) {
+    IAction tabSelectionAction = tabViewDescriptor.getTabSelectionAction();
+    if (tabSelectionAction != null) {
+      Map<String, Object> actionContext = getActionFactory().createActionContext(actionHandler, tabView,
+          tabView.getConnector(), Integer.toString(selectedIndex), tabComponent);
+      actionContext.put(ActionContextConstants.ACTION_PARAM, selectedIndex);
+      actionHandler.execute(tabSelectionAction, actionContext);
+    }
+  }
+
 }

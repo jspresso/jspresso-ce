@@ -2094,6 +2094,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         int selectedIndex = source.getSelectedIndex();
         view.setCurrentViewIndex(selectedIndex);
         storeTabSelectionPreference(viewDescriptor, selectedIndex, actionHandler);
+        triggerTabSelectionAction(selectedIndex, source, viewDescriptor, view, actionHandler);
       }
     });
     List<RComponent> tabs = new ArrayList<>();
