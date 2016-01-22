@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -28,14 +28,14 @@ import org.jspresso.framework.util.lang.ICloneable;
  * dialogs with a server service connector and forwards user actions to the
  * server. Another kind of connector might be a view connector connected to a
  * model connector with both connectors' states kept synchronized.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IConnector extends IPropertyChangeCapable, ICloneable {
 
   /**
    * Clones this connector.
-   * 
+   *
    * @param newConnectorId
    *          the identifier of the clone connector
    * @return the connector's clone.
@@ -45,7 +45,7 @@ public interface IConnector extends IPropertyChangeCapable, ICloneable {
   /**
    * Gets the identifier of the connector. In a bean property connector, this
    * identifier will be the property name.
-   * 
+   *
    * @return The connector identifier
    */
   String getId();
@@ -53,7 +53,7 @@ public interface IConnector extends IPropertyChangeCapable, ICloneable {
   /**
    * Sets the identifier of the connector. In a bean property connector, this
    * identifier will be the property name.
-   * 
+   *
    * @param id
    *          The connector identifier.
    */

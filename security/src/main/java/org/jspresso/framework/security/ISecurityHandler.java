@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,14 +20,14 @@ package org.jspresso.framework.security;
 
 /**
  * This interface is implemented by Jspresso security handlers.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface ISecurityHandler extends ISecurityContextBuilder {
 
   /**
    * Checks authorization for secured access.
-   * 
+   *
    * @param securable
    *          the id of the secured access to check.
    * @return true if access is granted.

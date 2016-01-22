@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -34,7 +34,7 @@ public interface IListSelectionModelBinder {
 
   /**
    * Binds a collection connector to keep track of a selection model selections.
-   * 
+   *
    * @param collectionComponent
    *          the collection component to bind the selection model for.
    * @param selectable

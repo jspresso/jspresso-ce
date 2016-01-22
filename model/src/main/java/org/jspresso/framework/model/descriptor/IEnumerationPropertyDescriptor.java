@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -28,7 +28,7 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * This interface is implemented by descriptors of enumeration properties. This
  * type of properties is constrained by a fixed value enumeration like
  * MALE/FEMALE or MONDAY/TUESDAY/WEDNESDAY/...
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IEnumerationPropertyDescriptor extends
@@ -37,21 +37,21 @@ public interface IEnumerationPropertyDescriptor extends
   /**
    * Gets the name of the enumeration (like GENDER for a MALE/FEMALE
    * enumeration).
-   * 
+   *
    * @return name of the underlying enumeration.
    */
   String getEnumerationName();
 
   /**
    * Gets the admissible values of the enumeration.
-   * 
+   *
    * @return the list of values contained in the underlying enumeration.
    */
   List<String> getEnumerationValues();
 
   /**
    * Gets the icon image url to use to render a enumeration value.
-   * 
+   *
    * @param value
    *          the value to render.
    * @return the image url to use.
@@ -60,7 +60,7 @@ public interface IEnumerationPropertyDescriptor extends
 
   /**
    * Gets the maximum length of the underlying string property.
-   * 
+   *
    * @return the string property maximum length.
    */
   Integer getMaxLength();
@@ -68,14 +68,14 @@ public interface IEnumerationPropertyDescriptor extends
   /**
    * Gets whether the enumeration values should be presented translated (using
    * the i18n keys enumerationName.value) or not.
-   * 
+   *
    * @return true if the enumeration values should be presented translated.
    */
   boolean isTranslated();
 
   /**
    * Gets the internationalized value of an enumeration element.
-   * 
+   *
    * @param value
    *          the enum value to translate.
    * @param translationProvider

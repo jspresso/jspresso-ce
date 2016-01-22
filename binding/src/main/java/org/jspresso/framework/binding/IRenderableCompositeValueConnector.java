@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,7 +23,7 @@ import org.jspresso.framework.util.gui.Icon;
 /**
  * This is the interface implemented by displayable composite connectors.
  * (composite).
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IRenderableCompositeValueConnector extends
@@ -31,7 +31,7 @@ public interface IRenderableCompositeValueConnector extends
 
   /**
    * Clones this connector.
-   * 
+   *
    * @return the connector's clone.
    */
   @Override
@@ -39,7 +39,7 @@ public interface IRenderableCompositeValueConnector extends
 
   /**
    * Clones this connector.
-   * 
+   *
    * @param newConnectorId
    *          the identifier of the clone connector
    * @return the connector's clone.
@@ -49,28 +49,28 @@ public interface IRenderableCompositeValueConnector extends
 
   /**
    * Gets the string used to display this connector description.
-   * 
+   *
    * @return the rendered description.
    */
   String getDisplayDescription();
 
   /**
    * Gets the icon used to display this connector.
-   * 
+   *
    * @return the rendered icon image url.
    */
   Icon getDisplayIcon();
 
   /**
    * Gets the string used to display this connector.
-   * 
+   *
    * @return the rendered string value.
    */
   String getDisplayValue();
 
   /**
    * Gets the connector responsible for rendering the composite connector.
-   * 
+   *
    * @return the rendering connector.
    */
   IValueConnector getRenderingConnector();

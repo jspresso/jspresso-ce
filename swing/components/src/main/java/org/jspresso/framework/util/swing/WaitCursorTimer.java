@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -29,7 +29,7 @@ import javax.swing.RootPaneContainer;
  * This class source code was submitted at JavaWorld by Kyle Davis. It
  * implements a automated hourglass management.
  * <p>
- * 
+ *
  * @author Kyle Davis
  */
 public class WaitCursorTimer extends Thread {
@@ -89,7 +89,7 @@ public class WaitCursorTimer extends Thread {
 
   /**
    * Starts the timer.
-   * 
+   *
    * @param sourceComponent
    *          the source component.
    */

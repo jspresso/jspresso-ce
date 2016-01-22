@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.application.frontend.command.remote;
 
 /**
  * A command to transfer selection of a remote peer.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteSelectionCommand extends RemoteCommand {
@@ -32,7 +32,7 @@ public class RemoteSelectionCommand extends RemoteCommand {
 
   /**
    * Gets the leadingIndex.
-   * 
+   *
    * @return the leadingIndex.
    */
   public int getLeadingIndex() {
@@ -41,7 +41,7 @@ public class RemoteSelectionCommand extends RemoteCommand {
 
   /**
    * Gets the selectedIndices.
-   * 
+   *
    * @return the selectedIndices.
    */
   public int[] getSelectedIndices() {
@@ -50,7 +50,7 @@ public class RemoteSelectionCommand extends RemoteCommand {
 
   /**
    * Sets the leadingIndex.
-   * 
+   *
    * @param leadingIndex
    *          the leadingIndex to set.
    */
@@ -60,7 +60,7 @@ public class RemoteSelectionCommand extends RemoteCommand {
 
   /**
    * Sets the selectedIndices.
-   * 
+   *
    * @param selectedIndices
    *          the selectedIndices to set.
    */

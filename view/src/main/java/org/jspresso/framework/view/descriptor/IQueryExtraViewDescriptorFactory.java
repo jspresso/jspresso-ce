@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Maxime HAMM. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -26,18 +26,18 @@ import org.jspresso.framework.view.descriptor.basic.BasicTabViewDescriptor;
 
 /**
  * Factory for query component extra view descriptor.
- * 
+ *
  * @author Maxime Hamm
  */
 public interface IQueryExtraViewDescriptorFactory {
 
   /**
    * Creates a new extra query component view descriptor.
-   * @param projectedViewDescriptor 
+   * @param projectedViewDescriptor
    *     the projected view descriptor.
-   * @param componentDescriptorProvider           
+   * @param componentDescriptorProvider
    *     the component descriptor provider.
-   * @param queryComponentDescriptor           
+   * @param queryComponentDescriptor
    *     the actual query component descriptor that will be used as model.
    * @return the created view descriptor.
    */

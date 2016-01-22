@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Maxime HAMM. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -59,7 +59,7 @@ public abstract class QueryComponentSerializationUtil {
         if (delegate != null) {
           map.put(key, delegate);
         }
-      } 
+      }
       else if (value instanceof EnumQueryStructure) {
         Serializable delegate = queryStructureToString((EnumQueryStructure) value);
         if (delegate != null) {
@@ -99,13 +99,13 @@ public abstract class QueryComponentSerializationUtil {
       Object v = query.get(k);
       if (v == null) {
         delegate[i++] = null;
-      } 
+      }
       else if (v instanceof QueryComponent) {
         delegate[i++] = componentToTable((QueryComponent) query.get(k));
-      } 
+      }
       else if (v instanceof EnumQueryStructure) {
         delegate[i++] = queryStructureToString((EnumQueryStructure) v);
-      } 
+      }
       else if (v instanceof Serializable) {
         delegate[i++] = (Serializable) query.get(k);
       }
@@ -117,7 +117,7 @@ public abstract class QueryComponentSerializationUtil {
     Set<EnumValueQueryStructure> selectedValues = value.getSelectedEnumerationValues();
     if (selectedValues.isEmpty())
       return null;
-    
+
     StringBuilder sb = new StringBuilder("[[");
     for (EnumValueQueryStructure ev : selectedValues) {
       sb.append(ev.getValue());
@@ -127,7 +127,7 @@ public abstract class QueryComponentSerializationUtil {
     return sb.toString();
   }
 
-  
+
   /**
    * Deserialize a base 64 representation of a query component
    * representation and hydrate the given query component instance.

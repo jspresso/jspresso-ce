@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.gui.remote;
 
 /**
  * A remote link component.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RLink extends RLabel implements RActionable {
@@ -49,7 +49,7 @@ public class RLink extends RLabel implements RActionable {
 
   /**
    * Gets the action.
-   * 
+   *
    * @return the action.
    */
   public RAction getAction() {
@@ -58,7 +58,7 @@ public class RLink extends RLabel implements RActionable {
 
   /**
    * Sets the action.
-   * 
+   *
    * @param action
    *          the action to set.
    */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 /**
  * This gate opens and closes based on the value of a string property matching a
  * regular expression.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RegexPropertyModelGate extends AbstractPropertyModelGate<String> {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -28,7 +28,7 @@ import org.jspresso.framework.util.gate.AbstractGate;
  * assigning the granted roles on the authorized artifact, is that the gate only
  * disables the artifact whereas the artifact granted roles prevent the artifact
  * from being created at all.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class GrantedRolesGate extends AbstractGate implements
@@ -49,7 +49,7 @@ public class GrantedRolesGate extends AbstractGate implements
    * Configures the roles for which the gate is open. It supports
    * &quot;<b>!</b>&quot; prefix to negate the role(s). If at least one of the
    * role is satisfied, then the gate is open.
-   * 
+   *
    * @param grantedRoles
    *          the grantedRoles to set.
    */
@@ -59,7 +59,7 @@ public class GrantedRolesGate extends AbstractGate implements
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @internal
    */
   @Override
@@ -88,7 +88,7 @@ public class GrantedRolesGate extends AbstractGate implements
 
   /**
    * Gets the granted roles.
-   * 
+   *
    * @return the grantedRoles.
    */
   protected Collection<String> getGrantedRoles() {

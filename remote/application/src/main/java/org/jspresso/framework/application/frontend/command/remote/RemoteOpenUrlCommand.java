@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.application.frontend.command.remote;
 
 /**
  * This command opens an url in a new browser window.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteOpenUrlCommand extends RemoteCommand {
@@ -32,7 +32,7 @@ public class RemoteOpenUrlCommand extends RemoteCommand {
 
   /**
    * Gets the urlSpec.
-   * 
+   *
    * @return the urlSpec.
    */
   public String getUrlSpec() {
@@ -41,7 +41,7 @@ public class RemoteOpenUrlCommand extends RemoteCommand {
 
   /**
    * Sets the urlSpec.
-   * 
+   *
    * @param urlSpec
    *          the urlSpec to set.
    */

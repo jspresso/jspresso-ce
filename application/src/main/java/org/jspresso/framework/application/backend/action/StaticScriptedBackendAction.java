@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -26,7 +26,7 @@ import org.jspresso.framework.util.scripting.ScriptMixin;
 /**
  * A statically scripted backend action. The script and the scripting language
  * are statically configured in the action itself.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class StaticScriptedBackendAction extends ScriptedBackendAction {
@@ -51,7 +51,7 @@ public class StaticScriptedBackendAction extends ScriptedBackendAction {
 
   /**
    * Sets the script source code.
-   * 
+   *
    * @param script
    *          the script source code.
    */
@@ -61,7 +61,7 @@ public class StaticScriptedBackendAction extends ScriptedBackendAction {
 
   /**
    * Sets the script language this scripted action is written in.
-   * 
+   *
    * @param scriptLanguage
    *          the scripting language.
    */

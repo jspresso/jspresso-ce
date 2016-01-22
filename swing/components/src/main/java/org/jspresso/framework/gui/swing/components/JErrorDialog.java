@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -48,7 +48,7 @@ import org.jspresso.framework.util.swing.SwingUtil;
 
 /**
  * Dialog used for reporting detailed messages (and errors).
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public final class JErrorDialog extends JDialog {
@@ -78,7 +78,7 @@ public final class JErrorDialog extends JDialog {
 
   /**
    * Factory method for error dialog.
-   * 
+   *
    * @param sourceComponent
    *          one of the components inside the owning window.
    * @param translationProvider
@@ -106,7 +106,7 @@ public final class JErrorDialog extends JDialog {
    * Set the details section of the error dialog. If the details are either null
    * or an empty string, then hide the detailsPane button and hide the detail
    * scroll pane. Otherwise, just set the detailsPane section.
-   * 
+   *
    * @param details
    *          Details to be shown in the detail section of the dialog. This can
    *          be null if you do not want to display the details section of the
@@ -127,7 +127,7 @@ public final class JErrorDialog extends JDialog {
    * Set the details section of the error dialog. If the details are either null
    * or an empty string, then hide the detailsPane button and hide the detail
    * scroll pane. Otherwise, just set the detailsPane section.
-   * 
+   *
    * @param details
    *          Details to be shown in the detail section of the dialog. This can
    *          be null if you do not want to display the details section of the
@@ -155,7 +155,7 @@ public final class JErrorDialog extends JDialog {
 
   /**
    * Set the error message for the dialog box.
-   * 
+   *
    * @param message
    *          Message for the error dialog
    */
@@ -170,7 +170,7 @@ public final class JErrorDialog extends JDialog {
 
   /**
    * Specifies the icon to use.
-   * 
+   *
    * @param messageIcon
    *          the Icon to use. If null, the default error icon will be used
    */
@@ -294,7 +294,7 @@ public final class JErrorDialog extends JDialog {
   /**
    * Set the detailsPane section to be either visible or invisible. Set the text
    * of the Details button accordingly.
-   * 
+   *
    * @param b
    *          if true detailsPane section will be visible
    */

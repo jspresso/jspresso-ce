@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import org.jspresso.framework.gui.remote.RAction;
 
 /**
  * This command is used to upload a file from the client peer.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteFileUploadCommand extends RemoteFileCommand {
@@ -33,7 +33,7 @@ public class RemoteFileUploadCommand extends RemoteFileCommand {
 
   /**
    * Gets the successCallbackAction.
-   * 
+   *
    * @return the successCallbackAction.
    */
   public RAction getSuccessCallbackAction() {
@@ -42,7 +42,7 @@ public class RemoteFileUploadCommand extends RemoteFileCommand {
 
   /**
    * Sets the successCallbackAction.
-   * 
+   *
    * @param successCallbackAction
    *          the successCallbackAction to set.
    */

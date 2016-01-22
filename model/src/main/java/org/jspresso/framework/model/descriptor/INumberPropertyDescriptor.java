@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,21 +22,21 @@ import java.math.BigDecimal;
 
 /**
  * This interface is the super-interface of all number property descriptors.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface INumberPropertyDescriptor extends IScalarPropertyDescriptor {
 
   /**
    * Gets the maximum value this property can have.
-   * 
+   *
    * @return the maximum admissible value
    */
   BigDecimal getMaxValue();
 
   /**
    * Gets the minimum value this property can have.
-   * 
+   *
    * @return the minimum admissible value.
    */
   BigDecimal getMinValue();

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -57,7 +57,7 @@ public class DisplayStaticUrlAction<E, F, G> extends DisplayUrlAction<E, F, G> {
 
   /**
    * Configures the translation key used to internationalize the URL to open.
-   * 
+   *
    * @param urlKey
    *          the urlKey to set.
    */

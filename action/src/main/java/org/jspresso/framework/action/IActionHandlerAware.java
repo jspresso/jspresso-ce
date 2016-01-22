@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -21,14 +21,14 @@ package org.jspresso.framework.action;
 /**
  * Simple interface that is implemented by objects that can be assigned an
  * action handler.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IActionHandlerAware {
 
   /**
    * Assigns the action handler.
-   * 
+   *
    * @param actionHandler
    *          the frontend controller to assign.
    */

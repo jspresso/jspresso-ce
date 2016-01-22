@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -37,7 +37,7 @@ public class BasicCompositeConnector extends AbstractCompositeValueConnector {
 
   /**
    * Constructs a new instance of BasicCompositeConnector.
-   * 
+   *
    * @param id
    *          the connector identifier
    */
@@ -101,7 +101,7 @@ public class BasicCompositeConnector extends AbstractCompositeValueConnector {
 
   /**
    * Gets the self-hosted value.
-   * 
+   *
    * @return the self-hosted value.
    */
   @Override
@@ -111,7 +111,7 @@ public class BasicCompositeConnector extends AbstractCompositeValueConnector {
 
   /**
    * Sets the self-hosted value.
-   * 
+   *
    * @param connecteeValue
    *          the value to host
    */

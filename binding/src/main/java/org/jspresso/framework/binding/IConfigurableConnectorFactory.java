@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,7 +23,7 @@ import org.jspresso.framework.util.format.IFormatter;
 /**
  * This is the interface defining the contract of a configurable connector
  * factory. These factories are designed to be used by view factories.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IConfigurableConnectorFactory {

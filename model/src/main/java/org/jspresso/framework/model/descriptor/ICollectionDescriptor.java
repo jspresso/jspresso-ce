@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,7 +24,7 @@ import org.jspresso.framework.util.collection.ESort;
 
 /**
  * This interface is implemented by descriptors of collections.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the concrete component element type.
@@ -43,14 +43,14 @@ public interface ICollectionDescriptor<E> extends
 
   /**
    * Gets the component descriptor of the elements contained in this collection.
-   * 
+   *
    * @return The collection's component descriptor.
    */
   IComponentDescriptor<? extends E> getElementDescriptor();
 
   /**
    * Get the list of properties ordering this collection.
-   * 
+   *
    * @return the list of properties ordering this collection.
    */
   Map<String, ESort> getOrderingProperties();

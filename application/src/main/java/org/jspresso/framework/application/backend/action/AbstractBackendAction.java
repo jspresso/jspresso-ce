@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,7 +23,7 @@ package org.jspresso.framework.application.backend.action;
  * executes on the backend (domain model) of the application. It provides
  * accessors on components which are generally used through the action execution
  * process.
- * 
+ *
  * @author Vincent Vandenschrick
  * @deprecated use concrete BackendAction instead.
  */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.gui.remote;
 
 /**
  * A split container.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RSplitContainer extends RContainer {
@@ -51,7 +51,7 @@ public class RSplitContainer extends RContainer {
 
   /**
    * Gets the leftTop.
-   * 
+   *
    * @return the leftTop.
    */
   public RComponent getLeftTop() {
@@ -60,7 +60,7 @@ public class RSplitContainer extends RContainer {
 
   /**
    * Gets the orientation.
-   * 
+   *
    * @return the orientation.
    */
   public String getOrientation() {
@@ -69,7 +69,7 @@ public class RSplitContainer extends RContainer {
 
   /**
    * Gets the rightBottom.
-   * 
+   *
    * @return the rightBottom.
    */
   public RComponent getRightBottom() {
@@ -78,7 +78,7 @@ public class RSplitContainer extends RContainer {
 
   /**
    * Sets the leftTop.
-   * 
+   *
    * @param leftTop
    *          the leftTop to set.
    */
@@ -88,7 +88,7 @@ public class RSplitContainer extends RContainer {
 
   /**
    * Sets the orientation.
-   * 
+   *
    * @param orientation
    *          the orientation to set.
    */
@@ -98,7 +98,7 @@ public class RSplitContainer extends RContainer {
 
   /**
    * Sets the rightBottom.
-   * 
+   *
    * @param rightBottom
    *          the rightBottom to set.
    */

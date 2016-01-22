@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -25,7 +25,7 @@ import org.jspresso.framework.model.descriptor.IPercentPropertyDescriptor;
  * The impact of using this descriptor is only on the UI level that will be
  * configured accordingly, i.e. displaying/editing properties as percentage
  * instead of their raw decimal values.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BasicPercentPropertyDescriptor extends

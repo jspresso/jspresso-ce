@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -29,7 +29,7 @@ import org.jspresso.framework.util.format.ParsingException;
 /**
  * This is a basic implementation of a formatted value connector built with a
  * formatter.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BasicFormattedValueConnector extends BasicValueConnector implements
@@ -71,7 +71,7 @@ public class BasicFormattedValueConnector extends BasicValueConnector implements
 
   /**
    * Gets the connector value as a string representation.
-   * 
+   *
    * @return the connector value as a string representation.
    */
   @Override
@@ -82,7 +82,7 @@ public class BasicFormattedValueConnector extends BasicValueConnector implements
 
   /**
    * Sets the connector value using the formatted value representation.
-   * 
+   *
    * @param formattedValue
    *          the formatted value, generally the string representation string
    *          representation.
@@ -106,7 +106,7 @@ public class BasicFormattedValueConnector extends BasicValueConnector implements
 
   /**
    * Gets the formatter.
-   * 
+   *
    * @return the formatter.
    */
   protected IFormatter<Object, Object> getFormatter() {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -26,7 +26,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicTreeViewDescriptor;
 
 /**
  * This is a default implementation of a simple workspace view descriptor.
- * 
+ *
  * @author Vincent Vandenschrick
  * @internal
  */

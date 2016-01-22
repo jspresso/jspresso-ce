@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.application.frontend.command.remote;
 
 /**
  * Starts the application.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteStartCommand extends RemoteCommand {
@@ -92,7 +92,7 @@ public class RemoteStartCommand extends RemoteCommand {
 
   /**
    * Gets the version.
-   * 
+   *
    * @return the version.
    */
   public String getVersion() {
@@ -101,7 +101,7 @@ public class RemoteStartCommand extends RemoteCommand {
 
   /**
    * Sets the version.
-   * 
+   *
    * @param version
    *          the version to set.
    */

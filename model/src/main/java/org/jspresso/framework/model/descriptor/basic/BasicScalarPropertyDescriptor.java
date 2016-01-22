@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -27,7 +27,7 @@ import org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor;
  * This is the root abstract descriptor for all property descriptors that are
  * not relationship end properties. This includes, for instance, strings,
  * numbers, dates, binary content, and so on.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class BasicScalarPropertyDescriptor extends
@@ -48,7 +48,7 @@ public abstract class BasicScalarPropertyDescriptor extends
 
   /**
    * Gets the defaultValue.
-   * 
+   *
    * @return the defaultValue.
    */
   @Override
@@ -101,7 +101,7 @@ public abstract class BasicScalarPropertyDescriptor extends
   /**
    * Parses a value given as String. Calls the model type constructor using the
    * String parameter.
-   * 
+   *
    * @param valueAsString
    *          the value to set as String.
    * @return the parsed value.

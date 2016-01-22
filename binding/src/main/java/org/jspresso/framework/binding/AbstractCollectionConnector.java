@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -39,7 +39,7 @@ import org.jspresso.framework.util.event.ValueChangeEvent;
  * This class is the base class of all default collection connectors. It
  * implements the dynamic management of the child connectors which represent the
  * collection.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractCollectionConnector extends
@@ -160,7 +160,7 @@ public abstract class AbstractCollectionConnector extends
 
   /**
    * Gets the childConnectorPrototype.
-   * 
+   *
    * @return the childConnectorPrototype.
    */
   public ICompositeValueConnector getChildConnectorPrototype() {

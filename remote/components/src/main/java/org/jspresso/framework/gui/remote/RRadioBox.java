@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.gui.remote;
 
 /**
  * A component containing enumerated values.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RRadioBox extends REnumBox {
@@ -49,7 +49,7 @@ public class RRadioBox extends REnumBox {
 
   /**
    * Gets the orientation.
-   * 
+   *
    * @return the orientation.
    */
   public String getOrientation() {
@@ -58,7 +58,7 @@ public class RRadioBox extends REnumBox {
 
   /**
    * Sets the orientation.
-   * 
+   *
    * @param orientation
    *          the orientation to set.
    */

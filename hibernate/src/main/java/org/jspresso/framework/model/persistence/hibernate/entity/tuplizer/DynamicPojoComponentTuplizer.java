@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import org.hibernate.mapping.Component;
 
 /**
  * A specialized hibernate tuplizer to handle proxy components.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class DynamicPojoComponentTuplizer extends ProxyPojoComponentTuplizer {

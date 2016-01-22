@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 /**
  * A remote action event.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RActionEvent implements Serializable {
@@ -35,7 +35,7 @@ public class RActionEvent implements Serializable {
 
   /**
    * Gets the parameter.
-   * 
+   *
    * @return the parameter.
    */
   public String getActionCommand() {
@@ -44,7 +44,7 @@ public class RActionEvent implements Serializable {
 
   /**
    * Sets the parameter.
-   * 
+   *
    * @param parameter
    *          the parameter to set.
    */
@@ -54,7 +54,7 @@ public class RActionEvent implements Serializable {
 
   /**
    * Gets the viewStatePermId.
-   * 
+   *
    * @return the viewStatePermId.
    */
   public String getViewStatePermId() {
@@ -63,7 +63,7 @@ public class RActionEvent implements Serializable {
 
   /**
    * Gets the viewStateGuid.
-   * 
+   *
    * @return the viewStateGuid.
    */
   public String getViewStateGuid() {
@@ -72,7 +72,7 @@ public class RActionEvent implements Serializable {
 
   /**
    * Sets the viewStatePermId.
-   * 
+   *
    * @param viewStatePermId
    *          the viewStatePermId to set.
    */
@@ -82,7 +82,7 @@ public class RActionEvent implements Serializable {
 
   /**
    * Sets the viewStateGuid.
-   * 
+   *
    * @param viewStateGuid
    *          the viewStateGuid to set.
    */

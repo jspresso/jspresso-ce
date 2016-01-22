@@ -1,5 +1,20 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
+ *
+ *  This file is part of the Jspresso framework.
+ *
+ *  Jspresso is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Jspresso is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.jspresso.framework.application.backend.action.security;
 
@@ -233,7 +248,7 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
   /**
    * Encodes the password hash based on the hash encoding parameter (either
    * Base64, Base16). Defaults to Base64.
-   * 
+   *
    * @param source
    *          the byte array (hash) to encode.
    * @return the encoded string.
@@ -253,7 +268,7 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
 
   /**
    * Gets the digestAlgorithm.
-   * 
+   *
    * @return the digestAlgorithm.
    */
   protected String getDigestAlgorithm() {
@@ -262,7 +277,7 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
 
   /**
    * Gets the hashEncoding.
-   * 
+   *
    * @return the hashEncoding.
    */
   protected String getHashEncoding() {
@@ -272,7 +287,7 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
   /**
    * Returns a prefix to use before storing a password. An example usage is to
    * prefix the password hash with the type of hash, e.g. {MD5}.
-   * 
+   *
    * @return a prefix to use before storing a password.
    */
   protected String getPasswordStorePrefix() {
@@ -281,7 +296,7 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
 
   /**
    * Gets the allowEmptyPasswords.
-   * 
+   *
    * @return the allowEmptyPasswords.
    */
   protected boolean isAllowEmptyPasswords() {

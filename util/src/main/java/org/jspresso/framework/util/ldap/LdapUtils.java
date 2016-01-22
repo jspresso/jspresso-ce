@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,7 +24,7 @@ import java.util.Date;
 
 /**
  * This is a simple helper class to be able to cope with ldap.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public final class LdapUtils {
@@ -35,7 +35,7 @@ public final class LdapUtils {
 
   /**
    * Formats an boolean attribute.
-   * 
+   *
    * @param value
    *          the boolean value.
    * @return the parsed boolean.
@@ -46,7 +46,7 @@ public final class LdapUtils {
 
   /**
    * Formats an integer attribute.
-   * 
+   *
    * @param value
    *          the integer value.
    * @return the parsed integer or null.
@@ -60,7 +60,7 @@ public final class LdapUtils {
 
   /**
    * Parses an boolean attribute.
-   * 
+   *
    * @param booleanAsString
    *          the string representation of the boolean.
    * @return the parsed boolean or null.
@@ -74,7 +74,7 @@ public final class LdapUtils {
 
   /**
    * Parses a generalized time as a date ignoring hour minute seconds.
-   * 
+   *
    * @param generalizedTime
    *          the string representation of the date/time in the format
    *          YYYYMMDDHHMMSS.
@@ -93,7 +93,7 @@ public final class LdapUtils {
 
   /**
    * Parses a generalized time as a date and time.
-   * 
+   *
    * @param generalizedTime
    *          the string representation of the date/time in the format
    *          YYYYMMDDHHMMSS.
@@ -112,7 +112,7 @@ public final class LdapUtils {
 
   /**
    * Parses an integer attribute.
-   * 
+   *
    * @param integerAsString
    *          the string representation of the integer.
    * @return the parsed integer or null.

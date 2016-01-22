@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.gui.remote;
 
 /**
  * A component containing enumerated values.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class REnumBox extends RComponent {
@@ -50,7 +50,7 @@ public abstract class REnumBox extends RComponent {
 
   /**
    * Gets the translations.
-   * 
+   *
    * @return the translations.
    */
   public String[] getTranslations() {
@@ -59,7 +59,7 @@ public abstract class REnumBox extends RComponent {
 
   /**
    * Gets the values.
-   * 
+   *
    * @return the values.
    */
   public String[] getValues() {
@@ -68,7 +68,7 @@ public abstract class REnumBox extends RComponent {
 
   /**
    * Sets the translations.
-   * 
+   *
    * @param translations
    *          the translations to set.
    */
@@ -78,7 +78,7 @@ public abstract class REnumBox extends RComponent {
 
   /**
    * Sets the values.
-   * 
+   *
    * @param values
    *          the values to set.
    */

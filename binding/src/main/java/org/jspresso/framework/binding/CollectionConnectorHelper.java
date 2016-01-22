@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -25,7 +25,7 @@ import java.util.List;
 
 /**
  * This class is a helper class to ease collection connector management.
- * 
+ *
  * @see org.jspresso.framework.binding.model.ModelCollectionPropertyConnector
  * @see org.jspresso.framework.binding.AbstractCollectionConnector
  * @author Vincent Vandenschrick
@@ -42,7 +42,7 @@ public final class CollectionConnectorHelper {
   /**
    * Builds a connector id from a base id and an index. This serves as child
    * connector ids in collection connectors. As of now it returns "baseId[i]"
-   * 
+   *
    * @param baseId
    *          the base identifier to be used to compose the new connector id.
    * @param i
@@ -55,7 +55,7 @@ public final class CollectionConnectorHelper {
 
   /**
    * Computes the array of element indices which where added to a collection.
-   * 
+   *
    * @param smallCollection
    *          the original collection.
    * @param bigCollection
@@ -84,7 +84,7 @@ public final class CollectionConnectorHelper {
 
   /**
    * Extracts the main collection connector from a connector hierarchy.
-   * 
+   *
    * @param rootConnector
    *          the root connector.
    * @return the the main collection connector.

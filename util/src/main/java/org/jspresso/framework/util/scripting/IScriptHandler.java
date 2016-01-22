@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,14 +22,14 @@ import java.util.Map;
 
 /**
  * The interface implemented by script executors.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IScriptHandler {
 
   /**
    * Evaluates a scripted expression.
-   * 
+   *
    * @param script
    *          the script to evaluate.
    * @param context
@@ -40,7 +40,7 @@ public interface IScriptHandler {
 
   /**
    * Executes a script.
-   * 
+   *
    * @param script
    *          the script to execute.
    * @param context

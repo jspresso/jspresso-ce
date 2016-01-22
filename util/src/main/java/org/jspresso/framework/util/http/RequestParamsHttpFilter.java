@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -36,7 +36,7 @@ import javax.servlet.http.HttpSession;
  * A simple servlet filter that takes the parameters out of the current HTTP
  * request and store them in a map into the HTTP session for later use by
  * subsequent requests.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RequestParamsHttpFilter implements Filter {
@@ -83,7 +83,7 @@ public class RequestParamsHttpFilter implements Filter {
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @throws ServletException
    *           used in superclass.
    */

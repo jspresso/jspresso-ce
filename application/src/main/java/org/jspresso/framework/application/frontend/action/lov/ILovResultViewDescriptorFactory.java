@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -26,14 +26,14 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
  * Factory interface for LOV result view factories.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface ILovResultViewDescriptorFactory {
 
   /**
    * Creates a new LOV result view.
-   * 
+   *
    * @param entityRefDescriptor
    *          the provider of the row descriptor.
    * @param lovContext

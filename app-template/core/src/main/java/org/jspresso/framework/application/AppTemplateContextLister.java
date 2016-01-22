@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -27,7 +27,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * A simple class used to dump the application template Spring elements.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public final class AppTemplateContextLister {
@@ -40,7 +40,7 @@ public final class AppTemplateContextLister {
 
   /**
    * Dumps the application elements along with their actual types.
-   * 
+   *
    * @param args main arguments
    */
   public static void main(String... args) {

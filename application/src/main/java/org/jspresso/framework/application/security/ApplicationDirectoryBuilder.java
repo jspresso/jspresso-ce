@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -49,7 +49,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 /**
  * A Directory builder to list the application various application elements
  * available along with their permId.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class ApplicationDirectoryBuilder {
@@ -97,7 +97,7 @@ public class ApplicationDirectoryBuilder {
   /**
    * Processes a workspace recursively to register all reachable application
    * elements into the directory.
-   * 
+   *
    * @param frontendController
    *          the application front controller to analyse.
    * @return this.
@@ -301,7 +301,7 @@ public class ApplicationDirectoryBuilder {
 
   /**
    * Extracts the permId store from this directory builder.
-   * 
+   *
    * @return the application elements directory.
    */
   public Map<String, Set<String>> toApplicationDirectory() {
@@ -326,7 +326,7 @@ public class ApplicationDirectoryBuilder {
 
   /**
    * Sets the excludePatterns.
-   * 
+   *
    * @param excludePatterns
    *          the excludePatterns to set.
    */

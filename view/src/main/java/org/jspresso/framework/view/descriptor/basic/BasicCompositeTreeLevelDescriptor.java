@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -33,7 +33,7 @@ import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
  * mapping a collection of <i>A</i>s and whose children are 2 tree levels
  * mapping respectively a collection <i>Y</i>s and <i>Z</i>s, the tree would
  * look like :
- * 
+ *
  * <pre>
  * parent
  *   <b>A</b>-1
@@ -59,10 +59,10 @@ import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
  *       <b>Z</b>-3.1
  *       <b>Z</b>-3.2
  * </pre>
- * 
+ *
  * You can notice the intermediary grouping nodes that are installed to visually
  * separate the 2 collection families (<i>Y</i> and <i>Z</i>).
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BasicCompositeTreeLevelDescriptor extends BasicTreeLevelDescriptor

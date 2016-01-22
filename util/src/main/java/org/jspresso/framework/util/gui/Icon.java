@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,7 +24,7 @@ import org.jspresso.framework.util.lang.ICloneable;
 
 /**
  * Icon representation.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class Icon implements Serializable, ICloneable {
@@ -80,7 +80,7 @@ public class Icon implements Serializable, ICloneable {
 
   /**
    * Gets the dimension.
-   * 
+   *
    * @return the dimension.
    */
   public Dimension getDimension() {
@@ -89,7 +89,7 @@ public class Icon implements Serializable, ICloneable {
 
   /**
    * Sets the dimension.
-   * 
+   *
    * @param dimension
    *          the dimension to set.
    */
@@ -99,7 +99,7 @@ public class Icon implements Serializable, ICloneable {
 
   /**
    * Sets the width.
-   * 
+   *
    * @param width
    *          the width to set.
    */
@@ -112,7 +112,7 @@ public class Icon implements Serializable, ICloneable {
 
   /**
    * Sets the height.
-   * 
+   *
    * @param height
    *          the height to set.
    */

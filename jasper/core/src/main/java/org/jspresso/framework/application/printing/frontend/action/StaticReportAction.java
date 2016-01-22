@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -45,7 +45,7 @@ public class StaticReportAction<E, F, G> extends AbstractReportAction<E, F, G> {
 
   /**
    * Configures the report to execute.
-   * 
+   *
    * @param reportDescriptor
    *          the reportDescriptor to set.
    */

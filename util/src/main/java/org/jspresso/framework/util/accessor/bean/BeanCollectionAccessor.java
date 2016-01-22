@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -27,7 +27,7 @@ import org.jspresso.framework.util.bean.AccessorInfo;
 
 /**
  * This class is the default implementation of collection property accessors.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BeanCollectionAccessor extends BeanPropertyAccessor implements
@@ -39,7 +39,7 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor implements
 
   /**
    * Constructs a new default java bean collection property accessor.
-   * 
+   *
    * @param property
    *          the property to be accessed.
    * @param beanClass
@@ -107,7 +107,7 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor implements
 
   /**
    * Capitalizes the first character of a string.
-   * 
+   *
    * @param input
    *          the string to capitalize the first character.
    * @return the transformed string.
@@ -118,7 +118,7 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor implements
 
   /**
    * Gets the elementClass.
-   * 
+   *
    * @return the elementClass.
    */
   protected Class<?> getElementClass() {

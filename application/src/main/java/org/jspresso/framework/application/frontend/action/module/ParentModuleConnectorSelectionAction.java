@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -27,7 +27,7 @@ import org.jspresso.framework.application.model.Module;
 /**
  * This action simply displays the parent of the currently selected module; i.e.
  * it goes up one level in the module hierarchy of the current workspace.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

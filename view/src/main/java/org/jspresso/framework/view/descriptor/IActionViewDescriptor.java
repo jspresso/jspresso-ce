@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,21 +23,21 @@ import org.jspresso.framework.util.gui.ERenderingOptions;
 
 /**
  * An action view descriptor.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IActionViewDescriptor extends IViewDescriptor {
 
   /**
    * Gets the action that is presented to the user through this view.
-   * 
+   *
    * @return the action that is presented to the user through this view.
    */
   IAction getAction();
 
   /**
    * Gets the renderingOptions.
-   * 
+   *
    * @return the renderingOptions.
    */
   ERenderingOptions getRenderingOptions();

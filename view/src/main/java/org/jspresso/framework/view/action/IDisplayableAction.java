@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -28,7 +28,7 @@ import org.jspresso.framework.util.gate.IGate;
 /**
  * This interface must be implemented by any displayable action of the
  * application.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IDisplayableAction extends IAction, IIconDescriptor, IStylable {
@@ -36,7 +36,7 @@ public interface IDisplayableAction extends IAction, IIconDescriptor, IStylable 
   /**
    * Provides the action accelerator to the runtime framework using its string
    * representation.
-   * 
+   *
    * @return the accelerator string representation.
    */
   String getAcceleratorAsString();
@@ -44,7 +44,7 @@ public interface IDisplayableAction extends IAction, IIconDescriptor, IStylable 
   /**
    * Gets the collection of gates determining the actionability state of this
    * action.
-   * 
+   *
    * @return the collection of gates determining the actionability state of this
    *         action.
    */
@@ -53,7 +53,7 @@ public interface IDisplayableAction extends IAction, IIconDescriptor, IStylable 
   /**
    * Provides the action mnemonic to the runtime framework using its string
    * representation.
-   * 
+   *
    * @return the mnemonic string representation.
    */
   String getMnemonicAsString();

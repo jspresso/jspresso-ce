@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -57,7 +57,7 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
  * Abstract base class for action factories.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual action class created.
@@ -87,7 +87,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
 
   /**
    * Creates the initial action context.
-   * 
+   *
    * @param actionHandler
    *          the action handler.
    * @param view
@@ -131,7 +131,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
 
   /**
    * Sets the iconFactory.
-   * 
+   *
    * @param iconFactory
    *          the iconFactory to set.
    */
@@ -141,7 +141,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
 
   /**
    * Creates and attach the necessary action gates.
-   * 
+   *
    * @param action
    *          the displayable Jspresso action.
    * @param actionHandler
@@ -252,7 +252,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
 
   /**
    * Performs dependency injection on a gate.
-   * 
+   *
    * @param gate
    *          the gate.
    * @param actionHandler
@@ -331,7 +331,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
 
   /**
    * Gets the iconFactory.
-   * 
+   *
    * @return the iconFactory.
    */
   protected IIconFactory<G> getIconFactory() {

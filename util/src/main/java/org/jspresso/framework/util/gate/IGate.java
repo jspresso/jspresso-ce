@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,7 +23,7 @@ import org.jspresso.framework.util.lang.ICloneable;
 
 /**
  * A simple open / close, true / false interface.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IGate extends IPropertyChangeCapable, ICloneable {
@@ -35,7 +35,7 @@ public interface IGate extends IPropertyChangeCapable, ICloneable {
 
   /**
    * Clones the gate.
-   * 
+   *
    * @return the cloned gate.
    */
   @Override
@@ -43,7 +43,7 @@ public interface IGate extends IPropertyChangeCapable, ICloneable {
 
   /**
    * Tests whether the gate is open.
-   * 
+   *
    * @return true if open.
    */
   boolean isOpen();

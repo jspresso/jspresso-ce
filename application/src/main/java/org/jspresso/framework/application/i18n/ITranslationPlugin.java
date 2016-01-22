@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -27,7 +27,7 @@ import org.jspresso.framework.application.backend.session.IApplicationSession;
  * implement custom i18n schemes that are much more dynamic than the default,
  * bundle-based, static one. For instance, one can implement different i18n
  * schemes based on the logged-in user (or its memberships).
- * 
+ *
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("UnusedParameters")
@@ -35,7 +35,7 @@ public interface ITranslationPlugin {
 
   /**
    * Gets a translated string based on a key.
-   * 
+   *
    * @param key
    *          the i18n key.
    * @param locale
@@ -49,7 +49,7 @@ public interface ITranslationPlugin {
 
   /**
    * Gets a translated message based on a key.
-   * 
+   *
    * @param key
    *          the i18n key.
    * @param args

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import java.util.prefs.Preferences;
 
 /**
  * An implementation of preference store relying on the Java preferences API.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class JavaPreferencesStore implements IPreferencesStore {
@@ -38,7 +38,7 @@ public class JavaPreferencesStore implements IPreferencesStore {
 
   /**
    * Sets the path of this store.
-   * 
+   *
    * @param storePath
    *          the preferences store path.
    */

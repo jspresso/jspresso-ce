@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,14 +23,14 @@ import javax.security.auth.Subject;
 /**
  * This interface is implemented by strategies determining a card name based on
  * a model instance.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface ICardNameSelector {
 
   /**
    * Gets the card name to use to present the model.
-   * 
+   *
    * @param model
    *          the model to back the view.
    * @param subject

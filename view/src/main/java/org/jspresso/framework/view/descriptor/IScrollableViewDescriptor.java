@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -21,7 +21,7 @@ package org.jspresso.framework.view.descriptor;
 /**
  * This public interface is implemented by view descriptors which are
  * scrollable.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IScrollableViewDescriptor extends IViewDescriptor {
@@ -29,7 +29,7 @@ public interface IScrollableViewDescriptor extends IViewDescriptor {
   /**
    * Configures the view to be either scaled or scrollable when the display area
    * is too small to display it.
-   * 
+   *
    * @return true if scrollable.
    */
   boolean isScrollable();
@@ -37,7 +37,7 @@ public interface IScrollableViewDescriptor extends IViewDescriptor {
   /**
    * Configures the view to be either vertically scaled or scrollable when the
    * display area is too small to display it.
-   * 
+   *
    * @return true if vertically scrollable.
    */
   boolean isVerticallyScrollable();
@@ -45,7 +45,7 @@ public interface IScrollableViewDescriptor extends IViewDescriptor {
   /**
    * Configures the view to be either horizontally scaled or scrollable when the
    * display area is too small to display it.
-   * 
+   *
    * @return true if horizontally scrollable.
    */
   boolean isHorizontallyScrollable();

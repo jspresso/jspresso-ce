@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -45,7 +45,7 @@ import org.jspresso.framework.util.collection.ESort;
 
 /**
  * Base class for component factories.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractComponentFactory implements IComponentFactory {
@@ -312,7 +312,7 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
 
     /**
      * Gets the sourceObject.
-     * 
+     *
      * @return the sourceObject.
      */
     public Object getSourceObject() {
@@ -321,7 +321,7 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
 
     /**
      * Gets the valuesToCompare.
-     * 
+     *
      * @return the valuesToCompare.
      */
     public Object[] getValuesToCompare() {

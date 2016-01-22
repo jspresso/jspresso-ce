@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -28,7 +28,7 @@ import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
  * then be embedded in surrounding a composite view. It literally takes the
  * action away from the toolbar/context menu it is located when registered in an
  * action map and makes it a primary citizen of the UI.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BasicActionViewDescriptor extends BasicViewDescriptor implements

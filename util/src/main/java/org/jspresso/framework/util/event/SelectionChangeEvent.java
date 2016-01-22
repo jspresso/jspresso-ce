@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,7 +24,7 @@ import java.util.EventObject;
 /**
  * This kind of events gets delivered whenever a selectable detects a change in
  * its selection.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class SelectionChangeEvent extends EventObject {
@@ -63,7 +63,7 @@ public class SelectionChangeEvent extends EventObject {
 
   /**
    * Gets the leadingIndex.
-   * 
+   *
    * @return the leadingIndex.
    */
   public int getLeadingIndex() {
@@ -72,7 +72,7 @@ public class SelectionChangeEvent extends EventObject {
 
   /**
    * Gets the new selection. The indices array is ordered.
-   * 
+   *
    * @return the new selection.
    */
   public int[] getNewSelection() {
@@ -81,7 +81,7 @@ public class SelectionChangeEvent extends EventObject {
 
   /**
    * Gets the old selection. The indices array is ordered.
-   * 
+   *
    * @return the old selection.
    */
   public int[] getOldSelection() {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,7 +24,7 @@ import org.jspresso.framework.security.UserPrincipal;
 
 /**
  * Defines all the components lifecycle hooks.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the class of the intercepted entity.
@@ -34,7 +34,7 @@ public interface ILifecycleInterceptor<E> {
 
   /**
    * Called whenever an entity is created in memory.
-   * 
+   *
    * @param component
    *          the created entity.
    * @param entityFactory
@@ -51,7 +51,7 @@ public interface ILifecycleInterceptor<E> {
 
   /**
    * Called whenever an persistent entity is deleted.
-   * 
+   *
    * @param component
    *          the deleted entity.
    * @param entityFactory
@@ -71,7 +71,7 @@ public interface ILifecycleInterceptor<E> {
    * back from the unit of work. The component state is fully initialized when
    * this method is called. The onLoad callback may be used to perform some
    * extra technical initializations like registering some listeners.
-   * 
+   *
    * @param component
    *          the created entity.
    */
@@ -82,7 +82,7 @@ public interface ILifecycleInterceptor<E> {
    * state is fully initialized when this method is called. The onClone callback
    * may be used to perform some extra technical initializations like
    * registering some listeners or initializing some non persistent properties.
-   * 
+   *
    * @param component
    *          the entity clone.
    * @param sourceComponent
@@ -92,7 +92,7 @@ public interface ILifecycleInterceptor<E> {
 
   /**
    * Called whenever an entity is made persistent for the first time.
-   * 
+   *
    * @param component
    *          the persisted entity.
    * @param entityFactory
@@ -109,7 +109,7 @@ public interface ILifecycleInterceptor<E> {
 
   /**
    * Called whenever an persistent entity is updated.
-   * 
+   *
    * @param component
    *          the updated entity.
    * @param entityFactory

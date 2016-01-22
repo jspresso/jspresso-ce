@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -21,14 +21,14 @@ package org.jspresso.framework.application.backend.session;
 /**
  * Simple interface that is implemented by objects that can be assigned an
  * application session.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IApplicationSessionAware {
 
   /**
    * Assigns the application session.
-   * 
+   *
    * @param applicationSession
    *          the application session to assign.
    */

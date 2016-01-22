@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import org.jspresso.framework.gui.remote.RComponent;
 
 /**
  * A command to trigger workspace display on the remote peer.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteWorkspaceDisplayCommand extends RemoteCommand {
@@ -34,7 +34,7 @@ public class RemoteWorkspaceDisplayCommand extends RemoteCommand {
 
   /**
    * Gets the workspaceName.
-   * 
+   *
    * @return the workspaceName.
    */
   public String getWorkspaceName() {
@@ -43,7 +43,7 @@ public class RemoteWorkspaceDisplayCommand extends RemoteCommand {
 
   /**
    * Gets the workspaceView.
-   * 
+   *
    * @return the workspaceView.
    */
   public RComponent getWorkspaceView() {
@@ -52,7 +52,7 @@ public class RemoteWorkspaceDisplayCommand extends RemoteCommand {
 
   /**
    * Sets the workspaceName.
-   * 
+   *
    * @param workspaceName
    *          the workspaceName to set.
    */
@@ -62,7 +62,7 @@ public class RemoteWorkspaceDisplayCommand extends RemoteCommand {
 
   /**
    * Sets the workspaceView.
-   * 
+   *
    * @param workspaceView
    *          the workspaceView to set.
    */

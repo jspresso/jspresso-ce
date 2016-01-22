@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -25,7 +25,7 @@ import org.jspresso.framework.action.IActionHandler;
 /**
  * This interface is the base interface used to react to file manipulation
  * (open/save).
- * 
+ *
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("UnusedParameters")
@@ -33,7 +33,7 @@ public interface IFileCallback {
 
   /**
    * Called whenever the file opening/saving is cancelled.
-   * 
+   *
    * @param actionHandler
    *          the action handler.
    * @param context

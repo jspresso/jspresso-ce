@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import org.jspresso.framework.util.gui.Dimension;
 
 /**
  * Implements a icon set that can be variabilized using a root path.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class PathBasedIconSet implements IIconSet {
@@ -61,7 +61,7 @@ public class PathBasedIconSet implements IIconSet {
 
   /**
    * Splits an icon name in base name / extension.
-   * 
+   *
    * @param iconName
    *          the iconName to parse and split.
    * @return a 2 length array containing the base name and the extension of the
@@ -85,7 +85,7 @@ public class PathBasedIconSet implements IIconSet {
 
   /**
    * Gets the rootPath.
-   * 
+   *
    * @return the rootPath.
    */
   protected String getRootPath() {
@@ -94,7 +94,7 @@ public class PathBasedIconSet implements IIconSet {
 
   /**
    * Sets the rootPath.
-   * 
+   *
    * @param rootPath
    *          the rootPath to set.
    */
@@ -104,7 +104,7 @@ public class PathBasedIconSet implements IIconSet {
 
   /**
    * Gets the supportedExtensions.
-   * 
+   *
    * @return the supportedExtensions.
    */
   protected String[] getSupportedExtensions() {
@@ -125,7 +125,7 @@ public class PathBasedIconSet implements IIconSet {
 
   /**
    * Gets the defaultExtension.
-   * 
+   *
    * @return the defaultExtension.
    */
   protected String getDefaultExtension() {

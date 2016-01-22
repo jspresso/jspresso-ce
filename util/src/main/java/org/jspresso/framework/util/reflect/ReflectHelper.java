@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import java.lang.reflect.Field;
 
 /**
  * Helper class for reflection.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public final class ReflectHelper {
@@ -36,7 +36,7 @@ public final class ReflectHelper {
 
   /**
    * Gets a private field value.
-   * 
+   *
    * @param clazz
    *          the class declaring the private field.
    * @param fieldName
@@ -58,7 +58,7 @@ public final class ReflectHelper {
 
   /**
    * Sets a private field value.
-   * 
+   *
    * @param clazz
    *          the class declaring the private field.
    * @param fieldName

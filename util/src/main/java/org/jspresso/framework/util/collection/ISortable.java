@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import java.util.Map;
 
 /**
  * Defines the contract for sortable bean collections.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface ISortable {
@@ -30,7 +30,7 @@ public interface ISortable {
   /**
    * Gets the ordered list of sorting attributes along with their individual
    * sorting direction.
-   * 
+   *
    * @return the ordered list of sorting attributes along with their individual
    *         sorting direction.
    */
@@ -39,7 +39,7 @@ public interface ISortable {
   /**
    * Sets the ordered list of sorting attributes along with their individual
    * sorting direction.
-   * 
+   *
    * @param orderingProperties
    *          the ordered list of sorting attributes along with their individual
    *          sorting direction.

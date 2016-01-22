@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 /**
  * The state of a remote formatted value.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteFormattedValueState extends RemoteValueState {
@@ -51,7 +51,7 @@ public class RemoteFormattedValueState extends RemoteValueState {
 
   /**
    * Gets the valueAsObject.
-   * 
+   *
    * @return the valueAsObject.
    */
   public Object getValueAsObject() {
@@ -60,7 +60,7 @@ public class RemoteFormattedValueState extends RemoteValueState {
 
   /**
    * Sets the valueAsObject.
-   * 
+   *
    * @param valueAsObject
    *          the valueAsObject to set.
    */

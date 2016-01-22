@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,7 +23,7 @@ package org.jspresso.framework.util.event;
  * of of value modifications. This is typically used when binding two connectors
  * together (in a MVC relationship for instance) where the 2 connectors will
  * listen for each other value.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IValueChangeListener {

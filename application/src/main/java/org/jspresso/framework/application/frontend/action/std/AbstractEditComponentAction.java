@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -35,7 +35,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 /**
  * This action serves as a base class for actions that pop-pup a dialog to edit
  * a component.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.
@@ -93,7 +93,7 @@ public abstract class AbstractEditComponentAction<E, F, G> extends
 
   /**
    * Constructs the list of actions that will be installed on the dialog toolbar.
-   * 
+   *
    * @return the list of actions that will be installed on the dialog toolbar.
    */
   protected List<IDisplayableAction> getDialogActions() {
@@ -112,14 +112,14 @@ public abstract class AbstractEditComponentAction<E, F, G> extends
 
   /**
    * Gets the okAction.
-   * 
+   *
    * @return the okAction.
    */
   protected abstract IDisplayableAction getOkAction();
 
   /**
    * Gets the cancelAction.
-   * 
+   *
    * @return the cancelAction.
    */
   protected abstract IDisplayableAction getCancelAction();
@@ -127,7 +127,7 @@ public abstract class AbstractEditComponentAction<E, F, G> extends
   /**
    * Configures the view descriptor to be used to create the component editing
    * view that will be installed in the dialog.
-   * 
+   *
    * @param viewDescriptor
    *          the viewDescriptor to set.
    */
@@ -137,7 +137,7 @@ public abstract class AbstractEditComponentAction<E, F, G> extends
 
   /**
    * Gets the model.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the model.
@@ -146,7 +146,7 @@ public abstract class AbstractEditComponentAction<E, F, G> extends
 
   /**
    * Gets the viewDescriptor.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the viewDescriptor.
@@ -157,7 +157,7 @@ public abstract class AbstractEditComponentAction<E, F, G> extends
 
   /**
    * Gets the modelDescriptor.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the modelDescriptor.
@@ -168,7 +168,7 @@ public abstract class AbstractEditComponentAction<E, F, G> extends
 
   /**
    * Gets the complementaryActions.
-   * 
+   *
    * @return the complementaryActions.
    */
   public List<? extends IDisplayableAction> getComplementaryActions() {
@@ -178,7 +178,7 @@ public abstract class AbstractEditComponentAction<E, F, G> extends
   /**
    * Installs a list of complementary actions to install between the ok and
    * cancel actions.
-   * 
+   *
    * @param complementaryActions
    *          the complementaryActions to set.
    */

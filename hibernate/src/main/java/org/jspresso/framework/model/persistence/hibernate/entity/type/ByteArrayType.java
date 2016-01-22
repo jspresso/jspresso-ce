@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -33,7 +33,7 @@ import org.jspresso.framework.util.uid.ByteArray;
 
 /**
  * A user type to be able to use byte arrays as entity identifiers.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class ByteArrayType implements UserType {

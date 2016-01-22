@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,7 +24,7 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
  * This interface is implemented by anything which can be described.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IDescriptor {
@@ -44,14 +44,14 @@ public interface IDescriptor {
 
   /**
    * Gets the end-user understandable description.
-   * 
+   *
    * @return The user-friendly description
    */
   String getDescription();
 
   /**
    * Gets the internationalized end-user understandable description.
-   * 
+   *
    * @param translationProvider
    *          the translation provider which can be used by the descriptor to
    *          compute its internationalized description.
@@ -65,7 +65,7 @@ public interface IDescriptor {
 
   /**
    * Gets the internationalized name of this descriptor.
-   * 
+   *
    * @param translationProvider
    *          the translation provider which can be used by the descriptor to
    *          compute its internationalized name.
@@ -80,7 +80,7 @@ public interface IDescriptor {
    * Gets the name of this descriptor. Depending on the implementation, this
    * name can be technically meaningful (e.g. a method name, a property name,
    * ...).
-   * 
+   *
    * @return The name of this described object
    */
   String getName();
@@ -88,7 +88,7 @@ public interface IDescriptor {
   /**
    * Gets the timestamp of the last update of this descriptor or -1 if no
    * information is available.
-   * 
+   *
    * @return the timestamp of the last update of this descriptor or -1 if no
    *         information is available.
    */

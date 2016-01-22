@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -34,7 +34,7 @@ import freemarker.template.TemplateScalarModel;
  * <li>chars immediately after an underscore in case of a sql identifier</li>
  * </ul>
  * The result is made uppercase.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("rawtypes")
@@ -81,7 +81,7 @@ public class CompactString implements TemplateMethodModelEx {
 
   /**
    * Test main method.
-   * 
+   *
    * @param args
    *          main args. unused.
    * @throws TemplateModelException

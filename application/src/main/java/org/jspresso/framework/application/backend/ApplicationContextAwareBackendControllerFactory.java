@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,7 +24,7 @@ import org.springframework.context.ApplicationContextAware;
 /**
  * A simple backend controller factory that leverages a Spring application
  * context to create a new backend controller.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class ApplicationContextAwareBackendControllerFactory implements
@@ -46,7 +46,7 @@ public class ApplicationContextAwareBackendControllerFactory implements
 
   /**
    * Sets the applicationContext.
-   * 
+   *
    * @param applicationContext
    *          the applicationContext to set.
    */
@@ -57,7 +57,7 @@ public class ApplicationContextAwareBackendControllerFactory implements
 
   /**
    * Gets the backendControllerBeanName.
-   * 
+   *
    * @return the backendControllerBeanName.
    */
   public String getBackendControllerBeanName() {
@@ -66,7 +66,7 @@ public class ApplicationContextAwareBackendControllerFactory implements
 
   /**
    * Sets the backendControllerBeanName.
-   * 
+   *
    * @param backendControllerBeanName
    *          the backendControllerBeanName to set.
    */

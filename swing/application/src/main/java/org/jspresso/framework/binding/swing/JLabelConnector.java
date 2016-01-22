@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -25,7 +25,7 @@ import org.jspresso.framework.util.html.HtmlHelper;
 
 /**
  * A connector for label.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class JLabelConnector extends JComponentConnector<JLabel> {
@@ -49,7 +49,7 @@ public class JLabelConnector extends JComponentConnector<JLabel> {
 
   /**
    * Sets the forceHtml.
-   * 
+   *
    * @param forceHtml
    *          the forceHtml to set.
    */
@@ -59,7 +59,7 @@ public class JLabelConnector extends JComponentConnector<JLabel> {
 
   /**
    * Sets the formatter.
-   * 
+   *
    * @param formatter
    *          the formatter to set.
    */

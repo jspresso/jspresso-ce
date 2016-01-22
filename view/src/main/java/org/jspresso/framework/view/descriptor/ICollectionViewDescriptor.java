@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,7 +24,7 @@ import org.jspresso.framework.model.descriptor.IModelDescriptor;
 /**
  * This public interface is implemented by any collection view descriptor. For
  * example, a collection view is a table view, a list view, ...
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface ICollectionViewDescriptor extends IScrollableViewDescriptor,
@@ -33,7 +33,7 @@ public interface ICollectionViewDescriptor extends IScrollableViewDescriptor,
   /**
    * Gets the item selection action that will be attached to the created
    * collection view.
-   * 
+   *
    * @return the item selection action that will be attached to the created
    *         collection view.
    */
@@ -41,14 +41,14 @@ public interface ICollectionViewDescriptor extends IScrollableViewDescriptor,
 
   /**
    * Gets the action that is registered on the selected collection element.
-   * 
+   *
    * @return the action that is registered on the selected collection element.
    */
   IAction getRowAction();
 
   /**
    * Gets the type of selection allowed on the collection view.
-   * 
+   *
    * @return the type of selection allowed on the collection view.
    */
   ESelectionMode getSelectionMode();
@@ -56,7 +56,7 @@ public interface ICollectionViewDescriptor extends IScrollableViewDescriptor,
   /**
    * Gets the descriptor that describes the view used to display and control
    * pagination.
-   * 
+   *
    * @return the descriptor that describes the view used to display and control
    *         pagination.
    */
@@ -64,14 +64,14 @@ public interface ICollectionViewDescriptor extends IScrollableViewDescriptor,
 
   /**
    * Whether this collection view should auto select 1st row.
-   * 
+   *
    * @return true if this collection view should auto select 1st row.
    */
   boolean isAutoSelectFirstRow();
 
   /**
    * Gets the model descriptor this view selection descriptor acts on.
-   * 
+   *
    * @return the view selection model descriptor.
    */
   IModelDescriptor getSelectionModelDescriptor();

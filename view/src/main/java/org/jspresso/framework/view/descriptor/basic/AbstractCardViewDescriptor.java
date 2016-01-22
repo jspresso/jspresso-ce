@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -43,7 +43,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * One of the most important usage of card views is when it is combine as the
  * detail in a master-detail view. The detail view may then change dynamically
  * based on the selected master.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractCardViewDescriptor extends BasicViewDescriptor
@@ -53,7 +53,7 @@ public abstract class AbstractCardViewDescriptor extends BasicViewDescriptor
 
   /**
    * Gets the child view registered in the card view by its name.
-   * 
+   *
    * @param cardName
    *          the card name to lookup the view for.
    * @return the child view descriptor.
@@ -68,7 +68,7 @@ public abstract class AbstractCardViewDescriptor extends BasicViewDescriptor
 
   /**
    * Puts the child view registered in the card view by its name.
-   * 
+   *
    * @param cardName
    *          the card name to lookup the view for.
    * @param cardViewDescriptor
@@ -84,7 +84,7 @@ public abstract class AbstractCardViewDescriptor extends BasicViewDescriptor
 
   /**
    * Sets the childViewDescriptors.
-   * 
+   *
    * @param cardViewDescriptors
    *          the cardViewDescriptors to set.
    */

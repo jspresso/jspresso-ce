@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2012 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -30,7 +30,7 @@ import org.hibernate.service.spi.SessionFactoryServiceRegistry;
 /**
  * A new Hibernate 4 integrator used to register the default Jspresso post-load
  * listener.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class JspressoHibernateIntegrator implements Integrator {

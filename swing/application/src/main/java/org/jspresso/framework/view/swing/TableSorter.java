@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -64,7 +64,7 @@ import javax.swing.table.TableModel;
  * <p/>
  * This is a long overdue rewrite of a class of the same name that first
  * appeared in the swing table demos in 1997.
- * 
+ *
  * @author Philip Milne
  * @author Brendon McLean
  * @author Dan van Enckevort

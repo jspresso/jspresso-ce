@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2014 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.gui.remote;
 
 /**
  * A component used to fill an empty area.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class REmptyComponent extends RComponent {

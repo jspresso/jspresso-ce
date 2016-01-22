@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -21,7 +21,7 @@ package org.jspresso.framework.state.remote;
 /**
  * A simple interface to establish the transformation contract to fill in a
  * remote state value.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IRemoteStateValueMapper {
@@ -31,7 +31,7 @@ public interface IRemoteStateValueMapper {
    * should default to the original value but the developer is given a chance
    * here to mutate the actual object returned. This allows for changing the
    * type of objects actually exchanged with the remote frontend peer.
-   * 
+   *
    *
    * @param state the remote value state to map the value for.
    * @param originalValue

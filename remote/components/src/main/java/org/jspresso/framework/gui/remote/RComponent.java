@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -31,7 +31,7 @@ import org.jspresso.framework.util.remote.RemotePeer;
 
 /**
  * This class is the generic server peer of a client GUI component.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class RComponent extends RemotePeer implements
@@ -162,7 +162,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Gets the state.
-   * 
+   *
    * @return the state.
    */
   @Override
@@ -172,7 +172,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Gets the description.
-   * 
+   *
    * @return the description.
    */
   public String getToolTip() {
@@ -181,7 +181,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Sets the actionLists.
-   * 
+   *
    * @param actionLists
    *          the actionLists to set.
    */
@@ -191,7 +191,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Sets the background.
-   * 
+   *
    * @param background
    *          the background to set.
    */
@@ -201,7 +201,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Sets the borderType.
-   * 
+   *
    * @param borderType
    *          the borderType to set.
    */
@@ -211,7 +211,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Sets the font.
-   * 
+   *
    * @param font
    *          the font to set.
    */
@@ -221,7 +221,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Sets the foreground.
-   * 
+   *
    * @param foreground
    *          the foreground to set.
    */
@@ -231,7 +231,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Sets the icon.
-   * 
+   *
    * @param icon
    *          the icon to set.
    */
@@ -241,7 +241,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Sets the label.
-   * 
+   *
    * @param label
    *          the label to set.
    */
@@ -251,7 +251,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Sets the preferredSize.
-   * 
+   *
    * @param preferredSize
    *          the preferredSize to set.
    */
@@ -261,7 +261,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Sets the state.
-   * 
+   *
    * @param state
    *          the state to set.
    */
@@ -271,7 +271,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Sets the toolTip.
-   * 
+   *
    * @param toolTip
    *          the toolTip to set.
    */
@@ -281,7 +281,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Gets the toolTipState.
-   * 
+   *
    * @return the toolTipState.
    */
   public RemoteValueState getToolTipState() {
@@ -290,7 +290,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Sets the toolTipState.
-   * 
+   *
    * @param toolTipState
    *          the toolTipState to set.
    */
@@ -316,7 +316,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Gets the secondaryActionLists.
-   * 
+   *
    * @return the secondaryActionLists.
    */
   public RActionList[] getSecondaryActionLists() {
@@ -325,7 +325,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Sets the secondaryActionLists.
-   * 
+   *
    * @param secondaryActionLists
    *          the secondaryActionLists to set.
    */
@@ -335,7 +335,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Gets the styleName.
-   * 
+   *
    * @return the styleName.
    */
   public String getStyleName() {
@@ -344,7 +344,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Sets the styleName.
-   * 
+   *
    * @param styleName
    *          the styleName to set.
    */
@@ -354,7 +354,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Gets the backgroundState.
-   * 
+   *
    * @return the backgroundState.
    */
   public RemoteValueState getBackgroundState() {
@@ -363,7 +363,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Sets the backgroundState.
-   * 
+   *
    * @param backgroundState
    *          the backgroundState to set.
    */
@@ -373,7 +373,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Gets the foregroundState.
-   * 
+   *
    * @return the foregroundState.
    */
   public RemoteValueState getForegroundState() {
@@ -382,7 +382,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Sets the foregroundState.
-   * 
+   *
    * @param foregroundState
    *          the foregroundState to set.
    */
@@ -392,7 +392,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Gets the fontState.
-   * 
+   *
    * @return the fontState.
    */
   public RemoteValueState getFontState() {
@@ -401,7 +401,7 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * Sets the fontState.
-   * 
+   *
    * @param fontState
    *          the fontState to set.
    */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -21,14 +21,14 @@ package org.jspresso.framework.view.descriptor;
 /**
  * This public interface is implemented by objects capable of providing a
  * reference on a IViewDescriptor.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IViewDescriptorProvider {
 
   /**
    * Gets the view descriptor referenced by this object.
-   * 
+   *
    * @return the view descriptor referenced by this object.
    */
   IViewDescriptor getViewDescriptor();

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -30,7 +30,7 @@ import org.jspresso.framework.gui.remote.RIcon;
 /**
  * This class serves as base class for remote actions. It provides accessors on
  * commonly used artifacts.
- * 
+ *
  * @author Vincent Vandenschrick
  * @internal
  */
@@ -39,7 +39,7 @@ public abstract class AbstractRemoteAction extends
 
   /**
    * Registers a command for remote execution.
-   * 
+   *
    * @param command
    *          the command to register.
    * @param context

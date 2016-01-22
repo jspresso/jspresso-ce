@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -32,7 +32,7 @@ public interface ITreeSelectionModelBinder {
 
   /**
    * Binds a collection connector to keep track of a selection model selections.
-   * 
+   *
    * @param rootConnector
    *          the root connector of the connector hierarchy.
    * @param tree

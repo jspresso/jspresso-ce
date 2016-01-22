@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,14 +22,14 @@ import java.util.Map;
 
 /**
  * This interface is implemented by Jspresso security context builders.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface ISecurityContextBuilder {
 
   /**
    * Returns the current security context this builder works on.
-   * 
+   *
    * @return the current security context this builder works on.
    */
   Map<String, Object> getSecurityContext();
@@ -48,7 +48,7 @@ public interface ISecurityContextBuilder {
 
   /**
    * Restores the last recorded snapshot.
-   * 
+   *
    * @return itself.
    */
   ISecurityContextBuilder restoreLastSecurityContextSnapshot();

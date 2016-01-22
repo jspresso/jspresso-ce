@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -21,14 +21,14 @@ package org.jspresso.framework.model.descriptor;
 /**
  * This interface is implemented by descriptors of source code string
  * properties.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface ISourceCodePropertyDescriptor extends ITextPropertyDescriptor {
 
   /**
    * Gets the language the source code is written in.
-   * 
+   *
    * @return the language the source code is written in.
    */
   String getLanguage();

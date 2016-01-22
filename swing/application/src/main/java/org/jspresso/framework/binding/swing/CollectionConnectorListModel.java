@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -35,7 +35,7 @@ import org.jspresso.framework.util.swing.SwingUtil;
  * This class implements a list model backed by a collection connector. As
  * expected, this list model will fire necessary events depending on connectors
  * received events.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class CollectionConnectorListModel extends AbstractListModel<IValueConnector> {
@@ -114,7 +114,7 @@ public class CollectionConnectorListModel extends AbstractListModel<IValueConnec
 
   /**
    * Gets the value to display as row toolTip.
-   * 
+   *
    * @param rowIndex
    *          the row index to compute the toolTip for.
    * @return the row toolTip or null.

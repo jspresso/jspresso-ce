@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ package org.jspresso.framework.model.component;
  * This is an interface used to identify classes responsible for providing
  * component accessors which are not directly related to the core properties.
  * Such classes provide derived (computed) properties of the component.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <T>
  *          The class of the extended component.
@@ -32,7 +32,7 @@ public interface IComponentExtension<T extends IComponent> {
 
   /**
    * Returns the component instance to which this extension is attached.
-   * 
+   *
    * @return The extended entity instance.
    */
   T getComponent();

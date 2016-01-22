@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -41,7 +41,7 @@ import org.jspresso.framework.util.event.SelectionChangeSupport;
 
 /**
  * This class is a model property connector which manages a collection property.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class ModelCollectionPropertyConnector extends ModelPropertyConnector
@@ -59,7 +59,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    * Constructs a new model property connector on a model collection property.
    * This constructor does not specify the element class of this collection
    * connector. It must be set afterwards using the appropriate setter.
-   * 
+   *
    * @param modelDescriptor
    *          the model descriptor backing this connector.
    * @param modelConnectorFactory
@@ -82,7 +82,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   /**
    * Adds a new child connector to this composite. The key used as storage key
    * is the child connector id.
-   * 
+   *
    * @param childConnector
    *          the added connector.
    */

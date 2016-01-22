@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -32,7 +32,7 @@ import org.jboss.security.SimplePrincipal;
 
 /**
  * Helper class for security management.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public final class SecurityHelper {
@@ -53,7 +53,7 @@ public final class SecurityHelper {
 
   /**
    * Creates an anonymous subject.
-   * 
+   *
    * @return a new anonymous subject.
    */
   public static Subject createAnonymousSubject() {
@@ -67,7 +67,7 @@ public final class SecurityHelper {
 
   /**
    * Tests whether the passed subject has sufficient roles.
-   * 
+   *
    * @param subject
    *          the subject to test.
    * @param securable
@@ -135,7 +135,7 @@ public final class SecurityHelper {
 
   /**
    * Extracts the role names contained in this JAAS subject.
-   * 
+   *
    * @param subject
    *          the subject to extract the roles for.
    * @return the roles list.

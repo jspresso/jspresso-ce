@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.gui.remote;
 
 /**
  * A remote check box component.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RCheckBox extends RComponent {
@@ -48,7 +48,7 @@ public class RCheckBox extends RComponent {
 
   /**
    * Gets the triState.
-   * 
+   *
    * @return the triState.
    */
   public boolean isTriState() {
@@ -57,7 +57,7 @@ public class RCheckBox extends RComponent {
 
   /**
    * Sets the triState.
-   * 
+   *
    * @param triState
    *          the triState to set.
    */

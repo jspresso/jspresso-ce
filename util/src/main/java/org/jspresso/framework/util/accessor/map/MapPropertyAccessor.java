@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -25,14 +25,14 @@ import org.jspresso.framework.util.accessor.AbstractPropertyAccessor;
 /**
  * This class is the default implementation of property accessors. It relies on
  * Jakarta commons beanutils.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class MapPropertyAccessor extends AbstractPropertyAccessor {
 
   /**
    * Constructs a map property accessor.
-   * 
+   *
    * @param property
    *          the property accessed.
    */
@@ -42,7 +42,7 @@ public class MapPropertyAccessor extends AbstractPropertyAccessor {
 
   /**
    * Gets the writable.
-   * 
+   *
    * @return the writable.
    */
   @Override

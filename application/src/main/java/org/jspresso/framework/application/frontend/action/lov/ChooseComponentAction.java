@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -160,7 +160,7 @@ public class ChooseComponentAction<E, F, G> extends FrontendAction<E, F, G> {
   /**
    * Configures the action that will be triggered when the user cancels the
    * component choice.
-   * 
+   *
    * @param cancelAction
    *          the cancelAction to set.
    */
@@ -172,7 +172,7 @@ public class ChooseComponentAction<E, F, G> extends FrontendAction<E, F, G> {
    * Configures the action that will be triggered when the user confirms the
    * component choice. the chosen component will then be retrieved from the
    * selected view item.
-   * 
+   *
    * @param okAction
    *          the okAction to set.
    */
@@ -182,7 +182,7 @@ public class ChooseComponentAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Gets the collectionViewDescriptor.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the collectionViewDescriptor.
@@ -195,7 +195,7 @@ public class ChooseComponentAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Sets the collectionViewDescriptor.
-   * 
+   *
    * @param collectionViewDescriptor
    *          the collectionViewDescriptor to set.
    */
@@ -206,7 +206,7 @@ public class ChooseComponentAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Gets the componentDescriptor.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the componentDescriptor.
@@ -219,7 +219,7 @@ public class ChooseComponentAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Sets the componentDescriptor.
-   * 
+   *
    * @param componentDescriptor
    *          the componentDescriptor to set.
    */

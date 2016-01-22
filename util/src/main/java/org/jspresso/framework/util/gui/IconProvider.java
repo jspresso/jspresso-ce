@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -21,7 +21,7 @@ package org.jspresso.framework.util.gui;
 /**
  * Implementations of this interface are designed to provide icons based on an
  * object.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IconProvider {
@@ -30,7 +30,7 @@ public interface IconProvider {
    * Given a user object, this method gives the ability to the tree view
    * descriptor to return the icon used to render the user object. This method
    * may return null.
-   * 
+   *
    * @param userObject
    *          the user object to render.
    * @return the url of the image to use for the renderer or null.

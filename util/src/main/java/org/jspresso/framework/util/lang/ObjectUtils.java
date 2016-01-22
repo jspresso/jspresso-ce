@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import java.sql.Timestamp;
 
 /**
  * Helper class for objects operations.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public final class ObjectUtils {
@@ -67,7 +67,7 @@ public final class ObjectUtils {
 
   /**
    * Extracts the raw classname from a potentially generic one.
-   * 
+   *
    * @param sourceClassName
    *          the source class name, potentially containing generics
    *          information.

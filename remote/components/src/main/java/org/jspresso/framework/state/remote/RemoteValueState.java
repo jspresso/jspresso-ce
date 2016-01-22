@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -31,7 +31,7 @@ import org.jspresso.framework.util.remote.RemotePeer;
 
 /**
  * The state of a remote value.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteValueState extends RemotePeer {
@@ -63,7 +63,7 @@ public class RemoteValueState extends RemotePeer {
 
   /**
    * Gets the value.
-   * 
+   *
    * @return the value.
    */
   public Object getValue() {
@@ -72,7 +72,7 @@ public class RemoteValueState extends RemotePeer {
 
   /**
    * Gets the readable.
-   * 
+   *
    * @return the readable.
    */
   public boolean isReadable() {
@@ -81,7 +81,7 @@ public class RemoteValueState extends RemotePeer {
 
   /**
    * Gets the writable.
-   * 
+   *
    * @return the writable.
    */
   public boolean isWritable() {
@@ -90,7 +90,7 @@ public class RemoteValueState extends RemotePeer {
 
   /**
    * Sets the readable.
-   * 
+   *
    * @param readable
    *          the readable to set.
    */
@@ -100,7 +100,7 @@ public class RemoteValueState extends RemotePeer {
 
   /**
    * Sets the value.
-   * 
+   *
    * @param value
    *          the value to set.
    */
@@ -110,7 +110,7 @@ public class RemoteValueState extends RemotePeer {
 
   /**
    * Transform object value before using it as value state.
-   * 
+   *
    * @param incomingValue
    *          the original value.
    * @return the transformed value.
@@ -141,7 +141,7 @@ public class RemoteValueState extends RemotePeer {
 
   /**
    * Sets the writable.
-   * 
+   *
    * @param writable
    *          the writable to set.
    */
@@ -151,7 +151,7 @@ public class RemoteValueState extends RemotePeer {
 
   /**
    * Gets the parent.
-   * 
+   *
    * @return the parent.
    */
   public RemoteCompositeValueState getParent() {
@@ -160,7 +160,7 @@ public class RemoteValueState extends RemotePeer {
 
   /**
    * Sets the parent.
-   * 
+   *
    * @param parent the parent to set.
    */
   public void setParent(RemoteCompositeValueState parent) {

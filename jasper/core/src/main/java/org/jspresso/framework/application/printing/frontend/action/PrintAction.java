@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -37,7 +37,7 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 /**
  * This action allows the user to choose a report among a list and print it. The
  * list of available reports is statically configured into the action.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.
@@ -69,7 +69,7 @@ public class PrintAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Sets the modelConnectorFactory.
-   * 
+   *
    * @param modelConnectorFactory
    *          the modelConnectorFactory to set.
    * @deprecated model connector is now created by the backend controller.
@@ -84,7 +84,7 @@ public class PrintAction<E, F, G> extends FrontendAction<E, F, G> {
   /**
    * Configures the available report descriptors the user will be allowed to
    * choose.
-   * 
+   *
    * @param reportDescriptors
    *          the reportDescriptors to set.
    */

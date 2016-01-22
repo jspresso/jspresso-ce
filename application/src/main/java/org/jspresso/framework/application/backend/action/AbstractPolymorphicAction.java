@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -38,7 +38,7 @@ public abstract class AbstractPolymorphicAction extends BackendAction {
    * context selected indices to compute the selected objects collection.
    * Otherwise, it will simply return a singleton list holding the value of the
    * backend connector.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the list of selected objects.

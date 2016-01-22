@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -42,7 +42,7 @@ public class AddMapToMasterAction extends AbstractAddCollectionToMasterAction {
 
   /**
    * Gets the new map component to add.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the map to add to the collection.

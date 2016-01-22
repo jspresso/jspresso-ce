@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,14 +20,14 @@ package org.jspresso.framework.model.entity;
 
 /**
  * Implemented by classes that can be injected with an entity lifecycle handler.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IEntityLifecycleHandlerAware {
 
   /**
    * Sets the entity lifecycle handler.
-   * 
+   *
    * @param entityLifecycleHandler
    *          the entity lifecycle handler.
    */

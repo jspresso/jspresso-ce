@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -39,7 +39,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * Default cascading order for master-detail is :
  * <p>
  * north -> west -> center -> east -> south
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
@@ -145,7 +145,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * Sets the child view to layout in the <i>center</i> zone. The child view
    * will be resized both horizontally and vertically.
-   * 
+   *
    * @param centerViewDescriptor
    *          the centerViewDescriptor to set.
    */
@@ -156,7 +156,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * Sets the child view to layout in the <i>east</i> zone. The child view will
    * be resized vertically.
-   * 
+   *
    * @param eastViewDescriptor
    *          the eastViewDescriptor to set.
    */
@@ -167,7 +167,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * Sets the child view to layout in the <i>north</i> zone. The child view will
    * be resized horizontally.
-   * 
+   *
    * @param northViewDescriptor
    *          the northViewDescriptor to set.
    */
@@ -178,7 +178,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * Sets the child view to layout in the <i>south</i> zone. The child view will
    * be resized horizontally.
-   * 
+   *
    * @param southViewDescriptor
    *          the southViewDescriptor to set.
    */
@@ -189,7 +189,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * Sets the child view to layout in the <i>west</i> zone. The child view will
    * be resized vertically.
-   * 
+   *
    * @param westViewDescriptor
    *          the westViewDescriptor to set.
    */

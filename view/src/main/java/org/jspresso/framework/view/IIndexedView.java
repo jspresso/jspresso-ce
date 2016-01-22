@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -21,7 +21,7 @@ package org.jspresso.framework.view;
 /**
  * This interface establishes the general contract of a composite view which
  * owns indexed child views.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  */
@@ -29,7 +29,7 @@ public interface IIndexedView<E> extends ICompositeView<E> {
 
   /**
    * Gets the indexed child view.
-   * 
+   *
    * @param index
    *          the index to look up the child view.
    * @return the child view or null if none.
@@ -38,14 +38,14 @@ public interface IIndexedView<E> extends ICompositeView<E> {
 
   /**
    * Gets the currently displayed view index.
-   * 
+   *
    * @return the currently displayed view.
    */
   int getCurrentViewIndex();
 
   /**
    * Sets the currently displayed view index.
-   * 
+   *
    * @param index
    *          the currently displayed view.
    */

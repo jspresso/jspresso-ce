@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import java.util.Collection;
 
 /**
  * This helper class contains utility methods to work with gates.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public final class GateHelper {
@@ -33,7 +33,7 @@ public final class GateHelper {
 
   /**
    * Returns true if and only if gates are null, empty or all open.
-   * 
+   *
    * @param gates
    *          the gates collection.
    * @return gates status.

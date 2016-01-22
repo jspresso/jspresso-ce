@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import java.util.List;
 
 /**
  * Marks objects being able to provide a list of collection connectors.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface ICollectionConnectorListProvider extends
@@ -30,7 +30,7 @@ public interface ICollectionConnectorListProvider extends
 
   /**
    * Clones this connector.
-   * 
+   *
    * @return the connector's clone.
    */
   @Override
@@ -38,7 +38,7 @@ public interface ICollectionConnectorListProvider extends
 
   /**
    * Clones this connector.
-   * 
+   *
    * @param newConnectorId
    *          the identifier of the clone connector
    * @return the connector's clone.
@@ -48,7 +48,7 @@ public interface ICollectionConnectorListProvider extends
 
   /**
    * Gets the collection connector.
-   * 
+   *
    * @return the collection connector.
    */
   List<ICollectionConnector> getCollectionConnectors();
@@ -56,7 +56,7 @@ public interface ICollectionConnectorListProvider extends
   /**
    * Sets whether this connector should also forward its children selections (a
    * tree connector for instance).
-   * 
+   *
    * @param tracksChildrenSelection
    *          true if the connector selector should also forward its children
    *          selections.

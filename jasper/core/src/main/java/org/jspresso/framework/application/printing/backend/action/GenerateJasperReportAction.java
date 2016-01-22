@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -111,7 +111,7 @@ public class GenerateJasperReportAction extends BackendAction {
   /**
    * Configures the JDBC template (wrapping a data source) to use for filling the
    * report.
-   * 
+   *
    * @param jdbcTemplate
    *          the jdbcTemplate to set.
    */

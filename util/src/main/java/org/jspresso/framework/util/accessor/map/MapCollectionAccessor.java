@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -26,7 +26,7 @@ import org.jspresso.framework.util.accessor.ICollectionAccessor;
 
 /**
  * This class is the default implementation of collection property accessors.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class MapCollectionAccessor extends MapPropertyAccessor implements
@@ -34,7 +34,7 @@ public class MapCollectionAccessor extends MapPropertyAccessor implements
 
   /**
    * Constructs a new default java bean collection property accessor.
-   * 
+   *
    * @param property
    *          the property to be accessed.
    */

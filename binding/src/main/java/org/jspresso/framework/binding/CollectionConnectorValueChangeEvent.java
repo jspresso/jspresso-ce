@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -26,7 +26,7 @@ import org.jspresso.framework.util.event.ValueChangeEvent;
  * This class is a specific connector value change event for collection
  * connectors. It keeps track of the children connectors that were potentially
  * removed during the notification process.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class CollectionConnectorValueChangeEvent extends ValueChangeEvent {
@@ -55,7 +55,7 @@ public class CollectionConnectorValueChangeEvent extends ValueChangeEvent {
 
   /**
    * Gets the removedChildrenConnectors.
-   * 
+   *
    * @return the removedChildrenConnectors.
    */
   public List<IValueConnector> getRemovedChildrenConnectors() {

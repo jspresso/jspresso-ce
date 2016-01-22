@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,7 +23,7 @@ import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
 /**
  * A simple query structure which holds selection tick, a value and a
  * translation.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class EnumValueQueryStructure extends AbstractPropertyChangeCapable {
@@ -41,7 +41,7 @@ public class EnumValueQueryStructure extends AbstractPropertyChangeCapable {
 
   /**
    * Gets the selected.
-   * 
+   *
    * @return the selected.
    */
   public boolean isSelected() {
@@ -50,7 +50,7 @@ public class EnumValueQueryStructure extends AbstractPropertyChangeCapable {
 
   /**
    * Sets the selected.
-   * 
+   *
    * @param selected
    *          the selected to set.
    */
@@ -62,7 +62,7 @@ public class EnumValueQueryStructure extends AbstractPropertyChangeCapable {
 
   /**
    * Gets the value.
-   * 
+   *
    * @return the value.
    */
   public String getValue() {
@@ -71,7 +71,7 @@ public class EnumValueQueryStructure extends AbstractPropertyChangeCapable {
 
   /**
    * Sets the value.
-   * 
+   *
    * @param value
    *          the value to set.
    */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -35,7 +35,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * Default cascading order for master-detail is :
  * <p>
  * left -> right or top -> bottom depending on the split orientation.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
@@ -90,7 +90,7 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * Sets the <i>left</i> (horizontal split) of <i>top</i> (vertical split)
    * nested view.
-   * 
+   *
    * @param leftTopViewDescriptor
    *          the leftTopViewDescriptor to set.
    */
@@ -121,7 +121,7 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * Sets the <i>right</i> (horizontal split) of <i>bottom</i> (vertical split)
    * nested view.
-   * 
+   *
    * @param rightBottomViewDescriptor
    *          the rightBottomViewDescriptor to set.
    */

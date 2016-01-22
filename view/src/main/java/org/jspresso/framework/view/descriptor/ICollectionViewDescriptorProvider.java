@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,14 +22,14 @@ package org.jspresso.framework.view.descriptor;
 /**
  * This public interface is implemented by any object capable of priding a
  * collection view descriptor.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface ICollectionViewDescriptorProvider {
 
   /**
    * Gets the collection view descriptor.
-   * 
+   *
    * @return the collection view descriptor.
    */
   ICollectionViewDescriptor getCollectionViewDescriptor();

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -27,7 +27,7 @@ import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
  * without any intermediary grouping node. For instance, given a simple tree
  * level mapping a collection of <i>A</i>s and whose child is a tree level
  * mapping a collection of <i>B</i>s, the tree would look like :
- * 
+ *
  * <pre>
  * parent
  *   <b>A</b>-1
@@ -40,7 +40,7 @@ import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
  *     <b>B</b>-3.1
  *     <b>B</b>-3.2
  * </pre>
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BasicSimpleTreeLevelDescriptor extends BasicTreeLevelDescriptor

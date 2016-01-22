@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -31,7 +31,7 @@ import org.jspresso.framework.util.bean.EAccessorType;
  * This is the core implementation of all query components in the application.
  * Instances of this class serve as handlers for proxies representing the query
  * components.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class QueryComponentInvocationHandler implements InvocationHandler,

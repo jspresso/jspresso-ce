@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -30,7 +30,7 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
  * names and icons of the registered component descriptors. For instance, this
  * can be useful in the UI if you want to visually indicate the actual type of a
  * element contained in a polymorphic collection.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class TypeEnumerationPropertyDescriptor extends
@@ -50,7 +50,7 @@ public class TypeEnumerationPropertyDescriptor extends
   /**
    * Registers the list of component descriptors to build the enumeration
    * values/icons from their names and icons.
-   * 
+   *
    * @param componentDescriptorList
    *          the componentDescriptorList to set.
    */

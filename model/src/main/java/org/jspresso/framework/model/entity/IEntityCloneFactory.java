@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,14 +22,14 @@ import org.jspresso.framework.model.component.IComponent;
 
 /**
  * A factory to clone entities.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IEntityCloneFactory {
 
   /**
    * Clones a component.
-   * 
+   *
    * @param <E>
    *          the component contract (class or interface) to clone.
    * @param componentToClone
@@ -43,7 +43,7 @@ public interface IEntityCloneFactory {
 
   /**
    * Clones an entity.
-   * 
+   *
    * @param <E>
    *          the entity contract (class or interface) to clone.
    * @param entityToClone

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import java.util.List;
 
 /**
  * This is a helper class for tree descriptor management.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public final class TreeDescriptorHelper {
@@ -34,7 +34,7 @@ public final class TreeDescriptorHelper {
   /**
    * From a tree path of descriptor names, it retrieves the list descriptor of
    * the node collection.
-   * 
+   *
    * @param treeLevelDescriptor
    *          the tree level descriptor to start from.
    * @param treePath

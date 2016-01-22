@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * This interface establishes the general contract of a composite view which has
  * child views.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  */
@@ -31,7 +31,7 @@ public interface ICompositeView<E> extends IView<E> {
 
   /**
    * Gets the child views.
-   * 
+   *
    * @return the child views.
    */
   List<IView<E>> getChildren();

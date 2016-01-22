@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -27,7 +27,7 @@ import org.jspresso.framework.action.IActionHandler;
  * This action pops-up a binary question. Depending on user answer, another
  * action is triggered. The Yes - No alternative actions are parametrized
  * statically.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.
@@ -58,7 +58,7 @@ public class YesNoAction<E, F, G> extends AbstractMessageAction<E, F, G> {
   /**
    * Assigns the action to execute when the user answers negatively to the
    * question.
-   * 
+   *
    * @param noAction
    *          the noAction to set.
    */
@@ -69,7 +69,7 @@ public class YesNoAction<E, F, G> extends AbstractMessageAction<E, F, G> {
   /**
    * Assigns the action to execute when the user answers positively to the
    * question.
-   * 
+   *
    * @param yesAction
    *          the yesAction to set.
    */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,14 +20,14 @@ package org.jspresso.framework.util.event;
 
 /**
  * this interface is implemented by components supporting selection.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface ISelectable {
 
   /**
    * Adds a new selection listener to this selectable.
-   * 
+   *
    * @param listener
    *          the added listener.
    */
@@ -35,14 +35,14 @@ public interface ISelectable {
 
   /**
    * Gets the selected indices in this selectable.
-   * 
+   *
    * @return the indices to set selected.
    */
   int[] getSelectedIndices();
 
   /**
    * Removes a selection listener from this selectable.
-   * 
+   *
    * @param listener
    *          the removed listener.
    */
@@ -50,7 +50,7 @@ public interface ISelectable {
 
   /**
    * Sets the selected indices in this selectable.
-   * 
+   *
    * @param selectedIndices
    *          the indices to set selected. The leading index is defaulted to the
    *          highest selected one.
@@ -59,7 +59,7 @@ public interface ISelectable {
 
   /**
    * Sets the selected indices in this selectable.
-   * 
+   *
    * @param selectedIndices
    *          the indices to set selected.
    * @param leadingIndex

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Batch launcher.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public final class BatchLauncher {
@@ -37,7 +37,7 @@ public final class BatchLauncher {
 
   /**
    * Main method.
-   * 
+   *
    * @param args
    *          arguments.
    */

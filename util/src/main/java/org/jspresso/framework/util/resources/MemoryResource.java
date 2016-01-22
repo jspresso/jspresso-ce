@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,7 +23,7 @@ import java.io.InputStream;
 
 /**
  * a byte array resource.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class MemoryResource extends AbstractResource {
@@ -57,7 +57,7 @@ public class MemoryResource extends AbstractResource {
 
   /**
    * Gets the name.
-   * 
+   *
    * @return the name.
    */
   @Override

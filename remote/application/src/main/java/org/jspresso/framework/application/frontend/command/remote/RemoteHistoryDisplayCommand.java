@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.application.frontend.command.remote;
 
 /**
  * A command to exchange history navigation on both sides.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteHistoryDisplayCommand extends RemoteCommand {
@@ -32,7 +32,7 @@ public class RemoteHistoryDisplayCommand extends RemoteCommand {
 
   /**
    * Gets the snapshotId.
-   * 
+   *
    * @return the snapshotId.
    */
   public String getSnapshotId() {
@@ -41,7 +41,7 @@ public class RemoteHistoryDisplayCommand extends RemoteCommand {
 
   /**
    * Sets the snapshotId.
-   * 
+   *
    * @param snapshotId
    *          the snapshotId to set.
    */
@@ -51,7 +51,7 @@ public class RemoteHistoryDisplayCommand extends RemoteCommand {
 
   /**
    * Gets the name.
-   * 
+   *
    * @return the name.
    */
   public String getName() {
@@ -60,7 +60,7 @@ public class RemoteHistoryDisplayCommand extends RemoteCommand {
 
   /**
    * Sets the name.
-   * 
+   *
    * @param name
    *          the name to set.
    */

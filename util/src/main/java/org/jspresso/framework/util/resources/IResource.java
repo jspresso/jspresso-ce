@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,14 +23,14 @@ import java.io.InputStream;
 
 /**
  * This interface is implemented by passive web resources.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IResource extends IResourceBase {
 
   /**
    * Gets the resource content input stream.
-   * 
+   *
    * @return the resource content input stream.
    * @throws IOException
    *           whenever an IO exception occurs.

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -25,7 +25,7 @@ import java.util.List;
 
 /**
  * This is a utility class to easily work on connector trees.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public final class ConnectorHelper {
@@ -37,7 +37,7 @@ public final class ConnectorHelper {
   /**
    * Given a starting connector and a connector path, this method retrieves a
    * target connector from the connector parent/child tree.
-   * 
+   *
    * @param rootConnector
    *          the connector t start from.
    * @param connectorPath
@@ -61,7 +61,7 @@ public final class ConnectorHelper {
    * This methods gets the array of indices of an object collection held as
    * values in a collection connector. if the collection connector does not
    * contain one of the values, the value is simply ignored.
-   * 
+   *
    * @param collectionConnector
    *          the connector to retrieve the indices of.
    * @param values
@@ -93,7 +93,7 @@ public final class ConnectorHelper {
   /**
    * Retrieves a connector complete path following the parent/child
    * relationship.
-   * 
+   *
    * @param connector
    *          the connector to look the tree path for.
    * @return the list of connector identifiers from the root connector to the
@@ -116,7 +116,7 @@ public final class ConnectorHelper {
   /**
    * Given a connector, this method loops upward to the parent/child
    * relationship to determine the first connector of the hierarchy.
-   * 
+   *
    * @param connector
    *          the connector to look the root parent connector for.
    * @return the root parent connector.

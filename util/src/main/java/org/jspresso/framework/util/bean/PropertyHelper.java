@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -33,7 +33,7 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
 
 /**
  * This helper class contains utility methods to work with bean properties.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public final class PropertyHelper {
@@ -46,7 +46,7 @@ public final class PropertyHelper {
    * Gets the property descriptor of a property on a specified class. If the
    * specified class is an interface, all its super-interfaces are also
    * processed.
-   * 
+   *
    * @param beanClass
    *          the class to get the property descriptor of.
    * @param property
@@ -122,7 +122,7 @@ public final class PropertyHelper {
 
   /**
    * Retrieves all property names declared by a bean class.
-   * 
+   *
    * @param beanClass
    *          the class to introspect.
    * @return the collection of property names.
@@ -144,7 +144,7 @@ public final class PropertyHelper {
 
   /**
    * Retrieves the type of a bean property.
-   * 
+   *
    * @param beanClass
    *          the bean class on which to look for the property.
    * @param property

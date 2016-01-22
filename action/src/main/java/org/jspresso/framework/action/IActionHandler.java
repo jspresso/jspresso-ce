@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -32,7 +32,7 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * This interface establishes the general contract of an object able to execute
  * actions (controllers for instance). No assumption is made on whether this
  * action is to be executed (a)synchronously, transactionally, ...
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IActionHandler extends IExceptionHandler, ISecurityHandler,
@@ -42,7 +42,7 @@ public interface IActionHandler extends IExceptionHandler, ISecurityHandler,
    * Executes an action. Implementers should delegate the execution to the
    * action itself but are free to set the context of the execution (action
    * context, synchronous or not, transactionality, ...).
-   * 
+   *
    * @param action
    *          the action to be executed.
    * @param context
@@ -63,14 +63,14 @@ public interface IActionHandler extends IExceptionHandler, ISecurityHandler,
 
   /**
    * Returns the JAAS subject attached to this action handler.
-   * 
+   *
    * @return the JAAS subject attached to this action handler.
    */
   Subject getSubject();
 
   /**
    * Reads a user preference.
-   * 
+   *
    * @param key
    *          the key under which the preference as been stored.
    * @return the stored preference or null.
@@ -79,7 +79,7 @@ public interface IActionHandler extends IExceptionHandler, ISecurityHandler,
 
   /**
    * Stores a user preference.
-   * 
+   *
    * @param key
    *          the key under which the preference as to be stored.
    * @param value
@@ -89,7 +89,7 @@ public interface IActionHandler extends IExceptionHandler, ISecurityHandler,
 
   /**
    * Deletes a user preference.
-   * 
+   *
    * @param key
    *          the key under which the preference is stored.
    */
@@ -97,7 +97,7 @@ public interface IActionHandler extends IExceptionHandler, ISecurityHandler,
 
   /**
    * Gets the client timeZone.
-   * 
+   *
    * @return the client timeZone.
    */
   TimeZone getClientTimeZone();

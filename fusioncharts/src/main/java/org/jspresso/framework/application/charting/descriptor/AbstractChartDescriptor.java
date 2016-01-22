@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import org.jspresso.framework.util.gui.Dimension;
 
 /**
  * Basic implementation of a chart descriptor.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractChartDescriptor implements IChartDescriptor {
@@ -53,7 +53,7 @@ public abstract class AbstractChartDescriptor implements IChartDescriptor {
 
   /**
    * Gets the title.
-   * 
+   *
    * @return the title.
    */
   @Override
@@ -63,7 +63,7 @@ public abstract class AbstractChartDescriptor implements IChartDescriptor {
 
   /**
    * Gets the chart Url.
-   * 
+   *
    * @return the chart Url.
    */
   @Override
@@ -73,7 +73,7 @@ public abstract class AbstractChartDescriptor implements IChartDescriptor {
 
   /**
    * Sets the chart Height.
-   * 
+   *
    * @param height
    *          the chart Height to set.
    */
@@ -83,7 +83,7 @@ public abstract class AbstractChartDescriptor implements IChartDescriptor {
 
   /**
    * Sets the title.
-   * 
+   *
    * @param title
    *          the title to set.
    */
@@ -93,7 +93,7 @@ public abstract class AbstractChartDescriptor implements IChartDescriptor {
 
   /**
    * Sets the chart Url.
-   * 
+   *
    * @param url
    *          the chart Url to set.
    */
@@ -103,7 +103,7 @@ public abstract class AbstractChartDescriptor implements IChartDescriptor {
 
   /**
    * Sets the chart Width.
-   * 
+   *
    * @param width
    *          the chart Width to set.
    */

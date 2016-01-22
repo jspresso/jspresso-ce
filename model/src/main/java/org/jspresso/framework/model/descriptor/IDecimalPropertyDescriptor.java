@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.model.descriptor;
 
 /**
  * This interface is implemented by descriptors of decimal properties.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IDecimalPropertyDescriptor extends INumberPropertyDescriptor {
@@ -42,7 +42,7 @@ public interface IDecimalPropertyDescriptor extends INumberPropertyDescriptor {
   /**
    * Returns true if this property is based on java.math.BigDecimal instead of
    * java.lang.Double.
-   * 
+   *
    * @return true if this property is based on java.math.BigDecimal instead of
    *         java.lang.Double.
    */

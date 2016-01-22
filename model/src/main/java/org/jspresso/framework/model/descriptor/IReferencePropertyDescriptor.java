@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import java.util.Map;
 
 /**
  * This interface is implemented by descriptors of reference properties.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the concrete component type.
@@ -38,7 +38,7 @@ public interface IReferencePropertyDescriptor<E> extends
    * initialized with the 'propB' property of its owning entity. Whenever
    * 'propB' is not a valid property name, it will be treated as a constant
    * value and 'propA' property will be initialized accordingly.
-   * 
+   *
    * @return the initialisation mapping.
    */
   Map<String, Object> getInitializationMapping();
@@ -46,21 +46,21 @@ public interface IReferencePropertyDescriptor<E> extends
   /**
    * When a list of value is triggered, this is the default page size of the
    * result list.
-   * 
+   *
    * @return the default page size of the result list.
    */
   Integer getPageSize();
 
   /**
    * Gets the descriptor of the component referenced by this property.
-   * 
+   *
    * @return the referenced component descriptor
    */
   IComponentDescriptor<? extends E> getReferencedDescriptor();
 
   /**
    * Gets whether this reference property descriptor is a one-to-one end.
-   * 
+   *
    * @return true if this reference property descriptor is a one-to-one end.
    */
   boolean isOneToOne();

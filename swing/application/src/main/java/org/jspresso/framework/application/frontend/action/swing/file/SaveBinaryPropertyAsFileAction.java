@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -28,7 +28,7 @@ import org.jspresso.framework.model.descriptor.IFileFilterable;
  * Lets the user browse the local file system and choose a file to store the
  * content of a binary property. Files are filtered based on the file filter
  * defined in the binary property descriptor.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class SaveBinaryPropertyAsFileAction extends SaveFileAction {

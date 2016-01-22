@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,14 +23,14 @@ import java.util.List;
 /**
  * An interface to handle various string flavors of a component collection in
  * order to transfer them to the clipboard.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IClipboardTransferHandler {
 
   /**
    * Creates a plain text representation of the component collection.
-   * 
+   *
    * @param transferredComponents
    *          the component collection to transform.
    * @return the plain text representation.
@@ -39,7 +39,7 @@ public interface IClipboardTransferHandler {
 
   /**
    * Creates an HTML representation of the component collection.
-   * 
+   *
    * @param transferredComponents
    *          the component collection to transform.
    * @return the HTML representation.

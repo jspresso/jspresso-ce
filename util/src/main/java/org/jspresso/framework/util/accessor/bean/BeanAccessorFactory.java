@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -27,7 +27,7 @@ import org.jspresso.framework.util.bean.PropertyHelper;
 
 /**
  * This is the default implementation of the accessor factory.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BeanAccessorFactory extends AbstractAccessorFactory {

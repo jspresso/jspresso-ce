@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -38,7 +38,7 @@ import org.jspresso.framework.util.gate.IGateAccessible;
 
 /**
  * Default implementation for model connectors factory.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class DefaultModelConnectorFactory implements IModelConnectorFactory {
@@ -136,7 +136,7 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
 
   /**
    * Gets the descriptorRegistry.
-   * 
+   *
    * @return the descriptorRegistry.
    */
   @Override
@@ -156,7 +156,7 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
 
   /**
    * Sets the descriptorRegistry.
-   * 
+   *
    * @param descriptorRegistry
    *          the descriptorRegistry to set.
    */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ package org.jspresso.framework.view.descriptor;
  * This public interface is implemented by a composite view descriptor which
  * organizes 2 view descriptors in a split manner. The described view can
  * typically be implemented using a swing JSplitPane.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface ISplitViewDescriptor extends ICompositeViewDescriptor {
@@ -30,14 +30,14 @@ public interface ISplitViewDescriptor extends ICompositeViewDescriptor {
   /**
    * Gets the left / top sub view descriptor of this split composite view
    * descriptor.
-   * 
+   *
    * @return the left / top sub view descriptor.
    */
   IViewDescriptor getLeftTopViewDescriptor();
 
   /**
    * Gets the orientation of the split described view.
-   * 
+   *
    * @return the split orientation. The admissible values are : <li>
    *         Orientation.VERTICAL <li>Orientation.HORIZONTAL
    */
@@ -46,7 +46,7 @@ public interface ISplitViewDescriptor extends ICompositeViewDescriptor {
   /**
    * Gets the right / bottom sub view descriptor of this split composite view
    * descriptor.
-   * 
+   *
    * @return the right / bottom sub view descriptor.
    */
   IViewDescriptor getRightBottomViewDescriptor();

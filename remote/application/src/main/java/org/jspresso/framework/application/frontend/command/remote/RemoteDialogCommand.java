@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import org.jspresso.framework.gui.remote.RComponent;
 
 /**
  * A command to trigger a modal remote dialog pop-up.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteDialogCommand extends RemoteAbstractDialogCommand {
@@ -35,7 +35,7 @@ public class RemoteDialogCommand extends RemoteAbstractDialogCommand {
 
   /**
    * Gets the view.
-   * 
+   *
    * @return the view.
    */
   public RComponent getView() {
@@ -44,7 +44,7 @@ public class RemoteDialogCommand extends RemoteAbstractDialogCommand {
 
   /**
    * Sets the view.
-   * 
+   *
    * @param view
    *          the view to set.
    */
@@ -54,7 +54,7 @@ public class RemoteDialogCommand extends RemoteAbstractDialogCommand {
 
   /**
    * Gets the modal.
-   * 
+   *
    * @return the modal.
    */
   public boolean isModal() {
@@ -63,7 +63,7 @@ public class RemoteDialogCommand extends RemoteAbstractDialogCommand {
 
   /**
    * Sets the modal.
-   * 
+   *
    * @param modal the modal to set.
    */
   public void setModal(boolean modal) {

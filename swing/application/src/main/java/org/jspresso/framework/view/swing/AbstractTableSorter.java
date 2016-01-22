@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -63,7 +63,7 @@ import org.jspresso.framework.util.gui.IIndexMapper;
  * </ul>
  * <p/>
  * This is an split from the TableSorter class.
- * 
+ *
  * @author Philip Milne
  * @author Brendon McLean
  * @author Dan van Enckevort
@@ -160,7 +160,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
 
   /**
    * Gets sorting status.
-   * 
+   *
    * @param column
    *          column.
    * @return sorting status.
@@ -171,7 +171,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
 
   /**
    * Gets tableHeader.
-   * 
+   *
    * @return tableHeader.
    */
   public JTableHeader getTableHeader() {
@@ -180,7 +180,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
 
   /**
    * Gets tableModel.
-   * 
+   *
    * @return tableModel.
    */
   public TableModel getTableModel() {
@@ -205,7 +205,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
 
   /**
    * Tests whether it is sorting.
-   * 
+   *
    * @return true if sorting
    */
   public boolean isSorting() {
@@ -214,7 +214,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
 
   /**
    * Sets the downIcon.
-   * 
+   *
    * @param downIcon
    *          the downIcon to set.
    */
@@ -224,7 +224,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
 
   /**
    * Sets column sorting status.
-   * 
+   *
    * @param column
    *          column.
    * @param status
@@ -243,7 +243,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
 
   /**
    * Sets tableHeader.
-   * 
+   *
    * @param tableHeader
    *          tableHeader.
    */
@@ -266,7 +266,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
 
   /**
    * Sets tableModel.
-   * 
+   *
    * @param tableModel
    *          tableModel.
    */
@@ -286,7 +286,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
 
   /**
    * Sets the upIcon.
-   * 
+   *
    * @param upIcon
    *          the upIcon to set.
    */
@@ -320,7 +320,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
 
   /**
    * Retrieves the column view index from the model index.
-   * 
+   *
    * @param modelColumnIndex
    *          the model column index.
    * @return the column index.
@@ -341,14 +341,14 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
   /**
    * Creates a table model listener to react to the underlying table model
    * change events.
-   * 
+   *
    * @return the table model listener.
    */
   protected abstract TableModelListener createTableModelHandler();
 
   /**
    * Gets HeaderRendererIcon.
-   * 
+   *
    * @param column
    *          column.
    * @return HeaderRendererIcon
@@ -372,7 +372,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
 
   /**
    * Gets the sortingColumns.
-   * 
+   *
    * @return the sortingColumns.
    */
   protected List<Directive> getSortingColumns() {
@@ -381,7 +381,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
 
   /**
    * Whether the table column is sortable.
-   * 
+   *
    * @param column
    *          the table column to test.
    * @return true is the table column is sortable.
@@ -428,7 +428,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
 
     /**
      * Gets the column.
-     * 
+     *
      * @return the column.
      */
     protected int getColumn() {
@@ -437,7 +437,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
 
     /**
      * Gets the direction.
-     * 
+     *
      * @return the direction.
      */
     protected int getDirection() {
@@ -482,7 +482,7 @@ public abstract class AbstractTableSorter extends AbstractTableModel implements
 
   /**
    * Decorates a table cell renderer with sorting state.
-   * 
+   *
      * @author Vincent Vandenschrick
    */
   public static class SortableHeaderRenderer implements TableCellRenderer {

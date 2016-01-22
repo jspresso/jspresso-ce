@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -29,14 +29,14 @@ import org.jspresso.framework.security.UserPrincipal;
 /**
  * This interface establishes the contract of an application session. This
  * application session represents the backend application state.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IApplicationSession {
 
   /**
    * Gets a custom value from the session.
-   * 
+   *
    * @param key
    *          the key used to lookup the custom value.
    * @return the value previously stored into the session or null if none.
@@ -45,35 +45,35 @@ public interface IApplicationSession {
 
   /**
    * Lists the custom values from the application session.
-   * 
+   *
    * @return the session custom values map.
    */
   Map<String, Object> getCustomValues();
 
   /**
    * Gets the session locale.
-   * 
+   *
    * @return the session locale.
    */
   Locale getLocale();
 
   /**
    * Gets the session principal as a JAAS principal.
-   * 
+   *
    * @return the session owner.
    */
   UserPrincipal getPrincipal();
 
   /**
    * Gets the session owner as a JAAS subject.
-   * 
+   *
    * @return the session owner.
    */
   Subject getSubject();
 
   /**
    * Puts a custom value into the session.
-   * 
+   *
    * @param key
    *          the key under which to store the custom property.
    * @param value
@@ -83,7 +83,7 @@ public interface IApplicationSession {
 
   /**
    * Sets the session locale.
-   * 
+   *
    * @param locale
    *          the session locale.
    */
@@ -91,7 +91,7 @@ public interface IApplicationSession {
 
   /**
    * Sets the session owner as a JAAS subject.
-   * 
+   *
    * @param sessionOwner
    *          the session owner.
    */
@@ -99,14 +99,14 @@ public interface IApplicationSession {
 
   /**
    * Gets the session identifier.
-   * 
+   *
    * @return the session identifier.
    */
   String getId();
 
   /**
    * Gets the session logged in user.
-   * 
+   *
    * @return the session logged in user.
    */
   String getUsername();

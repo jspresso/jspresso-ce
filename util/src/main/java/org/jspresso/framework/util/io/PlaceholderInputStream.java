@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * A filtered input stream that replaces placeholders on the fly based on a
  * substitution map.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class PlaceholderInputStream extends FilterInputStream {
@@ -37,7 +37,7 @@ public class PlaceholderInputStream extends FilterInputStream {
 
   /**
    * Creates an PlaceholderInputStream..
-   * 
+   *
    * @param sourceStream
    *          the InputStream to be filtered.
    * @param variables

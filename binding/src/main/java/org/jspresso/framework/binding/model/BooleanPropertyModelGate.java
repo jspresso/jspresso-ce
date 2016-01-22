@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -21,7 +21,7 @@ package org.jspresso.framework.binding.model;
 /**
  * This gate opens and closes based on the value of a boolean property of the
  * assigned model.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BooleanPropertyModelGate extends AbstractPropertyModelGate<Object> {
@@ -30,7 +30,7 @@ public class BooleanPropertyModelGate extends AbstractPropertyModelGate<Object> 
 
   /**
    * Configures the boolean property name.
-   * 
+   *
    * @param booleanPropertyName
    *          the propertyName to set.
    * @deprecated use setPropertyName instead.

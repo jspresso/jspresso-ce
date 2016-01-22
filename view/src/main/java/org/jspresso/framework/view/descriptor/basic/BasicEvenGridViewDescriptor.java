@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -86,7 +86,7 @@ public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
 
   /**
    * Registers the nested views to display as grid cells.
-   * 
+   *
    * @param cells
    *          the cells to set.
    */
@@ -96,7 +96,7 @@ public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
 
   /**
    * Sets the viewDescriptors.
-   * 
+   *
    * @param viewDescriptors
    *          the viewDescriptors to set.
    * @deprecated use setCells instead.
@@ -128,7 +128,7 @@ public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
    * dimension (row or column). Nested views are distributed along the driving
    * axis until this maximum number has been reached. A new row or column is
    * then created to host the remaining cells.
-   * 
+   *
    * @param drivingDimensionCellCount
    *          the drivingDimensionCellCount to set.
    */

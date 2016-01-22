@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -26,7 +26,7 @@ import org.jspresso.framework.util.accessor.IAccessorFactory;
 
 /**
  * Interface for all factories of model connectors.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IModelConnectorFactory {
@@ -34,7 +34,7 @@ public interface IModelConnectorFactory {
   /**
    * Creates a model connector based on a model type. It uses the descriptor
    * registry to locate the model descriptor based on its type.
-   * 
+   *
    * @param id
    *          the connector identifier.
    * @param componentContract
@@ -48,7 +48,7 @@ public interface IModelConnectorFactory {
 
   /**
    * Creates a model connector based on a model descriptor.
-   * 
+   *
    * @param id
    *          the connector identifier.
    * @param modelDescriptor

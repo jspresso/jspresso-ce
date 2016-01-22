@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,7 +24,7 @@ import org.jspresso.framework.util.accessor.ICollectionAccessor;
 
 /**
  * This is the map implementation of the accessor factory.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class MapAccessorFactory extends AbstractAccessorFactory {

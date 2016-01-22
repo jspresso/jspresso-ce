@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,14 +22,14 @@ import javax.security.auth.Subject;
 
 /**
  * Implemented by classes that can be injected with a JAAS subject.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface ISubjectAware {
 
   /**
    * Sets the JAAS subject.
-   * 
+   *
    * @param subject
    *          the JAAS subject to set.
    */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,7 +23,7 @@ import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 /**
  * This interface establishes the general contract of a composite view which has
  * child views which are keyed by a string.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  */
@@ -31,7 +31,7 @@ public interface IMapView<E> extends IView<E> {
 
   /**
    * Adds a child view to the map.
-   * 
+   *
    * @param key
    *          the child view key.
    * @param childView
@@ -41,7 +41,7 @@ public interface IMapView<E> extends IView<E> {
 
   /**
    * Gets the child view indexed by the key or null if the key does not exist.
-   * 
+   *
    * @param key
    *          the key to look up the child view.
    * @return the child view or null if none.
@@ -50,14 +50,14 @@ public interface IMapView<E> extends IView<E> {
 
   /**
    * Gets the currently displayed view.
-   * 
+   *
    * @return the currently displayed view.
    */
   IView<E> getCurrentView();
 
   /**
    * Sets the currently displayed view.
-   * 
+   *
    * @param currentView
    *          the currently displayed view.
    */

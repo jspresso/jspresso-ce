@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 /**
  * Simple holder of cell constraints.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class CellConstraints implements Serializable {
@@ -75,7 +75,7 @@ public class CellConstraints implements Serializable {
 
   /**
    * Gets the column.
-   * 
+   *
    * @return the column.
    */
   public int getColumn() {
@@ -84,7 +84,7 @@ public class CellConstraints implements Serializable {
 
   /**
    * Gets the height.
-   * 
+   *
    * @return the height.
    */
   public int getHeight() {
@@ -93,7 +93,7 @@ public class CellConstraints implements Serializable {
 
   /**
    * Gets the row.
-   * 
+   *
    * @return the row.
    */
   public int getRow() {
@@ -102,7 +102,7 @@ public class CellConstraints implements Serializable {
 
   /**
    * Gets the width.
-   * 
+   *
    * @return the width.
    */
   public int getWidth() {
@@ -111,7 +111,7 @@ public class CellConstraints implements Serializable {
 
   /**
    * Gets the heightResizable.
-   * 
+   *
    * @return the heightResizable.
    */
   public boolean isHeightResizable() {
@@ -120,7 +120,7 @@ public class CellConstraints implements Serializable {
 
   /**
    * Gets the widthResizable.
-   * 
+   *
    * @return the widthResizable.
    */
   public boolean isWidthResizable() {
@@ -129,7 +129,7 @@ public class CellConstraints implements Serializable {
 
   /**
    * Sets the column.
-   * 
+   *
    * @param column
    *          the column to set.
    */
@@ -139,7 +139,7 @@ public class CellConstraints implements Serializable {
 
   /**
    * Sets the height.
-   * 
+   *
    * @param height
    *          the height to set.
    */
@@ -149,7 +149,7 @@ public class CellConstraints implements Serializable {
 
   /**
    * Sets the heightResizable.
-   * 
+   *
    * @param heightResizable
    *          the heightResizable to set.
    */
@@ -159,7 +159,7 @@ public class CellConstraints implements Serializable {
 
   /**
    * Sets the row.
-   * 
+   *
    * @param row
    *          the row to set.
    */
@@ -169,7 +169,7 @@ public class CellConstraints implements Serializable {
 
   /**
    * Sets the width.
-   * 
+   *
    * @param width
    *          the width to set.
    */
@@ -179,7 +179,7 @@ public class CellConstraints implements Serializable {
 
   /**
    * Sets the widthResizable.
-   * 
+   *
    * @param widthResizable
    *          the widthResizable to set.
    */

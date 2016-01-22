@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -31,7 +31,7 @@ import org.springframework.jdbc.core.RowCallbackHandler;
 
 /**
  * A JDBC based preference store.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class JdbcPreferencesStore implements IPreferencesStore {
@@ -240,7 +240,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
 
   /**
    * Configures the data source to which the JdbcPreferenceStore is persisted.
-   * 
+   *
    * @param dataSource
    *          the data source to which the JdbcPreferenceStore is persisted.
    */
@@ -250,7 +250,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
 
   /**
    * Gets the tableName.
-   * 
+   *
    * @return the tableName.
    */
   public String getTableName() {
@@ -262,7 +262,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
 
   /**
    * Sets the tableName.
-   * 
+   *
    * @param tableName
    *          the tableName to set.
    */
@@ -272,7 +272,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
 
   /**
    * Gets the defaultRestrictions.
-   * 
+   *
    * @return the defaultRestrictions.
    */
   public Map<String, String> getDefaultRestrictions() {
@@ -282,7 +282,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
   /**
    * Sets the defaultRestrictions. The default restrictions contains arbitrary
    * string key value pairs that are added to every SQL where clauses.
-   * 
+   *
    * @param defaultRestrictions
    *          the defaultRestrictions to set.
    */
@@ -292,7 +292,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
 
   /**
    * Gets the prefKeyColumnName.
-   * 
+   *
    * @return the prefKeyColumnName.
    */
   protected String getKeyColumnName() {
@@ -304,7 +304,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
 
   /**
    * Sets the prefKeyColumnName.
-   * 
+   *
    * @param keyColumnName
    *          the prefKeyColumnName to set.
    */
@@ -314,7 +314,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
 
   /**
    * Gets the prefValueColumnName.
-   * 
+   *
    * @return the prefValueColumnName.
    */
   protected String getValueColumnName() {
@@ -326,7 +326,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
 
   /**
    * Sets the prefValueColumnName.
-   * 
+   *
    * @param valueColumnName
    *          the prefValueColumnName to set.
    */
@@ -336,7 +336,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
 
   /**
    * Sets the pathColumnName.
-   * 
+   *
    * @param pathColumnName
    *          the pathColumnName to set.
    */
@@ -346,7 +346,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
 
   /**
    * Gets the pathColumnName.
-   * 
+   *
    * @return the pathColumnName.
    */
   protected String getPathColumnName() {

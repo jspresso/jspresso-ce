@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.gui.remote;
 
 /**
  * A container with stacked children views.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RCardContainer extends RContainer {
@@ -50,7 +50,7 @@ public class RCardContainer extends RContainer {
 
   /**
    * Gets the cardNames.
-   * 
+   *
    * @return the cardNames.
    */
   public String[] getCardNames() {
@@ -59,7 +59,7 @@ public class RCardContainer extends RContainer {
 
   /**
    * Gets the cards.
-   * 
+   *
    * @return the cards.
    */
   public RComponent[] getCards() {
@@ -68,7 +68,7 @@ public class RCardContainer extends RContainer {
 
   /**
    * Sets the cardNames.
-   * 
+   *
    * @param cardNames
    *          the cardNames to set.
    */
@@ -78,7 +78,7 @@ public class RCardContainer extends RContainer {
 
   /**
    * Sets the cards.
-   * 
+   *
    * @param cards
    *          the cards to set.
    */

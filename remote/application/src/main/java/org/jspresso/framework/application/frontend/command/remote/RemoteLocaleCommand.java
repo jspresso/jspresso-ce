@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import java.util.Map;
 
 /**
  * Changes the locale of the remote peer.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteLocaleCommand extends RemoteCommand {
@@ -38,7 +38,7 @@ public class RemoteLocaleCommand extends RemoteCommand {
 
   /**
    * Gets the language.
-   * 
+   *
    * @return the language.
    */
   public String getLanguage() {
@@ -47,7 +47,7 @@ public class RemoteLocaleCommand extends RemoteCommand {
 
   /**
    * Sets the language.
-   * 
+   *
    * @param language
    *          the language to set.
    */
@@ -57,7 +57,7 @@ public class RemoteLocaleCommand extends RemoteCommand {
 
   /**
    * Gets the datePattern.
-   * 
+   *
    * @return the datePattern.
    */
   public String getDatePattern() {
@@ -66,7 +66,7 @@ public class RemoteLocaleCommand extends RemoteCommand {
 
   /**
    * Sets the datePattern.
-   * 
+   *
    * @param datePattern
    *          the datePattern to set.
    */
@@ -76,7 +76,7 @@ public class RemoteLocaleCommand extends RemoteCommand {
 
   /**
    * Gets the translations.
-   * 
+   *
    * @return the translations.
    */
   public Map<String, String> getTranslations() {
@@ -85,7 +85,7 @@ public class RemoteLocaleCommand extends RemoteCommand {
 
   /**
    * Sets the translations.
-   * 
+   *
    * @param translations
    *          the translations to set.
    */
@@ -95,7 +95,7 @@ public class RemoteLocaleCommand extends RemoteCommand {
 
   /**
    * Gets the firstDayOfWeek.
-   * 
+   *
    * @return the firstDayOfWeek.
    */
   public int getFirstDayOfWeek() {
@@ -104,7 +104,7 @@ public class RemoteLocaleCommand extends RemoteCommand {
 
   /**
    * Sets the firstDayOfWeek.
-   * 
+   *
    * @param firstDayOfWeek
    *          the firstDayOfWeek to set.
    */

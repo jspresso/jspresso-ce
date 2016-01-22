@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -31,7 +31,7 @@ import org.jspresso.framework.model.descriptor.IFileFilterable;
  * be installed on a property view. A suitable (built-in) file open callback is
  * installed upon action instantiation and thus, nothing has to be configured
  * for the action to be immediately operational.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class SaveBinaryPropertyAsFileAction extends SaveFileAction {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 /**
  * a simple holder for 2D coordinates.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class Coordinates implements Serializable {
@@ -69,7 +69,7 @@ public class Coordinates implements Serializable {
 
   /**
    * Gets the x.
-   * 
+   *
    * @return the x.
    */
   public int getX() {
@@ -78,7 +78,7 @@ public class Coordinates implements Serializable {
 
   /**
    * Gets the y.
-   * 
+   *
    * @return the y.
    */
   public int getY() {
@@ -95,7 +95,7 @@ public class Coordinates implements Serializable {
 
   /**
    * Sets the x.
-   * 
+   *
    * @param x
    *          the x to set.
    */
@@ -105,7 +105,7 @@ public class Coordinates implements Serializable {
 
   /**
    * Sets the y.
-   * 
+   *
    * @param y
    *          the y to set.
    */

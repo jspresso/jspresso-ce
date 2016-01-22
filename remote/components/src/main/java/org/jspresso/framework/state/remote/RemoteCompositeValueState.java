@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import java.util.List;
 
 /**
  * The state of a composite remote value.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteCompositeValueState extends RemoteValueState {
@@ -56,7 +56,7 @@ public class RemoteCompositeValueState extends RemoteValueState {
 
   /**
    * Gets the children.
-   * 
+   *
    * @return the children.
    */
   public List<RemoteValueState> getChildren() {
@@ -65,7 +65,7 @@ public class RemoteCompositeValueState extends RemoteValueState {
 
   /**
    * Gets the description.
-   * 
+   *
    * @return the description.
    */
   public String getDescription() {
@@ -74,7 +74,7 @@ public class RemoteCompositeValueState extends RemoteValueState {
 
   /**
    * Gets the iconImageUrl.
-   * 
+   *
    * @return the iconImageUrl.
    */
   public String getIconImageUrl() {
@@ -83,7 +83,7 @@ public class RemoteCompositeValueState extends RemoteValueState {
 
   /**
    * Gets the leadingIndex.
-   * 
+   *
    * @return the leadingIndex.
    */
   public int getLeadingIndex() {
@@ -92,7 +92,7 @@ public class RemoteCompositeValueState extends RemoteValueState {
 
   /**
    * Gets the selectedIndices.
-   * 
+   *
    * @return the selectedIndices.
    */
   public int[] getSelectedIndices() {
@@ -101,7 +101,7 @@ public class RemoteCompositeValueState extends RemoteValueState {
 
   /**
    * Sets the children.
-   * 
+   *
    * @param children
    *          the children to set.
    */
@@ -116,7 +116,7 @@ public class RemoteCompositeValueState extends RemoteValueState {
 
   /**
    * Sets the description.
-   * 
+   *
    * @param description
    *          the description to set.
    */
@@ -126,7 +126,7 @@ public class RemoteCompositeValueState extends RemoteValueState {
 
   /**
    * Sets the iconImageUrl.
-   * 
+   *
    * @param iconImageUrl
    *          the iconImageUrl to set.
    */
@@ -136,7 +136,7 @@ public class RemoteCompositeValueState extends RemoteValueState {
 
   /**
    * Sets the leadingIndex.
-   * 
+   *
    * @param leadingIndex
    *          the leadingIndex to set.
    */
@@ -146,7 +146,7 @@ public class RemoteCompositeValueState extends RemoteValueState {
 
   /**
    * Sets the selectedIndices.
-   * 
+   *
    * @param selectedIndices
    *          the selectedIndices to set.
    */

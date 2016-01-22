@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -30,7 +30,7 @@ import org.jspresso.framework.util.collection.IPageable;
 
 /**
  * PageableDescriptor singleton.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public final class PageableDescriptor {
@@ -47,7 +47,7 @@ public final class PageableDescriptor {
 
   /**
    * Creates the singleton instance.
-   * 
+   *
    * @return the singleton instance.
    */
   private static IComponentDescriptor<IPageable> createInstance() {

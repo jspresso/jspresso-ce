@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,7 +24,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 /**
  * This interface establishes the general contract of a view. Its main role is
  * to provide a pair of (visible peer , connector) used by the framework.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          The root class of the view peers.
@@ -34,28 +34,28 @@ public interface IView<E> extends IViewProvider<E> {
   /**
    * Gets the view connector of this view. This connector is built connected to
    * the view peer.
-   * 
+   *
    * @return the view connector.
    */
   IValueConnector getConnector();
 
   /**
    * Gets the descriptor of this view.
-   * 
+   *
    * @return the view descriptor.
    */
   IViewDescriptor getDescriptor();
 
   /**
    * Gets the parent view or null if it's a root view.
-   * 
+   *
    * @return the parent view or null if it's a root view.
    */
   IView<E> getParent();
 
   /**
    * Gets the view peer of this view.
-   * 
+   *
    * @return the view peer.
    */
   E getPeer();
@@ -63,7 +63,7 @@ public interface IView<E> extends IViewProvider<E> {
   /**
    * Sets the view connector of this view. This connector is built connected to
    * the view peer.
-   * 
+   *
    * @param connector
    *          the view connector.
    */
@@ -71,7 +71,7 @@ public interface IView<E> extends IViewProvider<E> {
 
   /**
    * Sets the parent view or null if it's a root view.
-   * 
+   *
    * @param parent
    *          the parent view or null if it's a root view.
    */
@@ -79,7 +79,7 @@ public interface IView<E> extends IViewProvider<E> {
 
   /**
    * Sets the view peer of this view.
-   * 
+   *
    * @param peer
    *          the view peer.
    */

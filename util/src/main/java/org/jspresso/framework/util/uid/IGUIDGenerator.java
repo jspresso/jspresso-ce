@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 /**
  * This interface has to be implemented by generators of GUID.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual UID type generated.
@@ -31,7 +31,7 @@ public interface IGUIDGenerator<E extends Serializable> {
 
   /**
    * Generates a new GUID.
-   * 
+   *
    * @return the GUID generated.
    */
   E generateGUID();

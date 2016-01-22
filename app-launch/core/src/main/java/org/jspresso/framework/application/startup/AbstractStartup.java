@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -31,7 +31,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 /**
  * Abstract class for application startup.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractStartup implements IStartup {
@@ -45,7 +45,7 @@ public abstract class AbstractStartup implements IStartup {
 
   /**
    * Gets the applicationContext.
-   * 
+   *
    * @return the applicationContext.
    */
   protected BeanFactory getApplicationContext() {
@@ -84,21 +84,21 @@ public abstract class AbstractStartup implements IStartup {
   /**
    * Gets the application context key to get the application context out of the
    * singleton bean factory locator.
-   * 
+   *
    * @return the used application context key.
    */
   protected abstract String getApplicationContextKey();
 
   /**
    * Gets the startup locale.
-   * 
+   *
    * @return the startup locale.
    */
   protected abstract Locale getStartupLocale();
 
   /**
    * Gets the client timezone.
-   * 
+   *
    * @return the client timezone.
    */
   protected abstract TimeZone getClientTimeZone();

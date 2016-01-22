@@ -1,5 +1,20 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
+ *
+ *  This file is part of the Jspresso framework.
+ *
+ *  Jspresso is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Jspresso is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.jspresso.framework.application.backend.action.security;
 
@@ -14,7 +29,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 /**
  * Concrete backend implementation of a change password action where password is
  * stored in a relational database.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class DatabaseChangePasswordAction extends AbstractChangePasswordAction {
@@ -24,7 +39,7 @@ public class DatabaseChangePasswordAction extends AbstractChangePasswordAction {
 
   /**
    * Configures the Spring jdbcTemplate to use to issue the update statement.
-   * 
+   *
    * @param jdbcTemplate
    *          the jdbcTemplate to set.
    */
@@ -40,7 +55,7 @@ public class DatabaseChangePasswordAction extends AbstractChangePasswordAction {
    * <li><b>&quot;user name&quot;</b>.</li>
    * <li><b>&quot;current password&quot;</b> potentially hashed.</li>
    * </ol>
-   * 
+   *
    * @param updateQuery
    *          the updateQuery to set.
    */
@@ -77,7 +92,7 @@ public class DatabaseChangePasswordAction extends AbstractChangePasswordAction {
 
   /**
    * Gets the jdbcTemplate.
-   * 
+   *
    * @return the jdbcTemplate.
    */
   protected JdbcTemplate getJdbcTemplate() {
@@ -86,7 +101,7 @@ public class DatabaseChangePasswordAction extends AbstractChangePasswordAction {
 
   /**
    * Gets the updateQuery.
-   * 
+   *
    * @return the updateQuery.
    */
   protected String getUpdateQuery() {

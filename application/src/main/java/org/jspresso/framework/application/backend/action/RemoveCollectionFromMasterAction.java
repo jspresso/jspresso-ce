@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -34,7 +34,7 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
  * An action used in master/detail views to remove selected details from a
  * master domain object. No further operation (like actual removal from a
  * persistent store) is performed by this action.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {

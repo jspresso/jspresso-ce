@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,7 +23,7 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
 /**
  * This exception is thrown whenever an exception occurs when directly setting
  * the value of a connector.
- * 
+ *
  * @see org.jspresso.framework.binding.IValueConnector#getConnectorValue()
  * @see org.jspresso.framework.binding.IValueConnector#setConnectorValue(Object)
  * @author Vincent Vandenschrick
@@ -34,7 +34,7 @@ public class ConnectorInputException extends NestedRuntimeException {
 
   /**
    * Constructs a new connector exception.
-   * 
+   *
    * @param message
    *          the exception message.
    */
@@ -44,7 +44,7 @@ public class ConnectorInputException extends NestedRuntimeException {
 
   /**
    * Constructs a new connector exception.
-   * 
+   *
    * @param nestedException
    *          the original exception.
    */
@@ -54,7 +54,7 @@ public class ConnectorInputException extends NestedRuntimeException {
 
   /**
    * Constructs a new connector exception.
-   * 
+   *
    * @param nestedException
    *          the original exception.
    * @param message

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -121,7 +121,7 @@ public interface IComponentDescriptor<E> extends IIconDescriptor,
   /**
    * Retrieves list of service contract class names implemented by this
    * component.
-   * 
+   *
    * @return the list of service contract class names implemented by this
    *         component.
    */
@@ -129,7 +129,7 @@ public interface IComponentDescriptor<E> extends IIconDescriptor,
 
   /**
    * Retrieves list of service contracts implemented by this component.
-   * 
+   *
    * @return the list of service contracts implemented by this component.
    */
   Collection<Class<?>> getServiceContracts();
@@ -147,7 +147,7 @@ public interface IComponentDescriptor<E> extends IIconDescriptor,
   /**
    * Gets the property used to build the toString() representation of the
    * component.
-   * 
+   *
    * @return the property used to build the toString() representation of the
    *         component.
    */
@@ -155,7 +155,7 @@ public interface IComponentDescriptor<E> extends IIconDescriptor,
 
   /**
    * Gets the property used to build the HTML representation of the component.
-   * 
+   *
    * @return the property used to build the HTML representation of the
    *         component.
    */
@@ -163,7 +163,7 @@ public interface IComponentDescriptor<E> extends IIconDescriptor,
 
   /**
    * Gets the property used to autocomplete when performing a LOV.
-   * 
+   *
    * @return the property used to autocomplete when performing a LOV.
    */
   String getAutoCompleteProperty();
@@ -171,14 +171,14 @@ public interface IComponentDescriptor<E> extends IIconDescriptor,
   /**
    * Gets the set of properties which are erased during a clone operation of the
    * component.
-   * 
+   *
    * @return the properties which must not be cloned.
    */
   Collection<String> getUnclonedProperties();
 
   /**
    * Gets whether the component described is an entity.
-   * 
+   *
    * @return true if the component described is an entity.
    */
   boolean isEntity();
@@ -186,7 +186,7 @@ public interface IComponentDescriptor<E> extends IIconDescriptor,
   /**
    * Gets whether this entity descriptor is a pure abstract definition. Only
    * descendants of this descriptor can be instantiated.
-   * 
+   *
    * @return true if this is a pure abstract entity descriptor.
    */
   boolean isPurelyAbstract();

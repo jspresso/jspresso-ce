@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -26,14 +26,14 @@ import org.jspresso.framework.util.accessor.IAccessorFactory;
 
 /**
  * This interface defines the contract of a component factory.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IComponentFactory extends IComponentDescriptorRegistry {
 
   /**
    * Creates a new component instance based on the component descriptor.
-   * 
+   *
    * @param <T>
    *          the concrete class of the created component.
    * @param componentContract
@@ -45,7 +45,7 @@ public interface IComponentFactory extends IComponentDescriptorRegistry {
   /**
    * Creates a new component instance based on the component descriptor. All
    * method calls are handled by the component delegate.
-   * 
+   *
    * @param <T>
    *          the concrete class of the created component.
    * @param componentContract
@@ -59,7 +59,7 @@ public interface IComponentFactory extends IComponentDescriptorRegistry {
 
   /**
    * Creates a new query component instance based on the component descriptor.
-   * 
+   *
    * @param componentContract
    *          the class of the component to create.
    * @return the query component instance.
@@ -69,14 +69,14 @@ public interface IComponentFactory extends IComponentDescriptorRegistry {
 
   /**
    * Gets the accessor factory used by this component factory.
-   * 
+   *
    * @return the accessor factory used by this component factory.
    */
   IAccessorFactory getAccessorFactory();
 
   /**
    * Sorts a component collection property.
-   * 
+   *
    * @param component
    *          the component to sort the collection property of.
    * @param propertyName

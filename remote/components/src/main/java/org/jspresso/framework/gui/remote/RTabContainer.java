@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,7 +24,7 @@ import org.jspresso.framework.util.bean.SinglePropertyChangeSupport;
 
 /**
  * A container with tabbed children views.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RTabContainer extends RContainer {
@@ -56,7 +56,7 @@ public class RTabContainer extends RContainer {
 
   /**
    * Gets the tabs.
-   * 
+   *
    * @return the tabs.
    */
   public RComponent[] getTabs() {
@@ -65,7 +65,7 @@ public class RTabContainer extends RContainer {
 
   /**
    * Sets the tabs.
-   * 
+   *
    * @param tabs
    *          the tabs to set.
    */
@@ -75,7 +75,7 @@ public class RTabContainer extends RContainer {
 
   /**
    * Gets the selectedIndex.
-   * 
+   *
    * @return the selectedIndex.
    */
   public int getSelectedIndex() {
@@ -84,7 +84,7 @@ public class RTabContainer extends RContainer {
 
   /**
    * Sets the selectedIndex.
-   * 
+   *
    * @param selectedIndex
    *          the selectedIndex to set.
    */

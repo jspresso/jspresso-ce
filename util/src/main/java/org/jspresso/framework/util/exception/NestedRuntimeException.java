@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -21,7 +21,7 @@ package org.jspresso.framework.util.exception;
 /**
  * This class is for throwing any throwable (checked and unchecked) over
  * non-checked methods.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class NestedRuntimeException extends RuntimeException {
@@ -30,7 +30,7 @@ public class NestedRuntimeException extends RuntimeException {
 
   /**
    * Constructs a new NestedRuntimeException.
-   * 
+   *
    * @param message
    *          the exception message.
    */
@@ -40,7 +40,7 @@ public class NestedRuntimeException extends RuntimeException {
 
   /**
    * Constructs a new NestedRuntimeException.
-   * 
+   *
    * @param nestedException
    *          the wrapped exception (checked or unchecked).
    */
@@ -50,7 +50,7 @@ public class NestedRuntimeException extends RuntimeException {
 
   /**
    * Constructs a new NestedRuntimeException.
-   * 
+   *
    * @param nestedException
    *          the wrapped exception (checked or unchecked).
    * @param message

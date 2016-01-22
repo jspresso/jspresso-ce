@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -29,7 +29,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
  * This is the abstract base class for <i>Fusioncharts</i> (flash based charting
  * library) display actions. It holds several common properties that are
  * independent from the actual, concrete, implementations.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.
@@ -46,7 +46,7 @@ public class AbstractChartAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Configures a list of actions to install in the chart modal dialog.
-   * 
+   *
    * @param actions
    *          the actions to set.
    */
@@ -64,7 +64,7 @@ public class AbstractChartAction<E, F, G> extends FrontendAction<E, F, G> {
    * <li>the width/height of the chart area</li>
    * <li>an abstract method to implement in order to compute the chart XML data</li>
    * </ul>
-   * 
+   *
    * @param chartDescriptor
    *          the chartDescriptor to set.
    */
@@ -74,7 +74,7 @@ public class AbstractChartAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Configures the JDBC template to be used by the chart to compute its data.
-   * 
+   *
    * @param jdbcTemplate
    *          the jdbcTemplate to set.
    */
@@ -84,7 +84,7 @@ public class AbstractChartAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Gets the actions.
-   * 
+   *
    * @return the actions.
    */
   protected List<IDisplayableAction> getActions() {
@@ -93,7 +93,7 @@ public class AbstractChartAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Gets the chartDescriptor.
-   * 
+   *
    * @return the chartDescriptor.
    */
   protected IChartDescriptor getChartDescriptor() {
@@ -102,7 +102,7 @@ public class AbstractChartAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Gets the jdbcTemplate.
-   * 
+   *
    * @return the jdbcTemplate.
    */
   protected JdbcTemplate getJdbcTemplate() {

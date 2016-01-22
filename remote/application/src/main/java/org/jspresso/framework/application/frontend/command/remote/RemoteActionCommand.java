@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import org.jspresso.framework.gui.remote.RActionEvent;
 
 /**
  * A command to trigger a remote action.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteActionCommand extends RemoteCommand {
@@ -33,7 +33,7 @@ public class RemoteActionCommand extends RemoteCommand {
 
   /**
    * Gets the actionEvent.
-   * 
+   *
    * @return the actionEvent.
    */
   public RActionEvent getActionEvent() {
@@ -42,7 +42,7 @@ public class RemoteActionCommand extends RemoteCommand {
 
   /**
    * Sets the actionEvent.
-   * 
+   *
    * @param actionEvent
    *          the actionEvent to set.
    */

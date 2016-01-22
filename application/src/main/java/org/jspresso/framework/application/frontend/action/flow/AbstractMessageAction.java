@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -44,7 +44,7 @@ public abstract class AbstractMessageAction<E, F, G> extends
 
   /**
    * Gets the message.
-   * 
+   *
    * @param context
    *          the actionContext.
    * @return the message.
@@ -60,7 +60,7 @@ public abstract class AbstractMessageAction<E, F, G> extends
 
   /**
    * Allows subclasses to retrieve message arguments from the action context.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the message arguments to be passed to the translation provider for
@@ -76,7 +76,7 @@ public abstract class AbstractMessageAction<E, F, G> extends
    * provider. If {@link #getMessageArgs(Map)} returns a not-null array or
    * arguments, they are passed to the translation provider to be used as message
    * format arguments.
-   * 
+   *
    * @param messageCode
    *          the message code to translate.
    * @param context

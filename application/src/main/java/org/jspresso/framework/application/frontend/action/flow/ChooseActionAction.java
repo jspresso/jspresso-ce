@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -76,7 +76,7 @@ public class ChooseActionAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Configures the list of actions to choose from.
-   * 
+   *
    * @param actions
    *          the actions to set.
    */
@@ -86,7 +86,7 @@ public class ChooseActionAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Sets the modelConnectorFactory.
-   * 
+   *
    * @param modelConnectorFactory
    *          the beanConnectorFactory to set.
    * @deprecated model connector is now created by the backend controller.

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,7 +24,7 @@ import gnu.trove.set.hash.TLinkedHashSet;
 
 /**
  * Helper class to ease the IItemSelectionListener management.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class ItemSelectionSupport {
@@ -33,7 +33,7 @@ public class ItemSelectionSupport {
 
   /**
    * Adds a new listener to this source.
-   * 
+   *
    * @param listener
    *          The added listener.
    */

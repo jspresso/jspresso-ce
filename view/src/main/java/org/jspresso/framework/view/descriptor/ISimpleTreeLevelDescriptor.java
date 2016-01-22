@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -21,14 +21,14 @@ package org.jspresso.framework.view.descriptor;
 /**
  * This interface is implemented by descriptors of simple tree levels. Simple
  * tree levels are tree levels where children are organised into a single group.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface ISimpleTreeLevelDescriptor extends ITreeLevelDescriptor {
 
   /**
    * Gets the subtree descriptor.
-   * 
+   *
    * @return the subtree descriptor.
    */
   ITreeLevelDescriptor getChildDescriptor();

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Maxime HAMM. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *

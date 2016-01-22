@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * A simple filter to ensure that the session is authenticated and contains a
  * Subject.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class SecurityContextFilter implements Filter {

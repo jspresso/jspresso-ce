@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import org.jspresso.framework.util.remote.IRemotePeer;
 
 /**
  * This interface has to be implemented by listeners of remote peer registries.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("EmptyMethod")
@@ -30,7 +30,7 @@ public interface IRemotePeerRegistryListener {
 
   /**
    * This method is called when a remote peer is registered.
-   * 
+   *
    * @param peer
    *          the added remote peer.
    */
@@ -39,7 +39,7 @@ public interface IRemotePeerRegistryListener {
 
   /**
    * This method is called when a remote peer is un-registered.
-   * 
+   *
    * @param peerGuid
    *          the removed remote peer guid.
    */

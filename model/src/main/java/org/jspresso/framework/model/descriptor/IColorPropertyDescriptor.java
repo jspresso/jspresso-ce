@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ package org.jspresso.framework.model.descriptor;
  * This interface is implemented by descriptors of color properties. Color are
  * stored as hex string in the form "0xFFFFFF" if alpha (transparency) is not
  * used and "0xFFFFFFFF" if alpha is used.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IColorPropertyDescriptor extends IScalarPropertyDescriptor {

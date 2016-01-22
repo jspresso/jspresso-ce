@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -27,7 +27,7 @@ import org.jspresso.framework.util.bean.AccessorInfo;
 
 /**
  * This class is the default implementation of list property accessors.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BeanListAccessor extends BeanCollectionAccessor implements
@@ -37,7 +37,7 @@ public class BeanListAccessor extends BeanCollectionAccessor implements
 
   /**
    * Constructs a new default java bean list property accessor.
-   * 
+   *
    * @param property
    *          the property to be accessed.
    * @param beanClass

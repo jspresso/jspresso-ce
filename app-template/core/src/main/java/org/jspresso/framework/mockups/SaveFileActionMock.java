@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import org.jspresso.framework.application.frontend.file.IFileSaveCallback;
 
 /**
  * A mock for SaveFileAction.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.
@@ -38,7 +38,7 @@ public class SaveFileActionMock<E, F, G> extends ChooseFileActionMock<E, F, G> {
 
   /**
    * Gets the contentType.
-   * 
+   *
    * @return the contentType.
    */
   public String getContentType() {
@@ -47,7 +47,7 @@ public class SaveFileActionMock<E, F, G> extends ChooseFileActionMock<E, F, G> {
 
   /**
    * Sets the contentType.
-   * 
+   *
    * @param contentType
    *          the contentType to set.
    */
@@ -57,7 +57,7 @@ public class SaveFileActionMock<E, F, G> extends ChooseFileActionMock<E, F, G> {
 
   /**
    * Gets the fileSaveCallback.
-   * 
+   *
    * @return the fileSaveCallback.
    */
   public IFileSaveCallback getFileSaveCallback() {
@@ -66,7 +66,7 @@ public class SaveFileActionMock<E, F, G> extends ChooseFileActionMock<E, F, G> {
 
   /**
    * Sets the fileSaveCallback.
-   * 
+   *
    * @param fileSaveCallback
    *          the fileSaveCallback to set.
    */

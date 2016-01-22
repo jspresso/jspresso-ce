@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2014 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -26,7 +26,7 @@ import org.jspresso.framework.model.component.IQueryComponent;
 
 /**
  * Empty refiner.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class MockQueryRefiner implements IQueryRefiner {

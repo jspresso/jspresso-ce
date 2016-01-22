@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -21,7 +21,7 @@ package org.jspresso.framework.binding;
 /**
  * Interface of a configurable collection connector provider. Should be used by
  * view factories.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IConfigurableCollectionConnectorProvider extends
@@ -29,7 +29,7 @@ public interface IConfigurableCollectionConnectorProvider extends
 
   /**
    * Sets the collectionConnector.
-   * 
+   *
    * @param collectionConnectorProvider
    *          the collectionConnectorProvider to set.
    */

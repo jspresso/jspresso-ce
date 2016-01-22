@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2014 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -34,7 +34,7 @@ import org.jspresso.framework.model.entity.IEntityFactory;
 
 /**
  * A utility class used to persist some test data.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractHibernateTestDataPersister {
@@ -82,7 +82,7 @@ public abstract class AbstractHibernateTestDataPersister {
 
   /**
    * Creates a component instance.
-   * 
+   *
    * @param <T>
    *          the actual component type.
    * @param componentContract
@@ -96,7 +96,7 @@ public abstract class AbstractHibernateTestDataPersister {
 
   /**
    * Creates an entity instance.
-   * 
+   *
    * @param <T>
    *          the actual entity type.
    * @param entityContract
@@ -109,7 +109,7 @@ public abstract class AbstractHibernateTestDataPersister {
 
   /**
    * Persists or update an entity.
-   * 
+   *
    * @param entity
    *          the entity to persist or update.
    */
@@ -125,7 +125,7 @@ public abstract class AbstractHibernateTestDataPersister {
 
   /**
    * Query entities.
-   * 
+   *
    * @param queryString
    *          the HQL query string.
    * @return the entity list.
@@ -136,7 +136,7 @@ public abstract class AbstractHibernateTestDataPersister {
 
   /**
    * Query entities by criteria.
-   * 
+   *
    * @param criteria
    *          the Hibernate detached criteria.
    * @return the entity list.
@@ -147,7 +147,7 @@ public abstract class AbstractHibernateTestDataPersister {
 
   /**
    * Gets the backend controller.
-   * 
+   *
    * @return the backend controller.
    */
   protected HibernateBackendController getBackendController() {
@@ -157,7 +157,7 @@ public abstract class AbstractHibernateTestDataPersister {
 
   /**
    * Gets the entityFactory.
-   * 
+   *
    * @return the entityFactory.
    */
   protected IEntityFactory getEntityFactory() {
@@ -166,7 +166,7 @@ public abstract class AbstractHibernateTestDataPersister {
 
   /**
    * Gets the hibernateSession.
-   * 
+   *
    * @return the hibernateSession.
    */
   protected Session getHibernateSession() {

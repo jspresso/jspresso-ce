@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -25,14 +25,14 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
  * A factory to create report instances out of report descriptors.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IReportFactory {
 
   /**
    * Creates a report instance based on a report descriptor.
-   * 
+   *
    * @param reportDescriptor
    *          the report descriptor to create the report for.
    * @param translationProvider

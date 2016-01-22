@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2014 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -38,7 +38,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
  * The base abstract implementation for lov view factories.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractLovViewDescriptorFactory extends AbstractActionContextAware
@@ -50,7 +50,7 @@ public abstract class AbstractLovViewDescriptorFactory extends AbstractActionCon
 
   /**
    * Sets the queryViewDescriptorFactory.
-   * 
+   *
    * @param queryViewDescriptorFactory
    *          the queryViewDescriptorFactory to set.
    */
@@ -61,7 +61,7 @@ public abstract class AbstractLovViewDescriptorFactory extends AbstractActionCon
 
   /**
    * Creates a result collection view.
-   * 
+   *
    * @param entityRefDescriptor
    *          the entity reference descriptor.
    * @param lovContext
@@ -77,7 +77,7 @@ public abstract class AbstractLovViewDescriptorFactory extends AbstractActionCon
 
   /**
    * Gets the resultViewDescriptorFactory.
-   * 
+   *
    * @return the resultViewDescriptorFactory.
    */
   protected ILovResultViewDescriptorFactory getResultViewDescriptorFactory() {
@@ -86,7 +86,7 @@ public abstract class AbstractLovViewDescriptorFactory extends AbstractActionCon
 
   /**
    * Sets the resultViewDescriptorFactory.
-   * 
+   *
    * @param resultViewDescriptorFactory
    *          the resultViewDescriptorFactory to set.
    */
@@ -97,7 +97,7 @@ public abstract class AbstractLovViewDescriptorFactory extends AbstractActionCon
 
   /**
    * Gets the queryViewDescriptorFactory.
-   * 
+   *
    * @return the queryViewDescriptorFactory.
    */
   protected IQueryViewDescriptorFactory getQueryViewDescriptorFactory() {
@@ -106,7 +106,7 @@ public abstract class AbstractLovViewDescriptorFactory extends AbstractActionCon
 
   /**
    * Gets the queryComponentDescriptorFactory.
-   * 
+   *
    * @return the queryComponentDescriptorFactory.
    */
   protected IQueryComponentDescriptorFactory getQueryComponentDescriptorFactory() {
@@ -115,7 +115,7 @@ public abstract class AbstractLovViewDescriptorFactory extends AbstractActionCon
 
   /**
    * Sets the queryComponentDescriptorFactory.
-   * 
+   *
    * @param queryComponentDescriptorFactory
    *          the queryComponentDescriptorFactory to set.
    */

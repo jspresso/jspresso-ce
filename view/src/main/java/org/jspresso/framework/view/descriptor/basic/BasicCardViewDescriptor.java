@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -30,7 +30,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * Describes a multi-purpose card view that is configurable with a custom card
  * determination strategy. Cards are registered with a name key that is used to
  * retrieve the card to display based on the card selector selected name key.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BasicCardViewDescriptor extends AbstractCardViewDescriptor {

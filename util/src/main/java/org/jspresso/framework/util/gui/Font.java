@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 /**
  * A simple class to represent a font.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class Font implements Serializable {
@@ -44,7 +44,7 @@ public class Font implements Serializable {
 
   /**
    * Gets the name.
-   * 
+   *
    * @return the name.
    */
   public String getName() {
@@ -53,7 +53,7 @@ public class Font implements Serializable {
 
   /**
    * Gets the size.
-   * 
+   *
    * @return the size.
    */
   public int getSize() {
@@ -62,7 +62,7 @@ public class Font implements Serializable {
 
   /**
    * Gets the bold.
-   * 
+   *
    * @return the bold.
    */
   public boolean isBold() {
@@ -71,7 +71,7 @@ public class Font implements Serializable {
 
   /**
    * Gets the italic.
-   * 
+   *
    * @return the italic.
    */
   public boolean isItalic() {
@@ -80,7 +80,7 @@ public class Font implements Serializable {
 
   /**
    * Sets the bold.
-   * 
+   *
    * @param bold
    *          the bold to set.
    */
@@ -90,7 +90,7 @@ public class Font implements Serializable {
 
   /**
    * Sets the italic.
-   * 
+   *
    * @param italic
    *          the italic to set.
    */
@@ -100,7 +100,7 @@ public class Font implements Serializable {
 
   /**
    * Sets the name.
-   * 
+   *
    * @param name
    *          the name to set.
    */
@@ -110,7 +110,7 @@ public class Font implements Serializable {
 
   /**
    * Sets the size.
-   * 
+   *
    * @param size
    *          the size to set.
    */

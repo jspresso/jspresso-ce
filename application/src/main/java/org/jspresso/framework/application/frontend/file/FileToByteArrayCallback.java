@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -32,7 +32,7 @@ import org.jspresso.framework.application.action.AbstractActionContextAware;
 /**
  * Default handler implementation to fully read the file input stream into a byte
  * array and setting it in the context.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class FileToByteArrayCallback extends AbstractActionContextAware

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import java.math.BigDecimal;
 
 /**
  * A remote number field component.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class RNumericComponent extends RComponent {
@@ -54,7 +54,7 @@ public abstract class RNumericComponent extends RComponent {
 
   /**
    * Gets the maxValue.
-   * 
+   *
    * @return the maxValue.
    */
   public Number getMaxValue() {
@@ -63,7 +63,7 @@ public abstract class RNumericComponent extends RComponent {
 
   /**
    * Gets the minValue.
-   * 
+   *
    * @return the minValue.
    */
   public Number getMinValue() {
@@ -72,7 +72,7 @@ public abstract class RNumericComponent extends RComponent {
 
   /**
    * Sets the maxValue.
-   * 
+   *
    * @param maxValue
    *          the maxValue to set.
    */
@@ -86,7 +86,7 @@ public abstract class RNumericComponent extends RComponent {
 
   /**
    * Sets the minValue.
-   * 
+   *
    * @param minValue
    *          the minValue to set.
    */
@@ -100,7 +100,7 @@ public abstract class RNumericComponent extends RComponent {
 
   /**
    * Sets the horizontalAlignment.
-   * 
+   *
    * @param horizontalAlignment
    *          the horizontalAlignment to set.
    */
@@ -110,7 +110,7 @@ public abstract class RNumericComponent extends RComponent {
 
   /**
    * Gets the horizontalAlignment.
-   * 
+   *
    * @return the horizontalAlignment.
    */
   public String getHorizontalAlignment() {

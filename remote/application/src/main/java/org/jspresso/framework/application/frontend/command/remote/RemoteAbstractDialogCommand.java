@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,7 +23,7 @@ import org.jspresso.framework.util.gui.Dimension;
 
 /**
  * Base class to dialog pop-up based commands.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class RemoteAbstractDialogCommand extends RemoteCommand {
@@ -37,7 +37,7 @@ public abstract class RemoteAbstractDialogCommand extends RemoteCommand {
 
   /**
    * Gets the actions.
-   * 
+   *
    * @return the actions.
    */
   public RAction[] getActions() {
@@ -46,7 +46,7 @@ public abstract class RemoteAbstractDialogCommand extends RemoteCommand {
 
   /**
    * Gets the dimension.
-   * 
+   *
    * @return the dimension.
    */
   public Dimension getDimension() {
@@ -55,7 +55,7 @@ public abstract class RemoteAbstractDialogCommand extends RemoteCommand {
 
   /**
    * Gets the title.
-   * 
+   *
    * @return the title.
    */
   public String getTitle() {
@@ -64,7 +64,7 @@ public abstract class RemoteAbstractDialogCommand extends RemoteCommand {
 
   /**
    * Gets the useCurrent.
-   * 
+   *
    * @return the useCurrent.
    */
   public boolean isUseCurrent() {
@@ -73,7 +73,7 @@ public abstract class RemoteAbstractDialogCommand extends RemoteCommand {
 
   /**
    * Sets the actions.
-   * 
+   *
    * @param actions
    *          the actions to set.
    */
@@ -83,7 +83,7 @@ public abstract class RemoteAbstractDialogCommand extends RemoteCommand {
 
   /**
    * Sets the dimension.
-   * 
+   *
    * @param dimension
    *          the dimension to set.
    */
@@ -93,7 +93,7 @@ public abstract class RemoteAbstractDialogCommand extends RemoteCommand {
 
   /**
    * Sets the title.
-   * 
+   *
    * @param title
    *          the title to set.
    */
@@ -103,7 +103,7 @@ public abstract class RemoteAbstractDialogCommand extends RemoteCommand {
 
   /**
    * Sets the useCurrent.
-   * 
+   *
    * @param useCurrent
    *          the useCurrent to set.
    */

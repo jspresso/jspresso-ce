@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -80,7 +80,7 @@ public class DialogCallbackHandler implements CallbackHandler {
 
   /**
    * Handles the specified set of callbacks.
-   * 
+   *
    * @param callbacks
    *          the callbacks to handle
    * @throws UnsupportedCallbackException
@@ -243,7 +243,7 @@ public class DialogCallbackHandler implements CallbackHandler {
 
   /**
    * Sets the iconFactory.
-   * 
+   *
    * @param iconFactory
    *          the iconFactory to set.
    */
@@ -253,7 +253,7 @@ public class DialogCallbackHandler implements CallbackHandler {
 
   /**
    * Sets the locale.
-   * 
+   *
    * @param locale
    *          the locale to set.
    */
@@ -263,7 +263,7 @@ public class DialogCallbackHandler implements CallbackHandler {
 
   /**
    * Sets the parentComponent.
-   * 
+   *
    * @param parentComponent
    *          the parentComponent to set.
    */
@@ -273,7 +273,7 @@ public class DialogCallbackHandler implements CallbackHandler {
 
   /**
    * Sets the translationProvider.
-   * 
+   *
    * @param translationProvider
    *          the translationProvider to set.
    */

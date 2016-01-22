@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -28,14 +28,14 @@ import java.util.Map;
  * memory friendly. This means that the registry must not prevent an object from
  * being garbage collected. Given this point implementations should leverage on
  * weak references.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IEntityRegistry {
 
   /**
    * Get an entity from the registry.
-   * 
+   *
    * @param entityContract
    *          the entity contract.
    * @param id
@@ -46,7 +46,7 @@ public interface IEntityRegistry {
 
   /**
    * Registers an entity in the registry.
-   * 
+   *
    * @param entityContract
    *          the entity contract.
    * @param id

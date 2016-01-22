@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -27,7 +27,7 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
  * This action displays information about a binary property content. The
  * displayed information mainly consists in the content size. The action must be
  * installed on a property view and supports textual and binary properties.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.
@@ -79,7 +79,7 @@ public class BinaryPropertyInfoAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Retrieve the binary content to display the info on.
-   * 
+   *
    * @param context
    *          the action context.
    * @return The binary content to display the info on or null.

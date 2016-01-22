@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -44,7 +44,7 @@ import org.jspresso.framework.util.swing.SwingUtil;
 /**
  * A subclass of Nacho calendar date field with some default values and
  * behaviour.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class JDateField extends DateField {
@@ -64,7 +64,7 @@ public class JDateField extends DateField {
 
   /**
    * Turns the date field to be editable or not.
-   * 
+   *
    * @param editable
    *          true if editable.
    */

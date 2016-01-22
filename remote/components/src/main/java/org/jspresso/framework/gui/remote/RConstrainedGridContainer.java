@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import org.jspresso.framework.util.gui.CellConstraints;
 
 /**
  * A constraint distribution grid container.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RConstrainedGridContainer extends RContainer {
@@ -52,7 +52,7 @@ public class RConstrainedGridContainer extends RContainer {
 
   /**
    * Gets the cellConstraints.
-   * 
+   *
    * @return the cellConstraints.
    */
   public CellConstraints[] getCellConstraints() {
@@ -61,7 +61,7 @@ public class RConstrainedGridContainer extends RContainer {
 
   /**
    * Gets the cells.
-   * 
+   *
    * @return the cells.
    */
   public RComponent[] getCells() {
@@ -70,7 +70,7 @@ public class RConstrainedGridContainer extends RContainer {
 
   /**
    * Sets the cellConstraints.
-   * 
+   *
    * @param cellConstraints
    *          the cellConstraints to set.
    */
@@ -80,7 +80,7 @@ public class RConstrainedGridContainer extends RContainer {
 
   /**
    * Sets the cells.
-   * 
+   *
    * @param cells
    *          the cells to set.
    */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -32,7 +32,7 @@ import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
 
 /**
  * Helper class for property view descriptors.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public final class PropertyViewDescriptorHelper {
@@ -46,7 +46,7 @@ public final class PropertyViewDescriptorHelper {
 
   /**
    * Explodes component reference property descriptors.
-   * 
+   *
    * @param propertyViewDescriptor
    *          the property view descriptor to explode if necessary.
    * @param componentDescriptorProvider
@@ -130,7 +130,7 @@ public final class PropertyViewDescriptorHelper {
   /**
    * Explores a property chain and determines whether one of the chain element is
    * computed (thus making the complete chain computed).
-   * 
+   *
    * @param componentDescriptor
    *          the component descriptor from which the property chain is
    *          extracted.

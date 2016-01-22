@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.state.remote;
 
 /**
  * Implemented by classes that are remote value state aware.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IRemoteStateOwner {
@@ -28,14 +28,14 @@ public interface IRemoteStateOwner {
   /**
    * Gets the actual state owner value that may be different from the state
    * value.
-   * 
+   *
    * @return the actual state owner value.
    */
   Object actualValue();
 
   /**
    * Extracts the state from the state owner.
-   * 
+   *
    * @return the state value object.
    */
   RemoteValueState getState();
@@ -48,7 +48,7 @@ public interface IRemoteStateOwner {
   /**
    * Sets the actual owner value from state value, allowing for a transformation
    * if necessary.
-   * 
+   *
    * @param stateValue
    *          the incoming state value.
    */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -26,7 +26,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
  * Factory for views.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.
@@ -39,7 +39,7 @@ public interface IViewFactory<E, F, G> {
 
   /**
    * Creates a new view from a view descriptor.
-   * 
+   *
    * @param viewDescriptor
    *          the view descriptor being the root of the view hierarchy to be
    *          constructed.
@@ -55,28 +55,28 @@ public interface IViewFactory<E, F, G> {
 
   /**
    * Gets the action factory.
-   * 
+   *
    * @return the action factory.
    */
   IActionFactory<G, E> getActionFactory();
 
   /**
    * Gets the view connector factory.
-   * 
+   *
    * @return the view connector factory.
    */
   IConfigurableConnectorFactory getConnectorFactory();
 
   /**
    * Gets the icon factory.
-   * 
+   *
    * @return the icon factory.
    */
   IIconFactory<F> getIconFactory();
 
   /**
    * Stores user table preferences.
-   * 
+   *
    * @param tableId
    *          the table id used as preference key in the user store.
    * @param columnPrefs
@@ -89,7 +89,7 @@ public interface IViewFactory<E, F, G> {
 
   /**
    * Request focus for a component.
-   * 
+   *
    * @param component
    *          the component to focus.
    */
@@ -97,7 +97,7 @@ public interface IViewFactory<E, F, G> {
 
   /**
    * Request editing for a component.
-   * 
+   *
    * @param component
    *          the component to turn to editing mode.
    */
@@ -105,7 +105,7 @@ public interface IViewFactory<E, F, G> {
 
   /**
    * Forces the refresh of a card view, potentially changing its visible card.
-   * 
+   *
    * @param cardView
    *          the card view to re-compute the visible card for.
    * @param unbindPrevious

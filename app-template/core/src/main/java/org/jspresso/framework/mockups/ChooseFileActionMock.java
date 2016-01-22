@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -25,7 +25,7 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
 
 /**
  * A mock for SaveFileAction.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.
@@ -41,7 +41,7 @@ public class ChooseFileActionMock<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Gets the defaultFileName.
-   * 
+   *
    * @return the defaultFileName.
    */
   public String getDefaultFileName() {
@@ -50,7 +50,7 @@ public class ChooseFileActionMock<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Sets the defaultFileName.
-   * 
+   *
    * @param defaultFileName
    *          the defaultFileName to set.
    */
@@ -60,7 +60,7 @@ public class ChooseFileActionMock<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Gets the fileFilter.
-   * 
+   *
    * @return the fileFilter.
    */
   public Map<String, List<String>> getFileFilter() {
@@ -69,7 +69,7 @@ public class ChooseFileActionMock<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Sets the fileFilter.
-   * 
+   *
    * @param fileFilter
    *          the fileFilter to set.
    */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,7 +24,7 @@ import org.jspresso.framework.model.component.IQueryComponent;
 
 /**
  * A factory used to create a criteria based on a query component.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("UnusedParameters")
@@ -32,7 +32,7 @@ public interface ICriteriaFactory {
 
   /**
    * Takes a criteria and applies ordering specs to it.
-   * 
+   *
    * @param criteria
    *          the enhanced detached criteria to apply ordering for.
    * @param queryComponent
@@ -47,7 +47,7 @@ public interface ICriteriaFactory {
    * Creates an Hibernate detached criteria by traversing a query component.
    * Whenever the query component is not valid (references a transient entity
    * for instance), the method should return null.
-   * 
+   *
    * @param queryComponent
    *          the query component to traverse.
    * @param context

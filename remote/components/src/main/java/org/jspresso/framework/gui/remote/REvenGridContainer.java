@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.gui.remote;
 
 /**
  * An evenly distributed grid container.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class REvenGridContainer extends RContainer {
@@ -51,7 +51,7 @@ public class REvenGridContainer extends RContainer {
 
   /**
    * Gets the cells.
-   * 
+   *
    * @return the cells.
    */
   public RComponent[] getCells() {
@@ -60,7 +60,7 @@ public class REvenGridContainer extends RContainer {
 
   /**
    * Gets the drivingDimension.
-   * 
+   *
    * @return the drivingDimension.
    */
   public String getDrivingDimension() {
@@ -69,7 +69,7 @@ public class REvenGridContainer extends RContainer {
 
   /**
    * Gets the drivingDimensionCellCount.
-   * 
+   *
    * @return the drivingDimensionCellCount.
    */
   public int getDrivingDimensionCellCount() {
@@ -78,7 +78,7 @@ public class REvenGridContainer extends RContainer {
 
   /**
    * Sets the cells.
-   * 
+   *
    * @param cells
    *          the cells to set.
    */
@@ -88,7 +88,7 @@ public class REvenGridContainer extends RContainer {
 
   /**
    * Sets the drivingDimension.
-   * 
+   *
    * @param drivingDimension
    *          the drivingDimension to set.
    */
@@ -98,7 +98,7 @@ public class REvenGridContainer extends RContainer {
 
   /**
    * Sets the drivingDimensionCellCount.
-   * 
+   *
    * @param drivingDimensionCellCount
    *          the drivingDimensionCellCount to set.
    */

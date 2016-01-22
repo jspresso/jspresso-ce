@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -36,7 +36,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * descriptor model. Most of the time, the model will be a collection property
  * descriptor so that the collection to display is directly inferred from the
  * collection property value through the binding layer.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
@@ -85,7 +85,7 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
 
   /**
    * Gets the selectionMode.
-   * 
+   *
    * @return the selectionMode.
    */
   @Override
@@ -97,7 +97,7 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
    * Registers an action that is implicitly triggered every time the selection
    * changes on the collection view UI peer. The context of the action execution
    * is the same as if the action was registered in the view action map.
-   * 
+   *
    * @param itemSelectionAction
    *          the itemSelectionAction to set.
    */
@@ -110,7 +110,7 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
    * activated (e.g. double-clicked for current UI channels) on the collection
    * view UI peer. The context of the action execution is the same as if the
    * action was registered in the view action map.
-   * 
+   *
    * @param rowAction
    *          the rowAction to set.
    */
@@ -149,7 +149,7 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
 
   /**
    * Gets the paginationViewDescriptor.
-   * 
+   *
    * @return the paginationViewDescriptor.
    */
   @Override
@@ -162,7 +162,7 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
    * collection view. When constructed, the collection view will be decorated
    * with the pagination view. The pagination view will be bound to the same
    * model as the one providing the collection of the collection view.
-   * 
+   *
    * @param paginationViewDescriptor
    *          the paginationViewDescriptor to set.
    */
@@ -173,7 +173,7 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
 
   /**
    * Gets the autoSelectFirstRow.
-   * 
+   *
    * @return the autoSelectFirstRow.
    */
   @Override
@@ -223,7 +223,7 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
 
   /**
    * Dig the view descriptor to extract the main collection view.
-   * 
+   *
    * @param viewDescriptor
    *          the module projected view descriptor.
    * @return the main collection view descriptor.
@@ -257,7 +257,7 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
 
   /**
    * Gets the selectionModelDescriptor.
-   * 
+   *
    * @return the selectionModelDescriptor.
    */
   @Override
@@ -267,7 +267,7 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
 
   /**
    * Sets the selectionModelDescriptor.
-   * 
+   *
    * @param selectionModelDescriptor
    *          the selectionModelDescriptor to set.
    */

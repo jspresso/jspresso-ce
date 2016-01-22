@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2014 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -37,7 +37,7 @@ import org.jspresso.framework.view.descriptor.basic.AbstractTreeViewDescriptor;
  * accordion. Whatever the graphical representation is, there is at most one
  * workspace active at a time for a user session - either the active (focused)
  * internal frame or the expanded accordion section.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class MobileWorkspace extends Workspace {

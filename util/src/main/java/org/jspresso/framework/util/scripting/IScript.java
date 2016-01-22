@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.util.scripting;
 
 /**
  * Interface implemented by ny scriptable object.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IScript {
@@ -38,21 +38,21 @@ public interface IScript {
 
   /**
    * Gets the scripting language used.
-   * 
+   *
    * @return the scripting language used.
    */
   String getLanguage();
 
   /**
    * Gets the script code.
-   * 
+   *
    * @return the script code.
    */
   String getScript();
 
   /**
    * Gets the scripted object.
-   * 
+   *
    * @return the scripted object.
    */
   Object getScriptedObject();

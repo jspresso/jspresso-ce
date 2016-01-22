@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,7 +23,7 @@ package org.jspresso.framework.model.component;
  * factories. A component extension is a delegate instance attached to an
  * component instance and responsible for providing access on computed
  * properties.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IComponentExtensionFactory {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -26,7 +26,7 @@ import javax.script.ScriptEngineManager;
 /**
  * This is the default implementation of the script handler interface. It relies
  * on Jakarta's "Bean Scripting Framework".
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class DefaultScriptHandler implements IScriptHandler {

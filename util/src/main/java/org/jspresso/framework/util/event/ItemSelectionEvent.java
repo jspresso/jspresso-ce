@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,7 +23,7 @@ import java.util.EventObject;
 /**
  * An event notifying an item selection change. It contains the object at the
  * source of the event and the newly selected item (or null if none).
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class ItemSelectionEvent extends EventObject {
@@ -47,7 +47,7 @@ public class ItemSelectionEvent extends EventObject {
 
   /**
    * Gets the selectedItem.
-   * 
+   *
    * @return the selectedItem.
    */
   public Object getSelectedItem() {
@@ -56,7 +56,7 @@ public class ItemSelectionEvent extends EventObject {
 
   /**
    * Sets the selectedItem.
-   * 
+   *
    * @param selectedItem
    *          the selectedItem to set.
    */

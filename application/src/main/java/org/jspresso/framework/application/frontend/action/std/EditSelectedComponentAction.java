@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -36,7 +36,7 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * This action should be installed on collection views. It takes the selected
  * component and edit it in a modal dialog. Editing happens in a &quot;Unit of
  * Work&quot; meaning that it can be rolled-back when canceling.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.
@@ -53,7 +53,7 @@ public class EditSelectedComponentAction<E, F, G> extends
 
   /**
    * Gets the cancelAction.
-   * 
+   *
    * @return the cancelAction.
    */
   @Override
@@ -63,7 +63,7 @@ public class EditSelectedComponentAction<E, F, G> extends
 
   /**
    * Gets the okAction.
-   * 
+   *
    * @return the okAction.
    */
   @Override
@@ -90,7 +90,7 @@ public class EditSelectedComponentAction<E, F, G> extends
 
   /**
    * Gets the selected model.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the model.
@@ -104,7 +104,7 @@ public class EditSelectedComponentAction<E, F, G> extends
 
   /**
    * Sets the cancelAction.
-   * 
+   *
    * @param cancelAction
    *          the cancelAction to set.
    */
@@ -114,7 +114,7 @@ public class EditSelectedComponentAction<E, F, G> extends
 
   /**
    * Sets the okAction.
-   * 
+   *
    * @param okAction
    *          the okAction to set.
    */
@@ -124,7 +124,7 @@ public class EditSelectedComponentAction<E, F, G> extends
 
   /**
    * Default OK action.
-   * 
+   *
      * @author Vincent Vandenschrick
    * @param <E>
    *          the actual gui component type used.
@@ -153,7 +153,7 @@ public class EditSelectedComponentAction<E, F, G> extends
   /**
    * A wrapper action that roll backs the current UOW before delegating to its
    * delegate.
-   * 
+   *
      * @author Vincent Vandenschrick
    * @param <E>
    *          the actual gui component type used.

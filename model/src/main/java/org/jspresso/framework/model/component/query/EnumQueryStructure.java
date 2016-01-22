@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -33,7 +33,7 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 /**
  * A simple query structure which holds selection tick, a value and a
  * translation.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class EnumQueryStructure extends AbstractPropertyChangeCapable {
@@ -77,7 +77,7 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
 
   /**
    * Gets the enumerationValues.
-   * 
+   *
    * @return the enumerationValues.
    */
   public Set<EnumValueQueryStructure> getEnumerationValues() {
@@ -86,7 +86,7 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
 
   /**
    * Sets the enumerationValues.
-   * 
+   *
    * @param enumerationValues
    *          the enumerationValues to set.
    */
@@ -127,7 +127,7 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
 
   /**
    * Computes the toString().
-   * 
+   *
    * @return the toString().
    */
   public String getToString() {
@@ -178,7 +178,7 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
 
   /**
    * Gets the translationProvider.
-   * 
+   *
    * @return the translationProvider.
    */
   protected ITranslationProvider getTranslationProvider() {
@@ -187,7 +187,7 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
 
   /**
    * Sets the translationProvider.
-   * 
+   *
    * @param translationProvider
    *          the translationProvider to set.
    */
@@ -198,7 +198,7 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
 
   /**
    * Gets the locale.
-   * 
+   *
    * @return the locale.
    */
   protected Locale getLocale() {
@@ -207,7 +207,7 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
 
   /**
    * Sets the locale.
-   * 
+   *
    * @param locale
    *          the locale to set.
    */
@@ -218,7 +218,7 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
 
   /**
    * Gets the sourceDescriptor.
-   * 
+   *
    * @return the sourceDescriptor.
    */
   protected IEnumerationPropertyDescriptor getSourceDescriptor() {

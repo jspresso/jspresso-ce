@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,7 +23,7 @@ import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
 /**
  * This abstract class holds some default implementation for connector. All the
  * default connectors inherit from this default behaviour.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 
@@ -36,7 +36,7 @@ public abstract class AbstractConnector extends AbstractPropertyChangeCapable
    * Constructs a new AbstractConnector using an identifier. In case of a bean
    * connector, this identifier must be the bean property the connector
    * connects.
-   * 
+   *
    * @param id
    *          The connector identifier.
    */
@@ -72,7 +72,7 @@ public abstract class AbstractConnector extends AbstractPropertyChangeCapable
 
   /**
    * Changes the connector id.
-   * 
+   *
    * @param id
    *          the connector identifier.
    */

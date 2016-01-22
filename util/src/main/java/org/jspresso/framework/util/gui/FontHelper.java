@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.util.gui;
 
 /**
  * This is a simple helper class to deal with font representations.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public final class FontHelper {
@@ -74,7 +74,7 @@ public final class FontHelper {
 
   /**
    * Transforms a font to its string representation.
-   * 
+   *
    * @param font
    *          the font to transform.
    * @return the font string representation.

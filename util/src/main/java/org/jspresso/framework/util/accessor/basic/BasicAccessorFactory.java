@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -27,7 +27,7 @@ import org.jspresso.framework.util.accessor.ICollectionAccessor;
 
 /**
  * This is the default implementation of the accessor factory.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("UnusedParameters")
@@ -57,7 +57,7 @@ public class BasicAccessorFactory extends AbstractAccessorFactory {
 
   /**
    * Sets the beanAccessorFactory.
-   * 
+   *
    * @param beanAccessorFactory
    *          the beanAccessorFactory to set.
    */
@@ -67,7 +67,7 @@ public class BasicAccessorFactory extends AbstractAccessorFactory {
 
   /**
    * Sets the mapAccessorFactory.
-   * 
+   *
    * @param mapAccessorFactory
    *          the mapAccessorFactory to set.
    */

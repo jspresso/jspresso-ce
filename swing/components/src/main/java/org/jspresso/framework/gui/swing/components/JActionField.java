@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -47,7 +47,7 @@ import org.jspresso.framework.util.swing.SwingUtil;
  * button except that the action is parametrized by the field text value. This
  * component is represented by a text field and a button. Actioning the button
  * or the text field triggers the action.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class JActionField extends JPanel {
@@ -148,7 +148,7 @@ public class JActionField extends JPanel {
   /**
    * Gets whether this action field text is synchronized with its underlying
    * value.
-   * 
+   *
    * @return true if this action field text is synchronized with its underlying
    *         value.
    */
@@ -166,7 +166,7 @@ public class JActionField extends JPanel {
 
   /**
    * Removes a focus listener from the text field.
-   * 
+   *
    * @param l
    *          the listener to remove.
    */
@@ -183,7 +183,7 @@ public class JActionField extends JPanel {
 
   /**
    * Sets the action field action.
-   * 
+   *
    * @param actions
    *          the action field actions.
    */
@@ -218,7 +218,7 @@ public class JActionField extends JPanel {
 
   /**
    * Gets the action field text.
-   * 
+   *
    * @param actionText
    *          the action field text.
    */
@@ -228,7 +228,7 @@ public class JActionField extends JPanel {
 
   /**
    * Decorates the component with a marker.
-   * 
+   *
    * @param decorated
    *          if the component should be decorated.
    */
@@ -243,7 +243,7 @@ public class JActionField extends JPanel {
 
   /**
    * Turns the action field to be editable or not.
-   * 
+   *
    * @param enabled
    *          true if enabled.
    */
@@ -257,7 +257,7 @@ public class JActionField extends JPanel {
 
   /**
    * Sets the value.
-   * 
+   *
    * @param value
    *          the value to set.
    */

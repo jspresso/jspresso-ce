@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.application.frontend.command.remote;
 
 /**
  * A command to update writability of a remote peer.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteWritabilityCommand extends RemoteCommand {
@@ -31,7 +31,7 @@ public class RemoteWritabilityCommand extends RemoteCommand {
 
   /**
    * Gets the writable.
-   * 
+   *
    * @return the writable.
    */
   public boolean isWritable() {
@@ -40,7 +40,7 @@ public class RemoteWritabilityCommand extends RemoteCommand {
 
   /**
    * Sets the writable.
-   * 
+   *
    * @param writable
    *          the writable to set.
    */

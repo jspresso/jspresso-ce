@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.application.frontend.command.remote;
 
 /**
  * This command is used to download a file to the client peer.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteFileDownloadCommand extends RemoteFileCommand {
@@ -32,7 +32,7 @@ public class RemoteFileDownloadCommand extends RemoteFileCommand {
 
   /**
    * Gets the defaultFileName.
-   * 
+   *
    * @return the defaultFileName.
    */
   public String getDefaultFileName() {
@@ -41,7 +41,7 @@ public class RemoteFileDownloadCommand extends RemoteFileCommand {
 
   /**
    * Gets the resourceId.
-   * 
+   *
    * @return the resourceId.
    */
   public String getResourceId() {
@@ -50,7 +50,7 @@ public class RemoteFileDownloadCommand extends RemoteFileCommand {
 
   /**
    * Sets the defaultFileName.
-   * 
+   *
    * @param defaultFileName
    *          the defaultFileName to set.
    */
@@ -60,7 +60,7 @@ public class RemoteFileDownloadCommand extends RemoteFileCommand {
 
   /**
    * Sets the resourceId.
-   * 
+   *
    * @param resourceId
    *          the resourceId to set.
    */

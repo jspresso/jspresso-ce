@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -33,7 +33,7 @@ import org.jspresso.framework.model.component.IComponent;
  * semantics (indexed collections). It allows to take a the selected elements
  * and move them in the collection using a configured offset. It allows for
  * re-ordering the list.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class CollectionElementMoveAction extends AbstractCollectionAction {
@@ -150,7 +150,7 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
    * list. A configured offset of <b>1</b> will increase (move down) by one the
    * selected elements indices whereas an offset of <b>-1</b> will decrease
    * (move up) the selected elements indices.
-   * 
+   *
    * @param offset
    *          the offset to set.
    */
@@ -165,7 +165,7 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
   /**
    * Configures this action to move the selected elements to the top of the
    * list.
-   * 
+   *
    * @param toTop
    *          the toTop to set.
    */
@@ -180,7 +180,7 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
   /**
    * Configures this action to move the selected elements to the bottom of the
    * list.
-   * 
+   *
    * @param toBottom
    *          the toBottom to set.
    */

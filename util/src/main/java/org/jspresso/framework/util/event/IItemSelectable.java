@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,14 +20,14 @@ package org.jspresso.framework.util.event;
 
 /**
  * This interface is implemented by any structure capable of selecting an item.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IItemSelectable {
 
   /**
    * Adds an item selection listener to this object.
-   * 
+   *
    * @param listener
    *          the listener to add.
    */
@@ -36,7 +36,7 @@ public interface IItemSelectable {
   /**
    * Triggers notification of an item selection event. This method has to be
    * made public to cope with notification of the children selection events.
-   * 
+   *
    * @param evt
    *          the event to be propagated.
    */
@@ -53,7 +53,7 @@ public interface IItemSelectable {
 
   /**
    * Removes an item selection listener from this object.
-   * 
+   *
    * @param listener
    *          the listener to remove.
    */

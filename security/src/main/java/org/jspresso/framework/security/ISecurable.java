@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import java.util.Collection;
 
 /**
  * Marks a resource as capable of holding security restrictions.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface ISecurable {
@@ -31,7 +31,7 @@ public interface ISecurable {
    * Gets the list of roles which are granted access to this resource. If null is
    * returned the access control is disabled. an empty collection means that
    * nobody can access the resource (this might not be very useful).
-   * 
+   *
    * @return list of roles which are granted access to this resource
    */
   Collection<String> getGrantedRoles();

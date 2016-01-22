@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -36,7 +36,7 @@ import org.springframework.jdbc.core.ConnectionCallback;
 /**
  * This is the concrete implementation of the Fusionchart display action used in
  * standalone UI channels (Swing).
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.
@@ -89,7 +89,7 @@ public class DisplayChartAction<E, F, G> extends AbstractChartAction<E, F, G> {
 
   /**
    * Gets the domain entry point for the chart.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the domain entry point for the chart.

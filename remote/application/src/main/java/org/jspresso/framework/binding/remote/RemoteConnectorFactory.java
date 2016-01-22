@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -59,7 +59,7 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
 
 /**
  * This connector factory implementation creates remote connector server peers.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
@@ -513,7 +513,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
 
   /**
    * Sets the guidGenerator.
-   * 
+   *
    * @param guidGenerator
    *          the guidGenerator to set.
    */
@@ -523,7 +523,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
 
   /**
    * Sets the remoteCommandHandler.
-   * 
+   *
    * @param remoteCommandHandler
    *          the remoteCommandHandler to set.
    */
@@ -533,7 +533,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
 
   /**
    * Sets the remotePeerRegistry.
-   * 
+   *
    * @param remotePeerRegistry
    *          the remotePeerRegistry to set.
    */
@@ -552,7 +552,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
   /**
    * Attach the necessary listeners to the value connector so that adequate
    * notifications get sent to the remote client side.
-   * 
+   *
    * @param connector
    *          the connector to attach listeners to.
    */

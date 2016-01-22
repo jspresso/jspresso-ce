@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -28,7 +28,7 @@ import org.jspresso.framework.util.lang.StringUtils;
 
 /**
  * Default implementation of a reference descriptor.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the concrete component type.
@@ -98,7 +98,7 @@ public class BasicReferencePropertyDescriptor<E> extends
 
   /**
    * Gets the pageSize.
-   * 
+   *
    * @return the pageSize.
    */
   @Override
@@ -119,7 +119,7 @@ public class BasicReferencePropertyDescriptor<E> extends
 
   /**
    * Gets the oneToOne.
-   * 
+   *
    * @return the oneToOne.
    */
   @Override
@@ -203,7 +203,7 @@ public class BasicReferencePropertyDescriptor<E> extends
    * Qualifies the type of element this property refers to. It may point to any
    * type of component descriptor, i.e. entity, interface or component
    * descriptor.
-   * 
+   *
    * @param referencedDescriptor
    *          the referencedDescriptor to set.
    */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -27,7 +27,7 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
 /**
  * An action used to transfer textual representation(s) of selected models to
  * the system clipboard.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.
@@ -58,7 +58,7 @@ public class TransferToClipboardAction<E, F, G> extends FrontendAction<E, F, G> 
 
   /**
    * Gets the clipboardTransferHandler.
-   * 
+   *
    * @return the clipboardTransferHandler.
    */
   protected IClipboardTransferHandler getClipboardTransferHandler() {
@@ -67,7 +67,7 @@ public class TransferToClipboardAction<E, F, G> extends FrontendAction<E, F, G> 
 
   /**
    * Sets the clipboardTransferHandler.
-   * 
+   *
    * @param clipboardTransferHandler
    *          the clipboardTransferHandler to set.
    */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -37,7 +37,7 @@ import org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescript
 
 /**
  * A query structure used to implement enumeration disjunctions in filters.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class EnumQueryStructureDescriptor extends
@@ -163,7 +163,7 @@ public class EnumQueryStructureDescriptor extends
 
   /**
    * Gets the sourceDescriptor.
-   * 
+   *
    * @return the sourceDescriptor.
    */
   public IEnumerationPropertyDescriptor getSourceDescriptor() {

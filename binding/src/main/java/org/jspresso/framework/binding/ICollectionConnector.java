@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import org.jspresso.framework.util.event.ISelectionChangeListener;
 
 /**
  * This is the interface implemented by connectors on collections.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface ICollectionConnector extends ISelectionChangeListener,
@@ -30,7 +30,7 @@ public interface ICollectionConnector extends ISelectionChangeListener,
 
   /**
    * Clones this connector.
-   * 
+   *
    * @return the connector's clone.
    */
   @Override
@@ -38,7 +38,7 @@ public interface ICollectionConnector extends ISelectionChangeListener,
 
   /**
    * Clones this connector.
-   * 
+   *
    * @param newConnectorId
    *          the identifier of the clone connector
    * @return the connector's clone.
@@ -48,7 +48,7 @@ public interface ICollectionConnector extends ISelectionChangeListener,
 
   /**
    * Creates a new collection element connector.
-   * 
+   *
    * @param connectorId
    *          the identifier of the new created connector.
    * @return the created connector
@@ -57,7 +57,7 @@ public interface ICollectionConnector extends ISelectionChangeListener,
 
   /**
    * Returns the connector at the given index in the collection.
-   * 
+   *
    * @param index
    *          the index of the searched connector.
    * @return the searched connector or null if the collection is not large

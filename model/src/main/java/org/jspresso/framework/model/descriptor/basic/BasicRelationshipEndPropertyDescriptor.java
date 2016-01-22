@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -30,7 +30,7 @@ import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescripto
  * N&quot; properties</li>
  * </ul>
  * Other type of properties are named <i>scalar</i> properties.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class BasicRelationshipEndPropertyDescriptor extends
@@ -70,7 +70,7 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
 
   /**
    * Gets the fkName.
-   * 
+   *
    * @return the fkName.
    */
   public String getFkName() {
@@ -113,7 +113,7 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
    * <p>
    * This property is strictly behavioural and does not impact the domain state
    * itself.
-   * 
+   *
    * @param composition
    *          the composition to set.
    */
@@ -124,7 +124,7 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
   /**
    * Gives the developer the opportunity to customize the generated foreign key
    * (if any) name.
-   * 
+   *
    * @param fkName
    *          the fkName to set.
    */
@@ -207,7 +207,7 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
 
   /**
    * Gets the leadingPersistence.
-   * 
+   *
    * @return the leadingPersistence.
    */
   public boolean isLeadingPersistence() {
@@ -216,14 +216,14 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
 
   /**
    * Gets the default composition of a relationship end.
-   * 
+   *
    * @return the default composition of a relationship end.
    */
   protected abstract boolean getDefaultComposition();
 
   /**
    * Gets the fetchType.
-   * 
+   *
    * @return the fetchType.
    */
   public EFetchType getFetchType() {
@@ -252,7 +252,7 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
 
   /**
    * Gets the batchSize.
-   * 
+   *
    * @return the batchSize.
    */
   public Integer getBatchSize() {
@@ -264,7 +264,7 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
    * relationship end. Whenever possible, the ORM will use a IN clause in order
    * to fetch multiple instances relationships at once. The batch size
    * determines the size of th IN clause.
-   * 
+   *
    * @param batchSize
    *          the batchSize to set.
    */

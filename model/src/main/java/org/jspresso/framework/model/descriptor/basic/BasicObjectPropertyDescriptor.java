@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -27,7 +27,7 @@ import org.jspresso.framework.model.descriptor.IObjectPropertyDescriptor;
 /**
  * This descriptor is used to describe an arbitrary object property for which
  * the type can be explicitly declared.
- * 
+ *
  * @internal
  * @author Vincent Vandenschrick
  */
@@ -109,7 +109,7 @@ public class BasicObjectPropertyDescriptor extends
 
   /**
    * Configures the actual property type through its fully qualified name.
-   * 
+   *
    * @param modelTypeClassName
    *          the modelTypeClassName to set.
    */

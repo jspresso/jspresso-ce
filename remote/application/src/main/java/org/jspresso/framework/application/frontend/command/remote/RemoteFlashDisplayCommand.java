@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.application.frontend.command.remote;
 
 /**
  * A command to trigger a modal remote dialog pop-up to display a flash movie.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteFlashDisplayCommand extends RemoteAbstractDialogCommand {
@@ -33,7 +33,7 @@ public class RemoteFlashDisplayCommand extends RemoteAbstractDialogCommand {
 
   /**
    * Gets the paramNames.
-   * 
+   *
    * @return the paramNames.
    */
   public String[] getParamNames() {
@@ -42,7 +42,7 @@ public class RemoteFlashDisplayCommand extends RemoteAbstractDialogCommand {
 
   /**
    * Gets the paramValues.
-   * 
+   *
    * @return the paramValues.
    */
   public String[] getParamValues() {
@@ -51,7 +51,7 @@ public class RemoteFlashDisplayCommand extends RemoteAbstractDialogCommand {
 
   /**
    * Gets the swfUrl.
-   * 
+   *
    * @return the swfUrl.
    */
   public String getSwfUrl() {
@@ -60,7 +60,7 @@ public class RemoteFlashDisplayCommand extends RemoteAbstractDialogCommand {
 
   /**
    * Sets the paramNames.
-   * 
+   *
    * @param paramNames
    *          the paramNames to set.
    */
@@ -70,7 +70,7 @@ public class RemoteFlashDisplayCommand extends RemoteAbstractDialogCommand {
 
   /**
    * Sets the paramValues.
-   * 
+   *
    * @param paramValues
    *          the paramValues to set.
    */
@@ -80,7 +80,7 @@ public class RemoteFlashDisplayCommand extends RemoteAbstractDialogCommand {
 
   /**
    * Sets the swfUrl.
-   * 
+   *
    * @param swfUrl
    *          the swfUrl to set.
    */

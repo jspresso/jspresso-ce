@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -30,12 +30,12 @@ import org.jspresso.framework.binding.ICollectionConnector;
  * Components to clone are retrieved from the context using the selected indices
  * of the model collection connector. Actual cloning of components is left to
  * concrete implementations that must implement :
- * 
+ *
  * <pre>
  * protected abstract Object cloneElement(Object element,
  *     Map&lt;String, Object&gt; context)
  * </pre>
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractCloneCollectionAction extends
@@ -43,7 +43,7 @@ public abstract class AbstractCloneCollectionAction extends
 
   /**
    * Clones an element.
-   * 
+   *
    * @param element
    *          the element to clone.
    * @param context

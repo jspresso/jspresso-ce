@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -50,7 +50,7 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
 
 /**
  * A helper class for Swing.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public final class SwingUtil {
@@ -72,7 +72,7 @@ public final class SwingUtil {
   /**
    * Make even and odd rows background colors slightly different in collection
    * component (table, list, ...).
-   * 
+   *
    * @param background
    *          the base background color of the collection component (table,
    *          list, ...) on which this renderer is used.
@@ -95,7 +95,7 @@ public final class SwingUtil {
 
   /**
    * Center a window on screen.
-   * 
+   *
    * @param w
    *          the window to center on screen.
    */
@@ -110,7 +110,7 @@ public final class SwingUtil {
 
   /**
    * Center a window on screen.
-   * 
+   *
    * @param w
    *          the window to center on screen.
    */
@@ -122,7 +122,7 @@ public final class SwingUtil {
 
   /**
    * Configures a jButton with default behaviour like the multi-click threshold.
-   * 
+   *
    * @param button
    *          the button to work on.
    */
@@ -133,7 +133,7 @@ public final class SwingUtil {
   /**
    * Configures a text field so that it selects its content when getting focus by
    * another mean than the mouse.
-   * 
+   *
    * @param textField
    *          the text field to work on.
    */
@@ -172,7 +172,7 @@ public final class SwingUtil {
 
   /**
    * Retrieves the first contained component of a certain type.
-   * 
+   *
    * @param component
    *          the component to start from.
    * @param childComponentType
@@ -200,7 +200,7 @@ public final class SwingUtil {
 
   /**
    * Make a color scaled using a defined factor.
-   * 
+   *
    * @param color
    *          the color to scale.
    * @param factor
@@ -241,7 +241,7 @@ public final class SwingUtil {
 
   /**
    * Gets the visible parent window.
-   * 
+   *
    * @param component
    *          the component to start from
    * @return the visible parent window or null.
@@ -259,7 +259,7 @@ public final class SwingUtil {
 
   /**
    * Gets the window or the internal frame holding the component.
-   * 
+   *
    * @param component
    *          the component to look the window or internal frame for.
    * @return the window (frame or dialog) or the internal frame in the component
@@ -318,7 +318,7 @@ public final class SwingUtil {
 
   /**
    * Tests whether the component passed in parameter is used as an editor.
-   * 
+   *
    * @param comp
    *          the component to test.
    * @return true if the component is currently used as an editor.
@@ -337,7 +337,7 @@ public final class SwingUtil {
 
   /**
    * Executes a job avoiding the common swing UI freeze.
-   * 
+   *
    * @param foxtrotJob
    *          the potentially long running job to execute.
    * @return the job execution result.
@@ -352,7 +352,7 @@ public final class SwingUtil {
   /**
    * Tests whether in swing event dispatch thread. If not, use SwingUtilities to
    * invoke runnable and wait.
-   * 
+   *
    * @param runnable
    *          the runnable operation which updates the GUI.
    */

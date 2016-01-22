@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.application.frontend.command.remote;
 
 /**
  * A command to cleanup garbage collected remote peers.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteCleanupCommand extends RemoteCommand {
@@ -31,7 +31,7 @@ public class RemoteCleanupCommand extends RemoteCommand {
 
   /**
    * Gets the removedPeerGuids.
-   * 
+   *
    * @return the removedPeerGuids.
    */
   public String[] getRemovedPeerGuids() {
@@ -40,7 +40,7 @@ public class RemoteCleanupCommand extends RemoteCommand {
 
   /**
    * Sets the removedPeerGuids.
-   * 
+   *
    * @param removedPeerGuids
    *          the removedPeerGuids to set.
    */

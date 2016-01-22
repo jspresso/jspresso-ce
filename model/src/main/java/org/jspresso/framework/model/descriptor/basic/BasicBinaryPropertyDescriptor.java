@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -29,7 +29,7 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 /**
  * Describes a property used to store a binary value in the form of a byte
  * array.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BasicBinaryPropertyDescriptor extends
@@ -113,7 +113,7 @@ public class BasicBinaryPropertyDescriptor extends
 
   /**
    * Sets the max size (in bytes) of the property value.
-   * 
+   *
    * @param maxLength
    *          the maxLength to set.
    */
@@ -162,7 +162,7 @@ public class BasicBinaryPropertyDescriptor extends
 
   /**
    * Gets the fileName.
-   * 
+   *
    * @return the fileName.
    */
   @Override
@@ -173,7 +173,7 @@ public class BasicBinaryPropertyDescriptor extends
   /**
    * Configures the default file name to use when downloading the property
    * content as a file.
-   * 
+   *
    * @param fileName
    *          the fileName to set.
    */
@@ -183,7 +183,7 @@ public class BasicBinaryPropertyDescriptor extends
 
   /**
    * Gets the contentType.
-   * 
+   *
    * @return the contentType.
    */
   @Override
@@ -194,7 +194,7 @@ public class BasicBinaryPropertyDescriptor extends
   /**
    * Configures the default content type to use when downloading the property
    * content as a file.
-   * 
+   *
    * @param contentType
    *          the contentType to set.
    */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -32,7 +32,7 @@ import org.jspresso.framework.model.entity.IEntity;
 
 /**
  * This action adds a new object in the projected collection.
- * 
+ *
  * @author Vincent Vandenschrick
  * @deprecated use AddComponentCollectionToMasterAction instead
  */
@@ -66,7 +66,7 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
 
   /**
    * Creates a new entity to add to the projected object collection.
-   * 
+   *
    * @param actionHandler
    *          the action handler (generally the controller).
    * @param context

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -29,7 +29,7 @@ import org.jspresso.framework.view.action.IActionable;
 
 /**
  * This public interface is the super-interface of all view descriptors.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IViewDescriptor extends IIconDescriptor, IStylable,
@@ -38,7 +38,7 @@ public interface IViewDescriptor extends IIconDescriptor, IStylable,
   /**
    * Gets the background color of this view as hex string representation argb
    * coded.
-   * 
+   *
    * @return this view's foreground color.
    */
   String getBackground();
@@ -66,21 +66,21 @@ public interface IViewDescriptor extends IIconDescriptor, IStylable,
   /**
    * Gets the foreground color of this view as hex string representation argb
    * coded.
-   * 
+   *
    * @return this view's foreground color.
    */
   String getForeground();
 
   /**
    * Gets the model descriptor this view descriptor acts on.
-   * 
+   *
    * @return the view model descriptor.
    */
   IModelDescriptor getModelDescriptor();
 
   /**
    * Gets the preferred dimension of the view peer component.
-   * 
+   *
    * @return the preferred dimension of the view peer component.
    */
   Dimension getPreferredSize();

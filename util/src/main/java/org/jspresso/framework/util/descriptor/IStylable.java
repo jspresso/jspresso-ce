@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -21,14 +21,14 @@ package org.jspresso.framework.util.descriptor;
 /**
  * This interface is implemented by anything which can be assigned a graphical
  * style name. The way it is actually leveraged depends on the UI channel.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IStylable {
 
   /**
    * Gets the style name.
-   * 
+   *
    * @return the style name.
    */
   String getStyleName();

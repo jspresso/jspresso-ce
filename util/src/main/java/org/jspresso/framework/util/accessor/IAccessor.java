@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import java.lang.reflect.InvocationTargetException;
 
 /**
  * This interface is implemented by any bean value accessor.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IAccessor {
@@ -53,7 +53,7 @@ public interface IAccessor {
 
   /**
    * Gets the writability of this accessor .
-   * 
+   *
    * @return true if this accessor has a mutator.
    */
   boolean isWritable();

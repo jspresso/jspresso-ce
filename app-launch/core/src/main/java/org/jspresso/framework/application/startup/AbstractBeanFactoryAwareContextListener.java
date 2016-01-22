@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -30,7 +30,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 /**
  * A simple listener to hook in webapp startup that can provide the application
  * bean factory into an arbitrary callback method.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractBeanFactoryAwareContextListener implements
@@ -69,7 +69,7 @@ public abstract class AbstractBeanFactoryAwareContextListener implements
 
   /**
    * Retrieves the spring bean factory selector to use.
-   * 
+   *
    * @param event
    *          the servlet context event from which the servlet context can be
    *          retrieved and used.
@@ -81,7 +81,7 @@ public abstract class AbstractBeanFactoryAwareContextListener implements
 
   /**
    * Retrieves the spring application context key to use.
-   * 
+   *
    * @param event
    *          the servlet context event from which the servlet context can be
    *          retrieved and used.
@@ -94,7 +94,7 @@ public abstract class AbstractBeanFactoryAwareContextListener implements
   /**
    * Callback method that is executed when the webapp context has been
    * initialized.
-   * 
+   *
    * @param beanFactory
    *          the bean factory to use.
    * @param event
@@ -109,7 +109,7 @@ public abstract class AbstractBeanFactoryAwareContextListener implements
   /**
    * Callback method that is executed when the webapp context has been
    * destroyed.
-   * 
+   *
    * @param beanFactory
    *          the bean factory to use.
    * @param event

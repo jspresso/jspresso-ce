@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import java.util.Map;
 
 /**
  * This interface is implemented by classes aware of entities states dirtiness.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IEntityDirtAware {
@@ -30,7 +30,7 @@ public interface IEntityDirtAware {
   /**
    * Gets the entity dirty properties (changed properties that need to be
    * updated to the persistent store as well as computed properties).
-   * 
+   *
    * @param entity
    *          the entity to get the dirty properties of.
    * @return an empty map if the entity is not dirty. The collection of dirty

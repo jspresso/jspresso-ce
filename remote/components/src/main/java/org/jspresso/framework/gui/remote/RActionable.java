@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,14 +20,14 @@ package org.jspresso.framework.gui.remote;
 
 /**
  * A remote actionable component.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface RActionable {
 
   /**
    * Configures the action to be executed when the component is actioned.
-   * 
+   *
    * @param action
    *          the action to be executed when the component is actioned.
    */

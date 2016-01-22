@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -28,7 +28,7 @@ import java.util.Set;
 
 /**
  * Helper class for string operations.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public final class StringUtils {
@@ -46,7 +46,7 @@ public final class StringUtils {
 
   /**
    * Ensures that all strings in the source collection are whitespace free.
-   * 
+   *
    * @param sourceCollection
    *          the list of strings to check.
    * @return the set of whitespace free strings.
@@ -73,7 +73,7 @@ public final class StringUtils {
 
   /**
    * Ensures that all strings in the source list are whitespace free.
-   * 
+   *
    * @param sourceList
    *          the list of strings to check.
    * @return the list of whitespace free strings.
@@ -91,7 +91,7 @@ public final class StringUtils {
 
   /**
    * Ensures that all strings in the source list are whitespace free.
-   * 
+   *
    * @param sourceMap
    *          the map of strings to check.
    * @return the list of whitespace free strings.
@@ -112,7 +112,7 @@ public final class StringUtils {
 
   /**
    * Ensures that all strings in the source set are whitespace free.
-   * 
+   *
    * @param sourceSet
    *          the list of strings to check.
    * @return the set of whitespace free strings.
@@ -131,7 +131,7 @@ public final class StringUtils {
   /**
    * Eliminates any whitespace character from the source string. This is useful
    * to ensure that any XML formatting does not break class names for instance.
-   * 
+   *
    * @param source
    *          the source string.
    * @return the whitespace free string.
@@ -145,7 +145,7 @@ public final class StringUtils {
 
   /**
    * Prepends the UTF-8 bom to a source string.
-   * 
+   *
    * @param source
    *          the source to prepend the BOM to.
    * @return the bom-ed string.

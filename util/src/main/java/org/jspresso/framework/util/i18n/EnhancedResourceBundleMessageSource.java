@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -31,7 +31,7 @@ import org.springframework.context.support.ResourceBundleMessageSource;
  * EnhancedResourceBundleMessageSource will try to follow the property chain to
  * find a translation, e.g. : to translate address.city.zip, it will try, in
  * order : <li>address.city.zip <li>city.zip <li>zip
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class EnhancedResourceBundleMessageSource extends
@@ -48,7 +48,7 @@ public class EnhancedResourceBundleMessageSource extends
 
   /**
    * Sets the resolveNested.
-   * 
+   *
    * @param resolveNested
    *          the resolveNested to set.
    */
@@ -58,7 +58,7 @@ public class EnhancedResourceBundleMessageSource extends
 
   /**
    * Delegates to super implementation (do not search for nested translations).
-   * 
+   *
    * @param code
    *          the translation code.
    * @param locale
@@ -71,7 +71,7 @@ public class EnhancedResourceBundleMessageSource extends
 
   /**
    * Delegates to super implementation (do not search for nested translations).
-   * 
+   *
    * @param code
    *          the translation code.
    * @param locale
@@ -203,7 +203,7 @@ public class EnhancedResourceBundleMessageSource extends
 
   /**
    * Sets the fallbackLocale.
-   * 
+   *
    * @param fallbackLocale
    *          the fallbackLocale to set.
    */
@@ -230,7 +230,7 @@ public class EnhancedResourceBundleMessageSource extends
 
   /**
    * Gets the fallbackLocale.
-   * 
+   *
    * @return the fallbackLocale.
    */
   protected Locale getFallbackLocale() {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -35,7 +35,7 @@ import org.jspresso.framework.util.swing.SwingUtil;
 /**
  * A default table cell renderer rendering even and odd rows background slightly
  * differently.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class EvenOddTableCellRenderer extends DefaultTableCellRenderer
@@ -143,7 +143,7 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer
 
   /**
    * Gets the customFont.
-   * 
+   *
    * @return the customFont.
    */
   protected Font getCustomFont() {
@@ -152,7 +152,7 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer
 
   /**
    * Sets the customFont.
-   * 
+   *
    * @param customFont
    *          the customFont to set.
    */
@@ -162,7 +162,7 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer
 
   /**
    * Gets the toolTipProperty.
-   * 
+   *
    * @return the toolTipProperty.
    */
   protected String getToolTipProperty() {
@@ -171,7 +171,7 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer
 
   /**
    * Sets the toolTipProperty.
-   * 
+   *
    * @param toolTipProperty
    *          the toolTipProperty to set.
    */
@@ -182,7 +182,7 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer
 
   /**
    * Gets the backgroundProperty.
-   * 
+   *
    * @return the backgroundProperty.
    */
   protected String getBackgroundProperty() {
@@ -191,7 +191,7 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer
 
   /**
    * Sets the backgroundProperty.
-   * 
+   *
    * @param backgroundProperty
    *          the backgroundProperty to set.
    */
@@ -202,7 +202,7 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer
 
   /**
    * Gets the foregroundProperty.
-   * 
+   *
    * @return the foregroundProperty.
    */
   protected String getForegroundProperty() {
@@ -211,7 +211,7 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer
 
   /**
    * Sets the foregroundProperty.
-   * 
+   *
    * @param foregroundProperty
    *          the foregroundProperty to set.
    */
@@ -222,7 +222,7 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer
 
   /**
    * Gets the fontProperty.
-   * 
+   *
    * @return the fontProperty.
    */
   protected String getFontProperty() {
@@ -231,7 +231,7 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer
 
   /**
    * Sets the fontProperty.
-   * 
+   *
    * @param fontProperty
    *          the fontProperty to set.
    */
@@ -242,7 +242,7 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer
 
   /**
    * Gets the dynamicFont.
-   * 
+   *
    * @return the dynamicFont.
    */
   protected Font getDynamicFont() {
@@ -251,7 +251,7 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer
 
   /**
    * Sets the dynamicFont.
-   * 
+   *
    * @param dynamicFont
    *          the dynamicFont to set.
    */

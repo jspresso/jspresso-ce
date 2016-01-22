@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,7 +24,7 @@ import org.jspresso.framework.model.component.IComponentFactory;
 
 /**
  * This interface defines the contract of an entities factory.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IEntityFactory extends IComponentFactory {
@@ -33,7 +33,7 @@ public interface IEntityFactory extends IComponentFactory {
    * Creates a new entity instance based on the entity descriptor. The entity
    * will be initialized with any necessary starting state. Lifecycle
    * interceptor are also created.
-   * 
+   *
    * @param <T>
    *          the concrete class of the created entity.
    * @param entityContract
@@ -45,7 +45,7 @@ public interface IEntityFactory extends IComponentFactory {
   /**
    * Instantiates an entity using a given ID. No lifecycle interceptor nor
    * registration of any kind is performed.
-   * 
+   *
    * @param <T>
    *          the concrete class of the created entity.
    * @param entityContract
@@ -60,7 +60,7 @@ public interface IEntityFactory extends IComponentFactory {
   /**
    * Instantiates an entity using a given ID. No lifecycle interceptor nor
    * registration of any kind is performed.
-   * 
+   *
    * @param <T>
    *          the concrete class of the created entity.
    * @param entityContract

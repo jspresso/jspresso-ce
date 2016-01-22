@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -45,7 +45,7 @@ import org.jspresso.framework.model.entity.IEntity;
 /**
  * This class is a model property connector which manages a model reference
  * property.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 
@@ -65,7 +65,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
 
   /**
    * Constructs a new model property connector on a model reference property.
-   * 
+   *
    * @param modelDescriptor
    *          the model descriptor backing this connector.
    * @param modelConnectorFactory
@@ -289,7 +289,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see #addModelChangeListener(IModelChangeListener)
    */
   @Override
@@ -312,7 +312,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
 
   /**
    * Notifies its listeners that the connector's model changed.
-   * 
+   *
    * @param oldModel
    *          The old model of the connector
    * @param newModel
@@ -327,7 +327,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   /**
    * Adds a new child connector to this composite. The key used as storage key
    * is the child connector id.
-   * 
+   *
    * @param childConnector
    *          the added connector.
    */

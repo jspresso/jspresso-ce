@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,7 +23,7 @@ import org.jspresso.framework.util.remote.RemotePeer;
 
 /**
  * This class is the generic server peer of a client GUI icon.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RIcon extends RemotePeer {
@@ -58,7 +58,7 @@ public class RIcon extends RemotePeer {
 
   /**
    * Gets the dimension.
-   * 
+   *
    * @return the dimension.
    */
   public Dimension getDimension() {
@@ -67,7 +67,7 @@ public class RIcon extends RemotePeer {
 
   /**
    * Gets the imageUrlSpec.
-   * 
+   *
    * @return the imageUrlSpec.
    */
   public String getImageUrlSpec() {
@@ -76,7 +76,7 @@ public class RIcon extends RemotePeer {
 
   /**
    * Sets the dimension.
-   * 
+   *
    * @param dimension
    *          the dimension to set.
    */
@@ -86,7 +86,7 @@ public class RIcon extends RemotePeer {
 
   /**
    * Sets the imageUrlSpec.
-   * 
+   *
    * @param imageUrlSpec
    *          the imageUrlSpec to set.
    */

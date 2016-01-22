@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -25,7 +25,7 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
 
 /**
  * This is a simple helper class to be able to cope with "classpath:" urls.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public final class UrlHelper {
@@ -99,7 +99,7 @@ public final class UrlHelper {
   /**
    * Extracts the resource path from a "classpath:" URL or return the original
    * one if it is not a "classpath:" URL.
-   * 
+   *
    * @param urlSpec
    *          the string representation of the URL.
    * @param makeAbsolute
@@ -129,7 +129,7 @@ public final class UrlHelper {
 
   /**
    * Whether this url is a "classpath:" pseudo URL.
-   * 
+   *
    * @param urlSpec
    *          the string representation of the URL.
    * @return true if this url is a "classpath:" pseudo URL.

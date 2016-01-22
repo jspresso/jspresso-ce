@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import java.text.ParseException;
 
 /**
  * Generic contract of a formatter object.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the source type.
@@ -33,7 +33,7 @@ public interface IFormatter<E, F> {
 
   /**
    * Formats an object to another representation, generally a string.
-   * 
+   *
    * @param value
    *          the object to format.
    * @return The formatted string representation.
@@ -43,7 +43,7 @@ public interface IFormatter<E, F> {
   /**
    * Parses an external representation (generally a string) and transform it to
    * an Object value.
-   * 
+   *
    * @param source
    *          the string representation to parse.
    * @return the parsed object.

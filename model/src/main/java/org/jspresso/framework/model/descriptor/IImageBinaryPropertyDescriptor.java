@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import org.jspresso.framework.util.image.IScalableImageAware;
 
 /**
  * This interface is implemented by descriptors of image binary properties.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IImageBinaryPropertyDescriptor extends

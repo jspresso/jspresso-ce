@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,14 +20,14 @@ package org.jspresso.framework.view.swing;
 
 /**
  * Interface implemented by dynamic style capable renderers.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface DynamicStyleRenderer {
 
   /**
    * Sets the toolTipProperty.
-   * 
+   *
    * @param toolTipProperty
    *          the toolTipProperty to set.
    */
@@ -35,7 +35,7 @@ public interface DynamicStyleRenderer {
 
   /**
    * Sets the backgroundProperty.
-   * 
+   *
    * @param backgroundProperty
    *          the backgroundProperty to set.
    */
@@ -43,7 +43,7 @@ public interface DynamicStyleRenderer {
 
   /**
    * Sets the foregroundProperty.
-   * 
+   *
    * @param foregroundProperty
    *          the foregroundProperty to set.
    */
@@ -51,7 +51,7 @@ public interface DynamicStyleRenderer {
 
   /**
    * Sets the fontProperty.
-   * 
+   *
    * @param fontProperty
    *          the fontProperty to set.
    */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -26,7 +26,7 @@ import javax.security.auth.callback.PasswordCallback;
 /**
  * A simplistic JAAS callback handler that auto handles user and password
  * callback.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class UsernamePasswordHandler implements CallbackHandler {
@@ -109,7 +109,7 @@ public class UsernamePasswordHandler implements CallbackHandler {
 
   /**
    * Sets the rememberMe.
-   * 
+   *
    * @param rememberMe
    *          the rememberMe to set.
    */
@@ -119,7 +119,7 @@ public class UsernamePasswordHandler implements CallbackHandler {
 
   /**
    * Gets the rememberMe.
-   * 
+   *
    * @return the rememberMe.
    */
   public boolean isRememberMe() {

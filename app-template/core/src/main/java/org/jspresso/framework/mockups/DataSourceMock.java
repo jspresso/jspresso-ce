@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -26,7 +26,7 @@ import javax.sql.DataSource;
 
 /**
  * Mock for DataSource.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class DataSourceMock implements DataSource {
@@ -110,7 +110,7 @@ public class DataSourceMock implements DataSource {
   public Connection getConnection(String username, String password) {
     return null;
   }
-  
+
   /**
    * Mock method.
    * <p>

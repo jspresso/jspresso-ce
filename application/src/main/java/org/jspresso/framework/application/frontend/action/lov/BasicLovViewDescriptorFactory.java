@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -38,7 +38,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
  * A default implementation for lov view factories.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BasicLovViewDescriptorFactory extends AbstractLovViewDescriptorFactory
@@ -93,7 +93,7 @@ public class BasicLovViewDescriptorFactory extends AbstractLovViewDescriptorFact
 
   /**
    * Sets the resultViewActionMap.
-   * 
+   *
    * @param resultViewActionMap
    *          the resultViewActionMap to set.
    */
@@ -103,7 +103,7 @@ public class BasicLovViewDescriptorFactory extends AbstractLovViewDescriptorFact
 
   /**
    * Sets the sortingAction.
-   * 
+   *
    * @param sortingAction
    *          the sortingAction to set.
    */
@@ -113,7 +113,7 @@ public class BasicLovViewDescriptorFactory extends AbstractLovViewDescriptorFact
 
   /**
    * Sets the paginationViewDescriptor.
-   * 
+   *
    * @param paginationViewDescriptor
    *          the paginationViewDescriptor to set.
    */

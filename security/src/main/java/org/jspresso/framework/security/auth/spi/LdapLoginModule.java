@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -38,7 +38,7 @@ import org.jspresso.framework.security.UserPrincipal;
 /**
  * Extends the JBoss LdapExtLoginModule to keep track of the authenticated
  * distinguished name.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class LdapLoginModule extends LdapExtLoginModule {
@@ -179,7 +179,7 @@ public class LdapLoginModule extends LdapExtLoginModule {
 
   /**
    * Extracts a slice from an LDAP name.
-   * 
+   *
    * @param nameAsString
    *          LDAP name as string.
    * @param nameParser

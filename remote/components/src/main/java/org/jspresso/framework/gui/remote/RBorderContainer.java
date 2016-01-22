@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.gui.remote;
 
 /**
  * A border (north, south, east, west, center) container.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RBorderContainer extends RContainer {
@@ -53,7 +53,7 @@ public class RBorderContainer extends RContainer {
 
   /**
    * Gets the center.
-   * 
+   *
    * @return the center.
    */
   public RComponent getCenter() {
@@ -62,7 +62,7 @@ public class RBorderContainer extends RContainer {
 
   /**
    * Gets the east.
-   * 
+   *
    * @return the east.
    */
   public RComponent getEast() {
@@ -71,7 +71,7 @@ public class RBorderContainer extends RContainer {
 
   /**
    * Gets the north.
-   * 
+   *
    * @return the north.
    */
   public RComponent getNorth() {
@@ -80,7 +80,7 @@ public class RBorderContainer extends RContainer {
 
   /**
    * Gets the south.
-   * 
+   *
    * @return the south.
    */
   public RComponent getSouth() {
@@ -89,7 +89,7 @@ public class RBorderContainer extends RContainer {
 
   /**
    * Gets the west.
-   * 
+   *
    * @return the west.
    */
   public RComponent getWest() {
@@ -98,7 +98,7 @@ public class RBorderContainer extends RContainer {
 
   /**
    * Sets the center.
-   * 
+   *
    * @param center
    *          the center to set.
    */
@@ -108,7 +108,7 @@ public class RBorderContainer extends RContainer {
 
   /**
    * Sets the east.
-   * 
+   *
    * @param east
    *          the east to set.
    */
@@ -118,7 +118,7 @@ public class RBorderContainer extends RContainer {
 
   /**
    * Sets the north.
-   * 
+   *
    * @param north
    *          the north to set.
    */
@@ -128,7 +128,7 @@ public class RBorderContainer extends RContainer {
 
   /**
    * Sets the south.
-   * 
+   *
    * @param south
    *          the south to set.
    */
@@ -138,7 +138,7 @@ public class RBorderContainer extends RContainer {
 
   /**
    * Sets the west.
-   * 
+   *
    * @param west
    *          the west to set.
    */

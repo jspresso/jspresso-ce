@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -31,7 +31,7 @@ import org.jspresso.framework.util.collection.ESort;
 /**
  * A bean comparator which compare beans based on a list of properties using
  * their natural order.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BeanComparator implements Comparator<Object> {

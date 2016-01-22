@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,7 +24,7 @@ import org.jspresso.framework.gui.remote.RAction;
 
 /**
  * This command is the base class for file commands.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteFileCommand extends RemoteCommand {
@@ -37,7 +37,7 @@ public class RemoteFileCommand extends RemoteCommand {
 
   /**
    * Gets the cancelCallbackAction.
-   * 
+   *
    * @return the cancelCallbackAction.
    */
   public RAction getCancelCallbackAction() {
@@ -46,7 +46,7 @@ public class RemoteFileCommand extends RemoteCommand {
 
   /**
    * Gets the fileFilter.
-   * 
+   *
    * @return the fileFilter.
    */
   public Map<String, String[]> getFileFilter() {
@@ -55,7 +55,7 @@ public class RemoteFileCommand extends RemoteCommand {
 
   /**
    * Gets the fileUrl.
-   * 
+   *
    * @return the fileUrl.
    */
   public String getFileUrl() {
@@ -64,7 +64,7 @@ public class RemoteFileCommand extends RemoteCommand {
 
   /**
    * Sets the cancelCallbackAction.
-   * 
+   *
    * @param cancelCallbackAction
    *          the cancelCallbackAction to set.
    */
@@ -74,7 +74,7 @@ public class RemoteFileCommand extends RemoteCommand {
 
   /**
    * Sets the fileFilter.
-   * 
+   *
    * @param fileFilter
    *          the fileFilter to set.
    */
@@ -84,7 +84,7 @@ public class RemoteFileCommand extends RemoteCommand {
 
   /**
    * Sets the fileUrl.
-   * 
+   *
    * @param fileUrl
    *          the fileUrl to set.
    */

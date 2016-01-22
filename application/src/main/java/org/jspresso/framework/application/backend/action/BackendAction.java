@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -41,7 +41,7 @@ import org.springframework.transaction.support.TransactionTemplate;
  * on the backend (domain model) of the application. It provides accessors on
  * the context elements that are generally used through the action execution
  * process.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BackendAction extends AbstractAction {
@@ -84,7 +84,7 @@ public class BackendAction extends AbstractAction {
 
   /**
    * Gets the accessorFactory.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the accessorFactory.
@@ -95,7 +95,7 @@ public class BackendAction extends AbstractAction {
 
   /**
    * Gets the current application session.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the current application session.
@@ -130,7 +130,7 @@ public class BackendAction extends AbstractAction {
 
   /**
    * Gets the frontend controller out of the action context.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the frontend controller.
@@ -142,7 +142,7 @@ public class BackendAction extends AbstractAction {
 
   /**
    * Gets the entityFactory.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the entityFactory.
@@ -153,7 +153,7 @@ public class BackendAction extends AbstractAction {
 
   /**
    * Gets the transactionTemplate.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the transactionTemplate.
@@ -247,7 +247,7 @@ public class BackendAction extends AbstractAction {
 
   /**
    * Sets the badFrontendAccessChecked.
-   * 
+   *
    * @param badFrontendAccessChecked
    *          the badFrontendAccessChecked to set.
    */
@@ -267,7 +267,7 @@ public class BackendAction extends AbstractAction {
 
   /**
    * Inform about the action progress.
-   * 
+   *
    * @param progress
    *          the action progress.
    */

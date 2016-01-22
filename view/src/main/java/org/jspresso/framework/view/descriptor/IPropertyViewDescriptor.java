@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -26,49 +26,49 @@ import org.jspresso.framework.util.gui.IClientTypeAware;
 /**
  * This public interface is implemented by view descriptors which are just
  * presenting a property.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IPropertyViewDescriptor extends IViewDescriptor, IClientTypeAware {
 
   /**
    * Gets the label background.
-   * 
+   *
    * @return the label background.
    */
   String getLabelBackground();
 
   /**
    * Gets the label font.
-   * 
+   *
    * @return the label font.
    */
   String getLabelFont();
 
   /**
    * Gets the label foreground.
-   * 
+   *
    * @return the label foreground.
    */
   String getLabelForeground();
 
   /**
    * Gets the child properties to display in case of a complex property.
-   * 
+   *
    * @return The list of displayed properties in the case of a complex property.
    */
   List<String> getRenderedChildProperties();
 
   /**
    * Gets the sortability.
-   * 
+   *
    * @return the sortable.
    */
   boolean isSortable();
 
   /**
    * Gets the default child properties to display in case of a complex property.
-   * 
+   *
    * @return The list of displayed properties in the case of a complex property.
    */
   List<String> getDefaultRenderedChildProperties();
@@ -76,7 +76,7 @@ public interface IPropertyViewDescriptor extends IViewDescriptor, IClientTypeAwa
   /**
    * When used in a component descriptor, gets the number of columns a property
    * spans when displayed.
-   * 
+   *
    * @return the spanned column count.
    */
   Integer getWidth();
@@ -84,7 +84,7 @@ public interface IPropertyViewDescriptor extends IViewDescriptor, IClientTypeAwa
   /**
    * Returns the action to trigger whenever the property is actioned, e.g.
    * clicked.
-   * 
+   *
    * @return the action to trigger whenever the property is actioned, e.g.
    *         clicked.
    */
@@ -92,7 +92,7 @@ public interface IPropertyViewDescriptor extends IViewDescriptor, IClientTypeAwa
 
   /**
    * Returns the horizontal alignment used for displaying the property.
-   * 
+   *
    * @return the horizontal alignment used for displaying the property.
    */
   EHorizontalAlignment getHorizontalAlignment();

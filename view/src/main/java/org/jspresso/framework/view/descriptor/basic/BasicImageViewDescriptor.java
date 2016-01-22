@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -31,7 +31,7 @@ import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
  * by the binary property descriptor and use it in your UI. Jspresso will then
  * display the image whose content is stored in the binary property directly in
  * the UI.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BasicImageViewDescriptor extends BasicPropertyViewDescriptor
@@ -51,7 +51,7 @@ public class BasicImageViewDescriptor extends BasicPropertyViewDescriptor
 
   /**
    * Gets the scrollable.
-   * 
+   *
    * @return the scrollable.
    */
   @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -30,7 +30,7 @@ import org.jspresso.framework.util.lang.ObjectUtils;
  * type (such as int or boolean) it must be wrapped as the corresponding
  * java.lang.* Object type (such as Integer or Boolean). Null values may be
  * provided for the old and the new values if their true values are not known.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class ValueChangeEvent extends EventObject {
@@ -65,7 +65,7 @@ public class ValueChangeEvent extends EventObject {
 
   /**
    * Gets the new value of the source.
-   * 
+   *
    * @return The new value of the source, expressed as an Object.
    */
   public Object getNewValue() {
@@ -74,7 +74,7 @@ public class ValueChangeEvent extends EventObject {
 
   /**
    * Gets the old value of the source.
-   * 
+   *
    * @return The old value of the source, expressed as an Object.
    */
   public Object getOldValue() {
@@ -83,7 +83,7 @@ public class ValueChangeEvent extends EventObject {
 
   /**
    * Tells if this event requires propagation.
-   * 
+   *
    * @return true if oldValue != newValue.
    */
   public boolean needsFiring() {

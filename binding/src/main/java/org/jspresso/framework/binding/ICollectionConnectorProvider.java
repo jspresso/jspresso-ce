@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import org.jspresso.framework.util.event.ISelectable;
 
 /**
  * Marks objects being able to provide a collection connector.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface ICollectionConnectorProvider extends
@@ -30,7 +30,7 @@ public interface ICollectionConnectorProvider extends
 
   /**
    * Clones this connector.
-   * 
+   *
    * @return the connector's clone.
    */
   @Override
@@ -38,7 +38,7 @@ public interface ICollectionConnectorProvider extends
 
   /**
    * Clones this connector.
-   * 
+   *
    * @param newConnectorId
    *          the identifier of the clone connector
    * @return the connector's clone.
@@ -48,7 +48,7 @@ public interface ICollectionConnectorProvider extends
 
   /**
    * Gets the collection connector.
-   * 
+   *
    * @return the collection connector.
    */
   ICollectionConnector getCollectionConnector();

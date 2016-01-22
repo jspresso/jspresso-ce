@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,14 +23,14 @@ import java.util.Collection;
 /**
  * This is the interface implemented by connectors nesting other connectors
  * (composite).
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface ICompositeValueConnector extends IValueConnector {
 
   /**
    * Adds a new child connector to this composite.
-   * 
+   *
    * @param storageKey
    *          the key under which the child connector will be stored /
    *          retrieved.
@@ -42,7 +42,7 @@ public interface ICompositeValueConnector extends IValueConnector {
   /**
    * Adds a new child connector to this composite. The key used as storage key
    * is the child connector id.
-   * 
+   *
    * @param childConnector
    *          the added connector.
    */
@@ -50,7 +50,7 @@ public interface ICompositeValueConnector extends IValueConnector {
 
   /**
    * Removes a child connector from this composite.
-   * 
+   *
    * @param storageKey
    *          the key to remove the child connector for.
    */
@@ -58,21 +58,21 @@ public interface ICompositeValueConnector extends IValueConnector {
 
   /**
    * Tests whether the children connectors are readable.
-   * 
+   *
    * @return true if readable.
    */
   boolean areChildrenReadable();
 
   /**
    * Tests whether the children connectors are writable.
-   * 
+   *
    * @return true if writable.
    */
   boolean areChildrenWritable();
 
   /**
    * Clones this connector.
-   * 
+   *
    * @return the connector's clone.
    */
   @Override
@@ -80,7 +80,7 @@ public interface ICompositeValueConnector extends IValueConnector {
 
   /**
    * Clones this connector.
-   * 
+   *
    * @param newConnectorId
    *          the identifier of the clone connector
    * @return the connector's clone.
@@ -100,7 +100,7 @@ public interface ICompositeValueConnector extends IValueConnector {
 
   /**
    * Gets the number of child connectors contained in this composite connector.
-   * 
+   *
    * @return the element connectors count.
    */
   int getChildConnectorCount();

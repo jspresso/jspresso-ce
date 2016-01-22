@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -26,7 +26,7 @@ import javax.swing.Scrollable;
 
 /**
  * Scrollable panel.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class JScrollablePanel extends JPanel implements Scrollable {
@@ -64,7 +64,7 @@ public class JScrollablePanel extends JPanel implements Scrollable {
 
   /**
    * Gets the scrollableTracksViewportHeight.
-   * 
+   *
    * @return the scrollableTracksViewportHeight.
    */
   @Override
@@ -74,7 +74,7 @@ public class JScrollablePanel extends JPanel implements Scrollable {
 
   /**
    * Sets the scrollableTracksViewportHeight.
-   * 
+   *
    * @param scrollableTracksViewportHeight
    *          the scrollableTracksViewportHeight to set.
    */
@@ -85,7 +85,7 @@ public class JScrollablePanel extends JPanel implements Scrollable {
 
   /**
    * Gets the scrollableTracksViewportWidth.
-   * 
+   *
    * @return the scrollableTracksViewportWidth.
    */
   @Override
@@ -95,7 +95,7 @@ public class JScrollablePanel extends JPanel implements Scrollable {
 
   /**
    * Sets the scrollableTracksViewportWidth.
-   * 
+   *
    * @param scrollableTracksViewportWidth
    *          the scrollableTracksViewportWidth to set.
    */

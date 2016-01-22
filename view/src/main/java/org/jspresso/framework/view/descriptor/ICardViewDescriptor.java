@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ package org.jspresso.framework.view.descriptor;
  * This public interface is implemented by "Card" view descriptors. A typical
  * implementation of the described view could be a swing JPanel using a card
  * layout.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface ICardViewDescriptor extends IViewDescriptor,

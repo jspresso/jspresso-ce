@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,14 +23,14 @@ import java.io.OutputStream;
 
 /**
  * This interface is implemented by active web resources.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IActiveResource extends IResourceBase {
 
   /**
    * Writes content to the passed output stream.
-   * 
+   *
    * @param out
    *          the output stream where to write the resource content.
    * @throws IOException

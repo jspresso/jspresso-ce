@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -136,7 +136,7 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
   /**
    * Describes the elements contained in this collection. It can be any of
    * entity, interface or component descriptor.
-   * 
+   *
    * @param elementDescriptor
    *          the elementDescriptor to set.
    */

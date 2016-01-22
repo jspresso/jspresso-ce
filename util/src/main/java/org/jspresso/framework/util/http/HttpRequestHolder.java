@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * This filter needs to be installed on any broker servlet so that iot keeps
  * track of the current HTTP request.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class HttpRequestHolder implements Filter {
@@ -111,7 +111,7 @@ public class HttpRequestHolder implements Filter {
 
   /**
    * Gets whether a thread-bound request is available.
-   * 
+   *
    * @return true if a thread-bound request is available.
    */
   public static boolean isAvailable() {

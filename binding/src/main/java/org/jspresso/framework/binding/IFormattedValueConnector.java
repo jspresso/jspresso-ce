@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -21,21 +21,21 @@ package org.jspresso.framework.binding;
 /**
  * This public interface is implemented by connectors whose value can be parsed
  * and formatted as string.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IFormattedValueConnector extends IValueConnector {
 
   /**
    * Gets the connector value as its formatted representation.
-   * 
+   *
    * @return the formatted value, generally a string representation.
    */
   Object getFormattedValue();
 
   /**
    * Sets the connector value using the formatted value representation.
-   * 
+   *
    * @param formattedValue
    *          the formatted value, generally the string representation string
    *          representation.

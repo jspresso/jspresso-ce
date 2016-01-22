@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -37,7 +37,7 @@ public class FindAction extends AbstractQbeAction {
 
   /**
    * Retrieves the query component out of the context.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the query component.

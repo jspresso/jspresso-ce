@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -36,7 +36,7 @@ import org.jspresso.framework.util.collection.IPageable;
 
 /**
  * An implementation used for query components.
- * 
+ *
  * @internal
  * @author Vincent Vandenschrick
  * @param <E>

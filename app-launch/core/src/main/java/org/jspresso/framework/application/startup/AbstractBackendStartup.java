@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Abstract class for application startup including only the backend layer. This
  * serves for batch processes for instance.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractBackendStartup extends AbstractStartup {
@@ -49,7 +49,7 @@ public abstract class AbstractBackendStartup extends AbstractStartup {
 
   /**
    * Gets the application backend controller.
-   * 
+   *
    * @return the application backend controller.
    */
   protected IBackendController getBackendController() {
@@ -74,7 +74,7 @@ public abstract class AbstractBackendStartup extends AbstractStartup {
 
   /**
    * Creates a user subject.
-   * 
+   *
    * @param userName
    *          the user name.
    * @return a user subject.
@@ -88,7 +88,7 @@ public abstract class AbstractBackendStartup extends AbstractStartup {
 
   /**
    * Configures session on the backend controller.
-   * 
+   *
    * @param subject
    *          the JAAS subject containing the user principal.
    * @param locale
@@ -103,7 +103,7 @@ public abstract class AbstractBackendStartup extends AbstractStartup {
 
   /**
    * Executes a backend action.
-   * 
+   *
    * @param action
    *          the backend action to execute.
    * @param initialContext
@@ -128,7 +128,7 @@ public abstract class AbstractBackendStartup extends AbstractStartup {
 
   /**
    * Sets the startupLocale.
-   * 
+   *
    * @param startupLocale
    *          the startupLocale to set.
    */
@@ -157,7 +157,7 @@ public abstract class AbstractBackendStartup extends AbstractStartup {
 
   /**
    * Gets the clientTimeZone.
-   * 
+   *
    * @return the clientTimeZone.
    */
   @Override
@@ -170,7 +170,7 @@ public abstract class AbstractBackendStartup extends AbstractStartup {
 
   /**
    * Sets the clientTimeZone.
-   * 
+   *
    * @param clientTimeZone
    *          the clientTimeZone to set.
    */

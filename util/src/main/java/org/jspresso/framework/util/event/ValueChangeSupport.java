@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -26,7 +26,7 @@ import gnu.trove.set.hash.TLinkedHashSet;
 
 /**
  * Helper class to ease the IValueChangeListener management.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class ValueChangeSupport implements IValueChangeSource {
@@ -55,7 +55,7 @@ public class ValueChangeSupport implements IValueChangeSource {
    * Registers a listener to be excluded (generally temporarily) from the
    * notification process without being removed from the actual listeners
    * collection.
-   * 
+   *
    * @param listener
    *          the excluded listener.
    */
@@ -119,7 +119,7 @@ public class ValueChangeSupport implements IValueChangeSource {
 
   /**
    * Gets the listeners.
-   * 
+   *
    * @return the listeners.
    */
   @Override
@@ -132,7 +132,7 @@ public class ValueChangeSupport implements IValueChangeSource {
 
   /**
    * Gets whether the listener collection is empty.
-   * 
+   *
    * @return true if the listener collection is empty.
    */
   public boolean isEmpty() {
@@ -142,7 +142,7 @@ public class ValueChangeSupport implements IValueChangeSource {
   /**
    * Registers a listener to be re-included to the notification process without
    * being re-added to the actual listeners collection.
-   * 
+   *
    * @param listener
    *          the previously excluded listener.
    */

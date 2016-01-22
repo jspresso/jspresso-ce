@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -30,7 +30,7 @@ import org.jspresso.framework.util.resources.server.ResourceManager;
 
 /**
  * An (internal) action to trigger the file open callback.
- * 
+ *
  * @internal
  * @author Vincent Vandenschrick
  */

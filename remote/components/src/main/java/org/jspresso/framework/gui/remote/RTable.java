@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 
 /**
  * A tabular component.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RTable extends RCollectionComponent {
@@ -58,7 +58,7 @@ public class RTable extends RCollectionComponent {
 
   /**
    * Gets the columnIds.
-   * 
+   *
    * @return the columnIds.
    */
   public String[] getColumnIds() {
@@ -67,7 +67,7 @@ public class RTable extends RCollectionComponent {
 
   /**
    * Gets the columns.
-   * 
+   *
    * @return the columns.
    */
   public RComponent[] getColumns() {
@@ -76,7 +76,7 @@ public class RTable extends RCollectionComponent {
 
   /**
    * Gets the sortingAction.
-   * 
+   *
    * @return the sortingAction.
    */
   public RAction getSortingAction() {
@@ -85,7 +85,7 @@ public class RTable extends RCollectionComponent {
 
   /**
    * Gets the horizontallyScrollable.
-   * 
+   *
    * @return the horizontallyScrollable.
    */
   public boolean isHorizontallyScrollable() {
@@ -94,7 +94,7 @@ public class RTable extends RCollectionComponent {
 
   /**
    * Gets the sortable.
-   * 
+   *
    * @return the sortable.
    */
   public boolean isSortable() {
@@ -103,7 +103,7 @@ public class RTable extends RCollectionComponent {
 
   /**
    * Sets the columnIds.
-   * 
+   *
    * @param columnIds
    *          the columnIds to set.
    */
@@ -113,7 +113,7 @@ public class RTable extends RCollectionComponent {
 
   /**
    * Sets the columns.
-   * 
+   *
    * @param columns
    *          the columns to set.
    */
@@ -123,7 +123,7 @@ public class RTable extends RCollectionComponent {
 
   /**
    * Sets the horizontallyScrollable.
-   * 
+   *
    * @param horizontallyScrollable
    *          the horizontallyScrollable to set.
    */
@@ -133,7 +133,7 @@ public class RTable extends RCollectionComponent {
 
   /**
    * Sets the sortable.
-   * 
+   *
    * @param sortable
    *          the sortable to set.
    */
@@ -143,7 +143,7 @@ public class RTable extends RCollectionComponent {
 
   /**
    * Sets the sortingAction.
-   * 
+   *
    * @param sortingAction
    *          the sortingAction to set.
    */
@@ -153,7 +153,7 @@ public class RTable extends RCollectionComponent {
 
   /**
    * Gets the columnHeaders.
-   * 
+   *
    * @return the columnHeaders.
    */
   public RComponent[] getColumnHeaders() {
@@ -162,7 +162,7 @@ public class RTable extends RCollectionComponent {
 
   /**
    * Sets the columnHeaders.
-   * 
+   *
    * @param columnHeaders
    *          the columnHeaders to set.
    */
@@ -172,7 +172,7 @@ public class RTable extends RCollectionComponent {
 
   /**
    * Gets the rowPrototype.
-   * 
+   *
    * @return the rowPrototype.
    */
   public RemoteCompositeValueState getRowPrototype() {
@@ -181,7 +181,7 @@ public class RTable extends RCollectionComponent {
 
   /**
    * Sets the rowPrototype.
-   * 
+   *
    * @param rowPrototype
    *          the rowPrototype to set.
    */

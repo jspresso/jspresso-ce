@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -31,7 +31,7 @@ import org.jspresso.framework.model.persistence.hibernate.property.EntityPropert
 
 /**
  * A specialized hibernate tuplizer to handle proxy entities.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class DynamicPojoEntityTuplizer extends PojoEntityTuplizer {

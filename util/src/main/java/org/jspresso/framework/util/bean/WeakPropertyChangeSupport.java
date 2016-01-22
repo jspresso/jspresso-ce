@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -38,7 +38,7 @@ import gnu.trove.map.hash.THashMap;
  * This class is serializable. When it is serialized it will save (and restore)
  * any listeners that are themselves serializable. Any non-serializable
  * listeners will be skipped during serialization.
- * 
+ *
  * @author <a href="mailto:haaf@mercatis.de">Holger Engels</a>
  */
 public class WeakPropertyChangeSupport implements Serializable {
@@ -164,7 +164,7 @@ public class WeakPropertyChangeSupport implements Serializable {
 
   /**
    * Remove a PropertyChangeListener for a specific property.
-   * 
+   *
    * @param propertyName
    *          The name of the property that was listened on.
    * @param listener
@@ -185,7 +185,7 @@ public class WeakPropertyChangeSupport implements Serializable {
   /**
    * Report a bound property update to any registered listeners. No event is
    * fired if old and new are equal and non-null.
-   * 
+   *
    * @param propertyName
    *          The programmatic name of the property that was changed.
    * @param oldValue
@@ -234,7 +234,7 @@ public class WeakPropertyChangeSupport implements Serializable {
    * <p/>
    * This is merely a convenience wrapper around the more general
    * firePropertyChange method that takes Object values.
-   * 
+   *
    * @param propertyName
    *          The programmatic name of the property that was changed.
    * @param oldValue
@@ -256,7 +256,7 @@ public class WeakPropertyChangeSupport implements Serializable {
    * <p/>
    * This is merely a convenience wrapper around the more general
    * firePropertyChange method that takes Object values.
-   * 
+   *
    * @param propertyName
    *          The programmatic name of the property that was changed.
    * @param oldValue
@@ -276,7 +276,7 @@ public class WeakPropertyChangeSupport implements Serializable {
   /**
    * Fire an existing PropertyChangeEvent to any registered listeners. No event
    * is fired if the given event's old and new values are equal and non-null.
-   * 
+   *
    * @param evt
    *          The PropertyChangeEvent object.
    */
@@ -315,7 +315,7 @@ public class WeakPropertyChangeSupport implements Serializable {
 
   /**
    * Check if there are any listeners for a specific property.
-   * 
+   *
    * @param propertyName
    *          the property name.
    * @return true if there are ore or more listeners for the given property

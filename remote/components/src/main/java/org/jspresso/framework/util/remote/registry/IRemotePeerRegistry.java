@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import org.jspresso.framework.util.remote.IRemotePeer;
 
 /**
  * This interface is implemented by remote peer registries.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IRemotePeerRegistry {
@@ -34,7 +34,7 @@ public interface IRemotePeerRegistry {
 
   /**
    * Retrieves a registered remote peer.
-   * 
+   *
    * @param guid
    *          the remote peer guid.
    * @return the registered remote peer or null if no remote peer with the given
@@ -44,7 +44,7 @@ public interface IRemotePeerRegistry {
 
   /**
    * Retrieves a registered remote peer using its permanent id.
-   * 
+   *
    * @param permId
    *          the remote peer permId.
    * @return the registered remote peer or null if no remote peer with the given
@@ -54,7 +54,7 @@ public interface IRemotePeerRegistry {
 
   /**
    * Tests whether a remote peer is already registered.
-   * 
+   *
    * @param guid
    *          the remote peer guid.
    * @return true if the remote peer is already registered.
@@ -63,7 +63,7 @@ public interface IRemotePeerRegistry {
 
   /**
    * Registers a remote peer.
-   * 
+   *
    * @param remotePeer
    *          the remote peer to register.
    */
@@ -71,7 +71,7 @@ public interface IRemotePeerRegistry {
 
   /**
    * Generates and registers a permanent Id.
-   * 
+   *
    * @param permId
    *          the permanent seed to use.
    * @param guid
@@ -82,7 +82,7 @@ public interface IRemotePeerRegistry {
 
   /**
    * Un-registers a remote peer.
-   * 
+   *
    * @param guid
    *          the remote peer guid.
    */
@@ -90,7 +90,7 @@ public interface IRemotePeerRegistry {
 
   /**
    * Adds a remote peer registry listener.
-   * 
+   *
    * @param listener
    *          the listener to add.
    */
@@ -98,7 +98,7 @@ public interface IRemotePeerRegistry {
 
   /**
    * Removes a remote peer registry listener.
-   * 
+   *
    * @param listener
    *          the listener to remove.
    */

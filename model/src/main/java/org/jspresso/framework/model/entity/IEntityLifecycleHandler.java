@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,7 +24,7 @@ import org.jspresso.framework.model.component.IComponent;
 
 /**
  * Defines the contract of any component able to handle entities lifecycle.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IEntityLifecycleHandler extends IEntityDirtAware {
@@ -36,7 +36,7 @@ public interface IEntityLifecycleHandler extends IEntityDirtAware {
 
   /**
    * Tests whether an entity has been registered for deletion.
-   * 
+   *
    * @param entity
    *          the entity to test.
    * @return true if the entity has been registered for deletion.
@@ -45,7 +45,7 @@ public interface IEntityLifecycleHandler extends IEntityDirtAware {
 
   /**
    * Tests whether an entity has been registered for update.
-   * 
+   *
    * @param entity
    *          the entity to test.
    * @return true if the entity has been registered for update.
@@ -54,7 +54,7 @@ public interface IEntityLifecycleHandler extends IEntityDirtAware {
 
   /**
    * Registers an entity for deletion.
-   * 
+   *
    * @param entity
    *          the entity to register.
    */
@@ -62,7 +62,7 @@ public interface IEntityLifecycleHandler extends IEntityDirtAware {
 
   /**
    * Registers an entity for update.
-   * 
+   *
    * @param entity
    *          the entity to register.
    */
@@ -70,7 +70,7 @@ public interface IEntityLifecycleHandler extends IEntityDirtAware {
 
   /**
    * Performs necessary cleanings when an entity or component is deleted.
-   * 
+   *
    * @param component
    *          the deleted entity or component.
    * @param dryRun
@@ -88,7 +88,7 @@ public interface IEntityLifecycleHandler extends IEntityDirtAware {
 
   /**
    * Reloads an entity from persistent store.
-   * 
+   *
    * @param entity
    *          the entity to reload.
    */

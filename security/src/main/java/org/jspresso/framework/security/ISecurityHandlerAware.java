@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -21,14 +21,14 @@ package org.jspresso.framework.security;
 /**
  * Implemented by classes that can be injected with a Jspresso security
  * handler.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface ISecurityHandlerAware {
 
   /**
    * Sets the security handler.
-   * 
+   *
    * @param securityHandler
    *          the security handler to set.
    */

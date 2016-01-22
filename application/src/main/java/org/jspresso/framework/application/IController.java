@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -33,7 +33,7 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  * This interface is implemented by the controllers of the application.
  * Controllers implement the interface since their main role is to execute
  * application actions.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IController extends IActionHandler, IPropertyChangeCapable {
@@ -50,7 +50,7 @@ public interface IController extends IActionHandler, IPropertyChangeCapable {
 
   /**
    * This method gets executed when a user successfully logs in.
-   * 
+   *
    * @param subject
    *          the authenticated user subject.
    */
@@ -58,21 +58,21 @@ public interface IController extends IActionHandler, IPropertyChangeCapable {
 
   /**
    * Gets the applicationSession for this backend controller.
-   * 
+   *
    * @return the current controller application session.
    */
   IApplicationSession getApplicationSession();
 
   /**
    * Gets the current controller locale.
-   * 
+   *
    * @return the current controller locale.
    */
   Locale getLocale();
 
   /**
    * Gets the translation provider used by this controller.
-   * 
+   *
    * @return the translation provider used by this controller.
    * @deprecated the controller is now a translation provider by itself.
    */
@@ -81,7 +81,7 @@ public interface IController extends IActionHandler, IPropertyChangeCapable {
 
   /**
    * Stops the controller. This method performs any necessary cleanup.
-   * 
+   *
    * @return true if the stop was successful.
    */
   boolean stop();
@@ -90,7 +90,7 @@ public interface IController extends IActionHandler, IPropertyChangeCapable {
    * Retrieves the initial action context from the controller. This context is
    * passed to the action chain and contains application-wide context key-value
    * pairs.
-   * 
+   *
    * @return the map representing the initial context provided by this
    *         controller.
    */

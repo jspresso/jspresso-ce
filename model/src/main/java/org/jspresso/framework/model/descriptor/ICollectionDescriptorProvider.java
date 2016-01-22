@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.model.descriptor;
 
 /**
  * Implementing classes are able to provide a collection descriptor.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the concrete collection component type.
@@ -29,7 +29,7 @@ public interface ICollectionDescriptorProvider<E> extends IModelDescriptor {
 
   /**
    * Gets the collection descriptor.
-   * 
+   *
    * @return the collection descriptor.
    */
   ICollectionDescriptor<E> getCollectionDescriptor();

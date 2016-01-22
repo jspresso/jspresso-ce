@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -34,7 +34,7 @@ import org.jspresso.framework.binding.ICollectionConnector;
  * selected objects from the module's projected collection. If one (or more) of
  * the removed objects are also used in children bean modules, the corresponding
  * children bean modules are also removed accordingly.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoveFromModuleObjectsAction extends AbstractCollectionAction {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -26,7 +26,7 @@ import org.jspresso.framework.model.component.IComponent;
 /**
  * An Hibernate aware entity factory that ensures that all sorted PersistentSets
  * are backed by LinkedHashSets.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class HibernateControllerAwareProxyEntityFactory extends

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -25,7 +25,7 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
 
 /**
  * This action displays a workspace using its (untranslated) name.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.
@@ -52,7 +52,7 @@ public class WorkspaceSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Configures the name of the workspace to display.
-   * 
+   *
    * @param workspaceName
    *          the workspaceName to set.
    */

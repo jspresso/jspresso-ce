@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2014 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -31,7 +31,7 @@ import org.jspresso.framework.model.entity.IEntity;
  * Reloads all the module entities as well as all its sub-modules entities
  * recursively. The whole entities graphs are reloaded from the persistent
  * store.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class ReloadModuleObjectAction extends ReloadAction {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.application.frontend.command.remote;
 
 /**
  * A command to update the remote application frame status bar.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteUpdateStatusCommand extends RemoteCommand {
@@ -31,7 +31,7 @@ public class RemoteUpdateStatusCommand extends RemoteCommand {
 
   /**
    * Sets the status.
-   * 
+   *
    * @param status
    *          the status to set.
    */
@@ -41,7 +41,7 @@ public class RemoteUpdateStatusCommand extends RemoteCommand {
 
   /**
    * Gets the status.
-   * 
+   *
    * @return the status.
    */
   public String getStatus() {

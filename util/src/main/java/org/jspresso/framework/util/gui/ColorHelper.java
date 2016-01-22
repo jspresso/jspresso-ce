@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.util.gui;
 
 /**
  * This is a simple helper class to deal with color representations.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public final class ColorHelper {
@@ -31,7 +31,7 @@ public final class ColorHelper {
 
   /**
    * Transforms a color rgba hex string representation to its rgba components.
-   * 
+   *
    * @param hexString
    *          the Hex string representation argb coded.
    * @return the rgba components of the color once parsed in an array.
@@ -55,7 +55,7 @@ public final class ColorHelper {
   /**
    * Transforms a color rgba components to their hex string representation argb
    * coded.
-   * 
+   *
    * @param r
    *          the red component.
    * @param g

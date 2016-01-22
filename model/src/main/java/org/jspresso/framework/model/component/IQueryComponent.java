@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -201,7 +201,7 @@ public interface IQueryComponent extends Map<String, Object>, IPageable, ISortab
    * Resets the query component.
    */
   void reset();
-  
+
   /**
    * Set the extra component.
    * @param extra The component.
@@ -213,5 +213,5 @@ public interface IQueryComponent extends Map<String, Object>, IPageable, ISortab
    * @return the extra component.
    */
   IComponent getExtra() ;
-  
+
 }

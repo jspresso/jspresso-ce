@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2014 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -25,12 +25,12 @@ import org.jspresso.framework.binding.IValueConnector;
 
 /**
  * An action used duplicate a domain object. the cloned domain object is set as model for the current view.
- * 
+ *
  * <pre>
  * protected abstract Object cloneElement(Object element,
  *     Map&lt;String, Object&gt; context)
  * </pre>
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractCloneAction extends
@@ -38,7 +38,7 @@ public abstract class AbstractCloneAction extends
 
   /**
    * Clones an element.
-   * 
+   *
    * @param element
    *          the element to clone.
    * @param context

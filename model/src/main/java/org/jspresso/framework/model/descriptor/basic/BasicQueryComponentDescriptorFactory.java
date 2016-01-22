@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -31,7 +31,7 @@ import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 
 /**
  * Basic implementation. Creates basic query component descriptors.
- * 
+ *
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$
  */
@@ -97,20 +97,20 @@ public class BasicQueryComponentDescriptorFactory implements IQueryComponentDesc
 
   /**
    * Instanciate query component descriptor.
-   * 
+   *
    * @param componentDescriptorProvider
    *    the provider for delegate entity descriptor.
-   * @param registry 
-   *    the registry. 
+   * @param registry
+   *    the registry.
    * @return the query component descriptor
    */
   protected IComponentDescriptor<IQueryComponent> instanciateQueryComponentDescriptor(
       IComponentDescriptorProvider<? extends IComponent> componentDescriptorProvider,
       Map<Class<? extends IComponent>, IComponentDescriptor<? extends IComponent>> registry) {
-    
+
     IComponentDescriptor<IQueryComponent> queryComponentDescriptor
       = new BasicQueryComponentDescriptor<IQueryComponent>(componentDescriptorProvider, registry);
-   
+
     return queryComponentDescriptor;
   }
 }

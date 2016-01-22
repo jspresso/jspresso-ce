@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.gui.remote;
 
 /**
  * A remote html area component.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RHtmlArea extends RTextComponent {
@@ -51,7 +51,7 @@ public class RHtmlArea extends RTextComponent {
 
   /**
    * Gets the readOnly.
-   * 
+   *
    * @return the readOnly.
    */
   public boolean isReadOnly() {
@@ -60,7 +60,7 @@ public class RHtmlArea extends RTextComponent {
 
   /**
    * Sets the readOnly.
-   * 
+   *
    * @param readOnly
    *          the readOnly to set.
    */
@@ -70,7 +70,7 @@ public class RHtmlArea extends RTextComponent {
 
   /**
    * Gets the verticallyScrollable.
-   * 
+   *
    * @return the verticallyScrollable.
    */
   public boolean isVerticallyScrollable() {
@@ -79,7 +79,7 @@ public class RHtmlArea extends RTextComponent {
 
   /**
    * Sets the verticallyScrollable.
-   * 
+   *
    * @param verticallyScrollable
    *          the verticallyScrollable to set.
    */
@@ -89,7 +89,7 @@ public class RHtmlArea extends RTextComponent {
 
   /**
    * Gets the horizontallyScrollable.
-   * 
+   *
    * @return the horizontallyScrollable.
    */
   public boolean isHorizontallyScrollable() {
@@ -98,7 +98,7 @@ public class RHtmlArea extends RTextComponent {
 
   /**
    * Sets the horizontallyScrollable.
-   * 
+   *
    * @param horizontallyScrollable
    *          the horizontallyScrollable to set.
    */

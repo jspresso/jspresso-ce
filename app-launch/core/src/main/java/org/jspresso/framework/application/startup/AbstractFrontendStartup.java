@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Abstract class for application startup including all layers.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.
@@ -75,7 +75,7 @@ public abstract class AbstractFrontendStartup<E, F, G> extends AbstractStartup {
 
   /**
    * Gets the application frontend controller.
-   * 
+   *
    * @return the application frontend controller.
    */
   protected IFrontendController<E, F, G> getFrontendController() {

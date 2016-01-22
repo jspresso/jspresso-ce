@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,7 +23,7 @@ import org.jspresso.framework.model.descriptor.IHtmlPropertyDescriptor;
 /**
  * Describes a property as handing HTML content. This instructs Jspresso to
  * display the property value as HTML instead of raw text content.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BasicHtmlPropertyDescriptor extends BasicTextPropertyDescriptor

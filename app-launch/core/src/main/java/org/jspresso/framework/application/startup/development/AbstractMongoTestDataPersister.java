@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2014 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -34,7 +34,7 @@ import org.jspresso.framework.model.entity.IEntityFactory;
 
 /**
  * A utility class used to persist some test data.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractMongoTestDataPersister {
@@ -82,7 +82,7 @@ public abstract class AbstractMongoTestDataPersister {
 
   /**
    * Creates a component instance.
-   * 
+   *
    * @param <T>
    *          the actual component type.
    * @param componentContract
@@ -96,7 +96,7 @@ public abstract class AbstractMongoTestDataPersister {
 
   /**
    * Creates an entity instance.
-   * 
+   *
    * @param <T>
    *          the actual entity type.
    * @param entityContract
@@ -109,7 +109,7 @@ public abstract class AbstractMongoTestDataPersister {
 
   /**
    * Persists or update an entity.
-   * 
+   *
    * @param entity
    *          the entity to persist or update.
    */
@@ -136,7 +136,7 @@ public abstract class AbstractMongoTestDataPersister {
 
   /**
    * Gets the backend controller.
-   * 
+   *
    * @return the backend controller.
    */
   protected MongoBackendController getBackendController() {
@@ -146,7 +146,7 @@ public abstract class AbstractMongoTestDataPersister {
 
   /**
    * Gets the entityFactory.
-   * 
+   *
    * @return the entityFactory.
    */
   protected IEntityFactory getEntityFactory() {
@@ -155,7 +155,7 @@ public abstract class AbstractMongoTestDataPersister {
 
   /**
    * Gets the hibernateSession.
-   * 
+   *
    * @return the hibernateSession.
    */
   protected MongoTemplate getMongoTemplate() {

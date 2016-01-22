@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,7 +24,7 @@ import org.jspresso.framework.util.lang.ICloneable;
 
 /**
  * a simple holder for 2D dimension.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class Dimension implements Serializable, ICloneable {
@@ -73,7 +73,7 @@ public class Dimension implements Serializable, ICloneable {
 
   /**
    * Gets the height.
-   * 
+   *
    * @return the height.
    */
   public int getHeight() {
@@ -82,7 +82,7 @@ public class Dimension implements Serializable, ICloneable {
 
   /**
    * Gets the width.
-   * 
+   *
    * @return the width.
    */
   public int getWidth() {
@@ -99,7 +99,7 @@ public class Dimension implements Serializable, ICloneable {
 
   /**
    * Sets the height.
-   * 
+   *
    * @param height
    *          the height to set.
    */
@@ -109,7 +109,7 @@ public class Dimension implements Serializable, ICloneable {
 
   /**
    * Sets the width.
-   * 
+   *
    * @param width
    *          the width to set.
    */

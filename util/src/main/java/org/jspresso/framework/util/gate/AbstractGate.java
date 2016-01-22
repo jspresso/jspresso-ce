@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,7 +23,7 @@ import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
 /**
  * This is the base abstract class of all Jspresso built-in gates. Open/close
  * rule is delegated to concrete implementations.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractGate extends AbstractPropertyChangeCapable

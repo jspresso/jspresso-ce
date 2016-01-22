@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -29,7 +29,7 @@ import org.jspresso.framework.application.model.Workspace;
  * Displays a module, and the corresponding workspace if necessary based on
  * their names. It can be used as startup action to select and display a module
  * when the application launches.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.
@@ -87,7 +87,7 @@ public class ModuleSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Configures the name (untranslated) of the module to be displayed.
-   * 
+   *
    * @param moduleName
    *          the moduleName to set.
    */
@@ -97,7 +97,7 @@ public class ModuleSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Configures the name (untranslated) of the workspace to be displayed.
-   * 
+   *
    * @param workspaceName
    *          the workspaceName to set.
    */
@@ -107,7 +107,7 @@ public class ModuleSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Gets the moduleName.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the moduleName.
@@ -119,7 +119,7 @@ public class ModuleSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Gets the workspaceName.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the workspaceName.

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,7 +24,7 @@ import org.jspresso.framework.state.remote.RemoteValueState;
 
 /**
  * A command to update the children of a remote peer.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteChildrenCommand extends RemoteCommand {
@@ -36,7 +36,7 @@ public class RemoteChildrenCommand extends RemoteCommand {
 
   /**
    * Gets the children.
-   * 
+   *
    * @return the children.
    */
   public List<RemoteValueState> getChildren() {
@@ -45,7 +45,7 @@ public class RemoteChildrenCommand extends RemoteCommand {
 
   /**
    * Sets the children.
-   * 
+   *
    * @param children
    *          the children to set.
    */
@@ -55,7 +55,7 @@ public class RemoteChildrenCommand extends RemoteCommand {
 
   /**
    * Gets the remove.
-   * 
+   *
    * @return the remove.
    */
   public boolean isRemove() {
@@ -64,7 +64,7 @@ public class RemoteChildrenCommand extends RemoteCommand {
 
   /**
    * Sets the remove.
-   * 
+   *
    * @param remove the remove to set.
    */
   public void setRemove(boolean remove) {

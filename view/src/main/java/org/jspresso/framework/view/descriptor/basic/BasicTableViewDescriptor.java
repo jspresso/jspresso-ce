@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -208,7 +208,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
    * There are many other usages of defining column property view descriptors
    * all of them being linked to customizing the table columns without impacting
    * the model.
-   * 
+   *
    * @param columnViewDescriptors
    *          the columnViewDescriptors to set.
    */
@@ -268,7 +268,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
   /**
    * Configures the action to be activated when a sort is triggered by the user.
    * It should be used with caution and rarely be overridden from the default.
-   * 
+   *
    * @param sortingAction
    *          the sortingAction to set.
    */
@@ -278,7 +278,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
 
   /**
    * Gets the renderedProperties.
-   * 
+   *
    * @return the renderedProperties.
    */
   private List<String> getRenderedProperties() {

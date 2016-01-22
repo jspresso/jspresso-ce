@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.util.gate;
 
 /**
  * This is the base abstract implementation for gates that are model-based.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractModelGate extends AbstractGate implements
@@ -71,7 +71,7 @@ public abstract class AbstractModelGate extends AbstractGate implements
 
   /**
    * Sets the collectionBased.
-   * 
+   *
    * @param collectionBased
    *          the collectionBased to set.
    */
@@ -81,7 +81,7 @@ public abstract class AbstractModelGate extends AbstractGate implements
 
   /**
    * Sets the model.
-   * 
+   *
    * @param model
    *          the model to set.
    * @internal
@@ -93,7 +93,7 @@ public abstract class AbstractModelGate extends AbstractGate implements
 
   /**
    * Gets the model.
-   * 
+   *
    * @return the model.
    */
   protected Object getModel() {

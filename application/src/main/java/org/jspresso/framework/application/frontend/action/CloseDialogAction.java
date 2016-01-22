@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -26,7 +26,7 @@ import org.jspresso.framework.action.IActionHandler;
  * This is a very generic action that closes (disposes) the currently opened
  * dialog. The dialog is actually closed between the <i>wrapped</i> action and
  * the <i>next</i> action if and only if the wrapped action succeeds.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.

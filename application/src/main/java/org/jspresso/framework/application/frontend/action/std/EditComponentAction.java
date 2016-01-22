@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -51,7 +51,7 @@ public class EditComponentAction<E, F, G> extends
   /**
    * Configures the action to be installed in the dialog when the user cancels
    * the component edition.
-   * 
+   *
    * @param cancelAction
    *          the cancelAction to set.
    */
@@ -61,7 +61,7 @@ public class EditComponentAction<E, F, G> extends
 
   /**
    * Gets the cancelAction.
-   * 
+   *
    * @return the cancelAction.
    */
   @Override
@@ -71,7 +71,7 @@ public class EditComponentAction<E, F, G> extends
 
   /**
    * Sets the modelConnectorFactory.
-   * 
+   *
    * @param modelConnectorFactory
    *          the modelConnectorFactory to set.
    * @deprecated model connector is now created by the backend controller.
@@ -86,7 +86,7 @@ public class EditComponentAction<E, F, G> extends
   /**
    * Configures the action to be installed in the dialog when the user confirms
    * the component edition.
-   * 
+   *
    * @param okAction
    *          the okAction to set.
    */
@@ -96,7 +96,7 @@ public class EditComponentAction<E, F, G> extends
 
   /**
    * Gets the okAction.
-   * 
+   *
    * @return the okAction.
    */
   @Override
@@ -106,7 +106,7 @@ public class EditComponentAction<E, F, G> extends
 
   /**
    * Gets the model.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the model.

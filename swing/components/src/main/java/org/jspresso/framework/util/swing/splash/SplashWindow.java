@@ -1,11 +1,20 @@
 /*
- * @(#)SplashWindow.java  2.2  2005-04-03
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
- * Copyright (c) 2003-2005 Werner Randelshofer
- * Staldenmattweg 2, Immensee, CH-6405, Switzerland.
- * All rights reserved.
+ *  This file is part of the Jspresso framework.
  *
- * This software is in the public domain.
+ *  Jspresso is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Jspresso is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package org.jspresso.framework.util.swing.splash;
@@ -33,11 +42,11 @@ import org.jspresso.framework.util.swing.SwingUtil;
  * the Splasher class and the SplashWindow class as small as possible. The less
  * code and the less classes must be loaded into the JVM to open the splash
  * screen, the faster it will appear.
- * 
+ *
  * <pre>
- * 
+ *
  * class Splasher {
- * 
+ *
  *   public static void main(String[] args) {
  *     SplashWindow.splash(Startup.class.getResource(&quot;splash.gif&quot;));
  *     MyApplication.main(args);
@@ -45,7 +54,7 @@ import org.jspresso.framework.util.swing.SwingUtil;
  *   }
  * }
  * </pre>
- * 
+ *
  * @author Werner Randelshofer
  * @version 2.1 2005-04-03 Revised.
  */
@@ -71,7 +80,7 @@ public final class SplashWindow extends Window {
    * been drawn at least once by the AWT event dispatcher thread.<br>
    * This attribute acts like a latch. Once set to true, it will never be
    * changed back to false again.
-   * 
+   *
    * @see #paint
    * @see #splash(Image)
    */
@@ -79,7 +88,7 @@ public final class SplashWindow extends Window {
 
   /**
    * Creates a new instance.
-   * 
+   *
    * @param parent
    *          the parent of the window.
    * @param image
@@ -141,7 +150,7 @@ public final class SplashWindow extends Window {
 
   /**
    * Opens a splash window using the specified image.
-   * 
+   *
    * @param image
    *          The splash image.
    */
@@ -177,7 +186,7 @@ public final class SplashWindow extends Window {
 
   /**
    * Opens a splash window using the specified image.
-   * 
+   *
    * @param imageURL
    *          The url of the splash image.
    */

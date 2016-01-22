@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -25,7 +25,7 @@ import org.jspresso.framework.util.remote.RemotePeer;
 
 /**
  * This class is the generic server peer of a client GUI action.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RAction extends RemotePeer {
@@ -63,7 +63,7 @@ public class RAction extends RemotePeer {
 
   /**
    * Triggers the action execution.
-   * 
+   *
    * @param actionEvent
    *          the action event.
    * @param context
@@ -76,7 +76,7 @@ public class RAction extends RemotePeer {
 
   /**
    * Gets the acceleratorAsString.
-   * 
+   *
    * @return the acceleratorAsString.
    */
   public String getAcceleratorAsString() {
@@ -85,7 +85,7 @@ public class RAction extends RemotePeer {
 
   /**
    * Gets the description.
-   * 
+   *
    * @return the description.
    */
   public String getDescription() {
@@ -94,7 +94,7 @@ public class RAction extends RemotePeer {
 
   /**
    * Gets the icon.
-   * 
+   *
    * @return the icon.
    */
   public RIcon getIcon() {
@@ -103,7 +103,7 @@ public class RAction extends RemotePeer {
 
   /**
    * Gets the mnemonicAsString.
-   * 
+   *
    * @return the mnemonicAsString.
    */
   public String getMnemonicAsString() {
@@ -112,7 +112,7 @@ public class RAction extends RemotePeer {
 
   /**
    * Gets the name.
-   * 
+   *
    * @return the name.
    */
   public String getName() {
@@ -121,7 +121,7 @@ public class RAction extends RemotePeer {
 
   /**
    * Gets the enabled.
-   * 
+   *
    * @return the enabled.
    */
   public boolean isEnabled() {
@@ -130,7 +130,7 @@ public class RAction extends RemotePeer {
 
   /**
    * Sets the acceleratorAsString.
-   * 
+   *
    * @param acceleratorAsString
    *          the acceleratorAsString to set.
    */
@@ -140,7 +140,7 @@ public class RAction extends RemotePeer {
 
   /**
    * Sets the description.
-   * 
+   *
    * @param description
    *          the description to set.
    */
@@ -150,7 +150,7 @@ public class RAction extends RemotePeer {
 
   /**
    * Sets the enabled.
-   * 
+   *
    * @param enabled
    *          the enabled to set.
    */
@@ -160,7 +160,7 @@ public class RAction extends RemotePeer {
 
   /**
    * Sets the icon.
-   * 
+   *
    * @param icon
    *          the icon to set.
    */
@@ -170,7 +170,7 @@ public class RAction extends RemotePeer {
 
   /**
    * Sets the mnemonicAsString.
-   * 
+   *
    * @param mnemonicAsString
    *          the mnemonicAsString to set.
    */
@@ -180,7 +180,7 @@ public class RAction extends RemotePeer {
 
   /**
    * Sets the name.
-   * 
+   *
    * @param name
    *          the name to set.
    */
@@ -221,7 +221,7 @@ public class RAction extends RemotePeer {
 
   /**
    * Gets the styleName.
-   * 
+   *
    * @return the styleName.
    */
   public String getStyleName() {
@@ -230,7 +230,7 @@ public class RAction extends RemotePeer {
 
   /**
    * Sets the styleName.
-   * 
+   *
    * @param styleName
    *          the styleName to set.
    */

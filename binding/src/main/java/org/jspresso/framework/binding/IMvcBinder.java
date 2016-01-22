@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -21,14 +21,14 @@ package org.jspresso.framework.binding;
 /**
  * This is the interface which has to be implemented by classes which bind model
  * connectors to view connectors in a MVC relationship.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IMvcBinder {
 
   /**
    * Binds two connectors altogether.
-   * 
+   *
    * @param viewConnector
    *          The connector for the view
    * @param modelConnector

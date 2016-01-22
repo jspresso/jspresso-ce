@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2014 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
 
 /**
  * A command to request back navigation.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteBackCommand extends RemoteCommand {

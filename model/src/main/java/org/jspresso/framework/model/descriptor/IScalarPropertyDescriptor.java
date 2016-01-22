@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.model.descriptor;
 
 /**
  * This interface is the super-interface of all scalar properties descriptors.
- * 
+ *
  * @author Vincent Vandenschrick
  * @see org.jspresso.framework.model.descriptor.IComponentDescriptor
  */
@@ -28,7 +28,7 @@ public interface IScalarPropertyDescriptor extends IPropertyDescriptor {
 
   /**
    * Gets the default initial value of this scalar property.
-   * 
+   *
    * @return the default initial value of this scalar property.
    */
   Object getDefaultValue();

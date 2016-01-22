@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -25,7 +25,7 @@ import org.jspresso.framework.util.collection.ESort;
 
 /**
  * This interface is implemented by descriptors of collection properties.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the concrete collection component element type.
@@ -35,28 +35,28 @@ public interface ICollectionPropertyDescriptor<E> extends
 
   /**
    * Get the list of properties ordering this collection.
-   * 
+   *
    * @return the list of properties ordering this collection.
    */
   Map<String, ESort> getOrderingProperties();
 
   /**
    * Gets the descriptor of the collection referenced by this property.
-   * 
+   *
    * @return the referenced collection descriptor.
    */
   ICollectionDescriptor<E> getReferencedDescriptor();
 
   /**
    * Gets whether this collection property descriptor is a many-to-many end.
-   * 
+   *
    * @return true if this collection property descriptor is a many-to-many end.
    */
   boolean isManyToMany();
 
   /**
    * Triggers all adder post processors.
-   * 
+   *
    * @param component
    *          the component targeted by the adder.
    * @param collection
@@ -73,7 +73,7 @@ public interface ICollectionPropertyDescriptor<E> extends
 
   /**
    * Triggers all remover post processors.
-   * 
+   *
    * @param component
    *          the component targeted by the remover.
    * @param collection
@@ -90,7 +90,7 @@ public interface ICollectionPropertyDescriptor<E> extends
 
   /**
    * Triggers all adder pre processors.
-   * 
+   *
    * @param component
    *          the component targeted by the adder.
    * @param collection
@@ -107,7 +107,7 @@ public interface ICollectionPropertyDescriptor<E> extends
 
   /**
    * Triggers all remover pre processors.
-   * 
+   *
    * @param component
    *          the component targeted by the remover.
    * @param collection

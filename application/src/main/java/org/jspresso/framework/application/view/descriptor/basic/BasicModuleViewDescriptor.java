@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -32,7 +32,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicSimpleTreeLevelDescript
 
 /**
  * This is the default implementation of a simple module view descriptor.
- * 
+ *
  * @author Vincent Vandenschrick
  * @internal
  */
@@ -103,7 +103,7 @@ public class BasicModuleViewDescriptor extends BasicSimpleTreeLevelDescriptor
 
   /**
    * Gets the projectedViewDescriptor.
-   * 
+   *
    * @return the projectedViewDescriptor.
    */
   public IViewDescriptor getProjectedViewDescriptor() {
@@ -112,7 +112,7 @@ public class BasicModuleViewDescriptor extends BasicSimpleTreeLevelDescriptor
 
   /**
    * Sets the description.
-   * 
+   *
    * @param description
    *          the description to set.
    */
@@ -122,7 +122,7 @@ public class BasicModuleViewDescriptor extends BasicSimpleTreeLevelDescriptor
 
   /**
    * Sets the iconImageURL.
-   * 
+   *
    * @param iconImageURL
    *          the iconImageURL to set.
    */
@@ -132,7 +132,7 @@ public class BasicModuleViewDescriptor extends BasicSimpleTreeLevelDescriptor
 
   /**
    * Sets the name.
-   * 
+   *
    * @param name
    *          the name to set.
    */
@@ -142,7 +142,7 @@ public class BasicModuleViewDescriptor extends BasicSimpleTreeLevelDescriptor
 
   /**
    * Sets the projectedViewDescriptor.
-   * 
+   *
    * @param projectedViewDescriptor
    *          the projectedViewDescriptor to set.
    */
@@ -152,7 +152,7 @@ public class BasicModuleViewDescriptor extends BasicSimpleTreeLevelDescriptor
 
   /**
    * Gets the lastUpdated.
-   * 
+   *
    * @return the lastUpdated.
    */
   @Override
@@ -162,7 +162,7 @@ public class BasicModuleViewDescriptor extends BasicSimpleTreeLevelDescriptor
 
   /**
    * Sets the lastUpdated.
-   * 
+   *
    * @param lastUpdated
    *          the lastUpdated to set.
    * @internal

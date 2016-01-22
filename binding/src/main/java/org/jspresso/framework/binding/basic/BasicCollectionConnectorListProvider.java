@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -31,7 +31,7 @@ import org.jspresso.framework.util.event.ItemSelectionEvent;
 /**
  * A composite connector holding a reference on a collection connector to easily
  * play a role in a parent/children relationship.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BasicCollectionConnectorListProvider extends

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -56,7 +56,7 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
   /**
    * Adds a readability gate. Whenever one of the gate is not open, the
    * connector is not readable.
-   * 
+   *
    * @param gate
    *          the new gate to add.
    */
@@ -70,7 +70,7 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
   /**
    * Adds a writability gate. Whenever one of the gate is not open, the
    * connector is not writable.
-   * 
+   *
    * @param gate
    *          the new gate to add.
    */
@@ -103,7 +103,7 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
 
   /**
    * Clones this connector.
-   * 
+   *
    * @return the connector's clone.
    */
   @Override
@@ -111,7 +111,7 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
 
   /**
    * Clones this connector.
-   * 
+   *
    * @param newConnectorId
    *          the identifier of the clone connector
    * @return the connector's clone.
@@ -130,21 +130,21 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
 
   /**
    * Gets the connector this connector is attached to in mvc relationship.
-   * 
+   *
    * @return the model connector.
    */
   IValueConnector getModelConnector();
 
   /**
    * Gets the modelDescriptor.
-   * 
+   *
    * @return the modelDescriptor.
    */
   IModelDescriptor getModelDescriptor();
 
   /**
    * Gets the modelProvider.
-   * 
+   *
    * @return the modelProvider.
    */
   IModelProvider getModelProvider();
@@ -152,21 +152,21 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
   /**
    * Gets the connector this connector is attached to in parent / child
    * relationship.
-   * 
+   *
    * @return the parent connector.
    */
   ICompositeValueConnector getParentConnector();
 
   /**
    * Tests whether the connector is readable.
-   * 
+   *
    * @return true if readable.
    */
   boolean isReadable();
 
   /**
    * Tests whether the connector is writable.
-   * 
+   *
    * @return true if writable.
    */
   boolean isWritable();
@@ -178,7 +178,7 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
 
   /**
    * Removes a readability gate.
-   * 
+   *
    * @param gate
    *          the new gate to remove.
    */
@@ -186,7 +186,7 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
 
   /**
    * Removes a writability gate.
-   * 
+   *
    * @param gate
    *          the new gate to remove.
    */
@@ -194,7 +194,7 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
 
   /**
    * Sets a new value on the connectee and fire value change.
-   * 
+   *
    * @param aValue
    *          The value to set on the peer
    */
@@ -202,7 +202,7 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
 
   /**
    * Sets the exceptionHandler.
-   * 
+   *
    * @param exceptionHandler
    *          the exceptionHandler to set.
    */
@@ -213,7 +213,7 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
    * that the readability status of the connector will actually be changed. It
    * may have some other rules or accessibility interceptors that prevent this
    * to happen.
-   * 
+   *
    * @param locallyReadable
    *          true if readable.
    */
@@ -224,7 +224,7 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
    * that the writability status of the connector will actually be changed. It
    * may have some other rules or accessibility interceptors that prevent this
    * to happen.
-   * 
+   *
    * @param locallyWritable
    *          true if writable.
    */
@@ -232,7 +232,7 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
 
   /**
    * Sets the connector this connector is attached to in mvc relationship.
-   * 
+   *
    * @param modelConnector
    *          the model connector.
    */
@@ -240,7 +240,7 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
 
   /**
    * Sets the modelDescriptor.
-   * 
+   *
    * @param modelDescriptor
    *          the modelDescriptor.
    */
@@ -249,7 +249,7 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
   /**
    * Sets the connector this connector is attached to in parent / child
    * relationship.
-   * 
+   *
    * @param parent
    *          the parent connector.
    */

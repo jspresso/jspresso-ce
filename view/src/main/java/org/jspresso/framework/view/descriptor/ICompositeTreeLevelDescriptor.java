@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,14 +24,14 @@ import java.util.List;
  * This interface is implemented by descriptors of composite tree levels.
  * composite tree levels are tree levels where children are organised into sub
  * groups.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface ICompositeTreeLevelDescriptor extends ITreeLevelDescriptor {
 
   /**
    * Gets the subtree descriptor from its name.
-   * 
+   *
    * @param name
    *          the name of the child tree level descriptor.
    * @return the subtree descriptor.
@@ -40,7 +40,7 @@ public interface ICompositeTreeLevelDescriptor extends ITreeLevelDescriptor {
 
   /**
    * Gets the subtree descriptors.
-   * 
+   *
    * @return the subtree descriptors.
    */
   List<ITreeLevelDescriptor> getChildrenDescriptors();

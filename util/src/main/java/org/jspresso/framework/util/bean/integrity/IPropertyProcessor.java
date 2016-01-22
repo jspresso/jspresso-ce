@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -21,7 +21,7 @@ package org.jspresso.framework.util.bean.integrity;
 /**
  * This is an interface used to identify classes responsible for providing
  * component property integrity processors.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          The type of the target.
@@ -35,7 +35,7 @@ public interface IPropertyProcessor<E, F> {
    * This method gets called whenever a property has been set on an component to
    * which this processor is registered. This method may change the actual value
    * set to the bean.
-   * 
+   *
    * @param target
    *          the component the processor is ran on.
    * @param newPropertyValue
@@ -48,7 +48,7 @@ public interface IPropertyProcessor<E, F> {
   /**
    * This method gets called whenever a property has been set on an component to
    * which this processor is registered.
-   * 
+   *
    * @param target
    *          the component the processor is ran on.
    * @param oldPropertyValue

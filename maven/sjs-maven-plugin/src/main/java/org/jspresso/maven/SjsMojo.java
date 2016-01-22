@@ -1,7 +1,5 @@
-package org.jspresso.maven;
-
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -18,6 +16,7 @@ package org.jspresso.maven;
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
+package org.jspresso.maven;
 
 import java.io.File;
 import java.io.IOException;

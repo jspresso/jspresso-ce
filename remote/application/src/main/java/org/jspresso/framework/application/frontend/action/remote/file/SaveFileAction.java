@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -79,7 +79,7 @@ public class SaveFileAction extends ChooseFileAction {
 
   /**
    * Gets the contentType.
-   * 
+   *
    * @return the contentType.
    */
   public String getContentType() {
@@ -126,7 +126,7 @@ public class SaveFileAction extends ChooseFileAction {
 
   /**
    * Gets the file save callback.
-   * 
+   *
    * @param context the action context.
    * @return the file save callback.
    */
@@ -137,7 +137,7 @@ public class SaveFileAction extends ChooseFileAction {
   /**
    * Computes a file name to save the file. Queries the file save callback for a
    * file name and defaults to the action default one if none is returned.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the file name to save the file under.
@@ -176,7 +176,7 @@ public class SaveFileAction extends ChooseFileAction {
 
     /**
      * Gets the name.
-     * 
+     *
      * @return the name.
      */
     @Override

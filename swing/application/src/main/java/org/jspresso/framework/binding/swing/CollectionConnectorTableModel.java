@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -42,7 +42,7 @@ import org.jspresso.framework.util.swing.SwingUtil;
  * expected, this table model will fire necessary events depending on connectors
  * received events. Its column are determined by the prototype connector which
  * serves as model for the table rows.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class CollectionConnectorTableModel extends AbstractTableModel {
@@ -175,7 +175,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   /**
    * Sets the exceptionHandler.
-   * 
+   *
    * @param exceptionHandler
    *          the exceptionHandler to set.
    */
@@ -232,7 +232,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   /**
    * Gets the value connector backing the table cell.
-   * 
+   *
    * @param rowIndex
    *          the row index of the cell.
    * @param columnIndex
@@ -312,7 +312,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   /**
    * Gets the value to display as row toolTip.
-   * 
+   *
    * @param rowIndex
    *          the row index to compute the toolTip for.
    * @return the row toolTip or null.
@@ -323,7 +323,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   /**
    * Gets the value to display as cell toolTip.
-   * 
+   *
    * @param rowIndex
    *          the row index to compute the toolTip for.
    * @param toolTipProperty
@@ -342,7 +342,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   /**
    * Gets the value to display as cell background.
-   * 
+   *
    * @param rowIndex
    *          the row index to compute the background for.
    * @param backgroundProperty
@@ -361,7 +361,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   /**
    * Gets the value to display as cell foreground.
-   * 
+   *
    * @param rowIndex
    *          the row index to compute the foreground for.
    * @param foregroundProperty
@@ -380,7 +380,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   /**
    * Gets the value to display as cell font.
-   * 
+   *
    * @param rowIndex
    *          the row index to compute the font for.
    * @param fontProperty
@@ -398,7 +398,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   /**
    * Gets the value to display as row background.
-   * 
+   *
    * @param rowIndex
    *          the row index to compute the background for.
    * @return the row background or null.
@@ -418,7 +418,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   /**
    * Gets the value to display as row foreground.
-   * 
+   *
    * @param rowIndex
    *          the row index to compute the foreground for.
    * @return the row foreground or null.
@@ -438,7 +438,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   /**
    * Gets the value to display as row font.
-   * 
+   *
    * @param rowIndex
    *          the row index to compute the font for.
    * @return the row font or null.
@@ -502,7 +502,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   /**
    * Gets the rowBackgroundProperty.
-   * 
+   *
    * @return the rowBackgroundProperty.
    */
   protected String getRowBackgroundProperty() {
@@ -511,7 +511,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   /**
    * Sets the rowBackgroundProperty.
-   * 
+   *
    * @param rowBackgroundProperty
    *          the rowBackgroundProperty to set.
    */
@@ -521,7 +521,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   /**
    * Gets the rowForegroundProperty.
-   * 
+   *
    * @return the rowForegroundProperty.
    */
   protected String getRowForegroundProperty() {
@@ -530,7 +530,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   /**
    * Sets the rowForegroundProperty.
-   * 
+   *
    * @param rowForegroundProperty
    *          the rowForegroundProperty to set.
    */
@@ -540,7 +540,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   /**
    * Gets the rowFontProperty.
-   * 
+   *
    * @return the rowFontProperty.
    */
   protected String getRowFontProperty() {
@@ -549,7 +549,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   /**
    * Sets the rowFontProperty.
-   * 
+   *
    * @param rowFontProperty
    *          the rowFontProperty to set.
    */

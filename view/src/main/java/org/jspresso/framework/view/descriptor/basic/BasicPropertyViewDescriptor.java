@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -46,7 +46,7 @@ import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
  * to interact directly with the FS (save content to a file, load content from a
  * file, ...). In that case, defining a property view alone on the text property
  * of the owning component might be a good solution.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
@@ -226,7 +226,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * Gets the action.
-   * 
+   *
    * @return the action.
    */
   @Override
@@ -246,7 +246,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * action is executed <i>after</i> the model has been updated. However the old
    * property value can be retrieved from the context action param.</li>
    * </ol>
-   * 
+   *
    * @param action
    *          the action to set.
    */
@@ -301,7 +301,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * Gets the sortability.
-   * 
+   *
    * @return the sortable.
    */
   @Override

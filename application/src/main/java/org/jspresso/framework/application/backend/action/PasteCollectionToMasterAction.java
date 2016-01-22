@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -37,7 +37,7 @@ import org.jspresso.framework.model.entity.IEntityCloneFactory;
  * them when executed using the configured entity clone factory. Whenever the
  * components have been previously <i>cut</i>, the paste action will simply use
  * the exact same instances as the one placed on the clipboard.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class PasteCollectionToMasterAction extends
@@ -48,7 +48,7 @@ public class PasteCollectionToMasterAction extends
   /**
    * Configures the entity clone factory to use when the paste action is
    * triggered after a copy.
-   * 
+   *
    * @param entityCloneFactory
    *          the entityCloneFactory to set.
    */
@@ -58,7 +58,7 @@ public class PasteCollectionToMasterAction extends
 
   /**
    * Gets the buffered entities from the backend controller.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the entities to add to the collection.

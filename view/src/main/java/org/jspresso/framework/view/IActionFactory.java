@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -28,7 +28,7 @@ import org.jspresso.framework.util.gui.Dimension;
 
 /**
  * A factory for actions.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual action class created.
@@ -45,7 +45,7 @@ public interface IActionFactory<E, F> {
 
   /**
    * Creates an action from its descriptor.
-   * 
+   *
    * @param action
    *          the action descriptor.
    * @param dimension
@@ -63,7 +63,7 @@ public interface IActionFactory<E, F> {
 
   /**
    * Creates an action from its descriptor.
-   * 
+   *
    * @param action
    *          the action descriptor.
    * @param actionHandler
@@ -79,7 +79,7 @@ public interface IActionFactory<E, F> {
 
   /**
    * Creates the initial action context.
-   * 
+   *
    * @param actionHandler
    *          the action handler.
    * @param view
@@ -98,7 +98,7 @@ public interface IActionFactory<E, F> {
 
   /**
    * Enabled or disables an action.
-   * 
+   *
    * @param action
    *          the action to work on.
    * @param enabled
@@ -108,7 +108,7 @@ public interface IActionFactory<E, F> {
 
   /**
    * Sets an action name.
-   * 
+   *
    * @param action
    *          the action to work on.
    * @param name

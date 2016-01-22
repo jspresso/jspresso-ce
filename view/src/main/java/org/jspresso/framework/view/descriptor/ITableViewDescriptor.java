@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -26,14 +26,14 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * This public interface is implemented by tabular view descriptors. For
  * instance, the described view can be a swing JTable presenting a collection of
  * java beans.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface ITableViewDescriptor extends ICollectionViewDescriptor {
 
   /**
    * Gets the column view descriptors.
-   * 
+   *
    * @return the column view descriptors.
    */
   List<IPropertyViewDescriptor> getColumnViewDescriptors();
@@ -41,7 +41,7 @@ public interface ITableViewDescriptor extends ICollectionViewDescriptor {
   /**
    * Gets the action triggered when sorting is triggered by the used (if
    * supported by the UI).
-   * 
+   *
    * @return the action triggered when sorting is triggered by the used (if
    *         supported by the UI).
    */
@@ -49,7 +49,7 @@ public interface ITableViewDescriptor extends ICollectionViewDescriptor {
 
   /**
    * Gets whether this table rows should be sorted manually.
-   * 
+   *
    * @return whether this table rows should be sorted manually.
    */
   boolean isSortable();

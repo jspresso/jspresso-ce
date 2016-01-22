@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -28,7 +28,7 @@ import org.jspresso.framework.util.bean.PropertyHelper;
 /**
  * This class is the default implementation of bean property accessors. It
  * relies on Jakarta commons beanutils.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BeanPropertyAccessor extends AbstractPropertyAccessor {
@@ -38,7 +38,7 @@ public class BeanPropertyAccessor extends AbstractPropertyAccessor {
 
   /**
    * Constructs a property accessor based on reflection.
-   * 
+   *
    * @param property
    *          the property accessed.
    * @param beanClass
@@ -62,7 +62,7 @@ public class BeanPropertyAccessor extends AbstractPropertyAccessor {
 
   /**
    * Gets the writable.
-   * 
+   *
    * @return the writable.
    */
   @Override
@@ -72,7 +72,7 @@ public class BeanPropertyAccessor extends AbstractPropertyAccessor {
 
   /**
    * Gets the beanClass property.
-   * 
+   *
    * @return the beanClass.
    */
   protected Class<?> getBeanClass() {

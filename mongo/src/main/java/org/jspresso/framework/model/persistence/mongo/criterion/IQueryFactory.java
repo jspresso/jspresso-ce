@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2014 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -26,7 +26,7 @@ import org.jspresso.framework.model.component.IQueryComponent;
 
 /**
  * A factory used to create a query based on a query component.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("UnusedParameters")
@@ -34,7 +34,7 @@ public interface IQueryFactory {
 
   /**
    * Takes a query and applies ordering specs to it.
-   * 
+   *
    * @param query
    *          the enhanced detached query to apply ordering for.
    * @param queryComponent
@@ -48,7 +48,7 @@ public interface IQueryFactory {
    * Creates an Mongo query by traversing a query component.
    * Whenever the query component is not valid (references a transient entity
    * for instance), the method should return null.
-   * 
+   *
    * @param queryComponent
    *          the query component to traverse.
    * @param context

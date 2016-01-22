@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -84,7 +84,7 @@ public class OpenFileAction extends ChooseFileAction {
 
   /**
    * Gets the file save callback.
-   * 
+   *
    * @param context the action context.
    * @return the file save callback.
    */
@@ -94,7 +94,7 @@ public class OpenFileAction extends ChooseFileAction {
 
   /**
    * Gets the fileCancelCallbackAction.
-   * 
+   *
    * @param context the action context.
    * @return the fileCancelCallbackAction.
    */

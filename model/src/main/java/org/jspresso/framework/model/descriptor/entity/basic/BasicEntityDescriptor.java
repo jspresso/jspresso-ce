@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -105,7 +105,7 @@ public class BasicEntityDescriptor<E extends IEntity> extends
 
   /**
    * Gets whether this entity is purely abstract.
-   * 
+   *
    * @return whether this entity is purely abstract.
    */
   @Override
@@ -128,7 +128,7 @@ public class BasicEntityDescriptor<E extends IEntity> extends
    * An abstract entity descriptor differs from an interface descriptor mainly
    * because of its concrete representation in the data store as formerly
    * described.
-   * 
+   *
    * @param purelyAbstract
    *          Whether this entity is purely abstract.
    */
@@ -140,7 +140,7 @@ public class BasicEntityDescriptor<E extends IEntity> extends
    * Configures the root entity descriptor to use globally for the application.
    * Jspresso will ensure that all entity descriptors have this root descriptor
    * as ancestor.
-   * 
+   *
    * @param rootEntityDescriptor
    *          the root entity descriptor to use globally for the application.
    */
@@ -151,7 +151,7 @@ public class BasicEntityDescriptor<E extends IEntity> extends
 
   /**
    * Gets the entityDescriptor.
-   * 
+   *
    * @return the entityDescriptor.
    */
   public static synchronized IComponentDescriptor<IEntity> getRootEntityDescriptor() {

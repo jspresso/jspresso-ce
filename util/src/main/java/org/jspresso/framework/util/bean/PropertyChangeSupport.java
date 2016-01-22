@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2014 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -36,7 +36,7 @@ import gnu.trove.map.hash.THashMap;
  * This class is serializable. When it is serialized it will save (and restore)
  * any listeners that are themselves serializable. Any non-serializable
  * listeners will be skipped during serialization.
- * 
+ *
  * @author <a href="mailto:haaf@mercatis.de">Holger Engels</a>
  */
 public class PropertyChangeSupport implements Serializable {
@@ -305,7 +305,7 @@ public class PropertyChangeSupport implements Serializable {
 
   /**
    * Check if there are any listeners for a specific property.
-   * 
+   *
    * @param propertyName
    *          the property name.
    * @return true if there are ore or more listeners for the given property

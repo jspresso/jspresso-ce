@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -21,14 +21,14 @@ package org.jspresso.framework.util.gui;
 /**
  * This interface is implemented by classes which provide a mapping between two
  * sets of indices (identified as model and view index sets).
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IIndexMapper {
 
   /**
    * View to model index translation.
-   * 
+   *
    * @param viewIndex
    *          the view index to translate.
    * @return the resulting model index.
@@ -37,7 +37,7 @@ public interface IIndexMapper {
 
   /**
    * Model to view index translation.
-   * 
+   *
    * @param modelIndex
    *          the model index to translate.
    * @return the resulting view index.

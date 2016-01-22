@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,7 +24,7 @@ import org.jspresso.framework.util.http.HttpRequestHolder;
 
 /**
  * Holds the current thread backend controller.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public final class BackendControllerHolder {
@@ -84,7 +84,7 @@ public final class BackendControllerHolder {
   /**
    * Gets the backend controller belonging to this thread without getting the
    * parent thread value.
-   * 
+   *
    * @return the backend controller belonging to this thread without getting the
    *         parent thread value.
    */
@@ -94,7 +94,7 @@ public final class BackendControllerHolder {
 
   /**
    * Gets the tread-bound backend controller.
-   * 
+   *
    * @return the tread-bound backend controller.
    */
   public static IBackendController getCurrentBackendController() {

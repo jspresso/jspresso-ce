@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -26,7 +26,7 @@ import org.apache.commons.codec.binary.Hex;
 
 /**
  * Wrapper class around a byte array.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public final class ByteArray implements Serializable, Comparable<ByteArray> {
@@ -84,7 +84,7 @@ public final class ByteArray implements Serializable, Comparable<ByteArray> {
 
   /**
    * Returns a cloned array.
-   * 
+   *
    * @return a cloned byte array.
    */
   public byte[] getBytes() {

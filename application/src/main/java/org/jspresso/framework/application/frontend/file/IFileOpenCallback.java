@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -25,14 +25,14 @@ import org.jspresso.framework.action.IActionHandler;
 
 /**
  * This interface is used react to file open.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IFileOpenCallback extends IFileCallback {
 
   /**
    * Called whenever a file is opened.
-   * 
+   *
    * @param name
    *          the file name.
    * @param in

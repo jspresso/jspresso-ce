@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,14 +24,14 @@ import org.jspresso.framework.util.gui.CellConstraints;
  * A grid view descriptor which organises its components in constrained cells.
  * This kind of described container view might typically be implemented by a
  * swing JPanel with a GridBagLayout.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IConstrainedGridViewDescriptor extends IGridViewDescriptor {
 
   /**
    * Gets the constraint applied to a contained view descriptor.
-   * 
+   *
    * @param viewDescriptor
    *          the contained view descriptor.
    * @return the constraints applied to the contained view or null if none.

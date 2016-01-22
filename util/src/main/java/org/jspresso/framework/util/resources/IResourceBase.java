@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,28 +22,28 @@ import java.io.IOException;
 
 /**
  * This interface is implemented by web resources.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IResourceBase {
 
   /**
    * Gets the resource mime type.
-   * 
+   *
    * @return the resource mime type.
    */
   String getMimeType();
 
   /**
    * Gets the name of the resource or null.
-   * 
+   *
    * @return the name of the resource.
    */
   String getName();
 
   /**
    * Gets the resource length.
-   * 
+   *
    * @return the resource length.
    * @throws IOException
    *           whenever an IO exception occurs.

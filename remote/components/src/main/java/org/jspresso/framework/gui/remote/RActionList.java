@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import org.jspresso.framework.util.remote.RemotePeer;
 
 /**
  * This class is the generic server peer of a client GUI action list.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RActionList extends RemotePeer {
@@ -55,7 +55,7 @@ public class RActionList extends RemotePeer {
 
   /**
    * Gets the actions.
-   * 
+   *
    * @return the actions.
    */
   public RAction[] getActions() {
@@ -64,7 +64,7 @@ public class RActionList extends RemotePeer {
 
   /**
    * Gets the description.
-   * 
+   *
    * @return the description.
    */
   public String getDescription() {
@@ -73,7 +73,7 @@ public class RActionList extends RemotePeer {
 
   /**
    * Gets the icon.
-   * 
+   *
    * @return the icon.
    */
   public RIcon getIcon() {
@@ -82,7 +82,7 @@ public class RActionList extends RemotePeer {
 
   /**
    * Gets the name.
-   * 
+   *
    * @return the name.
    */
   public String getName() {
@@ -91,7 +91,7 @@ public class RActionList extends RemotePeer {
 
   /**
    * Sets the actions.
-   * 
+   *
    * @param actions
    *          the actions to set.
    */
@@ -101,7 +101,7 @@ public class RActionList extends RemotePeer {
 
   /**
    * Sets the description.
-   * 
+   *
    * @param description
    *          the description to set.
    */
@@ -111,7 +111,7 @@ public class RActionList extends RemotePeer {
 
   /**
    * Sets the icon.
-   * 
+   *
    * @param icon
    *          the icon to set.
    */
@@ -121,7 +121,7 @@ public class RActionList extends RemotePeer {
 
   /**
    * Sets the name.
-   * 
+   *
    * @param name
    *          the name to set.
    */
@@ -131,7 +131,7 @@ public class RActionList extends RemotePeer {
 
   /**
    * Gets the collapsable.
-   * 
+   *
    * @return the collapsable.
    */
   public boolean isCollapsable() {
@@ -140,7 +140,7 @@ public class RActionList extends RemotePeer {
 
   /**
    * Sets the collapsable.
-   * 
+   *
    * @param collapsable
    *          the collapsable to set.
    */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -32,7 +32,7 @@ public interface IModelProvider {
 
   /**
    * Adds a new bean listener to this model provider.
-   * 
+   *
    * @param listener
    *          The added listener
    */
@@ -49,14 +49,14 @@ public interface IModelProvider {
 
   /**
    * Gets the bean object of this provider.
-   * 
+   *
    * @return The bean object
    */
   IComponentDescriptorProvider<?> getModelDescriptor();
 
   /**
    * Removes a bean listener from this model provider.
-   * 
+   *
    * @param listener
    *          The added listener
    */

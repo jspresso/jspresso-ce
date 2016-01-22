@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -32,7 +32,7 @@ import org.jspresso.framework.application.model.Module;
  * a collection module is marked dirty if and only if one of its module objects
  * is an entity which is dirty. On the other hand, a bean module is marked dirty
  * if and only if its (single) module object is an entity and is dirty.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.
@@ -67,7 +67,7 @@ public abstract class AbstractModuleDirtyStateAction<E, F, G> extends
 
   /**
    * Gets the collection of modules to check the dirty state for.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the collection of modules to check the dirty state for.

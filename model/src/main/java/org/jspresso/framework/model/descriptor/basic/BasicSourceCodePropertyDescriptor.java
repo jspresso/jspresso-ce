@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -57,7 +57,7 @@ public class BasicSourceCodePropertyDescriptor extends
    * Explicitly sets the language this sourcecode property should contain. This
    * is only a hint fo Jspresso to configure the UI components accordingly to
    * interact with this property.
-   * 
+   *
    * @param language
    *          the language to set.
    */

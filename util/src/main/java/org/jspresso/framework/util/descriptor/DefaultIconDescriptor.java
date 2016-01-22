@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,7 +23,7 @@ import org.jspresso.framework.util.gui.Icon;
 /**
  * This is a utility class from which most displayable descriptors inherit for
  * factorization purpose. It provides an icon image URL.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class DefaultIconDescriptor extends DefaultDescriptor implements
@@ -45,7 +45,7 @@ public class DefaultIconDescriptor extends DefaultDescriptor implements
 
   /**
    * Gets the iconImageURL.
-   * 
+   *
    * @return the iconImageURL.
    */
   @Override
@@ -61,7 +61,7 @@ public class DefaultIconDescriptor extends DefaultDescriptor implements
    * <li>the <b>jar:/</b> pseudo URL protocol</li>
    * <li>the <b>classpath:/</b> pseudo URL protocol</li>
    * </ul>
-   * 
+   *
    * @param iconImageURL
    *          the iconImageURL to set.
    */
@@ -74,7 +74,7 @@ public class DefaultIconDescriptor extends DefaultDescriptor implements
 
   /**
    * Sets the icon preferred width.
-   * 
+   *
    * @param iconPreferredWidth
    *          the iconPreferredWidth to set.
    */
@@ -87,7 +87,7 @@ public class DefaultIconDescriptor extends DefaultDescriptor implements
 
   /**
    * Sets the icon preferred height.
-   * 
+   *
    * @param iconPreferredHeight
    *          the iconPreferredHeight to set.
    */
@@ -100,7 +100,7 @@ public class DefaultIconDescriptor extends DefaultDescriptor implements
 
   /**
    * Sets the icon.
-   * 
+   *
    * @param icon
    *          the icon to set.
    */

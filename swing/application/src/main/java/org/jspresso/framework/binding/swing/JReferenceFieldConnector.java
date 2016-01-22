@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -30,7 +30,7 @@ import org.jspresso.framework.util.gui.Icon;
 
 /**
  * JReferenceFieldConnector connector.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class JReferenceFieldConnector extends JActionFieldConnector implements
@@ -55,7 +55,7 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
   /**
    * Adds a new child connector to this composite. The key used as storage key
    * is the child connector id.
-   * 
+   *
    * @param childConnector
    *          the added connector.
    */
@@ -194,7 +194,7 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
 
   /**
    * Sets the renderingConnector.
-   * 
+   *
    * @param renderingConnector
    *          the renderingConnector to set.
    */

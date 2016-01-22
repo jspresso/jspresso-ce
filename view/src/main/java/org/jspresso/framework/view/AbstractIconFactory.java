@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -26,7 +26,7 @@ import org.jspresso.framework.util.gui.Icon;
 
 /**
  * A factory for icons.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual icon class created.
@@ -71,7 +71,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Gets the backwardIconImageURL.
-   * 
+   *
    * @return the backwardIconImageURL.
    */
   @Override
@@ -89,7 +89,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Gets the cancelIconImageURL.
-   * 
+   *
    * @return the cancelIconImageURL.
    */
   @Override
@@ -107,7 +107,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Gets the downIconImageURL.
-   * 
+   *
    * @return the downIconImageURL.
    */
   @Override
@@ -125,7 +125,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Gets the errorIconImageURL.
-   * 
+   *
    * @return the errorIconImageURL.
    */
   @Override
@@ -143,7 +143,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Gets the forbiddenIconImageURL.
-   * 
+   *
    * @return the forbiddenIconImageURL.
    */
   @Override
@@ -161,7 +161,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Gets the forwardIconImageURL.
-   * 
+   *
    * @return the forwardIconImageURL.
    */
   @Override
@@ -212,7 +212,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Gets the infoIconImageURL.
-   * 
+   *
    * @return the infoIconImageURL.
    */
   @Override
@@ -222,7 +222,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Gets the largeIconSize.
-   * 
+   *
    * @return the largeIconSize.
    */
   @Override
@@ -235,7 +235,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Gets the mediumIconSize.
-   * 
+   *
    * @return the mediumIconSize.
    */
   @Override
@@ -256,7 +256,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Gets the noIconImageURL.
-   * 
+   *
    * @return the noIconImageURL.
    */
   @Override
@@ -274,7 +274,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Gets the okYesIconImageURL.
-   * 
+   *
    * @return the okYesIconImageURL.
    */
   @Override
@@ -292,7 +292,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Gets the questionIconImageURL.
-   * 
+   *
    * @return the questionIconImageURL.
    */
   @Override
@@ -302,7 +302,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Gets the smallIconSize.
-   * 
+   *
    * @return the smallIconSize.
    */
   @Override
@@ -315,7 +315,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Gets the tinyIconSize.
-   * 
+   *
    * @return the tinyIconSize.
    */
   @Override
@@ -336,7 +336,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Gets the upIconImageURL.
-   * 
+   *
    * @return the upIconImageURL.
    */
   @Override
@@ -354,7 +354,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Gets the warningIconImageURL.
-   * 
+   *
    * @return the warningIconImageURL.
    */
   @Override
@@ -364,7 +364,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the backwardIconImageURL.
-   * 
+   *
    * @param backwardIconImageURL
    *          the backwardIconImageURL to set.
    */
@@ -374,7 +374,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the cancelIconImageURL.
-   * 
+   *
    * @param cancelIconImageURL
    *          the cancelIconImageURL to set.
    */
@@ -384,7 +384,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the downIconImageURL.
-   * 
+   *
    * @param downIconImageURL
    *          the downIconImageURL to set.
    */
@@ -394,7 +394,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the errorIconImageURL.
-   * 
+   *
    * @param errorIconImageURL
    *          the errorIconImageURL to set.
    */
@@ -404,7 +404,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the forbiddenIconImageURL.
-   * 
+   *
    * @param forbiddenIconImageURL
    *          the forbiddenIconImageURL to set.
    */
@@ -414,7 +414,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the forwardIconImageURL.
-   * 
+   *
    * @param forwardIconImageURL
    *          the forwardIconImageURL to set.
    */
@@ -424,7 +424,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the infoIconImageURL.
-   * 
+   *
    * @param infoIconImageURL
    *          the infoIconImageURL to set.
    */
@@ -434,7 +434,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the largeIconSize.
-   * 
+   *
    * @param largeIconSize
    *          the largeIconSize to set.
    */
@@ -444,7 +444,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the mediumIconSize.
-   * 
+   *
    * @param mediumIconSize
    *          the mediumIconSize to set.
    */
@@ -454,7 +454,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the noIconImageURL.
-   * 
+   *
    * @param noIconImageURL
    *          the noIconImageURL to set.
    */
@@ -464,7 +464,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the okYesIconImageURL.
-   * 
+   *
    * @param okYesIconImageURL
    *          the okYesIconImageURL to set.
    */
@@ -474,7 +474,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the questionIconImageURL.
-   * 
+   *
    * @param questionIconImageURL
    *          the questionIconImageURL to set.
    */
@@ -484,7 +484,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the smallIconSize.
-   * 
+   *
    * @param smallIconSize
    *          the smallIconSize to set.
    */
@@ -494,7 +494,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the tinyIconSize.
-   * 
+   *
    * @param tinyIconSize
    *          the tinyIconSize to set.
    */
@@ -504,7 +504,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the upIconImageURL.
-   * 
+   *
    * @param upIconImageURL
    *          the upIconImageURL to set.
    */
@@ -514,7 +514,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the warningIconImageURL.
-   * 
+   *
    * @param warningIconImageURL
    *          the warningIconImageURL to set.
    */
@@ -524,7 +524,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Creates a swing icon from an image url.
-   * 
+   *
    * @param urlSpec
    *          the url of the image to be used on the icon.
    * @param iconSize
@@ -536,7 +536,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Gets the iconSet.
-   * 
+   *
    * @return the iconSet.
    */
   @Override
@@ -546,7 +546,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the iconSet.
-   * 
+   *
    * @param iconSet
    *          the iconSet to set.
    */

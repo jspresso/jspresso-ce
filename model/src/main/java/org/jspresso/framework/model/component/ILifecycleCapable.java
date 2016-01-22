@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,7 +24,7 @@ import org.jspresso.framework.security.UserPrincipal;
 
 /**
  * Defines the component lifecycle hooks.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface ILifecycleCapable {
@@ -61,7 +61,7 @@ public interface ILifecycleCapable {
 
   /**
    * Called when an component is created (still transient).
-   * 
+   *
    * @param entityFactory
    *          an entity factory instance which can be used to complete the
    *          lifecycle step.
@@ -76,7 +76,7 @@ public interface ILifecycleCapable {
 
   /**
    * Called just before an component is deleted (delete).
-   * 
+   *
    * @param entityFactory
    *          an entity factory instance which can be used to complete the
    *          lifecycle step.
@@ -102,7 +102,7 @@ public interface ILifecycleCapable {
    * state is fully initialized when this method is called. The onClone callback
    * may be used to perform some extra technical initializations like
    * registering some listeners or initializing some non persistent properties.
-   * 
+   *
    * @param <E>
    *          tha actual component type.
    * @param sourceComponent
@@ -112,7 +112,7 @@ public interface ILifecycleCapable {
 
   /**
    * Called just before an component is persisted (insert).
-   * 
+   *
    * @param entityFactory
    *          an entity factory instance which can be used to complete the
    *          lifecycle step.
@@ -127,7 +127,7 @@ public interface ILifecycleCapable {
 
   /**
    * Called just before an component is updated (update).
-   * 
+   *
    * @param entityFactory
    *          an entity factory instance which can be used to complete the
    *          lifecycle step.

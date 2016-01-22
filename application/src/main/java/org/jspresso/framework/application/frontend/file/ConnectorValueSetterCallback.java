@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -30,7 +30,7 @@ import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 /**
  * Default handler implementation to deal with setting binary properties using
  * files.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class ConnectorValueSetterCallback extends FileToByteArrayCallback {

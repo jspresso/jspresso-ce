@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -68,7 +68,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
   /**
    * Implements the getter strategy on the entity proxy implementation to be
    * used by hibernate.
-   * 
+   *
      * @author Vincent Vandenschrick
    */
   private static final class EntityPropertyGetter implements Getter {
@@ -156,7 +156,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
   /**
    * Implements the setter strategy on the entity proxy implementation to be
    * used by hibernate.
-   * 
+   *
      * @author Vincent Vandenschrick
    */
   private static final class EntityPropertySetter implements Setter {

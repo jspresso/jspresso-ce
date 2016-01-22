@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -25,7 +25,7 @@ import org.jspresso.framework.util.gui.Dimension;
 /**
  * A property view descriptor used to refine (filter) values that are displayed
  * in enumeration property views.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IEnumerationPropertyViewDescriptor extends
@@ -35,7 +35,7 @@ public interface IEnumerationPropertyViewDescriptor extends
    * Returns an optional allowed set of values to restrict the model ones. Only
    * values belonging to the allowed ones should actually be made available as a
    * choice.
-   * 
+   *
    * @return an optional allowed set of values to restrict the model ones.
    */
   Set<String> getAllowedValues();
@@ -44,7 +44,7 @@ public interface IEnumerationPropertyViewDescriptor extends
    * Returns an optional forbidden set of values to restrict the model ones.
    * Only values not belonging to the forbidden ones should actually be made
    * available as a choice.
-   * 
+   *
    * @return an optional forbidden set of values to restrict the model ones.
    */
   Set<String> getForbiddenValues();

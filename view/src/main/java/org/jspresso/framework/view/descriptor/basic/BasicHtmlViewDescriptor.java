@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,7 +24,7 @@ import org.jspresso.framework.view.descriptor.IHtmlViewDescriptor;
  * This type of view descriptor is used to display a a string property
  * containing HTML text. The objective is to be able to configure scrollability
  * of the HTML component.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BasicHtmlViewDescriptor extends BasicPropertyViewDescriptor
@@ -43,7 +43,7 @@ public class BasicHtmlViewDescriptor extends BasicPropertyViewDescriptor
 
   /**
    * Gets the scrollable.
-   * 
+   *
    * @return the scrollable.
    */
   @Override
@@ -53,7 +53,7 @@ public class BasicHtmlViewDescriptor extends BasicPropertyViewDescriptor
 
   /**
    * Gets the verticallyScrollable.
-   * 
+   *
    * @return the verticallyScrollable.
    */
   @Override
@@ -64,7 +64,7 @@ public class BasicHtmlViewDescriptor extends BasicPropertyViewDescriptor
   /**
    * Configures the view to be either vertically cropped or scrollable when the
    * display area is too small to display it.
-   * 
+   *
    * @param verticallyScrollable
    *          the verticallyScrollable to set.
    */
@@ -75,7 +75,7 @@ public class BasicHtmlViewDescriptor extends BasicPropertyViewDescriptor
   /**
    * Configures the view to be either horizontally cropped or scrollable when the
    * display area is too small to display it.
-   * 
+   *
    * @return the horizontallyScrollable.
    */
   @Override
@@ -85,7 +85,7 @@ public class BasicHtmlViewDescriptor extends BasicPropertyViewDescriptor
 
   /**
    * Sets the horizontallyScrollable.
-   * 
+   *
    * @param horizontallyScrollable
    *          the horizontallyScrollable to set.
    */

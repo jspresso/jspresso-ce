@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -32,7 +32,7 @@ import org.jspresso.framework.util.url.UrlHelper;
 /**
  * A connector on a label whose role is to render an image based on its binary
  * representation taken out of the connector value or the image URL.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class JImageConnector extends JComponentConnector<JLabel> {

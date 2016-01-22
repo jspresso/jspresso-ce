@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -21,14 +21,14 @@ package org.jspresso.framework.view.descriptor;
 /**
  * This interface is implemented by strategies providing card descriptors based
  * on their names.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface ICardProvider {
 
   /**
    * Gets the card view for the name passed as parameter.
-   * 
+   *
    * @param cardName
    *          the card name to lookup the view for.
    * @return the card view descriptor.

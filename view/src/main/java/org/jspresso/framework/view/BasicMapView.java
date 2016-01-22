@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -25,7 +25,7 @@ import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 
 /**
  * Basic map view.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the type of component this view uses.
@@ -69,7 +69,7 @@ public class BasicMapView<E> extends BasicView<E> implements IMapView<E> {
 
   /**
    * Gets the children view map.
-   * 
+   *
    * @return the children view map.
    */
   protected Map<String, IView<E>> getChildrenMap() {

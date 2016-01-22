@@ -1,5 +1,20 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
+ *
+ *  This file is part of the Jspresso framework.
+ *
+ *  Jspresso is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Jspresso is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.jspresso.framework.application.frontend.action.wizard;
 
@@ -124,7 +139,7 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
   /**
    * Configures the action that will be executed whenever the user cancels the
    * wizard.
-   * 
+   *
    * @param cancelAction
    *          the cancelAction to set.
    */
@@ -135,7 +150,7 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
   /**
    * Configures the action that will be executed whenever the user validates the
    * wizard.
-   * 
+   *
    * @param finishAction
    *          the finishAction to set.
    */
@@ -145,7 +160,7 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Configures the first wizard step to display.
-   * 
+   *
    * @param firstWizardStep
    *          the firstWizardStep to set.
    */
@@ -156,7 +171,7 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
   /**
    * Configures explicitly the height of the wizard dialog. It prevents the
    * dialog from resizing dynamically depending on the displayed wizard step.
-   * 
+   *
    * @param height
    *          the height to set.
    */
@@ -166,7 +181,7 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Sets the modelConnectorFactory.
-   * 
+   *
    * @param modelConnectorFactory
    *          the modelConnectorFactory to set.
    * @deprecated model connector is now created by the backend controller.
@@ -181,7 +196,7 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
   /**
    * Configures explicitly the width of the wizard dialog. It prevents the
    * dialog from resizing dynamically depending on the displayed wizard step.
-   * 
+   *
    * @param width
    *          the width to set.
    */
@@ -191,7 +206,7 @@ public class WizardAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Creates (and initializes) the wizard model.
-   * 
+   *
    * @param initialWizardModel
    *          the initial wizard model.
    * @param context

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import java.util.Map;
 
 /**
  * A command to trigger a sort action.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteSortCommand extends RemoteCommand {
@@ -35,7 +35,7 @@ public class RemoteSortCommand extends RemoteCommand {
 
   /**
    * Gets the orderingProperties.
-   * 
+   *
    * @return the orderingProperties.
    */
   public Map<String, String> getOrderingProperties() {
@@ -44,7 +44,7 @@ public class RemoteSortCommand extends RemoteCommand {
 
   /**
    * Gets the viewStatePermId.
-   * 
+   *
    * @return the viewStatePermId.
    */
   public String getViewStatePermId() {
@@ -53,7 +53,7 @@ public class RemoteSortCommand extends RemoteCommand {
 
   /**
    * Gets the viewStateGuid.
-   * 
+   *
    * @return the viewStateGuid.
    */
   public String getViewStateGuid() {
@@ -62,7 +62,7 @@ public class RemoteSortCommand extends RemoteCommand {
 
   /**
    * Sets the orderingProperties.
-   * 
+   *
    * @param orderingProperties
    *          the orderingProperties to set.
    */
@@ -72,7 +72,7 @@ public class RemoteSortCommand extends RemoteCommand {
 
   /**
    * Sets the viewStatePermId.
-   * 
+   *
    * @param viewStatePermId
    *          the viewStatePermId to set.
    */
@@ -82,7 +82,7 @@ public class RemoteSortCommand extends RemoteCommand {
 
   /**
    * Sets the viewStateGuid.
-   * 
+   *
    * @param viewStateGuid
    *          the viewStateGuid to set.
    */

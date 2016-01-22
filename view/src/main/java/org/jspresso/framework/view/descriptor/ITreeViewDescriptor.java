@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,14 +23,14 @@ import org.jspresso.framework.util.gui.IconProvider;
 
 /**
  * This public interface is implemented by any tree view descriptor.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface ITreeViewDescriptor extends IViewDescriptor {
 
   /**
    * Gets the iconImageURLProvider.
-   * 
+   *
    * @return the iconImageURLProvider.
    */
   IconProvider getIconImageURLProvider();
@@ -38,7 +38,7 @@ public interface ITreeViewDescriptor extends IViewDescriptor {
   /**
    * Gets the item selection action that will be attached to the created tree
    * view.
-   * 
+   *
    * @return the item selection action that will be attached to the created tree
    *         view.
    */
@@ -47,28 +47,28 @@ public interface ITreeViewDescriptor extends IViewDescriptor {
   /**
    * It gets the maximum depth of the tree structure which is mandatory in case
    * of a recursive one.
-   * 
+   *
    * @return the maximum tree structure depth.
    */
   int getMaxDepth();
 
   /**
    * Gets the root tree level descriptor of this tree view.
-   * 
+   *
    * @return the root tree level descriptor of this tree view.
    */
   ITreeLevelDescriptor getRootSubtreeDescriptor();
 
   /**
    * Gets the row action that will be attached to the created tree view.
-   * 
+   *
    * @return the row action that will be attached to the created tree view.
    */
   IAction getRowAction();
 
   /**
    * Gets whether the tree view should be created expanded.
-   * 
+   *
    * @return true if the tree view should be created expanded.
    */
   boolean isExpanded();

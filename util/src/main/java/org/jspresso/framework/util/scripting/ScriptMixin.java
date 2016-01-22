@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.util.scripting;
 
 /**
  * Utility class helping to bring scripting capability in an object.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class ScriptMixin implements IScript {
@@ -41,7 +41,7 @@ public class ScriptMixin implements IScript {
 
   /**
    * Gets the language.
-   * 
+   *
    * @return the language.
    */
   @Override
@@ -51,7 +51,7 @@ public class ScriptMixin implements IScript {
 
   /**
    * Gets the script.
-   * 
+   *
    * @return the script.
    */
   @Override
@@ -61,7 +61,7 @@ public class ScriptMixin implements IScript {
 
   /**
    * Gets the scriptedObject.
-   * 
+   *
    * @return the scriptedObject.
    */
   @Override
@@ -71,7 +71,7 @@ public class ScriptMixin implements IScript {
 
   /**
    * Sets the language.
-   * 
+   *
    * @param language
    *          the language to set.
    */
@@ -81,7 +81,7 @@ public class ScriptMixin implements IScript {
 
   /**
    * Sets the script.
-   * 
+   *
    * @param script
    *          the script to set.
    */

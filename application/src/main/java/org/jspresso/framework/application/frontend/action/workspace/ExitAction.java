@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -32,7 +32,7 @@ import org.jspresso.framework.application.model.Workspace;
  * modules are traversed ton check that no pending changes need to be forwarded
  * to the persistent store. Whenever the dirty checking is positive, then the
  * user is notified and given a chance to cancel the exit.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.
@@ -107,7 +107,7 @@ public class ExitAction<E, F, G> extends FrontendAction<E, F, G> {
    * update its dirty state. It will be triggered just before a global iteration
    * is performed on all the application modules to be able to notify the user
    * that pending changes are not yet flushed to the persistent store.
-   * 
+   *
    * @param checkCurrentModuleDirtyStateAction
    *          the checkCurrentModuleDirtyStateAction to set.
    */
@@ -118,7 +118,7 @@ public class ExitAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Gets the checkCurrentModuleDirtyStateAction.
-   * 
+   *
    * @return the checkCurrentModuleDirtyStateAction.
    */
   protected IAction getCheckCurrentModuleDirtyStateAction() {

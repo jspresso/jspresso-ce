@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -36,7 +36,7 @@ public class BasicCollectionConnector extends AbstractCollectionConnector {
 
   /**
    * Constructs a new instance of BasicCollectionConnector.
-   * 
+   *
    * @param id
    *          the connector identifier.
    * @param binder
@@ -72,7 +72,7 @@ public class BasicCollectionConnector extends AbstractCollectionConnector {
 
   /**
    * Gets the self-hosted value.
-   * 
+   *
    * @return the self-hosted value.
    */
   @Override
@@ -82,7 +82,7 @@ public class BasicCollectionConnector extends AbstractCollectionConnector {
 
   /**
    * Sets the self-hosted value.
-   * 
+   *
    * @param connecteeValue
    *          the value to host
    */

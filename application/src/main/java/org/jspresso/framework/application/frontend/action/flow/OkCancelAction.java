@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -27,7 +27,7 @@ import org.jspresso.framework.action.IActionHandler;
  * This action pops-up an Ok - Cancel confirmation option. Depending on user
  * answer, another action is triggered. The Ok - Cancel alternative actions are
  * parametrized statically.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the actual gui component type used.
@@ -59,7 +59,7 @@ public class OkCancelAction<E, F, G> extends AbstractMessageAction<E, F, G> {
 
   /**
    * Assigns the action to execute when the user cancels the option.
-   * 
+   *
    * @param cancelAction
    *          the cancelAction to set.
    */
@@ -69,7 +69,7 @@ public class OkCancelAction<E, F, G> extends AbstractMessageAction<E, F, G> {
 
   /**
    * Assigns the action to execute when the user confirms the option.
-   * 
+   *
    * @param okAction
    *          the okAction to set.
    */

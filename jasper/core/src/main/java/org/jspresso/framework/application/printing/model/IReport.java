@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -25,7 +25,7 @@ import org.jspresso.framework.util.descriptor.IDescriptor;
 
 /**
  * Defines the contract of a report instance.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IReport extends IDescriptor {
@@ -37,14 +37,14 @@ public interface IReport extends IDescriptor {
 
   /**
    * Gets the report context.
-   * 
+   *
    * @return the context key/value pairs.
    */
   Map<String, Object> getContext();
 
   /**
    * Gets the descriptor of this report.
-   * 
+   *
    * @return the descriptor of this report.
    */
   IReportDescriptor getReportDescriptor();

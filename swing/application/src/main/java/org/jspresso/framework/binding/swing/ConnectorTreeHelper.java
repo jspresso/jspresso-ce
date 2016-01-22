@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -30,7 +30,7 @@ import org.jspresso.framework.binding.IValueConnector;
 
 /**
  * This is a utility class to help connector tree management.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public final class ConnectorTreeHelper {
@@ -41,7 +41,7 @@ public final class ConnectorTreeHelper {
 
   /**
    * Retrieves a connector tree path following the parent/child relationship.
-   * 
+   *
    * @param rootConnector
    *          the root connector of the hierarchy. The returned tree path will
    *          start from this connector.

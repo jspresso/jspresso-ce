@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * This interface establishes the general contract of an object able to
  * intercept and handle exceptions.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IExceptionHandler {
@@ -31,7 +31,7 @@ public interface IExceptionHandler {
   /**
    * This method is called whenever an exception occurs and has to be handled by
    * the handler.
-   * 
+   *
    * @param ex
    *          the exception that occurs.
    * @param context

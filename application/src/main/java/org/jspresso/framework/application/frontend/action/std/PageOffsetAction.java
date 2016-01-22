@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -90,7 +90,7 @@ public class PageOffsetAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Configures the page offset to be set to the action context.
-   * 
+   *
    * @param pageOffset
    *          the pageOffset to set.
    */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -25,7 +25,7 @@ import org.jspresso.framework.application.model.Module;
 
 /**
  * A simple structure to represent an entry in the modules navigation history.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class ModuleHistoryEntry {
@@ -57,7 +57,7 @@ public class ModuleHistoryEntry {
 
   /**
    * Gets the module.
-   * 
+   *
    * @return the module.
    */
   public Module getModule() {
@@ -66,16 +66,16 @@ public class ModuleHistoryEntry {
 
   /**
    * Gets the workspaceName.
-   * 
+   *
    * @return the workspaceName.
    */
   public String getWorkspaceName() {
     return workspaceName;
   }
-  
+
   /**
    * Gets the module history entry id.
-   * 
+   *
    * @return the module history entry id.
    */
   public String getId() {
@@ -84,7 +84,7 @@ public class ModuleHistoryEntry {
 
   /**
    * Gets the module history name.
-   * 
+   *
    * @return the module history name.
    */
   public String getName() {

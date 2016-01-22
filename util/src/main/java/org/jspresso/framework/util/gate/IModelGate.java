@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import org.jspresso.framework.util.lang.IModelAware;
 
 /**
  * A model based gate.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IModelGate extends IGate, IModelAware {
@@ -30,7 +30,7 @@ public interface IModelGate extends IGate, IModelAware {
   /**
    * Gets whether the gate should be provided with a collection of components
    * instead of a single one if possible.
-   * 
+   *
    * @return true if the gate should be provided with a collection of components
    *         instead of a single one if possible.
    */

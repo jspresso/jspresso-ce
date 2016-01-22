@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,7 +23,7 @@ import org.jspresso.framework.model.descriptor.IImageUrlPropertyDescriptor;
 /**
  * Describes an image URL property. This type of descriptor instructs Jspresso
  * to use an image component to interact with this type of property.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BasicImageUrlPropertyDescriptor extends

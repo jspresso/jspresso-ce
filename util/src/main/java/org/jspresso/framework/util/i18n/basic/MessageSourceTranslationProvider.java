@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -29,7 +29,7 @@ import org.springframework.context.MessageSource;
 /**
  * A translation provider which relies on a spring message source. It will
  * typically be configured with a resource bundle message source.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class MessageSourceTranslationProvider extends
@@ -75,7 +75,7 @@ public class MessageSourceTranslationProvider extends
 
   /**
    * Sets the messageSource.
-   * 
+   *
    * @param messageSource
    *          the messageSource to set.
    */
@@ -85,7 +85,7 @@ public class MessageSourceTranslationProvider extends
 
   /**
    * Gets the messageSource.
-   * 
+   *
    * @return the messageSource.
    */
   protected MessageSource getMessageSource() {

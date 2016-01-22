@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  * This card view provides a simple card determination strategy that is based on
  * the bound model type. This strategy pulls up the card whose model descriptor
  * matches the type of the bound model.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class EntityCardViewDescriptor extends AbstractCardViewDescriptor {
@@ -67,7 +67,7 @@ public class EntityCardViewDescriptor extends AbstractCardViewDescriptor {
    * changes, this list is iterated until a card with a matching model is found.
    * The first matching card is displayed. Whenever no registered card matches,
    * an empty view is displayed.
-   * 
+   *
    * @param viewDescriptors
    *          the viewDescriptors to set.
    */

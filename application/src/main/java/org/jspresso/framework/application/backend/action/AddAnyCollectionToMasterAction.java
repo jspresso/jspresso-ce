@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -38,7 +38,7 @@ public class AddAnyCollectionToMasterAction extends
   /**
    * Gets the new detail to or collection of details to add from the context.
    * The ACTION_PARAM variable is used.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the collection of details to add to the collection.

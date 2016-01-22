@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.application.frontend.command.remote;
 
 /**
  * A command to notify of table columns reordering / resize.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteTableChangedCommand extends RemoteCommand {
@@ -33,7 +33,7 @@ public class RemoteTableChangedCommand extends RemoteCommand {
 
   /**
    * Gets the tableId.
-   * 
+   *
    * @return the tableId.
    */
   public String getTableId() {
@@ -42,7 +42,7 @@ public class RemoteTableChangedCommand extends RemoteCommand {
 
   /**
    * Sets the tableId.
-   * 
+   *
    * @param tableId
    *          the tableId to set.
    */
@@ -52,7 +52,7 @@ public class RemoteTableChangedCommand extends RemoteCommand {
 
   /**
    * Gets the columnIds.
-   * 
+   *
    * @return the columnIds.
    */
   public String[] getColumnIds() {
@@ -61,7 +61,7 @@ public class RemoteTableChangedCommand extends RemoteCommand {
 
   /**
    * Sets the columnIds.
-   * 
+   *
    * @param columnIds
    *          the columnIds to set.
    */
@@ -71,7 +71,7 @@ public class RemoteTableChangedCommand extends RemoteCommand {
 
   /**
    * Gets the columnWidths.
-   * 
+   *
    * @return the columnWidths.
    */
   public Integer[] getColumnWidths() {
@@ -80,7 +80,7 @@ public class RemoteTableChangedCommand extends RemoteCommand {
 
   /**
    * Sets the columnWidths.
-   * 
+   *
    * @param columnWidths
    *          the columnWidths to set.
    */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,7 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * This interface is implemented by any bean value accessor on a collection
  * property.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface ICollectionAccessor extends IAccessor {

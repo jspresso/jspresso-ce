@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -27,7 +27,7 @@ import org.jspresso.framework.model.descriptor.ITextPropertyDescriptor;
  * Describes a multi-line text property. This type of descriptor instructs
  * Jspresso to use a multi-line text component to interact with this type of
  * property.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
@@ -125,7 +125,7 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
 
   /**
    * Gets the fileName.
-   * 
+   *
    * @return the fileName.
    */
   @Override
@@ -136,7 +136,7 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
   /**
    * Configures the default file name to use when downloading the property
    * content as a file.
-   * 
+   *
    * @param fileName
    *          the fileName to set.
    */
@@ -146,7 +146,7 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
 
   /**
    * Gets the contentType.
-   * 
+   *
    * @return the contentType.
    */
   @Override
@@ -157,7 +157,7 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
   /**
    * Configures the default content type to use when downloading the property
    * content as a file.
-   * 
+   *
    * @param contentType
    *          the contentType to set.
    */

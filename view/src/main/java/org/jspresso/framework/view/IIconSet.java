@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,14 +22,14 @@ import org.jspresso.framework.util.gui.Dimension;
 
 /**
  * Defines the contract of an icon set.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IIconSet {
 
   /**
    * Gets the icon image URL for the icon key passed as parameter.
-   * 
+   *
    * @param iconName
    *          the icon name to retrieve the icon for.
    * @param dim

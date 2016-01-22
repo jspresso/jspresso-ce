@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -25,7 +25,7 @@ import java.util.List;
  * This is a special enumeration descriptor that allows to build the enumeration
  * values out of a list of integer values. Obviously, no icon is provided for a
  * given value.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RangeEnumerationPropertyDescriptor extends
@@ -84,7 +84,7 @@ public class RangeEnumerationPropertyDescriptor extends
 
   /**
    * Gets the maxValue.
-   * 
+   *
    * @return the maxValue.
    */
   public Integer getMaxValue() {
@@ -93,7 +93,7 @@ public class RangeEnumerationPropertyDescriptor extends
 
   /**
    * Gets the minValue.
-   * 
+   *
    * @return the minValue.
    */
   public Integer getMinValue() {
@@ -102,7 +102,7 @@ public class RangeEnumerationPropertyDescriptor extends
 
   /**
    * Gets the rangeStep.
-   * 
+   *
    * @return the rangeStep.
    */
   public Integer getRangeStep() {
@@ -119,7 +119,7 @@ public class RangeEnumerationPropertyDescriptor extends
 
   /**
    * The enumeration maximum bound. Default value is <i>10</i>.
-   * 
+   *
    * @param maxValue
    *          the maxValue to set.
    */
@@ -129,7 +129,7 @@ public class RangeEnumerationPropertyDescriptor extends
 
   /**
    * The enumeration minimum bound. Default value is <i>0</i>.
-   * 
+   *
    * @param minValue
    *          the minValue to set.
    */

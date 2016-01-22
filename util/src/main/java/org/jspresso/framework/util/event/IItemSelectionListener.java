@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -21,7 +21,7 @@ package org.jspresso.framework.util.event;
 /**
  * This interface is implemented by listeners willing to be notified of an item
  * selection change.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IItemSelectionListener {
@@ -29,7 +29,7 @@ public interface IItemSelectionListener {
   /**
    * This method is called whenever this listener is to be notified that the
    * selected item has changed.
-   * 
+   *
    * @param event
    *          the event containing the object at the origin of the event and the
    *          selected item inside it.

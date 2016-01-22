@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,7 +24,7 @@ import org.jspresso.framework.security.ISecurable;
 
 /**
  * Marks classes capable of providing a component descriptor.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the concrete component type.
@@ -34,21 +34,21 @@ public interface IComponentDescriptorProvider<E> extends IModelDescriptor,
 
   /**
    * Gets the referenced component descriptor.
-   * 
+   *
    * @return the referenced component descriptor.
    */
   IComponentDescriptor<? extends E> getComponentDescriptor();
 
   /**
    * Get the default queryable properties of this component.
-   * 
+   *
    * @return the default queryable properties of this component.
    */
   List<String> getQueryableProperties();
 
   /**
    * Get the default rendered properties of this component.
-   * 
+   *
    * @return the default rendered properties of this component.
    */
   List<String> getRenderedProperties();

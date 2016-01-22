@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -27,7 +27,7 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
  * This is the abstract base descriptor of all numeric based properties.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class BasicNumberPropertyDescriptor extends
@@ -130,7 +130,7 @@ public abstract class BasicNumberPropertyDescriptor extends
 
   /**
    * is default value a default one.
-   * 
+   *
    * @param boundValue
    *          the boundValue to test.
    * @return true is the boundValue us a default one.

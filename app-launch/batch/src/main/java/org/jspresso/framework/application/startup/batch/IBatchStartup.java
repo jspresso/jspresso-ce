@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,14 +22,14 @@ import org.jspresso.framework.application.startup.IStartup;
 
 /**
  * Batch startup interface supporting command line arguments.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IBatchStartup extends IStartup {
 
   /**
    * Parses command line arguments.
-   * 
+   *
    * @param args
    *          command line arguments.
    * @return true if parsing was complete and successful.

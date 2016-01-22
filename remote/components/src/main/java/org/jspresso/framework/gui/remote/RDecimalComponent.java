@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.gui.remote;
 
 /**
  * A remote number field component.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public abstract class RDecimalComponent extends RNumericComponent {
@@ -49,7 +49,7 @@ public abstract class RDecimalComponent extends RNumericComponent {
 
   /**
    * Gets the maxFractionDigit.
-   * 
+   *
    * @return the maxFractionDigit.
    */
   public int getMaxFractionDigit() {
@@ -58,7 +58,7 @@ public abstract class RDecimalComponent extends RNumericComponent {
 
   /**
    * Sets the maxFractionDigit.
-   * 
+   *
    * @param maxFractionDigit
    *          the maxFractionDigit to set.
    */

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -32,7 +32,7 @@ import org.jspresso.framework.util.collection.ESort;
 /**
  * This descriptor is used to describe collection properties that are used
  * either as &quot;1-N&quot; or &quot;N-N&quot; &quot;N&quot; relationship end.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          the concrete collection component element type.
@@ -89,7 +89,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
 
   /**
    * Gets the referencedDescriptor.
-   * 
+   *
    * @return the referencedDescriptor.
    */
   @Override
@@ -99,7 +99,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
 
   /**
    * Gets the manyToMany.
-   * 
+   *
    * @return the manyToMany.
    */
   @Override

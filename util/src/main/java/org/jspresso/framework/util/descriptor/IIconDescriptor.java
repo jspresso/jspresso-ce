@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,14 +23,14 @@ import org.jspresso.framework.util.gui.Icon;
 /**
  * This interface is implemented by anything which is graphically identifiable
  * by an icon.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IIconDescriptor extends IDescriptor {
 
   /**
    * Gets the icon of the descriptor.
-   * 
+   *
    * @return the icon of the descriptor.
    */
   Icon getIcon();

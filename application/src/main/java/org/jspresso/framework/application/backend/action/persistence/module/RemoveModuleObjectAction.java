@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2014 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -37,7 +37,7 @@ import org.jspresso.framework.model.entity.IEntity;
  * This action, which is to be used on bean modules, <b>deletes the module
  * object from the persistent store</b>. The bean module is also removed from
  * it's parent accordingly.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoveModuleObjectAction extends AbstractCollectionAction {
@@ -100,7 +100,7 @@ public class RemoveModuleObjectAction extends AbstractCollectionAction {
 
   /**
    * Deletes the entity from the persistent store.
-   * 
+   *
    * @param entity
    *          the entity to remove
    * @param context

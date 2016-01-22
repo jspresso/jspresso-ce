@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,7 +24,7 @@ import org.jspresso.framework.security.ISecurable;
 
 /**
  * A delegate plugin used to implement dynamic security algorithm.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 @SuppressWarnings("UnusedParameters")
@@ -32,7 +32,7 @@ public interface ISecurityPlugin {
 
   /**
    * Checks authorization for secured access.
-   * 
+   *
    * @param securable
    *          the id of the secured access to check.
    * @param context

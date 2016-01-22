@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -41,7 +41,7 @@ import org.jspresso.framework.util.reflect.ReflectHelper;
 
 /**
  * A utility class for Hibernate.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public final class HibernateHelper {
@@ -87,7 +87,7 @@ public final class HibernateHelper {
 
   /**
    * Test Object equality potentially unwrapping Hibernate proxies.
-   * 
+   *
    * @param e1
    *          the 1st entity to test.
    * @param e2
@@ -111,7 +111,7 @@ public final class HibernateHelper {
 
   /**
    * Computes the Hibernate role name of a persistent collection.
-   * 
+   *
    * @param entityContract
    *          the entity contract owing the collection.
    * @param property
@@ -155,7 +155,7 @@ public final class HibernateHelper {
   /**
    * Ensures that the collection held by a Persistent Set is actually a
    * LinkedHashSet.
-   * 
+   *
    * @param collection
    *          the collection to ensure implementation of.
    */

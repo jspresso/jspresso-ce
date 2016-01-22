@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -31,7 +31,7 @@ import org.jspresso.framework.util.swing.SwingUtil;
 
 /**
  * Initiates a file open action.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class OpenFileAction extends ChooseFileAction {
@@ -68,7 +68,7 @@ public class OpenFileAction extends ChooseFileAction {
 
   /**
    * Sets the fileOpenCallback.
-   * 
+   *
    * @param fileOpenCallback
    *          the fileOpenCallback to set.
    */

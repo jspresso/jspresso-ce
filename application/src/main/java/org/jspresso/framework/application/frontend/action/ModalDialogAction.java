@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -111,7 +111,7 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Gets the actions.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the actions.
@@ -123,7 +123,7 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Gets the dialog size.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the dialog size.
@@ -134,7 +134,7 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Gets the mainView.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the mainView.
@@ -146,7 +146,7 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Gets the title.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the dialog title.
@@ -157,7 +157,7 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Gets the focused component.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the focused component or null if not set.

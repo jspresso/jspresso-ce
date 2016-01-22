@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.view;
 
 /**
  * A simple interface to implement an indirection on a view.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
  *          The root class of the view peers.
@@ -29,7 +29,7 @@ public interface IViewProvider<E> {
 
   /**
    * Get the referenced view.
-   * 
+   *
    * @return the referenced view.
    */
   IView<E> getView();

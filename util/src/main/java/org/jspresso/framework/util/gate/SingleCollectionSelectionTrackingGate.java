@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -23,7 +23,7 @@ import java.util.Collection;
 /**
  * A simple gate that tracks collection selection (actually the sub-collection
  * is set as model) and opens whenever the selection is a singleton.
- * 
+ *
  * @author Vincent Vandenschrick
  * @internal
  */

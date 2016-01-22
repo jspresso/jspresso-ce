@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -33,7 +33,7 @@ import org.jspresso.framework.util.descriptor.IDescriptor;
 
 /**
  * Basic implementation of a report descriptor.
- * 
+ *
  * @author Vincent Vandenschrick
  * @internal
  */
@@ -79,7 +79,7 @@ public class BasicReportDescriptor extends BasicComponentDescriptor<IReport>
 
   /**
    * Gets the beforeAction.
-   * 
+   *
    * @return the beforeAction.
    */
   @Override
@@ -99,7 +99,7 @@ public class BasicReportDescriptor extends BasicComponentDescriptor<IReport>
 
   /**
    * Gets the reportDesignUrl.
-   * 
+   *
    * @return the reportDesignUrl.
    */
   @Override
@@ -109,7 +109,7 @@ public class BasicReportDescriptor extends BasicComponentDescriptor<IReport>
 
   /**
    * Sets the beforeAction.
-   * 
+   *
    * @param beforeAction
    *          the beforeAction to set.
    */
@@ -119,7 +119,7 @@ public class BasicReportDescriptor extends BasicComponentDescriptor<IReport>
 
   /**
    * Sets the reportDesignUrl.
-   * 
+   *
    * @param reportDesignUrl
    *          the reportDesignUrl to set.
    */

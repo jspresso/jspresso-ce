@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import org.jspresso.framework.gui.remote.RAction;
 
 /**
  * OK - Cancel remote flow action.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteOkCancelCommand extends RemoteMessageCommand {
@@ -34,7 +34,7 @@ public class RemoteOkCancelCommand extends RemoteMessageCommand {
 
   /**
    * Gets the cancelAction.
-   * 
+   *
    * @return the cancelAction.
    */
   public RAction getCancelAction() {
@@ -43,7 +43,7 @@ public class RemoteOkCancelCommand extends RemoteMessageCommand {
 
   /**
    * Gets the okAction.
-   * 
+   *
    * @return the okAction.
    */
   public RAction getOkAction() {
@@ -52,7 +52,7 @@ public class RemoteOkCancelCommand extends RemoteMessageCommand {
 
   /**
    * Sets the cancelAction.
-   * 
+   *
    * @param cancelAction
    *          the cancelAction to set.
    */
@@ -62,7 +62,7 @@ public class RemoteOkCancelCommand extends RemoteMessageCommand {
 
   /**
    * Sets the okAction.
-   * 
+   *
    * @param okAction
    *          the okAction to set.
    */

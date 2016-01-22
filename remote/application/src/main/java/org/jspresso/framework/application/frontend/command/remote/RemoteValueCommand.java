@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -22,7 +22,7 @@ import java.io.Serializable;
 
 /**
  * This command is used to update a remote peer value.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteValueCommand extends RemoteCommand {
@@ -36,7 +36,7 @@ public class RemoteValueCommand extends RemoteCommand {
 
   /**
    * Gets the description.
-   * 
+   *
    * @return the description.
    */
   public String getDescription() {
@@ -45,7 +45,7 @@ public class RemoteValueCommand extends RemoteCommand {
 
   /**
    * Gets the iconImageUrl.
-   * 
+   *
    * @return the iconImageUrl.
    */
   public String getIconImageUrl() {
@@ -54,7 +54,7 @@ public class RemoteValueCommand extends RemoteCommand {
 
   /**
    * Gets the value.
-   * 
+   *
    * @return the value.
    */
   public Object getValue() {
@@ -63,7 +63,7 @@ public class RemoteValueCommand extends RemoteCommand {
 
   /**
    * Sets the description.
-   * 
+   *
    * @param description
    *          the description to set.
    */
@@ -73,7 +73,7 @@ public class RemoteValueCommand extends RemoteCommand {
 
   /**
    * Sets the iconImageUrl.
-   * 
+   *
    * @param iconImageUrl
    *          the iconImageUrl to set.
    */
@@ -83,7 +83,7 @@ public class RemoteValueCommand extends RemoteCommand {
 
   /**
    * Sets the value.
-   * 
+   *
    * @param value
    *          the value to set.
    */
@@ -93,7 +93,7 @@ public class RemoteValueCommand extends RemoteCommand {
 
   /**
    * Gets the valueAsObject.
-   * 
+   *
    * @return the valueAsObject.
    */
   public Object getValueAsObject() {
@@ -102,7 +102,7 @@ public class RemoteValueCommand extends RemoteCommand {
 
   /**
    * Sets the valueAsObject.
-   * 
+   *
    * @param valueAsObject
    *          the valueAsObject to set.
    */

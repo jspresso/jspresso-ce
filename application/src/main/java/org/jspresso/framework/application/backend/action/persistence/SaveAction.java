@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2014 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -75,7 +75,7 @@ public class SaveAction extends BackendAction {
 
   /**
    * Gets the list of entities to save.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the list of entities to save.

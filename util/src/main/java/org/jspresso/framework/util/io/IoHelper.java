@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -24,7 +24,7 @@ import java.io.OutputStream;
 
 /**
  * This is a simple helper class for IO operations.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public final class IoHelper {
@@ -35,7 +35,7 @@ public final class IoHelper {
 
   /**
    * Copies the content of an input stream to an output stream.
-   * 
+   *
    * @param inputStream
    *          the input stream to read the bytes from.
    * @param outputStream

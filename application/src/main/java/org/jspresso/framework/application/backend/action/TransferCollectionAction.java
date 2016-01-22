@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -29,7 +29,7 @@ import org.jspresso.framework.model.datatransfer.ETransferMode;
 /**
  * An action used to register a collection of domain objects into the
  * application's clipboard along with a transfer mode semantics.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class TransferCollectionAction extends BackendAction {

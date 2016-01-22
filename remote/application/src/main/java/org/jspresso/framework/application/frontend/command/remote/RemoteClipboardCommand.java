@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -20,7 +20,7 @@ package org.jspresso.framework.application.frontend.command.remote;
 
 /**
  * Sends some text content to assign to the system clipboard.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteClipboardCommand extends RemoteCommand {
@@ -32,7 +32,7 @@ public class RemoteClipboardCommand extends RemoteCommand {
 
   /**
    * Gets the plainContent.
-   * 
+   *
    * @return the plainContent.
    */
   public String getPlainContent() {
@@ -41,7 +41,7 @@ public class RemoteClipboardCommand extends RemoteCommand {
 
   /**
    * Sets the plainContent.
-   * 
+   *
    * @param plainContent
    *          the plainContent to set.
    */
@@ -51,7 +51,7 @@ public class RemoteClipboardCommand extends RemoteCommand {
 
   /**
    * Gets the htmlContent.
-   * 
+   *
    * @return the htmlContent.
    */
   public String getHtmlContent() {
@@ -60,7 +60,7 @@ public class RemoteClipboardCommand extends RemoteCommand {
 
   /**
    * Sets the htmlContent.
-   * 
+   *
    * @param htmlContent
    *          the htmlContent to set.
    */

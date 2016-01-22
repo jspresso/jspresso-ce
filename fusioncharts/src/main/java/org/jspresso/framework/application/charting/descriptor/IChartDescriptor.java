@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -27,14 +27,14 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 
 /**
  * Defines a chart.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IChartDescriptor {
 
   /**
    * Gets the chart data.
-   * 
+   *
    * @param model
    *          the model this chart is ran from.
    * @param jdbcConnection
@@ -55,21 +55,21 @@ public interface IChartDescriptor {
 
   /**
    * Gets the chart dimensions.
-   * 
+   *
    * @return the chart dimensions.
    */
   Dimension getDimension();
 
   /**
    * Gets the chart title i18n key. This key will be internationalized.
-   * 
+   *
    * @return the chart title i18n key.
    */
   String getTitle();
 
   /**
    * Gets the chart url.
-   * 
+   *
    * @return the chart url.
    */
   String getUrl();
