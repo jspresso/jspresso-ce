@@ -158,6 +158,26 @@ public class ControllerAwareEntityInvocationHandler extends BasicEntityInvocatio
    * {@inheritDoc}
    */
   @Override
+  protected void addToProperty(Object proxy, ICollectionPropertyDescriptor<?> propertyDescriptor, int index,
+                               Object value) {
+    getBackendController().initializePropertyIfNeeded((IComponent) proxy, propertyDescriptor.getName());
+    super.addToProperty(proxy, propertyDescriptor, index, value);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void removeFromProperty(Object proxy, ICollectionPropertyDescriptor<?> propertyDescriptor,
+                               Object value) {
+    getBackendController().initializePropertyIfNeeded((IComponent) proxy, propertyDescriptor.getName());
+    super.removeFromProperty(proxy, propertyDescriptor, value);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   protected Object getReferenceProperty(Object proxy, IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
     String propertyName = propertyDescriptor.getName();
     getBackendController().initializePropertyIfNeeded((IComponent) proxy, propertyName);

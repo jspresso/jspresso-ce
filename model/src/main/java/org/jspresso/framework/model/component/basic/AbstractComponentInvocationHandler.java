@@ -27,6 +27,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -602,7 +603,17 @@ public abstract class AbstractComponentInvocationHandler implements
         inlineComponentFactory.sortCollectionProperty((IComponent) proxy,
             propertyName);
       }
-      return property;
+      if (property instanceof ICollectionWrapper<?>) {
+        return property;
+      }
+      List<Class<?>> implementedInterfaces = new ArrayList<>();
+      implementedInterfaces.add(ICollectionWrapper.class);
+      implementedInterfaces.addAll(Arrays.asList(property.getClass().getInterfaces()));
+      return Proxy.newProxyInstance(AbstractComponentInvocationHandler.class.getClassLoader(),
+          implementedInterfaces.toArray(new Class[implementedInterfaces.size()]),
+          new PersistentCollectionWrapper<>((Collection<IComponent>) property, (IComponent) proxy, propertyName,
+              propertyDescriptor.getCollectionDescriptor().getElementDescriptor().getComponentContract(),
+              accessorFactory));
     } catch (RuntimeException re) {
       LOG.error("Error when retrieving [{}] collection property on {}",
           propertyName, proxy);
@@ -944,6 +955,20 @@ public abstract class AbstractComponentInvocationHandler implements
   protected abstract Object retrievePropertyValue(String propertyName);
 
   /**
+   * Refine property to store object.
+   *
+   * @param propertyValue
+   *     the property value
+   * @return the object
+   */
+  protected Object refinePropertyToStore(Object propertyValue) {
+    if (propertyValue instanceof ICollectionWrapper<?>) {
+      return ((ICollectionWrapper) propertyValue).getWrappedCollection();
+    }
+    return propertyValue;
+  }
+
+  /**
    * Direct write access to the properties map without any other operation. Use
    * with caution only in subclasses.
    *
@@ -966,6 +991,7 @@ public abstract class AbstractComponentInvocationHandler implements
    * @param newPropertyValue
    *     the new property value
    */
+  @SuppressWarnings("unchecked")
   protected void storeCollectionProperty(Object proxy, ICollectionPropertyDescriptor<?> propertyDescriptor,
                                         Object oldPropertyValue, Object newPropertyValue) {
     String propertyName = propertyDescriptor.getName();
@@ -1293,20 +1319,9 @@ public abstract class AbstractComponentInvocationHandler implements
   }
 
   @SuppressWarnings("unchecked")
-  private void addToProperty(Object proxy, ICollectionPropertyDescriptor<?> propertyDescriptor, int index, Object value) {
+  protected void addToProperty(Object proxy, ICollectionPropertyDescriptor<?> propertyDescriptor, int index, Object value) {
     String propertyName = propertyDescriptor.getName();
-    Collection<Object> collectionProperty;
-    try {
-      collectionProperty = accessorFactory.createPropertyAccessor(propertyName,
-          componentDescriptor.getComponentContract()).getValue(proxy);
-    } catch (IllegalAccessException | NoSuchMethodException ex) {
-      throw new ComponentException(ex);
-    } catch (InvocationTargetException ex) {
-      if (ex.getCause() instanceof RuntimeException) {
-        throw (RuntimeException) ex.getCause();
-      }
-      throw new ComponentException(ex.getCause());
-    }
+    Collection<Object> collectionProperty = (Collection<Object>) straightGetProperty(proxy, propertyName);
     if (value instanceof IEntity && collectionProperty.contains(value)) {
       if (collectionProperty instanceof Set<?>) {
         LOG.warn(
@@ -1810,25 +1825,15 @@ public abstract class AbstractComponentInvocationHandler implements
     // NO-OP.
   }
 
-  private void removeFromProperty(Object proxy,
+  @SuppressWarnings("unchecked")
+  protected void removeFromProperty(Object proxy,
       ICollectionPropertyDescriptor<?> propertyDescriptor, Object value) {
     String propertyName = propertyDescriptor.getName();
     // The following optimization breaks bidirectional N-N relationship persistence
     // if (!isInitialized(straightGetProperty(proxy, propertyName))) {
     // return;
     // }
-    Collection<Object> collectionProperty;
-    try {
-      collectionProperty = accessorFactory
-          .createPropertyAccessor(propertyName, componentDescriptor.getComponentContract()).getValue(proxy);
-    } catch (IllegalAccessException | NoSuchMethodException ex) {
-      throw new ComponentException(ex);
-    } catch (InvocationTargetException ex) {
-      if (ex.getCause() instanceof RuntimeException) {
-        throw (RuntimeException) ex.getCause();
-      }
-      throw new ComponentException(ex.getCause());
-    }
+    Collection<Object> collectionProperty = (Collection<Object>) straightGetProperty(proxy, propertyName);
     try {
       if (propertyProcessorsEnabled) {
         propertyDescriptor.preprocessRemover(proxy, collectionProperty, value);

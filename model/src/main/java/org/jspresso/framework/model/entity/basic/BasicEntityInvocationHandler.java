@@ -33,6 +33,7 @@ import org.jspresso.framework.model.component.IComponentCollectionFactory;
 import org.jspresso.framework.model.component.IComponentExtensionFactory;
 import org.jspresso.framework.model.component.IComponentFactory;
 import org.jspresso.framework.model.component.basic.AbstractComponentInvocationHandler;
+import org.jspresso.framework.model.component.basic.ICollectionWrapper;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
@@ -179,7 +180,7 @@ public class BasicEntityInvocationHandler extends
    */
   @Override
   protected void storeProperty(String propertyName, Object propertyValue) {
-    properties.put(propertyName, propertyValue);
+    properties.put(propertyName, refinePropertyToStore(propertyValue));
   }
 
   private Map<String, Object> createPropertyMap() {

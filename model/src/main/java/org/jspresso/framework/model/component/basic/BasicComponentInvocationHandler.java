@@ -141,7 +141,7 @@ public class BasicComponentInvocationHandler extends
    */
   @Override
   protected void storeProperty(String propertyName, Object propertyValue) {
-    properties.put(propertyName, propertyValue);
+    properties.put(propertyName, refinePropertyToStore(propertyValue));
   }
 
   private Object stackOverFlowToStringWatchDog;
