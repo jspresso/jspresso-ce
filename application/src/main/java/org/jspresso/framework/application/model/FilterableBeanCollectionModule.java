@@ -261,6 +261,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
       }
 
       BasicTabViewDescriptor tabView = new BasicTabViewDescriptor();
+      tabView.setPermId(getPermId() + ".filter");
       tabView.setRenderingOptions(ERenderingOptions.LABEL);
       tabView.setTabs(tabs);
 
