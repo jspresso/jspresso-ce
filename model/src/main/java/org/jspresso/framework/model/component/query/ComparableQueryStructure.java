@@ -212,37 +212,7 @@ public class ComparableQueryStructure extends QueryComponent {
         case ComparableQueryStructureDescriptor.NN:
           return "!#";
         default:
-          Format format = null;
-          IPropertyDescriptor sd = getSourceDescriptor();
-          if (sd instanceof IDatePropertyDescriptor) {
-            if (((IDatePropertyDescriptor) sd).getType() == EDateType.DATE_TIME) {
-              if (((IDatePropertyDescriptor) sd).isSecondsAware()) {
-                format = new SimpleDateFormat(getTranslationProvider().getDatePattern(getLocale()) + " "
-                    + getTranslationProvider().getTimePattern(getLocale()));
-              } else {
-                format = new SimpleDateFormat(getTranslationProvider().getDatePattern(getLocale()) + " "
-                    + getTranslationProvider().getShortTimePattern(getLocale()));
-              }
-            } else {
-              format = new SimpleDateFormat(getTranslationProvider().getDatePattern(getLocale()));
-            }
-          } else if (sd instanceof ITimePropertyDescriptor) {
-            if (((ITimePropertyDescriptor) sd).isSecondsAware()) {
-              format = new SimpleDateFormat(getTranslationProvider().getTimePattern(getLocale()));
-            } else {
-              format = new SimpleDateFormat(getTranslationProvider().getShortTimePattern(getLocale()));
-            }
-          } else if (sd instanceof IIntegerPropertyDescriptor) {
-            format = NumberFormat.getIntegerInstance(locale);
-          } else if (sd instanceof IDecimalPropertyDescriptor) {
-            if (sd instanceof IPercentPropertyDescriptor) {
-              format = NumberFormat.getPercentInstance(locale);
-            } else {
-              format = NumberFormat.getNumberInstance(locale);
-            }
-            ((NumberFormat) format).setMaximumFractionDigits(((IDecimalPropertyDescriptor) sd).getMaxFractionDigit());
-            ((NumberFormat) format).setMinimumFractionDigits(((IDecimalPropertyDescriptor) sd).getMaxFractionDigit());
-          }
+          Format format = getFormat();
           StringBuilder buf = new StringBuilder();
           Object infValue = getInfValue();
           Object supValue = getSupValue();
@@ -284,6 +254,45 @@ public class ComparableQueryStructure extends QueryComponent {
       }
     }
     return "";
+  }
+
+  /**
+   * Gets format dependening on property descriptor type.
+   * @return The format.
+   */
+  public Format getFormat() {
+    Format format = null;
+    IPropertyDescriptor sd = getSourceDescriptor();
+    if (sd instanceof IDatePropertyDescriptor) {
+      if (((IDatePropertyDescriptor) sd).getType() == EDateType.DATE_TIME) {
+        if (((IDatePropertyDescriptor) sd).isSecondsAware()) {
+          format = new SimpleDateFormat(
+              getTranslationProvider().getDatePattern(getLocale()) + " " + getTranslationProvider().getTimePattern(getLocale()));
+        } else {
+          format = new SimpleDateFormat(
+              getTranslationProvider().getDatePattern(getLocale()) + " " + getTranslationProvider().getShortTimePattern(getLocale()));
+        }
+      } else {
+        format = new SimpleDateFormat(getTranslationProvider().getDatePattern(getLocale()));
+      }
+    } else if (sd instanceof ITimePropertyDescriptor) {
+      if (((ITimePropertyDescriptor) sd).isSecondsAware()) {
+        format = new SimpleDateFormat(getTranslationProvider().getTimePattern(getLocale()));
+      } else {
+        format = new SimpleDateFormat(getTranslationProvider().getShortTimePattern(getLocale()));
+      }
+    } else if (sd instanceof IIntegerPropertyDescriptor) {
+      format = NumberFormat.getIntegerInstance(locale);
+    } else if (sd instanceof IDecimalPropertyDescriptor) {
+      if (sd instanceof IPercentPropertyDescriptor) {
+        format = NumberFormat.getPercentInstance(locale);
+      } else {
+        format = NumberFormat.getNumberInstance(locale);
+      }
+      ((NumberFormat) format).setMaximumFractionDigits(((IDecimalPropertyDescriptor) sd).getMaxFractionDigit());
+      ((NumberFormat) format).setMinimumFractionDigits(((IDecimalPropertyDescriptor) sd).getMaxFractionDigit());
+    }
+    return format;
   }
 
   /**
@@ -329,7 +338,7 @@ public class ComparableQueryStructure extends QueryComponent {
    *
    * @return the sourceDescriptor.
    */
-  protected IPropertyDescriptor getSourceDescriptor() {
+  public IPropertyDescriptor getSourceDescriptor() {
     return sourceDescriptor;
   }
 }
