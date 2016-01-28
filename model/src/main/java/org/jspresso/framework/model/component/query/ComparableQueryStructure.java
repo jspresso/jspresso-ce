@@ -220,7 +220,14 @@ public class ComparableQueryStructure extends QueryComponent {
           if (compareValue == null) {
             compareValue = supValue;
           }
-          String formattedCompareValue = format != null ? format.format(compareValue) : compareValue.toString();
+          
+          String formattedCompareValue;
+          try {
+            formattedCompareValue = format != null ? format.format(compareValue) : compareValue.toString();
+          } catch (IllegalArgumentException e) {
+            formattedCompareValue = compareValue.toString();
+          }
+          
           switch (comparator) {
             case ComparableQueryStructureDescriptor.EQ:
               buf.append("= ").append(formattedCompareValue);
