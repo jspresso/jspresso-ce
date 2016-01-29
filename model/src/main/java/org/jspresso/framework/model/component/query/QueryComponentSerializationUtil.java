@@ -53,6 +53,14 @@ public abstract class QueryComponentSerializationUtil {
     LinkedHashMap<String, Serializable> map = new LinkedHashMap<>();
     for (String key : query.keySet()) {
       Object value = query.get(key);
+      
+      // ignore empty comparable query structures
+      if (value instanceof ComparableQueryStructure) {
+        ComparableQueryStructure cqs = (ComparableQueryStructure)value;
+        if (cqs.getInfValue() ==null && cqs.getSupValue()==null)
+          continue;
+      }
+      
       if (value instanceof QueryComponent) {
         QueryComponent qc = (QueryComponent) value;
         Serializable[] delegate = componentToTable(qc);
