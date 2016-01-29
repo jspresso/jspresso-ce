@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.frontend.action.module;
 
+import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
@@ -64,17 +65,12 @@ public class ModuleSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
       if (ws != null && getController(context).isAccessGranted(ws)) {
         try {
           getController(context).pushToSecurityContext(ws);
-          for (Module m : ws.getModules()) {
-            try {
-              getController(context).pushToSecurityContext(m);
-              if (moName.equals(m.getName())) {
-                if (getController(context).isAccessGranted(m)) {
-                  getController(context).displayModule(wsName, m);
-                }
+          List<Module> modules = ws.getModules();
+          if (modules != null) {
+            for (Module m : modules) {
+              if (displayModule(wsName, moName, m, context)) {
                 break;
               }
-            } finally {
-              getController(context).restoreLastSecurityContextSnapshot();
             }
           }
         } finally {
@@ -83,6 +79,29 @@ public class ModuleSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
       }
     }
     return super.execute(actionHandler, context);
+  }
+
+  private boolean displayModule(String wsName, String moName, Module module, Map<String, Object> context) {
+    try {
+      getController(context).pushToSecurityContext(module);
+      if (moName.equals(module.getName())) {
+        if (getController(context).isAccessGranted(module)) {
+          getController(context).displayModule(wsName, module);
+        }
+        return true;
+      }
+      List<Module> subModules = module.getSubModules();
+      if (subModules != null) {
+        for (Module m : subModules) {
+          if (displayModule(wsName, moName, m, context)) {
+            return true;
+          }
+        }
+      }
+    } finally {
+      getController(context).restoreLastSecurityContextSnapshot();
+    }
+    return false;
   }
 
   /**
@@ -112,7 +131,6 @@ public class ModuleSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
    *     the action context.
    * @return the moduleName.
    */
-  @SuppressWarnings("UnusedParameters")
   protected String getModuleName(Map<String, Object> context) {
     return moduleName;
   }
@@ -124,7 +142,6 @@ public class ModuleSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
    *     the action context.
    * @return the workspaceName.
    */
-  @SuppressWarnings("UnusedParameters")
   protected String getWorkspaceName(Map<String, Object> context) {
     return workspaceName;
   }
