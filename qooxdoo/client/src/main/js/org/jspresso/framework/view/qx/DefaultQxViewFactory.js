@@ -1261,8 +1261,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             componentLabel.setAlignX("left");
             componentLabel.setAlignY("bottom");
           }
-          componentLabel.setAllowStretchX(false);
-          componentLabel.setAllowStretchY(false);
+          componentLabel.setAllowStretchX(false, false);
+          componentLabel.setAllowStretchY(false, false);
           if (componentLabel.getLabel() == "") {
             formLayout.setColumnFlex(labelCol - 1, 0);
             compColSpan++;
@@ -1306,6 +1306,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         form.add(component, {
           row: compRow, column: compCol, rowSpan: compRowSpan, colSpan: compColSpan
         });
+        if (compColSpan > 1 && component.getMaxWidth() > 0
+            && (formLayout.getColumnMaxWidth(compCol) == Infinity || formLayout.getColumnMaxWidth(compCol) < component.getMaxWidth())) {
+          formLayout.setColumnMaxWidth(compCol, component.getMaxWidth());
+        }
 
         if ((compColSpan > 1 || compColSpan == columnCount) && component.getWidth()
             == null/*to cope with preferred width*/) {
@@ -1517,7 +1521,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         var comboBox = new qx.ui.form.SelectBox();
         comboBox.setAllowStretchY(false, false);
         var iconDim;
-        var width = 0;
+        var maxTr = "";
         for (var i = 0; i < remoteComboBox.getValues().length; i++) {
           /* // Seems that there is no problem wit recent versions of qooxdoo
            if (i == 0 && remoteComboBox.getValues()[i].length > 0) {
@@ -1540,11 +1544,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           if (!iconDim && rIcon && rIcon.getDimension()) {
             iconDim = rIcon.getDimension();
           }
-          if (tr.length > width) {
-            width = tr.length;
+          if (tr.length > maxTr.length) {
+            maxTr = tr;
           }
         }
-        this._sizeMaxComponentWidth(comboBox, remoteComboBox, width);
+        this._sizeMaxComponentWidthFromText(comboBox, remoteComboBox, maxTr);
         var extraWidth = 25;
         if (iconDim) {
           extraWidth += iconDim.getWidth();
@@ -2442,13 +2446,19 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         charCount = expectedCharCount;
       }
       charCount += 2;
+      var templateText = "";
+      for (var i = 0; i < charCount; i++) {
+        templateText += org.jspresso.framework.view.qx.DefaultQxViewFactory.__TEMPLATE_CHAR;
+      }
+      this._sizeMaxComponentWidthFromText(component, remoteComponent, templateText);
+    },
+
+    _sizeMaxComponentWidthFromText: function (component, remoteComponent, text) {
       var compFont = component.getFont();
       if (!compFont) {
         compFont = qx.theme.manager.Font.getInstance().resolve("default");
       }
-      var charWidth = qx.bom.Label.getTextSize(org.jspresso.framework.view.qx.DefaultQxViewFactory.__TEMPLATE_CHAR,
-          compFont.getStyles()).width;
-      w = charWidth * charCount;
+      var w = qx.bom.Label.getTextSize(text, compFont.getStyles()).width;
       if (remoteComponent.getPreferredSize() && remoteComponent.getPreferredSize().getWidth() > w) {
         w = remoteComponent.getPreferredSize().getWidth();
       }
