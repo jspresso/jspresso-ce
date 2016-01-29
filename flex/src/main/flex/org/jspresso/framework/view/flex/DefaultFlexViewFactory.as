@@ -2070,7 +2070,7 @@ public class DefaultFlexViewFactory {
           } else {
             bottomHeight = rightBottom.measuredHeight;
           }
-          if ((topHeight + bottomHeight) > 0) {
+          if ((topHeight + bottomHeight) > splitContainer.height) {
             leftTop.percentHeight = (topHeight * 100.0) / (topHeight + bottomHeight);
             rightBottom.percentHeight = (bottomHeight * 100.0) / (topHeight + bottomHeight);
           }
@@ -2087,7 +2087,7 @@ public class DefaultFlexViewFactory {
           } else {
             rightWidth = rightBottom.measuredWidth;
           }
-          if ((leftWidth + rightWidth) > 0) {
+          if ((leftWidth + rightWidth) > splitContainer.width) {
             leftTop.percentWidth = (leftWidth * 100.0) / (leftWidth + rightWidth);
             rightBottom.percentWidth = (rightWidth * 100.0) / (leftWidth + rightWidth);
           }
