@@ -2721,7 +2721,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         wrapper.setPadding([component.getMarginTop(), component.getMarginRight(), component.getMarginBottom(),
                             component.getMarginLeft()]);
         wrapper.add(component);
-        splitContainer.add(wrapper, lflex);
+        splitContainer.add(wrapper, 0);
       }
       if (remoteSplitContainer.getRightBottom() != null) {
         component = this.createComponent(remoteSplitContainer.getRightBottom());
@@ -2736,7 +2736,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         wrapper.setPadding([component.getMarginTop(), component.getMarginRight(), component.getMarginBottom(),
                             component.getMarginLeft()]);
         wrapper.add(component);
-        splitContainer.add(wrapper, rflex);
+        splitContainer.add(wrapper, 1);
       }
       return splitContainer;
     },
