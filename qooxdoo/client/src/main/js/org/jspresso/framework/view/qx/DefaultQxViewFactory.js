@@ -2701,37 +2701,49 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         splitContainer.setOrientation("horizontal");
       }
 
-      var component, wrapper;
-      if (remoteSplitContainer.getLeftTop() != null) {
-        component = this.createComponent(remoteSplitContainer.getLeftTop());
-        var lflex;
-        if (remoteSplitContainer.getOrientation() == "VERTICAL") {
-          lflex = component.getSizeHint().height;
-        } else {
-          lflex = component.getSizeHint().width;
+      splitContainer.addListenerOnce("appear", function (appearEvent) {
+        var ltComponent, rbComponent, wrapper;
+        var ltSize, rbSize, splitSize;
+        if (remoteSplitContainer.getLeftTop() != null) {
+          ltComponent = this.createComponent(remoteSplitContainer.getLeftTop());
+          if (remoteSplitContainer.getOrientation() == "VERTICAL") {
+            ltSize = ltComponent.getSizeHint().height;
+            splitSize = splitContainer.getBounds().height;
+          } else {
+            ltSize = ltComponent.getSizeHint().width;
+            splitSize = splitContainer.getBounds().width;
+          }
+          wrapper = new qx.ui.container.Composite(new qx.ui.layout.Grow());
+          ltComponent.syncAppearance();
+          wrapper.setPadding([ltComponent.getMarginTop(), ltComponent.getMarginRight(), ltComponent.getMarginBottom(),
+                              ltComponent.getMarginLeft()]);
+          wrapper.add(ltComponent);
+          ltComponent = wrapper;
         }
-        wrapper = new qx.ui.container.Composite(new qx.ui.layout.Grow());
-        component.syncAppearance();
-        wrapper.setPadding([component.getMarginTop(), component.getMarginRight(), component.getMarginBottom(),
-                            component.getMarginLeft()]);
-        wrapper.add(component);
-        splitContainer.add(wrapper, 0);
-      }
-      if (remoteSplitContainer.getRightBottom() != null) {
-        component = this.createComponent(remoteSplitContainer.getRightBottom());
-        var rflex;
-        if (remoteSplitContainer.getOrientation() == "VERTICAL") {
-          rflex = component.getSizeHint().height;
-        } else {
-          rflex = component.getSizeHint().width;
+        if (remoteSplitContainer.getRightBottom() != null) {
+          rbComponent = this.createComponent(remoteSplitContainer.getRightBottom());
+          if (remoteSplitContainer.getOrientation() == "VERTICAL") {
+            rbSize = rbComponent.getSizeHint().height;
+            splitSize = splitContainer.getBounds().height;
+          } else {
+            rbSize = rbComponent.getSizeHint().width;
+            splitSize = splitContainer.getBounds().width;
+          }
+          wrapper = new qx.ui.container.Composite(new qx.ui.layout.Grow());
+          rbComponent.syncAppearance();
+          wrapper.setPadding([rbComponent.getMarginTop(), rbComponent.getMarginRight(), rbComponent.getMarginBottom(),
+                              rbComponent.getMarginLeft()]);
+          wrapper.add(rbComponent);
+          rbComponent = wrapper;
         }
-        wrapper = new qx.ui.container.Composite(new qx.ui.layout.Grow());
-        component.syncAppearance();
-        wrapper.setPadding([component.getMarginTop(), component.getMarginRight(), component.getMarginBottom(),
-                            component.getMarginLeft()]);
-        wrapper.add(component);
-        splitContainer.add(wrapper, 1);
-      }
+        if ((ltSize + rbSize) < splitSize) {
+          splitContainer.add(ltComponent, 0);
+          splitContainer.add(rbComponent, 1);
+        } else {
+          splitContainer.add(ltComponent, ltSize);
+          splitContainer.add(rbComponent, rbSize);
+        }
+      }, this);
       return splitContainer;
     },
 
