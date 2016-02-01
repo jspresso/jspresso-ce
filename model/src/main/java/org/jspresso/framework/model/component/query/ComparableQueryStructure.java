@@ -198,6 +198,7 @@ public class ComparableQueryStructure extends QueryComponent {
     return true;
   }
 
+
   /**
    * Computes the toString().
    *
@@ -220,14 +221,8 @@ public class ComparableQueryStructure extends QueryComponent {
           if (compareValue == null) {
             compareValue = supValue;
           }
-          
-          String formattedCompareValue;
-          try {
-            formattedCompareValue = format != null ? format.format(compareValue) : compareValue.toString();
-          } catch (IllegalArgumentException e) {
-            formattedCompareValue = compareValue.toString();
-          }
-          
+
+          String formattedCompareValue = formatValue(compareValue, format);
           switch (comparator) {
             case ComparableQueryStructureDescriptor.EQ:
               buf.append("= ").append(formattedCompareValue);
@@ -246,12 +241,12 @@ public class ComparableQueryStructure extends QueryComponent {
               break;
             case ComparableQueryStructureDescriptor.BE:
               if (infValue != null && supValue != null) {
-                buf.append(">= ").append(format != null ? format.format(infValue) : infValue.toString()).append(", <= ")
-                   .append(format != null ? format.format(supValue) : supValue.toString());
+                buf.append(">= ").append(formatValue(infValue, format)).append(", <= ").append(
+                    formatValue(supValue, format));
               } else if (infValue != null) {
-                buf.append(">= ").append(format != null ? format.format(infValue) : infValue.toString());
+                buf.append(">= ").append(formatValue(infValue, format));
               } else if (supValue != null) {
-                buf.append("<= ").append(format != null ? format.format(supValue) : supValue.toString());
+                buf.append("<= ").append(formatValue(supValue, format));
               }
               break;
             default:
@@ -261,6 +256,16 @@ public class ComparableQueryStructure extends QueryComponent {
       }
     }
     return "";
+  }
+
+  private String formatValue(Object value, Format format) {
+    String formattedCompareValue;
+    try {
+      formattedCompareValue = format != null ? format.format(value) : value.toString();
+    } catch (IllegalArgumentException e) {
+      formattedCompareValue = value.toString();
+    }
+    return formattedCompareValue;
   }
 
   /**
