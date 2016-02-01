@@ -123,7 +123,8 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
           editorWidget.blur();
           if (editorWidget instanceof qx.ui.form.DateField) {
             // Forces synchronization of the date field
-            editorWidget.setValue(editorWidget.getValue());
+            //editorWidget.setValue(editorWidget.getValue());
+            editorWidget.fireDataEvent("changeValue", this.getValue());
           }
           timer.start(function (userData, timerId) {
             if (table.isEditing()) {
@@ -152,7 +153,8 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
           editorWidget.blur();
           if (editorWidget instanceof qx.ui.form.DateField) {
             // Forces synchronization of the date field
-            editorWidget.setValue(editorWidget.getValue());
+            //editorWidget.setValue(editorWidget.getValue());
+            editorWidget.fireDataEvent("changeValue", this.getValue());
           }
           timer.start(function (userData, timerId) {
             if (table.isEditing()) {

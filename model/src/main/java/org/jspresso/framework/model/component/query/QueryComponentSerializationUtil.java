@@ -24,9 +24,6 @@ import java.util.LinkedHashMap;
 import java.util.Set;
 
 import org.jspresso.framework.model.component.IQueryComponent;
-import org.jspresso.framework.model.descriptor.IComponentDescriptor;
-import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.util.io.SerializationUtil;
 
 /**
@@ -40,40 +37,51 @@ public abstract class QueryComponentSerializationUtil {
   /**
    * Serialize a query component content to a Base64 form.
    *
-   * @param query component to serialize
-   * @param complement additional map of string to serialize
+   * @param query
+   *     component to serialize
+   * @param complement
+   *     additional map of string to serialize
    * @return the string representation of the query component
-   * @throws IOException the iO exception
+   *
+   * @throws IOException
+   *     the iO exception
    */
-  public static String serializeFilter(IQueryComponent query,
-      LinkedHashMap<String, Serializable> complement)
-  throws IOException {
+  public static String serializeFilter(IQueryComponent query, LinkedHashMap<String, Serializable> complement)
+      throws IOException {
 
     // temporary map (too heavy to be serialized, will use a simple table)
     LinkedHashMap<String, Serializable> map = new LinkedHashMap<>();
     for (String key : query.keySet()) {
       Object value = query.get(key);
+
+      // ignore empty comparable query structures
+      if (value instanceof ComparableQueryStructure) {
+        ComparableQueryStructure cqs = (ComparableQueryStructure) value;
+        if (cqs.getInfValue() == null && cqs.getSupValue() == null) {
+          continue;
+        }
+      }
+
       if (value instanceof QueryComponent) {
         QueryComponent qc = (QueryComponent) value;
         Serializable[] delegate = componentToTable(qc);
         if (delegate != null) {
           map.put(key, delegate);
         }
-      } 
-      else if (value instanceof EnumQueryStructure) {
+      } else if (value instanceof EnumQueryStructure) {
         Serializable delegate = queryStructureToString((EnumQueryStructure) value);
         if (delegate != null) {
           map.put(key, delegate);
         }
-      }
-      else if (value == null || value instanceof Serializable) {
+      } else if (value == null || value instanceof Serializable) {
         map.put(key, (Serializable) value);
       }
     }
 
     // manage additional fields
-    for (String k : complement.keySet())
+    for (String k : complement.keySet()) {
       map.put(k, complement.get(k));
+    }
 
     // prepare non heavy table
     Serializable[] simple = new Serializable[map.keySet().size() * 2];
@@ -99,14 +107,11 @@ public abstract class QueryComponentSerializationUtil {
       Object v = query.get(k);
       if (v == null) {
         delegate[i++] = null;
-      } 
-      else if (v instanceof QueryComponent) {
+      } else if (v instanceof QueryComponent) {
         delegate[i++] = componentToTable((QueryComponent) query.get(k));
-      } 
-      else if (v instanceof EnumQueryStructure) {
+      } else if (v instanceof EnumQueryStructure) {
         delegate[i++] = queryStructureToString((EnumQueryStructure) v);
-      } 
-      else if (v instanceof Serializable) {
+      } else if (v instanceof Serializable) {
         delegate[i++] = (Serializable) query.get(k);
       }
     }
@@ -115,9 +120,10 @@ public abstract class QueryComponentSerializationUtil {
 
   private static String queryStructureToString(EnumQueryStructure value) {
     Set<EnumValueQueryStructure> selectedValues = value.getSelectedEnumerationValues();
-    if (selectedValues.isEmpty())
+    if (selectedValues.isEmpty()) {
       return null;
-    
+    }
+
     StringBuilder sb = new StringBuilder("[[");
     for (EnumValueQueryStructure ev : selectedValues) {
       sb.append(ev.getValue());
@@ -127,20 +133,23 @@ public abstract class QueryComponentSerializationUtil {
     return sb.toString();
   }
 
-  
+
   /**
    * Deserialize a base 64 representation of a query component
    * representation and hydrate the given query component instance.
    *
-   * @param filterBase64 the base 64 representation of a query component.
+   * @param filterBase64
+   *     the base 64 representation of a query component.
    * @return the serializable [ ]
-   * @throws IOException the iO exception
-   * @throws ClassNotFoundException the class not found exception
+   *
+   * @throws IOException
+   *     the iO exception
+   * @throws ClassNotFoundException
+   *     the class not found exception
    */
   public static Serializable[] deserializeFilter(String filterBase64) throws IOException, ClassNotFoundException {
 
-    Serializable[] filters =
-        (Serializable[]) SerializationUtil.deserializeFromBase64(filterBase64, true);
+    Serializable[] filters = (Serializable[]) SerializationUtil.deserializeFromBase64(filterBase64, true);
 
     return filters;
   }

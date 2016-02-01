@@ -28,8 +28,7 @@ import java.util.TimeZone;
  *
  * @author Vincent Vandenschrick
  */
-public class TimeZoneEnumerationPropertyDescriptor extends
-    AbstractEnumerationPropertyDescriptor {
+public class TimeZoneEnumerationPropertyDescriptor extends AbstractEnumerationPropertyDescriptor {
 
   private List<String> enumerationValues;
 
@@ -42,7 +41,13 @@ public class TimeZoneEnumerationPropertyDescriptor extends
       if (timezoneId.matches(
           "(Africa/|America/|Antarctica/|Arctic/|Asia/" + "|Atlantic/|Australia/|Europe/|Indian/|Pacific/).*")) {
         if (!timezoneId.startsWith("Asia/Riyadh8")) {
-          enumerationValues.add(timezoneId);
+
+          int i1 = timezoneId.indexOf('/');
+          int i2 = i1 < 0 ? -1 : timezoneId.indexOf('/', i1 + 1);
+
+          if (i2 < 0) {
+            enumerationValues.add(timezoneId);
+          }
         }
       }
     }
@@ -85,6 +90,7 @@ public class TimeZoneEnumerationPropertyDescriptor extends
 
   /**
    * Returns true.
+   *
    * @return {@code true}
    */
   @Override
