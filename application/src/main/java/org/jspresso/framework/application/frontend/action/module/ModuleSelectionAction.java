@@ -29,14 +29,15 @@ import org.jspresso.framework.application.model.Workspace;
  * Displays a module, and the corresponding workspace if necessary based on
  * their names. It can be used as startup action to select and display a module
  * when the application launches.
- * 
+ *
  * @author Vincent Vandenschrick
  * @param <E>
- *          the actual gui component type used.
+ *     the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *     the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *     the actual action type used.
+ * @author Vincent Vandenschrick
  */
 public class ModuleSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
 
@@ -45,12 +46,11 @@ public class ModuleSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Displays the workspace and module.
-   * <p>
+   * <p/>
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler,
-      Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
 
     String wsName = getWorkspaceName(context);
     String moName = getModuleName(context);
@@ -87,9 +87,9 @@ public class ModuleSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Configures the name (untranslated) of the module to be displayed.
-   * 
+   *
    * @param moduleName
-   *          the moduleName to set.
+   *     the moduleName to set.
    */
   public void setModuleName(String moduleName) {
     this.moduleName = moduleName;
@@ -97,9 +97,9 @@ public class ModuleSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Configures the name (untranslated) of the workspace to be displayed.
-   * 
+   *
    * @param workspaceName
-   *          the workspaceName to set.
+   *     the workspaceName to set.
    */
   public void setWorkspaceName(String workspaceName) {
     this.workspaceName = workspaceName;
@@ -107,9 +107,9 @@ public class ModuleSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Gets the moduleName.
-   * 
+   *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the moduleName.
    */
   @SuppressWarnings("UnusedParameters")
@@ -119,9 +119,9 @@ public class ModuleSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Gets the workspaceName.
-   * 
+   *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the workspaceName.
    */
   @SuppressWarnings("UnusedParameters")

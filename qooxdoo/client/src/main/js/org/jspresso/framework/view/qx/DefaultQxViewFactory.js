@@ -1306,8 +1306,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         form.add(component, {
           row: compRow, column: compCol, rowSpan: compRowSpan, colSpan: compColSpan
         });
-        if (compColSpan > 1 && component.getMaxWidth() > 0
-            && (formLayout.getColumnMaxWidth(compCol) == Infinity || formLayout.getColumnMaxWidth(compCol) < component.getMaxWidth())) {
+        if (compColSpan > 1 && component.getMaxWidth() > 0 && (formLayout.getColumnMaxWidth(compCol) == Infinity
+            || formLayout.getColumnMaxWidth(compCol) < component.getMaxWidth())) {
           formLayout.setColumnMaxWidth(compCol, component.getMaxWidth());
         }
 
@@ -2486,17 +2486,20 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @param remoteLabel {org.jspresso.framework.gui.remote.RLabel}
      */
     _createLabel: function (remoteLabel) {
-      var atom = new qx.ui.basic.Atom();
-      var label = atom.getChildControl("label");
+      var labelComponent = new qx.ui.basic.Atom();
+      var label = labelComponent.getChildControl("label");
       var state = remoteLabel.getState();
+      if (remoteLabel.getIcon()) {
+        labelComponent.setIcon(remoteLabel.getIcon().getImageUrlSpec());
+      }
       if (state) {
-        atom.setAppearance("dynamicatom");
-        atom.getChildControl("label").setSelectable(true);
+        labelComponent.setAppearance("dynamicatom");
+        label.setSelectable(true);
         var modelController = new qx.data.controller.Object(state);
         if (remoteLabel instanceof org.jspresso.framework.gui.remote.RLink && remoteLabel.getAction()) {
           this._getRemotePeerRegistry().register(remoteLabel.getAction());
-          atom.setRich(true);
-          modelController.addTarget(atom, "label", "value", false, {
+          labelComponent.setRich(true);
+          modelController.addTarget(labelComponent, "label", "value", false, {
             converter: function (modelValue, model) {
               if (modelValue) {
                 return "<u><a href='javascript:'>" + modelValue + "</a></u>";
@@ -2504,30 +2507,45 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
               return modelValue;
             }
           });
-          atom.addListener("tap", function (event) {
+          labelComponent.addListener("tap", function (event) {
             this._getActionHandler().execute(remoteLabel.getAction());
           }, this);
         } else {
-          atom.setRich(true);
-          modelController.addTarget(atom, "label", "value", false, {
+          labelComponent.setRich(true);
+          modelController.addTarget(labelComponent, "label", "value", false, {
             converter: function (modelValue, model) {
               return modelValue;
             }
           });
         }
         // Do not size dynamic labels
-        // this._sizeMaxComponentWidth(atom, remoteLabel, remoteLabel.getMaxLength())
+        // this._sizeMaxComponentWidth(labelComponent, remoteLabel, remoteLabel.getMaxLength());
+
+        // The following does not work with labelComponent labels since they cannot grow inside the labelComponent. We must use a wrapper.
+        //this._configureHorizontalAlignment(label, remoteLabel.getHorizontalAlignment());
+        var wrapper = new qx.ui.container.Composite(new qx.ui.layout.Dock());
+        var alignment = remoteLabel.getHorizontalAlignment();
+        if (alignment == "LEFT") {
+          wrapper.add(labelComponent, {
+            edge: "west"
+          });
+        } else if (alignment == "CENTER") {
+          wrapper.add(labelComponent, {
+            edge: "center"
+          });
+        } else if (alignment == "RIGHT") {
+          wrapper.add(labelComponent, {
+            edge: "east"
+          });
+        }
+        labelComponent = wrapper;
       } else {
         var labelText = remoteLabel.getLabel();
         labelText = org.jspresso.framework.util.html.HtmlUtil.replaceNewlines(labelText);
-        atom.setLabel(labelText);
-        atom.setRich(org.jspresso.framework.util.html.HtmlUtil.isHtml(labelText));
+        labelComponent.setLabel(labelText);
+        labelComponent.setRich(org.jspresso.framework.util.html.HtmlUtil.isHtml(labelText));
       }
-      this._configureHorizontalAlignment(label, remoteLabel.getHorizontalAlignment());
-      if (remoteLabel.getIcon()) {
-        atom.setIcon(remoteLabel.getIcon().getImageUrlSpec());
-      }
-      return atom;
+      return labelComponent;
     },
 
     /**
