@@ -41,7 +41,7 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedTable", {
           var row = sc._getRowForPagePos(pageX, pageY);
           var col = sc._getColumnForPageX(pageX);
           /**/
-          if (row >= 0 && col >= 0) {
+          if (row != null && col != null && row >= 0 && col >= 0) {
             try {
               v = tm.getToolTip(col, row);
             } catch (az) {

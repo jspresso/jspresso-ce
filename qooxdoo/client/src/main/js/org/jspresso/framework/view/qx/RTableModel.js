@@ -310,24 +310,25 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel", {
     },
 
     getToolTip: function (column, row) {
-      if (row >= 0) {
-        if (column > 0) {
+      if (row != null && row >= 0) {
+        if (column != null && column >= 0) {
           if (this.__dynamicToolTipIndices[column] >= 0) {
             var v = this.getRowData(row).getChildren().getItem(this.__dynamicToolTipIndices[column]).getValue();
             if (v != null && (v instanceof String || typeof(v) === 'string')) {
               return v;
             }
             return null;
+          } else if (column == 0) {
+            return this.getRowData(row).getValue();
           } else {
             var v = this.getValue(column, row);
             if (v != null && (v instanceof String || typeof(v) === 'string')) {
               return v;
             }
-            return null;
           }
         }
-        return this.getRowData(row).getValue();
       }
+      return null;
     }
 
   }
