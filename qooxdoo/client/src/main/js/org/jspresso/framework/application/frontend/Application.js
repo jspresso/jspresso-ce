@@ -83,7 +83,6 @@
  * @use(org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCancelCommand)
  * @use(org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCommand)
  * @use(org.jspresso.framework.application.frontend.command.remote.RemoteErrorMessageCommand)
- *
  */
 
 qx.Class.define("org.jspresso.framework.application.frontend.Application", {

@@ -16,6 +16,15 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+/**
+ * @asset (org/jspresso/framework/mobile/bookmark/android3_bookmark.png)
+ * @asset (org/jspresso/framework/mobile/bookmark/android4_bookmark.png)
+ * @asset (org/jspresso/framework/mobile/bookmark/blackberry.png)
+ * @asset (org/jspresso/framework/mobile/bookmark/playbook_bookmark.png)
+ * @asset (org/jspresso/framework/mobile/bookmark/safari_forward.png)
+ * @asset (org/jspresso/framework/mobile/bookmark/safari_ios7_forward.png)
+ */
 qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobile.MobileQxController", {
 
   extend: org.jspresso.framework.application.frontend.controller.qx.AbstractQxController,
