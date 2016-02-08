@@ -107,6 +107,7 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
   private List<String>            queryableProperties;
   private List<String>            renderedProperties;
   private IComponentDescriptor<E> queryDescriptor;
+  private boolean                 isQueryDescriptor;
   private Collection<IGate>       readabilityGates;
 
   private Set<Class<?>>                  serviceContracts;
@@ -142,6 +143,7 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
     propertyDescriptorsCache = new ConcurrentHashMap<>();
     // Force initialization of ancestor descriptors
     setAncestorDescriptors(null);
+    isQueryDescriptor = false;
   }
 
   private static IComponentDescriptor<IComponent> createComponentDescriptor() {
@@ -159,8 +161,12 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
   @Override
   public IComponentDescriptor<E> createQueryDescriptor() {
     synchronized (queryDescriptorLock) {
+      if (isQueryDescriptor) {
+        queryDescriptor = this;
+      }
       if (queryDescriptor == null) {
         queryDescriptor = (AbstractComponentDescriptor<E>) super.clone();
+        ((AbstractComponentDescriptor<E>)queryDescriptor).isQueryDescriptor = true;
 
         List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
         if (ancestorDescs != null) {
