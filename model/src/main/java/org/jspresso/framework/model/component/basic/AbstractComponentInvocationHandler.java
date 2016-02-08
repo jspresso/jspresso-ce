@@ -2068,6 +2068,9 @@ public abstract class AbstractComponentInvocationHandler implements
               // Just check that only order differs
               Set<Object> temp = new THashSet<>(currentProperty);
               temp.removeAll((List<?>) actualNewProperty);
+              if (currentProperty instanceof ICollectionWrapper) {
+                currentProperty = ((ICollectionWrapper) currentProperty).getWrappedCollection();
+              }
               currentProperty.clear();
               currentProperty.addAll((List<?>) actualNewProperty);
               currentProperty.addAll(temp);

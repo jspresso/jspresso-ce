@@ -17,6 +17,11 @@
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * @asset(org/jspresso/framework/*.png)
+ * @asset(org/jspresso/framework/htmleditor/*.png)
+ */
+
 qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
   extend: org.jspresso.framework.view.qx.AbstractQxViewFactory,
 
