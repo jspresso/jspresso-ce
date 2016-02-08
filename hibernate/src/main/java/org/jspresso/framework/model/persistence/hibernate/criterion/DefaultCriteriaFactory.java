@@ -197,7 +197,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
           (ComparableQueryStructure) aQueryComponent, componentDescriptor, aQueryComponent, context));
     } else {
       String translationsPath = AbstractComponentDescriptor.getComponentTranslationsDescriptorTemplate().getName();
-      String translationsAlias = componentDescriptor.getComponentContract().getSimpleName() + "_" + translationsPath;
+      String translationsAlias = currentCriteria.getAlias() + "_" + componentDescriptor.getComponentContract().getSimpleName() + "_" + translationsPath;
       if (componentDescriptor.isTranslatable()) {
         rootCriteria.getSubCriteriaFor(currentCriteria, translationsPath, translationsAlias, JoinType.LEFT_OUTER_JOIN);
       }
