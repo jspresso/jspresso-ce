@@ -64,8 +64,8 @@ public class BasicReferencePropertyDescriptor<E> extends
   public BasicReferencePropertyDescriptor<E> createQueryDescriptor() {
     BasicReferencePropertyDescriptor<E> queryDescriptor = (BasicReferencePropertyDescriptor<E>) super
         .createQueryDescriptor();
-    IComponentDescriptor<? extends E> realReferencedDescriptor = queryDescriptor
-        .getReferencedDescriptor();
+    IComponentDescriptor<? extends E> realReferencedDescriptor = /*queryDescriptor
+        .*/getReferencedDescriptor();
     IComponentDescriptor<? extends E> queryReferencedDescriptor = realReferencedDescriptor
         .createQueryDescriptor();
     queryDescriptor.setReferencedDescriptor(queryReferencedDescriptor);
