@@ -216,14 +216,7 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
           }
         },
 
-        "transition-box": {
-          style: {
-            transition: "all 300ms ease-in"
-          }
-        },
-
         "header-box": {
-          include: "transition-box",
           style: {
             gradientStart: ["header", 0],
             gradientEnd: ["app-background", 100]
@@ -231,7 +224,6 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
         },
 
         "accordion-box": {
-          include: "transition-box",
           style: {
             width: [0, 1, 0, 0],
             color: "border-main"
@@ -239,10 +231,10 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
         },
 
         "accordion-section-box": {
-          include: "transition-box",
           style: {
             width: [0, 0],
-            color: "border-main"
+            color: "border-main",
+            transition: "top 300ms ease-in"
           }
         },
 

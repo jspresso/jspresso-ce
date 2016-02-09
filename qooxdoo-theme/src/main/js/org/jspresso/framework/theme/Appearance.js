@@ -509,11 +509,6 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         "application-split": {
           alias: "splitpane",
           include: "splitpane",
-          style: function (states) {
-            return {
-              decorator: "transition-box"
-            };
-          }
         },
 
         "application-split/splitter": {

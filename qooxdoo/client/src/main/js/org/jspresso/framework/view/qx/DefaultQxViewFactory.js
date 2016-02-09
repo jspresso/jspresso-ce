@@ -30,8 +30,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     __FIELD_MAX_CHAR_COUNT: 32,
     __NUMERIC_FIELD_MAX_CHAR_COUNT: 16,
     __COLUMN_MAX_CHAR_COUNT: 12,
-    __DATE_CHAR_COUNT: 10,
-    __TIME_CHAR_COUNT: 6,
 
     _hexColorToQxColor: function (hexColor) {
       if (hexColor) {
@@ -276,8 +274,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      */
     _createTimeField: function (remoteTimeField) {
       var timeField = this._createFormattedField(remoteTimeField);
-      this._sizeMaxComponentWidth(timeField, remoteTimeField,
-          org.jspresso.framework.view.qx.DefaultQxViewFactory.__TIME_CHAR_COUNT);
+      this._sizeMaxComponentWidthFromText(timeField, remoteTimeField, "00:00:00");
       return timeField;
     },
 
@@ -421,9 +418,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       remoteTimeField.setMillisecondsAware(remoteDateField.getMillisecondsAware());
       remoteTimeField.useDateDto(true);
       dateTimeField.add(this.createComponent(remoteTimeField, false));
-      this._sizeMaxComponentWidth(dateTimeField, remoteDateField,
-          org.jspresso.framework.view.qx.DefaultQxViewFactory.__DATE_CHAR_COUNT
-          + org.jspresso.framework.view.qx.DefaultQxViewFactory.__TIME_CHAR_COUNT + 4);
+      this._sizeMaxComponentWidth(dateTimeField, remoteDateField, "00/00/0000 000 00:00:00");
       return dateTimeField;
     },
 
@@ -1315,7 +1310,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         form.add(component, {
           row: compRow, column: compCol, rowSpan: compRowSpan, colSpan: compColSpan
         });
-        if (compColSpan > 1 && component.getMaxWidth() > 0 && (formLayout.getColumnMaxWidth(compCol) == Infinity
+        if (compColSpan == 1 && component.getMaxWidth() > 0 && (formLayout.getColumnMaxWidth(compCol) == Infinity
             || formLayout.getColumnMaxWidth(compCol) < component.getMaxWidth())) {
           formLayout.setColumnMaxWidth(compCol, component.getMaxWidth());
         }
@@ -2604,8 +2599,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       modelController.addTarget(dateField, "enabled", "writable", false);
       var ps = remoteDateField.getPreferredSize();
       remoteDateField.setPreferredSize(null);
-      this._sizeMaxComponentWidth(dateField, remoteDateField,
-          org.jspresso.framework.view.qx.DefaultQxViewFactory.__DATE_CHAR_COUNT);
+      // Add "000" for icon
+      this._sizeMaxComponentWidthFromText(dateField, remoteDateField,
+          "00/00/0000 000");
       remoteDateField.setPreferredSize(ps);
       return dateField;
     },
