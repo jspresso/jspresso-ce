@@ -49,14 +49,14 @@ public abstract class QueryComponentSerializationUtil {
    *     the iO exception
    */
   public static String serializeFilter(
-      IQueryComponent query, 
-      LinkedHashMap<String, Serializable> complement) 
+      IQueryComponent query,
+      LinkedHashMap<String, Serializable> complement)
     throws IOException {
-    
+
     return serializeFilter(query, complement, new HashMap<String, Object>());
   }
 
-  
+
   /**
    * Serialize a query component content to a Base64 form.
    *
@@ -64,20 +64,20 @@ public abstract class QueryComponentSerializationUtil {
    *     query to serialize
    * @param complement
    *     additional map of string to serialize
-   * @param overrided 
-   *     overrided query map keys
+   * @param overridden
+   *     overridden query map keys
    * @return the string representation of the query component
    *
    * @throws IOException
    *     the iO exception
    */
   public static String serializeFilter(
-      IQueryComponent query, 
-      LinkedHashMap<String, Serializable> complement, 
-      Map<String, Object> overrided)
+      IQueryComponent query,
+      LinkedHashMap<String, Serializable> complement,
+      Map<String, Object> overridden)
    throws IOException {
 
-    // temporary map (too heavy to be serialized, will use a simple table), 
+    // temporary map (too heavy to be serialized, will use a simple table),
     LinkedHashMap<String, Serializable> map = new LinkedHashMap<>();
     for (String key : query.keySet()) {
       Object value = query.get(key);
@@ -92,7 +92,7 @@ public abstract class QueryComponentSerializationUtil {
 
       if (value instanceof QueryComponent) {
         QueryComponent qc = (QueryComponent) value;
-        Serializable[] delegate = componentToTable(qc, overrided.get(key));
+        Serializable[] delegate = componentToTable(qc, overridden.get(key));
         if (delegate != null) {
           map.put(key, delegate);
         }
@@ -123,7 +123,7 @@ public abstract class QueryComponentSerializationUtil {
 
     return SerializationUtil.toBase64String(data); // data.length
   }
-  
+
   @SuppressWarnings("unchecked")
   private static Serializable[] componentToTable(QueryComponent query, Object overrided) {
     if (query.size() == 0) {
@@ -137,13 +137,13 @@ public abstract class QueryComponentSerializationUtil {
       Object v = query.get(k);
       if (v == null) {
         delegate[i++] = null;
-      } 
+      }
       else if (v instanceof QueryComponent) {
         delegate[i++] = componentToTable((QueryComponent) query.get(k), o);
-      } 
+      }
       else if (v instanceof EnumQueryStructure) {
         delegate[i++] = queryStructureToString((EnumQueryStructure) v);
-      } 
+      }
       else if (o instanceof Serializable) {
         delegate[i++] = (Serializable) o;
       }
@@ -169,11 +169,11 @@ public abstract class QueryComponentSerializationUtil {
     return sb.toString();
   }
 
-  
+
   /**
    * Get map value from property path.
    * @param map The map
-   * @param path The propery path.
+   * @param path The property path.
    * @return the value.
    */
   @SuppressWarnings("unchecked")
@@ -181,18 +181,18 @@ public abstract class QueryComponentSerializationUtil {
     int i = path.indexOf('.');
     if (i<0)
       return map.get(path);
-    
+
     String step = path.substring(0, i);
     Object o = map.get(step);
-    if (! (o instanceof Map)) 
+    if (! (o instanceof Map))
       return null;
-    
+
     Map<String, Object> submap = (Map<String, Object>) o;
     String trailer = path.substring(i+1);
     return getFromMap(submap, trailer);
   }
 
-  
+
 
   /**
    * Deserialize a base 64 representation of a query component
