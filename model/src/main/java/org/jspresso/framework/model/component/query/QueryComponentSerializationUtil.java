@@ -20,7 +20,9 @@ package org.jspresso.framework.model.component.query;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.jspresso.framework.model.component.IQueryComponent;
@@ -38,7 +40,7 @@ public abstract class QueryComponentSerializationUtil {
    * Serialize a query component content to a Base64 form.
    *
    * @param query
-   *     component to serialize
+   *     query to serialize
    * @param complement
    *     additional map of string to serialize
    * @return the string representation of the query component
@@ -46,10 +48,36 @@ public abstract class QueryComponentSerializationUtil {
    * @throws IOException
    *     the iO exception
    */
-  public static String serializeFilter(IQueryComponent query, LinkedHashMap<String, Serializable> complement)
-      throws IOException {
+  public static String serializeFilter(
+      IQueryComponent query, 
+      LinkedHashMap<String, Serializable> complement) 
+    throws IOException {
+    
+    return serializeFilter(query, complement, new HashMap<String, Object>());
+  }
 
-    // temporary map (too heavy to be serialized, will use a simple table)
+  
+  /**
+   * Serialize a query component content to a Base64 form.
+   *
+   * @param query
+   *     query to serialize
+   * @param complement
+   *     additional map of string to serialize
+   * @param overrided 
+   *     overrided query map keys
+   * @return the string representation of the query component
+   *
+   * @throws IOException
+   *     the iO exception
+   */
+  public static String serializeFilter(
+      IQueryComponent query, 
+      LinkedHashMap<String, Serializable> complement, 
+      Map<String, Object> overrided)
+   throws IOException {
+
+    // temporary map (too heavy to be serialized, will use a simple table), 
     LinkedHashMap<String, Serializable> map = new LinkedHashMap<>();
     for (String key : query.keySet()) {
       Object value = query.get(key);
@@ -64,7 +92,7 @@ public abstract class QueryComponentSerializationUtil {
 
       if (value instanceof QueryComponent) {
         QueryComponent qc = (QueryComponent) value;
-        Serializable[] delegate = componentToTable(qc);
+        Serializable[] delegate = componentToTable(qc, overrided.get(key));
         if (delegate != null) {
           map.put(key, delegate);
         }
@@ -95,23 +123,31 @@ public abstract class QueryComponentSerializationUtil {
 
     return SerializationUtil.toBase64String(data); // data.length
   }
-
-  private static Serializable[] componentToTable(QueryComponent query) {
+  
+  @SuppressWarnings("unchecked")
+  private static Serializable[] componentToTable(QueryComponent query, Object overrided) {
     if (query.size() == 0) {
       return null;
     }
     Serializable[] delegate = new Serializable[query.size() * 2];
     int i = 0;
     for (String k : query.keySet()) {
+      Object o = (overrided instanceof Map) ? ((Map<String, Object>) overrided).get(k) : overrided;
       delegate[i++] = k;
       Object v = query.get(k);
       if (v == null) {
         delegate[i++] = null;
-      } else if (v instanceof QueryComponent) {
-        delegate[i++] = componentToTable((QueryComponent) query.get(k));
-      } else if (v instanceof EnumQueryStructure) {
+      } 
+      else if (v instanceof QueryComponent) {
+        delegate[i++] = componentToTable((QueryComponent) query.get(k), o);
+      } 
+      else if (v instanceof EnumQueryStructure) {
         delegate[i++] = queryStructureToString((EnumQueryStructure) v);
-      } else if (v instanceof Serializable) {
+      } 
+      else if (o instanceof Serializable) {
+        delegate[i++] = (Serializable) o;
+      }
+      else if (v instanceof Serializable) {
         delegate[i++] = (Serializable) query.get(k);
       }
     }
@@ -133,6 +169,30 @@ public abstract class QueryComponentSerializationUtil {
     return sb.toString();
   }
 
+  
+  /**
+   * Get map value from property path.
+   * @param map The map
+   * @param path The propery path.
+   * @return the value.
+   */
+  @SuppressWarnings("unchecked")
+  public static Object getFromMap(Map<String, Object> map, String path) {
+    int i = path.indexOf('.');
+    if (i<0)
+      return map.get(path);
+    
+    String step = path.substring(0, i);
+    Object o = map.get(step);
+    if (! (o instanceof Map)) 
+      return null;
+    
+    Map<String, Object> submap = (Map<String, Object>) o;
+    String trailer = path.substring(i+1);
+    return getFromMap(submap, trailer);
+  }
+
+  
 
   /**
    * Deserialize a base 64 representation of a query component
