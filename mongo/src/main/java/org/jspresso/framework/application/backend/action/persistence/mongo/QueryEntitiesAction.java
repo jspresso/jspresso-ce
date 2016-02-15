@@ -93,6 +93,9 @@ public class QueryEntitiesAction extends AbstractQueryComponentsAction {
    * @return the criteria.
    */
   public static Criteria createEntityIdsInCriteria(Collection<Serializable> entityIds, int chunkSize) {
+    if (entityIds.size() < chunkSize) {
+      return Criteria.where(IEntity.ID).in(entityIds);
+    }
     int i = 0;
     Criteria splittedInlist = Criteria.where(IEntity.ID);
     Set<Serializable> currentEntityIds = new LinkedHashSet<>();

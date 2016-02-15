@@ -20,7 +20,9 @@ package org.jspresso.framework.model.persistence.mongo.criterion;
 
 import static org.springframework.data.mongodb.core.query.Criteria.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -35,6 +37,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 import org.jspresso.framework.application.action.AbstractActionContextAware;
+import org.jspresso.framework.application.backend.action.persistence.mongo.QueryEntitiesAction;
 import org.jspresso.framework.model.component.IPropertyTranslation;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.component.query.ComparableQueryStructure;
@@ -177,54 +180,52 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
     } else {
       String translationsPath = AbstractComponentDescriptor.getComponentTranslationsDescriptorTemplate().getName();
       for (Map.Entry<String, Object> property : aQueryComponent.entrySet()) {
-        IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor(property.getKey());
+        String propertyName = property.getKey();
+        Object propertyValue = property.getValue();
+        IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor(propertyName);
         if (propertyDescriptor != null) {
           boolean isEntityRef = false;
           if (componentDescriptor.isEntity() && aQueryComponent.containsKey(IEntity.ID)) {
             isEntityRef = true;
           }
-          if ((!PropertyViewDescriptorHelper.isComputed(componentDescriptor, property.getKey()) || (
+          if ((!PropertyViewDescriptorHelper.isComputed(componentDescriptor, propertyName) || (
               propertyDescriptor instanceof IStringPropertyDescriptor
                   && ((IStringPropertyDescriptor) propertyDescriptor).isTranslatable())) && (!isEntityRef || IEntity.ID
-              .equals(property.getKey()))) {
+              .equals(propertyName))) {
             String prefixedProperty;
             if (path != null) {
-              prefixedProperty = path + "." + property.getKey();
+              prefixedProperty = path + "." + propertyName;
             } else {
-              prefixedProperty = property.getKey();
+              prefixedProperty = propertyName;
             }
-            if (property.getValue() instanceof IEntity) {
-              if (!((IEntity) property.getValue()).isPersistent()) {
+            if (propertyValue instanceof IEntity) {
+              if (!((IEntity) propertyValue).isPersistent()) {
                 abort = true;
               } else {
-                completeQuery(query, where(prefixedProperty).is(property.getValue()));
+                completeQuery(query, where(prefixedProperty).is(propertyValue));
               }
-            } else if (property.getValue() instanceof Boolean && (isTriStateBooleanSupported() || (Boolean) property
-                .getValue())) {
-              completeQuery(query, where(prefixedProperty).is(property.getValue()));
-            } else if (property.getValue() instanceof String) {
-              if (IEntity.ID.equalsIgnoreCase(property.getKey())) {
-                completeQuery(query, createIdRestriction(propertyDescriptor, prefixedProperty, property.getValue(),
-                    componentDescriptor, aQueryComponent, context));
-              } else {
-                completeQueryWithTranslations(query, translationsPath, translationsPath, property, propertyDescriptor,
-                    prefixedProperty, getBackendController(context).getLocale(), componentDescriptor, aQueryComponent,
-                    context);
-              }
-            } else if (property.getValue() instanceof Number || property.getValue() instanceof Date) {
-              completeQuery(query, where(prefixedProperty).is(property.getValue()));
-            } else if (property.getValue() instanceof EnumQueryStructure) {
-              completeQuery(query, createEnumQueryStructureRestriction(prefixedProperty,
-                  ((EnumQueryStructure) property.getValue())));
-            } else if (property.getValue() instanceof IQueryComponent) {
-              IQueryComponent joinedComponent = ((IQueryComponent) property.getValue());
+            } else if (propertyValue instanceof Boolean && (isTriStateBooleanSupported() || (Boolean) propertyValue)) {
+              completeQuery(query, where(prefixedProperty).is(propertyValue));
+            } else if (IEntity.ID.equalsIgnoreCase(propertyName)) {
+              completeQuery(query,
+                  createIdRestriction(propertyDescriptor, prefixedProperty, propertyValue, componentDescriptor,
+                      aQueryComponent, context));
+            } else if (propertyValue instanceof String) {
+              completeQueryWithTranslations(query, translationsPath, translationsPath, property, propertyDescriptor,
+                  prefixedProperty, getBackendController(context).getLocale(), componentDescriptor, aQueryComponent,
+                  context);
+            } else if (propertyValue instanceof Number || propertyValue instanceof Date) {
+              completeQuery(query, where(prefixedProperty).is(propertyValue));
+            } else if (propertyValue instanceof EnumQueryStructure) {
+              completeQuery(query, createEnumQueryStructureRestriction(prefixedProperty, ((EnumQueryStructure) propertyValue)));
+            } else if (propertyValue instanceof IQueryComponent) {
+              IQueryComponent joinedComponent = ((IQueryComponent) propertyValue);
               if (!isQueryComponentEmpty(joinedComponent, propertyDescriptor)) {
                 if (joinedComponent.isInlineComponent()/* || path != null */) {
                   // the joined component is an inline component so we must use
                   // dot nested properties. Same applies if we are in a nested
                   // path i.e. already on an inline component.
-                  abort = abort || completeQuery(query, prefixedProperty, (IQueryComponent) property.getValue(),
-                      context);
+                  abort = abort || completeQuery(query, prefixedProperty, (IQueryComponent) propertyValue, context);
                 } else {
                   // the joined component is an entity so we must use
                   // nested query; unless the autoComplete property
@@ -256,9 +257,9 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
                   }
                 }
               }
-            } else if (property.getValue() != null) {
+            } else if (propertyValue != null) {
               // Unknown property type. Assume equals.
-              completeQuery(query, where(prefixedProperty).is(property.getValue()));
+              completeQuery(query, where(prefixedProperty).is(propertyValue));
             }
           }
         }
@@ -331,14 +332,18 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
    *     the context
    * @return the created criteria or null if no criteria necessary.
    */
+  @SuppressWarnings("unchecked")
   protected Criteria createIdRestriction(IPropertyDescriptor propertyDescriptor, String prefixedProperty,
                                          Object propertyValue, IComponentDescriptor<?> componentDescriptor,
                                          IQueryComponent queryComponent, Map<String, Object> context) {
-    if (propertyValue instanceof String) {
-      return createStringRestriction(propertyDescriptor, prefixedProperty.replace('.' + IEntity.ID, ""),
+    String joinedProperty = prefixedProperty.replace('.' + IEntity.ID, "");
+    if (propertyValue instanceof Collection<?>) {
+      return Criteria.where(joinedProperty).in((Collection<?>) propertyValue);
+    } else if (propertyValue instanceof String) {
+      return createStringRestriction(propertyDescriptor, joinedProperty,
           (String) propertyValue, componentDescriptor, queryComponent, context);
     } else {
-      return where(prefixedProperty.replace('.' + IEntity.ID, "")).is(propertyValue);
+      return where(joinedProperty).is(propertyValue);
     }
   }
 
@@ -372,6 +377,7 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
                                                IPropertyDescriptor propertyDescriptor, String prefixedProperty,
                                                Locale locale, IComponentDescriptor<?> componentDescriptor,
                                                IQueryComponent queryComponent, Map<String, Object> context) {
+    String propertyValue = (String) property.getValue();
     if (propertyDescriptor instanceof IStringPropertyDescriptor && ((IStringPropertyDescriptor) propertyDescriptor)
         .isTranslatable()) {
       String nlsOrRawValue = null;
@@ -387,37 +393,37 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
         List<Criteria> translationRestriction = new ArrayList<>();
         translationRestriction.add(createStringRestriction(
             ((ICollectionPropertyDescriptor<IPropertyTranslation>) componentDescriptor.getPropertyDescriptor(
-                translationsPath)).getCollectionDescriptor().getElementDescriptor().getPropertyDescriptor(
-                IPropertyTranslation.TRANSLATED_VALUE), translationsAlias + "." + IPropertyTranslation.TRANSLATED_VALUE,
-            nlsValue, componentDescriptor, queryComponent, context));
+                translationsPath)).getCollectionDescriptor().getElementDescriptor().getPropertyDescriptor
+                (IPropertyTranslation.TRANSLATED_VALUE),
+            translationsAlias + "." + IPropertyTranslation.TRANSLATED_VALUE, propertyValue, componentDescriptor,
+            queryComponent, context));
         String languagePath = translationsAlias + "." + IPropertyTranslation.LANGUAGE;
         translationRestriction.add(where(languagePath).is(locale.getLanguage()));
-        translationRestriction.add(where(translationsAlias + "." + IPropertyTranslation.PROPERTY_NAME).is(
-            barePropertyName));
+        translationRestriction.add(where(translationsAlias + "." + IPropertyTranslation.PROPERTY_NAME).is(barePropertyName));
 
         List<Criteria> disjunction = new ArrayList<>();
-        disjunction.add(new Criteria().andOperator(translationRestriction.toArray(
-            new Criteria[translationRestriction.size()])));
+        disjunction.add(new Criteria().andOperator(translationRestriction.toArray(new Criteria[translationRestriction.size()])));
         if (nlsOrRawValue != null) {
           List<Criteria> rawValueRestriction = new ArrayList<>();
           // No SQL exists equivalent in Mongo...
           // rawValueRestriction.add(new Criteria().orOperator(where(translationsPath).is(null), where(languagePath)
           //  .is(locale.getLanguage())));
           String rawPropertyName = barePropertyName + IComponentDescriptor.RAW_SUFFIX;
-          rawValueRestriction.add(createStringRestriction(componentDescriptor.getPropertyDescriptor(rawPropertyName),
-              rawPropertyName, nlsOrRawValue, componentDescriptor, queryComponent, context));
+          rawValueRestriction.add(
+              createStringRestriction(componentDescriptor.getPropertyDescriptor(rawPropertyName), rawPropertyName,
+                  nlsOrRawValue, componentDescriptor, queryComponent, context));
           if (rawValueRestriction.size() == 1) {
             disjunction.add(rawValueRestriction.get(0));
           } else {
-            disjunction.add(new Criteria().andOperator(rawValueRestriction.toArray(
-                new Criteria[rawValueRestriction.size()])));
+            disjunction.add(new Criteria().andOperator(rawValueRestriction.toArray(new Criteria[rawValueRestriction.size()])));
           }
         }
         currentQuery.addCriteria(new Criteria().orOperator(disjunction.toArray(new Criteria[disjunction.size()])));
       }
     } else {
-      completeQuery(currentQuery, createStringRestriction(propertyDescriptor, prefixedProperty,
-          (String) property.getValue(), componentDescriptor, queryComponent, context));
+      completeQuery(currentQuery,
+          createStringRestriction(propertyDescriptor, prefixedProperty, propertyValue, componentDescriptor,
+              queryComponent, context));
     }
   }
 
