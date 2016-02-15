@@ -209,7 +209,7 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
               }
             } else if (propertyValue instanceof Boolean && (isTriStateBooleanSupported() || (Boolean) propertyValue)) {
               completeQuery(query, where(prefixedProperty).is(propertyValue));
-            } else if (IEntity.ID.equalsIgnoreCase(property.getKey())) {
+            } else if (IEntity.ID.equalsIgnoreCase(propertyName)) {
               completeQuery(query,
                   createIdRestriction(propertyDescriptor, prefixedProperty, propertyValue, componentDescriptor,
                       aQueryComponent, context));

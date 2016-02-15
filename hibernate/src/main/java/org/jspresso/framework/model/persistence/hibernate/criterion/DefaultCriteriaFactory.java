@@ -205,51 +205,52 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
         rootCriteria.getSubCriteriaFor(currentCriteria, translationsPath, translationsAlias, JoinType.LEFT_OUTER_JOIN);
       }
       for (Map.Entry<String, Object> property : aQueryComponent.entrySet()) {
-        IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor(property.getKey());
+        String propertyName = property.getKey();
+        Object propertyValue = property.getValue();
+        IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor(propertyName);
         if (propertyDescriptor != null) {
           boolean isEntityRef = false;
           if (componentDescriptor.isEntity() && aQueryComponent.containsKey(IEntity.ID)) {
             isEntityRef = true;
           }
-          if ((!PropertyViewDescriptorHelper.isComputed(componentDescriptor, property.getKey()) || (
+          if ((!PropertyViewDescriptorHelper.isComputed(componentDescriptor, propertyName) || (
               propertyDescriptor instanceof IStringPropertyDescriptor
                   && ((IStringPropertyDescriptor) propertyDescriptor).isTranslatable())) && (!isEntityRef || IEntity.ID
-              .equals(property.getKey()))) {
-            String prefixedProperty = PropertyHelper.toJavaBeanPropertyName(property.getKey());
+              .equals(propertyName))) {
+            String prefixedProperty = PropertyHelper.toJavaBeanPropertyName(propertyName);
             if (path != null) {
               prefixedProperty = path + "." + prefixedProperty;
             }
-            if (property.getValue() instanceof IEntity) {
-              if (!((IEntity) property.getValue()).isPersistent()) {
+            if (propertyValue instanceof IEntity) {
+              if (!((IEntity) propertyValue).isPersistent()) {
                 abort = true;
               } else {
-                completeCriteria(currentCriteria, Restrictions.eq(prefixedProperty, property.getValue()));
+                completeCriteria(currentCriteria, Restrictions.eq(prefixedProperty, propertyValue));
               }
-            } else if (property.getValue() instanceof Boolean && (isTriStateBooleanSupported() || (Boolean) property
-                .getValue())) {
-              completeCriteria(currentCriteria, Restrictions.eq(prefixedProperty, property.getValue()));
-            } else if(IEntity.ID.equalsIgnoreCase(property.getKey())) {
+            } else if (propertyValue instanceof Boolean && (isTriStateBooleanSupported() || (Boolean) propertyValue)) {
+              completeCriteria(currentCriteria, Restrictions.eq(prefixedProperty, propertyValue));
+            } else if(IEntity.ID.equalsIgnoreCase(propertyName)) {
               completeCriteria(currentCriteria,
-                  createIdRestriction(propertyDescriptor, prefixedProperty, property.getValue(), componentDescriptor,
+                  createIdRestriction(propertyDescriptor, prefixedProperty, propertyValue, componentDescriptor,
                       aQueryComponent, context));
-            } else if (property.getValue() instanceof String) {
+            } else if (propertyValue instanceof String) {
               completeCriteriaWithTranslations(currentCriteria, translationsPath, translationsAlias, property,
                   propertyDescriptor, prefixedProperty, getBackendController(context).getLocale(), componentDescriptor,
                   aQueryComponent, context);
-            } else if (property.getValue() instanceof Number || property.getValue() instanceof Date) {
-              completeCriteria(currentCriteria, Restrictions.eq(prefixedProperty, property.getValue()));
-            } else if (property.getValue() instanceof EnumQueryStructure) {
+            } else if (propertyValue instanceof Number || propertyValue instanceof Date) {
+              completeCriteria(currentCriteria, Restrictions.eq(prefixedProperty, propertyValue));
+            } else if (propertyValue instanceof EnumQueryStructure) {
               completeCriteria(currentCriteria, createEnumQueryStructureRestriction(prefixedProperty,
-                  ((EnumQueryStructure) property.getValue())));
-            } else if (property.getValue() instanceof IQueryComponent) {
-              IQueryComponent joinedComponent = ((IQueryComponent) property.getValue());
+                  ((EnumQueryStructure) propertyValue)));
+            } else if (propertyValue instanceof IQueryComponent) {
+              IQueryComponent joinedComponent = ((IQueryComponent) propertyValue);
               if (!isQueryComponentEmpty(joinedComponent, propertyDescriptor)) {
                 if (joinedComponent.isInlineComponent()/* || path != null */) {
                   // the joined component is an inline component so we must use
                   // dot nested properties. Same applies if we are in a nested
                   // path i.e. already on an inline component.
                   abort = abort || completeCriteria(rootCriteria, currentCriteria, prefixedProperty,
-                      (IQueryComponent) property.getValue(), context);
+                      (IQueryComponent) propertyValue, context);
                 } else {
                   // the joined component is an entity so we must use
                   // nested criteria; unless the autoComplete property
@@ -287,9 +288,9 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
                   }
                 }
               }
-            } else if (property.getValue() != null) {
+            } else if (propertyValue != null) {
               // Unknown property type. Assume equals.
-              completeCriteria(currentCriteria, Restrictions.eq(prefixedProperty, property.getValue()));
+              completeCriteria(currentCriteria, Restrictions.eq(prefixedProperty, propertyValue));
             }
           }
         }
