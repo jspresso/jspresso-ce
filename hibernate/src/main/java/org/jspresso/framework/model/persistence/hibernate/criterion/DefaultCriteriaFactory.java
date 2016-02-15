@@ -18,7 +18,9 @@
  */
 package org.jspresso.framework.model.persistence.hibernate.criterion;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -29,6 +31,7 @@ import java.util.Set;
 import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Junction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
@@ -38,7 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.jspresso.framework.application.action.AbstractActionContextAware;
-import org.jspresso.framework.application.backend.persistence.hibernate.HibernateHelper;
+import org.jspresso.framework.application.backend.action.persistence.hibernate.QueryEntitiesAction;
 import org.jspresso.framework.model.component.IPropertyTranslation;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.component.query.ComparableQueryStructure;
@@ -225,15 +228,14 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
             } else if (property.getValue() instanceof Boolean && (isTriStateBooleanSupported() || (Boolean) property
                 .getValue())) {
               completeCriteria(currentCriteria, Restrictions.eq(prefixedProperty, property.getValue()));
+            } else if(IEntity.ID.equalsIgnoreCase(property.getKey())) {
+              completeCriteria(currentCriteria,
+                  createIdRestriction(propertyDescriptor, prefixedProperty, property.getValue(), componentDescriptor,
+                      aQueryComponent, context));
             } else if (property.getValue() instanceof String) {
-              if (IEntity.ID.equalsIgnoreCase(property.getKey())) {
-                completeCriteria(currentCriteria, createIdRestriction(propertyDescriptor, prefixedProperty,
-                    property.getValue(), componentDescriptor, aQueryComponent, context));
-              } else {
-                completeCriteriaWithTranslations(currentCriteria, translationsPath, translationsAlias, property,
-                    propertyDescriptor, prefixedProperty, getBackendController(context).getLocale(),
-                    componentDescriptor, aQueryComponent, context);
-              }
+              completeCriteriaWithTranslations(currentCriteria, translationsPath, translationsAlias, property,
+                  propertyDescriptor, prefixedProperty, getBackendController(context).getLocale(), componentDescriptor,
+                  aQueryComponent, context);
             } else if (property.getValue() instanceof Number || property.getValue() instanceof Date) {
               completeCriteria(currentCriteria, Restrictions.eq(prefixedProperty, property.getValue()));
             } else if (property.getValue() instanceof EnumQueryStructure) {
@@ -429,14 +431,19 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
    *     the context
    * @return the created criterion or null if no criterion necessary.
    */
+  @SuppressWarnings("unchecked")
   protected Criterion createIdRestriction(IPropertyDescriptor propertyDescriptor, String prefixedProperty,
                                           Object propertyValue, IComponentDescriptor<?> componentDescriptor,
                                           IQueryComponent queryComponent, Map<String, Object> context) {
-    if (propertyValue instanceof String) {
-      return createStringRestriction(propertyDescriptor, prefixedProperty, (String) propertyValue, componentDescriptor,
-          queryComponent, context);
+    if (propertyValue instanceof Collection<?>) {
+      return QueryEntitiesAction.createEntityIdsInCriterion((Collection<Serializable>) propertyValue, 100);
     } else {
-      return Restrictions.eq(prefixedProperty, propertyValue);
+      if (propertyValue instanceof String) {
+        return createStringRestriction(propertyDescriptor, prefixedProperty, (String) propertyValue, componentDescriptor,
+            queryComponent, context);
+      } else {
+        return Restrictions.eq(prefixedProperty, propertyValue);
+      }
     }
   }
 

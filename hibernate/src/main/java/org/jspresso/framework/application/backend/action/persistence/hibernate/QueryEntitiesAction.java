@@ -108,6 +108,9 @@ public class QueryEntitiesAction extends AbstractQueryComponentsAction {
    * @return the criterion.
    */
   public static Criterion createEntityIdsInCriterion(Collection<Serializable> entityIds, int chunkSize) {
+    if (entityIds.size() < chunkSize) {
+      return Restrictions.in(IEntity.ID, entityIds);
+    }
     int i = 0;
     Disjunction splittedInlist = Restrictions.disjunction();
     Set<Serializable> currentEntityIds = new LinkedHashSet<>();
