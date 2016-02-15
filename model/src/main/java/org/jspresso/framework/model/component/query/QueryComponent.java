@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentFactory;
@@ -262,7 +263,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
         if (((Collection<?>) incomingValue).size() == 1) {
           return put(nestedQueryComponentKey, ((Collection<?>) incomingValue).iterator().next());
         }
-        StringBuilder idValue = null;
+        Set<Serializable> idValue = new HashSet<>();
         StringBuilder tsValue = null;
         List<StringBuilder> extraPropValues = null;
         if (extraProps != null) {
@@ -275,13 +276,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
         for (Object element : (Collection<?>) incomingValue) {
           if (element instanceof IEntity) {
             List<Serializable> queryPropertyValues = extractQueryPropertyValues((IEntity) element, extraProps);
-            if (queryPropertyValues.get(0) instanceof CharSequence) {
-              if (idValue == null) {
-                idValue = new StringBuilder(queryPropertyValues.get(0).toString());
-              } else {
-                idValue.append(IQueryComponent.DISJUNCT).append(queryPropertyValues.get(0).toString());
-              }
-            }
+            idValue.add(queryPropertyValues.get(0));
             if (queryPropertyValues.get(1) instanceof CharSequence) {
               if (tsValue == null) {
                 tsValue = new StringBuilder(queryPropertyValues.get(1).toString());
@@ -304,10 +299,10 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
             }
           }
         }
-        if (idValue != null) {
-          actualValue.put(IEntity.ID, idValue.toString());
-        } else {
+        if (idValue.isEmpty()) {
           actualValue.remove(IEntity.ID);
+        } else {
+          actualValue.put(IEntity.ID, idValue);
         }
         if (tsValue != null) {
           actualValue.put(tsProp, tsValue.toString());
