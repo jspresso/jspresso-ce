@@ -508,7 +508,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
 
         "application-split": {
           alias: "splitpane",
-          include: "splitpane",
+          include: "splitpane"
         },
 
         "application-split/splitter": {
