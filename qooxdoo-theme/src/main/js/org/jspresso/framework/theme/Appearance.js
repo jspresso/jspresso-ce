@@ -644,7 +644,6 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             return {
               backgroundColor: "app-background",
-              decorator: "transition-box",
               paddingBottom: 10
             }
           }
