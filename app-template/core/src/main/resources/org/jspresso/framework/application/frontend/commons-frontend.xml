@@ -602,6 +602,9 @@
     </property>
   </bean>
 
+  <bean id="removeComponentsFromWorkspacesFrontAction"
+        class="org.jspresso.framework.application.frontend.action.std.RemoveComponentsFromWorkspacesFrontAction"/>
+
   <bean id="removeEntityCollectionFromMasterFrontAction" class="org.jspresso.framework.application.frontend.action.flow.StaticYesNoAction">
     <property name="iconImageURL">
       <bean parent="abstractFwIconImageURL">
@@ -613,7 +616,11 @@
     <property name="acceleratorAsString" value="ctrl shift D" />
     <property name="collectionBased" value="true" />
     <property name="messageCode" value="remove.selected.message" />
-    <property name="yesAction" ref="removeCollectionFromMasterBackAction" />
+    <property name="yesAction">
+      <bean parent="removeComponentsFromWorkspacesFrontAction">
+        <property name="wrappedAction" ref="removeCollectionFromMasterBackAction" />
+      </bean>
+    </property>
   </bean>
 
   <bean id="removeAnyCollectionFromMasterFrontAction" class="org.jspresso.framework.application.frontend.action.flow.StaticYesNoAction"
