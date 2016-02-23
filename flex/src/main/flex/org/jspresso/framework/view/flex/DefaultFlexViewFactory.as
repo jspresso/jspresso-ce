@@ -1199,6 +1199,7 @@ public class DefaultFlexViewFactory {
       };
 
       var triggerAction:Function = function (event:Event):void {
+        //trace("####################### triggerAction #####################")
         var tf:TextInput = (event.currentTarget as TextInput);
         var inputText:String = tf.text;
         if (inputText == null || inputText.length == 0) {
@@ -1229,7 +1230,8 @@ public class DefaultFlexViewFactory {
       // specifically.
       // textInput.addEventListener(FocusEvent.FOCUS_OUT, triggerAction);
       textInput.addEventListener(FocusEvent.FOCUS_OUT, function (event:FocusEvent):void {
-        if (event.relatedObject is DataGrid) {
+        if ( event.relatedObject == null /* An external window has been focused */
+          || event.relatedObject is DataGrid /* The datagrid has been focused */) {
           triggerAction(event);
         }
       });
