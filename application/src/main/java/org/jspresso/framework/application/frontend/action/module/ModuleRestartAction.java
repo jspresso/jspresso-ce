@@ -19,6 +19,7 @@
 package org.jspresso.framework.application.frontend.action.module;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -62,26 +63,49 @@ public class ModuleRestartAction<E, F, G> extends FrontendAction<E, F, G> {
    * @return the boolean
    */
   protected boolean restartModule(Module module, IActionHandler actionHandler, Map<String, Object> context) {
-    if (module.getSubModules() != null) {
-      List<Module> subModulesToRemove = new ArrayList<>();
-      for (Module subModule : module.getSubModules()) {
+    List<Module> subModules = module.getSubModules();
+    if (subModules != null) {
+      Collection<Module> modulesToRemove = new ArrayList<>();
+      for (Module subModule : subModules) {
         if (module.isSubModuleSticky(subModule)) {
           restartModule(subModule, actionHandler, context);
         } else {
-          if (subModule instanceof BeanModule) {
-            ((BeanModule) subModule).setModuleObject(null);
-          } else if (subModule instanceof BeanCollectionModule) {
-            ((BeanCollectionModule) subModule).setModuleObjects(null);
-          }
-          subModulesToRemove.add(subModule);
+          cleanSubModules(subModule);
+          modulesToRemove.add(subModule);
         }
       }
-      module.removeSubModules(subModulesToRemove);
+      removeModulesFromParent(module, modulesToRemove);
     }
     boolean startupResult = true;
     if (module.getStartupAction() != null) {
       startupResult = actionHandler.execute(module.getStartupAction(), context);
     }
     return startupResult;
+  }
+
+  private Collection<Module> cleanSubModules(Module module) {
+    Collection<Module> modulesToRemove = new ArrayList<>();
+    List<Module> subModules = module.getSubModules();
+    if (subModules != null) {
+      for (Module subModule : subModules) {
+        modulesToRemove.add(subModule);
+        Collection<Module> grandSubModulesToRemove = cleanSubModules(subModule);
+        if (!grandSubModulesToRemove.isEmpty()) {
+          removeModulesFromParent(subModule, grandSubModulesToRemove);
+        }
+      }
+    }
+    return modulesToRemove;
+  }
+
+  private void removeModulesFromParent(Module parentModule, Collection<Module> subModulesToRemove) {
+    parentModule.removeSubModules(subModulesToRemove);
+    for (Module module : subModulesToRemove) {
+      if (module instanceof BeanModule) {
+        ((BeanModule) module).setModuleObject(null);
+      } else if (module instanceof BeanCollectionModule) {
+        ((BeanCollectionModule) module).setModuleObjects(null);
+      }
+    }
   }
 }
