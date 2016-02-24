@@ -26,6 +26,7 @@ import java.util.Map;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.IFrontendController;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
+import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.BeanModule;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
@@ -34,13 +35,13 @@ import org.jspresso.framework.application.model.Workspace;
  * Remove selected models from workspaces front action.
  *
  * @param <E>
- *          the actual gui component type used.
+ *     the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *     the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *     the actual action type used.
  */
-public class RemoveComponentsFromWorkspacesFrontAction<E,F,G> extends FrontendAction<E,F,G> {
+public class RemoveComponentsFromWorkspacesFrontAction<E, F, G> extends FrontendAction<E, F, G> {
 
   @Override
   public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
@@ -68,8 +69,17 @@ public class RemoveComponentsFromWorkspacesFrontAction<E,F,G> extends FrontendAc
     List<Module> subModules = module.getSubModules();
     if (subModules != null) {
       for (Module subModule : subModules) {
-        if (subModule instanceof BeanModule && componentsToDelete.contains(((BeanModule) subModule).getModuleObject())) {
+        if (subModule instanceof BeanModule && componentsToDelete.contains(
+            ((BeanModule) subModule).getModuleObject())) {
+          ((BeanModule) subModule).setModuleObject(null);
           modulesToRemove.add(subModule);
+        } else if (subModule instanceof BeanCollectionModule) {
+          List<?> moduleObjects = ((BeanCollectionModule) subModule).getModuleObjects();
+          if (moduleObjects != null) {
+            for (Object componentToDelete : componentsToDelete) {
+              ((BeanCollectionModule) subModule).removeFromModuleObjects(componentToDelete);
+            }
+          }
         }
         Collection<Module> grandSubModulesToRemove = cleanComponentsFromModules(subModule, componentsToDelete);
         if (!grandSubModulesToRemove.isEmpty()) {
