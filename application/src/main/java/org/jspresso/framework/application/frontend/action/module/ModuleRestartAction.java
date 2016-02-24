@@ -19,6 +19,7 @@
 package org.jspresso.framework.application.frontend.action.module;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +32,7 @@ import org.jspresso.framework.application.model.Module;
 /**
  * This action is used to restart a module. It cleans its children and executes
  * its startup action.
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
@@ -50,21 +51,32 @@ public class ModuleRestartAction<E, F, G> extends FrontendAction<E, F, G> {
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     Module module = getModule(context);
-    if (module instanceof BeanCollectionModule
-        && module.getSubModules() != null) {
-      List<Module> beanModulesToRemove = new ArrayList<Module>();
-      for (Module beanModule : module.getSubModules()) {
-        if (beanModule instanceof BeanModule) {
-          ((BeanModule) beanModule).setModuleObject(null);
-          beanModulesToRemove.add(beanModule);
-        }
-      }
-      module.removeSubModules(beanModulesToRemove);
-    }
+    cleanSubBeanModules(module);
     boolean startupResult = true;
     if (module.getStartupAction() != null) {
       startupResult = actionHandler.execute(module.getStartupAction(), context);
     }
     return startupResult && super.execute(actionHandler, context);
   }
+
+  private Collection<Module> cleanSubBeanModules(Module module) {
+    Collection<Module> modulesToRemove = new ArrayList<Module>();
+    List<Module> subModules = module.getSubModules();
+    if (subModules != null) {
+      for (Module subModule : subModules) {
+        if (subModule instanceof BeanModule) {
+          modulesToRemove.add(subModule);
+        }
+        Collection<Module> grandSubModulesToRemove = cleanSubBeanModules(subModule);
+        if (!grandSubModulesToRemove.isEmpty()) {
+          subModule.removeSubModules(grandSubModulesToRemove);
+          for (Module grandSubModuleToRemove : grandSubModulesToRemove) {
+            ((BeanModule) grandSubModuleToRemove).setModuleObject(null);
+          }
+        }
+      }
+    }
+    return modulesToRemove;
+  }
+
 }
