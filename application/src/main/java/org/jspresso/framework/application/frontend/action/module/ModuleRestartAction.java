@@ -59,7 +59,7 @@ public class ModuleRestartAction<E, F, G> extends FrontendAction<E, F, G> {
     return startupResult && super.execute(actionHandler, context);
   }
 
-  private Collection<Module> cleanSubBeanModules(Module module) {
+  private void cleanSubBeanModules(Module module) {
     Collection<Module> modulesToRemove = new ArrayList<Module>();
     List<Module> subModules = module.getSubModules();
     if (subModules != null) {
@@ -67,16 +67,13 @@ public class ModuleRestartAction<E, F, G> extends FrontendAction<E, F, G> {
         if (subModule instanceof BeanModule) {
           modulesToRemove.add(subModule);
         }
-        Collection<Module> grandSubModulesToRemove = cleanSubBeanModules(subModule);
-        if (!grandSubModulesToRemove.isEmpty()) {
-          subModule.removeSubModules(grandSubModulesToRemove);
-          for (Module grandSubModuleToRemove : grandSubModulesToRemove) {
-            ((BeanModule) grandSubModuleToRemove).setModuleObject(null);
-          }
-        }
+        cleanSubBeanModules(subModule);
       }
     }
-    return modulesToRemove;
+    for (Module moduleToRemove : modulesToRemove) {
+      ((BeanModule) moduleToRemove).setModuleObject(null);
+    }
+    module.removeSubModules(modulesToRemove);
   }
 
 }
