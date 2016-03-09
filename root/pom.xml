@@ -110,7 +110,8 @@
     <xdoclet2-hibernate-plugin.version>1.0.5</xdoclet2-hibernate-plugin.version>
     <build-helper-plugin.version>1.9.1</build-helper-plugin.version>
     <hibernate3-plugin.version>2.2</hibernate3-plugin.version>
-    <jasperreports-plugin.version>1.0-beta-2</jasperreports-plugin.version>
+    <jasperreports-plugin-legacy.version>1.0-beta-2</jasperreports-plugin-legacy.version>
+    <jasperreports-plugin.version>2.0</jasperreports-plugin.version>
     <flexmojos-plugin.version>7.0.0</flexmojos-plugin.version>
     <exec-plugin.version>1.4.0</exec-plugin.version>
     <gmaven-plugin.version>1.5</gmaven-plugin.version>
@@ -1272,9 +1273,14 @@
           </dependencies>
         </plugin>
         <plugin>
+          <groupId>com.alexnederlof</groupId>
+          <artifactId>jasperreports-plugin</artifactId>
+          <version>${jasperreports-plugin.version}</version>
+        </plugin>
+        <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>jasperreports-maven-plugin</artifactId>
-          <version>${jasperreports-plugin.version}</version>
+          <version>${jasperreports-plugin-legacy.version}</version>
           <dependencies>
             <dependency>
               <groupId>net.sf.jasperreports</groupId>

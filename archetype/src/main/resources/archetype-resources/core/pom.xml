@@ -234,20 +234,19 @@
       </plugin>
 #end
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>jasperreports-maven-plugin</artifactId>
-        <configuration>
-           <outputDirectory>${symbol_dollar}{project.build.directory}/generated-resources/jasperreports</outputDirectory>
-        </configuration>
+        <groupId>com.alexnederlof</groupId>
+        <artifactId>jasperreports-plugin</artifactId>
         <executions>
           <execution>
-            <id>compile-jasper-reports</id>
             <phase>generate-resources</phase>
             <goals>
-              <goal>compile-reports</goal>
+              <goal>jasper</goal>
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <outputDirectory>${symbol_dollar}{project.build.directory}/generated-resources/jasperreports</outputDirectory>
+        </configuration>
       </plugin>
     </plugins>
   </build>
