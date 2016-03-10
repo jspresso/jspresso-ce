@@ -150,18 +150,6 @@ import org.jspresso.framework.util.gui.Font;
 import org.jspresso.framework.util.html.HtmlUtil;
 import org.jspresso.framework.util.lang.DateDto;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
-import org.openscales.core.Map;
-import org.openscales.core.basetypes.Resolution;
-import org.openscales.core.feature.PointFeature;
-import org.openscales.core.handler.mouse.DragHandler;
-import org.openscales.core.handler.mouse.WheelHandler;
-import org.openscales.core.layer.VectorLayer;
-import org.openscales.core.layer.osm.Mapnik;
-import org.openscales.core.style.Style;
-import org.openscales.geometry.basetypes.Bounds;
-import org.openscales.geometry.basetypes.Location;
-import org.openscales.geometry.basetypes.Size;
-import org.openscales.proj4as.ProjProjection;
 import org.sepy.ui.CheckBoxExtended;
 
 public class DefaultFlexViewFactory {
