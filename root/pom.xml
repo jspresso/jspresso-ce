@@ -3,7 +3,7 @@
   <groupId>org.jspresso.framework</groupId>
   <artifactId>jspresso-root</artifactId>
   <packaging>pom</packaging>
-  <version>4.2.6</version>
+  <version>4.2.7-SNAPSHOT</version>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -14,7 +14,7 @@
     <java.version>1.7</java.version>
 
     <!-- Jspresso dependencies versions -->
-    <jspresso.version>4.2.6</jspresso.version>
+    <jspresso.version>4.2.7-SNAPSHOT</jspresso.version>
     <sjs.version>2.2</sjs.version>
 
     <junit.version>4.11</junit.version>
