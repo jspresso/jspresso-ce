@@ -217,7 +217,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
       cleanupState(remotePeer as RemoteCompositeValueState)
     }
   }
-  
+
   protected function cleanupState(rcvs:RemoteCompositeValueState):void {
     for each(var childState:RemoteValueState in rcvs.children) {
       if (childState is RemoteCompositeValueState) {
@@ -234,24 +234,24 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     try {
       _changeNotificationsEnabled = false;
 
-//      var valueListener:Function = function (value:Object):void {
-//        valueUpdated(remoteValueState);
-//      };
-//      BindingUtils.bindSetter(valueListener, remoteValueState, "value", true);
-//      if (remoteValueState is RemoteCompositeValueState) {
-//        var selectedIndicesListener:Function = function (selectedIndices:Array):void {
-//          selectedIndicesUpdated(remoteValueState as RemoteCompositeValueState);
-//        };
-//        BindingUtils.bindSetter(selectedIndicesListener, remoteValueState, "selectedIndices", true);
-//      }
+      var valueListener:Function = function (value:Object):void {
+        valueUpdated(remoteValueState);
+      };
+      BindingUtils.bindSetter(valueListener, remoteValueState, "value", true);
+      if (remoteValueState is RemoteCompositeValueState) {
+        var selectedIndicesListener:Function = function (selectedIndices:Array):void {
+          selectedIndicesUpdated(remoteValueState as RemoteCompositeValueState);
+        };
+        BindingUtils.bindSetter(selectedIndicesListener, remoteValueState, "selectedIndices", true);
+      }
 
-        remoteValueState.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, valueStateHandler, false, 0, true);
+      // remoteValueState.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, valueStateHandler, false, 0, true);
 
     } finally {
       _changeNotificationsEnabled = wasEnabled;
     }
   }
-  
+
   protected function valueStateHandler(event:PropertyChangeEvent):void {
     if (event.property == "value") {
       valueUpdated(event.source as RemoteValueState);
