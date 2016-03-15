@@ -19,8 +19,8 @@
 
     <junit.version>4.12</junit.version>
     <mockito.version>1.10.19</mockito.version>
-    <flex.version>4.14.1.20150325</flex.version>
-    <playerglobal.version>19.0</playerglobal.version>
+    <flex.version>4.15.0</flex.version>
+    <playerglobal.version>20.0</playerglobal.version>
     <flexunit.version>4.1.0</flexunit.version>
     <blazeds.version>4.7.2</blazeds.version>
     <flexlib.version>2.5</flexlib.version>
@@ -115,7 +115,7 @@
     <build-helper-plugin.version>1.10</build-helper-plugin.version>
     <hibernate3-plugin.version>2.2</hibernate3-plugin.version>
     <jasperreports-plugin.version>2.0</jasperreports-plugin.version>
-    <flexmojos-plugin.version>7.0.1</flexmojos-plugin.version>
+    <flexmojos-plugin.version>7.1.0</flexmojos-plugin.version>
     <exec-plugin.version>1.4.0</exec-plugin.version>
     <groovy.version>2.4.5</groovy.version>
     <groovy-eclipse-compiler.version>2.9.2-01</groovy-eclipse-compiler.version>
@@ -862,6 +862,18 @@
         <artifactId>playerglobal</artifactId>
         <version>${playerglobal.version}</version>
         <type>swc</type>
+      </dependency>
+      <dependency>
+        <groupId>com.adobe.flash</groupId>
+        <artifactId>framework</artifactId>
+        <version>${playerglobal.version}</version>
+        <type>pom</type>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.flex</groupId>
+        <artifactId>framework</artifactId>
+        <version>${flex.version}</version>
+        <type>pom</type>
       </dependency>
       <dependency>
         <groupId>org.apache.flex.framework</groupId>

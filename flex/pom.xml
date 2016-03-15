@@ -12,29 +12,20 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.apache.flex.framework</groupId>
+      <groupId>org.apache.flex</groupId>
       <artifactId>framework</artifactId>
-      <type>swc</type>
+      <type>pom</type>
     </dependency>
     <dependency>
-      <groupId>org.apache.flex.framework</groupId>
-      <artifactId>mx</artifactId>
-      <type>swc</type>
+      <groupId>com.adobe.flash</groupId>
+      <artifactId>framework</artifactId>
+      <type>pom</type>
     </dependency>
     <dependency>
-      <groupId>org.apache.flex.framework</groupId>
-      <artifactId>textLayout</artifactId>
+      <groupId>org.apache.flex.framework.themes</groupId>
+      <artifactId>halo</artifactId>
       <type>swc</type>
-    </dependency>
-    <dependency>
-      <groupId>com.adobe.flash.framework</groupId>
-      <artifactId>playerglobal</artifactId>
-      <type>swc</type>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.flex.framework</groupId>
-      <artifactId>rpc</artifactId>
-      <type>swc</type>
+      <scope>theme</scope>
     </dependency>
     <dependency>
       <groupId>flexlib</groupId>
