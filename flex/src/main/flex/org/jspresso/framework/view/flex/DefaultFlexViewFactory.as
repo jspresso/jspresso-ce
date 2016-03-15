@@ -715,7 +715,8 @@ public class DefaultFlexViewFactory {
         || remoteComponent is RLabel
         || remoteComponent is RTimeField
         || remoteComponent is RComboBox
-        || remoteComponent is RCheckBox) {
+        || remoteComponent is RCheckBox
+        || remoteComponent is RColorField) {
       decorator = decorateWithAsideActions(component, remoteComponent, false);
     } else {
       decorator = decorateWithToolbars(component, remoteComponent);
@@ -1126,7 +1127,7 @@ public class DefaultFlexViewFactory {
     var decorated:UIComponent = component;
     if(remoteComponent.actionLists) {
       var actionField:HBox = new HBox();
-      syncSizes(actionField, component);
+      //syncSizes(actionField, component);
       actionField.styleName = "actionField";
       actionField.regenerateStyleCache(false);
       actionField.horizontalScrollPolicy = ScrollPolicy.OFF;
