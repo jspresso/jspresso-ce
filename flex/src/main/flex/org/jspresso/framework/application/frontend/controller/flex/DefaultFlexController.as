@@ -228,20 +228,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     var wasEnabled:Boolean = _changeNotificationsEnabled;
     try {
       _changeNotificationsEnabled = false;
-
-      var valueListener:Function = function (value:Object):void {
-        valueUpdated(remoteValueState);
-      };
-      BindingUtils.bindSetter(valueListener, remoteValueState, "value", true);
-      if (remoteValueState is RemoteCompositeValueState) {
-        var selectedIndicesListener:Function = function (selectedIndices:Array):void {
-          selectedIndicesUpdated(remoteValueState as RemoteCompositeValueState);
-        };
-        BindingUtils.bindSetter(selectedIndicesListener, remoteValueState, "selectedIndices", true);
-      }
-
-      // remoteValueState.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, valueStateHandler, false, 0, true);
-
+      remoteValueState.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, valueStateHandler, false, 0, true);
     } finally {
       _changeNotificationsEnabled = wasEnabled;
     }
@@ -510,7 +497,10 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
             }
             for (var toRemove:int = children.length - 1; toRemove >= 0; toRemove--) {
               if (newChildren.getItemIndex(children.getItemAt(toRemove)) < 0) {
-                children.removeItemAt(toRemove);
+                var removedChild:RemoteValueState = children.removeItemAt(toRemove) as RemoteValueState;
+                if (removedChild) {
+                  removedChild.parent = null;
+                }
               }
             }
             var index:int = 0;
@@ -518,13 +508,16 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
               var existingIndex:int = children.getItemIndex(newChild);
               if (existingIndex != index) {
                 if (existingIndex >= 0) {
-                  children.removeItemAt(existingIndex);
+                  var removedChild:RemoteValueState = children.removeItemAt(existingIndex) as RemoteValueState;
+                  if (removedChild) {
+                    removedChild.parent = null;
+                  }
                 }
                 children.addItemAt(newChild, index);
+                newChild.parent = (targetPeer as RemoteCompositeValueState);
               }
               index++;
             }
-//            ((command as RemoteChildrenCommand).children as ArrayList).source = [];
             (command as RemoteChildrenCommand).children.removeAll();
           } else {
             children.removeAll();
