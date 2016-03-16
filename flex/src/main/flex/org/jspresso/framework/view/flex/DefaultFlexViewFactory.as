@@ -161,6 +161,7 @@ import org.openscales.core.style.Style;
 import org.openscales.geometry.basetypes.Bounds;
 import org.openscales.geometry.basetypes.Location;
 import org.openscales.geometry.basetypes.Size;
+import org.openscales.proj4as.ProjProjection;
 import org.sepy.ui.CheckBoxExtended;
 
 public class DefaultFlexViewFactory {
