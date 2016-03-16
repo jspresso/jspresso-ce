@@ -476,14 +476,16 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
       } else if (command is RemoteChildrenCommand) {
         var children:ListCollectionView = (targetPeer as RemoteCompositeValueState).children;
         _postponedChildrenNotificationBuffer.push(targetPeer.guid);
+        var removedChild:RemoteValueState;
         if ((command as RemoteChildrenCommand).remove) {
-          for each(var removedChild:RemoteValueState in (command as RemoteChildrenCommand).children) {
+          for each(removedChild in (command as RemoteChildrenCommand).children) {
             if (isRegistered(removedChild.guid)) {
               removedChild = getRegistered(removedChild.guid) as RemoteValueState;
               var removedIndex:int = children.getItemIndex(removedChild);
               if (removedIndex >= 0) {
                 children.removeItemAt(removedIndex);
               }
+              removedChild.parent = null;
             }
           }
         } else {
@@ -502,7 +504,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
             }
             for (var toRemove:int = children.length - 1; toRemove >= 0; toRemove--) {
               if (newChildren.getItemIndex(children.getItemAt(toRemove)) < 0) {
-                var removedChild:RemoteValueState = children.removeItemAt(toRemove) as RemoteValueState;
+                removedChild = children.removeItemAt(toRemove) as RemoteValueState;
                 if (removedChild) {
                   removedChild.parent = null;
                 }
@@ -513,7 +515,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
               var existingIndex:int = children.getItemIndex(newChild);
               if (existingIndex != index) {
                 if (existingIndex >= 0) {
-                  var removedChild:RemoteValueState = children.removeItemAt(existingIndex) as RemoteValueState;
+                  removedChild = children.removeItemAt(existingIndex) as RemoteValueState;
                   if (removedChild) {
                     removedChild.parent = null;
                   }
