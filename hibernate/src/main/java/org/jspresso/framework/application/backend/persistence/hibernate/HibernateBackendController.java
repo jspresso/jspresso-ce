@@ -107,12 +107,17 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   @Override
   public <E extends IEntity> List<E> cloneInUnitOfWork(List<E> entities) {
+    IEntityRegistry uowEntityRegistry = getUowEntityRegistry();
     final List<E> uowEntities = super.cloneInUnitOfWork(entities);
     IEntityRegistry alreadyDetached = createEntityRegistry("detachFromHibernateInDepth");
     IEntityRegistry alreadyLocked = createEntityRegistry("lockInHibernateInDepth");
     for (IEntity uowEntity : uowEntities) {
-      detachFromHibernateInDepth(uowEntity, getHibernateSession(), alreadyDetached);
-      lockInHibernateInDepth(uowEntity, getHibernateSession(), alreadyLocked);
+      // prevent detach/attach entities that were previously in the UOW for performance reasons.
+      // see bug jspresso-ce-#103
+      if (uowEntity != null && uowEntityRegistry.get(getComponentContract(uowEntity), uowEntity.getId()) == null) {
+        detachFromHibernateInDepth(uowEntity, getHibernateSession(), alreadyDetached);
+        lockInHibernateInDepth(uowEntity, getHibernateSession(), alreadyLocked);
+      }
     }
     return uowEntities;
   }
