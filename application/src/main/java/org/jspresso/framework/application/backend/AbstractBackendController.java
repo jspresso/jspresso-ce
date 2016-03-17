@@ -267,8 +267,7 @@ public abstract class AbstractBackendController extends AbstractController imple
       throw new BackendException("Cannot use a unit of work that has not begun.");
     }
     List<E> uowEntities = new ArrayList<>();
-    Map<Class<? extends IEntity>, Map<Serializable, IEntity>> uowExistingEntities = unitOfWork.getRegisteredEntities();
-    IEntityRegistry alreadyCloned = createEntityRegistry("cloneInUnitOfWork", uowExistingEntities);
+    IEntityRegistry alreadyCloned = getUowEntityRegistry();
     Set<IEntity> eventsToRelease = new LinkedHashSet<>();
     boolean wasDirtyTrackingEnabled = isDirtyTrackingEnabled();
     try {
@@ -287,6 +286,16 @@ public abstract class AbstractBackendController extends AbstractController imple
       setDirtyTrackingEnabled(wasDirtyTrackingEnabled);
     }
     return uowEntities;
+  }
+
+  /**
+   * Gets uow entity registry.
+   *
+   * @return the uow entity registry
+   */
+  protected IEntityRegistry getUowEntityRegistry() {
+    Map<Class<? extends IEntity>, Map<Serializable, IEntity>> uowExistingEntities = unitOfWork.getRegisteredEntities();
+    return createEntityRegistry("cloneInUnitOfWork", uowExistingEntities);
   }
 
   /**
