@@ -1977,6 +1977,13 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           actionField.add(component, {
             flex: 1
           });
+
+          // propagate focus
+          actionField.addListener("focus", function (e) {
+            if (component.isFocusable()) {
+              component.focus();
+            }
+          });
         }
         var modelController;
         if (remoteComponent.getState()) {
