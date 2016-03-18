@@ -21,14 +21,16 @@ package org.jspresso.framework.application.frontend.action.lov;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.apache.commons.lang3.ArrayUtils;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.AbstractQbeAction;
@@ -62,6 +64,8 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is a standard &quot;List Of Values&quot; action for reference property
@@ -320,27 +324,39 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   /**
    * Handle preselected item.
    *
-   * @param preselectedItem
-   *     the preselected item
+   * @param preselection
+   *     the preselected item or item collection.
    * @param queryComponent
-   *     the query component
+   *     the query component.
    * @param lovView
-   *     the lov view
+   *     the lov view.
    */
-  protected void handlePreselectedItem(Object preselectedItem, IQueryComponent queryComponent, IView<E> lovView) {
-    if (preselectedItem != null && queryComponent.getQueriedComponents().size() > 0) {
-      for (int i = 0; i < queryComponent.getQueriedComponents().size(); i++) {
-        if (preselectedItem.equals(queryComponent.getQueriedComponents().get(i))) {
-          // this is from the dialog.
-          ICollectionConnector resultConnector = (ICollectionConnector) ((ICompositeValueConnector) lovView
-              .getConnector()).getChildConnector(IQueryComponent.QUERIED_COMPONENTS);
-          if (resultConnector != null) {
-            resultConnector.setSelectedIndices(i);
-          }
-          break;
-        }
-      }
+  protected void handlePreselectedItem(Object preselection, IQueryComponent queryComponent, IView<E> lovView) {
+    
+    if (preselection == null || queryComponent.getQueriedComponents().isEmpty())
+      return;
+    
+    ICollectionConnector resultConnector = (ICollectionConnector) ((ICompositeValueConnector) 
+        lovView.getConnector()).getChildConnector(IQueryComponent.QUERIED_COMPONENTS);
+    if (resultConnector == null) 
+      return;
+    
+    Set<?> preselectionCollection;
+    if (preselection instanceof Collection) 
+      preselectionCollection = new HashSet<>((Collection<?>) preselection);
+    else 
+      preselectionCollection = Collections.singleton(preselection);
+    
+    List<Integer> indices = new ArrayList<>();
+    for (int i = 0; i < queryComponent.getQueriedComponents().size(); i++) {
+      if (preselectionCollection.contains(queryComponent.getQueriedComponents().get(i)))
+        indices.add(i);
     }
+    
+    if (indices.isEmpty()) 
+      return;
+    
+    resultConnector.setSelectedIndices(ArrayUtils.toPrimitive(indices.toArray(new Integer[]{}), 0));
   }
 
   /**
