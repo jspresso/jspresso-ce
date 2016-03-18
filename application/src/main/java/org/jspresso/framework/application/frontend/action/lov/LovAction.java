@@ -31,6 +31,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.AbstractQbeAction;
@@ -64,8 +67,6 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This is a standard &quot;List Of Values&quot; action for reference property
@@ -232,7 +233,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
             viewConnector.setConnectorValue(queryComponent);
           }
           ((IRenderableCompositeValueConnector) viewConnector).getRenderingConnector().setConnectorValue(
-              autoCompletePropertyValue                                                                 );
+              autoCompletePropertyValue);
           return true;
         }
       }
@@ -247,13 +248,13 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
       // we are on a nested LOV => We must retrieve the real Entity descriptor
       ((BasicReferencePropertyDescriptor<IComponent>) refinedErqDescriptor).setReferencedDescriptor(
           (IComponentDescriptor<? extends IComponent>) getComponentDescriptorRegistry()
-              .getComponentDescriptor                             (erqDescriptor.getModelType())   );
+              .getComponentDescriptor(erqDescriptor.getModelType()));
       erqDescriptor = refinedErqDescriptor;
     }
     IView<E> lovView = getViewFactory(context).createView(createLovViewDescriptor(erqDescriptor, context),
-        actionHandler, getLocale(context)                );
+        actionHandler, getLocale(context));
     IValueConnector queryEntityConnector = (IValueConnector) context.get(
-        CreateQueryComponentAction.QUERY_MODEL_CONNECTOR                );
+        CreateQueryComponentAction.QUERY_MODEL_CONNECTOR);
     getMvcBinder(context).bind(lovView.getConnector(), queryEntityConnector);
 
     if (autoquery) {
@@ -270,12 +271,12 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
             try {
               // Determine if it is a single exact match.
               String firstItemPropertyValue = getBackendController(context).getAccessorFactory().createPropertyAccessor(
-                  autoCompletePropertyName, firstItem.getClass()                                                       ).getValue(firstItem);
+                  autoCompletePropertyName, firstItem.getClass()).getValue(firstItem);
               String secondItemPropertyValue = getBackendController(context).getAccessorFactory()
-                                                                            .createPropertyAccessor (
+                                                                            .createPropertyAccessor(
                                                                                 autoCompletePropertyName,
                                                                                 firstItem.getClass()).getValue(
-                      secondItem                                                                              );
+                      secondItem);
               if (autoCompletePropertyValue.equalsIgnoreCase(firstItemPropertyValue) && !autoCompletePropertyValue
                   .equalsIgnoreCase(secondItemPropertyValue)) {
                 selectedItem = firstItem;
@@ -287,7 +288,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
           if (selectedItem != null) {
             if (selectedItem instanceof IEntity) {
               selectedItem = getController(context).getBackendController().merge((IEntity) selectedItem,
-                  EMergeMode.MERGE_LAZY                                         );
+                  EMergeMode.MERGE_LAZY);
             }
             context.put(LOV_SELECTED_ITEM, selectedItem);
             actionHandler.execute(getOkAction(), context);
@@ -318,7 +319,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   protected IViewDescriptor createLovViewDescriptor(IReferencePropertyDescriptor<IComponent> erqDescriptor,
                                                     Map<String, Object> context) {
     return lovViewDescriptorFactory.createLovViewDescriptor(erqDescriptor, getSelectionMode(context), getOkAction(),
-        context                                            );
+        context);
   }
 
   /**
@@ -332,30 +333,34 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    *     the lov view.
    */
   protected void handlePreselectedItem(Object preselection, IQueryComponent queryComponent, IView<E> lovView) {
-    
-    if (preselection == null || queryComponent.getQueriedComponents().isEmpty())
+
+    if (preselection == null || queryComponent.getQueriedComponents().isEmpty()) {
       return;
-    
-    ICollectionConnector resultConnector = (ICollectionConnector) ((ICompositeValueConnector) 
-        lovView.getConnector()).getChildConnector(IQueryComponent.QUERIED_COMPONENTS);
-    if (resultConnector == null) 
+    }
+
+    ICollectionConnector resultConnector = (ICollectionConnector) ((ICompositeValueConnector) lovView.getConnector())
+        .getChildConnector(IQueryComponent.QUERIED_COMPONENTS);
+    if (resultConnector == null) {
       return;
-    
+    }
+
     Set<?> preselectionCollection;
-    if (preselection instanceof Collection) 
+    if (preselection instanceof Collection) {
       preselectionCollection = new HashSet<>((Collection<?>) preselection);
-    else 
+    } else {
       preselectionCollection = Collections.singleton(preselection);
-    
+    }
     List<Integer> indices = new ArrayList<>();
     for (int i = 0; i < queryComponent.getQueriedComponents().size(); i++) {
-      if (preselectionCollection.contains(queryComponent.getQueriedComponents().get(i)))
+      if (preselectionCollection.contains(queryComponent.getQueriedComponents().get(i))) {
         indices.add(i);
+      }
     }
-    
-    if (indices.isEmpty()) 
+
+    if (indices.isEmpty()) {
       return;
-    
+    }
+
     resultConnector.setSelectedIndices(ArrayUtils.toPrimitive(indices.toArray(new Integer[]{}), 0));
   }
 
@@ -386,13 +391,12 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     actions.add(getFindAction());
     actions.add(getCancelAction());
     context.put(ModalDialogAction.DIALOG_ACTIONS, actions);
-    context.put
-        (ModalDialogAction.DIALOG_TITLE,
+    context.put(ModalDialogAction.DIALOG_TITLE,
         getI18nName(getTranslationProvider(context), getLocale(context)) + " : " + erqDescriptor
             .getReferencedDescriptor().getI18nName(getTranslationProvider(context), getLocale(context)));
     context.put(ModalDialogAction.DIALOG_VIEW, lovView);
     if (lovView instanceof ICompositeView<?>) {
-      context.put                                                     (ModalDialogAction.DIALOG_FOCUSED_COMPONENT,
+      context.put(ModalDialogAction.DIALOG_FOCUSED_COMPONENT,
           ((ICompositeView<E>) lovView).getChildren().get(1).getPeer());
     }
 
@@ -439,9 +443,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   public String getI18nDescription(ITranslationProvider translationProvider, Locale locale) {
     if (getDescription() == null) {
       if (entityDescriptor != null) {
-        return translationProvider.getTranslation                                          ("lov.element.description",
-            new Object[]{entityDescriptor.getI18nName                            (translationProvider, locale)},
-            locale);
+        return translationProvider.getTranslation("lov.element.description",
+            new Object[]{entityDescriptor.getI18nName(translationProvider, locale)}, locale);
       }
       return translationProvider.getTranslation("lov.description", locale);
     }
@@ -461,9 +464,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   public String getI18nName(ITranslationProvider translationProvider, Locale locale) {
     if (getName() == null) {
       if (entityDescriptor != null) {
-        return translationProvider.getTranslation                                          ("lov.element.name",
-            new Object[]{entityDescriptor.getI18nName                            (translationProvider, locale)},
-            locale);
+        return translationProvider.getTranslation("lov.element.name",
+            new Object[]{entityDescriptor.getI18nName(translationProvider, locale)}, locale);
       }
       return translationProvider.getTranslation("lov.name", locale);
     }
@@ -666,7 +668,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
             (IReferencePropertyDescriptor<IComponent>) modelDescriptor)
             .clone();
         ((BasicReferencePropertyDescriptor<IComponent>) returnedDescriptor).setInitializationMapping(
-            initializationMapping                                                                   );
+            initializationMapping);
       }
       return returnedDescriptor;
     }
