@@ -29,6 +29,7 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MCellAdditionalStyle", {
     _getAdditionalCellStyle: function (cellInfo) {
       var styleString = ["padding-top:" + (cellInfo.styleHeight / 5) + "px;"];
       if (this.__attributes) {
+        var useInnerStyle = false;
         for (var key in this.__attributes) {
           if (key == "backgroundIndex" || key == "foregroundIndex") {
             if (!cellInfo.selected) {
@@ -60,12 +61,37 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MCellAdditionalStyle", {
                 styleString.push("font-size:", rFont.getSize(), "px;");
               }
             }
+          } else if (key == "style" || key == "dynamicStyle") {
+            useInnerStyle = true;
           } else {
             //noinspection JSUnfilteredForInLoop
             if (this.__attributes[key]) {
               if (!cellInfo.selected || !("background-color" == key || "color" == key)) {
                 //noinspection JSUnfilteredForInLoop
                 styleString.push(key, ":", this.__attributes[key], ";");
+              }
+            }
+          }
+        }
+        if (useInnerStyle) {
+          var dynamicStyle = this.__attributes["dynamicStyle"];
+          var style = this.__attributes["style"];
+          var cellValue = cellInfo.value;
+          if (!isNaN(cellValue) && dynamicStyle && dynamicStyle.conditionalStyle) {
+            for (var i = 0; i < dynamicStyle.conditionalStyle.length; i++) {
+              if (dynamicStyle.conditionalStyle[i].value == null) {
+                style = dynamicStyle.conditionalStyle[i].style;
+              } else if ((dynamicStyle.comparison == "GT" && cellValue > dynamicStyle.conditionalStyle[i].value)
+                  || (dynamicStyle.comparison == "GE" && cellValue >= dynamicStyle.conditionalStyle[i].value)) {
+                style = dynamicStyle.conditionalStyle[i].style;
+              }
+            }
+          }
+          if (style) {
+            for (var key in style) {
+              if (!cellInfo.selected || !("background-color" == key || "color" == key)) {
+                //noinspection JSUnfilteredForInLoop
+                styleString.push(key, ":", style[key], ";");
               }
             }
           }
