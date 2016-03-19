@@ -60,7 +60,7 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MCellAdditionalStyle", {
                 styleString.push("font-size:", rFont.getSize(), "px;");
               }
             }
-          } else if (key == "style" || key == "dynamicStyle") {
+          } else if (key == "staticStyle" || key == "dynamicStyle") {
             useInnerStyle = true;
           } else {
             //noinspection JSUnfilteredForInLoop
@@ -74,7 +74,7 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MCellAdditionalStyle", {
         }
         if (useInnerStyle) {
           var dynamicStyle = this.__attributes["dynamicStyle"];
-          var style = this.__attributes["style"];
+          var style = this.__attributes["staticStyle"];
           var cellValue = cellInfo.value;
           if (!isNaN(cellValue) && dynamicStyle && dynamicStyle.conditionalStyle) {
             for (var i = 0; i < dynamicStyle.conditionalStyle.length; i++) {
