@@ -124,6 +124,16 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           }
         },
 
+        "selectbox": {
+          base: true,
+          include: "button-frame",
+          style: function (states) {
+            return {
+              padding: [2, 4]
+            };
+          }
+        },
+        
         "textfield": {
           base: true,
           style: function (states) {
@@ -753,6 +763,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             return {}
           }
-        }
+        },
+        
+        "htmlarea": "textarea"
       }
     });
