@@ -1545,7 +1545,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             maxTr = tr;
           }
         }
-        this._sizeMaxComponentWidthFromText(comboBox, remoteComboBox, maxTr);
+        this._sizeMaxComponentWidthFromText(comboBox, remoteComboBox, maxTr + "_");
         var extraWidth = 25;
         if (iconDim) {
           extraWidth += iconDim.getWidth();
