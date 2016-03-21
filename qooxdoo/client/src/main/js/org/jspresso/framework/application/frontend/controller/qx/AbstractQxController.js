@@ -830,7 +830,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
       }
       for (var guid in this.__postponedEditionCommands) {
         var delayedEditionCommand = this.__postponedEditionCommands[guid];
-        this._handleEditCommand(this.getRegistered(delayedEditionCommand.getTargetPeerGuid()).retrievePeer());
+        this._handleEditCommand(this.getRegistered(delayedEditionCommand.getTargetPeerGuid()));
       }
     },
 
