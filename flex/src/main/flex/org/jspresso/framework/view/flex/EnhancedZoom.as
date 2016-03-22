@@ -37,7 +37,7 @@ public class EnhancedZoom extends Zoom {
 
   public function EnhancedZoom(actionHandler:IActionHandler, position:Pixel = null) {
     this._actionHandler = actionHandler;
-    BindingUtils.bindSetter(updateMapPosition, _actionHandler, "userGeoLocation");
+    BindingUtils.bindSetter(updateMapPosition, _actionHandler, "userGeoLocation", true);
     super(position);
   }
 

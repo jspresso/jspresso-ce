@@ -923,8 +923,8 @@ public class DefaultFlexViewFactory {
         markers.addFeature(marker);
       }
     };
-    BindingUtils.bindSetter(updateMapLocation, longitudeState, "value");
-    BindingUtils.bindSetter(updateMapLocation, latitudeState, "value");
+    BindingUtils.bindSetter(updateMapLocation, longitudeState, "value", true);
+    BindingUtils.bindSetter(updateMapLocation, latitudeState, "value", true);
 
     var wrapper:UIComponent = new UIComponent();
     wrapper.addEventListener(Event.RESIZE, function(e:Event):void {
@@ -1188,7 +1188,7 @@ public class DefaultFlexViewFactory {
           }
           textInput.editable = (value as Boolean);
         };
-        BindingUtils.bindSetter(updateEditability, remoteState, "writable");
+        BindingUtils.bindSetter(updateEditability, remoteState, "writable", true);
       } else {
         textInput.editable = false;
       }
@@ -2422,7 +2422,7 @@ public class DefaultFlexViewFactory {
         state.leadingIndex = -1;
         state.selectedIndices = null;
       }
-    }, list, "selectedItems", false);
+    }, list, "selectedItems", true);
     BindingUtils.bindSetter(function (selectedIndices:Array):void {
       if (selectedIndices != null && selectedIndices.length > 0) {
         // work on items to translate indices independently of list sorting state.
@@ -2952,7 +2952,7 @@ public class DefaultFlexViewFactory {
       }
       textArea.editable = value as Boolean;
     };
-    BindingUtils.bindSetter(updateEditability, remoteState, "writable");
+    BindingUtils.bindSetter(updateEditability, remoteState, "writable", true);
     var updateModel:Function = function (event:Event):void {
       var text:String = (event.currentTarget as TextArea).text;
       if (text != null && text.length == 0) {
@@ -3198,7 +3198,7 @@ public class DefaultFlexViewFactory {
       }
       textInput.editable = value as Boolean;
     };
-    BindingUtils.bindSetter(updateEditability, remoteState, "writable");
+    BindingUtils.bindSetter(updateEditability, remoteState, "writable", true);
 
     var updateView:Function = function (value:Object):void {
       if (value == null) {
