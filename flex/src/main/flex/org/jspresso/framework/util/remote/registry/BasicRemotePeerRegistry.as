@@ -25,20 +25,12 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
 
   public function register(remotePeer:IRemotePeer):void {
     if (remotePeer && remotePeer.guid) {
-      _backingStore[remotePeer.guid] = new WeakReference(remotePeer);
+      _backingStore[remotePeer.guid] = remotePeer;
     }
   }
 
   public function getRegistered(guid:String):IRemotePeer {
-    var ref:WeakReference = _backingStore[guid] as WeakReference;
-    if (ref) {
-      var remotePeer:IRemotePeer = ref.object as IRemotePeer;
-      if (remotePeer) {
-        return remotePeer;
-      }
-      delete _backingStore[guid];
-    }
-    return null;
+    return _backingStore[guid];
   }
 
   public function unregister(remotePeer:IRemotePeer):void {
@@ -48,15 +40,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
   }
 
   public function isRegistered(guid:String):Boolean {
-    var ref:WeakReference = _backingStore[guid] as WeakReference;
-    if (ref) {
-      var remotePeer:IRemotePeer = ref.object as IRemotePeer;
-      if (remotePeer) {
-        return true;
-      }
-      delete _backingStore[guid];
-    }
-    return false;
+    return _backingStore.hasOwnProperty(guid);
   }
 }
 }
