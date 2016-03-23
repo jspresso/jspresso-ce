@@ -119,7 +119,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states, superStyles) {
             return {
               decorator: states.hovered ? superStyles.decorator : undefined,
-              padding: states.hovered ? [2, 4] : [3, 5]
+              padding: states.hovered ? [2, 4] : [3, 5],
+              margin: 2
             };
           }
         },
@@ -133,7 +134,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
             };
           }
         },
-        
+
         "textfield": {
           base: true,
           style: function (states) {
@@ -770,7 +771,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
             return {}
           }
         },
-        
+
         "htmlarea": "textarea"
       }
     });
