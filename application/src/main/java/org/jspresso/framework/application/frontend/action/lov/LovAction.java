@@ -609,6 +609,14 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     this.initializationMapping = initializationMapping;
     this.entityRefQueryDescriptor = createEntityRefQueryDescriptor(entityDescriptor, initializationMapping);
   }
+  
+  /**
+   * Get initialization mapping.
+   * @return the initialization mapping.
+   */
+  protected Map<String, Object> getInitializationMapping() {
+    return initializationMapping;
+  }
 
   /**
    * Configures the factory to be used to create the QBE view used in the
