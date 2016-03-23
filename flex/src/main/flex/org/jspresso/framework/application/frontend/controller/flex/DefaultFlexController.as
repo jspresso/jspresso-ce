@@ -213,19 +213,6 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
           delete _postponedCommands[remotePeer.guid];
         }
       }
-    } else if (remotePeer is RemoteCompositeValueState) {
-      cleanupState(remotePeer as RemoteCompositeValueState)
-    }
-  }
-
-  protected function cleanupState(rcvs:RemoteCompositeValueState):void {
-    for each(var childState:RemoteValueState in rcvs.children) {
-      if (childState is RemoteCompositeValueState) {
-        cleanupState(childState as RemoteCompositeValueState);
-      }
-    }
-    if (getRegistered(rcvs.guid) != rcvs) {
-      rcvs.children.removeAll();
     }
   }
 
@@ -493,9 +480,6 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
             var newChildren:ArrayCollection = new ArrayCollection();
             for each(var child:RemoteValueState in (command as RemoteChildrenCommand).children) {
               if (isRegistered(child.guid)) {
-                if (child is RemoteCompositeValueState) {
-                  cleanupState(child as RemoteCompositeValueState);
-                }
                 child = getRegistered(child.guid) as RemoteValueState;
               } else {
                 register(child);
