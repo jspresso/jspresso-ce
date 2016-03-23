@@ -304,6 +304,12 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
     if (ObjectUtils.equals(this.filter, filter)) {
       return;
     }
+    Integer oldDisplayPageIndex = getDisplayPageIndex();
+    String oldDisplayPageCount = getDisplayPageCount();
+    String oldDisplayRecordCount = getDisplayRecordCount();
+    boolean oldPageNavigationEnabled = isPageNavigationEnabled();
+    boolean oldNextPageEnabled = isNextPageEnabled();
+    boolean oldPreviousPageEnabled = isPreviousPageEnabled();
     IQueryComponent oldValue = getFilter();
     if (oldValue != null) {
       oldValue
@@ -314,6 +320,12 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
       filter.setPageSize(getPageSize());
       filter.setDefaultOrderingProperties(getOrderingProperties());
       filter.addPropertyChangeListener(filterComponentTracker);
+      firePropertyChange(IPageable.DISPLAY_PAGE_INDEX, oldDisplayPageIndex, getDisplayPageIndex());
+      firePropertyChange(IPageable.DISPLAY_PAGE_COUNT, oldDisplayPageCount, getDisplayPageCount());
+      firePropertyChange(IPageable.DISPLAY_RECORD_COUNT, oldDisplayRecordCount, getDisplayRecordCount());
+      firePropertyChange(IPageable.PAGE_NAVIGATION_ENABLED, oldPageNavigationEnabled, isPageNavigationEnabled());
+      firePropertyChange(IPageable.NEXT_PAGE_ENABLED, oldNextPageEnabled, isNextPageEnabled());
+      firePropertyChange(IPageable.PREVIOUS_PAGE_ENABLED, oldPreviousPageEnabled, isPreviousPageEnabled());
     }
     firePropertyChange(FilterableBeanCollectionModuleDescriptor.FILTER,
         oldValue, getFilter());
