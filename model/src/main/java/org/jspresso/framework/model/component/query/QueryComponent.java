@@ -445,7 +445,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
       pc = getPageCount();
     }
     if (pc == 0) {
-      return 0;
+      return null;
     }
     int p = 0;
     if (getPage() != null) {
@@ -499,7 +499,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    */
   @Override
   public String getDisplayPageCount() {
-    if (getPageCount() == null || getPageCount() == UNKNOWN_COUNT) {
+    if (getPageCount() == null || getPageCount() == UNKNOWN_COUNT || getPageCount() == 0) {
       return "";
     }
     return getPageCount().toString();
@@ -561,7 +561,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    */
   @Override
   public String getDisplayRecordCount() {
-    if (getRecordCount() == null || getRecordCount() == UNKNOWN_COUNT) {
+    if (getRecordCount() == null || getRecordCount() == UNKNOWN_COUNT || getRecordCount() == 0) {
       return "";
     }
     return getRecordCount().toString();
@@ -750,7 +750,11 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    * @return the selected record count
    */
   @Override
-  public Integer getSelectedRecordCount() {
+  public Integer getSelectedRecordCount()
+  {
+    if (getRecordCount() == null || getRecordCount() == 0) {
+      return null;
+    }
     return selectedRecordCount;
   }
 
