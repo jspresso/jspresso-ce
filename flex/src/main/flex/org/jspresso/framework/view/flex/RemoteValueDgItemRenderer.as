@@ -20,7 +20,9 @@
 package org.jspresso.framework.view.flex {
 
 import flash.display.Graphics;
+import flash.events.KeyboardEvent;
 import flash.events.TextEvent;
+import flash.ui.Keyboard;
 
 import mx.binding.utils.BindingUtils;
 import mx.binding.utils.ChangeWatcher;
@@ -28,6 +30,7 @@ import mx.controls.DataGrid;
 import mx.controls.listClasses.BaseListData;
 import mx.controls.listClasses.ListData;
 import mx.controls.listClasses.ListItemRenderer;
+import mx.core.UIComponent;
 import mx.events.FlexEvent;
 import mx.formatters.Formatter;
 
@@ -65,6 +68,17 @@ public class RemoteValueDgItemRenderer extends ListItemRenderer implements IColu
     _foregroundIndex = -1;
     addEventListener(FlexEvent.CREATION_COMPLETE, function (event:FlexEvent):void {
       selectable = _selectable;
+      // In order to fix jspresso-ce-113
+      label.addEventListener(KeyboardEvent.KEY_DOWN, function (e:KeyboardEvent):void {
+        if (label.selectable && (e.keyCode == Keyboard.UP || e.keyCode == Keyboard.DOWN || e.keyCode == Keyboard.LEFT
+            || e.keyCode == Keyboard.RIGHT || e.keyCode == Keyboard.TAB)) {
+          callLater(function ():void {
+            if (parent is UIComponent) {
+              (parent as UIComponent).setFocus();
+            }
+          });
+        }
+      });
     });
   }
 
@@ -74,8 +88,7 @@ public class RemoteValueDgItemRenderer extends ListItemRenderer implements IColu
       if (value is ListData) {
         super.listData = value;
       } else {
-        super.listData = new ListData(value.label, null, null, value.uid, value.owner, value.rowIndex,
-                                      value.columnIndex);
+        super.listData = new ListData(value.label, null, null, value.uid, value.owner, value.rowIndex, value.columnIndex);
       }
     } else {
       super.listData = value;
@@ -151,7 +164,7 @@ public class RemoteValueDgItemRenderer extends ListItemRenderer implements IColu
     if (data) {
       if (backgroundIndex >= 0) {
         var backgroundState:RemoteValueState = ((data as RemoteCompositeValueState).children[backgroundIndex]
-            as RemoteValueState);
+        as RemoteValueState);
         if (_backgroundChangeListener != null) {
           _backgroundChangeListener.reset(backgroundState);
           redraw(backgroundState.value);
@@ -161,7 +174,7 @@ public class RemoteValueDgItemRenderer extends ListItemRenderer implements IColu
       }
       if (foregroundIndex >= 0) {
         var foregroundState:RemoteValueState = ((data as RemoteCompositeValueState).children[foregroundIndex]
-            as RemoteValueState);
+        as RemoteValueState);
         if (_foregroundChangeListener != null) {
           _foregroundChangeListener.reset(foregroundState);
           redraw(foregroundState.value);
@@ -316,7 +329,7 @@ public class RemoteValueDgItemRenderer extends ListItemRenderer implements IColu
     if (data && listData && listData.owner is DataGrid) {
       if (backgroundIndex >= 0) {
         var backgroundValue:Object = ((data as RemoteCompositeValueState).children[backgroundIndex]
-            as RemoteValueState).value;
+        as RemoteValueState).value;
         var g:Graphics = graphics;
         g.clear();
         if (backgroundValue != null) {
@@ -327,7 +340,7 @@ public class RemoteValueDgItemRenderer extends ListItemRenderer implements IColu
       }
       if (foregroundIndex >= 0) {
         var foregroundValue:Object = ((data as RemoteCompositeValueState).children[foregroundIndex]
-            as RemoteValueState).value;
+        as RemoteValueState).value;
         if (foregroundValue) {
           setStyle("color", foregroundValue);
           alpha = DefaultFlexViewFactory.getAlphaFromArgb(foregroundValue as String);
