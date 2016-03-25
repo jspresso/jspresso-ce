@@ -1950,6 +1950,18 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       return actionField;
     },
 
+    _createAsideAction: function (remoteAction, remoteComponent, disableActionsWithField) {
+      var button = this.createAction(remoteAction);
+      //button.setFocusable(false);
+      var remoteValueState = remoteComponent.state;
+      if (remoteValueState && disableActionsWithField) {
+        remoteComponent.addListener("changeWritable", function (e) {
+          button.setEnabled(e.getData() && remoteAction.isEnabled());
+        }, this);
+      }
+      return button;
+    },
+    
     /**
      * @param component {qx.ui.core.Widget}
      * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
@@ -1970,23 +1982,15 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             flex: 1
           });
         }
-        var modelController;
-        if (remoteComponent.getState()) {
-          modelController = new qx.data.controller.Object(remoteComponent.getState());
-        }
         for (var i = 0; i < remoteComponent.getActionLists().length; i++) {
           var actionList = remoteComponent.getActionLists()[i];
           for (var j = 0; j < actionList.getActions().length; j++) {
             var remoteAction = actionList.getActions()[j];
-            var actionComponent = this.createAction(remoteAction);
-            actionComponent.setLabel(null);
-            //actionComponent.setFocusable(false);
-            actionComponent.setAllowStretchY(false, false);
-            actionComponent.setAlignY("middle");
-            actionField.add(actionComponent);
-            if (modelController && disableActionsWithField) {
-              modelController.addTarget(actionComponent, "enabled", "writable", false);
-            }
+            var button = this._createAsideAction(remoteAction, remoteComponent, disableActionsWithField);
+            button.setLabel(null);
+            button.setAllowStretchY(false, false);
+            button.setAlignY("middle");
+            actionField.add(button);
           }
         }
         decorated = actionField;

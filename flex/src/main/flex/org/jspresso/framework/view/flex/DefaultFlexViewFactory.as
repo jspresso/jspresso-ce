@@ -1134,22 +1134,33 @@ public class DefaultFlexViewFactory {
       for (var i:int = 0; i < remoteComponent.actionLists.length; i++) {
         var actionList:RActionList = remoteComponent.actionLists[i] as RActionList;
         for (var j:int = 0; j < actionList.actions.length; j++) {
-          var actionComponent:Button = createAction(actionList.actions[j], actionField);
-          actionComponent.label = null;
-          actionComponent.addEventListener(FlexEvent.CREATION_COMPLETE, function (event:FlexEvent):void {
-            var b:Button = event.currentTarget as Button;
-            //noinspection JSSuspiciousNameCombination
-            b.width = b.height;
-          });
-          actionField.addChild(actionComponent);
-          if (remoteComponent.state && disableActionsWithField) {
-            BindingUtils.bindProperty(actionComponent, "enabled", remoteComponent.state, "writable");
-          }
+          var remoteAction:RAction = actionList.actions[j];
+          var button:Button = createAsideActionAction(remoteAction, actionField, remoteComponent, disableActionsWithField);
+          actionField.addChild(button);
         }
       }
       decorated = actionField;
     }
     return decorated;
+  }
+
+  protected function createAsideActionAction(remoteAction:RAction, actionField:HBox, remoteComponent:RComponent,
+                                           disableActionsWithField:Boolean):Button {
+    var button:Button = createAction(remoteAction, actionField);
+    button.label = null;
+    button.addEventListener(FlexEvent.CREATION_COMPLETE, function (event:FlexEvent):void {
+      var b:Button = event.currentTarget as Button;
+      //noinspection JSSuspiciousNameCombination
+      b.width = b.height;
+    });
+    var remoteValueState:RemoteValueState = remoteComponent.state;
+    if (remoteValueState && disableActionsWithField) {
+      var updateButtonState:Function = function (enabled:Boolean):void {
+        button.enabled = enabled && remoteAction.enabled;
+      };
+      BindingUtils.bindSetter(updateButtonState, remoteValueState, "writable", true);
+    }
+    return button;
   }
 
   protected function bindActionField(actionField:UIComponent, textInput:TextInput, remoteState:RemoteValueState,
