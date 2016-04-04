@@ -269,6 +269,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _createTimeField: function (remoteTimeField) {
       var timeField = this._createFormattedField(remoteTimeField);
       this._sizeMaxComponentWidthFromText(timeField, remoteTimeField, "00:00:00");
+      timeField.setMinWidth(timeField.getMaxWidth());
       return timeField;
     },
 
@@ -2599,6 +2600,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       // Add "000" for icon
       this._sizeMaxComponentWidthFromText(dateField, remoteDateField,
           "00/00/0000 000");
+      dateField.setMinWidth(dateField.getMaxWidth());
       remoteDateField.setPreferredSize(ps);
       return dateField;
     },
