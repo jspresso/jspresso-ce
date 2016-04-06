@@ -41,7 +41,6 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.frontend.command.remote.CommandException;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand;
-import org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteApplicationDescriptionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand;
@@ -408,7 +407,6 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
           // The following code has been handled at a lower level,
           // see AbstractCompositeValueConnector.propagateRollback
           // if (targetPeer instanceof IRemoteStateOwner) {
-          // ((IRemoteStateOwner) targetPeer).synchRemoteState();
           // RemoteValueState state = ((IRemoteStateOwner)
           // targetPeer).getState();
           // if (!ObjectUtils.equals(((RemoteValueCommand) command).getValue(),
@@ -422,7 +420,6 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
           // }
         } catch (ConnectorInputException ex) {
           if (targetPeer instanceof IRemoteStateOwner) {
-            ((IRemoteStateOwner) targetPeer).synchRemoteState();
             RemoteValueState state = ((IRemoteStateOwner) targetPeer).getState();
             if (!ObjectUtils.equals(((RemoteValueCommand) command).getValue(), state.getValue())) {
 

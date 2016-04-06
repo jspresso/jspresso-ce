@@ -24,6 +24,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
       check: "qx.data.Array",
       nullable: true
     },
+    removedChildrenGuids: {
+      check: "Array",
+      nullable: true
+    },
     remove: {
       check: "Boolean"
     }
