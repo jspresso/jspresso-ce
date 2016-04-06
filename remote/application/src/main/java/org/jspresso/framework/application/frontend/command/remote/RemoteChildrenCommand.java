@@ -24,7 +24,7 @@ import org.jspresso.framework.state.remote.RemoteValueState;
 
 /**
  * A command to update the children of a remote peer.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class RemoteChildrenCommand extends RemoteCommand {
@@ -32,11 +32,12 @@ public class RemoteChildrenCommand extends RemoteCommand {
   private static final long      serialVersionUID = 5963387363740451053L;
 
   private List<RemoteValueState> children;
+  private String[]               removedChildrenGuids;
   private boolean                remove;
 
   /**
    * Gets the children.
-   * 
+   *
    * @return the children.
    */
   public List<RemoteValueState> getChildren() {
@@ -45,9 +46,9 @@ public class RemoteChildrenCommand extends RemoteCommand {
 
   /**
    * Sets the children.
-   * 
+   *
    * @param children
-   *          the children to set.
+   *     the children to set.
    */
   public void setChildren(List<RemoteValueState> children) {
     this.children = children;
@@ -55,7 +56,7 @@ public class RemoteChildrenCommand extends RemoteCommand {
 
   /**
    * Gets the remove.
-   * 
+   *
    * @return the remove.
    */
   public boolean isRemove() {
@@ -64,11 +65,30 @@ public class RemoteChildrenCommand extends RemoteCommand {
 
   /**
    * Sets the remove.
-   * 
-   * @param remove the remove to set.
+   *
+   * @param remove
+   *     the remove to set.
    */
   public void setRemove(boolean remove) {
     this.remove = remove;
   }
 
+  /**
+   * Get removed children guids string [ ].
+   *
+   * @return the string [ ]
+   */
+  public String[] getRemovedChildrenGuids() {
+    return removedChildrenGuids;
+  }
+
+  /**
+   * Sets removed children guids.
+   *
+   * @param removedChildrenGuids
+   *     the removed children guids
+   */
+  public void setRemovedChildrenGuids(String... removedChildrenGuids) {
+    this.removedChildrenGuids = removedChildrenGuids;
+  }
 }
