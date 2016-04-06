@@ -57,9 +57,10 @@ import org.jspresso.framework.util.lang.ObjectUtils;
 public abstract class AbstractValueConnector extends AbstractConnector
     implements IValueConnector {
 
-  private IExceptionHandler        exceptionHandler;
-  private boolean                  locallyReadable;
-  private boolean                  locallyWritable;
+  private IExceptionHandler exceptionHandler;
+  private boolean           locallyReadable;
+  private boolean           locallyWritable;
+  private boolean           mute;
 
   private IValueConnector          modelConnector;
   private IModelDescriptor         modelDescriptor;
@@ -96,6 +97,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
     locallyWritable = true;
     oldReadability = isReadable();
     oldWritability = isWritable();
+    mute = false;
   }
 
   /**
@@ -208,11 +210,16 @@ public abstract class AbstractValueConnector extends AbstractConnector
    */
   @Override
   public void recycle(IMvcBinder mvcBinder) {
-    if (mvcBinder != null) {
-      mvcBinder.bind(this, null);
+    try {
+      setMute(true);
+      if (mvcBinder != null) {
+        mvcBinder.bind(this, null);
+      }
+      setParentConnector(null);
+      setConnectorValue(null);
+    } finally {
+      setMute(false);
     }
-    setParentConnector(null);
-    setConnectorValue(null);
   }
 
   /**
@@ -940,5 +947,24 @@ public abstract class AbstractValueConnector extends AbstractConnector
    */
   protected ISecurityHandler getSecurityHandler() {
     return securityHandler;
+  }
+
+  /**
+   * Is mute boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isMute() {
+    return mute;
+  }
+
+  /**
+   * Sets mute.
+   *
+   * @param mute
+   *     the recycling
+   */
+  protected void setMute(boolean mute) {
+    this.mute = mute;
   }
 }

@@ -127,6 +127,9 @@ import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.gui.remote.RSplitContainer;
 import org.jspresso.framework.gui.remote.RTabContainer;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
+import org.jspresso.framework.state.remote.RemoteCompositeValueState;
+import org.jspresso.framework.state.remote.RemoteCompositeValueState;
+import org.jspresso.framework.state.remote.RemoteFormattedValueState;
 import org.jspresso.framework.state.remote.RemoteFormattedValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.array.ArrayUtil;
@@ -463,11 +466,12 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
       } else if (command is RemoteChildrenCommand) {
         var children:ListCollectionView = (targetPeer as RemoteCompositeValueState).children;
         _postponedChildrenNotificationBuffer.push(targetPeer.guid);
-        var removedChild:RemoteValueState;
         if ((command as RemoteChildrenCommand).remove) {
-          for each(removedChild in (command as RemoteChildrenCommand).children) {
-            if (isRegistered(removedChild.guid)) {
-              removedChild = getRegistered(removedChild.guid) as RemoteValueState;
+          var removedChildGuid:String;
+          var removedChild:RemoteValueState;
+          for each(removedChildGuid in (command as RemoteChildrenCommand).removedChildrenGuids) {
+            if (isRegistered(removedChildGuid)) {
+              removedChild = getRegistered(removedChildGuid) as RemoteValueState;
               var removedIndex:int = children.getItemIndex(removedChild);
               if (removedIndex >= 0) {
                 children.removeItemAt(removedIndex);
@@ -480,7 +484,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
             var newChildren:ArrayCollection = new ArrayCollection();
             for each(var child:RemoteValueState in (command as RemoteChildrenCommand).children) {
               if (isRegistered(child.guid)) {
-                child = getRegistered(child.guid) as RemoteValueState;
+                child = syncRegisteredState(child);
               } else {
                 register(child);
               }
@@ -526,6 +530,27 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
         }
       }
     }
+  }
+  
+  private function syncRegisteredState(state:RemoteValueState):RemoteValueState {
+    var registeredState:RemoteValueState = getRegistered(state.guid) as RemoteValueState;
+    if (registeredState) {
+      registeredState.value = state.value;
+      registeredState.readable = state.readable;
+      registeredState.writable = state.writable;
+      if (state is RemoteCompositeValueState) {
+        (registeredState as RemoteCompositeValueState).description = (state as RemoteCompositeValueState).description;
+        (registeredState as RemoteCompositeValueState).iconImageUrl = (state as RemoteCompositeValueState).iconImageUrl;
+        (registeredState as RemoteCompositeValueState).leadingIndex = (state as RemoteCompositeValueState).leadingIndex;
+        (registeredState as RemoteCompositeValueState).selectedIndices = (state as RemoteCompositeValueState).selectedIndices;
+        for each (var child:RemoteValueState in (state as RemoteCompositeValueState).children) {
+          syncRegisteredState(child);
+        }
+      } else if (state is RemoteFormattedValueState) {
+        (registeredState as RemoteFormattedValueState).valueAsObject = (state as RemoteFormattedValueState).valueAsObject;
+      }
+    }
+    return registeredState;
   }
 
   private function closeDialog():void {

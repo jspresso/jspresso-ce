@@ -120,9 +120,12 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
   @Override
   public RemoteFormattedValueState getState() {
     if (state == null) {
-      state = createState();
-      synchRemoteState();
+      state = connectorFactory.createRemoteFormattedValueState(getGuid(), getPermId());
     }
+    state.setValue(getFormattedValue());
+    state.setValueAsObject(getValueForState());
+    state.setReadable(isReadable());
+    state.setWritable(isWritable());
     return state;
   }
 
@@ -147,18 +150,6 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
   @Override
   public void setPermId(String permId) {
     this.permId = permId;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void synchRemoteState() {
-    RemoteFormattedValueState currentState = getState();
-    currentState.setValue(getFormattedValue());
-    currentState.setValueAsObject(getValueForState());
-    currentState.setReadable(isReadable());
-    currentState.setWritable(isWritable());
   }
 
   /**
@@ -193,7 +184,7 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
   protected Object getValueForState() {
     Object valueForState = getConnectorValue();
     if (getRemoteStateValueMapper() != null) {
-      valueForState = getRemoteStateValueMapper().getValueForState(getState(), valueForState);
+      valueForState = getRemoteStateValueMapper().getValueForState(state, valueForState);
     }
     return valueForState;
   }
@@ -213,24 +204,10 @@ public class RemoteFormattedValueConnector extends BasicFormattedValueConnector
     Object valueFromState;
     if (getRemoteStateValueMapper() != null) {
       valueFromState = getRemoteStateValueMapper()
-          .getValueFromState(getState(), stateValue);
+          .getValueFromState(state, stateValue);
     } else {
       valueFromState = stateValue;
     }
     setConnectorValue(valueFromState);
-    // There are rare cases (e.g. due to interceptSetter that resets the command value to the connector
-    // actual state), when the connector and the state are not synced.
-    synchRemoteState();
-  }
-
-  /**
-   * Creates a new state instance representing this connector.
-   *
-   * @return the newly created state.
-   */
-  protected RemoteFormattedValueState createState() {
-    RemoteFormattedValueState createdState = connectorFactory
-        .createRemoteFormattedValueState(getGuid(), getPermId());
-    return createdState;
   }
 }

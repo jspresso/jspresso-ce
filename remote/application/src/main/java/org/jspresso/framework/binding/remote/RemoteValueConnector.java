@@ -115,9 +115,11 @@ public class RemoteValueConnector extends BasicValueConnector implements
   @Override
   public RemoteValueState getState() {
     if (state == null) {
-      state = createState();
-      synchRemoteState();
+      state = connectorFactory.createRemoteValueState(getGuid(), getPermId());
     }
+    state.setValue(getValueForState());
+    state.setReadable(isReadable());
+    state.setWritable(isWritable());
     return state;
   }
 
@@ -157,28 +159,6 @@ public class RemoteValueConnector extends BasicValueConnector implements
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void synchRemoteState() {
-    RemoteValueState currentState = getState();
-    currentState.setValue(getValueForState());
-    currentState.setReadable(isReadable());
-    currentState.setWritable(isWritable());
-  }
-
-  /**
-   * Creates a new state instance representing this connector.
-   *
-   * @return the newly created state.
-   */
-  protected RemoteValueState createState() {
-    RemoteValueState createdState = connectorFactory.createRemoteValueState(
-        getGuid(), getPermId());
-    return createdState;
-  }
-
-  /**
    * Gets the remoteStateValueMapper.
    *
    * @return the remoteStateValueMapper.
@@ -198,7 +178,7 @@ public class RemoteValueConnector extends BasicValueConnector implements
   protected Object getValueForState() {
     Object valueForState = getConnectorValue();
     if (getRemoteStateValueMapper() != null) {
-      valueForState = getRemoteStateValueMapper().getValueForState(getState(), valueForState);
+      valueForState = getRemoteStateValueMapper().getValueForState(state, valueForState);
     }
     return valueForState;
   }
@@ -218,13 +198,10 @@ public class RemoteValueConnector extends BasicValueConnector implements
     Object valueFromState;
     if (getRemoteStateValueMapper() != null) {
       valueFromState = getRemoteStateValueMapper()
-          .getValueFromState(getState(), stateValue);
+          .getValueFromState(state, stateValue);
     } else {
       valueFromState = stateValue;
     }
     setConnectorValue(valueFromState);
-    // There are rare cases (e.g. due to interceptSetter that resets the command value to the connector
-    // actual state), when the connector and the state are not synced.
-    synchRemoteState();
   }
 }

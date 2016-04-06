@@ -350,25 +350,30 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
 
       /** @type {qx.data.Array} */
       var children = compositeValueState.getChildren();
-      /** @type {Array} */
-      var commandChildren = childrenCommand.getChildren().toArray();
+      var oldLength = children.getLength();
+      var args = [];
 
       if (childrenCommand.getRemove()) {
-        for (var i = 0; i < commandChildren.length; i++) {
-          /** @type {org.jspresso.framework.state.remote.RemoteValueState} */
-          var child = commandChildren[i];
-          if (this.isRegistered(child.getGuid())) {
-            child = /** @type {org.jspresso.framework.state.remote.RemoteValueState} */ this.getRegistered(
-                child.getGuid());
-            children.remove(child);
+        /** @type {Array} */
+        var removedChildrenGuids = childrenCommand.getRemovedChildrenGuids();
+        var args = children.toArray().concat();
+        for (var i = 0; i < removedChildrenGuids.length; i++) {
+          /** @type {String} */
+          var childGuid = removedChildrenGuids[i];
+          if (this.isRegistered(childGuid)) {
+            child = /** @type {org.jspresso.framework.state.remote.RemoteValueState} */ this.getRegistered(childGuid);
+            var index = args.indexOf(child);
+            if (index >= 0) {
+              args.splice(index, 1);
+            }
             child.setParent(null);
           }
         }
       } else {
-        var oldLength = children.getLength();
+        /** @type {Array} */
+        var commandChildren = childrenCommand.getChildren().toArray();
         var newLength = commandChildren.length;
 
-        var args = [];
         args.length = newLength;
 
         for (var i = 0; i < newLength; i++) {
@@ -383,12 +388,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
           args[i] = child;
           child.setParent(compositeValueState);
         }
-        if (oldLength > 0) {
-          args.unshift(0, oldLength);
-          qx.data.Array.prototype.splice.apply(children, args);
-        } else {
-          qx.data.Array.prototype.push.apply(children, args);
-        }
+      }
+      if (oldLength > 0) {
+        args.unshift(0, oldLength);
+        qx.data.Array.prototype.splice.apply(children, args);
+      } else {
+        qx.data.Array.prototype.push.apply(children, args);
       }
     },
 

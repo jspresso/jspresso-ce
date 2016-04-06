@@ -120,8 +120,16 @@ public class RemoteCollectionConnectorProvider extends
   @Override
   public RemoteCompositeValueState getState() {
     if (state == null) {
-      state = createState();
-      synchRemoteState();
+      state = connectorFactory.createRemoteCompositeValueState(getGuid(), getPermId());
+    }
+    state.setValue(getDisplayValue());
+    state.setReadable(isReadable());
+    state.setWritable(isWritable());
+    state.setDescription(getDisplayDescription());
+    state.setIconImageUrl(ResourceProviderServlet.computeImageResourceDownloadUrl(getDisplayIcon(), RIcon.DEFAULT_DIM));
+    ICollectionConnector collectionConnector = getCollectionConnector();
+    if (collectionConnector instanceof RemoteCollectionConnector) {
+      state.setChildren(new ArrayList<>(((RemoteCollectionConnector) collectionConnector).getState().getChildren()));
     }
     return state;
   }
@@ -139,37 +147,6 @@ public class RemoteCollectionConnectorProvider extends
   @Override
   public void setPermId(String permId) {
     this.permId = permId;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void synchRemoteState() {
-    RemoteCompositeValueState currentState = getState();
-    currentState.setValue(getDisplayValue());
-    currentState.setReadable(isReadable());
-    currentState.setWritable(isWritable());
-    currentState.setDescription(getDisplayDescription());
-    currentState.setIconImageUrl(ResourceProviderServlet
-        .computeImageResourceDownloadUrl(getDisplayIcon(), RIcon.DEFAULT_DIM));
-  }
-
-  /**
-   * Creates a new state instance representing this connector.
-   *
-   * @return the newly created state.
-   */
-  protected RemoteCompositeValueState createState() {
-    RemoteCompositeValueState createdState = connectorFactory
-        .createRemoteCompositeValueState(getGuid(), getPermId());
-    ICollectionConnector collectionConnector = getCollectionConnector();
-    if (collectionConnector instanceof RemoteCollectionConnector) {
-      createdState.setChildren(new ArrayList<>(
-          ((RemoteCollectionConnector) collectionConnector).getState()
-              .getChildren()));
-    }
-    return createdState;
   }
 
   /**
@@ -204,7 +181,7 @@ public class RemoteCollectionConnectorProvider extends
   protected Object getValueForState() {
     Object valueForState = getConnectorValue();
     if (getRemoteStateValueMapper() != null) {
-      valueForState = getRemoteStateValueMapper().getValueForState(getState(), valueForState);
+      valueForState = getRemoteStateValueMapper().getValueForState(state, valueForState);
     }
     return valueForState;
   }
@@ -217,13 +194,10 @@ public class RemoteCollectionConnectorProvider extends
     Object valueFromState;
     if (getRemoteStateValueMapper() != null) {
       valueFromState = getRemoteStateValueMapper()
-          .getValueFromState(getState(), stateValue);
+          .getValueFromState(state, stateValue);
     } else {
       valueFromState = stateValue;
     }
     setConnectorValue(valueFromState);
-    // There are rare cases (e.g. due to interceptSetter that resets the command value to the connector
-    // actual state), when the connector and the state are not synced.
-    synchRemoteState();
   }
 }

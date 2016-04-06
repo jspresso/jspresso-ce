@@ -381,7 +381,12 @@ public abstract class AbstractCollectionConnector extends
           connector = existingConnectors.remove(0);
         } else {
           connector = createChildConnector(getId() + "Element");
-          mvcBinder.bind(connector, nextModelConnector);
+          try {
+            ((AbstractValueConnector) connector).setMute(true);
+            mvcBinder.bind(connector, nextModelConnector);
+          } finally {
+            ((AbstractValueConnector) connector).setMute(false);
+          }
         }
         addChildConnector(computeStorageKey(i), connector);
       }

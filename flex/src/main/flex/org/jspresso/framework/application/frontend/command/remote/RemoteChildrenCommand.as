@@ -26,6 +26,7 @@ import mx.collections.ListCollectionView;
 public class RemoteChildrenCommand extends RemoteCommand {
 
   private var _children:ListCollectionView;
+  private var _removedChildrenGuids:Boolean;
   private var _remove:Boolean;
 
   public function RemoteChildrenCommand() {
@@ -48,5 +49,13 @@ public class RemoteChildrenCommand extends RemoteCommand {
     _remove = value;
   }
 
+
+  public function get removedChildrenGuids():Boolean {
+    return _removedChildrenGuids;
+  }
+
+  public function set removedChildrenGuids(value:Boolean):void {
+    _removedChildrenGuids = value;
+  }
 }
 }
