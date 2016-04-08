@@ -1962,7 +1962,13 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       if (remoteImageComponent.getAction() != null) {
         this._getRemotePeerRegistry().register(remoteImageComponent.getAction());
         imageComponent.addListener("tap", function (e) {
-          this._getActionHandler().execute(remoteImageComponent.getAction());
+          var actionEvent = new org.jspresso.framework.gui.remote.RImageActionEvent();
+          var element = imageComponent.getContentElement();
+          actionEvent.setWidth(element.width);
+          actionEvent.setHeight(element.height);
+          actionEvent.setX(e.getDocumentLeft() - element.x);
+          actionEvent.setY(e.getDocumentTop() - element.y);
+          this._getActionHandler().execute(remoteImageComponent.getAction(), actionEvent);
         }, this);
       }
       var wrapper = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox().set({

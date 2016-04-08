@@ -113,6 +113,7 @@ import org.jspresso.framework.gui.remote.REvenGridContainer;
 import org.jspresso.framework.gui.remote.RForm;
 import org.jspresso.framework.gui.remote.RHtmlArea;
 import org.jspresso.framework.gui.remote.RIcon;
+import org.jspresso.framework.gui.remote.RImageActionEvent;
 import org.jspresso.framework.gui.remote.RImageComponent;
 import org.jspresso.framework.gui.remote.RIntegerField;
 import org.jspresso.framework.gui.remote.RLabel;
@@ -1065,6 +1066,18 @@ public class DefaultFlexViewFactory {
     var imageComponent:Image = new CachedImage();
     imageComponent.scaleContent = false;
     bindImage(imageComponent, remoteImageComponent.state);
+    if (remoteImageComponent.action) {
+      getRemotePeerRegistry().register(remoteImageComponent.action);
+      imageComponent.addEventListener(MouseEvent.CLICK, function (event:MouseEvent):void {
+        var actionEvent:RImageActionEvent = new RImageActionEvent();
+        actionEvent.x = event.localX;
+        actionEvent.y = event.localY;
+        actionEvent.width = imageComponent.width;
+        actionEvent.height = imageComponent.height;
+        // Call later to ensure that the row is selected before the action gets executed.
+        imageComponent.callLater(_actionHandler.execute, [remoteImageComponent.action, actionEvent]);
+      });
+    }
     if (remoteImageComponent.scrollable) {
       imageComponent.styleName = "scrollableImage";
       var scrollPane:Canvas = new Canvas();
@@ -1072,13 +1085,6 @@ public class DefaultFlexViewFactory {
       return scrollPane;
     } else {
       imageComponent.styleName = "unscrollableImage";
-    }
-    if (remoteImageComponent.action) {
-      getRemotePeerRegistry().register(remoteImageComponent.action);
-      imageComponent.addEventListener(MouseEvent.CLICK, function (event:MouseEvent):void {
-        // To ensure that the row is selected before the action gets executed.
-        imageComponent.callLater(_actionHandler.execute, [remoteImageComponent.action]);
-      });
     }
     return imageComponent;
   }
