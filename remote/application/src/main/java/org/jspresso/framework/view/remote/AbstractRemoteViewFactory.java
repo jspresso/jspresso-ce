@@ -1075,6 +1075,11 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         viewComponent.setScrollable(false);
       }
       IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
+      if (propertyViewDescriptor.getAction() != null) {
+        RAction action = getActionFactory().createAction(propertyViewDescriptor.getAction(), actionHandler, view, locale);
+        configurePropertyViewAction(propertyViewDescriptor, action);
+        viewComponent.setAction(action);
+      }
       return view;
     } else {
       return createBinaryPropertyView(propertyViewDescriptor, actionHandler, locale);

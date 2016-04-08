@@ -194,14 +194,20 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       if (remoteImageComponent.getAction() != null) {
         this._getRemotePeerRegistry().register(remoteImageComponent.getAction());
         imageComponent.addListener("tap", function (e) {
-          this._getActionHandler().execute(remoteImageComponent.getAction());
+          var actionEvent = new org.jspresso.framework.gui.remote.RImageActionEvent();
+          var box = imageComponent.getContentLocation("box");
+          actionEvent.setWidth(box.right - box.left);
+          actionEvent.setHeight(box.bottom - box.top);
+          actionEvent.setX(e.getDocumentLeft() - box.left);
+          actionEvent.setY(e.getDocumentTop() - box.top);
+          this._getActionHandler().execute(remoteImageComponent.getAction(), actionEvent);
         }, this);
       }
 
       if (remoteImageComponent.getScrollable()) {
         var scrollContainer = new qx.ui.container.Scroll();
         scrollContainer.add(imageComponent);
-        imageComponent = scrollContainer;
+        return scrollContainer;
       } else {
         var borderContainer = new qx.ui.container.Composite();
         var borderLayout = new qx.ui.layout.Dock();
@@ -1970,7 +1976,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       }
       return button;
     },
-    
+
     /**
      * @param component {qx.ui.core.Widget}
      * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
