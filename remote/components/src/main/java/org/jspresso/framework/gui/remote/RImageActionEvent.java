@@ -18,14 +18,12 @@
  */
 package org.jspresso.framework.gui.remote;
 
-import java.io.Serializable;
-
 /**
  * A remote image action event.
  *
  * @author Vincent Vandenschrick
  */
-public class RImageActionEvent implements Serializable {
+public class RImageActionEvent extends RActionEvent {
 
   private static final long serialVersionUID = -2220584519485192197L;
 
