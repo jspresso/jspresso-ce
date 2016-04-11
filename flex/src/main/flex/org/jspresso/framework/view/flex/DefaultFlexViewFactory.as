@@ -2891,8 +2891,10 @@ public class DefaultFlexViewFactory {
         event.preventDefault();
         return;
       }
-      if (!isDgCellEditable(dg, event.rowIndex, event.columnIndex)) {
-        event.preventDefault();
+      if (event.rowIndex >= 0 && event.columnIndex >= 0) {
+        if (!isDgCellEditable(dg, event.rowIndex, event.columnIndex)) {
+          event.preventDefault();
+        }
       }
     });
     table.addEventListener(DataGridEvent.ITEM_EDIT_BEGIN, function (event:DataGridEvent):void {
@@ -2914,23 +2916,28 @@ public class DefaultFlexViewFactory {
   }
 
   protected function isDgCellEditable(dg:DataGrid, row:int, col:int):Boolean {
-    var column:DataGridColumn = dg.columns[col];
-    var rowCollection:ListCollectionView = dg.dataProvider as ListCollectionView;
-    var rowValueState:RemoteCompositeValueState = rowCollection.getItemAt(row) as RemoteCompositeValueState;
-    if (!rowValueState.writable) {
-      return false;
-    } else {
-      var cellValueState:RemoteValueState;
-      var columnRenderer:ClassFactory = column.itemRenderer as ClassFactory;
-      // watch out checkbox selection column...
-      if (columnRenderer.properties && !isNaN(columnRenderer.properties["index"])) {
-        cellValueState = rowValueState.children[columnRenderer.properties["index"] as int] as RemoteValueState;
-        if (!cellValueState.writable) {
+    if (row >= 0 && col >= 0) {
+      var rowCollection:ListCollectionView = dg.dataProvider as ListCollectionView;
+      if (col < dg.columnCount && row < rowCollection.length) {
+        var column:DataGridColumn = dg.columns[col];
+        var rowValueState:RemoteCompositeValueState = rowCollection.getItemAt(row) as RemoteCompositeValueState;
+        if (!rowValueState.writable) {
           return false;
+        } else {
+          var cellValueState:RemoteValueState;
+          var columnRenderer:ClassFactory = column.itemRenderer as ClassFactory;
+          // watch out checkbox selection column...
+          if (columnRenderer.properties && !isNaN(columnRenderer.properties["index"])) {
+            cellValueState = rowValueState.children[columnRenderer.properties["index"] as int] as RemoteValueState;
+            if (!cellValueState.writable) {
+              return false;
+            }
+          }
         }
+        return true;
       }
     }
-    return true;
+    return false;
   }
 
   /**
