@@ -984,6 +984,19 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       drawer.add(content);
       drawer.show();
       return drawer;
+    },
+
+    /**
+     * @param remotePeer {org.jspresso.framework.state.remote.RemoteCompositeValueState|org.jspresso.framework.gui.remote.mobile.RMobileTabContainer}
+     * @param selectionCommand {org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand}
+     * @return {undefined}
+     */
+    _handleSelectionCommand: function (remotePeer, selectionCommand) {
+      if (remotePeer instanceof org.jspresso.framework.gui.remote.mobile.RMobileTabContainer) {
+        remotePeer.setSelectedIndex(selectionCommand.getLeadingIndex());
+      } else {
+        this.base(arguments, remotePeer, selectionCommand);
+      }
     }
   }
 });
