@@ -1319,6 +1319,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           command.setLeadingIndex(index);
           this._getCommandHandler().registerCommand(command);
         }, this);
+        tabContainer.setCurrentIndex(remoteTabContainer.getSelectedIndex());
       } else {
         var tabBar = tabContainer.getUserData("tabBar");
         remoteTabContainer.addListener("changeSelectedIndex", function (event) {
@@ -1333,6 +1334,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           command.setLeadingIndex(index);
           this._getCommandHandler().registerCommand(command);
         }, this);
+        tabBar.setSelection(tabContainer.getUserData("tabBarChildren")[remoteTabContainer.getSelectedIndex()])
       }
 
       return tabContainer;
