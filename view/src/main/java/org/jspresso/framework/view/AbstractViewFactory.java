@@ -3549,7 +3549,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       ITableViewDescriptor viewDescriptor, IActionHandler actionHandler) {
 
     Object[][] columnPrefs = null;
-    if (viewDescriptor.getPermId() != null) {
+    if (viewDescriptor.getPermId() != null && actionHandler.getSubject() != null) {
       String prefs = actionHandler
           .getUserPreference(viewDescriptor.getPermId());
       if (prefs != null) {
@@ -3622,7 +3622,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
    * @return the tab selection preference
    */
   protected int getTabSelectionPreference(ITabViewDescriptor tabViewDescriptor, IActionHandler actionHandler) {
-    if (tabViewDescriptor.getPermId() != null) {
+    if (tabViewDescriptor.getPermId() != null && actionHandler.getSubject() != null) {
       String tabSelectionPreference = actionHandler.getUserPreference(tabViewDescriptor.getPermId());
       if (tabSelectionPreference != null) {
         return Integer.parseInt(tabSelectionPreference);
