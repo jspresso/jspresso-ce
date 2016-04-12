@@ -3549,7 +3549,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
       ITableViewDescriptor viewDescriptor, IActionHandler actionHandler) {
 
     Object[][] columnPrefs = null;
-    if (viewDescriptor.getPermId() != null) {
+    if (viewDescriptor.getPermId() != null && actionHandler.getSubject() != null) {
       String prefs = actionHandler
           .getUserPreference(viewDescriptor.getPermId());
       if (prefs != null) {
