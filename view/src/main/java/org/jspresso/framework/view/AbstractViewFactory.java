@@ -3524,14 +3524,16 @@ public abstract class AbstractViewFactory<E, F, G> implements
   @Override
   public void storeTablePreferences(String tableId, Object[][] columnPrefs,
       IActionHandler actionHandler) {
-    StringBuilder buff = new StringBuilder();
-    for (int i = 0; i < columnPrefs.length; i++) {
-      if (i > 0) {
-        buff.append("!");
+    if (actionHandler.getSubject() != null) {
+      StringBuilder buff = new StringBuilder();
+      for (int i = 0; i < columnPrefs.length; i++) {
+        if (i > 0) {
+          buff.append("!");
+        }
+        buff.append(columnPrefs[i][0]).append(",").append(columnPrefs[i][1]);
       }
-      buff.append(columnPrefs[i][0]).append(",").append(columnPrefs[i][1]);
+      actionHandler.putUserPreference(tableId, buff.toString());
     }
-    actionHandler.putUserPreference(tableId, buff.toString());
   }
 
   /**
@@ -3604,7 +3606,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
    */
   protected void storeTabSelectionPreference(ITabViewDescriptor tabViewDescriptor, int selectedTabIndex, IActionHandler actionHandler) {
     if (tabViewDescriptor.getPermId() != null) {
-      actionHandler.putUserPreference(tabViewDescriptor.getPermId(), Integer.toString(selectedTabIndex));
+      if (actionHandler.getSubject() != null) {
+        actionHandler.putUserPreference(tabViewDescriptor.getPermId(), Integer.toString(selectedTabIndex));
+      }
     }
   }
 
