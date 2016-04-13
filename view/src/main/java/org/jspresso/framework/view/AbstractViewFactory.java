@@ -3534,7 +3534,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         if (i > 0) {
           buff.append("!");
         }
-        buff.append(columnPrefs[i][0]).append(",").append(columnPrefs[i][1]);
+        buff.append(columnPrefs[i][0]).append(",").append(columnPrefs[i][1]).append(",").append(columnPrefs[i][2]);
       }
       actionHandler.putUserPreference(tableId, buff.toString());
     }
@@ -3547,9 +3547,9 @@ public abstract class AbstractViewFactory<E, F, G> implements
    *          the table view descriptor.
    * @param actionHandler
    *          the action handler to load the user preferences from.
-   * @return an ordered map of column view descriptors and widths.
+   * @return an ordered map of column view descriptors and (widths, visibility) pairs.
    */
-  protected Map<IPropertyViewDescriptor, Integer> getUserColumnViewDescriptors(
+  protected Map<IPropertyViewDescriptor, Object[]> getUserColumnViewDescriptors(
       ITableViewDescriptor viewDescriptor, IActionHandler actionHandler) {
 
     Object[][] columnPrefs = null;
@@ -3561,13 +3561,14 @@ public abstract class AbstractViewFactory<E, F, G> implements
         columnPrefs = new Object[columns.length][2];
         for (int i = 0; i < columns.length; i++) {
           String[] column = columns[i].split(",");
+          Boolean visibility = column.length > 2 ? Boolean.valueOf(column[2]) : Boolean.TRUE;
           columnPrefs[i] = new Object[] {
-              column[0], Integer.valueOf(column[1])
+              column[0], Integer.valueOf(column[1]), visibility
           };
         }
       }
     }
-    Map<IPropertyViewDescriptor, Integer> userColumnViewDescriptors = new LinkedHashMap<>();
+    Map<IPropertyViewDescriptor, Object[]> userColumnViewDescriptors = new LinkedHashMap<>();
     if (columnPrefs == null) {
       for (IPropertyViewDescriptor columnViewDescriptor : viewDescriptor
           .getColumnViewDescriptors()) {
@@ -3587,7 +3588,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
             .remove(columnPref[0]);
         if (userColumn != null) {
           userColumnViewDescriptors
-              .put(userColumn, (Integer) columnPref[1]);
+              .put(userColumn, new Object[] {columnPref[1], columnPref[2]});
         }
       }
       // Add remaining new columns

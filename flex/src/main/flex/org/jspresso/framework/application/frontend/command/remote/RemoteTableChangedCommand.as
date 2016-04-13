@@ -27,6 +27,7 @@ public class RemoteTableChangedCommand extends RemoteCommand {
   private var _tableId:String;
   private var _columnIds:Array;
   private var _columnWidths:Array;
+  private var _columnVisibilities:Array;
 
   public function RemoteTableChangedCommand() {
     //default constructor.
@@ -56,6 +57,12 @@ public class RemoteTableChangedCommand extends RemoteCommand {
     _columnWidths = value;
   }
 
+  public function get columnVisibilities():Array {
+    return _columnVisibilities;
+  }
 
+  public function set columnVisibilities(value:Array):void {
+    _columnVisibilities = value;
+  }
 }
 }

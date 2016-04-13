@@ -254,9 +254,9 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
     List<RComponent> columnHeaders = new ArrayList<>();
     List<String> columnIds = new ArrayList<>();
     List<IView<RComponent>> propertyViews = new ArrayList<>();
-    Map<IPropertyViewDescriptor, Integer> userColumnViewDescriptors = getUserColumnViewDescriptors(viewDescriptor,
+    Map<IPropertyViewDescriptor, Object[]> userColumnViewDescriptors = getUserColumnViewDescriptors(viewDescriptor,
         actionHandler);
-    for (Map.Entry<IPropertyViewDescriptor, Integer> columnViewDescriptorEntry : userColumnViewDescriptors.entrySet()) {
+    for (Map.Entry<IPropertyViewDescriptor, Object[]> columnViewDescriptorEntry : userColumnViewDescriptors.entrySet()) {
       IPropertyViewDescriptor columnViewDescriptor = columnViewDescriptorEntry.getKey();
       if (actionHandler.isAccessGranted(columnViewDescriptor)) {
         IView<RComponent> column = createView(columnViewDescriptor, actionHandler, locale);
@@ -308,8 +308,11 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
           configurePropertyViewAction(columnViewDescriptor, action);
           ((RActionable) column.getPeer()).setAction(action);
         }
-        if (columnViewDescriptorEntry.getValue() != null) {
-          column.getPeer().setPreferredSize(new Dimension(columnViewDescriptorEntry.getValue(), -1));
+        final Object[] columnCaracteristics = columnViewDescriptorEntry.getValue();
+        if (columnCaracteristics != null) {
+          int visibilityHeight = ((boolean) columnCaracteristics[1]) ? 1 : -1;
+          Dimension columnPreferredSize = new Dimension((Integer) columnCaracteristics[0], visibilityHeight);
+          column.getPeer().setPreferredSize(columnPreferredSize);
         }
         propertyViews.add(column);
       }

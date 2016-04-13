@@ -27,9 +27,10 @@ public class RemoteTableChangedCommand extends RemoteCommand {
 
   private static final long serialVersionUID = 3637851380452065032L;
 
-  private String            tableId;
-  private String[]          columnIds;
-  private Integer[]         columnWidths;
+  private String    tableId;
+  private String[]  columnIds;
+  private Integer[] columnWidths;
+  private boolean[] columnVisibilities;
 
   /**
    * Gets the tableId.
@@ -44,7 +45,7 @@ public class RemoteTableChangedCommand extends RemoteCommand {
    * Sets the tableId.
    *
    * @param tableId
-   *          the tableId to set.
+   *     the tableId to set.
    */
   public void setTableId(String tableId) {
     this.tableId = tableId;
@@ -63,7 +64,7 @@ public class RemoteTableChangedCommand extends RemoteCommand {
    * Sets the columnIds.
    *
    * @param columnIds
-   *          the columnIds to set.
+   *     the columnIds to set.
    */
   public void setColumnIds(String... columnIds) {
     this.columnIds = columnIds;
@@ -82,10 +83,28 @@ public class RemoteTableChangedCommand extends RemoteCommand {
    * Sets the columnWidths.
    *
    * @param columnWidths
-   *          the columnWidths to set.
+   *     the columnWidths to set.
    */
   public void setColumnWidths(Integer... columnWidths) {
     this.columnWidths = columnWidths;
   }
 
+  /**
+   * Get column visibilities boolean [ ].
+   *
+   * @return the boolean [ ]
+   */
+  public boolean[] getColumnVisibilities() {
+    return columnVisibilities;
+  }
+
+  /**
+   * Sets column visibilities.
+   *
+   * @param columnVisibilities
+   *     the column visibilities
+   */
+  public void setColumnVisibilities(boolean[] columnVisibilities) {
+    this.columnVisibilities = columnVisibilities;
+  }
 }
