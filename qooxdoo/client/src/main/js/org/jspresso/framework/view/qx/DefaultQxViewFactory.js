@@ -19,10 +19,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
   extend: org.jspresso.framework.view.qx.AbstractQxViewFactory,
 
   statics: {
-    __TEMPLATE_CHAR: "0",
-    __FIELD_MAX_CHAR_COUNT: 32,
-    __NUMERIC_FIELD_MAX_CHAR_COUNT: 16,
-    __COLUMN_MAX_CHAR_COUNT: 12,
+    __TEMPLATE_CHAR: "0", __FIELD_MAX_CHAR_COUNT: 32, __NUMERIC_FIELD_MAX_CHAR_COUNT: 16, __COLUMN_MAX_CHAR_COUNT: 12,
 
     _hexColorToQxColor: function (hexColor) {
       if (hexColor) {
@@ -2205,6 +2202,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         } else {
           columnModel.getBehavior().setWidth(i, columnWidth, columnWidth < 50 ? 0 : columnWidth);
         }
+        if (rColumn.getPreferredSize() && rColumn.getPreferredSize().getHeight() < 0) {
+          columnModel.setColumnVisible(i, false);
+        }
         columnToolTips[i] = -1;
         if (rColumn.getToolTipState()) {
           columnToolTips[i] = remoteTable.getRowPrototype().getChildren().indexOf(rColumn.getToolTipState());
@@ -2345,19 +2345,24 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           notificationCommand.setTableId(remoteTable.getPermId());
           var columnIds = [];
           var columnWidths = [];
+          var columnVisibilities = [];
           for (var ci = 0; ci < table.getTableColumnModel().getOverallColumnCount(); ci++) {
             columnIds.push(table.getTableModel().getColumnId(table.getTableColumnModel().getOverallColumnAtX(ci)));
             columnWidths.push(
                 table.getTableColumnModel().getColumnWidth(table.getTableColumnModel().getOverallColumnAtX(ci)));
+            columnVisibilities.push(table.getTableColumnModel().isColumnVisible(
+                table.getTableColumnModel().getOverallColumnAtX(ci)))
           }
           notificationCommand.setColumnIds(columnIds);
           notificationCommand.setColumnWidths(columnWidths);
+          notificationCommand.setColumnVisibilities(columnVisibilities);
           //noinspection JSPotentiallyInvalidUsageOfThis
           this._getCommandHandler().registerCommand(notificationCommand);
         };
 
         table.getTableColumnModel().addListener("widthChanged", notifyTableChanged, this);
         table.getTableColumnModel().addListener("orderChanged", notifyTableChanged, this);
+        table.getTableColumnModel().addListener("visibilityChanged", notifyTableChanged, this);
       }
       return table;
     },
@@ -2604,8 +2609,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var ps = remoteDateField.getPreferredSize();
       remoteDateField.setPreferredSize(null);
       // Add "000" for icon
-      this._sizeMaxComponentWidthFromText(dateField, remoteDateField,
-          "00/00/0000 000");
+      this._sizeMaxComponentWidthFromText(dateField, remoteDateField, "00/00/0000 000");
       dateField.setMinWidth(dateField.getMaxWidth());
       remoteDateField.setPreferredSize(ps);
       return dateField;

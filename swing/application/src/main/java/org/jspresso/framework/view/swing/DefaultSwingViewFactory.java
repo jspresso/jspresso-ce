@@ -2199,9 +2199,9 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
 
     List<Class<?>> columnClasses = new ArrayList<>();
     Set<String> forbiddenColumns = new HashSet<>();
-    Map<IPropertyViewDescriptor, Integer> userColumnViewDescriptors = getUserColumnViewDescriptors(viewDescriptor,
+    Map<IPropertyViewDescriptor, Object[]> userColumnViewDescriptors = getUserColumnViewDescriptors(viewDescriptor,
         actionHandler);
-    for (Map.Entry<IPropertyViewDescriptor, Integer> columnViewDescriptorEntry : userColumnViewDescriptors.entrySet()) {
+    for (Map.Entry<IPropertyViewDescriptor, Object[]> columnViewDescriptorEntry : userColumnViewDescriptors.entrySet()) {
       IPropertyViewDescriptor columnViewDescriptor = columnViewDescriptorEntry.getKey();
       String columnId = columnViewDescriptor.getModelDescriptor().getName();
       if (actionHandler.isAccessGranted(columnViewDescriptor)) {
@@ -2239,7 +2239,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     viewComponent.setSelectionMode(getSelectionMode(viewDescriptor));
     int maxColumnSize = computePixelWidth(viewComponent, getMaxColumnCharacterLength());
     int columnIndex = 0;
-    for (Map.Entry<IPropertyViewDescriptor, Integer> columnViewDescriptorEntry : userColumnViewDescriptors.entrySet()) {
+    for (Map.Entry<IPropertyViewDescriptor, Object[]> columnViewDescriptorEntry : userColumnViewDescriptors.entrySet()) {
       IPropertyViewDescriptor columnViewDescriptor = columnViewDescriptorEntry.getKey();
       String propertyName = columnViewDescriptor.getModelDescriptor().getName();
       if (!forbiddenColumns.contains(propertyName)) {
@@ -2314,7 +2314,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
                                     ITableViewDescriptor viewDescriptor, ICollectionConnector connector,
                                     ICompositeValueConnector rowConnectorPrototype, JTable viewComponent,
                                     IView<JComponent> view, int maxColumnSize, int columnIndex,
-                                    Map.Entry<IPropertyViewDescriptor, Integer> columnViewDescriptorEntry,
+                                    Map.Entry<IPropertyViewDescriptor, Object[]> columnViewDescriptorEntry,
                                     IPropertyViewDescriptor columnViewDescriptor, String propertyName,
                                     TableModel tableModel) {
     IComponentDescriptor<?> rowDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor.getModelDescriptor())
@@ -2431,7 +2431,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       column.setHeaderRenderer(headerRenderer);
     }
     if (columnViewDescriptorEntry.getValue() != null) {
-      column.setPreferredWidth(columnViewDescriptorEntry.getValue());
+      column.setPreferredWidth((Integer) columnViewDescriptorEntry.getValue()[0]);
     } else {
       if (columnViewDescriptor.getPreferredSize() != null && columnViewDescriptor.getPreferredSize().getWidth() > 0) {
         column.setPreferredWidth(columnViewDescriptor.getPreferredSize().getWidth());

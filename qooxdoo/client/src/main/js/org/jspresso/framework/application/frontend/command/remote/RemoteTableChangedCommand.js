@@ -28,6 +28,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
     },
     columnWidths: {
       check: "Array"
+    },
+    columnVisibilities: {
+      check: "Array"
     }
   }
 });

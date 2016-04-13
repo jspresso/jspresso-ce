@@ -359,8 +359,12 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
     } else if (command instanceof RemoteTableChangedCommand) {
       Object[][] columnPrefs = new Object[((RemoteTableChangedCommand) command).getColumnIds().length][2];
       for (int i = 0; i < ((RemoteTableChangedCommand) command).getColumnIds().length; i++) {
-        columnPrefs[i] = new Object[]{((RemoteTableChangedCommand) command).getColumnIds()[i],
-                                      ((RemoteTableChangedCommand) command).getColumnWidths()[i]};
+        final String[] columnIds = ((RemoteTableChangedCommand) command).getColumnIds();
+        final Integer[] columnWidths = ((RemoteTableChangedCommand) command).getColumnWidths();
+        final boolean[] columnVisibilities = ((RemoteTableChangedCommand) command).getColumnVisibilities();
+        columnPrefs[i] = new Object[]{columnIds[i],
+                                      columnWidths[i],
+                                      (columnVisibilities == null || columnVisibilities[i])};
       }
       getViewFactory().storeTablePreferences(((RemoteTableChangedCommand) command).getTableId(), columnPrefs, this);
     } else {
