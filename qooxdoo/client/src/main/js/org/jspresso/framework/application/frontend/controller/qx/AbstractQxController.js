@@ -380,8 +380,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
           /** @type {org.jspresso.framework.state.remote.RemoteValueState} */
           var child = commandChildren[i];
           if (this.isRegistered(child.getGuid())) {
-            child = /** @type {org.jspresso.framework.state.remote.RemoteValueState} */ this.getRegistered(
-                child.getGuid());
+            child = this.__syncRegisteredState(child);
           } else {
             this.register(child);
           }
@@ -395,6 +394,31 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
       } else {
         qx.data.Array.prototype.push.apply(children, args);
       }
+    },
+
+    __syncRegisteredState: function(state) {
+      var registeredState = this.getRegistered(state.getGuid());
+      if (registeredState) {
+        registeredState.setValue(state.getValue());
+        registeredState.setReadable(state.isReadable());
+        registeredState.setWritable(state.isWritable());
+        if (state instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
+          registeredState.setDescription(state.getDescription());
+          registeredState.setIconImageUrl(state.getIconImageUrl());
+          registeredState.setLeadingIndex(state.getLeadingIndex());
+          registeredState.setSelectedIndices(state.getSelectedIndices());
+          if (state.getChildren()) {
+            /** @type {Array} */
+            var children = state.getChildren().toArray();
+            for (var i = 0; i < children.length; i++) {
+              this.__syncRegisteredState(children[i]);
+            }
+          }
+        } else if (state instanceof org.jspresso.framework.state.remote.RemoteFormattedValueState) {
+          registeredState.setValueAsObject(state.getValueAsObject());
+        }
+      }
+      return registeredState;
     },
 
     /**
