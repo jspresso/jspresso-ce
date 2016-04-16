@@ -618,14 +618,19 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
             this.linkNextPageBackButton(existingCard, previousPage, backAction, animation);
           }
           var existingCards = nextPage.getUserData("existingCards");
-          if (existingCards) {
+          if (existingCards != null) {
             for (var i = 0; i < existingCards.length; i++) {
               if (existingCard != existingCards[i]) {
                 this.linkNextPageBackButton(existingCards[i], previousPage, backAction, animation);
               }
             }
+            nextPage.setUserData("previousPage", previousPage);
+          } else if (nextPage["getChildren"]) {
+            var children = nextPage.getChildren();
+            if (children && children.length == 1) {
+              this.linkNextPageBackButton(children[0], previousPage, backAction, animation);
+            }
           }
-          nextPage.setUserData("previousPage", previousPage);
         }
         return;
       }
@@ -1374,11 +1379,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           if (rCardComponent instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
             // Do not actually add the card to the card container since it's added to the manager.
             // cardContainer.add(cardComponent);
-            this.linkNextPageBackButton(cardComponent, cardContainer.getUserData("previousPage"), null, null);
           } else {
             cardContainer.add(cardComponent);
             this._selectCard(cardContainer, cardComponent);
           }
+          this.linkNextPageBackButton(cardComponent, cardContainer.getUserData("previousPage"), null, null);
         } else {
           this._selectCard(cardContainer, existingCards[existingCardNames.indexOf(cardName)]);
         }
@@ -1408,6 +1413,20 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
       } else if (selectedCard) {
         selectedCard.show();
+        this.__ensureSubCardPagesVisible(selectedCard);
+      }
+    },
+
+    __ensureSubCardPagesVisible: function(rootCard) {
+      var existingCards = rootCard.getUserData("existingCards");
+      if (existingCards != null) {
+        // This is a card container
+        this._selectCard(rootCard, rootCard.getUserData("currentPage"));
+      } else if (rootCard["getChildren"]) {
+        var children = rootCard.getChildren();
+        if (children && children.length == 1) {
+          this.__ensureSubCardPagesVisible(children[0]);
+        }
       }
     },
 
