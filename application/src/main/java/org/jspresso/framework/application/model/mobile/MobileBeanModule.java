@@ -87,10 +87,12 @@ public class MobileBeanModule extends BeanModule {
     AbstractMobilePageViewDescriptor projectedViewDescriptor = getProjectedViewDescriptor();
     if (projectedViewDescriptor != null) {
       BeanModuleDescriptor beanModuleDescriptor = getDescriptor();
-      projectedViewDescriptor.setModelDescriptor(beanModuleDescriptor.getPropertyDescriptor(MODULE_OBJECT));
+      MobileBorderViewDescriptor wrapperDescriptor = new MobileBorderViewDescriptor();
+      wrapperDescriptor.setModelDescriptor(beanModuleDescriptor.getPropertyDescriptor(MODULE_OBJECT));
+      wrapperDescriptor.setCenterViewDescriptor(projectedViewDescriptor);
       MobileBorderViewDescriptor viewDescriptor = new MobileBorderViewDescriptor();
       viewDescriptor.setModelDescriptor(beanModuleDescriptor);
-      viewDescriptor.setCenterViewDescriptor(projectedViewDescriptor);
+      viewDescriptor.setCenterViewDescriptor(wrapperDescriptor);
       return viewDescriptor;
     }
     return null;
