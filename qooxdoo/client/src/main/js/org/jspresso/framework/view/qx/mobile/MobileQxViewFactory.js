@@ -19,6 +19,12 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
   extend: org.jspresso.framework.view.qx.AbstractQxViewFactory,
 
   statics: {
+    __GET_CHILDREN_METHOD: "getChildren",
+    __CURRENT_PAGE: "currentPage",
+    __CARD_NAME: "cardName",
+    __EXISTING_CARDS: "existingCards",
+    __EXISTING_CARD_NAMES: "existingCardNames",
+    
     bindListItem: function (item, state, selected, displayIcon) {
       var children = state.getChildren();
       var title;
@@ -445,7 +451,16 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       if (nextPage instanceof qx.ui.mobile.page.NavigationPage) {
         pageToShow = nextPage;
       } else {
-        pageToShow = nextPage.getUserData("currentPage");
+        var currentPage = nextPage.getUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE);
+        if (currentPage != null) {
+          // This is a card container or a border container with a nested page
+          pageToShow = currentPage;
+        } else if (nextPage[org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__GET_CHILDREN_METHOD]) {
+          var children = nextPage.getChildren();
+          if (children && children.length == 1) {
+            pageToShow = this._getActualPageToShow(children[0]);
+          }
+        }
       }
       return pageToShow;
     },
@@ -615,19 +630,19 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       // Because of MobileCardPage
       if (!(nextPage instanceof qx.ui.mobile.page.NavigationPage)) {
         if (!nextPage.getUserData("previousPage")) {
-          var existingCard = nextPage.getUserData("currentPage");
-          if (existingCard) {
-            this.linkNextPageBackButton(existingCard, previousPage, backAction, animation);
+          var currentPage = nextPage.getUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE);
+          if (currentPage) {
+            this.linkNextPageBackButton(currentPage, previousPage, backAction, animation);
           }
-          var existingCards = nextPage.getUserData("existingCards");
+          var existingCards = nextPage.getUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__EXISTING_CARDS);
           if (existingCards != null) {
             for (var i = 0; i < existingCards.length; i++) {
-              if (existingCard != existingCards[i]) {
+              if (currentPage != existingCards[i]) {
                 this.linkNextPageBackButton(existingCards[i], previousPage, backAction, animation);
               }
             }
             nextPage.setUserData("previousPage", previousPage);
-          } else if (nextPage["getChildren"]) {
+          } else if (nextPage[org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__GET_CHILDREN_METHOD]) {
             var children = nextPage.getChildren();
             if (children && children.length == 1) {
               this.linkNextPageBackButton(children[0], previousPage, backAction, animation);
@@ -1217,8 +1232,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createCardContainer: function (remoteCardContainer) {
       var cardContainer = this._createCardContainerComponent();
-      cardContainer.setUserData("existingCardNames", []);
-      cardContainer.setUserData("existingCards", []);
+      cardContainer.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__EXISTING_CARD_NAMES, []);
+      cardContainer.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__EXISTING_CARDS, []);
 
       for (var i = 0; i < remoteCardContainer.getCardNames().length; i++) {
         var rCardComponent = remoteCardContainer.getCards()[i];
@@ -1231,12 +1246,12 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var state = remoteCardContainer.getState();
       state.addListener("changeValue", function (e) {
         var selectedCardName = e.getData();
-        var cards = cardContainer.getUserData("existingCards");
+        var cards = cardContainer.getUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__EXISTING_CARDS);
         if (cards) {
           var selectedCard;
           for (var i = 0; i < cards.length; i++) {
             var child = cards[i];
-            if (child.getUserData("cardName") == selectedCardName) {
+            if (child.getUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CARD_NAME) == selectedCardName) {
               selectedCard = child;
             }
           }
@@ -1260,20 +1275,32 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var north = remoteBorderContainer.getNorth();
       if (north) {
         var child = this.createComponent(north);
-        this._addSectionHeader(borderContainer, north);
-        borderContainer.add(child);
+        if (child instanceof qx.ui.mobile.page.NavigationPage) {
+          borderContainer.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE, child);
+        } else {
+          this._addSectionHeader(borderContainer, north);
+          borderContainer.add(child);
+        }
       }
       var center = remoteBorderContainer.getCenter();
       if (center) {
         var child = this.createComponent(center);
-        this._addSectionHeader(borderContainer, center);
-        borderContainer.add(child, {flex: 1});
+        if (child instanceof qx.ui.mobile.page.NavigationPage) {
+          borderContainer.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE, child);
+        } else {
+          this._addSectionHeader(borderContainer, center);
+          borderContainer.add(child, {flex: 1});
+        }
       }
       var south = remoteBorderContainer.getSouth();
       if (south) {
         var child = this.createComponent(south);
-        this._addSectionHeader(borderContainer, south);
-        borderContainer.add(child);
+        if (child instanceof qx.ui.mobile.page.NavigationPage) {
+          borderContainer.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE, child);
+        } else {
+          this._addSectionHeader(borderContainer, south);
+          borderContainer.add(child);
+        }
       }
       return borderContainer;
     },
@@ -1370,14 +1397,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           && rCardComponent.getCenter() instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
         this.addCard(cardContainer, rCardComponent.getCenter(), cardName);
       } else {
-        var existingCards = cardContainer.getUserData("existingCards");
-        var existingCardNames = cardContainer.getUserData("existingCardNames");
+        var existingCards = cardContainer.getUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__EXISTING_CARDS);
+        var existingCardNames = cardContainer.getUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__EXISTING_CARD_NAMES);
         var existingCard = existingCardNames.indexOf(cardName) >= 0;
         if (!existingCard) {
           existingCardNames.push(cardName);
           var cardComponent = this.createComponent(rCardComponent);
           existingCards.push(cardComponent);
-          cardComponent.setUserData("cardName", cardName);
+          cardComponent.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CARD_NAME, cardName);
           if (rCardComponent instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
             // Do not actually add the card to the card container since it's added to the manager.
             // cardContainer.add(cardComponent);
@@ -1406,29 +1433,16 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @param selectedCard  {qx.ui.mobile.core.Widget}
      */
     _selectCard: function (cardContainer, selectedCard) {
+      var pageToShow;
       if (selectedCard instanceof qx.ui.mobile.page.NavigationPage) {
-        var currentCard = cardContainer.getUserData("currentPage");
-        cardContainer.setUserData("currentPage", selectedCard);
-        var pageToShow = this._getActualPageToShow(selectedCard);
-        if (pageToShow) {
-          this._getActionHandler().showPage(pageToShow);
-        }
+        var currentCard = cardContainer.getUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE);
+        cardContainer.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE, selectedCard);
       } else if (selectedCard) {
         selectedCard.show();
-        this.__ensureSubCardPagesVisible(selectedCard);
       }
-    },
-
-    __ensureSubCardPagesVisible: function(rootCard) {
-      var existingCards = rootCard.getUserData("existingCards");
-      if (existingCards != null) {
-        // This is a card container
-        this._selectCard(rootCard, rootCard.getUserData("currentPage"));
-      } else if (rootCard["getChildren"]) {
-        var children = rootCard.getChildren();
-        if (children && children.length == 1) {
-          this.__ensureSubCardPagesVisible(children[0]);
-        }
+      pageToShow = this._getActualPageToShow(selectedCard);
+      if (pageToShow) {
+        this._getActionHandler().showPage(pageToShow);
       }
     },
 
