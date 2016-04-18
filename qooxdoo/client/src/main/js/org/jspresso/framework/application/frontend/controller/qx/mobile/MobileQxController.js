@@ -104,7 +104,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       if (this.getCurrentPage() != page) {
         this._getViewFactory().loseFocus();
         var detailCardLayout = this._getManager().getDetailNavigation().getLayout();
-        if (page.getLayoutParent().getLayoutParent() == this._getManager().getDetailNavigation()
+        if (   page.getLayoutParent()
+            && page.getLayoutParent().getLayoutParent() == this._getManager().getDetailNavigation()
             && detailCardLayout.getShowAnimation()) {
           if (this.__animationQueue != null) {
             this.__animationQueue.push({page: page, animation: animation, back: back});
