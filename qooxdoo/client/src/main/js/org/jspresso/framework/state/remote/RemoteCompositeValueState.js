@@ -139,16 +139,6 @@ qx.Class.define("org.jspresso.framework.state.remote.RemoteCompositeValueState",
           child.setParent(this);
         }
       }
-      /*
-       children = this.getChildren();
-       children.addListener("changeBubble", function(event) {
-       this._applyEventPropagation(value,  old, "children." + event.getData()["name"]);
-       }, this);
-       */
-    },
-
-    notifyChildrenChanged: function () {
-      this.fireDataEvent("changeChildren", this.getChildren(), this.getChildren(), false);
     }
   }
 });
