@@ -26,6 +26,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
   ],
 
   statics: {
+    ANIMATION_DURATION: 1000
   },
 
   /**
@@ -34,7 +35,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
    */
   construct: function (remoteController, userLanguage) {
     this.base(arguments, remoteController, userLanguage);
-    this.__applicationContainer = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.Card());
+    var mainCardLayout = new qx.ui.mobile.layout.Card();
+
+    mainCardLayout.setAnimationDuration(
+        org.jspresso.framework.application.frontend.controller.qx.mobile.MobileQxController.ANIMATION_DURATION);
+    this.__applicationContainer = new qx.ui.mobile.container.Composite(mainCardLayout);
     this.__applicationContainer.addCssClass("jspresso-root");
     this._getApplication().getRoot().add(this.__applicationContainer, {flex: 1});
     var deviceType = qx.core.Environment.get("device.type");
@@ -263,6 +268,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         manager.setHideMasterButtonCaption(this.translate("Hide"));
       }
       manager.getDetailNavigation().getLayout().setShowAnimation(true);
+      manager.getDetailNavigation().getLayout().setAnimationDuration(
+          org.jspresso.framework.application.frontend.controller.qx.mobile.MobileQxController.ANIMATION_DURATION);
       this.__blankPage = new qx.ui.mobile.page.NavigationPage();
       manager.addDetail(this.__blankPage);
       this.__blankPage.show();
