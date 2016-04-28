@@ -939,11 +939,16 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @param remoteAction {org.jspresso.framework.gui.remote.RAction}
      */
     createCommand: function (remoteAction) {
+      // The commands do not rely on the focused view in order to be triggered. Moreover, they cann break browser
+      // native ones (like Ctr+C on Chrome). We have to find a more reliable way to handle keyboard accelerators.
+      /*
       var accel = remoteAction.getAcceleratorAsString();
       if (accel) {
         accel = accel.replace(/ /g, "+");
       }
       var command = new qx.ui.command.Command(accel);
+      */
+      var command = new qx.ui.command.Command();
       this.setIcon(command, remoteAction.getIcon());
       if (remoteAction.getName()) {
         command.setLabel(remoteAction.getName());
@@ -1002,12 +1007,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var menuItems = [];
       for (var i = 0; i < actions.length; i++) {
         var menuButton = this.createMenuButton(actions[i]);
-        // The commands do not rely on the focused view in order to be triggered. Moreover, they cann break browser
-        // native ones (like Ctr+C on Chrome). We have to find a more reliable way to handle keyboard accelerators.
-        /*
         var command = this.createCommand(actions[i]);
         menuButton.setCommand(command);
-        */
         menuItems.push(menuButton);
       }
       return menuItems;
