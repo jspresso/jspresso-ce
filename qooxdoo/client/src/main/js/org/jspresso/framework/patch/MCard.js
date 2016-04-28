@@ -95,7 +95,7 @@ qx.Mixin.define("org.jspresso.framework.patch.MCard", {
       }
 
       this.__patchNextWidget = widget;
-      if (this.__patchCurrentWidget && this.getShowAnimation() && qx.core.Environment.get("css.transform.3d")) {
+      if (this.getShowAnimation() && qx.core.Environment.get("css.transform.3d")) {
         properties = properties || {};
 
         this.__patchAnimation = properties.animation || this.getDefaultAnimation();
@@ -122,9 +122,13 @@ qx.Mixin.define("org.jspresso.framework.patch.MCard", {
       if (this.__patchCurrentWidget) {
         var pageToExclude = this.__patchCurrentWidget;
         pageToExclude.removeCssClass("active");
+        // Makes the page flicker
+        /*
         qx.event.Timer.once(function () {
           pageToExclude.exclude();
         }, this, 0);
+        */
+        pageToExclude.exclude();
       }
       this.__patchCurrentWidget = this.__patchNextWidget;
       this.__patchCurrentWidget.addCssClass("active");
@@ -187,16 +191,20 @@ qx.Mixin.define("org.jspresso.framework.patch.MCard", {
       this.__patchInAnimation = true;
 
       this.fireDataEvent("animationStart", [this.__patchCurrentWidget, widget]);
-      var fromElement = this.__patchCurrentWidget.getContainerElement();
+      var fromElement = this.__patchCurrentWidget ? this.__patchCurrentWidget.getContainerElement() : null;
       var toElement = widget.getContainerElement();
 
       var onAnimationEnd = qx.lang.Function.bind(this._onAnimationEnd, this);
 
       if (qx.core.Environment.get("browser.name") == "iemobile" || qx.core.Environment.get("browser.name") == "ie") {
-        qx.bom.Event.addNativeListener(fromElement, "MSAnimationEnd", onAnimationEnd, false);
+        if (fromElement) {
+          qx.bom.Event.addNativeListener(fromElement, "MSAnimationEnd", onAnimationEnd, false);
+        }
         qx.bom.Event.addNativeListener(toElement, "MSAnimationEnd", onAnimationEnd, false);
       } else {
-        qx.event.Registration.addListener(fromElement, "animationEnd", this._onAnimationEnd, this);
+        if (fromElement) {
+          qx.event.Registration.addListener(fromElement, "animationEnd", this._onAnimationEnd, this);
+        }
         qx.event.Registration.addListener(toElement, "animationEnd", this._onAnimationEnd, this);
       }
 
@@ -210,10 +218,14 @@ qx.Mixin.define("org.jspresso.framework.patch.MCard", {
           this.__patchReverse);
 
       qx.bom.element.Class.addClasses(toElement, toCssClasses);
-      qx.bom.element.Class.addClasses(fromElement, fromCssClasses);
+      if (fromElement) {
+        qx.bom.element.Class.addClasses(fromElement, fromCssClasses);
+      }
 
-      qx.bom.element.Animation.animate(toElement, toElementAnimation);
-      qx.bom.element.Animation.animate(fromElement, fromElementAnimation);
+      qx.bom.element.Animation.animate(toElement, toElementAnimation, this.getAnimationDuration());
+      if (fromElement) {
+        qx.bom.element.Animation.animate(fromElement, fromElementAnimation, this.getAnimationDuration());
+      }
     },
 
 
@@ -233,19 +245,31 @@ qx.Mixin.define("org.jspresso.framework.patch.MCard", {
      */
     __patchStopAnimation: function () {
       if (this.__patchInAnimation) {
-        var fromElement = this.__patchCurrentWidget.getContainerElement();
-        var toElement = this.__patchNextWidget.getContainerElement();
+        var fromElement = this.__patchCurrentWidget ? this.__patchCurrentWidget.getContainerElement() : null;
+        var toElement = this.__patchNextWidget ? this.__patchNextWidget.getContainerElement() : null;
 
         if (qx.core.Environment.get("browser.name") == "iemobile" || qx.core.Environment.get("browser.name") == "ie") {
-          qx.bom.Event.removeNativeListener(fromElement, "MSAnimationEnd", this._onAnimationEnd, false);
-          qx.bom.Event.removeNativeListener(toElement, "MSAnimationEnd", this._onAnimationEnd, false);
+          if (fromElement) {
+            qx.bom.Event.removeNativeListener(fromElement, "MSAnimationEnd", this._onAnimationEnd, false);
+          }
+          if (toElement) {
+            qx.bom.Event.removeNativeListener(toElement, "MSAnimationEnd", this._onAnimationEnd, false);
+          }
         } else {
-          qx.event.Registration.removeListener(fromElement, "animationEnd", this._onAnimationEnd, this);
-          qx.event.Registration.removeListener(toElement, "animationEnd", this._onAnimationEnd, this);
+          if (fromElement) {
+            qx.event.Registration.removeListener(fromElement, "animationEnd", this._onAnimationEnd, this);
+          }
+          if (toElement) {
+            qx.event.Registration.removeListener(toElement, "animationEnd", this._onAnimationEnd, this);
+          }
         }
 
-        qx.bom.element.Class.removeClasses(fromElement, this.__patchGetAnimationClasses("out"));
-        qx.bom.element.Class.removeClasses(toElement, this.__patchGetAnimationClasses("in"));
+        if (fromElement) {
+          qx.bom.element.Class.removeClasses(fromElement, this.__patchGetAnimationClasses("out"));
+        }
+        if (toElement) {
+          qx.bom.element.Class.removeClasses(toElement, this.__patchGetAnimationClasses("in"));
+        }
 
         this._swapWidget();
         this._widget.removeCssClass("animationParent");
