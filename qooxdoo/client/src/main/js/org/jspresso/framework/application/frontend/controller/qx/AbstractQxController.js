@@ -849,7 +849,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
         //noinspection JSUnfilteredForInLoop
         var peer = this.getRegistered(guid);
         if (peer instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
-          peer.notifyChildrenChanged();
+          // Might break subtree refreshing when adding complete subtrees
+          // peer.notifyChildrenChanged();
           if (this.__postponedSelectionCommands.hasOwnProperty(guid)) {
             var delayedSelectionCommand = this.__postponedSelectionCommands[guid];
             peer.setLeadingIndex(delayedSelectionCommand.getLeadingIndex());
