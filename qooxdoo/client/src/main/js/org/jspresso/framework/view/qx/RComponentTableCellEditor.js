@@ -166,7 +166,10 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
       editor.addListener("focusout", function (e) {
         var relatedTarget = e.getRelatedTarget();
         var timer = qx.util.TimerManager.getInstance();
-        if (relatedTarget != null && relatedTarget != table && !qx.ui.core.Widget.contains(editor, relatedTarget)) {
+        if (relatedTarget != null
+            && relatedTarget != editor
+            && relatedTarget != table
+            && !qx.ui.core.Widget.contains(editor, relatedTarget)) {
           timer.start(function (userData, timerId) {
             if (table.isEditing()) {
               table.stopEditing();
