@@ -1,4 +1,6 @@
 # jspresso-ce
+
+[![Join the chat at https://gitter.im/jspresso/jspresso-ce](https://badges.gitter.im/jspresso/jspresso-ce.svg)](https://gitter.im/jspresso/jspresso-ce?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Jspresso Framework Community Edition
 
 
