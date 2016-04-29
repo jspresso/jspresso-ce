@@ -426,7 +426,7 @@
     </property>
   </bean>
 
-  <bean id="queryModuleFilterAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
+  <bean id="queryModuleFilterAction" class="org.jspresso.framework.application.frontend.action.module.QueryFilterModuleAction">
     <property name="name" value="query.filter.name" />
     <property name="iconImageURL">
       <bean parent="abstractFwIconImageURL">
@@ -436,6 +436,11 @@
     <property name="acceleratorAsString" value="ctrl F" />
     <property name="wrappedAction" ref="queryModuleFilterBackAction" />
     <property name="nextAction" ref="checkModuleDirtyStateFrontAction" />
+    <property name="emptyResultAction">
+      <bean parent="staticInfoFrontAction">
+        <property name="messageCode" value="result.empty" />
+      </bean>
+    </property>
   </bean>
 
   <bean id="abstractFrontendAction" abstract="true" class="org.jspresso.framework.application.frontend.action.FrontendAction" />
