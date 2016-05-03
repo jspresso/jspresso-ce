@@ -503,13 +503,16 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         } else {
           pageToRestore = this._dialogStack[this._dialogStack.length - 1][0];
         }
-        if (pageToDestroy) {
-          pageToDestroy.addListenerOnce("disappear", function () {
-            qx.event.Timer.once(function () {
-              this.__applicationContainer.remove(pageToDestroy);
-              pageToDestroy.destroy();
-            }, this, 500);
-          }, this);
+        var callback = function () {
+          qx.event.Timer.once(function () {
+            this.__applicationContainer.remove(pageToDestroy);
+            pageToDestroy.destroy();
+          }, this, org.jspresso.framework.application.frontend.controller.qx.mobile.MobileQxController.ANIMATION_DURATION + 500);
+        };
+        if (pageToRestore && pageToDestroy) {
+          pageToRestore.addListenerOnce("appear", callback, this);
+        } else if (pageToDestroy) {
+          pageToDestroy.addListenerOnce("disappear", callback, this);
         }
         pageToRestore.show({animation: "slideup", reverse: true});
         if (this.__savedCurrentPage) {
