@@ -23,13 +23,15 @@ import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.NameCallback;
 import javax.security.auth.callback.PasswordCallback;
 
+import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
+
 /**
  * A simplistic JAAS callback handler that auto handles user and password
  * callback.
  *
  * @author Vincent Vandenschrick
  */
-public class UsernamePasswordHandler implements CallbackHandler {
+public class UsernamePasswordHandler extends AbstractPropertyChangeCapable implements CallbackHandler {
 
   private String  password;
   private String  username;

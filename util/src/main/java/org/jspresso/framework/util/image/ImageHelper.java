@@ -23,8 +23,8 @@ import java.io.InputStream;
 import java.net.URL;
 
 import javaxt.io.Image;
-import org.apache.commons.codec.binary.Base64;
 
+import org.apache.commons.codec.binary.Base64;
 import org.jspresso.framework.util.url.UrlHelper;
 
 /**
@@ -133,6 +133,33 @@ public final class ImageHelper {
    */
   public static byte[] fromBase64Src(String base64Src) {
     return Base64.decodeBase64(base64Src.replaceAll("^.*base64,", ""));
+  }
+  
+  
+  /**
+   * Load image from project's ressource path.
+   * @param resourcePath The path to the resource.
+   * @return the image as bytes.
+   * @throws IOException If ressource cannot be read.
+   */
+  public static byte[] loadImage(String resourcePath) throws IOException {
+    
+    if (!resourcePath.startsWith("/"))
+      resourcePath = "/" + resourcePath;
+    
+    InputStream is = null;
+    try {
+      is = ImageHelper.class.getResourceAsStream(resourcePath);
+      Image im = ImageHelper.createImage(is);
+      return im.getByteArray();
+    } finally {
+      if (is!=null)
+        try {
+          is.close();
+        } catch (IOException e) {
+          return null;
+        }
+    }
   }
 
 }
