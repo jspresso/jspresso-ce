@@ -33,7 +33,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
   ],
 
   statics: {
-    ANIMATION_DURATION: 1000
+    ANIMATION_DURATION: 500
   },
 
   /**
