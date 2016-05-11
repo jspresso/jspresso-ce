@@ -389,9 +389,14 @@ public abstract class AbstractCollectionConnector extends
           }
         }
         addChildConnector(computeStorageKey(i), connector);
+        if (removedChildrenConnectors != null) {
+          removedChildrenConnectors.remove(connector);
+        }
       }
     }
-    removedChildrenConnectors = new ArrayList<>();
+    if (removedChildrenConnectors == null) {
+      removedChildrenConnectors = new ArrayList<>();
+    }
     for (List<IValueConnector> obsoleteConnectors : existingConnectorsByModel
         .values()) {
       for (IValueConnector obsoleteConnector : obsoleteConnectors) {

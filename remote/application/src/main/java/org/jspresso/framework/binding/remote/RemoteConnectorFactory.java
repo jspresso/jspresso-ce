@@ -348,11 +348,21 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
   private boolean isRecycling(IValueConnector connector) {
     if (connector instanceof AbstractValueConnector) {
       return ((AbstractValueConnector) connector).isMute()
-          || isRecycling(connector.getModelConnector())
+          || isCollectionConnectorDescendant(connector) && isRecycling(connector.getModelConnector())
           || isRecycling(connector.getParentConnector());
     } else {
       return false;
     }
+  }
+
+  private boolean isCollectionConnectorDescendant(IValueConnector connector) {
+    if (connector == null) {
+      return false;
+    }
+    if (connector instanceof ICollectionConnector) {
+      return true;
+    }
+    return isCollectionConnectorDescendant(connector.getParentConnector());
   }
 
   /**
