@@ -116,9 +116,11 @@ public class RefreshCardViewFrontAction<E, F, G> extends FrontendAction<E, F, G>
     }
     else if (view instanceof IMapView<?>) {
       IView<?> v = ((IMapView<?>)view).getCurrentView();
-      IMapView<?> card = searchCard(v, permId);
-      if (card !=null) {
-        return card;
+      if (v !=null) {
+        IMapView<?> card = searchCard(v, permId);
+        if (card !=null) {
+          return card;
+        }
       }
     }
     return null;
