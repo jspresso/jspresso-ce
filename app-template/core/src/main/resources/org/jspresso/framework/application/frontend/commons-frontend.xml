@@ -444,6 +444,8 @@
   <bean id="staticDisplayUrlFrontAction" abstract="true" parent="displayUrlFrontAction"
     class="org.jspresso.framework.application.frontend.action.std.DisplayStaticUrlAction" />
 
+  <bean id="refreshCardViewFrontAction" class="org.jspresso.framework.application.frontend.action.std.RefreshCardViewFrontAction"/>
+
   <bean id="wizardAction" abstract="true" class="org.jspresso.framework.application.frontend.action.wizard.WizardAction">
     <property name="name" value="wizard.name" />
     <property name="iconImageURL">
