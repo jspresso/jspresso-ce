@@ -1052,7 +1052,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     JComponent viewComponent;
     TimeZone timeZone =
         propertyDescriptor.isTimeZoneAware() ? actionHandler.getClientTimeZone() : actionHandler.getReferenceTimeZone();
-    DateFormat format = createDateFormat(propertyDescriptor, timeZone, actionHandler, locale);
+    DateFormat format = createDateFormat(propertyViewDescriptor, propertyDescriptor, timeZone, actionHandler, locale);
     IFormatter<?, String> formatter = createFormatter(format);
     if (propertyViewDescriptor.isReadOnly()) {
       if (propertyViewDescriptor.getAction() != null) {
@@ -2129,7 +2129,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       TimeZone timeZone =
           ((IDatePropertyDescriptor) propertyDescriptor).isTimeZoneAware() ? actionHandler.getClientTimeZone() :
               actionHandler.getReferenceTimeZone();
-      cellRenderer = createDateTableCellRenderer((IDatePropertyDescriptor) propertyDescriptor, timeZone, actionHandler,
+      cellRenderer = createDateTableCellRenderer(propertyViewDescriptor, (IDatePropertyDescriptor) propertyDescriptor,
+          timeZone, actionHandler,
           locale);
     } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
       cellRenderer = createTimeTableCellRenderer((ITimePropertyDescriptor) propertyDescriptor, actionHandler, locale);
@@ -2444,7 +2445,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
           column.setPreferredWidth(Math.max(editorView.getPeer().getPreferredSize().width, minHeaderWidth));
         } else {
           column.setPreferredWidth(Math.max(Math.min(computePixelWidth(viewComponent,
-              getFormatLength(createFormatter(propertyDescriptor, actionHandler, locale),
+              getFormatLength(createFormatter(columnViewDescriptor, propertyDescriptor, actionHandler, locale),
                   getTemplateValue(propertyDescriptor))), maxColumnSize), minHeaderWidth));
         }
       }
@@ -3003,10 +3004,11 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     return new ColorTableCellRenderer();
   }
 
-  private TableCellRenderer createDateTableCellRenderer(IDatePropertyDescriptor propertyDescriptor, TimeZone timeZone,
+  private TableCellRenderer createDateTableCellRenderer(IPropertyViewDescriptor propertyViewDescriptor,
+                                                        IDatePropertyDescriptor propertyDescriptor, TimeZone timeZone,
                                                         ITranslationProvider translationProvider, Locale locale) {
     return new FormattedTableCellRenderer(
-        createDateFormatter(propertyDescriptor, timeZone, translationProvider, locale));
+        createDateFormatter(propertyViewDescriptor, propertyDescriptor, timeZone, translationProvider, locale));
   }
 
   private TableCellRenderer createDecimalTableCellRenderer(IDecimalPropertyDescriptor propertyDescriptor,
