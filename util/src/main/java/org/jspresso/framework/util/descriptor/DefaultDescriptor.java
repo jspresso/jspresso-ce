@@ -77,8 +77,9 @@ public class DefaultDescriptor implements IDescriptor, ICloneable {
   @Override
   public String getI18nName(ITranslationProvider translationProvider,
       Locale locale) {
-    if (i18nNameKey != null) {
-      return translationProvider.getTranslation(i18nNameKey, locale);
+    String key = getI18nNameKey();
+    if (key != null) {
+      return translationProvider.getTranslation(key, locale);
     }
     return translationProvider.getTranslation(getName(), locale);
   }
