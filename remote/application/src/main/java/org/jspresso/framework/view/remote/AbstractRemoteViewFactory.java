@@ -804,7 +804,12 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
       ((RDateField) viewComponent).setType(propertyDescriptor.getType().name());
       ((RDateField) viewComponent).setSecondsAware(propertyDescriptor.isSecondsAware());
       ((RDateField) viewComponent).setMillisecondsAware(propertyDescriptor.isMillisecondsAware());
-      ((RDateField) viewComponent).setFormatPattern(propertyDescriptor.getFormatPattern());
+      String formatPattern = propertyDescriptor.getFormatPattern();
+      if (propertyViewDescriptor instanceof BasicDatePropertyViewDescriptor
+          && ((BasicDatePropertyViewDescriptor) propertyViewDescriptor).getFormatPattern() != null) {
+        formatPattern = ((BasicDatePropertyViewDescriptor) propertyViewDescriptor).getFormatPattern();
+      }
+      ((RDateField) viewComponent).setFormatPattern(formatPattern);
     }
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
