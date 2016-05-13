@@ -135,6 +135,7 @@ import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicDatePropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
@@ -1522,21 +1523,27 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates a date format based on a date property descriptor.
    *
+   * @param propertyViewDescriptor
+   *     the property view descriptor
    * @param propertyDescriptor
-   *          the date property descriptor.
+   *     the date property descriptor.
    * @param timeZone
-   *          the timezone.
+   *     the timezone.
    * @param translationProvider
-   *          the translation provider.
+   *     the translation provider.
    * @param locale
-   *          the locale.
+   *     the locale.
    * @return the date format.
    */
-  protected SimpleDateFormat createDateFormat(IDatePropertyDescriptor propertyDescriptor, TimeZone timeZone,
+  protected SimpleDateFormat createDateFormat(IPropertyViewDescriptor propertyViewDescriptor,
+                                              IDatePropertyDescriptor propertyDescriptor, TimeZone timeZone,
                                               ITranslationProvider translationProvider, Locale locale) {
     SimpleDateFormat format;
     String formatPattern;
-    if (propertyDescriptor.getFormatPattern() != null) {
+    if (propertyViewDescriptor instanceof BasicDatePropertyViewDescriptor
+        && ((BasicDatePropertyViewDescriptor) propertyViewDescriptor).getFormatPattern() != null) {
+      formatPattern = ((BasicDatePropertyViewDescriptor) propertyViewDescriptor).getFormatPattern();
+    } else if (propertyDescriptor.getFormatPattern() != null) {
       formatPattern = propertyDescriptor.getFormatPattern();
     } else {
       if (propertyDescriptor.getType() == EDateType.DATE) {
@@ -1636,25 +1643,6 @@ public abstract class AbstractViewFactory<E, F, G> implements
       return translationProvider.getTimePattern(locale);
     }
     return translationProvider.getShortTimePattern(locale);
-  }
-
-  /**
-   * Creates a date formatter based on a date property descriptor.
-   *
-   * @param propertyDescriptor
-   *          the date property descriptor.
-   * @param timeZone
-   *          the timezone.
-   * @param translationProvider
-   *          the translation provider.
-   * @param locale
-   *          the locale.
-   * @return the date formatter.
-   */
-  protected IFormatter<?, String> createDateFormatter(
-      IDatePropertyDescriptor propertyDescriptor, TimeZone timeZone,
-      ITranslationProvider translationProvider, Locale locale) {
-    return createFormatter(createDateFormat(propertyDescriptor, timeZone, translationProvider, locale));
   }
 
   /**
@@ -1811,6 +1799,28 @@ public abstract class AbstractViewFactory<E, F, G> implements
   protected abstract E createEmptyComponent();
 
   /**
+   * Creates a date formatter based on a date property descriptor.
+   *
+   * @param propertyViewDescriptor
+   *     the property view descriptor
+   * @param propertyDescriptor
+   *     the date property descriptor.
+   * @param timeZone
+   *     the timezone.
+   * @param translationProvider
+   *     the translation provider.
+   * @param locale
+   *     the locale.
+   * @return the date formatter.
+   */
+  protected IFormatter<?, String> createDateFormatter(IPropertyViewDescriptor propertyViewDescriptor,
+                                                      IDatePropertyDescriptor propertyDescriptor, TimeZone timeZone,
+                                                      ITranslationProvider translationProvider, Locale locale) {
+    return createFormatter(createDateFormat(propertyViewDescriptor, propertyDescriptor, timeZone, translationProvider,
+        locale));
+  }
+
+  /**
    * Creates an enumeration property view.
    *
    * @param propertyViewDescriptor
@@ -1854,21 +1864,23 @@ public abstract class AbstractViewFactory<E, F, G> implements
   /**
    * Creates a formatter based on a property descriptor.
    *
+   * @param propertyViewDescriptor
+   *     the property view descriptor
    * @param propertyDescriptor
-   *          the property descriptor.
+   *     the property descriptor.
    * @param actionHandler
-   *          the action handler.
+   *     the action handler.
    * @param locale
-   *          the locale.
+   *     the locale.
    * @return the formatter.
    */
-  protected IFormatter<?, String> createFormatter(
+  protected IFormatter<?, String> createFormatter(IPropertyViewDescriptor propertyViewDescriptor,
       IPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
       Locale locale) {
     if (propertyDescriptor instanceof IDatePropertyDescriptor) {
       TimeZone timeZone = ((IDatePropertyDescriptor) propertyDescriptor).isTimeZoneAware() ?
           actionHandler.getClientTimeZone() : actionHandler.getReferenceTimeZone();
-      return createDateFormatter((IDatePropertyDescriptor) propertyDescriptor,
+      return createDateFormatter(propertyViewDescriptor, (IDatePropertyDescriptor) propertyDescriptor,
           timeZone, actionHandler, locale);
     }
     if (propertyDescriptor instanceof ITimePropertyDescriptor) {

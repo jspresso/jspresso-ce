@@ -153,6 +153,7 @@ import org.jspresso.framework.view.descriptor.IStringPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicDatePropertyViewDescriptor;
 
 /**
  * Abstract base implementation for remote views.
@@ -774,7 +775,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     RComponent viewComponent;
     final TimeZone timeZone =
         propertyDescriptor.isTimeZoneAware() ? actionHandler.getClientTimeZone() : actionHandler.getReferenceTimeZone();
-    IFormatter<?, String> formatter = createDateFormatter(propertyDescriptor, timeZone, actionHandler, locale);
+    IFormatter<?, String> formatter = createDateFormatter(propertyViewDescriptor, propertyDescriptor, timeZone,
+        actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
       if (propertyViewDescriptor.getAction() != null) {
@@ -794,7 +796,12 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
       ((RDateField) viewComponent).setType(propertyDescriptor.getType().name());
       ((RDateField) viewComponent).setSecondsAware(propertyDescriptor.isSecondsAware());
       ((RDateField) viewComponent).setMillisecondsAware(propertyDescriptor.isMillisecondsAware());
-      ((RDateField) viewComponent).setFormatPattern(propertyDescriptor.getFormatPattern());
+      String formatPattern = propertyDescriptor.getFormatPattern();
+      if (propertyViewDescriptor instanceof BasicDatePropertyViewDescriptor
+          && ((BasicDatePropertyViewDescriptor) propertyViewDescriptor).getFormatPattern() != null) {
+        formatPattern = ((BasicDatePropertyViewDescriptor) propertyViewDescriptor).getFormatPattern();
+      }
+      ((RDateField) viewComponent).setFormatPattern(formatPattern);
     }
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
@@ -1422,16 +1429,12 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     RCardContainer cardContainer = (RCardContainer) cardView.getPeer();
 
     RComponent[] newCards = new RComponent[cardContainer.getCards().length + 1];
-    for (int i = 0; i < cardContainer.getCards().length; i++) {
-      newCards[i] = cardContainer.getCards()[i];
-    }
+    System.arraycopy(cardContainer.getCards(), 0, newCards, 0, cardContainer.getCards().length);
     newCards[newCards.length - 1] = card.getPeer();
     cardContainer.setCards(newCards);
 
     String[] newCardNames = new String[cardContainer.getCardNames().length + 1];
-    for (int i = 0; i < cardContainer.getCardNames().length; i++) {
-      newCardNames[i] = cardContainer.getCardNames()[i];
-    }
+    System.arraycopy(cardContainer.getCardNames(), 0, newCardNames, 0, cardContainer.getCardNames().length);
     newCardNames[newCardNames.length - 1] = cardName;
     cardContainer.setCardNames(newCardNames);
 
