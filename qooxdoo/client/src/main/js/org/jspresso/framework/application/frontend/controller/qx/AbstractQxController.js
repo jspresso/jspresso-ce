@@ -51,6 +51,18 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     this._dialogStack = [];
     this._dialogStack.push([null, null, null]);
     qx.locale.Manager.getInstance().setLocale(this.__userLanguage);
+    var actionHandler = this;
+    window.executeAction = function (actionGuid, actionCommand) {
+      actionCommand = (typeof actionCommand == 'undefined') ? null : actionCommand;
+      var action = actionHandler.getRegistered(actionGuid);
+      if (action) {
+        var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
+        actionEvent.setActionCommand(actionCommand);
+        qx.event.Timer.once(function () {
+          actionHandler.execute(action, actionEvent);
+        }, {}, 100);
+      }
+    };
     this._initRemoteController();
   },
 

@@ -461,6 +461,11 @@ mx|TextInput {
   paddingTop:              3px;
 }
 
+.htmlText {
+  borderSkin:              ClassReference(null);
+  focusSkin:               ClassReference(null);
+}
+
 /* Tooltip -------------------------------------------------------------------*/
 mx|ToolTip {
   backgroundColor: #3D3D3D;

@@ -18,8 +18,7 @@
  */
 
 qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
-  extend: qx.ui.table.cellrenderer.Default,
-  include: [org.jspresso.framework.view.qx.MCellAdditionalStyle],
+  extend: qx.ui.table.cellrenderer.Default, include: [org.jspresso.framework.view.qx.MCellAdditionalStyle],
 
   construct: function (table, format) {
     this.base(arguments);
@@ -28,9 +27,7 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
   },
 
   members: {
-    __format: null,
-    __table: null,
-    __action: null,
+    __format: null, __table: null, __action: null,
 
     _formatValue: function (cellInfo) {
       if (this.__format && cellInfo.value) {
@@ -44,8 +41,7 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
           || cellInfo.value instanceof String)) {
         if (cellInfo.value.indexOf("\n") >= 0) {
           cellInfo.value = org.jspresso.framework.util.html.HtmlUtil.toHtml(
-              org.jspresso.framework.util.html.HtmlUtil.replaceNewlines(cellInfo.value)
-          );
+              org.jspresso.framework.util.html.HtmlUtil.replaceNewlines(cellInfo.value));
         }
       }
       if (org.jspresso.framework.util.html.HtmlUtil.isHtml(cellInfo.value) && this.__table.getRowHeight() < 150) {
@@ -54,18 +50,21 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
           contentHeight = 150;
         }
         if (this.__table.getRowHeight() < contentHeight) {
-          this.__table.setRowHeight(contentHeight + 4);
+          this.__table.setRowHeight(parseInt(contentHeight + (cellInfo.styleHeight * 2 / 5) + 4));
         }
       }
-      if (this.__action) {
-        // Action is handled in the cell click event
-        return "<u>" + this.base(arguments, cellInfo) + "</u>";
+      var htmlContent;
+      var action = this.__action;
+      if (org.jspresso.framework.util.html.HtmlUtil.isHtml(cellInfo.value)) {
+        htmlContent = cellInfo.value;
+      } else if (action) {
+        htmlContent = "<u style='cursor: pointer;' onMouseUp='executeAction();'>" + this.base(arguments, cellInfo)
+            + "</u>";
       } else {
-        if (org.jspresso.framework.util.html.HtmlUtil.isHtml(cellInfo.value)) {
-          return cellInfo.value;
-        }
-        return this.base(arguments, cellInfo);
+        htmlContent = this.base(arguments, cellInfo);
       }
+      htmlContent = org.jspresso.framework.util.html.HtmlUtil.bindActionToHtmlContent(htmlContent, action);
+      return htmlContent;
     },
 
     setAction: function (action) {
