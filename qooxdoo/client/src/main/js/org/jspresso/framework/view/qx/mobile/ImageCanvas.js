@@ -155,11 +155,13 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImageCanvas", {
     },
 
     setImage: function (imageUrl) {
-      if(imageUrl) {
+      if (imageUrl) {
         var image = new Image();
         image.src = imageUrl;
         this.__canvas.addListenerOnce("appear", function (e) {
-          this.__drawImage(image);
+          qx.event.Timer.once(function () {
+            this.__drawImage(image);
+          }, this, 100);
         }, this);
       } else {
         this.clear();
