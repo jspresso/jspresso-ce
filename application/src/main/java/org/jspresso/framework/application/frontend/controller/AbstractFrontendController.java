@@ -2150,7 +2150,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private String getGlobalUserPreferenceGuidKey(String username) {
     // We must encode the username in the preference key, since the user is not yet logged-in,
     // thus the preference store is the global one.
-    return UP_GUID + "|" + username;
+    return UP_GUID + "|" + (username != null ? username.toLowerCase() : null);
   }
 
   /**
