@@ -42,6 +42,7 @@ import mx.containers.Panel;
 import mx.containers.TabNavigator;
 import mx.containers.VBox;
 import mx.containers.ViewStack;
+import mx.controls.Alert;
 import mx.controls.Button;
 import mx.controls.CheckBox;
 import mx.controls.ColorPicker;
@@ -148,6 +149,8 @@ import org.jspresso.framework.util.format.TimeParser;
 import org.jspresso.framework.util.gui.CellConstraints;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.gui.Font;
+import org.jspresso.framework.util.html.HtmlUtil;
+import org.jspresso.framework.util.html.HtmlUtil;
 import org.jspresso.framework.util.html.HtmlUtil;
 import org.jspresso.framework.util.lang.DateDto;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
@@ -2593,6 +2596,10 @@ public class DefaultFlexViewFactory {
           readOnly = true;
           columnAction = (rColumn as RLink).action;
           getRemotePeerRegistry().register(columnAction);
+        } else if (rColumn is RHtmlArea && (rColumn as RHtmlArea).readOnly) {
+          readOnly = true;
+          columnAction = (rColumn as RHtmlArea).action;
+          getRemotePeerRegistry().register(columnAction);
         }
         var alignment:String = "left";
         if (rColumn is RLabel) {
@@ -3053,18 +3060,27 @@ public class DefaultFlexViewFactory {
       htmlText.wordWrap = true;
       htmlText.horizontalScrollPolicy = ScrollPolicy.OFF;
     }
-    bindHtmlText(htmlText, remoteHtmlArea.state);
+    bindHtmlText(htmlText, remoteHtmlArea);
     return htmlText;
   }
 
-  protected function bindHtmlText(htmlText:TextArea, remoteState:RemoteValueState):void {
+  protected function bindHtmlText(htmlText:TextArea, remoteHtmlArea:RHtmlArea):void {
+    var remoteState:RemoteValueState = remoteHtmlArea.state;
     var updateText:Function = function (value:Object):void {
       if (value == null) {
         htmlText.htmlText = null;
       } else {
-        htmlText.htmlText = HtmlUtil.convertFromXHtml(value.toString());
+        htmlText.htmlText = HtmlUtil.bindActionToHtmlContent(HtmlUtil.convertFromXHtml(value.toString()), remoteHtmlArea.action);
       }
     };
+    if (remoteHtmlArea.action) {
+      getRemotePeerRegistry().register(remoteHtmlArea.action);
+      htmlText.addEventListener(TextEvent.LINK, function (evt:TextEvent):void {
+        var actionEvent:RActionEvent = new RActionEvent();
+        actionEvent.actionCommand = evt.text;
+        getActionHandler().execute(remoteHtmlArea.action, actionEvent);
+      });
+    }
     BindingUtils.bindSetter(updateText, remoteState, "value", true);
   }
 
@@ -3120,7 +3136,7 @@ public class DefaultFlexViewFactory {
         } else {
           var labelText:String = remoteState.value.toString();
           if (HtmlUtil.isHtml(labelText)) {
-            labelText = HtmlUtil.sanitizeHtml(labelText);
+            labelText = HtmlUtil.bindActionToHtmlContent(HtmlUtil.sanitizeHtml(labelText), (remoteLabel as RLink).action);
           }
           if (((remoteLabel as RLink).action).enabled) {
             label.htmlText = "<u><a href='event:action'>" + labelText + "</a></u>";
@@ -3131,6 +3147,8 @@ public class DefaultFlexViewFactory {
       };
       label.selectable = true;
       label.addEventListener(TextEvent.LINK, function (evt:TextEvent):void {
+        var actionEvent:RActionEvent = new RActionEvent();
+        actionEvent.actionCommand = evt.text;
         getActionHandler().execute((remoteLabel as RLink).action);
       });
       BindingUtils.bindSetter(updateLabel, (remoteLabel as RLink).action, "enabled", true);

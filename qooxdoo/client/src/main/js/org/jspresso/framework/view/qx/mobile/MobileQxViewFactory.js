@@ -24,7 +24,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     __CARD_NAME: "cardName",
     __EXISTING_CARDS: "existingCards",
     __EXISTING_CARD_NAMES: "existingCardNames",
-    
+
     bindListItem: function (item, state, selected, displayIcon) {
       var children = state.getChildren();
       var title;
@@ -1552,14 +1552,19 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           modelController.addTarget(atom, "label", "value", false, {
             converter: function (modelValue, model) {
               if (modelValue) {
-                return "<u><a href='javascript:'>" + modelValue + "</a></u>";
+                var htmlContent;
+                if (org.jspresso.framework.util.html.HtmlUtil.isHtml(modelValue)) {
+                  htmlContent = modelValue;
+                } else {
+                  htmlContent = "<u onMouseUp='executeAction();' onPointerUp='executeAction();' onTouchEnd='executeAction();'>" + modelValue + "</u>";
+                }
+                htmlContent = org.jspresso.framework.util.html.HtmlUtil.bindActionToHtmlContent(htmlContent,
+                    remoteLabel.getAction());
+                return htmlContent;
               }
               return modelValue;
             }
           });
-          atom.addListener("tap", function (event) {
-            this._getActionHandler().execute(remoteLabel.getAction());
-          }, this);
         } else {
           modelController.addTarget(atom, "label", "value", false, {
             converter: function (modelValue, model) {
@@ -2218,8 +2223,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var htmlText = new qx.ui.mobile.basic.Label();
       var state = remoteHtmlArea.getState();
       var modelController = new qx.data.controller.Object(state);
+      if (remoteHtmlArea.getAction()) {
+        this._getRemotePeerRegistry().register(remoteHtmlArea.getAction());
+      }
       modelController.addTarget(htmlText, "value", "value", false, {
-        converter: this._modelToViewFieldConverter
+        converter: function (modelValue, model) {
+          return org.jspresso.framework.util.html.HtmlUtil.bindActionToHtmlContent(modelValue,
+              remoteHtmlArea.getAction());
+        }
       });
       return htmlText;
     }
