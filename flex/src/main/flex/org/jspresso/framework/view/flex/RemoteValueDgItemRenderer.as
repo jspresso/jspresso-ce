@@ -31,6 +31,7 @@ import mx.formatters.Formatter;
 
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.gui.remote.RAction;
+import org.jspresso.framework.gui.remote.RActionEvent;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.gui.Font;
@@ -251,16 +252,17 @@ public class RemoteValueDgItemRenderer extends ListItemRenderer implements IColu
   protected override function commitProperties():void {
     super.commitProperties();
     var cellText:String = label.text;
-    if (_action != null) {
-      if (HtmlUtil.isHtml(cellText)) {
-        cellText = HtmlUtil.sanitizeHtml(cellText);
-      }
-      label.htmlText = "<u><a href='event:action'>" + cellText + "</a></u>";
+    var htmlText:String;
+    if (HtmlUtil.isHtml(cellText)) {
+      htmlText = HtmlUtil.bindActionToHtmlContent(HtmlUtil.sanitizeHtml(cellText), _action);
     } else {
-      if (HtmlUtil.isHtml(cellText)) {
-        label.htmlText = HtmlUtil.sanitizeHtml(cellText);
+      if (_action != null) {
+        htmlText = "<u><a href='event:action'>" + cellText + "</a></u>";
+      } else {
+        htmlText = cellText;
       }
     }
+    label.htmlText = htmlText;
     if (index != -1 && index != 1 && toolTipIndex < 0) {
       //in that case tool tip is based on the cell text.
       if (HtmlUtil.isHtml(cellText)) {
@@ -286,7 +288,9 @@ public class RemoteValueDgItemRenderer extends ListItemRenderer implements IColu
         //label.selectable = true;
         label.addEventListener(TextEvent.LINK, function (evt:TextEvent):void {
           // To ensure that the row is selected before the action gets executed.
-          callLater(_actionHandler.execute, [_action]);
+          var actionEvent:RActionEvent = new RActionEvent();
+          actionEvent.actionCommand = evt.text;
+          callLater(_actionHandler.execute, [_action, actionEvent]);
         });
       });
     }
