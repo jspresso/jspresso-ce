@@ -888,8 +888,14 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       htmlText.setSelectable(true);
       var state = remoteHtmlArea.getState();
       var modelController = new qx.data.controller.Object(state);
+      if (remoteHtmlArea.getAction()) {
+        this._getRemotePeerRegistry().register(remoteHtmlArea.getAction());
+      }
       modelController.addTarget(htmlText, "value", "value", false, {
-        converter: this._modelToViewFieldConverter
+        converter: function (modelValue, model) {
+          return org.jspresso.framework.util.html.HtmlUtil.bindActionToHtmlContent(modelValue,
+              remoteHtmlArea.getAction());
+        }
       });
       var scrollPane = new qx.ui.container.Scroll();
       scrollPane.add(htmlText);
@@ -942,12 +948,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       // The commands do not rely on the focused view in order to be triggered. Moreover, they cann break browser
       // native ones (like Ctr+C on Chrome). We have to find a more reliable way to handle keyboard accelerators.
       /*
-      var accel = remoteAction.getAcceleratorAsString();
-      if (accel) {
-        accel = accel.replace(/ /g, "+");
-      }
-      var command = new qx.ui.command.Command(accel);
-      */
+       var accel = remoteAction.getAcceleratorAsString();
+       if (accel) {
+       accel = accel.replace(/ /g, "+");
+       }
+       var command = new qx.ui.command.Command(accel);
+       */
       var command = new qx.ui.command.Command();
       this.setIcon(command, remoteAction.getIcon());
       if (remoteAction.getName()) {
@@ -2067,11 +2073,23 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         };
         table = new org.jspresso.framework.view.qx.EnhancedTable(tableModel, custom);
       }
+      table.setShowCellFocusIndicator(true);
+      var paneScroller = table.getPaneScroller(0);
+      var focusIndicator = paneScroller.getChildControl("focus-indicator");
+      focusIndicator.addListener("pointerdown", function (e) {
+        focusIndicator.setZIndex(0);
+      }, this);
+      paneScroller.addListener("pointerdown", function (e) {
+        focusIndicator.setZIndex(0);
+      }, this);
+      paneScroller.addListener("pointerup", function (e) {
+        focusIndicator.setZIndex(1000);
+      }, this);
       table.setStatusBarVisible(false);
       table.highlightFocusedRow(false);
       table.setResetSelectionOnHeaderTap(false);
       if (!remoteTable.getColumnReorderingAllowed()) {
-        table.getPaneScroller(0)._startMoveHeader = function (moveCol, pageX) {
+        paneScroller._startMoveHeader = function (moveCol, pageX) {
         };
       }
       table.addListener("cellTap", function (e) {
@@ -2131,7 +2149,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           cellRenderer = new org.jspresso.framework.view.qx.FormattedTableCellRenderer(table, format);
           cellRenderer.setUseAutoAlign(false);
 
-          if (rColumn instanceof org.jspresso.framework.gui.remote.RLink) {
+          if (rColumn instanceof org.jspresso.framework.gui.remote.RLink || rColumn
+              instanceof org.jspresso.framework.gui.remote.RHtmlArea) {
             this._getRemotePeerRegistry().register(rColumn.getAction());
             cellRenderer.setAction(rColumn.getAction());
           }
@@ -2231,15 +2250,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         }
       }
       tableModel.setDynamicToolTipIndices(columnToolTips);
-      table.addListener("cellTap", function (e) {
-        var col = e.getColumn();
-        var renderer = table.getTableColumnModel().getDataCellRenderer(col);
-        if ((    renderer instanceof org.jspresso.framework.view.qx.FormattedTableCellRenderer || renderer
-            instanceof org.jspresso.framework.view.qx.ImageTableCellRenderer) && renderer.getAction()) {
-          this._getActionHandler().execute(renderer.getAction());
-        }
-      }, this);
-
       table.setHeight(5 * table.getRowHeight() + table.getHeaderCellHeight());
       var selectionModel = table.getSelectionModel();
       if (remoteTable.getSelectionMode() == "SINGLE_SELECTION") {
@@ -2370,8 +2380,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             columnIds.push(table.getTableModel().getColumnId(table.getTableColumnModel().getOverallColumnAtX(ci)));
             columnWidths.push(
                 table.getTableColumnModel().getColumnWidth(table.getTableColumnModel().getOverallColumnAtX(ci)));
-            columnVisibilities.push(table.getTableColumnModel().isColumnVisible(
-                table.getTableColumnModel().getOverallColumnAtX(ci)))
+            columnVisibilities.push(
+                table.getTableColumnModel().isColumnVisible(table.getTableColumnModel().getOverallColumnAtX(ci)))
           }
           notificationCommand.setColumnIds(columnIds);
           notificationCommand.setColumnWidths(columnWidths);
@@ -2541,14 +2551,19 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           modelController.addTarget(labelComponent, "label", "value", false, {
             converter: function (modelValue, model) {
               if (modelValue) {
-                return "<u><a href='javascript:'>" + modelValue + "</a></u>";
+                var htmlContent;
+                if (org.jspresso.framework.util.html.HtmlUtil.isHtml(modelValue)) {
+                  htmlContent = modelValue;
+                } else {
+                  htmlContent = "<u style='cursor: pointer;' onMouseUp='executeAction();'>" + modelValue + "</u>";
+                }
+                htmlContent = org.jspresso.framework.util.html.HtmlUtil.bindActionToHtmlContent(htmlContent,
+                    remoteLabel.getAction());
+                return htmlContent;
               }
               return modelValue;
             }
           });
-          labelComponent.addListener("tap", function (event) {
-            this._getActionHandler().execute(remoteLabel.getAction());
-          }, this);
         } else {
           labelComponent.setRich(true);
           modelController.addTarget(labelComponent, "label", "value", false, {

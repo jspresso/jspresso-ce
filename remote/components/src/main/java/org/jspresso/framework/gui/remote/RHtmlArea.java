@@ -27,15 +27,17 @@ public class RHtmlArea extends RTextComponent {
 
   private static final long serialVersionUID = 5482012658466216934L;
 
-  private boolean           readOnly;
-  private boolean           verticallyScrollable;
-  private boolean           horizontallyScrollable;
+  private boolean readOnly;
+  private boolean verticallyScrollable;
+  private boolean horizontallyScrollable;
+  private RAction action;
+
 
   /**
    * Constructs a new {@code RHtmlArea} instance.
    *
    * @param guid
-   *          the guid.
+   *     the guid.
    */
   public RHtmlArea(String guid) {
     super(guid);
@@ -62,7 +64,7 @@ public class RHtmlArea extends RTextComponent {
    * Sets the readOnly.
    *
    * @param readOnly
-   *          the readOnly to set.
+   *     the readOnly to set.
    */
   public void setReadOnly(boolean readOnly) {
     this.readOnly = readOnly;
@@ -81,7 +83,7 @@ public class RHtmlArea extends RTextComponent {
    * Sets the verticallyScrollable.
    *
    * @param verticallyScrollable
-   *          the verticallyScrollable to set.
+   *     the verticallyScrollable to set.
    */
   public void setVerticallyScrollable(boolean verticallyScrollable) {
     this.verticallyScrollable = verticallyScrollable;
@@ -100,9 +102,28 @@ public class RHtmlArea extends RTextComponent {
    * Sets the horizontallyScrollable.
    *
    * @param horizontallyScrollable
-   *          the horizontallyScrollable to set.
+   *     the horizontallyScrollable to set.
    */
   public void setHorizontallyScrollable(boolean horizontallyScrollable) {
     this.horizontallyScrollable = horizontallyScrollable;
+  }
+
+  /**
+   * Gets action.
+   *
+   * @return the action
+   */
+  public RAction getAction() {
+    return action;
+  }
+
+  /**
+   * Sets action.
+   *
+   * @param action
+   *     the action
+   */
+  public void setAction(RAction action) {
+    this.action = action;
   }
 }

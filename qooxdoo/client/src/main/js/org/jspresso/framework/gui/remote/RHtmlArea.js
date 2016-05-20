@@ -33,6 +33,10 @@ qx.Class.define("org.jspresso.framework.gui.remote.RHtmlArea", {
     },
     horizontallyScrollable: {
       check: "Boolean"
+    },
+    action: {
+      check: "org.jspresso.framework.gui.remote.RAction",
+      nullable: true
     }
   }
 

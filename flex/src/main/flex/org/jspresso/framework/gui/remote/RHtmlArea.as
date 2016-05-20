@@ -27,6 +27,7 @@ public class RHtmlArea extends RTextComponent {
   private var _readOnly:Boolean;
   private var _verticallyScrollable:Boolean;
   private var _horizontallyScrollable:Boolean;
+  private var _action:RAction;
 
   public function RHtmlArea() {
     //default constructor.
@@ -54,6 +55,14 @@ public class RHtmlArea extends RTextComponent {
 
   public function set horizontallyScrollable(value:Boolean):void {
     _horizontallyScrollable = value;
+  }
+
+  public function get action():RAction {
+    return _action;
+  }
+
+  public function set action(value:RAction):void {
+    _action = value;
   }
 }
 }

@@ -58,6 +58,17 @@ qx.Class.define("org.jspresso.framework.util.html.HtmlUtil", {
         return message.replace(new RegExp("\n", 'g'), "<br/>");
       }
       return message;
+    },
+
+    bindActionToHtmlContent: function (htmlContent, action) {
+      if (htmlContent && action) {
+        htmlContent = htmlContent.replace(/<a href='executeAction\(['"]([^\)]*)['"]\)'>/g,
+            "<u onMouseUp='executeAction(\"$1\")' onPointerUp='executeAction(\"$1\")' onTouchEnd='executeAction(\"$1\")'>");
+        htmlContent = htmlContent.replace(/<\/a>/g, "</u>");
+        htmlContent = htmlContent.replace(/executeAction\(/g, "executeAction(\"" + action.getGuid() + "\",");
+        htmlContent = htmlContent.replace(/\,\)/g, ")");
+      }
+      return htmlContent;
     }
   }
 });

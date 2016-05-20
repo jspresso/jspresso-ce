@@ -19,6 +19,8 @@
 
 package org.jspresso.framework.util.html {
 
+import org.jspresso.framework.gui.remote.RAction;
+
 public class HtmlUtil {
 
   private static const HTML_ENTITIES:Object = {};
@@ -282,6 +284,14 @@ public class HtmlUtil {
     str = str.replace(pattern, "&#39;");
 
     return str;
+  }
+
+  public static function bindActionToHtmlContent(htmlContent:String, action:RAction):String {
+    if (htmlContent && action) {
+      htmlContent = htmlContent.replace(/executeAction\(["']([^\)]*)["']\)/g,
+                                        "event:$1");
+    }
+    return htmlContent;
   }
 }
 }
