@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Stack;
 
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.backend.BackendException;
 import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.BeanModule;
@@ -90,6 +91,12 @@ public class AddBeanAsSubModuleAction extends BackendAction {
 
       Module parentModule = findDestinationModule(nextSelectedModuleObject,
           context);
+      if (parentModule == null) {
+        Workspace parentWorkspace = getParentWorkspace(context);
+        String parentWorkspaceName = parentWorkspace!=null ? parentWorkspace.getName() : "null";
+        throw new BackendException("Destination module not found for workpace '" + parentWorkspaceName + "' and module '" + getParentModuleName(context) + "'");
+      }
+      
       IComponentDescriptor<?> beanComponentDescriptor = getBeanComponentDescriptor(
           parentModule, context);
 

@@ -46,7 +46,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * @author Maxime HAMM
  * @see org.jspresso.framework.application.backend.action.module.AddBeanAsSubModuleAction
  */
-@SuppressWarnings("UnusedParameters")
 public class AddBeanAsSubModuleFrontAction<E, F, G> extends FrontendAction<E, F, G> {
 
   private String          parentWorkspaceName;
