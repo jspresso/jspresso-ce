@@ -102,6 +102,8 @@ public class BasicDecimalPropertyDescriptor extends
    */
   public void setUsingBigDecimal(boolean usingBigDecimal) {
     this.usingBigDecimal = usingBigDecimal;
+    // Re-compute default value because it may change type (between Double and BigDecimal)
+    setDefaultValue(getDefaultValue());
   }
 
   /**
