@@ -271,7 +271,8 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
                           crit = Restrictions.not(crit);
                         }
                         completeCriteria(currentCriteria, crit);
-                        digDeeper = false;
+                        // there might be other restrictions
+                        // digDeeper = false;
                       }
                     }
                   }
