@@ -1301,7 +1301,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         } else {
           component.setAllowGrowX(false);
         }
-        if (this._isMultiline(rComponent)) {
+        if (this.isMultiline(rComponent)) {
           compRowSpan = 2;
           extraRowOffset = 1;
           formLayout.setRowFlex(compRow + 1, 1);
@@ -1415,10 +1415,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _applyPreferredSize: function (remoteComponent, component) {
       var preferredSize = remoteComponent.getPreferredSize();
       if (preferredSize) {
-        if (preferredSize.getWidth() > 0) {
+        if (preferredSize.getWidth() > 1) {
           component.setWidth(preferredSize.getWidth());
         }
-        if (preferredSize.getHeight() > 0) {
+        if (preferredSize.getHeight() > 1) {
           component.setHeight(preferredSize.getHeight());
         }
       }
@@ -2062,13 +2062,19 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var paneScroller = table.getPaneScroller(0);
       var focusIndicator = paneScroller.getChildControl("focus-indicator");
       focusIndicator.addListener("pointerdown", function (e) {
-        focusIndicator.setZIndex(0);
+        if (!table.isEditing()) {
+          focusIndicator.setZIndex(0);
+        }
       }, this);
       paneScroller.addListener("pointerdown", function (e) {
-        focusIndicator.setZIndex(0);
+        if (!table.isEditing()) {
+          focusIndicator.setZIndex(0);
+        }
       }, this);
       paneScroller.addListener("pointerup", function (e) {
-        focusIndicator.setZIndex(1000);
+        if (!table.isEditing()) {
+          focusIndicator.setZIndex(1000);
+        }
       }, this);
       table.setStatusBarVisible(false);
       table.highlightFocusedRow(false);
@@ -2892,7 +2898,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @return {Boolean}
      * @param rComponent {org.jspresso.framework.gui.remote.RComponent}
      */
-    _isMultiline: function (rComponent) {
+    isMultiline: function (rComponent) {
       return rComponent instanceof org.jspresso.framework.gui.remote.RTable || rComponent
           instanceof org.jspresso.framework.gui.remote.RTextArea || rComponent
           instanceof org.jspresso.framework.gui.remote.RList || rComponent
@@ -2903,7 +2909,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @return {Boolean}
      * @param rComponent {org.jspresso.framework.gui.remote.RComponent}
      */
-    _isFixedWidth: function (rComponent) {
+    isFixedWidth: function (rComponent) {
       return rComponent instanceof org.jspresso.framework.gui.remote.RDateField || rComponent
           instanceof org.jspresso.framework.gui.remote.RTimeField || rComponent
           instanceof org.jspresso.framework.gui.remote.RComboBox || rComponent

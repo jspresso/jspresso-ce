@@ -969,7 +969,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
 
         component.addCssClass("jspresso-form-element");
-        if (this._isFixedWidth(rComponent)) {
+        if (this.isFixedWidth(rComponent)) {
           row.add(component);
         } else {
           if (remoteForm.getLabelsPosition() == "ASIDE") {
@@ -977,7 +977,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           }
           row.add(component, {flex: 1});
         }
-        if (this._isMultiline(rComponent)) {
+        if (this.isMultiline(rComponent)) {
           form.add(row, {flex: 1});
         } else {
           form.add(row);
@@ -2188,7 +2188,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @return {Boolean}
      * @param rComponent {org.jspresso.framework.gui.remote.RComponent}
      */
-    _isMultiline: function (rComponent) {
+    isMultiline: function (rComponent) {
       return rComponent instanceof org.jspresso.framework.gui.remote.RTable || rComponent
           instanceof org.jspresso.framework.gui.remote.RTextArea || rComponent
           instanceof org.jspresso.framework.gui.remote.RList || rComponent
@@ -2200,7 +2200,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @return {Boolean}
      * @param rComponent {org.jspresso.framework.gui.remote.RComponent}
      */
-    _isFixedWidth: function (rComponent) {
+    isFixedWidth: function (rComponent) {
       return rComponent instanceof org.jspresso.framework.gui.remote.RCheckBox || rComponent
           instanceof org.jspresso.framework.gui.remote.RLabel || (rComponent
           instanceof org.jspresso.framework.gui.remote.RActionField && !rComponent.isShowTextField());
