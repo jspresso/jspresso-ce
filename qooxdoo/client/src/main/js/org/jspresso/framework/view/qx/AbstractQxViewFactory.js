@@ -279,16 +279,16 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
      * @return {Boolean}
      * @param rComponent {org.jspresso.framework.gui.remote.RComponent}
      */
-    _isMultiline: function (rComponent) {
-      throw new Error("_isMultiline is abstract.");
+    isMultiline: function (rComponent) {
+      throw new Error("isMultiline is abstract.");
     },
 
     /**
      * @return {Boolean}
      * @param rComponent {org.jspresso.framework.gui.remote.RComponent}
      */
-    _isFixedWidth: function (rComponent) {
-      throw new Error("_isFixedWidth is abstract.");
+    isFixedWidth: function (rComponent) {
+      throw new Error("_sFixedWidth is abstract.");
     },
 
     /**
