@@ -697,10 +697,10 @@ public class DefaultFlexViewFactory {
   }
 
   private function setComponentSize(component:UIComponent, preferredSize:Dimension):void {
-    if (preferredSize.width > 0) {
+    if (preferredSize.width > 1) {
       component.width = preferredSize.width;
     }
-    if (preferredSize.height > 0) {
+    if (preferredSize.height > 1) {
       component.height = preferredSize.height;
     }
   }

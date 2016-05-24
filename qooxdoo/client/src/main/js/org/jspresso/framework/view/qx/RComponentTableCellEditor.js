@@ -79,46 +79,49 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
       }, this);
 
       var editor;
-      if (!(editorWidget instanceof qx.ui.container.Composite) && !(editorWidget instanceof qx.ui.form.TextArea)) {
-        editor = new qx.ui.container.Composite(new qx.ui.layout.VBox().set({
-          alignX: "center", alignY: "middle"
-        })).set({
-          focusable: true
-        });
-        editorWidget.setAllowStretchY(false, false);
-        if (editorWidget instanceof qx.ui.form.CheckBox) {
-          editorWidget.addListenerOnce("appear", function (e) {
-            editorWidget.setValue(!editorWidget.getValue());
-          });
-        } else {
-          // propagate focus
-          editor.addListener("focus", function () {
-            editorWidget.focus();
-          });
-          // propagate active state
-          editor.addListener("activate", function () {
-            editorWidget.activate();
-          });
-          editorWidget.setAllowStretchX(true, true);
-        }
-        editorWidget.setMaxWidth(null);
-        editorWidget.setWidth(null);
-        editorWidget.setMinWidth(0);
-        editorWidget.setAlignY("middle");
-        editor.add(editorWidget);
+      var layout;
+      if (this.__viewFactory.isMultiline(this.__rComponent)) {
+        layout = new qx.ui.layout.Grow();
+        editorWidget.setAllowStretchY(true, true);
       } else {
-        editor = editorWidget;
-        if (editorWidget instanceof qx.ui.form.TextArea) {
-          // prevent enter to go to Table
-          editor.addListener("keypress", function (/** @type {qx.event.type.KeySequence} */evt) {
-            // Handle keys that are independent from the modifiers
-            var identifier = evt.getKeyIdentifier();
-            // Editing mode
-            if (evt.getModifiers() == 0 && identifier == "Enter") {
-              evt.stopPropagation();
-            }
-          });
-        }
+        layout = new qx.ui.layout.VBox().set({
+          alignX: "center"
+        });
+      }
+      editor = new qx.ui.container.Composite(layout).set({
+        focusable: true
+      });
+      editor.setPadding(1);
+      if (editorWidget instanceof qx.ui.form.CheckBox) {
+        editorWidget.addListenerOnce("appear", function (e) {
+          editorWidget.setValue(!editorWidget.getValue());
+        });
+      } else {
+        // propagate focus
+        editor.addListener("focus", function () {
+          editorWidget.focus();
+        });
+        // propagate active state
+        editor.addListener("activate", function () {
+          editorWidget.activate();
+        });
+        editorWidget.setAllowStretchX(true, true);
+      }
+      editorWidget.setMaxWidth(null);
+      editorWidget.setWidth(null);
+      editorWidget.setMinWidth(0);
+      editor.add(editorWidget);
+
+      if (editorWidget instanceof qx.ui.form.TextArea) {
+        // prevent enter to go to Table
+        editorWidget.addListener("keypress", function (/** @type {qx.event.type.KeySequence} */evt) {
+          // Handle keys that are independent from the modifiers
+          var identifier = evt.getKeyIdentifier();
+          // Editing mode
+          if (evt.getModifiers() == 0 && identifier == "Enter") {
+            evt.stopPropagation();
+          }
+        });
       }
       editor.addListener("keypress", function (e) {
         var timer = qx.util.TimerManager.getInstance();
@@ -183,10 +186,8 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
       editor.addListener("focusout", function (e) {
         var relatedTarget = e.getRelatedTarget();
         var timer = qx.util.TimerManager.getInstance();
-        if (relatedTarget != null
-            && relatedTarget != editor
-            && relatedTarget != table
-            && !qx.ui.core.Widget.contains(editor, relatedTarget)) {
+        if (relatedTarget != null && relatedTarget != editor && relatedTarget != table && !qx.ui.core.Widget.contains(
+                editor, relatedTarget)) {
           timer.start(function (userData, timerId) {
             if (table.isEditing()) {
               table.stopEditing();
