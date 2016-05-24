@@ -251,7 +251,8 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
                           crit = where(prefixedProperty).is(null);
                         }
                         completeQuery(query, crit);
-                        digDeeper = false;
+                        // there might be other restrictions
+                        // digDeeper = false;
                       }
                     }
                   }
