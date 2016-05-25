@@ -37,8 +37,7 @@ import org.jspresso.framework.view.descriptor.IListViewDescriptor;
  * @version $LastChangedRevision : 9424 $
  * @author Vincent Vandenschrick
  */
-public class BasicListViewDescriptor extends AbstractListViewDescriptor
-    implements IListViewDescriptor {
+public class BasicListViewDescriptor extends AbstractListViewDescriptor {
 
   // Empty as of now.
 }

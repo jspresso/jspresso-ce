@@ -50,5 +50,14 @@ public class REvenGridContainer extends RContainer {
   public function get drivingDimensionCellCount():int {
     return _drivingDimensionCellCount;
   }
+
+  public override function transferToState(stateMapping:Object):void {
+    super.transferToState(stateMapping);
+    if (cells) {
+      for (var i:int = 0; i < cells.length; i++) {
+        (cells[i] as RComponent).transferToState(stateMapping);
+      }
+    }
+  }
 }
 }

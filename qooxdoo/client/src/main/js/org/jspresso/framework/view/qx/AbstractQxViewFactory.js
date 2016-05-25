@@ -100,6 +100,8 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
           component = this._createImageComponent(remoteComponent);
         } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RList) {
           component = this._createList(remoteComponent);
+        } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RRepeater) {
+          component = this._createRepeater(remoteComponent);
         } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RNumericComponent) {
           component = this._createNumericComponent(remoteComponent);
         } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.REmptyComponent) {

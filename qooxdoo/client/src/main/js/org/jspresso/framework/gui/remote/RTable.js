@@ -45,5 +45,19 @@ qx.Class.define("org.jspresso.framework.gui.remote.RTable", {
     columnReorderingAllowed: {
       check: "Boolean"
     }
+  },
+
+  members: {
+    transferToState: function (stateMapping) {
+      this.base(arguments, stateMapping);
+      this.setRowPrototype(this.getRowPrototype() ?
+          (stateMapping[this.getRowPrototype().getGuid()] ? stateMapping[this.getRowPrototype().getGuid()] :
+              this.getRowPrototype()) : null);
+      if (this.getColumns()) {
+        for (var i = 0; i < this.getColumns().length; i++) {
+          this.getColumns()[i].transferToState(stateMapping);
+        }
+      }
+    }
   }
 });

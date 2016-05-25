@@ -1814,6 +1814,23 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
 
     /**
      *
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteRepeater {org.jspresso.framework.gui.remote.mobile.RMobileList}
+     */
+    _createRepeater: function (remoteRepeater) {
+      var repeaterContainer = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox(4));
+      if (remoteRepeater.getRowAction()) {
+        this._getRemotePeerRegistry().register(remoteRepeater.getRowAction())
+      }
+      var repeater = new org.jspresso.framework.view.qx.ViewRepeater(repeaterContainer, remoteRepeater, this,
+          this._getActionHandler());
+      repeater.setDataProvider(remoteRepeater.getState().getChildren());
+
+      return repeaterContainer;
+    },
+
+    /**
+     *
      * @param remoteCheckBox {org.jspresso.framework.gui.remote.RCheckBox}
      * @param checkBox {qx.ui.mobile.form.CheckBox}
      */

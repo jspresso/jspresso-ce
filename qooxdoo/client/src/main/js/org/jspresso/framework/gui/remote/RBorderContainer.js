@@ -40,5 +40,27 @@ qx.Class.define("org.jspresso.framework.gui.remote.RBorderContainer", {
       check: "org.jspresso.framework.gui.remote.RComponent",
       nullable: true
     }
+  },
+  
+  members: {
+    transferToState: function (stateMapping) {
+      this.base(arguments, stateMapping);
+      if (this.getNorth()) {
+        this.getNorth().transferToState(stateMapping);
+      }
+      if (this.getWest()) {
+        this.getWest().transferToState(stateMapping);
+      }
+      if (this.getCenter()) {
+        this.getCenter().transferToState(stateMapping);
+      }
+      if (this.getEast()) {
+        this.getEast().transferToState(stateMapping);
+      }
+      if (this.getSouth()) {
+        this.getSouth().transferToState(stateMapping);
+      }
+    }
   }
+
 });

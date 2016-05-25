@@ -52,6 +52,7 @@ import java.util.TimeZone;
 
 import javax.swing.Action;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -227,6 +228,7 @@ import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IMapViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
+import org.jspresso.framework.view.descriptor.IRepeaterViewDescriptor;
 import org.jspresso.framework.view.descriptor.IScrollableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.IStringPropertyViewDescriptor;
@@ -1804,7 +1806,7 @@ public class DefaultSwingViewFactory extends
    *
    * @return the created panel.
    */
-  protected JPanel createJPanel() {
+  protected JScrollablePanel createJPanel() {
     JScrollablePanel panel = new JScrollablePanel();
     return panel;
   }
@@ -2051,6 +2053,34 @@ public class DefaultSwingViewFactory extends
         }
       });
     }
+    return view;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("MagicConstant")
+  @Override
+  protected IView<JComponent> createRepeaterView(IRepeaterViewDescriptor viewDescriptor, IActionHandler actionHandler,
+                                                 Locale locale) {
+    ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
+        .getModelDescriptor());
+    IView<JComponent> repeated = createView(viewDescriptor.getRepeatedViewDescriptor(), actionHandler, locale);
+    ICompositeValueConnector elementConnectorPrototype = (ICompositeValueConnector) repeated.getConnector();
+    ICollectionConnector connector = getConnectorFactory().createCollectionConnector(modelDescriptor.getName(),
+        getMvcBinder(), elementConnectorPrototype);
+    JScrollablePanel repeaterContainer = createJPanel();
+    repeaterContainer.setScrollableTracksViewportWidth(true);
+    repeaterContainer.setLayout(new BoxLayout(repeaterContainer, BoxLayout.PAGE_AXIS));
+    JScrollPane scrollPane = createJScrollPane();
+    scrollPane.setViewportView(repeaterContainer);
+    IView<JComponent> view = constructView(scrollPane, viewDescriptor, connector);
+    Action rowAction = null;
+    if (viewDescriptor.getRowAction() != null) {
+      rowAction = getActionFactory().createAction(viewDescriptor.getRowAction(), actionHandler, view, locale);
+    }
+    new JRepeater(repeaterContainer, viewDescriptor.getRepeatedViewDescriptor(), connector, this, getMvcBinder(),
+        rowAction, actionHandler, locale);
     return view;
   }
 
