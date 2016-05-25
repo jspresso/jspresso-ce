@@ -128,6 +128,7 @@ import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IMapViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
+import org.jspresso.framework.view.descriptor.IRepeaterViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISimpleTreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
@@ -2359,6 +2360,20 @@ public abstract class AbstractViewFactory<E, F, G> implements
       Locale locale);
 
   /**
+   * Creates a repeater view.
+   *
+   * @param viewDescriptor
+   *     the view descriptor.
+   * @param actionHandler
+   *     the action handler.
+   * @param locale
+   *     the locale.
+   * @return the created table view.
+   */
+  protected abstract IView<E> createRepeaterView(IRepeaterViewDescriptor viewDescriptor, IActionHandler actionHandler,
+                                              Locale locale);
+
+  /**
    * Creates a tab view.
    *
    * @param viewDescriptor
@@ -3068,11 +3083,11 @@ public abstract class AbstractViewFactory<E, F, G> implements
       Locale locale) {
     IView<E> view = null;
     if (viewDescriptor instanceof IListViewDescriptor) {
-      view = createListView((IListViewDescriptor) viewDescriptor,
-          actionHandler, locale);
+      view = createListView((IListViewDescriptor) viewDescriptor, actionHandler, locale);
     } else if (viewDescriptor instanceof ITableViewDescriptor) {
-      view = createTableView((ITableViewDescriptor) viewDescriptor,
-          actionHandler, locale);
+      view = createTableView((ITableViewDescriptor) viewDescriptor, actionHandler, locale);
+    } else if (viewDescriptor instanceof IRepeaterViewDescriptor) {
+      view = createRepeaterView((IRepeaterViewDescriptor) viewDescriptor, actionHandler, locale);
     }
     return view;
   }

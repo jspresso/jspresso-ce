@@ -101,5 +101,17 @@ public class RTable extends RCollectionComponent {
   public function set columnReorderingAllowed(value:Boolean):void {
     _columnReorderingAllowed = value;
   }
+
+  public override function transferToState(stateMapping:Object):void {
+    super.transferToState(stateMapping);
+    rowPrototype = rowPrototype ?
+        (stateMapping[rowPrototype.guid] ? stateMapping[rowPrototype.guid] as RemoteCompositeValueState :
+            rowPrototype) : null;
+    if (columns) {
+      for (var i:int = 0; i < columns.length; i++) {
+        (columns[i] as RComponent).transferToState(stateMapping);
+      }
+    }
+  }
 }
 }

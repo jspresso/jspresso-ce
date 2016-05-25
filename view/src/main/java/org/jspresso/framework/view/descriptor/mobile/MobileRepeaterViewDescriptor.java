@@ -16,32 +16,17 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
+package org.jspresso.framework.view.descriptor.mobile;
 
-qx.Class.define("org.jspresso.framework.gui.remote.RTabContainer", {
-  extend: org.jspresso.framework.gui.remote.RContainer,
+import org.jspresso.framework.view.descriptor.basic.AbstractListViewDescriptor;
 
-  construct: function () {
-    this.base(arguments);
-  },
+/**
+ * This descriptor is used to implement a repeater view. A repeater view displays a
+ * collection of components, each one in an arbitrary view that is repeated as necessary.
+ *
+ * @author Vincent Vandenschrick
+ */
+public class MobileRepeaterViewDescriptor extends AbstractListViewDescriptor implements IMobileViewDescriptor {
 
-  properties: {
-    tabs: {
-      check: "Array"
-    },
-    selectedIndex: {
-      check: "Integer",
-      event: "changeSelectedIndex"
-    }
-  },
-
-  members: {
-    transferToState: function (stateMapping) {
-      this.base(arguments, stateMapping);
-      if (this.getTabs()) {
-        for (var i = 0; i < this.getTabs().length; i++) {
-          this.getTabs()[i].transferToState(stateMapping);
-        }
-      }
-    }
-  }
-});
+  // Empty as of now.
+}

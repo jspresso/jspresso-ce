@@ -78,6 +78,7 @@ import org.jspresso.framework.gui.remote.RNumericComponent;
 import org.jspresso.framework.gui.remote.RPasswordField;
 import org.jspresso.framework.gui.remote.RPercentField;
 import org.jspresso.framework.gui.remote.RRadioBox;
+import org.jspresso.framework.gui.remote.RRepeater;
 import org.jspresso.framework.gui.remote.RSecurityComponent;
 import org.jspresso.framework.gui.remote.RTabContainer;
 import org.jspresso.framework.gui.remote.RTextArea;
@@ -110,6 +111,7 @@ import org.jspresso.framework.server.remote.RemotePeerRegistryServlet;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.IRemoteStateValueMapper;
 import org.jspresso.framework.state.remote.IRemoteValueStateFactory;
+import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.format.IFormatter;
@@ -148,6 +150,7 @@ import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IMapViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
+import org.jspresso.framework.view.descriptor.IRepeaterViewDescriptor;
 import org.jspresso.framework.view.descriptor.IScrollableViewDescriptor;
 import org.jspresso.framework.view.descriptor.IStringPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
@@ -2143,5 +2146,42 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
    */
   protected RTabContainer createRTabContainer(ITabViewDescriptor viewDescriptor) {
     return new RTabContainer(getGuidGenerator().generateGUID());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createRepeaterView(IRepeaterViewDescriptor viewDescriptor, IActionHandler actionHandler,
+                                                 Locale locale) {
+    ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
+        .getModelDescriptor());
+    IView<RComponent> repeated = createView(viewDescriptor.getRepeatedViewDescriptor(), actionHandler, locale);
+    ICompositeValueConnector elementConnectorPrototype = (ICompositeValueConnector) repeated.getConnector();
+    ICollectionConnector connector = getConnectorFactory().createCollectionConnector(modelDescriptor.getName(),
+        getMvcBinder(), elementConnectorPrototype);
+    RRepeater viewComponent = createRRepeater(viewDescriptor);
+    viewComponent.setRepeated(repeated.getPeer());
+    IView<RComponent> view = constructView(viewComponent, viewDescriptor, connector);
+    viewComponent.setSelectionMode(viewDescriptor.getSelectionMode().name());
+    if (viewDescriptor.getRowAction() != null) {
+      viewComponent.setRowAction(
+          getActionFactory().createAction(viewDescriptor.getRowAction(), actionHandler, view, locale));
+    }
+    if (elementConnectorPrototype instanceof IRemoteStateOwner) {
+      viewComponent.setViewPrototype((RemoteCompositeValueState) ((IRemoteStateOwner) elementConnectorPrototype).getState());
+    }
+    return view;
+  }
+
+  /**
+   * Creates a remote repeater container.
+   *
+   * @param viewDescriptor
+   *     the component view descriptor.
+   * @return the created remote component.
+   */
+  protected RRepeater createRRepeater(IRepeaterViewDescriptor viewDescriptor) {
+    return new RRepeater(getGuidGenerator().generateGUID());
   }
 }

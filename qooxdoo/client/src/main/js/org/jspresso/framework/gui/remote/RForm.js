@@ -49,5 +49,16 @@ qx.Class.define("org.jspresso.framework.gui.remote.RForm", {
     widthResizeable: {
       check: "Boolean"
     }
+  },
+
+  members: {
+    transferToState: function (stateMapping) {
+      this.base(arguments, stateMapping);
+      if (this.getElements()) {
+        for (var i = 0; i < this.getElements().length; i++) {
+          this.getElements()[i].transferToState(stateMapping);
+        }
+      }
+    }
   }
 });

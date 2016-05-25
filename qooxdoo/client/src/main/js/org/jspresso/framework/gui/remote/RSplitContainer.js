@@ -36,5 +36,17 @@ qx.Class.define("org.jspresso.framework.gui.remote.RSplitContainer", {
       check: "org.jspresso.framework.gui.remote.RComponent",
       nullable: true
     }
+  },
+
+  members: {
+    transferToState: function (stateMapping) {
+      this.base(arguments, stateMapping);
+      if (this.getLeftTop()) {
+        this.getLeftTop().transferToState(stateMapping);
+      }
+      if (this.getRightBottom()) {
+        this.getRightBottom().transferToState(stateMapping);
+      }
+    }
   }
 });

@@ -17,7 +17,7 @@
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.RTable", {
+qx.Class.define("org.jspresso.framework.gui.remote.RRepeater", {
   extend: org.jspresso.framework.gui.remote.RCollectionComponent,
 
   construct: function () {
@@ -25,43 +25,22 @@ qx.Class.define("org.jspresso.framework.gui.remote.RTable", {
   },
 
   properties: {
-    columns: {
-      check: "Array"
+    repeated: {
+      check: "org.jspresso.framework.gui.remote.RComponent"
     },
-    columnHeaders: {
-      check: "Array"
-    },
-    columnIds: {
-      check: "Array"
-    },
-    rowPrototype: {
+    viewPrototype: {
       check: "org.jspresso.framework.state.remote.RemoteCompositeValueState"
-    },
-    sortingAction: {
-      check: "org.jspresso.framework.gui.remote.RAction",
-      nullable: true
-    },
-    horizontallyScrollable: {
-      check: "Boolean"
-    },
-    sortable: {
-      check: "Boolean"
-    },
-    columnReorderingAllowed: {
-      check: "Boolean"
     }
   },
 
   members: {
     transferToState: function (stateMapping) {
       this.base(arguments, stateMapping);
-      this.setRowPrototype(this.getRowPrototype() ?
-          (stateMapping[this.getRowPrototype().getGuid()] ? stateMapping[this.getRowPrototype().getGuid()] :
-              this.getRowPrototype()) : null);
-      if (this.getColumns()) {
-        for (var i = 0; i < this.getColumns().length; i++) {
-          this.getColumns()[i].transferToState(stateMapping);
-        }
+      this.setViewPrototype(this.getViewPrototype() ?
+          (stateMapping[this.getViewPrototype().getGuid()] ? stateMapping[this.getViewPrototype().getGuid()] :
+              this.getViewPrototype()) : null);
+      if (this.getRepeated()) {
+        this.getRepeated().transferToState(stateMapping);
       }
     }
   }

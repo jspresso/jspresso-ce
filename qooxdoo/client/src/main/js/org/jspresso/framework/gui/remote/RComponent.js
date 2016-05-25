@@ -120,7 +120,26 @@ qx.Class.define("org.jspresso.framework.gui.remote.RComponent", {
           this._applyEventPropagation(e.getData(), e.getOldData(), name.substring(0, name.length - "State".length));
         }, this);
       }
-    }
+    },
 
+    transferToState: function (stateMapping) {
+      this.setBackgroundState(this.getBackgroundState() ?
+          (stateMapping[this.getBackgroundState().getGuid()] ? stateMapping[this.getBackgroundState().getGuid()] :
+              this.getBackgroundState()) : null);
+      this.setFontState(this.getFontState() ?
+          (stateMapping[this.getFontState().getGuid()] ? stateMapping[this.getFontState().getGuid()] :
+              this.getFontState()) : null);
+      this.setForegroundState(this.getForegroundState() ?
+          (stateMapping[this.getForegroundState().getGuid()] ? stateMapping[this.getForegroundState().getGuid()] :
+              this.getForegroundState()) : null);
+      this.setLabelState(this.getLabelState() ?
+          (stateMapping[this.getLabelState().getGuid()] ? stateMapping[this.getLabelState().getGuid()] :
+              this.getLabelState()) : null);
+      this.setState(this.getState() ?
+          (stateMapping[this.getState().getGuid()] ? stateMapping[this.getState().getGuid()] : this.getState()) : null);
+      this.setToolTipState(this.getToolTipState() ?
+          (stateMapping[this.getToolTipState().getGuid()] ? stateMapping[this.getToolTipState().getGuid()] :
+              this.getToolTipState()) : null);
+    }
   }
 });

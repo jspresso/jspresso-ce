@@ -16,32 +16,20 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
+package org.jspresso.framework.view.descriptor;
 
-qx.Class.define("org.jspresso.framework.gui.remote.RTabContainer", {
-  extend: org.jspresso.framework.gui.remote.RContainer,
+/**
+ * This public interface is implemented by repeater view descriptors.
+ *
+ * @author Vincent Vandenschrick
+ */
+public interface IRepeaterViewDescriptor extends ICollectionViewDescriptor {
 
-  construct: function () {
-    this.base(arguments);
-  },
+  /**
+   * Gets element view descriptor.
+   *
+   * @return the element view descriptor
+   */
+  IViewDescriptor getRepeatedViewDescriptor();
 
-  properties: {
-    tabs: {
-      check: "Array"
-    },
-    selectedIndex: {
-      check: "Integer",
-      event: "changeSelectedIndex"
-    }
-  },
-
-  members: {
-    transferToState: function (stateMapping) {
-      this.base(arguments, stateMapping);
-      if (this.getTabs()) {
-        for (var i = 0; i < this.getTabs().length; i++) {
-          this.getTabs()[i].transferToState(stateMapping);
-        }
-      }
-    }
-  }
-});
+}

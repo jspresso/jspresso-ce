@@ -20,48 +20,42 @@
 
 package org.jspresso.framework.gui.remote {
 
+import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 
-[RemoteClass(alias="org.jspresso.framework.gui.remote.REvenGridContainer")]
-public class REvenGridContainer extends RContainer {
+[RemoteClass(alias="org.jspresso.framework.gui.remote.RRepeater")]
+public class RRepeater extends RCollectionComponent {
 
-  private var _cells:Array;
-  private var _drivingDimension:String;
-  private var _drivingDimensionCellCount:int;
+  private var _repeated:RComponent;
+  private var _viewPrototype:RemoteCompositeValueState;
 
-  public function REvenGridContainer() {
+  public function RRepeater() {
     //default constructor.
   }
 
-  public function set cells(value:Array):void {
-    _cells = value;
+  public function get repeated():RComponent {
+    return _repeated;
   }
 
-  public function get cells():Array {
-    return _cells;
+  public function set repeated(value:RComponent):void {
+    _repeated = value;
   }
 
-  public function set drivingDimension(value:String):void {
-    _drivingDimension = value;
+
+  public function get viewPrototype():RemoteCompositeValueState {
+    return _viewPrototype;
   }
 
-  public function get drivingDimension():String {
-    return _drivingDimension;
-  }
-
-  public function set drivingDimensionCellCount(value:int):void {
-    _drivingDimensionCellCount = value;
-  }
-
-  public function get drivingDimensionCellCount():int {
-    return _drivingDimensionCellCount;
+  public function set viewPrototype(value:RemoteCompositeValueState):void {
+    _viewPrototype = value;
   }
 
   public override function transferToState(stateMapping:Object):void {
     super.transferToState(stateMapping);
-    if (cells) {
-      for (var i:int = 0; i < cells.length; i++) {
-        (cells[i] as RComponent).transferToState(stateMapping);
-      }
+    viewPrototype = viewPrototype ?
+        (stateMapping[viewPrototype.guid] ? stateMapping[viewPrototype.guid] as RemoteCompositeValueState :
+            viewPrototype) : null;
+    if (_repeated) {
+      _repeated.transferToState(stateMapping);
     }
   }
 }
