@@ -2895,6 +2895,28 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     },
 
     /**
+     *
+     * @return {qx.ui.core.Widget}
+     * @param remoteRepeater {org.jspresso.framework.gui.remote.RRepeater}
+     */
+    _createRepeater: function (remoteRepeater) {
+      var repeaterContainer = new qx.ui.container.Composite(new qx.ui.layout.VBox(4));
+      if (remoteRepeater.getRowAction()) {
+        this._getRemotePeerRegistry().register(remoteRepeater.getRowAction())
+      }
+      var repeater = new org.jspresso.framework.view.qx.ViewRepeater(repeaterContainer, remoteRepeater, this,
+          this._getActionHandler());
+      repeater.setDataProvider(remoteRepeater.getState().getChildren());
+
+      var scroller = new qx.ui.container.Scroll();
+      scroller.setScrollbarX("off");
+      scroller.setScrollbarY("auto");
+      scroller.add(repeaterContainer);
+
+      return scroller;
+    },
+
+    /**
      * @return {Boolean}
      * @param rComponent {org.jspresso.framework.gui.remote.RComponent}
      */
@@ -2902,7 +2924,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       return rComponent instanceof org.jspresso.framework.gui.remote.RTable || rComponent
           instanceof org.jspresso.framework.gui.remote.RTextArea || rComponent
           instanceof org.jspresso.framework.gui.remote.RList || rComponent
-          instanceof org.jspresso.framework.gui.remote.RHtmlArea;
+          instanceof org.jspresso.framework.gui.remote.RHtmlArea || rComponent
+          instanceof org.jspresso.framework.gui.remote.RRepeater;
     },
 
     /**

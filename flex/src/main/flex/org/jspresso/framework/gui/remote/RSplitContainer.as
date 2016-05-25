@@ -50,5 +50,15 @@ public class RSplitContainer extends RContainer {
   public function get rightBottom():RComponent {
     return _rightBottom;
   }
+
+  public override function transferToState(stateMapping:Object):void {
+    super.transferToState(stateMapping);
+    if (leftTop) {
+      leftTop.transferToState(stateMapping);
+    }
+    if (rightBottom) {
+      rightBottom.transferToState(stateMapping);
+    }
+  }
 }
 }

@@ -27,5 +27,16 @@ qx.Class.define("org.jspresso.framework.gui.remote.RTabContainer", {
       check: "Integer",
       event: "changeSelectedIndex"
     }
+  },
+
+  members: {
+    transferToState: function (stateMapping) {
+      this.base(arguments, stateMapping);
+      if (this.getTabs()) {
+        for (var i = 0; i < this.getTabs().length; i++) {
+          this.getTabs()[i].transferToState(stateMapping);
+        }
+      }
+    }
   }
 });

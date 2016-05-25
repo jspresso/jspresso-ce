@@ -194,6 +194,21 @@ public class RComponent extends RemotePeer implements IRemoteStateOwner {
     _fontState = value;
   }
 
+  public function transferToState(stateMapping:Object):void {
+    backgroundState = backgroundState ?
+        (stateMapping[backgroundState.guid] ? stateMapping[backgroundState.guid] as RemoteValueState :
+            backgroundState) : null;
+    fontState = fontState ?
+        (stateMapping[fontState.guid] ? stateMapping[fontState.guid] as RemoteValueState : fontState) : null;
+    foregroundState = foregroundState ?
+        (stateMapping[foregroundState.guid] ? stateMapping[foregroundState.guid] as RemoteValueState :
+            foregroundState) : null;
+    labelState = labelState ?
+        (stateMapping[labelState.guid] ? stateMapping[labelState.guid] as RemoteValueState : labelState) : null;
+    state = state ? (stateMapping[state.guid] ? stateMapping[state.guid] as RemoteValueState : state) : null;
+    toolTipState = toolTipState ?
+        (stateMapping[toolTipState.guid] ? stateMapping[toolTipState.guid] as RemoteValueState : toolTipState) : null;
+  }
 
 }
 }

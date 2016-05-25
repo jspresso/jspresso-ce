@@ -132,7 +132,7 @@ public abstract class AbstractListViewDescriptor extends BasicCollectionViewDesc
    */
   @Override
   public boolean isHorizontallyScrollable() {
-    return true;
+    return false;
   }
 
   /**

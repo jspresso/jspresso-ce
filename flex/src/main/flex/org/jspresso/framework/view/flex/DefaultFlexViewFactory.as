@@ -42,7 +42,6 @@ import mx.containers.Panel;
 import mx.containers.TabNavigator;
 import mx.containers.VBox;
 import mx.containers.ViewStack;
-import mx.controls.Alert;
 import mx.controls.Button;
 import mx.controls.CheckBox;
 import mx.controls.ColorPicker;
@@ -125,6 +124,7 @@ import org.jspresso.framework.gui.remote.RNumericComponent;
 import org.jspresso.framework.gui.remote.RPasswordField;
 import org.jspresso.framework.gui.remote.RPercentField;
 import org.jspresso.framework.gui.remote.RRadioBox;
+import org.jspresso.framework.gui.remote.RRepeater;
 import org.jspresso.framework.gui.remote.RSecurityComponent;
 import org.jspresso.framework.gui.remote.RSplitContainer;
 import org.jspresso.framework.gui.remote.RTabContainer;
@@ -149,8 +149,6 @@ import org.jspresso.framework.util.format.TimeParser;
 import org.jspresso.framework.util.gui.CellConstraints;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.gui.Font;
-import org.jspresso.framework.util.html.HtmlUtil;
-import org.jspresso.framework.util.html.HtmlUtil;
 import org.jspresso.framework.util.html.HtmlUtil;
 import org.jspresso.framework.util.lang.DateDto;
 import org.jspresso.framework.util.remote.registry.IRemotePeerRegistry;
@@ -286,6 +284,8 @@ public class DefaultFlexViewFactory {
         component = createSecurityComponent(remoteComponent as RSecurityComponent);
       } else if (remoteComponent is RTable) {
         component = createTable(remoteComponent as RTable);
+      } else if (remoteComponent is RRepeater) {
+        component = createRepeater(remoteComponent as RRepeater);
       } else if (remoteComponent is RForm) {
         component = createForm(remoteComponent as RForm);
       } else if (remoteComponent is RTextComponent) {
@@ -2488,6 +2488,26 @@ public class DefaultFlexViewFactory {
   protected function createSecurityComponent(remoteSecurityComponent:RSecurityComponent):UIComponent {
     var securityComponent:Canvas = new Canvas();
     return securityComponent;
+  }
+
+  protected function createRepeater(remoteRepeater:RRepeater):UIComponent {
+    var repeaterContainer:VBox = new VBox();
+    repeaterContainer.horizontalScrollPolicy = ScrollPolicy.OFF;
+    repeaterContainer.verticalScrollPolicy = ScrollPolicy.OFF;
+
+    if (remoteRepeater.rowAction) {
+      getRemotePeerRegistry().register(remoteRepeater.rowAction);
+    }
+    var repeater:ViewRepeater = new ViewRepeater(repeaterContainer, remoteRepeater, this, _actionHandler);
+    repeater.dataProvider = (remoteRepeater.state as RemoteCompositeValueState).children;
+
+    var scroller:Canvas = new Canvas();
+    repeaterContainer.percentWidth = 100.0;
+    scroller.horizontalScrollPolicy = ScrollPolicy.OFF;
+    scroller.verticalScrollPolicy = ScrollPolicy.AUTO;
+    scroller.addChild(repeaterContainer);
+
+    return scroller;
   }
 
   protected function createTable(remoteTable:RTable):UIComponent {

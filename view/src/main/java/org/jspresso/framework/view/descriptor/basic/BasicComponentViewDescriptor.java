@@ -66,8 +66,7 @@ import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
  *
  * @author Vincent Vandenschrick
  */
-public class BasicComponentViewDescriptor extends AbstractComponentViewDescriptor
-    implements IComponentViewDescriptor {
+public class BasicComponentViewDescriptor extends AbstractComponentViewDescriptor {
 
   private int                           columnCount;
   private EHorizontalPosition           labelsHorizontalPosition;
