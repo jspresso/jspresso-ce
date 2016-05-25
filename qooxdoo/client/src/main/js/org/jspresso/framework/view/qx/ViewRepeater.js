@@ -71,11 +71,11 @@ qx.Class.define("org.jspresso.framework.view.qx.ViewRepeater", {
           component.addListener("tap", function (evt) {
             var index = this.__container.getChildren().indexOf(evt.getCurrentTarget());
             if (index >= 0) {
-              this.__remoteRepeater.getState().setSelectedIndices([index]);
               this.__remoteRepeater.getState().setLeadingIndex(index);
+              this.__remoteRepeater.getState().setSelectedIndices([index]);
             } else {
-              this.__remoteRepeater.getState().setSelectedIndices([]);
               this.__remoteRepeater.getState().setLeadingIndex(-1);
+              this.__remoteRepeater.getState().setSelectedIndices([]);
             }
           }, this);
           if (this.__remoteRepeater.getRowAction()) {

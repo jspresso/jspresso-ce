@@ -90,11 +90,11 @@ public class ViewRepeater {
         component.addEventListener(MouseEvent.CLICK, function (evt:MouseEvent):void {
           var index:int = _container.getChildIndex(evt.currentTarget as DisplayObject);
           if (index >= 0) {
-            (_remoteRepeater.state as RemoteCompositeValueState).selectedIndices = [index];
             (_remoteRepeater.state as RemoteCompositeValueState).leadingIndex = index;
+            (_remoteRepeater.state as RemoteCompositeValueState).selectedIndices = [index];
           } else {
-            (_remoteRepeater.state as RemoteCompositeValueState).selectedIndices = [];
             (_remoteRepeater.state as RemoteCompositeValueState).leadingIndex = -1;
+            (_remoteRepeater.state as RemoteCompositeValueState).selectedIndices = [];
           }
         });
         if (_remoteRepeater.rowAction) {
