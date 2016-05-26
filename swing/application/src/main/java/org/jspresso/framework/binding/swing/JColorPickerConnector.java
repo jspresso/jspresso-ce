@@ -67,7 +67,7 @@ public class JColorPickerConnector extends JComponentConnector<JColorPicker> {
    * {@inheritDoc}
    */
   @Override
-  protected Object getConnecteeValue() {
+  protected Object protectedGetConnecteeValue() {
     Color value = getConnectedJComponent().getValue();
     if (value != null) {
       return ColorHelper.toHexString(value.getRed(), value.getGreen(),

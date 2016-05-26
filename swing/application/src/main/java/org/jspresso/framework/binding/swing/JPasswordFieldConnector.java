@@ -36,7 +36,7 @@ public class JPasswordFieldConnector extends JTextFieldConnector {
    * {@inheritDoc}
    */
   @Override
-  protected Object getConnecteeValue() {
+  protected Object protectedGetConnecteeValue() {
     char[] password = getConnectedJComponent().getPassword();
     if (password != null && password.length == 0) {
       password = null;

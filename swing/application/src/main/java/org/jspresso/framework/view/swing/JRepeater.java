@@ -94,7 +94,7 @@ public class JRepeater {
     this.locale = locale;
     this.collectionConnector = connector;
     this.rowAction = rowAction;
-    rebindDataProvider();
+    //rebindDataProvider();
     collectionConnector.addValueChangeListener(new IValueChangeListener() {
       @Override
       public void valueChange(ValueChangeEvent evt) {

@@ -79,7 +79,7 @@ public class JLabelConnector extends JComponentConnector<JLabel> {
    * {@inheritDoc}
    */
   @Override
-  protected Object getConnecteeValue() {
+  protected Object protectedGetConnecteeValue() {
     return connecteeValue;
   }
 

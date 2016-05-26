@@ -78,7 +78,7 @@ public abstract class JTextComponentConnector<E extends JTextComponent> extends
    * {@inheritDoc}
    */
   @Override
-  protected Object getConnecteeValue() {
+  protected Object protectedGetConnecteeValue() {
     String text = getConnectedJComponent().getText();
     if (StringUtils.isEmpty(text)) {
       return null;

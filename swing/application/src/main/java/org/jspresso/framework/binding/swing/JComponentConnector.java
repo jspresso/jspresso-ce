@@ -32,24 +32,24 @@ import org.jspresso.framework.util.swing.SwingUtil;
  * {@code getConnectedJComponent()} which returns the parametrized type of
  * the class.
  *
- * @author Vincent Vandenschrick
  * @param <E>
- *          The actual class of the subclass of {@code JComponent}.
+ *     The actual class of the subclass of {@code JComponent}.
+ * @author Vincent Vandenschrick
  */
-public abstract class JComponentConnector<E extends JComponent> extends
-    AbstractValueConnector {
+public abstract class JComponentConnector<E extends JComponent> extends AbstractValueConnector {
 
-  private final E     connectedJComponent;
-
+  private E     connectedJComponent;
   private Color savedForeground;
+
+  private Object value;
 
   /**
    * Constructs a new {@code JComponentConnector} instance.
    *
    * @param id
-   *          the connector identifier.
+   *     the connector identifier.
    * @param connectedJComponent
-   *          the connected JComponent.
+   *     the connected JComponent.
    */
   public JComponentConnector(String id, E connectedJComponent) {
     super(id);
@@ -63,6 +63,8 @@ public abstract class JComponentConnector<E extends JComponent> extends
    * Turn read-only if not bound.
    * <p>
    * {@inheritDoc}
+   *
+   * @return the boolean
    */
   @Override
   public boolean isWritable() {
@@ -74,21 +76,23 @@ public abstract class JComponentConnector<E extends JComponent> extends
    * ran on the Swing event dispatch thread. It actually delegates the connectee
    * modification to the {@code protectedReadabilityChange} method.
    *
-   * @see #protectedReadabilityChange()
+   * @see #protectedReadabilityChange() #protectedReadabilityChange()
    */
   @Override
   public final void readabilityChange() {
     super.readabilityChange();
-    SwingUtil.updateSwingGui(new Runnable() {
+    if (getConnectedJComponent() != null) {
+      SwingUtil.updateSwingGui(new Runnable() {
 
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public void run() {
-        protectedReadabilityChange();
-      }
-    });
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void run() {
+          protectedReadabilityChange();
+        }
+      });
+    }
   }
 
   /**
@@ -96,21 +100,23 @@ public abstract class JComponentConnector<E extends JComponent> extends
    * ran on the Swing event dispatch thread. It actually delegates the connectee
    * modification to the {@code protectedWritabilityChange} method.
    *
-   * @see #protectedWritabilityChange()
+   * @see #protectedWritabilityChange() #protectedWritabilityChange()
    */
   @Override
   public final void writabilityChange() {
     super.writabilityChange();
-    SwingUtil.updateSwingGui(new Runnable() {
+    if (getConnectedJComponent() != null) {
+      SwingUtil.updateSwingGui(new Runnable() {
 
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public void run() {
-        protectedWritabilityChange();
-      }
-    });
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void run() {
+          protectedWritabilityChange();
+        }
+      });
+    }
   }
 
   /**
@@ -126,19 +132,6 @@ public abstract class JComponentConnector<E extends JComponent> extends
    */
   @Override
   protected final void fireConnectorValueChange() {
-    // SwingUtil.performLongOperation(new Job() {
-    //
-    // /**
-    // * Decorates the super implementation with the foxtrot job.
-    // * <p>
-    // * {@inheritDoc}
-    // */
-    // @Override
-    // public Object run() {
-    // protectedFireConnectorValueChange();
-    // return null;
-    // }
-    // });
     try {
       protectedFireConnectorValueChange();
     } catch (ConnectorInputException ex) {
@@ -180,8 +173,7 @@ public abstract class JComponentConnector<E extends JComponent> extends
       savedForeground = null;
     } else if (savedForeground == null) {
       savedForeground = getConnectedJComponent().getForeground();
-      getConnectedJComponent().setForeground(
-          getConnectedJComponent().getBackground());
+      getConnectedJComponent().setForeground(getConnectedJComponent().getBackground());
     }
   }
 
@@ -191,7 +183,7 @@ public abstract class JComponentConnector<E extends JComponent> extends
    * connector modification to be handled in the event dispatch thread.
    *
    * @param aValue
-   *          the connectee value to set.
+   *     the connectee value to set.
    */
   protected abstract void protectedSetConnecteeValue(Object aValue);
 
@@ -212,16 +204,56 @@ public abstract class JComponentConnector<E extends JComponent> extends
    * <p>
    * {@inheritDoc}
    *
-   * @see #protectedSetConnecteeValue(Object)
+   * @param aValue
+   *     the a value
+   * @see #protectedSetConnecteeValue(Object) #protectedSetConnecteeValue(Object)
    */
   @Override
   protected final void setConnecteeValue(final Object aValue) {
-    SwingUtil.updateSwingGui(new Runnable() {
+    if (getConnectedJComponent() != null) {
+      SwingUtil.updateSwingGui(new Runnable() {
 
-      @Override
-      public void run() {
-        protectedSetConnecteeValue(aValue);
-      }
-    });
+        @Override
+        public void run() {
+          protectedSetConnecteeValue(aValue);
+        }
+      });
+    } else {
+      value = aValue;
+    }
+  }
+
+  /**
+   * Gets connectee value.
+   *
+   * @return the connectee value
+   */
+  protected final Object getConnecteeValue() {
+    if (getConnectedJComponent() != null) {
+      return protectedGetConnecteeValue();
+    } else {
+      return value;
+    }
+  }
+
+  /**
+   * Protected get connectee value object.
+   *
+   * @return the object
+   */
+  protected abstract Object protectedGetConnecteeValue();
+
+  /**
+   * Clone j component connector.
+   *
+   * @return the j component connector
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public JComponentConnector<E> clone() {
+    JComponentConnector<E> clone = (JComponentConnector<E>) super.clone();
+    clone.connectedJComponent = null;
+    clone.savedForeground = null;
+    return clone;
   }
 }

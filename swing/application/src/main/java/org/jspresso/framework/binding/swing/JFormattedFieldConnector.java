@@ -77,7 +77,7 @@ public class JFormattedFieldConnector extends JTextFieldConnector {
    */
   @SuppressWarnings("unchecked")
   @Override
-  protected Object getConnecteeValue() {
+  protected Object protectedGetConnecteeValue() {
     if (StringUtils.isEmpty(getConnectedJComponent().getText())) {
       return null;
     }
