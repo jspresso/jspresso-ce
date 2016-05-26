@@ -82,6 +82,7 @@ import org.jspresso.framework.application.frontend.command.remote.IRemoteCommand
 import org.jspresso.framework.application.frontend.command.remote.RemoteAbstractDialogCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteAddRepeatedCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteApplicationDescriptionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand;
@@ -138,6 +139,7 @@ import org.jspresso.framework.view.flex.DefaultFlexViewFactory;
 import org.jspresso.framework.view.flex.EnhancedTabNavigator;
 import org.jspresso.framework.view.flex.RIconMenuBarItem;
 import org.jspresso.framework.view.flex.RIconMenuItemRenderer;
+import org.jspresso.framework.view.flex.ViewRepeater;
 
 public class DefaultFlexController implements IRemotePeerRegistry, IActionHandler, IRemoteCommandHandler {
   private static const JSPRESSO_VERSION:String = VERSIONS::jspresso_version;
@@ -518,8 +520,10 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
         if (command is RemoteAddCardCommand) {
           getViewFactory().addCard(targetComponent.retrievePeer() as ViewStack, (command as RemoteAddCardCommand).card,
                                    (command as RemoteAddCardCommand).cardName);
+        } else if (command is RemoteAddRepeatedCommand) {
+          getViewFactory().addRepeated(targetComponent.retrievePeer() as ViewRepeater, (command as RemoteAddRepeatedCommand).newSections);
         } else if (command is RemoteFocusCommand) {
-          getViewFactory().focus(targetComponent.retrievePeer());
+          getViewFactory().focus(targetComponent.retrievePeer() as UIComponent);
         } else if (command is RemoteEditCommand) {
           _postponedEditionCommands.push(command);
         }
@@ -1024,7 +1028,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     }
     for (i = 0; i < _postponedEditionCommands.length; i++) {
       var delayedEditionCommand:RemoteEditCommand = _postponedEditionCommands[i] as RemoteEditCommand;
-      getViewFactory().edit((getRegistered(delayedEditionCommand.targetPeerGuid) as RComponent).retrievePeer());
+      getViewFactory().edit((getRegistered(delayedEditionCommand.targetPeerGuid) as RComponent).retrievePeer() as UIComponent);
     }
   }
 

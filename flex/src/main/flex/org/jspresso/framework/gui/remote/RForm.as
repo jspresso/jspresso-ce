@@ -95,14 +95,5 @@ public class RForm extends RComponent {
   public function set widthResizeable(value:Boolean):void {
     _widthResizeable = value;
   }
-
-  public override function transferToState(stateMapping:Object):void {
-    super.transferToState(stateMapping);
-    if (elements) {
-      for (var i:int = 0; i < elements.length; i++) {
-        (elements[i] as RComponent).transferToState(stateMapping);
-      }
-    }
-  }
 }
 }

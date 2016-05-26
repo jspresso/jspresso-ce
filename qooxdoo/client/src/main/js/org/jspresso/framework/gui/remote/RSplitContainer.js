@@ -34,14 +34,5 @@ qx.Class.define("org.jspresso.framework.gui.remote.RSplitContainer", {
   },
 
   members: {
-    transferToState: function (stateMapping) {
-      this.base(arguments, stateMapping);
-      if (this.getLeftTop()) {
-        this.getLeftTop().transferToState(stateMapping);
-      }
-      if (this.getRightBottom()) {
-        this.getRightBottom().transferToState(stateMapping);
-      }
-    }
   }
 });

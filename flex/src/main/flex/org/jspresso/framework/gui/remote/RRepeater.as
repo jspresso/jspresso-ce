@@ -20,43 +20,12 @@
 
 package org.jspresso.framework.gui.remote {
 
-import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 
 [RemoteClass(alias="org.jspresso.framework.gui.remote.RRepeater")]
 public class RRepeater extends RCollectionComponent {
 
-  private var _repeated:RComponent;
-  private var _viewPrototype:RemoteCompositeValueState;
-
   public function RRepeater() {
     //default constructor.
-  }
-
-  public function get repeated():RComponent {
-    return _repeated;
-  }
-
-  public function set repeated(value:RComponent):void {
-    _repeated = value;
-  }
-
-
-  public function get viewPrototype():RemoteCompositeValueState {
-    return _viewPrototype;
-  }
-
-  public function set viewPrototype(value:RemoteCompositeValueState):void {
-    _viewPrototype = value;
-  }
-
-  public override function transferToState(stateMapping:Object):void {
-    super.transferToState(stateMapping);
-    viewPrototype = viewPrototype ?
-        (stateMapping[viewPrototype.guid] ? stateMapping[viewPrototype.guid] as RemoteCompositeValueState :
-            viewPrototype) : null;
-    if (_repeated) {
-      _repeated.transferToState(stateMapping);
-    }
   }
 }
 }
