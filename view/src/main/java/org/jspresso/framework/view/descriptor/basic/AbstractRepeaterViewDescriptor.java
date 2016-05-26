@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.view.descriptor.basic;
 
+import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.view.descriptor.IRepeaterViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
@@ -39,7 +40,13 @@ public abstract class AbstractRepeaterViewDescriptor extends BasicCollectionView
    *
    * @return the element view descriptor
    */
+  @Override
   public IViewDescriptor getRepeatedViewDescriptor() {
+    if (repeatedViewDescriptor instanceof BasicViewDescriptor && repeatedViewDescriptor.getModelDescriptor() == null
+        && getModelDescriptor() instanceof ICollectionDescriptorProvider<?>) {
+      ((BasicViewDescriptor) repeatedViewDescriptor).setModelDescriptor(
+          ((ICollectionDescriptorProvider) getModelDescriptor()).getCollectionDescriptor().getElementDescriptor());
+    }
     return repeatedViewDescriptor;
   }
 
