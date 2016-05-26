@@ -70,7 +70,7 @@ public class JDateFieldConnector extends JComponentConnector<JDateField> {
    * {@inheritDoc}
    */
   @Override
-  protected Object getConnecteeValue() {
+  protected Object protectedGetConnecteeValue() {
     // don't call getValue() due to bad focus event delivery order of
     // JFormattedTextField.
     // return getConnectedJComponent().getValue();

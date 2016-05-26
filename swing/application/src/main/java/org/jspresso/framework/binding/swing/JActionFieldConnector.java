@@ -110,7 +110,7 @@ public class JActionFieldConnector extends JComponentConnector<JActionField> {
    * {@inheritDoc}
    */
   @Override
-  protected Object getConnecteeValue() {
+  protected Object protectedGetConnecteeValue() {
     return value;
   }
 

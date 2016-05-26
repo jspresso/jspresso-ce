@@ -68,7 +68,7 @@ public class JEditTextAreaConnector extends JComponentConnector<JEditTextArea> {
    * {@inheritDoc}
    */
   @Override
-  protected Object getConnecteeValue() {
+  protected Object protectedGetConnecteeValue() {
     return getConnectedJComponent().getText();
   }
 

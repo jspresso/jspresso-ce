@@ -114,7 +114,7 @@ public class JHTMLEditorConnector extends JComponentConnector<JHTMLEditor> {
    * {@inheritDoc}
    */
   @Override
-  protected Object getConnecteeValue() {
+  protected Object protectedGetConnecteeValue() {
     return getConnectedJComponent().getText();
   }
 
