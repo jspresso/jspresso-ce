@@ -47,14 +47,5 @@ public class RTabContainer extends RContainer {
   public function set selectedIndex(value:int):void {
     _selectedIndex = value;
   }
-
-  public override function transferToState(stateMapping:Object):void {
-    super.transferToState(stateMapping);
-    if (tabs) {
-      for (var i:int = 0; i < tabs.length; i++) {
-        (tabs[i] as RComponent).transferToState(stateMapping);
-      }
-    }
-  }
 }
 }

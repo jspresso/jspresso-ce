@@ -47,6 +47,7 @@ public class ViewRepeater {
   private var _dataProvider:ListCollectionView;
 
   private var _componentTank:Object;
+  private var _forceRebind;
 
   public function ViewRepeater(container:Container, remoteRepeater:RRepeater, viewFactory:DefaultFlexViewFactory,
                                actionHandler:IActionHandler) {
@@ -55,6 +56,7 @@ public class ViewRepeater {
     _viewFactory = viewFactory;
     _actionHandler = actionHandler;
     _componentTank = {};
+    _forceRebind = true;
   }
 
 
@@ -69,7 +71,6 @@ public class ViewRepeater {
     if (_dataProvider) {
       _dataProvider.addEventListener(CollectionEvent.COLLECTION_CHANGE, rebindDataProvider);
     }
-    rebindDataProvider();
   }
 
   private function rebindDataProvider(collectionEvent:CollectionEvent = null):void {
@@ -80,45 +81,36 @@ public class ViewRepeater {
     for (var i:int = 0; i < _dataProvider.length; i++) {
       var state:RemoteValueState = _dataProvider.getItemAt(i) as RemoteValueState;
       var component:UIComponent = _componentTank[state.guid];
-      if (!component) {
-        var stateMapping:Object = {};
-        mapStates(_remoteRepeater.viewPrototype, state, stateMapping);
-        _remoteRepeater.transferToState(stateMapping);
-        component = _viewFactory.createComponent(_remoteRepeater.repeated, false);
-        _componentTank[state.guid] = component;
-        component.percentWidth = 100;
-        component.addEventListener(MouseEvent.CLICK, function (evt:MouseEvent):void {
-          var index:int = _container.getChildIndex(evt.currentTarget as DisplayObject);
-          if (index >= 0) {
-            (_remoteRepeater.state as RemoteCompositeValueState).leadingIndex = index;
-            (_remoteRepeater.state as RemoteCompositeValueState).selectedIndices = [index];
-          } else {
-            (_remoteRepeater.state as RemoteCompositeValueState).leadingIndex = -1;
-            (_remoteRepeater.state as RemoteCompositeValueState).selectedIndices = [];
-          }
-        });
-        if (_remoteRepeater.rowAction) {
-          component.doubleClickEnabled = true;
-          component.addEventListener(MouseEvent.DOUBLE_CLICK, function (evt:MouseEvent):void {
-            _actionHandler.execute(_remoteRepeater.rowAction)
-          });
-        }
-      }
       _container.addChild(component);
     }
   }
 
-  private function mapStates(fromState:RemoteValueState, toState:RemoteValueState, stateMapping:Object):void {
-    stateMapping[fromState.guid] = toState;
-    if (fromState is RemoteCompositeValueState) {
-      var fromChildren:ListCollectionView = (fromState as RemoteCompositeValueState).children;
-      for (var i:int = 0; i < fromChildren.length; i++) {
-        var toChildren:ListCollectionView = (toState as RemoteCompositeValueState).children;
-        if (i < toChildren.length) {
-          mapStates(fromChildren.getItemAt(i) as RemoteValueState, toChildren.getItemAt(i) as RemoteValueState,
-                    stateMapping);
+  public function addRepeated(newSections:Array):void {
+    for (var i:int = 0; i < newSections.length; i++) {
+      var newRemoteSection:RComponent = newSections[i];
+      var newSection:UIComponent = _viewFactory.createComponent(newRemoteSection);
+      _componentTank[newRemoteSection.state.guid] = newSection;
+      newSection.percentWidth = 100;
+      newSection.addEventListener(MouseEvent.CLICK, function (evt:MouseEvent):void {
+        var index:int = _container.getChildIndex(evt.currentTarget as DisplayObject);
+        if (index >= 0) {
+          (_remoteRepeater.state as RemoteCompositeValueState).leadingIndex = index;
+          (_remoteRepeater.state as RemoteCompositeValueState).selectedIndices = [index];
+        } else {
+          (_remoteRepeater.state as RemoteCompositeValueState).leadingIndex = -1;
+          (_remoteRepeater.state as RemoteCompositeValueState).selectedIndices = [];
         }
+      });
+      if (_remoteRepeater.rowAction) {
+        newSection.doubleClickEnabled = true;
+        newSection.addEventListener(MouseEvent.DOUBLE_CLICK, function (evt:MouseEvent):void {
+          _actionHandler.execute(_remoteRepeater.rowAction)
+        });
       }
+    }
+    if (_forceRebind) {
+      _forceRebind = false;
+      rebindDataProvider();
     }
   }
 }

@@ -46,14 +46,5 @@ public class RConstrainedGridContainer extends RContainer {
   public function get cells():Array {
     return _cells;
   }
-
-  public override function transferToState(stateMapping:Object):void {
-    super.transferToState(stateMapping);
-    if (cells) {
-      for (var i:int = 0; i < cells.length; i++) {
-        (cells[i] as RComponent).transferToState(stateMapping);
-      }
-    }
-  }
 }
 }

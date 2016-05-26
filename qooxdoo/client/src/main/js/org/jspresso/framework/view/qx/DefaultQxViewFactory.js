@@ -2776,11 +2776,19 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         splitContainer.setOrientation("horizontal");
       }
 
+      var ltComponent, rbComponent;
+      if (remoteSplitContainer.getLeftTop() != null) {
+        ltComponent = this.createComponent(remoteSplitContainer.getLeftTop());
+      }
+      if (remoteSplitContainer.getRightBottom() != null) {
+        rbComponent = this.createComponent(remoteSplitContainer.getRightBottom());
+      }
+
       splitContainer.addListenerOnce("appear", function (appearEvent) {
         var ltComponent, rbComponent, wrapper;
         var ltSize, rbSize, splitSize;
-        if (remoteSplitContainer.getLeftTop() != null) {
-          ltComponent = this.createComponent(remoteSplitContainer.getLeftTop());
+        var wrapper;
+        if (ltComponent) {
           if (remoteSplitContainer.getOrientation() == "VERTICAL") {
             ltSize = ltComponent.getSizeHint().height;
             splitSize = splitContainer.getBounds().height;
@@ -2795,8 +2803,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           wrapper.add(ltComponent);
           ltComponent = wrapper;
         }
-        if (remoteSplitContainer.getRightBottom() != null) {
-          rbComponent = this.createComponent(remoteSplitContainer.getRightBottom());
+        if (rbComponent) {
           if (remoteSplitContainer.getOrientation() == "VERTICAL") {
             rbSize = rbComponent.getSizeHint().height;
             splitSize = splitContainer.getBounds().height;
@@ -2925,7 +2932,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var repeater = new org.jspresso.framework.view.qx.ViewRepeater(repeaterContainer, remoteRepeater, this,
           this._getActionHandler());
       repeater.setDataProvider(remoteRepeater.getState().getChildren());
-
+      remoteRepeater.assignPeer(repeater);
+      
       var scroller = new qx.ui.container.Scroll();
       scroller.setScrollbarX("off");
       scroller.setScrollbarY("auto");

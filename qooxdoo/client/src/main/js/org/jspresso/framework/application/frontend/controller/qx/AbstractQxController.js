@@ -471,9 +471,18 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      * @return {undefined}
      */
     _handleAddCardCommand: function (targetPeer, addCardCommand) {
-      throw new Error("_handleAddCardCommand is abstract.");
+      this._getViewFactory().addCard(targetPeer.retrievePeer(), addCardCommand.getCard(), addCardCommand.getCardName());
     },
 
+    /**
+     * @param targetPeer {org.jspresso.framework.gui.remote.RComponent}
+     * @param addRepeatedCommand {org.jspresso.framework.application.frontend.command.remote.RemoteAddRepeatedCommand}
+     * @return {undefined}
+     */
+    _handleAddRepeatedCommand: function (targetPeer, addRepeatedCommand) {
+      this._getViewFactory().addRepeated(targetPeer.retrievePeer(), addRepeatedCommand.getNewSections());
+    },
+    
     /**
      * @param targetPeer {org.jspresso.framework.gui.remote.RComponent}
      * @param focusCommand {org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand}
@@ -620,6 +629,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
           c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand} */
               command;
           this._handleAddCardCommand(targetPeer, c);
+        } else if (command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteAddRepeatedCommand) {
+          c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteAddRepeatedCommand} */
+              command;
+          this._handleAddRepeatedCommand(targetPeer, c);
         } else if (command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand) {
           c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand} */
               command;

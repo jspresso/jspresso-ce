@@ -34,13 +34,5 @@ qx.Class.define("org.jspresso.framework.gui.remote.RCardContainer", {
   },
 
   members: {
-    transferToState: function (stateMapping) {
-      this.base(arguments, stateMapping);
-      if (this.getCards()) {
-        for (var i = 0; i < this.getCards().length; i++) {
-          this.getCards()[i].transferToState(stateMapping);
-        }
-      }
-    }
   }
 });

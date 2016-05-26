@@ -42,6 +42,8 @@ qx.Class.define("org.jspresso.framework.view.qx.ViewRepeater", {
     __dataProvider: null,
     /** @type {Object} */
     __componentTank: null,
+    /** @type {Boolean} */
+    __forceRebind: true,
 
     setDataProvider: function (value) {
       if (this.__dataProvider) {
@@ -54,7 +56,6 @@ qx.Class.define("org.jspresso.framework.view.qx.ViewRepeater", {
       if (this.__dataProvider) {
         this.__dataProvider.addListener("change", this.__rebindDataProvider, this);
       }
-      this.__rebindDataProvider();
     },
 
     __rebindDataProvider: function (evt) {
@@ -62,44 +63,36 @@ qx.Class.define("org.jspresso.framework.view.qx.ViewRepeater", {
       for (var i = 0; i < this.__dataProvider.length; i++) {
         var state = this.__dataProvider.getItem(i);
         var component = this.__componentTank[state.getGuid()];
-        if (!component) {
-          var stateMapping = {};
-          this.__mapStates(this.__remoteRepeater.getViewPrototype(), state, stateMapping);
-          this.__remoteRepeater.transferToState(stateMapping);
-          component = this.__viewFactory.createComponent(this.__remoteRepeater.getRepeated(), false);
-          this.__componentTank[state.getGuid()] = component;
-          component.addListener("tap", function (evt) {
-            var index = this.__container.getChildren().indexOf(evt.getCurrentTarget());
-            if (index >= 0) {
-              this.__remoteRepeater.getState().setLeadingIndex(index);
-              this.__remoteRepeater.getState().setSelectedIndices([index]);
-            } else {
-              this.__remoteRepeater.getState().setLeadingIndex(-1);
-              this.__remoteRepeater.getState().setSelectedIndices([]);
-            }
-          }, this);
-          if (this.__remoteRepeater.getRowAction()) {
-            component.addListener("dbltap", function (evt) {
-              this.__actionHandler.execute(this.__remoteRepeater.getRowAction());
-            }, this);
-          }
-        }
         this.__container.add(component);
       }
     },
 
-    __mapStates: function (fromState, toState, stateMapping) {
-      stateMapping[fromState.getGuid()] = toState;
-      if (fromState instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
-        var fromChildren = fromState.getChildren();
-        for (var i = 0; i < fromChildren.length; i++) {
-          var toChildren = toState.getChildren();
-          if (i < toChildren.length) {
-            this.__mapStates(fromChildren.getItem(i), toChildren.getItem(i), stateMapping);
+    addRepeated: function (newSections) {
+      var rebind = this.__componentTank.length == 0;
+      for (var i = 0; i < newSections.length; i++) {
+        var newRemoteSection = newSections[i];
+        var newSection = this.__viewFactory.createComponent(newRemoteSection);
+        this.__componentTank[newRemoteSection.getState().getGuid()] = newSection;
+        newSection.addListener("tap", function (evt) {
+          var index = this.__container.getChildren().indexOf(evt.getCurrentTarget());
+          if (index >= 0) {
+            this.__remoteRepeater.getState().setLeadingIndex(index);
+            this.__remoteRepeater.getState().setSelectedIndices([index]);
+          } else {
+            this.__remoteRepeater.getState().setLeadingIndex(-1);
+            this.__remoteRepeater.getState().setSelectedIndices([]);
           }
+        }, this);
+        if (this.__remoteRepeater.getRowAction()) {
+          newSection.addListener("dbltap", function (evt) {
+            this.__actionHandler.execute(this.__remoteRepeater.getRowAction());
+          }, this);
         }
       }
+      if (this.__forceRebind) {
+        this.__forceRebind = false;
+        this.__rebindDataProvider();
+      }
     }
-
   }
 });

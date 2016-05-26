@@ -17,10 +17,16 @@
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.RRepeater", {
-  extend: org.jspresso.framework.gui.remote.RCollectionComponent,
+qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteAddRepeatedCommand", {
+  extend: org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
 
   construct: function () {
     this.base(arguments);
+  },
+
+  properties: {
+    newSections: {
+      check: "Array"
+    }
   }
 });

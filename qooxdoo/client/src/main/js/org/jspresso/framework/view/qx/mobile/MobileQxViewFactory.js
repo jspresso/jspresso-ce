@@ -1840,7 +1840,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var repeater = new org.jspresso.framework.view.qx.ViewRepeater(repeaterContainer, remoteRepeater, this,
           this._getActionHandler());
       repeater.setDataProvider(remoteRepeater.getState().getChildren());
-
+      remoteRepeater.assignPeer(repeater);
+      
       return repeaterContainer;
     },
 

@@ -73,24 +73,5 @@ public class RBorderContainer extends RContainer {
   public function get west():RComponent {
     return _west;
   }
-
-  public override function transferToState(stateMapping:Object):void {
-    super.transferToState(stateMapping);
-    if (north) {
-      north.transferToState(stateMapping);
-    }
-    if (west) {
-      west.transferToState(stateMapping);
-    }
-    if (center) {
-      center.transferToState(stateMapping);
-    }
-    if (east) {
-      east.transferToState(stateMapping);
-    }
-    if (south) {
-      south.transferToState(stateMapping);
-    }
-  }
 }
 }

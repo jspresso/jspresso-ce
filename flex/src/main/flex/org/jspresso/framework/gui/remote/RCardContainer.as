@@ -46,14 +46,5 @@ public class RCardContainer extends RContainer {
   public function get cards():Array {
     return _cards;
   }
-
-  public override function transferToState(stateMapping:Object):void {
-    super.transferToState(stateMapping);
-    if (cards) {
-      for (var i:int = 0; i < cards.length; i++) {
-        (cards[i] as RComponent).transferToState(stateMapping);
-      }
-    }
-  }
 }
 }

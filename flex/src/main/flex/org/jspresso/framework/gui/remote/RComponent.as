@@ -49,7 +49,7 @@ public class RComponent extends RemotePeer implements IRemoteStateOwner {
   private var _preferredSize:Dimension;
   private var _styleName:String;
 
-  private var _peer:UIComponent;
+  private var _peer:Object;
 
   public function RComponent() {
     //default constructor.
@@ -151,11 +151,11 @@ public class RComponent extends RemotePeer implements IRemoteStateOwner {
     _secondaryActionLists = value;
   }
 
-  public function assignPeer(value:UIComponent):void {
+  public function assignPeer(value:Object):void {
     _peer = value;
   }
 
-  public function retrievePeer():UIComponent {
+  public function retrievePeer():Object {
     return _peer;
   }
 
@@ -198,22 +198,5 @@ public class RComponent extends RemotePeer implements IRemoteStateOwner {
   public function set fontState(value:RemoteValueState):void {
     _fontState = value;
   }
-
-  public function transferToState(stateMapping:Object):void {
-    backgroundState = backgroundState ?
-        (stateMapping[backgroundState.guid] ? stateMapping[backgroundState.guid] as RemoteValueState :
-            backgroundState) : null;
-    fontState = fontState ?
-        (stateMapping[fontState.guid] ? stateMapping[fontState.guid] as RemoteValueState : fontState) : null;
-    foregroundState = foregroundState ?
-        (stateMapping[foregroundState.guid] ? stateMapping[foregroundState.guid] as RemoteValueState :
-            foregroundState) : null;
-    labelState = labelState ?
-        (stateMapping[labelState.guid] ? stateMapping[labelState.guid] as RemoteValueState : labelState) : null;
-    state = state ? (stateMapping[state.guid] ? stateMapping[state.guid] as RemoteValueState : state) : null;
-    toolTipState = toolTipState ?
-        (stateMapping[toolTipState.guid] ? stateMapping[toolTipState.guid] as RemoteValueState : toolTipState) : null;
-  }
-
 }
 }

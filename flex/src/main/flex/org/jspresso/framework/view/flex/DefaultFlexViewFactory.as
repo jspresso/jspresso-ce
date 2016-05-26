@@ -309,7 +309,9 @@ public class DefaultFlexViewFactory {
     if (component == null) {
       component = createDefaultComponent();
     }
-    remoteComponent.assignPeer(component);
+    if (!remoteComponent.retrievePeer()) {
+      remoteComponent.assignPeer(component);
+    }
     if (isNaN(component.minWidth)) {
       component.minWidth = 0;
     }
@@ -2509,7 +2511,7 @@ public class DefaultFlexViewFactory {
     }
     var repeater:ViewRepeater = new ViewRepeater(repeaterContainer, remoteRepeater, this, _actionHandler);
     repeater.dataProvider = (remoteRepeater.state as RemoteCompositeValueState).children;
-
+    remoteRepeater.assignPeer(repeater);
     var scroller:Canvas = new Canvas();
     repeaterContainer.percentWidth = 100.0;
     scroller.horizontalScrollPolicy = ScrollPolicy.OFF;
@@ -2517,6 +2519,10 @@ public class DefaultFlexViewFactory {
     scroller.addChild(repeaterContainer);
 
     return scroller;
+  }
+  
+  public function addRepeated(repeater:ViewRepeater, newSections:Array):void {
+    repeater.addRepeated(newSections);
   }
 
   protected function createTable(remoteTable:RTable):UIComponent {
