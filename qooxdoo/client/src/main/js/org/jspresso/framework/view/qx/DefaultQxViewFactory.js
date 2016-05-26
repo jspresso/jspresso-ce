@@ -2767,7 +2767,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       }
 
       splitContainer.addListenerOnce("appear", function (appearEvent) {
-        var ltComponent, rbComponent, wrapper;
         var ltSize, rbSize, splitSize;
         var wrapper;
         if (ltComponent) {
@@ -2915,7 +2914,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           this._getActionHandler());
       repeater.setDataProvider(remoteRepeater.getState().getChildren());
       remoteRepeater.assignPeer(repeater);
-      
+
       var scroller = new qx.ui.container.Scroll();
       scroller.setScrollbarX("off");
       scroller.setScrollbarY("auto");
