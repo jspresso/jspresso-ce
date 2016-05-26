@@ -65,7 +65,7 @@ public class JComboBoxConnector extends JComponentConnector<JComboBox<String>> {
    * {@inheritDoc}
    */
   @Override
-  protected Object getConnecteeValue() {
+  protected Object protectedGetConnecteeValue() {
     return getConnectedJComponent().getSelectedItem();
   }
 

@@ -52,7 +52,7 @@ public class JRadioButtonConnector extends JToggleButtonConnector<JRadioButton> 
    * {@inheritDoc}
    */
   @Override
-  protected Object getConnecteeValue() {
+  protected Object protectedGetConnecteeValue() {
     if (getConnectedJComponent().isSelected()) {
       return checkedValue;
     }

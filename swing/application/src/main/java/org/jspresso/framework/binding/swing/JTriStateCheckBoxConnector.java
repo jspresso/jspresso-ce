@@ -48,7 +48,7 @@ public class JTriStateCheckBoxConnector extends
    * {@inheritDoc}
    */
   @Override
-  protected Object getConnecteeValue() {
+  protected Object protectedGetConnecteeValue() {
     if (getConnectedJComponent().getState() == CheckState.INDETERMINATE) {
       return null;
     }
