@@ -29,13 +29,5 @@ qx.Class.define("org.jspresso.framework.gui.remote.RConstrainedGridContainer", {
   },
 
   members: {
-    transferToState: function (stateMapping) {
-      this.base(arguments, stateMapping);
-      if (this.getCells()) {
-        for (var i = 0; i < this.getCells().length; i++) {
-          this.getCells()[i].transferToState(stateMapping);
-        }
-      }
-    }
   }
 });

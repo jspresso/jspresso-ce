@@ -16,11 +16,37 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
+package org.jspresso.framework.application.frontend.command.remote;
 
-qx.Class.define("org.jspresso.framework.gui.remote.RRepeater", {
-  extend: org.jspresso.framework.gui.remote.RCollectionComponent,
+import org.jspresso.framework.gui.remote.RComponent;
 
-  construct: function () {
-    this.base(arguments);
+/**
+ * This command is used to add repeated views in a remote repeater.
+ *
+ * @author Vincent Vandenschrick
+ */
+public class RemoteAddRepeatedCommand extends RemoteCommand {
+
+  private static final long serialVersionUID = -3157446085372670892L;
+
+  private RComponent[] newSections;
+
+  /**
+   * Get new sections r component [ ].
+   *
+   * @return the r component [ ]
+   */
+  public RComponent[] getNewSections() {
+    return newSections;
   }
-});
+
+  /**
+   * Sets new sections.
+   *
+   * @param newSections
+   *     the new sections
+   */
+  public void setNewSections(RComponent[] newSections) {
+    this.newSections = newSections;
+  }
+}

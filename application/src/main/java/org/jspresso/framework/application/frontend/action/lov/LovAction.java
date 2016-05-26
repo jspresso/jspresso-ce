@@ -158,6 +158,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
       // The following relies on a workaround used to determine the bean
       // model whenever the lov component is used inside a JTable.
       IValueConnector parentModelConnector = viewConnector.getParentConnector().getModelConnector();
+      while (parentModelConnector.getModelConnector() != null) {
+        parentModelConnector = parentModelConnector.getModelConnector();
+      }
       if (parentModelConnector instanceof IModelProvider) {
         masterComponent = ((IModelProvider) parentModelConnector).getModel();
       } else if (parentModelConnector instanceof ICollectionConnector) {
@@ -583,6 +586,14 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   public void setInitializationMapping(Map<String, Object> initializationMapping) {
     this.initializationMapping = initializationMapping;
     this.entityRefQueryDescriptor = createEntityRefQueryDescriptor(entityDescriptor, initializationMapping);
+  }
+
+  /**
+   * Get initialization mapping.
+   * @return the initialization mapping.
+   */
+  protected Map<String, Object> getInitializationMapping() {
+    return initializationMapping;
   }
 
   /**

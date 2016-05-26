@@ -123,7 +123,9 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
       if (component == null) {
         component = this._createDefaultComponent();
       }
-      remoteComponent.assignPeer(component);
+      if (!remoteComponent.retrievePeer()) {
+        remoteComponent.assignPeer(component);
+      }
       if (registerPeers) {
         this._getRemotePeerRegistry().register(remoteComponent);
       }
@@ -598,6 +600,15 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
         }
       }
       return allActions;
+    },
+
+    addCard: function (cardContainer, rCardComponent, cardName) {
+      throw new Error("_createEmptyWidget is abstract.");
+    },
+
+
+    addRepeated: function (repeater, newSections) {
+      repeater.addRepeated(newSections);
     }
 
   }

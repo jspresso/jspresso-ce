@@ -38,6 +38,7 @@ import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteAddRepeatedCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
@@ -111,9 +112,10 @@ import org.jspresso.framework.server.remote.RemotePeerRegistryServlet;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.IRemoteStateValueMapper;
 import org.jspresso.framework.state.remote.IRemoteValueStateFactory;
-import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.automation.IPermIdSource;
+import org.jspresso.framework.util.event.IValueChangeListener;
+import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.gui.ColorHelper;
 import org.jspresso.framework.util.gui.Dimension;
@@ -2135,26 +2137,83 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
    * {@inheritDoc}
    */
   @Override
-  protected IView<RComponent> createRepeaterView(IRepeaterViewDescriptor viewDescriptor, IActionHandler actionHandler,
-                                                 Locale locale) {
+  protected IView<RComponent> createRepeaterView(final IRepeaterViewDescriptor viewDescriptor,
+                                                 final IActionHandler actionHandler, final Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
-    IView<RComponent> repeated = createView(viewDescriptor.getRepeatedViewDescriptor(), actionHandler, locale);
+    final IView<RComponent> repeated = createView(viewDescriptor.getRepeatedViewDescriptor(), actionHandler, locale);
     ICompositeValueConnector elementConnectorPrototype = (ICompositeValueConnector) repeated.getConnector();
     ICollectionConnector connector = getConnectorFactory().createCollectionConnector(modelDescriptor.getName(),
         getMvcBinder(), elementConnectorPrototype);
     RRepeater viewComponent = createRRepeater(viewDescriptor);
-    viewComponent.setRepeated(repeated.getPeer());
     IView<RComponent> view = constructView(viewComponent, viewDescriptor, connector);
     viewComponent.setSelectionMode(viewDescriptor.getSelectionMode().name());
     if (viewDescriptor.getRowAction() != null) {
       viewComponent.setRowAction(
           getActionFactory().createAction(viewDescriptor.getRowAction(), actionHandler, view, locale));
     }
-    if (elementConnectorPrototype instanceof IRemoteStateOwner) {
-      viewComponent.setViewPrototype((RemoteCompositeValueState) ((IRemoteStateOwner) elementConnectorPrototype).getState());
-    }
+    bindRepeaterConnector(connector, viewComponent, viewDescriptor, actionHandler, locale);
     return view;
+  }
+
+  /**
+   * Bind repeater connector.
+   *
+   * @param connector
+   *     the connector
+   * @param repeater
+   *     the repeater
+   * @param viewDescriptor
+   *     the view descriptor
+   * @param actionHandler
+   *     the action handler
+   * @param locale
+   *     the locale
+   */
+  protected void bindRepeaterConnector(ICollectionConnector connector, final RComponent repeater,
+                                       final IRepeaterViewDescriptor viewDescriptor, final IActionHandler actionHandler,
+                                       final Locale locale) {
+    final Map<Integer, IView<RComponent>> childIds = new HashMap<>();
+    connector.addValueChangeListener(new IValueChangeListener() {
+      @Override
+      public void valueChange(ValueChangeEvent evt) {
+        ICollectionConnector connector = (ICollectionConnector) evt.getSource();
+        int targetCount = connector.getChildConnectorCount();
+        List<RComponent> extraSections = new ArrayList<>();
+        for (int i = 0; i < targetCount; i++) {
+          IValueConnector elementConnector = connector.getChildConnector(i);
+          int childId = System.identityHashCode(elementConnector);
+          if (!childIds.containsKey(childId)) {
+            IView<RComponent> extraSection = createView(viewDescriptor.getRepeatedViewDescriptor(), actionHandler,
+                locale);
+            RComponent peer = extraSection.getPeer();
+            RemoteValueState state = ((IRemoteStateOwner) elementConnector).getState();
+            peer.setState(state);
+            extraSections.add(peer);
+            getMvcBinder().bind(extraSection.getConnector(), elementConnector);
+            childIds.put(childId, extraSection);
+          }
+        }
+        if (!extraSections.isEmpty()) {
+          addRepeatedSections(repeater, extraSections);
+        }
+      }
+    });
+  }
+
+  /**
+   * Add repeated sections.
+   *
+   * @param repeater
+   *     the repeater
+   * @param extraSections
+   *     the extra sections
+   */
+  protected void addRepeatedSections(RComponent repeater, List<RComponent> extraSections) {
+    RemoteAddRepeatedCommand addRepeatedCommand = new RemoteAddRepeatedCommand();
+    addRepeatedCommand.setTargetPeerGuid(repeater.getGuid());
+    addRepeatedCommand.setNewSections(extraSections.toArray(new RComponent[extraSections.size()]));
+    getRemoteCommandHandler().registerCommand(addRepeatedCommand);
   }
 
   /**

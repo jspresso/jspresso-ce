@@ -761,16 +761,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     addDetailPage: function (navigationPage) {
       this._getManager().addDetail(navigationPage);
     },
-
-    /**
-     * @param targetPeer {org.jspresso.framework.gui.remote.RComponent}
-     * @param addCardCommand {org.jspresso.framework.application.frontend.command.remote.RemoteAddCardCommand}
-     * @return {undefined}
-     */
-    _handleAddCardCommand: function (targetPeer, addCardCommand) {
-      this._getViewFactory().addCard(targetPeer.retrievePeer(), addCardCommand.getCard(), addCardCommand.getCardName());
-    },
-
+    
     /**
      * @param targetPeer {org.jspresso.framework.gui.remote.RComponent}
      * @param focusCommand {org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand}

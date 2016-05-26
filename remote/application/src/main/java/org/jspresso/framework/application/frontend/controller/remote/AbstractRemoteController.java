@@ -41,6 +41,7 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.frontend.command.remote.CommandException;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteAddRepeatedCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteApplicationDescriptionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteCleanupCommand;
@@ -651,6 +652,9 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
   public void registerCommand(RemoteCommand command) {
     if (command instanceof RemoteChildrenCommand && ((RemoteChildrenCommand) command).isRemove()) {
       commandQueue.add(commandLowPriorityOffset, command);
+      commandLowPriorityOffset++;
+    } else if(command instanceof RemoteAddRepeatedCommand) {
+      commandQueue.add(0, command);
       commandLowPriorityOffset++;
     } else {
       if (isIdempotent(command)) {

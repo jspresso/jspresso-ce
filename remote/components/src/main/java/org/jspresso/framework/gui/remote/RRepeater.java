@@ -29,9 +29,6 @@ public class RRepeater extends RCollectionComponent {
 
   private static final long serialVersionUID = 3448113257778789L;
 
-  private RComponent                repeated;
-  private RemoteCompositeValueState viewPrototype;
-
   /**
    * Constructs a new {@code RRepeater} instance.
    *
@@ -48,43 +45,5 @@ public class RRepeater extends RCollectionComponent {
    */
   public RRepeater() {
     // For serialization support
-  }
-
-  /**
-   * Gets repeated.
-   *
-   * @return the repeated
-   */
-  public RComponent getRepeated() {
-    return repeated;
-  }
-
-  /**
-   * Sets repeated.
-   *
-   * @param repeated
-   *     the repeated
-   */
-  public void setRepeated(RComponent repeated) {
-    this.repeated = repeated;
-  }
-
-  /**
-   * Gets view prototype.
-   *
-   * @return the view prototype
-   */
-  public RemoteCompositeValueState getViewPrototype() {
-    return viewPrototype;
-  }
-
-  /**
-   * Sets view prototype.
-   *
-   * @param viewPrototype
-   *     the view prototype
-   */
-  public void setViewPrototype(RemoteCompositeValueState viewPrototype) {
-    this.viewPrototype = viewPrototype;
   }
 }
