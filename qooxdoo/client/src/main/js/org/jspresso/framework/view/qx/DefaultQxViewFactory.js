@@ -2208,8 +2208,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         }
         tableModel.setDynamicStylesIndices(dynamicStylesIndices);
         var columnWidth;
+        var fixed = false;
         if (rColumn.getPreferredSize() && rColumn.getPreferredSize().getWidth() > 0) {
           columnWidth = rColumn.getPreferredSize().getWidth();
+          fixed = true;
         } else {
           var tableFont = qx.theme.manager.Font.getInstance().resolve("default");
           var headerWidth = qx.bom.Label.getTextSize(columnLabels[i], tableFont.getStyles()).width;
@@ -2230,7 +2232,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         if (remoteTable.getHorizontallyScrollable()) {
           columnModel.setColumnWidth(i, columnWidth);
         } else {
-          columnModel.getBehavior().setWidth(i, columnWidth, columnWidth < 50 ? 0 : columnWidth);
+          columnModel.getBehavior().setWidth(i, columnWidth, (fixed || columnWidth < 50) ? 0 : columnWidth);
         }
         if (rColumn.getPreferredSize() && rColumn.getPreferredSize().getHeight() < 0) {
           columnModel.setColumnVisible(i, false);
