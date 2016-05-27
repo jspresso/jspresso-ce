@@ -23,6 +23,7 @@ import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -1939,11 +1940,23 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
                                      IView<RComponent> view) {
     ActionMap actionMap = viewDescriptor.getActionMap();
     ActionMap secondaryActionMap = viewDescriptor.getSecondaryActionMap();
+    RComponent peer = view.getPeer();
     if (actionMap != null && actionHandler.isAccessGranted(actionMap)) {
       try {
         actionHandler.pushToSecurityContext(actionMap);
-        List<RActionList> viewActionLists = createViewToolBar(actionMap, view, actionHandler, locale);
-        view.getPeer().setActionLists(viewActionLists.toArray(new RActionList[viewActionLists.size()]));
+        // There might be default actions like LOV
+        RActionList[] defaultActionLists = peer.getActionLists();
+        List<RActionList> declaredActionLists = createViewToolBar(actionMap, view, actionHandler, locale);
+        if (defaultActionLists != null || declaredActionLists != null) {
+          List<RActionList> viewActionLists = new ArrayList<>();
+          if (defaultActionLists != null) {
+            viewActionLists.addAll(Arrays.asList(defaultActionLists));
+          }
+          if (declaredActionLists != null) {
+            viewActionLists.addAll(declaredActionLists);
+          }
+          peer.setActionLists(viewActionLists.toArray(new RActionList[viewActionLists.size()]));
+        }
       } finally {
         actionHandler.restoreLastSecurityContextSnapshot();
       }
@@ -1951,8 +1964,21 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     if (secondaryActionMap != null && actionHandler.isAccessGranted(secondaryActionMap)) {
       try {
         actionHandler.pushToSecurityContext(secondaryActionMap);
-        List<RActionList> viewActionLists = createViewToolBar(secondaryActionMap, view, actionHandler, locale);
-        view.getPeer().setSecondaryActionLists(viewActionLists.toArray(new RActionList[viewActionLists.size()]));
+        // There might be default actions like LOV
+        RActionList[] defaultSecondaryActionLists = peer.getSecondaryActionLists();
+        List<RActionList> declaredSecondaryActionLists = createViewToolBar(secondaryActionMap, view, actionHandler,
+            locale);
+        if (defaultSecondaryActionLists != null || declaredSecondaryActionLists != null) {
+          List<RActionList> viewSecondaryActionLists = new ArrayList<>();
+          if (defaultSecondaryActionLists != null) {
+            viewSecondaryActionLists.addAll(Arrays.asList(defaultSecondaryActionLists));
+          }
+          if (declaredSecondaryActionLists != null) {
+            viewSecondaryActionLists.addAll(declaredSecondaryActionLists);
+          }
+          peer.setSecondaryActionLists(
+              viewSecondaryActionLists.toArray(new RActionList[viewSecondaryActionLists.size()]));
+        }
       } finally {
         actionHandler.restoreLastSecurityContextSnapshot();
       }
