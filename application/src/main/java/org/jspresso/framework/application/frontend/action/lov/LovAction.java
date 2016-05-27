@@ -161,9 +161,15 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
       if (parentModelConnector instanceof IModelProvider) {
         masterComponent = ((IModelProvider) parentModelConnector).getModel();
       } else if (parentModelConnector instanceof ICollectionConnector) {
-        int collectionIndex = ((ICollectionConnector) viewConnector.getParentConnector()).getSelectedIndices()[0];
-        masterComponent = ((ICollectionConnector) parentModelConnector).getChildConnector(collectionIndex)
-                                                                       .getConnectorValue();
+        IValueConnector parentCollectionConnector = viewConnector;
+        while (!(parentCollectionConnector instanceof ICollectionConnector) && parentCollectionConnector.getParentConnector() != null) {
+          parentCollectionConnector = parentCollectionConnector.getParentConnector();
+        }
+        if (parentCollectionConnector != null && parentCollectionConnector instanceof ICollectionConnector) {
+          int collectionIndex = ((ICollectionConnector) parentCollectionConnector).getSelectedIndices()[0];
+          masterComponent = ((ICollectionConnector) parentModelConnector).getChildConnector(collectionIndex)
+                                                                         .getConnectorValue();
+        }
       }
     } else {
       masterComponent = getSelectedModel(context);
