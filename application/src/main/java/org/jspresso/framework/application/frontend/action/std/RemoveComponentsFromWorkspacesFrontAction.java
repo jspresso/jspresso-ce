@@ -58,17 +58,37 @@ public class RemoveComponentsFromWorkspacesFrontAction<E, F, G> extends Frontend
       Workspace workspace = controller.getWorkspace(wsName);
       if (workspace != null) {
         for (Module module : workspace.getModules()) {
-          cleanComponentsFromModules(module, componentsToDelete);
+          
+          Collection<Module> subModulesToRemove = cleanComponentsFromModules(module, componentsToDelete);
+          if (!subModulesToRemove.isEmpty()) {
+            module.removeSubModules(subModulesToRemove);
+            for (Module m : subModulesToRemove) {
+              ((BeanModule) m).setModuleObject(null);
+            }
+          }
+          
+          if (module instanceof BeanCollectionModule) {
+            List<?> moduleObjects = ((BeanCollectionModule) module).getModuleObjects();
+            if (moduleObjects != null) {
+              for (Object componentToDelete : componentsToDelete) {
+                if (moduleObjects.contains(componentToDelete)) {
+                  ((BeanCollectionModule) module).removeFromModuleObjects(componentToDelete);
+                }
+              }
+            }
+          }
         }
       }
     }
   }
 
   private Collection<Module> cleanComponentsFromModules(Module module, Collection<?> componentsToDelete) {
-    Collection<Module> modulesToRemove = new ArrayList<Module>();
+   
+    Collection<Module> modulesToRemove = new ArrayList<>();
     List<Module> subModules = module.getSubModules();
     if (subModules != null) {
       for (Module subModule : subModules) {
+        
         if (subModule instanceof BeanModule && componentsToDelete.contains(
             ((BeanModule) subModule).getModuleObject())) {
           ((BeanModule) subModule).setModuleObject(null);
