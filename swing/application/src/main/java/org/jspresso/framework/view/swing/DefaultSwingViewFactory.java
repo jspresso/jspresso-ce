@@ -2766,7 +2766,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       if (modelDescriptor instanceof IStringPropertyDescriptor || modelDescriptor instanceof IDatePropertyDescriptor
           || modelDescriptor instanceof INumberPropertyDescriptor || modelDescriptor instanceof ITimePropertyDescriptor
           || modelDescriptor instanceof IEnumerationPropertyDescriptor
-          || modelDescriptor instanceof IBooleanPropertyDescriptor) {
+          || modelDescriptor instanceof IBooleanPropertyDescriptor
+          || modelDescriptor instanceof IReferencePropertyDescriptor) {
         asideActions = true;
         defaultRenderingOptions = ERenderingOptions.ICON;
       }
