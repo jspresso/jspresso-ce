@@ -82,7 +82,7 @@ qx.Class.define("org.jspresso.framework.view.qx.ViewRepeater", {
             this.__remoteRepeater.getState().setLeadingIndex(-1);
             this.__remoteRepeater.getState().setSelectedIndices([]);
           }
-        }, this);
+        }, this, /*use capture true so that it gets triggered before everything else*/ true);
         if (this.__remoteRepeater.getRowAction()) {
           newSection.addListener("dbltap", function (evt) {
             this.__actionHandler.execute(this.__remoteRepeater.getRowAction());

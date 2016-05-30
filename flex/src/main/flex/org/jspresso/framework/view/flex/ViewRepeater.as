@@ -100,7 +100,7 @@ public class ViewRepeater {
           (_remoteRepeater.state as RemoteCompositeValueState).leadingIndex = -1;
           (_remoteRepeater.state as RemoteCompositeValueState).selectedIndices = [];
         }
-      });
+      }, /*use capture true so that it gets triggered before everything else*/ true);
       if (_remoteRepeater.rowAction) {
         newSection.doubleClickEnabled = true;
         newSection.addEventListener(MouseEvent.DOUBLE_CLICK, function (evt:MouseEvent):void {
