@@ -94,7 +94,6 @@ public class JRepeater {
     this.locale = locale;
     this.collectionConnector = connector;
     this.rowAction = rowAction;
-    //rebindDataProvider();
     collectionConnector.addValueChangeListener(new IValueChangeListener() {
       @Override
       public void valueChange(ValueChangeEvent evt) {
@@ -103,7 +102,7 @@ public class JRepeater {
     });
     selectionListener = new MouseAdapter() {
       @Override
-      public void mouseClicked(MouseEvent e) {
+      public void mousePressed(MouseEvent e) {
         if (e.getClickCount() > 1) {
           childDblClicked(e);
         } else {
