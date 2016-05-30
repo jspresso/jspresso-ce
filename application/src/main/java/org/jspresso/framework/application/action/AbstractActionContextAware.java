@@ -18,7 +18,9 @@
  */
 package org.jspresso.framework.application.action;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -26,6 +28,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.IFrontendController;
 import org.jspresso.framework.application.model.Module;
@@ -33,7 +36,13 @@ import org.jspresso.framework.binding.ConnectorHelper;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.model.component.IComponent;
+import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.model.descriptor.IModelDescriptorAware;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
+import org.jspresso.framework.util.accessor.ICollectionAccessor;
 import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
@@ -326,16 +335,83 @@ public abstract class AbstractActionContextAware {
   protected int[] getSelectedIndices(int[] viewPath, Map<String, Object> context) {
     int[] selectedIndices = null;
     IValueConnector selectableConnector = getViewConnector(viewPath, context);
+    
     while (selectableConnector != null
         && !(selectableConnector instanceof ISelectable)) {
       selectableConnector = selectableConnector.getParentConnector();
     }
+    
     if (selectableConnector != null) {
       selectedIndices = ((ISelectable) selectableConnector)
           .getSelectedIndices();
     }
+    else {
+      
+      // Use model connector
+      IValueConnector modelConnector = getModelConnector(context);
+      Object master = modelConnector.getParentConnector().getConnectorValue();
+      if (master instanceof Collection<?>) {
+        return null;
+      }
+      
+      Class<?> targetContract;
+      if (master instanceof IComponent) {
+        targetContract = ((IComponent) master).getComponentContract();
+      } else {
+        targetContract = master.getClass();
+      }
+      
+      Class<?> elementComponentContract = getDetailElementDescriptor(context).getModelType();
+      if (elementComponentContract == null || Collection.class.isAssignableFrom(elementComponentContract)) {
+        return null;
+      }
+      
+      ICollectionAccessor collectionAccessor = getBackendController(context).getAccessorFactory().createCollectionPropertyAccessor(
+          modelConnector.getId(), targetContract, elementComponentContract);
+      if (collectionAccessor instanceof IModelDescriptorAware) {
+        ((IModelDescriptorAware) collectionAccessor).setModelDescriptor(getModelDescriptor(context));
+      }
+      
+      try {
+        Collection<?> existingCollection = collectionAccessor.getValue(master);
+        Object model = getModel(context);
+    
+        return new int[]{ Arrays.asList(existingCollection.toArray()).indexOf(model)};
+      } 
+      catch (IllegalAccessException | NoSuchMethodException ex) {
+        throw new ActionException(ex);
+      } 
+      catch (InvocationTargetException ex) {
+        if (ex.getCause() instanceof RuntimeException) {
+          throw (RuntimeException) ex.getCause();
+        }
+        throw new ActionException(ex.getCause());
+      }
+      
+    }
     return selectedIndices;
   }
+  
+  private IComponentDescriptor<?> getDetailElementDescriptor(Map<String, Object> context) {
+    IComponentDescriptor<?> elementDescriptor = null;
+    String collectionPropertyName = getModelDescriptor(context).getName();
+    Object master = getModelConnector(context).getModelProvider().getModel();
+    if (master instanceof IComponent) {
+      // Component type should be refined depending on concrete master. See property translations for instance.
+      IPropertyDescriptor propertyDescriptor =
+           getBackendController(context).getEntityFactory().getComponentDescriptor(
+            ((IComponent) master).getComponentContract()).getPropertyDescriptor(collectionPropertyName);
+      
+      if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) { 
+        elementDescriptor = ((ICollectionPropertyDescriptor<?>) propertyDescriptor).getReferencedDescriptor().getElementDescriptor();
+      }
+    } else {
+      elementDescriptor = ((ICollectionPropertyDescriptor<?>) getModelDescriptor(context)).getReferencedDescriptor()
+                                                                                          .getElementDescriptor();
+    }
+    return elementDescriptor;
+  }
+  
 
   /**
    * This is a versatile helper method that retrieves the selected model either

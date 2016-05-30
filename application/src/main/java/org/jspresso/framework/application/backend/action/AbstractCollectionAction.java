@@ -24,6 +24,7 @@ import java.util.Map;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
 
 /**
  * Base class for backend actions acting on collection models. This class is
@@ -56,9 +57,12 @@ public abstract class AbstractCollectionAction extends BackendAction {
    * {@inheritDoc}
    */
   @Override
-  protected ICollectionDescriptorProvider<?> getModelDescriptor(
-      Map<String, Object> context) {
-    return (ICollectionDescriptorProvider<?>) super.getModelDescriptor(context);
+  protected ICollectionDescriptorProvider<?> getModelDescriptor(Map<String, Object> context) {
+    IModelDescriptor modelDescriptor = super.getModelDescriptor(context);
+    if (modelDescriptor instanceof ICollectionDescriptorProvider<?>) {
+      return (ICollectionDescriptorProvider<?>) modelDescriptor;
+    }
+    return (ICollectionDescriptorProvider<?>) getModelConnector(context).getModelDescriptor();
   }
 
   /**
