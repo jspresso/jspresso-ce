@@ -1,5 +1,7 @@
 4.3
 ===
+- Rename all your sjs files from .sjs to .groovy and update your application.groovy content to reflect this change.
+
 - JasperReports plugin changed from codehaus to to alexnederlof
   (https://github.com/alexnederlof/Jasper-report-maven-plugin).
 
