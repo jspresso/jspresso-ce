@@ -51,6 +51,9 @@ import org.apache.maven.project.MavenProject;
     requiresDependencyResolution = ResolutionScope.COMPILE, threadSafe = true)
 public class SjsMojo extends AbstractMojo {
 
+  private static final String GROOVY_EXT = ".groovy";
+  private static final String SJSEXT = ".sjs";
+
   /**
    * The Maven project.
    */
@@ -66,7 +69,7 @@ public class SjsMojo extends AbstractMojo {
   /**
    * The name of the application groovy file that packs the application.
    */
-  @Parameter(defaultValue = "application.groovy", required = true)
+  @Parameter(defaultValue = "application.sjs", required = true)
   private String applicationFileName;
 
   /**
@@ -151,7 +154,15 @@ public class SjsMojo extends AbstractMojo {
     Binding binding = new Binding();
     binding.setVariable("project", project);
     binding.setVariable("fail", new FailClosure());
-    gse.run(applicationFileName, binding);
+    String refinedApplicationFileName = applicationFileName;
+    if (!new File(srcDir + File.separator + applicationFileName).exists()) {
+      if (applicationFileName.contains(SJSEXT)) {
+        refinedApplicationFileName = applicationFileName.replaceAll(SJSEXT, GROOVY_EXT);
+      } else if(applicationFileName.contains(GROOVY_EXT)) {
+        refinedApplicationFileName = applicationFileName.replaceAll(GROOVY_EXT, SJSEXT);
+      }
+    }
+    gse.run(refinedApplicationFileName, binding);
   }
 
   private boolean isChangeDetected() {
