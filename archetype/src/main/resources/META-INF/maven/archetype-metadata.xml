@@ -131,7 +131,7 @@
         <fileSet filtered="true" packaged="false" encoding="UTF-8">
           <directory>src/main/dsl</directory>
           <includes>
-            <include>*.groovy</include>
+            <include>*.sjs</include>
           </includes>
         </fileSet>
       </fileSets>
