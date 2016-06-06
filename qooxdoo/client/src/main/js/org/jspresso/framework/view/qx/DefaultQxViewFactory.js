@@ -2039,6 +2039,14 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       }
     },
 
+    __isFocusedCellWritable: function(table) {
+      var tableModel = table.getTableModel();
+      var row = table.getFocusedRow();
+      var column = table.getFocusedColumn();
+      var cellState = tableModel.getRowData(row).getChildren().getItem(column + 1);
+      return tableModel.isColumnEditable(table.getFocusedColumn()) && cellState.isWritable();
+    },
+
     /**
      * @return {qx.ui.core.Widget}
      * @param remoteTable {org.jspresso.framework.gui.remote.RTable}
@@ -2077,20 +2085,20 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var paneScroller = table.getPaneScroller(0);
       var focusIndicator = paneScroller.getChildControl("focus-indicator");
       focusIndicator.addListener("pointerdown", function (e) {
-        if (!table.isEditing()) {
+        if (!this.__isFocusedCellWritable(table)) {
           focusIndicator.setZIndex(0);
         }
-      }, this);
+      }, this, true);
       paneScroller.addListener("pointerdown", function (e) {
-        if (!table.isEditing()) {
+        if (!this.__isFocusedCellWritable(table)) {
           focusIndicator.setZIndex(0);
         }
-      }, this);
+      }, this, true);
       paneScroller.addListener("pointerup", function (e) {
-        if (!table.isEditing()) {
+        if (!this.__isFocusedCellWritable(table)) {
           focusIndicator.setZIndex(1000);
         }
-      }, this);
+      }, this, true);
       table.setStatusBarVisible(false);
       table.highlightFocusedRow(false);
       table.setResetSelectionOnHeaderTap(false);
