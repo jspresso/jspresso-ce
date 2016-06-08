@@ -50,6 +50,7 @@
         <value>${packageInPathFormat}/backend/dsl-backend.xml</value>
         <value>${packageInPathFormat}/backend/backend.xml</value>
         <value>${packageInPathFormat}/core-config.xml</value>
+        <value>${packageInPathFormat}/config.xml</value>
       </list>
     </constructor-arg>
   </bean>
