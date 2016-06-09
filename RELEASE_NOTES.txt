@@ -22,7 +22,7 @@
         </configuration>
       </plugin>
 
-- Flex has been upgraded to the latest 4.14.1 version
+- Flex has been upgraded to the latest 4.15 version
 
 - We have moved to Apache BlazeDS implementation, so replace all blazeds dependencies sections in your webapp modules
   by the following one :
