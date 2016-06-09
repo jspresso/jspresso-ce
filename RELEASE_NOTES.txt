@@ -22,7 +22,31 @@
         </configuration>
       </plugin>
 
-- Flex has been upgraded to the latest 4.15 version
+- Flex has been upgraded to the latest 4.15 version. If necessary in your project, change all dependencies :
+
+  from
+      <dependency>
+        <groupId>org.apache.flex.framework</groupId>
+        <artifactId>flex-framework</artifactId>
+        <type>pom</type>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.flex.framework</groupId>
+        <artifactId>framework</artifactId>
+        <type>swc</type>
+        <scope>external</scope>
+      </dependency>
+  to
+      <dependency>
+        <groupId>org.apache.flex</groupId>
+        <artifactId>framework</artifactId>
+        <type>pom</type>
+      </dependency>
+      <dependency>
+        <groupId>com.adobe.flash</groupId>
+        <artifactId>framework</artifactId>
+        <type>pom</type>
+      </dependency>
 
 - We have moved to Apache BlazeDS implementation, so replace all blazeds dependencies sections in your webapp modules
   by the following one :
