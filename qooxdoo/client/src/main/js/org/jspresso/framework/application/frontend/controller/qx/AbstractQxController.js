@@ -10,6 +10,8 @@
  * PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details. You should have received a copy of the GNU Lesser General Public
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
+
+ * @asset(org/jspresso/framework/*.png)
  */
 qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.AbstractQxController", {
   extend: qx.core.Object,

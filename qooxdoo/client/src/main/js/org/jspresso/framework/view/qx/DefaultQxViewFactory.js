@@ -1997,6 +1997,13 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           actionField.add(component, {
             flex: 1
           });
+
+          // propagate focus
+          actionField.addListener("focus", function (e) {
+            if (component.isFocusable()) {
+              component.focus();
+            }
+          });
         }
         for (var i = 0; i < remoteComponent.getActionLists().length; i++) {
           var actionList = remoteComponent.getActionLists()[i];
@@ -2677,7 +2684,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       });
 
       var resetButton = new qx.ui.form.Button();
-      resetButton.setIcon("org/jspresso/framework/dialog-close.png");
+      resetButton.setIcon("org/jspresso/framework/reset-small.png");
       if (!remoteColorField.getResetEnabled()) {
         resetButton.setEnabled(false);
       }
@@ -2690,7 +2697,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 
       // colorWidget.setWidth(resetButton.getWidth());
       this._sizeMaxComponentWidth(colorWidget, remoteColorField);
-      colorWidget.setHeight(22/* resetButton.getHeight() */);
       colorWidget.setAllowStretchX(true, true);
 
       colorPopup.addListener("changeValue", function (e) {
@@ -2715,6 +2721,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         flex: 1
       });
       colorField.add(resetButton);
+
+      colorWidget.setHeight(24);
+      resetButton.setWidth(24);
+      resetButton.setHeight(24);
 
       return colorField;
     },
