@@ -20,6 +20,7 @@
     <junit.version>4.12</junit.version>
     <mockito.version>1.10.19</mockito.version>
     <flex.version>4.15.0</flex.version>
+    <flex-fontkit.version>1.0</flex-fontkit.version>
     <playerglobal.version>20.0</playerglobal.version>
     <flexunit.version>4.1.0</flexunit.version>
     <blazeds.version>4.7.2</blazeds.version>
@@ -1486,6 +1487,11 @@
               <artifactId>compiler</artifactId>
               <version>${flex.version}</version>
               <type>pom</type>
+            </dependency>
+            <dependency>
+              <groupId>com.adobe</groupId>
+              <artifactId>fontkit</artifactId>
+              <version>${flex-fontkit.version}</version>
             </dependency>
           </dependencies>
         </plugin>
