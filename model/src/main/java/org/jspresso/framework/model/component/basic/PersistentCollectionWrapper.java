@@ -21,7 +21,9 @@ package org.jspresso.framework.model.component.basic;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,6 +40,10 @@ import org.jspresso.framework.util.accessor.IListAccessor;
  * @author Vincent Vandenschrick
  */
 public class PersistentCollectionWrapper<E> implements InvocationHandler {
+
+  private static final HashSet<String> READER_METHODS = new HashSet<>(Arrays
+      .asList("iterator", "toArray", "size", "listIterator", "isEmpty", "contains", "containsAll", "equals", "hashcode",
+          "get", "indexOf", "lastIndexOf"));
 
   private IComponent         holder;
   private Class<? extends E> elementType;
@@ -120,7 +126,10 @@ public class PersistentCollectionWrapper<E> implements InvocationHandler {
           throw new ComponentException("Unsupported collection type " + wrappedCollection.getClass().getName());
         }
         Object returnValue = method.invoke(result, args);
-        wrappedAccessor.setValue(holder, result);
+        boolean isReaderMethod = READER_METHODS.contains(methodName);
+        if (!isReaderMethod && !result.equals(wrappedCollection)) {
+          wrappedAccessor.setValue(holder, result);
+        }
         return returnValue;
     }
     return method.invoke(wrappedCollection, args);
