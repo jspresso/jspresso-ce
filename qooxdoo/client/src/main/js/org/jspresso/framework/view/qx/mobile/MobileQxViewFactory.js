@@ -240,6 +240,22 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
         toolBar.add(actionComponent);
       }
+      toolBar.addListener("appear", function (e) {
+        qx.event.Timer.once(function () {
+          var maxH = 0;
+          var children = toolBar.getChildren();
+          for (var childI = 0; childI < children.length; childI++) {
+            if (children[childI].getContainerElement().clientHeight > maxH) {
+              maxH = children[childI].getContainerElement().offsetHeight;
+            }
+          }
+          if (maxH > 0) {
+            for (childI = 0; childI < children.length; childI++) {
+              children[childI]._setStyle("height", maxH + "px");
+            }
+          }
+        }, this, 50);
+      }, this);
       return toolBar;
     },
 
@@ -894,6 +910,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         button.setShow("both");
       } else if (label) {
         button.setShow("label");
+        button.getLabelWidget().setWrap(true);
       } else {
         //button.setGap(0);
         //button.removeCssClass("gap");
