@@ -46,7 +46,6 @@ import org.slf4j.LoggerFactory;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.gui.Icon;
-import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.http.HttpRequestHolder;
 import org.jspresso.framework.util.image.ImageHelper;
 import org.jspresso.framework.util.io.IoHelper;
@@ -321,6 +320,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
           String resourceId = ResourceManager.getInstance().register(
               uploadResource);
           out.print(" id=\"" + resourceId);
+          // Sometimes prevents the browser to parse back the result
           // out.print("\" name=\"" + HtmlHelper.escapeForHTML(item.getName()));
           out.println("\" />");
         }
