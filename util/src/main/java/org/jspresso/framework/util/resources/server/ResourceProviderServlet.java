@@ -321,7 +321,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
           String resourceId = ResourceManager.getInstance().register(
               uploadResource);
           out.print(" id=\"" + resourceId);
-          out.print("\" name=\"" + HtmlHelper.escapeForHTML(item.getName()));
+          // out.print("\" name=\"" + HtmlHelper.escapeForHTML(item.getName()));
           out.println("\" />");
         }
       }
