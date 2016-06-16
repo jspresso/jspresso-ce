@@ -89,6 +89,7 @@ import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.gui.EClientType;
+import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.http.CookiePreferencesStore;
 import org.jspresso.framework.util.http.HttpRequestHolder;
 import org.jspresso.framework.util.http.RequestParamsHttpFilter;
@@ -382,14 +383,19 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
         throw new CommandException(getTranslation("session.unsynced", getApplicationSession().getLocale()));
       }
       if (command instanceof RemoteValueCommand) {
+        RemoteValueCommand valueCommand = (RemoteValueCommand) command;
+        Object commandValue = valueCommand.getValue();
+        Object originalCommandValue = commandValue;
+        if (commandValue instanceof String) {
+          commandValue = HtmlHelper.sanitizeHtml((String) commandValue);
+        }
         try {
           if (targetPeer instanceof IFormattedValueConnector) {
-            ((IFormattedValueConnector) targetPeer).setFormattedValue(((RemoteValueCommand) command).getValue());
+            ((IFormattedValueConnector) targetPeer).setFormattedValue(commandValue);
           } else if (targetPeer instanceof IRemoteStateOwner) {
             IRemoteStateOwner remoteStateOwner = (IRemoteStateOwner) targetPeer;
-            RemoteValueCommand valueCommand = (RemoteValueCommand) command;
-            remoteStateOwner.setValueFromState(valueCommand.getValue());
-            if (!ObjectUtils.equals(remoteStateOwner.getState().getValue(), valueCommand.getValue())) {
+            remoteStateOwner.setValueFromState(commandValue);
+            if (!ObjectUtils.equals(remoteStateOwner.getState().getValue(), originalCommandValue)) {
               // There are rare cases (e.g. due to interceptSetter that resets the command value to the connector
               // actual state), when the connector and the state are not synced.
               valueCommand.setValue(remoteStateOwner.getState().getValue());
@@ -397,9 +403,8 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
             }
           } else if (targetPeer instanceof IValueConnector) {
             IValueConnector connector = (IValueConnector) targetPeer;
-            RemoteValueCommand valueCommand = (RemoteValueCommand) command;
-            connector.setConnectorValue(valueCommand.getValue());
-            if (!ObjectUtils.equals(connector.getConnectorValue(), valueCommand.getValue())) {
+            connector.setConnectorValue(commandValue);
+            if (!ObjectUtils.equals(connector.getConnectorValue(), originalCommandValue)) {
               // There are rare cases (e.g. due to interceptSetter that resets the command value to the connector
               // actual state), when the connector and the state are not synced.
               valueCommand.setValue(connector.getConnectorValue());
@@ -426,7 +431,7 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
         } catch (ConnectorInputException ex) {
           if (targetPeer instanceof IRemoteStateOwner) {
             RemoteValueState state = ((IRemoteStateOwner) targetPeer).getState();
-            if (!ObjectUtils.equals(((RemoteValueCommand) command).getValue(), state.getValue())) {
+            if (!ObjectUtils.equals(commandValue, state.getValue())) {
 
               RemoteValueCommand rollbackCommand = new RemoteValueCommand();
               rollbackCommand.setTargetPeerGuid(state.getGuid());

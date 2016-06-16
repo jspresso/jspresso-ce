@@ -85,6 +85,7 @@
     <openmap.version>5.0.3</openmap.version>
     <javaxt.version>1.6.2</javaxt.version>
     <jta.version>1.1</jta.version>
+    <owasp-java-html-sanitizer.version>20160526.1</owasp-java-html-sanitizer.version>
 
     <!-- Plugins versions common to Jspresso root pom-->
     <compiler-plugin.version>3.3</compiler-plugin.version>
@@ -1051,6 +1052,11 @@
         <groupId>javaxt</groupId>
         <artifactId>javaxt-core</artifactId>
         <version>${javaxt.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
+        <artifactId>owasp-java-html-sanitizer</artifactId>
+        <version>${owasp-java-html-sanitizer.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

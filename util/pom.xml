@@ -73,6 +73,10 @@
       <artifactId>javaxt-core</artifactId>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
+      <artifactId>owasp-java-html-sanitizer</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <resources>

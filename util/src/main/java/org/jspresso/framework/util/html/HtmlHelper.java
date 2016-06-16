@@ -21,6 +21,9 @@ package org.jspresso.framework.util.html;
 import java.io.StringWriter;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.owasp.html.HtmlPolicyBuilder;
+import org.owasp.html.PolicyFactory;
+import org.owasp.html.Sanitizers;
 
 /**
  * This is a simple helper class to be able to cope with html.
@@ -32,12 +35,17 @@ public final class HtmlHelper {
   /**
    * {@code HTML_END}.
    */
-  public static final String HTML_END   = "</HTML>";
+  public static final String HTML_END = "</HTML>";
 
   /**
    * {@code HTML_START}.
    */
   public static final String HTML_START = "<HTML>";
+
+  private static final PolicyFactory JSPRESSO_SANITIZING_POLICY = new HtmlPolicyBuilder().allowElements("html")
+                                                                                         .toFactory().and(
+          Sanitizers.BLOCKS).and(Sanitizers.FORMATTING).and(Sanitizers.IMAGES).and(Sanitizers.LINKS).and(
+          Sanitizers.STYLES).and(Sanitizers.TABLES);
 
   private HtmlHelper() {
     // private constructor for helper class.
@@ -47,7 +55,7 @@ public final class HtmlHelper {
    * Transforms a string to html and emphasis.
    *
    * @param message
-   *          the message to transform.
+   *     the message to transform.
    * @return the html emphasised string.
    */
   public static String emphasis(String message) {
@@ -63,7 +71,7 @@ public final class HtmlHelper {
    * {@code escapeSpaces=true}.
    *
    * @param text
-   *          the text to escape.
+   *     the text to escape.
    * @return the escaped HTML text.
    */
   public static String escapeForHTML(String text) {
@@ -74,9 +82,9 @@ public final class HtmlHelper {
    * Escapes special characters for HTML.
    *
    * @param text
-   *          the text to escape.
+   *     the text to escape.
    * @param escapeSpaces
-   *          should we also escape spaces using &'nbsp'; entity ?
+   *     should we also escape spaces using &'nbsp'; entity ?
    * @return the escaped HTML text.
    */
   public static String escapeForHTML(String text, boolean escapeSpaces) {
@@ -127,7 +135,7 @@ public final class HtmlHelper {
    * Is this message HTML code.
    *
    * @param msg
-   *          the message to test.
+   *     the message to test.
    * @return true if it contains &lt;HTML&gt;
    */
   public static boolean isHtml(String msg) {
@@ -141,7 +149,7 @@ public final class HtmlHelper {
    * Keeps the text pre-formatted.
    *
    * @param message
-   *          the message to transform.
+   *     the message to transform.
    * @return the html pre-formatted text.
    */
   public static String preformat(String message) {
@@ -155,7 +163,7 @@ public final class HtmlHelper {
    * Surrounds with html tags.
    *
    * @param message
-   *          the message to transform.
+   *     the message to transform.
    * @return the html pre-formatted text.
    */
   public static String toHtml(String message) {
@@ -163,5 +171,16 @@ public final class HtmlHelper {
       return HTML_START + message + HTML_END;
     }
     return null;
+  }
+
+  /**
+   * Sanitize html so that it can't be used to inject some malicious javascript code for client XSS attack.
+   *
+   * @param html
+   *     the html
+   * @return the string
+   */
+  public static String sanitizeHtml(String html) {
+    return JSPRESSO_SANITIZING_POLICY.sanitize(html);
   }
 }
