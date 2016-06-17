@@ -47,7 +47,7 @@ public class ViewRepeater {
   private var _dataProvider:ListCollectionView;
 
   private var _componentTank:Object;
-  private var _forceRebind;
+  private var _forceRebind:Boolean;
 
   public function ViewRepeater(container:Container, remoteRepeater:RRepeater, viewFactory:DefaultFlexViewFactory,
                                actionHandler:IActionHandler) {
