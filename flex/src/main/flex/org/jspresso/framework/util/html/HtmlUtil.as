@@ -288,7 +288,7 @@ public class HtmlUtil {
 
   public static function bindActionToHtmlContent(htmlContent:String, action:RAction):String {
     if (htmlContent && action) {
-      htmlContent = htmlContent.replace(/executeAction\(["']([^\)]*)["']\)/g,
+      htmlContent = htmlContent.replace(/executeAction\(["']?([^\)]*)["']?\)/g,
                                         "event:$1");
     }
     return htmlContent;
