@@ -126,7 +126,7 @@
     <groovy.version>2.4.5</groovy.version>
     <groovy-eclipse-compiler.version>2.9.2-01</groovy-eclipse-compiler.version>
     <groovy-eclipse-batch.version>2.4.3-01</groovy-eclipse-batch.version>
-    <jetty-plugin.version>9.3.6.v20151106</jetty-plugin.version>
+    <jetty-plugin.version>9.2.17.v20160517</jetty-plugin.version>
     <appassembler-plugin.version>1.10</appassembler-plugin.version>
   </properties>
 
@@ -1507,9 +1507,16 @@
           <version>${exec-plugin.version}</version>
         </plugin>
         <plugin>
-          <groupId>org.mortbay.jetty</groupId>
+          <groupId>org.eclipse.jetty</groupId>
           <artifactId>jetty-maven-plugin</artifactId>
           <version>${jetty-plugin.version}</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.slf4j</groupId>
+              <artifactId>slf4j-api</artifactId>
+              <version>${slf4j.version}</version>
+            </dependency>
+          </dependencies>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>

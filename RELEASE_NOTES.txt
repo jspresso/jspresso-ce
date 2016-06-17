@@ -1,5 +1,11 @@
 4.3
 ===
+- Jetty maven plugin changed its groupId. In the root pom.xml of your project, replace :
+
+    <groupId>org.mortbay.jetty</groupId>
+  by
+    <groupId>org.eclipse.jetty</groupId>
+
 - Rename all your sjs files from .sjs to .groovy and update your application.groovy content to reflect this change.
 
 - JasperReports plugin changed from codehaus to to alexnederlof
