@@ -768,6 +768,7 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
       ex.printStackTrace(new PrintWriter(stringWriter));
       ((RemoteErrorMessageCommand) errorMessageCommand).setDetailMessage(stringWriter.toString());
     }
+    stop();
     registerCommand(errorMessageCommand);
     return true;
   }
