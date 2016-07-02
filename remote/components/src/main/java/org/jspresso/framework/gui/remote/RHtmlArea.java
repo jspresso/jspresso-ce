@@ -23,7 +23,7 @@ package org.jspresso.framework.gui.remote;
  * 
  * @author Vincent Vandenschrick
  */
-public class RHtmlArea extends RTextComponent {
+public class RHtmlArea extends RTextComponent implements RActionable {
 
   private static final long serialVersionUID = 5482012658466216934L;
 
