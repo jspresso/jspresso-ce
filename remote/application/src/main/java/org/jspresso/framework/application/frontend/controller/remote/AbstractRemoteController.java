@@ -755,8 +755,10 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
       StringWriter stringWriter = new StringWriter();
       ex.printStackTrace(new PrintWriter(stringWriter));
       ((RemoteErrorMessageCommand) errorMessageCommand).setDetailMessage(stringWriter.toString());
+      // This is a very unexpected exception. Too risky to continue since there could be de-synchronizations
+      // between client and server.
+      stop();
     }
-    stop();
     registerCommand(errorMessageCommand);
     return true;
   }
