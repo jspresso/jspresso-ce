@@ -2035,9 +2035,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     __isFocusedCellWritable: function(table) {
       var tableModel = table.getTableModel();
       var row = table.getFocusedRow();
-      var column = table.getFocusedColumn();
-      var cellState = tableModel.getRowData(row).getChildren().getItem(column + 1);
-      return tableModel.isColumnEditable(table.getFocusedColumn()) && cellState.isWritable();
+      if (row != null && row >= 0) {
+        var column = table.getFocusedColumn();
+        var cellState = tableModel.getRowData(row).getChildren().getItem(column + 1);
+        return tableModel.isColumnEditable(table.getFocusedColumn()) && cellState.isWritable();
+      }
+      return false;
     },
 
     /**
