@@ -2101,6 +2101,10 @@ public class DefaultFlexViewFactory {
           } else {
             bottomHeight = rightBottom.measuredHeight;
           }
+          if (topHeight == 0 && bottomHeight == 0) {
+            topHeight = 100;
+            bottomHeight = 100;
+          }
           if ((topHeight + bottomHeight) > splitContainer.height) {
             leftTop.percentHeight = (topHeight * 100.0) / (topHeight + bottomHeight);
             rightBottom.percentHeight = (bottomHeight * 100.0) / (topHeight + bottomHeight);
@@ -2117,6 +2121,10 @@ public class DefaultFlexViewFactory {
             rightWidth = rightBottom.width;
           } else {
             rightWidth = rightBottom.measuredWidth;
+          }
+          if (leftWidth == 0 && rightWidth == 0) {
+            leftWidth = 100;
+            rightWidth = 100;
           }
           if ((leftWidth + rightWidth) > splitContainer.width) {
             leftTop.percentWidth = (leftWidth * 100.0) / (leftWidth + rightWidth);
@@ -2520,7 +2528,7 @@ public class DefaultFlexViewFactory {
 
     return scroller;
   }
-  
+
   public function addRepeated(repeater:ViewRepeater, newSections:Array):void {
     repeater.addRepeated(newSections);
   }
