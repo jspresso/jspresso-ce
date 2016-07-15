@@ -2284,6 +2284,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       } else {
         selectionModel.setSelectionMode(qx.ui.table.selection.Model.MULTIPLE_INTERVAL_SELECTION);
       }
+      // When sorting is done locally, selection must be re-synched
+      if (!remoteTable.getSortingAction()) {
+        tableModel.addListener("sorted", function (e) {
+          state.fireDataEvent("changeSelectedIndices", state.getSelectedIndices());
+        });
+      }
       selectionModel.addListener("changeSelection", function (e) {
         var leadingIndex = tableModel.viewIndexToModelIndex(selectionModel.getLeadSelectionIndex());
         var selectedRanges = selectionModel.getSelectedRanges();
