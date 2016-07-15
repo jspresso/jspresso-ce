@@ -181,6 +181,7 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel", {
           this.__sortedRows.sort(comparator);
         }
       }
+      this.fireDataEvent("sorted", [columnIndex, ascending]);
       this.fireEvent("metaDataChanged");
     },
 
@@ -199,6 +200,7 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel", {
         this.__sortColumnIndex = -1;
         this.__sortAscending = false;
         this.__sortedRows = null;
+        this.fireDataEvent("sorted", null);
         this.fireEvent("metaDataChanged");
       }
     },
