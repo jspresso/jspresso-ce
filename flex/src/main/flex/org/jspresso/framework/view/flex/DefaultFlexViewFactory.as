@@ -3328,7 +3328,11 @@ public class DefaultFlexViewFactory {
       } else {
         currentAlpha = "FF";
       }
-      remoteState.value = "0x" + currentAlpha + (event.currentTarget as ColorPicker).selectedColor.toString(16);
+      var colorAsString:String = (event.currentTarget as ColorPicker).selectedColor.toString(16);
+      while (colorAsString.length < 6) {
+        colorAsString = "0" + colorAsString;
+      }
+      remoteState.value = "0x" + currentAlpha + colorAsString;
     };
     colorPicker.addEventListener(ColorPickerEvent.CHANGE, updateModel);
   }
