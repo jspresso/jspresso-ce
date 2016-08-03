@@ -269,10 +269,12 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
                         Criterion crit = Restrictions.isNull(prefixedProperty);
                         if (negate) {
                           crit = Restrictions.not(crit);
+                          // there might be other restrictions
+                          // digDeeper = false;
+                        } else {
+                          digDeeper = true;
                         }
                         completeCriteria(currentCriteria, crit);
-                        // there might be other restrictions
-                        // digDeeper = false;
                       }
                     }
                   }
