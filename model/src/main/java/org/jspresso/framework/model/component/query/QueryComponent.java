@@ -211,7 +211,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
       IComponentDescriptor<?> referencedDescriptor = ((IReferencePropertyDescriptor<?>) propertyDescriptor)
           .getReferencedDescriptor();
       if (referencedDescriptor.isEntity()) {
-        if (!(value instanceof IQueryComponent)) {
+        if (!(value instanceof IQueryComponent) && !IQueryComponent.NULL_VAL.equals(value)) {
           String tsProp = referencedDescriptor.getToStringProperty();
           String acProp = referencedDescriptor.getAutoCompleteProperty();
           return buildNestedQueryComponent(key, value, tsProp, Collections.singletonList(acProp));
