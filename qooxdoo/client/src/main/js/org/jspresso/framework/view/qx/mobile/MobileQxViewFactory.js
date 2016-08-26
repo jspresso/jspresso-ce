@@ -1850,7 +1850,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @param remoteRepeater {org.jspresso.framework.gui.remote.mobile.RMobileList}
      */
     _createRepeater: function (remoteRepeater) {
-      var repeaterContainer = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox(4));
+      var repeaterContainer = new org.jspresso.framework.view.qx.mobile.RepeaterContainer(remoteRepeater.getState());
       if (remoteRepeater.getRowAction()) {
         this._getRemotePeerRegistry().register(remoteRepeater.getRowAction())
       }
@@ -1858,7 +1858,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           this._getActionHandler());
       repeater.setDataProvider(remoteRepeater.getState().getChildren());
       remoteRepeater.assignPeer(repeater);
-      
+
       return repeaterContainer;
     },
 

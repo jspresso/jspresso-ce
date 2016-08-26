@@ -18,7 +18,7 @@
  */
 package org.jspresso.framework.view.descriptor.mobile;
 
-import org.jspresso.framework.view.descriptor.basic.AbstractListViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.AbstractRepeaterViewDescriptor;
 
 /**
  * This descriptor is used to implement a repeater view. A repeater view displays a
@@ -26,7 +26,7 @@ import org.jspresso.framework.view.descriptor.basic.AbstractListViewDescriptor;
  *
  * @author Vincent Vandenschrick
  */
-public class MobileRepeaterViewDescriptor extends AbstractListViewDescriptor implements IMobileViewDescriptor {
+public class MobileRepeaterViewDescriptor extends AbstractRepeaterViewDescriptor implements IMobileViewDescriptor {
 
   // Empty as of now.
 }
