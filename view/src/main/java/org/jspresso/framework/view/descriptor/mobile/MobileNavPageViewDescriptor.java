@@ -28,6 +28,7 @@ import org.jspresso.framework.view.ViewException;
 import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptorProvider;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
+import org.jspresso.framework.view.descriptor.IRepeaterViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicCollectionViewDescriptor;
@@ -95,7 +96,8 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
    */
   public void setSelectionViewDescriptor(IViewDescriptor selectionViewDescriptor) {
     if (selectionViewDescriptor instanceof IListViewDescriptor
-        || selectionViewDescriptor instanceof ITreeViewDescriptor) {
+        || selectionViewDescriptor instanceof ITreeViewDescriptor
+        || selectionViewDescriptor instanceof IRepeaterViewDescriptor) {
       this.selectionViewDescriptor = selectionViewDescriptor;
     } else {
       throw new IllegalArgumentException("Only list or tree is supported as selection view.");
