@@ -60,25 +60,14 @@ public class MobileLovAction<E, F, G> extends LovAction<E, F, G> {
     // Since in mobile environment, item selection triggers ok action, we must disable it.
   }
 
-
-  /**
-   * Determines the default selection mode for the result view.
-   *
-   * @param lovContext
-   *     the LOV context.
-   * @return the default selection mode for the result view.
-   */
-  @Override
-  protected ESelectionMode getDefaultSelectionMode(Map<String, Object> lovContext) {
-    return ESelectionMode.SINGLE_SELECTION;
-  }
-
   @Override
   protected void feedContextWithDialog(IReferencePropertyDescriptor<IComponent> erqDescriptor,
                                        IQueryComponent queryComponent, IView<E> lovView, IActionHandler actionHandler,
                                        Map<String, Object> context) {
     super.feedContextWithDialog(erqDescriptor, queryComponent, lovView, actionHandler, context);
-    context.put(ModalDialogAction.DIALOG_ACTIONS, Collections.emptyList());
+    if (!context.containsKey(ModalDialogAction.DIALOG_ACTIONS)) {
+      context.put(ModalDialogAction.DIALOG_ACTIONS, Collections.emptyList());
+    }
     context.put(ModalDialogAction.DIALOG_TITLE, erqDescriptor.getReferencedDescriptor().getI18nName(
         getTranslationProvider(context), getLocale(context)));
   }

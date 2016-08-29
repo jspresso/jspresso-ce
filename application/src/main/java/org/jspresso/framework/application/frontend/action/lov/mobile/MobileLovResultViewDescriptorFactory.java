@@ -56,7 +56,12 @@ public class MobileLovResultViewDescriptorFactory extends
 
     resultViewDescriptor.setModelDescriptor(queriedEntitiesDescriptor);
     resultViewDescriptor.setReadOnly(true);
-    resultViewDescriptor.setSelectionMode(ESelectionMode.SINGLE_SELECTION);
+    if (getModel(lovContext) instanceof IQueryComponent) {
+      // We are on a filter view that supports multi selection
+      resultViewDescriptor.setSelectionMode(ESelectionMode.MULTIPLE_INTERVAL_CUMULATIVE_SELECTION);
+    } else {
+      resultViewDescriptor.setSelectionMode(ESelectionMode.SINGLE_SELECTION);
+    }
 
     resultViewDescriptor.setPermId("Lov." + entityRefDescriptor.getName());
     return resultViewDescriptor;

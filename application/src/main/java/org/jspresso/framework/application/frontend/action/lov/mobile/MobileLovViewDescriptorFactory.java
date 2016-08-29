@@ -18,9 +18,11 @@
  */
 package org.jspresso.framework.application.frontend.action.lov.mobile;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import org.jspresso.framework.application.backend.action.BackendAction;
+import org.jspresso.framework.application.frontend.action.ModalDialogAction;
 import org.jspresso.framework.application.frontend.action.lov.AbstractLovViewDescriptorFactory;
 import org.jspresso.framework.application.frontend.action.lov.ILovViewDescriptorFactory;
 import org.jspresso.framework.application.frontend.action.std.mobile.AddPageAction;
@@ -64,7 +66,12 @@ public class MobileLovViewDescriptorFactory extends AbstractLovViewDescriptorFac
         BasicCollectionViewDescriptor
         .extractMainCollectionView(resultViewDescriptor);
     resultCollectionViewDescriptor.setSelectionMode(selectionMode);
-    resultCollectionViewDescriptor.setItemSelectionAction(okAction);
+    if (ESelectionMode.SINGLE_SELECTION.equals(selectionMode)
+        || ESelectionMode.SINGLE_CUMULATIVE_SELECTION.equals(selectionMode)) {
+      resultCollectionViewDescriptor.setItemSelectionAction(okAction);
+    } else {
+      lovContext.put(ModalDialogAction.DIALOG_ACTIONS, Arrays.asList(okAction));
+    }
     IQueryComponent queryComponent = (IQueryComponent) lovContext.get(IQueryComponent.QUERY_COMPONENT);
     Integer pageSize = queryComponent.getPageSize();
     if (pageSize != null && pageSize > 0) {

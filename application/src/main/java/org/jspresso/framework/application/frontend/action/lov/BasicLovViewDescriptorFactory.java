@@ -73,7 +73,10 @@ public class BasicLovViewDescriptorFactory extends AbstractLovViewDescriptorFact
       ((BasicTableViewDescriptor) resultCollectionViewDescriptor)
           .setSortingAction(sortingAction);
     }
-    resultCollectionViewDescriptor.setRowAction(okAction);
+    if (ESelectionMode.SINGLE_SELECTION.equals(selectionMode) || ESelectionMode.SINGLE_CUMULATIVE_SELECTION.equals(
+        selectionMode)) {
+      resultCollectionViewDescriptor.setRowAction(okAction);
+    }
     IQueryComponent queryComponent = (IQueryComponent) lovContext
         .get(IQueryComponent.QUERY_COMPONENT);
     Integer pageSize = queryComponent.getPageSize();
