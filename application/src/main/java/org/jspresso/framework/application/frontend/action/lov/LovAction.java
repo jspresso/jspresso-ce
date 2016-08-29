@@ -364,15 +364,21 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   protected void feedContextWithDialog(IReferencePropertyDescriptor<IComponent> erqDescriptor,
                                        IQueryComponent queryComponent, IView<E> lovView,
                                        final IActionHandler actionHandler, final Map<String, Object> context) {
-    List<IDisplayableAction> actions = new ArrayList<>();
     getViewConnector(context).setConnectorValue(getViewConnector(context).getConnectorValue());
 
-    actions.add(getOkAction());
-    actions.add(getFindAction());
-    actions.add(getCancelAction());
-    context.put(ModalDialogAction.DIALOG_ACTIONS, actions);
-    context.put(ModalDialogAction.DIALOG_TITLE, getI18nName(getTranslationProvider(context), getLocale(context)) + " : "
-        + erqDescriptor.getReferencedDescriptor().getI18nName(getTranslationProvider(context), getLocale(context)));
+    if (!context.containsKey(ModalDialogAction.DIALOG_ACTIONS)) {
+      List<IDisplayableAction> actions = new ArrayList<>();
+      actions.add(getOkAction());
+      if (getCreateAction() != null) {
+        actions.add(getCreateAction());
+      }
+      actions.add(getFindAction());
+      actions.add(getCancelAction());
+      context.put(ModalDialogAction.DIALOG_ACTIONS, actions);
+    }
+    context.put(ModalDialogAction.DIALOG_TITLE,
+        getI18nName(getTranslationProvider(context), getLocale(context)) + " : " + erqDescriptor
+            .getReferencedDescriptor().getI18nName(getTranslationProvider(context), getLocale(context)));
     context.put(ModalDialogAction.DIALOG_VIEW, lovView);
     if (lovView instanceof ICompositeView<?>) {
       context.put(ModalDialogAction.DIALOG_FOCUSED_COMPONENT, ((ICompositeView<E>) lovView).getChildren().get(1)
