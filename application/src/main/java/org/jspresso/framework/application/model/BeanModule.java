@@ -131,15 +131,7 @@ public class BeanModule extends Module implements PropertyChangeListener {
         .getProjectedViewDescriptor();
     if (componentDescriptor != null) {
       if (projectedViewDescriptor == null) {
-        projectedViewDescriptor = new BasicComponentViewDescriptor();
-        ((BasicComponentViewDescriptor) projectedViewDescriptor)
-            .setModelDescriptor(componentDescriptor);
-        ((BasicComponentViewDescriptor) projectedViewDescriptor)
-            .setBorderType(EBorderType.TITLED);
-        ((BasicComponentViewDescriptor) projectedViewDescriptor)
-            .setName(componentDescriptor.getName());
-        ((BasicComponentViewDescriptor) projectedViewDescriptor)
-            .setColumnCount(3);
+        projectedViewDescriptor = createDefaultProjectedViewDescriptor();
         setProjectedViewDescriptor(projectedViewDescriptor);
       }
       if (projectedViewDescriptor.getModelDescriptor() == null
@@ -149,6 +141,20 @@ public class BeanModule extends Module implements PropertyChangeListener {
       }
     }
     return projectedViewDescriptor;
+  }
+
+  /**
+   * Create default projected view descriptor.
+   *
+   * @return the view descriptor
+   */
+  protected IViewDescriptor createDefaultProjectedViewDescriptor() {
+    BasicComponentViewDescriptor defaultProjectedViewDescriptor = new BasicComponentViewDescriptor();
+    defaultProjectedViewDescriptor.setModelDescriptor(componentDescriptor);
+    defaultProjectedViewDescriptor.setBorderType(EBorderType.TITLED);
+    defaultProjectedViewDescriptor.setName(componentDescriptor.getName());
+    defaultProjectedViewDescriptor.setColumnCount(3);
+    return defaultProjectedViewDescriptor;
   }
 
   /**
