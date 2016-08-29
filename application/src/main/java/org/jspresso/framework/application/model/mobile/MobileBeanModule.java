@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.model.mobile;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 import org.jspresso.framework.application.model.BeanModule;
@@ -108,7 +109,7 @@ public class MobileBeanModule extends BeanModule {
   public void setProjectedViewDescriptor(IViewDescriptor elementViewDescriptor) {
     if (!(elementViewDescriptor instanceof AbstractMobilePageViewDescriptor)) {
       throw new IllegalArgumentException(
-          "Mobile bean collection module views only support page views as element views and not :"
+          "Mobile bean module views only support page views as element views and not : "
               + elementViewDescriptor.getClass().getSimpleName());
     }
     super.setProjectedViewDescriptor(elementViewDescriptor);
@@ -121,5 +122,24 @@ public class MobileBeanModule extends BeanModule {
   public MobileBeanModule clone() {
     MobileBeanModule clone = (MobileBeanModule) super.clone();
     return clone;
+  }
+
+  /**
+   * Create default projected view descriptor.
+   *
+   * @return the view descriptor
+   */
+  protected IViewDescriptor createDefaultProjectedViewDescriptor() {
+    IComponentDescriptor<?> componentDescriptor = getComponentDescriptor();
+
+    MobileComponentViewDescriptor componentViewDescriptor = new MobileComponentViewDescriptor();
+    componentViewDescriptor.setModelDescriptor(componentDescriptor);
+    componentViewDescriptor.setName(componentDescriptor.getName());
+
+    MobileCompositePageViewDescriptor defaultProjectedViewDescriptor = new MobileCompositePageViewDescriptor();
+    defaultProjectedViewDescriptor.setInlineEditing(true);
+    defaultProjectedViewDescriptor.setPageSectionDescriptors(
+        Arrays.<IMobilePageSectionViewDescriptor>asList(componentViewDescriptor));
+    return defaultProjectedViewDescriptor;
   }
 }
