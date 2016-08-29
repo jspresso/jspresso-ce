@@ -369,9 +369,6 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     if (!context.containsKey(ModalDialogAction.DIALOG_ACTIONS)) {
       List<IDisplayableAction> actions = new ArrayList<>();
       actions.add(getOkAction());
-      if (getCreateAction() != null) {
-        actions.add(getCreateAction());
-      }
       actions.add(getFindAction());
       actions.add(getCancelAction());
       context.put(ModalDialogAction.DIALOG_ACTIONS, actions);
