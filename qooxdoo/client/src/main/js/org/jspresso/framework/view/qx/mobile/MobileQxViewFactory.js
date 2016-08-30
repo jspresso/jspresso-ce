@@ -1623,6 +1623,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var datePickerButton = this.createButton("...", null, null);
       remoteDateField.getState().bind("writable", datePickerButton, "enabled");
       datePickerButton.removeCssClass("button");
+      //datePickerButton.removeCssClass("gap");
       var datePicker = new org.jspresso.framework.view.qx.mobile.DatePicker(this.__monthNames);
       var datePickerPopup = new org.jspresso.framework.view.qx.mobile.PickerPopup(datePicker, datePickerButton);
       datePickerPopup.setConfirmButtonCaption(this._getActionHandler().translate("ok"));
@@ -1683,6 +1684,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var timePickerButton = this.createButton("...", null, null);
       remoteTimeField.getState().bind("writable", timePickerButton, "enabled");
       timePickerButton.removeCssClass("button");
+      //timePickerButton.removeCssClass("gap");
       var timePicker = new org.jspresso.framework.view.qx.mobile.TimePicker(remoteTimeField.getSecondsAware(),
           remoteTimeField.getMillisecondsAware());
       var timePickerPopup = new org.jspresso.framework.view.qx.mobile.PickerPopup(timePicker, timePickerButton);
@@ -2002,7 +2004,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @param remoteDateField {org.jspresso.framework.gui.remote.RDateField}
      */
     _createDateTimeField: function (remoteDateField) {
-      var dateTimeField = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox())
+      var dateTimeField = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
       var oldType = remoteDateField.getType();
       try {
         remoteDateField.setType("DATE");
@@ -2025,7 +2027,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       remoteTimeField.setMillisecondsAware(remoteDateField.getMillisecondsAware());
       remoteTimeField.useDateDto(true);
       dateTimeField.add(this.createComponent(remoteTimeField, false), {flex: 1});
-      return dateTimeField;
+      var dateTimeFieldWrapper = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox());
+      dateTimeFieldWrapper.add(dateTimeField, {flex: 1});
+      return dateTimeFieldWrapper;
     },
 
     /**
@@ -2102,7 +2106,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
       });
       modelController.addTarget(radioGroup, "enabled", "writable", false);
-      return radioBox;
+      var radioBoxWrapper = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox());
+      radioBoxWrapper.add(radioBox, {flex: 1});
+      return radioBoxWrapper;
     },
 
     /**

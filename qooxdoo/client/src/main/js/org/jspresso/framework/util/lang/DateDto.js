@@ -35,16 +35,20 @@ qx.Class.define("org.jspresso.framework.util.lang.DateDto", {
       check: "Integer"
     },
     hour: {
-      check: "Integer"
+      check: "Integer",
+      nullable: true
     },
     minute: {
-      check: "Integer"
+      check: "Integer",
+      nullable: true
     },
     second: {
-      check: "Integer"
+      check: "Integer",
+      nullable: true
     },
     millisecond: {
-      check: "Integer"
+      check: "Integer",
+      nullable: true
     }
   }
 });
