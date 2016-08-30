@@ -475,7 +475,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     _handleAddRepeatedCommand: function (targetPeer, addRepeatedCommand) {
       this._getViewFactory().addRepeated(targetPeer.retrievePeer(), addRepeatedCommand.getNewSections());
     },
-    
+
     /**
      * @param targetPeer {org.jspresso.framework.gui.remote.RComponent}
      * @param focusCommand {org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand}
@@ -578,16 +578,18 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
         this._handleClipboardCommand(c);
       } else {
         var targetPeerGuid = command.getTargetPeerGuid();
-        var targetPeer = this.getRegistered(targetPeerGuid);
-        if (targetPeer == null) {
-          if (!(command
-              instanceof org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand)) {
-            if (!this.__postponedCommands[targetPeerGuid]) {
-              this.__postponedCommands[targetPeerGuid] = [];
+        if (targetPeerGuid) {
+          var targetPeer = this.getRegistered(targetPeerGuid);
+          if (targetPeer == null) {
+            if (!(command
+                instanceof org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand)) {
+              if (!this.__postponedCommands[targetPeerGuid]) {
+                this.__postponedCommands[targetPeerGuid] = [];
+              }
+              this.__postponedCommands[targetPeerGuid].push(command);
             }
-            this.__postponedCommands[targetPeerGuid].push(command);
+            return;
           }
-          return;
         }
         if (command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand) {
           c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand} */
@@ -633,7 +635,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
         } else if (command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand) {
           c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand} */
               command;
-          this.__postponedEditionCommands[targetPeerGuid] = c;
+          if (targetPeerGuid) {
+            this.__postponedEditionCommands[targetPeerGuid] = c;
+          } else {
+            this.__postponedEditionCommands["current"] = c;
+          }
         }
       }
     },

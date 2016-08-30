@@ -306,11 +306,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         c = /** @type {org.jspresso.framework.application.frontend.command.remote.mobile.RemoteBackCommand} */
             command;
         this._handleBackCommand(c);
-      } else if (command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand
-          && !command.getTargetPeerGuid()) {
-        c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteEditCommand} */
-            command;
-        this._handleEditCommand(null, c);
       } else if (command
           instanceof org.jspresso.framework.application.frontend.command.remote.mobile.RemoteAnimationCommand) {
         c = /** @type {org.jspresso.framework.application.frontend.command.remote.mobile.RemoteAnimationCommand} */
@@ -771,7 +766,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     addDetailPage: function (navigationPage) {
       this._getManager().addDetail(navigationPage);
     },
-    
+
     /**
      * @param targetPeer {org.jspresso.framework.gui.remote.RComponent}
      * @param focusCommand {org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand}
