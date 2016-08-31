@@ -553,6 +553,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         var pageContent = this.__workspacesMasterPage.getContent();
         if (applicationDescription) {
           var descriptionLabel = new qx.ui.mobile.basic.Label(applicationDescription);
+          this.bind("description", descriptionLabel, "value");
           descriptionLabel.addCssClass("group");
           pageContent.add(descriptionLabel);
         }

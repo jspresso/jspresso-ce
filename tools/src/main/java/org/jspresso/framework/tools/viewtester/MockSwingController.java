@@ -351,4 +351,12 @@ public class MockSwingController extends
   public void login() {
     // NO-OP
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void notifyApplicationDescriptionChange() {
+    // NO-OP
+  }
 }

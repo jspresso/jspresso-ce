@@ -62,7 +62,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
   properties: {
     name: {
       check: "String",
+      nullable: true,
       event: "changeName"
+    },
+    description: {
+      check: "String",
+      nullable: true,
+      event: "changeDescription"
     }
   },
 
@@ -572,6 +578,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
         c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteApplicationDescriptionCommand} */
             command;
         this.setName(c.getApplicationName());
+        this.setDescription(c.getApplicationDescription());
       } else if (command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand) {
         c = /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand} */
             command;
@@ -931,6 +938,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      */
     _handleInitCommand: function (initCommand) {
       this.setName(initCommand.getApplicationName());
+      this.setDescription(initCommand.getApplicationDescription());
       this._initApplicationFrame(initCommand);
     }
   }

@@ -1114,9 +1114,26 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
   public void setName(String name) {
     super.setName(name);
     if (isStarted()) {
-      RemoteApplicationDescriptionCommand radCommand = new RemoteApplicationDescriptionCommand();
-      radCommand.setApplicationName(getI18nName(this, getLocale()));
-      registerCommand(radCommand);
+      notifyApplicationDescriptionChange();
     }
+  }
+
+  @Override
+  public void setDescription(String description) {
+    super.setDescription(description);
+    if (isStarted()) {
+      notifyApplicationDescriptionChange();
+    }
+  }
+
+  /**
+   * Notify application description change.
+   */
+  @Override
+  public void notifyApplicationDescriptionChange() {
+    RemoteApplicationDescriptionCommand radCommand = new RemoteApplicationDescriptionCommand();
+    radCommand.setApplicationName(getI18nName(this, getLocale()));
+    radCommand.setApplicationDescription(getI18nDescription(this, getLocale()));
+    registerCommand(radCommand);
   }
 }

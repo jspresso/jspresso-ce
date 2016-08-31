@@ -140,4 +140,12 @@ public class MockFrontendController<E, F, G> extends
   public void login() {
     // NO-OP
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void notifyApplicationDescriptionChange() {
+    // NO-OP
+  }
 }
