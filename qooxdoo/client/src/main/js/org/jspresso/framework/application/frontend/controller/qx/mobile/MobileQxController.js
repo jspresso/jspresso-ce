@@ -96,6 +96,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     __messageQueue: null,
     /** @type {qx.ui.mobile.page.NavigationPage} */
     __savedCurrentPage: null,
+    /** @type {Boolean} */
+    __dialogAnimating: false,
 
 
     showPage: function (page, animation, back) {
@@ -135,13 +137,18 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         }
       }
       if (!this.__animationQueue && this.__messageQueue) {
-        for (var i = 0; i < this.__messageQueue.length; i++) {
-          var md = this.__messageQueue[i];
+        if (this.__messageQueue.length > 0) {
+          var md = this.__messageQueue[0];
           qx.event.Timer.once(function () {
+            this.__messageQueue.splice(0, 1);
             md.show();
+            md.addListener("changeVisibility", function () {
+              this.__dequeueAnimation();
+            }, this);
           }, this, 100);
+        } else {
+          this.__messageQueue = null;
         }
-        this.__messageQueue = null;
       }
     },
 
@@ -157,7 +164,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     },
 
     isAnimating: function () {
-      return this.__animationQueue != null;
+      return this.__animationQueue != null || this.__dialogAnimating;
     },
 
     hasAnimationQueued: function () {
@@ -371,6 +378,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      */
     _popupDialog: function (title, message, remoteDialogView, icon, actions, useCurrent, dimension,
                             secondaryActionLists) {
+      this.__dialogAnimating = true;
       useCurrent = (typeof useCurrent == 'undefined') ? false : useCurrent;
 
       var dialogView = remoteDialogView;
@@ -470,6 +478,15 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         this.__savedCurrentPage = this.getCurrentPage();
       }
 
+      var callback = function () {
+        qx.event.Timer.once(function () {
+          this.__dialogAnimating = false;
+          this.__dequeueAnimation();
+        }, this, org.jspresso.framework.application.frontend.controller.qx.mobile.MobileQxController.ANIMATION_DURATION
+            + 500);
+      };
+      dialogPage.addListenerOnce("appear", callback, this);
+
       var masterContainer = this._getManager().getMasterContainer();
       if (this.isTablet() && masterContainer.isVisible()) {
         this.__restoreMasterOnClose = true;
@@ -486,6 +503,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      * Close top most dialog.
      */
     _closeDialog: function () {
+      this.__dialogAnimating = true;
       /** @type {qx.ui.mobile.page.NavigationPage} */
       var pageToDestroy = null;
       if (this._dialogStack && this._dialogStack.length > 1) {
@@ -502,6 +520,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
           qx.event.Timer.once(function () {
             this.__applicationContainer.remove(pageToDestroy);
             pageToDestroy.destroy();
+            this.__dialogAnimating = false;
+            this.__dequeueAnimation();
           }, this, org.jspresso.framework.application.frontend.controller.qx.mobile.MobileQxController.ANIMATION_DURATION + 500);
         };
         if (pageToRestore && pageToDestroy) {
