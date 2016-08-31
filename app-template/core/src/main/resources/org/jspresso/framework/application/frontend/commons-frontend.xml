@@ -1282,4 +1282,7 @@
   </bean>
   <bean id="translations.table" parent="propertyTranslationsTableBase"/>
 
+  <bean id="refreshControllerDescriptionFrontAction"
+        class="org.jspresso.framework.application.frontend.action.controller.RefreshControllerDescriptionAction" />
+
 </beans>
