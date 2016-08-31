@@ -18,6 +18,9 @@
  */
 package org.jspresso.framework.util.http;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.Cookie;
 
 import org.jspresso.framework.util.preferences.IPreferencesStore;
@@ -30,12 +33,14 @@ import org.jspresso.framework.util.preferences.IPreferencesStore;
 public class CookiePreferencesStore implements IPreferencesStore {
 
   private String storePath;
+  private Map<String, String> sessionStore;
 
   /**
    * Constructs a new {@code CookiePreferencesStore} instance.
    */
   public CookiePreferencesStore() {
     this.storePath = GLOBAL_STORE;
+    this.sessionStore = new HashMap<>();
   }
 
   /**
@@ -63,12 +68,16 @@ public class CookiePreferencesStore implements IPreferencesStore {
   @Override
   public String getPreference(String key) {
     String completeKey = storePath + key;
-    if (HttpRequestHolder.getServletRequest() != null) {
-      Cookie[] cookies = HttpRequestHolder.getServletRequest().getCookies();
-      if (cookies != null) {
-        for (Cookie cooky : cookies) {
-          if (completeKey.equals(cooky.getName())) {
-            return cooky.getValue();
+    if (sessionStore.containsKey(completeKey)) {
+      return sessionStore.get(completeKey);
+    } else {
+      if (HttpRequestHolder.getServletRequest() != null) {
+        Cookie[] cookies = HttpRequestHolder.getServletRequest().getCookies();
+        if (cookies != null) {
+          for (Cookie cooky : cookies) {
+            if (completeKey.equals(cooky.getName())) {
+              return cooky.getValue();
+            }
           }
         }
       }
@@ -82,6 +91,7 @@ public class CookiePreferencesStore implements IPreferencesStore {
   @Override
   public void putPreference(String key, String value) {
     String completeKey = storePath + key;
+    sessionStore.put(completeKey, value);
     if (HttpRequestHolder.getServletResponse() != null) {
       Cookie cookie = new Cookie(completeKey, value);
       cookie.setMaxAge(Integer.MAX_VALUE);
@@ -97,6 +107,7 @@ public class CookiePreferencesStore implements IPreferencesStore {
   @Override
   public void removePreference(String key) {
     String completeKey = storePath + key;
+    sessionStore.remove(completeKey);
     if (HttpRequestHolder.getServletResponse() != null) {
       Cookie cookie = new Cookie(completeKey, "");
       cookie.setMaxAge(0);
