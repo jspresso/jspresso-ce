@@ -264,6 +264,10 @@ public class RemotePeerRegistryServlet extends HttpServlet {
         content = baos.toByteArray();
       }
 
+      if (content != null && content.length == 0) {
+        content = null;
+      }
+
       IRemoteStateOwner stateOwner = (IRemoteStateOwner) peerRegistry.getRegistered(id);
       stateOwner.setValueFromState(content);
 
