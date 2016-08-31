@@ -173,6 +173,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
   private var _postponedEditionCommands:Array;
   private var _userGeoLocation:Object;
   private var _applicationName:String;
+  private var _applicationDescription:String;
 
 
   public function DefaultFlexController(remoteController:RemoteObject, userLanguage:String) {
@@ -406,6 +407,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     } else if (command is RemoteInitCommand) {
       var initCommand:RemoteInitCommand = command as RemoteInitCommand;
       this.name = initCommand.applicationName;
+      this.description = initCommand.applicationDescription;
       linkBrowserHistory();
       initApplicationFrame(initCommand);
     } else if (command is RemoteWorkspaceDisplayCommand) {
@@ -535,7 +537,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
       }
     }
   }
-  
+
   private function syncRegisteredState(state:RemoteValueState):RemoteValueState {
     var registeredState:RemoteValueState = getRegistered(state.guid) as RemoteValueState;
     if (registeredState) {
@@ -1550,13 +1552,22 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     ExternalInterface.call("getGeoLocation");
   }
 
+  [Bindable]
+  public function get name():String {
+    return _applicationName;
+  }
+
   public function set name(name:String):void {
     this._applicationName = name;
   }
 
   [Bindable]
-  public function get name():String {
-    return _applicationName;
+  public function get description():String {
+    return _applicationDescription;
+  }
+
+  public function set description(value:String):void {
+    _applicationDescription = value;
   }
 }
 }

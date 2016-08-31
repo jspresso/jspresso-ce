@@ -528,4 +528,9 @@ public interface IFrontendController<E, F, G> extends IController, IIconDescript
    *     the name
    */
   void setName(String name);
+
+  /**
+   * Notify application description change.
+   */
+  void notifyApplicationDescriptionChange();
 }

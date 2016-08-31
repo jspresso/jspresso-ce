@@ -962,4 +962,12 @@ public class DefaultSwingController extends
       updateFrameTitle();
     }
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void notifyApplicationDescriptionChange() {
+    updateFrameTitle();
+  }
 }
