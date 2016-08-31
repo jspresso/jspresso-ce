@@ -99,7 +99,7 @@ public class BasicImageBinaryPropertyDescriptor extends BasicBinaryPropertyDescr
   @Override
   public Object interceptSetter(Object component, Object newValue) {
     Object actualNewValue = newValue;
-    if (newValue instanceof byte[]) {
+    if (newValue instanceof byte[] && ((byte[]) newValue).length > 0) {
       try {
         actualNewValue = ImageHelper.scaleImage(actualNewValue, getScaledWidth(), getScaledHeight(),
             getFormatName());
