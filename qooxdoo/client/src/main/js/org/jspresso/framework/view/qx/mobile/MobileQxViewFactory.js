@@ -65,8 +65,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
   members: {
 
     /** @type {Array} */
-    __monthNames: null,
-    /** @type {qx.ui.mobile.form.TextField} */
+    __monthNames: null, /** @type {qx.ui.mobile.form.TextField} */
     __textFieldToBlur: null,
 
     /**
@@ -473,7 +472,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       if (nextPage instanceof qx.ui.mobile.page.NavigationPage) {
         pageToShow = nextPage;
       } else {
-        var currentPage = nextPage.getUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE);
+        var currentPage = nextPage.getUserData(
+            org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE);
         if (currentPage != null) {
           // This is a card container or a border container with a nested page
           pageToShow = currentPage;
@@ -652,11 +652,13 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       // Because of MobileCardPage
       if (!(nextPage instanceof qx.ui.mobile.page.NavigationPage)) {
         if (!nextPage.getUserData("previousPage")) {
-          var currentPage = nextPage.getUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE);
+          var currentPage = nextPage.getUserData(
+              org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE);
           if (currentPage) {
             this.linkNextPageBackButton(currentPage, previousPage, backAction, animation);
           }
-          var existingCards = nextPage.getUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__EXISTING_CARDS);
+          var existingCards = nextPage.getUserData(
+              org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__EXISTING_CARDS);
           if (existingCards != null) {
             for (var i = 0; i < existingCards.length; i++) {
               if (currentPage != existingCards[i]) {
@@ -1189,8 +1191,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
               remoteTree.getDisplayIcon());
           item.setShowArrow(remoteTree.getShowArrow() && row > 0);
           item.setLevel(data.level);
-        },
-        createItemRenderer: function () {
+        }, createItemRenderer: function () {
           return new org.jspresso.framework.view.qx.mobile.TreeItemRenderer();
         }
       });
@@ -1217,9 +1218,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         for (var i = selectedIndex - 1; i >= 0; i--) {
           var upperNode = treeListModel.getItem(i);
           if (upperNode.level < currentNode.level) {
-            futureSelections = [
-              {state: upperNode.state, selection: [localIndex]}
-            ].concat(futureSelections);
+            futureSelections = [{state: upperNode.state, selection: [localIndex]}].concat(futureSelections);
             var j = futureDeselections.indexOf(upperNode.state);
             if (j >= 0) {
               futureDeselections[j] = null;
@@ -1269,12 +1268,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var state = remoteCardContainer.getState();
       state.addListener("changeValue", function (e) {
         var selectedCardName = e.getData();
-        var cards = cardContainer.getUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__EXISTING_CARDS);
+        var cards = cardContainer.getUserData(
+            org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__EXISTING_CARDS);
         if (cards) {
           var selectedCard;
           for (var i = 0; i < cards.length; i++) {
             var child = cards[i];
-            if (child.getUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CARD_NAME) == selectedCardName) {
+            if (child.getUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CARD_NAME)
+                == selectedCardName) {
               selectedCard = child;
             }
           }
@@ -1420,8 +1421,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           && rCardComponent.getCenter() instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
         this.addCard(cardContainer, rCardComponent.getCenter(), cardName);
       } else {
-        var existingCards = cardContainer.getUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__EXISTING_CARDS);
-        var existingCardNames = cardContainer.getUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__EXISTING_CARD_NAMES);
+        var existingCards = cardContainer.getUserData(
+            org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__EXISTING_CARDS);
+        var existingCardNames = cardContainer.getUserData(
+            org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__EXISTING_CARD_NAMES);
         var existingCard = existingCardNames.indexOf(cardName) >= 0;
         if (!existingCard) {
           existingCardNames.push(cardName);
@@ -1458,8 +1461,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     _selectCard: function (cardContainer, selectedCard) {
       var pageToShow;
       if (selectedCard instanceof qx.ui.mobile.page.NavigationPage) {
-        var currentCard = cardContainer.getUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE);
-        cardContainer.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE, selectedCard);
+        var currentCard = cardContainer.getUserData(
+            org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE);
+        cardContainer.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE,
+            selectedCard);
       } else if (selectedCard) {
         selectedCard.show();
       }
@@ -1579,7 +1584,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
                 if (org.jspresso.framework.util.html.HtmlUtil.isHtml(modelValue)) {
                   htmlContent = modelValue;
                 } else {
-                  htmlContent = "<u onMouseUp='executeAction();' onPointerUp='executeAction();' onTouchEnd='executeAction();'>" + modelValue + "</u>";
+                  htmlContent = "<u onMouseUp='executeAction();' onPointerUp='executeAction();' onTouchEnd='executeAction();'>"
+                      + modelValue + "</u>";
                 }
                 htmlContent = org.jspresso.framework.util.html.HtmlUtil.bindActionToHtmlContent(htmlContent,
                     remoteLabel.getAction());
@@ -1685,8 +1691,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       remoteTimeField.getState().bind("writable", timePickerButton, "enabled");
       timePickerButton.removeCssClass("button");
       //timePickerButton.removeCssClass("gap");
-      var timePicker = new org.jspresso.framework.view.qx.mobile.TimePicker(remoteTimeField.getSecondsAware(),
-          remoteTimeField.getMillisecondsAware());
+      var secondsAware = remoteTimeField.getSecondsAware();
+      var millisecondsAware = remoteTimeField.getMillisecondsAware();
+      var timePicker = new org.jspresso.framework.view.qx.mobile.TimePicker(secondsAware, millisecondsAware);
       var timePickerPopup = new org.jspresso.framework.view.qx.mobile.PickerPopup(timePicker, timePickerButton);
       timePickerPopup.setConfirmButtonCaption(this._getActionHandler().translate("ok"));
       timePickerPopup.setCancelButtonCaption(this._getActionHandler().translate("cancel"));
@@ -1701,10 +1708,16 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           current.setHour(0);
           current.setMinute(0);
           current.setSecond(0);
+          current.setMillSecond(0);
         }
         timePicker.setSelectedIndex(0, current.getHour());
         timePicker.setSelectedIndex(1, current.getMinute());
-        timePicker.setSelectedIndex(2, current.getSecond());
+        if (secondsAware) {
+          timePicker.setSelectedIndex(2, current.getSecond());
+        }
+        if (millisecondsAware) {
+          timePicker.setSelectedIndex(3, current.getMillisecond());
+        }
         timePickerPopup.show();
       }, this);
       var timeFieldWithPicker = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox());
@@ -1780,8 +1793,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           if (remoteList instanceof org.jspresso.framework.gui.remote.mobile.RMobileList) {
             item.setShowArrow(remoteList.getShowArrow());
           }
-        },
-        createItemRenderer: function () {
+        }, createItemRenderer: function () {
           return new rendererType();
         }
       });
@@ -1856,8 +1868,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       if (remoteRepeater.getRowAction()) {
         this._getRemotePeerRegistry().register(remoteRepeater.getRowAction())
       }
-      var repeater = new org.jspresso.framework.view.qx.ViewRepeater(repeaterContainer, remoteRepeater, this,
-          this._getActionHandler());
+      var repeater = new org.jspresso.framework.view.qx.ViewRepeater(repeaterContainer, remoteRepeater, this, this._getActionHandler());
       repeater.setDataProvider(remoteRepeater.getState().getChildren());
       remoteRepeater.assignPeer(repeater);
 
@@ -2064,8 +2075,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }, this);
       }
       var wrapper = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox().set({
-        alignX: "center",
-        alignY: "middle"
+        alignX: "center", alignY: "middle"
       }));
       wrapper.addCssClass("jspresso-cropper");
       wrapper.add(imageComponent);
@@ -2119,8 +2129,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var state = remoteImagePicker.getState();
       var imageChooser = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
       var imagePickerBar = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox());
-      var imagePicker = new org.jspresso.framework.view.qx.mobile.ImagePicker(remoteImagePicker.getSubmitUrl(),
-          remoteImagePicker.getLabel());
+      var imagePicker = new org.jspresso.framework.view.qx.mobile.ImagePicker(remoteImagePicker.getSubmitUrl(), remoteImagePicker.getLabel());
       imagePicker.addCssClass("jspresso-even-width");
       var clearButton = new qx.ui.mobile.form.Button(this._getActionHandler().translate("Clear"));
       clearButton.addListener("tap", function (e) {
@@ -2164,8 +2173,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createImageCanvas: function (remoteImageCanvas) {
       var height;
-      var imageCanvas = new org.jspresso.framework.view.qx.mobile.ImageCanvas(remoteImageCanvas.getDrawingSize(),
-          this._getActionHandler().translate("Clear"));
+      var imageCanvas = new org.jspresso.framework.view.qx.mobile.ImageCanvas(remoteImageCanvas.getDrawingSize(), this._getActionHandler().translate(
+          "Clear"));
       imageCanvas.addCssClass("jspresso-image-canvas");
       var state = remoteImageCanvas.getState();
       state.addListener("changeValue", function (e) {
