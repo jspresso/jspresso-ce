@@ -1969,12 +1969,13 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _createAsideAction: function (remoteAction, remoteComponent, disableActionsWithField) {
       var button = this.createAction(remoteAction);
       //button.setFocusable(false);
-      var remoteValueState = remoteComponent.state;
+      var remoteValueState = remoteComponent.getState();
       if (remoteValueState && disableActionsWithField) {
-        remoteComponent.addListener("changeWritable", function (e) {
+        remoteValueState.addListener("changeWritable", function (e) {
           button.setEnabled(e.getData() && remoteAction.isEnabled());
         }, this);
       }
+      button.setEnabled(remoteValueState.isWritable() && remoteAction.isEnabled());
       return button;
     },
 

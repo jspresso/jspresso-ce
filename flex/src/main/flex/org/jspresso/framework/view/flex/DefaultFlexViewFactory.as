@@ -1150,7 +1150,7 @@ public class DefaultFlexViewFactory {
         var actionList:RActionList = remoteComponent.actionLists[i] as RActionList;
         for (var j:int = 0; j < actionList.actions.length; j++) {
           var remoteAction:RAction = actionList.actions[j];
-          var button:Button = createAsideActionAction(remoteAction, actionField, remoteComponent, disableActionsWithField);
+          var button:Button = createAsideAction(remoteAction, actionField, remoteComponent, disableActionsWithField);
           actionField.addChild(button);
         }
       }
@@ -1159,8 +1159,8 @@ public class DefaultFlexViewFactory {
     return decorated;
   }
 
-  protected function createAsideActionAction(remoteAction:RAction, actionField:HBox, remoteComponent:RComponent,
-                                           disableActionsWithField:Boolean):Button {
+  protected function createAsideAction(remoteAction:RAction, actionField:HBox, remoteComponent:RComponent,
+                                       disableActionsWithField:Boolean):Button {
     var button:Button = createAction(remoteAction, actionField);
     button.label = null;
     button.addEventListener(FlexEvent.CREATION_COMPLETE, function (event:FlexEvent):void {
