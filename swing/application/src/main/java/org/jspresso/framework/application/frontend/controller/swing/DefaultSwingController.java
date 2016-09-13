@@ -742,7 +742,8 @@ public class DefaultSwingController extends
       IView<JComponent> loginView = createLoginView();
 
       // Login dialog
-      loginDialog = new JDialog(controllerFrame, getLoginViewDescriptor().getI18nName(this, getLocale()), true);
+      IViewDescriptor loginViewDescriptor = getLoginViewDescriptor();
+      loginDialog = new JDialog(controllerFrame, loginViewDescriptor.getI18nName(this, getLocale()), true);
       loginDialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
       JPanel buttonBox = new JPanel();
@@ -750,7 +751,7 @@ public class DefaultSwingController extends
       buttonBox.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
 
       int i = 0;
-      for (ActionList actionList : getLoginViewDescriptor().getActionMap().getActionLists(this)) {
+      for (ActionList actionList : loginViewDescriptor.getActionMap().getActionLists(this)) {
         for (IDisplayableAction action : actionList.getActions()) {
           JButton button = new JButton(getViewFactory().getActionFactory().createAction(action,
               getViewFactory().getIconFactory().getSmallIconSize(), this, loginView, getLocale()));
@@ -771,7 +772,7 @@ public class DefaultSwingController extends
       actionPanel.add(buttonBox, BorderLayout.EAST);
 
       JPanel mainPanel = new JPanel(new BorderLayout());
-      mainPanel.add(new JLabel(getLoginViewDescriptor().getI18nDescription(this, getLocale())),
+      mainPanel.add(new JLabel(loginViewDescriptor.getI18nDescription(this, getLocale())),
           BorderLayout.NORTH);
       mainPanel.add(loginView.getPeer(), BorderLayout.CENTER);
       mainPanel.add(actionPanel, BorderLayout.SOUTH);

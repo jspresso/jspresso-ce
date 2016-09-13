@@ -1397,14 +1397,15 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * @return the login view
    */
   protected IView<E> createLoginView() {
-    BasicViewDescriptor refinedViewDescriptor = ((BasicViewDescriptor) getLoginViewDescriptor()).clone();
+    IViewDescriptor loginViewDescriptor = getLoginViewDescriptor();
+    BasicViewDescriptor refinedViewDescriptor = ((BasicViewDescriptor) loginViewDescriptor).clone();
     refinedViewDescriptor.setActionMap(null);
     refinedViewDescriptor.setSecondaryActionMap(null);
     IView<E> loginView = getViewFactory().createView(refinedViewDescriptor,
         this, getLocale());
     IValueConnector loginModelConnector = getBackendController()
         .createModelConnector("login",
-            getLoginViewDescriptor().getModelDescriptor());
+            loginViewDescriptor.getModelDescriptor());
     getMvcBinder().bind(loginView.getConnector(), loginModelConnector);
     loginModelConnector.setConnectorValue(getLoginCallbackHandler());
     return loginView;
