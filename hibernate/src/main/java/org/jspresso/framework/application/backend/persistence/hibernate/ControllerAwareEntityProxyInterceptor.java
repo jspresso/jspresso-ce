@@ -40,6 +40,8 @@ import org.slf4j.LoggerFactory;
 import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.model.component.ILifecycleCapable;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 import org.jspresso.framework.model.persistence.hibernate.EntityProxyInterceptor;
@@ -61,6 +63,8 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
   private static final long serialVersionUID = -6834992000307471098L;
 
   private static final Logger LOG = LoggerFactory.getLogger(ControllerAwareEntityProxyInterceptor.class);
+
+  private static final int MAX_LIFECYCLE_ITERATIONS = 10;
 
   /**
    * Uses the backend controller to retrieve the dirty properties of the entity.
@@ -244,18 +248,31 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
       public void propertyChange(PropertyChangeEvent evt) {
         Object source = evt.getSource();
         if (source instanceof IEntity) {
-          lifecycledEntities.remove(source);
+          IComponentDescriptor<?> componentDescriptor = getBackendController().getEntityFactory()
+                                                                              .getComponentDescriptor(((IEntity) source)
+                                                                                  .getComponentContract());
+          IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor(evt.getPropertyName());
+          if (propertyDescriptor != null && !propertyDescriptor.isComputed()) {
+            lifecycledEntities.remove(source);
+          }
         }
       }
     };
     try {
       backendController.addDirtInterceptor(dirtInterceptor);
       boolean lifeCycleTriggered = triggerLifecycle(preFlushedEntities, persistedEntities, lifecycledEntities);
-      while (lifeCycleTriggered) {
+      int i = 0;
+      while (lifeCycleTriggered && i < MAX_LIFECYCLE_ITERATIONS) {
         // Because new entities might have been added to the underlying map of the original iterator.
         preFlushedEntities = new LinkedHashSet<>(underlyingHibernateMap.values());
         // Until the state is stable.
         lifeCycleTriggered = triggerLifecycle(preFlushedEntities, persistedEntities, lifecycledEntities);
+        i++;
+      }
+      if (i == MAX_LIFECYCLE_ITERATIONS) {
+        LOG.error("An infinite loop was prevented when flushing to persistent store. This is certainly due to lifecycle "
+            + "interceptors that do not converge and keep modifying the entity tree in an incompatible manner. "
+            + "The maximum number of iterations ({}) was reached.", MAX_LIFECYCLE_ITERATIONS);
       }
     } finally {
       backendController.removeDirtInterceptor(dirtInterceptor);
