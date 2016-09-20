@@ -428,6 +428,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       this._sizeMaxComponentWidth(dateTimeField, remoteDateField, "00/00/0000 000 00:00:00");
       dateTimeField.setUserData("df", dateField);
       dateTimeField.setUserData("tf", timeField);
+      dateTimeField.addListener("appear", function () {
+        dateTimeField.setBackgroundColor(dateField.getBackgroundColor());
+        dateField.setBackgroundColor(null);
+        timeField.setBackgroundColor(null);
+      }, this);
       return dateTimeField;
     },
 
@@ -606,41 +611,65 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _bindDynamicBackground: function (component, rComponent) {
       var backgroundState = rComponent.getBackgroundState();
       if (backgroundState) {
-        // To allow for having the background color displayed instead of the decorator.
-        component.setDecorator("main");
-        this._getRemotePeerRegistry().register(backgroundState);
-        var modelController = new qx.data.controller.Object(backgroundState);
-        modelController.addTarget(component, "backgroundColor", "value", false, {
-          converter: function (modelValue, model) {
-            return org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(modelValue);
-          }
-        });
+        component.addListener("appear", function () {
+          var defaultDecorator = component.getDecorator();
+          var defaultBackgroundColor = component.getBackgroundColor();
+          var mainDecorator = "main";
+          this._getRemotePeerRegistry().register(backgroundState);
+          var modelController = new qx.data.controller.Object(backgroundState);
+          modelController.addTarget(component, "backgroundColor", "value", false, {
+            converter: function (modelValue, model) {
+              if (modelValue) {
+                // To allow for having the background color displayed instead of the decorator.
+                component.setDecorator(mainDecorator);
+                return org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(modelValue);
+              } else {
+                component.setDecorator(defaultDecorator);
+                return defaultBackgroundColor;
+              }
+            }
+          });
+        }, this);
       }
     },
 
     _bindDynamicForeground: function (component, rComponent) {
       var foregroundState = rComponent.getForegroundState();
       if (foregroundState) {
-        this._getRemotePeerRegistry().register(foregroundState);
-        var modelController = new qx.data.controller.Object(foregroundState);
-        modelController.addTarget(component, "textColor", "value", false, {
-          converter: function (modelValue, model) {
-            return org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(modelValue);
-          }
-        });
+        component.addListener("appear", function () {
+          this._getRemotePeerRegistry().register(foregroundState);
+          var modelController = new qx.data.controller.Object(foregroundState);
+          var defaultTextColor = component.getTextColor();
+          modelController.addTarget(component, "textColor", "value", false, {
+            converter: function (modelValue, model) {
+              if (modelValue) {
+                return org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(modelValue);
+              } else {
+                return defaultTextColor;
+              }
+            }
+          });
+        }, this);
       }
     },
 
     _bindDynamicFont: function (component, rComponent) {
       var fontState = rComponent.getFontState();
       if (fontState) {
-        this._getRemotePeerRegistry().register(fontState);
-        var modelController = new qx.data.controller.Object(fontState);
-        modelController.addTarget(component, "font", "value", false, {
-          converter: function (modelValue, model) {
-            return org.jspresso.framework.view.qx.DefaultQxViewFactory._fontToQxFont(modelValue);
-          }
-        });
+        component.addListener("appear", function () {
+          this._getRemotePeerRegistry().register(fontState);
+          var modelController = new qx.data.controller.Object(fontState);
+          var defaultFont = component.getFont();
+          modelController.addTarget(component, "font", "value", false, {
+            converter: function (modelValue, model) {
+              if (modelValue) {
+                return org.jspresso.framework.view.qx.DefaultQxViewFactory._fontToQxFont(modelValue);
+              } else {
+                return defaultFont;
+              }
+            }
+          });
+        }, this);
       }
     },
 
@@ -1547,15 +1576,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         var iconDim;
         var maxTr = "";
         for (var i = 0; i < remoteComboBox.getValues().length; i++) {
-          /* // Seems that there is no problem wit recent versions of qooxdoo
-           if (i == 0 && remoteComboBox.getValues()[i].length > 0) {
-           // Qx combos do not support null values
-           var fallbackLi = new qx.ui.form.ListItem(String.fromCharCode(0x00A0));
-           fallbackLi.setModel("");
-           this.setIcon(fallbackLi, null);
-           comboBox.add(fallbackLi);
-           }
-           */
           var tr = remoteComboBox.getTranslations()[i];
           if (tr == " ") {
             tr = String.fromCharCode(0x00A0);
@@ -1581,6 +1601,15 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         comboBox.setWidth(comboBox.getMaxWidth());
         comboBox.setMinWidth(comboBox.getMaxWidth());
         this._bindComboBox(remoteComboBox, comboBox);
+        comboBox.addListener("changeTextColor", function (e) {
+          var atom = comboBox.getChildControl("atom");
+          atom.setTextColor(e.getData());
+        }, this);
+        comboBox.addListener("appear", function () {
+          var atom = comboBox.getChildControl("atom");
+          comboBox.setTextColor(atom.getTextColor());
+          atom.setTextColor(null);
+        }, this);
         return comboBox;
       }
     },
@@ -1974,6 +2003,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           }
         }, this);
       }
+      if (textField) {
+        actionField.addListener("appear", function () {
+          actionField.setBackgroundColor(textField.getBackgroundColor());
+          textField.setBackgroundColor(null);
+        }, this);
+      }
       return actionField;
     },
 
@@ -2044,7 +2079,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       }
     },
 
-    __isFocusedCellWritable: function(table) {
+    __isFocusedCellWritable: function (table) {
       var tableModel = table.getTableModel();
       var row = table.getFocusedRow();
       if (row != null && row >= 0) {
@@ -2677,6 +2712,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       this._sizeMaxComponentWidthFromText(dateField, remoteDateField, "00/00/0000 000");
       dateField.setMinWidth(dateField.getMaxWidth());
       remoteDateField.setPreferredSize(ps);
+      dateField.addListener("appear", function () {
+        var textField = dateField.getChildControl("textfield");
+        dateField.setBackgroundColor(textField.getBackgroundColor());
+        textField.setBackgroundColor(null);
+      }, this);
       return dateField;
     },
 
@@ -2952,8 +2992,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       if (remoteRepeater.getRowAction()) {
         this._getRemotePeerRegistry().register(remoteRepeater.getRowAction())
       }
-      var repeater = new org.jspresso.framework.view.qx.ViewRepeater(repeaterContainer, remoteRepeater, this,
-          this._getActionHandler());
+      var repeater = new org.jspresso.framework.view.qx.ViewRepeater(repeaterContainer, remoteRepeater, this, this._getActionHandler());
       repeater.setDataProvider(remoteRepeater.getState().getChildren());
       remoteRepeater.assignPeer(repeater);
 
