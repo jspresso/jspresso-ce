@@ -137,8 +137,11 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
           }
           if (editorWidget instanceof qx.ui.form.DateField) {
             // Forces synchronization of the date field
-            //editorWidget.setValue(editorWidget.getValue());
             editorWidget.fireDataEvent("changeValue", this.getValue());
+          } else if (editorWidget instanceof qx.ui.container.Composite && editorWidget.getUserData("df")) {
+            // Forces synchronization of the date field
+            var dateField = editorWidget.getUserData("df");
+            dateField.fireDataEvent("changeValue", dateField.getValue());
           }
           timer.start(function (userData, timerId) {
             if (table.isEditing()) {
@@ -174,6 +177,10 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
           if (editorWidget instanceof qx.ui.form.DateField) {
             // Forces synchronization of the date field
             editorWidget.fireDataEvent("changeValue", this.getValue());
+          } else if (editorWidget instanceof qx.ui.container.Composite && editorWidget.getUserData("df")) {
+            // Forces synchronization of the date field
+            var dateField = editorWidget.getUserData("df");
+            dateField.fireDataEvent("changeValue", dateField.getValue());
           }
           timer.start(function (userData, timerId) {
             if (table.isEditing()) {

@@ -404,7 +404,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var oldType = remoteDateField.getType();
       try {
         remoteDateField.setType("DATE");
-        dateTimeField.add(this._createDateField(remoteDateField));
+        var dateField = this._createDateField(remoteDateField);
+        dateTimeField.add(dateField);
       } catch (e) {
         throw e;
       } finally {
@@ -422,8 +423,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       remoteTimeField.setSecondsAware(remoteDateField.getSecondsAware());
       remoteTimeField.setMillisecondsAware(remoteDateField.getMillisecondsAware());
       remoteTimeField.useDateDto(true);
-      dateTimeField.add(this.createComponent(remoteTimeField, false));
+      var timeField = this.createComponent(remoteTimeField, false);
+      dateTimeField.add(timeField);
       this._sizeMaxComponentWidth(dateTimeField, remoteDateField, "00/00/0000 000 00:00:00");
+      dateTimeField.setUserData("df", dateField);
+      dateTimeField.setUserData("tf", timeField);
       return dateTimeField;
     },
 
