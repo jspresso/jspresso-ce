@@ -302,8 +302,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
       Map<String, Object> navigationContext = getModuleActionContext(workspaceName);
       navigationContext.put(ActionContextConstants.FROM_MODULE, currentModule);
       navigationContext.put(ActionContextConstants.TO_MODULE, module);
-      execute(getOnModuleEnterAction(), new HashMap<String, Object>());
-      execute(module.getEntryAction(), new HashMap<String, Object>());
+      execute(getOnModuleEnterAction(), navigationContext);
+      execute(module.getEntryAction(), navigationContext);
     }
     firePropertyChange(SELECTED_MODULE, currentModule, module);
     boolean wasTracksWorkspaceNavigator = tracksWorkspaceNavigator;
