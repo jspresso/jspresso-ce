@@ -101,23 +101,26 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
 
 
     showPage: function (page, animation, back) {
-      if (this.getCurrentPage() != page) {
-        this._getViewFactory().loseFocus();
-        var detailCardLayout = this._getManager().getDetailNavigation().getLayout();
-        if (   page.getLayoutParent()
-            && page.getLayoutParent().getLayoutParent() == this._getManager().getDetailNavigation()
-            && detailCardLayout.getShowAnimation()) {
-          if (this.__animationQueue != null) {
-            this.__animationQueue.push({page: page, animation: animation, back: back});
+      var actualPage = this._getViewFactory().getActualPageToShow(page);
+      if (actualPage) {
+        if (this.getCurrentPage() != actualPage) {
+          this._getViewFactory().loseFocus();
+          var detailCardLayout = this._getManager().getDetailNavigation().getLayout();
+            if (actualPage.getLayoutParent()
+                && actualPage.getLayoutParent().getLayoutParent() == this._getManager().getDetailNavigation()
+                && detailCardLayout.getShowAnimation()) {
+            if (this.__animationQueue != null) {
+                this.__animationQueue.push({page: actualPage, animation: animation, back: back});
+            } else {
+              this.__animationQueue = [];
+                actualPage.show({animation: animation, reverse: back});
+              detailCardLayout.addListenerOnce("animationEnd", function (e) {
+                this.__dequeueAnimation();
+              }, this);
+            }
           } else {
-            this.__animationQueue = [];
-            page.show({animation: animation, reverse: back});
-            detailCardLayout.addListenerOnce("animationEnd", function (e) {
-              this.__dequeueAnimation();
-            }, this);
+            actualPage.show({animation: animation, reverse: back});
           }
-        } else {
-          page.show({animation: animation, reverse: back});
         }
       }
     },
