@@ -224,9 +224,11 @@ public abstract class AbstractActionContextAware {
     IValueConnector viewConnector = getViewConnector(viewPath, context);
     if (viewConnector != null) {
       IValueConnector modelConnector = viewConnector.getModelConnector();
-      // This is to deal with double binding
-      while (modelConnector.getModelConnector() != null) {
-        modelConnector = modelConnector.getModelConnector();
+      if (modelConnector != null) {
+        // This is to deal with double binding
+        while (modelConnector.getModelConnector() != null) {
+          modelConnector = modelConnector.getModelConnector();
+        }
       }
       return modelConnector;
     }
