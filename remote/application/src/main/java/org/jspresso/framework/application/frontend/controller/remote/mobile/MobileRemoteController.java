@@ -54,6 +54,12 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  */
 public class MobileRemoteController extends AbstractRemoteController {
 
+  private boolean singleModuleWorkspaceShortcut;
+
+  public MobileRemoteController() {
+    singleModuleWorkspaceShortcut = true;
+  }
+
   /**
    * Not supported in mobile environment.
    * <p/>
@@ -160,25 +166,30 @@ public class MobileRemoteController extends AbstractRemoteController {
    */
   @Override
   protected RComponent createWorkspaceView(String workspaceName) {
-    RMobileNavPage viewComponent = new RMobileNavPage(workspaceName + "_navigation");
     Workspace workspace = getWorkspace(workspaceName);
-    viewComponent.setLabel(workspace.getI18nName());
-    viewComponent.setToolTip(workspace.getI18nDescription());
-    //    String workspaceI18nHeaderDescription = workspace.getI18nHeaderDescription();
-    //    if (workspaceI18nHeaderDescription != null && workspaceI18nHeaderDescription.length() > 0) {
-    //      RMobileForm headerForm = createHeaderForm(workspaceI18nHeaderDescription);
-    //      viewComponent.setHeaderSections(headerForm);
-    //    }
-    IViewDescriptor workspaceNavigatorViewDescriptor = workspace.getViewDescriptor();
-    IValueConnector workspaceConnector = getBackendController().getWorkspaceConnector(workspaceName);
-    IView<RComponent> workspaceNavigator = createWorkspaceNavigator(workspaceName, workspaceNavigatorViewDescriptor);
+    List<Module> modules = workspace.getModules();
     IView<RComponent> moduleAreaView = createModuleAreaView(workspaceName);
-    viewComponent.setSelectionView(workspaceNavigator.getPeer());
     RMobileCardPage moduleAreaPage = new RMobileCardPage(workspaceName + "_moduleArea");
     moduleAreaPage.setPages((RCardContainer) moduleAreaView.getPeer());
-    viewComponent.setNextPage(moduleAreaPage);
-    getMvcBinder().bind(workspaceNavigator.getConnector(), workspaceConnector);
-    return viewComponent;
+    if (isSingleModuleWorkspaceShortcut() && modules != null && modules.size() == 1) {
+      return moduleAreaPage;
+    } else {
+      RMobileNavPage viewComponent = new RMobileNavPage(workspaceName + "_navigation");
+      viewComponent.setLabel(workspace.getI18nName());
+      viewComponent.setToolTip(workspace.getI18nDescription());
+      //    String workspaceI18nHeaderDescription = workspace.getI18nHeaderDescription();
+      //    if (workspaceI18nHeaderDescription != null && workspaceI18nHeaderDescription.length() > 0) {
+      //      RMobileForm headerForm = createHeaderForm(workspaceI18nHeaderDescription);
+      //      viewComponent.setHeaderSections(headerForm);
+      //    }
+      IViewDescriptor workspaceNavigatorViewDescriptor = workspace.getViewDescriptor();
+      IValueConnector workspaceConnector = getBackendController().getWorkspaceConnector(workspaceName);
+      IView<RComponent> workspaceNavigator = createWorkspaceNavigator(workspaceName, workspaceNavigatorViewDescriptor);
+      viewComponent.setSelectionView(workspaceNavigator.getPeer());
+      viewComponent.setNextPage(moduleAreaPage);
+      getMvcBinder().bind(workspaceNavigator.getConnector(), workspaceConnector);
+      return viewComponent;
+    }
   }
 
   private RMobileForm createHeaderForm(String i18nDescription) {
@@ -211,5 +222,37 @@ public class MobileRemoteController extends AbstractRemoteController {
     } else {
       displayModule(workspaceName, null);
     }
+  }
+
+  @Override
+  protected void displayWorkspace(String workspaceName, boolean bypassModuleBoundaryActions) {
+    boolean navigateToModule = workspaceName != null && !workspaceName.equals(getSelectedWorkspaceName());
+    super.displayWorkspace(workspaceName, bypassModuleBoundaryActions);
+    if (navigateToModule) {
+      Workspace workspace = getWorkspace(workspaceName);
+      List<Module> modules = workspace.getModules();
+      if (modules != null && modules.size() == 1) {
+        displayModule(modules.get(0));
+      }
+    }
+  }
+
+  /**
+   * Sets single module workspace shortcut.
+   *
+   * @param singleModuleWorkspaceShortcut
+   *     the single module workspace shortcut
+   */
+  public void setSingleModuleWorkspaceShortcut(boolean singleModuleWorkspaceShortcut) {
+    this.singleModuleWorkspaceShortcut = singleModuleWorkspaceShortcut;
+  }
+
+  /**
+   * Is single module workspace shortcut boolean.
+   *
+   * @return the boolean
+   */
+  protected boolean isSingleModuleWorkspaceShortcut() {
+    return singleModuleWorkspaceShortcut;
   }
 }

@@ -310,20 +310,43 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @param page {qx.ui.mobile.page.NavigationPage}
      * @param pageAction {org.jspresso.framework.gui.remote.RAction}
      */
+    _installNavigationPageMainAction: function (page, pageAction) {
+      this._getRemotePeerRegistry().register(pageAction);
+      page.setButtonText(pageAction.getName());
+      if (pageAction.getIcon()) {
+        page.setButtonIcon(pageAction.getIcon().getImageUrlSpec());
+      }
+      page.addListener("action", function (event) {
+        this._getActionHandler().execute(pageAction);
+      }, this);
+      page.setShowButton(pageAction.getEnabled());
+      pageAction.addListener("changeEnabled", function (evt) {
+        page.setShowButton(evt.getData());
+      }, this);
+    },
+
+    /**
+     * @param page {qx.ui.mobile.container.Composite}
+     * @param pageAction {org.jspresso.framework.gui.remote.RAction}
+     */
     installPageMainAction: function (page, pageAction) {
       if (pageAction) {
-        this._getRemotePeerRegistry().register(pageAction);
-        page.setButtonText(pageAction.getName());
-        if (pageAction.getIcon()) {
-          page.setButtonIcon(pageAction.getIcon().getImageUrlSpec());
+        if (page instanceof qx.ui.mobile.page.NavigationPage) {
+          this._installNavigationPageMainAction(page, pageAction);
         }
-        page.addListener("action", function (event) {
-          this._getActionHandler().execute(pageAction);
-        }, this);
-        page.setShowButton(pageAction.getEnabled());
-        pageAction.addListener("changeEnabled", function (evt) {
-          page.setShowButton(evt.getData());
-        }, this);
+        // The following overrites the page main action in case of a single module workspace.
+        /*
+        if (page instanceof qx.ui.mobile.page.NavigationPage) {
+            this._installNavigationPageMainAction(page, pageAction);
+          } else {
+            var pages = page.getUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__EXISTING_CARDS);
+            if (pages) {
+              for (var i = 0; i < pages.length; i++) {
+                this.installPageMainAction(pages[i], pageAction);
+              }
+            }
+          }
+          */
       }
     },
 
@@ -458,6 +481,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       /** @type {qx.ui.mobile.container.Composite} */
       var cardContainer = this.createComponent(remoteCardPage.getPages());
       // Card pages will be added and selected automatically by the card container.
+      cardContainer.setUserData("jspressoGuid", remoteCardPage.getGuid());
       return cardContainer;
     },
 
@@ -466,7 +490,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @param nextPage {qx.ui.mobile.core.Widget}
      * @return {qx.ui.mobile.page.NavigationPage}
      */
-    _getActualPageToShow: function (nextPage) {
+    getActualPageToShow: function (nextPage) {
       var pageToShow;
       // Because of MobileCardPage
       if (nextPage instanceof qx.ui.mobile.page.NavigationPage) {
@@ -480,7 +504,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         } else if (nextPage[org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__GET_CHILDREN_METHOD]) {
           var children = nextPage.getChildren();
           if (children && children.length == 1) {
-            pageToShow = this._getActualPageToShow(children[0]);
+            pageToShow = this.getActualPageToShow(children[0]);
           }
         }
       }
@@ -624,7 +648,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           // Navigation will be handled by selection
           // change on server-side,triggering a page change.
           if (nextPage instanceof qx.ui.mobile.page.NavigationPage) {
-            var pageToShow = this._getActualPageToShow(nextPage);
+            var pageToShow = this.getActualPageToShow(nextPage);
             if (pageToShow) {
               this._getActionHandler().showDetailPage(pageToShow);
             }
@@ -696,7 +720,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
         if (previousPage) {
           nextPage.addListener("back", function () {
-            this._getActionHandler().showDetailPage(this._getActualPageToShow(previousPage), animation, true);
+            this._getActionHandler().showDetailPage(this.getActualPageToShow(previousPage), animation, true);
           }, this);
         }
       }
@@ -752,7 +776,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
               var selectedIndex = evt.getData();
               /** @type {qx.ui.mobile.list.List} */
               var l = evt.getCurrentTarget();
-              var pageToShow = this._getActualPageToShow(l.getModel().getItem(selectedIndex).getUserData("next"));
+              var pageToShow = this.getActualPageToShow(l.getModel().getItem(selectedIndex).getUserData("next"));
               if (pageToShow && pageToShow.getVisibility() != "visible") {
                 this._getActionHandler().showDetailPage(pageToShow);
               }
@@ -1468,7 +1492,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       } else if (selectedCard) {
         selectedCard.show();
       }
-      pageToShow = this._getActualPageToShow(selectedCard);
+      pageToShow = this.getActualPageToShow(selectedCard);
       if (pageToShow) {
         this._getActionHandler().showPage(pageToShow);
       }
@@ -1892,7 +1916,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @return {undefined}
      */
     focus: function (component) {
-      var pageToShow = this._getActualPageToShow(component);
+      var pageToShow = this.getActualPageToShow(component);
       if (pageToShow && pageToShow.getVisibility() != "visible") {
         this._getActionHandler().showDetailPage(pageToShow);
       }
