@@ -1477,16 +1477,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @param selectedCard  {qx.ui.mobile.core.Widget}
      */
     _selectCard: function (cardContainer, selectedCard) {
-      var pageToShow;
-      if (selectedCard instanceof qx.ui.mobile.page.NavigationPage) {
-        var currentCard = cardContainer.getUserData(
-            org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE);
-        cardContainer.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE,
-            selectedCard);
-      } else if (selectedCard) {
+      if (selectedCard && !(selectedCard instanceof qx.ui.mobile.page.NavigationPage)) {
         selectedCard.show();
       }
-      pageToShow = this.getActualPageToShow(selectedCard);
+      var pageToShow = this.getActualPageToShow(selectedCard);
+      cardContainer.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE, pageToShow);
       if (pageToShow) {
         this._getActionHandler().showPage(pageToShow);
       }
