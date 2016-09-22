@@ -120,7 +120,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
                 this.__animationQueue.push({page: actualPage, animation: animation, back: back});
             } else {
               this.__animationQueue = [];
-                actualPage.show({animation: animation, reverse: back});
+              actualPage.show({animation: animation, reverse: back});
               detailCardLayout.addListenerOnce("animationEnd", function (e) {
                 this.__dequeueAnimation();
               }, this);
@@ -251,9 +251,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         if (workspacePage) {
           this.__routeToPage(workspacePage, data, "cube");
         }
-//        if (this.isTablet()) {
-//          this._getManager().getMasterContainer().hide();
-//        }
+        // if (this.isTablet()) {
+        //   this._getManager().getMasterContainer().hide();
+        // }
       }, this);
       routing.onGet("/page/{pageGuid}", function (data) {
         /** @type {org.jspresso.framework.gui.remote.mobile.RMobilePage} */

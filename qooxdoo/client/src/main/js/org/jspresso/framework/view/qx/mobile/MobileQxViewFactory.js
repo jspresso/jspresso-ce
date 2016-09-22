@@ -501,10 +501,16 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         if (currentPage != null) {
           // This is a card container or a border container with a nested page
           pageToShow = currentPage;
-        } else if (nextPage[org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__GET_CHILDREN_METHOD]) {
-          var children = nextPage.getChildren();
-          if (children && children.length == 1) {
-            pageToShow = this.getActualPageToShow(children[0]);
+        } else {
+          var pages = nextPage.getUserData(
+              org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__EXISTING_CARDS);
+          if (pages && pages.length > 0) {
+            pageToShow = pages[pages.length -1];
+          } else if (nextPage[org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__GET_CHILDREN_METHOD]) {
+            var children = nextPage.getChildren();
+            if (children && children.length == 1) {
+              pageToShow = this.getActualPageToShow(children[0]);
+            }
           }
         }
       }
