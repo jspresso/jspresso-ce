@@ -61,6 +61,10 @@ qx.Class.define("org.jspresso.framework.gui.remote.mobile.RMobilePageAware", {
     swipeRightAction: {
       check: "org.jspresso.framework.gui.remote.RAction",
       nullable: true
+    },
+    headerText: {
+      check: "String",
+      nullable: true
     }
   }
 

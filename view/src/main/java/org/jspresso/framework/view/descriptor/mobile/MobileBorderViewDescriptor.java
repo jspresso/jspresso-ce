@@ -41,6 +41,7 @@ public class MobileBorderViewDescriptor extends BasicBorderViewDescriptor
   private IDisplayableAction swipeRightAction;
   private EPosition          position;
   private List<String>       forClientTypes;
+  private String             i18nHeader;
 
   /**
    * Instantiates a new Mobile border view descriptor.
@@ -240,5 +241,26 @@ public class MobileBorderViewDescriptor extends BasicBorderViewDescriptor
    */
   public void setForClientTypes(List<String> forClientTypes) {
     this.forClientTypes = forClientTypes;
+  }
+
+  /**
+   * Gets i 18 n header.
+   *
+   * @return the i 18 n header
+   */
+  @Override
+  public String getI18nHeader() {
+    return i18nHeader;
+  }
+
+  /**
+   * Sets i 18 n header.
+   *
+   * @param i18nHeader
+   *     the 18 n header
+   */
+  @Override
+  public void setI18nHeader(String i18nHeader) {
+    this.i18nHeader = i18nHeader;
   }
 }

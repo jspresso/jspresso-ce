@@ -37,6 +37,7 @@ public abstract class RMobilePageAware extends RContainer {
   private RAction pageEndAction;
   private RAction swipeLeftAction;
   private RAction swipeRightAction;
+  private String  headerText;
 
   /**
    * Constructs a new {@code RMobilePageAwareContainer} instance.
@@ -164,5 +165,24 @@ public abstract class RMobilePageAware extends RContainer {
    */
   public void setSwipeRightAction(RAction swipeRightAction) {
     this.swipeRightAction = swipeRightAction;
+  }
+
+  /**
+   * Gets header text.
+   *
+   * @return the header text
+   */
+  public String getHeaderText() {
+    return headerText;
+  }
+
+  /**
+   * Sets header text.
+   *
+   * @param headerText
+   *     the header text
+   */
+  public void setHeaderText(String headerText) {
+    this.headerText = headerText;
   }
 }
