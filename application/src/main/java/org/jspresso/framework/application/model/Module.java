@@ -96,12 +96,24 @@ public class Module extends AbstractPropertyChangeCapable
    */
   public static final String DIRTY = "dirty";
 
+  /**
+   * {@code HEADER_DESCRIPTION} is "headerDescription".
+   */
+  public static final String HEADER_DESCRIPTION = "headerDescription";
+
+  /**
+   * {@code I18N_HEADER_DESCRIPTION} is "i18nHeaderDescription".
+   */
+  public static final String I18N_HEADER_DESCRIPTION = "i18nHeaderDescription";
+
   private String             description;
+  private String             i18nDescription;
+  private String             headerDescription;
+  private String             i18nHeaderDescription;
   private boolean            dirty;
   private IAction            entryAction;
   private IAction            exitAction;
   private Collection<String> grantedRoles;
-  private String             i18nDescription;
   private String             i18nName;
   private Icon               icon;
   private String             name;
@@ -856,5 +868,48 @@ public class Module extends AbstractPropertyChangeCapable
       return stickySubModules != null && stickySubModules.contains(subModule);
     }
     return true;
+  }
+
+  /**
+   * Gets header description.
+   *
+   * @return the header description
+   */
+  public String getHeaderDescription() {
+    return headerDescription;
+  }
+
+  /**
+   * Configures the key used to translate actual internationalized module
+   * header description. The resulting translation will generally be leveraged as a
+   * text header on the UI side.
+   *
+   * @param headerDescription
+   *     the header description
+   */
+  public void setHeaderDescription(String headerDescription) {
+    this.headerDescription = headerDescription;
+  }
+
+  /**
+   * Gets i 18 n header description.
+   *
+   * @return the i 18 n header description
+   */
+  public String getI18nHeaderDescription() {
+    if (i18nHeaderDescription != null) {
+      return i18nHeaderDescription;
+    }
+    return getHeaderDescription();
+  }
+
+  /**
+   * Sets i 18 n header description.
+   *
+   * @param i18nHeaderDescription
+   *     the i 18 n header description
+   */
+  public void setI18nHeaderDescription(String i18nHeaderDescription) {
+    this.i18nHeaderDescription = i18nHeaderDescription;
   }
 }

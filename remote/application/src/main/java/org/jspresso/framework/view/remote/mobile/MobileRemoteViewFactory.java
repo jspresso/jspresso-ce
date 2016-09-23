@@ -40,6 +40,7 @@ import org.jspresso.framework.gui.remote.RCardContainer;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RForm;
 import org.jspresso.framework.gui.remote.RImageComponent;
+import org.jspresso.framework.gui.remote.RLabel;
 import org.jspresso.framework.gui.remote.RList;
 import org.jspresso.framework.gui.remote.RMap;
 import org.jspresso.framework.gui.remote.RTabContainer;
@@ -77,6 +78,10 @@ import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.EBorderType;
+import org.jspresso.framework.view.descriptor.EHorizontalPosition;
+import org.jspresso.framework.view.descriptor.ELabelPosition;
+import org.jspresso.framework.view.descriptor.EPosition;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
@@ -136,6 +141,9 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
       if (viewDescriptor instanceof AbstractMobilePageViewDescriptor && view.getPeer() instanceof RMobilePage) {
         if (((AbstractMobilePageViewDescriptor) viewDescriptor).getI18nName() != null) {
           view.getPeer().setLabel(((AbstractMobilePageViewDescriptor) viewDescriptor).getI18nName());
+        }
+        if (((AbstractMobilePageViewDescriptor) viewDescriptor).getI18nDescription() != null) {
+          view.getPeer().setToolTip(((AbstractMobilePageViewDescriptor) viewDescriptor).getI18nDescription());
         }
         if (((AbstractMobilePageViewDescriptor) viewDescriptor).getI18nDescription() != null) {
           view.getPeer().setToolTip(((AbstractMobilePageViewDescriptor) viewDescriptor).getI18nDescription());
@@ -241,8 +249,11 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
             ((IMobilePageAware) viewDescriptor).getSwipeLeftAction(), actionHandler, view, locale));
       }
       if (((IMobilePageAware) viewDescriptor).getSwipeRightAction() != null) {
-        ((RMobilePageAware) view.getPeer()).setSwipeRightAction(getActionFactory().createAction(
-            ((IMobilePageAware) viewDescriptor).getSwipeRightAction(), actionHandler, view, locale));
+        ((RMobilePageAware) view.getPeer()).setSwipeRightAction(getActionFactory()
+            .createAction(((IMobilePageAware) viewDescriptor).getSwipeRightAction(), actionHandler, view, locale));
+      }
+      if (((IMobilePageAware) viewDescriptor).getI18nHeader() != null) {
+        ((RMobilePageAware) view.getPeer()).setHeaderText(((IMobilePageAware) viewDescriptor).getI18nHeader());
       }
     }
   }
@@ -962,4 +973,19 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     return filteredActionMap;
   }
 
+/*
+  public RMobileForm createHeaderForm(String i18nHeaderDescription) {
+    RMobileForm headerForm = new RMobileForm(getGuidGenerator().generateGUID());
+    RLabel headerLabel = new RLabel(getGuidGenerator().generateGUID());
+    headerLabel.setLabel(i18nHeaderDescription);
+    headerForm.setPosition(EPosition.TOP.name());
+    headerForm.setBorderType(EBorderType.NONE.name());
+    headerForm.setLabelsPosition(ELabelPosition.NONE.name());
+    headerForm.setElementLabels(headerLabel);
+    headerForm.setElements(headerLabel);
+    headerForm.setElementWidths(1);
+    headerForm.setLabelHorizontalPositions(EHorizontalPosition.LEFT.name());
+    return headerForm;
+  }
+*/
 }

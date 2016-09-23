@@ -112,4 +112,19 @@ public interface IMobilePageAware {
    *     the swipe right action
    */
   void setSwipeRightAction(IDisplayableAction swipeRightAction);
+
+  /**
+   * Gets i 18 n header.
+   *
+   * @return the i 18 n header
+   */
+  String getI18nHeader();
+
+  /**
+   * Sets i 18 n header.
+   *
+   * @param i18nHeader
+   *     the 18 n header
+   */
+  void setI18nHeader(String i18nHeader);
 }

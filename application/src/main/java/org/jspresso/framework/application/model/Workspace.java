@@ -84,20 +84,32 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
   public static final String NAME = "name";
 
   /**
-   * {@code HEADER_DESCRIPTION} is "HeaderDescription".
+   * {@code HEADER_DESCRIPTION} is "headerDescription".
    */
-  public static final String HEADER_DESCRIPTION = "HeaderDescription";
+  public static final String HEADER_DESCRIPTION = "headerDescription";
 
   /**
    * {@code I18N_HEADER_DESCRIPTION} is "i18nHeaderDescription".
    */
   public static final String I18N_HEADER_DESCRIPTION = "i18nHeaderDescription";
 
+  /**
+   * {@code PAGE_HEADER_DESCRIPTION} is "pageHeaderDescription".
+   */
+  public static final String PAGE_HEADER_DESCRIPTION = "pageHeaderDescription";
+
+  /**
+   * {@code I18N_PAGE_HEADER_DESCRIPTION} is "i18nPageHeaderDescription".
+   */
+  public static final String I18N_PAGE_HEADER_DESCRIPTION = "i18nPageHeaderDescription";
+
   private String             description;
+  private String             pageHeaderDescription;
+  private String             i18nHeaderDescription;
+  private String             i18nPageHeaderDescription;
   private Collection<String> grantedRoles;
   private String             headerDescription;
   private String             i18nDescription;
-  private String             i18nHeaderDescription;
   private String             i18nName;
   private Icon               icon;
   private IconProvider       iconProvider;
@@ -591,7 +603,10 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    * @return the i 18 n header description
    */
   public String getI18nHeaderDescription() {
-    return i18nHeaderDescription;
+    if (i18nHeaderDescription != null) {
+      return i18nHeaderDescription;
+    }
+    return getHeaderDescription();
   }
 
   /**
@@ -602,5 +617,48 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    */
   public void setI18nHeaderDescription(String i18nHeaderDescription) {
     this.i18nHeaderDescription = i18nHeaderDescription;
+  }
+
+  /**
+   * Gets page header description.
+   *
+   * @return the page header description
+   */
+  public String getPageHeaderDescription() {
+    return pageHeaderDescription;
+  }
+
+  /**
+   * Configures the key used to translate actual internationalized
+   * workspace page header description. The resulting translation will generally be
+   * leveraged as a textual section that explains the workspace goal.
+   *
+   * @param pageHeaderDescription
+   *     the page header description
+   */
+  public void setPageHeaderDescription(String pageHeaderDescription) {
+    this.pageHeaderDescription = pageHeaderDescription;
+  }
+
+  /**
+   * Gets i 18 n page header description.
+   *
+   * @return the i 18 n page header description
+   */
+  public String getI18nPageHeaderDescription() {
+    if (i18nPageHeaderDescription != null) {
+      return i18nPageHeaderDescription;
+    }
+    return getPageHeaderDescription();
+  }
+
+  /**
+   * Sets i 18 n page header description.
+   *
+   * @param i18nPageHeaderDescription
+   *     the 18 n page header description
+   */
+  public void setI18nPageHeaderDescription(String i18nPageHeaderDescription) {
+    this.i18nPageHeaderDescription = i18nPageHeaderDescription;
   }
 }

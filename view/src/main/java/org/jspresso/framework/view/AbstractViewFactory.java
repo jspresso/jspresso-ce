@@ -977,7 +977,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
         if (childCardView == null) {
           IViewDescriptor childCardViewDescriptor = cardViewDescriptor.getCardViewDescriptor(cardName);
           if (childCardViewDescriptor != null) {
-            childCardView = createView(childCardViewDescriptor, actionHandler, locale);
+            childCardView = createChildCardView(childCardViewDescriptor, actionHandler, locale);
             addCard(cardView, childCardView, cardName);
           }
         }
@@ -1029,6 +1029,22 @@ public abstract class AbstractViewFactory<E, F, G> implements
         showCardInPanel(cardsPeer, ICardViewDescriptor.DEFAULT_CARD);
       }
     }
+  }
+
+  /**
+   * Create child card view view.
+   *
+   * @param childCardViewDescriptor
+   *     the child card view descriptor
+   * @param actionHandler
+   *     the action handler
+   * @param locale
+   *     the locale
+   * @return the view
+   */
+  protected IView<E> createChildCardView(IViewDescriptor childCardViewDescriptor, IActionHandler actionHandler,
+                                         Locale locale) {
+    return createView(childCardViewDescriptor, actionHandler, locale);
   }
 
   /**

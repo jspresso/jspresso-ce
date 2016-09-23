@@ -27,23 +27,20 @@ import org.jspresso.framework.application.frontend.command.remote.mobile.RemoteB
 import org.jspresso.framework.application.frontend.controller.remote.AbstractRemoteController;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
+import org.jspresso.framework.application.view.descriptor.basic.WorkspaceCardViewDescriptor;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RCardContainer;
 import org.jspresso.framework.gui.remote.RComponent;
-import org.jspresso.framework.gui.remote.RLabel;
 import org.jspresso.framework.gui.remote.mobile.RMobileCardPage;
 import org.jspresso.framework.gui.remote.mobile.RMobileForm;
 import org.jspresso.framework.gui.remote.mobile.RMobileNavPage;
 import org.jspresso.framework.gui.remote.mobile.RMobilePage;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.view.IView;
-import org.jspresso.framework.view.descriptor.EBorderType;
-import org.jspresso.framework.view.descriptor.EHorizontalPosition;
-import org.jspresso.framework.view.descriptor.ELabelPosition;
-import org.jspresso.framework.view.descriptor.EPosition;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.jspresso.framework.view.remote.mobile.MobileRemoteViewFactory;
 
 /**
  * This is is the mobile implementation of a &quot;remotable&quot; frontend
@@ -106,7 +103,9 @@ public class MobileRemoteController extends AbstractRemoteController {
 
   /**
    * Navigate back.
-   * @param context the context
+   *
+   * @param context
+   *     the context
    */
   @SuppressWarnings("unchecked")
   public void navigateBack(Map<String, Object> context) {
@@ -177,11 +176,7 @@ public class MobileRemoteController extends AbstractRemoteController {
       RMobileNavPage viewComponent = new RMobileNavPage(workspaceName + "_navigation");
       viewComponent.setLabel(workspace.getI18nName());
       viewComponent.setToolTip(workspace.getI18nDescription());
-      //    String workspaceI18nHeaderDescription = workspace.getI18nHeaderDescription();
-      //    if (workspaceI18nHeaderDescription != null && workspaceI18nHeaderDescription.length() > 0) {
-      //      RMobileForm headerForm = createHeaderForm(workspaceI18nHeaderDescription);
-      //      viewComponent.setHeaderSections(headerForm);
-      //    }
+      viewComponent.setHeaderText(workspace.getI18nPageHeaderDescription());
       IViewDescriptor workspaceNavigatorViewDescriptor = workspace.getViewDescriptor();
       IValueConnector workspaceConnector = getBackendController().getWorkspaceConnector(workspaceName);
       IView<RComponent> workspaceNavigator = createWorkspaceNavigator(workspaceName, workspaceNavigatorViewDescriptor);
@@ -190,20 +185,6 @@ public class MobileRemoteController extends AbstractRemoteController {
       getMvcBinder().bind(workspaceNavigator.getConnector(), workspaceConnector);
       return viewComponent;
     }
-  }
-
-  private RMobileForm createHeaderForm(String i18nDescription) {
-    RMobileForm headerForm = new RMobileForm(getGuidGenerator().generateGUID());
-    RLabel headerLabel = new RLabel(getGuidGenerator().generateGUID());
-    headerLabel.setLabel(i18nDescription);
-    headerForm.setPosition(EPosition.TOP.name());
-    headerForm.setBorderType(EBorderType.NONE.name());
-    headerForm.setLabelsPosition(ELabelPosition.NONE.name());
-    headerForm.setElementLabels(headerLabel);
-    headerForm.setElements(headerLabel);
-    headerForm.setElementWidths(1);
-    headerForm.setLabelHorizontalPositions(EHorizontalPosition.LEFT.name());
-    return headerForm;
   }
 
   /**
@@ -224,6 +205,9 @@ public class MobileRemoteController extends AbstractRemoteController {
     }
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   protected void displayWorkspace(String workspaceName, boolean bypassModuleBoundaryActions) {
     boolean navigateToModule = workspaceName != null && !workspaceName.equals(getSelectedWorkspaceName());
@@ -254,5 +238,13 @@ public class MobileRemoteController extends AbstractRemoteController {
    */
   protected boolean isSingleModuleWorkspaceShortcut() {
     return singleModuleWorkspaceShortcut;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected WorkspaceCardViewDescriptor createWorkspaceViewDescriptor() {
+    return super.createWorkspaceViewDescriptor();
   }
 }

@@ -68,6 +68,7 @@ public class MobileBeanCollectionModule extends BeanCollectionModule {
     moduleViewDescriptor.setModelDescriptor(moduleDescriptor);
     moduleViewDescriptor.setI18nName(getI18nName());
     moduleViewDescriptor.setI18nDescription(getI18nDescription());
+    moduleViewDescriptor.setI18nHeader(getI18nHeaderDescription());
     return moduleViewDescriptor;
   }
 

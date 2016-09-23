@@ -585,6 +585,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           splittedContent.add(this.decorateWithScrollContainer(contentLeft), {flex: 1});
           splittedContent.add(contentRight, {flex: 1});
         }
+        if (remoteNavPage.getHeaderText()) {
+          var headerLabel = new qx.ui.mobile.form.Label(remoteNavPage.getHeaderText());
+          headerLabel.addCssClasses(["jspresso-header-label"]);
+          content.add(headerLabel);
+        }
         if (headerSections) {
           for (var i = 0; i < headerSections.length; i++) {
             var contentToAdd;
@@ -823,6 +828,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       }
       compositePage.addListener("initialize", function (e) {
         var content = compositePage.getContent();
+        if (remoteCompositePage.getHeaderText()) {
+          var headerLabel = new qx.ui.mobile.form.Label(remoteCompositePage.getHeaderText());
+          headerLabel.addCssClasses(["jspresso-header-label"]);
+          content.add(headerLabel);
+        }
         var contentTop = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
         var contentCenter = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
         var contentBottom = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());

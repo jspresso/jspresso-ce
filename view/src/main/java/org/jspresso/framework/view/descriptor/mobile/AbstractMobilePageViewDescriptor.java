@@ -42,6 +42,7 @@ public abstract class AbstractMobilePageViewDescriptor extends BasicCompositeVie
   private List<String>       forClientTypes;
   private String             i18nName;
   private String             i18nDescription;
+  private String             i18nHeader;
 
   /**
    * Instantiates a new Mobile border view descriptor.
@@ -245,4 +246,24 @@ public abstract class AbstractMobilePageViewDescriptor extends BasicCompositeVie
   public void setI18nDescription(String i18nDescription) {
     this.i18nDescription = i18nDescription;
   }
+
+  /**
+   * Gets i 18 n header.
+   *
+   * @return the i 18 n header
+   */
+  public String getI18nHeader() {
+    return i18nHeader;
+  }
+
+  /**
+   * Sets i 18 n header.
+   *
+   * @param i18nHeader
+   *     the 18 n header
+   */
+  public void setI18nHeader(String i18nHeader) {
+    this.i18nHeader = i18nHeader;
+  }
+
 }

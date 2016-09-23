@@ -43,13 +43,24 @@ public class WorkspaceCardViewDescriptor extends AbstractCardViewDescriptor {
       String cardName = computeModuleCardName((Module) model);
       if (cardName != null) {
         if (getCardViewDescriptor(cardName) == null) {
-          putCardViewDescriptor(cardName, ((Module) model).getViewDescriptor());
+          putCardViewDescriptor(cardName, getModuleViewDescriptor((Module) model));
         }
         return cardName;
       }
       return null;
     }
     return null;
+  }
+
+  /**
+   * Gets module view descriptor.
+   *
+   * @param module
+   *     the module
+   * @return the module view descriptor
+   */
+  protected IViewDescriptor getModuleViewDescriptor(Module module) {
+    return module.getViewDescriptor();
   }
 
   /**
