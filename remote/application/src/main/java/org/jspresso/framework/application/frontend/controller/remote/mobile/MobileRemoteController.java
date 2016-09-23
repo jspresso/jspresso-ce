@@ -170,7 +170,7 @@ public class MobileRemoteController extends AbstractRemoteController {
     IView<RComponent> moduleAreaView = createModuleAreaView(workspaceName);
     RMobileCardPage moduleAreaPage = new RMobileCardPage(workspaceName + "_moduleArea");
     moduleAreaPage.setPages((RCardContainer) moduleAreaView.getPeer());
-    if (isSingleModuleWorkspaceShortcut() && modules != null && modules.size() == 1) {
+    if (isShortcutToSingleModule(modules)) {
       return moduleAreaPage;
     } else {
       RMobileNavPage viewComponent = new RMobileNavPage(workspaceName + "_navigation");
@@ -185,6 +185,13 @@ public class MobileRemoteController extends AbstractRemoteController {
       getMvcBinder().bind(workspaceNavigator.getConnector(), workspaceConnector);
       return viewComponent;
     }
+  }
+
+  private boolean isShortcutToSingleModule(List<Module> modules) {
+    return isSingleModuleWorkspaceShortcut()
+        && modules != null
+        && modules.size() == 1
+        && (modules.get(0).getSubModules() == null || modules.get(0).getSubModules().isEmpty());
   }
 
   /**
@@ -215,7 +222,7 @@ public class MobileRemoteController extends AbstractRemoteController {
     if (navigateToModule) {
       Workspace workspace = getWorkspace(workspaceName);
       List<Module> modules = workspace.getModules();
-      if (modules != null && modules.size() == 1) {
+      if (isShortcutToSingleModule(modules)) {
         displayModule(modules.get(0));
       }
     }
