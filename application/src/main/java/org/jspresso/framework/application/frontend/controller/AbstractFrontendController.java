@@ -40,6 +40,14 @@ import javax.security.auth.login.LoginException;
 import org.apache.commons.lang.LocaleUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.exception.ConstraintViolationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.ConcurrencyFailureException;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.orm.hibernate4.SessionFactoryUtils;
+import org.springframework.transaction.UnexpectedRollbackException;
+
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IAction;
@@ -88,11 +96,6 @@ import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.dao.ConcurrencyFailureException;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.orm.hibernate4.SessionFactoryUtils;
 
 /**
  * Base class for frontend application controllers. Frontend controllers are
@@ -592,6 +595,19 @@ public abstract class AbstractFrontendController<E, F, G> extends
       }
     } catch (Throwable ex) {
       Throwable refinedException = ex;
+      if (ex instanceof UnexpectedRollbackException) {
+        Throwable cause = ex.getCause();
+        while (cause != null) {
+          if (cause instanceof DataAccessException) {
+            refinedException = cause;
+            break;
+          } else if (cause instanceof HibernateException) {
+            refinedException = cause;
+            break;
+          }
+          cause = cause.getCause();
+        }
+      }
       if (ex instanceof HibernateException) {
         refinedException = SessionFactoryUtils.convertHibernateAccessException((HibernateException) ex);
       }
