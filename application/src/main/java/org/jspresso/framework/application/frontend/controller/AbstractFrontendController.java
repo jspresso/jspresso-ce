@@ -608,7 +608,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
           cause = cause.getCause();
         }
       }
-      if (ex instanceof HibernateException) {
+      if (refinedException instanceof HibernateException) {
         refinedException = SessionFactoryUtils.convertHibernateAccessException((HibernateException) ex);
       }
       handleException(refinedException, context);
