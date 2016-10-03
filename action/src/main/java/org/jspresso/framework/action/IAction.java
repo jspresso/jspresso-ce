@@ -22,6 +22,7 @@ import java.util.Map;
 
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.automation.IPermIdSource;
+import org.jspresso.framework.util.exception.IExceptionHandler;
 import org.jspresso.framework.util.lang.ICloneable;
 
 /**
@@ -29,7 +30,7 @@ import org.jspresso.framework.util.lang.ICloneable;
  *
  * @author Vincent Vandenschrick
  */
-public interface IAction extends ISecurable, IPermIdSource, ICloneable {
+public interface IAction extends ISecurable, IPermIdSource, ICloneable, IExceptionHandler {
 
   /**
    * {@code STATIC_CONTEXT_KEY} is "STATIC_CONTEXT_KEY".

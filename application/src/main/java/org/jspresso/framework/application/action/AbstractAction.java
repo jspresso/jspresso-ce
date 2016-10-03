@@ -248,4 +248,24 @@ public abstract class AbstractAction extends AbstractActionContextAware
       throw new NestedRuntimeException(ex);
     }
   }
+
+  /**
+   * The exception is re-thrown by default.
+   * {@inheritDoc}
+   *
+   * @param ex
+   *          the exception that occurs.
+   * @param context
+   *          the context where some extra information can be retrieved.
+   * @return
+   */
+  @Override
+  public boolean handleException(Throwable ex, Map<String, Object> context) {
+    if (ex instanceof RuntimeException) {
+      throw (RuntimeException) ex;
+    } else if (ex instanceof Error) {
+      throw (Error) ex;
+    }
+    return false;
+  }
 }
