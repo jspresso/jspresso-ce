@@ -23,6 +23,7 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
@@ -195,7 +196,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
       getConnectorAt(rowIndex, columnIndex).setConnectorValue(cellValue);
     } catch (RuntimeException ex) {
       if (exceptionHandler != null
-          && exceptionHandler.handleException(ex, null)) {
+          && exceptionHandler.handleException(ex, Collections.<String, Object>emptyMap())) {
         return;
       }
       throw ex;
