@@ -409,11 +409,7 @@ public abstract class AbstractBackendController extends AbstractController imple
    * @return true if the action chain should continue, false otherwise.
    */
   protected boolean executeBackend(IAction action, Map<String, Object> context) {
-    try {
-      return action.execute(this, context);
-    } catch(Throwable ex) {
-      return action.handleException(ex, context);
-    }
+    return action.execute(this, context);
   }
 
   /**

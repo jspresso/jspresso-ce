@@ -24,6 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Set;
 
 import gnu.trove.set.hash.THashSet;
@@ -777,7 +778,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    */
   protected void handleException(RuntimeException ex) {
     if (getExceptionHandler() != null
-        && getExceptionHandler().handleException(ex, null)) {
+        && getExceptionHandler().handleException(ex, Collections.<String, Object>emptyMap())) {
       return;
     }
     throw ex;

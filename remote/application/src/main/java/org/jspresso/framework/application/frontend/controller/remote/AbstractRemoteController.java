@@ -214,7 +214,7 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
         removedPeersGuids.clear();
       }
     } catch (Exception ex) {
-      handleException(ex, null);
+      handleException(ex, getInitialActionContext());
     } finally {
       IBackendController bc = getBackendController();
       if (bc != null) {

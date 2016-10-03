@@ -165,6 +165,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private       IPreferencesStore                     clientPreferencesStore;
   private       boolean                               checkActionThreadSafety;
   private final PropertyChangeListener                dirtInterceptor;
+  private       List<IAction>                         actionStack;
 
   /**
    * Constructs a new {@code AbstractFrontendController} instance.
@@ -181,6 +182,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     moduleAutoPinEnabled = true;
     tracksWorkspaceNavigator = true;
     checkActionThreadSafety = true;
+    actionStack = new ArrayList<>();
     dirtInterceptor = new PropertyChangeListener() {
       @Override
       public void propertyChange(PropertyChangeEvent evt) {
@@ -588,12 +590,32 @@ public abstract class AbstractFrontendController<E, F, G> extends
       }
       // Should be handled before getting there.
       // checkAccess(action);
+      actionStack.add(0, action);
       if (action.isBackend()) {
         result = executeBackend(action, context);
       } else {
         result = executeFrontend(action, context);
       }
+      if (!actionStack.isEmpty()) {
+        if (actionStack.get(0) == action) {
+          actionStack.remove(0);
+        }
+      }
     } catch (Throwable ex) {
+      while (!actionStack.isEmpty()) {
+        IAction callingAction = actionStack.remove(0);
+        if (callingAction != null) {
+          boolean handled = false;
+          try {
+            handled = callingAction.handleException(ex, context);
+          } catch (Throwable refinedException) {
+            ex = refinedException;
+          }
+          if (handled) {
+            return true;
+          }
+        }
+      }
       Throwable refinedException = ex;
       if (ex instanceof UnexpectedRollbackException) {
         Throwable cause = ex.getCause();
@@ -1583,11 +1605,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * @return true if the action was successfully executed.
    */
   protected boolean executeFrontend(IAction action, Map<String, Object> context) {
-    try {
-      return action.execute(this, context);
-    } catch (Throwable ex) {
-      return action.handleException(ex, context);
-    }
+    return action.execute(this, context);
   }
 
   /**
