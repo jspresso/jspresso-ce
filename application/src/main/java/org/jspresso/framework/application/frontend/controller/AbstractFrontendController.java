@@ -597,28 +597,29 @@ public abstract class AbstractFrontendController<E, F, G> extends
         result = executeFrontend(action, context);
       }
       if (!actionStack.isEmpty()) {
-        if (actionStack.get(0) == action) {
-          actionStack.remove(0);
-        }
+        actionStack.remove(0);
       }
     } catch (Throwable ex) {
+      Throwable refinedException = ex;
       while (!actionStack.isEmpty()) {
         IAction callingAction = actionStack.remove(0);
         if (callingAction != null) {
           boolean handled = false;
           try {
-            handled = callingAction.handleException(ex, context);
-          } catch (Throwable refinedException) {
-            ex = refinedException;
+            handled = callingAction.handleException(refinedException, context);
+          } catch (Throwable reworkedException) {
+            if (!actionStack.isEmpty()) {
+              throw reworkedException;
+            }
+            refinedException = reworkedException;
           }
           if (handled) {
             return true;
           }
         }
       }
-      Throwable refinedException = ex;
-      if (ex instanceof UnexpectedRollbackException) {
-        Throwable cause = ex.getCause();
+      if (refinedException instanceof UnexpectedRollbackException) {
+        Throwable cause = refinedException.getCause();
         while (cause != null) {
           if (cause instanceof DataAccessException) {
             refinedException = cause;
@@ -631,7 +632,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
         }
       }
       if (refinedException instanceof HibernateException) {
-        refinedException = SessionFactoryUtils.convertHibernateAccessException((HibernateException) ex);
+        refinedException = SessionFactoryUtils.convertHibernateAccessException((HibernateException) refinedException);
       }
       handleException(refinedException, context);
       result = false;
