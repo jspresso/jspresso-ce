@@ -1583,7 +1583,11 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * @return true if the action was successfully executed.
    */
   protected boolean executeFrontend(IAction action, Map<String, Object> context) {
-    return action.execute(this, context);
+    try {
+      return action.execute(this, context);
+    } catch (Throwable ex) {
+      return action.handleException(ex, context);
+    }
   }
 
   /**

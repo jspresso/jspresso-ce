@@ -399,7 +399,21 @@ public abstract class AbstractBackendController extends AbstractController imple
     if (action.getClass().isAnnotationPresent(Transactional.class)) {
       return executeTransactionally(action, context);
     }
-    return action.execute(this, context);
+    return executeBackend(action, context);
+  }
+
+  /**
+   * Executes a backend action.
+   * @param action the action to execute.
+   * @param context the action context
+   * @return true if the action chain should continue, false otherwise.
+   */
+  protected boolean executeBackend(IAction action, Map<String, Object> context) {
+    try {
+      return action.execute(this, context);
+    } catch(Throwable ex) {
+      return action.handleException(ex, context);
+    }
   }
 
   /**
@@ -477,7 +491,7 @@ public abstract class AbstractBackendController extends AbstractController imple
 
       @Override
       public Boolean doInTransaction(TransactionStatus status) {
-        boolean executionStatus = action.execute(AbstractBackendController.this, context);
+        boolean executionStatus = executeBackend(action, context);
         if (!executionStatus) {
           status.setRollbackOnly();
         }
