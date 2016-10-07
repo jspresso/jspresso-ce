@@ -14,7 +14,6 @@
 
 qx.Class.define("org.jspresso.framework.util.format.DateFormatDecorator", {
   extend: qx.util.format.DateFormat,
-  implement: qx.util.format.IFormat,
 
   properties: {
     formatDelegates: {
@@ -68,7 +67,10 @@ qx.Class.define("org.jspresso.framework.util.format.DateFormatDecorator", {
       var parsedDate;
       for (var i = 0; i < this.getFormatDelegates().length && !parsedDate; i++) {
         try {
-          parsedDate = this.getFormatDelegates()[i].parse(str);
+          var formatDelegate = this.getFormatDelegates()[i];
+          if (str.length == formatDelegate.getFormatPattern().length) {
+            parsedDate = formatDelegate.parse(str);
+          }
         } catch (err) {
           //if (i == this.getFormatDelegates().length -1) {
           //  throw new Error("No delegate could parse the string "

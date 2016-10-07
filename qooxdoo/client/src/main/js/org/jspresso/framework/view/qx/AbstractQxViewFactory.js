@@ -383,7 +383,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
       if (remoteComponent instanceof org.jspresso.framework.gui.remote.RDateField) {
         var formatDelegates = [];
         if (remoteComponent.getFormatPattern()) {
-          formatDelegates.push(new qx.util.format.DateFormat(remoteComponent.getFormatPattern()));
+          formatDelegates.push(new org.jspresso.framework.util.format.DateFormat(remoteComponent.getFormatPattern()));
         }
         if (remoteComponent.getType() == "DATE_TIME") {
           var dateTimeFormat = new org.jspresso.framework.util.format.DateFormatDecorator();
@@ -421,7 +421,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
       } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RTimeField) {
         var formatDelegates = [];
         if (remoteComponent.getFormatPattern()) {
-          formatDelegates.push(new qx.util.format.DateFormat(remoteComponent.getFormatPattern()));
+          formatDelegates.push(new org.jspresso.framework.util.format.DateFormat(remoteComponent.getFormatPattern()));
         }
         var timeFormat = new org.jspresso.framework.util.format.DateFormatDecorator();
         if (remoteComponent.getMillisecondsAware()) {
@@ -468,24 +468,30 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
 
     _createTimeFormatPatterns: function () {
       var formatPatterns = [];
-      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HHmmss", "HH:mm:ss"));
-      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HHmm", "HH:mm"));
+      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HH:mm:ss", "HH:mm:ss"));
+      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HHmmss", "HHmmss"));
+      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HH:mm", "HH:mm"));
+      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HHmm", "HHmm"));
       formatPatterns.push(qx.locale.Date.getDateTimeFormat("HH", "HH"));
       return formatPatterns;
     },
 
     _createShortTimeFormatPatterns: function () {
       var formatPatterns = [];
-      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HHmm", "HH:mm"));
+      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HH:mm", "HH:mm"));
+      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HHmm", "HHmm"));
       formatPatterns.push(qx.locale.Date.getDateTimeFormat("HH", "HH"));
       return formatPatterns;
     },
 
     _createLongTimeFormatPatterns: function () {
       var formatPatterns = [];
-      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HHmmssSSS", "HH:mm:ss.SSS"));
-      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HHmmss", "HH:mm:ss"));
-      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HHmm", "HH:mm"));
+      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HH:mm:ss.SSS", "HH:mm:ss.SSS"));
+      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HHmmssSSS", "HHmmssSSS"));
+      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HH:mm:ss", "HH:mm:ss"));
+      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HHmmss", "HHmmss"));
+      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HH:mm", "HH:mm"));
+      formatPatterns.push(qx.locale.Date.getDateTimeFormat("HHmm", "HHmm"));
       formatPatterns.push(qx.locale.Date.getDateTimeFormat("HH", "HH"));
       return formatPatterns;
     },
@@ -550,7 +556,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
     _createDateFormats: function (formatPatterns) {
       var formats = [];
       for (var i = 0; i < formatPatterns.length; i++) {
-        formats.push(new qx.util.format.DateFormat(formatPatterns[i]));
+        formats.push(new org.jspresso.framework.util.format.DateFormat(formatPatterns[i]));
       }
       return formats;
     },
