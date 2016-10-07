@@ -144,46 +144,30 @@ public class DateUtils {
     var dt:Date = new Date(/*2000,0,1*/);
     dt.time = 0;
     var time:Object;
-    var isMil:Boolean = false;
-    //standard time regex
     var matches:Array;
-    var reg:RegExp = /^(1[012]|[1-9])(:[0-5]\d)?(:[0-5]\d)?(.?\d{3})?( ?[AaPp][Mm]?)?$/;
-    matches = reg.exec(value);
-    if (!matches) {
-      //military time regex
-      reg = /^(2[0-4]|1\d|0?\d)(:?[0-5]\d)?(:?[0-5]\d)?(.?\d{3})?$/;
-      isMil = true;
-      matches = reg.exec(value);
+    var regs:Array = [
+      /^(2[0-4]|1\d|0\d):([0-5]\d):([0-5]\d).(\d{3})$/,
+      /^(2[0-4]|1\d|0\d)([0-5]\d)([0-5]\d)(\d{3})$/,
+      /^(2[0-4]|1\d|0\d):([0-5]\d):([0-5]\d)$/,
+      /^(2[0-4]|1\d|0\d)([0-5]\d)([0-5]\d)$/,
+      /^(2[0-4]|1\d|0\d):([0-5]\d)$/,
+      /^(2[0-4]|1\d|0\d)([0-5]\d)$/,
+      /^(2[0-4]|1\d|0\d)$/
+    ];
+    for (var i:int = 0; i < regs.length && !matches; i++) {
+      matches = regs[i].exec(value);
     }
+
     if (!matches) {
       //could not parse
       return null;
     }
     time = {
       hours: Number(matches[1]),
-      minutes: matches[2] ? Number(String(matches[2]).replace(':', '')) : 0,
-      seconds: matches[3] ? Number(String(matches[3]).replace(':', '')) : 0,
-      milliseconds: matches[4] ? Number(String(matches[4]).replace('.', '')) : 0,
-      ampm: null
+      minutes: matches.length > 2 ? (matches[2] ? Number(String(matches[2])) : 0) : 0,
+      seconds: matches.length > 3 ? (matches[3] ? Number(String(matches[3])) : 0) : 0,
+      milliseconds: matches.length > 4 ? (matches[4] ? Number(String(matches[4])) : 0) : 0
     };
-    if (isMil) {
-      //processing military format
-      dt.setHours(time.hours, time.minutes, time.seconds, time.milliseconds);
-    } else {
-      //processing common format
-      if (matches[4]) {
-        //user indicated AM/PM
-        if (String(matches[4]).indexOf('P') != -1) {
-          //PM
-          time.hours = time.hours == 12 ? 12 : time.hours + 12;
-        } else if (time.hours == 12) {
-          time.hours = 0;
-        }
-      } else if (guessPMBelow > 0) {
-        //will have to guess PM
-        time.hours = time.hours < guessPMBelow ? time.hours + 12 : time.hours;
-      }
-    }
     dt.setHours(time.hours, time.minutes, time.seconds, time.milliseconds);
     return dt;
   }
