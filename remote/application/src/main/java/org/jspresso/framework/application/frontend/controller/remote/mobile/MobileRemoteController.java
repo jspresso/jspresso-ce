@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.application.frontend.action.workspace.WorkspaceSelectionAction;
 import org.jspresso.framework.application.frontend.command.remote.mobile.RemoteAnimationCommand;
 import org.jspresso.framework.application.frontend.command.remote.mobile.RemoteBackCommand;
 import org.jspresso.framework.application.frontend.controller.remote.AbstractRemoteController;
@@ -33,11 +34,13 @@ import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RCardContainer;
 import org.jspresso.framework.gui.remote.RComponent;
+import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.gui.remote.mobile.RMobileCardPage;
 import org.jspresso.framework.gui.remote.mobile.RMobileForm;
 import org.jspresso.framework.gui.remote.mobile.RMobileNavPage;
 import org.jspresso.framework.gui.remote.mobile.RMobilePage;
 import org.jspresso.framework.util.gui.Dimension;
+import org.jspresso.framework.util.gui.EClientType;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.remote.mobile.MobileRemoteViewFactory;
@@ -223,7 +226,12 @@ public class MobileRemoteController extends AbstractRemoteController {
       Workspace workspace = getWorkspace(workspaceName);
       List<Module> modules = workspace.getModules();
       if (isShortcutToSingleModule(modules)) {
-        displayModule(modules.get(0));
+        Module singleModule = modules.get(0);
+        // This is a hack to detect that we are called for the second time. So we must not re-display the module,
+        // otherwise the entry action is executed twice.
+        if (!bypassModuleBoundaryActions) {
+          displayModule(singleModule);
+        }
       }
     }
   }
@@ -247,11 +255,13 @@ public class MobileRemoteController extends AbstractRemoteController {
     return singleModuleWorkspaceShortcut;
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
-  protected WorkspaceCardViewDescriptor createWorkspaceViewDescriptor() {
-    return super.createWorkspaceViewDescriptor();
+  protected WorkspaceSelectionAction<RComponent, RIcon, RAction> createWorkspaceSelectionAction(String workspaceName,
+                                                                                                IViewDescriptor workspaceViewDescriptor) {
+
+    WorkspaceSelectionAction<RComponent, RIcon, RAction> workspaceSelectionAction = super
+        .createWorkspaceSelectionAction(workspaceName, workspaceViewDescriptor);
+    workspaceSelectionAction.setForceReselection(getClientType() == EClientType.MOBILE_HTML5_PHONE);
+    return workspaceSelectionAction;
   }
 }

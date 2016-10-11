@@ -261,7 +261,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
     Module currentModule = getSelectedModule();
     // Test same workspace and same module. important when module is null and
     // selected module also to avoid stack overflows.
-    if (((getSelectedWorkspaceName() == null && workspaceName == null) || ObjectUtils.equals(getSelectedWorkspaceName(),
+    String oldSelectedWorkspaceName = getSelectedWorkspaceName();
+    if (((oldSelectedWorkspaceName == null && workspaceName == null) || ObjectUtils.equals(oldSelectedWorkspaceName,
         workspaceName)) && ((currentModule == null && module == null) || ObjectUtils.equals(currentModule, module))) {
       if (currentModule != null && module != null && ObjectUtils.equals(currentModule.getParent(),
           module.getParent())) {
@@ -269,8 +270,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
       }
     }
     if (currentModule != null) {
-      pinModule(getSelectedWorkspaceName(), currentModule);
-      Map<String, Object> navigationContext = getModuleActionContext(getSelectedWorkspaceName());
+      pinModule(oldSelectedWorkspaceName, currentModule);
+      Map<String, Object> navigationContext = getModuleActionContext(oldSelectedWorkspaceName);
       navigationContext.put(ActionContextConstants.FROM_MODULE, currentModule);
       navigationContext.put(ActionContextConstants.TO_MODULE, module);
       execute(currentModule.getExitAction(), navigationContext);
@@ -292,7 +293,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
       IValueConnector moduleModelConnector = getBackendController().getModuleConnector(module);
       mvcBinder.bind(moduleAreaView.getConnector(), moduleModelConnector);
     }
-    selectedModules.put(workspaceName, module);
+    if (workspaceName != null) {
+      selectedModules.put(workspaceName, module);
+    }
     if (module != null) {
       if (!module.isStarted()) {
         if (getOnModuleStartupAction() != null) {
@@ -303,7 +306,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
         }
       }
       module.setStarted(true);
-      pinModule(getSelectedWorkspaceName(), module);
+      String newSelectedWorkspaceName = getSelectedWorkspaceName();
+      pinModule(newSelectedWorkspaceName, module);
       Map<String, Object> navigationContext = getModuleActionContext(workspaceName);
       navigationContext.put(ActionContextConstants.FROM_MODULE, currentModule);
       navigationContext.put(ActionContextConstants.TO_MODULE, module);
@@ -1488,14 +1492,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
       if (isAccessGranted(workspace)) {
         try {
           pushToSecurityContext(workspace);
-          WorkspaceSelectionAction<E, F, G> workspaceSelectionAction = new WorkspaceSelectionAction<>();
-          IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
-              .getViewDescriptor();
-          workspaceSelectionAction.setWorkspaceName(workspaceName);
-          workspaceSelectionAction.setName(workspaceViewDescriptor.getName());
-          workspaceSelectionAction.setDescription(workspaceViewDescriptor
-              .getDescription());
-          workspaceSelectionAction.setIcon(workspaceViewDescriptor.getIcon());
+          IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName).getViewDescriptor();
+          WorkspaceSelectionAction<E, F, G> workspaceSelectionAction = createWorkspaceSelectionAction(workspaceName,
+              workspaceViewDescriptor);
           workspaceSelectionActions.add(workspaceSelectionAction);
         } finally {
           restoreLastSecurityContextSnapshot();
@@ -1505,6 +1504,26 @@ public abstract class AbstractFrontendController<E, F, G> extends
     workspaceSelectionActionList.setActions(workspaceSelectionActions);
     workspaceSelectionActionList.setCollapsable(true);
     return workspaceSelectionActionList;
+  }
+
+  /**
+   * Create workspace selection action workspace selection action.
+   *
+   * @param workspaceName
+   *     the workspace name
+   * @param workspaceViewDescriptor
+   *     the workspace view descriptor
+   * @return the workspace selection action
+   */
+  protected WorkspaceSelectionAction<E, F, G> createWorkspaceSelectionAction(String workspaceName,
+                                                                             IViewDescriptor workspaceViewDescriptor) {
+    WorkspaceSelectionAction<E, F, G> workspaceSelectionAction = new WorkspaceSelectionAction<>();
+    workspaceSelectionAction.setWorkspaceName(workspaceName);
+    workspaceSelectionAction.setName(workspaceViewDescriptor.getName());
+    workspaceSelectionAction.setDescription(workspaceViewDescriptor
+        .getDescription());
+    workspaceSelectionAction.setIcon(workspaceViewDescriptor.getIcon());
+    return workspaceSelectionAction;
   }
 
   /**
