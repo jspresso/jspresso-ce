@@ -142,13 +142,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       if (!this.__animationQueue && this.__messageQueue) {
         if (this.__messageQueue.length > 0) {
           var md = this.__messageQueue[0];
-          qx.event.Timer.once(function () {
-            this.__messageQueue.splice(0, 1);
-            md.show();
-            md.addListener("changeVisibility", function () {
-              this.__dequeueAnimation();
-            }, this);
-          }, this, 100);
+          this.__messageQueue.splice(0, 1);
+          md.show();
+          md.addListener("changeVisibility", function () {
+            this.__dequeueAnimation();
+          }, this);
         } else {
           this.__messageQueue = null;
         }
