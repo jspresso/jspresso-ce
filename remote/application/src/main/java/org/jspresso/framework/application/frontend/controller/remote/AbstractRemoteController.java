@@ -1085,21 +1085,23 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
   protected void displayWorkspace(String workspaceName, boolean bypassModuleBoundaryActions, boolean notifyRemote) {
     if (!ObjectUtils.equals(workspaceName, getSelectedWorkspaceName())) {
       super.displayWorkspace(workspaceName, bypassModuleBoundaryActions);
-      if (workspaceViews == null) {
-        workspaceViews = new HashSet<>();
-      }
-      RComponent workspaceView = null;
-      if (!workspaceViews.contains(workspaceName)) {
-        workspaceViews.add(workspaceName);
-        workspaceView = createWorkspaceView(workspaceName);
-      }
-      if (notifyRemote) {
-        RemoteWorkspaceDisplayCommand workspaceDisplayCommand = new RemoteWorkspaceDisplayCommand();
-        if (workspaceView != null) {
-          workspaceDisplayCommand.setWorkspaceView(workspaceView);
+      if (workspaceName != null) {
+        if (workspaceViews == null) {
+          workspaceViews = new HashSet<>();
         }
-        workspaceDisplayCommand.setWorkspaceName(workspaceName);
-        registerCommand(workspaceDisplayCommand);
+        RComponent workspaceView = null;
+        if (!workspaceViews.contains(workspaceName)) {
+          workspaceViews.add(workspaceName);
+          workspaceView = createWorkspaceView(workspaceName);
+        }
+        if (notifyRemote) {
+          RemoteWorkspaceDisplayCommand workspaceDisplayCommand = new RemoteWorkspaceDisplayCommand();
+          if (workspaceView != null) {
+            workspaceDisplayCommand.setWorkspaceView(workspaceView);
+          }
+          workspaceDisplayCommand.setWorkspaceName(workspaceName);
+          registerCommand(workspaceDisplayCommand);
+        }
       }
     }
   }

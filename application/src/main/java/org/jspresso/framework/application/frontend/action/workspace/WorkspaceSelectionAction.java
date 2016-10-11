@@ -36,7 +36,15 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
  */
 public class WorkspaceSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
 
-  private String workspaceName;
+  private String  workspaceName;
+  private boolean forceReselection;
+
+  /**
+   * Instantiates a new Workspace selection action.
+   */
+  public WorkspaceSelectionAction() {
+    forceReselection = false;
+  }
 
   /**
    * Displays the workspace.
@@ -46,6 +54,9 @@ public class WorkspaceSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
+    if (forceReselection) {
+      getController(context).displayWorkspace(null);
+    }
     getController(context).displayWorkspace(workspaceName);
     return super.execute(actionHandler, context);
   }
@@ -60,4 +71,13 @@ public class WorkspaceSelectionAction<E, F, G> extends FrontendAction<E, F, G> {
     this.workspaceName = workspaceName;
   }
 
+  /**
+   * Sets force reselection.
+   *
+   * @param forceReselection
+   *     the force reselection
+   */
+  public void setForceReselection(boolean forceReselection) {
+    this.forceReselection = forceReselection;
+  }
 }
