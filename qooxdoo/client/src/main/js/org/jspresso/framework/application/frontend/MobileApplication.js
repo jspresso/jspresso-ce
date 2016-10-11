@@ -106,7 +106,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.MobileApplication",
     main: function () {
       this.base(arguments);
 
-      qx.Class.patch(qx.ui.mobile.form.Input, org.jspresso.framework.patch.MInput);
+      // On modern webviews (e.g. Chromium), it makes the focus behaving wrong. The user has to tap twice into the
+      // field for the keyboard to appear.
+      //qx.Class.patch(qx.ui.mobile.form.Input, org.jspresso.framework.patch.MInput);
 
       if (qx.core.Environment.get("qx.mobile.nativescroll")) {
         // Fixes horizontal scrolling (graphs for instance)
