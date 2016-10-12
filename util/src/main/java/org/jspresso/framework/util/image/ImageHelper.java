@@ -25,6 +25,9 @@ import java.net.URL;
 import javaxt.io.Image;
 
 import org.apache.commons.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.jspresso.framework.util.url.UrlHelper;
 
 /**
@@ -33,6 +36,8 @@ import org.jspresso.framework.util.url.UrlHelper;
  * @author Vincent Vandenschrick
  */
 public final class ImageHelper {
+
+  private final static Logger LOG = LoggerFactory.getLogger(ImageHelper.class);
 
   private ImageHelper() {
     // private constructor for helper class.
@@ -57,6 +62,14 @@ public final class ImageHelper {
   public static byte[] scaleImage(Object originalImageInput, Integer width, Integer height, String targetFormatName)
       throws IOException {
     Image image = createImage(originalImageInput);
+    if (image == null) {
+      if (originalImageInput instanceof byte[]) {
+        LOG.warn("Received an invalid image content. Cannot transform so returning original content.");
+        return (byte[]) originalImageInput;
+      }
+      LOG.warn("Received an invalid image content. Cannot transform so returning null.");
+      return null;
+    }
     image.rotate();
     if (width != null && height != null) {
       image.resize(width, height, true);
@@ -134,8 +147,8 @@ public final class ImageHelper {
   public static byte[] fromBase64Src(String base64Src) {
     return Base64.decodeBase64(base64Src.replaceAll("^.*base64,", ""));
   }
-  
-  
+
+
   /**
    * Load image from project's ressource path.
    * @param resourcePath The path to the resource.
@@ -143,10 +156,10 @@ public final class ImageHelper {
    * @throws IOException If ressource cannot be read.
    */
   public static byte[] loadImage(String resourcePath) throws IOException {
-    
+
     if (!resourcePath.startsWith("/"))
       resourcePath = "/" + resourcePath;
-    
+
     InputStream is = null;
     try {
       is = ImageHelper.class.getResourceAsStream(resourcePath);
