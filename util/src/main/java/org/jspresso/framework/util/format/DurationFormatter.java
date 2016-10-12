@@ -23,6 +23,7 @@ import java.util.Locale;
 
 import org.joda.time.Instant;
 import org.joda.time.Period;
+import org.joda.time.PeriodType;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
@@ -84,7 +85,7 @@ public class DurationFormatter implements IFormatter<Number, String> {
       return null;
     }
     try {
-      return formatter.print(new Period(0, value.longValue()));
+      return formatter.print(new Period(0, value.longValue(), PeriodType.dayTime()));
     } catch (Throwable t) {
       return null;
     }
