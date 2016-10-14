@@ -46,7 +46,7 @@ import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.hibernate4.SessionFactoryUtils;
-import org.springframework.transaction.UnexpectedRollbackException;
+import org.springframework.transaction.TransactionException;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
@@ -108,16 +108,16 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
  * place where you define the top-level application structure like the workspace
  * list, the name, the application-wide actions, ...
  *
- * @author Vincent Vandenschrick
  * @param <E>
- *          the actual gui component type used.
+ *     the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *     the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *     the actual action type used.
+ * @author Vincent Vandenschrick
  */
-public abstract class AbstractFrontendController<E, F, G> extends
-    AbstractController implements IFrontendController<E, F, G> {
+public abstract class AbstractFrontendController<E, F, G> extends AbstractController
+    implements IFrontendController<E, F, G> {
 
   /**
    * {@code MAX_LOGIN_RETRIES}.
@@ -210,9 +210,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Determines the workspace name of the parameter module.
    *
    * @param module
-   *          the module to determine the workspace of.
+   *     the module to determine the workspace of.
    * @return the module workspace name. If no workspace already contains this
-   *         module, defaults to the current one.
+   * module, defaults to the current one.
    */
   protected String getModuleWorkspace(Module module) {
     String selectedWsName = getSelectedWorkspaceName();
@@ -324,9 +324,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
             (ICollectionConnectorListProvider) workspaceNavigatorConnector, module);
         if (result != null) {
           int moduleModelIndex = (Integer) result[1];
-          ((ICollectionConnector) result[0]).setSelectedIndices(new int[] {
-            moduleModelIndex
-          }, moduleModelIndex);
+          ((ICollectionConnector) result[0]).setSelectedIndices(new int[]{moduleModelIndex}, moduleModelIndex);
         }
       }
     } finally {
@@ -339,8 +337,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
     if (moduleAreaView != null) {
       IView<E> moduleView = moduleAreaView.getCurrentView();
       if (moduleView != null) {
-        return getViewFactory().getActionFactory().createActionContext(this,
-            moduleView, moduleView.getConnector(), null, null);
+        return getViewFactory().getActionFactory().createActionContext(this, moduleView, moduleView.getConnector(),
+            null, null);
       }
     }
     return new HashMap<>();
@@ -360,9 +358,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
         Module nextModule = nextEntry.getModule();
         if (nextWorkspaceName != null && nextModule != null) {
           backwardHistoryEntries.add(nextEntry);
-          if (ObjectUtils.equals(nextWorkspaceName, getSelectedWorkspaceName())
-              && ObjectUtils.equals(nextModule,
-                  getSelectedModule())) {
+          if (ObjectUtils.equals(nextWorkspaceName, getSelectedWorkspaceName()) && ObjectUtils.equals(nextModule,
+              getSelectedModule())) {
             displayNextPinnedModule();
           } else {
             displayModule(nextWorkspaceName, nextModule);
@@ -386,16 +383,13 @@ public abstract class AbstractFrontendController<E, F, G> extends
     try {
       moduleAutoPinEnabled = false;
       if (backwardHistoryEntries.size() > 0) {
-        ModuleHistoryEntry previousEntry = backwardHistoryEntries
-            .remove(backwardHistoryEntries.size() - 1);
+        ModuleHistoryEntry previousEntry = backwardHistoryEntries.remove(backwardHistoryEntries.size() - 1);
         String previousWorkspaceName = previousEntry.getWorkspaceName();
         Module previousModule = previousEntry.getModule();
         if (previousWorkspaceName != null && previousModule != null) {
           forwardHistoryEntries.add(0, previousEntry);
-          if (ObjectUtils.equals(previousWorkspaceName,
-              getSelectedWorkspaceName())
-              && ObjectUtils.equals(previousModule,
-                  getSelectedModule())) {
+          if (ObjectUtils.equals(previousWorkspaceName, getSelectedWorkspaceName()) && ObjectUtils.equals(
+              previousModule, getSelectedModule())) {
             displayPreviousPinnedModule();
           } else {
             displayModule(previousWorkspaceName, previousModule);
@@ -416,7 +410,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Retrieves a pinned module in the backward or forward history and pins it.
    *
    * @param snapshotId
-   *          the snapshot id of the module history to display.
+   *     the snapshot id of the module history to display.
    * @return the history entry actually displayed or null if no change.
    */
   protected ModuleHistoryEntry displayPinnedModule(String snapshotId) {
@@ -461,14 +455,13 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Displays a workspace.
    *
    * @param workspaceName
-   *          the workspace identifier.
+   *     the workspace identifier.
    * @param bypassModuleBoundaryActions
-   *          should we bypass module onEnter/Exit actions ?
+   *     should we bypass module onEnter/Exit actions ?
    */
-  protected void displayWorkspace(String workspaceName,
-      boolean bypassModuleBoundaryActions) {
-    if ((getSelectedWorkspaceName() == null && workspaceName == null)
-        || ObjectUtils.equals(getSelectedWorkspaceName(), workspaceName)) {
+  protected void displayWorkspace(String workspaceName, boolean bypassModuleBoundaryActions) {
+    if ((getSelectedWorkspaceName() == null && workspaceName == null) || ObjectUtils.equals(getSelectedWorkspaceName(),
+        workspaceName)) {
       return;
     }
     Workspace workspace = null;
@@ -531,11 +524,11 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * Transfer focus.
    *
-   * @param context the context
+   * @param context
+   *     the context
    */
   protected void transferFocus(Map<String, Object> context) {
-    @SuppressWarnings("unchecked")
-    E componentToFocus = (E) context.get(FrontendAction.COMPONENT_TO_FOCUS);
+    @SuppressWarnings("unchecked") E componentToFocus = (E) context.get(FrontendAction.COMPONENT_TO_FOCUS);
     if (componentToFocus != null) {
       focus(componentToFocus);
     }
@@ -560,7 +553,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * <p/>
    * {@inheritDoc}
    */
-  @SuppressWarnings({"ThrowFromFinallyBlock", "ConstantConditions" })
+  @SuppressWarnings({"ThrowFromFinallyBlock", "ConstantConditions"})
   @Override
   public boolean execute(IAction action, Map<String, Object> context) {
     if (action == null) {
@@ -622,22 +615,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
           }
         }
       }
-      if (refinedException instanceof UnexpectedRollbackException) {
-        Throwable cause = refinedException.getCause();
-        while (cause != null) {
-          if (cause instanceof DataAccessException) {
-            refinedException = cause;
-            break;
-          } else if (cause instanceof HibernateException) {
-            refinedException = cause;
-            break;
-          }
-          cause = cause.getCause();
-        }
-      }
-      if (refinedException instanceof HibernateException) {
-        refinedException = SessionFactoryUtils.convertHibernateAccessException((HibernateException) refinedException);
-      }
       handleException(refinedException, context);
       result = false;
     } finally {
@@ -668,7 +645,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * Execute delayed actions.
    *
-   * @param actionHandler the action handler
+   * @param actionHandler
+   *     the action handler
    */
   @Override
   public void executeDelayedActions(IActionHandler actionHandler) {
@@ -997,7 +975,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * like &quot;Change password&quot; action should be installed here.
    *
    * @param actionMap
-   *          the actionMap to set.
+   *     the actionMap to set.
    */
   public void setActionMap(ActionMap actionMap) {
     this.actionMap = actionMap;
@@ -1008,7 +986,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * actually leveraged depends on the UI channel.
    *
    * @param description
-   *          the description to set.
+   *     the description to set.
    */
   public void setDescription(String description) {
     controllerDescriptor.setDescription(description);
@@ -1022,7 +1000,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * performed.
    *
    * @param exitAction
-   *          the exitAction to set.
+   *     the exitAction to set.
    */
   public void setExitAction(IDisplayableAction exitAction) {
     this.exitAction = exitAction;
@@ -1038,7 +1016,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * kept as the UI i18n locale.
    *
    * @param forcedStartingLocale
-   *          the forcedStartingLocale to set.
+   *     the forcedStartingLocale to set.
    */
   public void setForcedStartingLocale(String forcedStartingLocale) {
     this.forcedStartingLocale = forcedStartingLocale;
@@ -1054,7 +1032,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * right-aligned in the menu bar.
    *
    * @param helpActionMap
-   *          the helpActionMap to set.
+   *     the helpActionMap to set.
    */
   public void setHelpActionMap(ActionMap helpActionMap) {
     this.helpActionMap = helpActionMap;
@@ -1066,7 +1044,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * history, e.g. previous, next, home, and so on.
    *
    * @param navigationActionMap
-   *          the navigationActionMap to set.
+   *     the navigationActionMap to set.
    */
   public void setNavigationActionMap(ActionMap navigationActionMap) {
     this.navigationActionMap = navigationActionMap;
@@ -1082,7 +1060,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * </ul>
    *
    * @param iconImageURL
-   *          the iconImageURL to set.
+   *     the iconImageURL to set.
    */
   public void setIconImageURL(String iconImageURL) {
     controllerDescriptor.setIconImageURL(iconImageURL);
@@ -1095,7 +1073,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * property or through server-specific configuration.
    *
    * @param loginContextName
-   *          the loginContextName to set.
+   *     the loginContextName to set.
    */
   public void setLoginContextName(String loginContextName) {
     this.loginContextName = loginContextName;
@@ -1106,7 +1084,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * built-in login view descriptor includes a standard login/password form.
    *
    * @param loginViewDescriptor
-   *          the loginViewDescriptor to set.
+   *     the loginViewDescriptor to set.
    */
   public void setLoginViewDescriptor(IViewDescriptor loginViewDescriptor) {
     this.loginViewDescriptor = loginViewDescriptor;
@@ -1118,7 +1096,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * can be customized here.
    *
    * @param mvcBinder
-   *          the mvcBinder to set.
+   *     the mvcBinder to set.
    */
   public void setMvcBinder(IMvcBinder mvcBinder) {
     this.mvcBinder = mvcBinder;
@@ -1130,7 +1108,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * title.
    *
    * @param name
-   *          the name to set.
+   *     the name to set.
    */
   public void setName(String name) {
     controllerDescriptor.setName(name);
@@ -1140,7 +1118,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Sets the lastUpdated.
    *
    * @param lastUpdated
-   *          the lastUpdated to set.
+   *     the lastUpdated to set.
    * @internal
    */
   public void setLastUpdated(long lastUpdated) {
@@ -1153,7 +1131,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * enters.
    *
    * @param onModuleEnterAction
-   *          the onModuleEnterAction to set.
+   *     the onModuleEnterAction to set.
    */
   public void setOnModuleEnterAction(IAction onModuleEnterAction) {
     this.onModuleEnterAction = onModuleEnterAction;
@@ -1165,7 +1143,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * starts.
    *
    * @param onModuleStartupAction
-   *          the onModuleStartupAction to set.
+   *     the onModuleStartupAction to set.
    */
   public void setOnModuleStartupAction(IAction onModuleStartupAction) {
     this.onModuleStartupAction = onModuleStartupAction;
@@ -1178,7 +1156,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * checks current module dirty state.
    *
    * @param onModuleExitAction
-   *          the onModuleExitAction to set.
+   *     the onModuleExitAction to set.
    */
   public void setOnModuleExitAction(IAction onModuleExitAction) {
     this.onModuleExitAction = onModuleExitAction;
@@ -1192,7 +1170,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * these extracted values.
    *
    * @param loginAction
-   *          the loginAction to set.
+   *     the loginAction to set.
    */
   public void setLoginAction(IAction loginAction) {
     this.loginAction = loginAction;
@@ -1206,7 +1184,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * &quot;tip of the day&quot; like action, ...
    *
    * @param startupAction
-   *          the startupAction to set.
+   *     the startupAction to set.
    */
   public void setStartupAction(IAction startupAction) {
     this.startupAction = startupAction;
@@ -1219,7 +1197,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * factory concrete type per UI channel.
    *
    * @param viewFactory
-   *          the viewFactory to set.
+   *     the viewFactory to set.
    */
   public void setViewFactory(IViewFactory<E, F, G> viewFactory) {
     this.viewFactory = viewFactory;
@@ -1231,7 +1209,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * sub-modules.
    *
    * @param workspaces
-   *          the workspaces to set.
+   *     the workspaces to set.
    */
   public void setWorkspaces(List<Workspace> workspaces) {
     this.workspaces = new LinkedHashMap<>();
@@ -1250,7 +1228,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * </ul>
    *
    * @param workspacesMenuIconImageUrl
-   *          the workspacesMenuIconImageUrl to set.
+   *     the workspacesMenuIconImageUrl to set.
    */
   public void setWorkspacesMenuIconImageUrl(String workspacesMenuIconImageUrl) {
     this.workspacesMenuIconImageUrl = workspacesMenuIconImageUrl;
@@ -1288,8 +1266,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
   @Override
   public boolean stop() {
     if (getApplicationSession().getPrincipal() != null) {
-      LOG.info("User {} logged out for session {}.", getApplicationSession()
-          .getUsername(), getApplicationSession().getId());
+      LOG.info("User {} logged out for session {}.", getApplicationSession().getUsername(),
+          getApplicationSession().getId());
     }
     selectedModules.clear();
     workspaceNavigatorConnectors.clear();
@@ -1326,8 +1304,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * Remember login.
    *
-   * @param username the username
-   * @param password the password
+   * @param username
+   *     the username
+   * @param password
+   *     the password
    */
   @Override
   public void rememberLogin(String username, String password) {
@@ -1356,8 +1336,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   protected UsernamePasswordHandler createLoginCallbackHandler() {
     UsernamePasswordHandler uph = createUsernamePasswordHandler();
     String[] savedUserPass = decodeUserPass(getClientPreference(UP_KEY));
-    if (savedUserPass != null && savedUserPass.length == 2
-        && savedUserPass[0] != null) {
+    if (savedUserPass != null && savedUserPass.length == 2 && savedUserPass[0] != null) {
       uph.setUsername(savedUserPass[0]);
       uph.setPassword(savedUserPass[1]);
       uph.setRememberMe(true);
@@ -1395,7 +1374,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Reads a client preference.
    *
    * @param key
-   *          the key under which the preference as been stored.
+   *     the key under which the preference as been stored.
    * @return the stored preference or null.
    */
   @Override
@@ -1410,9 +1389,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Stores a client preference.
    *
    * @param key
-   *          the key under which the preference as to be stored.
+   *     the key under which the preference as to be stored.
    * @param value
-   *          the value of the preference to be stored.
+   *     the value of the preference to be stored.
    */
   @Override
   public void putClientPreference(String key, String value) {
@@ -1425,7 +1404,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Deletes a client preference.
    *
    * @param key
-   *          the key under which the preference is stored.
+   *     the key under which the preference is stored.
    */
   @Override
   public void removeClientPreference(String key) {
@@ -1444,11 +1423,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
     BasicViewDescriptor refinedViewDescriptor = ((BasicViewDescriptor) loginViewDescriptor).clone();
     refinedViewDescriptor.setActionMap(null);
     refinedViewDescriptor.setSecondaryActionMap(null);
-    IView<E> loginView = getViewFactory().createView(refinedViewDescriptor,
-        this, getLocale());
-    IValueConnector loginModelConnector = getBackendController()
-        .createModelConnector("login",
-            loginViewDescriptor.getModelDescriptor());
+    IView<E> loginView = getViewFactory().createView(refinedViewDescriptor, this, getLocale());
+    IValueConnector loginModelConnector = getBackendController().createModelConnector("login",
+        loginViewDescriptor.getModelDescriptor());
     getMvcBinder().bind(loginView.getConnector(), loginModelConnector);
     loginModelConnector.setConnectorValue(getLoginCallbackHandler());
     return loginView;
@@ -1458,11 +1435,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Creates the module area view to display the modules content.
    *
    * @param workspaceName
-   *          the workspace to create the module area view for.
+   *     the workspace to create the module area view for.
    * @return the the module area view to display the modules content.
    */
   protected IView<E> createModuleAreaView(String workspaceName) {
-    IMapView<E> moduleAreaView = (IMapView<E>) viewFactory.createView(createWorkspaceViewDescriptor(), this, getLocale());
+    IMapView<E> moduleAreaView = (IMapView<E>) viewFactory.createView(createWorkspaceViewDescriptor(), this,
+        getLocale());
     workspaceViews.put(workspaceName, moduleAreaView);
     return moduleAreaView;
   }
@@ -1484,8 +1462,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   protected ActionList createWorkspaceActionList() {
     ActionList workspaceSelectionActionList = new ActionList();
     workspaceSelectionActionList.setName("workspaces");
-    workspaceSelectionActionList
-        .setIconImageURL(getWorkspacesMenuIconImageUrl());
+    workspaceSelectionActionList.setIconImageURL(getWorkspacesMenuIconImageUrl());
     List<IDisplayableAction> workspaceSelectionActions = new ArrayList<>();
     for (String workspaceName : getWorkspaceNames()) {
       Workspace workspace = getWorkspace(workspaceName);
@@ -1520,8 +1497,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     WorkspaceSelectionAction<E, F, G> workspaceSelectionAction = new WorkspaceSelectionAction<>();
     workspaceSelectionAction.setWorkspaceName(workspaceName);
     workspaceSelectionAction.setName(workspaceViewDescriptor.getName());
-    workspaceSelectionAction.setDescription(workspaceViewDescriptor
-        .getDescription());
+    workspaceSelectionAction.setDescription(workspaceViewDescriptor.getDescription());
     workspaceSelectionAction.setIcon(workspaceViewDescriptor.getIcon());
     return workspaceSelectionAction;
   }
@@ -1553,22 +1529,19 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Creates a workspace navigator based on the workspace definition.
    *
    * @param workspaceName
-   *          the workspace to create the navigator for.
+   *     the workspace to create the navigator for.
    * @param workspaceNavigatorViewDescriptor
-   *          the view descriptor of the navigator.
+   *     the view descriptor of the navigator.
    * @return the workspace navigator view.
    */
   protected IView<E> createWorkspaceNavigator(final String workspaceName,
-      IViewDescriptor workspaceNavigatorViewDescriptor) {
-    IView<E> workspaceNavigatorView = viewFactory.createView(
-        workspaceNavigatorViewDescriptor, this, getLocale());
+                                              IViewDescriptor workspaceNavigatorViewDescriptor) {
+    IView<E> workspaceNavigatorView = viewFactory.createView(workspaceNavigatorViewDescriptor, this, getLocale());
     IItemSelectable workspaceNavigator;
     if (workspaceNavigatorView.getConnector() instanceof IItemSelectable) {
-      workspaceNavigator = (IItemSelectable) workspaceNavigatorView
-          .getConnector();
+      workspaceNavigator = (IItemSelectable) workspaceNavigatorView.getConnector();
     } else {
-      workspaceNavigator = (IItemSelectable) ((ICompositeValueConnector) workspaceNavigatorView
-          .getConnector())
+      workspaceNavigator = (IItemSelectable) ((ICompositeValueConnector) workspaceNavigatorView.getConnector())
           .getChildConnector(ModelRefPropertyConnector.THIS_PROPERTY);
     }
     workspaceNavigator.addItemSelectionListener(new IItemSelectionListener() {
@@ -1592,8 +1565,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * @param reuseCurrent
    *     set to true to reuse an existing modal dialog.
    */
-  protected void displayModalDialog(E dialogView, Map<String, Object> context,
-      boolean reuseCurrent) {
+  protected void displayModalDialog(E dialogView, Map<String, Object> context, boolean reuseCurrent) {
     if (reuseCurrent && dialogContextStack.size() >= 1) {
       dialogContextStack.remove(0);
     }
@@ -1606,9 +1578,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Executes a backend action.
    *
    * @param action
-   *          the backend action to execute.
+   *     the backend action to execute.
    * @param context
-   *          the action execution context.
+   *     the action execution context.
    * @return true if the action was successfully executed.
    */
   protected boolean executeBackend(IAction action, Map<String, Object> context) {
@@ -1619,9 +1591,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Executes a frontend action.
    *
    * @param action
-   *          the frontend action to execute.
+   *     the frontend action to execute.
    * @param context
-   *          the action execution context.
+   *     the action execution context.
    * @return true if the action was successfully executed.
    */
   protected boolean executeFrontend(IAction action, Map<String, Object> context) {
@@ -1648,8 +1620,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
       ExitAction<E, F, G> action = new ExitAction<>();
       action.setName("quit.name");
       action.setDescription("quit.description");
-      action.setIconImageURL(getViewFactory().getIconFactory()
-          .getCancelIconImageURL());
+      action.setIconImageURL(getViewFactory().getIconFactory().getCancelIconImageURL());
       exitAction = action;
     }
     return exitAction;
@@ -1745,7 +1716,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Gets the selected module.
    *
    * @param workspaceName
-   *          the workspace name to query the selected module for.
+   *     the workspace name to query the selected module for.
    * @return the selected module.
    */
   protected Module getSelectedModule(String workspaceName) {
@@ -1814,8 +1785,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
             pushToSecurityContext(workspace);
             workspace.setSecurityHandler(this);
             translateWorkspace(workspace);
-            filteredWorkspaces.put(workspaceEntry.getKey(),
-                workspaceEntry.getValue());
+            filteredWorkspaces.put(workspaceEntry.getKey(), workspaceEntry.getValue());
           } finally {
             restoreLastSecurityContextSnapshot();
           }
@@ -1925,24 +1895,20 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * back.
    *
    * @param workspaceName
-   *          the workspace to pin the module for.
+   *     the workspace to pin the module for.
    * @param module
-   *          the module to pin.
+   *     the module to pin.
    */
   protected void pinModule(String workspaceName, Module module) {
     if (moduleAutoPinEnabled && module != null) {
       if (backwardHistoryEntries.size() > 0) {
-        ModuleHistoryEntry lastPinnedModule = backwardHistoryEntries
-            .get(backwardHistoryEntries.size() - 1);
-        if (lastPinnedModule.getWorkspaceName().equals(workspaceName)
-            && lastPinnedModule.getModule().equals(module)) {
+        ModuleHistoryEntry lastPinnedModule = backwardHistoryEntries.get(backwardHistoryEntries.size() - 1);
+        if (lastPinnedModule.getWorkspaceName().equals(workspaceName) && lastPinnedModule.getModule().equals(module)) {
           return;
         }
       }
-      String historyEntryName = getWorkspace(workspaceName).getI18nName()
-          + " - " + module.getI18nName();
-      ModuleHistoryEntry historyEntry = new ModuleHistoryEntry(workspaceName,
-          module, historyEntryName);
+      String historyEntryName = getWorkspace(workspaceName).getI18nName() + " - " + module.getI18nName();
+      ModuleHistoryEntry historyEntry = new ModuleHistoryEntry(workspaceName, module, historyEntryName);
       backwardHistoryEntries.add(historyEntry);
       pinnedModuleDisplayed(historyEntry, true);
       forwardHistoryEntries.clear();
@@ -1952,8 +1918,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * Callback when a module is actually pinned in history.
    *
-   * @param historyEntry           the pinned module history entry.
-   * @param addToHistory the add to history
+   * @param historyEntry
+   *     the pinned module history entry.
+   * @param addToHistory
+   *     the add to history
    */
   protected void pinnedModuleDisplayed(ModuleHistoryEntry historyEntry, boolean addToHistory) {
     // NO-OP. Managed by subclasses when needed.
@@ -1964,14 +1932,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * key from which the user message will be constructed.
    *
    * @param exception
-   *          the DataIntegrityViolationException.
+   *     the DataIntegrityViolationException.
    * @return the translation key to use.
    */
-  protected String refineIntegrityViolationTranslationKey(
-      DataIntegrityViolationException exception) {
+  protected String refineIntegrityViolationTranslationKey(DataIntegrityViolationException exception) {
     if (exception.getCause() instanceof ConstraintViolationException) {
-      ConstraintViolationException cve = (ConstraintViolationException) exception
-          .getCause();
+      ConstraintViolationException cve = (ConstraintViolationException) exception.getCause();
       if (cve.getSQL() != null && cve.getSQL().toUpperCase().contains("DELETE")) {
         return "error.fk.delete";
       }
@@ -1991,43 +1957,73 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * can be cleanly handled by the framework.
    *
    * @param exception
-   *          the exception to compute the message for.
+   *     the exception to compute the message for.
    * @return the user friendly message or null if this exception is unexpected.
    */
   protected String computeUserFriendlyExceptionMessage(Throwable exception) {
-    if (exception instanceof SecurityException) {
-      return exception.getMessage();
+    Throwable refinedException = exception;
+    if (refinedException instanceof TransactionException) {
+      Throwable cause = refinedException.getCause();
+      while (cause != null) {
+        if (cause instanceof HibernateException) {
+          refinedException = cause;
+          break;
+        } else if (cause instanceof SecurityException) {
+          refinedException = cause;
+          break;
+        } else if (cause instanceof BusinessException) {
+          refinedException = cause;
+          break;
+        } else if (cause instanceof DataIntegrityViolationException) {
+          refinedException = cause;
+          break;
+        } else if (cause instanceof ConcurrencyFailureException) {
+          refinedException = cause;
+          break;
+        }
+        cause = cause.getCause();
+      }
     }
-    if (exception instanceof BusinessException) {
-      return ((BusinessException) exception).getI18nMessage(this, getLocale());
+    if (refinedException instanceof HibernateException) {
+      refinedException = SessionFactoryUtils.convertHibernateAccessException((HibernateException) refinedException);
     }
-    if (exception instanceof DataIntegrityViolationException) {
+    if (refinedException instanceof SecurityException) {
+      return refinedException.getMessage();
+    }
+    if (refinedException instanceof BusinessException) {
+      return ((BusinessException) refinedException).getI18nMessage(this, getLocale());
+    }
+    if (refinedException instanceof DataIntegrityViolationException) {
       String constraintTranslation = null;
-      if (exception.getCause() instanceof ConstraintViolationException) {
-        ConstraintViolationException cve = ((ConstraintViolationException) exception
-            .getCause());
+      if (refinedException.getCause() instanceof ConstraintViolationException) {
+        ConstraintViolationException cve = ((ConstraintViolationException) refinedException.getCause());
         if (cve.getConstraintName() != null) {
-          constraintTranslation = getTranslation(cve.getConstraintName(),
-              getLocale());
+          constraintTranslation = getTranslation(cve.getConstraintName(), getLocale());
         }
       }
       if (constraintTranslation == null) {
         constraintTranslation = getTranslation("unknown", getLocale());
       }
-      return getTranslation(
-          refineIntegrityViolationTranslationKey((DataIntegrityViolationException) exception),
-          new Object[] {
-            constraintTranslation
-          }, getLocale());
+      return getTranslation(refineIntegrityViolationTranslationKey((DataIntegrityViolationException) refinedException),
+          new Object[]{constraintTranslation}, getLocale());
     }
-    if (exception instanceof ConcurrencyFailureException) {
+    if (refinedException instanceof ConcurrencyFailureException) {
       return getTranslation("concurrency.error.description", getLocale());
+    }
+    if (refinedException instanceof TransactionException) {
+      LOG.error("The transaction was unexpectedly rolled back", refinedException);
+      Class<?> exceptionClass = refinedException.getClass();
+      Throwable cause = refinedException.getCause();
+      if (cause != null) {
+        exceptionClass = cause.getClass();
+      }
+      return getTranslation("transaction.error.description",
+          new String[]{exceptionClass.getSimpleName(), refinedException.getMessage()}, getLocale());
     }
     return null;
   }
 
-  private void navigatorSelectionChanged(String workspaceName,
-      ICompositeValueConnector selectedConnector) {
+  private void navigatorSelectionChanged(String workspaceName, ICompositeValueConnector selectedConnector) {
     if (tracksWorkspaceNavigator) {
       handleWorkspaceNavigatorSelection(workspaceName, selectedConnector);
     }
@@ -2036,12 +2032,13 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * Handle workspace navigator selection.
    *
-   * @param workspaceName the workspace name
-   * @param selectedConnector the selected connector
+   * @param workspaceName
+   *     the workspace name
+   * @param selectedConnector
+   *     the selected connector
    */
   protected void handleWorkspaceNavigatorSelection(String workspaceName, ICompositeValueConnector selectedConnector) {
-    if (selectedConnector != null
-        && selectedConnector.getConnectorValue() instanceof Module) {
+    if (selectedConnector != null && selectedConnector.getConnectorValue() instanceof Module) {
       Module selectedModule = selectedConnector.getConnectorValue();
       displayModule(workspaceName, selectedModule);
       // We do not reset displayed module on navigator selection anymore.
@@ -2059,30 +2056,26 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   @SuppressWarnings("ConstantConditions")
-  private Object[] synchWorkspaceNavigatorSelection(
-      ICollectionConnectorListProvider navigatorConnector, Module module) {
+  private Object[] synchWorkspaceNavigatorSelection(ICollectionConnectorListProvider navigatorConnector,
+                                                    Module module) {
     Object[] result = null;
     int moduleModelIndex = -1;
-    for (ICollectionConnector childCollectionConnector : navigatorConnector
-        .getCollectionConnectors()) {
+    for (ICollectionConnector childCollectionConnector : navigatorConnector.getCollectionConnectors()) {
       for (int i = 0; i < childCollectionConnector.getChildConnectorCount(); i++) {
-        IValueConnector childConnector = childCollectionConnector
-            .getChildConnector(i);
+        IValueConnector childConnector = childCollectionConnector.getChildConnector(i);
         if (module != null && module.equals(childConnector.getConnectorValue())) {
           moduleModelIndex = i;
         }
         if (childConnector instanceof ICollectionConnectorListProvider) {
-          Object[] subResult = synchWorkspaceNavigatorSelection(
-              (ICollectionConnectorListProvider) childConnector, module);
+          Object[] subResult = synchWorkspaceNavigatorSelection((ICollectionConnectorListProvider) childConnector,
+              module);
           if (subResult != null) {
             result = subResult;
           }
         }
       }
       if (moduleModelIndex >= 0) {
-        result = new Object[] {
-            childCollectionConnector, moduleModelIndex
-        };
+        result = new Object[]{childCollectionConnector, moduleModelIndex};
       } else {
         childCollectionConnector.setSelectedIndices(null, -1);
       }
@@ -2104,7 +2097,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * Translate workspace.
    *
-   * @param workspace the workspace
+   * @param workspace
+   *     the workspace
    */
   protected void translateWorkspace(Workspace workspace) {
     workspace.setI18nName(getTranslation(workspace.getName(), getLocale()));
@@ -2132,7 +2126,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * depends on the UI channel.
    *
    * @param frameWidth
-   *          the frameWidth to set.
+   *     the frameWidth to set.
    */
   public void setFrameWidth(Integer frameWidth) {
     this.frameWidth = frameWidth;
@@ -2152,7 +2146,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * leveraged depends on the UI channel.
    *
    * @param frameHeight
-   *          the frameHeight to set.
+   *     the frameHeight to set.
    */
   public void setFrameHeight(Integer frameHeight) {
     this.frameHeight = frameHeight;
@@ -2174,7 +2168,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * the main action map, e.g. placed in another toolbar.
    *
    * @param secondaryActionMap
-   *          the secondaryActionMap to set.
+   *     the secondaryActionMap to set.
    */
   public void setSecondaryActionMap(ActionMap secondaryActionMap) {
     this.secondaryActionMap = secondaryActionMap;
@@ -2195,9 +2189,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * used later for "remember me" function.
    *
    * @param username
-   *          the user name.
+   *     the user name.
    * @param password
-   *          the user password;
+   *     the user password;
    * @return the encoded username/password string.
    */
   @SuppressWarnings("UnusedParameters")
@@ -2226,7 +2220,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * values. This is used in "remember me" function.
    *
    * @param encodedUserPass
-   *          the encoded username/password string.
+   *     the encoded username/password string.
    * @return an string array of username/password strings
    */
   protected String[] decodeUserPass(String encodedUserPass) {
@@ -2283,7 +2277,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Sets the clientPreferenceStore.
    *
    * @param clientPreferencesStore
-   *          the clientPreferenceStore to set.
+   *     the clientPreferenceStore to set.
    */
   public void setClientPreferencesStore(IPreferencesStore clientPreferencesStore) {
     this.clientPreferencesStore = clientPreferencesStore;
@@ -2351,10 +2345,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * {@inheritDoc}
    */
   @Override
-  public String getTranslation(String key, Object[] args,
-      String defaultMessage, Locale locale) {
-    return getBackendController().getTranslation(key, args, defaultMessage,
-        locale);
+  public String getTranslation(String key, Object[] args, String defaultMessage, Locale locale) {
+    return getBackendController().getTranslation(key, args, defaultMessage, locale);
   }
 
   /**
@@ -2365,13 +2357,11 @@ public abstract class AbstractFrontendController<E, F, G> extends
     Map<String, Object> currentSecurityContext = getSecurityContext();
     int snapshotsToRestore = 0;
     try {
-      if (!currentSecurityContext
-          .containsKey(SecurityContextConstants.WORKSPACE)) {
+      if (!currentSecurityContext.containsKey(SecurityContextConstants.WORKSPACE)) {
         pushToSecurityContext(getSelectedWorkspace());
         snapshotsToRestore++;
       }
-      if (!currentSecurityContext
-          .containsKey(SecurityContextConstants.MODULE_CHAIN)) {
+      if (!currentSecurityContext.containsKey(SecurityContextConstants.MODULE_CHAIN)) {
         pushToSecurityContext(getSelectedModule());
         snapshotsToRestore++;
       }
@@ -2433,7 +2423,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Traces unexpected exceptions properly.
    *
    * @param ex
-   *          the exception to trace.
+   *     the exception to trace.
    */
   @Override
   public void traceUnexpectedException(Throwable ex) {
@@ -2459,7 +2449,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Sets the checkActionThreadSafety.
    *
    * @param checkActionThreadSafety
-   *          the checkActionThreadSafety to set.
+   *     the checkActionThreadSafety to set.
    */
   public void setCheckActionThreadSafety(boolean checkActionThreadSafety) {
     this.checkActionThreadSafety = checkActionThreadSafety;
@@ -2469,12 +2459,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * {@inheritDoc}
    */
   @Override
-  public final void displayModalDialog(E mainView, final List<G> actions,
-      final String title, final E sourceComponent,
-      final Map<String, Object> context, final Dimension dimension,
-      boolean reuseCurrent) {
-    displayDialog(mainView, actions, title, sourceComponent, context,
-        dimension, reuseCurrent, true);
+  public final void displayModalDialog(E mainView, final List<G> actions, final String title, final E sourceComponent,
+                                       final Map<String, Object> context, final Dimension dimension,
+                                       boolean reuseCurrent) {
+    displayDialog(mainView, actions, title, sourceComponent, context, dimension, reuseCurrent, true);
   }
 
   @Override
