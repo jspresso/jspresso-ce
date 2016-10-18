@@ -36,7 +36,12 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
 
 
   members: {
-    __viewFactory: null, __rComponent: null, __actionHandler: null, __currentBinding: null, __currentCellState: null,
+    __viewFactory: null,
+    __rComponent: null,
+    __actionHandler: null,
+    __currentBinding: null,
+    __currentCellState: null,
+    __savedDialogIndex: null,
 
     // interface implementation
     createCellEditor: function (cellInfo) {
@@ -67,7 +72,7 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
           return value === "" ? null : value;
         }
       });
-      this.__actionHandler.setCurrentViewStateGuid(this.__currentCellState.getGuid(),
+      this.__savedDialogIndex = this.__actionHandler.setCurrentViewStateGuid(this.__currentCellState.getGuid(),
           this.__currentCellState.getPermId());
       var editorWidget = this.__viewFactory.createComponent(this.__rComponent, false);
       editorWidget.addListener("disappear", this.__cleanCurrentCellBinding, this);
@@ -234,7 +239,7 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
         this.__currentCellState.removeBinding(this.__currentBinding);
         this.__currentBinding = null;
         this.__currentCellState = null;
-        this.__actionHandler.setCurrentViewStateGuid(null, null);
+        this.__actionHandler.setCurrentViewStateGuid(null, null, this.__savedDialogIndex);
       }
     }
   }

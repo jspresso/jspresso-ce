@@ -903,13 +903,20 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     },
 
     /**
-     *
      * @param viewStateGuid {String}
      * @param viewStatePermId {String}
+     * @param dialogStackIndex {int}
+     * @return {int} the actual dialogStackIndex used for setting the current view state guid.
      */
-    setCurrentViewStateGuid: function (viewStateGuid, viewStatePermId) {
-      this._dialogStack[this._dialogStack.length - 1][1] = viewStateGuid;
-      this._dialogStack[this._dialogStack.length - 1][2] = viewStatePermId;
+    setCurrentViewStateGuid: function (viewStateGuid, viewStatePermId, dialogStackIndex) {
+      if (typeof dialogStackIndex == 'undefined') {
+        dialogStackIndex = this._dialogStack.length - 1;
+      }
+      if (this._dialogStack.length > dialogStackIndex) {
+        this._dialogStack[dialogStackIndex][1] = viewStateGuid;
+        this._dialogStack[dialogStackIndex][2] = viewStatePermId;
+      }
+      return dialogStackIndex;
     },
 
     /**
