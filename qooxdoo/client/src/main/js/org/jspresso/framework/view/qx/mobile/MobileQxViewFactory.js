@@ -2078,6 +2078,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createImageComponent: function (remoteImageComponent) {
       var imageComponent = new qx.ui.mobile.basic.Image();
+      qx.bom.element.Style.set(imageComponent.getContentElement(), "max-width", "100%");
 
       var state = remoteImageComponent.getState();
       state.addListener("changeValue", function (e) {
