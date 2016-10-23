@@ -140,7 +140,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           base: true,
           style: function (states) {
             return {
-              padding: [2, 4]
+              padding: [2, 4],
+              backgroundColor : (states.disabled || states.readonly) ? "background-disabled" : "white"
             };
           }
         },

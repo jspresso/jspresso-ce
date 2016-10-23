@@ -67,6 +67,8 @@ qx.Theme.define("org.jspresso.framework.theme.Color",
         "navigator-header": "navigator",
         "navigator-header-text": "white",
         "navigator-selected": "background-selected",
-        "navigator-text-selected": "text-selected"
+        "navigator-text-selected": "text-selected",
+
+        "background-disabled": "#DDDDDD"
       }
     });
