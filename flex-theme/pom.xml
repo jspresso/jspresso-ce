@@ -8,7 +8,7 @@
   </parent>
   <artifactId>jspresso-flex-theme</artifactId>
   <packaging>swc</packaging>
-  <name>Jspresso Framework - Flex - Theme</name>
+  <name>Flex - Theme</name>
 
   <dependencies>
     <dependency>
