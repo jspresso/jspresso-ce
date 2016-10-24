@@ -119,25 +119,36 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       return component;
     },
 
+    __getComponentToStyle: function (component) {
+      var componentToStyle = component;
+      if (component instanceof qx.ui.container.Composite) {
+        if (component.getUserData("componentToStyle")) {
+          componentToStyle = component.getUserData("componentToStyle");
+        }
+      }
+      return componentToStyle;
+    },
+
     /**
      * @param component {qx.ui.core.Widget}
      * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
      * @return {undefined}
      */
     applyComponentStyle: function (component, remoteComponent) {
+      var componentToStyle = this.__getComponentToStyle(component);
       if (remoteComponent.getForeground()) {
-        component.setTextColor(
+        componentToStyle.setTextColor(
             org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(remoteComponent.getForeground()));
       }
       if (remoteComponent.getBackground()) {
-        component.setDecorator("main");
-        component.setBackgroundColor(
+        componentToStyle.setDecorator("main");
+        componentToStyle.setBackgroundColor(
             org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(remoteComponent.getBackground()));
       }
       var rFont = remoteComponent.getFont();
       if (rFont) {
-        var compFont = component.getFont();
-        component.setFont(org.jspresso.framework.view.qx.DefaultQxViewFactory._fontToQxFont(rFont, compFont));
+        var compFont = componentToStyle.getFont();
+        componentToStyle.setFont(org.jspresso.framework.view.qx.DefaultQxViewFactory._fontToQxFont(rFont, compFont));
       }
       this._applyStyleName(component, remoteComponent.getStyleName());
     },
@@ -611,20 +622,21 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _bindDynamicBackground: function (component, rComponent) {
       var backgroundState = rComponent.getBackgroundState();
       if (backgroundState) {
-        component.addListener("appear", function () {
-          var defaultDecorator = component.getDecorator();
-          var defaultBackgroundColor = component.getBackgroundColor();
+        var componentToStyle = this.__getComponentToStyle(component);
+        componentToStyle.addListener("appear", function () {
+          var defaultDecorator = componentToStyle.getDecorator();
+          var defaultBackgroundColor = componentToStyle.getBackgroundColor();
           var mainDecorator = "main";
           this._getRemotePeerRegistry().register(backgroundState);
           var modelController = new qx.data.controller.Object(backgroundState);
-          modelController.addTarget(component, "backgroundColor", "value", false, {
+          modelController.addTarget(componentToStyle, "backgroundColor", "value", false, {
             converter: function (modelValue, model) {
               if (modelValue) {
                 // To allow for having the background color displayed instead of the decorator.
-                component.setDecorator(mainDecorator);
+                componentToStyle.setDecorator(mainDecorator);
                 return org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(modelValue);
               } else {
-                component.setDecorator(defaultDecorator);
+                componentToStyle.setDecorator(defaultDecorator);
                 return defaultBackgroundColor;
               }
             }
@@ -636,11 +648,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _bindDynamicForeground: function (component, rComponent) {
       var foregroundState = rComponent.getForegroundState();
       if (foregroundState) {
-        component.addListener("appear", function () {
+        var componentToStyle = this.__getComponentToStyle(component);
+        componentToStyle.addListener("appear", function () {
           this._getRemotePeerRegistry().register(foregroundState);
           var modelController = new qx.data.controller.Object(foregroundState);
-          var defaultTextColor = component.getTextColor();
-          modelController.addTarget(component, "textColor", "value", false, {
+          var defaultTextColor = componentToStyle.getTextColor();
+          modelController.addTarget(componentToStyle, "textColor", "value", false, {
             converter: function (modelValue, model) {
               if (modelValue) {
                 return org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(modelValue);
@@ -656,11 +669,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _bindDynamicFont: function (component, rComponent) {
       var fontState = rComponent.getFontState();
       if (fontState) {
-        component.addListener("appear", function () {
+        var componentToStyle = this.__getComponentToStyle(component);
+        componentToStyle.addListener("appear", function () {
           this._getRemotePeerRegistry().register(fontState);
           var modelController = new qx.data.controller.Object(fontState);
-          var defaultFont = component.getFont();
-          modelController.addTarget(component, "font", "value", false, {
+          var defaultFont = componentToStyle.getFont();
+          modelController.addTarget(componentToStyle, "font", "value", false, {
             converter: function (modelValue, model) {
               if (modelValue) {
                 return org.jspresso.framework.view.qx.DefaultQxViewFactory._fontToQxFont(modelValue);
@@ -1934,6 +1948,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var modelController = new qx.data.controller.Object(state);
       var mainAction = remoteActionField.getActionLists()[0].getActions()[0];
       if (textField) {
+        actionField.setUserData("componentToStyle", textField);
         // propagate focus
         actionField.addListener("focus", function (e) {
           if (textField.isFocusable()) {
@@ -2001,12 +2016,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           } else {
             actionField.setDecorator(null);
           }
-        }, this);
-      }
-      if (textField) {
-        actionField.addListener("appear", function () {
-          actionField.setBackgroundColor(textField.getBackgroundColor());
-          textField.setBackgroundColor(null);
         }, this);
       }
       return actionField;
