@@ -98,7 +98,7 @@ public class RemoteValueDgItemEditor extends Canvas implements IColumnIndexProvi
     if (_state.value == null || _state.value == "") {
       var tf:UIComponent;
       if (_editor is Container) {
-        tf = (_editor as Container).getChildByName("tf") as UIComponent;
+        tf = (_editor as Container).getChildByName("componentToStyle") as UIComponent;
       }
       if (tf is TextInput) {
         (tf as TextInput).text = null;
@@ -115,7 +115,7 @@ public class RemoteValueDgItemEditor extends Canvas implements IColumnIndexProvi
   override public function setFocus():void {
     var tf:UIComponent;
     if (_editor is Container) {
-      tf = (_editor as Container).getChildByName("tf") as UIComponent;
+      tf = (_editor as Container).getChildByName("componentToStyle") as UIComponent;
     }
     if (tf != null) {
       tf.setFocus();

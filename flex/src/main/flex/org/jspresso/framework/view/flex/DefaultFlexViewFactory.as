@@ -353,32 +353,33 @@ public class DefaultFlexViewFactory {
   }
 
   public function applyComponentStyle(component:*, remoteComponent:RComponent):void {
+    var componentToStyle:* = _getComponentToStyle(component);
     if (remoteComponent.foreground) {
-      component.setStyle("color", remoteComponent.foreground);
-      if (component is IFlexDisplayObject) {
-        (component as IFlexDisplayObject).alpha = getAlphaFromArgb(remoteComponent.foreground);
+      componentToStyle.setStyle("color", remoteComponent.foreground);
+      if (componentToStyle is IFlexDisplayObject) {
+        (componentToStyle as IFlexDisplayObject).alpha = getAlphaFromArgb(remoteComponent.foreground);
       }
     }
     if (remoteComponent.background) {
-      component.setStyle("backgroundColor", remoteComponent.background);
-      component.setStyle("backgroundAlpha", getAlphaFromArgb(remoteComponent.background));
+      componentToStyle.setStyle("backgroundColor", remoteComponent.background);
+      componentToStyle.setStyle("backgroundAlpha", getAlphaFromArgb(remoteComponent.background));
     }
     if (remoteComponent.font) {
       if (remoteComponent.font.name) {
-        component.setStyle("fontFamily", remoteComponent.font.name);
+        componentToStyle.setStyle("fontFamily", remoteComponent.font.name);
       }
       if (remoteComponent.font.size > 0) {
-        component.setStyle("fontSize", remoteComponent.font.size);
+        componentToStyle.setStyle("fontSize", remoteComponent.font.size);
       }
       if (remoteComponent.font.italic) {
-        component.setStyle("fontStyle", "italic");
+        componentToStyle.setStyle("fontStyle", "italic");
       }
       if (remoteComponent.font.bold) {
-        component.setStyle("fontWeight", "bold");
+        componentToStyle.setStyle("fontWeight", "bold");
       }
     }
     if (remoteComponent.styleName) {
-      component.styleName = remoteComponent.styleName;
+      componentToStyle.styleName = remoteComponent.styleName;
     }
   }
 
@@ -1110,11 +1111,21 @@ public class DefaultFlexViewFactory {
     return actionComponent;
   }
 
+  private function _getComponentToStyle (component:*):* {
+    var componentToStyle:* = component;
+    if (component is Container) {
+      if (component.getChildByName("componentToStyle")) {
+        componentToStyle = component.getChildByName("componentToStyle") as UIComponent;
+      }
+    }
+    return componentToStyle;
+  }
+
   protected function createActionField(remoteActionField:RActionField):UIComponent {
     var textField:TextInput = null;
     if (remoteActionField.showTextField) {
       textField = createTextInputComponent();
-      textField.name = "tf";
+      textField.name = "componentToStyle";
       sizeMaxComponentWidth(textField, remoteActionField);
       if(remoteActionField.characterAction) {
         textField.addEventListener(Event.CHANGE, function (event:Event):void {
@@ -1976,13 +1987,14 @@ public class DefaultFlexViewFactory {
   protected function bindDynamicBackground(component:UIComponent, rComponent:RComponent):void {
     if (rComponent.backgroundState) {
       getRemotePeerRegistry().register(rComponent.backgroundState);
+      var componentToStyle:UIComponent = _getComponentToStyle(component);
       var updateBackground:Function = function (value:Object):void {
         if (value) {
-          component.setStyle("backgroundColor", value);
-          component.setStyle("backgroundAlpha", getAlphaFromArgb(value as String));
+          componentToStyle.setStyle("backgroundColor", value);
+          componentToStyle.setStyle("backgroundAlpha", getAlphaFromArgb(value as String));
         } else {
-          component.setStyle("backgroundColor", null);
-          component.setStyle("backgroundAlpha", null);
+          componentToStyle.setStyle("backgroundColor", null);
+          componentToStyle.setStyle("backgroundAlpha", null);
         }
       };
       BindingUtils.bindSetter(updateBackground, rComponent.backgroundState, "value", true);
@@ -1992,13 +2004,14 @@ public class DefaultFlexViewFactory {
   protected function bindDynamicForeground(component:UIComponent, rComponent:RComponent):void {
     if (rComponent.foregroundState) {
       getRemotePeerRegistry().register(rComponent.foregroundState);
+      var componentToStyle:UIComponent = _getComponentToStyle(component);
       var updateForeground:Function = function (value:Object):void {
         if (value) {
-          component.setStyle("color", value);
-          component.setStyle("alpha", getAlphaFromArgb(value as String));
+          componentToStyle.setStyle("color", value);
+          componentToStyle.setStyle("alpha", getAlphaFromArgb(value as String));
         } else {
-          component.setStyle("color", null);
-          component.setStyle("alpha", null);
+          componentToStyle.setStyle("color", null);
+          componentToStyle.setStyle("alpha", null);
         }
       };
       BindingUtils.bindSetter(updateForeground, rComponent.foregroundState, "value", true);
@@ -2008,25 +2021,26 @@ public class DefaultFlexViewFactory {
   protected function bindDynamicFont(component:UIComponent, rComponent:RComponent):void {
     if (rComponent.fontState) {
       getRemotePeerRegistry().register(rComponent.fontState);
+      var componentToStyle:UIComponent = _getComponentToStyle(component);
       var updateFont:Function = function (value:Object):void {
         if (value is Font) {
           if ((value as Font).name) {
-            component.setStyle("fontFamily", (value as Font).name);
+            componentToStyle.setStyle("fontFamily", (value as Font).name);
           }
           if ((value as Font).size > 0) {
-            component.setStyle("fontSize", (value as Font).size);
+            componentToStyle.setStyle("fontSize", (value as Font).size);
           }
           if ((value as Font).italic) {
-            component.setStyle("fontStyle", "italic");
+            componentToStyle.setStyle("fontStyle", "italic");
           }
           if ((value as Font).bold) {
-            component.setStyle("fontWeight", "bold");
+            componentToStyle.setStyle("fontWeight", "bold");
           }
         } else {
-          component.setStyle("fontFamily", null);
-          component.setStyle("fontSize", null);
-          component.setStyle("fontStyle", null);
-          component.setStyle("fontWeight", null);
+          componentToStyle.setStyle("fontFamily", null);
+          componentToStyle.setStyle("fontSize", null);
+          componentToStyle.setStyle("fontStyle", null);
+          componentToStyle.setStyle("fontWeight", null);
         }
       };
       BindingUtils.bindSetter(updateFont, rComponent.fontState, "value", true);
