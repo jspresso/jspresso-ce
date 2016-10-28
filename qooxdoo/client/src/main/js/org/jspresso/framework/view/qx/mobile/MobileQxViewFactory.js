@@ -473,13 +473,46 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       return container;
     },
 
+    __copyPageActions: function (source, target) {
+      if (!target.getEnterAction()) {
+        target.setEnterAction(source.getEnterAction());
+      }
+      if (!target.getMainAction()) {
+        target.setMainAction(source.getMainAction());
+      }
+      if (!target.getBackAction()) {
+        target.setBackAction(source.getBackAction());
+      }
+      if (!target.getPageEndAction()) {
+        target.setPageEndAction(source.getPageEndAction());
+      }
+      if (!target.getSwipeLeftAction()) {
+        target.setSwipeLeftAction(source.getSwipeLeftAction());
+      }
+      if (!target.getSwipeRightAction()) {
+        target.setSwipeRightAction(source.getSwipeRightAction());
+      }
+    },
+
     /**
      * @param remoteCardPage {org.jspresso.framework.gui.remote.mobile.RMobileCardPage}
      * @return {qx.ui.mobile.core.Widget}
      */
     _createMobileCardPage: function (remoteCardPage) {
+      var rCardContainer = remoteCardPage.getPages();
+      if (rCardContainer instanceof org.jspresso.framework.gui.remote.RCardContainer) {
+        var remoteCards = rCardContainer.getCards();
+        if (remoteCards) {
+          for (var i = 0; i < remoteCards.length; i++) {
+            var remoteCard = remoteCards[i];
+            if (remoteCard instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAware) {
+              this.__copyPageActions(remoteCardPage, remoteCard);
+            }
+          }
+        }
+      }
       /** @type {qx.ui.mobile.container.Composite} */
-      var cardContainer = this.createComponent(remoteCardPage.getPages());
+      var cardContainer = this.createComponent(rCardContainer);
       // Card pages will be added and selected automatically by the card container.
       cardContainer.setUserData("jspressoGuid", remoteCardPage.getGuid());
       return cardContainer;
@@ -500,7 +533,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
             org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE);
         if (currentPage != null) {
           // This is a card container or a border container with a nested page
-          pageToShow = currentPage;
+          pageToShow = this.getActualPageToShow(currentPage);
         } else {
           var pages = nextPage.getUserData(
               org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__EXISTING_CARDS);
@@ -1468,6 +1501,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         var existingCard = existingCardNames.indexOf(cardName) >= 0;
         if (!existingCard) {
           existingCardNames.push(cardName);
+          var remoteMobileCardPage = this._getRemotePeerRegistry().getRegistered(cardContainer.getUserData("jspressoGuid"));
+          if (remoteMobileCardPage && rCardComponent instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAware) {
+            this.__copyPageActions(remoteMobileCardPage, rCardComponent);
+          }
           var cardComponent = this.createComponent(rCardComponent);
           existingCards.push(cardComponent);
           cardComponent.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CARD_NAME, cardName);
@@ -1503,7 +1540,12 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         selectedCard.show();
       }
       var pageToShow = this.getActualPageToShow(selectedCard);
-      cardContainer.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE, pageToShow);
+      var pageToHide = cardContainer.getUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE);
+      if (pageToHide && pageToHide != pageToShow) {
+        pageToHide.setVisibility("excluded");
+      }
+      // Put selectedCard as current page and not pageToShow since selectedCard can be a nested card container.
+      cardContainer.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE, selectedCard);
       if (pageToShow) {
         this._getActionHandler().showPage(pageToShow);
       }
