@@ -28,7 +28,6 @@ import org.jspresso.framework.application.frontend.command.remote.mobile.RemoteB
 import org.jspresso.framework.application.frontend.controller.remote.AbstractRemoteController;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
-import org.jspresso.framework.application.view.descriptor.basic.WorkspaceCardViewDescriptor;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.remote.RAction;
@@ -36,14 +35,12 @@ import org.jspresso.framework.gui.remote.RCardContainer;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.gui.remote.mobile.RMobileCardPage;
-import org.jspresso.framework.gui.remote.mobile.RMobileForm;
 import org.jspresso.framework.gui.remote.mobile.RMobileNavPage;
 import org.jspresso.framework.gui.remote.mobile.RMobilePage;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.gui.EClientType;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-import org.jspresso.framework.view.remote.mobile.MobileRemoteViewFactory;
 
 /**
  * This is is the mobile implementation of a &quot;remotable&quot; frontend
