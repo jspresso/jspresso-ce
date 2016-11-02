@@ -72,6 +72,7 @@ qx.Class.define("org.jspresso.framework.view.qx.ViewRepeater", {
       for (var i = 0; i < newSections.length; i++) {
         var newRemoteSection = newSections[i];
         var newSection = this.__viewFactory.createComponent(newRemoteSection);
+        newSection.addCssClass("jspresso-repeater-section");
         this.__componentTank[newRemoteSection.getState().getGuid()] = newSection;
         newSection.addListener("tap", function (evt) {
           var index = this.__container.getChildren().indexOf(evt.getCurrentTarget());
