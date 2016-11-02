@@ -103,8 +103,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     __messageQueue: null,
     /** @type {qx.ui.mobile.page.NavigationPage} */
     __savedCurrentPage: null,
-    /** @type {Boolean} */
-    __dialogAnimating: false,
 
 
     showPage: function (page, animation, back) {
@@ -117,16 +115,27 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       }
     },
 
+    __getAnimationCardLayout: function(component) {
+      var parent = component.getLayoutParent();
+      if (parent) {
+        if (parent.getLayout() instanceof qx.ui.mobile.layout.Card) {
+          return parent.getLayout();
+        } else {
+          return this.__getAnimationCardLayout(parent);
+        }
+      }
+      return null;
+    },
+
     __queueAnimation: function (page, animation, back) {
-      var detailCardLayout = this._getManager().getDetailNavigation().getLayout();
-      if (page.getLayoutParent() && page.getLayoutParent().getLayoutParent() == this._getManager().getDetailNavigation()
-          && detailCardLayout.getShowAnimation()) {
+      var animationCardLayout = this.__getAnimationCardLayout(page);
+      if (animationCardLayout && animationCardLayout.getShowAnimation()) {
         if (this.__animationQueue != null) {
           this.__animationQueue.push({page: page, animation: animation, back: back});
         } else {
           this.__animationQueue = [];
           page.show({animation: animation, reverse: back});
-          detailCardLayout.addListenerOnce("animationEnd", function (e) {
+          animationCardLayout.addListenerOnce("animationEnd", function (e) {
             this.__dequeueAnimation();
           }, this);
         }
@@ -138,12 +147,18 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     __dequeueAnimation: function () {
       if (this.__animationQueue != null) {
         if (this.__animationQueue.length > 0) {
-          var detailCardLayout = this._getManager().getDetailNavigation().getLayout();
-          detailCardLayout.addListenerOnce("animationEnd", function (e) {
-            this.__dequeueAnimation();
-          }, this);
           var anim = this.__animationQueue.splice(0, 1)[0];
-          anim.page.show({animation: anim.animation, reverse: anim.back});
+          if (anim.page != this.getCurrentPage()) {
+            var animationCardLayout = this.__getAnimationCardLayout(anim.page);
+            if (animationCardLayout) {
+              animationCardLayout.addListenerOnce("animationEnd", function (e) {
+                this.__dequeueAnimation();
+              }, this);
+            }
+            anim.page.show({animation: anim.animation, reverse: anim.back});
+          } else {
+            this.__dequeueAnimation();
+          }
         }
         if (this.__animationQueue.length == 0) {
           this.__animationQueue = null;
@@ -175,7 +190,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     },
 
     isAnimating: function () {
-      return this.__animationQueue != null || this.__dialogAnimating;
+      return this.__animationQueue != null;
     },
 
     hasAnimationQueued: function () {
@@ -460,7 +475,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       }
 
       if (this.__managerContainer.isVisible() && this._dialogStack.length == 1) {
-        this.__savedCurrentPage = this.getCurrentPage();
+        var pageToRestore = this.getCurrentPage();
+        if (this.__animationQueue && this.__animationQueue.length > 0) {
+          pageToRestore = this.__animationQueue[this.__animationQueue.length -1].page;
+        }
+        this.__savedCurrentPage = pageToRestore;
       }
 
       var dialogPage = null;
@@ -488,16 +507,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       if (remoteDialogView instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAware) {
         this._getViewFactory().installPageActions(remoteDialogView, dialogPage);
       }
-
-      var callback = function () {
-        qx.event.Timer.once(function () {
-          this.__dialogAnimating = false;
-          this.__dequeueAnimation();
-        }, this, org.jspresso.framework.application.frontend.controller.qx.mobile.MobileQxController.ANIMATION_DURATION
-            + 500);
-      };
-      this.__dialogAnimating = true;
-      dialogPage.addListenerOnce("appear", callback, this);
 
       var masterContainer = this._getManager().getMasterContainer();
       if (this.isTablet() && masterContainer.isVisible()) {
@@ -531,15 +540,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
           qx.event.Timer.once(function () {
             this.__applicationContainer.remove(pageToDestroy);
             pageToDestroy.destroy();
-            this.__dialogAnimating = false;
-            this.__dequeueAnimation();
           }, this, org.jspresso.framework.application.frontend.controller.qx.mobile.MobileQxController.ANIMATION_DURATION + 500);
         };
-        if (pageToRestore && pageToDestroy) {
-          this.__dialogAnimating = true;
-          pageToRestore.addListenerOnce("appear", callback, this);
-        } else if (pageToDestroy) {
-          this.__dialogAnimating = true;
+        if (pageToDestroy) {
           pageToDestroy.addListenerOnce("disappear", callback, this);
         }
         if (this.__savedCurrentPage && this._dialogStack.length == 1) {
@@ -663,7 +666,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       if (this.isAnimating()) {
         qx.event.Timer.once(function () {
           this._handleBackCommand(backCommand);
-        }, this, org.jspresso.framework.application.frontend.controller.qx.mobile.MobileQxController.ANIMATION_DURATION);
+        }, this, org.jspresso.framework.application.frontend.controller.qx.mobile.MobileQxController.ANIMATION_DURATION / 10);
       } else {
         var wasEnabled = this._changeNotificationsEnabled;
         try {
