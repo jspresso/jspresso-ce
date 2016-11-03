@@ -2029,8 +2029,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         remoteValueState.addListener("changeWritable", function (e) {
           button.setEnabled(e.getData() && remoteAction.isEnabled());
         }, this);
+        button.setEnabled(remoteValueState.isWritable() && remoteAction.isEnabled());
       }
-      button.setEnabled(remoteValueState.isWritable() && remoteAction.isEnabled());
       return button;
     },
 
