@@ -81,7 +81,7 @@ public final class ImageHelper {
     if (targetFormatName != null) {
       return image.getByteArray(targetFormatName);
     }
-    return image.getByteArray();
+    return image.getByteArray("png");
   }
 
   /**

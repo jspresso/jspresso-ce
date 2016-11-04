@@ -62,7 +62,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImageCanvas", {
 
     _initialize: function (dimension, clearCaption) {
 
-      this.__canvasWidth = dimension.getWidth();
       this.__canvasHeight = dimension.getHeight();
 
       this.__lastPoint = {};
@@ -84,15 +83,22 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImageCanvas", {
       canvas.addListener("touchstart", qx.bom.Event.stopPropagation, this);
       canvas.addListener("tap", qx.bom.Event.stopPropagation, this);
 
-      canvas.setWidth(this._to(this.__canvasWidth));
-      canvas.setHeight(this._to(this.__canvasHeight));
-      qx.bom.element.Style.set(canvas.getContentElement(), "width", this.__canvasWidth + "px");
+      qx.bom.element.Style.set(canvas.getContentElement(), "width", "95%");
       qx.bom.element.Style.set(canvas.getContentElement(), "height", this.__canvasHeight + "px");
+
+      canvas.setHeight(this._to(this.__canvasHeight));
 
       var wrapper = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox().set({
         alignX: "center",
         alignY: "middle"
       }));
+
+      var canvasResizer = function () {
+        canvas.setWidth(qx.bom.element.Dimension.getWidth(canvas.getContentElement()));
+      };
+      wrapper.addListener("appear", canvasResizer);
+      window.addEventListener("resize", canvasResizer);
+
       wrapper.addCssClass("jspresso-cropper");
       wrapper.add(canvas);
       this.add(wrapper, {flex: 1});
