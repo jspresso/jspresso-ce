@@ -97,12 +97,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     __applicationContainer: null,
     /** @type {qx.ui.mobile.container.Composite} */
     __managerContainer: null,
-    /** @type {qx.ui.mobile.page.NavigationPage[]} */
+    /** @type {Object[]} */
     __animationQueue: null,
-    /** @type {qx.ui.mobile.dialog.Popup[]} */
-    __messageQueue: null,
     /** @type {qx.ui.mobile.page.NavigationPage} */
     __savedCurrentPage: null,
+    /** @type {boolean} */
+    __displayingMessage: false,
 
 
     showPage: function (page, animation, back) {
@@ -127,20 +127,29 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       return null;
     },
 
-    __queueAnimation: function (page, animation, back) {
-      var animationCardLayout = this.__getAnimationCardLayout(page);
-      if (animationCardLayout && animationCardLayout.getShowAnimation()) {
-        if (this.__animationQueue != null) {
-          this.__animationQueue.push({page: page, animation: animation, back: back});
-        } else {
+    __queueAnimation: function (pageOrDialog, animation, back) {
+      var wasAnimating = this.isAnimating();
+      if (pageOrDialog instanceof qx.ui.mobile.dialog.Popup) {
+        if (this.__animationQueue == null) {
           this.__animationQueue = [];
-          page.show({animation: animation, reverse: back});
-          animationCardLayout.addListenerOnce("animationEnd", function (e) {
-            this.__dequeueAnimation();
-          }, this);
+        }
+        this.__animationQueue.push(pageOrDialog);
+        if (!wasAnimating) {
+          this.__dequeueAnimation();
         }
       } else {
-        page.show({animation: animation, reverse: back});
+        var animationCardLayout = this.__getAnimationCardLayout(pageOrDialog);
+        if (animationCardLayout && animationCardLayout.getShowAnimation()) {
+          if (this.__animationQueue == null) {
+            this.__animationQueue = [];
+          }
+          this.__animationQueue.push({page: pageOrDialog, animation: animation, back: back});
+          if (!wasAnimating) {
+            this.__dequeueAnimation();
+          }
+        } else {
+          pageOrDialog.show({animation: animation, reverse: back});
+        }
       }
     },
 
@@ -148,49 +157,39 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       if (this.__animationQueue != null) {
         if (this.__animationQueue.length > 0) {
           var anim = this.__animationQueue.splice(0, 1)[0];
-          if (anim.page != this.getCurrentPage()) {
-            var animationCardLayout = this.__getAnimationCardLayout(anim.page);
-            if (animationCardLayout) {
-              animationCardLayout.addListenerOnce("animationEnd", function (e) {
-                this.__dequeueAnimation();
-              }, this);
-            }
-            anim.page.show({animation: anim.animation, reverse: anim.back});
+          if (anim instanceof qx.ui.mobile.dialog.Popup) {
+            this.__displayingMessage = true;
+            anim.show();
+            anim.addListener("changeVisibility", function () {
+              this.__displayingMessage = false;
+              this.__dequeueAnimation();
+            }, this);
           } else {
-            this.__dequeueAnimation();
+            if (anim.page != this.getCurrentPage()) {
+              var animationCardLayout = this.__getAnimationCardLayout(anim.page);
+              if (animationCardLayout) {
+                animationCardLayout.addListenerOnce("animationEnd", function (e) {
+                  this.__dequeueAnimation();
+                }, this);
+              }
+              anim.page.show({animation: anim.animation, reverse: anim.back});
+            } else {
+              this.__dequeueAnimation();
+            }
           }
         }
         if (this.__animationQueue.length == 0) {
           this.__animationQueue = null;
         }
       }
-      if (!this.__animationQueue && this.__messageQueue) {
-        if (this.__messageQueue.length > 0) {
-          var md = this.__messageQueue[0];
-          this.__messageQueue.splice(0, 1);
-          md.show();
-          md.addListener("changeVisibility", function () {
-            this.__dequeueAnimation();
-          }, this);
-        } else {
-          this.__messageQueue = null;
-        }
-      }
     },
 
     __showDialog: function (dialog) {
-      if (this.isAnimating()) {
-        if (this.__messageQueue == null) {
-          this.__messageQueue = [];
-        }
-        this.__messageQueue.push(dialog);
-      } else {
-        dialog.show();
-      }
+      this.__queueAnimation(dialog);
     },
 
     isAnimating: function () {
-      return this.__animationQueue != null;
+      return this.__animationQueue != null || this.__displayingMessage;
     },
 
     hasAnimationQueued: function () {
