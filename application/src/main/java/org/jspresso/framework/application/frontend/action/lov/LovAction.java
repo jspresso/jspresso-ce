@@ -33,7 +33,6 @@ import java.util.Set;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.AbstractQbeAction;
@@ -100,16 +99,25 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    * {@code LOV_PRESELECTED_ITEM}.
    */
   public static final  String LOV_PRESELECTED_ITEM     = "LOV_PRESELECTED_ITEM";
+  
   /**
    * {@code LOV_SELECTED_ITEM}.
    */
   public static final  String LOV_SELECTED_ITEM        = "LOV_SELECTED_ITEM";
-  private static final String NON_LOV_TRIGGERING_CHARS =
-      "%" + IQueryComponent.DISJUNCT + IQueryComponent.NOT_VAL + IQueryComponent.NULL_VAL;
+  
   /**
    * {@code REF_VIEW_DESCRIPTOR}.
    */
   public static final  String REF_VIEW_DESCRIPTOR      = "REF_VIEW_DESCRIPTOR";
+  
+  /**
+   * {@code REF_VIEW_DESCRIPTOR}.
+   */
+  public static final String CREATE_ENTITY_LOV_VIEW_DESCRIPTOR_FACTORY = "CREATE_ENTITY_LOV_VIEW_DESCRIPTOR_FACTORY";
+  
+  private static final String NON_LOV_TRIGGERING_CHARS =
+      "%" + IQueryComponent.DISJUNCT + IQueryComponent.NOT_VAL + IQueryComponent.NULL_VAL;
+  
   private boolean                                    autoquery;
   private Integer                                    pageSize;
   private IDisplayableAction                         cancelAction;
@@ -126,6 +134,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   private List<?>                                    staticComponentStore;
   private IComponentDescriptorRegistry               componentDescriptorRegistry;
   private IDisplayableAction                         createAction;
+  private ILovViewDescriptorForCreationFactory       lovViewDescriptorForCreationFactory;
 
 
   /**
@@ -149,6 +158,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   public boolean execute(final IActionHandler actionHandler, final Map<String, Object> context) {
     if (getStaticComponentStore() != null) {
       context.put(StaticQueryComponentsAction.COMPONENT_STORE_KEY, getStaticComponentStore());
+    }
+    if (lovViewDescriptorForCreationFactory!=null) {
+      context.put(CREATE_ENTITY_LOV_VIEW_DESCRIPTOR_FACTORY, lovViewDescriptorForCreationFactory);
     }
     IReferencePropertyDescriptor<IComponent> erqDescriptor = getEntityRefQueryDescriptor(context);
     context.put(CreateQueryComponentAction.COMPONENT_REF_DESCRIPTOR, erqDescriptor);
@@ -637,6 +649,16 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    */
   public void setLovViewDescriptorFactory(ILovViewDescriptorFactory lovViewDescriptorFactory) {
     this.lovViewDescriptorFactory = lovViewDescriptorFactory;
+  }
+  
+  /**
+   * Configures the factory to be used to create the LOV's on-the-fly-creation view.
+   *
+   * @param lovViewDescriptorForCreationFactory
+   *     the lovViewDescriptorForCreationFactory to set.
+   */
+  public void setLovViewDescriptorForCreationFactory(ILovViewDescriptorForCreationFactory lovViewDescriptorForCreationFactory) {
+    this.lovViewDescriptorForCreationFactory = lovViewDescriptorForCreationFactory;
   }
 
   /**
