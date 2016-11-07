@@ -95,7 +95,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     /** @type {qx.ui.mobile.page.NavigationPage} */
     __savedCurrentPage: null,
     /** @type {boolean} */
-    __displayingMessage: false,
+    __animating: false,
 
 
     showPage: function (page, animation, back) {
@@ -147,21 +147,23 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     },
 
     __dequeueAnimation: function () {
-      if (this.__animationQueue != null) {
+      if (!this.isAnimating() && this.__animationQueue != null) {
         if (this.__animationQueue.length > 0) {
           var anim = this.__animationQueue.splice(0, 1)[0];
           if (anim instanceof qx.ui.mobile.dialog.Popup) {
-            this.__displayingMessage = true;
+            this.__animating = true;
             anim.show();
             anim.addListener("changeVisibility", function () {
-              this.__displayingMessage = false;
+              this.__animating = false;
               this.__dequeueAnimation();
             }, this);
           } else {
             if (anim.page != this.getCurrentPage()) {
               var animationCardLayout = this.__getAnimationCardLayout(anim.page);
               if (animationCardLayout) {
+                this.__animating = true;
                 animationCardLayout.addListenerOnce("animationEnd", function (e) {
+                  this.__animating = false;
                   this.__dequeueAnimation();
                 }, this);
               }
@@ -182,7 +184,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     },
 
     isAnimating: function () {
-      return this.__animationQueue != null || this.__displayingMessage;
+      return this.__animating;
     },
 
     hasAnimationQueued: function () {
