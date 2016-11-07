@@ -289,7 +289,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      */
     _createTimeField: function (remoteTimeField) {
       var timeField = this._createFormattedField(remoteTimeField);
-      var template = "00:00";
+      var template = "AA00:00";
       if (remoteTimeField.isSecondsAware()) {
         template += ":00";
       }
