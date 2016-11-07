@@ -151,6 +151,7 @@ import org.jspresso.framework.view.descriptor.IEnumerationPropertyViewDescriptor
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IMapViewDescriptor;
+import org.jspresso.framework.view.descriptor.INestedComponentPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IRepeaterViewDescriptor;

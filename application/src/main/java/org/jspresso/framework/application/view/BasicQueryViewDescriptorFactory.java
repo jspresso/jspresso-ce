@@ -19,6 +19,7 @@
 package org.jspresso.framework.application.view;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -32,12 +33,14 @@ import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDes
 import org.jspresso.framework.model.descriptor.query.EnumQueryStructureDescriptor;
 import org.jspresso.framework.util.descriptor.DefaultDescriptor;
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.ELabelPosition;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactory;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicNestedComponentPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicReferencePropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
@@ -45,16 +48,18 @@ import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
 /**
  * A default implementation for query view descriptor factory.
  *
- * @version $LastChangedRevision : 1091 $
+ * @param <E>
+ *     the actual gui component type used.
+ * @param <F>
+ *     the actual icon type used.
+ * @param <G>
+ *     the actual action type used.
  * @author Vincent Vandenschrick
- * @param <E>           the actual gui component type used.
- * @param <F>           the actual icon type used.
- * @param <G>           the actual action type used.
+ * @version $LastChangedRevision : 1091 $
  */
-public class BasicQueryViewDescriptorFactory<E, F, G> implements
-    IQueryViewDescriptorFactory {
+public class BasicQueryViewDescriptorFactory<E, F, G> implements IQueryViewDescriptorFactory {
 
-  private boolean            useCompactComparableQueryStructures;
+  private boolean useCompactComparableQueryStructures;
 
   private IDisplayableAction okCloseDialogAction;
   private IDisplayableAction modalDialogAction;
@@ -71,47 +76,44 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
    */
   @SuppressWarnings("ConstantConditions")
   @Override
-  public IViewDescriptor createQueryViewDescriptor(
-      IComponentDescriptorProvider<IComponent> componentDescriptorProvider,
-      IComponentDescriptor<? extends IQueryComponent> queryComponentDescriptor, Map<String, Object> actionContext) {
+  public IViewDescriptor createQueryViewDescriptor(IComponentDescriptorProvider<IComponent> componentDescriptorProvider,
+                                                   IComponentDescriptor<? extends IQueryComponent>
+                                                       queryComponentDescriptor,
+                                                   Map<String, Object> actionContext) {
     BasicComponentViewDescriptor queryComponentViewDescriptor = new BasicComponentViewDescriptor();
     List<IPropertyViewDescriptor> propertyViewDescriptors = new ArrayList<>();
-    for (String queriableProperty : componentDescriptorProvider
-        .getQueryableProperties()) {
-      IPropertyDescriptor actualPropertyDescriptor = queryComponentDescriptor
-          .getPropertyDescriptor(queriableProperty);
+    for (String queriableProperty : componentDescriptorProvider.getQueryableProperties()) {
+      IPropertyDescriptor actualPropertyDescriptor = queryComponentDescriptor.getPropertyDescriptor(queriableProperty);
       // To preserve col spans for query structures.
       if (actualPropertyDescriptor instanceof ComparableQueryStructureDescriptor) {
         if (isUseCompactComparableQueryStructures()) {
           BasicReferencePropertyViewDescriptor propertyView = new BasicReferencePropertyViewDescriptor();
           propertyView.setName(queriableProperty);
-          propertyView
-              .setLovAction(createComparableEditAction((ComparableQueryStructureDescriptor) actualPropertyDescriptor));
+          propertyView.setLovAction(
+              createComparableEditAction((ComparableQueryStructureDescriptor) actualPropertyDescriptor));
           propertyView.setAutoCompleteEnabled(false);
           propertyViewDescriptors.add(propertyView);
         } else {
-          BasicPropertyViewDescriptor propertyView;
-
-          propertyView = new BasicPropertyViewDescriptor();
-          propertyView.setName(queriableProperty + "."
-              + ComparableQueryStructureDescriptor.COMPARATOR);
-          propertyViewDescriptors.add(propertyView);
-
-          propertyView = new BasicPropertyViewDescriptor();
-          propertyView.setName(queriableProperty + "."
-              + ComparableQueryStructureDescriptor.INF_VALUE);
-          propertyViewDescriptors.add(propertyView);
-
-          propertyView = new BasicPropertyViewDescriptor();
-          propertyView.setName(queriableProperty + "."
-              + ComparableQueryStructureDescriptor.SUP_VALUE);
+          BasicComponentViewDescriptor comparableComponentViewDescriptor = new BasicComponentViewDescriptor();
+          comparableComponentViewDescriptor.setLabelsPosition(ELabelPosition.NONE);
+          comparableComponentViewDescriptor.setWidthResizeable(false);
+          comparableComponentViewDescriptor.setColumnCount(3);
+          comparableComponentViewDescriptor.setModelDescriptor(
+              ((ComparableQueryStructureDescriptor) actualPropertyDescriptor).getReferencedDescriptor());
+          comparableComponentViewDescriptor.setRenderedProperties(Arrays
+              .asList(ComparableQueryStructureDescriptor.COMPARATOR,
+                  ComparableQueryStructureDescriptor.INF_VALUE,
+                  ComparableQueryStructureDescriptor.SUP_VALUE));
+          BasicNestedComponentPropertyViewDescriptor propertyView = new BasicNestedComponentPropertyViewDescriptor();
+          propertyView.setName(queriableProperty);
+          propertyView.setNestedComponentViewDescriptor(comparableComponentViewDescriptor);
+          propertyView.setModelDescriptor(actualPropertyDescriptor);
           propertyViewDescriptors.add(propertyView);
         }
       } else if (actualPropertyDescriptor instanceof EnumQueryStructureDescriptor) {
         BasicReferencePropertyViewDescriptor propertyView = new BasicReferencePropertyViewDescriptor();
         propertyView.setName(queriableProperty);
-        propertyView
-            .setLovAction(createEnumSelectAction((EnumQueryStructureDescriptor) actualPropertyDescriptor));
+        propertyView.setLovAction(createEnumSelectAction((EnumQueryStructureDescriptor) actualPropertyDescriptor));
         propertyView.setAutoCompleteEnabled(false);
         propertyViewDescriptors.add(propertyView);
       } else {
@@ -123,21 +125,20 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
     // We have to delay width computation in order to solve bug #663.
     for (IPropertyViewDescriptor propertyView : propertyViewDescriptors) {
       int width;
-      if (propertyView.getName().endsWith(
-          ComparableQueryStructureDescriptor.COMPARATOR)
-          || propertyView.getName().endsWith(
-              ComparableQueryStructureDescriptor.INF_VALUE)) {
-        width = 1;
-      } else if (propertyView.getName().endsWith(
-          ComparableQueryStructureDescriptor.SUP_VALUE)) {
-        width = 2;
-      } else {
-        width = 4;
-      }
+//      if (propertyView.getName().endsWith(
+//          ComparableQueryStructureDescriptor.COMPARATOR)
+//          || propertyView.getName().endsWith(
+//              ComparableQueryStructureDescriptor.INF_VALUE)) {
+//        width = 1;
+//      } else if (propertyView.getName().endsWith(
+//          ComparableQueryStructureDescriptor.SUP_VALUE)) {
+//        width = 2;
+//      } else {
+      width = 4;
+//      }
       ((BasicPropertyViewDescriptor) propertyView).setWidth(width);
     }
-    queryComponentViewDescriptor
-        .setPropertyViewDescriptors(propertyViewDescriptors);
+    queryComponentViewDescriptor.setPropertyViewDescriptors(propertyViewDescriptors);
     queryComponentViewDescriptor.setColumnCount(8);
 
     queryComponentViewDescriptor.setModelDescriptor(queryComponentDescriptor);
@@ -148,11 +149,12 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
   /**
    * Create comparable edit action.
    *
-   * @param comparablePropertyDescriptor the comparable property descriptor
+   * @param comparablePropertyDescriptor
+   *     the comparable property descriptor
    * @return the edit action
    */
-  protected IDisplayableAction createComparableEditAction(ComparableQueryStructureDescriptor
-                                                              comparablePropertyDescriptor) {
+  protected IDisplayableAction createComparableEditAction(
+      ComparableQueryStructureDescriptor comparablePropertyDescriptor) {
     EditComponentAction<E, F, G> comparableEditAction = new EditComponentAction<>();
     if (comparablePropertyDescriptor.getIcon() != null) {
       comparableEditAction.setIcon(comparablePropertyDescriptor.getIcon());
@@ -197,11 +199,10 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
    * Creates the enumSelectAction.
    *
    * @param enumPropertyDescriptor
-   *          the enumeration property descriptor to create the LOV action for.
+   *     the enumeration property descriptor to create the LOV action for.
    * @return the enumSelectAction.
    */
-  protected IDisplayableAction createEnumSelectAction(
-      final EnumQueryStructureDescriptor enumPropertyDescriptor) {
+  protected IDisplayableAction createEnumSelectAction(final EnumQueryStructureDescriptor enumPropertyDescriptor) {
     EditComponentAction<E, F, G> enumSelectAction = new EditComponentAction<>();
     if (enumPropertyDescriptor.getIcon() != null) {
       enumSelectAction.setIcon(enumPropertyDescriptor.getIcon());
@@ -211,8 +212,7 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
 
     BasicBorderViewDescriptor viewDescriptor = new BasicBorderViewDescriptor();
     viewDescriptor.setName(EnumQueryStructureDescriptor.ENUMERATION_VALUES);
-    viewDescriptor.setModelDescriptor(enumPropertyDescriptor
-        .getReferencedDescriptor());
+    viewDescriptor.setModelDescriptor(enumPropertyDescriptor.getReferencedDescriptor());
     BasicTableViewDescriptor table = new BasicTableViewDescriptor();
     table.setName(EnumQueryStructureDescriptor.ENUMERATION_VALUES);
     viewDescriptor.setCenterViewDescriptor(table);
@@ -238,7 +238,7 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
    * Sets the okCloseDialogAction.
    *
    * @param okCloseDialogAction
-   *          the okCloseDialogAction to set.
+   *     the okCloseDialogAction to set.
    */
   public void setOkCloseDialogAction(IDisplayableAction okCloseDialogAction) {
     this.okCloseDialogAction = okCloseDialogAction;
@@ -257,7 +257,7 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
    * Sets the modalDialogAction.
    *
    * @param modalDialogAction
-   *          the modalDialogAction to set.
+   *     the modalDialogAction to set.
    */
   public void setModalDialogAction(IDisplayableAction modalDialogAction) {
     this.modalDialogAction = modalDialogAction;
@@ -276,7 +276,7 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
    * Sets the defaultFindIconImageUrl.
    *
    * @param defaultFindIconImageUrl
-   *          the defaultFindIconImageUrl to set.
+   *     the defaultFindIconImageUrl to set.
    */
   public void setDefaultFindIconImageUrl(String defaultFindIconImageUrl) {
     this.defaultFindIconImageUrl = defaultFindIconImageUrl;
@@ -295,7 +295,8 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
   /**
    * Sets use compact comparable query structures.
    *
-   * @param useCompactComparableQueryStructures the use compact comparable query structures
+   * @param useCompactComparableQueryStructures
+   *     the use compact comparable query structures
    */
   public void setUseCompactComparableQueryStructures(boolean useCompactComparableQueryStructures) {
     this.useCompactComparableQueryStructures = useCompactComparableQueryStructures;
@@ -312,8 +313,8 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
       for (int i = 0; i < propertyViews.size(); i++) {
         IPropertyViewDescriptor propertyView = propertyViews.get(i);
         if ((propertyView.getModelDescriptor() instanceof ComparableQueryStructureDescriptor
-            && isUseCompactComparableQueryStructures())
-            || propertyView.getModelDescriptor() instanceof EnumQueryStructureDescriptor) {
+            && isUseCompactComparableQueryStructures()) || propertyView
+            .getModelDescriptor() instanceof EnumQueryStructureDescriptor) {
           if (!(propertyView instanceof BasicReferencePropertyViewDescriptor)) {
             BasicReferencePropertyViewDescriptor refPropertyView = new BasicReferencePropertyViewDescriptor();
             refPropertyView.setAction(propertyView.getAction());
@@ -323,11 +324,9 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
             refPropertyView.setFont(propertyView.getFont());
             refPropertyView.setForeground(propertyView.getForeground());
             refPropertyView.setGrantedRoles(propertyView.getGrantedRoles());
-            refPropertyView.setHorizontalAlignment(propertyView
-                .getHorizontalAlignment());
+            refPropertyView.setHorizontalAlignment(propertyView.getHorizontalAlignment());
             if (propertyView instanceof DefaultDescriptor) {
-              refPropertyView.setI18nNameKey(((DefaultDescriptor) propertyView)
-                  .getI18nNameKey());
+              refPropertyView.setI18nNameKey(((DefaultDescriptor) propertyView).getI18nNameKey());
             }
             refPropertyView.setIcon(propertyView.getIcon());
             refPropertyView.setLabelBackground(propertyView.getLabelBackground());
@@ -345,15 +344,13 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
             propertyView = refPropertyView;
             propertyViews.set(i, propertyView);
           }
-          if (((BasicReferencePropertyViewDescriptor) propertyView)
-              .getLovAction() == null) {
+          if (((BasicReferencePropertyViewDescriptor) propertyView).getLovAction() == null) {
             if (propertyView.getModelDescriptor() instanceof ComparableQueryStructureDescriptor) {
               ((BasicReferencePropertyViewDescriptor) propertyView).setLovAction(
                   createComparableEditAction((ComparableQueryStructureDescriptor) propertyView.getModelDescriptor()));
             } else if (propertyView.getModelDescriptor() instanceof EnumQueryStructureDescriptor) {
-              ((BasicReferencePropertyViewDescriptor) propertyView)
-                  .setLovAction(createEnumSelectAction((EnumQueryStructureDescriptor) propertyView
-                      .getModelDescriptor()));
+              ((BasicReferencePropertyViewDescriptor) propertyView).setLovAction(
+                  createEnumSelectAction((EnumQueryStructureDescriptor) propertyView.getModelDescriptor()));
             }
           }
         }
@@ -361,8 +358,7 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements
       ((BasicComponentViewDescriptor) viewDescriptor).setPropertyViewDescriptors(propertyViews);
     }
     if (viewDescriptor instanceof ICompositeViewDescriptor) {
-      List<IViewDescriptor> children = ((ICompositeViewDescriptor) viewDescriptor)
-          .getChildViewDescriptors();
+      List<IViewDescriptor> children = ((ICompositeViewDescriptor) viewDescriptor).getChildViewDescriptors();
       if (children != null) {
         for (IViewDescriptor childViewDesc : children) {
           adaptExistingViewDescriptor(childViewDesc);
