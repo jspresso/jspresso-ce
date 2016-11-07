@@ -289,7 +289,14 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      */
     _createTimeField: function (remoteTimeField) {
       var timeField = this._createFormattedField(remoteTimeField);
-      this._sizeMaxComponentWidthFromText(timeField, remoteTimeField, "00:00:00");
+      var template = "00:00";
+      if (remoteTimeField.isSecondsAware) {
+        template += ":00";
+      }
+      if (remoteTimeField.isMillisecondsAware) {
+        template += ".000";
+      }
+      this._sizeMaxComponentWidthFromText(timeField, remoteTimeField, template);
       timeField.setMinWidth(timeField.getMaxWidth());
       return timeField;
     },
@@ -436,7 +443,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       remoteTimeField.useDateDto(true);
       var timeField = this.createComponent(remoteTimeField, false);
       dateTimeField.add(timeField);
-      this._sizeMaxComponentWidth(dateTimeField, remoteDateField, "00/00/0000 000 00:00:00");
+      var maxW = dateField.getMaxWidth() + timeField.getMaxWidth() + 4;
+      dateTimeField.setMaxWidth(maxW);
+      dateTimeField.setWidth(maxW);
       dateTimeField.setUserData("df", dateField);
       dateTimeField.setUserData("tf", timeField);
       dateTimeField.addListener("appear", function () {
@@ -1245,7 +1254,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      */
     _createForm: function (remoteForm) {
       var form = new qx.ui.container.Composite();
-      form.setPadding(2);
       var formLayout = new qx.ui.layout.Grid(0, 0);
       var columnCount = remoteForm.getColumnCount();
       var col = 0;
@@ -1363,12 +1371,14 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         } else {
           compRowSpan = 1;
         }
-        if (component instanceof qx.ui.container.Composite) {
-          component.setPadding(2);
-        } else if (rComponent instanceof org.jspresso.framework.gui.remote.RLabel) {
-          component.setMargin([2, 6]);
-        } else {
-          component.setMargin(2);
+        if (!(rComponent instanceof org.jspresso.framework.gui.remote.RForm)) {
+          if (component instanceof qx.ui.container.Composite) {
+            component.setPadding(2);
+          } else if (rComponent instanceof org.jspresso.framework.gui.remote.RLabel) {
+            component.setMargin([2, 6]);
+          } else {
+            component.setMargin(2);
+          }
         }
         form.add(component, {
           row: compRow, column: compCol, rowSpan: compRowSpan, colSpan: compColSpan
