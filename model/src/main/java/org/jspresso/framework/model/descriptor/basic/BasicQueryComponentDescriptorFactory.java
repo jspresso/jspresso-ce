@@ -117,4 +117,13 @@ public class BasicQueryComponentDescriptorFactory implements IQueryComponentDesc
 
     return queryComponentDescriptor;
   }
+
+  /**
+   * Gets accessor factory.
+   *
+   * @return the accessor factory
+   */
+  protected IAccessorFactory getAccessorFactory() {
+    return accessorFactory;
+  }
 }
