@@ -930,6 +930,11 @@
         <artifactId>javaxt-core</artifactId>
         <version>${javaxt.version}</version>
       </dependency>
+      <dependency>
+        <groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
+        <artifactId>owasp-java-html-sanitizer</artifactId>
+        <version>${owasp-java-html-sanitizer.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <dependencies>

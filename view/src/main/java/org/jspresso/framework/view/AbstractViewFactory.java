@@ -1034,8 +1034,8 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    */
   protected IView<E> createNestedComponentPropertyView(
       INestedComponentPropertyViewDescriptor propertyViewDescriptor, IActionHandler actionHandler, Locale locale) {
-    IComponentViewDescriptor nestedComponentViewDescriptor = propertyViewDescriptor.getNestedComponentViewDescriptor();
-    IView<E> nestedComponentView = createComponentView(nestedComponentViewDescriptor, actionHandler, locale);
+    IViewDescriptor nestedComponentViewDescriptor = propertyViewDescriptor.getNestedComponentViewDescriptor();
+    IView<E> nestedComponentView = createView(nestedComponentViewDescriptor, actionHandler, locale);
     IRenderableCompositeValueConnector wrappingConnector = getConnectorFactory().createCompositeValueConnector(
         propertyViewDescriptor.getModelDescriptor().getName(), null);
     wrappingConnector.addChildConnector(ModelRefPropertyConnector.THIS_PROPERTY, nestedComponentView.getConnector());
