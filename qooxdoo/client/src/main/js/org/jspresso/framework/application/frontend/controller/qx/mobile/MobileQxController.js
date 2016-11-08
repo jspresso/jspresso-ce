@@ -173,7 +173,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
             }
           }
         }
-        if (this.__animationQueue.length == 0) {
+        if (this.__animationQueue != null && this.__animationQueue.length == 0) {
           this.__animationQueue = null;
         }
       }
@@ -416,25 +416,28 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
             actionListMessage.addCssClass("form-row-group-title");
             dialogContent.add(actionListMessage);
           }
-          for (var j = 0; j < actionList.getActions().length; j++) {
-            var action = actionList.getActions()[j];
-            var actionAsList = new qx.ui.mobile.list.List({
-              configureItem: function (item, data, row) {
-                item.setTitle(data.getName());
-                item.setSubtitle(data.getDescription());
-                if (data.getIcon()) {
-                  item.setImage(data.getIcon().getImageUrlSpec());
+          var secondaryActions = actionList.getActions();
+          if (secondaryActions && secondaryActions.length > 0) {
+            for (var j = 0; j < secondaryActions.length; j++) {
+              var action = secondaryActions[j];
+              var actionAsList = new qx.ui.mobile.list.List({
+                configureItem: function (item, data, row) {
+                  item.setTitle(data.getName());
+                  item.setSubtitle(data.getDescription());
+                  if (data.getIcon()) {
+                    item.setImage(data.getIcon().getImageUrlSpec());
+                  }
+                  item.setShowArrow(true);
                 }
-                item.setShowArrow(true);
-              }
-            });
-            actionAsList.addListener("tap", function (evt) {
-              var modelAction = evt.getCurrentTarget().getModel().getItem(0);
-              this.execute(modelAction);
-            }, this);
-            actionAsList.addCssClass("jspresso-list");
-            actionAsList.setModel(new qx.data.Array([action]));
-            dialogContent.add(actionAsList);
+              });
+              actionAsList.addListener("tap", function (evt) {
+                var modelAction = evt.getCurrentTarget().getModel().getItem(0);
+                this.execute(modelAction);
+              }, this);
+              actionAsList.addCssClass("jspresso-list");
+              actionAsList.setModel(new qx.data.Array([action]));
+              dialogContent.add(actionAsList);
+            }
           }
         }
       }
@@ -447,7 +450,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       var buttonBox = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
       buttonBox.getLayout().setAlignX("center");
       buttonBox.addCssClass("group");
-      if (actions.length > 0) {
+      if (actions && actions.length > 0) {
         if (actions[0] instanceof org.jspresso.framework.gui.remote.RAction) {
           var toolBar = this._getViewFactory().createToolBarFromActions(actions, 4, null);
           if (this.isTablet()) {
@@ -470,7 +473,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
 
       if (this.__managerContainer.isVisible() && this._dialogStack.length == 1) {
         var pageToRestore = this.getCurrentPage();
-        if (this.__animationQueue && this.__animationQueue.length > 0) {
+        if (this.__animationQueue != null && this.__animationQueue.length > 0) {
           pageToRestore = this.__animationQueue[this.__animationQueue.length -1].page;
         }
         this.__savedCurrentPage = pageToRestore;
@@ -559,7 +562,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       var applicationDescription = initCommand.getApplicationDescription();
       var workspaceNames = initCommand.getWorkspaceNames();
       var workspaceDescriptions = initCommand.getWorkspaceDescriptions();
-      var workspaceActions = initCommand.getWorkspaceActions();
+      var workspaceActionList = initCommand.getWorkspaceActions();
       var exitAction = initCommand.getExitAction();
       var navigationActions = initCommand.getNavigationActions();
       var actions = initCommand.getActions();
@@ -587,29 +590,29 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
           descriptionLabel.addCssClass("group");
           pageContent.add(descriptionLabel);
         }
-        for (var i = 0; i < workspaceActions.getActions().length; i++) {
-          var workspaceModel = new qx.data.Array([
-            {
-              workspaceName: workspaceNames[i],
-              workspaceAction: workspaceActions.getActions()[i]
+        var workspaceActions = workspaceActionList.getActions();
+        if (workspaceActions && workspaceActions.length > 0) {
+          for (var i = 0; i < workspaceActions.length; i++) {
+            var workspaceModel = new qx.data.Array([{
+              workspaceName: workspaceNames[i], workspaceAction: workspaceActions[i]
+            }]);
+            var workspaceNavigator = new qx.ui.mobile.list.List(workspaceItemListDelegate);
+            workspaceNavigator.addCssClass("jspresso-list");
+            workspaceNavigator.addCssClass("group");
+            workspaceNavigator.setModel(workspaceModel);
+            workspaceNavigator.addListener("tap", function (evt) {
+              var model = evt.getCurrentTarget().getModel().getItem(0);
+              var workspaceAction = model.workspaceAction;
+              this.__routing.executeGet("/workspace/" + model.workspaceName, {animation: "cube", reverse: false});
+              this.execute(workspaceAction);
+            }, this);
+            if (workspaceDescriptions[i]) {
+              var workspaceDescription = new qx.ui.mobile.basic.Label(workspaceDescriptions[i]);
+              workspaceDescription.addCssClass("group");
+              pageContent.add(workspaceDescription);
             }
-          ]);
-          var workspaceNavigator = new qx.ui.mobile.list.List(workspaceItemListDelegate);
-          workspaceNavigator.addCssClass("jspresso-list");
-          workspaceNavigator.addCssClass("group");
-          workspaceNavigator.setModel(workspaceModel);
-          workspaceNavigator.addListener("tap", function (evt) {
-            var model = evt.getCurrentTarget().getModel().getItem(0);
-            var workspaceAction = model.workspaceAction;
-            this.__routing.executeGet("/workspace/" + model.workspaceName, {animation: "cube", reverse: false});
-            this.execute(workspaceAction);
-          }, this);
-          if (workspaceDescriptions[i]) {
-            var workspaceDescription = new qx.ui.mobile.basic.Label(workspaceDescriptions[i]);
-            workspaceDescription.addCssClass("group");
-            pageContent.add(workspaceDescription);
+            pageContent.add(workspaceNavigator);
           }
-          pageContent.add(workspaceNavigator);
         }
       }, this);
       this.bind("name", this.__workspacesMasterPage, "title");

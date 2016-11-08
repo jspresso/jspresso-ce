@@ -93,8 +93,12 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImageCanvas", {
         alignY: "middle"
       }));
 
+      var that = this;
       var canvasResizer = function () {
-        canvas.setWidth(qx.bom.element.Dimension.getWidth(canvas.getContentElement()));
+        that.__canvasWidth = qx.bom.element.Dimension.getWidth(canvas.getContentElement());
+        that.__canvasHeight = qx.bom.element.Dimension.getHeight(canvas.getContentElement());
+        canvas.setWidth(that.__canvasWidth);
+        canvas.setHeight(that.__canvasHeight);
       };
       wrapper.addListener("appear", canvasResizer);
       window.addEventListener("resize", canvasResizer);
@@ -119,7 +123,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImageCanvas", {
      * Removes any drawings off the canvas.
      */
     clear: function () {
-      //this.__canvas.getContentElement().width = this.__canvas.getContentElement().width;
       var ctx = this.__canvas.getContext2d();
       ctx.clearRect(0, 0, this._to(this.__canvasWidth), this._to(this.__canvasHeight));
       ctx.fillStyle = "#ffffff";
