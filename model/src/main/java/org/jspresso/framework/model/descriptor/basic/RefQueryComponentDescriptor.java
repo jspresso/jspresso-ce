@@ -156,6 +156,7 @@ public class RefQueryComponentDescriptor<E> extends
       refinedPropertyDescriptor = new ComparableQueryStructureDescriptor(
           ((BasicPropertyDescriptor) propertyDescriptor)
               .createQueryDescriptor());
+      ((ComparableQueryStructureDescriptor) refinedPropertyDescriptor).setMandatory(false);
     } else if ((propertyDescriptor instanceof IReferencePropertyDescriptor<?>)) {
       IComponentDescriptor<? extends IComponent> referencedDescriptor;
       referencedDescriptor = ((IReferencePropertyDescriptor<IComponent>) propertyDescriptor)
