@@ -19,9 +19,7 @@
 package org.jspresso.framework.model.descriptor.basic;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -32,41 +30,43 @@ import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
-import org.jspresso.framework.util.collection.IPageable;
+import org.jspresso.framework.util.accessor.IAccessorFactory;
 
 /**
  * An implementation used for query components.
- * 
- * @internal
- * @author Vincent Vandenschrick
+ *
  * @param <E>
- *          the concrete type of components.
+ *     the concrete type of components.
+ * @author Vincent Vandenschrick
+ * @internal
  */
-public class BasicQueryComponentDescriptor<E> extends
-    RefQueryComponentDescriptor<IQueryComponent> {
+public class BasicQueryComponentDescriptor<E> extends RefQueryComponentDescriptor<IQueryComponent> {
 
   /**
    * Constructs a new {@code BasicQueryComponentDescriptor} instance.
    *
    * @param componentDescriptorProvider
-   *          the provider for delegate entity descriptor.
+   *     the provider for delegate entity descriptor.
    */
-  public BasicQueryComponentDescriptor(
-      IComponentDescriptorProvider<? extends IComponent> componentDescriptorProvider) {
+  public BasicQueryComponentDescriptor(IComponentDescriptorProvider<? extends IComponent> componentDescriptorProvider,
+                                       IAccessorFactory accessorFactory) {
     this(componentDescriptorProvider,
-        new THashMap<Class<? extends IComponent>, IComponentDescriptor<? extends IComponent>>());
+        new THashMap<Class<? extends IComponent>, IComponentDescriptor<? extends IComponent>>(), accessorFactory);
   }
 
   /**
    * Constructs a new {@code BasicQueryComponentDescriptor} instance.
    *
-   * @param componentDescriptorProvider           the provider for delegate entity descriptor.
-   * @param registry the registry
+   * @param componentDescriptorProvider
+   *     the provider for delegate entity descriptor.
+   * @param registry
+   *     the registry
    */
-  public BasicQueryComponentDescriptor(
-      IComponentDescriptorProvider<? extends IComponent> componentDescriptorProvider,
-      Map<Class<? extends IComponent>, IComponentDescriptor<? extends IComponent>> registry) {
-    super(componentDescriptorProvider, IQueryComponent.class, registry);
+  public BasicQueryComponentDescriptor(IComponentDescriptorProvider<? extends IComponent> componentDescriptorProvider,
+                                       Map<Class<? extends IComponent>, IComponentDescriptor<? extends IComponent>>
+                                           registry,
+                                       IAccessorFactory accessorFactory) {
+    super(componentDescriptorProvider, IQueryComponent.class, registry, accessorFactory);
     List<IComponentDescriptor<?>> ancestors = new ArrayList<>();
     ancestors.add(PageableDescriptor.INSTANCE);
     setAncestorDescriptors(ancestors);
@@ -80,12 +80,9 @@ public class BasicQueryComponentDescriptor<E> extends
   protected Collection<IPropertyDescriptor> getExtraPropertyDescriptors() {
     Collection<IPropertyDescriptor> extraPropertyDescriptors = new ArrayList<>();
     BasicListDescriptor<IComponent> queriedEntitiesCollectionDescriptor = new BasicListDescriptor<>();
-    queriedEntitiesCollectionDescriptor
-        .setElementDescriptor(getQueriedComponentsDescriptor());
-    queriedEntitiesCollectionDescriptor
-        .setName(IQueryComponent.QUERIED_COMPONENTS);
-    queriedEntitiesCollectionDescriptor
-        .setDescription("queriedEntities.description");
+    queriedEntitiesCollectionDescriptor.setElementDescriptor(getQueriedComponentsDescriptor());
+    queriedEntitiesCollectionDescriptor.setName(IQueryComponent.QUERIED_COMPONENTS);
+    queriedEntitiesCollectionDescriptor.setDescription("queriedEntities.description");
     BasicCollectionPropertyDescriptor<IComponent> qCPDescriptor = new BasicCollectionPropertyDescriptor<>();
     qCPDescriptor.setName(IQueryComponent.QUERIED_COMPONENTS);
     qCPDescriptor.setReferencedDescriptor(queriedEntitiesCollectionDescriptor);

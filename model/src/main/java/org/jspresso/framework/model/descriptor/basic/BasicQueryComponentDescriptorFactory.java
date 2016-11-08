@@ -28,17 +28,20 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.util.accessor.IAccessorFactory;
+import org.jspresso.framework.util.accessor.bean.BeanAccessorFactory;
 
 /**
  * Basic implementation. Creates basic query component descriptors.
- * 
+ *
  * @author Vincent Vandenschrick
  * @version $LastChangedRevision$
  */
 public class BasicQueryComponentDescriptorFactory implements IQueryComponentDescriptorFactory {
 
-  private final Map<IComponentDescriptorProvider<? extends IComponent>, IComponentDescriptor<IQueryComponent>> registry;
-  private final Map<Class<? extends IComponent>, IComponentDescriptor<? extends IComponent>> refRegistry;
+  private Map<IComponentDescriptorProvider<? extends IComponent>, IComponentDescriptor<IQueryComponent>> registry;
+  private Map<Class<? extends IComponent>, IComponentDescriptor<? extends IComponent>>                   refRegistry;
+  private IAccessorFactory accessorFactory;
 
   /**
    * Instantiates a new Basic query component descriptor factory.
@@ -46,6 +49,7 @@ public class BasicQueryComponentDescriptorFactory implements IQueryComponentDesc
   public BasicQueryComponentDescriptorFactory() {
     registry = new THashMap<>();
     refRegistry = new THashMap<>();
+    accessorFactory = new BeanAccessorFactory();
   }
 
   /**
@@ -74,8 +78,8 @@ public class BasicQueryComponentDescriptorFactory implements IQueryComponentDesc
   @Override
   public IReferencePropertyDescriptor<IQueryComponent> createQueryComponentReferenceDescriptor(
       String referencePropertyName, IComponentDescriptorProvider<IComponent> componentDescriptorProvider) {
-    BasicReferencePropertyDescriptor<IQueryComponent> referencePropertyDescriptor =
-        new BasicReferencePropertyDescriptor<>();
+    BasicReferencePropertyDescriptor<IQueryComponent> referencePropertyDescriptor = new
+        BasicReferencePropertyDescriptor<>();
     referencePropertyDescriptor.setName(referencePropertyName);
     referencePropertyDescriptor.setMandatory(false); // since it cannot be auto-created by the framework
     referencePropertyDescriptor.setReferencedDescriptor(createQueryComponentDescriptor(componentDescriptorProvider));
@@ -97,20 +101,20 @@ public class BasicQueryComponentDescriptorFactory implements IQueryComponentDesc
 
   /**
    * Instanciate query component descriptor.
-   * 
+   *
    * @param componentDescriptorProvider
-   *    the provider for delegate entity descriptor.
-   * @param registry 
-   *    the registry. 
+   *     the provider for delegate entity descriptor.
+   * @param registry
+   *     the registry.
    * @return the query component descriptor
    */
   protected IComponentDescriptor<IQueryComponent> instanciateQueryComponentDescriptor(
       IComponentDescriptorProvider<? extends IComponent> componentDescriptorProvider,
       Map<Class<? extends IComponent>, IComponentDescriptor<? extends IComponent>> registry) {
-    
-    IComponentDescriptor<IQueryComponent> queryComponentDescriptor
-      = new BasicQueryComponentDescriptor<IQueryComponent>(componentDescriptorProvider, registry);
-   
+
+    IComponentDescriptor<IQueryComponent> queryComponentDescriptor = new BasicQueryComponentDescriptor<IQueryComponent>(
+        componentDescriptorProvider, registry, accessorFactory);
+
     return queryComponentDescriptor;
   }
 }

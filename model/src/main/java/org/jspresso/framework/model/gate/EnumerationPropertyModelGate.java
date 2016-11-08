@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2013 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -16,16 +16,38 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.binding.model;
+package org.jspresso.framework.model.gate;
+
+import java.util.Collection;
 
 /**
  * This gate opens and closes based on the value of an enumeration property
  * matching a set of allowed values.
- * 
+ *
  * @author Vincent Vandenschrick
- * @deprecated use {@link org.jspresso.framework.model.gate.EnumerationPropertyModelGate} instead.
  */
-@Deprecated
-public class EnumerationPropertyModelGate extends org.jspresso.framework.model.gate.EnumerationPropertyModelGate {
-  // DEPRECATED
+public class EnumerationPropertyModelGate extends
+    AbstractPropertyModelGate<String> {
+
+  private Collection<String> openingValues;
+
+  /**
+   * Configures the enumeration values for which the gate is to be open, unless
+   * the {@code openOnTrue} property is set to {@code false}.
+   *
+   * @param openingValues
+   *          the openingValues to set.
+   */
+  public void setOpeningValues(Collection<String> openingValues) {
+    this.openingValues = openingValues;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean shouldOpen(String propertyValue) {
+    return propertyValue != null && openingValues != null
+        && openingValues.contains(propertyValue);
+  }
 }

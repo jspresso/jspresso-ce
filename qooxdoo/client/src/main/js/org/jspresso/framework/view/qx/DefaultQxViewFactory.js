@@ -441,11 +441,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       dateTimeField.setWidth(maxW);
       dateTimeField.setUserData("df", dateField);
       dateTimeField.setUserData("tf", timeField);
-      dateTimeField.addListener("appear", function () {
-        dateTimeField.setBackgroundColor(dateField.getBackgroundColor());
-        dateField.setBackgroundColor(null);
-        timeField.setBackgroundColor(null);
-      }, this);
       return dateTimeField;
     },
 
@@ -2724,11 +2719,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       this._sizeMaxComponentWidthFromText(dateField, remoteDateField, "00/00/0000 000");
       dateField.setMinWidth(dateField.getMaxWidth());
       remoteDateField.setPreferredSize(ps);
-      dateField.addListener("appear", function () {
-        var textField = dateField.getChildControl("textfield");
-        dateField.setBackgroundColor(textField.getBackgroundColor());
-        textField.setBackgroundColor(null);
-      }, this);
       return dateField;
     },
 
