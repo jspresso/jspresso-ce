@@ -94,7 +94,17 @@ public class ComparableQueryStructure extends QueryComponent {
    *     the comparator to set.
    */
   public void setComparator(String comparator) {
+    boolean oldInfValueUsed = isInfValueUsed();
+    boolean oldSupValueUsed = isSupValueUsed();
     put(ComparableQueryStructureDescriptor.COMPARATOR, comparator);
+    if (!isSupValueUsed()) {
+      setSupValue(null);
+    }
+    if (!isInfValueUsed()) {
+      setInfValue(null);
+    }
+    firePropertyChange(ComparableQueryStructureDescriptor.INF_VALUE_USED, oldInfValueUsed, isInfValueUsed());
+    firePropertyChange(ComparableQueryStructureDescriptor.SUP_VALUE_USED, oldSupValueUsed, isSupValueUsed());
   }
 
   /**
@@ -138,8 +148,7 @@ public class ComparableQueryStructure extends QueryComponent {
   /**
    * Whether the comparable query structure actually holds a restriction.
    *
-   * @return {@code true} if the comparable query structure actually holds
-   * a restriction.
+   * @return {@code true} if the comparable query structure actually holds a restriction.
    */
   @Override
   public boolean isRestricting() {
@@ -153,8 +162,7 @@ public class ComparableQueryStructure extends QueryComponent {
    *
    * @param value
    *     the value to test.
-   * @return {@code true} if the value passed as parameter matches the
-   * query structure.
+   * @return {@code true} if the value passed as parameter matches the query structure.
    */
   public boolean matches(Comparable<Object> value) {
     if (isRestricting()) {
@@ -270,6 +278,7 @@ public class ComparableQueryStructure extends QueryComponent {
 
   /**
    * Gets format dependening on property descriptor type.
+   *
    * @return The format.
    */
   public Format getFormat() {
@@ -358,5 +367,23 @@ public class ComparableQueryStructure extends QueryComponent {
    */
   public IPropertyDescriptor getSourceDescriptor() {
     return sourceDescriptor;
+  }
+
+  /**
+   * Is sup value used boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isSupValueUsed() {
+    return ComparableQueryStructureDescriptor.BE.equals(getComparator());
+  }
+
+  /**
+   * Is inf value used boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isInfValueUsed() {
+    return getComparator() != null;
   }
 }

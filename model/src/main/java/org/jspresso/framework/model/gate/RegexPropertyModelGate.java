@@ -16,16 +16,38 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.binding.model;
+package org.jspresso.framework.model.gate;
+
+import java.util.regex.Pattern;
 
 /**
  * This gate opens and closes based on the value of a string property matching a
  * regular expression.
  *
  * @author Vincent Vandenschrick
- * @deprecated use {@link org.jspresso.framework.model.gate.RegexPropertyModelGate} instead.
  */
-public class RegexPropertyModelGate extends org.jspresso.framework.model.gate.RegexPropertyModelGate {
+public class RegexPropertyModelGate extends AbstractPropertyModelGate<String> {
 
-  // DEPRECATED
+  private String regexpPattern;
+
+  /**
+   * Configures the regular expression to match the property value against. The
+   * gate will open if the property value matches the regex unless the
+   * {@code openOnTrue} property has been set to false.
+   *
+   * @param regexpPattern
+   *          the regexpPattern to set.
+   */
+  public void setRegexpPattern(String regexpPattern) {
+    this.regexpPattern = regexpPattern;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean shouldOpen(String propertyValue) {
+    return propertyValue != null && regexpPattern != null
+        && Pattern.matches(regexpPattern, propertyValue);
+  }
 }

@@ -31,6 +31,9 @@ import org.jspresso.framework.model.descriptor.basic.BasicEnumerationPropertyDes
 import org.jspresso.framework.model.descriptor.basic.BasicPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor;
+import org.jspresso.framework.model.gate.BooleanPropertyModelGate;
+import org.jspresso.framework.util.accessor.IAccessorFactory;
+import org.jspresso.framework.util.gate.IGate;
 
 /**
  * The component descriptor of comparable property query structures.
@@ -99,18 +102,28 @@ public class ComparableQueryStructureDescriptor extends
   /**
    * {@code SUP_VALUE} supValue.
    */
-  public static final String SUP_VALUE  = "supValue";
+  public static final String SUP_VALUE = "supValue";
+
+  /**
+   * {@code INF_VALUE_USED} infValueUsed.
+   */
+  public static final String INF_VALUE_USED = "infValueUsed";
+  /**
+   * {@code SUP_VALUE_USED} supValueUsed.
+   */
+  public static final String SUP_VALUE_USED = "supValueUsed";
 
   /**
    * Constructs a new {@code ComparablePropertyQueryStructureDescriptor}
    * instance.
    *
    * @param propertyDescriptor
-   *          the comparable property descriptor to build the query descriptor
-   *          for.
+   *     the comparable property descriptor to build the query descriptor          for.
+   * @param accessorFactory
+   *     the accessor factory
    */
   public ComparableQueryStructureDescriptor(
-      BasicPropertyDescriptor propertyDescriptor) {
+      BasicPropertyDescriptor propertyDescriptor, IAccessorFactory accessorFactory) {
 
     super();
     setName(propertyDescriptor.getName());
@@ -146,11 +159,19 @@ public class ComparableQueryStructureDescriptor extends
         .clone();
     infValuePropertyDescriptor.setName(INF_VALUE);
     infValuePropertyDescriptor.setI18nNameKey("");
+    BooleanPropertyModelGate infValueGate = new BooleanPropertyModelGate();
+    infValueGate.setAccessorFactory(accessorFactory);
+    infValueGate.setPropertyName(INF_VALUE_USED);
+    infValuePropertyDescriptor.setWritabilityGates(Arrays.asList((IGate)infValueGate));
 
     BasicPropertyDescriptor supValuePropertyDescriptor = propertyDescriptor
         .clone();
     supValuePropertyDescriptor.setName(SUP_VALUE);
     supValuePropertyDescriptor.setI18nNameKey("");
+    BooleanPropertyModelGate supValueGate = new BooleanPropertyModelGate();
+    supValueGate.setAccessorFactory(accessorFactory);
+    supValueGate.setPropertyName(SUP_VALUE_USED);
+    supValuePropertyDescriptor.setWritabilityGates(Arrays.asList((IGate) supValueGate));
 
     BasicStringPropertyDescriptor toStringPropertyDescriptor = new BasicStringPropertyDescriptor();
     toStringPropertyDescriptor.setName(TO_STRING);

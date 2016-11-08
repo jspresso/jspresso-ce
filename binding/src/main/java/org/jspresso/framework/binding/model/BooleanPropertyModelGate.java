@@ -23,55 +23,9 @@ package org.jspresso.framework.binding.model;
  * assigned model.
  *
  * @author Vincent Vandenschrick
+ * @deprecated use {@link org.jspresso.framework.model.gate.BooleanPropertyModelGate} instead.
  */
-public class BooleanPropertyModelGate extends AbstractPropertyModelGate<Object> {
-
-  private boolean negatedByName;
-
-  /**
-   * Configures the boolean property name.
-   *
-   * @param booleanPropertyName
-   *          the propertyName to set.
-   * @deprecated use setPropertyName instead.
-   */
-  @Deprecated
-  public void setBooleanPropertyName(String booleanPropertyName) {
-    setPropertyName(booleanPropertyName);
-  }
-
-  /**
-   * Configures the boolean property name to use. Unless the
-   * {@code openOnTrue} property is set to {@code false}, the state of
-   * the gate will follow the boolean property value. It supports
-   * &quot;<b>!</b>&quot; prefix to negate the property value. It also supports
-   * non-boolean properties. In that case, the test is performed against the
-   * {@code property != null} condition.
-   * @param propertyName the name of the property.
-   */
-  @Override
-  public void setPropertyName(String propertyName) {
-    if (propertyName != null && propertyName.startsWith("!")) {
-      super.setPropertyName(propertyName.substring(1));
-      negatedByName = true;
-    } else {
-      super.setPropertyName(propertyName);
-      negatedByName = false;
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected boolean shouldOpen(Object propertyValue) {
-    boolean shouldOpen = propertyValue != null;
-    if (propertyValue instanceof Boolean) {
-      shouldOpen = (Boolean) propertyValue;
-    }
-    if (negatedByName) {
-      return !shouldOpen;
-    }
-    return shouldOpen;
-  }
+@Deprecated
+public class BooleanPropertyModelGate extends org.jspresso.framework.model.gate.BooleanPropertyModelGate {
+  // DEPRECATED
 }

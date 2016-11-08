@@ -78,7 +78,7 @@
           <property name="name" value="displayPageIndex" />
           <property name="writabilityGates">
             <list>
-              <bean class="org.jspresso.framework.binding.model.BooleanPropertyModelGate">
+              <bean class="org.jspresso.framework.model.gate.BooleanPropertyModelGate">
                 <property name="accessorFactory" ref="accessorFactory" />
                 <property name="propertyName" value="pageNavigationEnabled" />
               </bean>
@@ -224,7 +224,7 @@
     </property>
     <property name="pageOffset" value="1" />
     <property name="actionabilityGates">
-      <bean class="org.jspresso.framework.binding.model.BooleanPropertyModelGate">
+      <bean class="org.jspresso.framework.model.gate.BooleanPropertyModelGate">
         <property name="accessorFactory" ref="accessorFactory" />
         <property name="propertyName" value="nextPageEnabled" />
       </bean>
@@ -241,7 +241,7 @@
     </property>
     <property name="pageOffset" value="-1" />
     <property name="actionabilityGates">
-      <bean class="org.jspresso.framework.binding.model.BooleanPropertyModelGate">
+      <bean class="org.jspresso.framework.model.gate.BooleanPropertyModelGate">
         <property name="accessorFactory" ref="accessorFactory" />
         <property name="propertyName" value="previousPageEnabled" />
       </bean>
