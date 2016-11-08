@@ -31,6 +31,6 @@ public interface INestedComponentPropertyViewDescriptor extends
    *
    * @return the nested component view descriptor
    */
-  IComponentViewDescriptor getNestedComponentViewDescriptor();
+  IViewDescriptor getNestedComponentViewDescriptor();
 
 }

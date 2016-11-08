@@ -20,6 +20,7 @@ package org.jspresso.framework.view.descriptor.basic;
 
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.INestedComponentPropertyViewDescriptor;
+import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
  * This specialized property view descriptor is used in order to display a nested component view.
@@ -29,7 +30,7 @@ import org.jspresso.framework.view.descriptor.INestedComponentPropertyViewDescri
 public class BasicNestedComponentPropertyViewDescriptor extends BasicPropertyViewDescriptor implements
     INestedComponentPropertyViewDescriptor {
 
-  private IComponentViewDescriptor nestedComponentViewDescriptor;
+  private IViewDescriptor nestedComponentViewDescriptor;
 
   /**
    * Gets nested component view descriptor.
@@ -37,7 +38,7 @@ public class BasicNestedComponentPropertyViewDescriptor extends BasicPropertyVie
    * @return the nested component view descriptor
    */
   @Override
-  public IComponentViewDescriptor getNestedComponentViewDescriptor() {
+  public IViewDescriptor getNestedComponentViewDescriptor() {
     return nestedComponentViewDescriptor;
   }
 
@@ -47,7 +48,7 @@ public class BasicNestedComponentPropertyViewDescriptor extends BasicPropertyVie
    * @param nestedComponentViewDescriptor
    *     the nested component view descriptor
    */
-  public void setNestedComponentViewDescriptor(IComponentViewDescriptor nestedComponentViewDescriptor) {
+  public void setNestedComponentViewDescriptor(IViewDescriptor nestedComponentViewDescriptor) {
     this.nestedComponentViewDescriptor = nestedComponentViewDescriptor;
   }
 }
