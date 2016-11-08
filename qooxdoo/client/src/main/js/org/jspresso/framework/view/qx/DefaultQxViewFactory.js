@@ -112,14 +112,14 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       return component;
     },
 
-    __getComponentToStyle: function (component) {
-      var componentToStyle = component;
+    __getComponentsToStyle: function (component) {
+      var componentsToStyle = [component];
       if (component instanceof qx.ui.container.Composite) {
-        if (component.getUserData("componentToStyle")) {
-          componentToStyle = component.getUserData("componentToStyle");
+        if (component.getUserData("componentsToStyle")) {
+          componentsToStyle = component.getUserData("componentsToStyle");
         }
       }
-      return componentToStyle;
+      return componentsToStyle;
     },
 
     /**
@@ -128,20 +128,26 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @return {undefined}
      */
     applyComponentStyle: function (component, remoteComponent) {
-      var componentToStyle = this.__getComponentToStyle(component);
-      if (remoteComponent.getForeground()) {
-        componentToStyle.setTextColor(
-            org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(remoteComponent.getForeground()));
-      }
-      if (remoteComponent.getBackground()) {
-        componentToStyle.setDecorator("main");
-        componentToStyle.setBackgroundColor(
-            org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(remoteComponent.getBackground()));
-      }
-      var rFont = remoteComponent.getFont();
-      if (rFont) {
-        var compFont = componentToStyle.getFont();
-        componentToStyle.setFont(org.jspresso.framework.view.qx.DefaultQxViewFactory._fontToQxFont(rFont, compFont));
+      var componentsToStyle = this.__getComponentsToStyle(component);
+      if (componentsToStyle) {
+        for (var i = 0; i < componentsToStyle.length; i++) {
+          var componentToStyle = componentsToStyle[i];
+          if (remoteComponent.getForeground()) {
+            componentToStyle.setTextColor(org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(
+                remoteComponent.getForeground()));
+          }
+          if (remoteComponent.getBackground()) {
+            componentToStyle.setDecorator("main");
+            componentToStyle.setBackgroundColor(org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(
+                remoteComponent.getBackground()));
+          }
+          var rFont = remoteComponent.getFont();
+          if (rFont) {
+            var compFont = componentToStyle.getFont();
+            componentToStyle.setFont(
+                org.jspresso.framework.view.qx.DefaultQxViewFactory._fontToQxFont(rFont, compFont));
+          }
+        }
       }
       this._applyStyleName(component, remoteComponent.getStyleName());
     },
@@ -424,12 +430,15 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       }
 
       var remoteTimeField = new org.jspresso.framework.gui.remote.RTimeField();
+      remoteTimeField.setState(remoteDateField.getState());
       remoteTimeField.setBackground(remoteDateField.getBackground());
+      remoteTimeField.setBackgroundState(remoteDateField.getBackgroundState());
       remoteTimeField.setBorderType(remoteDateField.getBorderType());
       remoteTimeField.setFont(remoteDateField.getFont());
+      remoteTimeField.setFontState(remoteDateField.getFontState());
       remoteTimeField.setForeground(remoteDateField.getForeground());
+      remoteTimeField.setForegroundState(remoteDateField.getForegroundState());
       remoteTimeField.setGuid(remoteDateField.getGuid());
-      remoteTimeField.setState(remoteDateField.getState());
       remoteTimeField.setToolTip(remoteDateField.getToolTip());
       remoteTimeField.setSecondsAware(remoteDateField.getSecondsAware());
       remoteTimeField.setMillisecondsAware(remoteDateField.getMillisecondsAware());
@@ -441,6 +450,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       dateTimeField.setWidth(maxW);
       dateTimeField.setUserData("df", dateField);
       dateTimeField.setUserData("tf", timeField);
+      dateTimeField.setUserData("componentsToStyle", [dateField, timeField]);
       return dateTimeField;
     },
 
@@ -619,68 +629,83 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _bindDynamicBackground: function (component, rComponent) {
       var backgroundState = rComponent.getBackgroundState();
       if (backgroundState) {
-        var componentToStyle = this.__getComponentToStyle(component);
-        componentToStyle.addListener("appear", function () {
-          var defaultDecorator = componentToStyle.getDecorator();
-          var defaultBackgroundColor = componentToStyle.getBackgroundColor();
-          var mainDecorator = "main";
-          this._getRemotePeerRegistry().register(backgroundState);
-          var modelController = new qx.data.controller.Object(backgroundState);
-          modelController.addTarget(componentToStyle, "backgroundColor", "value", false, {
-            converter: function (modelValue, model) {
-              if (modelValue) {
-                // To allow for having the background color displayed instead of the decorator.
-                componentToStyle.setDecorator(mainDecorator);
-                return org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(modelValue);
-              } else {
-                componentToStyle.setDecorator(defaultDecorator);
-                return defaultBackgroundColor;
-              }
-            }
-          });
-        }, this);
+        var componentsToStyle = this.__getComponentsToStyle(component);
+        if (componentsToStyle) {
+          for (var i = 0; i < componentsToStyle.length; i++) {
+            componentsToStyle[i].addListener("appear", function (e) {
+              var componentToStyle = e.getCurrentTarget();
+              var defaultDecorator = componentToStyle.getDecorator();
+              var defaultBackgroundColor = componentToStyle.getBackgroundColor();
+              var mainDecorator = "main";
+              this._getRemotePeerRegistry().register(backgroundState);
+              var modelController = new qx.data.controller.Object(backgroundState);
+              modelController.addTarget(componentToStyle, "backgroundColor", "value", false, {
+                converter: function (modelValue, model) {
+                  if (modelValue) {
+                    // To allow for having the background color displayed instead of the decorator.
+                    componentToStyle.setDecorator(mainDecorator);
+                    return org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(modelValue);
+                  } else {
+                    componentToStyle.setDecorator(defaultDecorator);
+                    return defaultBackgroundColor;
+                  }
+                }
+              });
+            }, this);
+          }
+        }
       }
     },
 
     _bindDynamicForeground: function (component, rComponent) {
       var foregroundState = rComponent.getForegroundState();
       if (foregroundState) {
-        var componentToStyle = this.__getComponentToStyle(component);
-        componentToStyle.addListener("appear", function () {
-          this._getRemotePeerRegistry().register(foregroundState);
-          var modelController = new qx.data.controller.Object(foregroundState);
-          var defaultTextColor = componentToStyle.getTextColor();
-          modelController.addTarget(componentToStyle, "textColor", "value", false, {
-            converter: function (modelValue, model) {
-              if (modelValue) {
-                return org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(modelValue);
-              } else {
-                return defaultTextColor;
-              }
-            }
-          });
-        }, this);
+        var componentsToStyle = this.__getComponentsToStyle(component);
+        if (componentsToStyle) {
+          for (var i = 0; i < componentsToStyle.length; i++) {
+            componentsToStyle[i].addListener("appear", function (e) {
+              var componentToStyle = e.getCurrentTarget();
+              this._getRemotePeerRegistry().register(foregroundState);
+              var modelController = new qx.data.controller.Object(foregroundState);
+              var defaultTextColor = componentToStyle.getTextColor();
+              modelController.addTarget(componentToStyle, "textColor", "value", false, {
+                converter: function (modelValue, model) {
+                  if (modelValue) {
+                    return org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(modelValue);
+                  } else {
+                    return defaultTextColor;
+                  }
+                }
+              });
+            }, this);
+          }
+        }
       }
     },
 
     _bindDynamicFont: function (component, rComponent) {
       var fontState = rComponent.getFontState();
       if (fontState) {
-        var componentToStyle = this.__getComponentToStyle(component);
-        componentToStyle.addListener("appear", function () {
-          this._getRemotePeerRegistry().register(fontState);
-          var modelController = new qx.data.controller.Object(fontState);
-          var defaultFont = componentToStyle.getFont();
-          modelController.addTarget(componentToStyle, "font", "value", false, {
-            converter: function (modelValue, model) {
-              if (modelValue) {
-                return org.jspresso.framework.view.qx.DefaultQxViewFactory._fontToQxFont(modelValue);
-              } else {
-                return defaultFont;
-              }
-            }
-          });
-        }, this);
+        var componentsToStyle = this.__getComponentsToStyle(component);
+        if (componentsToStyle) {
+          for (var i = 0; i < componentsToStyle.length; i++) {
+            componentsToStyle[i].addListener("appear", function (e) {
+              var componentToStyle = e.getCurrentTarget();
+              this._getRemotePeerRegistry().register(fontState);
+              var modelController = new qx.data.controller.Object(fontState);
+              var defaultFont = componentToStyle.getFont();
+              modelController.addTarget(componentToStyle, "font", "value", false, {
+                converter: function (modelValue, model) {
+                  if (modelValue) {
+                    return org.jspresso.framework.view.qx.DefaultQxViewFactory._fontToQxFont(modelValue);
+                  } else {
+                    return defaultFont;
+                  }
+                }
+              });
+            }, this);
+          }
+        }
       }
     },
 
@@ -1946,7 +1971,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var modelController = new qx.data.controller.Object(state);
       var mainAction = remoteActionField.getActionLists()[0].getActions()[0];
       if (textField) {
-        actionField.setUserData("componentToStyle", textField);
+        actionField.setUserData("componentsToStyle", [textField]);
         // propagate focus
         actionField.addListener("focus", function (e) {
           if (textField.isFocusable()) {

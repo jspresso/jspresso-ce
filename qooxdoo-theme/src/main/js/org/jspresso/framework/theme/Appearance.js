@@ -324,6 +324,25 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           }
         },
 
+        "datefield": {
+          base: true,
+          include: "textfield",
+          style: function (states) {
+            return {
+              backgroundColor: (states.disabled || states.readonly) ? "background-disabled" : "white"
+            };
+          }
+        },
+
+        "datefield/textfield": {
+          base:true,
+          style: function (states) {
+            return {
+              backgroundColor: undefined
+            };
+          }
+        },
+
         "datefield/button": {
           base: true,
           style: function (states) {
