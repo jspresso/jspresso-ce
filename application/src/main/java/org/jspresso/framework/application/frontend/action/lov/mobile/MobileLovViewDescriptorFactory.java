@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.application.frontend.action.lov.mobile;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -70,6 +71,7 @@ public class MobileLovViewDescriptorFactory extends AbstractLovViewDescriptorFac
     if (ESelectionMode.SINGLE_SELECTION.equals(selectionMode)
         || ESelectionMode.SINGLE_CUMULATIVE_SELECTION.equals(selectionMode)) {
       resultCollectionViewDescriptor.setItemSelectionAction(okAction);
+      lovContext.put(LovAction.LOV_DIALOG_ACTIONS, new ArrayList<>());
     } else {
       lovContext.put(LovAction.LOV_DIALOG_ACTIONS, Arrays.asList(okAction));
     }
