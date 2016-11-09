@@ -418,7 +418,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
       actions.add(getCancelAction());
       context.put(ModalDialogAction.DIALOG_ACTIONS, actions);
     } else {
-      context.put(ModalDialogAction.DIALOG_ACTIONS, LOV_DIALOG_ACTIONS);
+      context.put(ModalDialogAction.DIALOG_ACTIONS, context.get(LOV_DIALOG_ACTIONS));
     }
     context.put(ModalDialogAction.DIALOG_TITLE,
         getI18nName(getTranslationProvider(context), getLocale(context)) + " : " + erqDescriptor
