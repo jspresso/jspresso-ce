@@ -94,25 +94,30 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    * {@code LOV_PRESELECTED_ITEM}.
    */
   public static final  String LOV_PRESELECTED_ITEM     = "LOV_PRESELECTED_ITEM";
-  
+
   /**
    * {@code LOV_SELECTED_ITEM}.
    */
   public static final  String LOV_SELECTED_ITEM        = "LOV_SELECTED_ITEM";
-  
+
   /**
    * {@code REF_VIEW_DESCRIPTOR}.
    */
   public static final  String REF_VIEW_DESCRIPTOR      = "REF_VIEW_DESCRIPTOR";
-  
+
   /**
    * {@code REF_VIEW_DESCRIPTOR}.
    */
   public static final String CREATE_ENTITY_LOV_VIEW_DESCRIPTOR_FACTORY = "CREATE_ENTITY_LOV_VIEW_DESCRIPTOR_FACTORY";
-  
+
+  /**
+   * {@code LOV_DIALOG_ACTIONS}.
+   */
+  public static final  String LOV_DIALOG_ACTIONS      = "LOV_DIALOG_ACTIONS";
+
   private static final String NON_LOV_TRIGGERING_CHARS =
       "%" + IQueryComponent.DISJUNCT + IQueryComponent.NOT_VAL + IQueryComponent.NULL_VAL;
-  
+
   private boolean                                    autoquery;
   private Integer                                    pageSize;
   private IDisplayableAction                         cancelAction;
@@ -317,7 +322,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
       // The focus has not been explicitly set to something else.
       context.put(FrontendAction.COMPONENT_TO_FOCUS, getSourceComponent(context));
     }
-    return super.execute(actionHandler, context);
+    boolean success = super.execute(actionHandler, context);
+    context.remove(LOV_DIALOG_ACTIONS);
+    return success;
   }
 
   /**
@@ -380,7 +387,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
                                        final IActionHandler actionHandler, final Map<String, Object> context) {
     getViewConnector(context).setConnectorValue(getViewConnector(context).getConnectorValue());
 
-    if (!context.containsKey(ModalDialogAction.DIALOG_ACTIONS)) {
+    if (!context.containsKey(LOV_DIALOG_ACTIONS)) {
       List<IDisplayableAction> actions = new ArrayList<>();
       actions.add(getOkAction());
       if (getCreateAction() != null) {
@@ -389,6 +396,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
       actions.add(getFindAction());
       actions.add(getCancelAction());
       context.put(ModalDialogAction.DIALOG_ACTIONS, actions);
+    } else {
+      context.put(ModalDialogAction.DIALOG_ACTIONS, LOV_DIALOG_ACTIONS);
     }
     context.put(ModalDialogAction.DIALOG_TITLE,
         getI18nName(getTranslationProvider(context), getLocale(context)) + " : " + erqDescriptor
@@ -631,7 +640,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   public void setLovViewDescriptorFactory(ILovViewDescriptorFactory lovViewDescriptorFactory) {
     this.lovViewDescriptorFactory = lovViewDescriptorFactory;
   }
-  
+
   /**
    * Configures the factory to be used to create the LOV's on-the-fly-creation view.
    *

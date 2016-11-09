@@ -65,7 +65,7 @@ public class MobileLovAction<E, F, G> extends LovAction<E, F, G> {
                                        IQueryComponent queryComponent, IView<E> lovView, IActionHandler actionHandler,
                                        Map<String, Object> context) {
     super.feedContextWithDialog(erqDescriptor, queryComponent, lovView, actionHandler, context);
-    if (!context.containsKey(ModalDialogAction.DIALOG_ACTIONS)) {
+    if (!context.containsKey(LOV_DIALOG_ACTIONS)) {
       context.put(ModalDialogAction.DIALOG_ACTIONS, Collections.emptyList());
     }
     context.put(ModalDialogAction.DIALOG_TITLE, erqDescriptor.getReferencedDescriptor().getI18nName(
