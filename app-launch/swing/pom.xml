@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.jspresso.framework</groupId>
     <artifactId>jspresso-root</artifactId>
-    <version>4.2.9.2-SNAPSHOT</version>
+    <version>4.2.9.2</version>
     <relativePath>../../root/pom.xml</relativePath>
   </parent>
   <artifactId>jspresso-app-launch-swing</artifactId>
