@@ -181,6 +181,6 @@ public final class HtmlHelper {
    * @return the string
    */
   public static String sanitizeHtml(String html) {
-    return JSPRESSO_SANITIZING_POLICY.sanitize(html);
+    return StringEscapeUtils.unescapeHtml4(JSPRESSO_SANITIZING_POLICY.sanitize(html));
   }
 }
