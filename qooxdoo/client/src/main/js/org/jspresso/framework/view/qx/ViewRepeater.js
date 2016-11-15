@@ -72,7 +72,12 @@ qx.Class.define("org.jspresso.framework.view.qx.ViewRepeater", {
       for (var i = 0; i < newSections.length; i++) {
         var newRemoteSection = newSections[i];
         var newSection = this.__viewFactory.createComponent(newRemoteSection);
-        newSection.addCssClass("jspresso-repeater-section");
+        if (newSection instanceof qx.ui.mobile.core.Widget) {
+          newSection.addCssClass("jspresso-repeater-section");
+        } else if (newSection instanceof qx.ui.core.Widget) {
+          newSection.setPaddingTop(newSection.getPaddingTop() + 5);
+          newSection.setPaddingBottom(newSection.getPaddingBottom() + 5);
+        }
         this.__componentTank[newRemoteSection.getState().getGuid()] = newSection;
         newSection.addListener("tap", function (evt) {
           var index = this.__container.getChildren().indexOf(evt.getCurrentTarget());
