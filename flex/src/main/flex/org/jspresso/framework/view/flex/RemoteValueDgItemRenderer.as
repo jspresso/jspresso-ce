@@ -265,6 +265,9 @@ public class RemoteValueDgItemRenderer extends ListItemRenderer implements IColu
         htmlText = "<u><a href='event:action'>" + cellText + "</a></u>";
       } else {
         htmlText = cellText;
+        if (htmlText) {
+          htmlText = htmlText.replace(new RegExp("<", "g"), "&lt;").replace(new RegExp(">", "g"), "&gt;");
+        }
       }
     }
     label.htmlText = htmlText;
