@@ -71,10 +71,8 @@ public class MobileLovViewDescriptorFactory extends AbstractLovViewDescriptorFac
     if (ESelectionMode.SINGLE_SELECTION.equals(selectionMode)
         || ESelectionMode.SINGLE_CUMULATIVE_SELECTION.equals(selectionMode)) {
       resultCollectionViewDescriptor.setItemSelectionAction(okAction);
-      lovContext.put(LovAction.LOV_DIALOG_ACTIONS, new ArrayList<>());
-    } else {
-      lovContext.put(LovAction.LOV_DIALOG_ACTIONS, Arrays.asList(okAction));
     }
+    //lovContext.put(LovAction.LOV_DIALOG_ACTIONS, new ArrayList<>());
     IQueryComponent queryComponent = (IQueryComponent) lovContext.get(IQueryComponent.QUERY_COMPONENT);
     Integer pageSize = queryComponent.getPageSize();
     if (pageSize != null && pageSize > 0) {
