@@ -3,7 +3,7 @@
   <groupId>org.jspresso.framework</groupId>
   <artifactId>jspresso-framework</artifactId>
   <packaging>pom</packaging>
-  <version>4.2.9.3-SNAPSHOT</version>
+  <version>4.2.9.3</version>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -43,7 +43,7 @@
   </licenses>
   <scm>
     <connection>scm:git:https://github.com/jspresso/jspresso-ce.git</connection>
-    <tag>jspresso-framework-4.2.9.x</tag>
+    <tag>jspresso-framework-4.2.9.3</tag>
   </scm>
   <issueManagement>
     <system>Jspresso CE Issue Tracker</system>
