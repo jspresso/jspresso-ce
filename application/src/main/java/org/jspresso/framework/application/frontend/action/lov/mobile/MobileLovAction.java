@@ -18,8 +18,7 @@
  */
 package org.jspresso.framework.application.frontend.action.lov.mobile;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
@@ -29,7 +28,6 @@ import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.view.IView;
-import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.IMobilePageAware;
 
@@ -67,10 +65,10 @@ public class MobileLovAction<E, F, G> extends LovAction<E, F, G> {
                                        Map<String, Object> context) {
     super.feedContextWithDialog(erqDescriptor, queryComponent, lovView, actionHandler, context);
     if (!context.containsKey(LOV_DIALOG_ACTIONS)) {
-      context.put(ModalDialogAction.DIALOG_ACTIONS, new ArrayList<>());
+      context.put(ModalDialogAction.DIALOG_ACTIONS, Arrays.asList(getFindAction()));
     }
-    context.put(ModalDialogAction.DIALOG_TITLE, erqDescriptor.getReferencedDescriptor().getI18nName(
-        getTranslationProvider(context), getLocale(context)));
+    context.put(ModalDialogAction.DIALOG_TITLE,
+        erqDescriptor.getReferencedDescriptor().getI18nName(getTranslationProvider(context), getLocale(context)));
   }
 
   @Override
@@ -79,7 +77,7 @@ public class MobileLovAction<E, F, G> extends LovAction<E, F, G> {
     IViewDescriptor viewDescriptor = super.createLovViewDescriptor(erqDescriptor, context);
     if (viewDescriptor instanceof IMobilePageAware) {
       ((IMobilePageAware) viewDescriptor).setBackAction(getCancelAction());
-      ((IMobilePageAware) viewDescriptor).setMainAction(getFindAction());
+      ((IMobilePageAware) viewDescriptor).setMainAction(getOkAction());
     }
     return viewDescriptor;
   }
