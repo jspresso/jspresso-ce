@@ -94,7 +94,8 @@ public class JdbcPreferencesStore implements IPreferencesStore {
       return;
     }
     initIfNecessary();
-    String existing = preferences.put(key, value);
+    boolean existing = preferences.containsKey(key);
+    preferences.put(key, value);
     StringBuilder sql = new StringBuilder();
     String[] restrictionsColumns;
     String[] restrictionsValues;
@@ -127,7 +128,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
     restrictionsValues[2] = storePath;
     restrictionsTypes[2] = Types.VARCHAR;
 
-    if (existing != null) {
+    if (existing) {
       sql.append("UPDATE ").append(getTableName()).append(" SET ")
           .append(getValueColumnName()).append(" = ? WHERE ");
       for (int i = 1; i < restrictionsColumns.length; i++) {
