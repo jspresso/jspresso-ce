@@ -24,7 +24,9 @@ qx.Interface.define("org.jspresso.framework.action.IActionHandler", {
     },
 
     translate: function (key) {
-    }
+    },
 
+    showBusy: function (busy) {
+    }
   }
 });
