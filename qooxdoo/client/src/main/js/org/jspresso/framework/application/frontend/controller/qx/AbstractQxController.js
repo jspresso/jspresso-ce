@@ -154,15 +154,15 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     /**
      * @param busy {Boolean}
      */
-    _showBusy: function (busy) {
-      throw new Error("_showBusy is abstract");
+    showBusy: function (busy) {
+      throw new Error("showBusy is abstract");
     },
 
     /**
      * @return {undefined}
      */
     _dispatchCommands: function () {
-      this._showBusy(true);
+      this.showBusy(true);
       if (!this.__roundTrip) {
         this.__roundTrip = true;
         this.__remoteController.callAsyncListeners(true,
@@ -701,7 +701,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      * @return {undefined}
      */
     start: function () {
-      this._showBusy(true);
+      this.showBusy(true);
       var startCommand = new org.jspresso.framework.application.frontend.command.remote.RemoteStartCommand();
       startCommand.setLanguage(this.__userLanguage);
       startCommand.setKeysToTranslate(this._getKeysToTranslate());
@@ -800,7 +800,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
         } catch (e) {
           throw e;
         } finally {
-          this._showBusy(false);
+          this.showBusy(false);
           this.__roundTrip = false;
           this._checkPostponedCommandsCompletion();
           this.__postponedCommands = null;
@@ -831,7 +831,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
        * @param ex {qx.event.type.Data}
        */
       var errorHandler = function (ex) {
-        this._showBusy(false);
+        this.showBusy(false);
         this.__roundTrip = false;
         this._handleError(ex.getData().toString());
         if (this.__commandsBacklog.length > 0) {
