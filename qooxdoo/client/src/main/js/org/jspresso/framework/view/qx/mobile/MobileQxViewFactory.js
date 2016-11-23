@@ -2238,9 +2238,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         syncPicker.call(this, imageData);
       }, this);
       imagePicker.addListener("imagePicked", function () {
+        this._getActionHandler().showBusy(true);
         qx.event.Timer.once(function () {
           this._getActionHandler().refresh();
-        }, this, 500);
+          this._getActionHandler().showBusy(false);
+        }, this, 2000);
       }, this);
       syncPicker.call(this, state.getValue());
       return imageChooser;

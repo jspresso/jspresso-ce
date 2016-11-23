@@ -350,7 +350,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       }
     },
 
-    _showBusy: function (busy) {
+    showBusy: function (busy) {
       if (busy) {
         this.__busy = true;
         qx.event.Timer.once(function () {
