@@ -94,7 +94,11 @@ qx.Class.define("org.jspresso.framework.gui.remote.RComponent", {
     styleName: {
       check: "String",
       nullable: true
-    }
+    },
+    focusGainedAction: {
+      check: "org.jspresso.framework.gui.remote.RAction",
+      nullable: true
+    },
   },
 
   members: {

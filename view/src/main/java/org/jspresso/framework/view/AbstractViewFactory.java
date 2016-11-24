@@ -2226,15 +2226,15 @@ public abstract class AbstractViewFactory<E, F, G> implements
       view = createColorPropertyView(propertyViewDescriptor, actionHandler,
           locale);
     }
-    if (view != null && propertyViewDescriptor.getAction() != null
-        && !propertyViewDescriptor.isReadOnly()) {
-      // We must listen for incoming connector value change to trigger the
-      // action.
-      final IValueConnector viewConnector = view.getConnector();
-      if (viewConnector != null) {
-        viewConnector.addValueChangeListener(new ConnectorActionAdapter<>(
-            propertyViewDescriptor.getAction(), getActionFactory(),
-            actionHandler, view));
+    if (view != null) {
+      if (propertyViewDescriptor.getAction() != null && !propertyViewDescriptor.isReadOnly()) {
+        // We must listen for incoming connector value change to trigger the
+        // action.
+        final IValueConnector viewConnector = view.getConnector();
+        if (viewConnector != null) {
+          viewConnector.addValueChangeListener(
+              new ConnectorActionAdapter<>(propertyViewDescriptor.getAction(), getActionFactory(), actionHandler, view));
+        }
       }
     }
     return view;
@@ -3552,7 +3552,10 @@ public abstract class AbstractViewFactory<E, F, G> implements
         if (i > 0) {
           buff.append("!");
         }
-        buff.append(columnPrefs[i][0]).append(",").append(columnPrefs[i][1]).append(",").append(columnPrefs[i][2]);
+        buff.append(columnPrefs[i][0]).append(",").append(columnPrefs[i][1]);
+        if (columnPrefs[i].length > 2) {
+          buff.append(",").append(columnPrefs[i][2]);
+        }
       }
       actionHandler.putUserPreference(tableId, buff.toString());
     }
@@ -3576,7 +3579,7 @@ public abstract class AbstractViewFactory<E, F, G> implements
           .getUserPreference(viewDescriptor.getPermId());
       if (prefs != null) {
         String[] columns = prefs.split("!");
-        columnPrefs = new Object[columns.length][2];
+        columnPrefs = new Object[columns.length][3];
         for (int i = 0; i < columns.length; i++) {
           String[] column = columns[i].split(",");
           Boolean visibility = column.length > 2 ? Boolean.valueOf(column[2]) : Boolean.TRUE;
