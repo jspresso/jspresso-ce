@@ -105,6 +105,22 @@ public final class ActionContextConstants {
    */
   public static final String UI_EVENT                 = "UI_EVENT";
 
+  /**
+   * A parametrized entity reference descriptor.
+   */
+  public static final String COMPONENT_REF_DESCRIPTOR = "COMPONENT_REF_DESCRIPTOR";
+
+  /**
+   * The master component key from which the LOV has been triggered.
+   */
+  public static final String MASTER_COMPONENT = "MASTER_COMPONENT";
+
+  /**
+   * The connector of the query model.
+   */
+  public static final String QUERY_MODEL_CONNECTOR = "QUERY_MODEL_CONNECTOR";
+
+
   private ActionContextConstants() {
     // to prevent this class from being instantiated.
   }

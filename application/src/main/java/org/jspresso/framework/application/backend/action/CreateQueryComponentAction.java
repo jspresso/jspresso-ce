@@ -20,6 +20,7 @@ package org.jspresso.framework.application.backend.action;
 
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.model.component.IComponent;
@@ -46,17 +47,17 @@ public class CreateQueryComponentAction extends BackendAction {
   /**
    * A parametrized entity reference descriptor.
    */
-  public static final String               COMPONENT_REF_DESCRIPTOR = "COMPONENT_REF_DESCRIPTOR";
+  public static final String               COMPONENT_REF_DESCRIPTOR = ActionContextConstants.COMPONENT_REF_DESCRIPTOR;
 
   /**
    * The master component key from which the LOV has been triggered.
    */
-  public static final String               MASTER_COMPONENT         = "MASTER_COMPONENT";
+  public static final String               MASTER_COMPONENT         = ActionContextConstants.MASTER_COMPONENT;
 
   /**
    * The connector of the query model.
    */
-  public static final String               QUERY_MODEL_CONNECTOR    = "QUERY_MODEL_CONNECTOR";
+  public static final String               QUERY_MODEL_CONNECTOR    = ActionContextConstants.QUERY_MODEL_CONNECTOR;
 
   private IQueryComponentDescriptorFactory queryComponentDescriptorFactory;
 
