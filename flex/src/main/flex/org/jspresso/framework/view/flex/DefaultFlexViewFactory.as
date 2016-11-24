@@ -2601,7 +2601,6 @@ public class DefaultFlexViewFactory {
 
       var column:DataGridColumn = new DataGridColumn();
       column.headerText = rColumnHeader.label;
-      applyComponentStyle(column, rColumn);
       var itemRenderer:ClassFactory;
       var ttIndex:int = -1;
       var bgIndex:int = -1;
@@ -2634,7 +2633,9 @@ public class DefaultFlexViewFactory {
           }
         }
         itemRenderer = new ClassFactory(EnumerationDgItemRenderer);
-        itemRenderer.properties = {values: (rColumn as RComboBox).values,
+        itemRenderer.properties = {
+          viewFactory: this,
+          values: (rColumn as RComboBox).values,
           labels: (rColumn as RComboBox).translations,
           icons: (rColumn as RComboBox).icons,
           iconTemplate: _iconTemplate,
@@ -2643,7 +2644,8 @@ public class DefaultFlexViewFactory {
           toolTipIndex: ttIndex,
           backgroundIndex: bgIndex,
           foregroundIndex: fgIndex,
-          fontIndex: foIndex};
+          fontIndex: foIndex,
+          remoteComponent: rColumn};
       } else if (rColumn is RCheckBox || (rColumn is RActionField && !(rColumn as RActionField).showTextField)
           || rColumn is RImageComponent) {
         itemRenderer = new ClassFactory(UIComponentDgItemRenderer);
@@ -2689,7 +2691,9 @@ public class DefaultFlexViewFactory {
         }
         column.setStyle("textAlign", alignment);
         itemRenderer = new ClassFactory(RemoteValueDgItemRenderer);
-        itemRenderer.properties = {formatter: createFormatter(rColumn),
+        itemRenderer.properties = {
+          viewFactory: this,
+          formatter: createFormatter(rColumn),
           action: columnAction,
           actionHandler: getActionHandler(),
           selectable: readOnly,
@@ -2697,7 +2701,8 @@ public class DefaultFlexViewFactory {
           toolTipIndex: ttIndex,
           backgroundIndex: bgIndex,
           foregroundIndex: fgIndex,
-          fontIndex: foIndex};
+          fontIndex: foIndex,
+          remoteComponent: rColumn};
         column.editable = !readOnly;
       }
       column.itemRenderer = itemRenderer;

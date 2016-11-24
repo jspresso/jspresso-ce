@@ -63,7 +63,7 @@ public class DgHeaderItemRenderer extends HBox implements IColumnIndexProvider, 
 
   private function configure():void {
     if (_viewFactory != null && _rTemplate != null) {
-      _viewFactory.applyComponentStyle(_text, _rTemplate);
+      _viewFactory.applyComponentStyle(this, _rTemplate);
       if (_rTemplate.icon) {
         var labelIcon:Image = new CachedImage();
         labelIcon.source = _rTemplate.icon.imageUrlSpec;

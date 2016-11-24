@@ -185,9 +185,13 @@ public class UIComponentDgItemRenderer extends RemoteValueDgItemEditor implement
 
   override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
     if (listData.owner is DataGrid) {
-      if (backgroundIndex >= 0) {
-        var backgroundValue:Object = ((data as RemoteCompositeValueState).children[backgroundIndex]
-            as RemoteValueState).value;
+      if (backgroundIndex >= 0 || remoteComponent.background) {
+        var backgroundValue:Object;
+        if (backgroundIndex >= 0) {
+          backgroundValue = ((data as RemoteCompositeValueState).children[backgroundIndex] as RemoteValueState).value;
+        } else if(remoteComponent.background) {
+          backgroundValue = remoteComponent.background;
+        }
         if (backgroundValue) {
           setStyle("backgroundColor", backgroundValue);
           setStyle("backgroundAlpha", DefaultFlexViewFactory.getAlphaFromArgb(backgroundValue as String));
@@ -196,9 +200,13 @@ public class UIComponentDgItemRenderer extends RemoteValueDgItemEditor implement
           setStyle("backgroundAlpha", null);
         }
       }
-      if (foregroundIndex >= 0) {
-        var foregroundValue:Object = ((data as RemoteCompositeValueState).children[foregroundIndex]
-            as RemoteValueState).value;
+      if (foregroundIndex >= 0 || remoteComponent.foreground) {
+        var foregroundValue:Object;
+        if (foregroundIndex >= 0) {
+          foregroundValue = ((data as RemoteCompositeValueState).children[foregroundIndex] as RemoteValueState).value;
+        } else if (remoteComponent.foreground) {
+          foregroundValue = remoteComponent.foreground;
+        }
         if (foregroundValue) {
           setStyle("color", foregroundValue);
           setStyle("alpha", DefaultFlexViewFactory.getAlphaFromArgb(foregroundValue as String));
@@ -207,8 +215,13 @@ public class UIComponentDgItemRenderer extends RemoteValueDgItemEditor implement
           setStyle("alpha", null);
         }
       }
-      if (fontIndex >= 0) {
-        var fontValue:Object = ((data as RemoteCompositeValueState).children[fontIndex] as RemoteValueState).value;
+      if (fontIndex >= 0 || remoteComponent.font) {
+        var fontValue:Object;
+        if (fontIndex >= 0) {
+          fontValue = ((data as RemoteCompositeValueState).children[fontIndex] as RemoteValueState).value;
+        } else if (remoteComponent.font) {
+          fontValue = remoteComponent.font;
+        }
         if (fontValue is Font) {
           if ((fontValue as Font).name) {
             setStyle("fontFamily", (fontValue as Font).name);

@@ -37,6 +37,7 @@ import mx.formatters.Formatter;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RActionEvent;
+import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.gui.Font;
@@ -44,6 +45,7 @@ import org.jspresso.framework.util.html.HtmlUtil;
 
 public class RemoteValueDgItemRenderer extends ListItemRenderer implements IColumnIndexProvider {
 
+  private var _viewFactory:DefaultFlexViewFactory;
   private var _valueChangeListener:ChangeWatcher;
   private var _toolTipChangeListener:ChangeWatcher;
   private var _writabilityChangeListener:ChangeWatcher;
@@ -61,6 +63,7 @@ public class RemoteValueDgItemRenderer extends ListItemRenderer implements IColu
   private var _selectable:Boolean;
   private var _action:RAction;
   private var _actionHandler:IActionHandler;
+  private var _remoteComponent:RComponent;
 
   public function RemoteValueDgItemRenderer() {
     _index = -1;
@@ -332,11 +335,31 @@ public class RemoteValueDgItemRenderer extends ListItemRenderer implements IColu
     _fontIndex = value;
   }
 
+  public function get remoteComponent():RComponent {
+    return _remoteComponent;
+  }
+
+  public function set remoteComponent(value:RComponent):void {
+    _remoteComponent = value;
+  }
+
+  public function get viewFactory():DefaultFlexViewFactory {
+    return _viewFactory;
+  }
+
+  public function set viewFactory(value:DefaultFlexViewFactory):void {
+    _viewFactory = value;
+  }
+
   override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void {
     if (data && listData && listData.owner is DataGrid) {
-      if (backgroundIndex >= 0) {
-        var backgroundValue:Object = ((data as RemoteCompositeValueState).children[backgroundIndex]
-        as RemoteValueState).value;
+      if (backgroundIndex >= 0 || remoteComponent.background) {
+        var backgroundValue:Object;
+        if (backgroundIndex >=0) {
+          backgroundValue = ((data as RemoteCompositeValueState).children[backgroundIndex] as RemoteValueState).value;
+        } else if (remoteComponent.background) {
+          backgroundValue = remoteComponent.background;
+        }
         var g:Graphics = graphics;
         g.clear();
         if (backgroundValue != null) {
@@ -345,9 +368,13 @@ public class RemoteValueDgItemRenderer extends ListItemRenderer implements IColu
           g.endFill();
         }
       }
-      if (foregroundIndex >= 0) {
-        var foregroundValue:Object = ((data as RemoteCompositeValueState).children[foregroundIndex]
-        as RemoteValueState).value;
+      if (foregroundIndex >= 0 || remoteComponent.foreground) {
+        var foregroundValue:Object;
+        if (foregroundIndex >= 0) {
+          foregroundValue = ((data as RemoteCompositeValueState).children[foregroundIndex] as RemoteValueState).value;
+        } else if (remoteComponent.foreground){
+          foregroundValue = remoteComponent.foreground;
+        }
         if (foregroundValue) {
           setStyle("color", foregroundValue);
           alpha = DefaultFlexViewFactory.getAlphaFromArgb(foregroundValue as String);
@@ -356,8 +383,13 @@ public class RemoteValueDgItemRenderer extends ListItemRenderer implements IColu
           alpha = 1.0;
         }
       }
-      if (fontIndex >= 0) {
-        var fontValue:Object = ((data as RemoteCompositeValueState).children[fontIndex] as RemoteValueState).value;
+      if (fontIndex >= 0 || remoteComponent.font) {
+        var fontValue:Object;
+        if (fontIndex >= 0) {
+          fontValue = ((data as RemoteCompositeValueState).children[fontIndex] as RemoteValueState).value;
+        } else if (remoteComponent.font) {
+          fontValue = remoteComponent.font;
+        }
         if (fontValue is Font) {
           if ((fontValue as Font).name) {
             setStyle("fontFamily", (fontValue as Font).name);
