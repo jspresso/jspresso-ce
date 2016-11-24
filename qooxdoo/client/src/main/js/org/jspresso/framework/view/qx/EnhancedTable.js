@@ -70,6 +70,8 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedTable", {
         this.startEditing()
       }
       this.base(arguments, evt);
+      // In order to notify column change in same row
+      this.getSelectionModel()._fireChangeSelection();
     },
 
     _onSelectionChanged: function (evt) {

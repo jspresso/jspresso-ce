@@ -278,6 +278,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @return {qx.ui.mobile.core.Widget}
      */
     _decorateWithActions: function (remoteComponent, component) {
+      if (remoteComponent.getFocusGainedAction()) {
+        component.addListener("focusin", function (event) {
+          this._getActionHandler().execute(remoteComponent.getFocusGainedAction());
+        }, this);
+      }
       if (remoteComponent instanceof org.jspresso.framework.gui.remote.RTextField || remoteComponent
           instanceof org.jspresso.framework.gui.remote.RDateField || remoteComponent
           instanceof org.jspresso.framework.gui.remote.RNumericComponent || remoteComponent
