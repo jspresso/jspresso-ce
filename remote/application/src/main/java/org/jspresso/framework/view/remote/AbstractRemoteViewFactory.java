@@ -151,7 +151,6 @@ import org.jspresso.framework.view.descriptor.IEnumerationPropertyViewDescriptor
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IMapViewDescriptor;
-import org.jspresso.framework.view.descriptor.INestedComponentPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IRepeaterViewDescriptor;
@@ -1152,15 +1151,20 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor.getModelDescriptor();
     IView<RComponent> propertyView = super.createPropertyView(propertyViewDescriptor, actionHandler, locale);
     if (propertyView != null) {
+      RComponent peer = propertyView.getPeer();
       if (propertyDescriptor.getName() != null) {
-        propertyView.getPeer().setLabel(propertyDescriptor.getI18nName(actionHandler, locale));
+        peer.setLabel(propertyDescriptor.getI18nName(actionHandler, locale));
       }
-      if (propertyView.getPeer() instanceof RLabel) {
-        configureAlignment((RLabel) propertyView.getPeer(), propertyViewDescriptor.getHorizontalAlignment());
-      } else if (propertyView.getPeer() instanceof RTextField) {
-        configureAlignment((RTextField) propertyView.getPeer(), propertyViewDescriptor.getHorizontalAlignment());
-      } else if (propertyView.getPeer() instanceof RNumericComponent) {
-        configureAlignment((RNumericComponent) propertyView.getPeer(), propertyViewDescriptor.getHorizontalAlignment());
+      if (peer instanceof RLabel) {
+        configureAlignment((RLabel) peer, propertyViewDescriptor.getHorizontalAlignment());
+      } else if (peer instanceof RTextField) {
+        configureAlignment((RTextField) peer, propertyViewDescriptor.getHorizontalAlignment());
+      } else if (peer instanceof RNumericComponent) {
+        configureAlignment((RNumericComponent) peer, propertyViewDescriptor.getHorizontalAlignment());
+      }
+      if (propertyViewDescriptor.getFocusGainedAction() != null) {
+        peer.setFocusGainedAction(getActionFactory()
+            .createAction(propertyViewDescriptor.getFocusGainedAction(), actionHandler, propertyView, locale));
       }
     }
     return propertyView;

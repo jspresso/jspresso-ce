@@ -49,8 +49,7 @@ import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
  * 
  * @author Vincent Vandenschrick
  */
-public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
-    IPropertyViewDescriptor {
+public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements IPropertyViewDescriptor {
 
   private String               labelBackground;
   private String               labelFont;
@@ -62,6 +61,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
   private EHorizontalAlignment horizontalAlignment;
   private Boolean              sortable;
   private List<String>         forClientTypes;
+  private IAction              focusGainedAction;
 
   /**
    * Gets the labelBackground.
@@ -95,6 +95,8 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * {@inheritDoc}
+   *
+   * @return the rendered child properties
    */
   @Override
   public List<String> getRenderedChildProperties() {
@@ -103,6 +105,8 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * {@inheritDoc}
+   *
+   * @return the default rendered child properties
    */
   @Override
   public List<String> getDefaultRenderedChildProperties() {
@@ -139,7 +143,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * Default value is {@code null}, meaning use UI default.
    *
    * @param labelBackground
-   *          the labelBackground to set.
+   *     the labelBackground to set.
    */
   public void setLabelBackground(String labelBackground) {
     this.labelBackground = labelBackground;
@@ -162,7 +166,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * Default value is {@code null}, meaning use default component font.
    *
    * @param labelFont
-   *          the labelFont to set.
+   *     the labelFont to set.
    */
   public void setLabelFont(String labelFont) {
     this.labelFont = labelFont;
@@ -177,7 +181,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * Default value is {@code null}, meaning use UI default.
    *
    * @param labelForeground
-   *          the labelForeground to set.
+   *     the labelForeground to set.
    */
   public void setLabelForeground(String labelForeground) {
     this.labelForeground = labelForeground;
@@ -204,7 +208,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * views; so the latter is by far recommended.
    *
    * @param renderedChildProperties
-   *          the renderedChildProperties to set.
+   *     the renderedChildProperties to set.
    */
   public void setRenderedChildProperties(List<String> renderedChildProperties) {
     this.renderedChildProperties = renderedChildProperties;
@@ -218,7 +222,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * Default value is {@code null}, meaning use default span of 1.
    *
    * @param width
-   *          the width to set.
+   *     the width to set.
    */
   public void setWidth(Integer width) {
     this.width = width;
@@ -248,7 +252,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * </ol>
    * 
    * @param action
-   *          the action to set.
+   *     the action to set.
    */
   public void setAction(IAction action) {
     this.action = action;
@@ -256,6 +260,8 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * {@inheritDoc}
+   *
+   * @return the preferred width
    */
   @Override
   protected Integer getPreferredWidth() {
@@ -279,7 +285,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * Default value is {@code null}, meaning use property type default.
    *
    * @param horizontalAlignment
-   *          the horizontalAlignment to set.
+   *     the horizontalAlignment to set.
    */
   public void setHorizontalAlignment(EHorizontalAlignment horizontalAlignment) {
     this.horizontalAlignment = horizontalAlignment;
@@ -287,6 +293,8 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * {@inheritDoc}
+   *
+   * @return the horizontal alignment
    */
   @Override
   public EHorizontalAlignment getHorizontalAlignment() {
@@ -322,7 +330,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * {@code true}.
    *
    * @param sortable
-   *          the sortable to set.
+   *     the sortable to set.
    */
   public void setSortable(boolean sortable) {
     this.sortable = sortable;
@@ -332,6 +340,8 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * Queries the model property descriptor to determine read-only state.
    * <p>
    * {@inheritDoc}
+   *
+   * @return the boolean
    */
   @Override
   public boolean isReadOnly() {
@@ -365,7 +375,8 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * <p>
    * Default value is {@code LEFT}.
    *
-   * @param labelHorizontalPosition the label horizontal position
+   * @param labelHorizontalPosition
+   *     the label horizontal position
    */
   public void setLabelHorizontalPosition(EHorizontalPosition labelHorizontalPosition) {
     this.labelHorizontalPosition = labelHorizontalPosition;
@@ -386,9 +397,31 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
   /**
    * Sets for client types.
    *
-   * @param forClientTypes the for client types
+   * @param forClientTypes
+   *     the for client types
    */
   public void setForClientTypes(List<String> forClientTypes) {
     this.forClientTypes = forClientTypes;
+  }
+
+  /**
+   * Configures a focus gained action. This action is triggered when the remote peer receives the focus in the client
+   * UI.
+   *
+   * @return the focus gained action
+   */
+  @Override
+  public IAction getFocusGainedAction() {
+    return focusGainedAction;
+  }
+
+  /**
+   * Sets focus gained action.
+   *
+   * @param focusGainedAction
+   *     the focus gained action
+   */
+  public void setFocusGainedAction(IAction focusGainedAction) {
+    this.focusGainedAction = focusGainedAction;
   }
 }

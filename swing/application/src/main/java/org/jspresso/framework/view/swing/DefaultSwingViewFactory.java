@@ -31,6 +31,9 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -38,6 +41,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -84,6 +88,7 @@ import javax.swing.ToolTipManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableColumnModelEvent;
 import javax.swing.event.TableColumnModelListener;
 import javax.swing.event.TreeModelEvent;
@@ -128,7 +133,6 @@ import org.jspresso.framework.binding.AbstractCompositeValueConnector;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
-import org.jspresso.framework.binding.IConfigurableCollectionConnectorProvider;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.basic.BasicValueConnector;
@@ -226,7 +230,6 @@ import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IMapViewDescriptor;
-import org.jspresso.framework.view.descriptor.INestedComponentPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IRepeaterViewDescriptor;
@@ -2346,14 +2349,14 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
   @SuppressWarnings("ConstantConditions")
   private void configureTableColumn(final IActionHandler actionHandler, Locale locale,
                                     ITableViewDescriptor viewDescriptor, ICollectionConnector connector,
-                                    ICompositeValueConnector rowConnectorPrototype, JTable viewComponent,
-                                    IView<JComponent> view, int maxColumnSize, int columnIndex,
+                                    ICompositeValueConnector rowConnectorPrototype, final JTable table,
+                                    final IView<JComponent> view, int maxColumnSize, final int columnIndex,
                                     Map.Entry<IPropertyViewDescriptor, Object[]> columnViewDescriptorEntry,
                                     IPropertyViewDescriptor columnViewDescriptor, String propertyName,
                                     TableModel tableModel) {
     IComponentDescriptor<?> rowDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor.getModelDescriptor())
         .getCollectionDescriptor().getElementDescriptor();
-    TableColumn column = viewComponent.getColumnModel().getColumn(columnIndex);
+    TableColumn column = table.getColumnModel().getColumn(columnIndex);
     column.setIdentifier(computeColumnIdentifier(viewDescriptor, columnViewDescriptor));
     IPropertyDescriptor propertyDescriptor = rowDescriptor.getPropertyDescriptor(propertyName);
     String columnName = columnViewDescriptor.getI18nName(actionHandler, locale);
@@ -2440,7 +2443,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       Action colAction = getActionFactory().createAction(columnViewDescriptor.getAction(), actionHandler, view, locale);
       configurePropertyViewAction(columnViewDescriptor, colAction);
       cellRenderer = new HyperlinkTableCellRenderer(cellRenderer, colAction, columnIndex);
-      viewComponent.addMouseListener((MouseListener) cellRenderer);
+      table.addMouseListener((MouseListener) cellRenderer);
     }
     column.setCellRenderer(cellRenderer);
     EvenOddTableCellRenderer headerRenderer = new EvenOddTableCellRenderer();
@@ -2470,17 +2473,66 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       if (columnViewDescriptor.getPreferredSize() != null && columnViewDescriptor.getPreferredSize().getWidth() > 0) {
         column.setPreferredWidth(columnViewDescriptor.getPreferredSize().getWidth());
       } else {
-        int minHeaderWidth = computePixelWidth(viewComponent, columnName.length());
+        int minHeaderWidth = computePixelWidth(table, columnName.length());
         if (propertyDescriptor instanceof IBooleanPropertyDescriptor
             || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
-          column.setPreferredWidth(Math.max(computePixelWidth(viewComponent, 2), minHeaderWidth));
+          column.setPreferredWidth(Math.max(computePixelWidth(table, 2), minHeaderWidth));
         } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
           column.setPreferredWidth(Math.max(editorView.getPeer().getPreferredSize().width, minHeaderWidth));
         } else {
-          column.setPreferredWidth(Math.max(Math.min(computePixelWidth(viewComponent,
+          column.setPreferredWidth(Math.max(Math.min(computePixelWidth(table,
               getFormatLength(createFormatter(columnViewDescriptor, propertyDescriptor, actionHandler, locale),
                   getTemplateValue(propertyDescriptor))), maxColumnSize), minHeaderWidth));
         }
+      }
+    }
+    final IAction focusGainedAction = columnViewDescriptor.getFocusGainedAction();
+    if (focusGainedAction != null) {
+      table.getColumnModel().addColumnModelListener(new TableColumnModelListener() {
+        @Override
+        public void columnAdded(TableColumnModelEvent e) {
+          // NO-OP
+        }
+
+        @Override
+        public void columnRemoved(TableColumnModelEvent e) {
+          // NO-OP
+        }
+
+        @Override
+        public void columnMoved(TableColumnModelEvent e) {
+          // NO-OP
+        }
+
+        @Override
+        public void columnMarginChanged(ChangeEvent e) {
+          // NO-OP
+        }
+
+        @Override
+        public void columnSelectionChanged(ListSelectionEvent lse) {
+          handleTableCellSelectionEvent(lse, table, columnIndex, actionHandler, focusGainedAction, view);
+        }
+      });
+      table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        @Override
+        public void valueChanged(ListSelectionEvent lse) {
+          handleTableCellSelectionEvent(lse, table, columnIndex, actionHandler, focusGainedAction, view);
+        }
+      });
+    }
+  }
+
+  private void handleTableCellSelectionEvent(ListSelectionEvent lse, JTable table, int columnIndex,
+                                             IActionHandler actionHandler, IAction focusGainedAction,
+                                             IView<JComponent> view) {
+    if (!lse.getValueIsAdjusting()) {
+      int selectedRow = table.getSelectedRow();
+      int selectedColumn = table.getSelectedColumn();
+      if (selectedColumn == table.convertColumnIndexToView(columnIndex)) {
+        actionHandler.execute(focusGainedAction, getActionFactory()
+            .createActionContext(actionHandler, view, view.getConnector(), String.valueOf(selectedRow) + ";" + columnIndex,
+                table));
       }
     }
   }
@@ -3225,7 +3277,14 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
 
   private TableCellEditor createTableCellEditor(IView<JComponent> editorView, IActionHandler actionHandler) {
     SwingViewCellEditorAdapter editor;
-    if (editorView.getPeer() instanceof JActionField && ((JActionField) editorView.getPeer()).isShowingTextField()) {
+    JComponent peer = editorView.getPeer();
+    FocusListener[] listeners = peer.getListeners(FocusListener.class);
+    for (FocusListener listener : listeners) {
+      if (listener instanceof FocusGainedListener) {
+        peer.removeFocusListener(listener);
+      }
+    }
+    if (peer instanceof JActionField && ((JActionField) peer).isShowingTextField()) {
       editor = new SwingViewCellEditorAdapter(editorView, getModelConnectorFactory(), getMvcBinder(), actionHandler) {
 
         private static final long serialVersionUID = -1551909997448473681L;
@@ -3736,14 +3795,18 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected IView<JComponent> createPropertyView(IPropertyViewDescriptor propertyViewDescriptor,
-                                                 IActionHandler actionHandler, Locale locale) {
-    IView<JComponent> propertyView = super.createPropertyView(propertyViewDescriptor, actionHandler, locale);
-    if (propertyView.getPeer() instanceof JLabel) {
-      configureHorizontalAlignment((JLabel) propertyView.getPeer(), propertyViewDescriptor.getHorizontalAlignment());
-    } else if (propertyView.getPeer() instanceof JTextField) {
-      configureHorizontalAlignment((JTextField) propertyView.getPeer(),
-          propertyViewDescriptor.getHorizontalAlignment());
+  protected IView<JComponent> createPropertyView(final IPropertyViewDescriptor propertyViewDescriptor,
+                                                 final IActionHandler actionHandler, Locale locale) {
+    final IView<JComponent> propertyView = super.createPropertyView(propertyViewDescriptor, actionHandler, locale);
+    final JComponent peer = propertyView.getPeer();
+    if (peer instanceof JLabel) {
+      configureHorizontalAlignment((JLabel) peer, propertyViewDescriptor.getHorizontalAlignment());
+    } else if (peer instanceof JTextField) {
+      configureHorizontalAlignment((JTextField) peer, propertyViewDescriptor.getHorizontalAlignment());
+    }
+    if (propertyViewDescriptor.getFocusGainedAction() != null) {
+      peer.addFocusListener(
+          new FocusGainedListener(actionHandler, propertyView, propertyViewDescriptor.getFocusGainedAction()));
     }
     return propertyView;
   }
@@ -3881,6 +3944,25 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
           });
         }
       });
+    }
+  }
+
+  private class FocusGainedListener extends FocusAdapter {
+    private IActionHandler    actionHandler;
+    private IView<JComponent> view;
+    private IAction           action;
+
+    public FocusGainedListener(IActionHandler actionHandler, IView<JComponent> view, IAction action) {
+      this.actionHandler = actionHandler;
+      this.view = view;
+      this.action = action;
+    }
+
+    @Override
+    public void focusGained(FocusEvent e) {
+      Map<String, Object> context = getActionFactory().createActionContext(actionHandler, view, view.getConnector(),
+          null, view.getPeer());
+      actionHandler.execute(action, context);
     }
   }
 }

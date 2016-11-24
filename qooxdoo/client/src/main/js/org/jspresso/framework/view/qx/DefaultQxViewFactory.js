@@ -158,6 +158,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @return {qx.ui.core.Widget}
      */
     _decorateWithActions: function (remoteComponent, component) {
+      if (remoteComponent.getFocusGainedAction()) {
+        component.addListener("focusin", function (event) {
+          this._getActionHandler().execute(remoteComponent.getFocusGainedAction());
+        }, this);
+      }
       if (remoteComponent instanceof org.jspresso.framework.gui.remote.RTextField || remoteComponent
           instanceof org.jspresso.framework.gui.remote.RDateField || remoteComponent
           instanceof org.jspresso.framework.gui.remote.RNumericComponent || remoteComponent
@@ -2189,6 +2194,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       }, table);
       var dynamicStylesIndices = {};
       var columnModel = table.getTableColumnModel();
+      var hasFocusGainedAction = false;
       for (var i = 0; i < remoteTable.getColumnIds().length; i++) {
         dynamicStylesIndices[i] = [];
         var rColumn = remoteTable.getColumns()[i];
@@ -2213,6 +2219,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         } else if (remoteTable.getFontState()) {
           foIndex = remoteTable.getRowPrototype().getChildren().indexOf(remoteTable.getFontState());
         }
+        hasFocusGainedAction = hasFocusGainedAction || rColumn.getFocusGainedAction();
         var cellRenderer = null;
         if (rColumn instanceof org.jspresso.framework.gui.remote.RCheckBox) {
           cellRenderer = new org.jspresso.framework.view.qx.BooleanTableCellRenderer();
@@ -2356,6 +2363,20 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       } else {
         selectionModel.setSelectionMode(qx.ui.table.selection.Model.MULTIPLE_INTERVAL_SELECTION);
       }
+
+      if (hasFocusGainedAction) {
+        selectionModel.addListener("changeSelection", function (event) {
+          var rowIndex = tableModel.viewIndexToModelIndex(table.getFocusedRow());
+          var columnIndex = table.getFocusedColumn();
+          var focusedColumn = remoteTable.getColumns()[columnIndex];
+          if (focusedColumn.getFocusGainedAction()) {
+            var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
+            actionEvent.setActionCommand(rowIndex + ";" + columnIndex);
+            this._getActionHandler().execute(focusedColumn.getFocusGainedAction(), actionEvent);
+          }
+        },this);
+      }
+
       // When sorting is done locally, selection must be re-synched
       if (!remoteTable.getSortingAction()) {
         tableModel.addListener("sorted", function (e) {
