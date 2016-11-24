@@ -48,6 +48,7 @@ public class RComponent extends RemotePeer implements IRemoteStateOwner {
   private var _toolTipState:RemoteValueState;
   private var _preferredSize:Dimension;
   private var _styleName:String;
+  private var _focusGainedAction:RAction;
 
   private var _peer:Object;
 
@@ -197,6 +198,14 @@ public class RComponent extends RemotePeer implements IRemoteStateOwner {
 
   public function set fontState(value:RemoteValueState):void {
     _fontState = value;
+  }
+
+  public function get focusGainedAction():RAction {
+    return _focusGainedAction;
+  }
+
+  public function set focusGainedAction(value:RAction):void {
+    _focusGainedAction = value;
   }
 }
 }

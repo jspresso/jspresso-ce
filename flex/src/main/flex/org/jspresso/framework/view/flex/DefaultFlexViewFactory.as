@@ -714,6 +714,11 @@ public class DefaultFlexViewFactory {
   }
 
   protected function decorateWithActions(remoteComponent:RComponent, component:UIComponent):UIComponent {
+    if (remoteComponent.focusGainedAction) {
+      component.addEventListener(FocusEvent.FOCUS_IN, function (event:FocusEvent):void {
+        getActionHandler().execute(remoteComponent.focusGainedAction);
+      });
+    }
     var decorator:UIComponent;
     if(remoteComponent is RTextField
         || remoteComponent is RDateField
@@ -2578,13 +2583,21 @@ public class DefaultFlexViewFactory {
     }
     table.draggableColumns = remoteTable.columnReorderingAllowed;
 
+    var hasFocusGainedAction:Boolean = false;
     for (var i:int = 0; i < remoteTable.columns.length; i++) {
       var rColumn:RComponent = remoteTable.columns[i] as RComponent;
       var rColumnHeader:RComponent = remoteTable.columnHeaders[i] as RComponent;
       if (rColumn.state == null) {
         rColumn.state = new RemoteValueState();
       }
-      var editorComponent:UIComponent = createComponent(rColumn, false);
+      var focusGainedAction:RAction = rColumn.focusGainedAction;
+      hasFocusGainedAction = hasFocusGainedAction || focusGainedAction;
+      try {
+        rColumn.focusGainedAction = null;
+        var editorComponent:UIComponent = createComponent(rColumn, false);
+      } finally {
+        rColumn.focusGainedAction = focusGainedAction;
+      }
 
       var column:DataGridColumn = new DataGridColumn();
       column.headerText = rColumnHeader.label;
@@ -2742,6 +2755,29 @@ public class DefaultFlexViewFactory {
       column.headerRenderer = headerRenderer;
 
       columns.push(column);
+    }
+    if (hasFocusGainedAction) {
+      var focusGainedListener:Function = function (event:Event):void {
+        var rowIndex:int;
+        var columnIndex:int;
+        if (event is DataGridEvent) {
+          rowIndex = (event as DataGridEvent).rowIndex;
+          columnIndex = (event as DataGridEvent).columnIndex;
+        } else {
+          rowIndex = (event as ListEvent).rowIndex;
+          columnIndex = (event as ListEvent).columnIndex;
+        }
+        var column:DataGridColumn = table.columns[columnIndex];
+        columnIndex = column.itemRenderer["properties"]["index"] - 1;
+        var focusedColumn:RComponent = remoteTable.columns[columnIndex];
+        if (focusedColumn.focusGainedAction) {
+          var actionEvent:RActionEvent = new RActionEvent();
+          actionEvent.actionCommand = rowIndex + ";" + columnIndex;
+          getActionHandler().execute(focusedColumn.focusGainedAction, actionEvent);
+        }
+      };
+      table.addEventListener(DataGridEvent.ITEM_FOCUS_IN, focusGainedListener);
+      table.addEventListener(ListEvent.ITEM_CLICK, focusGainedListener);
     }
     if (remoteTable.sortable) {
       if (remoteTable.sortingAction) {

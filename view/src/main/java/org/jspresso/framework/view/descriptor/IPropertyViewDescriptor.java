@@ -104,4 +104,11 @@ public interface IPropertyViewDescriptor extends IViewDescriptor, IClientTypeAwa
    */
   EHorizontalPosition getLabelHorizontalPosition();
 
+  /**
+   * Gets the focus gained action.
+   *
+   * @return the the focus gained action
+   */
+  IAction getFocusGainedAction();
+
 }

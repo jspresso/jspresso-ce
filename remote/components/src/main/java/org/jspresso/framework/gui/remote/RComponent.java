@@ -56,6 +56,7 @@ public abstract class RComponent extends RemotePeer implements
   private String           toolTip;
   private RemoteValueState toolTipState;
   private String           styleName;
+  private RAction          focusGainedAction;
 
   @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
   private final transient Set<RAction> actionHardReferences;
@@ -64,7 +65,7 @@ public abstract class RComponent extends RemotePeer implements
    * Constructs a new {@code RComponent} instance.
    *
    * @param guid
-   *          the guid.
+   *     the guid.
    */
   public RComponent(String guid) {
     super(guid);
@@ -82,6 +83,8 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * {@inheritDoc}
+   *
+   * @return the object
    */
   @Override
   public Object actualValue() {
@@ -183,7 +186,7 @@ public abstract class RComponent extends RemotePeer implements
    * Sets the actionLists.
    *
    * @param actionLists
-   *          the actionLists to set.
+   *     the actionLists to set.
    */
   public void setActionLists(RActionList... actionLists) {
     this.actionLists = actionLists;
@@ -193,7 +196,7 @@ public abstract class RComponent extends RemotePeer implements
    * Sets the background.
    *
    * @param background
-   *          the background to set.
+   *     the background to set.
    */
   public void setBackground(String background) {
     this.background = background;
@@ -203,7 +206,7 @@ public abstract class RComponent extends RemotePeer implements
    * Sets the borderType.
    *
    * @param borderType
-   *          the borderType to set.
+   *     the borderType to set.
    */
   public void setBorderType(String borderType) {
     this.borderType = borderType;
@@ -213,7 +216,7 @@ public abstract class RComponent extends RemotePeer implements
    * Sets the font.
    *
    * @param font
-   *          the font to set.
+   *     the font to set.
    */
   public void setFont(Font font) {
     this.font = font;
@@ -223,7 +226,7 @@ public abstract class RComponent extends RemotePeer implements
    * Sets the foreground.
    *
    * @param foreground
-   *          the foreground to set.
+   *     the foreground to set.
    */
   public void setForeground(String foreground) {
     this.foreground = foreground;
@@ -233,7 +236,7 @@ public abstract class RComponent extends RemotePeer implements
    * Sets the icon.
    *
    * @param icon
-   *          the icon to set.
+   *     the icon to set.
    */
   public void setIcon(RIcon icon) {
     this.icon = icon;
@@ -243,7 +246,7 @@ public abstract class RComponent extends RemotePeer implements
    * Sets the label.
    *
    * @param label
-   *          the label to set.
+   *     the label to set.
    */
   public void setLabel(String label) {
     this.label = label;
@@ -253,7 +256,7 @@ public abstract class RComponent extends RemotePeer implements
    * Sets the preferredSize.
    *
    * @param preferredSize
-   *          the preferredSize to set.
+   *     the preferredSize to set.
    */
   public void setPreferredSize(Dimension preferredSize) {
     this.preferredSize = preferredSize;
@@ -263,7 +266,7 @@ public abstract class RComponent extends RemotePeer implements
    * Sets the state.
    *
    * @param state
-   *          the state to set.
+   *     the state to set.
    */
   public void setState(RemoteValueState state) {
     this.state = state;
@@ -273,7 +276,7 @@ public abstract class RComponent extends RemotePeer implements
    * Sets the toolTip.
    *
    * @param toolTip
-   *          the toolTip to set.
+   *     the toolTip to set.
    */
   public void setToolTip(String toolTip) {
     this.toolTip = toolTip;
@@ -292,7 +295,7 @@ public abstract class RComponent extends RemotePeer implements
    * Sets the toolTipState.
    *
    * @param toolTipState
-   *          the toolTipState to set.
+   *     the toolTipState to set.
    */
   public void setToolTipState(RemoteValueState toolTipState) {
     this.toolTipState = toolTipState;
@@ -300,6 +303,9 @@ public abstract class RComponent extends RemotePeer implements
 
   /**
    * {@inheritDoc}
+   *
+   * @param stateValue
+   *     the state value
    */
   @Override
   public void setValueFromState(Object stateValue) {
@@ -319,7 +325,7 @@ public abstract class RComponent extends RemotePeer implements
    * Sets the secondaryActionLists.
    *
    * @param secondaryActionLists
-   *          the secondaryActionLists to set.
+   *     the secondaryActionLists to set.
    */
   public void setSecondaryActionLists(RActionList... secondaryActionLists) {
     this.secondaryActionLists = secondaryActionLists;
@@ -338,7 +344,7 @@ public abstract class RComponent extends RemotePeer implements
    * Sets the styleName.
    *
    * @param styleName
-   *          the styleName to set.
+   *     the styleName to set.
    */
   public void setStyleName(String styleName) {
     this.styleName = styleName;
@@ -357,7 +363,7 @@ public abstract class RComponent extends RemotePeer implements
    * Sets the backgroundState.
    *
    * @param backgroundState
-   *          the backgroundState to set.
+   *     the backgroundState to set.
    */
   public void setBackgroundState(RemoteValueState backgroundState) {
     this.backgroundState = backgroundState;
@@ -376,7 +382,7 @@ public abstract class RComponent extends RemotePeer implements
    * Sets the foregroundState.
    *
    * @param foregroundState
-   *          the foregroundState to set.
+   *     the foregroundState to set.
    */
   public void setForegroundState(RemoteValueState foregroundState) {
     this.foregroundState = foregroundState;
@@ -395,7 +401,7 @@ public abstract class RComponent extends RemotePeer implements
    * Sets the fontState.
    *
    * @param fontState
-   *          the fontState to set.
+   *     the fontState to set.
    */
   public void setFontState(RemoteValueState fontState) {
     this.fontState = fontState;
@@ -413,7 +419,8 @@ public abstract class RComponent extends RemotePeer implements
   /**
    * Sets label state.
    *
-   * @param labelState the label state
+   * @param labelState
+   *     the label state
    */
   public void setLabelState(RemoteValueState labelState) {
     this.labelState = labelState;
@@ -422,7 +429,8 @@ public abstract class RComponent extends RemotePeer implements
   /**
    * Add referenced action to prevent it from being garbage collected.
    *
-   * @param action the action
+   * @param action
+   *     the action
    */
   public void addReferencedAction(RAction action) {
     actionHardReferences.add(action);
@@ -432,9 +440,31 @@ public abstract class RComponent extends RemotePeer implements
    * NO-OP
    * <p>
    * {@inheritDoc}
+   *
+   * @param remoteStateValueMapper
+   *     the remote state value mapper
    */
   @Override
   public void setRemoteStateValueMapper(IRemoteStateValueMapper remoteStateValueMapper) {
     // NO OP
+  }
+
+  /**
+   * Gets focus gained action.
+   *
+   * @return the focus gained action
+   */
+  public RAction getFocusGainedAction() {
+    return focusGainedAction;
+  }
+
+  /**
+   * Sets focus gained action.
+   *
+   * @param focusGainedAction
+   *     the focus gained action
+   */
+  public void setFocusGainedAction(RAction focusGainedAction) {
+    this.focusGainedAction = focusGainedAction;
   }
 }

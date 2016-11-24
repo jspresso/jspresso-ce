@@ -74,7 +74,14 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
       });
       this.__savedDialogIndex = this.__actionHandler.setCurrentViewStateGuid(this.__currentCellState.getGuid(),
           this.__currentCellState.getPermId());
-      var editorWidget = this.__viewFactory.createComponent(this.__rComponent, false);
+      var editorWidget;
+      var focusGainedAction = this.__rComponent.getFocusGainedAction();
+      try {
+        this.__rComponent.setFocusGainedAction(null);
+        editorWidget = this.__viewFactory.createComponent(this.__rComponent, false);
+      } finally {
+        this.__rComponent.setFocusGainedAction(focusGainedAction);
+      }
       editorWidget.addListener("disappear", this.__cleanCurrentCellBinding, this);
       state.addListenerOnce("changeValue", function (e) {
         if (e.getData() === null) {
