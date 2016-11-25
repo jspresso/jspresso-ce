@@ -121,7 +121,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   public static final  String LOV_DIALOG_ACTIONS      = "LOV_DIALOG_ACTIONS";
 
   private static final String NON_LOV_TRIGGERING_CHARS =
-      "%" + IQueryComponent.DISJUNCT + IQueryComponent.NOT_VAL + IQueryComponent.NULL_VAL;
+      "%" + IQueryComponent.DISJUNCT + IQueryComponent.CONJUNCT + IQueryComponent.NOT_VAL + IQueryComponent.NULL_VAL;
 
   private boolean                                    autoquery;
   private Integer                                    pageSize;
