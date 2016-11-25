@@ -20,7 +20,6 @@ package org.jspresso.framework.model.persistence.mongo.criterion;
 
 import static org.springframework.data.mongodb.core.query.Criteria.*;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -38,7 +37,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 import org.jspresso.framework.application.action.AbstractActionContextAware;
-import org.jspresso.framework.application.backend.action.persistence.mongo.QueryEntitiesAction;
 import org.jspresso.framework.model.component.IPropertyTranslation;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.component.query.ComparableQueryStructure;
@@ -220,7 +218,8 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
             } else if (propertyValue instanceof Number || propertyValue instanceof Date) {
               completeQuery(query, where(prefixedProperty).is(propertyValue));
             } else if (propertyValue instanceof EnumQueryStructure) {
-              completeQuery(query, createEnumQueryStructureRestriction(prefixedProperty, ((EnumQueryStructure) propertyValue)));
+              completeQuery(query,
+                  createEnumQueryStructureRestriction(prefixedProperty, ((EnumQueryStructure) propertyValue)));
             } else if (propertyValue instanceof IQueryComponent) {
               IQueryComponent joinedComponent = ((IQueryComponent) propertyValue);
               if (!isQueryComponentEmpty(joinedComponent, propertyDescriptor)) {
@@ -344,8 +343,8 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
     if (propertyValue instanceof Collection<?>) {
       return Criteria.where(joinedProperty).in((Collection<?>) propertyValue);
     } else if (propertyValue instanceof String) {
-      return createStringRestriction(propertyDescriptor, joinedProperty,
-          (String) propertyValue, componentDescriptor, queryComponent, context);
+      return createStringRestriction(propertyDescriptor, joinedProperty, (String) propertyValue, componentDescriptor,
+          queryComponent, context);
     } else {
       return where(joinedProperty).is(propertyValue);
     }
@@ -398,16 +397,18 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
         List<Criteria> translationRestriction = new ArrayList<>();
         translationRestriction.add(createStringRestriction(
             ((ICollectionPropertyDescriptor<IPropertyTranslation>) componentDescriptor.getPropertyDescriptor(
-                translationsPath)).getCollectionDescriptor().getElementDescriptor().getPropertyDescriptor
-                (IPropertyTranslation.TRANSLATED_VALUE),
+                translationsPath)).getCollectionDescriptor().getElementDescriptor()
+                                  .getPropertyDescriptor(IPropertyTranslation.TRANSLATED_VALUE),
             translationsAlias + "." + IPropertyTranslation.TRANSLATED_VALUE, propertyValue, componentDescriptor,
             queryComponent, context));
         String languagePath = translationsAlias + "." + IPropertyTranslation.LANGUAGE;
         translationRestriction.add(where(languagePath).is(locale.getLanguage()));
-        translationRestriction.add(where(translationsAlias + "." + IPropertyTranslation.PROPERTY_NAME).is(barePropertyName));
+        translationRestriction.add(
+            where(translationsAlias + "." + IPropertyTranslation.PROPERTY_NAME).is(barePropertyName));
 
         List<Criteria> disjunction = new ArrayList<>();
-        disjunction.add(new Criteria().andOperator(translationRestriction.toArray(new Criteria[translationRestriction.size()])));
+        disjunction.add(
+            new Criteria().andOperator(translationRestriction.toArray(new Criteria[translationRestriction.size()])));
         if (nlsOrRawValue != null) {
           List<Criteria> rawValueRestriction = new ArrayList<>();
           // No SQL exists equivalent in Mongo...
@@ -420,7 +421,8 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
           if (rawValueRestriction.size() == 1) {
             disjunction.add(rawValueRestriction.get(0));
           } else {
-            disjunction.add(new Criteria().andOperator(rawValueRestriction.toArray(new Criteria[rawValueRestriction.size()])));
+            disjunction.add(
+                new Criteria().andOperator(rawValueRestriction.toArray(new Criteria[rawValueRestriction.size()])));
           }
         }
         currentQuery.addCriteria(new Criteria().orOperator(disjunction.toArray(new Criteria[disjunction.size()])));
@@ -465,36 +467,46 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
                                              IQueryComponent queryComponent, Map<String, Object> context) {
     List<Criteria> disjunctions = new ArrayList<>();
     if (propertyValue.length() > 0) {
-      String[] propValues = propertyValue.split(IQueryComponent.DISJUNCT);
-      for (String propValue : propValues) {
-        String val = propValue;
-        if (val.length() > 0) {
-          Criteria crit;
-          boolean negate = false;
-          if (val.startsWith(IQueryComponent.NOT_VAL)) {
-            val = val.substring(1);
-            negate = true;
-          }
-          if (IQueryComponent.NULL_VAL.equals(val)) {
-            if (negate) {
-              crit = where(prefixedProperty).ne(null);
-            } else {
-              crit = where(prefixedProperty).is(null);
+      String[] stringDisjunctions = propertyValue.split(IQueryComponent.DISJUNCT);
+      for (String stringDisjunction : stringDisjunctions) {
+        List<Criteria> conjunctions = new ArrayList<>();
+        String[] stringConjunctions = stringDisjunction.split(IQueryComponent.CONJUNCT);
+        for (String stringConjunction : stringConjunctions) {
+          String val = stringConjunction;
+          if (val.length() > 0) {
+            Criteria crit;
+            boolean negate = false;
+            if (val.startsWith(IQueryComponent.NOT_VAL)) {
+              val = val.substring(1);
+              negate = true;
             }
-          } else {
-            if (IEntity.ID.equals(propertyDescriptor.getName())
-                || propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
+            if (IQueryComponent.NULL_VAL.equals(val)) {
               if (negate) {
-                crit = where(prefixedProperty).ne(val);
+                crit = where(prefixedProperty).ne(null);
               } else {
-                crit = where(prefixedProperty).is(val);
+                crit = where(prefixedProperty).is(null);
               }
             } else {
-              crit = createLikeRestriction(propertyDescriptor, prefixedProperty, val, componentDescriptor,
-                  queryComponent, context);
+              if (IEntity.ID.equals(propertyDescriptor.getName())
+                  || propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
+                if (negate) {
+                  crit = where(prefixedProperty).ne(val);
+                } else {
+                  crit = where(prefixedProperty).is(val);
+                }
+              } else {
+                crit = createLikeRestriction(propertyDescriptor, prefixedProperty, val, negate, componentDescriptor,
+                    queryComponent, context);
+              }
             }
+            conjunctions.add(crit);
           }
-          disjunctions.add(crit);
+        }
+        int conjunctionCount = conjunctions.size();
+        if (conjunctionCount == 1) {
+          disjunctions.add(conjunctions.get(0));
+        } else {
+          disjunctions.add(new Criteria().andOperator(conjunctions.toArray(new Criteria[conjunctionCount])));
         }
       }
     }
@@ -524,8 +536,9 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
    */
   @SuppressWarnings("unused")
   protected Criteria createLikeRestriction(IPropertyDescriptor propertyDescriptor, String prefixedProperty,
-                                           String propertyValue, IComponentDescriptor<?> componentDescriptor,
-                                           IQueryComponent queryComponent, Map<String, Object> context) {
+                                           String propertyValue, boolean negate,
+                                           IComponentDescriptor<?> componentDescriptor, IQueryComponent queryComponent,
+                                           Map<String, Object> context) {
     String regex = propertyValue;
     if (propertyDescriptor instanceof IStringPropertyDescriptor && ((IStringPropertyDescriptor) propertyDescriptor)
         .isUpperCase()) {
@@ -538,7 +551,11 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
     if (!regex.endsWith(".*")) {
       regex += ".*";
     }
-    return where(prefixedProperty).regex(regex);
+    Criteria criteria = where(prefixedProperty);
+    if (negate) {
+      criteria = criteria.not();
+    }
+    return criteria.regex(regex);
   }
 
   /**
