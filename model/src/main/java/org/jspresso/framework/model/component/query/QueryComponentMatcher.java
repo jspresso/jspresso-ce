@@ -168,13 +168,24 @@ public class QueryComponentMatcher {
       String regex = (String) predicate;
       String[] disjunctions = regex.split(QueryComponent.DISJUNCT);
       if (disjunctions.length > 1) {
-        for (String regexPart : disjunctions) {
-          if (propertyMatches((String) property, regexPart)) {
+        for (String disjunctionRegex : disjunctions) {
+          if (propertyMatches((String) property, disjunctionRegex)) {
             return true;
           }
         }
+        return false;
       } else {
-        return propertyMatches((String) property, regex);
+        String[] conjunctions = regex.split(QueryComponent.CONJUNCT);
+        if (conjunctions.length > 1) {
+          for (String conjunctionRegex : conjunctions) {
+            if (!propertyMatches((String) property, conjunctionRegex)) {
+              return false;
+            }
+          }
+          return true;
+        } else {
+          return propertyMatches((String) property, regex);
+        }
       }
     }
     return true;

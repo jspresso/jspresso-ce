@@ -470,38 +470,43 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
   protected Criterion createStringRestriction(IPropertyDescriptor propertyDescriptor, String prefixedProperty,
                                               String propertyValue, IComponentDescriptor<?> componentDescriptor,
                                               IQueryComponent queryComponent, Map<String, Object> context) {
-    Junction stringRestriction = null;
+    Junction disjunction = null;
     if (propertyValue.length() > 0) {
-      String[] propValues = propertyValue.split(IQueryComponent.DISJUNCT);
-      stringRestriction = Restrictions.disjunction();
-      for (String propValue : propValues) {
-        String val = propValue;
-        if (val.length() > 0) {
-          Criterion crit;
-          boolean negate = false;
-          if (val.startsWith(IQueryComponent.NOT_VAL)) {
-            val = val.substring(1);
-            negate = true;
-          }
-          if (IQueryComponent.NULL_VAL.equals(val)) {
-            crit = Restrictions.isNull(prefixedProperty);
-          } else {
-            if (IEntity.ID.equals(propertyDescriptor.getName())
-                || propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
-              crit = Restrictions.eq(prefixedProperty, val);
-            } else {
-              crit = createLikeRestriction(propertyDescriptor, prefixedProperty, val, componentDescriptor,
-                  queryComponent, context);
+      String[] stringDisjunctions = propertyValue.split(IQueryComponent.DISJUNCT);
+      disjunction = Restrictions.disjunction();
+      for (String stringDisjunction : stringDisjunctions) {
+        Junction conjunction = Restrictions.conjunction();
+        String[] stringConjunctions = stringDisjunction.split(IQueryComponent.CONJUNCT);
+        for (String stringConjunction : stringConjunctions) {
+          String val = stringConjunction;
+          if (val.length() > 0) {
+            Criterion crit;
+            boolean negate = false;
+            if (val.startsWith(IQueryComponent.NOT_VAL)) {
+              val = val.substring(1);
+              negate = true;
             }
+            if (IQueryComponent.NULL_VAL.equals(val)) {
+              crit = Restrictions.isNull(prefixedProperty);
+            } else {
+              if (IEntity.ID.equals(propertyDescriptor.getName())
+                  || propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
+                crit = Restrictions.eq(prefixedProperty, val);
+              } else {
+                crit = createLikeRestriction(propertyDescriptor, prefixedProperty, val, componentDescriptor,
+                    queryComponent, context);
+              }
+            }
+            if (negate) {
+              crit = Restrictions.not(crit);
+            }
+            conjunction.add(crit);
           }
-          if (negate) {
-            crit = Restrictions.not(crit);
-          }
-          stringRestriction.add(crit);
         }
+        disjunction.add(conjunction);
       }
     }
-    return stringRestriction;
+    return disjunction;
   }
 
   /**
