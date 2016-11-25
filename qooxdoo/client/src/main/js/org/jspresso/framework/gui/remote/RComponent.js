@@ -98,7 +98,7 @@ qx.Class.define("org.jspresso.framework.gui.remote.RComponent", {
     focusGainedAction: {
       check: "org.jspresso.framework.gui.remote.RAction",
       nullable: true
-    },
+    }
   },
 
   members: {
