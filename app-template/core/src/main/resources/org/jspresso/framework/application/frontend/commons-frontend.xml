@@ -103,17 +103,21 @@
   </bean>
 
   <bean id="pagingNavigationView" class="org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor">
-    <property name="borderType" value="SIMPLE" />
+    <property name="borderType" value="NONE" />
     <property name="modelDescriptor" ref="pageableStatusModel" />
-    <property name="centerViewDescriptor" ref="pageableStatusView" />
     <property name="westViewDescriptor">
-      <bean class="org.jspresso.framework.view.descriptor.basic.BasicActionViewDescriptor">
-        <property name="action" ref="previousPageFrontAction" />
-      </bean>
-    </property>
-    <property name="eastViewDescriptor">
-      <bean class="org.jspresso.framework.view.descriptor.basic.BasicActionViewDescriptor">
-        <property name="action" ref="nextPageFrontAction" />
+      <bean class="org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor">
+        <property name="westViewDescriptor">
+          <bean class="org.jspresso.framework.view.descriptor.basic.BasicActionViewDescriptor">
+            <property name="action" ref="previousPageFrontAction"/>
+          </bean>
+        </property>
+        <property name="centerViewDescriptor">
+          <bean class="org.jspresso.framework.view.descriptor.basic.BasicActionViewDescriptor">
+            <property name="action" ref="nextPageFrontAction"/>
+          </bean>
+        </property>
+        <property name="eastViewDescriptor" ref="pageableStatusView"/>
       </bean>
     </property>
   </bean>

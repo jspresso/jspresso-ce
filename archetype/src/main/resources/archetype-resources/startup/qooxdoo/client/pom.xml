@@ -31,7 +31,7 @@
       <scope>provided</scope>
     </dependency>
   </dependencies>
-  
+
   <build>
     <resources>
       <resource>
@@ -118,20 +118,13 @@
               <target>
                 <property name="web-debug.dir" value="${symbol_dollar}{project.build.directory}/web-debug"/>
                 <mkdir dir="${symbol_dollar}{web-debug.dir}"/>
-                <replace dir="${symbol_dollar}{web-debug.dir}" token="../../../../target"
-                         value="file:///${symbol_dollar}{project.build.directory}">
+                <replace dir="${symbol_dollar}{web-debug.dir}" token="../../../../target" value="../../target">
                   <include name="**/*.js"/>
                 </replace>
-                <replace dir="${symbol_dollar}{web-debug.dir}" token="../../../target"
-                         value="file:///${symbol_dollar}{project.build.directory}">
+                <replace dir="${symbol_dollar}{web-debug.dir}" token="../../../target" value="../../target">
                   <include name="**/*.js"/>
                 </replace>
-                <replace dir="${symbol_dollar}{web-debug.dir}" token="../../"
-                         value="file:///${symbol_dollar}{basedir}/src/main/">
-                  <include name="**/*.js"/>
-                </replace>
-                <replace dir="${symbol_dollar}{web-debug.dir}" token="../"
-                         value="file:///${symbol_dollar}{basedir}/src/main/">
+                <replace dir="${symbol_dollar}{web-debug.dir}" token="../../js" value="../../src/main/js">
                   <include name="**/*.js"/>
                 </replace>
                 <replace dir="${symbol_dollar}{web-debug.dir}" token="\" value="/">
