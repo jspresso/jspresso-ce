@@ -359,7 +359,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    */
   protected void handlePreselectedItem(Object preselection, IQueryComponent queryComponent, IView<E> lovView) {
 
-    if (preselection == null || queryComponent.getQueriedComponents().isEmpty()) {
+    List<Object> queriedComponents = queryComponent.getQueriedComponents();
+    if (preselection == null || queriedComponents == null || queriedComponents.isEmpty()) {
       return;
     }
 
@@ -376,8 +377,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
       preselectionCollection = Collections.singleton(preselection);
     }
     List<Integer> indices = new ArrayList<>();
-    for (int i = 0; i < queryComponent.getQueriedComponents().size(); i++) {
-      if (preselectionCollection.contains(queryComponent.getQueriedComponents().get(i))) {
+    for (int i = 0; i < queriedComponents.size(); i++) {
+      if (preselectionCollection.contains(queriedComponents.get(i))) {
         indices.add(i);
       }
     }
