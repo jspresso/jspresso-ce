@@ -15,7 +15,7 @@
 
     <!-- Jspresso dependencies versions -->
     <jspresso.version>4.3-SNAPSHOT</jspresso.version>
-    <sjs.version>2.5-SNAPSHOT</sjs.version>
+    <sjs.version>2.5</sjs.version>
 
     <junit.version>4.12</junit.version>
     <mockito.version>1.10.19</mockito.version>
