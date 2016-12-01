@@ -35,8 +35,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
   construct: function (remoteController, userLanguage) {
     this.base(arguments, remoteController, userLanguage);
     this._getApplication().getRoot().set({
-      blockerColor: '#bfbfbf',
-      blockerOpacity: 0.5
+      blockerColor: '#BBBBBB',
+      blockerOpacity: 0.3
     });
   },
 
@@ -50,6 +50,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     __dlFrame: null,
     /** @type {qx.ui.basic.Label} */
     __statusBar: null,
+    /** @type {Boolean} */
+    __busy: false,
 
 
     _createViewFactory: function () {
@@ -57,10 +59,18 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     },
 
     showBusy: function (busy) {
+      this.__busy = busy;
+      var root = this._getApplication().getRoot();
       if (busy) {
-        this._getApplication().getRoot().setGlobalCursor("wait");
+        root.setGlobalCursor("wait");
+        qx.event.Timer.once(function () {
+          if (this.__busy) {
+            root.block();
+          }
+        }, this, 500);
       } else {
-        this._getApplication().getRoot().setGlobalCursor("default");
+        root.unblock();
+        root.setGlobalCursor("default");
       }
     },
 
