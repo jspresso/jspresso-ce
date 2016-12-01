@@ -57,7 +57,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       if (busy) {
         root.setGlobalCursor("wait");
         qx.event.Timer.once(function () {
-          if (this.__busy) {
+          if (this.__busy && !root.isBlocked()) {
             root.block();
           }
         }, this, 500);

@@ -344,16 +344,19 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     },
 
     showBusy: function (busy) {
+      var blocker = qx.ui.mobile.core.Blocker.getInstance();
       if (busy) {
         this.__busy = true;
         qx.event.Timer.once(function () {
-          if (this.__busy) {
+          if (this.__busy && !blocker.isShown()) {
+            blocker.show();
             this.__busyPopup.show();
           }
         }, this, 500);
       } else {
         this.__busy = false;
         this.__busyPopup.hide();
+        blocker.hide();
       }
     },
 
