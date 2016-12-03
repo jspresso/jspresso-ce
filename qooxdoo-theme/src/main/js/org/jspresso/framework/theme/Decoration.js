@@ -107,8 +107,9 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
 
           style: {
             radius: 0,
-            width: [0, 0, 2, 0],
-            backgroundColor: "table-header-background"
+            width: [0, 0, 1, 0],
+            backgroundColor: "table-header-background",
+            color: "table-header-separator"
           }
         },
 
@@ -202,12 +203,68 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
           }
         },
 
+        "tab-pane-top-only": {
+          include: "panel-box-top-only",
+          style: {
+            color: "tab-pane-border"
+          }
+        },
+
+        "tab-pane-right-only": {
+          include: "panel-box-right-only",
+          style: {
+            color: "tab-pane-border"
+          }
+        },
+
+        "tab-pane-bottom-only": {
+          include: "panel-box-bottom-only",
+          style: {
+            color: "tab-pane-border"
+          }
+        },
+
+        "tab-pane-left-only": {
+          include: "panel-box-left-only",
+          style: {
+            color: "tab-pane-border"
+          }
+        },
+
+        "tab-button-top": {
+          include: "tabview-page-button-top",
+          style: {
+            color: "tab-pane-border"
+          }
+        },
+
+        "tab-button-bottom": {
+          include: "tabview-page-button-bottom",
+          style: {
+            color: "tab-pane-border"
+          }
+        },
+
+        "tab-button-right": {
+          include: "tabview-page-button-right",
+          style: {
+            color: "tab-pane-border"
+          }
+        },
+
+        "tab-button-left": {
+          include: "tabview-page-button-left",
+          style: {
+            color: "tab-pane-border"
+          }
+        },
+
         "window": {
           style: {
             radius: 2,
             width: 1,
             color: "window-border",
-            innerWidth: 2,
+            innerWidth: 1,
             innerColor: "window-border-inner",
             shadowLength: 1,
             shadowBlurRadius: 3,
@@ -218,7 +275,7 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
 
         "window-caption": {
           style: {
-            width: [0, 0, 2, 0],
+            width: [0, 0, 1, 0],
             color: "window-border-inner",
             backgroundColor: "window-caption-background"
           }
@@ -226,8 +283,9 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
 
         "header-box": {
           style: {
-            gradientStart: ["header", 0],
-            gradientEnd: ["app-background", 100]
+            //gradientStart: ["header", 0],
+            //gradientEnd: ["app-background", 100]
+            backgroundColor: "application-bar"
           }
         },
 

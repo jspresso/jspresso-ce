@@ -204,11 +204,12 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           alias: "groupbox",
           style: function (states) {
             return {
-              showSeparator: true,
+              showSeparator: false,
               gap: 0,
               decorator: undefined,
-              margin: [10, 5, 0, 5],
-              padding: 0
+              margin: [10, 1, 1, 1],
+              padding: 0,
+              backgroundColor: "app-background"
             };
           }
         },
@@ -307,7 +308,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             return {
               backgroundColor: "app-background",
-              margin: 0,
+              margin: 1,
               padding: 0
             };
           }
@@ -356,9 +357,26 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         "tabview": {
           base: true,
           style: function (states) {
-            return {
-              margin: [8, 5, 0, 5]
+            if (states.barTop) {
+              margin = [0, 1, 0, 1];
+            } else if (states.barBottom) {
+              margin = [0, 1, 0, 1];
+            } else if (states.barRight) {
+              margin = [1, 0, 1, 0];
+            } else {
+              margin = [1, 0, 1, 0];
             }
+            return {
+              margin: margin
+            }
+          }
+        },
+
+        "slidebar": {
+          style: function (states) {
+            return {
+              margin: 1
+            };
           }
         },
 
@@ -366,7 +384,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           base: true,
           alias: "slidebar",
           style: function (states) {
-            var margin = 2;
+            var margin = 0;
             var marginTop = margin, marginRight = margin, marginBottom = margin, marginLeft = margin;
 
             if (states.barTop) {
@@ -391,7 +409,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         "tabview/pane": {
           base: true,
           style: function (states) {
-            var margin = 2;
+            var margin = 1;
             var marginTop = margin, marginRight = margin, marginBottom = margin, marginLeft = margin;
             var decoratorSelector;
 
@@ -416,7 +434,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
               marginLeft: marginLeft,
               marginRight: marginRight,
               //decorator: "panel-box-" + decoratorSelector + "-angled",
-              decorator: "panel-box-" + decoratorSelector + "-only",
+              decorator: "tab-pane-" + decoratorSelector + "-only",
               backgroundColor: "app-background"
             };
           }
@@ -432,11 +450,26 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
               padding = [4, 2, 4, 2];
             }
 
+            if (states.checked) {
+              if (states.barTop) {
+                decorator = "tab-button-top";
+              } else if (states.barBottom) {
+                decorator = "tab-button-bottom"
+              } else if (states.barRight) {
+                decorator = "tab-button-right";
+              } else if (states.barLeft) {
+                decorator = "tab-button-left";
+              }
+            } else {
+              decorator = undefined;
+            }
+
             return {
               textColor: states.disabled ? "text-disabled" : states.checked ? "header-text-selected" : "header-text",
               backgroundColor: states.checked ? "app-background" : undefined,
               padding: padding,
-              font: states.disabled ? undefined : states.checked ? "bold" : undefined
+              font: states.disabled ? undefined : states.checked ? "bold" : undefined,
+              decorator: decorator
             };
           }
         },
@@ -472,7 +505,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           base: true,
           style: function (states) {
             return {
-              textColor: "label"
+              textColor: "white"
             };
           }
         },
@@ -544,12 +577,12 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         },
 
         "application-split/splitter": {
-          alias: "splitpane/splitter",
           include: "splitpane/splitter",
           style: function (states) {
             return {
               minWidth: 15,
-              minHeight: 15
+              minHeight: 15,
+              backgroundColor: "application-splitter"
             };
           }
         },
@@ -675,8 +708,9 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         "application-panel": {
           style: function (states) {
             return {
-              backgroundColor: "app-background",
-              paddingBottom: 10
+              backgroundColor: "application-panel",
+              paddingBottom: 10,
+              paddingRight: 10
             }
           }
         },

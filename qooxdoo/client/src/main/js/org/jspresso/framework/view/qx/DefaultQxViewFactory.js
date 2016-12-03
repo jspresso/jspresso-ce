@@ -2537,7 +2537,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       }
       if (toolBar || secondaryToolBar) {
         var surroundingBox = new qx.ui.container.Composite(new qx.ui.layout.VBox())
-        surroundingBox.setPadding(2);
+        //surroundingBox.setPadding(2);
         var slideBar;
         if (toolBar) {
           slideBar = new qx.ui.container.SlideBar();

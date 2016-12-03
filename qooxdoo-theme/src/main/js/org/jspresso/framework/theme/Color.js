@@ -18,7 +18,7 @@ qx.Theme.define("org.jspresso.framework.theme.Color",
 
       colors: {
         "dark-blue": "#44509E",
-        "light-blue": "#589DF6",
+        "light-blue": "#199CD0",
 
         "dark-grey": "#3D3D3D",
         "medium-dark-grey": "#575757",
@@ -46,9 +46,11 @@ qx.Theme.define("org.jspresso.framework.theme.Color",
         "textfield-focused-border": "default-focused-border",
         "checkbox-border": "default-focused-border",
         "header-cell-border": "transparent",
+        "tab-pane-border": "transparent",
 
         "table-border-main": "transparent",
         "table-header-background": "app-background",
+        "table-header-separator": "light-grey",
         "table-row": "label",
         "table-row-selected": "text-selected",
         "table-row-background-even": "white",
@@ -66,12 +68,12 @@ qx.Theme.define("org.jspresso.framework.theme.Color",
         "header": "white",
         "header-text": "label",
         "header-text-selected": "label",
-        "light-background": "light-grey",
+        "light-background": "super-light-grey",
         "dark-background": "dark-grey",
 
         "section-header-text": "app-foreground",
 
-        "window-caption-background": "light-background",
+        "window-caption-background": "light-blue",
         "window-border": "medium-light-grey",
         "window-border-inner": "light-grey",
 
@@ -84,6 +86,10 @@ qx.Theme.define("org.jspresso.framework.theme.Color",
         "navigator-header-text": "white",
         "navigator-selected": "background-selected",
         "navigator-text-selected": "text-selected",
+
+        "application-panel": "super-light-grey",
+        "application-bar": "application-panel",
+        "application-splitter": "application-panel",
 
         "background-disabled": "super-light-grey"
       }
