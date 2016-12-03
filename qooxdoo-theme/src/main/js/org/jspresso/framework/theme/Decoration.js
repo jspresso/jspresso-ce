@@ -51,9 +51,9 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
         "checkbox-focused": {
           include: "checkbox",
           style: {
-            color: "background-selected",
+            color: "checkbox-focused-border",
             shadowBlurRadius: 3,
-            shadowColor: "background-selected",
+            shadowColor: "checkbox-focused-border",
             shadowLength: 0,
             transition: "box-shadow 200ms ease-out"
           }
@@ -71,9 +71,9 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
           style: {
             radius: 2,
             width: 1,
-            color: "background-selected",
+            color: "textfield-focused-border",
             shadowBlurRadius: 2,
-            shadowColor: "background-selected",
+            shadowColor: "textfield-focused-border",
             shadowLength: 0,
             transition: "box-shadow 200ms ease-out"
           }
@@ -95,12 +95,20 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
           }
         },
 
+        "table": {
+          include: "panel-box",
+          style: {
+            color: "table-border-main"
+          }
+        },
+
         "table-header": {
           include: "button-box",
 
           style: {
             radius: 0,
-            width: [0, 0, 2, 0]
+            width: [0, 0, 2, 0],
+            backgroundColor: "table-header-background"
           }
         },
 
@@ -108,7 +116,7 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
           style: {
             widthLeft: 0,
             widthRight: 1,
-            color: "button-border"
+            color: "header-cell-border"
           }
         },
 

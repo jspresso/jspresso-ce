@@ -18,29 +18,45 @@ qx.Theme.define("org.jspresso.framework.theme.Color",
 
       colors: {
         "dark-blue": "#44509E",
-        "light-blue": "#6694E3",
+        "light-blue": "#589DF6",
 
-        "app-foreground": "dark-blue",
+        "dark-grey": "#3D3D3D",
+        "medium-dark-grey": "#575757",
+        "medium-grey": "#888888",
+        "medium-light-grey": "#AAAAAA",
+        "light-grey": "#CCCCCC",
+        "super-light-grey": "#DDDDDD",
+
+        "app-foreground": "dark-grey",
         "app-background": "white",
         "text-selected": "white",
 
-        "background-selected": "light-blue",
-        "background-selected-dark": "app-foreground",
+        "background-selected": "medium-grey",
+        "background-selected-dark": "medium-dark-grey",
         "background-selected-dark-disabled": "background-selected-disabled",
 
-        "border-separator": "#CCCCCC",
+        "border-separator": "light-grey",
 
-        "button-border": "#CCCCCC",
-        "button-border-hovered": "#BBBBBB",
+        "button-border": "light-grey",
+        "button-border-hovered": "medium-light-grey",
 
-        "label": "#777777",
+        "label": "medium-grey",
 
+        "default-focused-border": "light-blue",
+        "textfield-focused-border": "default-focused-border",
+        "checkbox-border": "default-focused-border",
+        "header-cell-border": "transparent",
+
+        "table-border-main": "transparent",
+        "table-header-background": "app-background",
         "table-row": "label",
         "table-row-selected": "text-selected",
         "table-row-background-even": "white",
         "table-row-background-odd": "light-background",
         "table-row-background-selected": "background-selected-dark",
         "table-row-background-focused-selected": "table-row-background-selected",
+        "table-row-line": "transparent",
+        "table-column-line": "transparent",
 
         "table-focus-indicator": "background-selected",
         "border-lead": "background-selected",
@@ -50,14 +66,14 @@ qx.Theme.define("org.jspresso.framework.theme.Color",
         "header": "white",
         "header-text": "label",
         "header-text-selected": "label",
-        "light-background": "#F2F2F2",
-        "dark-background": "#E2E2E2",
+        "light-background": "light-grey",
+        "dark-background": "dark-grey",
 
         "section-header-text": "app-foreground",
 
         "window-caption-background": "light-background",
-        "window-border": "#979797",
-        "window-border-inner": "#B7B7B7",
+        "window-border": "medium-light-grey",
+        "window-border-inner": "light-grey",
 
         "tooltip": "light-background",
         "tooltip-text": "label",
@@ -69,6 +85,6 @@ qx.Theme.define("org.jspresso.framework.theme.Color",
         "navigator-selected": "background-selected",
         "navigator-text-selected": "text-selected",
 
-        "background-disabled": "#DDDDDD"
+        "background-disabled": "super-light-grey"
       }
     });

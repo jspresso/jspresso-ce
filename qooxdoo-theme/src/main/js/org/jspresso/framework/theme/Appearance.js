@@ -159,7 +159,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           base: true,
           style: function (states) {
             return {
-              decorator: "panel-box",
+              decorator: "table",
               headerCellHeight: 27,
               rowHeight: 27
             };
