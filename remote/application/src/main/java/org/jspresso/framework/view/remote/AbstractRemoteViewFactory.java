@@ -1731,10 +1731,10 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
       lovAction.setDescription(actionHandler.getTranslation("lov.element.description",
           new Object[]{propertyDescriptor.getReferencedDescriptor().getI18nName(actionHandler, locale)}, locale)
           + IActionFactory.TOOLTIP_ELLIPSIS);
-      if (propertyDescriptor.getReferencedDescriptor().getIcon() != null) {
-        lovAction.setIcon(getIconFactory()
-            .getIcon(propertyDescriptor.getReferencedDescriptor().getIcon(), getIconFactory().getTinyIconSize()));
-      }
+      // if (propertyDescriptor.getReferencedDescriptor().getIcon() != null) {
+      //   lovAction.setIcon(getIconFactory()
+      //     .getIcon(propertyDescriptor.getReferencedDescriptor().getIcon(), getIconFactory().getTinyIconSize()));
+      // }
       RActionList actionList = new RActionList(getGuidGenerator().generateGUID());
       actionList.setActions(lovAction);
       viewComponent.setActionLists(actionList);

@@ -36,8 +36,9 @@ qx.Class.define("org.jspresso.framework.view.qx.MultilineHeaderCell", {
             anonymous: true,
             allowShrinkX: true,
             rich: true,
-            alignY: "top"
-          });
+            alignY: "top",
+            appearance: "table-header-label"
+      });
 
           this._add(control, {row: 0, column: 1});
           break;

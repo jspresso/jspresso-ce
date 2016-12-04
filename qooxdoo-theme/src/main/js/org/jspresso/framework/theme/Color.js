@@ -25,7 +25,7 @@ qx.Theme.define("org.jspresso.framework.theme.Color",
         "medium-grey": "#888888",
         "medium-light-grey": "#AAAAAA",
         "light-grey": "#CCCCCC",
-        "super-light-grey": "#DDDDDD",
+        "super-light-grey": "#EEEEEE",
 
         "app-foreground": "dark-grey",
         "app-background": "white",
@@ -34,6 +34,7 @@ qx.Theme.define("org.jspresso.framework.theme.Color",
         "background-selected": "medium-grey",
         "background-selected-dark": "medium-dark-grey",
         "background-selected-dark-disabled": "background-selected-disabled",
+        "background-selected-light": "super-light-grey",
 
         "border-separator": "light-grey",
 
@@ -48,30 +49,32 @@ qx.Theme.define("org.jspresso.framework.theme.Color",
         "header-cell-border": "transparent",
         "tab-pane-border": "transparent",
 
-        "table-border-main": "transparent",
-        "table-header-background": "app-background",
-        "table-header-separator": "light-grey",
-        "table-row": "label",
-        "table-row-selected": "text-selected",
-        "table-row-background-even": "white",
-        "table-row-background-odd": "light-background",
-        "table-row-background-selected": "background-selected-dark",
-        "table-row-background-focused-selected": "table-row-background-selected",
-        "table-row-line": "transparent",
-        "table-column-line": "transparent",
-
-        "table-focus-indicator": "background-selected",
-        "border-lead": "background-selected",
-
-        "border-main": "border-light",
-
         "header": "white",
         "header-text": "label",
         "header-text-selected": "label",
         "light-background": "super-light-grey",
         "dark-background": "dark-grey",
 
+        "table-header-text": "medium-dark-grey",
+        "table-border-main": "transparent",
+        "table-header-background": "app-background",
+        "table-header-separator": "transparent",
+        "table-row": "label",
+        "table-row-selected": "text-selected",
+        "table-row-background-even": "light-background",
+        "table-row-background-odd": "white",
+        "table-row-background-selected": "background-selected",
+        "table-row-background-focused-selected": "table-row-background-selected",
+        "table-row-line": "transparent",
+        "table-column-line": "transparent",
+
+        "table-focus-indicator": "background-selected-dark",
+        "border-lead": "background-selected",
+
+        "border-main": "border-light",
+
         "section-header-text": "app-foreground",
+        "panel-header-text": "label",
 
         "window-caption-background": "light-blue",
         "window-border": "medium-light-grey",
@@ -88,8 +91,8 @@ qx.Theme.define("org.jspresso.framework.theme.Color",
         "navigator-text-selected": "text-selected",
 
         "application-panel": "super-light-grey",
-        "application-bar": "application-panel",
-        "application-splitter": "application-panel",
+        "application-bar": "white",
+        "application-splitter": "transparent",
 
         "background-disabled": "super-light-grey"
       }

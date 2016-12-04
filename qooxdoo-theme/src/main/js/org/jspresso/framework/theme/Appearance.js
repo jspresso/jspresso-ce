@@ -174,8 +174,18 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
               hovered = "-hovered";
             }
             return {
-              textColor: "header-text",
+              textColor: "table-header-text",
               decorator: states.first ? "table-header-cell-first" + hovered : "table-header-cell" + hovered
+            };
+          }
+        },
+
+        "table-header-label": {
+          include: "label",
+          style: function (states) {
+            return {
+              textColor: "table-header-text",
+              font: "bold"
             };
           }
         },
@@ -208,7 +218,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
               gap: 0,
               decorator: undefined,
               margin: [10, 1, 1, 1],
-              padding: 0,
+              padding: 20,
               backgroundColor: "app-background"
             };
           }
@@ -220,7 +230,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             return {
               show: "label",
-              font: "headline-bold",
+              font: "headline-big",
               paddingLeft: 0
             };
           }
@@ -229,7 +239,50 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         "collapsable-panel/bar/label": {
           style: function (states) {
             return {
-              textColor: "section-header-text"
+              textColor: "panel-header-text"
+            };
+          }
+        },
+
+        "form": {
+          style: function (states) {
+            return {
+              padding: 20
+            };
+          }
+        },
+
+        "pagination-view": {
+          include: "form",
+          style: function (states) {
+            return {
+              padding: 5
+            };
+          }
+        },
+
+        "form-label": {
+          style: function (states) {
+            return {
+              margin: 5
+            };
+          }
+        },
+
+        "form-label-aside": {
+          include: "form-label",
+          style: function (states) {
+            return {
+              marginLeft: 20
+            };
+          }
+        },
+
+        "form-label-above": {
+          include: "form-label",
+          style: function (states) {
+            return {
+              marginLeft: 0
             };
           }
         },
@@ -709,8 +762,10 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             return {
               backgroundColor: "application-panel",
+              paddingTop: 10,
               paddingBottom: 10,
-              paddingRight: 10
+              paddingRight: 10,
+              paddingLeft: 10
             }
           }
         },

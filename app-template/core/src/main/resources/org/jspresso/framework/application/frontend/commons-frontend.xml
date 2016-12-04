@@ -72,6 +72,7 @@
     <property name="modelDescriptor" ref="pageableStatusModel" />
     <property name="columnCount" value="4" />
     <property name="labelsPosition" value="ASIDE" />
+    <property name="styleName" value="pagination-view" />
     <property name="propertyViewDescriptors">
       <list>
         <bean class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor">
@@ -85,6 +86,7 @@
             </list>
           </property>
           <property name="horizontalAlignment" value="LEFT" />
+          <property name="preferredWidth" value="40" />
         </bean>
         <bean class="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor">
           <property name="name" value="displayPageCount" />

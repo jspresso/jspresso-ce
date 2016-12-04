@@ -107,6 +107,16 @@ qx.Theme.define("org.jspresso.framework.theme.Font",
           bold: true
         },
 
+        "headline-big": {
+          include: "headline",
+          size: 25
+        },
+
+        "headline-big-bold": {
+          include: "headline-big",
+          bold: true
+        },
+
         "header": {
           include: "bold",
           size: 30

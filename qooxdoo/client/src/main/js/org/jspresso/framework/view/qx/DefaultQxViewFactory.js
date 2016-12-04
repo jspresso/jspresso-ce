@@ -84,6 +84,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
   },
 
   members: {
+    __constructingForm: false,
+
     /**
      * @return {qx.ui.core.Widget}
      */
@@ -1273,6 +1275,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       button.addListener("execute", listener, that);
     },
 
+
     /**
      * @return {qx.ui.core.Widget}
      * @param remoteForm {org.jspresso.framework.gui.remote.RForm}
@@ -1286,6 +1289,18 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var extraRowOffset = 0;
       var lastRow = 0;
       var lastCol = 0;
+
+      var formWrapper;
+      if (!this.__constructingForm) {
+        formWrapper = new qx.ui.container.Composite();
+        formWrapper.setAppearance("form");
+        formWrapper.setLayout(new qx.ui.layout.Grow());
+        formWrapper.add(form);
+      } else {
+        formWrapper = form;
+      }
+      var wasConstructingForm = this.__constructingForm;
+      this.__constructingForm = true;
 
       form.setLayout(formLayout);
 
@@ -1349,15 +1364,15 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         }
         if (remoteForm.getLabelsPosition() != "NONE") {
           if (remoteForm.getLabelsPosition() == "ASIDE") {
+            componentLabel.setAppearance("form-label-aside");
             if (labelHorizontalPosition == "RIGHT") {
               componentLabel.setAlignX("left");
-              componentLabel.setMarginRight(10);
             } else {
               componentLabel.setAlignX("right");
-              componentLabel.setMarginLeft(10);
             }
             componentLabel.setAlignY("middle");
           } else {
+            componentLabel.setAppearance("form-label-above");
             componentLabel.setAlignX("left");
             componentLabel.setAlignY("bottom");
           }
@@ -1387,7 +1402,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         if (rComponent instanceof org.jspresso.framework.gui.remote.RLabel) {
           component.setAllowGrowX(true);
         } else {
-          component.setAllowGrowX(false);
+          component.setMaxWidth(1000);
+          component.setAllowGrowX(true);
         }
         if (this.isMultiline(rComponent)) {
           compRowSpan = 2;
@@ -1438,22 +1454,23 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       // Since it's not resizeable anymore
       form.setMinWidth(form.getWidth());
 
-      var decoratedForm = form;
+      var decoratedForm = formWrapper;
       if (remoteForm.getVerticallyScrollable()) {
         var scrollContainer = new qx.ui.container.Scroll();
         scrollContainer.setScrollbarX("off");
         scrollContainer.setScrollbarY("auto");
-        scrollContainer.add(form);
+        scrollContainer.add(decoratedForm);
         scrollContainer.setMinWidth(form.getMinWidth());
         scrollContainer.setWidth(form.getWidth());
         scrollContainer.setHeight(form.getHeight());
         decoratedForm = scrollContainer;
       }
-      if (!remoteForm.getWidthResizeable()) {
+      if (!remoteForm.getWidthResizeable() && !wasConstructingForm) {
         var lefter = new qx.ui.container.Composite(new qx.ui.layout.Dock());
         lefter.add(decoratedForm, {edge: "west"});
         decoratedForm = lefter;
       }
+      this.__constructingForm = wasConstructingForm;
       return decoratedForm;
     },
 
@@ -1976,9 +1993,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var textField;
       if (remoteActionField.getShowTextField()) {
         textField = this._createTextFieldComponent();
-        this._sizeMaxComponentWidth(textField, remoteActionField);
       }
       var actionField = this._decorateWithAsideActions(textField, remoteActionField, true);
+      this._sizeMaxComponentWidth(actionField, remoteActionField);
       var state = remoteActionField.getState();
       var modelController = new qx.data.controller.Object(state);
       var mainAction = remoteActionField.getActionLists()[0].getActions()[0];
