@@ -27,6 +27,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -415,12 +416,29 @@ public abstract class ResourceProviderServlet extends HttpServlet {
           if (imageUrl == null) {
             throw new ServletException("Bad image URL : " + imageUrlSpec);
           }
+          String file = imageUrl.getFile();
           if (!ommitFileName) {
-            completeFileName(response, imageUrl.getFile());
+            completeFileName(response, file);
           }
           String width = request.getParameter(IMAGE_WIDTH_PARAMETER);
           String height = request.getParameter(IMAGE_HEIGHT_PARAMETER);
-          if (width != null && height != null) {
+          String extension = null;
+          if (file != null) {
+            int lastDotIndex = file.lastIndexOf(".");
+            if (lastDotIndex >= 0 && lastDotIndex < file.length()) {
+              extension = file.substring(lastDotIndex + 1).toLowerCase();
+            }
+            String contentType = URLConnection.guessContentTypeFromName(file);
+            if (contentType == null) {
+              if (extension != null && extension.equals("svg")) {
+                contentType = "image/svg+xml";
+              }
+            }
+            if (contentType != null) {
+              response.setContentType(contentType);
+            }
+          }
+          if (width != null && height != null && (extension == null || !extension.equals("svg"))) {
             inputStream = new BufferedInputStream(new ByteArrayInputStream(ImageHelper.scaleImage(imageUrl, Integer.parseInt(width),
                 Integer.parseInt(height), "PNG")));
           } else {
