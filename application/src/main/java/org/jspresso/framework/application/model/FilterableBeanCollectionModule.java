@@ -189,10 +189,14 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
 
     BasicCollectionViewDescriptor moduleObjectsView = (BasicCollectionViewDescriptor) BasicCollectionViewDescriptor
         .extractMainCollectionView(getProjectedViewDescriptor());
-    if (getPageSize() != null && getPageSize() > 0) {
-      if (moduleObjectsView != null
-          && moduleObjectsView.getPaginationViewDescriptor() == null) {
-        moduleObjectsView.setPaginationViewDescriptor(getPaginationViewDescriptor());
+    if (moduleObjectsView != null) {
+      if (moduleObjectsView.getName() == null) {
+        moduleObjectsView.setName(getName());
+      }
+      if (getPageSize() != null && getPageSize() > 0) {
+        if (moduleObjectsView.getPaginationViewDescriptor() == null) {
+          moduleObjectsView.setPaginationViewDescriptor(getPaginationViewDescriptor());
+        }
       }
     }
     decorator.setModelDescriptor(superViewDescriptor.getModelDescriptor());

@@ -217,7 +217,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
               showSeparator: false,
               gap: 0,
               decorator: undefined,
-              margin: [10, 1, 1, 1],
+              margin: [3, 1, 1, 1],
               padding: 20,
               backgroundColor: "app-background"
             };
@@ -503,23 +503,19 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
               padding = [4, 2, 4, 2];
             }
 
-            if (states.checked) {
-              if (states.barTop) {
-                decorator = "tab-button-top";
-              } else if (states.barBottom) {
-                decorator = "tab-button-bottom"
-              } else if (states.barRight) {
-                decorator = "tab-button-right";
-              } else if (states.barLeft) {
-                decorator = "tab-button-left";
-              }
-            } else {
-              decorator = undefined;
+            if (states.barTop) {
+              decorator = "tab-button-top";
+            } else if (states.barBottom) {
+              decorator = "tab-button-bottom"
+            } else if (states.barRight) {
+              decorator = "tab-button-right";
+            } else if (states.barLeft) {
+              decorator = "tab-button-left";
             }
 
             return {
-              textColor: states.disabled ? "text-disabled" : states.checked ? "header-text-selected" : "header-text",
-              backgroundColor: states.checked ? "app-background" : undefined,
+              textColor: states.disabled ? "tab-disabled-text" : states.checked ? "header-text-selected" : "tab-disabled-text",
+              backgroundColor: states.checked ? "app-background" : "tab-disabled",
               padding: padding,
               font: states.disabled ? undefined : states.checked ? "bold" : undefined,
               decorator: decorator
