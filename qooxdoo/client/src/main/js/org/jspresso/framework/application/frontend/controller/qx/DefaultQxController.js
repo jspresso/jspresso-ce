@@ -64,14 +64,23 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       if (busy) {
         root.setGlobalCursor("wait");
         qx.event.Timer.once(function () {
-          if (this.__busy && !root.isBlocked()) {
+          if (this.__busy && !root.isBlocked() && !this._isShowingDialog()) {
             root.block();
           }
         }, this, 500);
       } else {
-        root.unblock();
-        root.setGlobalCursor("default");
+        if (!this._isShowingDialog()) {
+          root.unblock();
+          root.setGlobalCursor("default");
+        }
       }
+    },
+
+    /**
+     * @return {Boolean}
+     */
+    _isShowingDialog: function () {
+      return this._dialogStack && this._dialogStack.length > 1;
     },
 
     /**
@@ -134,13 +143,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
        */
       var dialog;
       var newDialog = true;
-      if (useCurrent && this._dialogStack && this._dialogStack.length > 1) {
+      if (useCurrent && this._dialogStack && this._isShowingDialog()) {
         dialog = this._dialogStack[this._dialogStack.length - 1][0];
         dialog.removeAll();
         newDialog = false;
       } else {
         var dialogParent;
-        //        if(this._dialogStack && this._dialogStack.length > 1) {
+        //        if(this._isShowingDialog()) {
         //          dialogParent = this._dialogStack[_dialogStack.length -1];
         //        } else {
         //          dialogParent = this._getApplication().getRoot();
@@ -188,7 +197,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * Close top most dialog.
      */
     _closeDialog: function () {
-      if (this._dialogStack && this._dialogStack.length > 1) {
+      if (this._isShowingDialog()) {
         /** @type {qx.ui.window.Window} */
         var topDialog = this._dialogStack.pop()[0];
         this._getApplication().getRoot().remove(topDialog);

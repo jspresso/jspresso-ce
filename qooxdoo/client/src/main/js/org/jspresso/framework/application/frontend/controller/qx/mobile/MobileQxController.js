@@ -395,6 +395,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     },
 
     /**
+     * @return {Boolean}
+     */
+    _isShowingDialog: function () {
+      return this._dialogStack && this._dialogStack.length > 1;
+    },
+
+    /**
      *
      * @param title {String}
      * @param message {String}
@@ -481,7 +488,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         }
       }
 
-      if (this.__managerContainer.isVisible() && this._dialogStack.length == 1) {
+      if (this.__managerContainer.isVisible() && !this._isShowingDialog()) {
         var pageToRestore = this.getCurrentPage();
         if (this.__animationQueue != null && this.__animationQueue.length > 0) {
           pageToRestore = this.__animationQueue[this.__animationQueue.length -1].page;
@@ -490,7 +497,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       }
 
       var dialogPage = null;
-      if (useCurrent && this._dialogStack.length > 1) {
+      if (useCurrent && this._isShowingDialog()) {
         /** @type {qx.ui.mobile.page.NavigationPage} */
         var topDialogPage = this._dialogStack.pop()[0];
         if (topDialogPage) {
@@ -533,12 +540,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     _closeDialog: function () {
       /** @type {qx.ui.mobile.page.NavigationPage} */
       var pageToDestroy = null;
-      if (this._dialogStack && this._dialogStack.length > 1) {
+      if (this._isShowingDialog()) {
         pageToDestroy = this._dialogStack.pop()[0];
       }
       if (this._dialogStack) {
         var pageToRestore;
-        if (this._dialogStack.length == 1) {
+        if (!this._isShowingDialog()) {
           pageToRestore = this.__managerContainer;
         } else {
           pageToRestore = this._dialogStack[this._dialogStack.length - 1][0];
@@ -552,7 +559,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         if (pageToDestroy) {
           pageToDestroy.addListenerOnce("disappear", callback, this);
         }
-        if (this.__savedCurrentPage && this._dialogStack.length == 1) {
+        if (this.__savedCurrentPage && !this._isShowingDialog()) {
           qx.ui.mobile.page.Page._currentPage = this.__savedCurrentPage;
           this.__savedCurrentPage = null;
         }

@@ -159,6 +159,29 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     },
 
     /**
+     * @param title {String}
+     * @param message {String}
+     * @param remoteDialogView {org.jspresso.framework.gui.remote.RComponent}
+     * @param icon {org.jspresso.framework.gui.remote.RIcon}
+     * @param actions {org.jspresso.framework.gui.remote.RAction[] | qx.ui.form.Button[]}
+     * @param useCurrent {Boolean}
+     * @param dimension {org.jspresso.framework.util.gui.Dimension}
+     * @param secondaryActionLists {org.jspresso.framework.gui.remote.RActionList[]}
+     * @return {undefined}
+     */
+    _popupDialog: function (title, message, remoteDialogView, icon, actions, useCurrent, dimension,
+                            secondaryActionLists) {
+      throw new Error("_popupDialog is abstract");
+    },
+
+    /**
+     * @return {Boolean}
+     */
+    _isShowingDialog: function () {
+      throw new Error("_isShowingDialog is abstract");
+    },
+
+    /**
      * @param busy {Boolean}
      */
     showBusy: function (busy) {
@@ -495,7 +518,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      * @return {undefined}
      */
     _handleFocusCommand: function (targetPeer, focusCommand) {
-      throw new Error("_handleFocusCommand is abstract.");
+      throw new Error("_handleFocusCommand is abstract");
     },
 
     /**
@@ -504,7 +527,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      * @return {undefined}
      */
     _handleEditCommand: function (targetPeer, editCommand) {
-      throw new Error("_handleEditCommand is abstract.");
+      throw new Error("_handleEditCommand is abstract");
     },
 
     /**
@@ -663,21 +686,21 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      * @param uploadCommand {org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand}
      */
     _handleFileUpload: function (uploadCommand) {
-      throw new Error("_handleFileUpload is abstract.")
+      throw new Error("_handleFileUpload is abstract")
     },
 
     /**
      * @param downloadCommand {org.jspresso.framework.application.frontend.command.remote.RemoteFileDownloadCommand}
      */
     _handleFileDownload: function (downloadCommand) {
-      throw new Error("_handleFileDownload is abstract.")
+      throw new Error("_handleFileDownload is abstract")
     },
 
     /**
      * @param clipboardCommand {org.jspresso.framework.application.frontend.command.remote.RemoteClipboardCommand}
      */
     _handleClipboardCommand: function (clipboardCommand) {
-      throw new Error("_handleClipboardCommand is abstract.")
+      throw new Error("_handleClipboardCommand is abstract")
     },
 
     /**
