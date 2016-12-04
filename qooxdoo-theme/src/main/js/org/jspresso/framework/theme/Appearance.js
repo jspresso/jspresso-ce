@@ -78,7 +78,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           base: true,
           style: function (states) {
             return {
-              backgroundColor: "app-background"
+              backgroundColor: "toolbar"
             };
           }
         },
@@ -217,8 +217,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
               showSeparator: false,
               gap: 0,
               decorator: undefined,
-              margin: [3, 1, 1, 1],
-              padding: 20,
+              margin: [10, 1, 1, 1],
+              padding: [5, 20, 20, 20],
               backgroundColor: "app-background"
             };
           }
@@ -360,7 +360,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           base: true,
           style: function (states) {
             return {
-              backgroundColor: "app-background",
+              backgroundColor: "splitpane",
               margin: 1,
               padding: 0
             };
@@ -371,7 +371,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           base: true,
           style: function (states) {
             return {
-              backgroundColor: "app-background",
+              backgroundColor: "splitpane",
               minWidth: 10,
               minHeight: 10
             };

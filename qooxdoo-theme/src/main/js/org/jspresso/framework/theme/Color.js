@@ -48,8 +48,8 @@ qx.Theme.define("org.jspresso.framework.theme.Color",
         "checkbox-border": "default-focused-border",
         "header-cell-border": "transparent",
         "tab-pane-border": "transparent",
-        "tab-disabled": "medium-light-grey",
-        "tab-disabled-text": "white",
+        "tab-disabled": "light-grey",
+        "tab-disabled-text": "label",
 
         "header": "white",
         "header-text": "label",
@@ -69,14 +69,13 @@ qx.Theme.define("org.jspresso.framework.theme.Color",
         "table-row-background-focused-selected": "table-row-background-selected",
         "table-row-line": "transparent",
         "table-column-line": "transparent",
-
         "table-focus-indicator": "background-selected-dark",
-        "border-lead": "background-selected",
 
+        "border-lead": "background-selected",
         "border-main": "border-light",
 
         "section-header-text": "app-foreground",
-        "panel-header-text": "label",
+        "panel-header-text": "medium-grey",
 
         "window-caption-background": "light-blue",
         "window-border": "medium-light-grey",
@@ -93,9 +92,12 @@ qx.Theme.define("org.jspresso.framework.theme.Color",
         "navigator-text-selected": "text-selected",
 
         "application-panel": "super-light-grey",
-        "application-bar": "white",
+        "application-bar": "transparent",
         "application-splitter": "transparent",
 
-        "background-disabled": "super-light-grey"
+        "background-disabled": "super-light-grey",
+        "toolbar": "transparent",
+
+        "splitpane": "transparent"
       }
     });
