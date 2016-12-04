@@ -1402,7 +1402,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         if (rComponent instanceof org.jspresso.framework.gui.remote.RLabel) {
           component.setAllowGrowX(true);
         } else {
-          component.setMaxWidth(1000);
+          component.resetMaxWidth();
           component.setAllowGrowX(true);
         }
         if (this.isMultiline(rComponent)) {
