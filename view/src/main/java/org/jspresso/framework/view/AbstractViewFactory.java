@@ -193,6 +193,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   private IDisplayableAction            binaryPropertyInfoAction;
   private IConfigurableConnectorFactory connectorFactory;
   private ERenderingOptions defaultActionMapRenderingOptions = ERenderingOptions.ICON;
+  private ERenderingOptions defaultTabRenderingOptions       = ERenderingOptions.LABEL_ICON;
   private final IValueChangeListener        firstRowSelector;
   private       IIconFactory<F>             iconFactory;
   private       IComponentCollectionFactory componentCollectionFactory;
@@ -414,6 +415,16 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    */
   public void setDefaultActionMapRenderingOptions(ERenderingOptions defaultActionMapRenderingOptions) {
     this.defaultActionMapRenderingOptions = defaultActionMapRenderingOptions;
+  }
+
+  /**
+   * Sets default tab rendering options.
+   *
+   * @param defaultTabRenderingOptions
+   *     the default tab rendering options
+   */
+  public void setDefaultTabRenderingOptions(ERenderingOptions defaultTabRenderingOptions) {
+    this.defaultTabRenderingOptions = defaultTabRenderingOptions;
   }
 
   /**
@@ -1032,8 +1043,8 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    *     the locale
    * @return the view
    */
-  protected IView<E> createNestedComponentPropertyView(
-      INestedComponentPropertyViewDescriptor propertyViewDescriptor, IActionHandler actionHandler, Locale locale) {
+  protected IView<E> createNestedComponentPropertyView(INestedComponentPropertyViewDescriptor propertyViewDescriptor,
+                                                       IActionHandler actionHandler, Locale locale) {
     IViewDescriptor nestedComponentViewDescriptor = propertyViewDescriptor.getNestedComponentViewDescriptor();
     IView<E> nestedComponentView = createView(nestedComponentViewDescriptor, actionHandler, locale);
     IRenderableCompositeValueConnector wrappingConnector = getConnectorFactory().createCompositeValueConnector(
@@ -2168,7 +2179,8 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
         final IValueConnector viewConnector = view.getConnector();
         if (viewConnector != null) {
           viewConnector.addValueChangeListener(
-              new ConnectorActionAdapter<>(propertyViewDescriptor.getAction(), getActionFactory(), actionHandler, view));
+              new ConnectorActionAdapter<>(propertyViewDescriptor.getAction(), getActionFactory(), actionHandler,
+                  view));
         }
       }
     }
@@ -2619,6 +2631,15 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    */
   protected ERenderingOptions getDefaultActionMapRenderingOptions() {
     return defaultActionMapRenderingOptions;
+  }
+
+  /**
+   * Gets default tab rendering options.
+   *
+   * @return the default tab rendering options
+   */
+  protected ERenderingOptions getDefaultTabRenderingOptions() {
+    return defaultTabRenderingOptions;
   }
 
   /**

@@ -2658,7 +2658,11 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
         IView<JComponent> childView = createView(childViewDescriptor, actionHandler, locale);
         Icon childIcon = getIconFactory().getIcon(childViewDescriptor.getIcon(), getIconFactory().getSmallIconSize());
         String tabText = childViewDescriptor.getI18nName(actionHandler, locale);
-        switch (viewDescriptor.getRenderingOptions()) {
+        ERenderingOptions renderingOptions = getDefaultTabRenderingOptions();
+        if (viewDescriptor.getRenderingOptions() != null) {
+          renderingOptions = viewDescriptor.getRenderingOptions();
+        }
+        switch (renderingOptions) {
           case ICON:
             tabText = null;
             break;

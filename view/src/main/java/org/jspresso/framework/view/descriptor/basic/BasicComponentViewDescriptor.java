@@ -72,8 +72,8 @@ public class BasicComponentViewDescriptor extends AbstractComponentViewDescripto
   private EHorizontalPosition           labelsHorizontalPosition;
   private Map<String, Integer>          propertyWidths;
   private Map<String, List<String>>     renderedChildProperties;
-  private boolean                       verticallyScrollable;
-  private boolean                       widthResizeable;
+  private Boolean                       verticallyScrollable;
+  private Boolean                       widthResizeable;
 
   /**
    * Constructs a new {@code BasicComponentViewDescriptor} instance.
@@ -82,7 +82,6 @@ public class BasicComponentViewDescriptor extends AbstractComponentViewDescripto
     super();
     columnCount = 1;
     verticallyScrollable = false;
-    widthResizeable = true;
     labelsHorizontalPosition = EHorizontalPosition.LEFT;
   }
 
@@ -263,7 +262,10 @@ public class BasicComponentViewDescriptor extends AbstractComponentViewDescripto
    */
   @Override
   public boolean isWidthResizeable() {
-    return widthResizeable;
+    if (widthResizeable != null) {
+      return widthResizeable;
+    }
+    return getColumnCount() > 1;
   }
 
   /**

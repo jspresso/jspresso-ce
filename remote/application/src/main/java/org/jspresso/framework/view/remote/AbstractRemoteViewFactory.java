@@ -2151,7 +2151,11 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
       if (actionHandler.isAccessGranted(childViewDescriptor)) {
         IView<RComponent> childView = createView(childViewDescriptor, actionHandler, locale);
         RComponent tab = childView.getPeer();
-        switch (viewDescriptor.getRenderingOptions()) {
+        ERenderingOptions renderingOptions = getDefaultTabRenderingOptions();
+        if (viewDescriptor.getRenderingOptions() != null) {
+          renderingOptions = viewDescriptor.getRenderingOptions();
+        }
+        switch (renderingOptions) {
           case ICON:
             tab.setLabel(null);
             break;

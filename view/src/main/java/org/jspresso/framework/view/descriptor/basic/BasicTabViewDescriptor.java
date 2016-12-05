@@ -38,7 +38,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  */
 public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor implements ITabViewDescriptor {
 
-  private ERenderingOptions renderingOptions = ERenderingOptions.LABEL_ICON;
+  private ERenderingOptions renderingOptions;
   private List<IViewDescriptor> tabs;
   private boolean               lazy;
   private IAction               tabSelectionAction;
