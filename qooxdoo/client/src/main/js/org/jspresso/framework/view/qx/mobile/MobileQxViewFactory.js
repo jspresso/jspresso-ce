@@ -1689,7 +1689,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       }
       this._configureHorizontalAlignment(label, remoteLabel.getHorizontalAlignment());
       if (remoteLabel.getIcon()) {
-        atom.setIcon(remoteLabel.getIcon().getImageUrlSpec());
+        this.setIcon(atom, remoteLabel.getIcon());
       }
       return atom;
     },

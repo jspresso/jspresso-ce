@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.util.resources.server;
 
+import static org.jspresso.framework.util.image.ImageHelper.*;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
@@ -64,7 +66,7 @@ import org.jspresso.framework.util.url.UrlHelper;
  */
 public abstract class ResourceProviderServlet extends HttpServlet {
 
-  private static final long   serialVersionUID             = 5253634459280974738L;
+  private static final long serialVersionUID = 5253634459280974738L;
 
   /**
    * the url pattern to activate a resource download.
@@ -92,6 +94,11 @@ public abstract class ResourceProviderServlet extends HttpServlet {
   private static final String IMAGE_WIDTH_PARAMETER        = "width";
 
   /**
+   * preferSVG.
+   */
+  private static final String IMAGE_PREFER_SVG_PARAMETER   = "preferSVG";
+
+  /**
    * localUrl.
    */
   private static final String LOCAL_URL_PARAMETER          = "localUrl";
@@ -99,7 +106,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
   /**
    * omitFileName.
    */
-  private static final String OMIT_FILE_NAME_PARAMETER = "omitFileName";
+  private static final String OMIT_FILE_NAME_PARAMETER     = "omitFileName";
 
   /**
    * the url pattern to activate a resource upload.
@@ -422,25 +429,45 @@ public abstract class ResourceProviderServlet extends HttpServlet {
           }
           String width = request.getParameter(IMAGE_WIDTH_PARAMETER);
           String height = request.getParameter(IMAGE_HEIGHT_PARAMETER);
+          String preferSVGValue = request.getParameter(IMAGE_PREFER_SVG_PARAMETER);
+          boolean preferSVG = false;
+          if ("true".equalsIgnoreCase(preferSVGValue)) {
+            preferSVG = true;
+          }
           String extension = null;
           if (file != null) {
             int lastDotIndex = file.lastIndexOf(".");
             if (lastDotIndex >= 0 && lastDotIndex < file.length()) {
               extension = file.substring(lastDotIndex + 1).toLowerCase();
+              if (preferSVG && !extension.equalsIgnoreCase(SVG)) {
+                URL svgImageUrl = UrlHelper.createURL(imageUrlSpec.replaceAll(extension, SVG));
+                if (svgImageUrl != null) {
+                  try (InputStream svgIS = svgImageUrl.openStream()) {
+                    imageUrl = svgImageUrl;
+                    file = file.replaceAll(extension, SVG);
+                    extension = SVG;
+                  } catch (IOException ioe) {
+                    // SVG alternative does not exist.
+                  }
+                }
+              }
             }
             String contentType = URLConnection.guessContentTypeFromName(file);
             if (contentType == null) {
-              if (extension != null && extension.equals("svg")) {
-                contentType = "image/svg+xml";
+              if (extension != null && extension.equals(SVG)) {
+                contentType = SVG_CONTENT_TYPE;
               }
             }
             if (contentType != null) {
               response.setContentType(contentType);
             }
           }
-          if (width != null && height != null && (extension == null || !extension.equals("svg"))) {
-            inputStream = new BufferedInputStream(new ByteArrayInputStream(ImageHelper.scaleImage(imageUrl, Integer.parseInt(width),
-                Integer.parseInt(height), "PNG")));
+          if (width != null && height != null) {
+            byte[] scaledImageBytes = ImageHelper.scaleImage(imageUrl, Integer.parseInt(width), Integer.parseInt(height),
+                extension == null ? PNG : extension);
+            if (scaledImageBytes != null) {
+              inputStream = new BufferedInputStream(new ByteArrayInputStream(scaledImageBytes));
+            }
           } else {
             inputStream = new BufferedInputStream(imageUrl.openStream());
           }

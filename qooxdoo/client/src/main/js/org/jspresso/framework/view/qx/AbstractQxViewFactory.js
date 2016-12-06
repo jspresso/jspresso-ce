@@ -237,7 +237,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
     setIcon: function (component, icon) {
       if (icon) {
         if (typeof component.setIcon == 'function') {
-          component.setIcon(icon.getImageUrlSpec());
+          component.setIcon(icon.getImageUrlSpec()+"&preferSVG=true");
         }
       }
     },

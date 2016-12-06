@@ -1621,7 +1621,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
               atom.setLabel("");
             }
             if (icon) {
-              atom.setIcon(icon.getImageUrlSpec());
+              this.setIcon(atom, icon);
             } else {
               atom.setIcon("");
             }
@@ -2681,7 +2681,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var label = labelComponent.getChildControl("label");
       var state = remoteLabel.getState();
       if (remoteLabel.getIcon()) {
-        labelComponent.setIcon(remoteLabel.getIcon().getImageUrlSpec());
+        this.setIcon(labelComponent, remoteLabel.getIcon());
       }
       if (state) {
         labelComponent.setAppearance("dynamicatom");

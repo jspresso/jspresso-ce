@@ -18,16 +18,19 @@
  */
 package org.jspresso.framework.util.image;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 import javaxt.io.Image;
-
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.jspresso.framework.util.io.IoHelper;
 import org.jspresso.framework.util.url.UrlHelper;
 
 /**
@@ -38,6 +41,21 @@ import org.jspresso.framework.util.url.UrlHelper;
 public final class ImageHelper {
 
   private final static Logger LOG = LoggerFactory.getLogger(ImageHelper.class);
+
+  /**
+   * The constant SVG is &quot;svg&quot;.
+   */
+  public static final String SVG              = "svg";
+
+  /**
+   * The constant SVG_CONTENT_TYPE is &quot;image/svg+xml&quot;.
+   */
+  public static final String SVG_CONTENT_TYPE = "image/svg+xml";
+
+  /**
+   * The constant PNG is &quot;png&quot;.
+   */
+  public static final String PNG              = "png";
 
   private ImageHelper() {
     // private constructor for helper class.
@@ -61,27 +79,38 @@ public final class ImageHelper {
    */
   public static byte[] scaleImage(Object originalImageInput, Integer width, Integer height, String targetFormatName)
       throws IOException {
-    Image image = createImage(originalImageInput);
-    if (image == null) {
-      if (originalImageInput instanceof byte[]) {
-        LOG.warn("Received an invalid image content. Cannot transform so returning original content.");
-        return (byte[]) originalImageInput;
+    if (SVG.equals(targetFormatName)) {
+      String svgImage = createSvgImage(originalImageInput);
+      if (width != null) {
+        svgImage = svgImage.replaceFirst("width\\s*=\\s*\"\\d*\"", "width=\"" + width + "\"");
       }
-      LOG.warn("Received an invalid image content. Cannot transform so returning null.");
-      return null;
+      if (height != null) {
+        svgImage = svgImage.replaceFirst("height\\s*=\\s*\"\\d*\"", "height=\"" + height + "\"");
+      }
+      return svgImage.getBytes(StandardCharsets.UTF_8);
+    } else {
+      Image image = createImage(originalImageInput);
+      if (image == null) {
+        if (originalImageInput instanceof byte[]) {
+          LOG.warn("Received an invalid image content. Cannot transform so returning original content.");
+          return (byte[]) originalImageInput;
+        }
+        LOG.warn("Received an invalid image content. Cannot transform so returning null.");
+        return null;
+      }
+      image.rotate();
+      if (width != null && height != null) {
+        image.resize(width, height, true);
+      } else if (width != null) {
+        image.setWidth(width);
+      } else if (height != null) {
+        image.setHeight(height);
+      }
+      if (targetFormatName != null) {
+        return image.getByteArray(targetFormatName);
+      }
+      return image.getByteArray(PNG);
     }
-    image.rotate();
-    if (width != null && height != null) {
-      image.resize(width, height, true);
-    } else if (width != null) {
-      image.setWidth(width);
-    } else if (height != null) {
-      image.setHeight(height);
-    }
-    if (targetFormatName != null) {
-      return image.getByteArray(targetFormatName);
-    }
-    return image.getByteArray("png");
   }
 
   /**
@@ -105,9 +134,12 @@ public final class ImageHelper {
   /**
    * Create image.
    *
-   * @param originalImageInput the original image input
+   * @param originalImageInput
+   *     the original image input
    * @return the image
-   * @throws IOException the iO exception
+   *
+   * @throws IOException
+   *     the iO exception
    */
   public static Image createImage(Object originalImageInput) throws IOException {
     Image image;
@@ -126,12 +158,55 @@ public final class ImageHelper {
   }
 
   /**
+   * Create SVG image.
+   *
+   * @param originalImageInput
+   *     the original image input
+   * @return the SVG image
+   *
+   * @throws IOException
+   *     the iO exception
+   */
+  public static String createSvgImage(Object originalImageInput) throws IOException {
+    InputStream svgInputStream;
+    if (originalImageInput instanceof byte[]) {
+      svgInputStream = new ByteArrayInputStream((byte[]) originalImageInput);
+    } else if (originalImageInput instanceof String) {
+      try {
+        svgInputStream = UrlHelper.createURL((String) originalImageInput).openStream();
+      } catch(IOException ioe) {
+        svgInputStream = new ByteArrayInputStream(((String) originalImageInput).getBytes(StandardCharsets.UTF_8));
+      }
+    } else if (originalImageInput instanceof URL) {
+      svgInputStream = ((URL) originalImageInput).openStream();
+    } else if (originalImageInput instanceof InputStream) {
+      svgInputStream = (InputStream) originalImageInput;
+    } else {
+      throw new RuntimeException("Unsupported SVG image input.");
+    }
+    ByteArrayOutputStream svgOutputStream = new ByteArrayOutputStream();
+    try {
+      IoHelper.copyStream(svgInputStream, svgOutputStream);
+      return svgOutputStream.toString(StandardCharsets.UTF_8.name());
+    } finally {
+      if (svgInputStream != null) {
+        svgInputStream.close();
+      }
+      svgOutputStream.close();
+    }
+  }
+
+  /**
    * To base 64 src.
    *
-   * @param originalImageInput the original image input
-   * @param format the format
+   * @param originalImageInput
+   *     the original image input
+   * @param format
+   *     the format
    * @return the string
-   * @throws IOException the iO exception
+   *
+   * @throws IOException
+   *     the iO exception
    */
   public static String toBase64Src(Object originalImageInput, String format) throws IOException {
     Image img = createImage(originalImageInput);
@@ -141,7 +216,8 @@ public final class ImageHelper {
   /**
    * From base 64 src.
    *
-   * @param base64Src the base 64 src
+   * @param base64Src
+   *     the base 64 src
    * @return the byte [ ]
    */
   public static byte[] fromBase64Src(String base64Src) {
@@ -151,9 +227,13 @@ public final class ImageHelper {
 
   /**
    * Load image from project's ressource path.
-   * @param resourcePath The path to the resource.
+   *
+   * @param resourcePath
+   *     The path to the resource.
    * @return the image as bytes.
-   * @throws IOException If ressource cannot be read.
+   *
+   * @throws IOException
+   *     If ressource cannot be read.
    */
   public static byte[] loadImage(String resourcePath) throws IOException {
 

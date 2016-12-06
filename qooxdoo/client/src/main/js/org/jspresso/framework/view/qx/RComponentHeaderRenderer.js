@@ -50,7 +50,7 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentHeaderRenderer", {
         this.__table.setHeaderCellHeight(heightHint);
       }
       if (this.__rComponent.getIcon()) {
-        widget.setIcon(this.__rComponent.getIcon().getImageUrlSpec());
+        this.__viewFactory.setIcon(widget, this.__rComponent.getIcon());
       }
       return widget;
     }
