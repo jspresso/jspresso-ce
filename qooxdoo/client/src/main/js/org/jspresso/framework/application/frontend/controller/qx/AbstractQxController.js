@@ -201,7 +201,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
         this.__commandsQueue.length = 0;
       } else {
         for (var i = 0; i < this.__commandsQueue.length; i++) {
-          this.__commandsBacklog[i] = this.__commandsQueue[i];
+          this.__commandsBacklog.push(this.__commandsQueue[i]);
         }
       }
     },
