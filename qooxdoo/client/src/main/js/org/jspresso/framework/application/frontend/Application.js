@@ -1,12 +1,21 @@
-/*******************************************************************************
+/*
+ * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
  *
- * Copyright:
+ *  This file is part of the Jspresso framework.
  *
- * License:
+ *  Jspresso is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * Authors:
+ *  Jspresso is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
  *
- ******************************************************************************/
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /**
  * @use(org.jspresso.framework.gui.remote.RAction)
@@ -75,6 +84,9 @@
  * @use(org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCommand)
  * @use(org.jspresso.framework.application.frontend.command.remote.RemoteErrorMessageCommand)
  *
+ * // Fixes issue #9182: new unified pointer input model since Chrome 55
+ * // see https://github.com/qooxdoo/qooxdoo/issues/9182
+ * @require(org.jspresso.framework.patch.MEvent)
  */
 
 qx.Class.define("org.jspresso.framework.application.frontend.Application", {
