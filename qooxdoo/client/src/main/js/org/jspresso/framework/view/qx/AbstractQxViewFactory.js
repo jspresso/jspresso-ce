@@ -233,11 +233,19 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
     /**
      * @param component {qx.ui.core.Widget | qx.ui.core.mobile.Widget}
      * @param icon {org.jspresso.framework.gui.remote.RIcon}
+     * @param preferSVG {Boolean}
      */
-    setIcon: function (component, icon) {
+    setIcon: function (component, icon, preferSVG) {
+      if (typeof preferSVG == 'undefined') {
+        preferSVG = true;
+      }
       if (icon) {
         if (typeof component.setIcon == 'function') {
-          component.setIcon(icon.getImageUrlSpec()+"&preferSVG=true");
+          var imageUrlSpec = icon.getImageUrlSpec();
+          if (preferSVG) {
+            imageUrlSpec = imageUrlSpec + "&preferSVG=true";
+          }
+          component.setIcon(imageUrlSpec);
         }
       }
     },
