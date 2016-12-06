@@ -1080,8 +1080,25 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       }
       var menuItems = this.createMenuItems(actions);
       var menu = new qx.ui.menu.Menu();
+      var menuWidth = 0;
       for (var i = 0; i < menuItems.length; i++) {
-        menu.add(menuItems[i]);
+        var menuItem = menuItems[i];
+        menu.add(menuItem);
+        var menuItemWidth = 0;
+        if (actions[i].getIcon() && actions[i].getIcon()) {
+          menuItemWidth += actions[i].getIcon().getDimension().getWidth();
+        }
+        if (actions[i].getName()) {
+          menuItemWidth += this._measureText(menuItem, actions[i].getName());
+        }
+        menuItemWidth += menuItem.getPaddingLeft() * 2 + menuItem.getPaddingRight()
+                       + menuItem.getMarginLeft() + menuItem.getMarginRight();
+        if(menuItemWidth > menuWidth) {
+          menuWidth = menuItemWidth;
+        }
+      }
+      if (menuWidth > 0) {
+        menu.setWidth(menuWidth + menu.getPaddingLeft() + menu.getPaddingRight());
       }
       var button = new qx.ui.form.SplitButton(menuItems[0].getLabel(), menuItems[0].getIcon(), menu, menuItems[0].getCommand());
       return button;
@@ -2644,12 +2661,18 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       this._sizeMaxComponentWidthFromText(component, remoteComponent, templateText);
     },
 
-    _sizeMaxComponentWidthFromText: function (component, remoteComponent, text) {
-      var compFont = component.getFont();
-      if (!compFont) {
-        compFont = qx.theme.manager.Font.getInstance().resolve("default");
+    _measureText: function (component, text) {
+      var compFontId = component.getFont();
+      if (!compFontId) {
+        compFontId = "default";
       }
+      var compFont = qx.theme.manager.Font.getInstance().resolve(compFontId);
       var w = qx.bom.Label.getTextSize(text, compFont.getStyles()).width;
+      return w;
+    },
+
+    _sizeMaxComponentWidthFromText: function (component, remoteComponent, text) {
+      var w = this._measureText(component, text);
       if (remoteComponent.getPreferredSize() && remoteComponent.getPreferredSize().getWidth() > w) {
         w = remoteComponent.getPreferredSize().getWidth();
       }

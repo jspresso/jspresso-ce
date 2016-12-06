@@ -159,7 +159,7 @@
     <property name="name" value="find.name" />
     <property name="iconImageURL">
       <bean parent="abstractFwIconImageURL">
-        <constructor-arg index="0" value="find" />
+        <constructor-arg index="0" value="lov_find" />
       </bean>
     </property>
     <property name="wrappedAction" ref="lovFindBackAction" />
@@ -177,7 +177,7 @@
     <property name="nextAction" ref="modalDialogAction"/>
     <property name="defaultIconImageURL">
       <bean parent="abstractFwIconImageURL">
-        <constructor-arg index="0" value="find"/>
+        <constructor-arg index="0" value="lov_find"/>
       </bean>
     </property>
     <property name="componentDescriptorRegistry" ref="componentDescriptorRegistry"/>
