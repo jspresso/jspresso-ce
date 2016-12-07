@@ -119,8 +119,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states, superStyles) {
             return {
               decorator: states.hovered ? superStyles.decorator : undefined,
-              padding: states.hovered ? [2, 4] : [3, 5],
-              margin: 2
+              padding: states.hovered ? [1, 1] : [2, 2],
+              margin: 1
             };
           }
         },
@@ -337,8 +337,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           include: "button-frame",
           style: function (states, superStyles) {
             return {
-              padding: states.hovered ? [2, 4] : [3, 5],
-              margin: [2, 0, 2, 2],
+              padding: states.hovered ? [1, 1] : [2, 2],
+              margin: [1, 0, 1, 1],
               decorator: states.hovered ? superStyles.decorator : undefined
             };
           }
@@ -349,8 +349,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           include: "button-frame",
           style: function (states, superStyles) {
             return {
-              padding: states.hovered ? [2, 4] : [3, 5],
-              margin: [2, 2, 2, 0],
+              padding: states.hovered ? [1, 1] : [2, 2],
+              margin: [1, 1, 1, 0],
               decorator: states.hovered ? superStyles.decorator : undefined
             };
           }

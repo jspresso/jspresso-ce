@@ -28,7 +28,7 @@
     <property name="modalDialogAction" ref="modalDialogAction" />
     <property name="defaultFindIconImageUrl">
       <bean parent="abstractFwIconImageURL">
-        <constructor-arg index="0" value="find" />
+        <constructor-arg index="0" value="lov_find" />
       </bean>
     </property>
   </bean>
