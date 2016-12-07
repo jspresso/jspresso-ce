@@ -235,7 +235,9 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
      * @return {String}
      */
     _completeForSVG: function (imageUrlSpec) {
-      if (imageUrlSpec.indexOf("svg") < 0) {
+      if (imageUrlSpec.indexOf("svg") < 0
+          /*QX resource loading will break on parameters*/
+          && (imageUrlSpec.startsWith("http") || imageUrlSpec.startsWith("file"))) {
         if (imageUrlSpec.indexOf("?") >= 0) {
           return imageUrlSpec + "&preferSVG=true";
         } else {
