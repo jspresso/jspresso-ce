@@ -78,7 +78,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           base: true,
           style: function (states) {
             return {
-              backgroundColor: "toolbar"
+              backgroundColor: "toolbar",
+              marginBottom: 5
             };
           }
         },
@@ -88,7 +89,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             return {
               minHeight: 30,
-              padding: [0, 15, 0, 0],
+              padding: [0, 20, 0, 0],
               margin: 0
             };
           }

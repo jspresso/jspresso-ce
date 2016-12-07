@@ -518,8 +518,7 @@
     <property name="nextAction" ref="editSelectionFrontAction" />
   </bean>
 
-  <bean id="addToMasterFrontAction" parent="abstractAddToMasterFrontAction">
-  </bean>
+  <bean id="addToMasterFrontAction" parent="abstractAddToMasterFrontAction"/>
 
   <bean id="addAnyToMasterBackAction" class="org.jspresso.framework.application.backend.action.AddAnyCollectionToMasterAction" />
   <bean id="addAnyToMasterFrontAction" parent="addToMasterFrontAction">
@@ -532,7 +531,7 @@
     </property>
   </bean>
 
-  <bean id="cloneEntityCollectionFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
+  <bean abstract="true" id="abstractCloneEntityCollectionFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="iconImageURL">
       <bean parent="abstractFwIconImageURL">
         <constructor-arg index="0" value="edit_clone" />
@@ -549,6 +548,8 @@
     </property>
     <property name="nextAction" ref="editSelectionFrontAction" />
   </bean>
+
+  <bean id="cloneEntityCollectionFrontAction" parent="abstractCloneEntityCollectionFrontAction"/>
 
   <bean id="cloneMapCollectionFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="iconImageURL">
@@ -620,7 +621,7 @@
   <bean id="removeComponentsFromWorkspacesFrontAction"
         class="org.jspresso.framework.application.frontend.action.std.RemoveComponentsFromWorkspacesFrontAction"/>
 
-  <bean id="removeEntityCollectionFromMasterFrontAction" class="org.jspresso.framework.application.frontend.action.flow.StaticYesNoAction">
+  <bean abstract="true" id="abstractRemoveEntityCollectionFromMasterFrontAction" class="org.jspresso.framework.application.frontend.action.flow.StaticYesNoAction">
     <property name="iconImageURL">
       <bean parent="abstractFwIconImageURL">
         <constructor-arg index="0" value="edit_remove" />
@@ -637,6 +638,9 @@
       </bean>
     </property>
   </bean>
+
+  <bean id="removeEntityCollectionFromMasterFrontAction"
+        parent="abstractRemoveEntityCollectionFromMasterFrontAction"/>
 
   <bean id="removeAnyCollectionFromMasterFrontAction" class="org.jspresso.framework.application.frontend.action.flow.StaticYesNoAction"
     parent="removeEntityCollectionFromMasterFrontAction">
