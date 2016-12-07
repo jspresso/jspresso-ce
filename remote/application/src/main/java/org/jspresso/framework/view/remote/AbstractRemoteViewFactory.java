@@ -2024,14 +2024,15 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
           actionList.setCollapsable(nextActionList.isCollapsable());
           actionList.setName(nextActionList.getName());
           actionList.setDescription(nextActionList.getDescription());
-          actionList.setIcon(getIconFactory().getIcon(nextActionList.getIcon(), getIconFactory().getTinyIconSize()));
+          actionList.setIcon(getIconFactory().getIcon(nextActionList.getIcon(), getIconFactory().getSmallIconSize()));
           viewActionLists.add(actionList);
           List<RAction> actions = new ArrayList<>();
           for (IDisplayableAction action : nextActionList.getActions()) {
             if (actionHandler.isAccessGranted(action)) {
               try {
                 actionHandler.pushToSecurityContext(action);
-                RAction rAction = getActionFactory().createAction(action, actionHandler, view, locale);
+                RAction rAction = getActionFactory().createAction(action, getIconFactory().getSmallIconSize(),
+                    actionHandler, view, locale);
                 rAction.setAcceleratorAsString(action.getAcceleratorAsString());
                 actions.add(rAction);
                 switch (renderingOptions) {
