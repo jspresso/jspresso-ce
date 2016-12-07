@@ -19,7 +19,9 @@
 
 /**
  * @asset(org/jspresso/framework/*.png)
+ * @asset(org/jspresso/framework/*.svg)
  * @asset(org/jspresso/framework/htmleditor/*.png)
+ * @asset(org/jspresso/framework/htmleditor/*.svg)
  */
 
 qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
@@ -863,23 +865,23 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var toolbarEntries = [{
         bold: {
           text: this._getActionHandler().translate("format_bold"),
-          image: "org/jspresso/framework/htmleditor/format-text-bold.png",
+          image: "org/jspresso/framework/htmleditor/format-text-bold.svg",
           action: htmlEditor.setBold
         }, italic: {
           text: this._getActionHandler().translate("format_italic"),
-          image: "org/jspresso/framework/htmleditor/format-text-italic.png",
+          image: "org/jspresso/framework/htmleditor/format-text-italic.svg",
           action: htmlEditor.setItalic
         }, underline: {
           text: this._getActionHandler().translate("format_underline"),
-          image: "org/jspresso/framework/htmleditor/format-text-underline.png",
+          image: "org/jspresso/framework/htmleditor/format-text-underline.svg",
           action: htmlEditor.setUnderline
         }, strikethrough: {
           text: this._getActionHandler().translate("format_strikethrough"),
-          image: "org/jspresso/framework/htmleditor/format-text-strikethrough.png",
+          image: "org/jspresso/framework/htmleditor/format-text-strikethrough.svg",
           action: htmlEditor.setStrikeThrough
         }, removeFormat: {
           text: this._getActionHandler().translate("remove_format"),
-          image: "org/jspresso/framework/htmleditor/edit-clear.png",
+          image: "org/jspresso/framework/htmleditor/edit-clear.svg",
           action: htmlEditor.removeFormat
         }
       },
@@ -887,19 +889,19 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         {
           alignLeft: {
             text: this._getActionHandler().translate("align_left"),
-            image: "org/jspresso/framework/htmleditor/format-justify-left.png",
+            image: "org/jspresso/framework/htmleditor/format-justify-left.svg",
             action: htmlEditor.setJustifyLeft
           }, alignCenter: {
           text: this._getActionHandler().translate("align_center"),
-          image: "org/jspresso/framework/htmleditor/format-justify-center.png",
+          image: "org/jspresso/framework/htmleditor/format-justify-center.svg",
           action: htmlEditor.setJustifyCenter
         }, alignRight: {
           text: this._getActionHandler().translate("align_right"),
-          image: "org/jspresso/framework/htmleditor/format-justify-right.png",
+          image: "org/jspresso/framework/htmleditor/format-justify-right.svg",
           action: htmlEditor.setJustifyRight
         }, alignJustify: {
           text: this._getActionHandler().translate("align_justify"),
-          image: "org/jspresso/framework/htmleditor/format-justify-fill.png",
+          image: "org/jspresso/framework/htmleditor/format-justify-fill.svg",
           action: htmlEditor.setJustifyFull
         }
         },
@@ -915,21 +917,21 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         {
           indent: {
             text: this._getActionHandler().translate("indent_more"),
-            image: "org/jspresso/framework/htmleditor/format-indent-more.png",
+            image: "org/jspresso/framework/htmleditor/format-indent-more.svg",
             action: htmlEditor.insertIndent
           }, outdent: {
           text: this._getActionHandler().translate("indent_less"),
-          image: "org/jspresso/framework/htmleditor/format-indent-less.png",
+          image: "org/jspresso/framework/htmleditor/format-indent-less.svg",
           action: htmlEditor.insertOutdent
         }
         }, {
           ol: {
             text: this._getActionHandler().translate("insert_ordered_list"),
-            image: "org/jspresso/framework/htmleditor/list-ordered.png",
+            image: "org/jspresso/framework/htmleditor/list-ordered.svg",
             action: htmlEditor.insertOrderedList
           }, ul: {
             text: this._getActionHandler().translate("insert_unordered_list"),
-            image: "org/jspresso/framework/htmleditor/list-unordered.png",
+            image: "org/jspresso/framework/htmleditor/list-unordered.svg",
             action: htmlEditor.insertUnorderedList
           }
         }];
@@ -2840,7 +2842,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       });
 
       var resetButton = new qx.ui.form.Button();
-      resetButton.setIcon("org/jspresso/framework/reset-small.png");
+      resetButton.setIcon("org/jspresso/framework/reset-small.svg");
       if (!remoteColorField.getResetEnabled()) {
         resetButton.setEnabled(false);
       }

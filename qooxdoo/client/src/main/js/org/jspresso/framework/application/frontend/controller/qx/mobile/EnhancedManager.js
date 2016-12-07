@@ -17,7 +17,7 @@
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * @asset (org/jspresso/framework/mobile/nav-mobile-menu-icon.png)
+ * @asset (org/jspresso/framework/mobile/nav-mobile-menu-icon.svg)
  */
 
 qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobile.EnhancedManager", {
@@ -46,7 +46,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      */
     _createMasterButton: function () {
       var mb = this.base(arguments);
-      mb.setIcon("org/jspresso/framework/mobile/nav-mobile-menu-icon.png");
+      mb.setIcon("org/jspresso/framework/mobile/nav-mobile-menu-icon.svg");
       mb.setShow("icon");
       return mb;
     }

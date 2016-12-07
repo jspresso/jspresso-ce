@@ -20,8 +20,6 @@
 /**
  * @asset (org/jspresso/framework/mobile/bookmark/android3_bookmark.png)
  * @asset (org/jspresso/framework/mobile/bookmark/android4_bookmark.png)
- * @asset (org/jspresso/framework/mobile/bookmark/blackberry.png)
- * @asset (org/jspresso/framework/mobile/bookmark/playbook_bookmark.png)
  * @asset (org/jspresso/framework/mobile/bookmark/safari_forward.png)
  * @asset (org/jspresso/framework/mobile/bookmark/safari_ios7_forward.png)
  */
@@ -991,10 +989,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
           } else {
             bookmarkHintKey = "bookmark_android";
           }
-        } else if (osName.indexOf("blackberry") >= 0) {
-          bookmarkHintKey = "bookmark_blackberry";
-        } else if (osName.indexOf("playbook") >= 0) {
-          bookmarkHintKey = "bookmark_playbook";
         }
       }
       //return "bookmark_ios7orlater";

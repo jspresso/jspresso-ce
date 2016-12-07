@@ -231,6 +231,21 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
     },
 
     /**
+     * @param imageUrlSpec {String}
+     * @return {String}
+     */
+    _completeForSVG: function (imageUrlSpec) {
+      if (imageUrlSpec.indexOf("svg") < 0) {
+        if (imageUrlSpec.indexOf("?") >= 0) {
+          return imageUrlSpec + "&preferSVG=true";
+        } else {
+          return imageUrlSpec + "?preferSVG=true";
+        }
+      }
+      return imageUrlSpec;
+    },
+
+    /**
      * @param component {qx.ui.core.Widget | qx.ui.core.mobile.Widget}
      * @param icon {org.jspresso.framework.gui.remote.RIcon}
      * @param preferSVG {Boolean}
@@ -243,7 +258,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
         if (typeof component.setIcon == 'function') {
           var imageUrlSpec = icon.getImageUrlSpec();
           if (preferSVG) {
-            imageUrlSpec = imageUrlSpec + "&preferSVG=true";
+            imageUrlSpec = this._completeForSVG(imageUrlSpec);
           }
           component.setIcon(imageUrlSpec);
         }
@@ -256,7 +271,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
     createOkButton: function () {
       var b = this.createButton(this.__actionHandler.translate("ok"), null,
           new org.jspresso.framework.gui.remote.RIcon().set({
-            imageUrlSpec: "org/jspresso/framework/dialog-ok.png"
+            imageUrlSpec: "org/jspresso/framework/dialog-ok.svg"
           }));
       return b;
     },
@@ -267,7 +282,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
     createCancelButton: function () {
       var b = this.createButton(this.__actionHandler.translate("cancel"), null,
           new org.jspresso.framework.gui.remote.RIcon().set({
-            imageUrlSpec: "org/jspresso/framework/dialog-cancel.png"
+            imageUrlSpec: "org/jspresso/framework/dialog-cancel.svg"
           }));
       return b;
     },
@@ -278,7 +293,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
     createYesButton: function () {
       var b = this.createButton(this.__actionHandler.translate("yes"), null,
           new org.jspresso.framework.gui.remote.RIcon().set({
-            imageUrlSpec: "org/jspresso/framework/dialog-ok.png"
+            imageUrlSpec: "org/jspresso/framework/dialog-ok.svg"
           }));
       return b;
     },
@@ -289,7 +304,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
     createNoButton: function () {
       var b = this.createButton(this.__actionHandler.translate("no"), null,
           new org.jspresso.framework.gui.remote.RIcon().set({
-            imageUrlSpec: "org/jspresso/framework/dialog-close.png"
+            imageUrlSpec: "org/jspresso/framework/dialog-close.svg"
           }));
       return b;
     },

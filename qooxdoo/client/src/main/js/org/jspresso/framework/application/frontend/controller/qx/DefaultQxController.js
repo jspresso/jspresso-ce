@@ -19,6 +19,7 @@
 
 /**
  * @asset(org/jspresso/framework/*.png)
+ * @asset(org/jspresso/framework/*.png)
  */
 qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.DefaultQxController", {
 
@@ -652,7 +653,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       uploadForm.setLayout(new qx.ui.layout.VBox(10));
 
       var uploadField = new uploadwidget.UploadField('uploadFile', 'Select File',
-          'org/jspresso/framework/cloud_upload.png');
+          'org/jspresso/framework/cloud_upload.svg');
       uploadForm.add(uploadField);
 
       uploadDialog.add(uploadForm, {flex: 1});

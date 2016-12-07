@@ -19,6 +19,7 @@
 
 /**
  * @asset(org/jspresso/framework/*.png)
+ * @asset(org/jspresso/framework/*.svg)
  */
 qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.AbstractQxController", {
   extend: qx.core.Object,
