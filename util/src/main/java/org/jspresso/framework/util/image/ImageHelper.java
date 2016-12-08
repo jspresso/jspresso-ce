@@ -99,11 +99,13 @@ public final class ImageHelper {
         return null;
       }
       image.rotate();
-      if (width != null && height != null) {
+      int originalWidth = image.getWidth();
+      int originalHeight = image.getHeight();
+      if (width != null && height != null && width != originalWidth && height != originalHeight) {
         image.resize(width, height, true);
-      } else if (width != null) {
+      } else if (width != null && width != originalWidth) {
         image.setWidth(width);
-      } else if (height != null) {
+      } else if (height != null && height != originalHeight) {
         image.setHeight(height);
       }
       if (targetFormatName != null) {
