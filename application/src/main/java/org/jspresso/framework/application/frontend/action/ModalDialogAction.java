@@ -97,8 +97,8 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
 
     List<G> actions = new ArrayList<>();
     for (IDisplayableAction action : dActions) {
-      actions.add(getActionFactory(context).createAction(action, actionHandler,
-          mainView, getLocale(context)));
+      actions.add(getActionFactory(context).createAction(action, getIconFactory(context).getSmallIconSize(),
+          actionHandler, mainView, getLocale(context)));
     }
     getController(context).displayModalDialog(mainView.getPeer(), actions,
         title, sourceComponent, context, getDialogSize(context), false);

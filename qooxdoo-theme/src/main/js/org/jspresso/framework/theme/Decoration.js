@@ -19,7 +19,7 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
       decorations: {
         "button-box": {
           style: {
-            radius: 3,
+            radius: 2,
             width: 1,
             color: "button-border",
             backgroundColor: "button-box-bright"
@@ -37,7 +37,7 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
           include: "button-box",
           style: {
             color: "background-selected",
-            shadowBlurRadius: 3,
+            shadowBlurRadius: 2,
             shadowColor: "background-selected",
             shadowLength: 0,
             transition: "box-shadow 200ms ease-out"
@@ -52,7 +52,7 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
           include: "checkbox",
           style: {
             color: "checkbox-focused-border",
-            shadowBlurRadius: 3,
+            shadowBlurRadius: 2,
             shadowColor: "checkbox-focused-border",
             shadowLength: 0,
             transition: "box-shadow 200ms ease-out"
@@ -267,7 +267,7 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
             innerWidth: 1,
             innerColor: "window-border-inner",
             shadowLength: 1,
-            shadowBlurRadius: 3,
+            shadowBlurRadius: 2,
             shadowColor: "shadow",
             backgroundColor: "app-background"
           }
@@ -306,7 +306,7 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
 
         "scroll-knob": {
           style: {
-            radius: 3,
+            radius: 2,
             width: 1,
             color: "button-border"
           }

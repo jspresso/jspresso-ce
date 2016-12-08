@@ -28,7 +28,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           }
         },
 
-        label: {
+        "label": {
           base: true,
           style: function (states) {
             return {
@@ -37,7 +37,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           }
         },
 
-        atom: {
+        "atom": {
           base: true,
           style: function (states) {
             return {
@@ -55,7 +55,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           }
         },
 
-        dynamicatom: {
+        "dynamicatom": {
           include: "atom",
           alias: "atom",
           style: function (states) {
@@ -70,6 +70,14 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             return {
               backgroundColor: "app-background"
+            };
+          }
+        },
+
+        "menu-button/label": {
+          style: function (states) {
+            return {
+              textColor: states.selected ? undefined : "label"
             };
           }
         },
@@ -121,7 +129,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
             return {
               decorator: states.hovered ? superStyles.decorator : undefined,
               padding: states.hovered ? [1, 1] : [2, 2],
-              margin: 1
+              margin: states.labeled && (states.middle || states.right) ? [1, 1, 1, 20] : 1
             };
           }
         },
@@ -131,8 +139,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           include: "button-frame",
           style: function (states) {
             return {
-              padding: [2, 4],
-              margin: 2
+              padding: [2, 2],
+              margin: [2, 2, 2, 4]
             };
           }
         },
@@ -142,7 +150,33 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             return {
               padding: [2, 4],
-              backgroundColor : (states.disabled || states.readonly) ? "background-disabled" : "white"
+              marginLeft: 4,
+              backgroundColor : (states.disabled || states.readonly) ? "background-disabled" : "white",
+            };
+          }
+        },
+
+        "actionfield": {
+          style: function (states) {
+            return {
+              padding: [2, 2]
+            };
+          }
+        },
+
+        "actionfield-field": {
+          include: "textfield",
+          style: function (states) {
+            return {
+              marginLeft: 2
+            };
+          }
+        },
+
+        "datetimefield": {
+          style: function (states) {
+            return {
+              padding: [2, 2]
             };
           }
         },
@@ -151,7 +185,18 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           base: true,
           style: function (states) {
             return {
-              padding: 2
+              padding: 2,
+              margin: 2
+            };
+          }
+        },
+
+        "radiobutton": {
+          base: true,
+          style: function (states) {
+            return {
+              padding: 2,
+              margin: 2
             };
           }
         },
@@ -258,32 +303,6 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             return {
               padding: 5
-            };
-          }
-        },
-
-        "form-label": {
-          style: function (states) {
-            return {
-              margin: 5
-            };
-          }
-        },
-
-        "form-label-aside": {
-          include: "form-label",
-          style: function (states) {
-            return {
-              marginLeft: 20
-            };
-          }
-        },
-
-        "form-label-above": {
-          include: "form-label",
-          style: function (states) {
-            return {
-              marginLeft: 0
             };
           }
         },

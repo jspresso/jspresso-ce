@@ -41,7 +41,7 @@ qx.Theme.define("org.jspresso.framework.theme.Color",
         "button-border": "light-grey",
         "button-border-hovered": "medium-light-grey",
 
-        "label": "medium-grey",
+        "label": "medium-dark-grey",
 
         "default-focused-border": "light-blue",
         "textfield-focused-border": "default-focused-border",

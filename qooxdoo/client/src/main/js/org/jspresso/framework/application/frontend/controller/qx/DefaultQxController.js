@@ -105,7 +105,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         dialogView = this._getViewFactory().createComponent(remoteDialogView);
       }
       var buttonBox = new qx.ui.container.Composite();
-      buttonBox.setLayout(new qx.ui.layout.HBox(10, "right"));
+      buttonBox.setLayout(new qx.ui.layout.HBox(0, "right"));
 
       var dialogBox = new qx.ui.container.Composite();
       dialogBox.setLayout(new qx.ui.layout.VBox(0, null, new qx.ui.decoration.Decorator().set({
@@ -134,6 +134,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           buttons[i] = this._getViewFactory().createAction(allActions[i]);
         } else {
           buttons[i] = allActions[i];
+        }
+        if (i == 0) {
+          buttons[i].addState("left");
+        } else if (i == allActions.length - 1) {
+          buttons[i].addState("right");
+        } else {
+          buttons[i].addState("middle");
         }
         buttonBox.add(buttons[i]);
       }

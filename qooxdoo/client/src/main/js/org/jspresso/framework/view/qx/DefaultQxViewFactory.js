@@ -467,6 +467,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       dateTimeField.setUserData("df", dateField);
       dateTimeField.setUserData("tf", timeField);
       dateTimeField.setUserData("componentsToStyle", [dateField, timeField]);
+      dateTimeField.setAppearance("datetimefield");
       return dateTimeField;
     },
 
@@ -1136,26 +1137,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     },
 
     /**
-     *
-     * @return {undefined}
-     * @param icon {org.jspresso.framework.gui.remote.RIcon}
-     * @param button {qx.ui.form.Button | qx.ui.menu.Button}
-     * @param label {String}
-     * @param toolTip {String}
-     */
-    _completeButton: function (button, label, toolTip, icon) {
-      this.setIcon(button, icon);
-      if (label) {
-        button.setLabel(label);
-      }
-      if (toolTip) {
-        button.setToolTip(new qx.ui.tooltip.ToolTip(toolTip));
-        //to unblock tooltips on menu buttons
-        button.setBlockToolTip(false);
-      }
-    },
-
-    /**
      * @return {qx.ui.form.Button}
      * @param remoteAction {org.jspresso.framework.gui.remote.RAction}
      */
@@ -1277,6 +1258,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       this.setIcon(button, icon);
       if (label) {
         button.setLabel(label);
+        button.addState("labeled");
       }
       if (toolTip) {
         button.setToolTip(new qx.ui.tooltip.ToolTip(toolTip));
@@ -1308,6 +1290,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var extraRowOffset = 0;
       var lastRow = 0;
       var lastCol = 0;
+      var columnSpacing = 20;
+      var rowSpacing = 3;
+      var labelMarginRight = 3;
 
       var formWrapper;
       if (!this.__constructingForm) {
@@ -1383,7 +1368,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         }
         if (remoteForm.getLabelsPosition() != "NONE") {
           if (remoteForm.getLabelsPosition() == "ASIDE") {
-            componentLabel.setAppearance("form-label-aside");
             if (labelHorizontalPosition == "RIGHT") {
               componentLabel.setAlignX("left");
             } else {
@@ -1391,10 +1375,17 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             }
             componentLabel.setAlignY("middle");
           } else {
-            componentLabel.setAppearance("form-label-above");
             componentLabel.setAlignX("left");
             componentLabel.setAlignY("bottom");
           }
+          if (labelCol > 0) {
+            componentLabel.setMarginLeft(columnSpacing);
+          } else {
+            componentLabel.setMarginLeft(4);
+          }
+          componentLabel.setMarginRight(labelMarginRight);
+          componentLabel.setMarginTop(rowSpacing);
+          componentLabel.setMarginBottom(rowSpacing);
           componentLabel.setAllowStretchX(false, false);
           componentLabel.setAllowStretchY(false, false);
           if (componentLabel.getLabel() == "") {
@@ -1417,6 +1408,19 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         } else {
           component.setAlignX("left");
         }
+
+        if (remoteForm.getLabelsPosition() == "ABOVE") {
+          if (labelCol > 0) {
+            component.setMarginLeft(columnSpacing);
+          }
+          component.setMarginBottom(rowSpacing);
+        } else {
+          if (!(rComponent instanceof org.jspresso.framework.gui.remote.RForm)) {
+            component.setMarginTop(rowSpacing);
+            component.setMarginBottom(rowSpacing);
+          }
+        }
+
         component.setAlignY("middle");
         if (rComponent instanceof org.jspresso.framework.gui.remote.RLabel) {
           component.setAllowGrowX(true);
@@ -1430,15 +1434,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           formLayout.setRowFlex(compRow + 1, 1);
         } else {
           compRowSpan = 1;
-        }
-        if (!(rComponent instanceof org.jspresso.framework.gui.remote.RForm)) {
-          if (component instanceof qx.ui.container.Composite) {
-            component.setPadding(2);
-          } else if (rComponent instanceof org.jspresso.framework.gui.remote.RLabel) {
-            component.setMargin([2, 6]);
-          } else {
-            component.setMargin(2);
-          }
         }
         form.add(component, {
           row: compRow, column: compCol, rowSpan: compRowSpan, colSpan: compColSpan
@@ -2077,6 +2072,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             this._getActionHandler().execute(remoteActionField.getCharacterAction(), actionEvent);
           }, this);
         }
+        actionField.setAppearance("actionfield");
+        textField.setAppearance("actionfield-field");
       } else {
         state.addListener("changeValue", function (e) {
           if (e.getData()) {
