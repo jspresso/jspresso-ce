@@ -39,6 +39,20 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       blockerColor: '#BBBBBB',
       blockerOpacity: 0.3
     });
+
+    var rules = ["input::selection,textarea::selection", "input::-moz-selection,textarea::-moz-selection",
+                 "input::-ms-selection,textarea::-ms-selection",
+                 "input::-webkit-selection,textarea::-webkit-selection"];
+    var fieldSelectionBackgroundColor = qx.theme.manager.Color.getInstance().resolve("field-selection-background");
+    var fieldSelectionForegroundColor = qx.theme.manager.Color.getInstance().resolve("field-selection-foreground");
+    for (var i = 0; i < rules.length; i++) {
+      try {
+        qx.ui.style.Stylesheet.getInstance().addRule(rules[i],
+            "background-color:" + fieldSelectionBackgroundColor + "; color:" + fieldSelectionForegroundColor);
+      } catch (ex) {
+        // ignore styling errors due to browsers differences
+      }
+    }
   },
 
   members: {
@@ -190,8 +204,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       }
 
       if (this.__workspaceStack && this.__workspaceStack.getBounds()) {
-        dialog.setMaxWidth(Math.floor(this.__workspaceStack.getBounds().width * 90 / 100));
-        dialog.setMaxHeight(Math.floor(this.__workspaceStack.getBounds().height * 90 / 100));
+        dialog.setMaxWidth(Math.floor(this.__workspaceStack.getBounds().width * 98 / 100));
+        dialog.setMaxHeight(Math.floor(this.__workspaceStack.getBounds().height * 98 / 100));
       }
       dialog.add(dialogBox);
       dialog.open();
@@ -298,8 +312,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       this.__workspaceAccordionGroup = new qx.ui.form.RadioGroup();
       this.__workspaceAccordionGroup.setAllowEmptySelection(false);
       for (var i = 0; i < workspaceActions.getActions().length; i++) {
-        var workspacePanel = new org.jspresso.framework.view.qx.EnhancedCollapsiblePanel(
-            workspaceActions.getActions()[i].getName());
+        var workspacePanel = new org.jspresso.framework.view.qx.EnhancedCollapsiblePanel(workspaceActions.getActions()[i].getName());
         workspacePanel.setAppearance("accordion-section");
         workspacePanel._getLayout().setSeparator("accordion-section-box");
         if (i == 0) {
@@ -625,10 +638,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     _getKeysToTranslate: function () {
       /** @type {Array} */
       var keysToTranslate = this.base(arguments);
-      keysToTranslate = keysToTranslate.concat([
-        "change_font_family", "change_font_size", "format_bold", "format_italic", "format_underline",
-        "format_strikethrough", "remove_format", "align_left", "align_center", "align_right", "align_justify",
-        "indent_more", "indent_less", "insert_ordered_list", "insert_unordered_list", "undo", "redo"]);
+      keysToTranslate = keysToTranslate.concat(
+          ["change_font_family", "change_font_size", "format_bold", "format_italic", "format_underline",
+           "format_strikethrough", "remove_format", "align_left", "align_center", "align_right", "align_justify",
+           "indent_more", "indent_less", "insert_ordered_list", "insert_unordered_list", "undo", "redo"]);
       return keysToTranslate;
     },
 
@@ -659,8 +672,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       uploadForm.setAppearance("upload-form");
       uploadForm.setLayout(new qx.ui.layout.VBox(10));
 
-      var uploadField = new uploadwidget.UploadField('uploadFile', 'Select File',
-          'org/jspresso/framework/cloud_upload.svg');
+      var uploadField = new uploadwidget.UploadField('uploadFile', 'Select File', 'org/jspresso/framework/cloud_upload.svg');
       uploadForm.add(uploadField);
 
       uploadDialog.add(uploadForm, {flex: 1});
