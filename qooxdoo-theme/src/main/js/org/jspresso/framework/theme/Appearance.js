@@ -122,8 +122,19 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           }
         },
 
+        "button-frame/label" : {
+          base: true,
+          style : function(states)
+          {
+            return {
+              textColor : states.disabled ? "text-disabled" : "button-text"
+            };
+          }
+        },
+
         "button": {
           base: true,
+          alias: "button-frame",
           include: "button-frame",
           style: function (states, superStyles) {
             return {
@@ -136,6 +147,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
 
         "selectbox": {
           base: true,
+          alias: "button-frame",
           include: "button-frame",
           style: function (states) {
             return {
@@ -355,6 +367,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         "splitbutton/button": {
           base: true,
           include: "button-frame",
+          alias: "button-frame",
           style: function (states, superStyles) {
             return {
               padding: states.hovered ? [1, 1] : [2, 2],
@@ -534,7 +547,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
             }
 
             return {
-              textColor: states.disabled ? "tab-disabled-text" : states.checked ? "header-text-selected" : "tab-disabled-text",
+              textColor: states.disabled ? "tab-disabled-text" : states.checked ? "tab-text" : "tab-disabled-text",
               backgroundColor: states.checked ? "app-background" : "tab-disabled",
               padding: padding,
               font: states.disabled ? undefined : states.checked ? "bold" : undefined,
@@ -634,7 +647,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             return {
               font: "header",
-              textColor: "header-text",
+              textColor: "application-title",
               alignY: "middle"
             };
           }
