@@ -18,7 +18,7 @@ qx.Theme.define("org.jspresso.framework.theme.Color",
 
       colors: {
         "dark-blue": "#199CD0",
-        "selection-blue": "#2F65CA",
+        "selection-blue": "#116CD6",
 
         "dark-grey": "#3D3D3D",
         "dark-medium-dark-grey": "#575757",
