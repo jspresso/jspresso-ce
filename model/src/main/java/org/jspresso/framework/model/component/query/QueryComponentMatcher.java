@@ -238,7 +238,10 @@ public class QueryComponentMatcher {
           String regex = (String) v;
           regex = regex.replaceAll("%", ".*");
           regex = regex.replaceAll("_", ".");
-          regex += ".*";
+          if (!regex.contains(IQueryComponent.CONJUNCT) && !regex.contains(IQueryComponent.DISJUNCT) && !regex.contains(
+              IQueryComponent.NOT_VAL) && !regex.contains(IQueryComponent.NULL_VAL)) {
+            regex += ".*";
+          }
           if (matchesMiddle) {
             regex = ".*" + regex;
           }
