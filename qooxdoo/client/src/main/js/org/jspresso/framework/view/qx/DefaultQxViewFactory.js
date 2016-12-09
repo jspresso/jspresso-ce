@@ -2203,7 +2203,21 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       }
       table.setShowCellFocusIndicator(true);
       var paneScroller = table.getPaneScroller(0);
+      var columnModel = table.getTableColumnModel();
+      var paneModel = paneScroller.getTablePaneModel();
       var focusIndicator = paneScroller.getChildControl("focus-indicator");
+      focusIndicator.addListener("move", function(e) {
+        var firstRow = paneScroller.getTablePane().getFirstVisibleRow();
+        var rowHeight = table.getRowHeight();
+        var row = this.getRow();
+        var col = this.getColumn();
+        this.setUserBounds(
+          paneModel.getColumnLeft(col),
+          (row - firstRow) * rowHeight,
+          columnModel.getColumnWidth(col),
+          rowHeight
+        );
+      });
       focusIndicator.addListener("pointerdown", function (e) {
         if (!this.__isFocusedCellWritable(table)) {
           focusIndicator.setZIndex(0);
@@ -2233,7 +2247,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         }
       }, table);
       var dynamicStylesIndices = {};
-      var columnModel = table.getTableColumnModel();
       var hasFocusGainedAction = false;
       for (var i = 0; i < remoteTable.getColumnIds().length; i++) {
         dynamicStylesIndices[i] = [];
@@ -2534,12 +2547,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           var columnIds = [];
           var columnWidths = [];
           var columnVisibilities = [];
-          for (var ci = 0; ci < table.getTableColumnModel().getOverallColumnCount(); ci++) {
-            columnIds.push(table.getTableModel().getColumnId(table.getTableColumnModel().getOverallColumnAtX(ci)));
+          for (var ci = 0; ci < columnModel.getOverallColumnCount(); ci++) {
+            columnIds.push(table.getTableModel().getColumnId(columnModel.getOverallColumnAtX(ci)));
             columnWidths.push(
-                table.getTableColumnModel().getColumnWidth(table.getTableColumnModel().getOverallColumnAtX(ci)));
+                columnModel.getColumnWidth(columnModel.getOverallColumnAtX(ci)));
             columnVisibilities.push(
-                table.getTableColumnModel().isColumnVisible(table.getTableColumnModel().getOverallColumnAtX(ci)))
+                columnModel.isColumnVisible(columnModel.getOverallColumnAtX(ci)))
           }
           notificationCommand.setColumnIds(columnIds);
           notificationCommand.setColumnWidths(columnWidths);
@@ -2548,9 +2561,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           this._getCommandHandler().registerCommand(notificationCommand);
         };
 
-        table.getTableColumnModel().addListener("widthChanged", notifyTableChanged, this);
-        table.getTableColumnModel().addListener("orderChanged", notifyTableChanged, this);
-        table.getTableColumnModel().addListener("visibilityChanged", notifyTableChanged, this);
+        columnModel.addListener("widthChanged", notifyTableChanged, this);
+        columnModel.addListener("orderChanged", notifyTableChanged, this);
+        columnModel.addListener("visibilityChanged", notifyTableChanged, this);
       }
       return table;
     },

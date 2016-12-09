@@ -146,6 +146,14 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
           }
         },
 
+        "table-scroller-focus-indicator": {
+          style: {
+            radius: 2,
+            width: 1,
+            color: "table-focus-indicator"
+          }
+        },
+
         "panel-box-top-angled": {
           include: "panel-box",
           style: {

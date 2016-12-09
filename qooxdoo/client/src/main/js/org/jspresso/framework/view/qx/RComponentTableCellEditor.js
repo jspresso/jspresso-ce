@@ -83,6 +83,13 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
         this.__rComponent.setFocusGainedAction(focusGainedAction);
       }
       editorWidget.setMargin(0);
+      if (this.__rComponent instanceof org.jspresso.framework.gui.remote.RActionField) {
+        editorWidget.setPadding(0);
+        var componentsToStyle = editorWidget.getUserData("componentsToStyle");
+        if (componentsToStyle && componentsToStyle.length > 0) {
+          componentsToStyle[0].setMargin(0);
+        }
+      }
       editorWidget.addListener("disappear", this.__cleanCurrentCellBinding, this);
       state.addListenerOnce("changeValue", function (e) {
         if (e.getData() === null) {
@@ -104,7 +111,6 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
       editor = new qx.ui.container.Composite(layout).set({
         focusable: true
       });
-      editor.setPadding(1);
       if (editorWidget instanceof qx.ui.form.CheckBox) {
         editorWidget.addListenerOnce("appear", function (e) {
           editorWidget.setValue(!editorWidget.getValue());

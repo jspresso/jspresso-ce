@@ -17,8 +17,8 @@ qx.Theme.define("org.jspresso.framework.theme.Color",
       extend: qx.theme.simple.Color,
 
       colors: {
-        "dark-blue": "#199CD0",
-        "selection-blue": "#116CD6",
+        "our-blue": "#00A4DE",
+        "selection-blue": "#1F5EB3",
 
         "dark-grey": "#3D3D3D",
         "dark-medium-dark-grey": "#575757",
@@ -47,7 +47,7 @@ qx.Theme.define("org.jspresso.framework.theme.Color",
 
         "label": "dark-medium-dark-grey",
 
-        "default-focused-border": "dark-blue",
+        "default-focused-border": "our-blue",
         "textfield-focused-border": "default-focused-border",
         "checkbox-border": "default-focused-border",
         "header-cell-border": "transparent",
@@ -82,7 +82,7 @@ qx.Theme.define("org.jspresso.framework.theme.Color",
         "section-header-text": "app-foreground",
         "panel-header-text": "medium-dark-grey",
 
-        "window-caption-background": "dark-blue",
+        "window-caption-background": "our-blue",
         "window-border": "light-grey",
         "window-border-inner": "super-light-grey",
 
