@@ -82,6 +82,7 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
       } finally {
         this.__rComponent.setFocusGainedAction(focusGainedAction);
       }
+      editorWidget.setMargin(0);
       editorWidget.addListener("disappear", this.__cleanCurrentCellBinding, this);
       state.addListenerOnce("changeValue", function (e) {
         if (e.getData() === null) {
