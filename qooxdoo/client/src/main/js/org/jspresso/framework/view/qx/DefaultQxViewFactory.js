@@ -2207,16 +2207,15 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var paneModel = paneScroller.getTablePaneModel();
       var focusIndicator = paneScroller.getChildControl("focus-indicator");
       focusIndicator.addListener("move", function(e) {
-        var firstRow = paneScroller.getTablePane().getFirstVisibleRow();
-        var rowHeight = table.getRowHeight();
         var row = this.getRow();
         var col = this.getColumn();
-        this.setUserBounds(
-          paneModel.getColumnLeft(col),
-          (row - firstRow) * rowHeight,
-          columnModel.getColumnWidth(col),
-          rowHeight
-        );
+        if (row != null && col != null && row >= 0 && col >= 0) {
+          var firstRow = paneScroller.getTablePane().getFirstVisibleRow();
+          var rowHeight = table.getRowHeight();
+          var focusedColumnLeft = paneModel.getColumnLeft(col);
+          var focusedColumnWidth = columnModel.getColumnWidth(col);
+          this.setUserBounds(focusedColumnLeft, (row - firstRow) * rowHeight, focusedColumnWidth, rowHeight);
+        }
       });
       focusIndicator.addListener("pointerdown", function (e) {
         if (!this.__isFocusedCellWritable(table)) {
