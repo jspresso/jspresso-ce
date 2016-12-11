@@ -2013,6 +2013,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var state = remoteActionField.getState();
       var modelController = new qx.data.controller.Object(state);
       var mainAction = remoteActionField.getActionLists()[0].getActions()[0];
+      var mainButton = actionField.getLayoutChildren()[1];
       if (textField) {
         actionField.setUserData("componentsToStyle", [textField]);
         // propagate focus
@@ -2038,6 +2039,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           textField.setReadOnly(true);
         }
         var triggerAction = function (e) {
+          if (e instanceof qx.event.type.Focus && e.getRelatedTarget() == mainButton) {
+            // The main button will trigger the action
+            textField.setValue(state.getValue());
+            return;
+          }
           var content = textField.getValue();
           if (content && content.length > 0) {
             if (content != state.getValue()) {
