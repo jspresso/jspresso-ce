@@ -2001,7 +2001,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           textField.setReadOnly(true);
         }
         var triggerAction = function (e) {
-          if (e instanceof qx.event.type.Focus && actionField.getLayoutChildren().indexOf(e.getRelatedTarget()) >= 0) {
+          if (e instanceof qx.event.type.Focus && actionField.indexOf(e.getRelatedTarget()) >= 0) {
             // The main button will trigger the action
             textField.setValue(state.getValue());
             return;
