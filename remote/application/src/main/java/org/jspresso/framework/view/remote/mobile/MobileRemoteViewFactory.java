@@ -40,7 +40,6 @@ import org.jspresso.framework.gui.remote.RCardContainer;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RForm;
 import org.jspresso.framework.gui.remote.RImageComponent;
-import org.jspresso.framework.gui.remote.RLabel;
 import org.jspresso.framework.gui.remote.RList;
 import org.jspresso.framework.gui.remote.RMap;
 import org.jspresso.framework.gui.remote.RTabContainer;
@@ -78,10 +77,6 @@ import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
-import org.jspresso.framework.view.descriptor.EBorderType;
-import org.jspresso.framework.view.descriptor.EHorizontalPosition;
-import org.jspresso.framework.view.descriptor.ELabelPosition;
-import org.jspresso.framework.view.descriptor.EPosition;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
@@ -758,23 +753,21 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     if (imagePropertyView.getPeer() instanceof RMobileImageComponent) {
       ((RMobileImageComponent) imagePropertyView.getPeer()).setSubmitUrl(RemotePeerRegistryServlet.computeUploadUrl(
           ((IRemotePeer) imagePropertyView.getConnector()).getGuid()));
-      if (imagePropertyView.getPeer() instanceof RImageCanvas) {
-        Integer scaledWidth = ((IImageViewDescriptor) propertyViewDescriptor).getScaledWidth();
-        Integer scaledHeight = ((IImageViewDescriptor) propertyViewDescriptor).getScaledHeight();
-        if (scaledWidth == null) {
-          if (scaledHeight == null) {
-            scaledWidth = 300;
-          } else {
-            scaledWidth = scaledHeight;
-          }
-        }
+      Integer scaledWidth = ((IImageViewDescriptor) propertyViewDescriptor).getScaledWidth();
+      Integer scaledHeight = ((IImageViewDescriptor) propertyViewDescriptor).getScaledHeight();
+      if (scaledWidth == null) {
         if (scaledHeight == null) {
-          scaledHeight = scaledWidth;
+          scaledWidth = 300;
+        } else {
+          scaledWidth = scaledHeight;
         }
-        ((RImageCanvas) imagePropertyView.getPeer()).setDrawingSize(new Dimension(scaledWidth, scaledHeight));
-        ((RImageCanvas) imagePropertyView.getPeer()).setFormatName(
-            ((IImageBinaryPropertyDescriptor) propertyViewDescriptor.getModelDescriptor()).getFormatName());
       }
+      if (scaledHeight == null) {
+        scaledHeight = scaledWidth;
+      }
+      ((RMobileImageComponent) imagePropertyView.getPeer()).setImageSize(new Dimension(scaledWidth, scaledHeight));
+      ((RMobileImageComponent) imagePropertyView.getPeer()).setFormatName(
+          ((IImageBinaryPropertyDescriptor) propertyViewDescriptor.getModelDescriptor()).getFormatName());
     }
     return imagePropertyView;
   }

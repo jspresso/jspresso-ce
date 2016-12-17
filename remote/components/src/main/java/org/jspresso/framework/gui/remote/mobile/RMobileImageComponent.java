@@ -19,6 +19,7 @@
 package org.jspresso.framework.gui.remote.mobile;
 
 import org.jspresso.framework.gui.remote.RImageComponent;
+import org.jspresso.framework.util.gui.Dimension;
 
 /**
  * A remote mobile image component.
@@ -29,7 +30,9 @@ public class RMobileImageComponent extends RImageComponent {
 
   private static final long serialVersionUID = -8099319637631348345L;
 
-  private String submitUrl;
+  private String    submitUrl;
+  private Dimension imageSize;
+  private String    formatName;
 
   /**
    * Constructs a new {@code RMobileImageComponent} instance.
@@ -61,9 +64,48 @@ public class RMobileImageComponent extends RImageComponent {
   /**
    * Sets submit url.
    *
-   * @param submitUrl the submit url
+   * @param submitUrl
+   *     the submit url
    */
   public void setSubmitUrl(String submitUrl) {
     this.submitUrl = submitUrl;
+  }
+
+  /**
+   * Gets image size.
+   *
+   * @return the image size
+   */
+  public Dimension getImageSize() {
+    return imageSize;
+  }
+
+  /**
+   * Sets image size.
+   *
+   * @param imageSize
+   *     the image size
+   */
+  public void setImageSize(Dimension imageSize) {
+    this.imageSize = imageSize;
+  }
+
+  /**
+   * Gets format name.
+   *
+   * @return the format name
+   */
+  public String getFormatName() {
+    return formatName;
+  }
+
+  /**
+   * Sets format name.
+   *
+   * @param formatName
+   *     the format name
+   */
+  public void setFormatName(String formatName) {
+    this.formatName = formatName;
   }
 }
