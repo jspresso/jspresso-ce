@@ -27,6 +27,14 @@ qx.Class.define("org.jspresso.framework.gui.remote.mobile.RMobileImageComponent"
   properties: {
     submitUrl: {
       check: "String"
+    },
+    formatName: {
+      check: "String",
+      nullable: true
+    },
+    imageSize: {
+      check: "org.jspresso.framework.util.gui.Dimension",
+      nullable: true
     }
   }
 

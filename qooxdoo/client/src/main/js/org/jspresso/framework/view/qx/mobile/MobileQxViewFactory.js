@@ -2215,7 +2215,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var state = remoteImagePicker.getState();
       var imageChooser = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
       var imagePickerBar = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox());
-      var imagePicker = new org.jspresso.framework.view.qx.mobile.ImagePicker(remoteImagePicker.getSubmitUrl(), remoteImagePicker.getLabel());
+      var imagePicker = new org.jspresso.framework.view.qx.mobile.ImagePicker(remoteImagePicker.getSubmitUrl(),
+          remoteImagePicker.getLabel(), remoteImagePicker.getImageSize(), remoteImagePicker.getFormatName());
       imagePicker.addCssClass("jspresso-even-width");
       var clearButton = new qx.ui.mobile.form.Button(this._getActionHandler().translate("Clear"));
       clearButton.addListener("tap", function (e) {
@@ -2244,12 +2245,38 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         var imageData = e.getData();
         syncPicker.call(this, imageData);
       }, this);
-      imagePicker.addListener("imagePicked", function () {
+      imagePicker.addListener("imagePicked", function (imagePickedEvent) {
+/*
         this._getActionHandler().showBusy(true);
-        qx.event.Timer.once(function () {
-          this._getActionHandler().refresh();
+
+        var req = new qx.io.remote.Request(remoteImagePicker.getSubmitUrl(), "POST");
+        req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+        // Adding data to the request body
+        //req.setData(imagePickedEvent.getData()['url']);
+        req.setParameter("data", imagePickedEvent.getData()['url'], true);
+
+        // Force to testing iframe implementation
+        //req.setCrossDomain(true);
+
+        var onSuccess = function (e) {
+          qx.event.Timer.once(function () {
+            this._getActionHandler().refresh();
+          }, this, 1000);
           this._getActionHandler().showBusy(false);
-        }, this, 2000);
+        };
+        req.addListener("completed", onSuccess, this);
+        var onError = function (e) {
+          this._getActionHandler().showBusy(false);
+        };
+        req.addListener("aborted", onError, this);
+        req.addListener("failed", onError, this);
+        req.addListener("timeout", onError, this);
+
+        // Sending
+        req.send();
+*/
+        state.setValue(imagePickedEvent.getData()['url']);
       }, this);
       syncPicker.call(this, state.getValue());
       return imageChooser;
@@ -2261,8 +2288,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createImageCanvas: function (remoteImageCanvas) {
       var height;
-      var imageCanvas = new org.jspresso.framework.view.qx.mobile.ImageCanvas(remoteImageCanvas.getDrawingSize(), this._getActionHandler().translate(
-          "Clear"));
+      var imageCanvas = new org.jspresso.framework.view.qx.mobile.ImageCanvas(remoteImageCanvas.getImageSize(),
+          this._getActionHandler().translate("Clear"));
       imageCanvas.addCssClass("jspresso-image-canvas");
       var state = remoteImageCanvas.getState();
       state.addListener("changeValue", function (e) {

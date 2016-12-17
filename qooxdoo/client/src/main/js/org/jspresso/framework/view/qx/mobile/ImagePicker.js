@@ -37,12 +37,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImagePicker", {
   /**
    * @param submitUrl {String}
    * @param label {String} button label
-   * @param icon {String} icon path
+   * @param imageSize {org.jspresso.framework.util.gui.Dimension} image size
+   * @param formatName {String} format name
    */
 
-  construct: function (submitUrl, label, icon) {
-    this.base(arguments, label, icon);
-
+  construct: function (submitUrl, label, imageSize, formatName) {
+    this.base(arguments, label);
+    this.__imageSize = imageSize;
+    this.__formatName = formatName;
     this.__formEl = this._createForm(submitUrl);
     this.addListenerOnce('appear', function () {
       this.getContentElement().appendChild(this.__formEl);
@@ -54,7 +56,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImagePicker", {
   // --------------------------------------------------------------------------
 
   events: {
-    "imagePicked": "qx.event.type.Event"
+    "imagePicked": "qx.event.type.Data"
   },
 
   // --------------------------------------------------------------------------
@@ -64,6 +66,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImagePicker", {
   members: {
 
     __formEl: null,
+    __imageSize: null,
+    __formatName: null,
 
     // ------------------------------------------------------------------------
     // [Modifiers]
@@ -98,7 +102,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImagePicker", {
       // font so large that it will cover even really large underlying buttons.
       var css = {
         //position: "absolute",
-        cursor: "pointer",
+        //cursor: "pointer",
         hideFocus: "true",
         opacity: 0,
         top: '0px',
@@ -119,9 +123,87 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImagePicker", {
         capture: 'camera'
       });
       qx.bom.element.Style.setStyles(input, css, true);
+      var that = this;
       qx.event.Registration.addListener(input, "change", function (e) {
-        this.__formEl.submit();
-        this.fireEvent("imagePicked");
+        // Read in file
+        var file = event.target.files[0];
+
+        // Ensure it's an image
+        if (file.type.match(/image.*/)) {
+          //console.log('An image has been loaded');
+
+          // Load the image
+          var reader = new FileReader();
+          reader.onload = function (readerEvent) {
+            var image = new Image();
+            image.onload = function (imageEvent) {
+
+              // Resize the image
+              var canvas = document.createElement('canvas'),
+                  width = image.width, height = image.height;
+              var maxWidth = 600;
+              var maxHeight = 600;
+              if (that.__imageSize) {
+                if (that.__imageSize.getWidth()) {
+                  maxWidth = that.__imageSize.getWidth();
+                }
+                if (that.__imageSize.getHeight()) {
+                  maxHeight = that.__imageSize.getHeight();
+                }
+              }
+              if (width > maxWidth) {
+                height *= maxWidth / width;
+                width = maxWidth;
+              }
+              if (height > maxHeight) {
+                width *= maxHeight / height;
+                height = maxHeight;
+              }
+              canvas.width = width;
+              canvas.height = height;
+              canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+              var formatName = that.__formatName;
+              if (!formatName) {
+                formatName = "jpeg";
+              }
+              var dataUrl = canvas.toDataURL("image/" + formatName);
+              //var dataUrl = canvas.toDataURL('image/png');
+
+              /* Utility function to convert a canvas to a BLOB */
+              var dataURLToBlob = function (dataURL) {
+                var BASE64_MARKER = ';base64,';
+                if (dataURL.indexOf(BASE64_MARKER) == -1) {
+                  var parts = dataURL.split(',');
+                  var contentType = parts[0].split(':')[1];
+                  var raw = parts[1];
+
+                  return new Blob([raw], {type: contentType});
+                }
+
+                var parts = dataURL.split(BASE64_MARKER);
+                var contentType = parts[0].split(':')[1];
+                var raw = window.atob(parts[1]);
+                var rawLength = raw.length;
+
+                var uInt8Array = new Uint8Array(rawLength);
+
+                for (var i = 0; i < rawLength; ++i) {
+                  uInt8Array[i] = raw.charCodeAt(i);
+                }
+                return new Blob([uInt8Array], {type: contentType});
+              };
+              var resizedImage = dataURLToBlob(dataUrl);
+              that.fireDataEvent("imagePicked", {
+                blob: resizedImage,
+                url: dataUrl
+              });
+            };
+            image.src = readerEvent.target.result;
+          };
+          reader.readAsDataURL(file);
+        }
+        //this.__formEl.submit();
+        this.fireEvent();
       }, this);
       return input;
     },
@@ -132,9 +214,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImagePicker", {
         'margin-top': '-30px'
       };
       form = qx.dom.Element.create('form', {
-        method: 'post',
-        action: submitUrl,
-        enctype: 'multipart/form-data',
+        // method: 'post',
+        // action: submitUrl,
+        // enctype: 'multipart/form-data',
         target: this._createIFrameTarget()
       });
       qx.bom.element.Style.setStyles(form, css, true);

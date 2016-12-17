@@ -18,8 +18,6 @@
  */
 package org.jspresso.framework.gui.remote.mobile;
 
-import org.jspresso.framework.util.gui.Dimension;
-
 /**
  * A remote mobile image canvas to draw to.
  *
@@ -28,8 +26,6 @@ import org.jspresso.framework.util.gui.Dimension;
 public class RImageCanvas extends RMobileImageComponent {
 
   private static final long serialVersionUID = 8536899990104146329L;
-  private Dimension drawingSize;
-  private String formatName;
 
   /**
    * Constructs a new {@code RImageCanvas} instance.
@@ -49,39 +45,4 @@ public class RImageCanvas extends RMobileImageComponent {
     // For serialization support
   }
 
-  /**
-   * Gets drawing size.
-   *
-   * @return the drawing size
-   */
-  public Dimension getDrawingSize() {
-    return drawingSize;
-  }
-
-  /**
-   * Sets drawing size.
-   *
-   * @param drawingSize the drawing size
-   */
-  public void setDrawingSize(Dimension drawingSize) {
-    this.drawingSize = drawingSize;
-  }
-
-  /**
-   * Gets format name.
-   *
-   * @return the format name
-   */
-  public String getFormatName() {
-    return formatName;
-  }
-
-  /**
-   * Sets format name.
-   *
-   * @param formatName the format name
-   */
-  public void setFormatName(String formatName) {
-    this.formatName = formatName;
-  }
 }

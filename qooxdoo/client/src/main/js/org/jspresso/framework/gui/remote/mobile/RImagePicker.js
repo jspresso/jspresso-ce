@@ -22,9 +22,6 @@ qx.Class.define("org.jspresso.framework.gui.remote.mobile.RImagePicker", {
 
   construct: function () {
     this.base(arguments);
-  },
-
-  properties: {
   }
 
 });

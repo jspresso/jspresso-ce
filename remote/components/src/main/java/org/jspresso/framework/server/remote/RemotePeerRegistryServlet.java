@@ -248,7 +248,7 @@ public class RemotePeerRegistryServlet extends HttpServlet {
       byte[] content;
       if ("application/x-www-form-urlencoded".equals(request.getContentType())) {
         String data = request.getParameter("data");
-        content = Base64.decodeBase64(data);
+        content = ImageHelper.fromBase64Src(data);
       } else {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         OutputStream out = new BufferedOutputStream(baos);
