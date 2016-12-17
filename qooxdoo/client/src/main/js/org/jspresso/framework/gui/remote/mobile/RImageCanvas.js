@@ -35,17 +35,6 @@ qx.Class.define("org.jspresso.framework.gui.remote.mobile.RImageCanvas", {
 
   construct: function () {
     this.base(arguments);
-  },
-
-  properties: {
-    drawingSize: {
-      check: "org.jspresso.framework.util.gui.Dimension",
-      nullable: false
-    },
-    formatName: {
-      check: "String",
-      nullable: true
-    }
   }
 
 });
