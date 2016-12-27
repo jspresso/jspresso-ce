@@ -1,3 +1,142 @@
+4.3
+===
+- In order to ease load testing (see #240) , in your javascript code, replace all references to :
+      qx.io.remote.Rpc
+    by
+      org.jspresso.framework.io.Rpc
+
+- In order to implement https://github.com/jspresso/jspresso-ce/issues/187, the org.jspresso.framework.action.IAction
+  interface now extends org.jspresso.framework.util.exception.IExceptionHandler. This shuld not require any modification
+  to existing code unless you directly implement org.jspresso.framework.action.IAction without inheriting
+  org.jspresso.framework.application.action.AbstractAction. In the latter case, you have now to implement the method
+  public boolean handleException(Throwable ex, Map<String, Object> context)
+
+- Jetty maven plugin changed its groupId. In the root pom.xml of your project, replace :
+
+    <groupId>org.mortbay.jetty</groupId>
+  by
+    <groupId>org.eclipse.jetty</groupId>
+
+- Rename all your sjs files from .sjs to .groovy and update your application.groovy content to reflect this change.
+
+- JasperReports plugin changed from codehaus to to alexnederlof
+  (https://github.com/alexnederlof/Jasper-report-maven-plugin).
+
+  Replace your JasperReports compilation section in core/pom.xml by the following one :
+      <plugin>
+        <groupId>com.alexnederlof</groupId>
+        <artifactId>jasperreports-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>jasper</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <outputDirectory>${project.build.directory}/generated-resources/jasperreports</outputDirectory>
+        </configuration>
+      </plugin>
+
+- Flex has been upgraded to the latest 4.15 version. If necessary in your project, change all dependencies :
+
+  from
+      <dependency>
+        <groupId>org.apache.flex.framework</groupId>
+        <artifactId>flex-framework</artifactId>
+        <type>pom</type>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.flex.framework</groupId>
+        <artifactId>framework</artifactId>
+        <type>swc</type>
+        <scope>external</scope>
+      </dependency>
+  to
+      <dependency>
+        <groupId>org.apache.flex</groupId>
+        <artifactId>framework</artifactId>
+        <type>pom</type>
+      </dependency>
+      <dependency>
+        <groupId>com.adobe.flash</groupId>
+        <artifactId>framework</artifactId>
+        <type>pom</type>
+      </dependency>
+
+- We have moved to Apache BlazeDS implementation, so replace all blazeds dependencies sections in your webapp modules
+  by the following one :
+      <dependency>
+        <groupId>org.apache.flex.blazeds</groupId>
+        <artifactId>flex-messaging-remoting</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.flex.blazeds</groupId>
+        <artifactId>flex-messaging-proxy</artifactId>
+      </dependency>
+
+- Flex davisualization dependency management has been removed. Most of the time, you should be able to safely delete
+  them. However, whenever necessary, use the following dependencies in your projects Flex modules :
+      <dependency>
+        <groupId>org.apache.flex.framework</groupId>
+        <artifactId>advancedgrids</artifactId>
+        <type>swc</type>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.flex.framework</groupId>
+        <artifactId>charts</artifactId>
+        <type>swc</type>
+      </dependency>
+
+- Migrated to jfreechart 1.0.19. The artifact groupId changed so replace :
+      <dependency>
+        <groupId>jfree</groupId>
+        <artifactId>jfreechart</artifactId>
+      </dependency>
+  by
+      <dependency>
+        <groupId>org.jfree</groupId>
+        <artifactId>jfreechart</artifactId>
+      </dependency>
+
+- Migrated to log4j 2.4.1. If you want to migrate your projects too, log4j and log4j-slf4j binding dependencies
+  should be replaced (keep the scopes) :
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+    </dependency>
+  by
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-slf4j-impl</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+    </dependency>
+
+  Note that Log4j 2.x does not support properties configuration files anymore and that the configuration file should be
+  named log4j2.xml. Please read :
+    https://logging.apache.org/log4j/2.x/manual/configuration.html
+    https://logging.apache.org/log4j/2.x/manual/migration.html
+
+- All slf4j (e.g. slf4j-log4j12, log4j) binding dependencies have been removed from the framework. Only the api
+  dependency remains. This means that, depending on the actual logging framework to use (e.g. log4j), the corresponding
+  slf4j binding must be provided either as a project dependency or as a runtime dependency (e.g. provided by the
+  application server).
+
+- commons-lang dependency management has been removed from the root pom in favor of commons-lang3.
+
+
+4.2
+===
+
 4.1
 ===
 - We have migrated to Apache DBCP2.
