@@ -1,5 +1,10 @@
 4.3
 ===
+- In order to ease load testing (see #240) , in your javascript code, replace all references to :
+      qx.io.remote.Rpc
+    by
+      org.jspresso.framework.io.Rpc
+
 - In order to implement https://github.com/jspresso/jspresso-ce/issues/187, the org.jspresso.framework.action.IAction
   interface now extends org.jspresso.framework.util.exception.IExceptionHandler. This shuld not require any modification
   to existing code unless you directly implement org.jspresso.framework.action.IAction without inheriting
