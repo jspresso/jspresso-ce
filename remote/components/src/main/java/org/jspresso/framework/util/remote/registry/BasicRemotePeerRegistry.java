@@ -64,7 +64,7 @@ public class BasicRemotePeerRegistry implements IRemotePeerRegistry {
     automationBackingStore = new ReferenceMap(AbstractReferenceMap.ReferenceStrength.WEAK,
         AbstractReferenceMap.ReferenceStrength.WEAK, true);
     automationIndices = new HashMap<>();
-    setAutomationEnabled(false);
+    setAutomationEnabled(true);
   }
 
   /**
