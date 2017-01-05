@@ -30,7 +30,9 @@ qx.Class.define("org.jspresso.framework.io.Rpc", {
   statics: {
     makeServerURL: function (instanceId) {
       var retVal = qx.io.remote.Rpc.makeServerURL(instanceId);
-      retVal = retVal.replace(/;jsessionid=[^;]*/g, "");
+      if (retVal) {
+        retVal = retVal.replace(/;jsessionid=[^;]*/g, "");
+      }
       return retVal;
     }
 
