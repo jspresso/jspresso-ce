@@ -19,6 +19,10 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
 
   type: "abstract",
 
+  statics: {
+    __BUTTON_THRESHOLD: 500
+  },
+
   construct: function (remotePeerRegistry, actionHandler, commandHandler) {
     this.__remotePeerRegistry = remotePeerRegistry;
     this.__actionHandler = actionHandler;
