@@ -23,7 +23,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
   type: "abstract",
 
   statics: {
-    __BUTTON_THRESHOLD: 500
+    __TAP_THRESHOLD: 500
   },
 
   construct: function (remotePeerRegistry, actionHandler, commandHandler) {
@@ -391,6 +391,19 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
 
     _readOnlyFieldConverter: function (writable, model) {
       return !writable;
+    },
+
+    addComponentThresholdListener: function (component, type, listener, that) {
+      component.addListener(type, function (event) {
+        var b = event.getCurrentTarget();
+        var lastTimeStamp = b.getUserData("lastExecTimeStamp");
+        var eventTimeStamp = new Date().getTime();
+        if (lastTimeStamp == null || eventTimeStamp - lastTimeStamp
+            > org.jspresso.framework.view.qx.AbstractQxViewFactory.__TAP_THRESHOLD) {
+          listener.call(that, event);
+          b.setUserData("lastExecTimeStamp", eventTimeStamp);
+        }
+      }, that);
     },
 
     /**

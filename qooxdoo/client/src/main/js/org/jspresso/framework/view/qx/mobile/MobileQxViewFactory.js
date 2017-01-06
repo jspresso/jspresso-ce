@@ -1008,16 +1008,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @param that {var}
      */
     addButtonListener: function (button, listener, that) {
-      button.addListener("tap", function (event) {
-        var b = event.getCurrentTarget();
-        var lastTimeStamp = b.getUserData("lastExecTimeStamp");
-        var eventTimeStamp = new Date().getTime();
-        if (lastTimeStamp == null
-            || eventTimeStamp - lastTimeStamp > org.jspresso.framework.view.qx.AbstractQxViewFactory.__BUTTON_THRESHOLD) {
-          listener.call(that, event);
-          b.setUserData("lastExecTimeStamp", eventTimeStamp);
-        }
-      }, that);
+      this.addComponentThresholdListener(button, "tap", listener, that);
     },
 
     _addSectionHeader: function (container, remoteSection) {
@@ -2159,7 +2150,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       imageComponent.setSource(state.getValue());
       if (remoteImageComponent.getAction() != null) {
         this._getRemotePeerRegistry().register(remoteImageComponent.getAction());
-        imageComponent.addListener("tap", function (e) {
+        this.addComponentThresholdListener(imageComponent, "tap", function (e) {
           var actionEvent = new org.jspresso.framework.gui.remote.RImageActionEvent();
           var element = imageComponent.getContentElement();
           actionEvent.setWidth(element.width);
