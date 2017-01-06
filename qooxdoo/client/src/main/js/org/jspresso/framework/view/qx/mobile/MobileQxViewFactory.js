@@ -1008,7 +1008,16 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @param that {var}
      */
     addButtonListener: function (button, listener, that) {
-      button.addListener("tap", listener, that);
+      button.addListener("tap", function (event) {
+        var b = event.getCurrentTarget();
+        var lastTimeStamp = b.getUserData("lastExecTimeStamp");
+        var eventTimeStamp = new Date().getTime();
+        if (lastTimeStamp == null
+            || eventTimeStamp - lastTimeStamp > org.jspresso.framework.view.qx.AbstractQxViewFactory.__BUTTON_THRESHOLD) {
+          listener.call(that, event);
+          b.setUserData("lastExecTimeStamp", eventTimeStamp);
+        }
+      }, that);
     },
 
     _addSectionHeader: function (container, remoteSection) {
