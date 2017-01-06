@@ -18,16 +18,17 @@
  */
 package org.jspresso.framework.util.image;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
 import javaxt.io.Image;
-
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.jspresso.framework.util.io.IoHelper;
 import org.jspresso.framework.util.url.UrlHelper;
 
 /**
@@ -61,7 +62,8 @@ public final class ImageHelper {
    */
   public static byte[] scaleImage(Object originalImageInput, Integer width, Integer height, String targetFormatName)
       throws IOException {
-    Image image = createImage(originalImageInput);
+    byte[] imageBytes = extractImageBytes(originalImageInput);
+    Image image = new Image(imageBytes);
     if (image == null) {
       if (originalImageInput instanceof byte[]) {
         LOG.warn("Received an invalid image content. Cannot transform so returning original content.");
@@ -75,15 +77,17 @@ public final class ImageHelper {
     int originalHeight = image.getHeight();
     if (width != null && height != null && width != originalWidth && height != originalHeight) {
       image.resize(width, height, true);
-    } else if (width != null && width != originalWidth) {
+    } else if (height == null && width != null && width != originalWidth) {
       image.setWidth(width);
-    } else if (height != null && height != originalHeight) {
+    } else if (width == null && height != null && height != originalHeight) {
       image.setHeight(height);
+    } else {
+      return imageBytes;
     }
     if (targetFormatName != null) {
       return image.getByteArray(targetFormatName);
     }
-    return image.getByteArray("png");
+    return image.getByteArray("JPEG");
   }
 
   /**
@@ -107,24 +111,31 @@ public final class ImageHelper {
   /**
    * Create image.
    *
-   * @param originalImageInput the original image input
+   * @param originalImageInput
+   *     the original image input
    * @return the image
-   * @throws IOException the iO exception
+   *
+   * @throws IOException
+   *     the iO exception
    */
-  public static Image createImage(Object originalImageInput) throws IOException {
-    Image image;
+  public static byte[] extractImageBytes(Object originalImageInput) throws IOException {
+    byte[] imageBytes;
     if (originalImageInput instanceof byte[]) {
-      image = new Image((byte[]) originalImageInput);
-    } else if (originalImageInput instanceof String) {
-      image = new Image(UrlHelper.createURL((String) originalImageInput).openStream());
-    } else if (originalImageInput instanceof URL) {
-      image = new Image(((URL) originalImageInput).openStream());
-    } else if (originalImageInput instanceof InputStream) {
-      image = new Image((InputStream) originalImageInput);
+      imageBytes = (byte[]) originalImageInput;
     } else {
-      throw new RuntimeException("Unsupported image input.");
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      if (originalImageInput instanceof String) {
+        IoHelper.copyStream(UrlHelper.createURL((String) originalImageInput).openStream(), baos);
+      } else if (originalImageInput instanceof URL) {
+        IoHelper.copyStream(((URL) originalImageInput).openStream(), baos);
+      } else if (originalImageInput instanceof InputStream) {
+        IoHelper.copyStream((InputStream) originalImageInput, baos);
+      } else {
+        throw new RuntimeException("Unsupported image input.");
+      }
+      imageBytes = baos.toByteArray();
     }
-    return image;
+    return imageBytes;
   }
 
   /**
@@ -136,7 +147,7 @@ public final class ImageHelper {
    * @throws IOException the iO exception
    */
   public static String toBase64Src(Object originalImageInput, String format) throws IOException {
-    Image img = createImage(originalImageInput);
+    Image img = new Image(extractImageBytes(originalImageInput));
     return "data:image/" + format + ";base64," + Base64.encodeBase64String(img.getByteArray(format));
   }
 
@@ -152,28 +163,17 @@ public final class ImageHelper {
 
 
   /**
-   * Load image from project's ressource path.
+   * Load image from project's resource path.
    * @param resourcePath The path to the resource.
    * @return the image as bytes.
-   * @throws IOException If ressource cannot be read.
+   * @throws IOException If resource cannot be read.
    */
   public static byte[] loadImage(String resourcePath) throws IOException {
-
-    if (!resourcePath.startsWith("/"))
+    if (!resourcePath.startsWith("/")) {
       resourcePath = "/" + resourcePath;
-
-    InputStream is = null;
-    try {
-      is = ImageHelper.class.getResourceAsStream(resourcePath);
-      Image im = ImageHelper.createImage(is);
-      return im.getByteArray();
-    } finally {
-      if (is!=null)
-        try {
-          is.close();
-        } catch (IOException e) {
-          return null;
-        }
+    }
+    try (InputStream is =ImageHelper.class.getResourceAsStream(resourcePath)){
+      return extractImageBytes(is);
     }
   }
 
