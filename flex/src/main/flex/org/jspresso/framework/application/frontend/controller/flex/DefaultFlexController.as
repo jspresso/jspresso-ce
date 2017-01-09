@@ -32,6 +32,7 @@ import flash.net.FileFilter;
 import flash.net.FileReference;
 import flash.net.URLRequest;
 import flash.net.navigateToURL;
+import flash.system.Capabilities;
 import flash.utils.getTimer;
 
 import mx.binding.utils.BindingUtils;
@@ -1260,6 +1261,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
       startCommand.timezoneOffset = new Date().timezoneOffset * (-60000);
       startCommand.version = JSPRESSO_VERSION;
       startCommand.clientType = "DESKTOP_FLEX";
+      startCommand.clientPlatform = Capabilities.playerType + ":" + Capabilities.version;
       operation.send(startCommand);
     } else {
       operation.send(_userLanguage, getKeysToTranslate(), new Date().timezoneOffset * (-60000));

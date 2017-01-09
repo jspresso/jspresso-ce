@@ -43,6 +43,7 @@ public class BasicApplicationSession implements IApplicationSession {
   private       TimeZone            timeZone;
   private       Subject             subject;
   private       EClientType         clientType;
+  private       String              clientPlatform;
 
   /**
    * Constructs a new {@code BasicApplicationSession} instance.
@@ -54,6 +55,10 @@ public class BasicApplicationSession implements IApplicationSession {
 
   /**
    * {@inheritDoc}
+   *
+   * @param key
+   *     the key
+   * @return the custom value
    */
   @Override
   public Object getCustomValue(String key) {
@@ -72,6 +77,8 @@ public class BasicApplicationSession implements IApplicationSession {
 
   /**
    * {@inheritDoc}
+   *
+   * @return the principal
    */
   @Override
   public UserPrincipal getPrincipal() {
@@ -97,6 +104,11 @@ public class BasicApplicationSession implements IApplicationSession {
 
   /**
    * {@inheritDoc}
+   *
+   * @param key
+   *     the key
+   * @param value
+   *     the value
    */
   @Override
   public void putCustomValue(String key, Object value) {
@@ -157,6 +169,8 @@ public class BasicApplicationSession implements IApplicationSession {
 
   /**
    * {@inheritDoc}
+   *
+   * @return the id
    */
   @Override
   public String getId() {
@@ -165,6 +179,8 @@ public class BasicApplicationSession implements IApplicationSession {
 
   /**
    * {@inheritDoc}
+   *
+   * @return the username
    */
   @Override
   public String getUsername() {
@@ -199,10 +215,32 @@ public class BasicApplicationSession implements IApplicationSession {
   /**
    * Sets client type.
    *
-   * @param clientType the client type
+   * @param clientType
+   *     the client type
    */
   @Override
   public void setClientType(EClientType clientType) {
     this.clientType = clientType;
+  }
+
+  /**
+   * Gets client platform.
+   *
+   * @return the client platform
+   */
+  @Override
+  public String getClientPlatform() {
+    return clientPlatform;
+  }
+
+  /**
+   * Sets client platform.
+   *
+   * @param clientPlatform
+   *     the client platform
+   */
+  @Override
+  public void setClientPlatform(String clientPlatform) {
+    this.clientPlatform = clientPlatform;
   }
 }
