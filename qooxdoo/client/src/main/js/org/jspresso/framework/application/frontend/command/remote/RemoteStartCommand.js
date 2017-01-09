@@ -37,6 +37,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
     clientType: {
       check: "String",
       nullable: true
+    },
+    clientPlatform: {
+      check: "String",
+      nullable: true
     }
   }
 
