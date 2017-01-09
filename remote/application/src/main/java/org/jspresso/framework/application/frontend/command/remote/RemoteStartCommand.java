@@ -32,6 +32,7 @@ public class RemoteStartCommand extends RemoteCommand {
   private String[] keysToTranslate;
   private String   version;
   private String   clientType;
+  private String   clientPlatform;
 
   /**
    * Gets the language.
@@ -46,7 +47,7 @@ public class RemoteStartCommand extends RemoteCommand {
    * Sets the language.
    *
    * @param language
-   *          the language to set.
+   *     the language to set.
    */
   public void setLanguage(String language) {
     this.language = language;
@@ -65,7 +66,7 @@ public class RemoteStartCommand extends RemoteCommand {
    * Sets the timezoneOffset.
    *
    * @param timezoneOffset
-   *          the timezoneOffset to set.
+   *     the timezoneOffset to set.
    */
   public void setTimezoneOffset(int timezoneOffset) {
     this.timezoneOffset = timezoneOffset;
@@ -84,7 +85,7 @@ public class RemoteStartCommand extends RemoteCommand {
    * Sets the keysToTranslate.
    *
    * @param keysToTranslate
-   *          the keysToTranslate to set.
+   *     the keysToTranslate to set.
    */
   public void setKeysToTranslate(String... keysToTranslate) {
     this.keysToTranslate = keysToTranslate;
@@ -103,7 +104,7 @@ public class RemoteStartCommand extends RemoteCommand {
    * Sets the version.
    * 
    * @param version
-   *          the version to set.
+   *     the version to set.
    */
   public void setVersion(String version) {
     this.version = version;
@@ -121,9 +122,29 @@ public class RemoteStartCommand extends RemoteCommand {
   /**
    * Sets client type.
    *
-   * @param clientType the client type
+   * @param clientType
+   *     the client type
    */
   public void setClientType(String clientType) {
     this.clientType = clientType;
+  }
+
+  /**
+   * Gets client platform.
+   *
+   * @return the client platform
+   */
+  public String getClientPlatform() {
+    return clientPlatform;
+  }
+
+  /**
+   * Sets client platform.
+   *
+   * @param clientPlatform
+   *     the client platform
+   */
+  public void setClientPlatform(String clientPlatform) {
+    this.clientPlatform = clientPlatform;
   }
 }

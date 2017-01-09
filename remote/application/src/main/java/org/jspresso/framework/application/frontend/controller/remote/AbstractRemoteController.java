@@ -329,6 +329,7 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
       if (((RemoteStartCommand) command).getClientType() != null) {
         getApplicationSession().setClientType(EClientType.valueOf(((RemoteStartCommand) command).getClientType()));
       }
+      getApplicationSession().setClientPlatform(((RemoteStartCommand) command).getClientPlatform());
       if (isLoginInteractive()) {
         registerCommand(createLocaleCommand());
         RemoteInitLoginCommand initLoginCommand = new RemoteInitLoginCommand();

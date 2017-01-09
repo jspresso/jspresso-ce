@@ -126,7 +126,23 @@ public interface IApplicationSession {
   /**
    * Sets the session client type.
    *
-   * @param clientType the client type
+   * @param clientType
+   *     the client type
    */
   void setClientType(EClientType clientType);
+
+  /**
+   * Gets the session client platform.
+   *
+   * @return the client platform
+   */
+  String getClientPlatform();
+
+  /**
+   * Sets the session client platform.
+   *
+   * @param clientPlatform
+   *     the client platform
+   */
+  void setClientPlatform(String clientPlatform);
 }

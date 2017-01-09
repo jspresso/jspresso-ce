@@ -24,6 +24,7 @@ public class RemoteStartCommand extends RemoteCommand {
   private var _keysToTranslate:Array;
   private var _version:String;
   private var _clientType:String;
+  private var _clientPlatform:String;
 
   public function RemoteStartCommand() {
     //default constructor.
@@ -68,6 +69,14 @@ public class RemoteStartCommand extends RemoteCommand {
 
   public function set clientType(value:String):void {
     _clientType = value;
+  }
+
+  public function get clientPlatform():String {
+    return _clientPlatform;
+  }
+
+  public function set clientPlatform(value:String):void {
+    _clientPlatform = value;
   }
 }
 }
