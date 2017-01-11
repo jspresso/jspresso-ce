@@ -38,7 +38,11 @@
       <groupId>chrriis</groupId>
       <artifactId>dj-nativeswing</artifactId>
     </dependency>
-    <dependency>
+		<dependency>
+			<groupId>org.eclipse</groupId>
+			<artifactId>swt</artifactId>
+		</dependency>
+		<dependency>
       <groupId>chrriis</groupId>
       <artifactId>dj-swingsuite</artifactId>
     </dependency>

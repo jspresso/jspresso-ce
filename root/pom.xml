@@ -60,6 +60,7 @@
     <foxtrot.version>4.0</foxtrot.version>
     <swingx.version>1.6.1</swingx.version>
     <dj-nativeswing.version>1.0.2.20120308</dj-nativeswing.version>
+    <swt.version>4.6.1</swt.version>
     <dj-swingsuite.version>0.9.1</dj-swingsuite.version>
     <nachocalendar.version>0.23</nachocalendar.version>
     <jedit-syntax.version>2.2.2</jedit-syntax.version>
@@ -288,8 +289,8 @@
       </snapshots>
     </repository>
     <repository>
-      <id>swt-repo</id>
-      <url>https://swt-repo.googlecode.com/svn/repo/</url>
+      <id>maven-eclipse-repo</id>
+      <url>http://maven-eclipse.github.io/maven</url>
       <releases>
         <enabled>true</enabled>
       </releases>
@@ -706,6 +707,17 @@
         <groupId>chrriis</groupId>
         <artifactId>dj-nativeswing</artifactId>
         <version>${dj-nativeswing.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.eclipse</groupId>
+            <artifactId>swt</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse</groupId>
+        <artifactId>swt</artifactId>
+        <version>${swt.version}</version>
       </dependency>
       <dependency>
         <groupId>chrriis</groupId>
