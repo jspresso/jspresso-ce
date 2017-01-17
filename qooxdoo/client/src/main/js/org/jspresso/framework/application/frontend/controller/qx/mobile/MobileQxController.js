@@ -62,6 +62,21 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     this.__busyPopup.setTitle(this.translate("Loading") + "...");
     this.__manager = this.__createManager();
     this.__routing = this.__createRouting();
+
+    this.__reconnectPage = new qx.ui.mobile.page.NavigationPage();
+    this.__reconnectPage.setTitle("Disconnected");
+    this.__reconnectPage.addListener("initialize", function (e) {
+      var content = this.__reconnectPage.getContent();
+      var disconnectionMessage = new qx.ui.mobile.form.Label(this.translate("reconnection.message"));
+      disconnectionMessage.addCssClasses(["jspresso-header-label"]);
+      content.add(disconnectionMessage);
+      var reconnectButton = this._getViewFactory().createButton(this.translate("Reconnect"));
+      this._getViewFactory().addButtonListener(reconnectButton, function (evt) {
+        this.start();
+      }, this);
+      content.add(reconnectButton);
+    }, this);
+    this.__applicationContainer.add(this.__reconnectPage);
   },
 
   members: {
@@ -101,6 +116,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     __savedCurrentPage: null,
     /** @type {boolean} */
     __animating: false,
+    /** @type {qx.ui.mobile.page.NavigationPage} */
+    __reconnectPage: null,
+
+
 
 
     showPage: function (page, animation, back) {
@@ -302,9 +321,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       manager.getDetailNavigation().getLayout().setShowAnimation(true);
       manager.getDetailNavigation().getLayout().setAnimationDuration(
           org.jspresso.framework.application.frontend.controller.qx.mobile.MobileQxController.ANIMATION_DURATION);
-      this.__blankPage = new qx.ui.mobile.page.NavigationPage();
-      manager.addDetail(this.__blankPage);
-      this.__blankPage.show();
+      if (this.isTablet()) {
+        this.__blankPage = new qx.ui.mobile.page.NavigationPage();
+        manager.addDetail(this.__blankPage);
+        this.__blankPage.show();
+      }
       return manager;
     },
 
@@ -377,7 +398,15 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       this.__displayedWorkspaceName = null;
       this.__workspacesMasterPage = null;
       this.__routing.dispose();
-      this.__applicationContainer.removeAll();
+
+      var children = this.__applicationContainer.getChildren().concat();
+      for (var i = 0, l = children.length; i < l; i++) {
+        if (children[i] != this.__reconnectPage) {
+          this.__applicationContainer.remove(children[i]);
+        }
+      }
+      this.__reconnectPage.show({animation:"slideup", back:false});
+
 
       // re init
       this.__manager = this.__createManager();
@@ -908,7 +937,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       var keysToTranslate = this.base(arguments);
       keysToTranslate = keysToTranslate.concat([
         "m_01", "m_02", "m_03", "m_04", "m_05", "m_06", "m_07", "m_08", "m_09", "m_10", "m_11", "m_12", "Hide", "Wait",
-        "Loading", "Clear", "Choose", "Replace"]);
+        "Loading", "Clear", "Choose", "Replace", "Reconnect", "reconnection.message"]);
       var bookmarkHintKey = this._determineBrowserBookmarkHintKey();
       if (bookmarkHintKey) {
         keysToTranslate = keysToTranslate.concat([bookmarkHintKey]);
