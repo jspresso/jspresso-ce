@@ -194,7 +194,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       }
       extraMenu.getSelectionList().setModel(new qx.data.Array(extraActions));
       extraMenu.setAnchor(extraButton);
-      extraMenu.addListener("changeSelection", function (evt) {
+      this.addComponentThresholdListener(extraMenu, "changeSelection", function (evt) {
         var selectedIndex = evt.getData()["index"];
         this._getActionHandler().execute(extraActions[selectedIndex]);
       }, this);
@@ -316,7 +316,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       if (pageAction.getIcon()) {
         page.setButtonIcon(pageAction.getIcon().getImageUrlSpec());
       }
-      page.addListener("action", function (event) {
+      this.addComponentThresholdListener(page,  "action", function (event) {
         this._getActionHandler().execute(pageAction);
       }, this);
       page.setShowButton(pageAction.getEnabled());
@@ -664,7 +664,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
         navPage.setUserData("pageEndScroll", scroll);
         if (!needsSplittedContent) {
-          selectionComponent.getModel().addListener("change", function (e) {
+          this.addComponentThresholdListener(selectionComponent.getModel(), "change", function (e) {
             var lastScrollTimestamp = scroll.getUserData("lastScrollTimestamp");
             if (!lastScrollTimestamp || e.getTimeStamp() - lastScrollTimestamp > 2000) {
               var scrollPosition = scroll.getPosition();
@@ -685,7 +685,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         /** @type {qx.ui.mobile.page.NavigationPage} */
         var nextPage = this.createComponent(remoteNextPage);
         this.linkNextPageBackButton(nextPage, navPage, null, null);
-        selectionComponent.addListener("changeSelection", function (evt) {
+        this.addComponentThresholdListener(selectionComponent, "changeSelection", function (evt) {
           var oldSelectedIndex = selectionComponent.getUserData("oldSelectedIndex");
           var newSelectedIndex = evt.getData();
           selectionComponent.setUserData("oldSelectedIndex", newSelectedIndex);
@@ -758,12 +758,12 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           backButton.setIcon("org/jspresso/framework/mobile/back-mobile.png");
         }
         if (backAction) {
-          nextPage.addListener("back", function () {
+          this.addComponentThresholdListener(nextPage, "back", function () {
             this._getActionHandler().execute(backAction);
           }, this);
         }
         if (previousPage) {
-          nextPage.addListener("back", function () {
+          this.addComponentThresholdListener(nextPage, "back", function () {
             this._getActionHandler().showDetailPage(this.getActualPageToShow(previousPage), animation, true);
           }, this);
         }
@@ -816,7 +816,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
             });
             list.addCssClass("jspresso-list");
             list.setModel(listModel);
-            list.addListener("changeSelection", function (evt) {
+            this.addComponentThresholdListener(list, "changeSelection", function (evt) {
               var selectedIndex = evt.getData();
               /** @type {qx.ui.mobile.list.List} */
               var l = evt.getCurrentTarget();
@@ -1271,7 +1271,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       treeList.addCssClass("jspresso-list");
       treeList.setModel(treeListModel);
       var selections = [];
-      treeList.addListener("changeSelection", function (evt) {
+      this.addComponentThresholdListener(treeList, "changeSelection", function (evt) {
         var futureDeselections = [];
         var localLevel = 0;
         for (var i = 1; i < treeListModel.length; i++) {
@@ -1878,7 +1878,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
 
       list.setModel(listModel);
 
-      list.addListener("changeSelection", function (evt) {
+      this.addComponentThresholdListener(list, "changeSelection", function (evt) {
         var selectedIndex = evt.getData();
         var stateSelectedIndices = state.getSelectedIndices();
         var item = listModel.getItem(selectedIndex);
@@ -2238,36 +2238,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         syncPicker.call(this, imageData);
       }, this);
       imagePicker.addListener("imagePicked", function (imagePickedEvent) {
-/*
-        this._getActionHandler().showBusy(true);
-
-        var req = new qx.io.remote.Request(remoteImagePicker.getSubmitUrl(), "POST");
-        req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-        // Adding data to the request body
-        //req.setData(imagePickedEvent.getData()['url']);
-        req.setParameter("data", imagePickedEvent.getData()['url'], true);
-
-        // Force to testing iframe implementation
-        //req.setCrossDomain(true);
-
-        var onSuccess = function (e) {
-          qx.event.Timer.once(function () {
-            this._getActionHandler().refresh();
-          }, this, 1000);
-          this._getActionHandler().showBusy(false);
-        };
-        req.addListener("completed", onSuccess, this);
-        var onError = function (e) {
-          this._getActionHandler().showBusy(false);
-        };
-        req.addListener("aborted", onError, this);
-        req.addListener("failed", onError, this);
-        req.addListener("timeout", onError, this);
-
-        // Sending
-        req.send();
-*/
         state.setValue(imagePickedEvent.getData()['url']);
       }, this);
       syncPicker.call(this, state.getValue());
