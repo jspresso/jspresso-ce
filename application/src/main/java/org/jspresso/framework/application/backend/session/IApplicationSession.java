@@ -136,13 +136,21 @@ public interface IApplicationSession {
    *
    * @return the client platform
    */
-  String getClientPlatform();
+  String getClientPlatformName();
 
   /**
-   * Sets the session client platform.
+   * Sets the session client platform name.
    *
-   * @param clientPlatform
-   *     the client platform
+   * @param clientPlatformName
+   *     the client platform name
    */
-  void setClientPlatform(String clientPlatform);
+  void setClientPlatformName(String clientPlatformName);
+
+  /**
+   * Sets the session client platform version.
+   *
+   * @param clientPlatformVersion
+   *     the client platform version
+   */
+  void setClientPlatformVersion(String clientPlatformVersion);
 }

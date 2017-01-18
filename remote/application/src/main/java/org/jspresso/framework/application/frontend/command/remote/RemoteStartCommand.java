@@ -32,7 +32,8 @@ public class RemoteStartCommand extends RemoteCommand {
   private String[] keysToTranslate;
   private String   version;
   private String   clientType;
-  private String   clientPlatform;
+  private String   clientPlatformName;
+  private String   clientPlatformVersion;
 
   /**
    * Gets the language.
@@ -130,21 +131,40 @@ public class RemoteStartCommand extends RemoteCommand {
   }
 
   /**
-   * Gets client platform.
+   * Gets client platform name.
    *
-   * @return the client platform
+   * @return the client platform name
    */
-  public String getClientPlatform() {
-    return clientPlatform;
+  public String getClientPlatformName() {
+    return clientPlatformName;
   }
 
   /**
-   * Sets client platform.
+   * Sets client platform name.
    *
-   * @param clientPlatform
-   *     the client platform
+   * @param clientPlatformName
+   *     the client platform name
    */
-  public void setClientPlatform(String clientPlatform) {
-    this.clientPlatform = clientPlatform;
+  public void setClientPlatformName(String clientPlatformName) {
+    this.clientPlatformName = clientPlatformName;
+  }
+
+  /**
+   * Gets client platform version.
+   *
+   * @return the client platform version
+   */
+  public String getClientPlatformVersion() {
+    return clientPlatformVersion;
+  }
+
+  /**
+   * Sets client platform version.
+   *
+   * @param clientPlatformVersion
+   *     the client platform version
+   */
+  public void setClientPlatformVersion(String clientPlatformVersion) {
+    this.clientPlatformVersion = clientPlatformVersion;
   }
 }

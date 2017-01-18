@@ -1261,7 +1261,8 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
       startCommand.timezoneOffset = new Date().timezoneOffset * (-60000);
       startCommand.version = JSPRESSO_VERSION;
       startCommand.clientType = "DESKTOP_FLEX";
-      startCommand.clientPlatform = Capabilities.playerType + ":" + Capabilities.version;
+      startCommand.clientPlatformName = Capabilities.playerType;
+      startCommand.clientPlatformVersion = Capabilities.version;
       operation.send(startCommand);
     } else {
       operation.send(_userLanguage, getKeysToTranslate(), new Date().timezoneOffset * (-60000));
