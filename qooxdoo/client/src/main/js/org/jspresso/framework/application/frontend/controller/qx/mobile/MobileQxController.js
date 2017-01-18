@@ -280,9 +280,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
         if (workspacePage) {
           this.__routeToPage(workspacePage, data, "cube");
         }
-        // if (this.isTablet()) {
-        //   this._getManager().getMasterContainer().hide();
-        // }
       }, this);
       routing.onGet("/page/{pageGuid}", function (data) {
         /** @type {org.jspresso.framework.gui.remote.mobile.RMobilePage} */
@@ -334,6 +331,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      */
     _handleInitCommand: function (initCommand) {
       this.base(arguments, initCommand);
+      this.__reconnectPage.exclude();
       this._popupBookmarkHint();
     },
 
@@ -543,18 +541,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       if (remoteDialogView instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAware) {
         this._getViewFactory().installPageActions(remoteDialogView, dialogPage);
       }
-
-      var masterContainer = this._getManager().getMasterContainer();
-      if (this.isTablet() && masterContainer.isVisible()
-          && !(masterContainer instanceof qx.ui.mobile.container.Drawer && masterContainer.isHidden())) {
-        this.__restoreMasterOnClose = true;
-        masterContainer.addListenerOnce("changeVisibility", function () {
-          this.__queueAnimation(dialogPage, "slideup", false);
-        }, this);
-        this._getManager()._onHideMasterButtonTap();
-      } else {
-        this.__queueAnimation(dialogPage, "slideup", false);
-      }
+      this.__queueAnimation(dialogPage, "slideup", false);
     },
 
     /**
@@ -664,12 +651,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       }
       this.__routing.executeGet("/workspaces", {animation: "cube", reverse: false});
 
-      qx.event.Timer.once(function () {
-        if (this.isTablet() && (this.getCurrentPage() == null || this.getCurrentPage() == this.__workspacesMasterPage
-            || this.getCurrentPage() == this.__blankPage)) {
-          this._getManager().getMasterContainer().show();
-        }
-      }, this, 1000);
+      if (this.isTablet() && (this.getCurrentPage() == null || this.getCurrentPage() == this.__workspacesMasterPage
+          || this.getCurrentPage() == this.__blankPage)) {
+        var masterContainer = this._getManager().getMasterContainer();
+        masterContainer.show();
+      }
     },
 
     /**
