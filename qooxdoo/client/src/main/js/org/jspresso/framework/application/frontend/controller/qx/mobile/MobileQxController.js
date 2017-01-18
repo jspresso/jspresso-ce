@@ -550,7 +550,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       }
 
       var masterContainer = this._getManager().getMasterContainer();
-      if (this.isTablet() && masterContainer.isVisible()) {
+      if (this.isTablet() && masterContainer.isVisible()
+          && !(masterContainer instanceof qx.ui.mobile.container.Drawer && masterContainer.isHidden())) {
         this.__restoreMasterOnClose = true;
         masterContainer.addListenerOnce("changeVisibility", function () {
           this.__queueAnimation(dialogPage, "slideup", false);
