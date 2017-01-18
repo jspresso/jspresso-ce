@@ -43,7 +43,8 @@ public class BasicApplicationSession implements IApplicationSession {
   private       TimeZone            timeZone;
   private       Subject             subject;
   private       EClientType         clientType;
-  private       String              clientPlatform;
+  private       String              clientPlatformName;
+  private       String              clientPlatformVersion;
 
   /**
    * Constructs a new {@code BasicApplicationSession} instance.
@@ -226,23 +227,42 @@ public class BasicApplicationSession implements IApplicationSession {
   }
 
   /**
-   * Gets client platform.
+   * Gets client platform name.
    *
-   * @return the client platform
+   * @return the client platform name
    */
-  @Override
-  public String getClientPlatform() {
-    return clientPlatform;
+  public String getClientPlatformName() {
+    return clientPlatformName;
   }
 
   /**
-   * Sets client platform.
+   * Sets client platform name.
    *
-   * @param clientPlatform
-   *     the client platform
+   * @param clientPlatformName
+   *     the client platform name
    */
   @Override
-  public void setClientPlatform(String clientPlatform) {
-    this.clientPlatform = clientPlatform;
+  public void setClientPlatformName(String clientPlatformName) {
+    this.clientPlatformName = clientPlatformName;
+  }
+
+  /**
+   * Gets client platform version.
+   *
+   * @return the client platform version
+   */
+  public String getClientPlatformVersion() {
+    return clientPlatformVersion;
+  }
+
+  /**
+   * Sets client platform version.
+   *
+   * @param clientPlatformVersion
+   *     the client platform version
+   */
+  @Override
+  public void setClientPlatformVersion(String clientPlatformVersion) {
+    this.clientPlatformVersion = clientPlatformVersion;
   }
 }
