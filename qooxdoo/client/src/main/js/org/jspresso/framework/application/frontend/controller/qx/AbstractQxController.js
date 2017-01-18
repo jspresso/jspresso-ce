@@ -740,7 +740,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
       startCommand.setVersion(
           org.jspresso.framework.application.frontend.controller.qx.AbstractQxController.__JSPRESSO_VERSION);
       startCommand.setClientType(this._getClientType());
-      startCommand.setClientPlatformName(this._getClientPlatform());
+      startCommand.setClientPlatformName(this._getClientPlatformName());
       startCommand.setClientPlatformVersion(this._getClientPlatformVersion());
       this.__remoteController.callAsyncListeners(true,
           org.jspresso.framework.application.frontend.controller.qx.AbstractQxController.__START_METHOD,
