@@ -732,14 +732,19 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
       startCommand.setVersion(
           org.jspresso.framework.application.frontend.controller.qx.AbstractQxController.__JSPRESSO_VERSION);
       startCommand.setClientType(this._getClientType());
-      startCommand.setClientPlatform(this._getClientPlatform());
+      startCommand.setClientPlatformName(this._getClientPlatform());
+      startCommand.setClientPlatformVersion(this._getClientPlatformVersion());
       this.__remoteController.callAsyncListeners(true,
           org.jspresso.framework.application.frontend.controller.qx.AbstractQxController.__START_METHOD,
           org.jspresso.framework.util.object.ObjectUtil.untypeObjectGraph(startCommand));
     },
 
-    _getClientPlatform: function () {
-      return qx.core.Environment.get("browser.name") + ":" + qx.core.Environment.get("browser.version");
+    _getClientPlatformName: function () {
+      return qx.core.Environment.get("browser.name");
+    },
+
+    _getClientPlatformVersion: function () {
+      return qx.core.Environment.get("browser.version");
     },
 
     /**
