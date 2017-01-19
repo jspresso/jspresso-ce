@@ -641,7 +641,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       keysToTranslate = keysToTranslate.concat(
           ["change_font_family", "change_font_size", "format_bold", "format_italic", "format_underline",
            "format_strikethrough", "remove_format", "align_left", "align_center", "align_right", "align_justify",
-           "indent_more", "indent_less", "insert_ordered_list", "insert_unordered_list", "undo", "redo"]);
+           "indent_more", "indent_less", "insert_ordered_list", "insert_unordered_list", "undo", "redo", "error",
+           "file.too.big"]);
       return keysToTranslate;
     },
 
@@ -699,8 +700,16 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
 
       var okButton = this._getViewFactory().createOkButton();
       this._getViewFactory().addButtonListener(okButton, function (event) {
-        this.showBusy(true);
-        uploadForm.send();
+        if (uploadCommand.getFileMaxSize() && uploadField.getFileSize() && uploadField.getFileSize()
+            > uploadCommand.getFileMaxSize()) {
+          var errorMessageCommand = new org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand();
+          errorMessageCommand.setTitle(this.translate("error"));
+          errorMessageCommand.setMessage(this.translate("file.too.big"));
+          this._handleMessageCommand(errorMessageCommand);
+        } else {
+          this.showBusy(true);
+          uploadForm.send();
+        }
       }, this);
       buttonBox.add(okButton);
 

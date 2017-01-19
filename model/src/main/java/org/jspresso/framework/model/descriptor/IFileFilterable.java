@@ -31,25 +31,30 @@ import java.util.Map;
 public interface IFileFilterable {
 
   /**
-   * Gets the map of allowed file types (descriptions) and their associated
-   * extensions.
+   * Gets the map of allowed file types (descriptions) and their associated extensions.
    *
-   * @return the map of allowed file types (descriptions) and their associated
-   *         extensions.
+   * @return the map of allowed file types (descriptions) and their associated extensions
    */
   Map<String, List<String>> getFileFilter();
 
   /**
    * Returns the default file name to use when saving the content as a file.
    *
-   * @return the default file name to use when saving the content as a file.
+   * @return the default file name to use when saving the content as a file
    */
   String getFileName();
 
   /**
    * Returns the default content type to use when saving the content as a file.
    *
-   * @return the default content type to use when saving the content as a file.
+   * @return the default content type to use when saving the content as a file
    */
   String getContentType();
+
+  /**
+   * Gets the file max length.
+   *
+   * @return the file max length
+   */
+  Integer getMaxLength();
 }

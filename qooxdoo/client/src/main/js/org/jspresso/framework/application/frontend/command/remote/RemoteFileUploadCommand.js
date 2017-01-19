@@ -28,6 +28,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.command.remote.Remo
     successCallbackAction: {
       check: "org.jspresso.framework.gui.remote.RAction",
       nullable: true
+    },
+    fileMaxSize: {
+      check: "Integer",
+      nullable: true
     }
   }
 });

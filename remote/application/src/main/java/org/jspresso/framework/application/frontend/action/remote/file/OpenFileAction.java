@@ -38,22 +38,22 @@ import org.jspresso.framework.view.IView;
 public class OpenFileAction extends ChooseFileAction {
 
   private FileOpenCallbackAction fileOpenCallbackAction;
+  private Integer                fileMaxSize;
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler,
-      Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     RemoteFileUploadCommand fileUploadCommand = new RemoteFileUploadCommand();
-    fileUploadCommand.setFileFilter(translateFilter(getFileFilter(context),
-        context));
+    fileUploadCommand.setFileFilter(translateFilter(getFileFilter(context), context));
+    fileUploadCommand.setFileMaxSize(getFileMaxSize(context));
     IView<RComponent> view = getView(context);
-    RAction successCallbackAction = getActionFactory(context).createAction(
-        getFileOpenCallbackAction(context), actionHandler, view, getLocale(context));
+    RAction successCallbackAction = getActionFactory(context).createAction(getFileOpenCallbackAction(context),
+        actionHandler, view, getLocale(context));
     fileUploadCommand.setSuccessCallbackAction(successCallbackAction);
-    RAction cancelCallbackAction = getActionFactory(context).createAction(
-        getFileCancelCallbackAction(context), actionHandler, view, getLocale(context));
+    RAction cancelCallbackAction = getActionFactory(context).createAction(getFileCancelCallbackAction(context),
+        actionHandler, view, getLocale(context));
     fileUploadCommand.setCancelCallbackAction(cancelCallbackAction);
     fileUploadCommand.setFileUrl(ResourceProviderServlet.computeUploadUrl());
     registerCommand(fileUploadCommand, context);
@@ -75,7 +75,7 @@ public class OpenFileAction extends ChooseFileAction {
    * </ul>
    *
    * @param fileOpenCallback
-   *          the fileOpenCallback to set.
+   *     the fileOpenCallback to set.
    */
   public void setFileOpenCallback(IFileOpenCallback fileOpenCallback) {
     super.setFileCallback(fileOpenCallback);
@@ -85,7 +85,8 @@ public class OpenFileAction extends ChooseFileAction {
   /**
    * Gets the file save callback.
    *
-   * @param context the action context.
+   * @param context
+   *     the action context.
    * @return the file save callback.
    */
   protected IFileOpenCallback getFileOpenCallback(Map<String, Object> context) {
@@ -95,7 +96,8 @@ public class OpenFileAction extends ChooseFileAction {
   /**
    * Gets the fileCancelCallbackAction.
    *
-   * @param context the action context.
+   * @param context
+   *     the action context.
    * @return the fileCancelCallbackAction.
    */
   protected FileOpenCallbackAction getFileOpenCallbackAction(Map<String, Object> context) {
@@ -104,5 +106,26 @@ public class OpenFileAction extends ChooseFileAction {
       return new FileOpenCallbackAction(callback);
     }
     return fileOpenCallbackAction;
+  }
+
+  /**
+   * Gets the file max size.
+   *
+   * @param context
+   *     the action context
+   * @return the max size
+   */
+  protected Integer getFileMaxSize(Map<String, Object> context) {
+    return fileMaxSize;
+  }
+
+  /**
+   * Sets the file max size.
+   *
+   * @param fileMaxSize
+   *     the max size
+   */
+  public void setFileMaxSize(Integer fileMaxSize) {
+    this.fileMaxSize = fileMaxSize;
   }
 }

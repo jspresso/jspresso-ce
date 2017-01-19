@@ -48,4 +48,13 @@ public class OpenFileAsBinaryPropertyAction extends OpenFileAction {
     IFileFilterable modelDescriptor = (IFileFilterable) getModelDescriptor(context);
     return modelDescriptor.getFileFilter();
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected Integer getFileMaxSize(Map<String, Object> context) {
+    IFileFilterable modelDescriptor = (IFileFilterable) getModelDescriptor(context);
+    return modelDescriptor.getMaxLength();
+  }
 }
