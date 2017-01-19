@@ -36,6 +36,8 @@ import org.jspresso.framework.util.swing.SwingUtil;
  */
 public class OpenFileAction extends ChooseFileAction {
 
+  private Integer fileMaxSize;
+
   /**
    * {@inheritDoc}
    */
@@ -85,4 +87,26 @@ public class OpenFileAction extends ChooseFileAction {
   protected IFileOpenCallback getFileOpenCallback(Map<String, Object> context) {
     return (IFileOpenCallback) super.getFileCallback(context);
   }
+
+  /**
+   * Gets the file max size.
+   *
+   * @param context
+   *     the action context
+   * @return the max size
+   */
+  protected Integer getFileMaxSize(Map<String, Object> context) {
+    return fileMaxSize;
+  }
+
+  /**
+   * Sets the file max size.
+   *
+   * @param fileMaxSize
+   *     the max size
+   */
+  public void setFileMaxSize(Integer fileMaxSize) {
+    this.fileMaxSize = fileMaxSize;
+  }
+
 }

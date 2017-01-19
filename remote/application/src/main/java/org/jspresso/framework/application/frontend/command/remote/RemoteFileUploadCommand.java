@@ -30,6 +30,7 @@ public class RemoteFileUploadCommand extends RemoteFileCommand {
   private static final long serialVersionUID = -1367967389734501316L;
 
   private RAction           successCallbackAction;
+  private Integer           fileMaxSize;
 
   /**
    * Gets the successCallbackAction.
@@ -44,10 +45,28 @@ public class RemoteFileUploadCommand extends RemoteFileCommand {
    * Sets the successCallbackAction.
    * 
    * @param successCallbackAction
-   *          the successCallbackAction to set.
+   *     the successCallbackAction to set.
    */
   public void setSuccessCallbackAction(RAction successCallbackAction) {
     this.successCallbackAction = successCallbackAction;
   }
 
+  /**
+   * Gets file max size.
+   *
+   * @return the file max size
+   */
+  public Integer getFileMaxSize() {
+    return fileMaxSize;
+  }
+
+  /**
+   * Sets file max size.
+   *
+   * @param fileMaxSize
+   *     the file max size
+   */
+  public void setFileMaxSize(Integer fileMaxSize) {
+    this.fileMaxSize = fileMaxSize;
+  }
 }

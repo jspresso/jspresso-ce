@@ -21,6 +21,7 @@ import org.jspresso.framework.gui.remote.RAction;
 public class RemoteFileUploadCommand extends RemoteFileCommand {
 
   private var _successCallbackAction:RAction;
+  private var _fileMaxSize:int;
 
   public function RemoteFileUploadCommand() {
     //default constructor.
@@ -32,6 +33,14 @@ public class RemoteFileUploadCommand extends RemoteFileCommand {
 
   public function get successCallbackAction():RAction {
     return _successCallbackAction;
+  }
+
+  public function get fileMaxSize():int {
+    return _fileMaxSize;
+  }
+
+  public function set fileMaxSize(value:int):void {
+    _fileMaxSize = value;
   }
 }
 }
