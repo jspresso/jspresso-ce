@@ -58,7 +58,8 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedTable", {
     },
 
     _onKeyPress: function (evt) {
-      if (evt.getKeyIdentifier() == "Tab") {
+      var keyIdentifier = evt.getKeyIdentifier();
+      if (keyIdentifier == "Tab") {
         var newIdentifier;
         if (evt.isShiftPressed()) {
           newIdentifier = "Left";
@@ -66,12 +67,14 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedTable", {
           newIdentifier = "Right";
         }
         evt.init(evt.getNativeEvent(), evt.getTarget(), newIdentifier);
-      } else if (/*!evt.getModifiers() &&*/ evt.isPrintable()) {
+      } else if (!evt.isCtrlOrCommandPressed() && evt.isPrintable()) {
         this.startEditing()
       }
       this.base(arguments, evt);
-      // In order to notify column change in same row
-      this.getSelectionModel()._fireChangeSelection();
+      if (keyIdentifier == "Left" || keyIdentifier == "Right") {
+        // In order to notify column change in same row
+        this.getSelectionModel()._fireChangeSelection();
+      }
     },
 
     _onSelectionChanged: function (evt) {
