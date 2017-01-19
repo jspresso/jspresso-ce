@@ -32,7 +32,8 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MCellAdditionalStyle", {
 
     _getAdditionalCellStyle: function (cellInfo) {
       var styleString = ["padding-top: 5px;"];
-      styleString.push("user-select:text;");
+      styleString.push("user-select:text;",
+      "-moz-user-select:text;", "-webkit-user-select:text;", "-ms-user-select:text;");
       if (this.__attributes) {
         var useInnerStyle = false;
         for (var key in this.__attributes) {
