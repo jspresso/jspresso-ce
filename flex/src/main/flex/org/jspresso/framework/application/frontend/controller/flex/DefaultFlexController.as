@@ -590,9 +590,16 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
   protected function handleFileUpload(uploadCommand:RemoteFileUploadCommand):void {
     _fileReference = new FileReference();
     _fileReference.addEventListener(Event.SELECT, function (event:Event):void {
-      blockUI(false);
-      var request:URLRequest = new URLRequest(uploadCommand.fileUrl);
-      _fileReference.upload(request);
+      if (uploadCommand.fileMaxSize && _fileReference.size && _fileReference.size > uploadCommand.fileMaxSize) {
+        var errorMessageCommand:RemoteMessageCommand = new RemoteMessageCommand();
+        errorMessageCommand.title = translate("error");
+        errorMessageCommand.message = translate("file.too.big");
+        handleMessageCommand(errorMessageCommand);
+      } else {
+        blockUI(false);
+        var request:URLRequest = new URLRequest(uploadCommand.fileUrl);
+        _fileReference.upload(request);
+      }
     });
     _fileReference.addEventListener(DataEvent.UPLOAD_COMPLETE_DATA, function (event:DataEvent):void {
       blockUI(true);
@@ -1295,7 +1302,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
 
   protected function getKeysToTranslate():Array {
     return ["FS.browse.continue", "file.upload", "file.download", "system.clipboard.continue", "content.copy", "error",
-            "error.unexpected", "server.comm.failure", "ok", "cancel", "yes", "no", "detail"];
+            "error.unexpected", "server.comm.failure", "ok", "cancel", "yes", "no", "detail", "file.too.big"];
   }
 
   public function translate(key:String):String {

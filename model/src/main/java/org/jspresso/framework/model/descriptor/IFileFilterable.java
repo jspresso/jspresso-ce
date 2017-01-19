@@ -10,31 +10,36 @@ import java.util.Map;
  * This interface is implemented by descriptors of properties which can be
  * filled using files. Typically, binary property descriptors and text property
  * descriptors implement this interface.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public interface IFileFilterable {
 
   /**
-   * Gets the map of allowed file types (descriptions) and their associated
-   * extensions.
-   * 
-   * @return the map of allowed file types (descriptions) and their associated
-   *         extensions.
+   * Gets the map of allowed file types (descriptions) and their associated extensions.
+   *
+   * @return the map of allowed file types (descriptions) and their associated extensions
    */
   Map<String, List<String>> getFileFilter();
 
   /**
    * Returns the default file name to use when saving the content as a file.
-   * 
-   * @return the default file name to use when saving the content as a file.
+   *
+   * @return the default file name to use when saving the content as a file
    */
   String getFileName();
 
   /**
    * Returns the default content type to use when saving the content as a file.
-   * 
-   * @return the default content type to use when saving the content as a file.
+   *
+   * @return the default content type to use when saving the content as a file
    */
   String getContentType();
+
+  /**
+   * Gets the file max length.
+   *
+   * @return the file max length
+   */
+  Integer getMaxLength();
 }
