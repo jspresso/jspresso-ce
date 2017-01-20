@@ -124,7 +124,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImagePicker", {
       });
       qx.bom.element.Style.setStyles(input, css, true);
       var that = this;
-      qx.event.Registration.addListener(input, "change", function (e) {
+      qx.event.Registration.addListener(input, "change", function (event) {
         // Read in file
         var file = event.target.files[0];
 
