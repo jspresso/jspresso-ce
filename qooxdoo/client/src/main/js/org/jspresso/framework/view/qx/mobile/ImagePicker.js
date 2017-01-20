@@ -202,8 +202,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImagePicker", {
           };
           reader.readAsDataURL(file);
         }
-        //this.__formEl.submit();
-        this.fireEvent();
       }, this);
       return input;
     },

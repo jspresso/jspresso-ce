@@ -201,7 +201,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       }
       extraMenu.getSelectionList().setModel(new qx.data.Array(extraActions));
       extraMenu.setAnchor(extraButton);
-      this.addComponentThresholdListener(extraMenu, "changeSelection", function (evt) {
+      extraMenu.addListener("changeSelection", function (evt) {
         var selectedIndex = evt.getData()["index"];
         this._getActionHandler().execute(extraActions[selectedIndex]);
       }, this);
@@ -323,7 +323,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       if (pageAction.getIcon()) {
         page.setButtonIcon(this._completeForSVG(pageAction.getIcon().getImageUrlSpec()));
       }
-      this.addComponentThresholdListener(page,  "action", function (event) {
+      page.addListener("action", function (event) {
         this._getActionHandler().execute(pageAction);
       }, this);
       page.setShowButton(pageAction.getEnabled());
@@ -671,7 +671,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
         navPage.setUserData("pageEndScroll", scroll);
         if (!needsSplittedContent) {
-          this.addComponentThresholdListener(selectionComponent.getModel(), "change", function (e) {
+          selectionComponent.getModel().addListener("change", function (e) {
             var lastScrollTimestamp = scroll.getUserData("lastScrollTimestamp");
             if (!lastScrollTimestamp || e.getTimeStamp() - lastScrollTimestamp > 2000) {
               var scrollPosition = scroll.getPosition();
@@ -692,7 +692,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         /** @type {qx.ui.mobile.page.NavigationPage} */
         var nextPage = this.createComponent(remoteNextPage);
         this.linkNextPageBackButton(nextPage, navPage, null, null);
-        this.addComponentThresholdListener(selectionComponent, "changeSelection", function (evt) {
+        selectionComponent.addListener("changeSelection", function (evt) {
           var oldSelectedIndex = selectionComponent.getUserData("oldSelectedIndex");
           var newSelectedIndex = evt.getData();
           selectionComponent.setUserData("oldSelectedIndex", newSelectedIndex);
@@ -765,12 +765,12 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           backButton.setIcon("org/jspresso/framework/mobile/back-mobile.svg");
         }
         if (backAction) {
-          this.addComponentThresholdListener(nextPage, "back", function () {
+          nextPage.addListener("back", function () {
             this._getActionHandler().execute(backAction);
           }, this);
         }
         if (previousPage) {
-          this.addComponentThresholdListener(nextPage, "back", function () {
+          nextPage.addListener("back", function () {
             this._getActionHandler().showDetailPage(this.getActualPageToShow(previousPage), animation, true);
           }, this);
         }
@@ -824,7 +824,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
             });
             list.addCssClass("jspresso-list");
             list.setModel(listModel);
-            this.addComponentThresholdListener(list, "changeSelection", function (evt) {
+            list.addListener("changeSelection", function (evt) {
               var selectedIndex = evt.getData();
               /** @type {qx.ui.mobile.list.List} */
               var l = evt.getCurrentTarget();
@@ -1279,7 +1279,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       treeList.addCssClass("jspresso-list");
       treeList.setModel(treeListModel);
       var selections = [];
-      this.addComponentThresholdListener(treeList, "changeSelection", function (evt) {
+      treeList.addListener("changeSelection", function (evt) {
         var futureDeselections = [];
         var localLevel = 0;
         for (var i = 1; i < treeListModel.length; i++) {
@@ -1886,7 +1886,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
 
       list.setModel(listModel);
 
-      this.addComponentThresholdListener(list, "changeSelection", function (evt) {
+      list.addListener("changeSelection", function (evt) {
         var selectedIndex = evt.getData();
         var stateSelectedIndices = state.getSelectedIndices();
         var item = listModel.getItem(selectedIndex);
