@@ -126,7 +126,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImagePicker", {
       var that = this;
       qx.event.Registration.addListener(input, "change", function (event) {
         // Read in file
-        var file = event.target.files[0];
+        var file = event.getTarget().files[0];
 
         // Ensure it's an image
         if (file.type.match(/image.*/)) {
