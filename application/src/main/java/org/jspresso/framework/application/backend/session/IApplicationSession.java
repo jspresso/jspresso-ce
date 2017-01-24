@@ -153,4 +153,11 @@ public interface IApplicationSession {
    *     the client platform version
    */
   void setClientPlatformVersion(String clientPlatformVersion);
+
+  /**
+   * Gets the session client platform version.
+   *
+   * @return the client platform version
+   */
+  String getClientPlatformVersion();
 }
