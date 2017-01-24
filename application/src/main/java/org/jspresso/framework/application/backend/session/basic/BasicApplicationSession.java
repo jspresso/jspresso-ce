@@ -251,6 +251,7 @@ public class BasicApplicationSession implements IApplicationSession {
    *
    * @return the client platform version
    */
+  @Override
   public String getClientPlatformVersion() {
     return clientPlatformVersion;
   }
