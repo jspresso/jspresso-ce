@@ -83,10 +83,6 @@
  * @use(org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCancelCommand)
  * @use(org.jspresso.framework.application.frontend.command.remote.RemoteYesNoCommand)
  * @use(org.jspresso.framework.application.frontend.command.remote.RemoteErrorMessageCommand)
- *
- * // Fixes issue #9182: new unified pointer input model since Chrome 55
- * // see https://github.com/qooxdoo/qooxdoo/issues/9182
- * @require(org.jspresso.framework.patch.MEvent)
  */
 
 qx.Class.define("org.jspresso.framework.application.frontend.Application", {

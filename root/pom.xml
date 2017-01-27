@@ -35,7 +35,7 @@
     <hibernate.version>4.3.11.Final</hibernate.version>
     <jboss-logging.version>3.3.0.Final</jboss-logging.version>
     <jbosssx.version>4.9.3.Final</jbosssx.version>
-    <qooxdoo.version>5.0.1</qooxdoo.version>
+    <qooxdoo.version>5.0.2</qooxdoo.version>
     <jasper.version>6.2.0</jasper.version>
     <jfree.version>1.0.19</jfree.version>
     <itext.version>4.2.1</itext.version>
