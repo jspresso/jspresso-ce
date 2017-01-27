@@ -387,6 +387,14 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     /**
      * @return {undefined}
      */
+    _start: function () {
+      this.__animating = false;
+      this.base(arguments);
+    },
+
+    /**
+     * @return {undefined}
+     */
     _restart: function () {
       if (this._getManager().getMasterContainer()) {
         this._getManager().getMasterContainer().hide();
@@ -395,6 +403,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       this.__workspacePages = {};
       this.__displayedWorkspaceName = null;
       this.__workspacesMasterPage = null;
+      this.__animationQueue = null;
+      this.__savedCurrentPage = null;
+      this.__animating = false;
       this.__routing.dispose();
 
       var children = this.__applicationContainer.getChildren().concat();
