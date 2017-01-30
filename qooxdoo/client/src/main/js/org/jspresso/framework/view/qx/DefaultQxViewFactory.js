@@ -1644,7 +1644,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             atom.setIcon("");
           }
         };
-        synchAtomValue(state.getValue());
+        synchAtomValue.call(this, state.getValue());
 
         state.addListener("changeValue", function (e) {
           synchAtomValue(e.getData());
