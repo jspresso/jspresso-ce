@@ -42,6 +42,7 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
     __currentBinding: null,
     __currentCellState: null,
     __savedDialogIndex: null,
+    __editorWidget: null,
 
     // interface implementation
     createCellEditor: function (cellInfo) {
@@ -82,6 +83,7 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
       } finally {
         this.__rComponent.setFocusGainedAction(focusGainedAction);
       }
+      this.__editorWidget = editorWidget;
       editorWidget.setMargin(0);
       if (this.__rComponent instanceof org.jspresso.framework.gui.remote.RActionField) {
         editorWidget.setPadding(0);
@@ -147,65 +149,31 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
         var iden = e.getKeyIdentifier();
         if (iden == "Tab") {
           e.stop();
-          // Might be an inner widget of the editorWidget. see bug #106
-          var focusedWidget = qx.ui.core.FocusHandler.getInstance().getFocusedWidget();
-          if (focusedWidget) {
-            focusedWidget.blur();
-          } else {
-            editorWidget.blur();
+          if (table.isEditing()) {
+            table.stopEditing();
           }
-          if (editorWidget instanceof qx.ui.form.DateField) {
-            // Forces synchronization of the date field
-            editorWidget.fireDataEvent("changeValue", this.getValue());
-          } else if (editorWidget instanceof qx.ui.container.Composite && editorWidget.getUserData("df")) {
-            // Forces synchronization of the date field
-            var dateField = editorWidget.getUserData("df");
-            dateField.fireDataEvent("changeValue", dateField.getValue());
+          var columnCount = table.getTableModel().getColumnCount();
+          var rowCount = table.getTableModel().getRowCount();
+          col += (e.isShiftPressed() ? -1 : 1);
+          if (col < 0) {
+            row -= 1;
+            col = columnCount - 1;
+          } else if (col > columnCount - 1) {
+            row += 1;
+            col = 0;
           }
-          timer.start(function (userData, timerId) {
-            if (table.isEditing()) {
-              table.stopEditing();
-            }
-            var columnCount = table.getTableModel().getColumnCount();
-            var rowCount = table.getTableModel().getRowCount();
-            col += (e.isShiftPressed() ? -1 : 1);
-            if (col < 0) {
-              row -= 1;
-              col = columnCount - 1;
-            } else if (col > columnCount - 1) {
-              row += 1;
-              col = 0;
-            }
-            if (row >= 0 && row < rowCount && col >= 0 && col < columnCount) {
-              table.setFocusedCell(col, row, true);
-              table.updateContent();
-              // Breaks LOVs
-              //table.startEditing();
-            }
-          }, 0, this, null, 0);
+          if (row >= 0 && row < rowCount && col >= 0 && col < columnCount) {
+            table.setFocusedCell(col, row, true);
+            table.updateContent();
+            // Breaks LOVs
+            //table.startEditing();
+          }
           e.stopPropagation();
         } else if (iden == 'Enter') {
           e.stop();
-          // Might be an inner widget of the editorWidget. see bug #106
-          var focusedWidget = qx.ui.core.FocusHandler.getInstance().getFocusedWidget();
-          if (focusedWidget) {
-            focusedWidget.blur();
-          } else {
-            editorWidget.blur();
+          if (table.isEditing()) {
+            table.stopEditing();
           }
-          if (editorWidget instanceof qx.ui.form.DateField) {
-            // Forces synchronization of the date field
-            editorWidget.fireDataEvent("changeValue", this.getValue());
-          } else if (editorWidget instanceof qx.ui.container.Composite && editorWidget.getUserData("df")) {
-            // Forces synchronization of the date field
-            var dateField = editorWidget.getUserData("df");
-            dateField.fireDataEvent("changeValue", dateField.getValue());
-          }
-          timer.start(function (userData, timerId) {
-            if (table.isEditing()) {
-              table.stopEditing();
-            }
-          }, 0, this, null, 0);
           e.stopPropagation();
         }
       }, this);
@@ -223,28 +191,31 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
           if (this.__rComponent instanceof org.jspresso.framework.gui.remote.RActionField) {
             // Edition is completely handled by the action field and the value will be updated afterwards.
             table.cancelEditing();
-          } else {
-            if (editorWidget instanceof qx.ui.form.TextField) {
-              // Forces synchronization of the text field
-              editorWidget.fireDataEvent("changeValue", editorWidget.getValue());
-            }
-            // This is a hack to prevent default stopEditing() to occur before the state of the editor is actually
-            // updated.
-            table.setEnabled(false);
-            timer.start(function (userData, timerId) {
-              table.setEnabled(true);
-              if (table.isEditing()) {
-                table.stopEditing();
-              }
-            }, 0, this, null, 0);
           }
         }
       }, this);
       return editor;
     },
 
+    __flushEditorValue: function () {
+      var fieldToFlush;
+      if (this.__editorWidget instanceof qx.ui.form.DateField) {
+        fieldToFlush = this.__editorWidget;
+      } else if (this.__editorWidget instanceof qx.ui.container.Composite && this.__editorWidget.getUserData("df")) {
+        fieldToFlush = this.__editorWidget.getUserData("df");
+      }
+      if (this.__editorWidget instanceof qx.ui.form.TextField) {
+        fieldToFlush = this.__editorWidget;
+      }
+      if (fieldToFlush) {
+        // Forces synchronization of the field to flush
+        fieldToFlush.fireDataEvent("changeValue", fieldToFlush.getValue());
+      }
+    },
+
     // interface implementation
     getCellEditorValue: function (cellEditor) {
+      this.__flushEditorValue();
       return this.__rComponent.getState().getValue();
     },
 
