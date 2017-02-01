@@ -139,8 +139,10 @@ import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicDatePropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicNumberPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicTimePropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.PropertyViewDescriptorHelper;
 
 /**
@@ -1491,12 +1493,12 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   }
 
   /**
-   * Creates a date format based on a date property descriptor.
+   * Creates a number format based on a number property descriptor.
    *
    * @param propertyViewDescriptor
    *     the property view descriptor
    * @param propertyDescriptor
-   *     the date property descriptor.
+   *     the number property descriptor.
    * @param timeZone
    *     the timezone.
    * @param translationProvider
@@ -1657,6 +1659,8 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   /**
    * Creates a decimal format based on a decimal property descriptor.
    *
+   * @param propertyViewDescriptor
+   *     the property view descriptor
    * @param propertyDescriptor
    *     the decimal property descriptor
    * @param translationProvider
@@ -1665,16 +1669,22 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    *     the locale
    * @return the decimal format
    */
-  protected NumberFormat createDecimalFormat(IDecimalPropertyDescriptor propertyDescriptor,
+  protected NumberFormat createDecimalFormat(IPropertyViewDescriptor propertyViewDescriptor,
+                                             IDecimalPropertyDescriptor propertyDescriptor,
                                              ITranslationProvider translationProvider, Locale locale) {
+    String formatPattern = getOverloadedPattern(propertyViewDescriptor, propertyDescriptor);
     DecimalFormat format = (DecimalFormat) NumberFormat.getNumberInstance(locale);
     applyDecimalFormatSymbols(format, propertyDescriptor, translationProvider, locale);
-    format.setMaximumFractionDigits(propertyDescriptor.getMaxFractionDigit());
-    if (propertyDescriptor.isUsingBigDecimal()) {
-      format.setParseBigDecimal(true);
+    if (formatPattern != null) {
+      format.applyPattern(formatPattern);
+    } else {
+      format.setMaximumFractionDigits(propertyDescriptor.getMaxFractionDigit());
+      if (propertyDescriptor.isUsingBigDecimal()) {
+        format.setParseBigDecimal(true);
+      }
+      format.setMinimumFractionDigits(format.getMaximumFractionDigits());
+      format.setGroupingUsed(propertyDescriptor.isThousandsGroupingUsed());
     }
-    format.setMinimumFractionDigits(format.getMaximumFractionDigits());
-    format.setGroupingUsed(propertyDescriptor.isThousandsGroupingUsed());
     return format;
   }
 
@@ -1700,6 +1710,8 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   /**
    * Creates a decimal formatter based on a decimal property descriptor.
    *
+   * @param propertyViewDescriptor
+   *     the property view descriptor
    * @param propertyDescriptor
    *     the decimal property descriptor
    * @param translationProvider
@@ -1708,9 +1720,10 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    *     the locale
    * @return the decimal formatter
    */
-  protected IFormatter<Object, String> createDecimalFormatter(IDecimalPropertyDescriptor propertyDescriptor,
+  protected IFormatter<Object, String> createDecimalFormatter(IPropertyViewDescriptor propertyViewDescriptor,
+                                                              IDecimalPropertyDescriptor propertyDescriptor,
                                                               ITranslationProvider translationProvider, Locale locale) {
-    return new FormatAdapter(createDecimalFormat(propertyDescriptor, translationProvider, locale));
+    return new FormatAdapter(createDecimalFormat(propertyViewDescriptor, propertyDescriptor, translationProvider, locale));
   }
 
   /**
@@ -1730,6 +1743,8 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   /**
    * Creates a duration formatter based on a duration property descriptor.
    *
+   * @param propertyViewDescriptor
+   *     the property view descriptor
    * @param propertyDescriptor
    *     the duration property descriptor.
    * @param translationProvider
@@ -1738,7 +1753,8 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    *     the locale.
    * @return the duration formatter.
    */
-  protected IFormatter<Number, String> createDurationFormatter(IDurationPropertyDescriptor propertyDescriptor,
+  protected IFormatter<Number, String> createDurationFormatter(IPropertyViewDescriptor propertyViewDescriptor,
+                                                               IDurationPropertyDescriptor propertyDescriptor,
                                                                ITranslationProvider translationProvider,
                                                                Locale locale) {
     return new DurationFormatter(translationProvider, locale, propertyDescriptor.isSecondsAware(),
@@ -1851,19 +1867,19 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
           actionHandler, locale);
     }
     if (propertyDescriptor instanceof ITimePropertyDescriptor) {
-      return createTimeFormatter((ITimePropertyDescriptor) propertyDescriptor, actionHandler, locale);
+      return createTimeFormatter(propertyViewDescriptor, (ITimePropertyDescriptor) propertyDescriptor, actionHandler, locale);
     }
     if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
-      return createDurationFormatter((IDurationPropertyDescriptor) propertyDescriptor, actionHandler, locale);
+      return createDurationFormatter(propertyViewDescriptor, (IDurationPropertyDescriptor) propertyDescriptor, actionHandler, locale);
     }
     if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
-      return createPercentFormatter((IPercentPropertyDescriptor) propertyDescriptor, actionHandler, locale);
+      return createPercentFormatter(propertyViewDescriptor, (IPercentPropertyDescriptor) propertyDescriptor, actionHandler, locale);
     }
     if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
-      return createDecimalFormatter((IDecimalPropertyDescriptor) propertyDescriptor, actionHandler, locale);
+      return createDecimalFormatter(propertyViewDescriptor, (IDecimalPropertyDescriptor) propertyDescriptor, actionHandler, locale);
     }
     if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
-      return createIntegerFormatter((IIntegerPropertyDescriptor) propertyDescriptor, actionHandler, locale);
+      return createIntegerFormatter(propertyViewDescriptor, (IIntegerPropertyDescriptor) propertyDescriptor, actionHandler, locale);
     }
     return null;
   }
@@ -1921,6 +1937,8 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   /**
    * Creates an integer format based on an integer property descriptor.
    *
+   * @param propertyViewDescriptor
+   *     the property view descriptor
    * @param propertyDescriptor
    *     the integer property descriptor
    * @param translationProvider
@@ -1929,17 +1947,25 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    *     the locale
    * @return the integer format
    */
-  protected NumberFormat createIntegerFormat(IIntegerPropertyDescriptor propertyDescriptor,
+  protected NumberFormat createIntegerFormat(IPropertyViewDescriptor propertyViewDescriptor,
+                                             IIntegerPropertyDescriptor propertyDescriptor,
                                              ITranslationProvider translationProvider, Locale locale) {
+    String formatPattern = getOverloadedPattern(propertyViewDescriptor, propertyDescriptor);
     DecimalFormat format = (DecimalFormat) NumberFormat.getIntegerInstance(locale);
     applyDecimalFormatSymbols(format, propertyDescriptor, translationProvider, locale);
-    format.setGroupingUsed(propertyDescriptor.isThousandsGroupingUsed());
+    if (formatPattern != null) {
+      format.applyPattern(formatPattern);
+    } else {
+      format.setGroupingUsed(propertyDescriptor.isThousandsGroupingUsed());
+    }
     return format;
   }
 
   /**
    * Creates an integer formatter based on an integer property descriptor.
    *
+   * @param propertyViewDescriptor
+   *     the property view descriptor
    * @param propertyDescriptor
    *     the integer property descriptor
    * @param translationProvider
@@ -1948,9 +1974,10 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    *     the locale
    * @return the integer formatter
    */
-  protected IFormatter<Object, String> createIntegerFormatter(IIntegerPropertyDescriptor propertyDescriptor,
+  protected IFormatter<Object, String> createIntegerFormatter(IPropertyViewDescriptor propertyViewDescriptor,
+                                                              IIntegerPropertyDescriptor propertyDescriptor,
                                                               ITranslationProvider translationProvider, Locale locale) {
-    return new FormatAdapter(createIntegerFormat(propertyDescriptor, translationProvider, locale));
+    return new FormatAdapter(createIntegerFormat(propertyViewDescriptor, propertyDescriptor, translationProvider, locale));
   }
 
   /**
@@ -2069,9 +2096,33 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   protected abstract IView<E> createPasswordPropertyView(IPropertyViewDescriptor propertyViewDescriptor,
                                                          IActionHandler actionHandler, Locale locale);
 
+
+  /**
+   * Gets overloaded pattern.
+   *
+   * @param propertyViewDescriptor
+   *     the property view descriptor
+   * @param propertyDescriptor
+   *     the property descriptor
+   * @return the overloaded pattern
+   */
+  protected String getOverloadedPattern(IPropertyViewDescriptor propertyViewDescriptor,
+                                      INumberPropertyDescriptor propertyDescriptor) {
+    String formatPattern = null;
+    if (propertyViewDescriptor instanceof BasicNumberPropertyViewDescriptor
+        && ((BasicNumberPropertyViewDescriptor) propertyViewDescriptor).getFormatPattern() != null) {
+      formatPattern = ((BasicNumberPropertyViewDescriptor) propertyViewDescriptor).getFormatPattern();
+    } else if (propertyDescriptor.getFormatPattern() != null) {
+      formatPattern = propertyDescriptor.getFormatPattern();
+    }
+    return formatPattern;
+  }
+
   /**
    * Creates a percent format based on a percent property descriptor.
    *
+   * @param propertyViewDescriptor
+   *     the property view descriptor
    * @param propertyDescriptor
    *     the percent property descriptor
    * @param translationProvider
@@ -2080,22 +2131,30 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    *     the locale
    * @return the percent format
    */
-  protected NumberFormat createPercentFormat(IPercentPropertyDescriptor propertyDescriptor,
+  protected NumberFormat createPercentFormat(IPropertyViewDescriptor propertyViewDescriptor,
+                                             IPercentPropertyDescriptor propertyDescriptor,
                                              ITranslationProvider translationProvider, Locale locale) {
+    String formatPattern = getOverloadedPattern(propertyViewDescriptor, propertyDescriptor);
     DecimalFormat format = (DecimalFormat) NumberFormat.getPercentInstance(locale);
     applyDecimalFormatSymbols(format, propertyDescriptor, translationProvider, locale);
-    format.setMaximumFractionDigits(propertyDescriptor.getMaxFractionDigit());
-    if (propertyDescriptor.isUsingBigDecimal()) {
-      format.setParseBigDecimal(true);
+    if (formatPattern != null) {
+      format.applyPattern(formatPattern);
+    } else {
+      format.setMaximumFractionDigits(propertyDescriptor.getMaxFractionDigit());
+      if (propertyDescriptor.isUsingBigDecimal()) {
+        format.setParseBigDecimal(true);
+      }
+      format.setMinimumFractionDigits(format.getMaximumFractionDigits());
+      format.setGroupingUsed(propertyDescriptor.isThousandsGroupingUsed());
     }
-    format.setMinimumFractionDigits(format.getMaximumFractionDigits());
-    format.setGroupingUsed(propertyDescriptor.isThousandsGroupingUsed());
     return format;
   }
 
   /**
    * Creates a percent formatter based on a percent property descriptor.
    *
+   * @param propertyViewDescriptor
+   *     the property view descriptor
    * @param propertyDescriptor
    *     the percent property descriptor
    * @param translationProvider
@@ -2104,9 +2163,10 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    *     the locale
    * @return the percent formatter
    */
-  protected IFormatter<Object, String> createPercentFormatter(IPercentPropertyDescriptor propertyDescriptor,
+  protected IFormatter<Object, String> createPercentFormatter(IPropertyViewDescriptor propertyViewDescriptor,
+                                                              IPercentPropertyDescriptor propertyDescriptor,
                                                               ITranslationProvider translationProvider, Locale locale) {
-    return new FormatAdapter(createPercentFormat(propertyDescriptor, translationProvider, locale));
+    return new FormatAdapter(createPercentFormat(propertyViewDescriptor, propertyDescriptor, translationProvider, locale));
   }
 
   /**
@@ -2367,6 +2427,8 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   /**
    * Creates a time format based on a time property descriptor.
    *
+   * @param propertyViewDescriptor
+   *     the property view descriptor
    * @param propertyDescriptor
    *     the time property descriptor.
    * @param translationProvider
@@ -2375,10 +2437,14 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    *     the locale.
    * @return the time format.
    */
-  protected SimpleDateFormat createTimeFormat(ITimePropertyDescriptor propertyDescriptor,
+  protected SimpleDateFormat createTimeFormat(IPropertyViewDescriptor propertyViewDescriptor,
+                                              ITimePropertyDescriptor propertyDescriptor,
                                               ITranslationProvider translationProvider, Locale locale) {
     String formatPattern;
-    if (propertyDescriptor.getFormatPattern() != null) {
+    if (propertyViewDescriptor instanceof BasicTimePropertyViewDescriptor
+        && ((BasicTimePropertyViewDescriptor) propertyViewDescriptor).getFormatPattern() != null) {
+      formatPattern = ((BasicTimePropertyViewDescriptor) propertyViewDescriptor).getFormatPattern();
+    } else if (propertyDescriptor.getFormatPattern() != null) {
       formatPattern = propertyDescriptor.getFormatPattern();
     } else {
       formatPattern = getTimePattern(propertyDescriptor, translationProvider, locale);
@@ -2390,6 +2456,8 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   /**
    * Creates a time formatter based on an time property descriptor.
    *
+   * @param propertyViewDescriptor
+   *     the property view descriptor
    * @param propertyDescriptor
    *     the time property descriptor.
    * @param translationProvider
@@ -2398,9 +2466,10 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    *     the locale.
    * @return the time formatter.
    */
-  protected IFormatter<?, String> createTimeFormatter(ITimePropertyDescriptor propertyDescriptor,
+  protected IFormatter<?, String> createTimeFormatter(IPropertyViewDescriptor propertyViewDescriptor,
+                                                      ITimePropertyDescriptor propertyDescriptor,
                                                       ITranslationProvider translationProvider, Locale locale) {
-    return createFormatter(createTimeFormat(propertyDescriptor, translationProvider, locale));
+    return createFormatter(createTimeFormat(propertyViewDescriptor, propertyDescriptor, translationProvider, locale));
   }
 
   /**

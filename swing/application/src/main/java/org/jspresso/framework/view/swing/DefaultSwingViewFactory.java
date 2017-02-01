@@ -1093,7 +1093,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
       return createPercentPropertyView(propertyViewDescriptor, actionHandler, locale);
     }
-    IFormatter<Object, String> formatter = createDecimalFormatter(propertyDescriptor, actionHandler, locale);
+    IFormatter<Object, String> formatter = createDecimalFormatter(propertyViewDescriptor, propertyDescriptor, actionHandler, locale);
     JComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
@@ -1124,7 +1124,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
         .getModelDescriptor();
     JComponent viewComponent;
     IValueConnector connector;
-    IFormatter<?, String> formatter = createDurationFormatter(propertyDescriptor, actionHandler, locale);
+    IFormatter<?, String> formatter = createDurationFormatter(propertyViewDescriptor, propertyDescriptor, actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       if (propertyViewDescriptor.getAction() != null) {
         viewComponent = createJLink(propertyViewDescriptor);
@@ -1405,7 +1405,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
                                                         IActionHandler actionHandler, Locale locale) {
     IIntegerPropertyDescriptor propertyDescriptor = (IIntegerPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    IFormatter<?, String> formatter = createIntegerFormatter(propertyDescriptor, actionHandler, locale);
+    IFormatter<?, String> formatter = createIntegerFormatter(propertyViewDescriptor, propertyDescriptor, actionHandler, locale);
     JComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
@@ -1933,7 +1933,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
                                                         IActionHandler actionHandler, Locale locale) {
     IPercentPropertyDescriptor propertyDescriptor = (IPercentPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    IFormatter<?, String> formatter = createPercentFormatter(propertyDescriptor, actionHandler, locale);
+    IFormatter<?, String> formatter = createPercentFormatter(propertyViewDescriptor, propertyDescriptor, actionHandler, locale);
     JComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
@@ -2167,16 +2167,16 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       cellRenderer = createDateTableCellRenderer(propertyViewDescriptor, (IDatePropertyDescriptor) propertyDescriptor,
           timeZone, actionHandler, locale);
     } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
-      cellRenderer = createTimeTableCellRenderer((ITimePropertyDescriptor) propertyDescriptor, actionHandler, locale);
+      cellRenderer = createTimeTableCellRenderer(propertyViewDescriptor, (ITimePropertyDescriptor) propertyDescriptor, actionHandler, locale);
     } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
-      cellRenderer = createDurationTableCellRenderer((IDurationPropertyDescriptor) propertyDescriptor, actionHandler,
+      cellRenderer = createDurationTableCellRenderer(propertyViewDescriptor, (IDurationPropertyDescriptor) propertyDescriptor, actionHandler,
           locale);
     } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
       org.jspresso.framework.util.gui.Dimension iconSize = getEnumerationIconDimension(propertyViewDescriptor);
       cellRenderer = createEnumerationTableCellRenderer((IEnumerationPropertyDescriptor) propertyDescriptor, iconSize,
           actionHandler, locale);
     } else if (propertyDescriptor instanceof INumberPropertyDescriptor) {
-      cellRenderer = createNumberTableCellRenderer((INumberPropertyDescriptor) propertyDescriptor, actionHandler,
+      cellRenderer = createNumberTableCellRenderer(propertyViewDescriptor, (INumberPropertyDescriptor) propertyDescriptor, actionHandler,
           locale);
     } else if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
       cellRenderer = createRelationshipEndTableCellRenderer((IRelationshipEndPropertyDescriptor) propertyDescriptor,
@@ -2724,7 +2724,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     ITimePropertyDescriptor propertyDescriptor = (ITimePropertyDescriptor) propertyViewDescriptor.getModelDescriptor();
     IValueConnector connector;
     JComponent viewComponent;
-    IFormatter<?, String> formatter = createTimeFormatter(propertyDescriptor, actionHandler, locale);
+    IFormatter<?, String> formatter = createTimeFormatter(propertyViewDescriptor, propertyDescriptor, actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       if (propertyViewDescriptor.getAction() != null) {
         viewComponent = createJLink(propertyViewDescriptor);
@@ -3102,18 +3102,20 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
         createDateFormatter(propertyViewDescriptor, propertyDescriptor, timeZone, translationProvider, locale));
   }
 
-  private TableCellRenderer createDecimalTableCellRenderer(IDecimalPropertyDescriptor propertyDescriptor,
+  private TableCellRenderer createDecimalTableCellRenderer(IPropertyViewDescriptor propertyViewDescriptor,
+                                                           IDecimalPropertyDescriptor propertyDescriptor,
                                                            ITranslationProvider translationProvider, Locale locale) {
     if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
-      return createPercentTableCellRenderer((IPercentPropertyDescriptor) propertyDescriptor, translationProvider,
+      return createPercentTableCellRenderer(propertyViewDescriptor, (IPercentPropertyDescriptor) propertyDescriptor, translationProvider,
           locale);
     }
-    return new FormattedTableCellRenderer(createDecimalFormatter(propertyDescriptor, translationProvider, locale));
+    return new FormattedTableCellRenderer(createDecimalFormatter(propertyViewDescriptor, propertyDescriptor, translationProvider, locale));
   }
 
-  private TableCellRenderer createDurationTableCellRenderer(IDurationPropertyDescriptor propertyDescriptor,
+  private TableCellRenderer createDurationTableCellRenderer(IPropertyViewDescriptor propertyViewDescriptor,
+                                                            IDurationPropertyDescriptor propertyDescriptor,
                                                             ITranslationProvider translationProvider, Locale locale) {
-    return new FormattedTableCellRenderer(createDurationFormatter(propertyDescriptor, translationProvider, locale));
+    return new FormattedTableCellRenderer(createDurationFormatter(propertyViewDescriptor, propertyDescriptor, translationProvider, locale));
   }
 
   private TableCellRenderer createEnumerationTableCellRenderer(IEnumerationPropertyDescriptor propertyDescriptor,
@@ -3173,9 +3175,10 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     return constraints;
   }
 
-  private TableCellRenderer createIntegerTableCellRenderer(IIntegerPropertyDescriptor propertyDescriptor,
+  private TableCellRenderer createIntegerTableCellRenderer(IPropertyViewDescriptor propertyViewDescriptor,
+                                                           IIntegerPropertyDescriptor propertyDescriptor,
                                                            ITranslationProvider translationProvider, Locale locale) {
-    return new FormattedTableCellRenderer(createIntegerFormatter(propertyDescriptor, translationProvider, locale));
+    return new FormattedTableCellRenderer(createIntegerFormatter(propertyViewDescriptor, propertyDescriptor, translationProvider, locale));
   }
 
   private JPopupMenu createJPopupMenu(IView<JComponent> view, ActionMap actionMap, IActionHandler actionHandler,
@@ -3224,22 +3227,24 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     return actionItem;
   }
 
-  private TableCellRenderer createNumberTableCellRenderer(INumberPropertyDescriptor propertyDescriptor,
+  private TableCellRenderer createNumberTableCellRenderer(IPropertyViewDescriptor propertyViewDescriptor,
+                                                          INumberPropertyDescriptor propertyDescriptor,
                                                           ITranslationProvider translationProvider, Locale locale) {
     TableCellRenderer cellRenderer = null;
     if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
-      cellRenderer = createIntegerTableCellRenderer((IIntegerPropertyDescriptor) propertyDescriptor,
+      cellRenderer = createIntegerTableCellRenderer(propertyViewDescriptor, (IIntegerPropertyDescriptor) propertyDescriptor,
           translationProvider, locale);
     } else if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
-      cellRenderer = createDecimalTableCellRenderer((IDecimalPropertyDescriptor) propertyDescriptor,
+      cellRenderer = createDecimalTableCellRenderer(propertyViewDescriptor, (IDecimalPropertyDescriptor) propertyDescriptor,
           translationProvider, locale);
     }
     return cellRenderer;
   }
 
-  private TableCellRenderer createPercentTableCellRenderer(IPercentPropertyDescriptor propertyDescriptor,
+  private TableCellRenderer createPercentTableCellRenderer(IPropertyViewDescriptor propertyViewDescriptor,
+                                                           IPercentPropertyDescriptor propertyDescriptor,
                                                            ITranslationProvider translationProvider, Locale locale) {
-    return new FormattedTableCellRenderer(createPercentFormatter(propertyDescriptor, translationProvider, locale));
+    return new FormattedTableCellRenderer(createPercentFormatter(propertyViewDescriptor, propertyDescriptor, translationProvider, locale));
   }
 
   private TableCellRenderer createReferenceTableCellRenderer(
@@ -3310,9 +3315,10 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     return editor;
   }
 
-  private TableCellRenderer createTimeTableCellRenderer(ITimePropertyDescriptor propertyDescriptor,
+  private TableCellRenderer createTimeTableCellRenderer(IPropertyViewDescriptor propertyViewDescriptor,
+                                                        ITimePropertyDescriptor propertyDescriptor,
                                                         ITranslationProvider translationProvider, Locale locale) {
-    return new FormattedTableCellRenderer(createTimeFormatter(propertyDescriptor, translationProvider, locale));
+    return new FormattedTableCellRenderer(createTimeFormatter(propertyViewDescriptor, propertyDescriptor, translationProvider, locale));
   }
 
   private void decorateWithTitle(IView<JComponent> view, ITranslationProvider translationProvider, Locale locale) {

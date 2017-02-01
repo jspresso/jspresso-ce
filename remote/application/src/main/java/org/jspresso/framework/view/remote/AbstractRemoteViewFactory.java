@@ -160,6 +160,7 @@ import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicDatePropertyViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicTimePropertyViewDescriptor;
 
 /**
  * Abstract base implementation for remote views.
@@ -366,7 +367,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         .getModelDescriptor();
     IValueConnector connector;
     RComponent viewComponent;
-    IFormatter<Object, String> formatter = createIntegerFormatter(propertyDescriptor, actionHandler, locale);
+    IFormatter<Object, String> formatter = createIntegerFormatter(propertyViewDescriptor, propertyDescriptor, actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
       if (propertyViewDescriptor.getAction() != null) {
@@ -376,12 +377,13 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
       }
       ((RLabel) viewComponent).setMaxLength(getFormatLength(formatter, getIntegerTemplateValue(propertyDescriptor)));
     } else {
-      if (isNumberServerParse()) {
+      if (isNumberServerParse() || getOverloadedPattern(propertyViewDescriptor, propertyDescriptor) != null) {
         connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
+        viewComponent = createRTextField(propertyViewDescriptor);
       } else {
         connector = getConnectorFactory().createValueConnector(propertyDescriptor.getName());
+        viewComponent = createRIntegerField(propertyViewDescriptor);
       }
-      viewComponent = createRIntegerField(propertyViewDescriptor);
     }
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
@@ -663,7 +665,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
                                                         IActionHandler actionHandler, Locale locale) {
     IPercentPropertyDescriptor propertyDescriptor = (IPercentPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    IFormatter<Object, String> formatter = createPercentFormatter(propertyDescriptor, actionHandler, locale);
+    IFormatter<Object, String> formatter = createPercentFormatter(propertyViewDescriptor, propertyDescriptor, actionHandler, locale);
     IValueConnector connector;
     RComponent viewComponent;
     if (propertyViewDescriptor.isReadOnly()) {
@@ -675,14 +677,15 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
       }
       ((RLabel) viewComponent).setMaxLength(getFormatLength(formatter, getPercentTemplateValue(propertyDescriptor)));
     } else {
-      if (isNumberServerParse()) {
+      if (isNumberServerParse() || getOverloadedPattern(propertyViewDescriptor, propertyDescriptor) != null) {
         connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
+        viewComponent = createRTextField(propertyViewDescriptor);
       } else {
         connector = getConnectorFactory().createValueConnector(propertyDescriptor.getName());
+        viewComponent = createRPercentField(propertyViewDescriptor);
+        ((RPercentField) viewComponent).setMaxFractionDigit(propertyDescriptor.getMaxFractionDigit());
       }
       connector.setExceptionHandler(actionHandler);
-      viewComponent = createRPercentField(propertyViewDescriptor);
-      ((RPercentField) viewComponent).setMaxFractionDigit(propertyDescriptor.getMaxFractionDigit());
     }
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
@@ -883,7 +886,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     }
     IValueConnector connector;
     RComponent viewComponent;
-    IFormatter<Object, String> formatter = createDecimalFormatter(propertyDescriptor, actionHandler, locale);
+    IFormatter<Object, String> formatter = createDecimalFormatter(propertyViewDescriptor, propertyDescriptor, actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
       if (propertyViewDescriptor.getAction() != null) {
@@ -893,14 +896,15 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
       }
       ((RLabel) viewComponent).setMaxLength(getFormatLength(formatter, getDecimalTemplateValue(propertyDescriptor)));
     } else {
-      if (isNumberServerParse()) {
+      if (isNumberServerParse() || getOverloadedPattern(propertyViewDescriptor, propertyDescriptor) != null) {
         connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
+        viewComponent = createRTextField(propertyViewDescriptor);
       } else {
         connector = getConnectorFactory().createValueConnector(propertyDescriptor.getName());
+        viewComponent = createRDecimalField(propertyViewDescriptor);
+        ((RDecimalComponent) viewComponent).setMaxFractionDigit(propertyDescriptor.getMaxFractionDigit());
       }
       connector.setExceptionHandler(actionHandler);
-      viewComponent = createRDecimalField(propertyViewDescriptor);
-      ((RDecimalComponent) viewComponent).setMaxFractionDigit(propertyDescriptor.getMaxFractionDigit());
     }
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
@@ -917,7 +921,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         .getModelDescriptor();
     IValueConnector connector;
     RComponent viewComponent;
-    IFormatter<?, String> formatter = createDurationFormatter(propertyDescriptor, actionHandler, locale);
+    IFormatter<?, String> formatter = createDurationFormatter(propertyViewDescriptor, propertyDescriptor, actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
       if (propertyViewDescriptor.getAction() != null) {
@@ -1370,7 +1374,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     ITimePropertyDescriptor propertyDescriptor = (ITimePropertyDescriptor) propertyViewDescriptor.getModelDescriptor();
     IValueConnector connector;
     RComponent viewComponent;
-    IFormatter<?, String> formatter = createTimeFormatter(propertyDescriptor, actionHandler, locale);
+    IFormatter<?, String> formatter = createTimeFormatter(propertyViewDescriptor, propertyDescriptor, actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
       if (propertyViewDescriptor.getAction() != null) {
@@ -1426,7 +1430,12 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
       viewComponent = createRTimeField(propertyViewDescriptor);
       ((RTimeField) viewComponent).setSecondsAware(propertyDescriptor.isSecondsAware());
       ((RTimeField) viewComponent).setMillisecondsAware(propertyDescriptor.isMillisecondsAware());
-      ((RTimeField) viewComponent).setFormatPattern(propertyDescriptor.getFormatPattern());
+      String formatPattern = propertyDescriptor.getFormatPattern();
+      if (propertyViewDescriptor instanceof BasicTimePropertyViewDescriptor
+          && ((BasicTimePropertyViewDescriptor) propertyViewDescriptor).getFormatPattern() != null) {
+        formatPattern = ((BasicTimePropertyViewDescriptor) propertyViewDescriptor).getFormatPattern();
+      }
+      ((RTimeField) viewComponent).setFormatPattern(formatPattern);
     }
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);

@@ -36,6 +36,8 @@ public abstract class BasicNumberPropertyDescriptor extends
   private BigDecimal maxValue;
   private BigDecimal minValue;
   private boolean    thousandsGroupingUsed;
+  private String     formatPattern;
+
 
   /**
    * Constructs a new {@code BasicPropertyDescriptor} instance.
@@ -183,6 +185,24 @@ public abstract class BasicNumberPropertyDescriptor extends
    */
   public void setThousandsGroupingUsed(boolean thousandsGroupingUsed) {
     this.thousandsGroupingUsed = thousandsGroupingUsed;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getFormatPattern() {
+    return formatPattern;
+  }
+
+  /**
+   * Sets format pattern. Allows to override the default one.
+   *
+   * @param formatPattern
+   *     the format pattern
+   */
+  public void setFormatPattern(String formatPattern) {
+    this.formatPattern = formatPattern;
   }
 
   /**
