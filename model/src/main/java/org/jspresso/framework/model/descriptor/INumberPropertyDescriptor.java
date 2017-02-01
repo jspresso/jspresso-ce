@@ -47,4 +47,11 @@ public interface INumberPropertyDescriptor extends IScalarPropertyDescriptor {
    */
   boolean isThousandsGroupingUsed();
 
+  /**
+   * Allows to override the default format pattern.
+   *
+   * @return the overridden format pattern
+   */
+  String getFormatPattern();
+
 }
