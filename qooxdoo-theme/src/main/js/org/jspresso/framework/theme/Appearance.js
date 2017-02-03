@@ -443,6 +443,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         "tabview": {
           base: true,
           style: function (states) {
+            var margin;
             if (states.barTop) {
               margin = [0, 1, 0, 1];
             } else if (states.barBottom) {
@@ -536,6 +537,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
               padding = [4, 2, 4, 2];
             }
 
+            var decorator;
             if (states.barTop) {
               decorator = "tab-button-top";
             } else if (states.barBottom) {

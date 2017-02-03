@@ -19,7 +19,7 @@
 
 /**
  * @asset(org/jspresso/framework/*.png)
- * @asset(org/jspresso/framework/*.png)
+ * @asset(org/jspresso/framework/*.svg)
  */
 qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.DefaultQxController", {
 
@@ -67,7 +67,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     __statusBar: null,
     /** @type {Boolean} */
     __busy: false,
-
+    /** @type {qx.ui.basic.Atom} */
+    __repeatStatusAtom: null,
 
     _createViewFactory: function () {
       return new org.jspresso.framework.view.qx.DefaultQxViewFactory(this, this, this);
@@ -274,6 +275,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           }
         }
       }
+      this.__repeatStatusAtom = new qx.ui.basic.Atom();
+      this.__repeatStatusAtom.setIcon("org/jspresso/framework/circle_grey.svg");
+      this.__repeatStatusAtom.setAppearance("exit-button");
+      toolBar.add(this.__repeatStatusAtom);
       exitAction.setStyleName("exit-button");
       exitAction.setName(null);
       toolBar.add(this._getViewFactory().createAction(exitAction));
@@ -744,6 +749,16 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         this.__dlFrame.resetSource();
       }
       this.__dlFrame.setSource(downloadCommand.getFileUrl());
+    },
+
+    _startCurrentActionTimer: function () {
+      this.__repeatStatusAtom.setIcon("org/jspresso/framework/circle_green.svg");
+      this.base(arguments);
+    },
+
+    _stopCurrentActionTimer: function () {
+      this.__repeatStatusAtom.setIcon("org/jspresso/framework/circle_grey.svg");
+      this.base(arguments);
     },
 
     /**

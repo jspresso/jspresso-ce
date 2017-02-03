@@ -283,11 +283,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     execute: function (action, actionEvent, actionCallback) {
       actionEvent = (typeof actionEvent == 'undefined') ? null : actionEvent;
       actionCallback = (typeof actionCallback == 'undefined') ? null : actionCallback;
-      this.__stopCurrentActionTimer();
+      this._stopCurrentActionTimer();
       if (!actionEvent) {
         actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
       }
       if (action.getRepeatPeriodMillis() > 0) {
+        this._startCurrentActionTimer();
         this.__doExecute(action, actionEvent, actionCallback);
         this.__currentActionTimer = new qx.event.Timer(action.getRepeatPeriodMillis());
         this.__currentActionTimer.addListener("interval", function(event) {
@@ -299,7 +300,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
       }
     },
 
-    __stopCurrentActionTimer: function() {
+    _startCurrentActionTimer: function () {
+    },
+
+    _stopCurrentActionTimer: function() {
       if (this.__currentActionTimer) {
         this.__currentActionTimer.stop();
         this.__currentActionTimer = null;
@@ -739,7 +743,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      * @return {undefined}
      */
     _restart: function () {
-      this.__stopCurrentActionTimer();
+      this._stopCurrentActionTimer();
       this.__remotePeerRegistry = new org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry();
       this._changeNotificationsEnabled = true;
       this.__commandsQueue = [];
@@ -781,7 +785,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      * @return {undefined}
      */
     stop: function () {
-      this.__stopCurrentActionTimer();
+      this._stopCurrentActionTimer();
       this.__remoteController.callAsyncListeners(true,
           org.jspresso.framework.application.frontend.controller.qx.AbstractQxController.__STOP_METHOD);
     },

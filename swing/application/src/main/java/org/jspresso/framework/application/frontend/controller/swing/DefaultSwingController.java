@@ -110,7 +110,10 @@ import org.jspresso.framework.view.swing.BasicTransferable;
 public class DefaultSwingController extends
     AbstractFrontendController<JComponent, Icon, Action> {
 
-  private JFrame          controllerFrame;
+  public static final String CIRCLE_GREY_PNG = "circle_grey-24x24.png";
+  public static final String CIRCLE_GREEN_PNG = "circle_green-24x24.png";
+
+  private JFrame controllerFrame;
   private JDesktopPane    desktopPane;
   private JLabel          statusBar;
   private WaitCursorTimer waitTimer;
@@ -119,6 +122,9 @@ public class DefaultSwingController extends
   private JDialog                     loginDialog;
   private ScheduledExecutorService    timerService;
   private ScheduledFuture<?>          currentActionTimer;
+  private ImageIcon                   repeatGreyStatusIcon = new ImageIcon(getClass().getResource(CIRCLE_GREY_PNG));
+  private ImageIcon                   repeatGeenStatusIcon = new ImageIcon(getClass().getResource(CIRCLE_GREEN_PNG));
+  private JLabel                      repeatStatusLabel = new JLabel(repeatGreyStatusIcon);
 
   /**
    * {@inheritDoc}
@@ -305,6 +311,7 @@ public class DefaultSwingController extends
     if (action instanceof IDisplayableAction) {
       Integer repeatPeriodMillis = ((IDisplayableAction) action).getRepeatPeriodMillis();
       if(repeatPeriodMillis != null && repeatPeriodMillis > 0) {
+        repeatStatusLabel.setIcon(repeatGeenStatusIcon);
         currentActionTimer = timerService.scheduleWithFixedDelay(new Runnable() {
           @Override
           public void run() {
@@ -325,6 +332,7 @@ public class DefaultSwingController extends
 
   public void cancelCurrentActionTimer() {
     if (currentActionTimer != null) {
+      repeatStatusLabel.setIcon(repeatGreyStatusIcon);
       currentActionTimer.cancel(false);
     }
   }
@@ -597,6 +605,8 @@ public class DefaultSwingController extends
       }
     }
     applicationToolBar.add(Box.createHorizontalGlue());
+    applicationToolBar.add(repeatStatusLabel);
+    applicationToolBar.add(Box.createHorizontalStrut(5));
     if (getHelpActions() != null && isAccessGranted(getHelpActions())) {
       try {
         pushToSecurityContext(getHelpActions());

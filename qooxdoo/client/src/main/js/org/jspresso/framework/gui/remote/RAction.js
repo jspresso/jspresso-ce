@@ -57,6 +57,6 @@ qx.Class.define("org.jspresso.framework.gui.remote.RAction", {
     repeatPeriodMillis: {
       check: "Integer",
       nullable: true
-    },
+    }
   }
 });
