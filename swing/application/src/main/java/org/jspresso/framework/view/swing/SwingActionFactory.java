@@ -31,6 +31,7 @@ import javax.swing.KeyStroke;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.frontend.controller.swing.DefaultSwingController;
 import org.jspresso.framework.application.view.ControllerAwareActionFactory;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.util.gui.Dimension;
@@ -148,6 +149,9 @@ public class SwingActionFactory extends
         Map<String, Object> staticContext = (Map<String, Object>) getValue(IAction.STATIC_CONTEXT_KEY);
         if (staticContext != null) {
           actionContext.putAll(staticContext);
+        }
+        if (actionHandler instanceof DefaultSwingController) {
+          ((DefaultSwingController) actionHandler).cancelCurrentActionTimer();
         }
         actionHandler.execute(action, actionContext);
       }

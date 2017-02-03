@@ -39,7 +39,7 @@ public class RAction extends RemotePeer {
   private String              mnemonicAsString;
   private String              name;
   private String              styleName;
-
+  private Integer             repeatPeriodMillis;
   private Map<String, Object> userValues;
 
   /**
@@ -238,4 +238,22 @@ public class RAction extends RemotePeer {
     this.styleName = styleName;
   }
 
+  /**
+   * Gets repeat period millis.
+   *
+   * @return the repeat period millis
+   */
+  public Integer getRepeatPeriodMillis() {
+    return repeatPeriodMillis;
+  }
+
+  /**
+   * Sets repeat period millis.
+   *
+   * @param repeatPeriodMillis
+   *     the repeat period millis
+   */
+  public void setRepeatPeriodMillis(Integer repeatPeriodMillis) {
+    this.repeatPeriodMillis = repeatPeriodMillis;
+  }
 }

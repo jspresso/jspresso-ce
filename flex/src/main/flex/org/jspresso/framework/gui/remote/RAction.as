@@ -28,6 +28,7 @@ public class RAction extends RemotePeer {
   private var _styleName:String;
   private var _mnemonicAsString:String;
   private var _name:String;
+  private var _repeatPeriodMillis:int;
 
   public function RAction() {
     //default constructor.
@@ -89,5 +90,12 @@ public class RAction extends RemotePeer {
     _styleName = value;
   }
 
+  public function get repeatPeriodMillis():int {
+    return _repeatPeriodMillis;
+  }
+
+  public function set repeatPeriodMillis(value:int):void {
+    _repeatPeriodMillis = value;
+  }
 }
 }

@@ -147,10 +147,8 @@ public class RemoteActionFactory extends
       }
       remoteAction.setIcon(getIconFactory().getIcon(
           ((IDisplayableAction) action).getIcon(), dimension));
-      if (((IDisplayableAction) action).getMnemonicAsString() != null) {
-        remoteAction.setMnemonicAsString(((IDisplayableAction) action)
-            .getMnemonicAsString());
-      }
+      remoteAction.setMnemonicAsString(((IDisplayableAction) action).getMnemonicAsString());
+      remoteAction.setRepeatPeriodMillis(((IDisplayableAction) action).getRepeatPeriodMillis());
     }
     ActionAdapter remoteActionAdapter = new ActionAdapter(remoteAction, action,
         actionHandler, view);

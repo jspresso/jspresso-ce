@@ -22,12 +22,14 @@ import flash.events.DataEvent;
 import flash.events.Event;
 import flash.events.IOErrorEvent;
 import flash.events.MouseEvent;
+import flash.events.TimerEvent;
 import flash.external.ExternalInterface;
 import flash.net.FileFilter;
 import flash.net.FileReference;
 import flash.net.URLRequest;
 import flash.net.navigateToURL;
 import flash.system.Capabilities;
+import flash.utils.Timer;
 import flash.utils.getTimer;
 
 import mx.binding.utils.BindingUtils;
@@ -170,6 +172,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
   private var _userGeoLocation:Object;
   private var _applicationName:String;
   private var _applicationDescription:String;
+  private var _currentActionTimer:Timer;
 
 
   public function DefaultFlexController(remoteController:RemoteObject, userLanguage:String) {
@@ -262,6 +265,20 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
   public function execute(action:RAction, actionEvent:RActionEvent = null, actionCallback:Function = null,
                           disableUI:Boolean = true):void {
     //trace(">>> Execute <<< " + action.name + " param = " + param);
+    stopCurrentActionTimer();
+    if (action.repeatPeriodMillis > 0) {
+      _currentActionTimer = new Timer(action.repeatPeriodMillis);
+      _currentActionTimer.addEventListener(TimerEvent.TIMER, function (event:TimerEvent):void {
+        doExecute(action, actionEvent, actionCallback, disableUI);
+      });
+      _currentActionTimer.start();
+    } else {
+      doExecute(action, actionEvent, actionCallback, disableUI);
+    }
+  }
+
+  private function doExecute(action:RAction, actionEvent:RActionEvent, actionCallback:Function,
+                             disableUI:Boolean):void {
     if (action && action.enabled) {
       var ts:Number = getTimer();
       var lastTs:Number = _lastFiredActions[action.guid];
@@ -881,6 +898,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
   }
 
   protected function restart():void {
+    stopCurrentActionTimer();
     var applicationFrame:Application = getTopLevelApplication();
     applicationFrame.removeAllChildren();
     while (_dialogStack.length > 1) {
@@ -896,7 +914,15 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     start();
   }
 
+  private function stopCurrentActionTimer():void {
+    if (_currentActionTimer) {
+      _currentActionTimer.stop();
+      _currentActionTimer = null;
+    }
+  }
+
   protected function stop():void {
+    stopCurrentActionTimer();
     blockUI(false);
     var operation:AbstractOperation = _remoteController.getOperation(STOP_METHOD);
     operation.send();
