@@ -48,6 +48,7 @@ import mx.containers.dividedBoxClasses.BoxDivider;
 import mx.controls.Alert;
 import mx.controls.Button;
 import mx.controls.HRule;
+import mx.controls.Image;
 import mx.controls.Label;
 import mx.controls.Menu;
 import mx.controls.MenuBar;
@@ -174,9 +175,16 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
   private var _applicationDescription:String;
   private var _currentActionTimer:Timer;
 
+  [Embed(source="../../../../../../../../resources/assets/images/circle_grey-18x18.png")]
+  private var _repeatGreyStatusIcon:Class;
+  [Embed(source="../../../../../../../../resources/assets/images/circle_green-18x18.png")]
+  private var _repeatGeenStatusIcon:Class;
+  private var _repeatStatusImage:Image;
 
   public function DefaultFlexController(remoteController:RemoteObject, userLanguage:String) {
     _remotePeerRegistry = new BasicRemotePeerRegistry();
+    _repeatStatusImage = new Image();
+    _repeatStatusImage.source = _repeatGreyStatusIcon;
     _lastFiredActions = {};
     _viewFactory = createViewFactory();
     _changeNotificationsEnabled = true;
@@ -267,6 +275,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     //trace(">>> Execute <<< " + action.name + " param = " + param);
     stopCurrentActionTimer();
     if (action.repeatPeriodMillis > 0) {
+      _repeatStatusImage.source = _repeatGeenStatusIcon;
       _currentActionTimer = new Timer(action.repeatPeriodMillis);
       _currentActionTimer.addEventListener(TimerEvent.TIMER, function (event:TimerEvent):void {
         doExecute(action, actionEvent, actionCallback, disableUI);
@@ -641,7 +650,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
       _fileReference.browse(createTypeFilters(uploadCommand.fileFilter));
     } catch (error:Error) {
       // we are certainly running on FP 10 or above. Need an extra
-      // dialog to initiate the browsing...
+      // dialog to initi browsing...
       var alertCloseHandler:Function = function (event:CloseEvent):void {
         switch (event.detail) {
           case Alert.YES:
@@ -916,6 +925,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
 
   private function stopCurrentActionTimer():void {
     if (_currentActionTimer) {
+      _repeatStatusImage.source = _repeatGreyStatusIcon;
       _currentActionTimer.stop();
       _currentActionTimer = null;
     }
@@ -1151,6 +1161,10 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
 
   protected function getStatusBar():Label {
     return _statusBar;
+  }
+
+  protected function getRepeatStatusImage():Image {
+    return _repeatStatusImage;
   }
 
   protected function assembleApplicationContent(navigationAccordion:CollapsibleAccordion, mainViewStack:ViewStack,

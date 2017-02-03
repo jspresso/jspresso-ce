@@ -155,7 +155,6 @@ public class ThemedFlexController extends DefaultFlexController {
     rightHBox.addChild(new HeaderSeparator());
 
     var exitButton:Button = new Button();
-    rightHBox.addChild(exitButton);
     exitButton.styleName = "quitButton";
     exitButton.width = 24;
     exitButton.labelPlacement = ButtonLabelPlacement.TOP;
@@ -163,6 +162,8 @@ public class ThemedFlexController extends DefaultFlexController {
     exitButton.addEventListener(MouseEvent.CLICK, function (event:MouseEvent):void {
       execute(exitAction);
     });
+    rightHBox.addChild(exitButton);
+    rightHBox.addChild(getRepeatStatusImage());
 
     mainViewStack.styleName = "centralViewStack";
 

@@ -117,6 +117,10 @@ mx|PopUpButton.top {
   verticalCenter: 0;
 }
 
+.topBar {
+  verticalAlign: middle;
+}
+
 mx|List {
   backgroundColor:   #FFFFFF;
   borderColor:       #9E9E9E;
