@@ -53,6 +53,10 @@ qx.Class.define("org.jspresso.framework.gui.remote.RAction", {
     name: {
       check: "String",
       nullable: true
-    }
+    },
+    repeatPeriodMillis: {
+      check: "Integer",
+      nullable: true
+    },
   }
 });

@@ -37,6 +37,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.Action;
 import javax.swing.BorderFactory;
@@ -113,6 +117,8 @@ public class DefaultSwingController extends
 
   private Map<String, JInternalFrame> workspaceInternalFrames;
   private JDialog                     loginDialog;
+  private ScheduledExecutorService    timerService;
+  private ScheduledFuture<?>          currentActionTimer;
 
   /**
    * {@inheritDoc}
@@ -292,16 +298,42 @@ public class DefaultSwingController extends
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IAction action, Map<String, Object> context) {
+  public boolean execute(final IAction action, final Map<String, Object> context) {
     if (action == null) {
       return true;
     }
-    JComponent sourceComponent = (JComponent) context
-        .get(ActionContextConstants.SOURCE_COMPONENT);
+    if (action instanceof IDisplayableAction) {
+      Integer repeatPeriodMillis = ((IDisplayableAction) action).getRepeatPeriodMillis();
+      if(repeatPeriodMillis != null && repeatPeriodMillis > 0) {
+        currentActionTimer = timerService.scheduleWithFixedDelay(new Runnable() {
+          @Override
+          public void run() {
+            SwingUtilities.invokeLater(new Runnable() {
+                                         @Override
+                                         public void run() {
+                                           doExecute(action, context);
+                                         }
+                                       }
+            );
+          }
+        }, 0, repeatPeriodMillis, TimeUnit.MILLISECONDS);
+        return true;
+      }
+    }
+    return doExecute(action, context);
+  }
+
+  public void cancelCurrentActionTimer() {
+    if (currentActionTimer != null) {
+      currentActionTimer.cancel(false);
+    }
+  }
+
+  private boolean doExecute(IAction action, Map<String, Object> context) {
+    JComponent sourceComponent = (JComponent) context.get(ActionContextConstants.SOURCE_COMPONENT);
     Component windowOrInternalFrame = null;
     if (sourceComponent != null) {
-      windowOrInternalFrame = SwingUtil
-          .getWindowOrInternalFrame(sourceComponent);
+      windowOrInternalFrame = SwingUtil.getWindowOrInternalFrame(sourceComponent);
     }
     if (windowOrInternalFrame instanceof JFrame) {
       ((JFrame) windowOrInternalFrame).getGlassPane().setVisible(true);
@@ -317,8 +349,7 @@ public class DefaultSwingController extends
       if (windowOrInternalFrame instanceof JFrame) {
         ((JFrame) windowOrInternalFrame).getGlassPane().setVisible(false);
       } else if (windowOrInternalFrame instanceof JInternalFrame) {
-        ((JInternalFrame) windowOrInternalFrame).getGlassPane().setVisible(
-            false);
+        ((JInternalFrame) windowOrInternalFrame).getGlassPane().setVisible(false);
       } else if (windowOrInternalFrame instanceof JDialog) {
         ((JDialog) windowOrInternalFrame).getGlassPane().setVisible(false);
       }
@@ -512,6 +543,7 @@ public class DefaultSwingController extends
           initLoginProcess();
         }
       });
+      timerService = Executors.newSingleThreadScheduledExecutor();
       return true;
     }
     return false;
@@ -523,6 +555,7 @@ public class DefaultSwingController extends
   @Override
   public boolean stop() {
     if (super.stop()) {
+      timerService.shutdown();
       if (controllerFrame != null) {
         controllerFrame.dispose();
       }

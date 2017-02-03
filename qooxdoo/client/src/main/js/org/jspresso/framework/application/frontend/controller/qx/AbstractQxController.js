@@ -111,6 +111,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     __nextActionCallback: null,
     /** @type {Array} */
     _dialogStack: null,
+    /** @type {qx.event.Timer} */
+    __currentActionTimer: null,
 
     _getApplication: function () {
       return qx.core.Init.getApplication();
@@ -260,7 +262,18 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
       }
     },
 
-    /**
+    __doExecute: function (action, actionEvent, actionCallback) {
+      if (action && action.getEnabled()) {
+        //this.debug(">>> Execute <<< " + action.getName() + " param = " + param);
+        var command = new org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand();
+        command.setTargetPeerGuid(action.getGuid());
+        command.setPermId(action.getPermId());
+        command.setActionEvent(actionEvent);
+        this._completeActionEvent(actionEvent);
+        this.__nextActionCallback = actionCallback;
+        this.registerCommand(command);
+      }
+    }, /**
      *
      * @param action {org.jspresso.framework.gui.remote.RAction}
      * @param actionEvent {org.jspresso.framework.gui.remote.RActionEvent}
@@ -270,18 +283,26 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     execute: function (action, actionEvent, actionCallback) {
       actionEvent = (typeof actionEvent == 'undefined') ? null : actionEvent;
       actionCallback = (typeof actionCallback == 'undefined') ? null : actionCallback;
-      if (action && action.getEnabled()) {
-        //this.debug(">>> Execute <<< " + action.getName() + " param = " + param);
-        var command = new org.jspresso.framework.application.frontend.command.remote.RemoteActionCommand();
-        command.setTargetPeerGuid(action.getGuid());
-        command.setPermId(action.getPermId());
-        if (!actionEvent) {
-          actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
-        }
-        command.setActionEvent(actionEvent);
-        this._completeActionEvent(actionEvent);
-        this.__nextActionCallback = actionCallback;
-        this.registerCommand(command);
+      this.__stopCurrentActionTimer();
+      if (!actionEvent) {
+        actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
+      }
+      if (action.getRepeatPeriodMillis() > 0) {
+        this.__doExecute(action, actionEvent, actionCallback);
+        this.__currentActionTimer = new qx.event.Timer(action.getRepeatPeriodMillis());
+        this.__currentActionTimer.addListener("interval", function(event) {
+          this.__doExecute(action, actionEvent, actionCallback);
+        }, this);
+        this.__currentActionTimer.start();
+      } else {
+        this.__doExecute(action, actionEvent, actionCallback);
+      }
+    },
+
+    __stopCurrentActionTimer: function() {
+      if (this.__currentActionTimer) {
+        this.__currentActionTimer.stop();
+        this.__currentActionTimer = null;
       }
     },
 
@@ -718,6 +739,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      * @return {undefined}
      */
     _restart: function () {
+      this.__stopCurrentActionTimer();
       this.__remotePeerRegistry = new org.jspresso.framework.util.remote.registry.BasicRemotePeerRegistry();
       this._changeNotificationsEnabled = true;
       this.__commandsQueue = [];
@@ -759,6 +781,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      * @return {undefined}
      */
     stop: function () {
+      this.__stopCurrentActionTimer();
       this.__remoteController.callAsyncListeners(true,
           org.jspresso.framework.application.frontend.controller.qx.AbstractQxController.__STOP_METHOD);
     },

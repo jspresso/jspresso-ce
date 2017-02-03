@@ -71,4 +71,11 @@ public interface IDisplayableAction extends IAction, IIconDescriptor, IStylable 
    * @return the boolean
    */
   boolean isMultiSelectionEnabled();
+
+  /**
+   * Get repeat period in milliseconds.
+   *
+   * @return the repeat period in milliseconds
+   */
+  Integer getRepeatPeriodMillis();
 }

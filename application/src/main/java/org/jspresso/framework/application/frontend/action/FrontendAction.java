@@ -76,6 +76,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   private       boolean               multiSelectionEnabled;
   private       String                mnemonicAsString;
   private       String                styleName;
+  private       Integer               repeatPeriodMillis;
 
   /**
    * Constructs a new {@code AbstractFrontendAction} instance.
@@ -590,4 +591,24 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
     actionDescriptor.setIconPreferredHeight(iconPreferredHeight);
   }
 
+  /**
+   * Gets repeat period millis.
+   *
+   * @return the repeat period millis
+   */
+  @Override
+  public Integer getRepeatPeriodMillis() {
+    return repeatPeriodMillis;
+  }
+
+  /**
+   * Sets repeat period in milliseconds. Whenever this is set to a positive integer, the client UI controller should
+   * schedule an execution of this action periodically.
+   *
+   * @param repeatPeriodMillis
+   *     the repeat period millis
+   */
+  public void setRepeatPeriodMillis(Integer repeatPeriodMillis) {
+    this.repeatPeriodMillis = repeatPeriodMillis;
+  }
 }
