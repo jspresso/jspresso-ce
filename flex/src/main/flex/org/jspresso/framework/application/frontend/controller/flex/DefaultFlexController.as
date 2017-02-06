@@ -281,6 +281,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
         doExecute(action, actionEvent, actionCallback, disableUI);
       });
       _currentActionTimer.start();
+      doExecute(action, actionEvent, actionCallback, disableUI);
     } else {
       doExecute(action, actionEvent, actionCallback, disableUI);
     }

@@ -726,12 +726,16 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     },
 
     _startCurrentActionTimer: function () {
-      this.__repeatStatusAtom.setIcon("org/jspresso/framework/circle_green.svg");
+      if (this.__repeatStatusAtom) {
+        this.__repeatStatusAtom.setIcon("org/jspresso/framework/circle_green.svg");
+      }
       this.base(arguments);
     },
 
     _stopCurrentActionTimer: function () {
-      this.__repeatStatusAtom.setIcon("org/jspresso/framework/circle_grey.svg");
+      if (this.__repeatStatusAtom) {
+        this.__repeatStatusAtom.setIcon("org/jspresso/framework/circle_grey.svg");
+      }
       this.base(arguments);
     },
 
