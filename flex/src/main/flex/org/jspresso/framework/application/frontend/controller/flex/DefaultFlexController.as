@@ -68,6 +68,7 @@ import mx.events.BrowserChangeEvent;
 import mx.events.CloseEvent;
 import mx.events.FlexEvent;
 import mx.events.IndexChangedEvent;
+import mx.events.ListEvent;
 import mx.events.MenuEvent;
 import mx.events.PropertyChangeEvent;
 import mx.managers.BrowserManager;
@@ -1357,6 +1358,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
   }
 
   protected function displayWorkspace(workspaceName:String, workspaceView:RComponent):void {
+    stopCurrentActionTimer();
     if (workspaceView) {
       var workspaceNavigator:RComponent = null;
       if (workspaceView is RSplitContainer) {
@@ -1398,6 +1400,9 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
               tree.selectedItems = [];
             }
           }, state, "selectedIndices", true);
+          tree.addEventListener(ListEvent.ITEM_CLICK, function (event:ListEvent):void {
+            stopCurrentActionTimer();
+          });
         }
         (_workspaceAccordion.getAcccordionSectionByName(workspaceName) as Container).addChild(workspaceNavigatorUI);
       }
@@ -1409,6 +1414,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
   protected function popupDialog(title:String, message:String, dialogView:UIComponent, icon:RIcon, actions:Array,
                                  useCurrent:Boolean = false, dimension:Dimension = null,
                                  secondaryActionLists:Array = null):void {
+    stopCurrentActionTimer();
     dialogView.percentWidth = 100.0;
     dialogView.percentHeight = 100.0;
     var buttonBox:HBox = new HBox();
