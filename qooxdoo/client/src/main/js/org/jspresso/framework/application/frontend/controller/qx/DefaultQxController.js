@@ -115,6 +115,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
                             secondaryActionLists) {
       useCurrent = (typeof useCurrent == 'undefined') ? false : useCurrent;
 
+      this._stopCurrentActionTimer();
       var dialogView = remoteDialogView;
       if (remoteDialogView instanceof org.jspresso.framework.gui.remote.RComponent) {
         dialogView = this._getViewFactory().createComponent(remoteDialogView);
@@ -401,6 +402,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @return {undefined}
      */
     _displayWorkspace: function (workspaceName, workspaceView) {
+      this._stopCurrentActionTimer();
       if (workspaceView) {
         var workspaceNavigator = null;
         if (workspaceView instanceof org.jspresso.framework.gui.remote.RSplitContainer) {
@@ -416,7 +418,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           var workspaceNavigatorUI = this.createComponent(workspaceNavigator);
           if (workspaceNavigatorUI instanceof qx.ui.tree.Tree) {
             workspaceNavigatorUI.setHideRoot(true);
-            //workspaceNavigatorUI.setAppearance("workspace-tree");
+            workspaceNavigatorUI.addListener("changeSelection", function (e) {
+              this._stopCurrentActionTimer();
+            }, this);
           }
           var existingChildren = this.__workspaceAccordionGroup.getChildren();
           var existingChild;

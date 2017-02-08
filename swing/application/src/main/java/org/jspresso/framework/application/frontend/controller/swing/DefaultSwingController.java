@@ -79,6 +79,7 @@ import org.jspresso.framework.application.ControllerException;
 import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
+import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.gui.swing.components.JErrorDialog;
 import org.jspresso.framework.util.gui.Dimension;
@@ -149,6 +150,7 @@ public class DefaultSwingController extends
   public void displayDialog(final JComponent mainView, final List<Action> actions, final String title,
                             final JComponent sourceComponent, final Map<String, Object> context,
                             final Dimension dimension, final boolean reuseCurrent, final boolean modal) {
+    cancelCurrentActionTimer();
     displayModalDialog(mainView, context, reuseCurrent);
     SwingUtilities.invokeLater(new Runnable() {
 
@@ -231,6 +233,7 @@ public class DefaultSwingController extends
   @Override
   protected void displayWorkspace(String workspaceName, boolean bypassModuleBoundaryActions) {
     if (!ObjectUtils.equals(workspaceName, getSelectedWorkspaceName())) {
+      cancelCurrentActionTimer();
       super.displayWorkspace(workspaceName, bypassModuleBoundaryActions);
       if (workspaceName != null) {
         if (workspaceInternalFrames == null) {
@@ -281,6 +284,15 @@ public class DefaultSwingController extends
       }
     }
     updateFrameTitle();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void displayModule(String workspaceName, Module module) {
+    cancelCurrentActionTimer();
+    super.displayModule(workspaceName, module);
   }
 
   /**
@@ -563,6 +575,7 @@ public class DefaultSwingController extends
   @Override
   public boolean stop() {
     if (super.stop()) {
+      cancelCurrentActionTimer();
       timerService.shutdown();
       if (controllerFrame != null) {
         controllerFrame.dispose();
