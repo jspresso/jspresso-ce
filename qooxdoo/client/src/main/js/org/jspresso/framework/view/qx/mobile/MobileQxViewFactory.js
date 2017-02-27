@@ -1314,6 +1314,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
             futureSelections[i].state.setSelectedIndices(futureSelections[i].selection);
           }
         }
+      }, this);
+
+      this.addComponentThresholdListener(treeList, "changeSelection", function (evt) {
         if (remoteTree.getRowAction()) {
           this._getActionHandler().execute(remoteTree.getRowAction());
         }
@@ -1917,6 +1920,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
             item._applyEventPropagation(item.getValue(), undefined, "value");
           }
         }
+      }, this);
+
+      this.addComponentThresholdListener(list, "changeSelection", function (evt) {
         if (remoteList.getRowAction()) {
           this._getActionHandler().execute(remoteList.getRowAction());
         }
@@ -2143,12 +2149,19 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       if (remoteImageComponent.getAction() != null) {
         this._getRemotePeerRegistry().register(remoteImageComponent.getAction());
         this.addComponentThresholdListener(imageComponent, "tap", function (e) {
-          var actionEvent = new org.jspresso.framework.gui.remote.RImageActionEvent();
           var element = imageComponent.getContentElement();
+          var elementRect = element.getBoundingClientRect();
+          var actionEvent = new org.jspresso.framework.gui.remote.RImageActionEvent();
           actionEvent.setWidth(element.width);
           actionEvent.setHeight(element.height);
-          actionEvent.setX(e.getDocumentLeft() - element.x);
-          actionEvent.setY(e.getDocumentTop() - element.y);
+          actionEvent.setX(~~(e.getDocumentLeft() - elementRect.left));
+          actionEvent.setY(~~(e.getDocumentTop() - elementRect.top));
+          /*
+          alert("w: " + actionEvent.getWidth() + "; " + "h: " + actionEvent.getHeight() + "; " + "x: "
+              + actionEvent.getX() + "; " + "y: " + actionEvent.getY() + "; e.x: " + element.x + "; e.y: " + element.y
+              + "; d.x: " + e.getDocumentLeft() + "; d.y: " + e.getDocumentTop() + "; r.x: " + elementRect.left
+              + "; r.y: " + elementRect.right);
+          */
           this._getActionHandler().execute(remoteImageComponent.getAction(), actionEvent);
         }, this);
       }
