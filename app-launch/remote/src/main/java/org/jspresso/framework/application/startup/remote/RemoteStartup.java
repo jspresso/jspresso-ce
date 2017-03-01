@@ -140,13 +140,7 @@ public abstract class RemoteStartup extends
       if (!dupSessionNotifiedOnce && isDupSessionDetectionEnabled()
           && controller != null && controller.isStarted()) {
         dupSessionNotifiedOnce = true;
-        RemoteMessageCommand errorMessage = createErrorMessageCommand();
-        errorMessage.setMessage(controller.getTranslation("session.dup",
-            new Object[] {
-              controller.getI18nName(controller, locale)
-            }, locale));
-        // Do not return the singleton list directly since subclasses might add commands to it.
-        return new ArrayList<>(Collections.singleton((RemoteCommand) errorMessage));
+        return handleDuplicateSession(locale, controller);
       }
       dupSessionNotifiedOnce = false;
       setStartupLocale(locale);
@@ -177,14 +171,7 @@ public abstract class RemoteStartup extends
       controller = getFrontendController();
       if (startCommand.getVersion() != null
           && !isClientVersionCompatible(startCommand.getVersion())) {
-        RemoteMessageCommand errorMessage = createErrorMessageCommand();
-        assert controller != null;
-        errorMessage.setMessage(controller.getTranslation(
-            "incompatible.client.version", new Object[] {
-                startCommand.getVersion(), Build.getJspressoVersion()
-            }, locale));
-        // Do not return the singleton list directly since subclasses might add commands to it.
-        return new ArrayList<>(Collections.singleton((RemoteCommand) errorMessage));
+        return handleVersionIncompatibility(startCommand, controller, locale);
       }
       try {
         return handleCommands(Collections
@@ -205,7 +192,58 @@ public abstract class RemoteStartup extends
     }
   }
 
-  private boolean isClientVersionCompatible(String clientVersion) {
+  /**
+   * Handle version incompatibility list.
+   *
+   * @param startCommand
+   *     the start command
+   * @param controller
+   *     the controller
+   * @param locale
+   *     the locale
+   * @return the list
+   */
+  protected List<RemoteCommand> handleVersionIncompatibility(RemoteStartCommand startCommand,
+                                                           IFrontendController<RComponent, RIcon, RAction> controller,
+                                                           Locale locale) {
+    RemoteMessageCommand errorMessage = createErrorMessageCommand();
+    assert controller != null;
+    errorMessage.setMessage(controller.getTranslation(
+        "incompatible.client.version", new Object[] {
+            startCommand.getVersion(), Build.getJspressoVersion()
+        }, locale));
+    // Do not return the singleton list directly since subclasses might add commands to it.
+    return new ArrayList<>(Collections.singleton((RemoteCommand) errorMessage));
+  }
+
+  /**
+   * Handle duplicate session list.
+   *
+   * @param locale
+   *     the locale
+   * @param controller
+   *     the controller
+   * @return the list
+   */
+  protected List<RemoteCommand> handleDuplicateSession(Locale locale,
+                                                     IFrontendController<RComponent, RIcon, RAction> controller) {
+    RemoteMessageCommand errorMessage = createErrorMessageCommand();
+    errorMessage.setMessage(controller.getTranslation("session.dup",
+        new Object[] {
+          controller.getI18nName(controller, locale)
+        }, locale));
+    // Do not return the singleton list directly since subclasses might add commands to it.
+    return new ArrayList<>(Collections.singleton((RemoteCommand) errorMessage));
+  }
+
+  /**
+   * Is client version compatible boolean.
+   *
+   * @param clientVersion
+   *     the client version
+   * @return the boolean
+   */
+  protected boolean isClientVersionCompatible(String clientVersion) {
     return Boolean.parseBoolean(System.getProperty("skipJspressoVersionCheck"))
         || Build.getJspressoVersion() == null
         || Build.UNKNOWN.equals(Build.getJspressoVersion())
@@ -252,7 +290,7 @@ public abstract class RemoteStartup extends
     return clientTimeZone;
   }
 
-  private RemoteMessageCommand createErrorMessageCommand() {
+  protected RemoteMessageCommand createErrorMessageCommand() {
     IIconFactory<RIcon> iconFactory = getFrontendController().getViewFactory()
         .getIconFactory();
     RemoteMessageCommand messageCommand = new RemoteMessageCommand();
