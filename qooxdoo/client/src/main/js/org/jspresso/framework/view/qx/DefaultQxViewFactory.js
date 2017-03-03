@@ -1388,7 +1388,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           componentLabel.setMarginBottom(rowSpacing);
           componentLabel.setAllowStretchX(false, false);
           componentLabel.setAllowStretchY(false, false);
-          if (componentLabel.getLabel() == "") {
+          if (componentLabel.getLabel() == "" && remoteForm.getLabelsPosition() == "ASIDE") {
             formLayout.setColumnFlex(labelCol - 1, 0);
             compColSpan++;
             compCol--;
