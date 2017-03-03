@@ -2336,13 +2336,16 @@ public abstract class AbstractComponentInvocationHandler implements
       if (enabled) {
         try {
           enabled = false;
+          String evtPropertyName = evt.getPropertyName();
+          Object evtOldValue = evt.getOldValue();
+          Object evtNewValue = evt.getNewValue();
           if (source instanceof IEntity && referencesInlinedComponent) {
             // for dirtiness notification.
             // must check if the actual property change does not come from a
             // nested entity. In that case, the persistent state has not
             // changed.
             boolean chainHasEntity = false;
-            String[] chain = evt.getPropertyName().split(
+            String[] chain = evtPropertyName.split(
                 "\\" + IAccessor.NESTED_DELIM);
             IComponent sourceComponent = (IComponent) evt.getSource();
             if (chain.length > 1) {
@@ -2362,46 +2365,41 @@ public abstract class AbstractComponentInvocationHandler implements
               IComponent oldComponentValue = getInlineComponentFactory().createComponentInstance(
                   sourceComponent.getComponentContract());
               oldComponentValue.straightSetProperties(sourceComponent.straightGetProperties());
-              oldComponentValue.straightSetProperty(evt.getPropertyName(), evt.getOldValue());
+              oldComponentValue.straightSetProperty(evtPropertyName, evtOldValue);
               doFirePropertyChange(source, referencePropertyName, oldComponentValue, evt.getSource());
             }
           }
           // for ui notification
-          if (!(evt.getOldValue() instanceof IComponent && (!AbstractComponentInvocationHandler.this.isInitialized(
-              evt.getOldValue())
-              || ((IComponent) evt.getOldValue()).getOwningComponent() == null))) { // FAKE OLD COMPONENT VALUE
-            for (String trackedProperty : trackedProperties) {
-              if (trackedProperty.equals(evt.getPropertyName())) {
-                doFirePropertyChange(source, referencePropertyName
-                    + IAccessor.NESTED_DELIM + trackedProperty,
-                    evt.getOldValue(), evt.getNewValue());
-              } else if (trackedProperty.startsWith(evt.getPropertyName())) {
-                String remainderProperty = trackedProperty.substring(evt
-                    .getPropertyName().length() + 1);
-                if (remainderProperty.indexOf(IAccessor.NESTED_DELIM) >= 0) {
-                  // If the remainder is a nested property, we have to take
-                  // care of manually firing.
-                  if (evt.getNewValue() != null) {
-                    try {
-                      Object newValue = getAccessorFactory()
-                          .createPropertyAccessor(remainderProperty, evt.getNewValue().getClass()).getValue(
-                              evt.getNewValue());
-                      doFirePropertyChange(source, referencePropertyName
-                          + IAccessor.NESTED_DELIM + trackedProperty,
-                          IPropertyChangeCapable.UNKNOWN, newValue);
-                    } catch (IllegalAccessException | NoSuchMethodException ex) {
-                      throw new ComponentException(ex);
-                    } catch (InvocationTargetException ex) {
-                      if (ex.getTargetException() instanceof RuntimeException) {
-                        throw (RuntimeException) ex.getTargetException();
-                      }
-                      throw new ComponentException(ex);
+          for (String trackedProperty : trackedProperties) {
+            if (trackedProperty.equals(evtPropertyName)) {
+              if (!(evtOldValue instanceof IComponent) // FAKE OLD COMPONENT VALUE
+                  || AbstractComponentInvocationHandler.this.isInitialized(evtOldValue)
+                  || ((IComponent) evtOldValue).getOwningComponent() == null) {
+                doFirePropertyChange(source, referencePropertyName + IAccessor.NESTED_DELIM + trackedProperty,
+                  evtOldValue, evtNewValue);
+              }
+            } else if (trackedProperty.startsWith(evtPropertyName)) {
+              String remainderProperty = trackedProperty.substring(evtPropertyName.length() + 1);
+              if (remainderProperty.indexOf(IAccessor.NESTED_DELIM) >= 0) {
+                // If the remainder is a nested property, we have to take
+                // care of manually firing.
+                if (evtNewValue != null) {
+                  try {
+                    Object newValue = getAccessorFactory().createPropertyAccessor(remainderProperty, evtNewValue
+                        .getClass()).getValue(evtNewValue);
+                    doFirePropertyChange(source, referencePropertyName + IAccessor.NESTED_DELIM + trackedProperty,
+                        IPropertyChangeCapable.UNKNOWN, newValue);
+                  } catch (IllegalAccessException | NoSuchMethodException ex) {
+                    throw new ComponentException(ex);
+                  } catch (InvocationTargetException ex) {
+                    if (ex.getTargetException() instanceof RuntimeException) {
+                      throw (RuntimeException) ex.getTargetException();
                     }
-                  } else {
-                    doFirePropertyChange(source, referencePropertyName
-                        + IAccessor.NESTED_DELIM + trackedProperty,
-                        IPropertyChangeCapable.UNKNOWN, null);
+                    throw new ComponentException(ex);
                   }
+                } else {
+                  doFirePropertyChange(source, referencePropertyName + IAccessor.NESTED_DELIM + trackedProperty,
+                      IPropertyChangeCapable.UNKNOWN, null);
                 }
               }
             }
