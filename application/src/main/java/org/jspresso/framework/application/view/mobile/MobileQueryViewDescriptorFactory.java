@@ -105,15 +105,11 @@ public class MobileQueryViewDescriptorFactory<E, F, G> extends BasicQueryViewDes
           propertyView.setAutoCompleteEnabled(false);
           propertyViewDescriptors.add(propertyView);
       } else if (actualPropertyDescriptor instanceof EnumQueryStructureDescriptor) {
-        BasicReferencePropertyViewDescriptor propertyView = new BasicReferencePropertyViewDescriptor();
-        propertyView.setName(queriableProperty);
-        propertyView
-            .setLovAction(createEnumSelectAction((EnumQueryStructureDescriptor) actualPropertyDescriptor));
-        propertyView.setAutoCompleteEnabled(false);
+        BasicPropertyViewDescriptor propertyView = createEnumReferencePropertyViewDescriptor(queriableProperty,
+            (EnumQueryStructureDescriptor) actualPropertyDescriptor);
         propertyViewDescriptors.add(propertyView);
       } else {
-        BasicPropertyViewDescriptor propertyView = new BasicPropertyViewDescriptor();
-        propertyView.setName(queriableProperty);
+        BasicPropertyViewDescriptor propertyView = createDefaultPropertyViewDescriptor(queriableProperty);
         propertyViewDescriptors.add(propertyView);
       }
     }
@@ -226,33 +222,7 @@ public class MobileQueryViewDescriptorFactory<E, F, G> extends BasicQueryViewDes
         if ((propertyView.getModelDescriptor() instanceof ComparableQueryStructureDescriptor)
             || propertyView.getModelDescriptor() instanceof EnumQueryStructureDescriptor) {
           if (!(propertyView instanceof BasicReferencePropertyViewDescriptor)) {
-            BasicReferencePropertyViewDescriptor refPropertyView = new BasicReferencePropertyViewDescriptor();
-            refPropertyView.setAction(propertyView.getAction());
-            refPropertyView.setBackground(propertyView.getBackground());
-            refPropertyView.setBorderType(propertyView.getBorderType());
-            refPropertyView.setDescription(propertyView.getDescription());
-            refPropertyView.setFont(propertyView.getFont());
-            refPropertyView.setForeground(propertyView.getForeground());
-            refPropertyView.setGrantedRoles(propertyView.getGrantedRoles());
-            refPropertyView.setHorizontalAlignment(propertyView
-                .getHorizontalAlignment());
-            if (propertyView instanceof DefaultDescriptor) {
-              refPropertyView.setI18nNameKey(((DefaultDescriptor) propertyView)
-                  .getI18nNameKey());
-            }
-            refPropertyView.setIcon(propertyView.getIcon());
-            refPropertyView.setLabelBackground(propertyView.getLabelBackground());
-            refPropertyView.setLabelFont(propertyView.getLabelFont());
-            refPropertyView.setLabelForeground(propertyView.getLabelForeground());
-            refPropertyView.setModelDescriptor(propertyView.getModelDescriptor());
-            refPropertyView.setName(propertyView.getName());
-            refPropertyView.setPermId(propertyView.getPermId());
-            refPropertyView.setPreferredSize(propertyView.getPreferredSize());
-            refPropertyView.setReadabilityGates(propertyView.getReadabilityGates());
-            refPropertyView.setReadOnly(propertyView.isReadOnly());
-            refPropertyView.setWritabilityGates(propertyView.getWritabilityGates());
-            refPropertyView.setWidth(propertyView.getWidth());
-            refPropertyView.setAutoCompleteEnabled(false);
+            BasicReferencePropertyViewDescriptor refPropertyView = adaptReferencePropertyViewDescriptor(propertyView);
             propertyView = refPropertyView;
             propertyViews.set(i, propertyView);
           }
