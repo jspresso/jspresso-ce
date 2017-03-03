@@ -59,6 +59,17 @@ qx.Theme.define("org.jspresso.framework.theme.Decoration",
           }
         },
 
+        "selectbox-focused": {
+          include: "button-box",
+          style: {
+            color: "selectbox-focused-border",
+            shadowBlurRadius: 2,
+            shadowColor: "selectbox-focused-border",
+            shadowLength: 0,
+            transition: "box-shadow 200ms ease-out"
+          }
+        },
+
         "inset": {
           style: {
             radius: 2,

@@ -149,8 +149,9 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           base: true,
           alias: "button-frame",
           include: "button-frame",
-          style: function (states) {
+          style: function (states, superStyles) {
             return {
+              decorator: states.focused && !states.disabled ? "selectbox-focused" : superStyles.decorator,
               padding: [2, 2],
               margin: [2, 2, 2, 4]
             };
