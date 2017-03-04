@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.view.descriptor.basic;
 
-import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.INestedComponentPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
