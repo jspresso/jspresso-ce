@@ -1484,6 +1484,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       // Since it's not resizeable anymore
       form.setMinWidth(form.getWidth());
 
+      form = formWrapper;
       form = this._applyComponentScrollability(form,  remoteForm);
       if (!remoteForm.getWidthResizeable() && !wasConstructingForm) {
         var lefter = new qx.ui.container.Composite(new qx.ui.layout.Dock());
