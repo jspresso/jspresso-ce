@@ -23,15 +23,17 @@ package org.jspresso.framework.gui.remote;
  *
  * @author Vincent Vandenschrick
  */
-public abstract class RContainer extends RComponent {
+public abstract class RContainer extends RComponent implements IRemoteScrollable {
 
   private static final long serialVersionUID = -7174072538766465667L;
+  private boolean verticallyScrollable;
+  private boolean horizontallyScrollable;
 
   /**
    * Constructs a new {@code RContainer} instance.
    *
    * @param guid
-   *          the guid
+   *     the guid
    */
   public RContainer(String guid) {
     super(guid);
@@ -45,4 +47,45 @@ public abstract class RContainer extends RComponent {
     // For serialization support
   }
 
+  /**
+   * Is vertically scrollable boolean.
+   *
+   * @return the boolean
+   */
+  @Override
+  public boolean isVerticallyScrollable() {
+    return verticallyScrollable;
+  }
+
+  /**
+   * Sets vertically scrollable.
+   *
+   * @param verticallyScrollable
+   *     the vertically scrollable
+   */
+  @Override
+  public void setVerticallyScrollable(boolean verticallyScrollable) {
+    this.verticallyScrollable = verticallyScrollable;
+  }
+
+  /**
+   * Is horizontally scrollable boolean.
+   *
+   * @return the boolean
+   */
+  @Override
+  public boolean isHorizontallyScrollable() {
+    return horizontallyScrollable;
+  }
+
+  /**
+   * Sets horizontally scrollable.
+   *
+   * @param horizontallyScrollable
+   *     the horizontally scrollable
+   */
+  @Override
+  public void setHorizontallyScrollable(boolean horizontallyScrollable) {
+    this.horizontallyScrollable = horizontallyScrollable;
+  }
 }

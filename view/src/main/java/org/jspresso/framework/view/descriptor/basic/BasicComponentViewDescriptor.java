@@ -68,12 +68,13 @@ import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
  */
 public class BasicComponentViewDescriptor extends AbstractComponentViewDescriptor {
 
-  private int                           columnCount;
-  private EHorizontalPosition           labelsHorizontalPosition;
-  private Map<String, Integer>          propertyWidths;
-  private Map<String, List<String>>     renderedChildProperties;
-  private Boolean                       verticallyScrollable;
-  private Boolean                       widthResizeable;
+  private int                       columnCount;
+  private EHorizontalPosition       labelsHorizontalPosition;
+  private Map<String, Integer>      propertyWidths;
+  private Map<String, List<String>> renderedChildProperties;
+  private Boolean                   verticallyScrollable;
+  private Boolean                   horizontallyScrollable;
+  private Boolean                   widthResizeable;
 
   /**
    * Constructs a new {@code BasicComponentViewDescriptor} instance.
@@ -82,6 +83,7 @@ public class BasicComponentViewDescriptor extends AbstractComponentViewDescripto
     super();
     columnCount = 1;
     verticallyScrollable = false;
+    horizontallyScrollable = false;
     labelsHorizontalPosition = EHorizontalPosition.LEFT;
   }
 
@@ -237,11 +239,27 @@ public class BasicComponentViewDescriptor extends AbstractComponentViewDescripto
   }
 
   /**
-   * {@inheritDoc}
+   * Gets the horizontallyScrollable.
+   *
+   * @return the horizontallyScrollable.
    */
   @Override
   public boolean isHorizontallyScrollable() {
-    return false;
+    return horizontallyScrollable;
+  }
+
+  /**
+   * This property allows to define the form horizontal scrolling behaviour.
+   * Whenever it is set to true, the corresponding UI component will install a
+   * horizontal scroll bar when the available horizontal space is not enough.
+   * <p>
+   * Default value is {@code false}.
+   *
+   * @param horizontallyScrollable
+   *     the horizontallyScrollable to set.
+   */
+  public void setHorizontallyScrollable(boolean horizontallyScrollable) {
+    this.horizontallyScrollable = horizontallyScrollable;
   }
 
   /**

@@ -130,6 +130,7 @@ import org.jspresso.framework.view.descriptor.INestedComponentPropertyViewDescri
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IRepeaterViewDescriptor;
+import org.jspresso.framework.view.descriptor.IScrollableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISimpleTreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
@@ -1457,8 +1458,22 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
       view = createTabView((ITabViewDescriptor) viewDescriptor, actionHandler, locale);
     }
     bindCompositeView(view);
+    if (view != null && viewDescriptor.isScrollable()) {
+      view.setPeer(applyComponentScrollability(view.getPeer(), viewDescriptor));
+    }
     return view;
   }
+
+  /**
+   * Apply component scrollability.
+   *
+   * @param viewComponent
+   *     the viewComponent
+   * @param viewDescriptor
+   *     the view descriptor
+   * @return the scrollable container
+   */
+  protected abstract E applyComponentScrollability(E viewComponent, IScrollableViewDescriptor viewDescriptor);
 
   /**
    * Creates a constrained grid view.

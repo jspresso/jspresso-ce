@@ -26,7 +26,7 @@ import java.util.List;
  *
  * @author Vincent Vandenschrick
  */
-public interface ICompositeViewDescriptor extends IViewDescriptor {
+public interface ICompositeViewDescriptor extends IViewDescriptor, IScrollableViewDescriptor {
 
   /**
    * Gets the child view descriptors.
@@ -43,5 +43,4 @@ public interface ICompositeViewDescriptor extends IViewDescriptor {
    * @return true if the child views are in a master / detail relationship.
    */
   boolean isCascadingModels();
-
 }

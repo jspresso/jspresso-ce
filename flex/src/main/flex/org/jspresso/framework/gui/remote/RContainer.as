@@ -24,9 +24,28 @@ package org.jspresso.framework.gui.remote {
 [RemoteClass(alias="org.jspresso.framework.gui.remote.RContainer")]
 public class RContainer extends RComponent {
 
+  private var _verticallyScrollable:Boolean;
+  private var _horizontallyScrollable:Boolean;
+
   public function RContainer() {
     //default constructor.
   }
 
+  public function get verticallyScrollable():Boolean {
+    return _verticallyScrollable;
+  }
+
+  public function set verticallyScrollable(value:Boolean):void {
+    _verticallyScrollable = value;
+  }
+
+
+  public function get horizontallyScrollable():Boolean {
+    return _horizontallyScrollable;
+  }
+
+  public function set horizontallyScrollable(value:Boolean):void {
+    _horizontallyScrollable = value;
+  }
 }
 }

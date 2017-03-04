@@ -480,6 +480,21 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       return actionComponent;
     },
 
+    _applyComponentScrollability: function (component, remoteComponent) {
+      if (remoteComponent.isVerticallyScrollable() || remoteComponent.isHorizontallyScrollable()) {
+        var scrollContainer = new qx.ui.container.Scroll();
+        scrollContainer.setScrollbarX(remoteComponent.isHorizontallyScrollable() ? "auto" : "off");
+        scrollContainer.setScrollbarY(remoteComponent.isVerticallyScrollable() ? "auto" : "off");
+        scrollContainer.setMinWidth(component.getMinWidth());
+        scrollContainer.setMinHeight(component.getMinHeight());
+        scrollContainer.setWidth(component.getWidth());
+        scrollContainer.setHeight(component.getHeight());
+        scrollContainer.add(component);
+        return scrollContainer;
+      }
+      return component;
+    },
+
     /**
      * @return {qx.ui.core.Widget}
      * @param remoteContainer {org.jspresso.framework.gui.remote.RContainer}
@@ -499,6 +514,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.RTabContainer) {
         container = this._createTabContainer(remoteContainer);
       }
+      container = this._applyComponentScrollability(container, remoteContainer);
       return container;
     },
 
@@ -1468,24 +1484,14 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       // Since it's not resizeable anymore
       form.setMinWidth(form.getWidth());
 
-      var decoratedForm = formWrapper;
-      if (remoteForm.getVerticallyScrollable()) {
-        var scrollContainer = new qx.ui.container.Scroll();
-        scrollContainer.setScrollbarX("off");
-        scrollContainer.setScrollbarY("auto");
-        scrollContainer.add(decoratedForm);
-        scrollContainer.setMinWidth(form.getMinWidth());
-        scrollContainer.setWidth(form.getWidth());
-        scrollContainer.setHeight(form.getHeight());
-        decoratedForm = scrollContainer;
-      }
+      form = this._applyComponentScrollability(form,  remoteForm);
       if (!remoteForm.getWidthResizeable() && !wasConstructingForm) {
         var lefter = new qx.ui.container.Composite(new qx.ui.layout.Dock());
-        lefter.add(decoratedForm, {edge: "west"});
-        decoratedForm = lefter;
+        lefter.add(form, {edge: "west"});
+        form = lefter;
       }
       this.__constructingForm = wasConstructingForm;
-      return decoratedForm;
+      return form;
     },
 
     /**
@@ -1551,14 +1557,14 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _createTextFieldComponent: function () {
       var tf = new qx.ui.form.TextField();
       tf.addListener("focus", function () {
-        tf.selectAllText();
+        //tf.selectAllText();
         var oldValue = tf.getValue();
-        new qx.util.DeferredCall(function () {
+        qx.event.Timer.once(function () {
           var newValue = tf.getValue();
           if (newValue && oldValue && newValue == oldValue) {
             tf.selectAllText();
           }
-        }).schedule();
+        }, {}, 0);
       });
       return tf;
     },
