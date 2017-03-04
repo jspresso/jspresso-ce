@@ -81,6 +81,7 @@ import org.jspresso.framework.gui.remote.RPasswordField;
 import org.jspresso.framework.gui.remote.RPercentField;
 import org.jspresso.framework.gui.remote.RRadioBox;
 import org.jspresso.framework.gui.remote.RRepeater;
+import org.jspresso.framework.gui.remote.IRemoteScrollable;
 import org.jspresso.framework.gui.remote.RSecurityComponent;
 import org.jspresso.framework.gui.remote.RTabContainer;
 import org.jspresso.framework.gui.remote.RTextArea;
@@ -223,6 +224,18 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
       }
     };
 
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected RComponent applyComponentScrollability(RComponent viewComponent, IScrollableViewDescriptor viewDescriptor) {
+    if (viewComponent instanceof IRemoteScrollable) {
+      ((IRemoteScrollable) viewComponent).setVerticallyScrollable(viewDescriptor.isVerticallyScrollable());
+      ((IRemoteScrollable) viewComponent).setHorizontallyScrollable(viewDescriptor.isHorizontallyScrollable());
+    }
+    return viewComponent;
   }
 
   /**
@@ -1473,8 +1486,6 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     ICompositeValueConnector connector = getConnectorFactory().createCompositeValueConnector(
         getConnectorIdForBeanView(viewDescriptor), toolTipProperty);
     RForm viewComponent = createRForm(viewDescriptor);
-    viewComponent.setVerticallyScrollable(viewDescriptor.isVerticallyScrollable());
-    viewComponent.setWidthResizeable(viewDescriptor.isWidthResizeable());
     viewComponent.setColumnCount(viewDescriptor.getColumnCount());
     viewComponent.setLabelsPosition(viewDescriptor.getLabelsPosition().name());
 
@@ -1552,6 +1563,9 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     viewComponent.setElementLabels(elementLabels.toArray(new RComponent[elementLabels.size()]));
     viewComponent.setLabelHorizontalPositions(
         labelHorizontalPositions.toArray(new String[labelHorizontalPositions.size()]));
+    if (viewDescriptor.isScrollable()) {
+      view.setPeer(applyComponentScrollability(viewComponent, viewDescriptor));
+    }
     return view;
   }
 

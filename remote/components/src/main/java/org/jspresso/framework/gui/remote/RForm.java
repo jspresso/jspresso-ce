@@ -23,7 +23,7 @@ package org.jspresso.framework.gui.remote;
  *
  * @author Vincent Vandenschrick
  */
-public class RForm extends RComponent {
+public class RForm extends RComponent implements IRemoteScrollable {
 
   private static final long serialVersionUID = -5376646056261143239L;
 
@@ -33,6 +33,7 @@ public class RForm extends RComponent {
   private Integer[]    elementWidths;
   private String[]     labelHorizontalPositions;
   private boolean      verticallyScrollable;
+  private boolean      horizontallyScrollable;
   private boolean      widthResizeable;
   private String       labelsPosition;
 
@@ -169,6 +170,25 @@ public class RForm extends RComponent {
   }
 
   /**
+   * Is horizontally scrollable boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isHorizontallyScrollable() {
+    return horizontallyScrollable;
+  }
+
+  /**
+   * Sets horizontally scrollable.
+   *
+   * @param horizontallyScrollable
+   *     the horizontally scrollable
+   */
+  public void setHorizontallyScrollable(boolean horizontallyScrollable) {
+    this.horizontallyScrollable = horizontallyScrollable;
+  }
+
+  /**
    * Get label horizontal positions.
    *
    * @return the label horizontal positions
@@ -199,7 +219,8 @@ public class RForm extends RComponent {
   /**
    * Sets width resizeable.
    *
-   * @param widthResizeable the width resizeable
+   * @param widthResizeable
+   *     the width resizeable
    */
   public void setWidthResizeable(boolean widthResizeable) {
     this.widthResizeable = widthResizeable;

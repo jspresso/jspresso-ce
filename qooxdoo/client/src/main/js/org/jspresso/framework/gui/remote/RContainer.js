@@ -17,6 +17,14 @@ qx.Class.define("org.jspresso.framework.gui.remote.RContainer", {
 
   construct: function () {
     this.base(arguments);
-  }
+  },
 
+  properties: {
+    verticallyScrollable: {
+      check: "Boolean"
+    },
+    horizontallyScrollable: {
+      check: "Boolean"
+    }
+  }
 });

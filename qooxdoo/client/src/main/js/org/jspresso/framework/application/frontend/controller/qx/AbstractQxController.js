@@ -750,7 +750,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      * @return {undefined}
      */
     start: function () {
-      this.showBusy(true);
+      //this.showBusy(true);
       var startCommand = new org.jspresso.framework.application.frontend.command.remote.RemoteStartCommand();
       startCommand.setLanguage(this.__userLanguage);
       startCommand.setKeysToTranslate(this._getKeysToTranslate());

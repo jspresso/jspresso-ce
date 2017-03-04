@@ -47,6 +47,18 @@ public abstract class BasicCompositeViewDescriptor extends BasicViewDescriptor
     implements ICompositeViewDescriptor {
 
   private boolean cascadingModels;
+  private Boolean verticallyScrollable;
+  private Boolean horizontallyScrollable;
+
+  /**
+   * Constructs a new {@code BasicCompositeViewDescriptor} instance.
+   */
+  public BasicCompositeViewDescriptor() {
+    super();
+    verticallyScrollable = false;
+    horizontallyScrollable = false;
+  }
+
 
   /**
    * If no model is defined on this composite view descriptor, gets the one from
@@ -94,6 +106,62 @@ public abstract class BasicCompositeViewDescriptor extends BasicViewDescriptor
    */
   public void setCascadingModels(boolean cascadingModels) {
     this.cascadingModels = cascadingModels;
+  }
+
+  /**
+   * Gets the verticallyScrollable.
+   *
+   * @return the verticallyScrollable.
+   */
+  @Override
+  public boolean isVerticallyScrollable() {
+    return verticallyScrollable;
+  }
+
+  /**
+   * This property allows to define the form vertical scrolling behaviour.
+   * Whenever it is set to true, the corresponding UI component will install a
+   * vertical scroll bar when the available vertical space is not enough.
+   * <p>
+   * Default value is {@code false}.
+   *
+   * @param verticallyScrollable
+   *     the verticallyScrollable to set.
+   */
+  public void setVerticallyScrollable(boolean verticallyScrollable) {
+    this.verticallyScrollable = verticallyScrollable;
+  }
+
+  /**
+   * Gets the horizontallyScrollable.
+   *
+   * @return the horizontallyScrollable.
+   */
+  @Override
+  public boolean isHorizontallyScrollable() {
+    return horizontallyScrollable;
+  }
+
+  /**
+   * This property allows to define the form horizontal scrolling behaviour.
+   * Whenever it is set to true, the corresponding UI component will install a
+   * horizontal scroll bar when the available horizontal space is not enough.
+   * <p>
+   * Default value is {@code false}.
+   *
+   * @param horizontallyScrollable
+   *     the horizontallyScrollable to set.
+   */
+  public void setHorizontallyScrollable(boolean horizontallyScrollable) {
+    this.horizontallyScrollable = horizontallyScrollable;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isScrollable() {
+    return isVerticallyScrollable() || isHorizontallyScrollable();
   }
 
   /**

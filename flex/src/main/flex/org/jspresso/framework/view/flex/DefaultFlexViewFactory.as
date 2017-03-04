@@ -826,6 +826,25 @@ public class DefaultFlexViewFactory {
     return null;
   }
 
+  protected function applyComponentScrollability(component:Container, remoteComponent:RContainer):Container {
+    if (remoteComponent.verticallyScrollable || remoteComponent.horizontallyScrollable) {
+      var scroller:Canvas = new Canvas();
+      component.percentWidth = 100.0;
+      component.percentHeight = 100.0;
+      scroller.addChild(component);
+      scroller.horizontalScrollPolicy = remoteComponent.horizontallyScrollable ? ScrollPolicy.AUTO : ScrollPolicy.OFF;
+      scroller.verticalScrollPolicy = remoteComponent.verticallyScrollable ? ScrollPolicy.AUTO : ScrollPolicy.OFF;
+      /*
+       scroller.addEventListener(FlexEvent.CREATION_COMPLETE, function (e:FlexEvent):void {
+       scroller.width = component.getExplicitOrMeasuredWidth();
+       scroller.height = component.getExplicitOrMeasuredHeight();
+       });
+       */
+      component = scroller;
+    }
+    return component;
+  }
+
   protected function createContainer(remoteContainer:RContainer):UIComponent {
     var container:Container;
     if (remoteContainer is RBorderContainer) {
@@ -841,8 +860,7 @@ public class DefaultFlexViewFactory {
     } else if (remoteContainer is RTabContainer) {
       container = createTabContainer(remoteContainer as RTabContainer);
     }
-    container.horizontalScrollPolicy = ScrollPolicy.OFF;
-    container.verticalScrollPolicy = ScrollPolicy.OFF;
+    container = applyComponentScrollability(container, remoteContainer);
     return container;
   }
 
@@ -1963,13 +1981,13 @@ public class DefaultFlexViewFactory {
     form.horizontalScrollPolicy = ScrollPolicy.OFF;
     form.verticalScrollPolicy = ScrollPolicy.OFF;
     var decoratedForm:Container = form;
-    if (remoteForm.verticallyScrollable) {
+    if (remoteForm.verticallyScrollable || remoteForm.horizontallyScrollable) {
       var scroller:Canvas = new Canvas();
       form.percentWidth = 100.0;
       form.percentHeight = 100.0;
       scroller.addChild(form);
-      scroller.horizontalScrollPolicy = ScrollPolicy.OFF;
-      scroller.verticalScrollPolicy = ScrollPolicy.AUTO;
+      scroller.horizontalScrollPolicy = remoteForm.horizontallyScrollable? ScrollPolicy.AUTO: ScrollPolicy.OFF;
+      scroller.verticalScrollPolicy = remoteForm.verticallyScrollable? ScrollPolicy.AUTO : ScrollPolicy.OFF;
       scroller.addEventListener(FlexEvent.CREATION_COMPLETE, function (e:FlexEvent):void {
         scroller.width = form.getExplicitOrMeasuredWidth();
         scroller.height = form.getExplicitOrMeasuredHeight();

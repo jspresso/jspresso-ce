@@ -41,7 +41,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -253,6 +252,25 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
   private static final Dimension TREE_PREFERRED_SIZE = new Dimension(128, 128);
   private IListSelectionModelBinder listSelectionModelBinder;
   private ITreeSelectionModelBinder treeSelectionModelBinder;
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected JComponent applyComponentScrollability(JComponent viewComponent, IScrollableViewDescriptor viewDescriptor) {
+    JScrollPane scrollPane = createJScrollPane();
+    scrollPane.setBorder(BorderFactory.createEmptyBorder());
+    scrollPane.setVerticalScrollBarPolicy(viewDescriptor.isVerticallyScrollable() ?
+        ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED: ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+    scrollPane.setHorizontalScrollBarPolicy(viewDescriptor.isHorizontallyScrollable() ?
+        ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED : ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    if (viewComponent instanceof JScrollablePanel) {
+      ((JScrollablePanel) viewComponent).setScrollableTracksViewportHeight(!viewDescriptor.isVerticallyScrollable());
+      ((JScrollablePanel) viewComponent).setScrollableTracksViewportWidth(!viewDescriptor.isHorizontallyScrollable());
+    }
+    scrollPane.setViewportView(viewComponent);
+    return scrollPane;
+  }
 
   /**
    * Sets the listSelectionModelBinder.
@@ -684,11 +702,13 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     completePropertyViewsWithDynamicBackgrounds(connector, propertyViews, modelDescriptor);
     completePropertyViewsWithDynamicForegrounds(connector, propertyViews, modelDescriptor);
     completePropertyViewsWithDynamicFonts(connector, propertyViews, modelDescriptor);
-    applyComponentViewScrollability(viewDescriptor, viewComponent, view);
     if (!viewDescriptor.isWidthResizeable()) {
       JPanel lefter = new JPanel(new BorderLayout());
       lefter.add(viewComponent, BorderLayout.WEST);
       view.setPeer(lefter);
+    }
+    if (viewDescriptor.isScrollable()) {
+      view.setPeer(applyComponentScrollability(viewComponent, viewDescriptor));
     }
     return view;
   }
@@ -846,21 +866,6 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
         }
         attachFontListener(propertyView.getPeer(), fontConnector);
       }
-    }
-  }
-
-  private void applyComponentViewScrollability(IComponentViewDescriptor viewDescriptor, final JPanel viewComponent,
-                                               IView<JComponent> view) {
-    if (viewDescriptor.isVerticallyScrollable()) {
-      JScrollPane scrollPane = createJScrollPane();
-      scrollPane.setBorder(BorderFactory.createEmptyBorder());
-      if (viewComponent instanceof JScrollablePanel) {
-        ((JScrollablePanel) viewComponent).setScrollableTracksViewportWidth(true);
-      }
-      scrollPane.setViewportView(viewComponent);
-      scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-      scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-      view.setPeer(scrollPane);
     }
   }
 
