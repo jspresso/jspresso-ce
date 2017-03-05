@@ -1486,6 +1486,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     ICompositeValueConnector connector = getConnectorFactory().createCompositeValueConnector(
         getConnectorIdForBeanView(viewDescriptor), toolTipProperty);
     RForm viewComponent = createRForm(viewDescriptor);
+    viewComponent.setWidthResizeable(viewDescriptor.isWidthResizeable());
     viewComponent.setColumnCount(viewDescriptor.getColumnCount());
     viewComponent.setLabelsPosition(viewDescriptor.getLabelsPosition().name());
 
