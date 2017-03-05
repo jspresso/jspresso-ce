@@ -1999,6 +1999,11 @@ public class DefaultFlexViewFactory {
       });
       decoratedForm = scroller;
     }
+    if (!remoteForm.widthResizeable) {
+      var lefter:Canvas = new Canvas();
+      lefter.addChild(form);
+      decoratedForm = lefter;
+    }
     return decoratedForm;
   }
 
