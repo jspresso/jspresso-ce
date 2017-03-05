@@ -27,13 +27,14 @@ public class RActionComponent extends RComponent {
 
   private static final long serialVersionUID = 310120908489485221L;
 
-  private RAction           action;
+  private RAction     action;
+  private RActionList actionList;
 
   /**
    * Constructs a new {@code RActionComponent} instance.
    *
    * @param guid
-   *          the guid.
+   *     the guid.
    */
   public RActionComponent(String guid) {
     super(guid);
@@ -60,9 +61,28 @@ public class RActionComponent extends RComponent {
    * Sets the action.
    *
    * @param action
-   *          the action to set.
+   *     the action to set.
    */
   public void setAction(RAction action) {
     this.action = action;
+  }
+
+  /**
+   * Gets action list.
+   *
+   * @return the action list
+   */
+  public RActionList getActionList() {
+    return actionList;
+  }
+
+  /**
+   * Sets action list.
+   *
+   * @param actionList
+   *     the action list
+   */
+  public void setActionList(RActionList actionList) {
+    this.actionList = actionList;
   }
 }

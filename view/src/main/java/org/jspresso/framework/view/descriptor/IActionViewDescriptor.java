@@ -20,6 +20,7 @@ package org.jspresso.framework.view.descriptor;
 
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.util.gui.ERenderingOptions;
+import org.jspresso.framework.view.action.ActionList;
 
 /**
  * An action view descriptor.
@@ -34,6 +35,13 @@ public interface IActionViewDescriptor extends IViewDescriptor {
    * @return the action that is presented to the user through this view.
    */
   IAction getAction();
+
+  /**
+   * Gets the action list that is presented to the user through this view.
+   *
+   * @return the action list that is presented to the user through this view.
+   */
+  ActionList getActionList();
 
   /**
    * Gets the renderingOptions.

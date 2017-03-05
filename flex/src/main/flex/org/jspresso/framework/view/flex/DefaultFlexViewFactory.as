@@ -1132,8 +1132,11 @@ public class DefaultFlexViewFactory {
   }
 
   protected function createActionComponent(remoteActionComponent:RActionComponent):UIComponent {
-    var actionComponent:Button = createAction(remoteActionComponent.action, null);
-    return actionComponent;
+    if (remoteActionComponent.actionList) {
+      return createToolBarFromActionLists([remoteActionComponent.actionList], null);
+    } else {
+      return createAction(remoteActionComponent.action, null);
+    }
   }
 
   private function _getComponentToStyle (component:*):* {

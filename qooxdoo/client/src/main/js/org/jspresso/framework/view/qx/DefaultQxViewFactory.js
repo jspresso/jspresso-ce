@@ -476,8 +476,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @param remoteActionComponent {org.jspresso.framework.gui.remote.RActionComponent}
      */
     _createActionComponent: function (remoteActionComponent) {
-      var actionComponent = this.createAction(remoteActionComponent.getAction());
-      return actionComponent;
+      if (remoteActionComponent.getActionList()) {
+        return this.createToolBarFromActionLists([remoteActionComponent.getActionList()], null);
+      } else {
+        return this.createAction(remoteActionComponent.getAction(), null);
+      }
     },
 
     _applyComponentScrollability: function (component, remoteComponent) {

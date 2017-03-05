@@ -19,6 +19,7 @@
 package org.jspresso.framework.view.descriptor.basic;
 
 import org.jspresso.framework.util.gui.ERenderingOptions;
+import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
 
@@ -35,6 +36,7 @@ public class BasicActionViewDescriptor extends BasicViewDescriptor implements
     IActionViewDescriptor {
 
   private IDisplayableAction action;
+  private ActionList         actionList;
   private ERenderingOptions  renderingOptions = ERenderingOptions.ICON;
 
   /**
@@ -46,16 +48,8 @@ public class BasicActionViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  public ERenderingOptions getRenderingOptions() {
-    return renderingOptions;
-  }
-
-  /**
    * Assigns the action to display as a view. The action will typically be
-   * rendered as a button in the UI. whenever you want to size the icon used to
+   * rendered as a button in the UI. Whenever you want to size the icon used to
    * display the action (and thus the button peer), you might use the
    * {@code preferredWidth} / {@code preferredHeight} properties.
    *
@@ -64,6 +58,14 @@ public class BasicActionViewDescriptor extends BasicViewDescriptor implements
    */
   public void setAction(IDisplayableAction action) {
     this.action = action;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public ERenderingOptions getRenderingOptions() {
+    return renderingOptions;
   }
 
   /**
@@ -85,4 +87,22 @@ public class BasicActionViewDescriptor extends BasicViewDescriptor implements
     this.renderingOptions = renderingOptions;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public ActionList getActionList() {
+    return actionList;
+  }
+
+  /**
+   * Assigns the action list to display as a view. The action will typically be
+   * rendered as a button bar in the UI.
+   *
+   * @param actionList
+   *     the action list to set.
+   */
+  public void setActionList(ActionList actionList) {
+    this.actionList = actionList;
+  }
 }

@@ -24,6 +24,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -404,22 +405,44 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
   @Override
   protected IView<JComponent> createActionView(IActionViewDescriptor viewDescriptor, IActionHandler actionHandler,
                                                Locale locale) {
-    JButton viewComponent = createJButton();
+    JPanel viewComponent = createJPanel();
     IValueConnector connector = getConnectorFactory().createValueConnector(ModelRefPropertyConnector.THIS_PROPERTY);
     connector.setExceptionHandler(actionHandler);
     IView<JComponent> view = constructView(viewComponent, viewDescriptor, connector);
-    viewComponent.setAction(getActionFactory()
-        .createAction(viewDescriptor.getAction(), viewDescriptor.getPreferredSize(), actionHandler, view, locale));
-    viewComponent.setBorderPainted(false);
-    switch (viewDescriptor.getRenderingOptions()) {
-      case ICON:
-        viewComponent.setText(null);
-        break;
-      case LABEL:
-        viewComponent.setIcon(null);
-        break;
-      default:
-        break;
+    if (viewDescriptor.getActionList() != null) {
+      ERenderingOptions defaultRenderingOptions = ERenderingOptions.ICON;
+      if (viewDescriptor.getRenderingOptions() != null) {
+        defaultRenderingOptions = viewDescriptor.getRenderingOptions();
+      }
+      List<JButton> viewActionList = createViewActionList(viewDescriptor.getActionList(), defaultRenderingOptions, view,
+          actionHandler, locale);
+      if (viewActionList != null) {
+        FlowLayout layout = new FlowLayout();
+        viewComponent.setLayout(layout);
+        JToolBar toolBar = createJToolBar();
+        for (JButton toolbarButton : viewActionList) {
+          toolBar.add(toolbarButton);
+        }
+        viewComponent.add(toolBar);
+      }
+    } else {
+      BorderLayout layout = new BorderLayout();
+      viewComponent.setLayout(layout);
+      JButton actionButton = createJButton();
+      actionButton.setAction(getActionFactory()
+          .createAction(viewDescriptor.getAction(), viewDescriptor.getPreferredSize(), actionHandler, view, locale));
+      actionButton.setBorderPainted(false);
+      switch (viewDescriptor.getRenderingOptions()) {
+        case ICON:
+          actionButton.setText(null);
+          break;
+        case LABEL:
+          actionButton.setIcon(null);
+          break;
+        default:
+          break;
+      }
+      viewComponent.add(actionButton, BorderLayout.CENTER);
     }
     return view;
   }
@@ -2886,37 +2909,141 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
                                        ERenderingOptions defaultRenderingOptions, IActionHandler actionHandler,
                                        Locale locale) {
     JToolBar toolBar = createJToolBar();
+    ERenderingOptions toolbarRenderingOptions = getDefaultActionMapRenderingOptions();
+    if (defaultRenderingOptions != null) {
+      toolbarRenderingOptions = defaultRenderingOptions;
+    }
+    if (actionMap.getRenderingOptions() != null) {
+      toolbarRenderingOptions = actionMap.getRenderingOptions();
+    }
     for (Iterator<ActionList> iter = actionMap.getActionLists(actionHandler).iterator(); iter.hasNext(); ) {
       ActionList nextActionList = iter.next();
-      if (actionHandler.isAccessGranted(nextActionList)) {
-        try {
-          actionHandler.pushToSecurityContext(nextActionList);
-          ERenderingOptions renderingOptions = defaultRenderingOptions;
-          if (renderingOptions == null) {
-            renderingOptions = getDefaultActionMapRenderingOptions();
-          }
-          if (nextActionList.getRenderingOptions() != null) {
-            renderingOptions = nextActionList.getRenderingOptions();
-          } else if (actionMap.getRenderingOptions() != null) {
-            renderingOptions = actionMap.getRenderingOptions();
-          }
-          if (nextActionList.isCollapsable()) {
-            JButton actionButton;
-            List<IDisplayableAction> actions = new ArrayList<>();
-            for (IDisplayableAction action : nextActionList.getActions()) {
-              if (actionHandler.isAccessGranted(action)) {
-                actions.add(action);
-              }
+      List<JButton> viewActionList = createViewActionList(nextActionList, toolbarRenderingOptions, view, actionHandler,
+          locale);
+      if (viewActionList != null) {
+        for (JButton toolbarButton : viewActionList) {
+          toolBar.add(toolbarButton);
+        }
+      }
+      if (iter.hasNext()) {
+        toolBar.addSeparator();
+      }
+    }
+    return toolBar;
+  }
+
+  /**
+   * Create view action list list.
+   *
+   * @param nextActionList
+   *     the next action list
+   * @param toolbarRenderingOptions
+   *     the toolbar rendering options
+   * @param view
+   *     the view
+   * @param actionHandler
+   *     the action handler
+   * @param locale
+   *     the locale
+   * @return the list
+   */
+  protected List<JButton> createViewActionList(ActionList nextActionList,
+                                      ERenderingOptions toolbarRenderingOptions, IView<JComponent> view,
+                                      IActionHandler actionHandler, Locale locale) {
+    if (actionHandler.isAccessGranted(nextActionList)) {
+      List<JButton> viewActionList = new ArrayList<>();
+      try {
+        actionHandler.pushToSecurityContext(nextActionList);
+        ERenderingOptions renderingOptions = toolbarRenderingOptions;
+        if (nextActionList.getRenderingOptions() != null) {
+          renderingOptions = nextActionList.getRenderingOptions();
+        }
+        if (nextActionList.isCollapsable()) {
+          JButton actionButton;
+          List<IDisplayableAction> actions = new ArrayList<>();
+          for (IDisplayableAction action : nextActionList.getActions()) {
+            if (actionHandler.isAccessGranted(action)) {
+              actions.add(action);
             }
-            if (!actions.isEmpty()) {
-              if (actions.size() > 1) {
-                actionButton = createJComboButton();
-              } else {
-                actionButton = createJButton();
+          }
+          if (!actions.isEmpty()) {
+            if (actions.size() > 1) {
+              actionButton = createJComboButton();
+            } else {
+              actionButton = createJButton();
+            }
+            IDisplayableAction mainAction = actions.get(0);
+            Action swingAction = getActionFactory().createAction(mainAction, actionHandler, view, locale);
+            actionButton.setAction(swingAction);
+            switch (renderingOptions) {
+              case ICON:
+                actionButton.setText("");
+                break;
+              case LABEL:
+                actionButton.setIcon(null);
+                break;
+              default:
+                break;
+            }
+            if (mainAction.getAcceleratorAsString() != null) {
+              KeyStroke ks = KeyStroke.getKeyStroke(mainAction.getAcceleratorAsString());
+              view.getPeer().getActionMap().put(swingAction.getValue(Action.NAME), swingAction);
+              view.getPeer().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ks,
+                  swingAction.getValue(Action.NAME));
+              String acceleratorString = KeyEvent.getKeyModifiersText(ks.getModifiers()) + "-" + KeyEvent.getKeyText(
+                  ks.getKeyCode());
+              actionButton.setToolTipText(
+                  "<HTML>" + actionButton.getToolTipText() + " <FONT SIZE=\"-2\" COLOR=\"#993366\">"
+                      + acceleratorString + "</FONT></HTML>");
+            }
+            if (actions.size() > 1) {
+              JPopupMenu popupMenu = new JPopupMenu();
+              for (IDisplayableAction menuAction : actions) {
+                JMenuItem actionItem = createMenuItem(menuAction, view, actionHandler, locale);
+                switch (renderingOptions) {
+                  case ICON:
+                    actionItem.setText("");
+                    break;
+                  case LABEL:
+                    actionItem.setIcon(null);
+                    break;
+                  default:
+                    break;
+                }
+                if (menuAction.getAcceleratorAsString() != null) {
+                  KeyStroke ks = KeyStroke.getKeyStroke(menuAction.getAcceleratorAsString());
+                  view.getPeer().getActionMap().put(swingAction.getValue(Action.NAME), swingAction);
+                  view.getPeer().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ks,
+                      swingAction.getValue(Action.NAME));
+                  String acceleratorString = KeyEvent.getKeyModifiersText(ks.getModifiers()) + "-" + KeyEvent
+                      .getKeyText(ks.getKeyCode());
+                  actionItem.setToolTipText(
+                      "<HTML>" + actionItem.getToolTipText() + " <FONT SIZE=\"-2\" COLOR=\"#993366\">"
+                          + acceleratorString + "</FONT></HTML>");
+                }
+                popupMenu.add(actionItem);
               }
-              IDisplayableAction mainAction = actions.get(0);
-              Action swingAction = getActionFactory().createAction(mainAction, actionHandler, view, locale);
+              ((JComboButton) actionButton).setArrowPopupMenu(popupMenu);
+            }
+            viewActionList.add(actionButton);
+          }
+        } else {
+          for (IDisplayableAction action : nextActionList.getActions()) {
+            if (actionHandler.isAccessGranted(action)) {
+              Action swingAction = getActionFactory().createAction(action, actionHandler, view, locale);
+              JButton actionButton = createJButton();
               actionButton.setAction(swingAction);
+              if (action.getAcceleratorAsString() != null) {
+                KeyStroke ks = KeyStroke.getKeyStroke(action.getAcceleratorAsString());
+                view.getPeer().getActionMap().put(swingAction.getValue(Action.NAME), swingAction);
+                view.getPeer().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ks,
+                    swingAction.getValue(Action.NAME));
+                String acceleratorString = KeyEvent.getKeyModifiersText(ks.getModifiers()) + "-" + KeyEvent
+                    .getKeyText(ks.getKeyCode());
+                actionButton.setToolTipText(
+                    "<HTML>" + actionButton.getToolTipText() + " <FONT SIZE=\"-2\" COLOR=\"#993366\">"
+                        + acceleratorString + "</FONT></HTML>");
+              }
               switch (renderingOptions) {
                 case ICON:
                   actionButton.setText("");
@@ -2927,88 +3054,16 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
                 default:
                   break;
               }
-              if (mainAction.getAcceleratorAsString() != null) {
-                KeyStroke ks = KeyStroke.getKeyStroke(mainAction.getAcceleratorAsString());
-                view.getPeer().getActionMap().put(swingAction.getValue(Action.NAME), swingAction);
-                view.getPeer().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ks,
-                    swingAction.getValue(Action.NAME));
-                String acceleratorString = KeyEvent.getKeyModifiersText(ks.getModifiers()) + "-" + KeyEvent.getKeyText(
-                    ks.getKeyCode());
-                actionButton.setToolTipText(
-                    "<HTML>" + actionButton.getToolTipText() + " <FONT SIZE=\"-2\" COLOR=\"#993366\">"
-                        + acceleratorString + "</FONT></HTML>");
-              }
-              if (actions.size() > 1) {
-                JPopupMenu popupMenu = new JPopupMenu();
-                for (IDisplayableAction menuAction : actions) {
-                  JMenuItem actionItem = createMenuItem(menuAction, view, actionHandler, locale);
-                  switch (renderingOptions) {
-                    case ICON:
-                      actionItem.setText("");
-                      break;
-                    case LABEL:
-                      actionItem.setIcon(null);
-                      break;
-                    default:
-                      break;
-                  }
-                  if (menuAction.getAcceleratorAsString() != null) {
-                    KeyStroke ks = KeyStroke.getKeyStroke(menuAction.getAcceleratorAsString());
-                    view.getPeer().getActionMap().put(swingAction.getValue(Action.NAME), swingAction);
-                    view.getPeer().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ks,
-                        swingAction.getValue(Action.NAME));
-                    String acceleratorString = KeyEvent.getKeyModifiersText(ks.getModifiers()) + "-" + KeyEvent
-                        .getKeyText(ks.getKeyCode());
-                    actionItem.setToolTipText(
-                        "<HTML>" + actionItem.getToolTipText() + " <FONT SIZE=\"-2\" COLOR=\"#993366\">"
-                            + acceleratorString + "</FONT></HTML>");
-                  }
-                  popupMenu.add(actionItem);
-                }
-                ((JComboButton) actionButton).setArrowPopupMenu(popupMenu);
-              }
-              toolBar.add(actionButton);
-            }
-          } else {
-            for (IDisplayableAction action : nextActionList.getActions()) {
-              if (actionHandler.isAccessGranted(action)) {
-                Action swingAction = getActionFactory().createAction(action, actionHandler, view, locale);
-                JButton actionButton = createJButton();
-                actionButton.setAction(swingAction);
-                if (action.getAcceleratorAsString() != null) {
-                  KeyStroke ks = KeyStroke.getKeyStroke(action.getAcceleratorAsString());
-                  view.getPeer().getActionMap().put(swingAction.getValue(Action.NAME), swingAction);
-                  view.getPeer().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ks,
-                      swingAction.getValue(Action.NAME));
-                  String acceleratorString = KeyEvent.getKeyModifiersText(ks.getModifiers()) + "-" + KeyEvent
-                      .getKeyText(ks.getKeyCode());
-                  actionButton.setToolTipText(
-                      "<HTML>" + actionButton.getToolTipText() + " <FONT SIZE=\"-2\" COLOR=\"#993366\">"
-                          + acceleratorString + "</FONT></HTML>");
-                }
-                switch (renderingOptions) {
-                  case ICON:
-                    actionButton.setText("");
-                    break;
-                  case LABEL:
-                    actionButton.setIcon(null);
-                    break;
-                  default:
-                    break;
-                }
-                toolBar.add(actionButton);
-              }
+              viewActionList.add(actionButton);
             }
           }
-          if (iter.hasNext()) {
-            toolBar.addSeparator();
-          }
-        } finally {
-          actionHandler.restoreLastSecurityContextSnapshot();
         }
+        return viewActionList;
+      } finally {
+        actionHandler.restoreLastSecurityContextSnapshot();
       }
     }
-    return toolBar;
+    return null;
   }
 
   /**

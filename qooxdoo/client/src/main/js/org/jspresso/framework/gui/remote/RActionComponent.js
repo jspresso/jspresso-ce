@@ -26,7 +26,12 @@ qx.Class.define("org.jspresso.framework.gui.remote.RActionComponent", {
 
   properties: {
     action: {
-      check: "org.jspresso.framework.gui.remote.RAction"
+      check: "org.jspresso.framework.gui.remote.RAction",
+      nullable: true
+    },
+    actionList: {
+      check: "org.jspresso.framework.gui.remote.RActionList",
+      nullable: true
     }
   }
 });

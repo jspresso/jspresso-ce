@@ -25,6 +25,7 @@ package org.jspresso.framework.gui.remote {
 public class RActionComponent extends RComponent {
 
   private var _action:RAction;
+  private var _actionList:RActionList;
 
   public function RActionComponent() {
     //default constructor.
@@ -36,6 +37,14 @@ public class RActionComponent extends RComponent {
 
   public function get action():RAction {
     return _action;
+  }
+
+  public function get actionList():RActionList {
+    return _actionList;
+  }
+
+  public function set actionList(value:RActionList):void {
+    _actionList = value;
   }
 }
 }
