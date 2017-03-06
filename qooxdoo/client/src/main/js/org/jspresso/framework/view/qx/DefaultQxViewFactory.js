@@ -473,10 +473,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         var scrollContainer = new qx.ui.container.Scroll();
         scrollContainer.setScrollbarX(remoteComponent.isHorizontallyScrollable() ? "auto" : "off");
         scrollContainer.setScrollbarY(remoteComponent.isVerticallyScrollable() ? "auto" : "off");
-        scrollContainer.setMinWidth(component.getMinWidth());
-        scrollContainer.setMinHeight(component.getMinHeight());
-        scrollContainer.setWidth(component.getWidth());
-        scrollContainer.setHeight(component.getHeight());
+        if (!remoteComponent.isHorizontallyScrollable()) {
+          scrollContainer.setAllowStretchX(true, false);
+        }
+        if (!remoteComponent.isVerticallyScrollable()) {
+          scrollContainer.setAllowStretchY(true, false);
+        }
         scrollContainer.add(component);
         return scrollContainer;
       }
@@ -1447,12 +1449,14 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       // Since it's not resizeable anymore
       form.setMinWidth(form.getWidth());
 
-      form = this._applyComponentScrollability(form,  remoteForm);
+      var decoratedForm = form;
       if (!remoteForm.getWidthResizeable()) {
+        decoratedForm.setAllowStretchX(false, false);
         var lefter = new qx.ui.container.Composite(new qx.ui.layout.Dock());
-        lefter.add(form, {edge: "west"});
-        form = lefter;
+        lefter.add(decoratedForm, {edge: "west"});
+        decoratedForm = lefter;
       }
+      decoratedForm = this._applyComponentScrollability(decoratedForm, remoteForm);
       return decoratedForm;
     },
 
