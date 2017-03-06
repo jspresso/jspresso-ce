@@ -488,10 +488,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         var scrollContainer = new qx.ui.container.Scroll();
         scrollContainer.setScrollbarX(remoteComponent.isHorizontallyScrollable() ? "auto" : "off");
         scrollContainer.setScrollbarY(remoteComponent.isVerticallyScrollable() ? "auto" : "off");
-        scrollContainer.setMinWidth(component.getMinWidth());
-        scrollContainer.setMinHeight(component.getMinHeight());
-        scrollContainer.setWidth(component.getWidth());
-        scrollContainer.setHeight(component.getHeight());
+        if (!remoteComponent.isHorizontallyScrollable()) {
+          scrollContainer.setAllowStretchX(true, false);
+        }
+        if (!remoteComponent.isVerticallyScrollable()) {
+          scrollContainer.setAllowStretchY(true, false);
+        }
         scrollContainer.add(component);
         return scrollContainer;
       }
@@ -1313,15 +1315,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var rowSpacing = 3;
       var labelMarginRight = 3;
 
-      var formWrapper;
-      if (!this.__constructingForm) {
-        formWrapper = new qx.ui.container.Composite();
-        formWrapper.setAppearance("form");
-        formWrapper.setLayout(new qx.ui.layout.Grow());
-        formWrapper.add(form);
-      } else {
-        formWrapper = form;
-      }
       var wasConstructingForm = this.__constructingForm;
       this.__constructingForm = true;
 
@@ -1487,15 +1480,23 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       // Since it's not resizeable anymore
       form.setMinWidth(form.getWidth());
 
-      form = formWrapper;
-      form = this._applyComponentScrollability(form,  remoteForm);
-      if (!remoteForm.getWidthResizeable() && !wasConstructingForm) {
-        var lefter = new qx.ui.container.Composite(new qx.ui.layout.Dock());
-        lefter.add(form, {edge: "west"});
-        form = lefter;
+      var decoratedForm = form;
+      if (!wasConstructingForm) {
+        decoratedForm = new qx.ui.container.Composite();
+        decoratedForm.setAppearance("form");
+        decoratedForm.setLayout(new qx.ui.layout.Grow());
+        decoratedForm.setAllowStretchY(false, false);
+        decoratedForm.add(form);
+        if (!remoteForm.getWidthResizeable()) {
+          decoratedForm.setAllowStretchX(false, false);
+          var lefter = new qx.ui.container.Composite(new qx.ui.layout.Dock());
+          lefter.add(decoratedForm, {edge: "west"});
+          decoratedForm = lefter;
+        }
+        decoratedForm = this._applyComponentScrollability(decoratedForm, remoteForm);
       }
       this.__constructingForm = wasConstructingForm;
-      return form;
+      return decoratedForm;
     },
 
     /**

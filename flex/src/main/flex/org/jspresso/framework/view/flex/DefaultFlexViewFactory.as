@@ -830,21 +830,28 @@ public class DefaultFlexViewFactory {
     return null;
   }
 
-  protected function applyComponentScrollability(component:Container, remoteComponent:RContainer):Container {
-    if (remoteComponent.verticallyScrollable || remoteComponent.horizontallyScrollable) {
+  protected function applyComponentScrollability(component:Container, remoteComponent:RComponent):Container {
+    var verticallyScrollable:Boolean = false;
+    var horizontallyScrollable:Boolean = false;
+    if (remoteComponent is RContainer) {
+      verticallyScrollable = (remoteComponent as RContainer).verticallyScrollable;
+      horizontallyScrollable = (remoteComponent as RContainer).horizontallyScrollable;
+    } else if (remoteComponent is RForm) {
+      verticallyScrollable = (remoteComponent as RForm).verticallyScrollable;
+      horizontallyScrollable = (remoteComponent as RForm).horizontallyScrollable;
+    }
+    if (verticallyScrollable || horizontallyScrollable) {
       var scroller:Canvas = new Canvas();
-      component.percentWidth = 100.0;
-      component.percentHeight = 100.0;
+      if (!horizontallyScrollable) {
+        component.percentWidth = 100;
+      }
+      if (!verticallyScrollable) {
+        component.percentHeight = 100;
+      }
       scroller.addChild(component);
-      scroller.horizontalScrollPolicy = remoteComponent.horizontallyScrollable ? ScrollPolicy.AUTO : ScrollPolicy.OFF;
-      scroller.verticalScrollPolicy = remoteComponent.verticallyScrollable ? ScrollPolicy.AUTO : ScrollPolicy.OFF;
-      /*
-       scroller.addEventListener(FlexEvent.CREATION_COMPLETE, function (e:FlexEvent):void {
-       scroller.width = component.getExplicitOrMeasuredWidth();
-       scroller.height = component.getExplicitOrMeasuredHeight();
-       });
-       */
-      component = scroller;
+      scroller.horizontalScrollPolicy = horizontallyScrollable ? ScrollPolicy.AUTO : ScrollPolicy.OFF;
+      scroller.verticalScrollPolicy = verticallyScrollable ? ScrollPolicy.AUTO : ScrollPolicy.OFF;
+      return scroller;
     }
     return component;
   }
@@ -1985,25 +1992,16 @@ public class DefaultFlexViewFactory {
     BindingUtils.bindSetter(updateToolTip, remoteState, "value", true);
     form.horizontalScrollPolicy = ScrollPolicy.OFF;
     form.verticalScrollPolicy = ScrollPolicy.OFF;
+
     var decoratedForm:Container = form;
-    if (remoteForm.verticallyScrollable || remoteForm.horizontallyScrollable) {
-      var scroller:Canvas = new Canvas();
-      form.percentWidth = 100.0;
-      form.percentHeight = 100.0;
-      scroller.addChild(form);
-      scroller.horizontalScrollPolicy = remoteForm.horizontallyScrollable? ScrollPolicy.AUTO: ScrollPolicy.OFF;
-      scroller.verticalScrollPolicy = remoteForm.verticallyScrollable? ScrollPolicy.AUTO : ScrollPolicy.OFF;
-      scroller.addEventListener(FlexEvent.CREATION_COMPLETE, function (e:FlexEvent):void {
-        scroller.width = form.getExplicitOrMeasuredWidth();
-        scroller.height = form.getExplicitOrMeasuredHeight();
-      });
-      decoratedForm = scroller;
-    }
     if (!remoteForm.widthResizeable) {
       var lefter:Canvas = new Canvas();
-      lefter.addChild(form);
+      lefter.horizontalScrollPolicy = ScrollPolicy.OFF;
+      lefter.verticalScrollPolicy = ScrollPolicy.OFF;
+      lefter.addChild(decoratedForm);
       decoratedForm = lefter;
     }
+    decoratedForm = applyComponentScrollability(decoratedForm, remoteForm);
     return decoratedForm;
   }
 
