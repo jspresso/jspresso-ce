@@ -45,6 +45,7 @@ import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.persistence.hibernate.criterion.EnhancedDetachedCriteria;
 import org.jspresso.framework.model.persistence.hibernate.criterion.ICriteriaFactory;
+import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 
 /**
@@ -255,10 +256,11 @@ public class QueryEntitiesAction extends AbstractQueryComponentsAction {
       // Hibernate batch fetching.
       IAccessorFactory accessorFactory = getAccessorFactory(context);
       for (String prefetchProperty : prefetchProperties) {
+        IAccessor propertyAccessor = accessorFactory.createPropertyAccessor(prefetchProperty,
+            queryComponent.getQueryContract());
         for (IEntity entity : entities) {
           try {
-            accessorFactory.createPropertyAccessor(prefetchProperty, queryComponent.getQueryContract()).getValue(
-                entity);
+            propertyAccessor.getValue(entity);
           } catch (Exception e) {
             LOG.warn("An unexpected exception occurred when pre-fetching property {}", prefetchProperty, e);
           }
