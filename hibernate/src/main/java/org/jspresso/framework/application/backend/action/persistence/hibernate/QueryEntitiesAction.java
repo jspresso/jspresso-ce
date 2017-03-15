@@ -256,14 +256,18 @@ public class QueryEntitiesAction extends AbstractQueryComponentsAction {
       // Hibernate batch fetching.
       IAccessorFactory accessorFactory = getAccessorFactory(context);
       for (String prefetchProperty : prefetchProperties) {
-        IAccessor propertyAccessor = accessorFactory.createPropertyAccessor(prefetchProperty,
+        try {
+          IAccessor propertyAccessor = accessorFactory.createPropertyAccessor(prefetchProperty,
             queryComponent.getQueryContract());
-        for (IEntity entity : entities) {
-          try {
-            propertyAccessor.getValue(entity);
-          } catch (Exception e) {
-            LOG.warn("An unexpected exception occurred when pre-fetching property {}", prefetchProperty, e);
+          for (IEntity entity : entities) {
+            try {
+              propertyAccessor.getValue(entity);
+            } catch (Exception e) {
+              LOG.warn("An unexpected exception occurred when pre-fetching property {}", prefetchProperty, e);
+            }
           }
+        } catch (Exception e) {
+          LOG.warn("An unexpected exception occurred when pre-fetching property {}", prefetchProperty, e);
         }
       }
     }
