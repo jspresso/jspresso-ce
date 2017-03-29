@@ -144,7 +144,7 @@ public class CreateQueryComponentAction extends BackendAction {
         .getInitializationMapping();
     if (initializationMapping != null) {
       getEntityFactory(context).applyInitializationMapping(queryComponent, queryComponent.getQueryDescriptor(),
-          masterComponent, initializationMapping);
+          masterComponent, initializationMapping, erqDescriptor.getName());
     }
     if (queryComponentRefiner != null) {
       if (LOG.isDebugEnabled()) {
