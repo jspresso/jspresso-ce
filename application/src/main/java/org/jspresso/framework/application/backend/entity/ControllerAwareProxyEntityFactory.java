@@ -121,7 +121,7 @@ public class ControllerAwareProxyEntityFactory extends BasicProxyEntityFactory {
    * {@inheritDoc}
    */
   @Override
-  protected Object extractInitValue(Object masterComponent, Object initializedAttributeValue)
+  protected Object extractInitValue(Object masterComponent, String referencePath, Object initializedAttributeValue)
       throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
     Object initValue;
     if (initializedAttributeValue instanceof String
@@ -157,7 +157,7 @@ public class ControllerAwareProxyEntityFactory extends BasicProxyEntityFactory {
         }
       }
     } else {
-      initValue = super.extractInitValue(masterComponent, initializedAttributeValue);
+      initValue = super.extractInitValue(masterComponent, referencePath, initializedAttributeValue);
     }
     return initValue;
   }

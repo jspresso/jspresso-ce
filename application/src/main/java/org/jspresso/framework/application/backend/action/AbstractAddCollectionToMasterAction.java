@@ -106,7 +106,7 @@ public abstract class AbstractAddCollectionToMasterAction extends
           Object addedComponent = newComponents.get(i);
           if (getInitializationMapping() != null) {
             getEntityFactory(context).applyInitializationMapping(addedComponent, addedComponentDescriptor, master,
-                getInitializationMapping());
+                getInitializationMapping(), null);
           }
           if (existingCollection == null
               || !existingCollection.contains(addedComponent)) {

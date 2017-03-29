@@ -68,7 +68,7 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
    * Sets the accessorFactory used by this entity factory.
    *
    * @param accessorFactory
-   *          the accessorFactory to set.
+   *     the accessorFactory to set.
    */
   public void setAccessorFactory(IAccessorFactory accessorFactory) {
     this.accessorFactory = accessorFactory;
@@ -82,7 +82,7 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
   public void sortCollectionProperty(IComponent component, String propertyName) {
     ICollectionPropertyDescriptor<?> propertyDescriptor = (ICollectionPropertyDescriptor<?>) getComponentDescriptor(
         component.getComponentContract()).getPropertyDescriptor(propertyName);
-    if(propertyDescriptor != null) {
+    if (propertyDescriptor != null) {
       Map<String, ESort> orderingProperties = propertyDescriptor.getOrderingProperties();
       if (orderingProperties != null && !orderingProperties.isEmpty()) {
         Collection<Object> propertyValue = (Collection<Object>) component.straightGetProperty(propertyName);
@@ -97,19 +97,17 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
           Class<?> collectionElementContract = propertyDescriptor.getCollectionDescriptor().getElementDescriptor()
                                                                  .getComponentContract();
           for (Map.Entry<String, ESort> orderingProperty : orderingProperties.entrySet()) {
-            orderingAccessors.add(accessorFactory.createPropertyAccessor(orderingProperty.getKey(),
-                collectionElementContract));
+            orderingAccessors.add(
+                accessorFactory.createPropertyAccessor(orderingProperty.getKey(), collectionElementContract));
             orderingDirections.add(orderingProperty.getValue());
           }
 
           List<Object> collectionOrigin = new ArrayList<>(propertyValue);
           List<ComparableProperties> listToSort = new ArrayList<>();
           for (Object sourceObject : propertyValue) {
-            listToSort.add(new ComparableProperties(sourceObject,
-                orderingAccessors));
+            listToSort.add(new ComparableProperties(sourceObject, orderingAccessors));
           }
-          Collections.sort(listToSort, new ComparablePropertiesComparator(
-              orderingDirections));
+          Collections.sort(listToSort, new ComparablePropertiesComparator(orderingDirections));
           List<Object> collectionCopy = new ArrayList<>();
           for (ComparableProperties comparableProperties : listToSort) {
             collectionCopy.add(comparableProperties.getSourceObject());
@@ -129,33 +127,38 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
   /**
    * Apply initialization mapping.
    *
-   * @param component the component
-   * @param componentDescriptor the component descriptor
-   * @param masterComponent the master component
-   * @param initializationMapping the initialization mapping
+   * @param component
+   *     the component
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param masterComponent
+   *     the master component
+   * @param initializationMapping
+   *     the initialization mapping
+   * @param referencePath
+   *     the initialization mapping reference path
    */
   @SuppressWarnings("ConstantConditions")
   @Override
   public void applyInitializationMapping(Object component, IComponentDescriptor<?> componentDescriptor,
-                                          Object masterComponent, Map<String, Object> initializationMapping) {
+                                         Object masterComponent, Map<String, Object> initializationMapping,
+                                         String referencePath) {
     if (LOG.isDebugEnabled()) {
       LOG.debug("initializationMapping : " + initializationMapping);
     }
-    for (Map.Entry<String, Object> initializedAttribute : initializationMapping
-        .entrySet()) {
+    for (Map.Entry<String, Object> initializedAttribute : initializationMapping.entrySet()) {
       if (LOG.isDebugEnabled()) {
-        LOG.debug("initializing property : " + initializedAttribute.getKey()
-            + " from " + initializedAttribute.getKey());
+        LOG.debug(
+            "initializing property : " + initializedAttribute.getKey() + " from " + initializedAttribute.getKey());
       }
       IAccessor accessor = getAccessorFactory().createPropertyAccessor(initializedAttribute.getKey(),
           componentDescriptor.getComponentContract());
       try {
         Object initValue;
-        initValue = extractInitValue(masterComponent, initializedAttribute.getValue());
+        initValue = extractInitValue(masterComponent, referencePath, initializedAttribute.getValue());
         if (initValue != null) {
-          if (initValue instanceof String
-              && (((String) initValue).endsWith("null") || ((String) initValue)
-              .endsWith(IQueryComponent.NULL_VAL))) {
+          if (initValue instanceof String && (((String) initValue).endsWith("null") || ((String) initValue).endsWith(
+              IQueryComponent.NULL_VAL))) {
             if (((String) initValue).startsWith(IQueryComponent.NOT_VAL)) {
               initValue = IQueryComponent.NULL_VAL + IQueryComponent.NULL_VAL;
               if (LOG.isDebugEnabled()) {
@@ -168,26 +171,23 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
               }
             }
           } else {
-            IPropertyDescriptor initializedPropertyDescriptor = componentDescriptor
-                .getPropertyDescriptor(initializedAttribute.getKey());
+            IPropertyDescriptor initializedPropertyDescriptor = componentDescriptor.getPropertyDescriptor(
+                initializedAttribute.getKey());
 
             if (initializedPropertyDescriptor != null) {
-              Class<?> expectedType = initializedPropertyDescriptor
-                  .getModelType();
+              Class<?> expectedType = initializedPropertyDescriptor.getModelType();
               Class<?> initValueType = initValue.getClass();
-              if (!IQueryComponent.class.isAssignableFrom(initValueType)
-                  && !expectedType.isAssignableFrom(initValueType)) {
+              if (!IQueryComponent.class.isAssignableFrom(initValueType) && !expectedType.isAssignableFrom(
+                  initValueType)) {
                 if (Boolean.TYPE.equals(expectedType)) {
                   expectedType = Boolean.class;
                 }
                 if (LOG.isDebugEnabled()) {
-                  LOG.debug("Init value needs to be refined to match expected type : "
-                      + expectedType.getName());
+                  LOG.debug("Init value needs to be refined to match expected type : " + expectedType.getName());
                 }
                 try {
-                  initValue = expectedType.getConstructor(new Class<?>[] {
-                      String.class
-                  }).newInstance(initValue.toString());
+                  initValue = expectedType.getConstructor(new Class<?>[]{String.class}).newInstance(
+                      initValue.toString());
                   // Whenever an exception occurs, just try to set it
                   // normally
                   // though.
@@ -226,45 +226,52 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
   /**
    * Extract init value.
    *
-   * @param masterComponent the master component
-   * @param initializedAttributeValue the initialized attribute value
+   * @param masterComponent
+   *     the master component
+   * @param referencePath
+   *     the masterComponent reference path
+   * @param initializedAttributeValue
+   *     the initialized attribute value
    * @return the object
-   * @throws IllegalAccessException the illegal access exception
-   * @throws InvocationTargetException the invocation target exception
-   * @throws NoSuchMethodException the no such method exception
+   *
+   * @throws IllegalAccessException
+   *     the illegal access exception
+   * @throws InvocationTargetException
+   *     the invocation target exception
+   * @throws NoSuchMethodException
+   *     the no such method exception
    */
-  protected Object extractInitValue(Object masterComponent, Object initializedAttributeValue)
+  protected Object extractInitValue(Object masterComponent, String referencePath, Object initializedAttributeValue)
       throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+    Object refinedMasterComponent = masterComponent;
+    IAccessorFactory accessorFactory = getAccessorFactory();
+    int lastDotIndexOfReferencePath = -1;
+    if (referencePath != null) {
+      lastDotIndexOfReferencePath = referencePath.lastIndexOf(IAccessor.NESTED_DELIM);
+    }
     Object initValue;
-    if (masterComponent != null
-        && initializedAttributeValue instanceof String) {
-      Class<?> masterComponentContract;
-      if (masterComponent instanceof IComponent) {
-        masterComponentContract = ((IComponent) masterComponent)
-            .getComponentContract();
-      } else if (masterComponent instanceof IQueryComponent) {
-        masterComponentContract = ((IQueryComponent) masterComponent)
-            .getQueryContract();
-      } else {
-        masterComponentContract = masterComponent.getClass();
+    if (refinedMasterComponent != null && initializedAttributeValue instanceof String) {
+      Class<?> masterComponentContract = getComponentContract(refinedMasterComponent);
+      if (lastDotIndexOfReferencePath > 0) {
+        refinedMasterComponent = accessorFactory.createPropertyAccessor(
+            referencePath.substring(0, lastDotIndexOfReferencePath), masterComponentContract).getValue(
+            masterComponent);
+        masterComponentContract = getComponentContract(refinedMasterComponent);
       }
       try {
-        IAccessor masterAccessor = getAccessorFactory()
-            .createPropertyAccessor((String) initializedAttributeValue, masterComponentContract);
-        initValue = masterAccessor.getValue(masterComponent);
+        IAccessor masterAccessor = accessorFactory.createPropertyAccessor((String) initializedAttributeValue,
+            masterComponentContract);
+        initValue = masterAccessor.getValue(refinedMasterComponent);
         if (LOG.isDebugEnabled()) {
-          LOG.debug("Master component contract : "
-              + masterComponentContract.getName());
-          LOG.debug("Init value computed from master component : "
-              + initValue);
+          LOG.debug("Master component contract : " + masterComponentContract.getName());
+          LOG.debug("Init value computed from master component : " + initValue);
         }
       } catch (MissingPropertyException ex) {
         // the value in the initialization mapping is not a property.
         // Handle it as a constant value.
         initValue = initializedAttributeValue;
         if (LOG.isDebugEnabled()) {
-          LOG.debug("Init value computed from static value : "
-              + initValue);
+          LOG.debug("Init value computed from static value : " + initValue);
         }
       }
     } else {
@@ -276,28 +283,38 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
     return initValue;
   }
 
+  private Class<?> getComponentContract(Object masterComponent) {
+    Class<?> masterComponentContract;
+    if (masterComponent instanceof IComponent) {
+      masterComponentContract = ((IComponent) masterComponent).getComponentContract();
+    } else if (masterComponent instanceof IQueryComponent) {
+      masterComponentContract = ((IQueryComponent) masterComponent).getQueryContract();
+    } else {
+      masterComponentContract = masterComponent.getClass();
+    }
+    return masterComponentContract;
+  }
+
   private static class ComparableProperties {
 
-    private Object[] valuesToCompare;
+    private       Object[] valuesToCompare;
     private final Object   sourceObject;
 
     /**
      * Constructs a new {@code ComparableProperties} instance.
      *
      * @param sourceObject
-     *          the source object to compare properties.
+     *     the source object to compare properties.
      * @param orderingAccessors
-     *          the accessors to extract properties to compare.
+     *     the accessors to extract properties to compare.
      */
-    public ComparableProperties(Object sourceObject,
-        List<IAccessor> orderingAccessors) {
+    public ComparableProperties(Object sourceObject, List<IAccessor> orderingAccessors) {
       this.sourceObject = sourceObject;
       if (sourceObject != null) {
         valuesToCompare = new Object[orderingAccessors.size()];
         for (int i = 0; i < valuesToCompare.length; i++) {
           try {
-            valuesToCompare[i] = orderingAccessors.get(i)
-                .getValue(sourceObject);
+            valuesToCompare[i] = orderingAccessors.get(i).getValue(sourceObject);
           } catch (IllegalAccessException | NoSuchMethodException ex) {
             throw new MissingPropertyException(ex.getMessage());
           } catch (InvocationTargetException ex) {
@@ -329,8 +346,7 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
     }
   }
 
-  private static class ComparablePropertiesComparator implements
-      Comparator<ComparableProperties> {
+  private static class ComparablePropertiesComparator implements Comparator<ComparableProperties> {
 
     private final List<ESort> orderingDirections;
 
@@ -338,7 +354,7 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
      * Constructs a new {@code ComparablePropertiesComparator} instance.
      *
      * @param orderingDirections
-     *          the ordering directions.
+     *     the ordering directions.
      */
     public ComparablePropertiesComparator(List<ESort> orderingDirections) {
       this.orderingDirections = orderingDirections;
