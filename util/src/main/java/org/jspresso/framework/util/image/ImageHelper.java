@@ -90,13 +90,15 @@ public final class ImageHelper {
       return svgImage.getBytes(StandardCharsets.UTF_8);
     } else {
       byte[] imageBytes = extractImageBytes(originalImageInput);
-      Image image = new Image(imageBytes);
-      if (image == null) {
+      Image image;
+      try {
+        image = new Image(imageBytes);
+      } catch (Throwable ex) {
         if (originalImageInput instanceof byte[]) {
-          LOG.warn("Received an invalid image content. Cannot transform so returning original content.");
+          LOG.warn("Received an invalid image content. Cannot transform so returning original content.", ex);
           return (byte[]) originalImageInput;
         }
-        LOG.warn("Received an invalid image content. Cannot transform so returning null.");
+        LOG.warn("Received an invalid image content. Cannot transform so returning null.", ex);
         return null;
       }
       image.rotate();
