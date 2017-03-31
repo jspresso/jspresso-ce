@@ -101,17 +101,21 @@ public final class ImageHelper {
         LOG.warn("Received an invalid image content. Cannot transform so returning null.", ex);
         return null;
       }
-      image.rotate();
-      int originalWidth = image.getWidth();
-      int originalHeight = image.getHeight();
-      if (width != null && height != null && width != originalWidth && height != originalHeight) {
-        image.resize(width, height, true);
-      } else if (height == null && width != null && width != originalWidth) {
-        image.setWidth(width);
-      } else if (width == null && height != null && height != originalHeight) {
-        image.setHeight(height);
-      } else {
-        return imageBytes;
+      try {
+        image.rotate();
+        int originalWidth = image.getWidth();
+        int originalHeight = image.getHeight();
+        if (width != null && height != null && width != originalWidth && height != originalHeight) {
+          image.resize(width, height, true);
+        } else if (height == null && width != null && width != originalWidth) {
+          image.setWidth(width);
+        } else if (width == null && height != null && height != originalHeight) {
+          image.setHeight(height);
+        } else {
+          return imageBytes;
+        }
+      } catch(Throwable ex) {
+        LOG.warn("Cannot transform the image so leaving it as is.", ex);
       }
       if (targetFormatName != null) {
         return image.getByteArray(targetFormatName);
