@@ -103,6 +103,10 @@ public final class ImageHelper {
       }
       try {
         image.rotate();
+      } catch (Throwable ex) {
+        LOG.warn("Cannot rotate the image so leaving it as is.", ex);
+      }
+      try {
         int originalWidth = image.getWidth();
         int originalHeight = image.getHeight();
         if (width != null && height != null && width != originalWidth && height != originalHeight) {
@@ -115,7 +119,7 @@ public final class ImageHelper {
           return imageBytes;
         }
       } catch(Throwable ex) {
-        LOG.warn("Cannot transform the image so leaving it as is.", ex);
+        LOG.warn("Cannot resize the image so leaving it as is.", ex);
       }
       if (targetFormatName != null) {
         return image.getByteArray(targetFormatName);
