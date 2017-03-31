@@ -49,6 +49,7 @@ public class BasicWorkspaceViewDescriptor extends BasicTreeViewDescriptor {
 
     setChildDescriptor(modulesTreeLevelDescriptor);
     setRenderedProperty(Workspace.I18N_NAME);
-    setExpanded(true);
+    //Now configurable on a workspace level
+    //setExpanded(true);
   }
 }

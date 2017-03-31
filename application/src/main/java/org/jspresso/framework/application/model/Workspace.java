@@ -118,6 +118,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
   private List<Module> modules;
   private String       name;
 
+  private boolean startExpanded;
   private boolean started;
 
   private IAction          startupAction;
@@ -131,6 +132,7 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    * Constructs a new {@code Workspace} instance.
    */
   public Workspace() {
+    startExpanded = true;
     started = false;
   }
 
@@ -277,12 +279,13 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    */
   public IViewDescriptor getViewDescriptor() {
     if (viewDescriptor == null) {
-      viewDescriptor = createWorkspaceViewDescriptor();
-      ((AbstractTreeViewDescriptor) viewDescriptor).setName(getName());
-      ((AbstractTreeViewDescriptor) viewDescriptor).setDescription(getDescription());
-      ((AbstractTreeViewDescriptor) viewDescriptor).setIcon(getIcon());
-      ((AbstractTreeViewDescriptor) viewDescriptor).setIconImageURLProvider(getIconProvider());
-      ((AbstractTreeViewDescriptor) viewDescriptor).setItemSelectionAction(getItemSelectionAction());
+      AbstractTreeViewDescriptor workspaceViewDescriptor = createWorkspaceViewDescriptor();
+      workspaceViewDescriptor.setName(getName());
+      workspaceViewDescriptor.setDescription(getDescription());
+      workspaceViewDescriptor.setIcon(getIcon());
+      workspaceViewDescriptor.setIconImageURLProvider(getIconProvider());
+      workspaceViewDescriptor.setItemSelectionAction(getItemSelectionAction());
+      viewDescriptor = workspaceViewDescriptor;
     }
     return viewDescriptor;
   }
@@ -293,7 +296,9 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    * @return the workspace view descriptor
    */
   protected AbstractTreeViewDescriptor createWorkspaceViewDescriptor() {
-    return new BasicWorkspaceViewDescriptor();
+    BasicWorkspaceViewDescriptor workspaceViewDescriptor = new BasicWorkspaceViewDescriptor();
+    workspaceViewDescriptor.setExpanded(isStartExpanded());
+    return workspaceViewDescriptor;
   }
 
   /**
@@ -660,5 +665,24 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    */
   public void setI18nPageHeaderDescription(String i18nPageHeaderDescription) {
     this.i18nPageHeaderDescription = i18nPageHeaderDescription;
+  }
+
+  /**
+   * Should the module tree start expanded.
+   *
+   * @return the boolean
+   */
+  public boolean isStartExpanded() {
+    return startExpanded;
+  }
+
+  /**
+   * Sets expanded.
+   *
+   * @param startExpanded
+   *     the expanded
+   */
+  public void setStartExpanded(boolean startExpanded) {
+    this.startExpanded = startExpanded;
   }
 }
