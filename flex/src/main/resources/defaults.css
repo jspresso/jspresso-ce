@@ -91,6 +91,11 @@ sepy|CheckBoxExtended {
   disabled-skin: Embed(source="assets/images/closeaccordion2.png");
 }
 
+.workspaceSection {
+  paddingRight: 10;
+  backgroundColor: #FFFFFF;
+}
+
 .richTextEditorStatus {
 }
 

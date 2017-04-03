@@ -173,13 +173,6 @@ public class ThemedFlexController extends DefaultFlexController {
     mainContainer.addChild(split);
     return mainContainer;
   }
-
-  protected override function assembleSplittedSection(navigationAccordion:CollapsibleAccordion,
-                                                      mainViewStack:ViewStack):UIComponent {
-    var split:UIComponent = super.assembleSplittedSection(navigationAccordion, mainViewStack);
-    navigationAccordion.percentHeight = 100.0;
-    return split;
-  }
 }
 }
 

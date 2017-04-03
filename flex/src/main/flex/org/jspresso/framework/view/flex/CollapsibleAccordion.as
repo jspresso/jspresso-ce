@@ -196,6 +196,8 @@ public class CollapsibleAccordion extends Container {
     accordionVBox = new Canvas();
     accordionVBox.percentHeight = 100;
     accordionVBox.percentWidth = 100;
+    accordionVBox.horizontalScrollPolicy = ScrollPolicy.OFF;
+    accordionVBox.verticalScrollPolicy = ScrollPolicy.AUTO;
     accordionVBox.setStyle("verticalGap", 0);
     accordionVBox.styleName = contentStyle;
 

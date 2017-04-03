@@ -342,7 +342,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
 
       var splitContainer = new qx.ui.splitpane.Pane("horizontal");
       splitContainer.setAppearance("application-split");
-      splitContainer.add(workspaceAccordion, 0);
+      var workspaceAccordionScroll = new qx.ui.container.Scroll();
+      workspaceAccordionScroll.add(workspaceAccordion);
+      workspaceAccordionScroll.setScrollbarX("off");
+      workspaceAccordionScroll.setScrollbarY("auto");
+      workspaceAccordionScroll.setAppearance("application-accordion-scroll");
+      splitContainer.add(workspaceAccordionScroll, 0);
       var workspaceStackWrapper = new qx.ui.container.Composite(new qx.ui.layout.VBox());
       var toolBar = this._createApplicationToolBar(actions, navigationActions, helpActions, exitAction);
       workspaceStackWrapper.add(toolBar);

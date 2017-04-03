@@ -535,7 +535,7 @@ mx|ToolTip {
   backgroundAlpha:   1;
   fontSize:          14px;
   fontWeight:        bold;
-  paddingLeft:       35px;
+  paddingLeft:       5px;
   skin:              ClassReference("org.jspresso.framework.theme.buttons.GreyButtonSkin");
   textRollOverColor: #D1251D;
   textSelectedColor: #D1251D;

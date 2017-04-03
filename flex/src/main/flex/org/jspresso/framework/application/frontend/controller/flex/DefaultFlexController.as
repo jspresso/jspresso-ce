@@ -1088,24 +1088,25 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
   protected function createWorkspaceAccordion(workspaceNames:Array, workspaceActions:RActionList):CollapsibleAccordion {
     var wsAccordion:CollapsibleAccordion = new CollapsibleAccordion();
     wsAccordion.historyManagementEnabled = false;
-    wsAccordion.percentHeight = 100.0;
     for (var i:int = 0; i < workspaceActions.actions.length; i++) {
       var workspaceAction:RAction = workspaceActions.actions[i];
-      var cardCanvas:Canvas = createWorkspaceAccordionSection(workspaceAction.name, workspaceNames[i]);
-      wsAccordion.addAcccordionSection(cardCanvas);
+      var workspaceSection:Container = createWorkspaceAccordionSection(workspaceAction.name, workspaceNames[i]);
+      wsAccordion.addAcccordionSection(workspaceSection);
     }
     return wsAccordion;
   }
 
-  protected function createWorkspaceAccordionSection(wsLabel:String, wsName:String):Canvas {
-    var cardCanvas:Canvas = new Canvas();
-    cardCanvas.percentWidth = 100.0;
-    cardCanvas.percentHeight = 100.0;
-    cardCanvas.horizontalScrollPolicy = ScrollPolicy.OFF;
-    cardCanvas.verticalScrollPolicy = ScrollPolicy.OFF;
-    cardCanvas.label = wsLabel;
-    cardCanvas.name = wsName;
-    return cardCanvas;
+  protected function createWorkspaceAccordionSection(wsLabel:String, wsName:String):Container {
+    var workspaceSection:VBox = new VBox();
+    workspaceSection.percentWidth = 100.0;
+    workspaceSection.percentHeight = 100.0;
+    workspaceSection.styleName = "workspaceSection";
+    workspaceSection.minHeight = 150;
+    workspaceSection.horizontalScrollPolicy = ScrollPolicy.OFF;
+    workspaceSection.verticalScrollPolicy = ScrollPolicy.OFF;
+    workspaceSection.label = wsLabel;
+    workspaceSection.name = wsName;
+    return workspaceSection;
   }
 
   protected function createWorkspaceViewStack():ViewStack {
@@ -1132,7 +1133,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     _workspaceAccordion.addEventListener(FlexEvent.CREATION_COMPLETE, function (event:FlexEvent):void {
       for (var i:int = 0; i < workspaceActions.actions.length; i++) {
         var workspaceAction:RAction = workspaceActions.actions[i];
-        var section:Canvas = _workspaceAccordion.content[i] as Canvas;
+        var section:Container = _workspaceAccordion.content[i] as Container;
         section.icon = getViewFactory().getIconForComponent(_workspaceAccordion.getHeaderAt(i), workspaceAction.icon);
         var button:Button = _workspaceAccordion.getButtonAt(i);
         button.setStyle("icon", getViewFactory().getIconForComponent(button, workspaceAction.icon));
@@ -1180,6 +1181,8 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
 
     var applicationFrame:Application = getTopLevelApplication();
     var split:UIComponent = assembleSplittedSection(navigationAccordion, mainViewStack);
+    split.percentWidth = 100.0;
+    split.percentHeight = 100.0;
     assembleApplicationControlBar(exitAction, navigationActions, actions, helpActions);
     if (secondaryActions && secondaryActions.length > 0) {
       var secondaryToolBar:UIComponent = getViewFactory().decorateWithSlideBar(getViewFactory().createToolBarFromActionLists(secondaryActions,
@@ -1202,6 +1205,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     split.resizeToContent = true;
     navigationAccordion.horizontalScrollPolicy = ScrollPolicy.OFF;
     navigationAccordion.verticalScrollPolicy = ScrollPolicy.OFF;
+    navigationAccordion.percentHeight = 100;
     var adjustDividerLocation:Function = function (event:Event):void {
       var divider:BoxDivider = split.getDividerAt(0);
       var dividerX:int = divider.x;

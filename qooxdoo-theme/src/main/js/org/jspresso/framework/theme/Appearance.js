@@ -746,7 +746,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             return {
               margin: 0,
-              padding: 0
+              padding: 0,
+              minHeight: 200
             };
           }
         },
@@ -809,9 +810,18 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
               margin: 0,
               padding: 0,
               minWidth: 0,
-              width: 230,
               decorator: "accordion-box",
               backgroundColor: "navigator"
+            }
+          }
+        },
+
+        "application-accordion-scroll": {
+          include: "scrollarea",
+          alias: "scrollarea",
+          style: function (states) {
+            return {
+              width: 230,
             }
           }
         },
