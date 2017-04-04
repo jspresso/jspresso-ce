@@ -49,13 +49,16 @@ public final class PropertyNameTank {
 
   private static Integer feedTank(String propertyName) {
     Integer index;
-    synchronized (TANK) {
-      index = TANK.get(propertyName);
-      // Now that we acquire the lock, re-check that index is still null
-      if (index == null) {
-        index = TANK.size();
-        TANK.put(propertyName, index);
-        KNAT.put(index, propertyName);
+    index = TANK.get(propertyName);
+    if (index == null) {
+      synchronized (TANK) {
+        index = TANK.get(propertyName);
+        // Now that we acquire the lock, re-check that index is still null
+        if (index == null) {
+          index = TANK.size();
+          KNAT.put(index, propertyName);
+          TANK.put(propertyName, index);
+        }
       }
     }
     return index;

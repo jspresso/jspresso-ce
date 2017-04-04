@@ -39,7 +39,7 @@ import org.jspresso.framework.util.accessor.bean.BeanAccessorFactory;
  */
 public class BasicQueryComponentDescriptorFactory implements IQueryComponentDescriptorFactory {
 
-  private Map<IComponentDescriptorProvider<? extends IComponent>, IComponentDescriptor<IQueryComponent>> registry;
+  private final Map<IComponentDescriptorProvider<? extends IComponent>, IComponentDescriptor<IQueryComponent>> registry;
   private Map<Class<? extends IComponent>, IComponentDescriptor<? extends IComponent>>                   refRegistry;
   private IAccessorFactory accessorFactory;
 

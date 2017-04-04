@@ -48,7 +48,7 @@ public class BasicComponentDescriptorRegistry implements IComponentDescriptorReg
     if (contractNameToComponentDescriptorMap == null) {
       synchronized (mutex) {
         if (contractNameToComponentDescriptorMap == null) {
-          buildContractNameIdMap();
+          contractNameToComponentDescriptorMap = buildContractNameIdMap();
         }
       }
     }
@@ -63,7 +63,7 @@ public class BasicComponentDescriptorRegistry implements IComponentDescriptorReg
     if (contractNameToComponentDescriptorMap == null) {
       synchronized (mutex) {
         if (contractNameToComponentDescriptorMap == null) {
-          buildContractNameIdMap();
+          contractNameToComponentDescriptorMap  = buildContractNameIdMap();
         }
       }
     }
@@ -84,7 +84,7 @@ public class BasicComponentDescriptorRegistry implements IComponentDescriptorReg
   }
 
   @SuppressWarnings("rawtypes")
-  private void buildContractNameIdMap() {
+  private Map<String, IComponentDescriptor<?>> buildContractNameIdMap() {
     Map<String, IComponentDescriptor<?>> map = new HashMap<>();
     Map<String, IComponentDescriptor> idToComponentDescriptors = componentApplicationContext.getBeansOfType(
         IComponentDescriptor.class, false, false);
@@ -107,6 +107,6 @@ public class BasicComponentDescriptorRegistry implements IComponentDescriptorReg
       }
     }
     map.put(BasicDescriptorDescriptor.INSTANCE.getName(), BasicDescriptorDescriptor.INSTANCE);
-    contractNameToComponentDescriptorMap = map;
+    return map;
   }
 }

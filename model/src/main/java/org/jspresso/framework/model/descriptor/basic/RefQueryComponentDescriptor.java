@@ -57,7 +57,7 @@ public class RefQueryComponentDescriptor<E> extends AbstractComponentDescriptor<
   private Class<? extends E>                                 componentContract;
   private IComponentDescriptorProvider<? extends IComponent> queryComponentsDescriptorProvider;
 
-  private Map<Class<? extends IComponent>, IComponentDescriptor<? extends IComponent>> registry;
+  private final Map<Class<? extends IComponent>, IComponentDescriptor<? extends IComponent>> registry;
   private IAccessorFactory                                                             accessorFactory;
 
   /**

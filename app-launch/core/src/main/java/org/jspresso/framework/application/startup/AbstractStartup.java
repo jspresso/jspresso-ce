@@ -36,10 +36,9 @@ import org.springframework.context.ConfigurableApplicationContext;
  */
 public abstract class AbstractStartup implements IStartup {
 
-  private BeanFactory         applicationContext;
+  private volatile BeanFactory applicationContext;
 
-  private static final Logger LOG  = LoggerFactory
-                                       .getLogger(AbstractStartup.class);
+  private static final Logger LOG = LoggerFactory.getLogger(AbstractStartup.class);
 
   private static final Object LOCK = new Object();
 
@@ -52,21 +51,20 @@ public abstract class AbstractStartup implements IStartup {
     try {
       if (applicationContext == null) {
         synchronized (LOCK) {
-          BeanFactoryLocator bfl = SingletonBeanFactoryLocator
-              .getInstance(getBeanFactorySelector());
-          BeanFactoryReference bf = bfl
-              .useBeanFactory(getApplicationContextKey());
-          applicationContext = bf.getFactory();
-          if (applicationContext instanceof ConfigurableApplicationContext) {
-            ((ConfigurableApplicationContext) applicationContext)
-                .registerShutdownHook();
+          if (applicationContext == null) {
+            BeanFactoryLocator bfl = SingletonBeanFactoryLocator.getInstance(getBeanFactorySelector());
+            BeanFactoryReference bf = bfl.useBeanFactory(getApplicationContextKey());
+            BeanFactory tempApplicationContext = bf.getFactory();
+            if (tempApplicationContext instanceof ConfigurableApplicationContext) {
+              ((ConfigurableApplicationContext) tempApplicationContext).registerShutdownHook();
+            }
+            applicationContext = tempApplicationContext;
           }
         }
       }
       return applicationContext;
     } catch (RuntimeException ex) {
-      LOG.error("{} context could not be instantiated.",
-          getApplicationContextKey(), ex);
+      LOG.error("{} context could not be instantiated.", getApplicationContextKey(), ex);
       throw ex;
     }
   }
@@ -75,7 +73,7 @@ public abstract class AbstractStartup implements IStartup {
    * Allows to change the default bean factory selector.
    *
    * @return null by default, which means that
-   *         {@code classpath*:beanRefFactory.xml} is used.
+   * {@code classpath*:beanRefFactory.xml} is used.
    */
   protected String getBeanFactorySelector() {
     return null;

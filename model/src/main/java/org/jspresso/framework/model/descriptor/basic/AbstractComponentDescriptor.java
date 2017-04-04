@@ -95,39 +95,40 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
   private BeanFactory beanFactory;
   private Class<?>    componentContract;
 
-  private Collection<String> grantedRoles;
-  private List<String>       lifecycleInterceptorBeanNames;
-  private List<String>       lifecycleInterceptorClassNames;
+  private          Collection<String> grantedRoles;
+  private volatile List<String>       lifecycleInterceptorBeanNames;
+  private volatile List<String>       lifecycleInterceptorClassNames;
 
   private List<ILifecycleInterceptor<?>>   lifecycleInterceptors;
   private Map<String, ESort>               orderingProperties;
   private Integer                          pageSize;
   private Map<String, IPropertyDescriptor> propertyDescriptorsMap;
 
-  private List<String>            queryableProperties;
-  private List<String>            renderedProperties;
-  private IComponentDescriptor<E> queryDescriptor;
-  private boolean                 isQueryDescriptor;
-  private Collection<IGate>       readabilityGates;
+  private volatile List<String>            queryableProperties;
+  private volatile List<String>            renderedProperties;
+  private volatile IComponentDescriptor<E> queryDescriptor;
+  private          boolean                 isQueryDescriptor;
+  private          Collection<IGate>       readabilityGates;
 
-  private Set<Class<?>>                  serviceContracts;
-  private Map<String, String>            serviceDelegateBeanNames;
-  private Map<String, String>            serviceDelegateClassNames;
-  private Map<String, IComponentService> serviceDelegates;
+  private          Set<Class<?>>                  serviceContracts;
+  private volatile Map<String, String>            serviceDelegateBeanNames;
+  private volatile Map<String, String>            serviceDelegateClassNames;
+  private          Map<String, IComponentService> serviceDelegates;
 
-  private String                    sqlName;
-  private List<IPropertyDescriptor> tempPropertyBuffer;
+  private          String                    sqlName;
+  private          List<IPropertyDescriptor> tempPropertyBuffer;
+  private volatile boolean                   initializingPropertyDescriptorsMap;
 
-  private String toStringProperty;
-  private String toHtmlProperty;
-  private String autoCompleteProperty;
+  private volatile String toStringProperty;
+  private          String toHtmlProperty;
+  private volatile String autoCompleteProperty;
 
   private Collection<String> unclonedProperties;
 
   private Collection<IGate> writabilityGates;
 
-  private Map<String, IPropertyDescriptor> propertyDescriptorsCache;
-  private Collection<IPropertyDescriptor>  allPropertyDescriptorsCache;
+  private          Map<String, IPropertyDescriptor> propertyDescriptorsCache;
+  private volatile Collection<IPropertyDescriptor>  allPropertyDescriptorsCache;
 
   private static BasicCollectionPropertyDescriptor<IComponent> componentTranslationsDescriptorTemplate;
 
@@ -141,6 +142,7 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
   public AbstractComponentDescriptor(String name) {
     setName(name);
     propertyDescriptorsCache = new ConcurrentHashMap<>();
+    initializingPropertyDescriptorsMap = false;
     // Force initialization of ancestor descriptors
     setAncestorDescriptors(null);
     isQueryDescriptor = false;
@@ -160,30 +162,34 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
   @SuppressWarnings("unchecked")
   @Override
   public IComponentDescriptor<E> createQueryDescriptor() {
-    synchronized (queryDescriptorLock) {
-      if (isQueryDescriptor) {
-        queryDescriptor = this;
-      }
-      if (queryDescriptor == null) {
-        queryDescriptor = (AbstractComponentDescriptor<E>) super.clone();
-        ((AbstractComponentDescriptor<E>)queryDescriptor).isQueryDescriptor = true;
+    if (queryDescriptor == null) {
+      synchronized (queryDescriptorLock) {
+        if (queryDescriptor == null) {
+          IComponentDescriptor<E> tempQueryDescriptor;
+          if (isQueryDescriptor) {
+            queryDescriptor = this;
+          } else {
+            tempQueryDescriptor = (AbstractComponentDescriptor<E>) super.clone();
+            ((AbstractComponentDescriptor<E>) tempQueryDescriptor).isQueryDescriptor = true;
 
-        List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
-        if (ancestorDescs != null) {
-          List<IComponentDescriptor<?>> queryAncestorDescriptors = new ArrayList<>();
-          for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
-            queryAncestorDescriptors.add(ancestorDescriptor.createQueryDescriptor());
+            List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
+            if (ancestorDescs != null) {
+              List<IComponentDescriptor<?>> queryAncestorDescriptors = new ArrayList<>();
+              for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
+                queryAncestorDescriptors.add(ancestorDescriptor.createQueryDescriptor());
+              }
+              ((AbstractComponentDescriptor<E>) tempQueryDescriptor).setAncestorDescriptors(queryAncestorDescriptors);
+            }
+            queryDescriptor = tempQueryDescriptor;
+            Collection<IPropertyDescriptor> declaredPropertyDescs = getDeclaredPropertyDescriptors();
+            if (declaredPropertyDescs != null) {
+              Collection<IPropertyDescriptor> queryPropertyDescriptors = new ArrayList<>();
+              for (IPropertyDescriptor propertyDescriptor : declaredPropertyDescs) {
+                queryPropertyDescriptors.add(propertyDescriptor.createQueryDescriptor());
+              }
+              ((AbstractComponentDescriptor<E>) tempQueryDescriptor).setPropertyDescriptors(queryPropertyDescriptors);
+            }
           }
-          ((AbstractComponentDescriptor<E>) queryDescriptor).setAncestorDescriptors(queryAncestorDescriptors);
-        }
-
-        Collection<IPropertyDescriptor> declaredPropertyDescs = getDeclaredPropertyDescriptors();
-        if (declaredPropertyDescs != null) {
-          Collection<IPropertyDescriptor> queryPropertyDescriptors = new ArrayList<>();
-          for (IPropertyDescriptor propertyDescriptor : declaredPropertyDescs) {
-            queryPropertyDescriptors.add(propertyDescriptor.createQueryDescriptor());
-          }
-          ((AbstractComponentDescriptor<E>) queryDescriptor).setPropertyDescriptors(queryPropertyDescriptors);
         }
       }
     }
@@ -377,33 +383,34 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
    */
   @Override
   public Collection<IPropertyDescriptor> getPropertyDescriptors() {
-    synchronized (allPropertyDescriptorsLock) {
-      if (allPropertyDescriptorsCache == null) {
-        // A map is used instead of a set since a set does not replace an
-        // element it already contains.
-        Map<String, IPropertyDescriptor> allDescriptors = new LinkedHashMap<>();
-        List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
-        if (ancestorDescs != null) {
-          for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
-            for (IPropertyDescriptor propertyDescriptor : ancestorDescriptor.getPropertyDescriptors()) {
+    if (allPropertyDescriptorsCache == null) {
+      synchronized (allPropertyDescriptorsLock) {
+        if (allPropertyDescriptorsCache == null) {
+          Collection<IPropertyDescriptor> tempAllPropertyDescriptorsCache = new ArrayList<>();
+          // A map is used instead of a set since a set does not replace an
+          // element it already contains.
+          Map<String, IPropertyDescriptor> allDescriptors = new LinkedHashMap<>();
+          List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
+          if (ancestorDescs != null) {
+            for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
+              for (IPropertyDescriptor propertyDescriptor : ancestorDescriptor.getPropertyDescriptors()) {
+                allDescriptors.put(propertyDescriptor.getName(), propertyDescriptor);
+              }
+            }
+          }
+          Collection<IPropertyDescriptor> declaredPropertyDescriptors = getDeclaredPropertyDescriptors();
+          if (declaredPropertyDescriptors != null) {
+            for (IPropertyDescriptor propertyDescriptor : declaredPropertyDescriptors) {
+              propertyDescriptor = refinePropertyDescriptor(propertyDescriptor);
               allDescriptors.put(propertyDescriptor.getName(), propertyDescriptor);
             }
           }
-        }
-        Collection<IPropertyDescriptor> declaredPropertyDescriptors = getDeclaredPropertyDescriptors();
-        if (declaredPropertyDescriptors != null) {
-          for (IPropertyDescriptor propertyDescriptor : declaredPropertyDescriptors) {
-            propertyDescriptor = refinePropertyDescriptor(propertyDescriptor);
-            allDescriptors.put(propertyDescriptor.getName(), propertyDescriptor);
-          }
-        }
-        allPropertyDescriptorsCache = new ArrayList<>();
-        for (IPropertyDescriptor propertyDescriptor : allDescriptors.values()) {
-          allPropertyDescriptorsCache.add(propertyDescriptor);
+          tempAllPropertyDescriptorsCache.addAll(allDescriptors.values());
+          allPropertyDescriptorsCache = tempAllPropertyDescriptorsCache;
         }
       }
-      return allPropertyDescriptorsCache;
     }
+    return allPropertyDescriptorsCache;
   }
 
   private final Object queryablePropertiesLock = new Object();
@@ -413,24 +420,24 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
    */
   @Override
   public List<String> getQueryableProperties() {
-    synchronized (queryablePropertiesLock) {
-      if (queryableProperties == null) {
-        Set<String> queryablePropertiesSet = new TLinkedHashSet<>(1);
-        List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
-        if (ancestorDescs != null) {
-          for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
-            for (String propertyName : ancestorDescriptor.getQueryableProperties()) {
-              queryablePropertiesSet.add(propertyName);
+    if (queryableProperties == null) {
+      synchronized (queryablePropertiesLock) {
+        if (queryableProperties == null) {
+          Set<String> queryablePropertiesSet = new TLinkedHashSet<>(1);
+          List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
+          if (ancestorDescs != null) {
+            for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
+              queryablePropertiesSet.addAll(ancestorDescriptor.getQueryableProperties());
             }
           }
-        }
-        for (String renderedProperty : getRenderedProperties()) {
-          IPropertyDescriptor declaredPropertyDescriptor = getDeclaredPropertyDescriptor(renderedProperty);
-          if (declaredPropertyDescriptor != null && declaredPropertyDescriptor.isQueryable()) {
-            queryablePropertiesSet.add(renderedProperty);
+          for (String renderedProperty : getRenderedProperties()) {
+            IPropertyDescriptor declaredPropertyDescriptor = getDeclaredPropertyDescriptor(renderedProperty);
+            if (declaredPropertyDescriptor != null && declaredPropertyDescriptor.isQueryable()) {
+              queryablePropertiesSet.add(renderedProperty);
+            }
           }
+          queryableProperties = new ArrayList<>(queryablePropertiesSet);
         }
-        queryableProperties = new ArrayList<>(queryablePropertiesSet);
       }
     }
     return explodeComponentReferences(this, queryableProperties);
@@ -463,31 +470,31 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
    */
   @Override
   public List<String> getRenderedProperties() {
-    synchronized (renderedPropertiesLock) {
-      if (renderedProperties == null) {
-        Set<String> renderedPropertiesSet = new TLinkedHashSet<>(1);
-        List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
-        if (ancestorDescs != null) {
-          for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
-            for (String propertyName : ancestorDescriptor.getRenderedProperties()) {
-              renderedPropertiesSet.add(propertyName);
+    if (renderedProperties == null) {
+      synchronized (renderedPropertiesLock) {
+        if (renderedProperties == null) {
+          Set<String> renderedPropertiesSet = new TLinkedHashSet<>(1);
+          List<IComponentDescriptor<?>> ancestorDescs = getAncestorDescriptors();
+          if (ancestorDescs != null) {
+            for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescs) {
+              renderedPropertiesSet.addAll(ancestorDescriptor.getRenderedProperties());
             }
           }
-        }
-        Collection<IPropertyDescriptor> declaredPropertyDescriptors = getDeclaredPropertyDescriptors();
-        if (declaredPropertyDescriptors != null) {
-          for (IPropertyDescriptor propertyDescriptor : declaredPropertyDescriptors) {
-            if (!(propertyDescriptor instanceof ICollectionPropertyDescriptor<?>)
-                && !(propertyDescriptor instanceof ITextPropertyDescriptor)
-                && !(propertyDescriptor instanceof IObjectPropertyDescriptor)) {
-              String propertyName = propertyDescriptor.getName();
-              if (!propertyName.endsWith(RAW_SUFFIX) && !propertyName.endsWith(NLS_SUFFIX)) {
-                renderedPropertiesSet.add(propertyName);
+          Collection<IPropertyDescriptor> declaredPropertyDescriptors = getDeclaredPropertyDescriptors();
+          if (declaredPropertyDescriptors != null) {
+            for (IPropertyDescriptor propertyDescriptor : declaredPropertyDescriptors) {
+              if (!(propertyDescriptor instanceof ICollectionPropertyDescriptor<?>)
+                  && !(propertyDescriptor instanceof ITextPropertyDescriptor)
+                  && !(propertyDescriptor instanceof IObjectPropertyDescriptor)) {
+                String propertyName = propertyDescriptor.getName();
+                if (!propertyName.endsWith(RAW_SUFFIX) && !propertyName.endsWith(NLS_SUFFIX)) {
+                  renderedPropertiesSet.add(propertyName);
+                }
               }
             }
           }
+          renderedProperties = new ArrayList<>(renderedPropertiesSet);
         }
-        renderedProperties = new ArrayList<>(renderedPropertiesSet);
       }
     }
     return explodeComponentReferences(this, renderedProperties);
@@ -564,23 +571,27 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
    */
   @Override
   public String getToStringProperty() {
-    synchronized (toStringLock) {
-      if (toStringProperty == null) {
-        List<String> rp = getRenderedProperties();
-        if (rp != null && !rp.isEmpty()) {
-          for (String renderedProperty : rp) {
-            if (getPropertyDescriptor(renderedProperty) instanceof IStringPropertyDescriptor) {
-              toStringProperty = renderedProperty;
-              break;
+    if (toStringProperty == null) {
+      synchronized (toStringLock) {
+        if (toStringProperty == null) {
+          String tempToStringProperty = null;
+          List<String> rp = getRenderedProperties();
+          if (rp != null && !rp.isEmpty()) {
+            for (String renderedProperty : rp) {
+              if (getPropertyDescriptor(renderedProperty) instanceof IStringPropertyDescriptor) {
+                tempToStringProperty = renderedProperty;
+                break;
+              }
             }
+            if (tempToStringProperty == null) {
+              tempToStringProperty = rp.get(0);
+            }
+          } else if (getPropertyDescriptor("id") != null) {
+            tempToStringProperty = "id";
+          } else {
+            tempToStringProperty = getPropertyDescriptors().iterator().next().getName();
           }
-          if (toStringProperty == null) {
-            toStringProperty = rp.get(0);
-          }
-        } else if (getPropertyDescriptor("id") != null) {
-          toStringProperty = "id";
-        } else {
-          toStringProperty = getPropertyDescriptors().iterator().next().getName();
+          toStringProperty = tempToStringProperty;
         }
       }
     }
@@ -609,33 +620,37 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
    */
   @Override
   public String getAutoCompleteProperty() {
-    synchronized (autoCompleteLock) {
-      if (autoCompleteProperty == null) {
-        IPropertyDescriptor lpd = getPropertyDescriptor(getToStringProperty());
-        if (lpd != null && !lpd.isComputed()) {
-          autoCompleteProperty = lpd.getName();
-        } else {
-          List<String> rp = getRenderedProperties();
-          if (rp != null && !rp.isEmpty()) {
-            for (String renderedProperty : rp) {
-              if (getPropertyDescriptor(renderedProperty) instanceof IStringPropertyDescriptor) {
-                autoCompleteProperty = renderedProperty;
-                break;
-              }
-            }
-            if (autoCompleteProperty == null) {
-              Collection<IPropertyDescriptor> allProps = getPropertyDescriptors();
-              for (IPropertyDescriptor pd : allProps) {
-                if (pd instanceof IStringPropertyDescriptor && !IEntity.ID.equals(pd.getName())) {
-                  autoCompleteProperty = pd.getName();
+    if (autoCompleteProperty == null) {
+      synchronized (autoCompleteLock) {
+        if (autoCompleteProperty == null) {
+          String tempAutoCompleteProperty = null;
+          IPropertyDescriptor lpd = getPropertyDescriptor(getToStringProperty());
+          if (lpd != null && !lpd.isComputed()) {
+            tempAutoCompleteProperty = lpd.getName();
+          } else {
+            List<String> rp = getRenderedProperties();
+            if (rp != null && !rp.isEmpty()) {
+              for (String renderedProperty : rp) {
+                if (getPropertyDescriptor(renderedProperty) instanceof IStringPropertyDescriptor) {
+                  tempAutoCompleteProperty = renderedProperty;
                   break;
                 }
               }
-            }
-            if (autoCompleteProperty == null) {
-              autoCompleteProperty = IEntity.ID;
+              if (tempAutoCompleteProperty == null) {
+                Collection<IPropertyDescriptor> allProps = getPropertyDescriptors();
+                for (IPropertyDescriptor pd : allProps) {
+                  if (pd instanceof IStringPropertyDescriptor && !IEntity.ID.equals(pd.getName())) {
+                    tempAutoCompleteProperty = pd.getName();
+                    break;
+                  }
+                }
+              }
+              if (tempAutoCompleteProperty == null) {
+                tempAutoCompleteProperty = IEntity.ID;
+              }
             }
           }
+          autoCompleteProperty = tempAutoCompleteProperty;
         }
       }
     }
@@ -802,8 +817,8 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
         if (untypedOrderingProperty.getValue() instanceof ESort) {
           orderingProperties.put(untypedOrderingProperty.getKey(), (ESort) untypedOrderingProperty.getValue());
         } else if (untypedOrderingProperty.getValue() instanceof String) {
-          orderingProperties.put(untypedOrderingProperty.getKey(), ESort.valueOf(
-              (String) untypedOrderingProperty.getValue()));
+          orderingProperties.put(untypedOrderingProperty.getKey(),
+              ESort.valueOf((String) untypedOrderingProperty.getValue()));
         } else {
           orderingProperties.put(untypedOrderingProperty.getKey(), ESort.ASCENDING);
         }
@@ -1112,7 +1127,7 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
             // Whenever there are circular references between inline components, do not try to resolve them since it's
             // impossible, but log the warning.
             LOG.warn("A circular reference has been detected on inline {} components. You should explicitly declare "
-                    + "their rendered properties since they cannot be computed automatically.", watchDog);
+                + "their rendered properties since they cannot be computed automatically.", watchDog);
           } else {
             watchDog.add(componentDescriptor.getComponentContract());
             List<String> nestedProperties = new ArrayList<>();
@@ -1148,52 +1163,56 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
 
   @SuppressWarnings("unchecked")
   private void processPropertiesBufferIfNecessary() {
-    synchronized (propertiesBufferLock) {
-      if (tempPropertyBuffer != null) {
-        propertyDescriptorsMap = new LinkedHashMap<>();
-        for (IPropertyDescriptor descriptor : tempPropertyBuffer) {
-          if (descriptor instanceof IStringPropertyDescriptor) {
-            if (((IStringPropertyDescriptor) descriptor).isTranslatable()) {
-              String rawSqlName = ((BasicStringPropertyDescriptor) descriptor).getSqlName();
-              if (rawSqlName == null) {
-                rawSqlName = new SqlHelper().transformToSql(descriptor.getName(), null);
-              }
-              ((BasicStringPropertyDescriptor) descriptor).setSqlName(rawSqlName);
-              if (!descriptor.getName().endsWith(RAW_SUFFIX)) {
-                ((BasicStringPropertyDescriptor) descriptor).setName(descriptor.getName() + RAW_SUFFIX);
+    if (tempPropertyBuffer != null && !initializingPropertyDescriptorsMap) {
+      synchronized (propertiesBufferLock) {
+        if (tempPropertyBuffer != null && !initializingPropertyDescriptorsMap) {
+          initializingPropertyDescriptorsMap = true;
+          propertyDescriptorsMap = new LinkedHashMap<>();
+          for (IPropertyDescriptor descriptor : tempPropertyBuffer) {
+            if (descriptor instanceof IStringPropertyDescriptor) {
+              if (((IStringPropertyDescriptor) descriptor).isTranslatable()) {
+                String rawSqlName = ((BasicStringPropertyDescriptor) descriptor).getSqlName();
+                if (rawSqlName == null) {
+                  rawSqlName = new SqlHelper().transformToSql(descriptor.getName(), null);
+                }
+                ((BasicStringPropertyDescriptor) descriptor).setSqlName(rawSqlName);
+                if (!descriptor.getName().endsWith(RAW_SUFFIX)) {
+                  ((BasicStringPropertyDescriptor) descriptor).setName(descriptor.getName() + RAW_SUFFIX);
+                }
               }
             }
+            propertyDescriptorsMap.put(descriptor.getName(), descriptor);
           }
-          propertyDescriptorsMap.put(descriptor.getName(), descriptor);
-        }
-        tempPropertyBuffer = null;
-        if (isTranslatable()) {
-          for (IPropertyDescriptor translatablePropertyDescriptor : getPropertyDescriptors()) {
-            if (translatablePropertyDescriptor instanceof IStringPropertyDescriptor
-                && ((IStringPropertyDescriptor) translatablePropertyDescriptor).isTranslatable()
-                && !translatablePropertyDescriptor.getName().endsWith(NLS_SUFFIX)) {
-              completeWithComputedNlsDescriptors(translatablePropertyDescriptor);
+          tempPropertyBuffer = null;
+          if (isTranslatable()) {
+            for (IPropertyDescriptor translatablePropertyDescriptor : getPropertyDescriptors()) {
+              if (translatablePropertyDescriptor instanceof IStringPropertyDescriptor
+                  && ((IStringPropertyDescriptor) translatablePropertyDescriptor).isTranslatable()
+                  && !translatablePropertyDescriptor.getName().endsWith(NLS_SUFFIX)) {
+                completeWithComputedNlsDescriptors(translatablePropertyDescriptor);
+              }
+            }
+            if (!isPurelyAbstract()) {
+              BasicCollectionPropertyDescriptor<IComponent> translationsPropertyDescriptor =
+                  getComponentTranslationsDescriptorTemplate()
+                  .clone();
+              translationsPropertyDescriptor.setSqlName("T");
+              BasicCollectionDescriptor<IComponent> translationsCollectionDescriptor =
+                  (BasicCollectionDescriptor<IComponent>) ((BasicCollectionDescriptor<IComponent>)
+                      translationsPropertyDescriptor
+                  .getReferencedDescriptor()).clone();
+              BasicComponentDescriptor<IComponent> translationDescriptor = (BasicComponentDescriptor<IComponent>) (
+                  (BasicComponentDescriptor<IComponent>) translationsCollectionDescriptor
+                  .getElementDescriptor()).clone();
+              translationsPropertyDescriptor.setReferencedDescriptor(translationsCollectionDescriptor);
+              translationsCollectionDescriptor.setElementDescriptor(translationDescriptor);
+              translationDescriptor.setName(getName() + "$Translation");
+              propertyDescriptorsMap.put(translationsPropertyDescriptor.getName(), translationsPropertyDescriptor);
             }
           }
-          if (!isPurelyAbstract()) {
-            BasicCollectionPropertyDescriptor<IComponent> translationsPropertyDescriptor =
-                getComponentTranslationsDescriptorTemplate()
-                .clone();
-            translationsPropertyDescriptor.setSqlName("T");
-            BasicCollectionDescriptor<IComponent> translationsCollectionDescriptor =
-                (BasicCollectionDescriptor<IComponent>) ((BasicCollectionDescriptor<IComponent>)
-                    translationsPropertyDescriptor
-                .getReferencedDescriptor()).clone();
-            BasicComponentDescriptor<IComponent> translationDescriptor = (BasicComponentDescriptor<IComponent>) (
-                (BasicComponentDescriptor<IComponent>) translationsCollectionDescriptor
-                .getElementDescriptor()).clone();
-            translationsPropertyDescriptor.setReferencedDescriptor(translationsCollectionDescriptor);
-            translationsCollectionDescriptor.setElementDescriptor(translationDescriptor);
-            translationDescriptor.setName(getName() + "$Translation");
-            propertyDescriptorsMap.put(translationsPropertyDescriptor.getName(), translationsPropertyDescriptor);
-          }
+          resetPropertyDescriptorCaches();
+          initializingPropertyDescriptorsMap = false;
         }
-        resetPropertyDescriptorCaches();
       }
     }
   }
@@ -1208,22 +1227,18 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
     nlsDescriptor.setDelegateWritable(true);
     nlsDescriptor.setComputed(true);
     if (!isPurelyAbstract()) {
-      nlsDescriptor.setSqlName("(SELECT T.TRANSLATED_VALUE FROM {tableName}_T T WHERE T." +
-          "T_{tableName}_ID = ID AND T.LANGUAGE = :JspressoSessionGlobals.language AND " +
-          "T.PROPERTY_NAME = '" + barePropertyName + "')");
+      nlsDescriptor.setSqlName("(SELECT T.TRANSLATED_VALUE FROM {tableName}_T T WHERE T."
+          + "T_{tableName}_ID = ID AND T.LANGUAGE = :JspressoSessionGlobals.language AND " + "T.PROPERTY_NAME = '"
+          + barePropertyName + "')");
     }
     BasicStringPropertyDescriptor rawOrNlsDescriptor = (BasicStringPropertyDescriptor) rawDescriptor.clone();
     rawOrNlsDescriptor.setName(barePropertyName);
     rawOrNlsDescriptor.setDelegateWritable(true);
     rawOrNlsDescriptor.setComputed(true);
     if (!isPurelyAbstract()) {
-      rawOrNlsDescriptor.setSqlName("CASE WHEN " +
-          nlsDescriptor.getSqlName() +
-          " IS NULL THEN " +
-          ((BasicPropertyDescriptor) rawDescriptor).getSqlName() +
-          " ELSE " +
-          nlsDescriptor.getSqlName() +
-          " END");
+      rawOrNlsDescriptor.setSqlName(
+          "CASE WHEN " + nlsDescriptor.getSqlName() + " IS NULL THEN " + ((BasicPropertyDescriptor) rawDescriptor)
+              .getSqlName() + " ELSE " + nlsDescriptor.getSqlName() + " END");
     }
     propertyDescriptorsMap.put(nlsDescriptor.getName(), nlsDescriptor);
     propertyDescriptorsMap.put(rawOrNlsDescriptor.getName(), rawOrNlsDescriptor);
@@ -1232,41 +1247,45 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
   private final Object delegateServicesLock = new Object();
 
   private void registerDelegateServicesIfNecessary() {
-    synchronized (delegateServicesLock) {
-      if (serviceDelegateClassNames != null) {
-        for (Entry<String, String> nextEntry : serviceDelegateClassNames.entrySet()) {
-          try {
-            IComponentService delegate = null;
-            String serviceClassName = nextEntry.getKey();
-            String serviceDelegateClassName = nextEntry.getValue();
-            if (!(serviceDelegateClassName == null || "".equals(serviceDelegateClassName) || "null".equalsIgnoreCase(
-                serviceDelegateClassName))) {
-              delegate = (IComponentService) Class.forName(serviceDelegateClassName).newInstance();
+    if (serviceDelegateClassNames != null) {
+      synchronized (delegateServicesLock) {
+        if (serviceDelegateClassNames != null) {
+          for (Entry<String, String> nextEntry : serviceDelegateClassNames.entrySet()) {
+            try {
+              IComponentService delegate = null;
+              String serviceClassName = nextEntry.getKey();
+              String serviceDelegateClassName = nextEntry.getValue();
+              if (!(serviceDelegateClassName == null || "".equals(serviceDelegateClassName) || "null".equalsIgnoreCase(
+                  serviceDelegateClassName))) {
+                delegate = (IComponentService) Class.forName(serviceDelegateClassName).newInstance();
+              }
+              registerService(Class.forName(ObjectUtils.extractRawClassName(serviceClassName)), delegate);
+            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
+              throw new DescriptorException(ex);
             }
-            registerService(Class.forName(ObjectUtils.extractRawClassName(serviceClassName)), delegate);
-          } catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
-            throw new DescriptorException(ex);
           }
+          serviceDelegateClassNames = null;
         }
-        serviceDelegateClassNames = null;
       }
     }
-    synchronized (delegateServicesLock) {
-      if (serviceDelegateBeanNames != null && beanFactory != null) {
-        for (Entry<String, String> nextEntry : serviceDelegateBeanNames.entrySet()) {
-          try {
-            String serviceClassName = nextEntry.getKey();
-            String serviceDelegateBeanName = nextEntry.getValue();
-            if (!(serviceDelegateBeanName == null || "".equals(serviceDelegateBeanName) || "null".equalsIgnoreCase(
-                serviceDelegateBeanName))) {
-              registerService(Class.forName(ObjectUtils.extractRawClassName(serviceClassName)), beanFactory.getBean(
-                  serviceDelegateBeanName, IComponentService.class));
+    if (serviceDelegateBeanNames != null && beanFactory != null) {
+      synchronized (delegateServicesLock) {
+        if (serviceDelegateBeanNames != null && beanFactory != null) {
+          for (Entry<String, String> nextEntry : serviceDelegateBeanNames.entrySet()) {
+            try {
+              String serviceClassName = nextEntry.getKey();
+              String serviceDelegateBeanName = nextEntry.getValue();
+              if (!(serviceDelegateBeanName == null || "".equals(serviceDelegateBeanName) || "null".equalsIgnoreCase(
+                  serviceDelegateBeanName))) {
+                registerService(Class.forName(ObjectUtils.extractRawClassName(serviceClassName)),
+                    beanFactory.getBean(serviceDelegateBeanName, IComponentService.class));
+              }
+            } catch (ClassNotFoundException ex) {
+              throw new DescriptorException(ex);
             }
-          } catch (ClassNotFoundException ex) {
-            throw new DescriptorException(ex);
           }
+          serviceDelegateBeanNames = null;
         }
-        serviceDelegateBeanNames = null;
       }
     }
   }
@@ -1281,26 +1300,31 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
   private final Object lifecycleInterceptorsLock = new Object();
 
   private void registerLifecycleInterceptorsIfNecessary() {
-    synchronized (lifecycleInterceptorsLock) {
-      // process creation of lifecycle interceptors.
-      if (lifecycleInterceptorClassNames != null) {
-        for (String lifecycleInterceptorClassName : lifecycleInterceptorClassNames) {
-          try {
-            registerLifecycleInterceptor((ILifecycleInterceptor<?>) Class.forName(lifecycleInterceptorClassName)
-                                                                         .newInstance());
-          } catch (InstantiationException | ClassNotFoundException | IllegalAccessException ex) {
-            throw new DescriptorException(ex);
+    if (lifecycleInterceptorClassNames != null) {
+      synchronized (lifecycleInterceptorsLock) {
+        // process creation of lifecycle interceptors.
+        if (lifecycleInterceptorClassNames != null) {
+          for (String lifecycleInterceptorClassName : lifecycleInterceptorClassNames) {
+            try {
+              registerLifecycleInterceptor(
+                  (ILifecycleInterceptor<?>) Class.forName(lifecycleInterceptorClassName).newInstance());
+            } catch (InstantiationException | ClassNotFoundException | IllegalAccessException ex) {
+              throw new DescriptorException(ex);
+            }
           }
+          lifecycleInterceptorClassNames = null;
         }
-        lifecycleInterceptorClassNames = null;
       }
     }
-    synchronized (lifecycleInterceptorsLock) {
-      if (lifecycleInterceptorBeanNames != null && beanFactory != null) {
-        for (String lifecycleInterceptorBeanName : lifecycleInterceptorBeanNames) {
-          registerLifecycleInterceptor(beanFactory.getBean(lifecycleInterceptorBeanName, ILifecycleInterceptor.class));
+    if (lifecycleInterceptorBeanNames != null && beanFactory != null) {
+      synchronized (lifecycleInterceptorsLock) {
+        if (lifecycleInterceptorBeanNames != null && beanFactory != null) {
+          for (String lifecycleInterceptorBeanName : lifecycleInterceptorBeanNames) {
+            registerLifecycleInterceptor(
+                beanFactory.getBean(lifecycleInterceptorBeanName, ILifecycleInterceptor.class));
+          }
+          lifecycleInterceptorBeanNames = null;
         }
-        lifecycleInterceptorBeanNames = null;
       }
     }
   }
@@ -1405,8 +1429,7 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
    *
    * @return the component translation descriptor template
    */
-  public static synchronized BasicCollectionPropertyDescriptor<IComponent> getComponentTranslationsDescriptorTemplate
-  () {
+  public static synchronized BasicCollectionPropertyDescriptor<IComponent> getComponentTranslationsDescriptorTemplate() {
     return componentTranslationsDescriptorTemplate;
   }
 }
