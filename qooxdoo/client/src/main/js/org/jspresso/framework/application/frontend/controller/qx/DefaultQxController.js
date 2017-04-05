@@ -64,9 +64,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           }
         }, this, 500);
       } else {
+        root.resetGlobalCursor();
         if (!this._isShowingDialog()) {
           root.unblock();
-          root.setGlobalCursor("default");
         }
       }
     },
