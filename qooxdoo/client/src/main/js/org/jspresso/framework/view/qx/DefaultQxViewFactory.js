@@ -2775,6 +2775,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         }
       });
       modelController.addTarget(dateField, "enabled", "writable", false);
+      // Fixes a bug on the initial appearance of the datefield that dispays as disabled.
+      dateField.syncAppearance();
       var ps = remoteDateField.getPreferredSize();
       remoteDateField.setPreferredSize(null);
       // Add "000" for icon
