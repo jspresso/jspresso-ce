@@ -30,9 +30,10 @@ import org.hibernate.criterion.Projection;
 import org.hibernate.internal.CriteriaImpl;
 import org.hibernate.sql.JoinType;
 import org.hibernate.transform.ResultTransformer;
-import org.jspresso.framework.util.reflect.ReflectHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.jspresso.framework.util.reflect.ReflectHelper;
 
 /**
  * An enhanced detached criteria that holds a sub-criteria registry.
@@ -42,9 +43,8 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("rawtypes")
 public class EnhancedDetachedCriteria extends DetachedCriteria {
 
-  private static final long                                    serialVersionUID = 1477297471425065631L;
-  private static final Logger                                  LOG              = LoggerFactory
-                                                                                    .getLogger(EnhancedDetachedCriteria.class);
+  private static final long   serialVersionUID = 1477297471425065631L;
+  private static final Logger LOG              = LoggerFactory.getLogger(EnhancedDetachedCriteria.class);
 
   private Map<DetachedCriteria, Map<String, DetachedCriteria>> subCriteriaRegistry;
   private Projection                                           currentProjection;
@@ -55,9 +55,9 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
    * Constructs a new {@code EnhancedDetachedCriteria} instance.
    *
    * @param impl
-   *          criteria impl.
+   *     criteria impl.
    * @param criteria
-   *          criteria.
+   *     criteria.
    */
   protected EnhancedDetachedCriteria(CriteriaImpl impl, Criteria criteria) {
     super(impl, criteria);
@@ -67,7 +67,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
    * Constructs a new {@code EnhancedDetachedCriteria} instance.
    *
    * @param entityName
-   *          entity name.
+   *     entity name.
    */
   protected EnhancedDetachedCriteria(String entityName) {
     super(entityName);
@@ -77,9 +77,9 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
    * Constructs a new {@code EnhancedDetachedCriteria} instance.
    *
    * @param entityName
-   *          entity name.
+   *     entity name.
    * @param alias
-   *          alias.
+   *     alias.
    */
   protected EnhancedDetachedCriteria(String entityName, String alias) {
     super(entityName, alias);
@@ -89,7 +89,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
    * Creates a new enhanced detached criteria.
    *
    * @param clazz
-   *          class.
+   *     class.
    * @return the new enhanced detached criteria.
    */
   public static EnhancedDetachedCriteria forClass(Class clazz) {
@@ -100,9 +100,9 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
    * Creates a new enhanced detached criteria.
    *
    * @param clazz
-   *          class.
+   *     class.
    * @param alias
-   *          alias.
+   *     alias.
    * @return the new enhanced detached criteria.
    */
   public static EnhancedDetachedCriteria forClass(Class clazz, String alias) {
@@ -113,7 +113,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
    * Creates a new enhanced detached criteria.
    *
    * @param entityName
-   *          entity name.
+   *     entity name.
    * @return the new enhanced detached criteria.
    */
   public static EnhancedDetachedCriteria forEntityName(String entityName) {
@@ -124,13 +124,12 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
    * Creates a new enhanced detached criteria.
    *
    * @param entityName
-   *          entity name.
+   *     entity name.
    * @param alias
-   *          alias.
+   *     alias.
    * @return the new enhanced detached criteria.
    */
-  public static EnhancedDetachedCriteria forEntityName(String entityName,
-      String alias) {
+  public static EnhancedDetachedCriteria forEntityName(String entityName, String alias) {
     return new EnhancedDetachedCriteria(entityName, alias);
   }
 
@@ -138,15 +137,13 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
    * Creates or gets a previously registered sub-criteria.
    *
    * @param masterCriteria
-   *          the parent criteria holding the sub-criteria.
+   *     the parent criteria holding the sub-criteria.
    * @param associationPath
-   *          the association path.
+   *     the association path.
    * @return the new or previously registered sub-criteria.
    */
-  public DetachedCriteria getSubCriteriaFor(DetachedCriteria masterCriteria,
-      String associationPath) {
-    DetachedCriteria subCriteria = getRegisteredSubCriteria(masterCriteria,
-        associationPath);
+  public DetachedCriteria getSubCriteriaFor(DetachedCriteria masterCriteria, String associationPath) {
+    DetachedCriteria subCriteria = getRegisteredSubCriteria(masterCriteria, associationPath);
     if (subCriteria == null) {
       subCriteria = masterCriteria.createCriteria(associationPath);
       registerSubCriteria(masterCriteria, associationPath, subCriteria);
@@ -158,38 +155,36 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
    * Creates or gets a previously registered sub-criteria.
    *
    * @param masterCriteria
-   *          the parent criteria holding the sub-criteria.
+   *     the parent criteria holding the sub-criteria.
    * @param associationPath
-   *          the association path.
+   *     the association path.
    * @param joinType
-   *          the join type.
+   *     the join type.
    * @return the new or previously registered sub-criteria.
+   *
    * @deprecated Use
-   *             {@link #getSubCriteriaFor(DetachedCriteria, String, JoinType)}
-   *             instead.
+   * {@link #getSubCriteriaFor(DetachedCriteria, String, JoinType)}
+   * instead.
    */
   @Deprecated
-  public DetachedCriteria getSubCriteriaFor(DetachedCriteria masterCriteria,
-      String associationPath, int joinType) {
-    return getSubCriteriaFor(masterCriteria, associationPath,
-        JoinType.parse(joinType));
+  public DetachedCriteria getSubCriteriaFor(DetachedCriteria masterCriteria, String associationPath, int joinType) {
+    return getSubCriteriaFor(masterCriteria, associationPath, JoinType.parse(joinType));
   }
 
   /**
    * Creates or gets a previously registered sub-criteria.
    *
    * @param masterCriteria
-   *          the parent criteria holding the sub-criteria.
+   *     the parent criteria holding the sub-criteria.
    * @param associationPath
-   *          the association path.
+   *     the association path.
    * @param joinType
-   *          the join type.
+   *     the join type.
    * @return the new or previously registered sub-criteria.
    */
-  public DetachedCriteria getSubCriteriaFor(DetachedCriteria masterCriteria,
-      String associationPath, JoinType joinType) {
-    DetachedCriteria subCriteria = getRegisteredSubCriteria(masterCriteria,
-        associationPath);
+  public DetachedCriteria getSubCriteriaFor(DetachedCriteria masterCriteria, String associationPath,
+                                            JoinType joinType) {
+    DetachedCriteria subCriteria = getRegisteredSubCriteria(masterCriteria, associationPath);
     if (subCriteria == null) {
       subCriteria = masterCriteria.createCriteria(associationPath, joinType);
       registerSubCriteria(masterCriteria, associationPath, subCriteria);
@@ -201,20 +196,18 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
    * Creates or gets a previously registered sub-criteria.
    *
    * @param masterCriteria
-   *          the parent criteria holding the sub-criteria.
+   *     the parent criteria holding the sub-criteria.
    * @param associationPath
-   *          the association path.
+   *     the association path.
    * @param alias
-   *          the alias.
+   *     the alias.
    * @return the new or previously registered sub-criteria.
    */
-  public DetachedCriteria getSubCriteriaFor(DetachedCriteria masterCriteria,
-      String associationPath, String alias) {
-    DetachedCriteria subCriteria = getRegisteredSubCriteria(masterCriteria,
-        associationPath);
+  public DetachedCriteria getSubCriteriaFor(DetachedCriteria masterCriteria, String associationPath, String alias) {
+    DetachedCriteria subCriteria = getRegisteredSubCriteria(masterCriteria, alias);
     if (subCriteria == null) {
       subCriteria = masterCriteria.createCriteria(associationPath, alias);
-      registerSubCriteria(masterCriteria, associationPath, subCriteria);
+      registerSubCriteria(masterCriteria, alias, subCriteria);
     }
     return subCriteria;
   }
@@ -223,46 +216,44 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
    * Creates or gets a previously registered sub-criteria.
    *
    * @param masterCriteria
-   *          the parent criteria holding the sub-criteria.
+   *     the parent criteria holding the sub-criteria.
    * @param associationPath
-   *          the association path.
+   *     the association path.
    * @param alias
-   *          the alias.
+   *     the alias.
    * @param joinType
-   *          the join type.
+   *     the join type.
    * @return the new or previously registered sub-criteria.
+   *
    * @deprecated use
-   *             {@link #getSubCriteriaFor(DetachedCriteria, String, String, JoinType)}
-   *             instead.
+   * {@link #getSubCriteriaFor(DetachedCriteria, String, String, JoinType)}
+   * instead.
    */
   @Deprecated
-  public DetachedCriteria getSubCriteriaFor(DetachedCriteria masterCriteria,
-      String associationPath, String alias, int joinType) {
-    return getSubCriteriaFor(masterCriteria, associationPath, alias,
-        JoinType.parse(joinType));
+  public DetachedCriteria getSubCriteriaFor(DetachedCriteria masterCriteria, String associationPath, String alias,
+                                            int joinType) {
+    return getSubCriteriaFor(masterCriteria, associationPath, alias, JoinType.parse(joinType));
   }
 
   /**
    * Creates or gets a previously registered sub-criteria.
    *
    * @param masterCriteria
-   *          the parent criteria holding the sub-criteria.
+   *     the parent criteria holding the sub-criteria.
    * @param associationPath
-   *          the association path.
+   *     the association path.
    * @param alias
-   *          the alias.
+   *     the alias.
    * @param joinType
-   *          the join type.
+   *     the join type.
    * @return the new or previously registered sub-criteria.
    */
-  public DetachedCriteria getSubCriteriaFor(DetachedCriteria masterCriteria,
-      String associationPath, String alias, JoinType joinType) {
-    DetachedCriteria subCriteria = getRegisteredSubCriteria(masterCriteria,
-        associationPath);
+  public DetachedCriteria getSubCriteriaFor(DetachedCriteria masterCriteria, String associationPath, String alias,
+                                            JoinType joinType) {
+    DetachedCriteria subCriteria = getRegisteredSubCriteria(masterCriteria, alias);
     if (subCriteria == null) {
-      subCriteria = masterCriteria.createCriteria(associationPath, alias,
-          joinType);
-      registerSubCriteria(masterCriteria, associationPath, subCriteria);
+      subCriteria = masterCriteria.createCriteria(associationPath, alias, joinType);
+      registerSubCriteria(masterCriteria, alias, subCriteria);
     }
     return subCriteria;
   }
@@ -348,39 +339,33 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
   }
 
   @SuppressWarnings("unchecked")
-  private List<Order> privateGetOrders() throws IllegalAccessException,
-      NoSuchFieldException {
-    CriteriaImpl critImpl = (CriteriaImpl) ReflectHelper.getPrivateFieldValue(
-        DetachedCriteria.class, "impl", this);
-    List<Order> orders = (List<Order>) ReflectHelper.getPrivateFieldValue(
-        CriteriaImpl.class, "orderEntries", critImpl);
+  private List<Order> privateGetOrders() throws IllegalAccessException, NoSuchFieldException {
+    CriteriaImpl critImpl = (CriteriaImpl) ReflectHelper.getPrivateFieldValue(DetachedCriteria.class, "impl", this);
+    List<Order> orders = (List<Order>) ReflectHelper.getPrivateFieldValue(CriteriaImpl.class, "orderEntries", critImpl);
     return orders;
   }
 
-  private DetachedCriteria getRegisteredSubCriteria(
-      DetachedCriteria masterCriteria, String associationPath) {
+  private DetachedCriteria getRegisteredSubCriteria(DetachedCriteria masterCriteria, String associationPathOrAlias) {
     if (subCriteriaRegistry == null) {
       return null;
     }
-    Map<String, DetachedCriteria> subCriterias = subCriteriaRegistry
-        .get(masterCriteria);
+    Map<String, DetachedCriteria> subCriterias = subCriteriaRegistry.get(masterCriteria);
     if (subCriterias == null) {
       return null;
     }
-    return subCriterias.get(associationPath);
+    return subCriterias.get(associationPathOrAlias);
   }
 
-  private void registerSubCriteria(DetachedCriteria masterCriteria,
-      String associationPath, DetachedCriteria subCriteria) {
+  private void registerSubCriteria(DetachedCriteria masterCriteria, String associationPathOrAlias,
+                                   DetachedCriteria subCriteria) {
     if (subCriteriaRegistry == null) {
       subCriteriaRegistry = new HashMap<>();
     }
-    Map<String, DetachedCriteria> subCriterias = subCriteriaRegistry
-        .get(masterCriteria);
+    Map<String, DetachedCriteria> subCriterias = subCriteriaRegistry.get(masterCriteria);
     if (subCriterias == null) {
       subCriterias = new HashMap<>();
       subCriteriaRegistry.put(masterCriteria, subCriterias);
     }
-    subCriterias.put(associationPath, subCriteria);
+    subCriterias.put(associationPathOrAlias, subCriteria);
   }
 }
