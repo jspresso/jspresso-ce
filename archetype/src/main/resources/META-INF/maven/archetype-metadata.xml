@@ -132,6 +132,7 @@
           <directory>src/main/dsl</directory>
           <includes>
             <include>*.sjs</include>
+            <include>*.groovy</include>
           </includes>
         </fileSet>
       </fileSets>
