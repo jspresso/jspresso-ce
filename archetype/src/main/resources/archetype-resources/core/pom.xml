@@ -116,6 +116,12 @@
         <directory>src/main/resources</directory>
       </resource>
       <resource>
+        <directory>${symbol_dollar}{project.build.directory}/generated-resources/dsl</directory>
+      </resource>
+      <resource>
+        <directory>${symbol_dollar}{project.build.directory}/generated-resources/xdoclet</directory>
+      </resource>
+      <resource>
         <directory>${symbol_dollar}{project.build.directory}/generated-resources/jasperreports</directory>
       </resource>
     </resources>
