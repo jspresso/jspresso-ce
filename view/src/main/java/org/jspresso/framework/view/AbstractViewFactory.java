@@ -197,7 +197,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   private IConfigurableConnectorFactory connectorFactory;
   private ERenderingOptions defaultActionMapRenderingOptions = ERenderingOptions.ICON;
   private ERenderingOptions defaultTabRenderingOptions       = ERenderingOptions.LABEL_ICON;
-  private boolean           defaultHideActionWhenDisabled    = true;
+  private boolean           defaultHideActionWhenDisabled    = false;
   private final IValueChangeListener        firstRowSelector;
   private       IIconFactory<F>             iconFactory;
   private       IComponentCollectionFactory componentCollectionFactory;
