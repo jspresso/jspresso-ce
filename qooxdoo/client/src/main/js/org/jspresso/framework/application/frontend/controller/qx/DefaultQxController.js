@@ -335,14 +335,14 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       splitContainer._forwardStates = forwardStates;
       splitContainer.getChildControl("splitter")._forwardStates = forwardStates;
       var collapser = function (e) {
-        var widthToRestore = workspaceAccordion.getUserData("widthToRestore");
+        var widthToRestore = workspaceAccordionScroll.getUserData("widthToRestore");
         if (widthToRestore) {
-          workspaceAccordion.setUserData("widthToRestore", 0);
-          workspaceAccordion.setWidth(widthToRestore);
+          workspaceAccordionScroll.setUserData("widthToRestore", 0);
+          workspaceAccordionScroll.setWidth(widthToRestore);
           splitContainer.removeState("collapsed");
         } else {
-          workspaceAccordion.setUserData("widthToRestore", workspaceAccordion.getSizeHint().width);
-          workspaceAccordion.setWidth(0);
+          workspaceAccordionScroll.setUserData("widthToRestore", workspaceAccordionScroll.getSizeHint().width);
+          workspaceAccordionScroll.setWidth(0);
           splitContainer.addState("collapsed");
         }
       };
