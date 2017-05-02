@@ -35,6 +35,7 @@ public class RAction extends RemotePeer {
   private String              acceleratorAsString;
   private String              description;
   private boolean             enabled;
+  private boolean             hiddenWhenDisabled;
   private RIcon               icon;
   private String              mnemonicAsString;
   private String              name;
@@ -51,6 +52,7 @@ public class RAction extends RemotePeer {
   public RAction(String guid) {
     super(guid);
     enabled = true;
+    hiddenWhenDisabled = false;
   }
 
   /**
@@ -255,5 +257,24 @@ public class RAction extends RemotePeer {
    */
   public void setRepeatPeriodMillis(Integer repeatPeriodMillis) {
     this.repeatPeriodMillis = repeatPeriodMillis;
+  }
+
+  /**
+   * Is hidden when disabled boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isHiddenWhenDisabled() {
+    return hiddenWhenDisabled;
+  }
+
+  /**
+   * Sets hidden when disabled.
+   *
+   * @param hiddenWhenDisabled
+   *     the hidden when disabled
+   */
+  public void setHiddenWhenDisabled(boolean hiddenWhenDisabled) {
+    this.hiddenWhenDisabled = hiddenWhenDisabled;
   }
 }

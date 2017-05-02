@@ -45,8 +45,7 @@ public interface IDisplayableAction extends IAction, IIconDescriptor, IStylable 
    * Gets the collection of gates determining the actionability state of this
    * action.
    *
-   * @return the collection of gates determining the actionability state of this
-   *         action.
+   * @return the collection of gates determining the actionability state of this action.
    */
   Collection<IGate> getActionabilityGates();
 
@@ -78,4 +77,12 @@ public interface IDisplayableAction extends IAction, IIconDescriptor, IStylable 
    * @return the repeat period in milliseconds
    */
   Integer getRepeatPeriodMillis();
+
+  /**
+   * Is hidden when disabled boolean.
+   *
+   * @return the boolean
+   */
+  public Boolean getHiddenWhenDisabled();
+
 }

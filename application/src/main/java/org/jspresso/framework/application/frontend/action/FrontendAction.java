@@ -24,6 +24,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.application.action.AbstractAction;
 import org.jspresso.framework.application.frontend.IFrontendController;
@@ -54,16 +55,15 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * user, and so on. A frontend action can chain a backend action but the
  * opposite will be prevented.
  *
- * @author Vincent Vandenschrick
  * @param <E>
- *          the actual gui component type used.
+ *     the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *     the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *     the actual action type used.
+ * @author Vincent Vandenschrick
  */
-public class FrontendAction<E, F, G> extends AbstractAction implements
-    IDisplayableAction {
+public class FrontendAction<E, F, G> extends AbstractAction implements IDisplayableAction {
 
   /**
    * {@code COMPONENT_TO_FOCUS} is COMPONENT_TO_FOCUS.
@@ -74,6 +74,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
   private final DefaultIconDescriptor actionDescriptor;
   private       boolean               collectionBased;
   private       boolean               multiSelectionEnabled;
+  private       Boolean               hiddenWhenDisabled;
   private       String                mnemonicAsString;
   private       String                styleName;
   private       Integer               repeatPeriodMillis;
@@ -138,8 +139,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * {@inheritDoc}
    */
   @Override
-  public String getI18nDescription(ITranslationProvider translationProvider,
-      Locale locale) {
+  public String getI18nDescription(ITranslationProvider translationProvider, Locale locale) {
     if (getDescription() != null) {
       return translationProvider.getTranslation(getDescription(), "", locale);
     }
@@ -150,8 +150,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * {@inheritDoc}
    */
   @Override
-  public String getI18nName(ITranslationProvider translationProvider,
-      Locale locale) {
+  public String getI18nName(ITranslationProvider translationProvider, Locale locale) {
     return translationProvider.getTranslation(getName(), locale);
   }
 
@@ -259,7 +258,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * method.
    *
    * @param acceleratorAsString
-   *          the acceleratorAsString to set.
+   *     the acceleratorAsString to set.
    */
   public void setAcceleratorAsString(String acceleratorAsString) {
     this.acceleratorAsString = acceleratorAsString;
@@ -284,7 +283,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * (disables the action) when the view is not assigned any model.
    *
    * @param actionabilityGates
-   *          the actionabilityGates to set.
+   *     the actionabilityGates to set.
    */
   public void setActionabilityGates(Collection<IGate> actionabilityGates) {
     this.actionabilityGates = actionabilityGates;
@@ -303,7 +302,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * items.
    *
    * @param collectionBased
-   *          the collectionBased to set.
+   *     the collectionBased to set.
    */
   public void setCollectionBased(boolean collectionBased) {
     this.collectionBased = collectionBased;
@@ -316,7 +315,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * when the selection contains no or more than one element.
    *
    * @param multiSelectionEnabled
-   *          the multiSelectionEnabled to set.
+   *     the multiSelectionEnabled to set.
    */
   public void setMultiSelectionEnabled(boolean multiSelectionEnabled) {
     this.multiSelectionEnabled = multiSelectionEnabled;
@@ -329,7 +328,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * action.
    *
    * @param description
-   *          the description to set.
+   *     the description to set.
    */
   public void setDescription(String description) {
     actionDescriptor.setDescription(description);
@@ -346,7 +345,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * </ul>
    *
    * @param iconImageURL
-   *          the iconImageURL to set.
+   *     the iconImageURL to set.
    */
   public void setIconImageURL(String iconImageURL) {
     actionDescriptor.setIconImageURL(iconImageURL);
@@ -356,7 +355,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * Sets the icon.
    *
    * @param icon
-   *          the icon to set.
+   *     the icon to set.
    */
   public void setIcon(Icon icon) {
     actionDescriptor.setIcon(icon);
@@ -368,8 +367,8 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * and menu items.
    *
    * @param mnemonicStringRep
-   *          the mnemonic to set represented as a string as KeyStroke factory
-   *          would parse it.
+   *     the mnemonic to set represented as a string as KeyStroke factory
+   *     would parse it.
    */
   public void setMnemonicAsString(String mnemonicStringRep) {
     this.mnemonicAsString = mnemonicStringRep;
@@ -381,7 +380,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * menu label, ...).
    *
    * @param name
-   *          the name to set.
+   *     the name to set.
    */
   public void setName(String name) {
     actionDescriptor.setName(name);
@@ -392,9 +391,8 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    */
   @Override
   public String toString() {
-    return new ToStringBuilder(this).append("name", getName())
-        .append("description", getDescription())
-        .append("iconImageURL", getIcon()).toString();
+    return new ToStringBuilder(this).append("name", getName()).append("description", getDescription()).append(
+        "iconImageURL", getIcon()).toString();
   }
 
   private void completeActionabilityGates() {
@@ -405,8 +403,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
       actionabilityGates.remove(ModelTrackingGate.INSTANCE);
       actionabilityGates.add(NotEmptyCollectionSelectionTrackingGate.INSTANCE);
     } else {
-      actionabilityGates
-          .remove(NotEmptyCollectionSelectionTrackingGate.INSTANCE);
+      actionabilityGates.remove(NotEmptyCollectionSelectionTrackingGate.INSTANCE);
       actionabilityGates.add(ModelTrackingGate.INSTANCE);
     }
     if (isMultiSelectionEnabled()) {
@@ -420,7 +417,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * Gets the actionFactory.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the actionFactory.
    */
   protected IActionFactory<G, E> getActionFactory(Map<String, Object> context) {
@@ -431,7 +428,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * Retrieves the widget which triggered the action from the action context.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the widget which triggered the action.
    */
   @SuppressWarnings("unchecked")
@@ -444,7 +441,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * from the action context.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the concrete action that was triggered.
    */
   @SuppressWarnings("unchecked")
@@ -456,7 +453,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * Retrieves the UI action event from the action context.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the UI action event that was triggered.
    */
   protected Object getUiEvent(Map<String, Object> context) {
@@ -467,12 +464,11 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * Gets the frontend controller out of the action context.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the frontend controller.
    */
   @Override
-  protected IFrontendController<E, F, G> getController(
-      Map<String, Object> context) {
+  protected IFrontendController<E, F, G> getController(Map<String, Object> context) {
     return getFrontendController(context);
   }
 
@@ -480,7 +476,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * Gets the iconFactory.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the iconFactory.
    */
   protected IIconFactory<F> getIconFactory(Map<String, Object> context) {
@@ -491,7 +487,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * Gets the mvcBinder.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the mvcBinder.
    */
   protected IMvcBinder getMvcBinder(Map<String, Object> context) {
@@ -505,7 +501,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * {@code ActionContextConstants.SOURCE_COMPONENT}.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the source widget this action was triggered from.
    */
   @SuppressWarnings("unchecked")
@@ -517,7 +513,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * Gets the viewFactory.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the viewFactory.
    */
   protected IViewFactory<E, F, G> getViewFactory(Map<String, Object> context) {
@@ -538,7 +534,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * Sets the lastUpdated.
    *
    * @param lastUpdated
-   *          the lastUpdated to set.
+   *     the lastUpdated to set.
    * @internal
    */
   public void setLastUpdated(long lastUpdated) {
@@ -563,7 +559,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * Default value is {@code null}, meaning that a default style is used.
    *
    * @param styleName
-   *          the styleName to set.
+   *     the styleName to set.
    */
   public void setStyleName(String styleName) {
     this.styleName = styleName;
@@ -573,7 +569,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * Sets the icon preferred width.
    *
    * @param iconPreferredWidth
-   *          the iconPreferredWidth to set.
+   *     the iconPreferredWidth to set.
    * @see org.jspresso.framework.util.descriptor.DefaultIconDescriptor#setIconPreferredWidth(int)
    */
   public void setIconPreferredWidth(int iconPreferredWidth) {
@@ -584,7 +580,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    * Sets the icon preferred height.
    *
    * @param iconPreferredHeight
-   *          the iconPreferredHeight to set.
+   *     the iconPreferredHeight to set.
    * @see org.jspresso.framework.util.descriptor.DefaultIconDescriptor#setIconPreferredHeight(int)
    */
   public void setIconPreferredHeight(int iconPreferredHeight) {
@@ -610,5 +606,25 @@ public class FrontendAction<E, F, G> extends AbstractAction implements
    */
   public void setRepeatPeriodMillis(Integer repeatPeriodMillis) {
     this.repeatPeriodMillis = repeatPeriodMillis;
+  }
+
+  /**
+   * When configured to {@code true}, the action is hidden when it is disabled. Default value is
+   * undefined, i.e. {@code null}, meaning that the enclosing action list or map drives the configuration.
+   *
+   * @return the boolean
+   */
+  public Boolean getHiddenWhenDisabled() {
+    return hiddenWhenDisabled;
+  }
+
+  /**
+   * Sets hidden when disabled.
+   *
+   * @param hiddenWhenDisabled
+   *     the hidden when disabled
+   */
+  public void setHiddenWhenDisabled(Boolean hiddenWhenDisabled) {
+    this.hiddenWhenDisabled = hiddenWhenDisabled;
   }
 }

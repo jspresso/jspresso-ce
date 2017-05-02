@@ -412,6 +412,16 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
      */
     _bindButton: function (button, remoteAction) {
       remoteAction.bind("enabled", button, "enabled");
+      if (remoteAction.isHiddenWhenDisabled()) {
+        button.setVisibility(remoteAction.isEnabled() ? "visible" : "excluded");
+        remoteAction.addListener("changeEnabled", function (e) {
+          if (e.getData()) {
+            button.setVisibility("visible");
+          } else {
+            button.setVisibility("excluded");
+          }
+        }, this);
+      }
       this._getRemotePeerRegistry().register(remoteAction);
       this.addButtonListener(button, function (event) {
         this._getActionHandler().execute(remoteAction);

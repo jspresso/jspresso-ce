@@ -1136,8 +1136,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     createMenuItems: function (actions) {
       var menuItems = [];
       for (var i = 0; i < actions.length; i++) {
-        var menuButton = this.createMenuButton(actions[i]);
-        var command = this.createCommand(actions[i]);
+        var action = actions[i];
+        var menuButton = this.createMenuButton(action);
+        var command = this.createCommand(action);
         menuButton.setCommand(command);
         menuItems.push(menuButton);
       }
@@ -1152,6 +1153,16 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     createMenuButton: function (remoteAction) {
       var button = new qx.ui.menu.Button();
       remoteAction.bind("enabled", button, "enabled");
+      if (remoteAction.isHiddenWhenDisabled()) {
+        button.setVisibility(remoteAction.isEnabled() ? "visible" : "excluded");
+        remoteAction.addListener("changeEnabled", function (e) {
+          if (e.getData()) {
+            button.setVisibility("visible");
+          } else {
+            button.setVisibility("excluded");
+          }
+        }, this);
+      }
       this._getRemotePeerRegistry().register(remoteAction);
       this._completeButton(button, remoteAction.getName(), remoteAction.getDescription(), remoteAction.getIcon());
       return button;

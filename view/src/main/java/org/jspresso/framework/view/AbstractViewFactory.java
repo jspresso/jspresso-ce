@@ -197,6 +197,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   private IConfigurableConnectorFactory connectorFactory;
   private ERenderingOptions defaultActionMapRenderingOptions = ERenderingOptions.ICON;
   private ERenderingOptions defaultTabRenderingOptions       = ERenderingOptions.LABEL_ICON;
+  private boolean           defaultHideActionWhenDisabled    = true;
   private final IValueChangeListener        firstRowSelector;
   private       IIconFactory<F>             iconFactory;
   private       IComponentCollectionFactory componentCollectionFactory;
@@ -1738,7 +1739,8 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   protected IFormatter<Object, String> createDecimalFormatter(IPropertyViewDescriptor propertyViewDescriptor,
                                                               IDecimalPropertyDescriptor propertyDescriptor,
                                                               ITranslationProvider translationProvider, Locale locale) {
-    return new FormatAdapter(createDecimalFormat(propertyViewDescriptor, propertyDescriptor, translationProvider, locale));
+    return new FormatAdapter(
+        createDecimalFormat(propertyViewDescriptor, propertyDescriptor, translationProvider, locale));
   }
 
   /**
@@ -1882,19 +1884,24 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
           actionHandler, locale);
     }
     if (propertyDescriptor instanceof ITimePropertyDescriptor) {
-      return createTimeFormatter(propertyViewDescriptor, (ITimePropertyDescriptor) propertyDescriptor, actionHandler, locale);
+      return createTimeFormatter(propertyViewDescriptor, (ITimePropertyDescriptor) propertyDescriptor, actionHandler,
+          locale);
     }
     if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
-      return createDurationFormatter(propertyViewDescriptor, (IDurationPropertyDescriptor) propertyDescriptor, actionHandler, locale);
+      return createDurationFormatter(propertyViewDescriptor, (IDurationPropertyDescriptor) propertyDescriptor,
+          actionHandler, locale);
     }
     if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
-      return createPercentFormatter(propertyViewDescriptor, (IPercentPropertyDescriptor) propertyDescriptor, actionHandler, locale);
+      return createPercentFormatter(propertyViewDescriptor, (IPercentPropertyDescriptor) propertyDescriptor,
+          actionHandler, locale);
     }
     if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
-      return createDecimalFormatter(propertyViewDescriptor, (IDecimalPropertyDescriptor) propertyDescriptor, actionHandler, locale);
+      return createDecimalFormatter(propertyViewDescriptor, (IDecimalPropertyDescriptor) propertyDescriptor,
+          actionHandler, locale);
     }
     if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
-      return createIntegerFormatter(propertyViewDescriptor, (IIntegerPropertyDescriptor) propertyDescriptor, actionHandler, locale);
+      return createIntegerFormatter(propertyViewDescriptor, (IIntegerPropertyDescriptor) propertyDescriptor,
+          actionHandler, locale);
     }
     return null;
   }
@@ -1992,7 +1999,8 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   protected IFormatter<Object, String> createIntegerFormatter(IPropertyViewDescriptor propertyViewDescriptor,
                                                               IIntegerPropertyDescriptor propertyDescriptor,
                                                               ITranslationProvider translationProvider, Locale locale) {
-    return new FormatAdapter(createIntegerFormat(propertyViewDescriptor, propertyDescriptor, translationProvider, locale));
+    return new FormatAdapter(
+        createIntegerFormat(propertyViewDescriptor, propertyDescriptor, translationProvider, locale));
   }
 
   /**
@@ -2122,7 +2130,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    * @return the overloaded pattern
    */
   protected String getOverloadedPattern(IPropertyViewDescriptor propertyViewDescriptor,
-                                      INumberPropertyDescriptor propertyDescriptor) {
+                                        INumberPropertyDescriptor propertyDescriptor) {
     String formatPattern = null;
     if (propertyViewDescriptor instanceof BasicNumberPropertyViewDescriptor
         && ((BasicNumberPropertyViewDescriptor) propertyViewDescriptor).getFormatPattern() != null) {
@@ -2181,7 +2189,8 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   protected IFormatter<Object, String> createPercentFormatter(IPropertyViewDescriptor propertyViewDescriptor,
                                                               IPercentPropertyDescriptor propertyDescriptor,
                                                               ITranslationProvider translationProvider, Locale locale) {
-    return new FormatAdapter(createPercentFormat(propertyViewDescriptor, propertyDescriptor, translationProvider, locale));
+    return new FormatAdapter(
+        createPercentFormat(propertyViewDescriptor, propertyDescriptor, translationProvider, locale));
   }
 
   /**
@@ -3747,4 +3756,22 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     }
   }
 
+  /**
+   * Is default hide action when disabled boolean.
+   *
+   * @return the boolean
+   */
+  public boolean getDefaultHideActionWhenDisabled() {
+    return defaultHideActionWhenDisabled;
+  }
+
+  /**
+   * Sets default hide action when disabled.
+   *
+   * @param defaultHideActionWhenDisabled
+   *     the default hide action when disabled
+   */
+  public void setDefaultHideActionWhenDisabled(boolean defaultHideActionWhenDisabled) {
+    this.defaultHideActionWhenDisabled = defaultHideActionWhenDisabled;
+  }
 }

@@ -29,6 +29,7 @@ public class RAction extends RemotePeer {
   private var _acceleratorAsString:String;
   private var _description:String;
   private var _enabled:Boolean;
+  private var _hiddenWhenDisabled:Boolean;
   private var _icon:RIcon;
   private var _styleName:String;
   private var _mnemonicAsString:String;
@@ -61,6 +62,14 @@ public class RAction extends RemotePeer {
 
   public function get enabled():Boolean {
     return _enabled;
+  }
+
+  public function get hiddenWhenDisabled():Boolean {
+    return _hiddenWhenDisabled;
+  }
+
+  public function set hiddenWhenDisabled(value:Boolean):void {
+    _hiddenWhenDisabled = value;
   }
 
   public function set icon(value:RIcon):void {

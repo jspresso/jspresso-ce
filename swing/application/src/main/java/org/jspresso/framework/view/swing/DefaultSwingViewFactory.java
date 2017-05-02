@@ -40,6 +40,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -261,10 +263,12 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
   protected JComponent applyComponentScrollability(JComponent viewComponent, IScrollableViewDescriptor viewDescriptor) {
     JScrollPane scrollPane = createJScrollPane();
     scrollPane.setBorder(BorderFactory.createEmptyBorder());
-    scrollPane.setVerticalScrollBarPolicy(viewDescriptor.isVerticallyScrollable() ?
-        ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED: ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-    scrollPane.setHorizontalScrollBarPolicy(viewDescriptor.isHorizontallyScrollable() ?
-        ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED : ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    scrollPane.setVerticalScrollBarPolicy(
+        viewDescriptor.isVerticallyScrollable() ? ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED :
+            ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+    scrollPane.setHorizontalScrollBarPolicy(
+        viewDescriptor.isHorizontallyScrollable() ? ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED :
+            ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
     if (viewComponent instanceof JScrollablePanel) {
       ((JScrollablePanel) viewComponent).setScrollableTracksViewportHeight(!viewDescriptor.isVerticallyScrollable());
       ((JScrollablePanel) viewComponent).setScrollableTracksViewportWidth(!viewDescriptor.isHorizontallyScrollable());
@@ -409,13 +413,18 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     IValueConnector connector = getConnectorFactory().createValueConnector(ModelRefPropertyConnector.THIS_PROPERTY);
     connector.setExceptionHandler(actionHandler);
     IView<JComponent> view = constructView(viewComponent, viewDescriptor, connector);
+    ActionList actionList = viewDescriptor.getActionList();
     if (viewDescriptor.getActionList() != null) {
       ERenderingOptions defaultRenderingOptions = ERenderingOptions.ICON;
       if (viewDescriptor.getRenderingOptions() != null) {
         defaultRenderingOptions = viewDescriptor.getRenderingOptions();
       }
-      List<JButton> viewActionList = createViewActionList(viewDescriptor.getActionList(), defaultRenderingOptions, view,
-          actionHandler, locale);
+      boolean defaultHideActionWhenDisabled = getDefaultHideActionWhenDisabled();
+      if (viewDescriptor.getActionList().getHideActionWhenDisabled() != null) {
+        defaultHideActionWhenDisabled = viewDescriptor.getActionList().getHideActionWhenDisabled();
+      }
+      List<JButton> viewActionList = createViewActionList(viewDescriptor.getActionList(), defaultRenderingOptions,
+          defaultHideActionWhenDisabled, view, actionHandler, locale);
       if (viewActionList != null) {
         FlowLayout layout = new FlowLayout();
         viewComponent.setLayout(layout);
@@ -1121,7 +1130,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
       return createPercentPropertyView(propertyViewDescriptor, actionHandler, locale);
     }
-    IFormatter<Object, String> formatter = createDecimalFormatter(propertyViewDescriptor, propertyDescriptor, actionHandler, locale);
+    IFormatter<Object, String> formatter = createDecimalFormatter(propertyViewDescriptor, propertyDescriptor,
+        actionHandler, locale);
     JComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
@@ -1152,7 +1162,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
         .getModelDescriptor();
     JComponent viewComponent;
     IValueConnector connector;
-    IFormatter<?, String> formatter = createDurationFormatter(propertyViewDescriptor, propertyDescriptor, actionHandler, locale);
+    IFormatter<?, String> formatter = createDurationFormatter(propertyViewDescriptor, propertyDescriptor, actionHandler,
+        locale);
     if (propertyViewDescriptor.isReadOnly()) {
       if (propertyViewDescriptor.getAction() != null) {
         viewComponent = createJLink(propertyViewDescriptor);
@@ -1433,7 +1444,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
                                                         IActionHandler actionHandler, Locale locale) {
     IIntegerPropertyDescriptor propertyDescriptor = (IIntegerPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    IFormatter<?, String> formatter = createIntegerFormatter(propertyViewDescriptor, propertyDescriptor, actionHandler, locale);
+    IFormatter<?, String> formatter = createIntegerFormatter(propertyViewDescriptor, propertyDescriptor, actionHandler,
+        locale);
     JComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
@@ -1961,7 +1973,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
                                                         IActionHandler actionHandler, Locale locale) {
     IPercentPropertyDescriptor propertyDescriptor = (IPercentPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    IFormatter<?, String> formatter = createPercentFormatter(propertyViewDescriptor, propertyDescriptor, actionHandler, locale);
+    IFormatter<?, String> formatter = createPercentFormatter(propertyViewDescriptor, propertyDescriptor, actionHandler,
+        locale);
     JComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
@@ -2195,17 +2208,18 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       cellRenderer = createDateTableCellRenderer(propertyViewDescriptor, (IDatePropertyDescriptor) propertyDescriptor,
           timeZone, actionHandler, locale);
     } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
-      cellRenderer = createTimeTableCellRenderer(propertyViewDescriptor, (ITimePropertyDescriptor) propertyDescriptor, actionHandler, locale);
+      cellRenderer = createTimeTableCellRenderer(propertyViewDescriptor, (ITimePropertyDescriptor) propertyDescriptor,
+          actionHandler, locale);
     } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
-      cellRenderer = createDurationTableCellRenderer(propertyViewDescriptor, (IDurationPropertyDescriptor) propertyDescriptor, actionHandler,
-          locale);
+      cellRenderer = createDurationTableCellRenderer(propertyViewDescriptor,
+          (IDurationPropertyDescriptor) propertyDescriptor, actionHandler, locale);
     } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
       org.jspresso.framework.util.gui.Dimension iconSize = getEnumerationIconDimension(propertyViewDescriptor);
       cellRenderer = createEnumerationTableCellRenderer((IEnumerationPropertyDescriptor) propertyDescriptor, iconSize,
           actionHandler, locale);
     } else if (propertyDescriptor instanceof INumberPropertyDescriptor) {
-      cellRenderer = createNumberTableCellRenderer(propertyViewDescriptor, (INumberPropertyDescriptor) propertyDescriptor, actionHandler,
-          locale);
+      cellRenderer = createNumberTableCellRenderer(propertyViewDescriptor,
+          (INumberPropertyDescriptor) propertyDescriptor, actionHandler, locale);
     } else if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
       cellRenderer = createRelationshipEndTableCellRenderer((IRelationshipEndPropertyDescriptor) propertyDescriptor,
           locale);
@@ -2559,8 +2573,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       int selectedColumn = table.getSelectedColumn();
       if (selectedColumn == table.convertColumnIndexToView(columnIndex)) {
         actionHandler.execute(focusGainedAction, getActionFactory()
-            .createActionContext(actionHandler, view, view.getConnector(), String.valueOf(selectedRow) + ";" + columnIndex,
-                table));
+            .createActionContext(actionHandler, view, view.getConnector(),
+                String.valueOf(selectedRow) + ";" + columnIndex, table));
       }
     }
   }
@@ -2752,7 +2766,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     ITimePropertyDescriptor propertyDescriptor = (ITimePropertyDescriptor) propertyViewDescriptor.getModelDescriptor();
     IValueConnector connector;
     JComponent viewComponent;
-    IFormatter<?, String> formatter = createTimeFormatter(propertyViewDescriptor, propertyDescriptor, actionHandler, locale);
+    IFormatter<?, String> formatter = createTimeFormatter(propertyViewDescriptor, propertyDescriptor, actionHandler,
+        locale);
     if (propertyViewDescriptor.isReadOnly()) {
       if (propertyViewDescriptor.getAction() != null) {
         viewComponent = createJLink(propertyViewDescriptor);
@@ -2860,7 +2875,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       if (actionMap != null && actionHandler.isAccessGranted(actionMap)) {
         try {
           actionHandler.pushToSecurityContext(actionMap);
-          JToolBar toolBar = createViewToolBar(actionMap, view, defaultRenderingOptions, actionHandler, locale);
+          JToolBar toolBar = createViewActionMap(actionMap, view, defaultRenderingOptions, actionHandler, locale);
           if (asideActions) {
             viewPanel.add(toolBar, BorderLayout.EAST);
           } else {
@@ -2873,7 +2888,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       if (secondaryActionMap != null && actionHandler.isAccessGranted(secondaryActionMap)) {
         try {
           actionHandler.pushToSecurityContext(secondaryActionMap);
-          JToolBar toolBar = createViewToolBar(secondaryActionMap, view, defaultRenderingOptions, actionHandler,
+          JToolBar toolBar = createViewActionMap(secondaryActionMap, view, defaultRenderingOptions, actionHandler,
               locale);
           if (asideActions) {
             viewPanel.add(toolBar, BorderLayout.EAST);
@@ -2905,21 +2920,25 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * @return the tool bar
    */
   @SuppressWarnings("ConstantConditions")
-  protected JToolBar createViewToolBar(ActionMap actionMap, IView<JComponent> view,
-                                       ERenderingOptions defaultRenderingOptions, IActionHandler actionHandler,
-                                       Locale locale) {
+  protected JToolBar createViewActionMap(ActionMap actionMap, IView<JComponent> view,
+                                         ERenderingOptions defaultRenderingOptions, IActionHandler actionHandler,
+                                         Locale locale) {
     JToolBar toolBar = createJToolBar();
-    ERenderingOptions toolbarRenderingOptions = getDefaultActionMapRenderingOptions();
+    ERenderingOptions actionMapRenderingOptions = getDefaultActionMapRenderingOptions();
     if (defaultRenderingOptions != null) {
-      toolbarRenderingOptions = defaultRenderingOptions;
+      actionMapRenderingOptions = defaultRenderingOptions;
     }
     if (actionMap.getRenderingOptions() != null) {
-      toolbarRenderingOptions = actionMap.getRenderingOptions();
+      actionMapRenderingOptions = actionMap.getRenderingOptions();
+    }
+    boolean defaultHideActionWhenDisabled = getDefaultHideActionWhenDisabled();
+    if (actionMap.getHideActionWhenDisabled() != null) {
+      defaultHideActionWhenDisabled = actionMap.getHideActionWhenDisabled();
     }
     for (Iterator<ActionList> iter = actionMap.getActionLists(actionHandler).iterator(); iter.hasNext(); ) {
       ActionList nextActionList = iter.next();
-      List<JButton> viewActionList = createViewActionList(nextActionList, toolbarRenderingOptions, view, actionHandler,
-          locale);
+      List<JButton> viewActionList = createViewActionList(nextActionList, actionMapRenderingOptions,
+          defaultHideActionWhenDisabled, view, actionHandler, locale);
       if (viewActionList != null) {
         for (JButton toolbarButton : viewActionList) {
           toolBar.add(toolbarButton);
@@ -2935,9 +2954,9 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
   /**
    * Create view action list list.
    *
-   * @param nextActionList
-   *     the next action list
-   * @param toolbarRenderingOptions
+   * @param actionList
+   *     the action list
+   * @param actionMapRenderingOptions
    *     the toolbar rendering options
    * @param view
    *     the view
@@ -2947,21 +2966,25 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    *     the locale
    * @return the list
    */
-  protected List<JButton> createViewActionList(ActionList nextActionList,
-                                      ERenderingOptions toolbarRenderingOptions, IView<JComponent> view,
-                                      IActionHandler actionHandler, Locale locale) {
-    if (actionHandler.isAccessGranted(nextActionList)) {
+  protected List<JButton> createViewActionList(ActionList actionList, ERenderingOptions actionMapRenderingOptions,
+                                               boolean defaultHideActionWhenDisabled, IView<JComponent> view,
+                                               IActionHandler actionHandler, Locale locale) {
+    if (actionHandler.isAccessGranted(actionList)) {
       List<JButton> viewActionList = new ArrayList<>();
       try {
-        actionHandler.pushToSecurityContext(nextActionList);
-        ERenderingOptions renderingOptions = toolbarRenderingOptions;
-        if (nextActionList.getRenderingOptions() != null) {
-          renderingOptions = nextActionList.getRenderingOptions();
+        actionHandler.pushToSecurityContext(actionList);
+        ERenderingOptions renderingOptions = actionMapRenderingOptions;
+        if (actionList.getRenderingOptions() != null) {
+          renderingOptions = actionList.getRenderingOptions();
         }
-        if (nextActionList.isCollapsable()) {
-          JButton actionButton;
+        boolean hideActionWhenDisabled = defaultHideActionWhenDisabled;
+        if (actionList.getHideActionWhenDisabled() != null) {
+          hideActionWhenDisabled = actionList.getHideActionWhenDisabled();
+        }
+        if (actionList.isCollapsable()) {
+          final JButton actionButton;
           List<IDisplayableAction> actions = new ArrayList<>();
-          for (IDisplayableAction action : nextActionList.getActions()) {
+          for (IDisplayableAction action : actionList.getActions()) {
             if (actionHandler.isAccessGranted(action)) {
               actions.add(action);
             }
@@ -2993,13 +3016,26 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
               String acceleratorString = KeyEvent.getKeyModifiersText(ks.getModifiers()) + "-" + KeyEvent.getKeyText(
                   ks.getKeyCode());
               actionButton.setToolTipText(
-                  "<HTML>" + actionButton.getToolTipText() + " <FONT SIZE=\"-2\" COLOR=\"#993366\">"
-                      + acceleratorString + "</FONT></HTML>");
+                  "<HTML>" + actionButton.getToolTipText() + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
+                      + "</FONT></HTML>");
             }
             if (actions.size() > 1) {
               JPopupMenu popupMenu = new JPopupMenu();
               for (IDisplayableAction menuAction : actions) {
-                JMenuItem actionItem = createMenuItem(menuAction, view, actionHandler, locale);
+                boolean hiddenWhenDisabled = hideActionWhenDisabled;
+                if (menuAction.getHiddenWhenDisabled() != null) {
+                  hiddenWhenDisabled = menuAction.getHiddenWhenDisabled();
+                }
+                final JMenuItem actionItem = createMenuItem(menuAction, view, actionHandler, locale);
+                if (hiddenWhenDisabled) {
+                  actionItem.setVisible(actionItem.isEnabled());
+                  actionItem.addPropertyChangeListener("enabled", new PropertyChangeListener() {
+                    @Override
+                    public void propertyChange(PropertyChangeEvent evt) {
+                      actionItem.setVisible((Boolean) evt.getNewValue());
+                    }
+                  });
+                }
                 switch (renderingOptions) {
                   case ICON:
                     actionItem.setText("");
@@ -3028,18 +3064,31 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
             viewActionList.add(actionButton);
           }
         } else {
-          for (IDisplayableAction action : nextActionList.getActions()) {
+          for (IDisplayableAction action : actionList.getActions()) {
             if (actionHandler.isAccessGranted(action)) {
+              boolean hiddenWhenDisabled = hideActionWhenDisabled;
+              if (action.getHiddenWhenDisabled() != null) {
+                hiddenWhenDisabled = action.getHiddenWhenDisabled();
+              }
               Action swingAction = getActionFactory().createAction(action, actionHandler, view, locale);
-              JButton actionButton = createJButton();
+              final JButton actionButton = createJButton();
               actionButton.setAction(swingAction);
+              if (hiddenWhenDisabled) {
+                actionButton.setVisible(actionButton.isEnabled());
+                actionButton.addPropertyChangeListener("enabled", new PropertyChangeListener() {
+                  @Override
+                  public void propertyChange(PropertyChangeEvent evt) {
+                    actionButton.setVisible((Boolean) evt.getNewValue());
+                  }
+                });
+              }
               if (action.getAcceleratorAsString() != null) {
                 KeyStroke ks = KeyStroke.getKeyStroke(action.getAcceleratorAsString());
                 view.getPeer().getActionMap().put(swingAction.getValue(Action.NAME), swingAction);
                 view.getPeer().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ks,
                     swingAction.getValue(Action.NAME));
-                String acceleratorString = KeyEvent.getKeyModifiersText(ks.getModifiers()) + "-" + KeyEvent
-                    .getKeyText(ks.getKeyCode());
+                String acceleratorString = KeyEvent.getKeyModifiersText(ks.getModifiers()) + "-" + KeyEvent.getKeyText(
+                    ks.getKeyCode());
                 actionButton.setToolTipText(
                     "<HTML>" + actionButton.getToolTipText() + " <FONT SIZE=\"-2\" COLOR=\"#993366\">"
                         + acceleratorString + "</FONT></HTML>");
@@ -3166,16 +3215,18 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
                                                            IDecimalPropertyDescriptor propertyDescriptor,
                                                            ITranslationProvider translationProvider, Locale locale) {
     if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
-      return createPercentTableCellRenderer(propertyViewDescriptor, (IPercentPropertyDescriptor) propertyDescriptor, translationProvider,
-          locale);
+      return createPercentTableCellRenderer(propertyViewDescriptor, (IPercentPropertyDescriptor) propertyDescriptor,
+          translationProvider, locale);
     }
-    return new FormattedTableCellRenderer(createDecimalFormatter(propertyViewDescriptor, propertyDescriptor, translationProvider, locale));
+    return new FormattedTableCellRenderer(
+        createDecimalFormatter(propertyViewDescriptor, propertyDescriptor, translationProvider, locale));
   }
 
   private TableCellRenderer createDurationTableCellRenderer(IPropertyViewDescriptor propertyViewDescriptor,
                                                             IDurationPropertyDescriptor propertyDescriptor,
                                                             ITranslationProvider translationProvider, Locale locale) {
-    return new FormattedTableCellRenderer(createDurationFormatter(propertyViewDescriptor, propertyDescriptor, translationProvider, locale));
+    return new FormattedTableCellRenderer(
+        createDurationFormatter(propertyViewDescriptor, propertyDescriptor, translationProvider, locale));
   }
 
   private TableCellRenderer createEnumerationTableCellRenderer(IEnumerationPropertyDescriptor propertyDescriptor,
@@ -3238,7 +3289,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
   private TableCellRenderer createIntegerTableCellRenderer(IPropertyViewDescriptor propertyViewDescriptor,
                                                            IIntegerPropertyDescriptor propertyDescriptor,
                                                            ITranslationProvider translationProvider, Locale locale) {
-    return new FormattedTableCellRenderer(createIntegerFormatter(propertyViewDescriptor, propertyDescriptor, translationProvider, locale));
+    return new FormattedTableCellRenderer(
+        createIntegerFormatter(propertyViewDescriptor, propertyDescriptor, translationProvider, locale));
   }
 
   private JPopupMenu createJPopupMenu(IView<JComponent> view, ActionMap actionMap, IActionHandler actionHandler,
@@ -3292,11 +3344,11 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
                                                           ITranslationProvider translationProvider, Locale locale) {
     TableCellRenderer cellRenderer = null;
     if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
-      cellRenderer = createIntegerTableCellRenderer(propertyViewDescriptor, (IIntegerPropertyDescriptor) propertyDescriptor,
-          translationProvider, locale);
+      cellRenderer = createIntegerTableCellRenderer(propertyViewDescriptor,
+          (IIntegerPropertyDescriptor) propertyDescriptor, translationProvider, locale);
     } else if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
-      cellRenderer = createDecimalTableCellRenderer(propertyViewDescriptor, (IDecimalPropertyDescriptor) propertyDescriptor,
-          translationProvider, locale);
+      cellRenderer = createDecimalTableCellRenderer(propertyViewDescriptor,
+          (IDecimalPropertyDescriptor) propertyDescriptor, translationProvider, locale);
     }
     return cellRenderer;
   }
@@ -3304,7 +3356,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
   private TableCellRenderer createPercentTableCellRenderer(IPropertyViewDescriptor propertyViewDescriptor,
                                                            IPercentPropertyDescriptor propertyDescriptor,
                                                            ITranslationProvider translationProvider, Locale locale) {
-    return new FormattedTableCellRenderer(createPercentFormatter(propertyViewDescriptor, propertyDescriptor, translationProvider, locale));
+    return new FormattedTableCellRenderer(
+        createPercentFormatter(propertyViewDescriptor, propertyDescriptor, translationProvider, locale));
   }
 
   private TableCellRenderer createReferenceTableCellRenderer(
@@ -3378,7 +3431,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
   private TableCellRenderer createTimeTableCellRenderer(IPropertyViewDescriptor propertyViewDescriptor,
                                                         ITimePropertyDescriptor propertyDescriptor,
                                                         ITranslationProvider translationProvider, Locale locale) {
-    return new FormattedTableCellRenderer(createTimeFormatter(propertyViewDescriptor, propertyDescriptor, translationProvider, locale));
+    return new FormattedTableCellRenderer(
+        createTimeFormatter(propertyViewDescriptor, propertyDescriptor, translationProvider, locale));
   }
 
   private void decorateWithTitle(IView<JComponent> view, ITranslationProvider translationProvider, Locale locale) {

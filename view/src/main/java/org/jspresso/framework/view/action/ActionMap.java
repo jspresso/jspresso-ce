@@ -50,13 +50,13 @@ public class ActionMap implements ISecurable, IPermIdSource, ICloneable {
   private List<ActionMap>    parentActionMaps;
   private Collection<String> grantedRoles;
 
-  private ERenderingOptions  renderingOptions;
+  private ERenderingOptions renderingOptions;
+  private Boolean           hideActionWhenDisabled;
 
-  private String             permId;
+  private String permId;
 
-  private static void completeActionMap(
-      Map<String, ActionList> bufferActionMap, List<ActionList> actionLists,
-      ISecurityHandler securityHandler) {
+  private static void completeActionMap(Map<String, ActionList> bufferActionMap, List<ActionList> actionLists,
+                                        ISecurityHandler securityHandler) {
     if (actionLists != null) {
       Map<String, ActionList> mapOfActionLists = new LinkedHashMap<>();
       for (ActionList al : actionLists) {
@@ -67,21 +67,17 @@ public class ActionMap implements ISecurable, IPermIdSource, ICloneable {
           mapOfActionLists.put(Integer.toHexString(al.hashCode()), al);
         }
       }
-      for (Map.Entry<String, ActionList> actionListEntry : mapOfActionLists
-          .entrySet()) {
+      for (Map.Entry<String, ActionList> actionListEntry : mapOfActionLists.entrySet()) {
         if (securityHandler.isAccessGranted(actionListEntry.getValue())) {
           try {
             securityHandler.pushToSecurityContext(actionListEntry.getValue());
-            ActionList bufferActionList = bufferActionMap.get(actionListEntry
-                .getKey());
+            ActionList bufferActionList = bufferActionMap.get(actionListEntry.getKey());
             if (bufferActionList == null) {
               bufferActionList = actionListEntry.getValue().clone();
               bufferActionMap.put(actionListEntry.getKey(), bufferActionList);
             } else {
-              for (IDisplayableAction localAction : actionListEntry.getValue()
-                  .getActions()) {
-                int existingIndex = bufferActionList.getActions().indexOf(
-                    localAction);
+              for (IDisplayableAction localAction : actionListEntry.getValue().getActions()) {
+                int existingIndex = bufferActionList.getActions().indexOf(localAction);
                 if (existingIndex >= 0) {
                   bufferActionList.getActions().set(existingIndex, localAction);
                 } else {
@@ -102,7 +98,7 @@ public class ActionMap implements ISecurable, IPermIdSource, ICloneable {
    * local one.
    *
    * @param securityHandler
-   *          the action handler used to handle role based security.
+   *     the action handler used to handle role based security.
    * @return the actions list.
    */
   public List<ActionList> getActionLists(ISecurityHandler securityHandler) {
@@ -112,9 +108,7 @@ public class ActionMap implements ISecurable, IPermIdSource, ICloneable {
         if (securityHandler.isAccessGranted(parentActionMap)) {
           try {
             securityHandler.pushToSecurityContext(parentActionMap);
-            completeActionMap(buffer,
-                parentActionMap.getActionLists(securityHandler),
-                securityHandler);
+            completeActionMap(buffer, parentActionMap.getActionLists(securityHandler), securityHandler);
           } finally {
             securityHandler.restoreLastSecurityContextSnapshot();
           }
@@ -144,7 +138,7 @@ public class ActionMap implements ISecurable, IPermIdSource, ICloneable {
    * local actions will replace parent actions with the same name.
    *
    * @param actionLists
-   *          the action lists list to set.
+   *     the action lists list to set.
    */
   public void setActionLists(List<ActionList> actionLists) {
     this.actionLists = actionLists;
@@ -158,7 +152,7 @@ public class ActionMap implements ISecurable, IPermIdSource, ICloneable {
    * actions with the same name.
    *
    * @param parentActionMaps
-   *          the parentActionMaps to set.
+   *     the parentActionMaps to set.
    */
   public void setParentActionMaps(List<ActionMap> parentActionMaps) {
     this.parentActionMaps = parentActionMaps;
@@ -178,7 +172,7 @@ public class ActionMap implements ISecurable, IPermIdSource, ICloneable {
    * view factory.
    *
    * @param renderingOptions
-   *          the renderingOptions to set.
+   *     the renderingOptions to set.
    */
   public void setRenderingOptions(ERenderingOptions renderingOptions) {
     this.renderingOptions = renderingOptions;
@@ -203,7 +197,7 @@ public class ActionMap implements ISecurable, IPermIdSource, ICloneable {
    * to anyone.
    *
    * @param grantedRoles
-   *          the grantedRoles to set.
+   *     the grantedRoles to set.
    */
   public void setGrantedRoles(Collection<String> grantedRoles) {
     this.grantedRoles = grantedRoles;
@@ -227,7 +221,7 @@ public class ActionMap implements ISecurable, IPermIdSource, ICloneable {
    * id but must be explicitly set if Spring XML is used.
    *
    * @param permId
-   *          the permId to set.
+   *     the permId to set.
    */
   @Override
   public void setPermId(String permId) {
@@ -246,5 +240,25 @@ public class ActionMap implements ISecurable, IPermIdSource, ICloneable {
       // Cannot happen;
     }
     return clone;
+  }
+
+  /**
+   * When configured to {@code true}, the actions of the action map are hidden when they are disabled. Default value is
+   * undefined, i.e. {@code null}, meaning that the view factory configuration will drive the property.
+   *
+   * @return the boolean
+   */
+  public Boolean getHideActionWhenDisabled() {
+    return hideActionWhenDisabled;
+  }
+
+  /**
+   * Sets hidden when disabled.
+   *
+   * @param hideActionWhenDisabled
+   *     the hidden when disabled
+   */
+  public void setHideActionWhenDisabled(Boolean hideActionWhenDisabled) {
+    this.hideActionWhenDisabled = hideActionWhenDisabled;
   }
 }

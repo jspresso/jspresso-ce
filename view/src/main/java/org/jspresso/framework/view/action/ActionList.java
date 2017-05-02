@@ -43,6 +43,7 @@ public class ActionList extends DefaultIconDescriptor implements ISecurable,
 
   private List<IDisplayableAction> actions;
   private ERenderingOptions        renderingOptions;
+  private Boolean                  hideActionWhenDisabled;
   private boolean                  collapsable;
   private Collection<String>       grantedRoles;
   private String                   permId;
@@ -184,5 +185,25 @@ public class ActionList extends DefaultIconDescriptor implements ISecurable,
   @Override
   public void setPermId(String permId) {
     this.permId = permId;
+  }
+
+  /**
+   * When configured to {@code true}, the actions of the action list are hidden when they are disabled. Default value is
+   * undefined, i.e. {@code null}, meaning that the enclosing action map drives the configuration.
+   *
+   * @return the boolean
+   */
+  public Boolean getHideActionWhenDisabled() {
+    return hideActionWhenDisabled;
+  }
+
+  /**
+   * Sets hidden when disabled.
+   *
+   * @param hideActionWhenDisabled
+   *     the hidden when disabled
+   */
+  public void setHideActionWhenDisabled(Boolean hideActionWhenDisabled) {
+    this.hideActionWhenDisabled = hideActionWhenDisabled;
   }
 }

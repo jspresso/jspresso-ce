@@ -50,6 +50,7 @@ import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.binding.remote.RemoteValueConnector;
+import org.jspresso.framework.gui.remote.IRemoteScrollable;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RActionComponent;
 import org.jspresso.framework.gui.remote.RActionField;
@@ -81,7 +82,6 @@ import org.jspresso.framework.gui.remote.RPasswordField;
 import org.jspresso.framework.gui.remote.RPercentField;
 import org.jspresso.framework.gui.remote.RRadioBox;
 import org.jspresso.framework.gui.remote.RRepeater;
-import org.jspresso.framework.gui.remote.IRemoteScrollable;
 import org.jspresso.framework.gui.remote.RSecurityComponent;
 import org.jspresso.framework.gui.remote.RTabContainer;
 import org.jspresso.framework.gui.remote.RTextArea;
@@ -342,13 +342,19 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     connector.setExceptionHandler(actionHandler);
     RActionComponent viewComponent = createRActionComponent(viewDescriptor);
     IView<RComponent> view = constructView(viewComponent, viewDescriptor, connector);
-    if (viewDescriptor.getActionList() != null) {
+    ActionList actionList = viewDescriptor.getActionList();
+    if (actionList != null) {
       ERenderingOptions defaultRenderingOptions = ERenderingOptions.ICON;
       if (viewDescriptor.getRenderingOptions() != null) {
         defaultRenderingOptions = viewDescriptor.getRenderingOptions();
       }
-      viewComponent.setActionList(createViewActionList(viewDescriptor.getActionList(),
-          defaultRenderingOptions, view, actionHandler, locale));
+      boolean defaultHideActionWhenDisabled = getDefaultHideActionWhenDisabled();
+      if (actionList.getHideActionWhenDisabled() != null) {
+        defaultHideActionWhenDisabled = actionList.getHideActionWhenDisabled();
+      }
+      viewComponent.setActionList(
+          createViewActionList(actionList, defaultRenderingOptions, defaultHideActionWhenDisabled, view, actionHandler,
+              locale));
     } else {
       RAction action = getActionFactory().createAction(viewDescriptor.getAction(), viewDescriptor.getPreferredSize(),
           actionHandler, view, locale);
@@ -389,7 +395,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         .getModelDescriptor();
     IValueConnector connector;
     RComponent viewComponent;
-    IFormatter<Object, String> formatter = createIntegerFormatter(propertyViewDescriptor, propertyDescriptor, actionHandler, locale);
+    IFormatter<Object, String> formatter = createIntegerFormatter(propertyViewDescriptor, propertyDescriptor,
+        actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
       if (propertyViewDescriptor.getAction() != null) {
@@ -687,7 +694,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
                                                         IActionHandler actionHandler, Locale locale) {
     IPercentPropertyDescriptor propertyDescriptor = (IPercentPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    IFormatter<Object, String> formatter = createPercentFormatter(propertyViewDescriptor, propertyDescriptor, actionHandler, locale);
+    IFormatter<Object, String> formatter = createPercentFormatter(propertyViewDescriptor, propertyDescriptor,
+        actionHandler, locale);
     IValueConnector connector;
     RComponent viewComponent;
     if (propertyViewDescriptor.isReadOnly()) {
@@ -908,7 +916,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     }
     IValueConnector connector;
     RComponent viewComponent;
-    IFormatter<Object, String> formatter = createDecimalFormatter(propertyViewDescriptor, propertyDescriptor, actionHandler, locale);
+    IFormatter<Object, String> formatter = createDecimalFormatter(propertyViewDescriptor, propertyDescriptor,
+        actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
       if (propertyViewDescriptor.getAction() != null) {
@@ -943,7 +952,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         .getModelDescriptor();
     IValueConnector connector;
     RComponent viewComponent;
-    IFormatter<?, String> formatter = createDurationFormatter(propertyViewDescriptor, propertyDescriptor, actionHandler, locale);
+    IFormatter<?, String> formatter = createDurationFormatter(propertyViewDescriptor, propertyDescriptor, actionHandler,
+        locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
       if (propertyViewDescriptor.getAction() != null) {
@@ -1396,7 +1406,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     ITimePropertyDescriptor propertyDescriptor = (ITimePropertyDescriptor) propertyViewDescriptor.getModelDescriptor();
     IValueConnector connector;
     RComponent viewComponent;
-    IFormatter<?, String> formatter = createTimeFormatter(propertyViewDescriptor, propertyDescriptor, actionHandler, locale);
+    IFormatter<?, String> formatter = createTimeFormatter(propertyViewDescriptor, propertyDescriptor, actionHandler,
+        locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
       if (propertyViewDescriptor.getAction() != null) {
@@ -1988,7 +1999,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         actionHandler.pushToSecurityContext(actionMap);
         // There might be default actions like LOV
         RActionList[] defaultActionLists = peer.getActionLists();
-        List<RActionList> declaredActionLists = createViewToolBar(actionMap, view, actionHandler, locale);
+        List<RActionList> declaredActionLists = createViewActionMap(actionMap, view, actionHandler, locale);
         if (defaultActionLists != null || declaredActionLists != null) {
           List<RActionList> viewActionLists = new ArrayList<>();
           if (defaultActionLists != null) {
@@ -2008,7 +2019,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         actionHandler.pushToSecurityContext(secondaryActionMap);
         // There might be default actions like LOV
         RActionList[] defaultSecondaryActionLists = peer.getSecondaryActionLists();
-        List<RActionList> declaredSecondaryActionLists = createViewToolBar(secondaryActionMap, view, actionHandler,
+        List<RActionList> declaredSecondaryActionLists = createViewActionMap(secondaryActionMap, view, actionHandler,
             locale);
         if (defaultSecondaryActionLists != null || declaredSecondaryActionLists != null) {
           List<RActionList> viewSecondaryActionLists = new ArrayList<>();
@@ -2040,16 +2051,20 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
    *     the locale used.
    * @return the created tool bar.
    */
-  protected List<RActionList> createViewToolBar(ActionMap actionMap, IView<RComponent> view,
-                                                IActionHandler actionHandler, Locale locale) {
+  protected List<RActionList> createViewActionMap(ActionMap actionMap, IView<RComponent> view,
+                                                  IActionHandler actionHandler, Locale locale) {
     List<RActionList> viewActionLists = new ArrayList<>();
-    ERenderingOptions defaultRenderingOptions = getDefaultActionMapRenderingOptions();
+    ERenderingOptions actionMapRenderingOptions = getDefaultActionMapRenderingOptions();
     if (actionMap.getRenderingOptions() != null) {
-      defaultRenderingOptions = actionMap.getRenderingOptions();
+      actionMapRenderingOptions = actionMap.getRenderingOptions();
+    }
+    boolean defaultHideActionWhenDisabled = getDefaultHideActionWhenDisabled();
+    if (actionMap.getHideActionWhenDisabled() != null) {
+      defaultHideActionWhenDisabled = actionMap.getHideActionWhenDisabled();
     }
     for (ActionList nextActionList : actionMap.getActionLists(actionHandler)) {
-      RActionList viewActionList = createViewActionList(nextActionList, defaultRenderingOptions, view, actionHandler,
-          locale);
+      RActionList viewActionList = createViewActionList(nextActionList, actionMapRenderingOptions,
+          defaultHideActionWhenDisabled, view, actionHandler, locale);
       if (viewActionList != null) {
         viewActionLists.add(viewActionList);
       }
@@ -2064,7 +2079,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
    *     the action list
    * @param view
    *     the view
-   * @param defaultRenderingOptions
+   * @param actionMapRenderingOptions
    *     the default rendering options
    * @param actionHandler
    *     the action handler
@@ -2072,14 +2087,19 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
    *     the locale
    * @return the r action list
    */
-  protected RActionList createViewActionList(ActionList actionList, ERenderingOptions defaultRenderingOptions,
-                                             IView<RComponent> view, IActionHandler actionHandler, Locale locale) {
+  protected RActionList createViewActionList(ActionList actionList, ERenderingOptions actionMapRenderingOptions,
+                                             boolean defaultHideActionWhenDisabled, IView<RComponent> view,
+                                             IActionHandler actionHandler, Locale locale) {
     if (actionHandler.isAccessGranted(actionList)) {
       try {
         actionHandler.pushToSecurityContext(actionList);
-        ERenderingOptions renderingOptions = defaultRenderingOptions;
+        ERenderingOptions renderingOptions = actionMapRenderingOptions;
         if (actionList.getRenderingOptions() != null) {
           renderingOptions = actionList.getRenderingOptions();
+        }
+        boolean hideActionWhenDisabled = defaultHideActionWhenDisabled;
+        if (actionList.getHideActionWhenDisabled() != null) {
+          hideActionWhenDisabled = actionList.getHideActionWhenDisabled();
         }
         RActionList viewActionList = new RActionList(getGuidGenerator().generateGUID());
         viewActionList.setCollapsable(actionList.isCollapsable());
@@ -2090,10 +2110,15 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         for (IDisplayableAction action : actionList.getActions()) {
           if (actionHandler.isAccessGranted(action)) {
             try {
+              boolean hiddenWhenDisabled = hideActionWhenDisabled;
+              if (action.getHiddenWhenDisabled() != null) {
+                hiddenWhenDisabled = action.getHiddenWhenDisabled();
+              }
               actionHandler.pushToSecurityContext(action);
               RAction rAction = getActionFactory().createAction(action, getIconFactory().getSmallIconSize(),
                   actionHandler, view, locale);
               rAction.setAcceleratorAsString(action.getAcceleratorAsString());
+              rAction.setHiddenWhenDisabled(hiddenWhenDisabled);
               actions.add(rAction);
               switch (renderingOptions) {
                 case ICON:

@@ -3319,6 +3319,13 @@ public class DefaultFlexViewFactory {
       button.enabled = enabled;
     };
     BindingUtils.bindSetter(updateButtonState, remoteAction, "enabled", true);
+    if (remoteAction.hiddenWhenDisabled) {
+      var updateButtonVisibility:Function = function (enabled:Boolean):void {
+        button.visible = enabled;
+        button.includeInLayout = enabled;
+      };
+      BindingUtils.bindSetter(updateButtonVisibility, remoteAction, "enabled", true);
+    }
     getRemotePeerRegistry().register(remoteAction);
     var listener:Function = function (event:MouseEvent):void {
       _actionHandler.execute(remoteAction);
@@ -3561,6 +3568,12 @@ public class DefaultFlexViewFactory {
       menuItem["enabled"] = enabled;
     };
     BindingUtils.bindSetter(updateMenuItemState, action, "enabled", true);
+    if (action.hiddenWhenDisabled) {
+      var updateMenuItemVisibility:Function = function (enabled:Boolean):void {
+        menuItem["visible"] = enabled;
+      };
+      BindingUtils.bindSetter(updateMenuItemVisibility, action, "enabled", true);
+    }
     _remotePeerRegistry.register(action);
     installKeyboardShortcut(action, component);
     return menuItem;
