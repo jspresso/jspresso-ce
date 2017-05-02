@@ -82,7 +82,7 @@ public class InitModuleFilterAction extends BackendAction {
       for (IPropertyViewDescriptor columnDescriptor : ((ITableViewDescriptor) moduleObjectsViewDescriptor)
           .getColumnViewDescriptors()) {
         IPropertyDescriptor columnPropertyDescriptor = (IPropertyDescriptor) columnDescriptor.getModelDescriptor();
-        if (columnPropertyDescriptor.isComputed()
+        if (columnPropertyDescriptor != null && columnPropertyDescriptor.isComputed()
             || columnPropertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
           prefetchProperties.add(columnPropertyDescriptor.getName());
         }

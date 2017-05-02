@@ -1411,15 +1411,15 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           componentLabel.setMarginBottom(rowSpacing);
           componentLabel.setAllowStretchX(false, false);
           componentLabel.setAllowStretchY(false, false);
-          if (componentLabel.getLabel() == "" && remoteForm.getLabelsPosition() == "ASIDE") {
-            formLayout.setColumnFlex(labelCol - 1, 0);
-            compColSpan++;
-            compCol--;
-          } else {
-            form.add(componentLabel, {
-              row: labelRow, column: labelCol, rowSpan: 1, colSpan: labelColSpan
-            });
-          }
+          // if (componentLabel.getLabel() == "" && remoteForm.getLabelsPosition() == "ASIDE") {
+          //   formLayout.setColumnFlex(labelCol - 1, 0);
+          //   compColSpan++;
+          //   compCol--;
+          // } else {
+          form.add(componentLabel, {
+            row: labelRow, column: labelCol, rowSpan: 1, colSpan: labelColSpan
+          });
+          // }
         }
         component.setAllowShrinkX(true);
         if (remoteForm.getLabelsPosition() == "ASIDE") {

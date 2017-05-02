@@ -237,6 +237,7 @@ import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IRepeaterViewDescriptor;
 import org.jspresso.framework.view.descriptor.IScrollableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
+import org.jspresso.framework.view.descriptor.IStaticTextViewDescriptor;
 import org.jspresso.framework.view.descriptor.IStringPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
@@ -616,13 +617,18 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
          ite.hasNext(); ) {
       IPropertyViewDescriptor propertyViewDescriptor = ite.next();
       if (isAllowedForClientType(propertyViewDescriptor, actionHandler)) {
-        String propertyName = propertyViewDescriptor.getModelDescriptor().getName();
-        IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor.getModelDescriptor())
-            .getComponentDescriptor().getPropertyDescriptor(propertyName);
-        if (propertyDescriptor == null) {
-          throw new ViewException(
-              "Property descriptor [" + propertyName + "] does not exist for model descriptor " + viewDescriptor
-                  .getModelDescriptor().getName() + ".");
+        String propertyName = null;
+        IPropertyDescriptor propertyDescriptor = null;
+        IModelDescriptor propertyModelDescriptor = propertyViewDescriptor.getModelDescriptor();
+        if (propertyModelDescriptor != null) {
+          propertyName = propertyModelDescriptor.getName();
+          propertyDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor.getModelDescriptor())
+              .getComponentDescriptor().getPropertyDescriptor(propertyName);
+          if (propertyDescriptor == null) {
+            throw new ViewException(
+                "Property descriptor [" + propertyName + "] does not exist for model descriptor " + viewDescriptor
+                    .getModelDescriptor().getName() + ".");
+          }
         }
         IView<JComponent> propertyView = createView(propertyViewDescriptor, actionHandler, locale);
         propertyView.setParent(view);
@@ -633,7 +639,9 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
         } else {
           propertyViews.add(propertyView);
         }
-        connector.addChildConnector(propertyView.getConnector().getId(), propertyView.getConnector());
+        if (propertyName != null) {
+          connector.addChildConnector(propertyName, propertyView.getConnector());
+        }
         // already handled in createView.
         // if (propertyViewDescriptor.getReadabilityGates() != null) {
         // if (propertyViewDescriptor.getWritabilityGates() != null) {
@@ -1004,7 +1012,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
                                          IPropertyDescriptor propertyDescriptor, IView<JComponent> propertyView,
                                          boolean forbidden) {
     JLabel propertyLabel = createPropertyLabel(propertyViewDescriptor, propertyView.getPeer(), actionHandler, locale);
-    if (!propertyViewDescriptor.isReadOnly() && propertyDescriptor.isMandatory()
+    if (!propertyViewDescriptor.isReadOnly() && propertyDescriptor != null && propertyDescriptor.isMandatory()
         && !(propertyDescriptor instanceof IBooleanPropertyDescriptor)) {
       if (propertyViewDescriptor.getLabelForeground() == null) {
         propertyLabel.setForeground(createColor(getFormLabelMandatoryPropertyColorHex()));
@@ -1434,6 +1442,27 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     } else {
       return createBinaryPropertyView(propertyViewDescriptor, actionHandler, locale);
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<JComponent> createStaticTextPropertyView(IStaticTextViewDescriptor propertyViewDescriptor,
+                                                           IActionHandler actionHandler, Locale locale) {
+    JComponent viewComponent;
+    IValueConnector connector;
+    if (propertyViewDescriptor.isMultiLine()) {
+      viewComponent = createJTextPane(propertyViewDescriptor);
+      connector = new JTextPaneConnector(null, (JTextPane) viewComponent);
+    } else {
+      viewComponent = createJLabel(propertyViewDescriptor, false);
+      connector = new JLabelConnector(null, (JLabel) viewComponent);
+    }
+    connector.setExceptionHandler(actionHandler);
+    connector.setConnectorValue(actionHandler.getTranslation(propertyViewDescriptor.getI18nTextKey(), locale));
+    IView<JComponent> propertyView = constructView(viewComponent, propertyViewDescriptor, connector);
+    return propertyView;
   }
 
   /**

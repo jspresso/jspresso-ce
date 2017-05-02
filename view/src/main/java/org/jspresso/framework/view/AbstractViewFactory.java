@@ -133,6 +133,7 @@ import org.jspresso.framework.view.descriptor.IRepeaterViewDescriptor;
 import org.jspresso.framework.view.descriptor.IScrollableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISimpleTreeLevelDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
+import org.jspresso.framework.view.descriptor.IStaticTextViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
@@ -1236,10 +1237,10 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
                                                  IViewDescriptor viewDescriptor,
                                                  IPropertyDescriptor propertyDescriptor) {
     String dynamicToolTipProperty = null;
-    String descriptionKey;
+    String descriptionKey = null;
     if (viewDescriptor.getDescription() != null) {
       descriptionKey = viewDescriptor.getDescription();
-    } else {
+    } else if(propertyDescriptor != null) {
       descriptionKey = propertyDescriptor.getDescription();
     }
     if (descriptionKey != null) {
@@ -1957,6 +1958,20 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
                                                       IActionHandler actionHandler, Locale locale);
 
   /**
+   * Creates a static text property view.
+   *
+   * @param viewDescriptor
+   *     the view descriptor.
+   * @param actionHandler
+   *     the action handler.
+   * @param locale
+   *     the locale.
+   * @return the created static text view.
+   */
+  protected abstract IView<E> createStaticTextPropertyView(IStaticTextViewDescriptor viewDescriptor,
+                                                           IActionHandler actionHandler, Locale locale);
+
+  /**
    * Creates an integer format based on an integer property descriptor.
    *
    * @param propertyViewDescriptor
@@ -2226,6 +2241,11 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
       // First of all, test for Image property view before deciding based on the
       // model.
       view = createImagePropertyView(propertyViewDescriptor, actionHandler, locale);
+    } else if (propertyViewDescriptor instanceof IStaticTextViewDescriptor) {
+      // Then, test for static text property view before deciding based on the
+      // model.
+      view = createStaticTextPropertyView((IStaticTextViewDescriptor) propertyViewDescriptor, actionHandler,
+          locale);
     } else if (propertyViewDescriptor instanceof IHtmlViewDescriptor) {
       // Then, test for Html property view before deciding based on the
       // model.

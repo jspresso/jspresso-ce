@@ -22,7 +22,7 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IStringPropertyViewDescriptor;
 
 /**
- * This type of view descriptor is used to display a a string property.
+ * This type of view descriptor is used to display a string property.
  * The objective is to be able to configure an action bound to character typing.
  *
  * @author Vincent Vandenschrick

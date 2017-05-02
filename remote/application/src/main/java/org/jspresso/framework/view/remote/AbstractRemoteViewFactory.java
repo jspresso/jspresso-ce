@@ -101,6 +101,7 @@ import org.jspresso.framework.model.descriptor.IDurationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IHtmlPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPasswordPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPercentPropertyDescriptor;
@@ -156,6 +157,7 @@ import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IRepeaterViewDescriptor;
 import org.jspresso.framework.view.descriptor.IScrollableViewDescriptor;
+import org.jspresso.framework.view.descriptor.IStaticTextViewDescriptor;
 import org.jspresso.framework.view.descriptor.IStringPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
@@ -1142,6 +1144,26 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
    * {@inheritDoc}
    */
   @Override
+  protected IView<RComponent> createStaticTextPropertyView(IStaticTextViewDescriptor propertyViewDescriptor,
+                                                           IActionHandler actionHandler, Locale locale) {
+    RTextComponent viewComponent;
+    if (propertyViewDescriptor.isMultiLine()) {
+      viewComponent = createRHtmlArea(propertyViewDescriptor);
+      ((RHtmlArea) viewComponent).setReadOnly(true);
+    } else {
+      viewComponent = createRLabel(propertyViewDescriptor, false);
+    }
+    IValueConnector connector = getConnectorFactory().createValueConnector(null);
+    connector.setExceptionHandler(actionHandler);
+    connector.setConnectorValue(actionHandler.getTranslation(propertyViewDescriptor.getI18nTextKey(), locale));
+    IView<RComponent> propertyView = constructView(viewComponent, propertyViewDescriptor, connector);
+    return propertyView;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   protected IView<RComponent> createNumberPropertyView(IPropertyViewDescriptor propertyViewDescriptor,
                                                        IActionHandler actionHandler, Locale locale) {
     INumberPropertyDescriptor propertyDescriptor = (INumberPropertyDescriptor) propertyViewDescriptor
@@ -1188,7 +1210,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     IView<RComponent> propertyView = super.createPropertyView(propertyViewDescriptor, actionHandler, locale);
     if (propertyView != null) {
       RComponent peer = propertyView.getPeer();
-      if (propertyDescriptor.getName() != null) {
+      if (propertyDescriptor != null && propertyDescriptor.getName() != null) {
         peer.setLabel(propertyDescriptor.getI18nName(actionHandler, locale));
       }
       if (peer instanceof RLabel) {
@@ -1529,14 +1551,17 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
 
     for (IPropertyViewDescriptor propertyViewDescriptor : viewDescriptor.getPropertyViewDescriptors()) {
       if (isAllowedForClientType(propertyViewDescriptor, actionHandler)) {
-
-        String propertyName = propertyViewDescriptor.getModelDescriptor().getName();
-        IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor.getModelDescriptor())
-            .getComponentDescriptor().getPropertyDescriptor(propertyName);
-        if (propertyDescriptor == null) {
-          throw new ViewException(
-              "Property descriptor [" + propertyName + "] does not exist for model descriptor " + viewDescriptor
-                  .getModelDescriptor().getName() + ".");
+        String propertyName = null;
+        IPropertyDescriptor propertyDescriptor = null;
+        IModelDescriptor propertyModelDescriptor = propertyViewDescriptor.getModelDescriptor();
+        if (propertyModelDescriptor != null) {
+          propertyName = propertyModelDescriptor.getName();
+          propertyDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor.getModelDescriptor()).getComponentDescriptor().getPropertyDescriptor(propertyName);
+          if (propertyDescriptor == null) {
+            throw new ViewException(
+                "Property descriptor [" + propertyName + "] does not exist for model descriptor " + viewDescriptor
+                    .getModelDescriptor().getName() + ".");
+          }
         }
         IView<RComponent> propertyView = createView(propertyViewDescriptor, actionHandler, locale);
         // Fix bug 782
@@ -1564,7 +1589,9 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
           labelHorizontalPosition = EHorizontalPosition.LEFT;
         }
         labelHorizontalPositions.add(labelHorizontalPosition.name());
-        connector.addChildConnector(propertyName, propertyView.getConnector());
+        if (propertyName != null) {
+          connector.addChildConnector(propertyName, propertyView.getConnector());
+        }
         // already handled in createView.
         // if (propertyViewDescriptor.getReadabilityGates() != null) {
         // if (propertyViewDescriptor.getWritabilityGates() != null) {
@@ -1604,7 +1631,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
                                          IPropertyDescriptor propertyDescriptor, IView<RComponent> propertyView,
                                          boolean forbidden) {
     RLabel propertyLabel = createPropertyLabel(propertyViewDescriptor, propertyView.getPeer(), actionHandler, locale);
-    if (!propertyViewDescriptor.isReadOnly() && propertyDescriptor.isMandatory()
+    if (!propertyViewDescriptor.isReadOnly() && propertyDescriptor != null && propertyDescriptor.isMandatory()
         && !(propertyDescriptor instanceof IBooleanPropertyDescriptor)) {
       if (propertyViewDescriptor.getLabelForeground() == null) {
         propertyLabel.setForeground(getFormLabelMandatoryPropertyColorHex());
@@ -1768,10 +1795,10 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         ((RActionField) viewComponent).setFieldEditable(true);
       }
       RAction lovAction = createLovAction(view, actionHandler, locale);
-      // lovAction.setName(getTranslationProvider().getTranslation(
+      // lovAction.setName(actionHandler.getTranslation(
       // "lov.element.name",
       // new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
-      // getTranslationProvider(), locale)}, locale));
+      // actionHandler, locale)}, locale));
       lovAction.setDescription(actionHandler.getTranslation("lov.element.description",
           new Object[]{propertyDescriptor.getReferencedDescriptor().getI18nName(actionHandler, locale)}, locale)
           + IActionFactory.TOOLTIP_ELLIPSIS);
