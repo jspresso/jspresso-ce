@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
+
 import org.jspresso.framework.model.descriptor.DescriptorException;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.util.bean.integrity.IPropertyProcessor;
@@ -29,9 +32,6 @@ import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.lang.StringUtils;
-
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
 
 /**
  * This is the abstract base class for all property descriptors. It mainly
@@ -73,6 +73,7 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
   private boolean                        versionControl;
   private Collection<IGate>              writabilityGates;
   private Boolean                        filterComparable;
+  private boolean                        filterOnly;
 
   /**
    * Constructs a new {@code BasicPropertyDescriptor} instance.
@@ -81,6 +82,7 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
     computed = false;
     versionControl = true;
     cacheable = false;
+    filterOnly = false;
   }
 
   /**
@@ -229,7 +231,7 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
    */
   @Override
   public boolean isComputed() {
-    return getDelegateClassName() != null || computed;
+    return getDelegateClassName() != null || computed || isFilterOnly();
   }
 
   /**
@@ -262,6 +264,9 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
     }
     if (delegateWritable != null) {
       return delegateWritable;
+    }
+    if (isFilterOnly()) {
+      return true;
     }
     return false;
   }
@@ -666,8 +671,8 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
       // process creation of integrity processors.
       for (String integrityProcessorClassName : integrityProcessorClassNames) {
         try {
-          registerIntegrityProcessor((IPropertyProcessor<?, ?>) Class.forName(integrityProcessorClassName)
-                                                                     .newInstance());
+          registerIntegrityProcessor(
+              (IPropertyProcessor<?, ?>) Class.forName(integrityProcessorClassName).newInstance());
         } catch (InstantiationException | ClassNotFoundException | IllegalAccessException ex) {
           throw new DescriptorException(ex);
         }
@@ -784,7 +789,8 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
   /**
    * Sets filter comparable.
    *
-   * @param filterComparable the filter comparable
+   * @param filterComparable
+   *     the filter comparable
    */
   public void setFilterComparable(Boolean filterComparable) {
     this.filterComparable = filterComparable;
@@ -798,5 +804,29 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
    */
   protected boolean isDefaultFilterComparable() {
     return false;
+  }
+
+  /**
+   * Gets whether this property is only used in filters, i.e. it is not persistent and only serves for storing criteria
+   * data that can be further leveraged by criteria refiners. Using {@code filterOnly} properties relieves the developer
+   * from having to declare fake computed properties. see {@link
+   * <a href="https://github.com/jspresso/jspresso-ce/issues/253">
+   * this request for enhancement</a>}
+   *
+   * @return {@code true} if this property is only used in filters.
+   */
+  @Override
+  public boolean isFilterOnly() {
+    return filterOnly;
+  }
+
+  /**
+   * Sets filter only.
+   *
+   * @param filterOnly
+   *     the filter only
+   */
+  public void setFilterOnly(boolean filterOnly) {
+    this.filterOnly = filterOnly;
   }
 }

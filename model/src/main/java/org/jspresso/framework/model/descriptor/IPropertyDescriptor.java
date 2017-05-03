@@ -183,9 +183,22 @@ public interface IPropertyDescriptor extends IModelDescriptor, ICloneable, ISecu
    * Gets whether this property is filter comparable, i.e. a comparator is installed in any filter view based on this
    * property.
    * By default naturally comparable property types are filter comparable. But there are case when you might want to
-   * override this behaviour in a sense or another. see {@link <a href="https://github.com/jspresso/jspresso-ce/issues/12"> this bug report </a>}
+   * override this behaviour in a sense or another. see {@link
+   * <a href="https://github.com/jspresso/jspresso-ce/issues/12">
+   * this bug report </a>}
    *
    * @return {@code true} if this property is comparable.
    */
   boolean isFilterComparable();
+
+  /**
+   * Gets whether this property is only used in filters, i.e. it is not persistent and only serves for storing criteria
+   * data that can be further leveraged by criteria refiners. Using {@code filterOnly} properties relieves the developer
+   * from having to declare fake computed properties. see {@link
+   * <a href="https://github.com/jspresso/jspresso-ce/issues/253">
+   * this request for enhancement</a>}
+   *
+   * @return {@code true} if this property is only used in filters.
+   */
+  boolean isFilterOnly();
 }

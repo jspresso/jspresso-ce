@@ -319,32 +319,39 @@ public abstract class AbstractComponentInvocationHandler implements
                 modifierMonitors.remove(methodName);
               }
             }
-          } else if (propertyDescriptor instanceof IStringPropertyDescriptor
-              && ((IStringPropertyDescriptor) propertyDescriptor).isTranslatable()) {
-            if (accessorInfo.isModifier()) {
-              if (propertyDescriptor.getName().endsWith(IComponentDescriptor.NLS_SUFFIX)) {
-                invokeNlsSetter(proxy, (IStringPropertyDescriptor) propertyDescriptor, (String) args[0]);
-              } else {
-                invokeNlsOrRawSetter(proxy, (IStringPropertyDescriptor) propertyDescriptor, (String) args[0]);
-              }
-              return null;
-            } else {
-              if (propertyDescriptor.getName().endsWith(IComponentDescriptor.NLS_SUFFIX)) {
-                return invokeNlsGetter(proxy, (IStringPropertyDescriptor) propertyDescriptor);
-              } else {
-                return invokeNlsOrRawGetter(proxy, (IStringPropertyDescriptor) propertyDescriptor);
-              }
-            }
           } else {
-            try {
-              return invokeServiceMethod(proxy, method, args);
-            } catch (NoSuchMethodException ignored) {
-              // it will fall back in the general case.
+            String propertyName = propertyDescriptor.getName();
+            if (propertyDescriptor.isFilterOnly()) {
+              throw new ComponentException("The '" + propertyName
+                  + "' property is meant to be used only on filters for the following component : \n"
+                  + componentDescriptor.getComponentContract().getName());
+            } else if (propertyDescriptor instanceof IStringPropertyDescriptor
+                && ((IStringPropertyDescriptor) propertyDescriptor).isTranslatable()) {
+              if (accessorInfo.isModifier()) {
+                if (propertyName.endsWith(IComponentDescriptor.NLS_SUFFIX)) {
+                  invokeNlsSetter(proxy, (IStringPropertyDescriptor) propertyDescriptor, (String) args[0]);
+                } else {
+                  invokeNlsOrRawSetter(proxy, (IStringPropertyDescriptor) propertyDescriptor, (String) args[0]);
+                }
+                return null;
+              } else {
+                if (propertyName.endsWith(IComponentDescriptor.NLS_SUFFIX)) {
+                  return invokeNlsGetter(proxy, (IStringPropertyDescriptor) propertyDescriptor);
+                } else {
+                  return invokeNlsOrRawGetter(proxy, (IStringPropertyDescriptor) propertyDescriptor);
+                }
+              }
+            } else {
+              try {
+                return invokeServiceMethod(proxy, method, args);
+              } catch (NoSuchMethodException ignored) {
+                // it will fall back in the general case.
+              }
+              throw new ComponentException("The '" + propertyName
+                  + "' property is described as computed but we couldn't determine a way to compute it,"
+                  + " either through an extension or a service delegate on the following component : \n"
+                  + componentDescriptor.getComponentContract().getName());
             }
-            throw new ComponentException("The '" + propertyDescriptor.getName()
-                + "' property is described as computed but we couldn't determine a way to compute it,"
-                + " either through an extension or a service delegate on the following component : \n"
-                + componentDescriptor.getComponentContract().getName());
           }
         } else {
           try {
