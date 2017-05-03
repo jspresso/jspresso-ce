@@ -1240,7 +1240,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     String descriptionKey = null;
     if (viewDescriptor.getDescription() != null) {
       descriptionKey = viewDescriptor.getDescription();
-    } else if(propertyDescriptor != null) {
+    } else if (propertyDescriptor != null) {
       descriptionKey = propertyDescriptor.getDescription();
     }
     if (descriptionKey != null) {
@@ -2244,8 +2244,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     } else if (propertyViewDescriptor instanceof IStaticTextViewDescriptor) {
       // Then, test for static text property view before deciding based on the
       // model.
-      view = createStaticTextPropertyView((IStaticTextViewDescriptor) propertyViewDescriptor, actionHandler,
-          locale);
+      view = createStaticTextPropertyView((IStaticTextViewDescriptor) propertyViewDescriptor, actionHandler, locale);
     } else if (propertyViewDescriptor instanceof IHtmlViewDescriptor) {
       // Then, test for Html property view before deciding based on the
       // model.
@@ -3017,6 +3016,10 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
       IModelDescriptor propertyDescriptor = propertyViewDescriptor.getModelDescriptor();
       if (propertyDescriptor instanceof ITextPropertyDescriptor
           || propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
+        return true;
+      }
+      if (propertyViewDescriptor instanceof IStaticTextViewDescriptor
+          && ((IStaticTextViewDescriptor) propertyViewDescriptor).isMultiLine()) {
         return true;
       }
     }
