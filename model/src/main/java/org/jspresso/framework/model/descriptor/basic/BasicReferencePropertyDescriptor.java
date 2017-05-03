@@ -97,6 +97,14 @@ public class BasicReferencePropertyDescriptor<E> extends
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getModelTypeName() {
+    return getReferencedDescriptor().getModelTypeName();
+  }
+
+  /**
    * Gets the pageSize.
    *
    * @return the pageSize.

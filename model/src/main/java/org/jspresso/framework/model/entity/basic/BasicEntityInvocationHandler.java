@@ -21,9 +21,7 @@ package org.jspresso.framework.model.entity.basic;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.Map;
 
-import gnu.trove.map.hash.THashMap;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -32,8 +30,9 @@ import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
 import org.jspresso.framework.model.component.IComponentExtensionFactory;
 import org.jspresso.framework.model.component.IComponentFactory;
+import org.jspresso.framework.model.component.IComponentPropertyStore;
 import org.jspresso.framework.model.component.basic.AbstractComponentInvocationHandler;
-import org.jspresso.framework.model.component.basic.ICollectionWrapper;
+import org.jspresso.framework.model.component.basic.BasicComponentPropertyStore;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
@@ -45,39 +44,36 @@ import org.jspresso.framework.util.accessor.IAccessorFactory;
  *
  * @author Vincent Vandenschrick
  */
-public class BasicEntityInvocationHandler extends
-    AbstractComponentInvocationHandler {
+public class BasicEntityInvocationHandler extends AbstractComponentInvocationHandler {
 
-  private static final long   serialVersionUID = 6078989823404409653L;
+  private static final long serialVersionUID = 6078989823404409653L;
 
-  private final Map<String, Object> properties;
-  private int                 hashCode;
+  private final IComponentPropertyStore properties;
+  private       int                     hashCode;
 
   /**
    * Constructs a new {@code BasicEntityInvocationHandler} instance.
    *
    * @param entityDescriptor
-   *          The descriptor of the proxy entity.
+   *     The descriptor of the proxy entity.
    * @param inlineComponentFactory
-   *          the factory used to create inline components.
+   *     the factory used to create inline components.
    * @param collectionFactory
-   *          The factory used to create empty entity collections from
-   *          collection getters.
+   *     The factory used to create empty entity collections from
+   *     collection getters.
    * @param accessorFactory
-   *          The factory used to access proxy properties.
+   *     The factory used to access proxy properties.
    * @param extensionFactory
-   *          The factory used to create entity extensions based on their
-   *          classes.
+   *     The factory used to create entity extensions based on their
+   *     classes.
    */
-  protected BasicEntityInvocationHandler(
-      IComponentDescriptor<IEntity> entityDescriptor,
-      IComponentFactory inlineComponentFactory,
-      IComponentCollectionFactory collectionFactory,
-      IAccessorFactory accessorFactory,
-      IComponentExtensionFactory extensionFactory) {
-    super(entityDescriptor, inlineComponentFactory, collectionFactory,
-        accessorFactory, extensionFactory);
-    this.properties = createPropertyMap();
+  protected BasicEntityInvocationHandler(IComponentDescriptor<IEntity> entityDescriptor,
+                                         IComponentFactory inlineComponentFactory,
+                                         IComponentCollectionFactory collectionFactory,
+                                         IAccessorFactory accessorFactory,
+                                         IComponentExtensionFactory extensionFactory) {
+    super(entityDescriptor, inlineComponentFactory, collectionFactory, accessorFactory, extensionFactory);
+    this.properties = createPropertyStore();
     this.hashCode = -1;
   }
 
@@ -89,8 +85,7 @@ public class BasicEntityInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
-  public synchronized Object invoke(Object proxy, Method method, Object[] args)
-      throws Throwable {
+  public synchronized Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     String methodName = method.getName();
     if ("isPersistent".equals(methodName)) {
       return isPersistent(proxy);
@@ -101,13 +96,13 @@ public class BasicEntityInvocationHandler extends
   /**
    * Is persistent.
    *
-   * @param proxy the proxy
+   * @param proxy
+   *     the proxy
    * @return the boolean
    */
   protected boolean isPersistent(Object proxy) {
     Integer version = ((IEntity) proxy).getVersion();
-    return version != null
-        && !IEntity.DELETED_VERSION.equals(version);
+    return version != null && !IEntity.DELETED_VERSION.equals(version);
   }
 
   /**
@@ -126,18 +121,17 @@ public class BasicEntityInvocationHandler extends
       Object otherId;
       Class<?> otherContract;
 
-      if (Proxy.isProxyClass(another.getClass())
-          && Proxy.getInvocationHandler(another) instanceof BasicEntityInvocationHandler) {
-        BasicEntityInvocationHandler otherInvocationHandler = (BasicEntityInvocationHandler) Proxy
-            .getInvocationHandler(another);
+      if (Proxy.isProxyClass(another.getClass()) && Proxy.getInvocationHandler(
+          another) instanceof BasicEntityInvocationHandler) {
+        BasicEntityInvocationHandler otherInvocationHandler = (BasicEntityInvocationHandler) Proxy.getInvocationHandler(
+            another);
         otherContract = otherInvocationHandler.getComponentContract();
         otherId = otherInvocationHandler.straightGetProperty(proxy, IEntity.ID);
       } else {
         otherContract = ((IEntity) another).getComponentContract();
         otherId = ((IEntity) another).getId();
       }
-      return new EqualsBuilder().append(getComponentContract(), otherContract)
-          .append(id, otherId).isEquals();
+      return new EqualsBuilder().append(getComponentContract(), otherContract).append(id, otherId).isEquals();
     }
     return false;
   }
@@ -150,8 +144,7 @@ public class BasicEntityInvocationHandler extends
     if (hashCode == -1) {
       Object id = straightGetProperty(proxy, IEntity.ID);
       if (id == null) {
-        throw new NullPointerException(
-            "Id must be assigned on the entity before its hashcode can be used.");
+        throw new NullPointerException("Id must be assigned on the entity before its hashcode can be used.");
       }
       hashCode = new HashCodeBuilder(3, 17).append(id).toHashCode();
     }
@@ -163,7 +156,7 @@ public class BasicEntityInvocationHandler extends
    */
   @Override
   protected IComponent decorateReferent(IComponent referent,
-      IComponentDescriptor<? extends IComponent> referentDescriptor) {
+                                        IComponentDescriptor<? extends IComponent> referentDescriptor) {
     return referent;
   }
 
@@ -180,11 +173,19 @@ public class BasicEntityInvocationHandler extends
    */
   @Override
   protected void storeProperty(String propertyName, Object propertyValue) {
-    properties.put(propertyName, refinePropertyToStore(propertyValue));
+    properties.set(propertyName, refinePropertyToStore(propertyValue));
   }
 
-  private Map<String, Object> createPropertyMap() {
-    return new THashMap<>(1, 1.0f);
+  private IComponentPropertyStore createPropertyStore() {
+    try {
+      BasicComponentPropertyStore store = (BasicComponentPropertyStore) Class.forName(
+          getComponentContract().getName() + "$State").newInstance();
+      store.setAccessorFactory(getAccessorFactory());
+      return store;
+    } catch (InstantiationException | IllegalAccessException | ClassNotFoundException ex) {
+      throw new ComponentException(ex,
+          "Can not create component property store for " + getComponentContract().getName());
+    }
   }
 
   /**
@@ -192,16 +193,19 @@ public class BasicEntityInvocationHandler extends
    */
   @Override
   protected void markDeleted(Object proxy) {
-    ((IEntity) proxy).straightSetProperty(IEntity.VERSION,
-        IEntity.DELETED_VERSION);
+    ((IEntity) proxy).straightSetProperty(IEntity.VERSION, IEntity.DELETED_VERSION);
     super.markDeleted(proxy);
   }
 
   /**
    * Assigns raw property if the entity is not persistent yet.
-   * @param proxy the proxy
-   * @param propertyDescriptor the property descriptor
-   * @param translatedValue the translated value
+   *
+   * @param proxy
+   *     the proxy
+   * @param propertyDescriptor
+   *     the property descriptor
+   * @param translatedValue
+   *     the translated value
    */
   @Override
   protected void invokeNlsOrRawSetter(Object proxy, IStringPropertyDescriptor propertyDescriptor,
@@ -210,9 +214,8 @@ public class BasicEntityInvocationHandler extends
     if (!isPersistent(proxy)) {
       try {
         String rawPropertyName = propertyDescriptor.getName() + IComponentDescriptor.RAW_SUFFIX;
-        getAccessorFactory().createPropertyAccessor(
-            rawPropertyName, getComponentDescriptor().getComponentContract())
-                                              .setValue(proxy, translatedValue);
+        getAccessorFactory().createPropertyAccessor(rawPropertyName, getComponentDescriptor().getComponentContract())
+                            .setValue(proxy, translatedValue);
       } catch (IllegalAccessException | NoSuchMethodException ex) {
         throw new ComponentException(ex);
       } catch (InvocationTargetException ex) {

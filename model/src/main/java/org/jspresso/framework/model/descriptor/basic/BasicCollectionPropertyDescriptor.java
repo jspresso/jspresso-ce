@@ -77,6 +77,14 @@ public class BasicCollectionPropertyDescriptor<E> extends
    * {@inheritDoc}
    */
   @Override
+  public String getModelTypeName() {
+    return getReferencedDescriptor().getModelTypeName();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public Map<String, ESort> getOrderingProperties() {
     if (orderingProperties != null) {
       return orderingProperties;

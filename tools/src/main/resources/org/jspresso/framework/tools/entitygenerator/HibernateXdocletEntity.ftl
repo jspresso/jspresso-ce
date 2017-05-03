@@ -84,6 +84,9 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 <#list superInterfaceList as superInterface>  ${superInterface?replace("$", ".")}<#if superInterface_has_next>,${"\n"}<#else> {</#if></#list>
 <#else> {
 </#if>
+  <#if !componentDescriptor.purelyAbstract>
+    <@generateStateInnerClass componentDescriptor=componentDescriptor/>
+  </#if>
   <#if isEntity>
 
   /**
@@ -95,6 +98,33 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
       <@generateScalarGetter componentDescriptor=componentDescriptor propertyDescriptor=componentDescriptor.getPropertyDescriptor("version")/>
     </#if>
   </#if>
+
+</#macro>
+
+<#macro generateStateInnerClass componentDescriptor>
+
+  /**
+   * The State innerclass.
+   */
+  static class State extends org.jspresso.framework.model.component.basic.BasicComponentPropertyStore {
+  <#list componentDescriptor.propertyDescriptors as propertyDescriptor>
+    <#if !propertyDescriptor.computed || propertyDescriptor.persistenceFormula??>
+      <@generateStateProperty componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
+    </#if>
+  </#list>
+  }
+</#macro>
+
+<#macro generateStateProperty componentDescriptor propertyDescriptor>
+  <#local propertyName=propertyDescriptor.name/>
+  <#local propertyType=propertyDescriptor.modelTypeName/>
+    private ${propertyType} ${propertyName};
+    public void set${propertyName?cap_first}(${propertyType} ${propertyName}) {
+      this.${propertyName} = ${propertyName};
+    }
+    public ${propertyType} get${propertyName?cap_first}() {
+      return this.${propertyName};
+    }
 
 </#macro>
 
@@ -251,14 +281,13 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 <#macro generateCollectionSetter componentDescriptor propertyDescriptor>
   <#local propertyName=propertyDescriptor.name/>
   <#local collectionType=propertyDescriptor.modelTypeName/>
-  <#local elementType=propertyDescriptor.referencedDescriptor.elementDescriptor.name/>
   /**
    * Sets the ${propertyName}.
    *
    * @param ${propertyName}
    *          the ${propertyName} to set.
    */
-  void set${propertyName?cap_first}(${collectionType}<${elementType?replace("$", ".")}> ${propertyName});
+  void set${propertyName?cap_first}(${collectionType} ${propertyName});
 
 </#macro>
 
@@ -314,9 +343,9 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#local elementName=elementType[elementType?last_index_of(".")+1..]/>
   <#local isEntity=componentDescriptor.entity/>
   <#local isElementEntity=elementDescriptor.entity/>
-  <#if collectionType="java.util.List">
+  <#if collectionType?starts_with("java.util.List")>
     <#local hibernateCollectionType="list"/>
-  <#elseif collectionType="java.util.Set">
+  <#elseif collectionType?starts_with("java.util.Set")>
     <#local hibernateCollectionType="set"/>
   </#if>
   <#local manyToMany=propertyDescriptor.manyToMany/>
@@ -535,7 +564,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#if !propertyDescriptor.computed && fieldName??>
   @org.springframework.data.mongodb.core.mapping.Field("${fieldName}")
   </#if>
-  ${collectionType}<${elementType?replace("$", ".")}> get${propertyName?cap_first}();
+  ${collectionType} get${propertyName?cap_first}();
 
 </#macro>
 
@@ -584,7 +613,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
       <#local reverseOneToOne = !propertyDescriptor.leadingPersistence/>
     <#else>
       <#local reverseOneToOne=false/>
-      <#if propertyDescriptor.reverseRelationEnd.modelTypeName="java.util.List">
+      <#if propertyDescriptor.reverseRelationEnd.modelTypeName?starts_with("java.util.List")>
         <#local managesPersistence=false/>
       <#else>
         <#local managesPersistence=true/>

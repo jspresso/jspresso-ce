@@ -22,14 +22,15 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
-import gnu.trove.map.hash.THashMap;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import org.jspresso.framework.model.component.ComponentException;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
 import org.jspresso.framework.model.component.IComponentExtensionFactory;
 import org.jspresso.framework.model.component.IComponentFactory;
+import org.jspresso.framework.model.component.IComponentPropertyStore;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 
@@ -40,41 +41,39 @@ import org.jspresso.framework.util.accessor.IAccessorFactory;
  *
  * @author Vincent Vandenschrick
  */
-public class BasicComponentInvocationHandler extends
-    AbstractComponentInvocationHandler {
+public class BasicComponentInvocationHandler extends AbstractComponentInvocationHandler {
 
-  private static final long   serialVersionUID = -3178070064423598514L;
+  private static final long serialVersionUID = -3178070064423598514L;
 
-  private final Map<String, Object> properties;
+  private final IComponentPropertyStore properties;
 
   /**
    * Constructs a new {@code BasicComponentInvocationHandler} instance.
    *
    * @param componentDescriptor
-   *          The descriptor of the proxy component.
+   *     The descriptor of the proxy component.
    * @param inlineComponentFactory
-   *          the factory used to create inline components.
+   *     the factory used to create inline components.
    * @param collectionFactory
-   *          The factory used to create empty component collections from
-   *          collection getters.
+   *     The factory used to create empty component collections from
+   *     collection getters.
    * @param accessorFactory
-   *          The factory used to access proxy properties.
+   *     The factory used to access proxy properties.
    * @param extensionFactory
-   *          The factory used to create component extensions based on their
-   *          classes.
+   *     The factory used to create component extensions based on their
+   *     classes.
    */
-  public BasicComponentInvocationHandler(
-      IComponentDescriptor<IComponent> componentDescriptor,
-      IComponentFactory inlineComponentFactory,
-      IComponentCollectionFactory collectionFactory,
-      IAccessorFactory accessorFactory,
-      IComponentExtensionFactory extensionFactory) {
-    super(componentDescriptor, inlineComponentFactory, collectionFactory,
-        accessorFactory, extensionFactory);
-    this.properties = createPropertyMap();
+  public BasicComponentInvocationHandler(IComponentDescriptor<IComponent> componentDescriptor,
+                                         IComponentFactory inlineComponentFactory,
+                                         IComponentCollectionFactory collectionFactory,
+                                         IAccessorFactory accessorFactory,
+                                         IComponentExtensionFactory extensionFactory) {
+    super(componentDescriptor, inlineComponentFactory, collectionFactory, accessorFactory, extensionFactory);
+    this.properties = createPropertyStore();
   }
 
   private Object stackOverFlowEqualsWatchDog;
+
   /**
    * {@inheritDoc}
    */
@@ -141,10 +140,11 @@ public class BasicComponentInvocationHandler extends
    */
   @Override
   protected void storeProperty(String propertyName, Object propertyValue) {
-    properties.put(propertyName, refinePropertyToStore(propertyValue));
+    properties.set(propertyName, refinePropertyToStore(propertyValue));
   }
 
   private Object stackOverFlowToStringWatchDog;
+
   /**
    * {@inheritDoc}
    */
@@ -166,7 +166,15 @@ public class BasicComponentInvocationHandler extends
   }
 
 
-  private Map<String, Object> createPropertyMap() {
-    return new THashMap<>(1, 1.0f);
+  private IComponentPropertyStore createPropertyStore() {
+    try {
+      BasicComponentPropertyStore store = (BasicComponentPropertyStore) Class.forName(
+          getComponentContract().getName() + "$State").newInstance();
+      store.setAccessorFactory(getAccessorFactory());
+      return store;
+    } catch (InstantiationException | IllegalAccessException | ClassNotFoundException ex) {
+      throw new ComponentException(ex,
+          "Can not create component property store for " + getComponentContract().getName());
+    }
   }
 }

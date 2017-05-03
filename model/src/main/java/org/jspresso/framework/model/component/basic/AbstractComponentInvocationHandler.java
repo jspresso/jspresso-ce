@@ -2380,7 +2380,7 @@ public abstract class AbstractComponentInvocationHandler implements
               IComponent oldComponentValue = getInlineComponentFactory().createComponentInstance(
                   sourceComponent.getComponentContract());
               oldComponentValue.straightSetProperties(sourceComponent.straightGetProperties());
-              oldComponentValue.straightSetProperty(evtPropertyName, evtOldValue);
+              oldComponentValue.straightSetProperty(evtPropertyName, evtOldValue == IComponent.UNKNOWN ? null : evtOldValue);
               doFirePropertyChange(source, referencePropertyName, oldComponentValue, evt.getSource());
             }
           }

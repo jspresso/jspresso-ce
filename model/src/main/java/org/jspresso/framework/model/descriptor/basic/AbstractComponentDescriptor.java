@@ -289,7 +289,7 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
    */
   @Override
   public String getModelTypeName() {
-    return getName();
+    return getName().replaceAll("\\$",".");
   }
 
   /**

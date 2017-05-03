@@ -93,7 +93,7 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
    */
   @Override
   public String getModelTypeName() {
-    return getModelType().getName();
+    return getModelType().getName() + "<" + getElementDescriptor().getModelTypeName() + ">";
   }
 
   /**
