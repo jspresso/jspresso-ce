@@ -107,6 +107,9 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    * The State innerclass.
    */
   static class State extends org.jspresso.framework.model.component.basic.BasicComponentPropertyStore {
+
+  <@generateStateGet componentDescriptor=componentDescriptor/>
+  <@generateStateSet componentDescriptor=componentDescriptor/>
   <#list componentDescriptor.propertyDescriptors as propertyDescriptor>
     <#if !propertyDescriptor.computed || propertyDescriptor.persistenceFormula??>
       <@generateStateProperty componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
@@ -115,13 +118,67 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   }
 </#macro>
 
+<#macro generateStateGet componentDescriptor>
+    /**
+     * {@inheritDoc}
+     */
+    public Object get(String propertyName) {
+      switch(propertyName) {
+  <#list componentDescriptor.propertyDescriptors as propertyDescriptor>
+    <#if !propertyDescriptor.computed || propertyDescriptor.persistenceFormula??>
+      <#local propertyName=propertyDescriptor.name/>
+        case ${generateSQLName(propertyName)}:
+          return get${propertyName?cap_first}();
+    </#if>
+  </#list>
+        default:
+          throw new org.jspresso.framework.model.component.ComponentException(
+            "Can not read component property " + propertyName + " on " + getClass().getName());
+      }
+    }
+
+</#macro>
+
+<#macro generateStateSet componentDescriptor>
+    /**
+     * {@inheritDoc}
+     */
+    public void set(String propertyName, Object propertyValue) {
+      switch(propertyName) {
+  <#list componentDescriptor.propertyDescriptors as propertyDescriptor>
+    <#if !propertyDescriptor.computed || propertyDescriptor.persistenceFormula??>
+      <#local propertyName=propertyDescriptor.name/>
+      <#local propertyType=propertyDescriptor.modelTypeName/>
+        case ${generateSQLName(propertyName)}:
+          set${propertyName?cap_first}((${propertyType}) propertyValue);
+          break;
+    </#if>
+  </#list>
+        default:
+          throw new org.jspresso.framework.model.component.ComponentException(
+            "Can not write component property " + propertyName + " on " + getClass().getName());
+      }
+    }
+
+</#macro>
+
 <#macro generateStateProperty componentDescriptor propertyDescriptor>
   <#local propertyName=propertyDescriptor.name/>
   <#local propertyType=propertyDescriptor.modelTypeName/>
     private ${propertyType} ${propertyName};
+
+    /**
+     * The ${propertyName} setter.
+     * @param ${propertyName} the value to set
+     */
     public void set${propertyName?cap_first}(${propertyType} ${propertyName}) {
       this.${propertyName} = ${propertyName};
     }
+
+    /**
+     * The ${propertyName} getter.
+     * @return the ${propertyName} value
+     */
     public ${propertyType} get${propertyName?cap_first}() {
       return this.${propertyName};
     }
