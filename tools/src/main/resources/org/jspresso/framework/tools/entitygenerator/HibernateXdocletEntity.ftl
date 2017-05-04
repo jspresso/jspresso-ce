@@ -165,11 +165,16 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 <#macro generateStateProperty componentDescriptor propertyDescriptor>
   <#local propertyName=propertyDescriptor.name/>
   <#local propertyType=propertyDescriptor.modelTypeName/>
+
+
+    /**
+     * The ${propertyName} property.
+     */
     private ${propertyType} ${propertyName};
 
     /**
      * The ${propertyName} setter.
-     * @param ${propertyName} the value to set
+     * @param ${propertyName} the ${propertyName} value to set
      */
     public void set${propertyName?cap_first}(${propertyType} ${propertyName}) {
       this.${propertyName} = ${propertyName};
