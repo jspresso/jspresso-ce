@@ -52,6 +52,7 @@ import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
 import org.springframework.context.ApplicationContext;
 
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.util.freemarker.CompactString;
 import org.jspresso.framework.util.freemarker.CompareStrings;
 import org.jspresso.framework.util.freemarker.DedupSqlName;
@@ -323,14 +324,17 @@ public class EntityGenerator {
               //noinspection ResultOfMethodCallIgnored
               outFile.createNewFile();
               out = new FileOutputStream(outFile);
-            } else if (componentDescriptor.getLastUpdated() > outFile
-                .lastModified()) {
-              out = new FileOutputStream(outFile);
             } else {
-              LOG.debug("No change detected for {} : {} <= {}",
-                  componentDescriptor.getName(),
-                  new Date(componentDescriptor.getLastUpdated()),
-                  new Date(outFile.lastModified()));
+              long lastUpdated = getLastUpdated(componentDescriptor);
+              if (lastUpdated > outFile
+                  .lastModified()) {
+                out = new FileOutputStream(outFile);
+              } else {
+                LOG.debug("No change detected for {} : {} <= {}",
+                    componentDescriptor.getName(),
+                    new Date(lastUpdated),
+                    new Date(outFile.lastModified()));
+              }
             }
           } catch (IOException ex) {
             LOG.error("Error while writing output", ex);
@@ -366,6 +370,17 @@ public class EntityGenerator {
     } finally {
       bfr.release();
     }
+  }
+
+  private long getLastUpdated(IComponentDescriptor<?> componentDescriptor) {
+    long lastUpdated = componentDescriptor.getLastUpdated();
+    for (IPropertyDescriptor propertyDescriptor : componentDescriptor.getPropertyDescriptors()) {
+      long propertyLastUpdated = propertyDescriptor.getLastUpdated();
+      if (propertyLastUpdated > lastUpdated) {
+        lastUpdated = propertyLastUpdated;
+      }
+    }
+    return lastUpdated;
   }
 
   /**
