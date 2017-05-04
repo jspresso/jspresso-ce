@@ -67,4 +67,13 @@ public interface IStringPropertyDescriptor extends IScalarPropertyDescriptor {
    * languages with non-european character sets.
    */
   boolean isTranslatable();
+
+  /**
+   * Gets whether the underlying string property should be truncated
+   * automatically if too long.
+   *
+   * @return true if the underlying string property should be truncated
+   * automatically if too long.
+   */
+  boolean isTruncate();
 }

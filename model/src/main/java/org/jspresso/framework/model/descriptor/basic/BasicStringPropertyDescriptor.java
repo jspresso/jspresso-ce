@@ -30,14 +30,14 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  *
  * @author Vincent Vandenschrick
  */
-public class BasicStringPropertyDescriptor extends
-    BasicScalarPropertyDescriptor implements IStringPropertyDescriptor {
+public class BasicStringPropertyDescriptor extends BasicScalarPropertyDescriptor implements IStringPropertyDescriptor {
 
   private Integer maxLength;
   private String  regexpPattern;
   private String  regexpPatternSample;
   private Boolean upperCase;
   private Boolean translatable;
+  private Boolean truncate;
 
   /**
    * {@inheritDoc}
@@ -109,9 +109,14 @@ public class BasicStringPropertyDescriptor extends
    */
   @Override
   public Object interceptSetter(Object component, Object newValue) {
-    String actualNewValue = (String) newValue;
-    if (actualNewValue != null && isUpperCase()) {
-      actualNewValue = actualNewValue.toUpperCase();
+    String actualNewValue = getValueAsString(newValue);
+    if (actualNewValue != null) {
+      if (isUpperCase()) {
+        actualNewValue = actualNewValue.toUpperCase();
+      }
+      if (isTruncate() && !isLengthValid(component, newValue)) {
+        actualNewValue = actualNewValue.substring(0, getMaxLength());
+      }
     }
     return super.interceptSetter(component, actualNewValue);
   }
@@ -143,45 +148,34 @@ public class BasicStringPropertyDescriptor extends
     super.preprocessSetter(component, newValue);
     final String propertyValueAsString = getValueAsString(newValue);
     final Integer maxL = getMaxLength();
-    if (propertyValueAsString != null && maxL != null && maxL > 0
-        && propertyValueAsString.length() > maxL) {
-      IntegrityException ie = new IntegrityException("[" + getName()
-          + "] value (" + propertyValueAsString + ") is too long on ["
-          + component + "].") {
+    if (!isLengthValid(component, newValue)) {
+      IntegrityException ie = new IntegrityException(
+          "[" + getName() + "] value (" + propertyValueAsString + ") is too long on [" + component + "].") {
 
         private static final long serialVersionUID = 7459823123892198831L;
 
         @Override
-        public String getI18nMessage(ITranslationProvider translationProvider,
-            Locale locale) {
+        public String getI18nMessage(ITranslationProvider translationProvider, Locale locale) {
           StringBuilder boundsSpec = new StringBuilder("l");
           boundsSpec.append(" <= ").append(maxL);
-          return translationProvider.getTranslation(
-              "integrity.property.toolong", new Object[] {
-                  getI18nName(translationProvider, locale), boundsSpec,
-                  component
-              }, locale);
+          return translationProvider.getTranslation("integrity.property.toolong",
+              new Object[]{getI18nName(translationProvider, locale), boundsSpec, component}, locale);
         }
 
       };
-      throw ie;
     }
-    if (propertyValueAsString != null && getRegexpPattern() != null
-        && !Pattern.matches(getRegexpPattern(), propertyValueAsString)) {
-      IntegrityException ie = new IntegrityException("[" + getName()
-          + "] value (" + propertyValueAsString + ") does not match pattern ["
-          + getRegexpPatternSample() + "] on [" + component + "].") {
+    if (propertyValueAsString != null && getRegexpPattern() != null && !Pattern.matches(getRegexpPattern(),
+        propertyValueAsString)) {
+      IntegrityException ie = new IntegrityException(
+          "[" + getName() + "] value (" + propertyValueAsString + ") does not match pattern ["
+              + getRegexpPatternSample() + "] on [" + component + "].") {
 
         private static final long serialVersionUID = 7459823123892198831L;
 
         @Override
-        public String getI18nMessage(ITranslationProvider translationProvider,
-            Locale locale) {
-          return translationProvider.getTranslation(
-              "integrity.property.pattern", new Object[] {
-                  getI18nName(translationProvider, locale),
-                  getRegexpPatternSample(), component
-              }, locale);
+        public String getI18nMessage(ITranslationProvider translationProvider, Locale locale) {
+          return translationProvider.getTranslation("integrity.property.pattern",
+              new Object[]{getI18nName(translationProvider, locale), getRegexpPatternSample(), component}, locale);
         }
 
       };
@@ -189,12 +183,21 @@ public class BasicStringPropertyDescriptor extends
     }
   }
 
+  private boolean isLengthValid(final Object component, Object newValue) {
+    String propertyValueAsString = getValueAsString(newValue);
+    Integer maxL = getMaxLength();
+    if (propertyValueAsString != null && maxL != null && maxL > 0 && propertyValueAsString.length() > maxL) {
+      return false;
+    }
+    return true;
+  }
+
   /**
    * Configures the maximum string length this property allows. Default value is
    * {@code null} which means unlimited.
    *
    * @param maxLength
-   *          the maxLength to set.
+   *     the maxLength to set.
    */
   public void setMaxLength(Integer maxLength) {
     this.maxLength = maxLength;
@@ -205,7 +208,7 @@ public class BasicStringPropertyDescriptor extends
    * Default is {@code null} which means constraint free.
    *
    * @param regexpPattern
-   *          the regexpPattern to set.
+   *     the regexpPattern to set.
    */
   public void setRegexpPattern(String regexpPattern) {
     this.regexpPattern = regexpPattern;
@@ -218,7 +221,7 @@ public class BasicStringPropertyDescriptor extends
    * constraint.
    *
    * @param regexpPatternSample
-   *          the regexpPatternSample to set.
+   *     the regexpPatternSample to set.
    */
   public void setRegexpPatternSample(String regexpPatternSample) {
     this.regexpPatternSample = regexpPatternSample;
@@ -230,7 +233,7 @@ public class BasicStringPropertyDescriptor extends
    * a property processor was registered to perform the transformation.
    *
    * @param upperCase
-   *          the upperCase to set.
+   *     the upperCase to set.
    */
   public void setUpperCase(boolean upperCase) {
     this.upperCase = upperCase;
@@ -244,7 +247,8 @@ public class BasicStringPropertyDescriptor extends
    * are stored in an extra store. translated properties support searching, ordering,
    * ... exactly like non-translatable properties.
    *
-   * @param translatable the translatable
+   * @param translatable
+   *     the translatable
    */
   public void setTranslatable(boolean translatable) {
     this.translatable = translatable;
@@ -255,7 +259,7 @@ public class BasicStringPropertyDescriptor extends
    * value.
    *
    * @param value
-   *          the raw property value.
+   *     the raw property value.
    * @return the resulting string.
    */
   protected String getValueAsString(Object value) {
@@ -269,5 +273,27 @@ public class BasicStringPropertyDescriptor extends
    */
   protected Integer getDefaultMaxLength() {
     return 255;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isTruncate() {
+    if (truncate != null) {
+      return truncate;
+    }
+    return false;
+  }
+
+  /**
+   * Configures whether the underlying string property should be truncated
+   * automatically if too long. default value is {@code false}.
+   *
+   * @param truncate
+   *     set to true if the underlying string property should be truncated
+   *     automatically if too long.
+   */
+  public void setTruncate(Boolean truncate) {
+    this.truncate = truncate;
   }
 }

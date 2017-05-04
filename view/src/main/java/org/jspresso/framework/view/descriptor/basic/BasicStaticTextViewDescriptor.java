@@ -25,8 +25,7 @@ import org.jspresso.framework.view.descriptor.IStaticTextViewDescriptor;
  *
  * @author Vincent Vandenschrick
  */
-public class BasicStaticTextViewDescriptor extends BasicPropertyViewDescriptor
-    implements IStaticTextViewDescriptor {
+public class BasicStaticTextViewDescriptor extends BasicPropertyViewDescriptor implements IStaticTextViewDescriptor {
 
   private String  i18nTextKey;
   private boolean multiLine;
@@ -41,10 +40,10 @@ public class BasicStaticTextViewDescriptor extends BasicPropertyViewDescriptor
   }
 
   /**
-   * Sets i 18 n text key.
+   * Configures the key to be used for getting the translated static text.
    *
    * @param i18nTextKey
-   *     the 18 n text key
+   *     the key to be used for getting the translated static text.
    */
   public void setI18nTextKey(String i18nTextKey) {
     this.i18nTextKey = i18nTextKey;
@@ -61,10 +60,10 @@ public class BasicStaticTextViewDescriptor extends BasicPropertyViewDescriptor
   }
 
   /**
-   * Sets multi line.
+   * Configures the static text to display as multi line. This is {@code false} by default.
    *
-   * @param multiLine
-   *     the multi line
+   * @param i18nTextKey
+   *     {@code true} if this static text is multi line.
    */
   public void setMultiLine(boolean multiLine) {
     this.multiLine = multiLine;

@@ -821,10 +821,16 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
   }
 
   /**
-   * Sets filter only.
+   * Configures whether this property is only used in filters, i.e. it is not persistent and only serves for storing
+   * criteria
+   * data that can be further leveraged by criteria refiners. Using {@code filterOnly} properties relieves the
+   * developer
+   * from having to declare fake computed properties. see {@link
+   * <a href="https://github.com/jspresso/jspresso-ce/issues/253">
+   * this request for enhancement</a>}
    *
    * @param filterOnly
-   *     the filter only
+   *     {@code true} if this property is only used in filters.
    */
   public void setFilterOnly(boolean filterOnly) {
     this.filterOnly = filterOnly;
