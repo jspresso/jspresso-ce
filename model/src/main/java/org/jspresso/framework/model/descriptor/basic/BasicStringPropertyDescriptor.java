@@ -287,7 +287,7 @@ public class BasicStringPropertyDescriptor extends BasicScalarPropertyDescriptor
 
   /**
    * Configures whether the underlying string property should be truncated
-   * automatically if too long. default value is {@code false}.
+   * automatically if too long. Default value is {@code false}.
    *
    * @param truncate
    *     set to true if the underlying string property should be truncated
