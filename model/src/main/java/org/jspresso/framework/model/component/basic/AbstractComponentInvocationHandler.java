@@ -1380,6 +1380,8 @@ public abstract class AbstractComponentInvocationHandler implements
         if (collectionSortEnabled) {
           inlineComponentFactory.sortCollectionProperty((IComponent) proxy, propertyName);
         }
+        // This will be a no-op. Only for allowing to put a breakpoint on the state collection property setter.
+        storeProperty(propertyName, collectionProperty);
         doFirePropertyChange(proxy, propertyName, oldCollectionSnapshot, collectionProperty);
         if (propertyProcessorsEnabled) {
           propertyDescriptor.postprocessAdder(proxy, collectionProperty, value);
@@ -1877,6 +1879,8 @@ public abstract class AbstractComponentInvocationHandler implements
               ((IComponent) value).setOwningComponent(null, null);
             }
           }
+          // This will be a no-op. Only for allowing to put a breakpoint on the state collection property setter.
+          storeProperty(propertyName, collectionProperty);
           doFirePropertyChange(proxy, propertyName, oldCollectionSnapshot,
               collectionProperty);
           if (propertyProcessorsEnabled) {
