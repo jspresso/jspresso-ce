@@ -60,7 +60,10 @@ public class JMapViewConnector extends BasicCompositeConnector {
         Double latitude = latitudeConnector.getConnectorValue();
         Double longitude = longitudeConnector.getConnectorValue();
         if (longitude != null && latitude != null) {
+          mapView.setVisible(true);
           mapView.setCenter(latitude, longitude);
+        } else {
+          mapView.setVisible(false);
         }
       }
     };

@@ -1246,9 +1246,13 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         var longitude = longitudeState.getValue();
         var latitude = latitudeState.getValue();
         if (longitude != null && latitude != null) {
+          mapPage.showMap();
           mapPage.zoomToPosition(longitude, latitude, 12, true);
+        } else {
+          mapPage.hideMap();
         }
       };
+      mapPage.addListener("initialize", updateMapLocation);
       longitudeState.addListener("changeValue", updateMapLocation, this);
       latitudeState.addListener("changeValue", updateMapLocation, this);
 

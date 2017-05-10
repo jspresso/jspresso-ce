@@ -955,9 +955,12 @@ public class DefaultFlexViewFactory {
       var longitude:Number = longitudeState.value as Number;
       var latitude:Number = latitudeState.value as Number;
       if (longitude && latitude) {
+        map.visible = true;
         map.center = new Location(longitude, latitude);
         var marker:PointFeature = PointFeature.createPointFeature(map.center);
         markers.addFeature(marker);
+      } else {
+        map.visible = false;
       }
     };
     BindingUtils.bindSetter(updateMapLocation, longitudeState, "value", true);

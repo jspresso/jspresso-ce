@@ -222,6 +222,20 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MapNavigationPage", {
     moveToCurrentPosition: function () {
       var geo = qx.bom.GeoLocation.getInstance();
       geo.getCurrentPosition(false, 1000, 1000);
+    },
+
+    showMap() {
+      var scroll = this._getScrollContainer();
+      if (scroll) {
+        scroll.show();
+      }
+    },
+
+    hideMap() {
+      var scroll = this._getScrollContainer();
+      if (scroll) {
+        this._getScrollContainer().hide();
+      }
     }
   }
 });
