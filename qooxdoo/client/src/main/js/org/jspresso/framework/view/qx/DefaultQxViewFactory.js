@@ -670,7 +670,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         var componentsToStyle = this.__getComponentsToStyle(component);
         if (componentsToStyle) {
           for (var i = 0; i < componentsToStyle.length; i++) {
-            componentsToStyle[i].addListener("appear", function (e) {
+            componentsToStyle[i].addListenerOnce("appear", function (e) {
               var componentToStyle = e.getCurrentTarget();
               var defaultDecorator = componentToStyle.getDecorator();
               var defaultBackgroundColor = componentToStyle.getBackgroundColor();
@@ -701,7 +701,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         var componentsToStyle = this.__getComponentsToStyle(component);
         if (componentsToStyle) {
           for (var i = 0; i < componentsToStyle.length; i++) {
-            componentsToStyle[i].addListener("appear", function (e) {
+            componentsToStyle[i].addListenerOnce("appear", function (e) {
               var componentToStyle = e.getCurrentTarget();
               this._getRemotePeerRegistry().register(foregroundState);
               var modelController = new qx.data.controller.Object(foregroundState);
@@ -727,7 +727,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         var componentsToStyle = this.__getComponentsToStyle(component);
         if (componentsToStyle) {
           for (var i = 0; i < componentsToStyle.length; i++) {
-            componentsToStyle[i].addListener("appear", function (e) {
+            componentsToStyle[i].addListenerOnce("appear", function (e) {
               var componentToStyle = e.getCurrentTarget();
               this._getRemotePeerRegistry().register(fontState);
               var modelController = new qx.data.controller.Object(fontState);
@@ -1593,7 +1593,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var textField = this._createTextFieldComponent();
       if (window.clipboardData) {
         // We are in IE
-        textField.addListener("appear", function (appearEvent) {
+        textField.addListenerOnce("appear", function (appearEvent) {
           var input = textField.getContentElement().getDomElement();
           input["onpaste"] = function (pasteEvent) {
             var cbData = window.clipboardData.getData("Text");
@@ -1707,7 +1707,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           var atom = comboBox.getChildControl("atom");
           atom.setTextColor(e.getData());
         }, this);
-        comboBox.addListener("appear", function () {
+        comboBox.addListenerOnce("appear", function () {
           var atom = comboBox.getChildControl("atom");
           comboBox.setTextColor(atom.getTextColor());
           atom.setTextColor(null);
@@ -1801,7 +1801,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           map.hide();
         }
       };
-      map.addListener("appear", updateMapLocation);
+      map.addListenerOnce("appear", updateMapLocation);
       longitudeState.addListener("changeValue", updateMapLocation, this);
       latitudeState.addListener("changeValue", updateMapLocation, this);
       return map;
