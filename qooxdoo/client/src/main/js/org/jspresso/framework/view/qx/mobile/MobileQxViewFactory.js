@@ -240,7 +240,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
         toolBar.add(actionComponent);
       }
-      toolBar.addListener("appear", function (e) {
+      toolBar.addListenerOnce("appear", function (e) {
         qx.event.Timer.once(function () {
               var maxH = 0;
               var children = toolBar.getChildren();
