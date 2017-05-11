@@ -150,7 +150,7 @@ qx.Class.define("org.jspresso.framework.view.qx.MapComponent", {
 
       var size = new OpenLayers.Size(21, 25);
       var offset = new OpenLayers.Pixel(-(size.w / 2), -size.h);
-      var icon = new OpenLayers.Icon('http://www.openlayers.org/dev/img/marker.png', size, offset);
+      var icon = new OpenLayers.Icon('http://dev.openlayers.org/img/marker-green.png', size, offset);
 
       this.__myPositionMarker = new OpenLayers.Marker(mapPosition, icon);
 
