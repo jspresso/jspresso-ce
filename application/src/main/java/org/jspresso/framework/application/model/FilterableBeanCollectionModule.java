@@ -97,6 +97,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule
    * Constructs a new {@code FilterableBeanCollectionModule} instance.
    */
   public FilterableBeanCollectionModule() {
+    super();
     filterComponentTracker = new FilterComponentTracker(this);
   }
 

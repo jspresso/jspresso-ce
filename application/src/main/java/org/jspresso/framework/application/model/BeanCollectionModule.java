@@ -19,6 +19,7 @@
 package org.jspresso.framework.application.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,10 +29,13 @@ import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.lang.ObjectUtils;
+import org.jspresso.framework.view.action.ActionList;
+import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicCollectionViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicTabViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
@@ -57,6 +61,15 @@ public class BeanCollectionModule extends Module {
   private IComponentDescriptor<Object> elementComponentDescriptor;
   private IViewDescriptor              elementViewDescriptor;
   private List<?>                      moduleObjects;
+  private boolean                      detailViewIncluded;
+  private ActionList                   navigateModuleObjectsActionList;
+
+  /**
+   * Instantiates a new Bean collection module.
+   */
+  public BeanCollectionModule() {
+    detailViewIncluded = false;
+  }
 
   /**
    * Adds an element to the module's projected object collection at the
@@ -129,6 +142,8 @@ public class BeanCollectionModule extends Module {
 
   /**
    * {@inheritDoc}
+   *
+   * @return the granted roles
    */
   @Override
   public Collection<String> getGrantedRoles() {
@@ -144,6 +159,8 @@ public class BeanCollectionModule extends Module {
 
   /**
    * {@inheritDoc}
+   *
+   * @return the icon
    */
   @Override
   public Icon getIcon() {
@@ -166,6 +183,8 @@ public class BeanCollectionModule extends Module {
 
   /**
    * {@inheritDoc}
+   *
+   * @return the view descriptor
    */
   @Override
   public IViewDescriptor getViewDescriptor() {
@@ -173,10 +192,31 @@ public class BeanCollectionModule extends Module {
     IViewDescriptor moduleObjectsView = BasicCollectionViewDescriptor.extractMainCollectionView(
         projectedViewDescriptor);
     BeanCollectionModuleDescriptor moduleDescriptor = getDescriptor();
-    ((BasicViewDescriptor) moduleObjectsView).setModelDescriptor(moduleDescriptor.getPropertyDescriptor(
-        BeanCollectionModule.MODULE_OBJECTS));
+    ((BasicViewDescriptor) moduleObjectsView).setModelDescriptor(
+        moduleDescriptor.getPropertyDescriptor(BeanCollectionModule.MODULE_OBJECTS));
     BasicBorderViewDescriptor moduleViewDescriptor = new BasicBorderViewDescriptor();
-    moduleViewDescriptor.setCenterViewDescriptor(projectedViewDescriptor);
+    if (isDetailViewIncluded()) {
+      BasicTabViewDescriptor wrapperTabViewDescriptor = new BasicTabViewDescriptor();
+      wrapperTabViewDescriptor.setCascadingModels(true);
+      BasicViewDescriptor elementViewDescriptor = (BasicViewDescriptor) getElementViewDescriptor();
+      if (getNavigateModuleObjectsActionList() != null) {
+        ActionMap elementViewActionMap = elementViewDescriptor.getActionMap();
+        elementViewDescriptor = elementViewDescriptor.clone();
+        ActionMap actionMapWithNavigation = new ActionMap();
+        if (elementViewActionMap != null) {
+          actionMapWithNavigation.setParentActionMaps(Arrays.asList(elementViewActionMap));
+        }
+        actionMapWithNavigation.setActionLists(Arrays.asList(getNavigateModuleObjectsActionList()));
+        elementViewDescriptor.setActionMap(actionMapWithNavigation);
+      }
+      List<IViewDescriptor> tabs = new ArrayList<>();
+      tabs.add(moduleObjectsView);
+      tabs.add(elementViewDescriptor);
+      wrapperTabViewDescriptor.setTabs(tabs);
+      moduleViewDescriptor.setCenterViewDescriptor(wrapperTabViewDescriptor);
+    } else {
+      moduleViewDescriptor.setCenterViewDescriptor(projectedViewDescriptor);
+    }
     moduleViewDescriptor.setModelDescriptor(moduleDescriptor);
 
     return moduleViewDescriptor;
@@ -262,6 +302,8 @@ public class BeanCollectionModule extends Module {
 
   /**
    * {@inheritDoc}
+   *
+   * @return the bean collection module
    */
   @Override
   public BeanCollectionModule clone() {
@@ -272,6 +314,10 @@ public class BeanCollectionModule extends Module {
 
   /**
    * {@inheritDoc}
+   *
+   * @param backendController
+   *     the backend controller
+   * @return the boolean
    */
   @Override
   protected boolean isLocallyDirty(IBackendController backendController) {
@@ -300,5 +346,44 @@ public class BeanCollectionModule extends Module {
       }
     }
     return super.isSubModuleSticky(subModule);
+  }
+
+  /**
+   * Is detail view included boolean.
+   *
+   * @return the boolean
+   */
+  protected boolean isDetailViewIncluded() {
+    return detailViewIncluded;
+  }
+
+  /**
+   * This property allows to automatically include the detail view in a tab of the main collection module
+   * view. A complementary action list is installed to navigate between module objects. Default value is false.   *
+   *
+   * @param detailViewIncluded
+   *     the detail view included
+   */
+  public void setDetailViewIncluded(boolean detailViewIncluded) {
+    this.detailViewIncluded = detailViewIncluded;
+  }
+
+  /**
+   * Gets navigate module objects action list.
+   *
+   * @return the navigate module objects action list
+   */
+  protected ActionList getNavigateModuleObjectsActionList() {
+    return navigateModuleObjectsActionList;
+  }
+
+  /**
+   * Sets navigate module objects action list.
+   *
+   * @param navigateModuleObjectsActionList
+   *     the navigate module objects action list
+   */
+  public void setNavigateModuleObjectsActionList(ActionList navigateModuleObjectsActionList) {
+    this.navigateModuleObjectsActionList = navigateModuleObjectsActionList;
   }
 }
