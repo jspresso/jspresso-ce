@@ -224,14 +224,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MapNavigationPage", {
       geo.getCurrentPosition(false, 1000, 1000);
     },
 
-    showMap() {
+    showMap: function () {
       var scroll = this._getScrollContainer();
       if (scroll) {
         scroll.show();
       }
     },
 
-    hideMap() {
+    hideMap: function () {
       var scroll = this._getScrollContainer();
       if (scroll) {
         this._getScrollContainer().hide();
