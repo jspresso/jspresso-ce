@@ -28,6 +28,7 @@ import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.AbstractCollectionAction;
+import org.jspresso.framework.application.frontend.action.module.DisplayPreviousPinnedModuleAction;
 import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.BeanModule;
 import org.jspresso.framework.application.model.Module;
@@ -66,8 +67,13 @@ public class RemoveModuleObjectAction extends AbstractCollectionAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       final Map<String, Object> context) {
-    BeanModule module = (BeanModule) getModule(context);
-    final IEntity entityToRemove = (IEntity) module.getModuleObject();
+    Module module = getModule(context);
+    final IEntity entityToRemove;
+    if (module instanceof BeanModule) {
+       entityToRemove = (IEntity) ((BeanModule) module).getModuleObject();
+    } else {
+      entityToRemove = getModel(context);
+    }
     getTransactionTemplate(context).execute(
         new TransactionCallbackWithoutResult() {
 
@@ -93,7 +99,12 @@ public class RemoveModuleObjectAction extends AbstractCollectionAction {
             }
           }
         });
-    removeFromSubModules(module.getParent(), entityToRemove);
+    if (module instanceof BeanModule) {
+      removeFromSubModules(module.getParent(), entityToRemove);
+    } else if (module instanceof BeanCollectionModule) {
+      removeFromSubModules(module, entityToRemove);
+      context.put(DisplayPreviousPinnedModuleAction.BLOCK_BACKWARD_MODULE_NAVIGATION, true);
+    }
     setActionParameter(entityToRemove, context);
     return super.execute(actionHandler, context);
   }

@@ -40,6 +40,8 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
 public class DisplayPreviousPinnedModuleAction<E, F, G> extends
     FrontendAction<E, F, G> {
 
+  public final static String BLOCK_BACKWARD_MODULE_NAVIGATION = "BLOCK_BACKWARD_MODULE_NAVIGATION";
+
   /**
    * Displays the previous pinned module.
    * <p>
@@ -48,7 +50,10 @@ public class DisplayPreviousPinnedModuleAction<E, F, G> extends
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    getController(context).displayPreviousPinnedModule();
+    Boolean blockBackwardNavigation = (Boolean) context.get(BLOCK_BACKWARD_MODULE_NAVIGATION);
+    if (blockBackwardNavigation != null && !blockBackwardNavigation) {
+      getController(context).displayPreviousPinnedModule();
+    }
     return super.execute(actionHandler, context);
   }
 }
