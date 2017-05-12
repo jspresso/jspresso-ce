@@ -363,7 +363,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *          the ${propertyName} element to add.
    */
   void addTo${propertyName?cap_first}(${elementType?replace("$", ".")} ${propertyName}Element);
-  <#if propertyDescriptor.modelTypeName = "java.util.List">
+  <#if propertyDescriptor.modelTypeName?starts_with("java.util.List")>
 
   /**
    * Adds an element to the ${propertyName} at the specified index. If the index is out
