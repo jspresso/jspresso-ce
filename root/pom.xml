@@ -407,6 +407,12 @@
       </dependency>
       <dependency>
         <groupId>org.jspresso.framework</groupId>
+        <artifactId>jspresso-qooxdoo-legacy-theme</artifactId>
+        <version>${jspresso.version}</version>
+        <type>zip</type>
+      </dependency>
+      <dependency>
+        <groupId>org.jspresso.framework</groupId>
         <artifactId>jspresso-qooxdoo-server</artifactId>
         <version>${jspresso.version}</version>
       </dependency>

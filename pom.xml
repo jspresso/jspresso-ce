@@ -6,7 +6,7 @@
   <version>4.3-SNAPSHOT</version>
 
   <properties>
-    
+
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <ant-contrib.version>1.0b3</ant-contrib.version>
@@ -226,6 +226,7 @@
     <module>flex-theme</module>
     <module>qooxdoo</module>
     <module>qooxdoo-theme</module>
+    <module>qooxdoo-legacy-theme</module>
     <module>jasper</module>
     <module>fusioncharts</module>
     <module>app-launch</module>
