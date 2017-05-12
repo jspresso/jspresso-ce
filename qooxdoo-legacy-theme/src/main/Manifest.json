@@ -1,15 +1,15 @@
 {
-  "info" : 
+  "info" :
   {
-    "name" : "jspresso-ext-qooxdoo-theme",
+    "name" : "jspresso-ext-qooxdoo-legacy-theme",
 
     "summary" : "Jspresso Framework Qooxdoo theme",
     "description" : "This is a Jspresso theme based on Qooxdoo theme.",
-    
+
     "homepage" : "http://www.jspresso.org/",
 
     "license" : "LGPL V3",
-    "authors" : 
+    "authors" :
     [
       {
         "name" : "Vincent Vandenschrick (vvandens)",
@@ -17,8 +17,8 @@
       }
     ]
   },
-  
-  "provides" : 
+
+  "provides" :
   {
     "namespace"   : "org.jspresso.framework.theme",
     "encoding"    : "utf-8",

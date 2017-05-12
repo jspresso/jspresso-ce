@@ -1,5 +1,5 @@
 {
-  "name"    : "jspresso-qooxdoo-theme",
+  "name"    : "jspresso-qooxdoo-legacy-theme",
 
   "include" :
   [
@@ -8,7 +8,7 @@
     },
     {
       "path" : "library.json",
-      "as"   : "jspresso-qooxdoo-theme"
+      "as"   : "jspresso-qooxdoo-legacy-theme"
     }
   ],
 
@@ -58,7 +58,7 @@
       ]
     },
     "libraries": {
-      "extend": ["jspresso-qooxdoo-theme::libraries"]
+      "extend": ["jspresso-qooxdoo-legacy-theme::libraries"]
     },
     "build" :
     {

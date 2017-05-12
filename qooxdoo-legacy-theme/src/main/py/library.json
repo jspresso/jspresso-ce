@@ -1,5 +1,5 @@
 {
-  "name"    : "jspresso-qooxdoo-theme",
+  "name"    : "jspresso-qooxdoo-legacy-theme",
   "jobs": {
     "libraries": {
       "library": [
