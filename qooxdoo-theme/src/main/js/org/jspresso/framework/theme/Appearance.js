@@ -791,6 +791,16 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           }
         },
 
+        "workspace-tree-folder/icon": {
+          alias: "tree-folder/icon",
+          incude: "tree-folder/icon",
+          style: function (states) {
+            return {
+              padding: [0, 0, 0, 0]
+            };
+          }
+        },
+
         "application-panel": {
           style: function (states) {
             return {

@@ -180,6 +180,16 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           }
         },
 
+        "table-header-label": {
+          include: "label",
+          style: function (states) {
+            return {
+              textColor: "header-text",
+              font: "bold"
+            };
+          }
+        },
+
         "groupbox/legend": {
           base: true,
           style: function (states) {
@@ -229,6 +239,14 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             return {
               textColor: "section-header-text"
+            };
+          }
+        },
+
+        "form": {
+          style: function (states) {
+            return {
+              padding: 20
             };
           }
         },
@@ -320,6 +338,31 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
               backgroundColor: "app-background",
               minWidth: 10,
               minHeight: 10
+            };
+          }
+        },
+
+        "actionfield": {
+          style: function (states) {
+            return {
+              padding: [2, 2]
+            };
+          }
+        },
+
+        "actionfield-field": {
+          include: "textfield",
+          style: function (states) {
+            return {
+              marginLeft: 2
+            };
+          }
+        },
+
+        "datetimefield": {
+          style: function (states) {
+            return {
+              padding: [2, 2]
             };
           }
         },
@@ -672,6 +715,16 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           }
         },
 
+        "workspace-tree-folder/icon": {
+          alias: "tree-folder/icon",
+          incude: "tree-folder/icon",
+          style: function (states) {
+            return {
+              padding: [0, 0, 0, 0]
+            };
+          }
+        },
+
         "application-panel": {
           style: function (states) {
             return {
@@ -691,6 +744,16 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
               width: 230,
               decorator: "accordion-box",
               backgroundColor: "navigator"
+            }
+          }
+        },
+
+        "application-accordion-scroll": {
+          include: "scrollarea",
+          alias: "scrollarea",
+          style: function (states) {
+            return {
+              width: 230
             }
           }
         },
