@@ -12,7 +12,7 @@
   </parent>
   <artifactId>${artifactId}</artifactId>
   <packaging>swf</packaging>
-  <name>${applicationName} - Startup - Flex - Client</name>
+  <name>${applicationName} - Startup Flex Client</name>
 
   <dependencies>
     <dependency>

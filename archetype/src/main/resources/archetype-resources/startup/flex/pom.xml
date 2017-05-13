@@ -10,5 +10,5 @@
   </parent>
   <artifactId>${artifactId}</artifactId>
   <packaging>pom</packaging>
-  <name>${applicationName} - Startup - Flex</name>
+  <name>${applicationName} - Startup Flex</name>
 </project>

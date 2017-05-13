@@ -10,5 +10,5 @@
   </parent>
   <artifactId>${artifactId}</artifactId>
   <packaging>pom</packaging>
-  <name>${applicationName} - Startup - Qooxdoo</name>
+  <name>${applicationName} - Startup Qooxdoo</name>
 </project>
