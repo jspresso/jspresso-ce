@@ -8,7 +8,7 @@
   </parent>
   <artifactId>jspresso-app-template</artifactId>
   <packaging>pom</packaging>
-  <name>App - template</name>
+  <name>Jspresso CE - App Template</name>
   <modules>
     <module>core</module>
     <module>swing</module>

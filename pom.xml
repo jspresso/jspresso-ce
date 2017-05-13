@@ -27,7 +27,7 @@
 
   </properties>
 
-  <name>Jspresso Application Framework</name>
+  <name>Jspresso CE</name>
   <description>Jspresso is an innovative framework for building high quality java rich internet applications. Jspresso dramatically reduces the development cycles needed to get your corporate application up and running.</description>
   <url>http://www.jspresso.org</url>
   <organization>

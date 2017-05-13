@@ -8,7 +8,7 @@
 	</parent>
 	<artifactId>jspresso-swing</artifactId>
 	<packaging>pom</packaging>
-	<name>Swing</name>
+	<name>Jspresso CE - Swing</name>
 	<modules>
 		<module>application</module>
 		<module>components</module>

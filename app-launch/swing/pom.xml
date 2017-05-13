@@ -8,7 +8,7 @@
   </parent>
   <artifactId>jspresso-app-launch-swing</artifactId>
   <packaging>jar</packaging>
-  <name>App - launch - swing</name>
+  <name>Jspresso CE - App Launch Swing</name>
   <dependencies>
     <dependency>
       <groupId>org.jspresso.framework</groupId>

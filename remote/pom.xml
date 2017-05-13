@@ -8,7 +8,7 @@
 	</parent>
 	<artifactId>jspresso-remote</artifactId>
 	<packaging>pom</packaging>
-	<name>Remote</name>
+	<name>Jspresso CE - Remote</name>
 	<modules>
 		<module>application</module>
     <module>components</module>

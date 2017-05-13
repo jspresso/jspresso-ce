@@ -8,7 +8,7 @@
   </parent>
   <artifactId>jspresso-app-launch-remote</artifactId>
   <packaging>jar</packaging>
-  <name>App - launch - Remote</name>
+  <name>Jspresso CE - App Launch Remote</name>
   <dependencies>
     <dependency>
       <groupId>org.jspresso.framework</groupId>

@@ -8,7 +8,7 @@
   </parent>
   <artifactId>jspresso-qooxdoo-legacy-theme</artifactId>
   <packaging>pom</packaging>
-  <name>Qooxdoo - Legacy Theme</name>
+  <name>Jspresso CE - Qooxdoo Legacy Theme</name>
 
   <dependencies>
     <dependency>

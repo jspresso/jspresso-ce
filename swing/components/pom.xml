@@ -8,7 +8,7 @@
   </parent>
   <artifactId>jspresso-swing-components</artifactId>
   <packaging>jar</packaging>
-  <name>Swing - Components</name>
+  <name>Jspresso CE - Swing Components</name>
   <dependencies>
     <dependency>
       <groupId>org.jspresso.framework</groupId>

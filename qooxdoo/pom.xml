@@ -8,7 +8,7 @@
   </parent>
   <artifactId>jspresso-qooxdoo</artifactId>
   <packaging>pom</packaging>
-  <name>Qooxdoo</name>
+  <name>Jspresso CE - Qooxdoo</name>
   <modules>
     <module>client</module>
     <module>server</module>

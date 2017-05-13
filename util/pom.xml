@@ -8,7 +8,7 @@
 	</parent>
 	<artifactId>jspresso-util</artifactId>
 	<packaging>jar</packaging>
-	<name>Util</name>
+	<name>Jspresso CE - Util</name>
 	<dependencies>
     <dependency>
       <groupId>org.slf4j</groupId>

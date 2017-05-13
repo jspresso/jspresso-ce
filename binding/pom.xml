@@ -8,7 +8,7 @@
 	</parent>
 	<artifactId>jspresso-binding</artifactId>
 	<packaging>jar</packaging>
-	<name>Binding</name>
+	<name>Jspresso CE - Binding</name>
 	<dependencies>
 		<dependency>
 			<groupId>org.jspresso.framework</groupId>

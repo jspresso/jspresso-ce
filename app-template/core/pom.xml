@@ -8,7 +8,7 @@
   </parent>
   <artifactId>jspresso-app-template-core</artifactId>
   <packaging>jar</packaging>
-  <name>App - template - core</name>
+  <name>Jspresso CE - App Template Core</name>
   <dependencies>
     <dependency>
       <groupId>org.jspresso.framework</groupId>

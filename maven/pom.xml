@@ -10,7 +10,7 @@
   <groupId>org.jspresso.maven</groupId>
   <artifactId>jspresso-maven</artifactId>
   <packaging>pom</packaging>
-  <name>Jspresso Maven plugins</name>
+  <name>Jspresso CE - Maven Plugins</name>
   <description>This project defines Maven plugins for the Jspresso framework</description>
 
   <properties>

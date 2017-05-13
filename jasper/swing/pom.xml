@@ -8,7 +8,7 @@
   </parent>
   <artifactId>jspresso-jasper-swing</artifactId>
   <packaging>jar</packaging>
-  <name>JasperReports - Swing</name>
+  <name>Jspresso CE - JasperReports Swing</name>
   <dependencies>
     <dependency>
       <groupId>org.jspresso.framework</groupId>

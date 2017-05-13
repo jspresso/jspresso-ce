@@ -8,7 +8,7 @@
   </parent>
   <artifactId>jspresso-app-launch-core</artifactId>
   <packaging>jar</packaging>
-  <name>App - launch - core</name>
+  <name>Jspresso CE - App Launch Core</name>
   <dependencies>
     <dependency>
       <groupId>org.jspresso.framework</groupId>

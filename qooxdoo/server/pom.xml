@@ -8,7 +8,7 @@
 	</parent>
 	<artifactId>jspresso-qooxdoo-server</artifactId>
 	<packaging>jar</packaging>
-	<name>Qooxdoo - Server</name>
+	<name>Jspresso CE - Qooxdoo Server</name>
 	<dependencies>
 		<dependency>
 			<groupId>org.qooxdoo</groupId>

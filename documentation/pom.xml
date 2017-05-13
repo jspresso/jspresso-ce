@@ -9,7 +9,7 @@
   </parent>
   <artifactId>jspresso-documentation</artifactId>
   <packaging>pom</packaging>
-  <name>Documentation</name>
+  <name>Jspresso CE - Documentation</name>
 
   <dependencies>
     <dependency>

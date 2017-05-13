@@ -9,7 +9,7 @@
   </parent>
   <artifactId>jspresso-mongo</artifactId>
   <packaging>jar</packaging>
-  <name>MongoDB</name>
+  <name>Jspresso CE - MongoDB</name>
   <dependencies>
     <dependency>
       <groupId>org.jspresso.framework</groupId>

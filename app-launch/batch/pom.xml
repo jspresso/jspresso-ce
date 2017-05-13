@@ -8,7 +8,7 @@
   </parent>
   <artifactId>jspresso-app-launch-batch</artifactId>
   <packaging>jar</packaging>
-  <name>App - launch - batch</name>
+  <name>Jspresso CE - App Launch Batch</name>
   <dependencies>
     <dependency>
       <groupId>org.jspresso.framework</groupId>

@@ -8,7 +8,7 @@
 	</parent>
 	<artifactId>jspresso-remote-application</artifactId>
 	<packaging>jar</packaging>
-	<name>Remote - Application</name>
+	<name>Jspresso CE - Remote Application</name>
 	<dependencies>
     <dependency>
       <groupId>org.jspresso.framework</groupId>

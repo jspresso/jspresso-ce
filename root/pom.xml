@@ -4,6 +4,7 @@
   <artifactId>jspresso-root</artifactId>
   <packaging>pom</packaging>
   <version>4.3-SNAPSHOT</version>
+  <name>Jspresso CE - Root POM</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -129,7 +130,6 @@
     <appassembler-plugin.version>1.10</appassembler-plugin.version>
   </properties>
 
-  <name>Jspresso Root POM</name>
   <url>http://www.jspresso.org</url>
   <distributionManagement>
     <repository>

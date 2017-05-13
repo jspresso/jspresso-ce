@@ -8,7 +8,7 @@
 	</parent>
 	<artifactId>jspresso-action</artifactId>
 	<packaging>jar</packaging>
-	<name>Action</name>
+	<name>Jspresso CE - Action</name>
 	<dependencies>
     <dependency>
       <groupId>org.jspresso.framework</groupId>

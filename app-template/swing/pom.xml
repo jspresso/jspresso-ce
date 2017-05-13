@@ -8,8 +8,8 @@
   </parent>
   <artifactId>jspresso-app-template-swing</artifactId>
   <packaging>jar</packaging>
-  <name>App - template - Swing</name>
-  
+  <name>Jspresso CE - App Template Swing</name>
+
   <dependencies>
     <dependency>
       <groupId>org.jspresso.framework</groupId>

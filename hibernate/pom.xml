@@ -9,7 +9,7 @@
   </parent>
   <artifactId>jspresso-hibernate</artifactId>
   <packaging>jar</packaging>
-  <name>Hibernate</name>
+  <name>Jspresso CE - Hibernate</name>
   <dependencies>
     <dependency>
       <groupId>org.jspresso.framework</groupId>

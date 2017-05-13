@@ -8,7 +8,7 @@
   </parent>
   <artifactId>jspresso-app-launch</artifactId>
   <packaging>pom</packaging>
-  <name>App - launch</name>
+  <name>Jspresso CE - App Launch</name>
   <modules>
     <module>core</module>
     <module>batch</module>

@@ -8,7 +8,7 @@
   </parent>
   <artifactId>jspresso-jasper-core</artifactId>
   <packaging>jar</packaging>
-  <name>JasperReports - core</name>
+  <name>Jspresso CE - JasperReports Core</name>
   <dependencies>
     <dependency>
       <groupId>org.jspresso.framework</groupId>

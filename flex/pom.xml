@@ -8,7 +8,7 @@
   </parent>
   <artifactId>jspresso-flex</artifactId>
   <packaging>swc</packaging>
-  <name>Flex</name>
+  <name>Jspresso CE - Flex</name>
 
   <dependencies>
     <dependency>

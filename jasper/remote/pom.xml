@@ -8,7 +8,7 @@
   </parent>
   <artifactId>jspresso-jasper-remote</artifactId>
   <packaging>jar</packaging>
-  <name>JasperReports - Remote</name>
+  <name>Jspresso CE - JasperReports Remote</name>
   <dependencies>
     <dependency>
       <groupId>org.jspresso.framework</groupId>

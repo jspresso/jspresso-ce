@@ -8,7 +8,7 @@
   </parent>
   <artifactId>jspresso-archetype</artifactId>
   <packaging>maven-archetype</packaging>
-  <name>Jspresso Application Archetype</name>
+  <name>Jspresso CE - Application Archetype</name>
   <build>
     <resources>
       <resource>

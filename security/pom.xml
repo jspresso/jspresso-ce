@@ -8,7 +8,7 @@
   </parent>
   <artifactId>jspresso-security</artifactId>
   <packaging>jar</packaging>
-  <name>Security</name>
+  <name>Jspresso CE - Security</name>
   <dependencies>
     <dependency>
       <groupId>org.jspresso.framework</groupId>

@@ -8,7 +8,7 @@
 	</parent>
 	<artifactId>jspresso-view</artifactId>
 	<packaging>jar</packaging>
-	<name>View</name>
+	<name>Jspresso CE - View</name>
 	<dependencies>
 		<dependency>
 			<groupId>org.jspresso.framework</groupId>

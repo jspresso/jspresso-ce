@@ -8,8 +8,8 @@
   </parent>
   <artifactId>jspresso-fusioncharts</artifactId>
   <packaging>jar</packaging>
-  <name>FusionCharts</name>
-  
+  <name>Jspresso CE - FusionCharts</name>
+
   <dependencies>
     <dependency>
       <groupId>org.jspresso.framework</groupId>
