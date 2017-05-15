@@ -6,7 +6,7 @@
       org.jspresso.framework.io.Rpc
 
 - In order to implement https://github.com/jspresso/jspresso-ce/issues/187, the org.jspresso.framework.action.IAction
-  interface now extends org.jspresso.framework.util.exception.IExceptionHandler. This shuld not require any modification
+  interface now extends org.jspresso.framework.util.exception.IExceptionHandler. This should not require any modification
   to existing code unless you directly implement org.jspresso.framework.action.IAction without inheriting
   org.jspresso.framework.application.action.AbstractAction. In the latter case, you have now to implement the method
   public boolean handleException(Throwable ex, Map<String, Object> context)
