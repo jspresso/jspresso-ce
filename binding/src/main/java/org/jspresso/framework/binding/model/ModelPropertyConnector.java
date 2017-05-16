@@ -134,7 +134,8 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
     Object oldModel = evt.getOldValue();
     recomputeAccessor(newModel);
 
-    if (!(getParentConnector() instanceof ICollectionConnector)) {
+    ICompositeValueConnector parentConnector = getParentConnector();
+    if (parentConnector != null && !(parentConnector instanceof ICollectionConnector)) {
       if (oldModel != null && oldModel instanceof IPropertyChangeCapable) {
         ((IPropertyChangeCapable) oldModel).removePropertyChangeListener(
             getId(), this);

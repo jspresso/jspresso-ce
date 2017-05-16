@@ -21,10 +21,20 @@ package org.jspresso.framework.util.bean;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeListenerProxy;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import org.jspresso.framework.util.accessor.IAccessor;
+import org.jspresso.framework.util.accessor.IAccessorFactory;
+import org.jspresso.framework.util.accessor.basic.BasicAccessorFactory;
+import org.jspresso.framework.util.accessor.bean.BeanAccessorFactory;
+import org.jspresso.framework.util.accessor.map.MapAccessorFactory;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 import org.jspresso.framework.util.lang.ICloneable;
 
@@ -36,13 +46,28 @@ import org.jspresso.framework.util.lang.ICloneable;
  */
 public abstract class AbstractPropertyChangeCapable implements IPropertyChangeCapable, ICloneable {
 
-  private transient SinglePropertyChangeSupport     propertyChangeSupport;
-  private transient SingleWeakPropertyChangeSupport weakPropertyChangeSupport;
-  private transient List<PropertyChangeEvent>       delayedEvents;
+  private final static IAccessorFactory ACCESSOR_FACTORY;
+
+  private transient SinglePropertyChangeSupport               propertyChangeSupport;
+  private transient SingleWeakPropertyChangeSupport           weakPropertyChangeSupport;
+  private transient List<PropertyChangeEvent>                 delayedEvents;
+  private transient Map<String, NestedPropertyChangeListener> nestedPropertyChangeListeners;
+
+  static {
+    ACCESSOR_FACTORY = new BasicAccessorFactory();
+    ((BasicAccessorFactory) ACCESSOR_FACTORY).setBeanAccessorFactory(new BeanAccessorFactory());
+    ((BasicAccessorFactory) ACCESSOR_FACTORY).setMapAccessorFactory(new MapAccessorFactory());
+  }
 
   private synchronized void initializePropertyChangeSupportIfNeeded() {
     if (propertyChangeSupport == null) {
       this.propertyChangeSupport = new SinglePropertyChangeSupport(this);
+    }
+  }
+
+  private synchronized void initializeNestedPropertyChangeListenersIfNeeded() {
+    if (nestedPropertyChangeListeners == null) {
+      this.nestedPropertyChangeListeners = new HashMap<>();
     }
   }
 
@@ -70,12 +95,56 @@ public abstract class AbstractPropertyChangeCapable implements IPropertyChangeCa
     weakPropertyChangeSupport.addPropertyChangeListener(listener);
   }
 
+  private void registerNestedPropertyChangeListenerIfNeeded(String propertyName) {
+    int nestedDelimiterIndex = propertyName.indexOf(IAccessor.NESTED_DELIM);
+    if (nestedDelimiterIndex >= 0) {
+      initializeNestedPropertyChangeListenersIfNeeded();
+      String rootPropertyName = propertyName.substring(0, nestedDelimiterIndex);
+      final String remainderProperty = propertyName.substring(nestedDelimiterIndex + 1);
+      final AbstractPropertyChangeCapable.NestedPropertyChangeListener rootNestedPropertyListener;
+      if (nestedPropertyChangeListeners.containsKey(rootPropertyName)) {
+        rootNestedPropertyListener = nestedPropertyChangeListeners.get(rootPropertyName);
+      } else {
+        rootNestedPropertyListener = new AbstractPropertyChangeCapable.NestedPropertyChangeListener(rootPropertyName);
+        nestedPropertyChangeListeners.put(rootPropertyName, rootNestedPropertyListener);
+      }
+      rootNestedPropertyListener.registerNestedProperty(remainderProperty);
+      Object rootProperty;
+      try {
+        rootProperty = ACCESSOR_FACTORY.createPropertyAccessor(rootPropertyName, getClass()).getValue(this);
+      } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
+        throw new NestedRuntimeException(ex, "Could not attach listener on property : " + rootPropertyName);
+      }
+      if (rootProperty instanceof IPropertyChangeCapable) {
+        ((IPropertyChangeCapable) rootProperty).addPropertyChangeListener(remainderProperty,
+            rootNestedPropertyListener);
+      }
+      addPropertyChangeListener(rootPropertyName, new PropertyChangeListener() {
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
+          Object oldValue = evt.getOldValue();
+          Object newValue = evt.getNewValue();
+          if (oldValue instanceof IPropertyChangeCapable) {
+            ((IPropertyChangeCapable) oldValue).removePropertyChangeListener(remainderProperty,
+                rootNestedPropertyListener);
+          }
+          if (newValue instanceof IPropertyChangeCapable) {
+            ((IPropertyChangeCapable) newValue).addPropertyChangeListener(remainderProperty,
+                rootNestedPropertyListener);
+          }
+          rootNestedPropertyListener.fireAllNestedPropertyChanges(oldValue, newValue);
+        }
+      });
+    }
+  }
+
   /**
    * {@inheritDoc}
    */
   @Override
   public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
     initializePropertyChangeSupportIfNeeded();
+    registerNestedPropertyChangeListenerIfNeeded(propertyName);
     propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
   }
 
@@ -85,6 +154,7 @@ public abstract class AbstractPropertyChangeCapable implements IPropertyChangeCa
   @Override
   public void addWeakPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
     initializeWeakPropertyChangeSupportIfNeeded();
+    registerNestedPropertyChangeListenerIfNeeded(propertyName);
     weakPropertyChangeSupport.addPropertyChangeListener(propertyName, listener);
   }
 
@@ -97,6 +167,7 @@ public abstract class AbstractPropertyChangeCapable implements IPropertyChangeCa
       AbstractPropertyChangeCapable clonedBean = (AbstractPropertyChangeCapable) super.clone();
       clonedBean.propertyChangeSupport = null;
       clonedBean.weakPropertyChangeSupport = null;
+      clonedBean.nestedPropertyChangeListeners = null;
       clonedBean.delayedEvents = null;
       return clonedBean;
     } catch (CloneNotSupportedException ex) {
@@ -134,10 +205,16 @@ public abstract class AbstractPropertyChangeCapable implements IPropertyChangeCa
    * Performs property change firing.
    *
    * @param evt
-   *          evt
+   *     evt
    * @see java.beans.PropertyChangeSupport#firePropertyChange(java.beans.PropertyChangeEvent)
    */
+
   protected void firePropertyChange(PropertyChangeEvent evt) {
+    Object oldValue = evt.getOldValue();
+    Object newValue = evt.getNewValue();
+    if (oldValue == null && newValue == null || oldValue != null && newValue != null && oldValue.equals(newValue)) {
+      return;
+    }
     if (delayedEvents != null) {
       delayedEvents.add(evt);
     } else {
@@ -154,13 +231,12 @@ public abstract class AbstractPropertyChangeCapable implements IPropertyChangeCa
    * Performs property change firing.
    *
    * @param propertyName
-   *          propertyName
+   *     propertyName
    * @param oldValue
-   *          oldValue
+   *     oldValue
    * @param newValue
-   *          newValue
-   * @see java.beans.PropertyChangeSupport#firePropertyChange(java.lang.String,
-   *      boolean, boolean)
+   *     newValue
+   * @see java.beans.PropertyChangeSupport#firePropertyChange(java.lang.String, * boolean, boolean)
    */
   protected void firePropertyChange(String propertyName, boolean oldValue, boolean newValue) {
     firePropertyChange(new PropertyChangeEvent(this, propertyName, oldValue, newValue));
@@ -170,13 +246,12 @@ public abstract class AbstractPropertyChangeCapable implements IPropertyChangeCa
    * Performs property change firing.
    *
    * @param propertyName
-   *          propertyName
+   *     propertyName
    * @param oldValue
-   *          oldValue
+   *     oldValue
    * @param newValue
-   *          newValue
-   * @see java.beans.PropertyChangeSupport#firePropertyChange(java.lang.String,
-   *      int, int)
+   *     newValue
+   * @see java.beans.PropertyChangeSupport#firePropertyChange(java.lang.String, * int, int)
    */
   protected void firePropertyChange(String propertyName, int oldValue, int newValue) {
     firePropertyChange(new PropertyChangeEvent(this, propertyName, oldValue, newValue));
@@ -186,13 +261,12 @@ public abstract class AbstractPropertyChangeCapable implements IPropertyChangeCa
    * Performs property change firing.
    *
    * @param propertyName
-   *          propertyName
+   *     propertyName
    * @param oldValue
-   *          oldValue
+   *     oldValue
    * @param newValue
-   *          newValue
-   * @see java.beans.PropertyChangeSupport#firePropertyChange(java.lang.String,
-   *      int, int)
+   *     newValue
+   * @see java.beans.PropertyChangeSupport#firePropertyChange(java.lang.String, * int, int)
    */
   protected void firePropertyChange(String propertyName, long oldValue, long newValue) {
     firePropertyChange(new PropertyChangeEvent(this, propertyName, oldValue, newValue));
@@ -202,13 +276,12 @@ public abstract class AbstractPropertyChangeCapable implements IPropertyChangeCa
    * Performs property change firing.
    *
    * @param propertyName
-   *          propertyName
+   *     propertyName
    * @param oldValue
-   *          oldValue
+   *     oldValue
    * @param newValue
-   *          newValue
-   * @see java.beans.PropertyChangeSupport#firePropertyChange(java.lang.String,
-   *      java.lang.Object, java.lang.Object)
+   *     newValue
+   * @see java.beans.PropertyChangeSupport#firePropertyChange(java.lang.String, * java.lang.Object, java.lang.Object)
    */
   @Override
   public void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
@@ -219,7 +292,8 @@ public abstract class AbstractPropertyChangeCapable implements IPropertyChangeCa
    * Retrieves listeners.
    *
    * @return all of the {@code PropertyChangeListeners} added or an empty array
-   *         if no listeners have been added
+   * if no listeners have been added
+   *
    * @see java.beans.PropertyChangeSupport#getPropertyChangeListeners()
    */
   @Override
@@ -243,10 +317,11 @@ public abstract class AbstractPropertyChangeCapable implements IPropertyChangeCa
    * Retrieves listeners.
    *
    * @param propertyName
-   *          propertyName
+   *     propertyName
    * @return all of the {@code PropertyChangeListeners} associated with the
-   *         named property. If no such listeners have been added, or if
-   *         {@code propertyName} is null, an empty array is returned.
+   * named property. If no such listeners have been added, or if
+   * {@code propertyName} is null, an empty array is returned.
+   *
    * @see java.beans.PropertyChangeSupport#getPropertyChangeListeners(String)
    */
   @Override
@@ -265,8 +340,9 @@ public abstract class AbstractPropertyChangeCapable implements IPropertyChangeCa
    * Tests whether there are listeners for the property.
    *
    * @param propertyName
-   *          propertyName
+   *     propertyName
    * @return true if there are one or more listeners for the given property.
+   *
    * @see java.beans.PropertyChangeSupport#hasListeners(java.lang.String)
    */
   @Override
@@ -301,6 +377,48 @@ public abstract class AbstractPropertyChangeCapable implements IPropertyChangeCa
       delayedEvents = null;
       for (PropertyChangeEvent evt : delayedEventsCopy) {
         firePropertyChange(evt);
+      }
+    }
+  }
+
+  private final class NestedPropertyChangeListener implements PropertyChangeListener {
+
+    private String      rootPropertyName;
+    private Set<String> registeredNestedProperties;
+
+    public NestedPropertyChangeListener(String rootPropertyName) {
+      this.rootPropertyName = rootPropertyName;
+      this.registeredNestedProperties = new LinkedHashSet<>();
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+      AbstractPropertyChangeCapable.this.firePropertyChange(
+          rootPropertyName + IAccessor.NESTED_DELIM + evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
+    }
+
+    public void registerNestedProperty(String nestedProperty) {
+      registeredNestedProperties.add(nestedProperty);
+    }
+
+    public void fireAllNestedPropertyChanges(Object oldRoot, Object newRoot) {
+      for (String nestedPropertyName : registeredNestedProperties) {
+        Object oldNestedProperty = null;
+        Object newNestedProperty = null;
+        try {
+          if (oldRoot != null) {
+            oldNestedProperty = ACCESSOR_FACTORY.createPropertyAccessor(nestedPropertyName, oldRoot.getClass())
+                                                .getValue(oldRoot);
+          }
+          if (newRoot != null) {
+            newNestedProperty = ACCESSOR_FACTORY.createPropertyAccessor(nestedPropertyName, newRoot.getClass())
+                                                .getValue(newRoot);
+          }
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
+          throw new NestedRuntimeException(ex, "Could not attach listener on property : " + rootPropertyName);
+        }
+        AbstractPropertyChangeCapable.this.firePropertyChange(
+            rootPropertyName + IAccessor.NESTED_DELIM + nestedPropertyName, oldNestedProperty, newNestedProperty);
       }
     }
   }
