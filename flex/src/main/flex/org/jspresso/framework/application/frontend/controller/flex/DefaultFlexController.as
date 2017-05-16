@@ -280,7 +280,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
                           disableUI:Boolean = true):void {
     //trace(">>> Execute <<< " + action.name + " param = " + param);
     stopCurrentActionTimer();
-    if (action.repeatPeriodMillis > 0) {
+    if (action && action.repeatPeriodMillis > 0) {
       _repeatStatusImage.source = _repeatGeenStatusIcon;
       _currentActionTimer = new Timer(action.repeatPeriodMillis);
       _currentActionTimer.addEventListener(TimerEvent.TIMER, function (event:TimerEvent):void {
