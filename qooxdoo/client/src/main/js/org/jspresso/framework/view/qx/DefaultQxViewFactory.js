@@ -1819,6 +1819,15 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       treeController.setLabelPath("value");
       if (remoteTree.getDisplayIcon()) {
         treeController.setIconPath("iconImageUrl");
+        var that = this;
+        treeController.setIconOptions({
+          converter: function (imageUrlSpec) {
+            if (imageUrlSpec) {
+              return that._completeForSVG(imageUrlSpec);
+            }
+            return imageUrlSpec;
+          }
+        });
       }
       treeController.setDelegate({
         createItem: function () {
