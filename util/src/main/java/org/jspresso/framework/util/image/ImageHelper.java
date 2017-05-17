@@ -82,14 +82,14 @@ public final class ImageHelper {
     if (SVG.equals(targetFormatName)) {
       String svgImage = createSvgImage(originalImageInput);
       if (width != null) {
-        if (svgImage.matches("width\\s*=\\s*\"\\d*\"")) {
+        if (svgImage.matches("(?s).*width\\s*=\\s*\"\\d*\".*")) {
           svgImage = svgImage.replaceFirst("width\\s*=\\s*\"\\d*\"", "width=\"" + width + "\"");
         } else {
           svgImage = svgImage.replaceFirst("<svg", "<svg width=\"" + width + "\"");
         }
       }
       if (height != null) {
-        if (svgImage.matches("height\\s*=\\s*\"\\d*\"")) {
+        if (svgImage.matches("(?s).*height\\s*=\\s*\"\\d*\".*")) {
           svgImage = svgImage.replaceFirst("height\\s*=\\s*\"\\d*\"", "height=\"" + height + "\"");
         } else {
           svgImage = svgImage.replaceFirst("<svg", "<svg height=\"" + height + "\"");
