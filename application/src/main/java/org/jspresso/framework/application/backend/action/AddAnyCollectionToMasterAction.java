@@ -22,6 +22,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.jspresso.framework.action.ActionBusinessException;
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.binding.model.ModelCollectionPropertyConnector;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 
@@ -35,6 +41,8 @@ import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 public class AddAnyCollectionToMasterAction extends
     AbstractAddCollectionToMasterAction {
 
+  private static final Logger LOG = LoggerFactory.getLogger(AddAnyCollectionToMasterAction.class);
+
   /**
    * Gets the new detail to or collection of details to add from the context.
    * The ACTION_PARAM variable is used.
@@ -45,6 +53,12 @@ public class AddAnyCollectionToMasterAction extends
    */
   @Override
   protected List<?> getAddedComponents(Map<String, Object> context) {
+    if (!context.containsKey(ActionContextConstants.ACTION_PARAM)) {
+      LOG.error(getClass().getName() + " action ('addAnyToMasterFrontAction') takes the added element "
+          + "from the ACTION_PARAM context value. It seems that you've not added any. "
+          + "Use " + AddComponentCollectionToMasterAction.class.getName() + " instead. "
+          + "A default instance is registered under 'addToMasterFrontAction'");
+    }
     Object detailOrList = getActionParameter(context);
     if (detailOrList instanceof List<?>) {
       return (List<?>) detailOrList;
