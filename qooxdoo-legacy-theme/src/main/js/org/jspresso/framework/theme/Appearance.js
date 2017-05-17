@@ -720,7 +720,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           incude: "tree-folder/icon",
           style: function (states) {
             return {
-              padding: [0, 0, 0, 0]
+              padding: [0, 5, 0, 0]
             };
           }
         },
