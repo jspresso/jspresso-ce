@@ -118,7 +118,7 @@ public abstract class ResourceProviderServlet extends HttpServlet {
    * resource.
    */
   private static final String DEFAULT_LOCAL_URL_REGEX      = "(classpath|http):[A-Za-z0-9_\\-/ ]*\\." +
-      "(png|jpg|jpeg|gif|pdf|swf.?)(&width=\\d*+&height=\\d*+)?";
+      "(png|jpg|jpeg|gif|pdf|swf|svg.?)(&width=\\d*+&height=\\d*+)?";
 
   private static final String ALLOWED_LOCAL_URL_REGEX_KEY  = "allowedLocalUrlRegex";
 

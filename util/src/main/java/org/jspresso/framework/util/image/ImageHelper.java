@@ -45,7 +45,7 @@ public final class ImageHelper {
   /**
    * The constant SVG is &quot;svg&quot;.
    */
-  public static final String SVG              = "svg";
+  public static final String SVG = "svg";
 
   /**
    * The constant SVG_CONTENT_TYPE is &quot;image/svg+xml&quot;.
@@ -55,7 +55,7 @@ public final class ImageHelper {
   /**
    * The constant PNG is &quot;png&quot;.
    */
-  public static final String PNG              = "png";
+  public static final String PNG = "png";
 
   private ImageHelper() {
     // private constructor for helper class.
@@ -82,10 +82,18 @@ public final class ImageHelper {
     if (SVG.equals(targetFormatName)) {
       String svgImage = createSvgImage(originalImageInput);
       if (width != null) {
-        svgImage = svgImage.replaceFirst("width\\s*=\\s*\"\\d*\"", "width=\"" + width + "\"");
+        if (svgImage.matches("width\\s*=\\s*\"\\d*\"")) {
+          svgImage = svgImage.replaceFirst("width\\s*=\\s*\"\\d*\"", "width=\"" + width + "\"");
+        } else {
+          svgImage = svgImage.replaceFirst("<svg", "<svg width=\"" + width + "\"");
+        }
       }
       if (height != null) {
-        svgImage = svgImage.replaceFirst("height\\s*=\\s*\"\\d*\"", "height=\"" + height + "\"");
+        if (svgImage.matches("height\\s*=\\s*\"\\d*\"")) {
+          svgImage = svgImage.replaceFirst("height\\s*=\\s*\"\\d*\"", "height=\"" + height + "\"");
+        } else {
+          svgImage = svgImage.replaceFirst("<svg", "<svg height=\"" + height + "\"");
+        }
       }
       return svgImage.getBytes(StandardCharsets.UTF_8);
     } else {
@@ -118,7 +126,7 @@ public final class ImageHelper {
         } else {
           return imageBytes;
         }
-      } catch(Throwable ex) {
+      } catch (Throwable ex) {
         LOG.warn("Cannot resize the image so leaving it as is.", ex);
       }
       if (targetFormatName != null) {
@@ -193,7 +201,7 @@ public final class ImageHelper {
     } else if (originalImageInput instanceof String) {
       try {
         svgInputStream = UrlHelper.createURL((String) originalImageInput).openStream();
-      } catch(IOException ioe) {
+      } catch (IOException ioe) {
         svgInputStream = new ByteArrayInputStream(((String) originalImageInput).getBytes(StandardCharsets.UTF_8));
       }
     } else if (originalImageInput instanceof URL) {
@@ -246,15 +254,19 @@ public final class ImageHelper {
 
   /**
    * Load image from project's resource path.
-   * @param resourcePath The path to the resource.
+   *
+   * @param resourcePath
+   *     The path to the resource.
    * @return the image as bytes.
-   * @throws IOException If resource cannot be read.
+   *
+   * @throws IOException
+   *     If resource cannot be read.
    */
   public static byte[] loadImage(String resourcePath) throws IOException {
     if (!resourcePath.startsWith("/")) {
       resourcePath = "/" + resourcePath;
     }
-    try (InputStream is =ImageHelper.class.getResourceAsStream(resourcePath)){
+    try (InputStream is = ImageHelper.class.getResourceAsStream(resourcePath)) {
       return extractImageBytes(is);
     }
   }
