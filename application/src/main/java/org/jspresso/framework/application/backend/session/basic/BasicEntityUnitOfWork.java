@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.jspresso.framework.application.backend.BackendException;
 import org.jspresso.framework.application.backend.session.IEntityUnitOfWork;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.entity.IEntity;
@@ -273,6 +274,18 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    * {@inheritDoc}
    */
   @Override
+  public boolean isSuspended() {
+    if (nestedUnitOfWork != null && nestedUnitOfWork.isSuspended()) {
+      return true;
+    }
+    return suspended;
+  }
+
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public boolean isEntityRegisteredForDeletion(IEntity entity) {
     if (nestedUnitOfWork != null) {
       return nestedUnitOfWork.isEntityRegisteredForDeletion(entity);
@@ -296,6 +309,9 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   @Override
   public boolean isUpdated(IEntity entity) {
+    if (!isActive()) {
+      throw new BackendException("Cannot access unit of work.");
+    }
     if (nestedUnitOfWork != null) {
       return nestedUnitOfWork.isUpdated(entity);
     }

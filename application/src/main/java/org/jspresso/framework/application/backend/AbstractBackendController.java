@@ -212,6 +212,9 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   @Override
   public final void beginUnitOfWork() {
+    if (isUnitOfWorkSuspended()) {
+      return;
+    }
     if (isUnitOfWorkActive()) {
       throw new BackendException("Cannot begin a new unit of work. Another one is already active.");
     }
@@ -303,6 +306,9 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   @Override
   public final void commitUnitOfWork() {
+    if (isUnitOfWorkSuspended()) {
+      return;
+    }
     if (!isUnitOfWorkActive()) {
       throw new BackendException("Cannot commit a unit of work that has not begun.");
     }
@@ -828,6 +834,14 @@ public abstract class AbstractBackendController extends AbstractController imple
    * {@inheritDoc}
    */
   @Override
+  public boolean isUnitOfWorkSuspended() {
+    return unitOfWork.isSuspended();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public boolean isUpdatedInUnitOfWork(IEntity entity) {
     if (!isUnitOfWorkActive()) {
       throw new BackendException("Cannot access unit of work.");
@@ -977,6 +991,9 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   @Override
   public final void rollbackUnitOfWork() {
+    if (isUnitOfWorkSuspended()) {
+      return;
+    }
     if (!isUnitOfWorkActive()) {
       throw new BackendException("Cannot rollback a unit of work that has not begun.");
     }

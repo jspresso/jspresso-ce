@@ -143,6 +143,13 @@ public interface IEntityUnitOfWork extends IEntityLifecycleHandler {
   boolean isActive();
 
   /**
+   * Tests whether this unit of work is currently suspended.
+   *
+   * @return true if the unit of work is suspended.
+   */
+  boolean isSuspended();
+
+  /**
    * Tests whether the passed entity already updated in the current unit of work and waits
    * for commit.
    *
