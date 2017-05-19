@@ -327,6 +327,15 @@ public interface IBackendController
   boolean isUnitOfWorkActive();
 
   /**
+   * Gets whether a transactional unit of work has been started in the
+   * application session but is currently suspended.
+   *
+   * @return true if a transactional unit of work has been started in the
+   * application session but has been suspended.
+   */
+  boolean isUnitOfWorkSuspended();
+
+  /**
    * Tests whether the passed entity already updated in the current unit of work and waits
    * for commit.
    *
