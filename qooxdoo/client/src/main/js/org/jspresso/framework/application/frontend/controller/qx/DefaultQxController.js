@@ -341,7 +341,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           workspaceAccordion.setWidth(widthToRestore);
           splitContainer.removeState("collapsed");
         } else {
-          workspaceAccordion.setUserData("widthToRestore", workspaceAccordion.getSizeHint().width):
+          workspaceAccordion.setUserData("widthToRestore", workspaceAccordion.getSizeHint().width);
           workspaceAccordion.setWidth(0);
           splitContainer.addState("collapsed");
         }
