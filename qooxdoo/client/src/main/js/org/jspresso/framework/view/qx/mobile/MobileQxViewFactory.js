@@ -1240,21 +1240,33 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         mapPage.moveToCurrentPosition();
       }, this);
       var state = remoteMap.getState();
-      var longitudeState = state.getChildren().getItem(0);
-      var latitudeState = state.getChildren().getItem(1);
-      var updateMapLocation = function () {
+      var childrenStates = state.getChildren();
+      var longitudeState = childrenStates.getItem(0);
+      var latitudeState = childrenStates.getItem(1);
+      var routeState;
+      if (childrenStates.length > 2) {
+        routeState = childrenStates.getItem(2);
+      }
+      var updateMap = function () {
         var longitude = longitudeState.getValue();
         var latitude = latitudeState.getValue();
+        var route;
+        if (routeState) {
+          route = routeState.getValue();
+        }
         if (longitude != null && latitude != null) {
           mapPage.showMap();
-          mapPage.zoomToPosition(longitude, latitude, 12, true);
+          mapPage.zoomToPosition([longitude, latitude], 12);
+          mapPage.drawMarker(!route ? [longitude, latitude] : null)
+          mapPage.drawRoute(route)
         } else {
           mapPage.hideMap();
         }
       };
-      mapPage.addListener("initialize", updateMapLocation);
-      longitudeState.addListener("changeValue", updateMapLocation, this);
-      latitudeState.addListener("changeValue", updateMapLocation, this);
+      mapPage.addListener("initialize", updateMap);
+      longitudeState.addListener("changeValue", updateMap, this);
+      latitudeState.addListener("changeValue", updateMap, this);
+      routeState.addListener("changeValue", updateMap, this);
 
       mapPage.setTitle(remoteMap.getLabel());
       mapPage.setShowButton(true);

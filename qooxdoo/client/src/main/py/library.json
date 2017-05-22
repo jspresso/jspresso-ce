@@ -2,6 +2,24 @@
   "name": "jspresso-qooxdoo",
 
   "jobs": {
+    "common": {
+      "lint-check": {
+        "allowed-globals": [
+          "ol",
+          "Uint8Array"
+        ]
+      },
+      "add-css": [
+        {
+          "uri": "https://openlayers.org/en/v4.1.1/css/ol.css"
+        }
+      ],
+      "add-script": [
+        {
+          "uri": "https://openlayers.org/en/v4.1.1/build/ol.js"
+        }
+      ]
+    },
     "libraries": {
       "library": [
         {

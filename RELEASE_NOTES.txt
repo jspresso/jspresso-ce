@@ -1,5 +1,24 @@
 4.3
 ===
+- Edit startup/qooxdoo/client/src/main/py/config.json and add :
+
+      "extend": [
+        "jspresso-qooxdoo::common"
+      ],
+
+      OR
+
+      "extend": [
+        "jspresso-ext-qooxdoo::common"
+      ],
+
+  just below :
+
+    "jobs" :
+    {
+      "common" :
+      {
+
 - In order to ease load testing (see #240) , in your javascript code, replace all references to :
       qx.io.remote.Rpc
     by

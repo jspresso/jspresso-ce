@@ -38,4 +38,11 @@ public interface IMapViewDescriptor extends IViewDescriptor {
    * @return the latitude property
    */
   String getLatitudeProperty();
+
+  /**
+   * Gets route property.
+   *
+   * @return the route property
+   */
+  String getRouteProperty();
 }

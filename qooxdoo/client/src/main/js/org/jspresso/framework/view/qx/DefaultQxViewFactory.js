@@ -1789,21 +1789,34 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _createMap: function (remoteMap) {
       var map = new org.jspresso.framework.view.qx.MapComponent();
       var state = remoteMap.getState();
-      var longitudeState = state.getChildren().getItem(0);
-      var latitudeState = state.getChildren().getItem(1);
-      var updateMapLocation = function () {
+      var childrenStates = state.getChildren();
+      var longitudeState = childrenStates.getItem(0);
+      var latitudeState = childrenStates.getItem(1);
+      var routeState;
+      if (childrenStates.length > 2) {
+        routeState = childrenStates.getItem(2);
+      }
+      var updateMap = function () {
         var longitude = longitudeState.getValue();
         var latitude = latitudeState.getValue();
+        var route;
+        if (routeState) {
+          route = routeState.getValue();
+        }
+
         if (longitude != null && latitude != null) {
-          map.show();
-          map.zoomToPosition(longitude, latitude, 12, true);
+          map.showMap();
+          map.zoomToPosition([longitude, latitude], 12);
+          map.drawMarker(!route ? [longitude, latitude]: null)
+          map.drawRoute(route)
         } else {
-          map.hide();
+          map.hideMap();
         }
       };
-      map.addListenerOnce("appear", updateMapLocation);
-      longitudeState.addListener("changeValue", updateMapLocation, this);
-      latitudeState.addListener("changeValue", updateMapLocation, this);
+      map.addListenerOnce("appear", updateMap);
+      longitudeState.addListener("changeValue", updateMap, this);
+      latitudeState.addListener("changeValue", updateMap, this);
+      routeState.addListener("changeValue", updateMap, this);
       return map;
     },
 

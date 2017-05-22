@@ -73,8 +73,11 @@
 
   "jobs" :
   {
-    "common" : 
+    "common" :
     {
+      "extend": [
+        "jspresso-qooxdoo::common"
+      ],
       "cache" :
       {
         "compile"     : "${symbol_dollar}{TARGET}/cache",
@@ -84,7 +87,7 @@
     "libraries" :
     {
       "extend" : ["jspresso-qooxdoo::libraries"],
-      
+
       "library" :
       [
         {
@@ -113,7 +116,7 @@
         "target" : "${symbol_dollar}{TARGET}/web-debug"
       }
     },
-    
+
     "common-mobile" : {
       "compile-options" :
       {

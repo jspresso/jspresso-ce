@@ -20,6 +20,7 @@ package org.jspresso.framework.model.descriptor.basic;
 
 import java.io.Serializable;
 
+import org.jspresso.framework.model.descriptor.DescriptorException;
 import org.jspresso.framework.model.descriptor.IJavaSerializablePropertyDescriptor;
 
 /**
@@ -30,26 +31,65 @@ import org.jspresso.framework.model.descriptor.IJavaSerializablePropertyDescript
  *
  * @author Vincent Vandenschrick
  */
-public class BasicJavaSerializablePropertyDescriptor extends
-    BasicBinaryPropertyDescriptor implements
-    IJavaSerializablePropertyDescriptor {
+public class BasicJavaSerializablePropertyDescriptor extends BasicBinaryPropertyDescriptor
+    implements IJavaSerializablePropertyDescriptor {
+
+  private String modelTypeClassName;
 
   /**
    * {@inheritDoc}
    */
   @Override
   public BasicJavaSerializablePropertyDescriptor clone() {
-    BasicJavaSerializablePropertyDescriptor clonedDescriptor = (BasicJavaSerializablePropertyDescriptor) super
-        .clone();
+    BasicJavaSerializablePropertyDescriptor clonedDescriptor = (BasicJavaSerializablePropertyDescriptor) super.clone();
 
     return clonedDescriptor;
+  }
+
+  /**
+   * Returns Object class or the class refined by
+   * {@code modelTypeClassName}.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public Class<?> getModelType() {
+    if (modelTypeClassName != null) {
+      String refinedClassName = modelTypeClassName;
+      if (modelTypeClassName.contains("<")) {
+        refinedClassName = modelTypeClassName.substring(0, modelTypeClassName.indexOf("<"));
+      }
+      try {
+        return Class.forName(refinedClassName);
+      } catch (Exception ex) {
+        throw new DescriptorException(ex);
+      }
+    }
+    return getDefaultModelType();
+  }
+
+  protected Class<?> getDefaultModelType() {
+    return Serializable.class;
+  }
+
+  /**
+   * Configures the actual property type through its fully qualified name.
+   *
+   * @param modelTypeClassName
+   *     the modelTypeClassName to set.
+   */
+  public void setModelTypeClassName(String modelTypeClassName) {
+    this.modelTypeClassName = modelTypeClassName;
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public Class<?> getModelType() {
-    return Serializable.class;
+  public String getModelTypeName() {
+    if (this.modelTypeClassName != null) {
+      return this.modelTypeClassName;
+    }
+    return getDefaultModelType().getName();
   }
 }

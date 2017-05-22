@@ -36,7 +36,7 @@ import org.jspresso.framework.util.remote.RemotePeer;
  */
 public class RemoteValueState extends RemotePeer {
 
-  private static final long         serialVersionUID = 8957401466928527268L;
+  private static final long serialVersionUID = 8957401466928527268L;
 
   private boolean                   readable;
   private Serializable              value;
@@ -47,7 +47,7 @@ public class RemoteValueState extends RemotePeer {
    * Constructs a new {@code RemoteValueState} instance.
    *
    * @param guid
-   *          the state guid.
+   *     the state guid.
    */
   public RemoteValueState(String guid) {
     super(guid);
@@ -92,7 +92,7 @@ public class RemoteValueState extends RemotePeer {
    * Sets the readable.
    *
    * @param readable
-   *          the readable to set.
+   *     the readable to set.
    */
   public void setReadable(boolean readable) {
     this.readable = readable;
@@ -102,7 +102,7 @@ public class RemoteValueState extends RemotePeer {
    * Sets the value.
    *
    * @param value
-   *          the value to set.
+   *     the value to set.
    */
   public void setValue(Object value) {
     this.value = tranformValue(value);
@@ -112,7 +112,7 @@ public class RemoteValueState extends RemotePeer {
    * Transform object value before using it as value state.
    *
    * @param incomingValue
-   *          the original value.
+   *     the original value.
    * @return the transformed value.
    */
   protected Serializable tranformValue(Object incomingValue) {
@@ -122,19 +122,21 @@ public class RemoteValueState extends RemotePeer {
     } else if (incomingValue instanceof java.sql.Date) {
       transformedValue = new Date(((java.sql.Date) incomingValue).getTime());
     } else if (incomingValue instanceof BigDecimal) {
-      transformedValue = ((BigDecimal) incomingValue)
-          .doubleValue();
+      transformedValue = ((BigDecimal) incomingValue).doubleValue();
     } else if (incomingValue instanceof DateDto) {
       transformedValue = (DateDto) incomingValue;
-    } else if (incomingValue instanceof Date || incomingValue instanceof String
-        || incomingValue instanceof Boolean || incomingValue instanceof Number) {
+    } else if (incomingValue instanceof Date || incomingValue instanceof String || incomingValue instanceof Boolean
+        || incomingValue instanceof Number) {
       // if (value instanceof Serializable) {
       transformedValue = (Serializable) incomingValue;
-    } else if (incomingValue instanceof Font
-        || incomingValue instanceof Dimension || incomingValue instanceof Icon) {
+    } else if (incomingValue instanceof Font || incomingValue instanceof Dimension || incomingValue instanceof Icon) {
       transformedValue = (Serializable) incomingValue;
     } else if (incomingValue != null) {
-      transformedValue = incomingValue.toString();
+      if (incomingValue.getClass().isArray()) {
+        transformedValue = (Serializable) incomingValue;
+      } else {
+        transformedValue = incomingValue.toString();
+      }
     }
     return transformedValue;
   }
@@ -143,7 +145,7 @@ public class RemoteValueState extends RemotePeer {
    * Sets the writable.
    *
    * @param writable
-   *          the writable to set.
+   *     the writable to set.
    */
   public void setWritable(boolean writable) {
     this.writable = writable;
@@ -161,7 +163,8 @@ public class RemoteValueState extends RemotePeer {
   /**
    * Sets the parent.
    *
-   * @param parent the parent to set.
+   * @param parent
+   *     the parent to set.
    */
   public void setParent(RemoteCompositeValueState parent) {
     this.parent = parent;

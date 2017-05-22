@@ -25,14 +25,16 @@ import org.jspresso.framework.view.descriptor.IMapViewDescriptor;
  *
  * @author Vincent Vandenschrick
  */
-public class BasicMapViewDescriptor extends BasicViewDescriptor
-    implements IMapViewDescriptor {
+public class BasicMapViewDescriptor extends BasicViewDescriptor implements IMapViewDescriptor {
 
   private String longitudeProperty;
   private String latitudeProperty;
+  private String routeProperty;
 
   /**
    * {@inheritDoc}
+   *
+   * @return the longitude property
    */
   @Override
   public String getLongitudeProperty() {
@@ -40,9 +42,10 @@ public class BasicMapViewDescriptor extends BasicViewDescriptor
   }
 
   /**
-   * Sets longitude property.
+   * Sets the longitude property that will bind to the center of the map view.
    *
-   * @param longitudeProperty the longitude property
+   * @param longitudeProperty
+   *     the longitude property
    */
   public void setLongitudeProperty(String longitudeProperty) {
     this.longitudeProperty = longitudeProperty;
@@ -50,6 +53,8 @@ public class BasicMapViewDescriptor extends BasicViewDescriptor
 
   /**
    * {@inheritDoc}
+   *
+   * @return the latitude property
    */
   @Override
   public String getLatitudeProperty() {
@@ -57,11 +62,33 @@ public class BasicMapViewDescriptor extends BasicViewDescriptor
   }
 
   /**
-   * Sets latitude property.
+   * Sets the latitude property that will bind to the center of the map view.
    *
-   * @param latitudeProperty the latitude property
+   * @param latitudeProperty
+   *     the latitude property
    */
   public void setLatitudeProperty(String latitudeProperty) {
     this.latitudeProperty = latitudeProperty;
+  }
+
+  /**
+   * {@inheritDoc}
+   *
+   * @return the route property
+   */
+  @Override
+  public String getRouteProperty() {
+    return routeProperty;
+  }
+
+  /**
+   * Sets route property. This property should return an array of (longitude, latitude) coordinates that will draw a
+   * route on the map view. If {@code null}, no route is drawn.
+   *
+   * @param routeProperty
+   *     the route property
+   */
+  public void setRouteProperty(String routeProperty) {
+    this.routeProperty = routeProperty;
   }
 }

@@ -19,184 +19,32 @@
 
 /**
  * A Widget showing an OpenStreetMap map.
- *
- * @ignore(OpenLayers.*)
  */
 qx.Class.define("org.jspresso.framework.view.qx.MapComponent", {
   extend: qx.ui.core.Widget,
 
+  include: [org.jspresso.framework.view.qx.MMapMixin],
+
   construct: function () {
     this.base(arguments);
-    this.__geolocationEnabled = qx.core.Environment.get("html.geolocation");
-    this.addListenerOnce("appear", this._initialize, this);
-    this.addListener("resize", this._redrawMap, this);
+    this.addListenerOnce("appear", this._initializeMap, this);
+    this.addListener("resize", this.__redrawMap, this);
   },
 
 
   members: {
-    __mapUri: "http://www.openlayers.org/api/OpenLayers.js",
-    //__mapUri: "file:///Applications/envdev/OpenLayers-2.13.1/OpenLayers.debug.js",
-    __map: null,
-    __markers: null,
-    __myPositionMarker: null,
-    __mapnikLayer: null,
-    __geolocationEnabled: false,
-    __bufferredPosition: null,
 
-
-    // overridden
-    _initialize: function () {
-      if (this.__geolocationEnabled) {
-        this._initGeoLocation();
-      }
-
-      this._loadMapLibrary();
+    _getMapDomTarget: function () {
+      return this.getContentElement().getDomElement();
     },
 
-
-    /**
-     * Calls a redraw on Mapnik Layer. Needed after orientationChange event
-     * and drawing markers.
-     */
-    _redrawMap: function () {
-      if (this.__mapnikLayer !== null) {
-        this.__map.updateSize();
-        this.__mapnikLayer.redraw();
-      }
+    showMap: function () {
+      this.show();
     },
 
-    /**
-     * Loads JavaScript library which is needed for the map.
-     */
-    _loadMapLibrary: function () {
-      var req = new qx.bom.request.Script();
-
-      req.onload = function () {
-        var dom = this.getContentElement().getDomElement();
-        this.__map = new OpenLayers.Map({div: dom});
-
-        this.__mapnikLayer = new OpenLayers.Layer.OSM("mapnik", null, {});
-
-        this.__map.addLayer(this.__mapnikLayer);
-
-        this._zoomToDefaultPosition();
-      }.bind(this);
-
-      req.open("GET", this.__mapUri);
-      req.send();
-    },
-
-
-    /**
-     * Zooms the map to a default position.
-     * In this case: Paris, France.
-     */
-    _zoomToDefaultPosition: function () {
-      if (this.isVisible()) {
-        if (this.__bufferredPosition) {
-          this.zoomToPosition(this.__bufferredPosition["longitude"], this.__bufferredPosition["latitude"],
-              this.__bufferredPosition["zoom"], this.__bufferredPosition["showMarker"]);
-          this.__bufferredPosition = null;
-        } else {
-          this.zoomToPosition(2.3470, 48.8590, 12);
-        }
-      }
-    },
-
-
-    /**
-     * Zooms the map to a  position.
-     * @param longitude {Number} the longitude of the position.
-     * @param latitude {Number} the latitude of the position.
-     * @param zoom {Integer} zoom level.
-     * @param showMarker {Boolean} if a marker should be drawn at the defined position.
-     */
-    zoomToPosition: function (longitude, latitude, zoom, showMarker) {
-      if (this.__map) {
-        var fromProjection = new OpenLayers.Projection("EPSG:4326");
-        var toProjection = new OpenLayers.Projection("EPSG:900913");
-        var mapPosition = new OpenLayers.LonLat(longitude, latitude).transform(fromProjection, toProjection);
-
-        this.__map.setCenter(mapPosition, zoom);
-
-        if (showMarker === true) {
-          this.setMarkerOnMap(this.__map, mapPosition);
-        }
-      } else {
-        this.__bufferredPosition = {
-          longitude: longitude,
-          latitude: latitude,
-          zoom: zoom,
-          showMarker: showMarker
-        }
-      }
-    },
-
-
-    /**
-     * Draws a marker on the OSM map.
-     * @param map {Object} the map object.
-     * @param mapPosition {Map} the map position.
-     */
-    setMarkerOnMap: function (map, mapPosition) {
-      if (this.__markers === null) {
-        this.__markers = new OpenLayers.Layer.Markers("Markers");
-        map.addLayer(this.__markers);
-      }
-
-      if (this.__myPositionMarker !== null) {
-        this.__markers.removeMarker(this.__myPositionMarker);
-      }
-
-      var size = new OpenLayers.Size(21, 25);
-      var offset = new OpenLayers.Pixel(-(size.w / 2), -size.h);
-      var icon = new OpenLayers.Icon('http://dev.openlayers.org/img/marker-green.png', size, offset);
-
-      this.__myPositionMarker = new OpenLayers.Marker(mapPosition, icon);
-
-      this.__markers.addMarker(this.__myPositionMarker);
-    },
-
-
-    /**
-     * Prepares qooxdoo GeoLocation and installs needed listeners.
-     */
-    _initGeoLocation: function () {
-      var geo = qx.bom.GeoLocation.getInstance();
-      geo.addListener("position", this._onGeolocationSuccess, this);
-      geo.addListener("error", this._onGeolocationError, this);
-    },
-
-
-    /**
-     * Callback function when Geolocation did work.
-     */
-    _onGeolocationSuccess: function (position) {
-      this.zoomToPosition(position.getLongitude(), position.getLatitude(), 12, true);
-
-      this._redrawMap();
-    },
-
-
-    /**
-     * Callback function when GeoLocation returned an error.
-     */
-    _onGeolocationError: function () {
-      var buttons = [];
-      buttons.push(qx.locale.Manager.tr("OK"));
-      var title = "Problem with Geolocation";
-      var text = "Please activate location services on your browser and device.";
-      qx.ui.mobile.dialog.Manager.getInstance().confirm(title, text, function () {
-      }, this, buttons);
-    },
-
-
-    /**
-     * Retrieves GeoPosition out of qx.bom.GeoLocation and zooms to this point on map.
-     */
-    moveToCurrentPosition: function () {
-      var geo = qx.bom.GeoLocation.getInstance();
-      geo.getCurrentPosition(false, 1000, 1000);
+    hideMap: function () {
+      this.hide()
     }
+
   }
 });

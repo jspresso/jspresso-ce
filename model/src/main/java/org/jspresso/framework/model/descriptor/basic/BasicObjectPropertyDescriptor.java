@@ -96,6 +96,10 @@ public class BasicObjectPropertyDescriptor extends
         throw new DescriptorException(ex);
       }
     }
+    return getDefaultModelType();
+  }
+
+  protected Class<?> getDefaultModelType() {
     return Object.class;
   }
 
@@ -132,6 +136,9 @@ public class BasicObjectPropertyDescriptor extends
    */
   @Override
   public String getModelTypeName() {
-    return this.modelTypeClassName;
+    if (this.modelTypeClassName != null) {
+      return this.modelTypeClassName;
+    }
+    return getDefaultModelType().getName();
   }
 }
