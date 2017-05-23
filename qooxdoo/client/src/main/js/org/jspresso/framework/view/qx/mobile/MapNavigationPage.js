@@ -42,9 +42,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MapNavigationPage", {
       this._initializeMap();
       // Listens on window orientation change and resize, and triggers redraw of map.
       // Needed for triggering OpenLayers to use a bigger area, and draw more tiles.
-      qx.event.Registration.addListener(window, "orientationchange", this.__redrawMap, this);
-      qx.event.Registration.addListener(window, "resize", this.__redrawMap, this);
-      this.addListenerOnce("changeVisibility", this.__redrawMap, this);
+      qx.event.Registration.addListener(window, "orientationchange", this._redrawMap, this);
+      qx.event.Registration.addListener(window, "resize", this._redrawMap, this);
+      this.addListenerOnce("changeVisibility", this._redrawMap, this);
     },
 
     // overridden

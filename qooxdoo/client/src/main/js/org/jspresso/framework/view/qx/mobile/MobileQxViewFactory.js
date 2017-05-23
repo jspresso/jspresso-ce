@@ -1266,7 +1266,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       mapPage.addListener("initialize", updateMap);
       longitudeState.addListener("changeValue", updateMap, this);
       latitudeState.addListener("changeValue", updateMap, this);
-      routeState.addListener("changeValue", updateMap, this);
+      if (routeState) {
+        routeState.addListener("changeValue", updateMap, this);
+      }
 
       mapPage.setTitle(remoteMap.getLabel());
       mapPage.setShowButton(true);

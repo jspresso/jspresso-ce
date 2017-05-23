@@ -48,7 +48,7 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
      * Calls a redraw of the map. Needed after orientationChange event
      * and drawing markers.
      */
-    __redrawMap: function () {
+    _redrawMap: function () {
       if (this.__map !== null) {
         this.__map.updateSize();
       }
@@ -69,7 +69,7 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
           anchorXUnits: 'fraction',
           anchorYUnits: 'pixels',
           opacity: 0.75,
-          src: 'https://openlayers.org/en/v4.1.1/examples/data/icon.png'
+          src: qx.util.ResourceManager.getInstance().toUri("org/jspresso/framework/map_marker.png")
         })
       });
       var markerFeature = new ol.Feature({
@@ -158,7 +158,7 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
     _onGeolocationSuccess: function (position) {
       this.zoomToPosition(position.getLongitude(), position.getLatitude(), 12, true);
 
-      this.__redrawMap();
+      this._redrawMap();
     },
 
 
