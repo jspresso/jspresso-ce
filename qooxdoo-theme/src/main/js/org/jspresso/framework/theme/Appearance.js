@@ -41,7 +41,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           base: true,
           style: function (states) {
             return {
-              textColor: "label"
+              textColor: "label",
+              marginLeft: 4
             };
           }
         },
@@ -220,7 +221,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
             return {
               decorator: "table",
               headerCellHeight: 27,
-              rowHeight: 27
+              rowHeight: 27,
+              backgroundColor: "app-background"
             };
           }
         },
@@ -306,7 +308,9 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         "form": {
           style: function (states) {
             return {
-              padding: 20
+              margin: [10, 1, 1, 1],
+              padding: 20,
+              backgroundColor: "app-background"
             };
           }
         },
