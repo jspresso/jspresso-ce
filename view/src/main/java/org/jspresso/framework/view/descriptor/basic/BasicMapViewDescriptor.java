@@ -27,68 +27,26 @@ import org.jspresso.framework.view.descriptor.IMapViewDescriptor;
  */
 public class BasicMapViewDescriptor extends BasicViewDescriptor implements IMapViewDescriptor {
 
-  private String longitudeProperty;
-  private String latitudeProperty;
-  private String routeProperty;
+  private String mapContentProperty;
 
   /**
-   * {@inheritDoc}
+   * Gets map content property.
    *
-   * @return the longitude property
+   * @return the map content property
    */
   @Override
-  public String getLongitudeProperty() {
-    return longitudeProperty;
+  public String getMapContentProperty() {
+    return mapContentProperty;
   }
 
   /**
-   * Sets the longitude property that will bind to the center of the map view.
+   * Sets map content property. The targeted property should return a Json string that describes the markers and the
+   * routes to display on the map.
    *
-   * @param longitudeProperty
-   *     the longitude property
+   * @param mapContentProperty
+   *     the map content property
    */
-  public void setLongitudeProperty(String longitudeProperty) {
-    this.longitudeProperty = longitudeProperty;
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @return the latitude property
-   */
-  @Override
-  public String getLatitudeProperty() {
-    return latitudeProperty;
-  }
-
-  /**
-   * Sets the latitude property that will bind to the center of the map view.
-   *
-   * @param latitudeProperty
-   *     the latitude property
-   */
-  public void setLatitudeProperty(String latitudeProperty) {
-    this.latitudeProperty = latitudeProperty;
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @return the route property
-   */
-  @Override
-  public String getRouteProperty() {
-    return routeProperty;
-  }
-
-  /**
-   * Sets route property. This property should return an array of (longitude, latitude) coordinates that will draw a
-   * route on the map view. If {@code null}, no route is drawn.
-   *
-   * @param routeProperty
-   *     the route property
-   */
-  public void setRouteProperty(String routeProperty) {
-    this.routeProperty = routeProperty;
+  public void setMapContentProperty(String mapContentProperty) {
+    this.mapContentProperty = mapContentProperty;
   }
 }

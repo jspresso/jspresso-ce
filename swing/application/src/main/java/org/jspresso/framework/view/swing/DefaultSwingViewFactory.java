@@ -1064,8 +1064,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     } else {
       connectorId = ModelRefPropertyConnector.THIS_PROPERTY;
     }
-    IValueConnector connector = new JMapViewConnector(connectorId, mapBean, viewDescriptor.getLongitudeProperty(),
-        viewDescriptor.getLatitudeProperty());
+    IValueConnector connector = new JMapViewConnector(connectorId, mapBean, viewDescriptor.getMapContentProperty());
     IView<JComponent> view = constructView(viewComponent, viewDescriptor, connector);
     return view;
   }

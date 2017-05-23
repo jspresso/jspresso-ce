@@ -949,22 +949,30 @@ public class DefaultFlexViewFactory {
     map.addControl(new DragHandler());
 
     var state:RemoteCompositeValueState = remoteMap.state as RemoteCompositeValueState;
-    var longitudeState:RemoteValueState = state.children[0];
-    var latitudeState:RemoteValueState = state.children[1];
+    var mapContentState:RemoteValueState = state.children[0];
     var updateMapLocation:Function = function():void {
-      var longitude:Number = longitudeState.value as Number;
-      var latitude:Number = latitudeState.value as Number;
-      if (longitude && latitude) {
-        map.visible = true;
-        map.center = new Location(longitude, latitude);
-        var marker:PointFeature = PointFeature.createPointFeature(map.center);
-        markers.addFeature(marker);
+      var mapContent:String = mapContentState.value as String;
+      if (mapContent) {
+        var markersCoordinates:Array = JSON.parse(mapContent)["markers"] as Array;
+        if (markersCoordinates && markersCoordinates.length > 0) {
+          for (var i:int = 0; i < markersCoordinates.length; i++) {
+            var markerLocation = new Location(markersCoordinates[i][0], markersCoordinates[i][1])
+            if (i == 0) {
+              map.center = markerLocation;
+            }
+            var marker:PointFeature = PointFeature.createPointFeature(markerLocation);
+            markers.clear();
+            markers.addFeature(marker);
+          }
+          map.visible = true;
+        } else {
+          map.visible = false;
+        }
       } else {
         map.visible = false;
       }
     };
-    BindingUtils.bindSetter(updateMapLocation, longitudeState, "value", true);
-    BindingUtils.bindSetter(updateMapLocation, latitudeState, "value", true);
+    BindingUtils.bindSetter(updateMapLocation, mapContentState, "value", true);
 
     var wrapper:UIComponent = new UIComponent();
     wrapper.addEventListener(Event.RESIZE, function(e:Event):void {

@@ -26,23 +26,18 @@ package org.jspresso.framework.view.descriptor;
 public interface IMapViewDescriptor extends IViewDescriptor {
 
   /**
-   * Gets longitude property.
-   *
-   * @return the longitude property
+   * The constant MARKERS_KEY is &quot;markers&quot;.
    */
-  String getLongitudeProperty();
+  public final String MARKERS_KEY = "markers";
+  /**
+   * The constant ROUTES_KEY is &quot;routes&quot;.
+   */
+  public final String ROUTES_KEY = "routes";
 
   /**
-   * Gets latitude property.
+   * Gets map content property.
    *
-   * @return the latitude property
+   * @return the map content property
    */
-  String getLatitudeProperty();
-
-  /**
-   * Gets route property.
-   *
-   * @return the route property
-   */
-  String getRouteProperty();
+  String getMapContentProperty();
 }

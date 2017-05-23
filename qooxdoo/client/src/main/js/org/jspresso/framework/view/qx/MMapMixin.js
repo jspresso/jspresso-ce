@@ -30,10 +30,10 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
   members: {
     __map: null,
     __geolocationEnabled: false,
-    __markerLayer: null,
-    __markerPoint: null,
-    __routeLayer: null,
-    __routeLine: null,
+    __markersLayer: null,
+    __markersSource: null,
+    __routesLayer: null,
+    __routesSource: null,
 
 
     _initializeMap: function () {
@@ -62,7 +62,6 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
       });
       this.__map.addLayer(osmLayer);
 
-      this.__markerPoint = new ol.geom.Point(ol.proj.fromLonLat([0, 0]));
       var markerStyle = new ol.style.Style({
         image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ {
           anchor: [0.5, 46],
@@ -73,18 +72,17 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
         })
       });
       var markerFeature = new ol.Feature({
-        geometry: this.__markerPoint
+        geometry: new ol.geom.Point(ol.proj.fromLonLat([0, 0]))
       });
-      var markerSource = new ol.source.Vector({
+      this.__markersSource = new ol.source.Vector({
         features: [markerFeature]
       });
-      this.__markerLayer = new ol.layer.Vector({
-        source: markerSource,
+      this.__markersLayer = new ol.layer.Vector({
+        source: this.__markersSource,
         style: markerStyle
       });
-      this.__map.addLayer(this.__markerLayer);
+      this.__map.addLayer(this.__markersLayer);
 
-      this.__routeLine = new ol.geom.LineString([[0, 0]]);
       var routeStyle = new ol.style.Style({
         stroke: new ol.style.Stroke({
           color: '#3dadff',
@@ -92,52 +90,80 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
         })
       });
       var routeFeature = new ol.Feature({
-        geometry: this.__routeLine
+        geometry: new ol.geom.LineString([[0, 0]])
       });
-      var routeSource = new ol.source.Vector({
+      this.__routesSource = new ol.source.Vector({
         features: [routeFeature]
       });
-      this.__routeLayer = new ol.layer.Vector({
-        source: routeSource,
+      this.__routesLayer = new ol.layer.Vector({
+        source: this.__routesSource,
         style: routeStyle
       });
-      this.__map.addLayer(this.__routeLayer);
+      this.__map.addLayer(this.__routesLayer);
+      this.__map.setView(new ol.View({
+        center: ol.proj.fromLonLat([0,0]),
+        zoom: 12
+      }));
     },
 
     zoomToPosition: function (lonLat, zoom) {
       if (this.__map) {
-        var view = new ol.View({
-          center: ol.proj.fromLonLat(lonLat),
-          zoom: zoom
-        });
-        this.__map.setView(view);
-      }
-    },
-
-    drawMarker: function (lonLat) {
-      if (this.__map) {
+        var view = this.__map.getView();
         if (lonLat) {
-          this.__markerLayer.setVisible(true);
-          this.__markerPoint.setCoordinates(ol.proj.fromLonLat(lonLat));
-        } else {
-          this.__markerLayer.setVisible(false);
+          view.setCenter(ol.proj.fromLonLat(lonLat));
+        }
+        if (zoom) {
+          view.setZoom(zoom);
         }
       }
     },
 
-    drawRoute: function (route) {
+    drawMapContent: function (markers, routes) {
       if (this.__map) {
-        if (route) {
-          this.__routeLayer.setVisible(true);
-          var coordinates = [];
-          for (var i = 0; i < route.length; i++) {
-            var coord = ol.proj.fromLonLat(route[i]);
-            coordinates.push(coord);
+        var coordinates = [];
+        if (markers && markers.length > 0) {
+          var markersFeatures = [];
+          for (var i = 0; i < markers.length; i++) {
+            var markerNode = ol.proj.fromLonLat(markers[i]);
+            markersFeatures.push(new ol.Feature({
+              geometry: new ol.geom.Point(markerNode)
+            }));
+            coordinates.push(markerNode);
           }
-          this.__routeLine.setCoordinates(coordinates);
-          this.__map.getView().fit(ol.extent.boundingExtent(coordinates), this.__map.getSize());
+          this.__markersSource.clear(true);
+          this.__markersSource.addFeatures(markersFeatures);
+          this.__markersLayer.setVisible(true);
         } else {
-          this.__routeLayer.setVisible(false);
+          this.__markersLayer.setVisible(false);
+        }
+        if (routes && routes.length > 0) {
+          var routesFeatures = [];
+          for (var i = 0; i < routes.length; i++) {
+            var routeNodes = [];
+            var route = routes[i];
+            for (var j = 0; j < route.length; j++) {
+              var routeNode = ol.proj.fromLonLat(route[j]);
+              routeNodes.push(routeNode);
+              coordinates.push(routeNode);
+            }
+            routesFeatures.push(new ol.Feature({
+              geometry: new ol.geom.LineString(routeNodes)
+            }));
+          }
+          this.__routesSource.clear(true);
+          this.__routesSource.addFeatures(routesFeatures);
+          this.__routesLayer.setVisible(true);
+        } else {
+          this.__routesLayer.setVisible(false);
+        }
+        if (coordinates.length > 0) {
+          var view = this.__map.getView();
+          if (coordinates.length > 1) {
+            view.fit(ol.extent.boundingExtent(coordinates), this.__map.getSize());
+          } else {
+            view.setCenter(coordinates[0]);
+            view.setZoom(12);
+          }
         }
       }
     },
@@ -157,7 +183,6 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
      */
     _onGeolocationSuccess: function (position) {
       this.zoomToPosition(position.getLongitude(), position.getLatitude(), 12, true);
-
       this._redrawMap();
     },
 

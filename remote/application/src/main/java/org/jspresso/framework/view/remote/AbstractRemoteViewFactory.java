@@ -1695,11 +1695,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
       connectorId = viewDescriptor.getModelDescriptor().getName();
     }
     ICompositeValueConnector connector = getConnectorFactory().createCompositeValueConnector(connectorId, null);
-    connector.addChildConnector(getConnectorFactory().createValueConnector(viewDescriptor.getLongitudeProperty()));
-    connector.addChildConnector(getConnectorFactory().createValueConnector(viewDescriptor.getLatitudeProperty()));
-    if (viewDescriptor.getRouteProperty() != null) {
-      connector.addChildConnector(getConnectorFactory().createValueConnector(viewDescriptor.getRouteProperty()));
-    }
+    connector.addChildConnector(getConnectorFactory().createValueConnector(viewDescriptor.getMapContentProperty()));
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent, viewDescriptor, connector);
     return view;

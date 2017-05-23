@@ -19,11 +19,16 @@
 package org.jspresso.framework.binding.swing;
 
 import com.bbn.openmap.MapBean;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 
+import org.jspresso.framework.binding.ConnectorBindingException;
 import org.jspresso.framework.binding.basic.BasicCompositeConnector;
 import org.jspresso.framework.binding.basic.BasicValueConnector;
 import org.jspresso.framework.util.event.IValueChangeListener;
 import org.jspresso.framework.util.event.ValueChangeEvent;
+import org.jspresso.framework.view.descriptor.IMapViewDescriptor;
 
 /**
  * JMapViewConnector connector.
@@ -32,23 +37,22 @@ import org.jspresso.framework.util.event.ValueChangeEvent;
  */
 public class JMapViewConnector extends BasicCompositeConnector {
 
-  private BasicValueConnector longitudeConnector;
-  private BasicValueConnector latitudeConnector;
+  private BasicValueConnector mapContentConnector;
 
   /**
    * Constructs a new {@code JMapViewConnector} instance.
    *
-   * @param id           the id of the connector.
-   * @param mapView           the connected MapBean.
-   * @param longitudeId the longitude connector id
-   * @param latitudeId the latitude connector id
+   * @param id
+   *     the id of the connector.
+   * @param mapView
+   *     the connected MapBean.
+   * @param mapContentId
+   *     the map content id
    */
-  public JMapViewConnector(String id, MapBean mapView, String longitudeId, String latitudeId) {
+  public JMapViewConnector(String id, MapBean mapView, String mapContentId) {
     super(id);
-    longitudeConnector = new BasicValueConnector(longitudeId);
-    latitudeConnector = new BasicValueConnector(latitudeId);
-    addChildConnector(longitudeConnector);
-    addChildConnector(latitudeConnector);
+    mapContentConnector = new BasicValueConnector(mapContentId);
+    addChildConnector(mapContentConnector);
 
     bindMapView(mapView);
   }
@@ -57,17 +61,26 @@ public class JMapViewConnector extends BasicCompositeConnector {
     IValueChangeListener longLatValueChangeListener = new IValueChangeListener() {
       @Override
       public void valueChange(ValueChangeEvent evt) {
-        Double latitude = latitudeConnector.getConnectorValue();
-        Double longitude = longitudeConnector.getConnectorValue();
-        if (longitude != null && latitude != null) {
-          mapView.setVisible(true);
-          mapView.setCenter(latitude, longitude);
+        String mapContent = mapContentConnector.getConnectorValue();
+        if (mapContent != null) {
+          try {
+            JSONObject mapContentAsJson = new JSONObject(mapContent);
+            JSONArray markers = mapContentAsJson.optJSONArray(IMapViewDescriptor.MARKERS_KEY);
+            if (markers != null && markers.length() > 0) {
+              JSONArray marker = markers.getJSONArray(0);
+              mapView.setCenter(marker.getDouble(1), marker.getDouble(0));
+              mapView.setVisible(true);
+            } else {
+              mapView.setVisible(false);
+            }
+          } catch (JSONException e) {
+            throw new ConnectorBindingException(e, "Invalid Json map content");
+          }
         } else {
           mapView.setVisible(false);
         }
       }
     };
-    longitudeConnector.addValueChangeListener(longLatValueChangeListener);
-    latitudeConnector.addValueChangeListener(longLatValueChangeListener);
+    mapContentConnector.addValueChangeListener(longLatValueChangeListener);
   }
 }

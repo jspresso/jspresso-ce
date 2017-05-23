@@ -1233,47 +1233,35 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @param remoteMap {org.jspresso.framework.gui.remote.RMap}
      */
     _createMap: function (remoteMap) {
-      var mapPage = new org.jspresso.framework.view.qx.mobile.MapNavigationPage();
-      mapPage.setUserData("pageGuid", remoteMap.getGuid());
-      mapPage.setButtonIcon("org/jspresso/framework/mobile/my_location-mobile.svg");
-      mapPage.addListener("action", function (event) {
-        mapPage.moveToCurrentPosition();
+      var map = new org.jspresso.framework.view.qx.mobile.MapNavigationPage();
+      map.setUserData("pageGuid", remoteMap.getGuid());
+      map.setButtonIcon("org/jspresso/framework/mobile/my_location-mobile.svg");
+      map.addListener("action", function (event) {
+        map.moveToCurrentPosition();
       }, this);
       var state = remoteMap.getState();
       var childrenStates = state.getChildren();
-      var longitudeState = childrenStates.getItem(0);
-      var latitudeState = childrenStates.getItem(1);
-      var routeState;
-      if (childrenStates.length > 2) {
-        routeState = childrenStates.getItem(2);
-      }
+      var mapContentState = childrenStates.getItem(0);
       var updateMap = function () {
-        var longitude = longitudeState.getValue();
-        var latitude = latitudeState.getValue();
-        var route;
-        if (routeState) {
-          route = routeState.getValue();
-        }
-        if (longitude != null && latitude != null) {
-          mapPage.showMap();
-          mapPage.zoomToPosition([longitude, latitude], 12);
-          mapPage.drawMarker(!route ? [longitude, latitude] : null)
-          mapPage.drawRoute(route)
+        var mapContent = mapContentState.getValue();
+        if (mapContent != null) {
+          mapContent = JSON.parse(mapContent);
+          var markers = mapContent["markers"];
+          var routes = mapContent["routes"];
+          if (markers || routes) {
+            map.showMap();
+            map.drawMapContent(markers, routes);
+          }
         } else {
-          mapPage.hideMap();
+          map.hideMap();
         }
       };
-      mapPage.addListener("initialize", updateMap);
-      longitudeState.addListener("changeValue", updateMap, this);
-      latitudeState.addListener("changeValue", updateMap, this);
-      if (routeState) {
-        routeState.addListener("changeValue", updateMap, this);
-      }
-
-      mapPage.setTitle(remoteMap.getLabel());
-      mapPage.setShowButton(true);
-      this._addDetailPage(mapPage);
-      return mapPage;
+      map.addListener("initialize", updateMap);
+      mapContentState.addListener("changeValue", updateMap, this);
+      map.setTitle(remoteMap.getLabel());
+      map.setShowButton(true);
+      this._addDetailPage(map);
+      return map;
     },
 
     /**

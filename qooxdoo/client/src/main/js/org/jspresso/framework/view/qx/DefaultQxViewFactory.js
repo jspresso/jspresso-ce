@@ -1790,35 +1790,23 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var map = new org.jspresso.framework.view.qx.MapComponent();
       var state = remoteMap.getState();
       var childrenStates = state.getChildren();
-      var longitudeState = childrenStates.getItem(0);
-      var latitudeState = childrenStates.getItem(1);
-      var routeState;
-      if (childrenStates.length > 2) {
-        routeState = childrenStates.getItem(2);
-      }
+      var mapContentState = childrenStates.getItem(0);
       var updateMap = function () {
-        var longitude = longitudeState.getValue();
-        var latitude = latitudeState.getValue();
-        var route;
-        if (routeState) {
-          route = routeState.getValue();
-        }
-
-        if (longitude != null && latitude != null) {
-          map.showMap();
-          map.zoomToPosition([longitude, latitude], 12);
-          map.drawMarker(!route ? [longitude, latitude]: null)
-          map.drawRoute(route)
+        var mapContent = mapContentState.getValue();
+        if (mapContent != null) {
+          mapContent = JSON.parse(mapContent);
+          var markers = mapContent["markers"];
+          var routes = mapContent["routes"];
+          if (markers || routes) {
+            map.showMap();
+            map.drawMapContent(markers, routes);
+          }
         } else {
           map.hideMap();
         }
       };
       map.addListenerOnce("appear", updateMap);
-      longitudeState.addListener("changeValue", updateMap, this);
-      latitudeState.addListener("changeValue", updateMap, this);
-      if (routeState) {
-        routeState.addListener("changeValue", updateMap, this);
-      }
+      mapContentState.addListener("changeValue", updateMap, this);
       return map;
     },
 
