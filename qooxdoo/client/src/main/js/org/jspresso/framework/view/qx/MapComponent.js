@@ -39,7 +39,14 @@ qx.Class.define("org.jspresso.framework.view.qx.MapComponent", {
     },
 
     showMap: function () {
+      var redraw = false;
+      if (this.getVisibility() != "visible") {
+        redraw = true;
+      }
       this.show();
+      if (redraw) {
+        qx.event.Timer.once(this._redrawMap, this, 100);
+      }
     },
 
     hideMap: function () {
