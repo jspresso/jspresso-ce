@@ -45,7 +45,7 @@ public class LoggingActionMonitoringPlugin extends AbstractActionMonitoringPlugi
   protected void traceResults(IApplicationSession session, UserPrincipal user, Workspace workspace, Module module,
                               List<IAction> callStack, Map<String, Object> context, Date startTimestamp,
                               Date endTimestamp) {
-    if (LOG.isTraceEnabled()) {
+    if (isEnabled()) {
       String workspaceName = "";
       if (workspace != null) {
         workspaceName = workspace.getName();
@@ -88,5 +88,10 @@ public class LoggingActionMonitoringPlugin extends AbstractActionMonitoringPlugi
       LOG.trace("[{}][{}][{}][{}][{}][{}][{}][{}][{} ms.]", sessionId, userName, date, startTs, endTs, workspaceName,
           moduleName, callStackNames, duration);
     }
+  }
+
+  @Override
+  protected boolean isEnabled() {
+    return LOG.isTraceEnabled();
   }
 }

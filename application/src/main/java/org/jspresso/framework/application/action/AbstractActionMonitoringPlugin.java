@@ -94,7 +94,7 @@ public abstract class AbstractActionMonitoringPlugin extends AbstractActionConte
    */
   @Override
   public void actionStart(IAction action, Map<String, Object> context) {
-    if (!filter(action)) {
+    if (!isEnabled() || !filter(action)) {
       return;
     }
     Date startTimestamp = new Date();
@@ -124,7 +124,7 @@ public abstract class AbstractActionMonitoringPlugin extends AbstractActionConte
    */
   @Override
   public void actionEnd(IAction action, Map<String, Object> context) {
-    if (!filter(action)) {
+    if (!isEnabled() || !filter(action)) {
       return;
     }
     Date endTimestamp = new Date();
@@ -193,4 +193,8 @@ public abstract class AbstractActionMonitoringPlugin extends AbstractActionConte
   protected abstract void traceResults(IApplicationSession session, UserPrincipal user, Workspace workspace,
                                        Module module, List<IAction> callStack, Map<String, Object> context,
                                        Date startTimestamp, Date endTimestamp);
+
+  protected boolean isEnabled() {
+    return true;
+  }
 }
