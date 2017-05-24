@@ -274,6 +274,8 @@
     <constructor-arg type="java.lang.String" value="Jspresso Asynchronous Actions" />
   </bean>
 
+  <bean id="actionMonitoringPlugin" class="org.jspresso.framework.application.action.LoggingActionMonitoringPlugin" />
+
   <bean abstract="true" id="abstractBackControllerBase" class="org.jspresso.framework.application.backend.AbstractBackendController">
     <property name="entityFactory" ref="controllerAwareEntityFactory" />
     <property name="modelConnectorFactory" ref="modelConnectorFactory" />
@@ -290,6 +292,7 @@
     <property name="userPreferencesStore" ref="userPreferencesStore" />
     <property name="slaveControllerFactory" ref="backendControllerFactory"/>
     <property name="asyncActionsThreadGroup" ref="asyncActionsThreadGroup" />
+    <property name="actionMonitoringPlugin" ref="actionMonitoringPlugin" />
   </bean>
 
   <bean abstract="true" id="abstractBackController" parent="abstractBackControllerBase" />
