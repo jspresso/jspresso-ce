@@ -24,6 +24,7 @@ import java.util.Map;
 import javax.security.auth.Subject;
 
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.action.IActionMonitoringPlugin;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.gui.EClientType;
@@ -52,7 +53,7 @@ public interface IController extends IActionHandler, IPropertyChangeCapable {
    * This method gets executed when a user successfully logs in.
    *
    * @param subject
-   *          the authenticated user subject.
+   *     the authenticated user subject.
    */
   void loggedIn(Subject subject);
 
@@ -74,6 +75,7 @@ public interface IController extends IActionHandler, IPropertyChangeCapable {
    * Gets the translation provider used by this controller.
    *
    * @return the translation provider used by this controller.
+   *
    * @deprecated the controller is now a translation provider by itself.
    */
   @Deprecated
@@ -91,9 +93,14 @@ public interface IController extends IActionHandler, IPropertyChangeCapable {
    * passed to the action chain and contains application-wide context key-value
    * pairs.
    *
-   * @return the map representing the initial context provided by this
-   *         controller.
+   * @return the map representing the initial context provided by this         controller.
    */
   Map<String, Object> getInitialActionContext();
 
+  /**
+   * Gets the action monitoring plugin.
+   *
+   * @return the action monitoring plugin
+   */
+  IActionMonitoringPlugin getActionMonitoringPlugin();
 }

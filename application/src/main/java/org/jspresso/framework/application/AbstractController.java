@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.action.IActionMonitoringPlugin;
 import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
 import org.jspresso.framework.util.exception.IExceptionHandler;
 import org.jspresso.framework.util.gui.EClientType;
@@ -53,8 +54,7 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  *
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractController extends AbstractPropertyChangeCapable
-    implements IController {
+public abstract class AbstractController extends AbstractPropertyChangeCapable implements IController {
 
   private final List<Map.Entry<IAction, Map<String, Object>>> delayedActions;
   private       IExceptionHandler                             customExceptionHandler;
@@ -83,8 +83,9 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable
    * Gets the translationProvider.
    *
    * @return the translationProvider.
+   *
    * @deprecated the controller is itself a translation provider. will return
-   *             this.
+   * this.
    */
   @Override
   @Deprecated
@@ -126,7 +127,7 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable
    * </ul>
    *
    * @param customExceptionHandler
-   *          the customExceptionHandler to set.
+   *     the customExceptionHandler to set.
    */
   public void setCustomExceptionHandler(IExceptionHandler customExceptionHandler) {
     this.customExceptionHandler = customExceptionHandler;
@@ -196,21 +197,21 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable
    * thread-safety.
    *
    * @param action
-   *          the action to extract the internal state for.
+   *     the action to extract the internal state for.
    * @return the internal action chain state.
+   *
    * @throws IllegalAccessException
-   *           whenever an exception occurs accessing the internal private state
-   *           of the action through reflection.
+   *     whenever an exception occurs accessing the internal private state
+   *     of the action through reflection.
    */
-  public static Map<String, Object> extractInternalActionState(IAction action)
-      throws IllegalAccessException {
+  public static Map<String, Object> extractInternalActionState(IAction action) throws IllegalAccessException {
     HashMap<String, Object> state = new HashMap<>();
     appendToInternalActionState(action.getClass(), action, state);
     return state;
   }
 
-  private static void appendToInternalActionState(Class<?> clazz,
-      IAction action, Map<String, Object> state) throws IllegalAccessException {
+  private static void appendToInternalActionState(Class<?> clazz, IAction action, Map<String, Object> state)
+      throws IllegalAccessException {
     for (Field field : clazz.getDeclaredFields()) {
       if (!field.isSynthetic()) {
         field.setAccessible(true);
@@ -230,8 +231,10 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable
   /**
    * Execute later.
    *
-   * @param action the action
-   * @param context the context
+   * @param action
+   *     the action
+   * @param context
+   *     the context
    */
   @Override
   public synchronized void executeLater(IAction action, Map<String, Object> context) {
@@ -241,7 +244,8 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable
   /**
    * Execute delayed actions.
    *
-   * @param actionHandler the action handler to execute the action. Might be different from this.
+   * @param actionHandler
+   *     the action handler to execute the action. Might be different from this.
    */
   public void executeDelayedActions(IActionHandler actionHandler) {
     List<Map.Entry<IAction, Map<String, Object>>> iteratorCopy;
@@ -249,7 +253,7 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable
       iteratorCopy = new ArrayList<>(delayedActions);
       delayedActions.clear();
     }
-    for (Map.Entry<IAction, Map<String, Object>> delayedActionEntry: iteratorCopy) {
+    for (Map.Entry<IAction, Map<String, Object>> delayedActionEntry : iteratorCopy) {
       actionHandler.execute(delayedActionEntry.getKey(), delayedActionEntry.getValue());
     }
   }

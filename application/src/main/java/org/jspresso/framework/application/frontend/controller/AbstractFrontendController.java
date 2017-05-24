@@ -43,7 +43,6 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.ConcurrencyFailureException;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.hibernate4.SessionFactoryUtils;
 import org.springframework.transaction.TransactionException;
@@ -52,6 +51,7 @@ import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.action.IActionMonitoringPlugin;
 import org.jspresso.framework.application.AbstractController;
 import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.IBackendController;
@@ -591,7 +591,17 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
       if (action.isBackend()) {
         result = executeBackend(action, context);
       } else {
-        result = executeFrontend(action, context);
+        IActionMonitoringPlugin amp = getActionMonitoringPlugin();
+        try {
+          if (amp != null) {
+            amp.actionStart(action, context);
+          }
+          result = executeFrontend(action, context);
+        } finally {
+          if (amp != null) {
+            amp.actionEnd(action, context);
+          }
+        }
       }
       if (!actionStack.isEmpty()) {
         actionStack.remove(0);
@@ -2465,8 +2475,19 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
     displayDialog(mainView, actions, title, sourceComponent, context, dimension, reuseCurrent, true);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public void displayUrl(String urlSpec) {
     displayUrl(urlSpec, UrlHelper.BLANK_TARGET);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public IActionMonitoringPlugin getActionMonitoringPlugin() {
+    return getBackendController().getActionMonitoringPlugin();
   }
 }
