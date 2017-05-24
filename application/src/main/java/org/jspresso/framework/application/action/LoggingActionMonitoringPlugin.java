@@ -82,7 +82,7 @@ public class LoggingActionMonitoringPlugin extends AbstractActionMonitoringPlugi
       SimpleDateFormat tsFormat = new SimpleDateFormat("HH:mm:ss.SSS");
       String startTs = tsFormat.format(startTimestamp);
       String endTs = tsFormat.format(endTimestamp);
-      SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
+      SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
       String date = dateFormat.format(startTimestamp);
       long duration = endTimestamp.getTime() - startTimestamp.getTime();
       LOG.trace("[{}][{}][{}][{}][{}][{}][{}][{}][{} ms.]", sessionId, userName, date, startTs, endTs, workspaceName,
