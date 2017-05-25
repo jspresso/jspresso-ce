@@ -6,7 +6,9 @@
       "lint-check": {
         "allowed-globals": [
           "ol",
-          "Uint8Array"
+          "Uint8Array",
+          "qx.io",
+          "jQuery.jqplot"
         ]
       },
       "add-css": [
