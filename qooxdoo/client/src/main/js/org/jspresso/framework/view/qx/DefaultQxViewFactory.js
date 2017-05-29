@@ -1018,6 +1018,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         scrollPane.setScrollbarY("auto");
       } else {
         scrollPane.setScrollbarY("off");
+        scrollPane.setHeight(null);
       }
       return scrollPane;
     },
