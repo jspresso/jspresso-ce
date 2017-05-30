@@ -38,6 +38,8 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
  */
 public class BinaryPropertyInfoAction<E, F, G> extends FrontendAction<E, F, G> {
 
+  private String modelPath;
+
   /**
    * Displays the size of the binary property.
    * <p>
@@ -85,7 +87,7 @@ public class BinaryPropertyInfoAction<E, F, G> extends FrontendAction<E, F, G> {
    * @return The binary content to display the info on or null.
    */
   protected byte[] getBinaryContent(Map<String, Object> context) {
-    Object connectorValue = getViewConnector(context).getConnectorValue();
+    Object connectorValue = getModelConnector(getModelPath(context), context).getConnectorValue();
     byte[] content;
     if (connectorValue instanceof String) {
       content = ((String) connectorValue).getBytes();
@@ -93,5 +95,26 @@ public class BinaryPropertyInfoAction<E, F, G> extends FrontendAction<E, F, G> {
       content = (byte[]) connectorValue;
     }
     return content;
+  }
+
+  /**
+   * Gets model path.
+   *
+   * @param context
+   *     the context
+   * @return the model path
+   */
+  protected String getModelPath(Map<String, Object> context) {
+    return modelPath;
+  }
+
+  /**
+   * Sets model path.
+   *
+   * @param modelPath
+   *     the model path
+   */
+  public void setModelPath(String modelPath) {
+    this.modelPath = modelPath;
   }
 }

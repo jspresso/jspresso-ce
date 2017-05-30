@@ -21,6 +21,7 @@ package org.jspresso.framework.application.frontend.action.swing.file;
 import java.util.List;
 import java.util.Map;
 
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.file.ConnectorValueGetterCallback;
 import org.jspresso.framework.model.descriptor.IFileFilterable;
 
@@ -33,11 +34,15 @@ import org.jspresso.framework.model.descriptor.IFileFilterable;
  */
 public class SaveBinaryPropertyAsFileAction extends SaveFileAction {
 
+  private String modelPath;
+  private ConnectorValueGetterCallback fileSaveCallback;
+
   /**
    * Constructs a new {@code OpenFileAsBinaryPropertyAction} instance.
    */
   public SaveBinaryPropertyAsFileAction() {
-    setFileSaveCallback(new ConnectorValueGetterCallback());
+    fileSaveCallback = new ConnectorValueGetterCallback();
+    setFileSaveCallback(fileSaveCallback);
   }
 
   /**
@@ -45,7 +50,29 @@ public class SaveBinaryPropertyAsFileAction extends SaveFileAction {
    */
   @Override
   protected Map<String, List<String>> getFileFilter(Map<String, Object> context) {
-    IFileFilterable modelDescriptor = (IFileFilterable) getModelDescriptor(context);
+    IFileFilterable modelDescriptor = (IFileFilterable) getModelDescriptor(getModelPath(context), context);
     return modelDescriptor.getFileFilter();
+  }
+
+  /**
+   * Gets model path.
+   *
+   * @param context
+   *     the context
+   * @return the model path
+   */
+  protected String getModelPath(Map<String, Object> context) {
+    return modelPath;
+  }
+
+  /**
+   * Sets model path.
+   *
+   * @param modelPath
+   *     the model path
+   */
+  public void setModelPath(String modelPath) {
+    this.modelPath = modelPath;
+    fileSaveCallback.setModelPath(modelPath);
   }
 }

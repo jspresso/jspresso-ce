@@ -37,6 +37,8 @@ import org.jspresso.framework.model.descriptor.IModelDescriptor;
 public class ConnectorValueGetterCallback extends AbstractActionContextAware
     implements IFileSaveCallback {
 
+  private String modelPath;
+
   /**
    * {@inheritDoc}
    */
@@ -55,7 +57,7 @@ public class ConnectorValueGetterCallback extends AbstractActionContextAware
     OutputStream os = new BufferedOutputStream(out);
     // Do not use getSelectedModel() since it will return
     // the component holding the binary property
-    Object connectorValue = getViewConnector(context).getConnectorValue();
+    Object connectorValue = getModelConnector(getModelPath(context), context).getConnectorValue();
     byte[] content;
     if (connectorValue instanceof String) {
       content = ((String) connectorValue).getBytes();
@@ -73,10 +75,31 @@ public class ConnectorValueGetterCallback extends AbstractActionContextAware
    */
   @Override
   public String getFileName(Map<String, Object> context) {
-    IModelDescriptor modelDescriptor = getModelDescriptor(context);
+    IModelDescriptor modelDescriptor = getModelDescriptor(getModelPath(context), context);
     if (modelDescriptor instanceof IFileFilterable) {
       return ((IFileFilterable) modelDescriptor).getFileName();
     }
     return null;
+  }
+
+  /**
+   * Gets model path.
+   *
+   * @param context
+   *     the context
+   * @return the model path
+   */
+  protected String getModelPath(Map<String, Object> context) {
+    return modelPath;
+  }
+
+  /**
+   * Sets model path.
+   *
+   * @param modelPath
+   *     the model path
+   */
+  public void setModelPath(String modelPath) {
+    this.modelPath = modelPath;
   }
 }

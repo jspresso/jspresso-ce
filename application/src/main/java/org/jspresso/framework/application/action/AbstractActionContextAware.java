@@ -31,6 +31,7 @@ import org.jspresso.framework.application.frontend.IFrontendController;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.binding.ConnectorHelper;
 import org.jspresso.framework.binding.ICollectionConnector;
+import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
@@ -58,9 +59,9 @@ public abstract class AbstractActionContextAware {
    * {@code ActionContextConstants.ACTION_COMMAND} standard key.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the (string) action command if it exists in the action context or
-   *         null.
+   * null.
    */
   protected String getActionCommand(Map<String, Object> context) {
     return (String) context.get(ActionContextConstants.ACTION_COMMAND);
@@ -75,7 +76,7 @@ public abstract class AbstractActionContextAware {
    * @param <T>
    *     type inference return.
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the action parameter if it exists in the action context or null.
    */
   @SuppressWarnings("unchecked")
@@ -93,7 +94,7 @@ public abstract class AbstractActionContextAware {
    * </ul>
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the backend controller.
    */
   protected IBackendController getBackendController(Map<String, Object> context) {
@@ -101,8 +102,7 @@ public abstract class AbstractActionContextAware {
     if (frontController != null) {
       return frontController.getBackendController();
     }
-    return (IBackendController) context
-        .get(ActionContextConstants.BACK_CONTROLLER);
+    return (IBackendController) context.get(ActionContextConstants.BACK_CONTROLLER);
   }
 
   /**
@@ -118,14 +118,12 @@ public abstract class AbstractActionContextAware {
    * @param <G>
    *     the actual action type used.
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the frontend controller.
    */
   @SuppressWarnings("unchecked")
-  protected <E, F, G> IFrontendController<E, F, G> getFrontendController(
-      Map<String, Object> context) {
-    return (IFrontendController<E, F, G>) context
-        .get(ActionContextConstants.FRONT_CONTROLLER);
+  protected <E, F, G> IFrontendController<E, F, G> getFrontendController(Map<String, Object> context) {
+    return (IFrontendController<E, F, G>) context.get(ActionContextConstants.FRONT_CONTROLLER);
   }
 
   /**
@@ -134,7 +132,7 @@ public abstract class AbstractActionContextAware {
    * the session.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the locale the action executes in.
    */
   protected Locale getLocale(Map<String, Object> context) {
@@ -151,7 +149,7 @@ public abstract class AbstractActionContextAware {
    * @param <T>
    *     type inference return.
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the model.
    */
   protected <T> T getModel(Map<String, Object> context) {
@@ -164,13 +162,13 @@ public abstract class AbstractActionContextAware {
    * @param <T>
    *     type inference return.
    * @param viewPath
-   *          the view index path to follow.
-   *          <ul>
-   *          <li>A positive integer n means the nth child.</li>
-   *          <li>A negative integer -n means the nth parent.</li>
-   *          </ul>
+   *     the view index path to follow.
+   *     <ul>
+   *     <li>A positive integer n means the nth child.</li>
+   *     <li>A negative integer -n means the nth parent.</li>
+   *     </ul>
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the model.
    */
   protected <T> T getModel(int[] viewPath, Map<String, Object> context) {
@@ -194,11 +192,11 @@ public abstract class AbstractActionContextAware {
    * context accessors.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the model connector this action was triggered on.
    */
   protected IValueConnector getModelConnector(Map<String, Object> context) {
-    return getModelConnector(null, context);
+    return getModelConnector((int[]) null, context);
   }
 
   /**
@@ -210,17 +208,16 @@ public abstract class AbstractActionContextAware {
    * context accessors.
    *
    * @param viewPath
-   *          the view index path to follow.
-   *          <ul>
-   *          <li>A positive integer n means the nth child.</li>
-   *          <li>A negative integer -n means the nth parent.</li>
-   *          </ul>
+   *     the view index path to follow.
+   *     <ul>
+   *     <li>A positive integer n means the nth child.</li>
+   *     <li>A negative integer -n means the nth parent.</li>
+   *     </ul>
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the model connector this action was triggered on.
    */
-  protected IValueConnector getModelConnector(int[] viewPath,
-      Map<String, Object> context) {
+  protected IValueConnector getModelConnector(int[] viewPath, Map<String, Object> context) {
     IValueConnector viewConnector = getViewConnector(viewPath, context);
     if (viewConnector != null) {
       IValueConnector modelConnector = viewConnector.getModelConnector();
@@ -236,18 +233,85 @@ public abstract class AbstractActionContextAware {
   }
 
   /**
+   * Gets the model connector this action was triggered on following a model path described as a dotted string.
+   *
+   * @param modelPath
+   *     the model path to follow as a dotted string.
+   * @param context
+   *     the action context.
+   * @return the model connector this action was triggered on.
+   */
+  protected IValueConnector getModelConnector(String modelPath, Map<String, Object> context) {
+    IValueConnector modelConnector = getModelConnector(context);
+    if (modelConnector instanceof ICollectionConnectorProvider) {
+      int[] selectedIndices = getSelectedIndices(context);
+      if (selectedIndices.length > 0) {
+        modelConnector = ((ICollectionConnectorProvider) modelConnector).getCollectionConnector().getChildConnector(
+            selectedIndices[0]);
+      }
+    }
+    if (modelConnector != null) {
+      if (modelPath != null) {
+        String[] modelSteps = modelPath.split("\\.");
+        for (String modelStep : modelSteps) {
+          modelConnector = ((ICompositeValueConnector) modelConnector).getChildConnector(modelStep);
+        }
+      }
+      return modelConnector;
+    }
+    return null;
+  }
+
+  /**
    * Retrieves the model descriptor from the context using the
    * {@code ActionContextConstants.MODEL_DESCRIPTOR} standard key. The
    * model descriptor is registered in the action context based on the model of
    * the view to which the action is attached.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the model descriptor this model action was triggered on.
    */
   protected IModelDescriptor getModelDescriptor(Map<String, Object> context) {
-    return (IModelDescriptor) context
-        .get(ActionContextConstants.MODEL_DESCRIPTOR);
+    return (IModelDescriptor) context.get(ActionContextConstants.MODEL_DESCRIPTOR);
+  }
+
+  /**
+   * Gets the model descriptor this action was triggered on.
+   *
+   * @param viewPath
+   *     the view index path to follow.
+   *     <ul>
+   *     <li>A positive integer n means the nth child.</li>
+   *     <li>A negative integer -n means the nth parent.</li>
+   *     </ul>
+   * @param context
+   *     the action context.
+   * @return the model connector this action was triggered on.
+   */
+  protected IModelDescriptor getModelDescriptor(int[] viewPath, Map<String, Object> context) {
+    IValueConnector modelConnector = getModelConnector(viewPath, context);
+    if (modelConnector != null) {
+      return modelConnector.getModelDescriptor();
+    }
+    return null;
+  }
+
+  /**
+   * Gets the model descriptor this action was triggered on.
+   *
+   * @param modelPath
+   *     the model path to follow as a dotted string.
+   * @param context
+   *     the action context.
+   * @return the model descriptor this action was triggered on.
+   */
+  protected IModelDescriptor getModelDescriptor(String modelPath, Map<String, Object> context) {
+    IValueConnector modelConnector = getModelConnector(modelPath, context);
+    if (modelConnector != null) {
+      return modelConnector.getModelDescriptor();
+    }
+    return null;
   }
 
   /**
@@ -256,7 +320,7 @@ public abstract class AbstractActionContextAware {
    * {@code ActionContextConstants.MODULE} key.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the module this action executes on.
    */
   protected Module getModule(Map<String, Object> context) {
@@ -269,7 +333,7 @@ public abstract class AbstractActionContextAware {
    * stored using the {@code ActionContextConstants.CURRENT_MODULE} key.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the module this action executes on.
    */
   protected Module getCurrentModule(Map<String, Object> context) {
@@ -282,7 +346,7 @@ public abstract class AbstractActionContextAware {
    * @param <T>
    *     type inference return.
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the parent model.
    */
   protected <T> T getParentModel(Map<String, Object> context) {
@@ -302,7 +366,7 @@ public abstract class AbstractActionContextAware {
    * binding architecture.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the selected indices stored in the action context.
    */
   protected int[] getSelectedIndices(Map<String, Object> context) {
@@ -316,13 +380,13 @@ public abstract class AbstractActionContextAware {
    * binding architecture.
    *
    * @param viewPath
-   *          the view index path to follow.
-   *          <ul>
-   *          <li>A positive integer n means the nth child.</li>
-   *          <li>A negative integer -n means the nth parent.</li>
-   *          </ul>
+   *     the view index path to follow.
+   *     <ul>
+   *     <li>A positive integer n means the nth child.</li>
+   *     <li>A negative integer -n means the nth parent.</li>
+   *     </ul>
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the selected indices stored in the action context.
    */
   protected int[] getSelectedIndices(int[] viewPath, Map<String, Object> context) {
@@ -351,7 +415,7 @@ public abstract class AbstractActionContextAware {
    * @param <T>
    *     type inference return.
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the selected model.
    */
   protected <T> T getSelectedModel(Map<String, Object> context) {
@@ -366,13 +430,13 @@ public abstract class AbstractActionContextAware {
    * @param <T>
    *     type inference return.
    * @param viewPath
-   *          the view index path to follow.
-   *          <ul>
-   *          <li>A positive integer n means the nth child.</li>
-   *          <li>A negative integer -n means the nth parent.</li>
-   *          </ul>
+   *     the view index path to follow.
+   *     <ul>
+   *     <li>A positive integer n means the nth child.</li>
+   *     <li>A negative integer -n means the nth parent.</li>
+   *     </ul>
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the selected model.
    */
   protected <T> T getSelectedModel(int[] viewPath, Map<String, Object> context) {
@@ -397,7 +461,7 @@ public abstract class AbstractActionContextAware {
    * @param <T>
    *     type inference return.
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the list of selected models.
    */
   protected <T> List<T> getSelectedModels(Map<String, Object> context) {
@@ -412,18 +476,17 @@ public abstract class AbstractActionContextAware {
    * @param <T>
    *     type inference return.
    * @param viewPath
-   *          the view index path to follow.
-   *          <ul>
-   *          <li>A positive integer n means the nth child.</li>
-   *          <li>A negative integer -n means the nth parent.</li>
-   *          </ul>
+   *     the view index path to follow.
+   *     <ul>
+   *     <li>A positive integer n means the nth child.</li>
+   *     <li>A negative integer -n means the nth parent.</li>
+   *     </ul>
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the list of selected models.
    */
   @SuppressWarnings("unchecked")
-  protected <T> List<T> getSelectedModels(int[] viewPath,
-                                          Map<String, Object> context) {
+  protected <T> List<T> getSelectedModels(int[] viewPath, Map<String, Object> context) {
     IValueConnector modelConnector = getModelConnector(viewPath, context);
     if (modelConnector == null) {
       return null;
@@ -434,8 +497,7 @@ public abstract class AbstractActionContextAware {
       int[] selectedIndices = getSelectedIndices(viewPath, context);
       if (selectedIndices != null && selectedIndices.length > 0) {
         for (int selectedIndice : selectedIndices) {
-          IValueConnector childConnector = ((ICollectionConnector) modelConnector)
-              .getChildConnector(selectedIndice);
+          IValueConnector childConnector = ((ICollectionConnector) modelConnector).getChildConnector(selectedIndice);
           if (childConnector != null) {
             models.add((T) childConnector.getConnectorValue());
           }
@@ -453,11 +515,10 @@ public abstract class AbstractActionContextAware {
    * method simply delegates to the context backend controller.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the translation provider.
    */
-  protected ITranslationProvider getTranslationProvider(
-      Map<String, Object> context) {
+  protected ITranslationProvider getTranslationProvider(Map<String, Object> context) {
     return getBackendController(context);
   }
 
@@ -468,12 +529,11 @@ public abstract class AbstractActionContextAware {
    * {@code ActionContextConstants.ACTION_PARAM} standard key.
    *
    * @param actionParam
-   *          the action parameter to set to the context.
+   *     the action parameter to set to the context.
    * @param context
-   *          the action context.
+   *     the action context.
    */
-  protected void setActionParameter(Object actionParam,
-      Map<String, Object> context) {
+  protected void setActionParameter(Object actionParam, Map<String, Object> context) {
     context.put(ActionContextConstants.ACTION_PARAM, actionParam);
   }
 
@@ -484,12 +544,11 @@ public abstract class AbstractActionContextAware {
    * architecture.
    *
    * @param selectedIndices
-   *          the selected indices to store in the action context.
+   *     the selected indices to store in the action context.
    * @param context
-   *          the action context.
+   *     the action context.
    */
-  protected void setSelectedIndices(int[] selectedIndices,
-      Map<String, Object> context) {
+  protected void setSelectedIndices(int[] selectedIndices, Map<String, Object> context) {
     setSelectedIndices(null, selectedIndices, context);
   }
 
@@ -500,21 +559,19 @@ public abstract class AbstractActionContextAware {
    * architecture.
    *
    * @param viewPath
-   *          the view index path to follow.
-   *          <ul>
-   *          <li>A positive integer n means the nth child.</li>
-   *          <li>A negative integer -n means the nth parent.</li>
-   *          </ul>
+   *     the view index path to follow.
+   *     <ul>
+   *     <li>A positive integer n means the nth child.</li>
+   *     <li>A negative integer -n means the nth parent.</li>
+   *     </ul>
    * @param selectedIndices
-   *          the selected indices to store in the action context.
+   *     the selected indices to store in the action context.
    * @param context
-   *          the action context.
+   *     the action context.
    */
-  protected void setSelectedIndices(int[] viewPath, int[] selectedIndices,
-      Map<String, Object> context) {
+  protected void setSelectedIndices(int[] viewPath, int[] selectedIndices, Map<String, Object> context) {
     IValueConnector selectableConnector = getViewConnector(viewPath, context);
-    while (selectableConnector != null
-        && !(selectableConnector instanceof ISelectable)) {
+    while (selectableConnector != null && !(selectableConnector instanceof ISelectable)) {
       selectableConnector = selectableConnector.getParentConnector();
     }
     if (selectableConnector != null) {
@@ -528,12 +585,11 @@ public abstract class AbstractActionContextAware {
    * context.
    *
    * @param selectedModels
-   *          the list of models to select in the view connector.
+   *     the list of models to select in the view connector.
    * @param context
-   *          the action context.
+   *     the action context.
    */
-  protected void setSelectedModels(Collection<?> selectedModels,
-      Map<String, Object> context) {
+  protected void setSelectedModels(Collection<?> selectedModels, Map<String, Object> context) {
     setSelectedModels(null, selectedModels, context);
   }
 
@@ -543,22 +599,21 @@ public abstract class AbstractActionContextAware {
    * context.
    *
    * @param viewPath
-   *          the view index path to follow.
-   *          <ul>
-   *          <li>A positive integer n means the nth child.</li>
-   *          <li>A negative integer -n means the nth parent.</li>
-   *          </ul>
+   *     the view index path to follow.
+   *     <ul>
+   *     <li>A positive integer n means the nth child.</li>
+   *     <li>A negative integer -n means the nth parent.</li>
+   *     </ul>
    * @param selectedModels
-   *          the list of models to select in the view connector.
+   *     the list of models to select in the view connector.
    * @param context
-   *          the action context.
+   *     the action context.
    */
-  protected void setSelectedModels(int[] viewPath,
-      Collection<?> selectedModels, Map<String, Object> context) {
+  protected void setSelectedModels(int[] viewPath, Collection<?> selectedModels, Map<String, Object> context) {
     IValueConnector modelConnector = getModelConnector(viewPath, context);
     if (modelConnector instanceof ICollectionConnector) {
-      setSelectedIndices(viewPath, ConnectorHelper.getIndicesOf(
-          (ICollectionConnector) modelConnector, selectedModels), context);
+      setSelectedIndices(viewPath, ConnectorHelper.getIndicesOf((ICollectionConnector) modelConnector, selectedModels),
+          context);
     }
   }
 
@@ -569,13 +624,11 @@ public abstract class AbstractActionContextAware {
    * action was triggered from.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the property view descriptor.
    */
-  protected IPropertyViewDescriptor getPropertyViewDescriptor(
-      Map<String, Object> context) {
-    return (IPropertyViewDescriptor) context
-        .get(ActionContextConstants.PROPERTY_VIEW_DESCRIPTOR);
+  protected IPropertyViewDescriptor getPropertyViewDescriptor(Map<String, Object> context) {
+    return (IPropertyViewDescriptor) context.get(ActionContextConstants.PROPERTY_VIEW_DESCRIPTOR);
   }
 
   /**
@@ -593,7 +646,7 @@ public abstract class AbstractActionContextAware {
    * @param <T>
    *     type inference return.
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the view this action was triggered on.
    */
   protected <T> IView<T> getView(Map<String, Object> context) {
@@ -615,19 +668,18 @@ public abstract class AbstractActionContextAware {
    * @param <T>
    *     type inference return.
    * @param viewPath
-   *          the view index path to follow.
-   *          <ul>
-   *          <li>A positive integer n means the nth child.</li> <li>A negative
-   *          integer -n means the nth parent.</li>
-   *          </ul>
+   *     the view index path to follow.
+   *     <ul>
+   *     <li>A positive integer n means the nth child.</li> <li>A negative
+   *     integer -n means the nth parent.</li>
+   *     </ul>
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the view this action was triggered on.
    */
   @SuppressWarnings("unchecked")
   protected <T> IView<T> getView(int[] viewPath, Map<String, Object> context) {
-    return navigate((IView<T>) context.get(ActionContextConstants.VIEW),
-        viewPath);
+    return navigate((IView<T>) context.get(ActionContextConstants.VIEW), viewPath);
   }
 
   /**
@@ -643,7 +695,7 @@ public abstract class AbstractActionContextAware {
    * action has to be triggered on.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the value connector this action was triggered on.
    */
   protected IValueConnector getViewConnector(Map<String, Object> context) {
@@ -663,20 +715,18 @@ public abstract class AbstractActionContextAware {
    * action has to be triggered on.
    *
    * @param viewPath
-   *          the view index path to follow.
-   *          <ul>
-   *          <li>A positive integer n means the nth child.</li> <li>A negative
-   *          integer -n means the nth parent.</li>
-   *          </ul>
+   *     the view index path to follow.
+   *     <ul>
+   *     <li>A positive integer n means the nth child.</li> <li>A negative
+   *     integer -n means the nth parent.</li>
+   *     </ul>
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the value connector this action was triggered on.
    */
-  protected IValueConnector getViewConnector(int[] viewPath,
-      Map<String, Object> context) {
+  protected IValueConnector getViewConnector(int[] viewPath, Map<String, Object> context) {
     if (viewPath == null || viewPath.length == 0) {
-      return (IValueConnector) context
-          .get(ActionContextConstants.VIEW_CONNECTOR);
+      return (IValueConnector) context.get(ActionContextConstants.VIEW_CONNECTOR);
     }
     IView<?> view = getView(viewPath, context);
     if (view != null) {
@@ -692,13 +742,13 @@ public abstract class AbstractActionContextAware {
    * @param <T>
    *     The root class of the view peers.
    * @param fromView
-   *          the view to start from.
+   *     the view to start from.
    * @param viewPath
-   *          the view index path to follow.
-   *          <ul>
-   *          <li>A positive integer n means the nth child.</li>
-   *          <li>A negative integer -n means the nth parent.</li>
-   *          </ul>
+   *     the view index path to follow.
+   *     <ul>
+   *     <li>A positive integer n means the nth child.</li>
+   *     <li>A negative integer -n means the nth parent.</li>
+   *     </ul>
    * @return the view navigated to.
    */
   protected <T> IView<T> navigate(IView<T> fromView, int... viewPath) {
@@ -713,12 +763,9 @@ public abstract class AbstractActionContextAware {
               }
             }
           } else {
-            if (target instanceof ICompositeView<?>
-                && ((ICompositeView<?>) target).getChildren() != null
-                && nextIndex < ((ICompositeView<?>) target).getChildren()
-                    .size()) {
-              target = ((ICompositeView<T>) target).getChildren()
-                  .get(nextIndex);
+            if (target instanceof ICompositeView<?> && ((ICompositeView<?>) target).getChildren() != null
+                && nextIndex < ((ICompositeView<?>) target).getChildren().size()) {
+              target = ((ICompositeView<T>) target).getChildren().get(nextIndex);
             } else {
               target = null;
             }

@@ -35,21 +35,54 @@ import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
  */
 public class ConnectorValueSetterCallback extends FileToByteArrayCallback {
 
+  private String modelPath;
+
   /**
    * {@inheritDoc}
+   *
+   * @param name
+   *     the name
+   * @param in
+   *     the in
+   * @param actionHandler
+   *     the action handler
+   * @param context
+   *     the context
    */
   @Override
   public void fileChosen(String name, InputStream in,
       IActionHandler actionHandler, Map<String, Object> context) {
     super.fileChosen(name, in, actionHandler, context);
     if (context.containsKey(ActionContextConstants.ACTION_PARAM)) {
+      String modelPath = getModelPath(context);
       Object valueToSet = getActionParameter(context);
-      IModelDescriptor modelDescriptor = getModelDescriptor(context);
+      IModelDescriptor modelDescriptor = getModelDescriptor(modelPath, context);
       if (modelDescriptor instanceof IStringPropertyDescriptor) {
         valueToSet = new String((byte[]) valueToSet);
       }
-      IValueConnector viewConnector = getViewConnector(context);
-      viewConnector.setConnectorValue(valueToSet);
+      IValueConnector modelConnectorConnector = getModelConnector(modelPath, context);
+      modelConnectorConnector.setConnectorValue(valueToSet);
     }
+  }
+
+  /**
+   * Gets model path.
+   *
+   * @param context
+   *     the context
+   * @return the model path
+   */
+  protected String getModelPath(Map<String, Object> context) {
+    return modelPath;
+  }
+
+  /**
+   * Sets model path.
+   *
+   * @param modelPath
+   *     the model path
+   */
+  public void setModelPath(String modelPath) {
+    this.modelPath = modelPath;
   }
 }

@@ -29,16 +29,44 @@ import org.jspresso.framework.action.IActionHandler;
  */
 public class ResetConnectorValueAction extends BackendAction {
 
+  private String modelPath;
+
   /**
    * Resets the model connector value to null.
    * <p>
    * {@inheritDoc}
+   *
+   * @param actionHandler
+   *     the action handler
+   * @param context
+   *     the context
+   * @return the boolean
    */
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    getModelConnector(context).setConnectorValue(null);
+    getModelConnector(getModelPath(context), context).setConnectorValue(null);
     return super.execute(actionHandler, context);
   }
 
+  /**
+   * Gets model path.
+   *
+   * @param context
+   *     the context
+   * @return the model path
+   */
+  protected String getModelPath(Map<String, Object> context) {
+    return modelPath;
+  }
+
+  /**
+   * Sets model path.
+   *
+   * @param modelPath
+   *     the model path
+   */
+  public void setModelPath(String modelPath) {
+    this.modelPath = modelPath;
+  }
 }
