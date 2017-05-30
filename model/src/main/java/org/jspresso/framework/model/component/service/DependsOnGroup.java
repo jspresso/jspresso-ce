@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2017 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -26,22 +26,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Allows to configure computed properties dependencies.
- *
- * On properties :
+ * Allows to group multiple {@code DependsOn} annotations.
  * <pre>
- *   @DependsOn(sourceCollection = Ord.CUSTOMERS, value = OrderCustomer.SALES_CONTRACT),
- *   @DependsOn({Address.LATITUDE, Address.LONGITUDE})
- *   public Point getGeopoint()
- * </pre>
- *
- * On collection properties
- * <pre>
- *   @DependsOn(sourceCollection = Ord.CUSTOMERS, value = OrderCustomer.SALES_CONTRACT),
+ *   @DependsOnGroup({
+ *     @DependsOn(sourceCollection = Ord.CUSTOMERS, value = OrderCustomer.SALES_CONTRACT),
+ *     @DependsOn({Address.LATITUDE, Address.LONGITUDE})
+ *   })
  *   public Set<Contracts> getCustomerContracts()
  * </pre>
- *
- * You can group {@code DependsOn} collections using {@code DependsOnGroup} annotation.
  *
  * @author Vincent Vandenschrick
  */
@@ -49,19 +41,12 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Inherited
 @Documented
-public @interface DependsOn {
+public @interface DependsOnGroup {
 
   /**
-   * Configures the source collection property to bind child property to.
+   * Configures the group of {@code DependsOn} to apply to this computed property.
    *
-   * @return the source collection property to bind child property to.
+   * @return the group of {@code DependsOn} to apply to this computed property.
    */
-  String sourceCollection() default "";
-
-  /**
-   * Configures the source properties to bind this computed property to.
-   *
-   * @return the source properties to bind this computed property to.
-   */
-  String[] value();
+  DependsOn[] value();
 }
