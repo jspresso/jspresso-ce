@@ -131,7 +131,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             return {
               padding: [2, 4],
-              margin: 2
+              margin: 2,
+              decorator: states.focused ? "focused-inset" : "inset"
             };
           }
         },
@@ -140,6 +141,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           base: true,
           style: function (states) {
             return {
+              marginLeft: 2,
               padding: [2, 4],
               backgroundColor : (states.disabled || states.readonly) ? "background-disabled" : "white"
             };
@@ -345,8 +347,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         "actionfield": {
           style: function (states) {
             return {
-              backgroundColor: "white",
-              padding: [2, 2]
+              backgroundColor: "white"
             };
           }
         },
@@ -355,7 +356,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           include: "textfield",
           style: function (states) {
             return {
-              marginLeft: 2
+              marginRight: 2
             };
           }
         },
