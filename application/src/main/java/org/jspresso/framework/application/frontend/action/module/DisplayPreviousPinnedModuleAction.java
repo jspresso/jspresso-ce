@@ -51,7 +51,7 @@ public class DisplayPreviousPinnedModuleAction<E, F, G> extends
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     Boolean blockBackwardNavigation = (Boolean) context.get(BLOCK_BACKWARD_MODULE_NAVIGATION);
-    if (blockBackwardNavigation != null && !blockBackwardNavigation) {
+    if (blockBackwardNavigation == null || !blockBackwardNavigation) {
       getController(context).displayPreviousPinnedModule();
     }
     return super.execute(actionHandler, context);
