@@ -64,38 +64,49 @@ public class DependsOnHelper {
     for (Method method : methods) {
       DependsOn dependsOn = method.getAnnotation(DependsOn.class);
       if (dependsOn != null) {
-        IAccessorFactory accessorFactory = accessorFactoryProvider.getAccessorFactory();
-        AccessorInfo accessorInfo = accessorFactory.getAccessorInfo(method);
-        String targetProperty = accessorInfo.getAccessedPropertyName();
-        EAccessorType accessorType = accessorInfo.getAccessorType();
-        String[] sourceProperties = dependsOn.value();
-        if (accessorType != EAccessorType.NONE && targetProperty != null) {
-          if (sourceProperties != null && sourceProperties.length > 0) {
-            String sourceCollectionProperty = dependsOn.sourceCollection();
-            if (sourceCollectionProperty != null && sourceCollectionProperty.length() > 0) {
-              for (String sourceProperty : sourceProperties) {
-                registerNotificationCollectionForwarding(sourceBean, accessorFactoryProvider, sourceCollectionProperty,
-                    sourceProperty, targetProperty);
-              }
-            } else {
-              for (String sourceProperty : sourceProperties) {
-                registerNotificationForwarding(sourceBean, accessorFactoryProvider, sourceProperty, targetProperty);
-              }
-            }
+        registerDependsOnListeners(dependsOn, sourceBean, method, accessorFactoryProvider);
+      }
+      DependsOnGroup dependsOnGroup = method.getAnnotation(DependsOnGroup.class);
+      if (dependsOnGroup != null) {
+        for (DependsOn groupedDependsOn : dependsOnGroup.value()) {
+          registerDependsOnListeners(groupedDependsOn, sourceBean, method, accessorFactoryProvider);
+        }
+      }
+    }
+  }
+
+  private static void registerDependsOnListeners(DependsOn dependsOn, IPropertyChangeCapable sourceBean,
+                                                   Method method, IAccessorFactoryProvider accessorFactoryProvider) {
+    IAccessorFactory accessorFactory = accessorFactoryProvider.getAccessorFactory();
+    AccessorInfo accessorInfo = accessorFactory.getAccessorInfo(method);
+    String targetProperty = accessorInfo.getAccessedPropertyName();
+    EAccessorType accessorType = accessorInfo.getAccessorType();
+    String[] sourceProperties = dependsOn.value();
+    if (accessorType != EAccessorType.NONE && targetProperty != null) {
+      if (sourceProperties != null && sourceProperties.length > 0) {
+        String sourceCollectionProperty = dependsOn.sourceCollection();
+        if (sourceCollectionProperty != null && sourceCollectionProperty.length() > 0) {
+          for (String sourceProperty : sourceProperties) {
+            registerNotificationCollectionForwarding(sourceBean, accessorFactoryProvider, sourceCollectionProperty,
+                sourceProperty, targetProperty);
           }
-        } else if (method.getParameterTypes().length == 0) {
-          if (sourceProperties != null && sourceProperties.length > 0) {
-            String sourceCollectionProperty = dependsOn.sourceCollection();
-            if (sourceCollectionProperty != null && sourceCollectionProperty.length() > 0) {
-              for (String sourceProperty : sourceProperties) {
-                registerNotificationCollectionForwarding(sourceBean, accessorFactoryProvider, sourceCollectionProperty,
-                    sourceProperty, method);
-              }
-            } else {
-              for (String sourceProperty : sourceProperties) {
-                registerNotificationForwarding(sourceBean, accessorFactoryProvider, sourceProperty, method);
-              }
-            }
+        } else {
+          for (String sourceProperty : sourceProperties) {
+            registerNotificationForwarding(sourceBean, accessorFactoryProvider, sourceProperty, targetProperty);
+          }
+        }
+      }
+    } else if (method.getParameterTypes().length == 0) {
+      if (sourceProperties != null && sourceProperties.length > 0) {
+        String sourceCollectionProperty = dependsOn.sourceCollection();
+        if (sourceCollectionProperty != null && sourceCollectionProperty.length() > 0) {
+          for (String sourceProperty : sourceProperties) {
+            registerNotificationCollectionForwarding(sourceBean, accessorFactoryProvider, sourceCollectionProperty,
+                sourceProperty, method);
+          }
+        } else {
+          for (String sourceProperty : sourceProperties) {
+            registerNotificationForwarding(sourceBean, accessorFactoryProvider, sourceProperty, method);
           }
         }
       }
