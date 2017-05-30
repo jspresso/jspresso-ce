@@ -2263,19 +2263,28 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         }
       });
       focusIndicator.addListener("pointerdown", function (e) {
-        if (!this.__isFocusedCellWritable(table)) {
-          focusIndicator.setZIndex(0);
-        }
+        /*
+         if (!this.__isFocusedCellWritable(table)) {
+           focusIndicator.setZIndex(0);
+         }
+         */
+        focusIndicator.setZIndex(0);
       }, this, true);
       paneScroller.addListener("pointerdown", function (e) {
-        if (!this.__isFocusedCellWritable(table)) {
-          focusIndicator.setZIndex(0);
-        }
+        /*
+         if (!this.__isFocusedCellWritable(table)) {
+         focusIndicator.setZIndex(0);
+         }
+         */
+        focusIndicator.setZIndex(0);
       }, this, true);
       paneScroller.addListener("pointerup", function (e) {
-        if (!this.__isFocusedCellWritable(table)) {
-          focusIndicator.setZIndex(1000);
-        }
+        /*
+         if (!this.__isFocusedCellWritable(table)) {
+         focusIndicator.setZIndex(1000);
+         }
+         */
+        focusIndicator.setZIndex(1000);
       }, this, true);
       table.setStatusBarVisible(false);
       table.highlightFocusedRow(false);
@@ -2347,6 +2356,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             this._getRemotePeerRegistry().register(rColumn.getAction());
             cellRenderer.setAction(rColumn.getAction());
           }
+          cellRenderer.setAsideActions(rColumn.getActionLists());
+          cellRenderer.setDisableActionsWithField(rColumn instanceof org.jspresso.framework.gui.remote.RActionField);
         }
         if (cellRenderer) {
           var alignment = null;
@@ -2767,7 +2778,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         label.setSelectable(true);
         var modelController = new qx.data.controller.Object(state);
         if (remoteLabel instanceof org.jspresso.framework.gui.remote.RLink && remoteLabel.getAction()) {
-          this._getRemotePeerRegistry().register(remoteLabel.getAction());
+          var remoteLabelAction = remoteLabel.getAction();
+          this._getRemotePeerRegistry().register(remoteLabelAction);
           labelComponent.setRich(true);
           modelController.addTarget(labelComponent, "label", "value", false, {
             converter: function (modelValue, model) {
@@ -2776,7 +2788,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
                 if (org.jspresso.framework.util.html.HtmlUtil.isHtml(modelValue)) {
                   htmlContent = modelValue;
                 } else {
-                  htmlContent = "<u style='cursor: pointer;' onMouseUp='executeAction();'>" + modelValue + "</u>";
+                  htmlContent = "<u style='cursor: pointer;' onMouseUp='executeAction(\""
+                      + remoteLabelAction.getGuid() + "\");'>" + modelValue + "</u>";
                 }
                 htmlContent = org.jspresso.framework.util.html.HtmlUtil.bindActionToHtmlContent(htmlContent,
                     remoteLabel.getAction());

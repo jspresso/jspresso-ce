@@ -53,14 +53,26 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     this._dialogStack.push([null, null, null]);
     qx.locale.Manager.getInstance().setLocale(this.__userLanguage);
     var actionHandler = this;
-    window.executeAction = function (actionGuid, actionCommand) {
+    window.executeAction = function (actionGuid, actionCommand, viewStateGuid, viewStatePermId) {
       actionCommand = (typeof actionCommand == 'undefined') ? null : actionCommand;
+      viewStateGuid = (typeof viewStateGuid == 'undefined') ? null : viewStateGuid;
+      viewStatePermId = (typeof viewStatePermId == 'undefined') ? null : viewStatePermId;
       var action = actionHandler.getRegistered(actionGuid);
       if (action) {
         var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
         actionEvent.setActionCommand(actionCommand);
         qx.event.Timer.once(function () {
-          actionHandler.execute(action, actionEvent);
+          try {
+            var savedDialogIndex = null;
+            if (viewStateGuid && viewStatePermId) {
+              savedDialogIndex = actionHandler.setCurrentViewStateGuid(viewStateGuid, viewStatePermId);
+            }
+            actionHandler.execute(action, actionEvent);
+          } finally {
+            if (viewStateGuid && viewStatePermId) {
+              actionHandler.setCurrentViewStateGuid(null, null, savedDialogIndex);
+            }
+          }
         }, {}, 100);
       }
     };

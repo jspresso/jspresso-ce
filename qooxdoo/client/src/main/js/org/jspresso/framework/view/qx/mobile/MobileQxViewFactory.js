@@ -1672,7 +1672,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       if (state) {
         var modelController = new qx.data.controller.Object(state);
         if (remoteLabel instanceof org.jspresso.framework.gui.remote.RLink && remoteLabel.getAction()) {
-          this._getRemotePeerRegistry().register(remoteLabel.getAction());
+          var remoteLabelAction = remoteLabel.getAction();
+          this._getRemotePeerRegistry().register(remoteLabelAction);
           modelController.addTarget(atom, "label", "value", false, {
             converter: function (modelValue, model) {
               if (modelValue) {
@@ -1680,7 +1681,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
                 if (org.jspresso.framework.util.html.HtmlUtil.isHtml(modelValue)) {
                   htmlContent = modelValue;
                 } else {
-                  htmlContent = "<u onMouseUp='executeAction();' onPointerUp='executeAction();' onTouchEnd='executeAction();'>"
+                  htmlContent = "<u onMouseUp='executeAction(\"" + remoteLabelAction.getGuid()
+                      + "\");' onPointerUp='executeAction(\"" + remoteLabelAction.getGuid()
+                      + "\");' onTouchEnd='executeAction(\"" + remoteLabelAction.getGuid() + "\");'>"
                       + modelValue + "</u>";
                 }
                 htmlContent = org.jspresso.framework.util.html.HtmlUtil.bindActionToHtmlContent(htmlContent,

@@ -345,6 +345,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         "actionfield": {
           style: function (states) {
             return {
+              backgroundColor: "white",
               padding: [2, 2]
             };
           }

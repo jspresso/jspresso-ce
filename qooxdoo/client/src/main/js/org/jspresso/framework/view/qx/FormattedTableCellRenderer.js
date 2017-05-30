@@ -27,7 +27,7 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
   },
 
   members: {
-    __format: null, __table: null, __action: null,
+    __format: null, __table: null, __action: null, __asideActions: null, __disableActionsWithField: false,
 
     _formatValue: function (cellInfo) {
       if (this.__format && cellInfo.value) {
@@ -37,6 +37,7 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
     },
 
     _getContentHtml: function (cellInfo) {
+      var cellViewState = cellInfo.rowData.getChildren().getItem(cellInfo.col + 1);
       if (!org.jspresso.framework.util.html.HtmlUtil.isHtml(cellInfo.value) && (typeof(cellInfo.value) == "string"
           || cellInfo.value instanceof String)) {
         if (cellInfo.value.indexOf("\n") >= 0) {
@@ -54,17 +55,64 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
         }
       }
       var htmlContent;
-      var action = this.__action;
       if (org.jspresso.framework.util.html.HtmlUtil.isHtml(cellInfo.value)) {
         htmlContent = cellInfo.value;
-      } else if (action) {
-        htmlContent = "<u style='cursor: pointer;' onMouseUp='executeAction();'>" + this.base(arguments, cellInfo)
-            + "</u>";
+      } else if (this.__action) {
+        htmlContent = "<u style='cursor: pointer;' onMouseUp='executeAction(\"" + this.__action.getGuid() + "\");'>"
+            + this.base(arguments, cellInfo) + "</u>";
       } else {
         htmlContent = this.base(arguments, cellInfo);
       }
-      htmlContent = org.jspresso.framework.util.html.HtmlUtil.bindActionToHtmlContent(htmlContent, action);
-      return htmlContent;
+      htmlContent = org.jspresso.framework.util.html.HtmlUtil.bindActionToHtmlContent(htmlContent, this.__action);
+      if ((!this.__disableActionsWithField || cellInfo.editable) && this.__asideActions) {
+        var actionsHtmlContent = "";
+        for (var i = 0; i < this.__asideActions.length; i++) {
+          var actionList = this.__asideActions[i];
+          for (var j = 0; j < actionList.getActions().length ; j++) {
+            var remoteAction = actionList.getActions()[j];
+            if (remoteAction.isEnabled()) {
+              var icon = remoteAction.getIcon();
+              if (icon) {
+                var imageUrlSpec = icon.getImageUrlSpec();
+                if (imageUrlSpec.startsWith("http") && imageUrlSpec.indexOf("?") >= 0) {
+                  imageUrlSpec += "&preferSVG=true";
+                } else {
+                  imageUrlSpec += "?preferSVG=true";
+                }
+                var iconDimension = new org.jspresso.framework.util.gui.Dimension().set({
+                  width: 16,
+                  height: 16
+                });
+
+                actionsHtmlContent += "<div";
+                actionsHtmlContent += " onMouseUp='executeAction(\"" + remoteAction.getGuid() + "\", null, \""
+                    + cellViewState.getGuid() + "\", \"" + cellViewState.getPermId() + "\")'"
+                actionsHtmlContent += " style='overflow: hidden;";
+                actionsHtmlContent += " cursor: pointer;";
+                actionsHtmlContent += " top: 5px;";
+
+                if (iconDimension) {
+                  if (iconDimension.getWidth()) {
+                    actionsHtmlContent += " width: " + iconDimension.getWidth() + "px;";
+                  }
+                  if (iconDimension.getHeight()) {
+                    actionsHtmlContent += " height: " + iconDimension.getHeight() + "px;";
+                  }
+                }
+                actionsHtmlContent += " background-position: center;";
+                actionsHtmlContent += " background-image: url(\"" + imageUrlSpec + "\");";
+                actionsHtmlContent += " background-repeat: no-repeat;'>";
+                actionsHtmlContent += "</div>";
+              }
+            }
+          }
+        }
+      }
+      htmlContent = "<div style='overflow: hidden; text-overflow: ellipsis; flex: 1'>" + htmlContent + "</div>"
+      if (actionsHtmlContent) {
+        htmlContent += actionsHtmlContent;
+      }
+      return "<div style='display: flex'>" + htmlContent + "</div>";
     },
 
     setAction: function (action) {
@@ -73,6 +121,14 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
 
     getAction: function () {
       return this.__action;
+    },
+
+    setAsideActions: function (asideActions) {
+      this.__asideActions = asideActions;
+    },
+
+    setDisableActionsWithField: function (disableActionsWithField) {
+      this.__disableActionsWithField = disableActionsWithField;
     },
 
     _getCellStyle: function (cellInfo) {

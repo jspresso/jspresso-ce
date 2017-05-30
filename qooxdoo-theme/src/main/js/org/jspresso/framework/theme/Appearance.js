@@ -173,7 +173,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         "actionfield": {
           style: function (states) {
             return {
-              padding: [2, 2]
+              padding: [2, 2],
+              backgroundColor: "white"
             };
           }
         },
