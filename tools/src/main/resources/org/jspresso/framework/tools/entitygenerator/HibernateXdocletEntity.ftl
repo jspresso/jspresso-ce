@@ -5,7 +5,7 @@
  */
 package ${package};
 </#macro>
-<#macro generateClassHeader componentDescriptor>
+<#macro generateClassHeader componentDescriptor extension>
   <#local componentName=componentDescriptor.name[componentDescriptor.name?last_index_of(".")+1..]/>
   <#local superInterfaceList=[]/>
   <#global isEntity=componentDescriptor.entity/>
@@ -33,6 +33,9 @@ package ${package};
     <#if isEntity && !(superEntity??)>
       <#local superInterfaceList = ["org.jspresso.framework.model.entity.IEntity"] + superInterfaceList/>
     </#if>
+  </#if>
+  <#if extension>
+    <#local superInterfaceList = ["I" + componentName + "Extension"] + superInterfaceList/>
   </#if>
   <#if componentDescriptor.serviceContractClassNames??>
     <#list componentDescriptor.serviceContractClassNames as serviceContractClassName>
@@ -94,8 +97,8 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    */
   String TABLE = "${reducedTableName}";
     <#if !superEntity??>
-      <@generateScalarGetter componentDescriptor=componentDescriptor propertyDescriptor=componentDescriptor.getPropertyDescriptor("id")/>
-      <@generateScalarGetter componentDescriptor=componentDescriptor propertyDescriptor=componentDescriptor.getPropertyDescriptor("version")/>
+      <@generateScalarGetter componentDescriptor=componentDescriptor propertyDescriptor=componentDescriptor.getPropertyDescriptor("id") overridden=false/>
+      <@generateScalarGetter componentDescriptor=componentDescriptor propertyDescriptor=componentDescriptor.getPropertyDescriptor("version") overridden=false/>
     </#if>
   </#if>
 
@@ -124,10 +127,11 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
      */
     public Object get(String propertyName) {
       switch(propertyName) {
+  <#local componentName=componentDescriptor.name[componentDescriptor.name?last_index_of(".")+1..]/>
   <#list componentDescriptor.propertyDescriptors as propertyDescriptor>
     <#if !propertyDescriptor.computed || propertyDescriptor.persistenceFormula??>
       <#local propertyName=propertyDescriptor.name/>
-        case ${generateSQLName(propertyName)}:
+        case <#--<#if propertyDescriptor.computed && propertyDescriptor.persistenceFormula??>${componentName}Extension.</#if>-->${generateSQLName(propertyName)}:
           return get${propertyName?cap_first}();
     </#if>
   </#list>
@@ -145,11 +149,12 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
      */
     public void set(String propertyName, Object propertyValue) {
       switch(propertyName) {
+  <#local componentName=componentDescriptor.name[componentDescriptor.name?last_index_of(".")+1..]/>
   <#list componentDescriptor.propertyDescriptors as propertyDescriptor>
     <#if !propertyDescriptor.computed || propertyDescriptor.persistenceFormula??>
       <#local propertyName=propertyDescriptor.name/>
       <#local propertyType=propertyDescriptor.modelTypeName/>
-        case ${generateSQLName(propertyName)}:
+        case <#--<#if propertyDescriptor.computed && propertyDescriptor.persistenceFormula??>${componentName}Extension.</#if>-->${generateSQLName(propertyName)}:
           set${propertyName?cap_first}((${propertyType}) propertyValue);
           break;
     </#if>
@@ -203,7 +208,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 
 </#macro>
 
-<#macro generateScalarGetter componentDescriptor propertyDescriptor>
+<#macro generateScalarGetter componentDescriptor propertyDescriptor overridden>
   <#local propertyName=propertyDescriptor.name/>
   <#if propertyDescriptor.name ="id">
     <#local propertyType="java.io.Serializable"/>
@@ -218,7 +223,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     <#local columnName=generateSQLName(propertyName)/>
     <#local columnNameGenerated = true/>
   </#if>
-  <#if !propertyDescriptor.computed>
+  <#if !propertyDescriptor.computed && !overridden>
   /**
    * Column name used to store the ${propertyName} property.
    */
@@ -838,8 +843,10 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   </#list>
 </#macro>
 
-<#macro generateCollectionPropertyAccessors componentDescriptor propertyDescriptor>
-  <@generatePropertyNameConstant propertyDescriptor=propertyDescriptor/>
+<#macro generateCollectionPropertyAccessors componentDescriptor propertyDescriptor overridden>
+  <#if !overridden>
+    <@generatePropertyNameConstant propertyDescriptor=propertyDescriptor/>
+  </#if>
   <@generateCollectionGetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
   <#if propertyDescriptor.modifiable>
     <@generateCollectionSetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
@@ -849,8 +856,10 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 
 </#macro>
 
-<#macro generateReferencePropertyAccessors componentDescriptor propertyDescriptor>
-  <@generatePropertyNameConstant propertyDescriptor=propertyDescriptor/>
+<#macro generateReferencePropertyAccessors componentDescriptor propertyDescriptor overridden>
+  <#if !overridden>
+    <@generatePropertyNameConstant propertyDescriptor=propertyDescriptor/>
+  </#if>
   <@generateComponentRefGetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
   <#if propertyDescriptor.modifiable>
     <@generateEntityRefSetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
@@ -858,12 +867,14 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 
 </#macro>
 
-<#macro generateScalarPropertyAccessors componentDescriptor propertyDescriptor>
-  <@generatePropertyNameConstant propertyDescriptor=propertyDescriptor/>
-  <#if instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor")>
-    <@generateEnumerationConstants propertyDescriptor=propertyDescriptor/>
+<#macro generateScalarPropertyAccessors componentDescriptor propertyDescriptor overridden>
+  <#if !overridden>
+    <@generatePropertyNameConstant propertyDescriptor=propertyDescriptor/>
+    <#if instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor")>
+      <@generateEnumerationConstants propertyDescriptor=propertyDescriptor/>
+    </#if>
   </#if>
-  <@generateScalarGetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
+  <@generateScalarGetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor overridden=overridden/>
   <#if propertyDescriptor.modifiable>
     <@generateScalarSetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
   </#if>
@@ -871,22 +882,32 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 </#macro>
 
 <#macro generatePropertyAccessors componentDescriptor propertyDescriptor>
+  <#assign overridden=false/>
+  <#if componentDescriptor.ancestorDescriptors??>
+    <#list componentDescriptor.ancestorDescriptors as ancestorDescriptor>
+      <#list ancestorDescriptor.propertyDescriptors as ancestorPropertyDescriptor>
+        <#if ancestorPropertyDescriptor.name == propertyDescriptor.name>
+          <#assign overridden=true/>
+        </#if>
+      </#list>
+    </#list>
+  </#if>
   <#if instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor")>
-    <@generateCollectionPropertyAccessors componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
+    <@generateCollectionPropertyAccessors componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor overridden=overridden/>
   <#elseif instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor")>
-    <@generateReferencePropertyAccessors componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
+    <@generateReferencePropertyAccessors componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor overridden=overridden/>
   <#else>
-    <@generateScalarPropertyAccessors componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
+    <@generateScalarPropertyAccessors componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor overridden=overridden/>
   </#if>
 
 </#macro>
 
-<#macro generateClassSource componentDescriptor>
-  <@generateClassHeader componentDescriptor=componentDescriptor/>
+<#macro generateClassSource componentDescriptor extension>
+  <@generateClassHeader componentDescriptor=componentDescriptor extension=extension/>
   <#if componentDescriptor.declaredPropertyDescriptors??>
     <#assign empty=true/>
     <#list componentDescriptor.declaredPropertyDescriptors as propertyDescriptor>
-      <#if propertyDescriptor.name != "id" && propertyDescriptor.name != "version">
+      <#if propertyDescriptor.name != "id" && propertyDescriptor.name != "version" && (!propertyDescriptor.computed || instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IStringPropertyDescriptor") && (propertyDescriptor.translatable || propertyDescriptor.name?ends_with("Nls") || propertyDescriptor.name?ends_with("Raw")))>
         <@generatePropertyAccessors componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
         <#assign empty=false/>
       </#if>
@@ -895,15 +916,42 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     // THIS IS JUST A MARKER INTERFACE.
     </#if>
   <#else>
-  // THIS IS JUST A MARKER INTERFACE.
+    // THIS IS JUST A MARKER INTERFACE.
   </#if>
 </#macro>
 
+<#macro generateExtensionSource componentDescriptor>
+  <#local componentName=componentDescriptor.name[componentDescriptor.name?last_index_of(".")+1..]/>
+
+/**
+ * The ${componentName} extension interface holding all computed properties.
+ */
+interface I${componentName}Extension {
+
+  <#if componentDescriptor.declaredPropertyDescriptors??>
+    <#assign empty=true/>
+    <#list componentDescriptor.declaredPropertyDescriptors as propertyDescriptor>
+      <#if propertyDescriptor.computed && (!instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IStringPropertyDescriptor") || !(propertyDescriptor.translatable || propertyDescriptor.name?ends_with("Nls") || propertyDescriptor.name?ends_with("Raw")))>
+        <@generatePropertyAccessors componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
+        <#assign empty=false/>
+      </#if>
+    </#list>
+    <#if empty>
+  // THIS IS JUST A MARKER INTERFACE.
+    </#if>
+  <#else>
+  // THIS IS JUST A MARKER INTERFACE.
+  </#if>
+}
+</#macro>
+
 <@generatePackageHeader componentDescriptor=componentDescriptor/>
-<@generateClassSource componentDescriptor=componentDescriptor/>
+<@generateClassSource componentDescriptor=componentDescriptor extension=true/>
 
 <#if componentDescriptor.translatable && !componentDescriptor.purelyAbstract>
-  <@generateClassSource componentDescriptor=componentTranslationsDescriptor.referencedDescriptor.elementDescriptor/>
+  <@generateClassSource componentDescriptor=componentTranslationsDescriptor.referencedDescriptor.elementDescriptor extension=false/>
 }
 </#if>
 }
+
+<@generateExtensionSource componentDescriptor=componentDescriptor/>
