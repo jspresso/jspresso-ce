@@ -1507,9 +1507,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         decoratedForm.setAllowStretchY(false, false);
         decoratedForm.add(form);
         if (!remoteForm.getWidthResizeable()) {
-          decoratedForm.setAllowStretchX(false, false);
+          decoratedForm.setAllowStretchX(false, true);
           var lefter = new qx.ui.container.Composite(new qx.ui.layout.Dock());
-          lefter.add(decoratedForm, {edge: "west"});
+          lefter.add(decoratedForm, {flex: 1});
           decoratedForm = lefter;
         }
         decoratedForm = this._applyComponentScrollability(decoratedForm, remoteForm);
