@@ -654,13 +654,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var toolTipState = rComponent.getToolTipState();
       if (toolTipState) {
         this._getRemotePeerRegistry().register(toolTipState);
-        var modelController = new qx.data.controller.Object(toolTipState);
-        var toolTip = new qx.ui.tooltip.ToolTip();
-        toolTip.setRich(true);
-        modelController.addTarget(toolTip, "label", "value", false, {
-          converter: this._modelToViewFieldConverter
-        });
-        component.setToolTip(toolTip);
+        this._attachStateToolTip(toolTipState, component);
       }
     },
 
@@ -1309,6 +1303,25 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       this.addComponentThresholdListener(button, "execute", listener, that);
     },
 
+    _attachStateToolTip: function (state, component) {
+      state.addListener("changeValue", function (e) {
+        if (e.getData()) {
+          component.setBlockToolTip(false);
+        } else {
+          component.setBlockToolTip(true);
+        }
+      });
+      if (!state.getValue()) {
+        component.setBlockToolTip(true);
+      }
+      var modelController = new qx.data.controller.Object(state);
+      var toolTip = new qx.ui.tooltip.ToolTip();
+      toolTip.setRich(true);
+      modelController.addTarget(toolTip, "label", "value", false, {
+        converter: this._modelToViewFieldConverter
+      });
+      component.setToolTip(toolTip);
+    },
 
     /**
      * @return {qx.ui.core.Widget}
@@ -1480,13 +1493,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       }
       // Special toolTip handling
       var state = remoteForm.getState();
-      var modelController = new qx.data.controller.Object(state);
-      var toolTip = new qx.ui.tooltip.ToolTip();
-      toolTip.setRich(true);
-      modelController.addTarget(toolTip, "label", "value", false, {
-        converter: this._modelToViewFieldConverter
-      });
-      form.setToolTip(toolTip);
+      this._attachStateToolTip(state, form);
       // Before decoration happen
       this._applyPreferredSize(remoteForm, form);
       // Since it's not resizeable anymore
@@ -1518,7 +1525,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @return {undefined}
      */
     _configureToolTip: function (remoteComponent, component) {
-      if (remoteComponent.getToolTip() != null && component.getToolTip() == null) {
+      if (remoteComponent.getToolTip() && component.getToolTip() == null) {
         var toolTip = new qx.ui.tooltip.ToolTip(remoteComponent.getToolTip());
         toolTip.setRich(true);
         component.setToolTip(toolTip);
