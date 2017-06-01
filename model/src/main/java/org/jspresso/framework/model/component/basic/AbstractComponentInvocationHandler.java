@@ -1332,7 +1332,7 @@ public abstract class AbstractComponentInvocationHandler implements
     if (value instanceof IEntity && collectionProperty.contains(value)) {
       if (collectionProperty instanceof Set<?>) {
         LOG.warn(
-            "You have added twice the same element to the following collection property : {}.{}" + componentDescriptor
+            "You have added twice the same element to the following collection property : {}.{}", componentDescriptor
                 .getComponentContract().getName(), propertyName);
       } else {
         throw new ComponentException(
