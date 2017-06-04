@@ -65,6 +65,16 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           }
         },
 
+        dynamiclabel: {
+          include: "label",
+          alias: "label",
+          style: function (states) {
+            return {
+              textColor: undefined
+            };
+          }
+        },
+
         "menubar": {
           base: true,
           style: function (states) {

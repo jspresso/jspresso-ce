@@ -985,6 +985,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      */
     _createHtmlText: function (remoteHtmlArea) {
       var htmlText = new qx.ui.basic.Label();
+      htmlText.setAppearance("dynamiclabel")
       htmlText.setRich(true);
       htmlText.setSelectable(true);
       var state = remoteHtmlArea.getState();
