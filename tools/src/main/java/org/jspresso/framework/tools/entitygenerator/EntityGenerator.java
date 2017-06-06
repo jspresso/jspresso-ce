@@ -24,9 +24,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -59,6 +61,7 @@ import org.jspresso.framework.util.freemarker.DedupSqlName;
 import org.jspresso.framework.util.freemarker.GenerateSqlName;
 import org.jspresso.framework.util.freemarker.InstanceOf;
 import org.jspresso.framework.util.freemarker.ReduceSqlName;
+import org.jspresso.framework.util.sql.SqlHelper;
 
 /**
  * Generates Jspresso powered component java code based on its descriptor.
@@ -231,7 +234,16 @@ public class EntityGenerator {
       }
       Map<String, Object> rootContext = new HashMap<>();
 
-      rootContext.put("generateSQLName", new GenerateSqlName());
+      GenerateSqlName sqlNameGenerator = new GenerateSqlName();
+      rootContext.put("generateSQLName", sqlNameGenerator);
+      GenerateSqlName constantNameGenerator = new GenerateSqlName();
+      constantNameGenerator.setKeyWordProvider(new SqlHelper.KeyWordProvider() {
+        @Override
+        public List<String> run() {
+          return Collections.EMPTY_LIST;
+        }
+      });
+      rootContext.put("generateConstantName", constantNameGenerator);
       rootContext.put("dedupSQLName", new DedupSqlName(false));
       rootContext.put("reduceSQLName", new ReduceSqlName(maxSqlNameSize, new DedupSqlName(true)));
       rootContext.put("instanceof", new InstanceOf(wrapper));

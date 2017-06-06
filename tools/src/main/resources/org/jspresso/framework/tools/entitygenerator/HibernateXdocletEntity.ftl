@@ -132,7 +132,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#list componentDescriptor.propertyDescriptors as propertyDescriptor>
     <#if !propertyDescriptor.computed || propertyDescriptor.persistenceFormula??>
       <#local propertyName=propertyDescriptor.name/>
-        case <#--<#if propertyDescriptor.computed && propertyDescriptor.persistenceFormula??>${componentName}Extension.</#if>-->${generateSQLName(propertyName)}:
+        case <#--<#if propertyDescriptor.computed && propertyDescriptor.persistenceFormula??>${componentName}Extension.</#if>-->${generateConstantName(propertyName)}:
           return get${propertyName?cap_first}();
     </#if>
   </#list>
@@ -155,7 +155,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     <#if !propertyDescriptor.computed || propertyDescriptor.persistenceFormula??>
       <#local propertyName=propertyDescriptor.name/>
       <#local propertyType=propertyDescriptor.modelTypeName/>
-        case <#--<#if propertyDescriptor.computed && propertyDescriptor.persistenceFormula??>${componentName}Extension.</#if>-->${generateSQLName(propertyName)}:
+        case <#--<#if propertyDescriptor.computed && propertyDescriptor.persistenceFormula??>${componentName}Extension.</#if>-->${generateConstantName(propertyName)}:
           set${propertyName?cap_first}((${propertyType}) propertyValue);
           break;
     </#if>
@@ -228,7 +228,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   /**
    * Column name used to store the ${propertyName} property.
    */
-  String ${generateSQLName(propertyName)}_COL = "${reduceSQLName(columnName)}";
+  String ${generateConstantName(propertyName)}_COL = "${reduceSQLName(columnName)}";
   </#if>
   /**
    * Gets the ${propertyName}.
@@ -829,7 +829,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   /**
    * Constant value for ${propertyName}.
    */
-  String ${generateSQLName(propertyName)} = "${propertyName}";
+  String ${generateConstantName(propertyName)} = "${propertyName}";
 
 </#macro>
 
@@ -839,7 +839,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   /**
    * Constant enumeration value for ${propertyName} : ${enumerationValue}.
    */
-  String ${generateSQLName(propertyName + "_" + enumerationValue)} = "${enumerationValue}";
+  String ${generateConstantName(propertyName + "_" + enumerationValue)} = "${enumerationValue}";
 
   </#list>
 </#macro>

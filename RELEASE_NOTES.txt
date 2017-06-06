@@ -1,5 +1,8 @@
 4.3
 ===
+- The new generator does not use anymore final "_" to name Java constants when they are SQL reserved keywords.
+  Programs referencing such named constants should be modified accordingly.
+
 - Edit startup/qooxdoo/client/src/main/py/config.json and add :
 
       "extend": [
