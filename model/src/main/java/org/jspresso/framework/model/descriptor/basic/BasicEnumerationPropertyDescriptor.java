@@ -19,6 +19,7 @@
 package org.jspresso.framework.model.descriptor.basic;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +52,10 @@ public class BasicEnumerationPropertyDescriptor extends
    */
   @Override
   public List<String> getEnumerationValues() {
-    return new ArrayList<>(valuesAndIconImageUrls.keySet());
+    if (valuesAndIconImageUrls != null) {
+      return new ArrayList<>(valuesAndIconImageUrls.keySet());
+    }
+    return Collections.emptyList();
   }
 
   /**
@@ -83,9 +87,11 @@ public class BasicEnumerationPropertyDescriptor extends
    *          the values to set.
    */
   public void setValues(List<String> values) {
-    valuesAndIconImageUrls = new LinkedHashMap<>();
-    for (String value : StringUtils.ensureSpaceFree(values)) {
-      valuesAndIconImageUrls.put(value, null);
+    if (values != null) {
+      valuesAndIconImageUrls = new LinkedHashMap<>();
+      for (String value : StringUtils.ensureSpaceFree(values)) {
+        valuesAndIconImageUrls.put(value, null);
+      }
     }
   }
 
