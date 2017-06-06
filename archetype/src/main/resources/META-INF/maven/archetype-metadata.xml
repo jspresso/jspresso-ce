@@ -64,12 +64,6 @@
         <include>**/*.jpg</include>
       </includes>
     </fileSet>
-    <fileSet filtered="true" packaged="false" encoding="UTF-8">
-      <directory>launches</directory>
-      <includes>
-        <include>*.launch</include>
-      </includes>
-    </fileSet>
   </fileSets>
   <modules>
     <module id="${rootArtifactId}-core" dir="core" name="${rootArtifactId}-core">
