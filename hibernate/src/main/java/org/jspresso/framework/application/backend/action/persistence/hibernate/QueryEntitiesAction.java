@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Disjunction;
@@ -85,8 +86,8 @@ public class QueryEntitiesAction extends AbstractQueryComponentsAction {
 
   private static final Logger LOG = LoggerFactory.getLogger(QueryEntitiesAction.class);
 
-  private static final String CRITERIA_FACTORY    = "CRITERIA_FACTORY";
-  private static final String CRITERIA_REFINER    = "CRITERIA_REFINER";
+  private static final String CRITERIA_FACTORY = "CRITERIA_FACTORY";
+  private static final String CRITERIA_REFINER = "CRITERIA_REFINER";
   private ICriteriaFactory criteriaFactory;
   private ICriteriaRefiner criteriaRefiner;
   private boolean          useInListForPagination;
@@ -193,7 +194,11 @@ public class QueryEntitiesAction extends AbstractQueryComponentsAction {
         if (queryComponent.getRecordCount() == null) {
           if (isUseCountForPagination()) {
             criteria.setProjection(Projections.rowCount());
-            totalCount = ((Number) criteria.getExecutableCriteria(hibernateSession).list().get(0)).intValue();
+            Criteria executableCriteria = criteria.getExecutableCriteria(hibernateSession);
+            if (queryComponent.getQueryTimeout() > 0) {
+              executableCriteria.setTimeout(queryComponent.getQueryTimeout());
+            }
+            totalCount = ((Number) executableCriteria.list().get(0)).intValue();
           } else {
             totalCount = IQueryComponent.UNKNOWN_COUNT;
           }
@@ -209,14 +214,22 @@ public class QueryEntitiesAction extends AbstractQueryComponentsAction {
         }
         if (useInListForPagination) {
           criteria.setProjection(Projections.id());
-          List<Serializable> entityIds = criteria.getExecutableCriteria(hibernateSession).setFirstResult(
-              page * pageSize).setMaxResults(pageSize).list();
+          Criteria executableCriteria = criteria.getExecutableCriteria(hibernateSession);
+          if (queryComponent.getQueryTimeout() > 0) {
+            executableCriteria.setTimeout(queryComponent.getQueryTimeout());
+          }
+          List<Serializable> entityIds = executableCriteria.setFirstResult(page * pageSize).setMaxResults(pageSize)
+                                                           .list();
           if (entityIds.isEmpty()) {
             entities = new ArrayList<>();
           } else {
             criteria = EnhancedDetachedCriteria.forEntityName(queryComponent.getQueryContract().getName());
-            entities = criteria.add(createEntityIdsInCriterion(entityIds, 500)).getExecutableCriteria(hibernateSession)
-                               .list();
+            Criteria chunkExecutableCriteria = criteria.add(createEntityIdsInCriterion(entityIds, 500))
+                                                       .getExecutableCriteria(hibernateSession);
+            if (queryComponent.getQueryTimeout() > 0) {
+              chunkExecutableCriteria.setTimeout(queryComponent.getQueryTimeout());
+            }
+            entities = chunkExecutableCriteria.list();
             Map<Serializable, IEntity> entitiesById = new HashMap<>();
             for (IEntity entity : entities) {
               entitiesById.put(entity.getId(), entity);
@@ -230,8 +243,11 @@ public class QueryEntitiesAction extends AbstractQueryComponentsAction {
             }
           }
         } else {
-          entities = criteria.getExecutableCriteria(hibernateSession).setFirstResult(page * pageSize).setMaxResults(
-              pageSize).list();
+          Criteria executableCriteria = criteria.getExecutableCriteria(hibernateSession);
+          if (queryComponent.getQueryTimeout() > 0) {
+            executableCriteria.setTimeout(queryComponent.getQueryTimeout());
+          }
+          entities = executableCriteria.setFirstResult(page * pageSize).setMaxResults(pageSize).list();
         }
       } else {
         if (refinerOrders != null) {
@@ -258,7 +274,7 @@ public class QueryEntitiesAction extends AbstractQueryComponentsAction {
       for (String prefetchProperty : prefetchProperties) {
         try {
           IAccessor propertyAccessor = accessorFactory.createPropertyAccessor(prefetchProperty,
-            queryComponent.getQueryContract());
+              queryComponent.getQueryContract());
           for (IEntity entity : entities) {
             try {
               propertyAccessor.getValue(entity);

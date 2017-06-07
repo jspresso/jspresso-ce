@@ -148,6 +148,13 @@ public interface IQueryComponent extends Map<String, Object>, IPageable, ISortab
   boolean isDistinctEnforced();
 
   /**
+   * Gets query timeout. Any negative value means no timeout.
+   *
+   * @return the query timeout
+   */
+  int getQueryTimeout();
+
+  /**
    * Performs any I18N dependent initialization on the query component.
    *
    * @param translationProvider

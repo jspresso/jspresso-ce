@@ -70,6 +70,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   private       Integer                 recordCount;
   private       Integer                 selectedRecordCount;
   private       boolean                 distinctEnforced;
+  private       int                     queryTimeout;
   private       List<?>                 queriedComponents;
   private       List<?>                 stickyResults;
   private       ITranslationProvider    translationProvider;
@@ -124,6 +125,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
       }
     }
     this.distinctEnforced = false;
+    this.queryTimeout = -1;
   }
 
   /**
@@ -836,6 +838,26 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    */
   public void setDistinctEnforced(boolean distinctEnforced) {
     this.distinctEnforced = distinctEnforced;
+  }
+
+  /**
+   * Gets query timeout. Any negative value means no timeout.
+   *
+   * @return the query timeout
+   */
+  @Override
+  public int getQueryTimeout() {
+    return queryTimeout;
+  }
+
+  /**
+   * Sets query timeout in seconds. Any negative value means no timeout.
+   *
+   * @param queryTimeout
+   *     the query timeout
+   */
+  public void setQueryTimeout(int queryTimeout) {
+    this.queryTimeout = queryTimeout;
   }
 
   /**

@@ -85,7 +85,7 @@ public class HibernateBackendController extends AbstractBackendController {
 
   private SessionFactory hibernateSessionFactory;
   private FlushMode defaultTxFlushMode = FlushMode.COMMIT;
-  private DataSource   noTxDataSource;
+  private DataSource noTxDataSource;
 
   /**
    * {@code JSPRESSO_SESSION_GLOBALS} is "JspressoSessionGlobals".
@@ -405,7 +405,7 @@ public class HibernateBackendController extends AbstractBackendController {
       Hibernate.initialize(propertyValue);
       if (propertyValue instanceof Collection<?> && propertyValue instanceof PersistentCollection) {
         relinkAfterInitialization((Collection<?>) propertyValue, componentOrEntity);
-        for (Iterator<?> ite = ((Collection<?>) propertyValue).iterator(); ite.hasNext();) {
+        for (Iterator<?> ite = ((Collection<?>) propertyValue).iterator(); ite.hasNext(); ) {
           Object collectionElement = ite.next();
           if (collectionElement instanceof IEntity) {
             if (isEntityRegisteredForDeletion((IEntity) collectionElement)) {
@@ -484,7 +484,7 @@ public class HibernateBackendController extends AbstractBackendController {
   @SuppressWarnings("unchecked")
   @Override
   protected <E> Collection<E> wrapDetachedCollection(IEntity owner, Collection<E> detachedCollection,
-                                                          Collection<E> snapshotCollection, String role) {
+                                                     Collection<E> snapshotCollection, String role) {
     Collection<E> varSnapshotCollection = snapshotCollection;
     if (!(detachedCollection instanceof PersistentCollection)) {
       String collectionRoleName = HibernateHelper.getHibernateRoleName(getComponentContract(owner), role);
@@ -562,8 +562,7 @@ public class HibernateBackendController extends AbstractBackendController {
   @Override
   @SuppressWarnings("unchecked")
   protected <E extends IEntity> Collection<?> mergeCollection(String propertyName, Object propertyValue,
-                                                                       E registeredEntity,
-                                                                       Collection<?> registeredCollection) {
+                                                              E registeredEntity, Collection<?> registeredCollection) {
     Collection<?> mergedCollection;
     if (propertyValue instanceof PersistentCollection) {
       Collection<?> snapshotCollection = null;
@@ -639,8 +638,8 @@ public class HibernateBackendController extends AbstractBackendController {
         // }
       }
       Map<String, Object> entityProperties = component.straightGetProperties();
-      IComponentDescriptor<?> componentDescriptor = getEntityFactory().getComponentDescriptor(getComponentContract(
-          component));
+      IComponentDescriptor<?> componentDescriptor = getEntityFactory().getComponentDescriptor(
+          getComponentContract(component));
       for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
         String propertyName = property.getKey();
         Object propertyValue = property.getValue();
@@ -765,7 +764,29 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   public <T extends IEntity> T findFirstByCriteria(DetachedCriteria criteria, EMergeMode mergeMode,
                                                    Class<? extends T> clazz) {
-    List<T> ret = findByCriteria(criteria, 0, 1, mergeMode, clazz);
+    return findFirstByCriteria(criteria, -1, mergeMode, clazz);
+  }
+
+  /**
+   * Search Hibernate using criteria. The result is then merged into session unless the method is called into a
+   * pre-existing transaction, in which case, the merge mode is ignored and the merge is not performed.
+   *
+   * @param <T>
+   *     the entity type to return
+   * @param criteria
+   *     the detached criteria.
+   * @param queryTimeout
+   *     the query timeout
+   * @param mergeMode
+   *     the merge mode to use when merging back retrieved entities or null     if no merge is
+   *     requested.
+   * @param clazz
+   *     the type of the entity.
+   * @return the first found entity or null
+   */
+  public <T extends IEntity> T findFirstByCriteria(DetachedCriteria criteria, int queryTimeout, EMergeMode mergeMode,
+                                                   Class<? extends T> clazz) {
+    List<T> ret = findByCriteria(criteria, 0, 1, queryTimeout, mergeMode, clazz);
     if (ret != null && !ret.isEmpty()) {
       return ret.get(0);
     }
@@ -787,9 +808,30 @@ public class HibernateBackendController extends AbstractBackendController {
    *     the type of the entity.
    * @return the first found entity or null
    */
-  public <T extends IEntity> List<T> findByCriteria(final DetachedCriteria criteria, EMergeMode mergeMode,
+  public <T extends IEntity> List<T> findByCriteria(DetachedCriteria criteria, EMergeMode mergeMode,
                                                     Class<? extends T> clazz) {
-    return findByCriteria(criteria, -1, -1, mergeMode, clazz);
+    return findByCriteria(criteria, -1, mergeMode, clazz);
+  }
+
+  /**
+   * Search Hibernate using criteria. The result is then merged into session unless the method is called into a
+   * pre-existing transaction, in which case, the merge mode is ignored and the merge is not performed.
+   *
+   * @param <T>
+   *     the entity type to return
+   * @param criteria
+   *     the detached criteria.
+   * @param mergeMode
+   *     the merge mode to use when merging back retrieved entities or null
+   *     if no merge is requested.
+   * @param clazz
+   *     the type of the entity.
+   * @return the first found entity or null
+   */
+  public <T extends IEntity> List<T> findByCriteria(final DetachedCriteria criteria, int queryTimeout,
+                                                    EMergeMode mergeMode, Class<? extends T> clazz) {
+
+    return findByCriteria(criteria, -1, -1, queryTimeout, mergeMode, clazz);
   }
 
   /**
@@ -812,8 +854,36 @@ public class HibernateBackendController extends AbstractBackendController {
    * @return the first found entity or null
    */
   @SuppressWarnings("UnusedParameters")
-  public <T extends IEntity> List<T> findByCriteria(final DetachedCriteria criteria, int firstResult, int maxResults,
+  public <T extends IEntity> List<T> findByCriteria(DetachedCriteria criteria, int firstResult, int maxResults,
                                                     EMergeMode mergeMode, Class<? extends T> clazz) {
+    return findByCriteria(criteria, firstResult, maxResults, -1, mergeMode, clazz);
+  }
+
+  /**
+   * Search Hibernate using criteria. The result is then merged into session unless the method is called into a
+   * pre-existing transaction, in which case, the merge mode is ignored and the merge is not performed.
+   *
+   * @param <T>
+   *     the entity type to return
+   * @param criteria
+   *     the detached criteria.
+   * @param firstResult
+   *     the first result rank to retrieve.
+   * @param maxResults
+   *     the max number of results to retrieve.
+   * @param queryTimeout
+   *     the query timeout or -1 if no timeout
+   * @param mergeMode
+   *     the merge mode to use when merging back retrieved entities or null     if no merge is
+   *     requested.
+   * @param clazz
+   *     the type of the entity.
+   * @return the first found entity or null
+   */
+  @SuppressWarnings("UnusedParameters")
+  public <T extends IEntity> List<T> findByCriteria(final DetachedCriteria criteria, int firstResult, int maxResults,
+                                                    int queryTimeout, EMergeMode mergeMode, Class<? extends T> clazz) {
+
     List<T> res;
     if (isUnitOfWorkActive()) {
       // merge mode must be ignored if a transaction is pre-existing, so force
@@ -824,17 +894,17 @@ public class HibernateBackendController extends AbstractBackendController {
       // res = (List<T>) cloneInUnitOfWork(find(criteria, firstResult,
       // maxResults, null));
 
-      res = find(criteria, firstResult, maxResults, null);
+      res = find(criteria, firstResult, maxResults, queryTimeout, null);
     } else {
       // merge mode is passed for merge to occur inside the transaction.
-      res = find(criteria, firstResult, maxResults, mergeMode);
+      res = find(criteria, firstResult, maxResults, queryTimeout, mergeMode);
     }
     return res;
   }
 
   private <T extends IEntity> List<T> find(final DetachedCriteria criteria, final int firstResult, final int maxResults,
-                                           final EMergeMode mergeMode) {
-    List<T> entities =  getTransactionTemplate().execute(new TransactionCallback<List<T>>() {
+                                           final int queryTimeout, final EMergeMode mergeMode) {
+    List<T> entities = getTransactionTemplate().execute(new TransactionCallback<List<T>>() {
 
       @SuppressWarnings("unchecked")
       @Override
@@ -845,6 +915,9 @@ public class HibernateBackendController extends AbstractBackendController {
         }
         if (maxResults > 0) {
           executableCriteria.setMaxResults(maxResults);
+        }
+        if (queryTimeout > 0) {
+          executableCriteria.setTimeout(queryTimeout);
         }
         List<T> entities = executableCriteria.list();
         if (mergeMode != null) {
@@ -1102,7 +1175,8 @@ public class HibernateBackendController extends AbstractBackendController {
    */
   @Override
   protected IEntityRegistry createEntityRegistry(String name,
-                                                 Map<Class<? extends IEntity>, Map<Serializable, IEntity>> backingStore) {
+                                                 Map<Class<? extends IEntity>, Map<Serializable, IEntity>>
+                                                     backingStore) {
     return new HibernateEntityRegistry(name, backingStore);
   }
 
