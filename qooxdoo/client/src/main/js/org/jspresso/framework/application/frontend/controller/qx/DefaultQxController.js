@@ -251,6 +251,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       this.__repeatStatusAtom = new qx.ui.basic.Atom();
       this.__repeatStatusAtom.setIcon("org/jspresso/framework/circle_grey.svg");
       this.__repeatStatusAtom.setAppearance("exit-button");
+      this.__repeatStatusAtom.hide();
       toolBar.add(this.__repeatStatusAtom);
       exitAction.setStyleName("exit-button");
       exitAction.setName(null);
@@ -731,6 +732,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
 
     _startCurrentActionTimer: function () {
       if (this.__repeatStatusAtom) {
+        this.__repeatStatusAtom.show();
         this.__repeatStatusAtom.setIcon("org/jspresso/framework/circle_green.svg");
       }
       this.base(arguments);
@@ -738,6 +740,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
 
     _stopCurrentActionTimer: function () {
       if (this.__repeatStatusAtom) {
+        this.__repeatStatusAtom.hide();
         this.__repeatStatusAtom.setIcon("org/jspresso/framework/circle_grey.svg");
       }
       this.base(arguments);

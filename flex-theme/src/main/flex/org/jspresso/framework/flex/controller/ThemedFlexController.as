@@ -163,7 +163,9 @@ public class ThemedFlexController extends DefaultFlexController {
       execute(exitAction);
     });
     rightHBox.addChild(exitButton);
-    rightHBox.addChild(getRepeatStatusImage());
+    var repeatStatusImage:Image = getRepeatStatusImage();
+    repeatStatusImage.visible = false;
+    rightHBox.addChild(repeatStatusImage);
 
     mainViewStack.styleName = "centralViewStack";
 

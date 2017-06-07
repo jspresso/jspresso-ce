@@ -276,6 +276,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     //trace(">>> Execute <<< " + action.name + " param = " + param);
     stopCurrentActionTimer();
     if (action.repeatPeriodMillis > 0) {
+      _repeatStatusImage.visible = true;
       _repeatStatusImage.source = _repeatGeenStatusIcon;
       _currentActionTimer = new Timer(action.repeatPeriodMillis);
       _currentActionTimer.addEventListener(TimerEvent.TIMER, function (event:TimerEvent):void {
@@ -927,6 +928,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
 
   private function stopCurrentActionTimer():void {
     if (_currentActionTimer) {
+      _repeatStatusImage.visible = false;
       _repeatStatusImage.source = _repeatGreyStatusIcon;
       _currentActionTimer.stop();
       _currentActionTimer = null;
