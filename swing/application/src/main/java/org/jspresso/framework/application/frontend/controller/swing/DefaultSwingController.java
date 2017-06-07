@@ -111,8 +111,8 @@ import org.jspresso.framework.view.swing.BasicTransferable;
 public class DefaultSwingController extends
     AbstractFrontendController<JComponent, Icon, Action> {
 
-  public static final String CIRCLE_GREY_PNG = "circle_grey-24x24.png";
-  public static final String CIRCLE_GREEN_PNG = "circle_green-24x24.png";
+  public static final String CIRCLE_GREY_PNG = "circle_grey-16x16.png";
+  public static final String CIRCLE_GREEN_PNG = "circle_green-16x16.png";
 
   private JFrame controllerFrame;
   private JDesktopPane    desktopPane;
@@ -323,6 +323,7 @@ public class DefaultSwingController extends
     if (action instanceof IDisplayableAction) {
       Integer repeatPeriodMillis = ((IDisplayableAction) action).getRepeatPeriodMillis();
       if(repeatPeriodMillis != null && repeatPeriodMillis > 0) {
+        repeatStatusLabel.setVisible(true);
         repeatStatusLabel.setIcon(repeatGeenStatusIcon);
         currentActionTimer = timerService.scheduleWithFixedDelay(new Runnable() {
           @Override
@@ -344,6 +345,7 @@ public class DefaultSwingController extends
 
   public void cancelCurrentActionTimer() {
     if (currentActionTimer != null) {
+      repeatStatusLabel.setVisible(false);
       repeatStatusLabel.setIcon(repeatGreyStatusIcon);
       currentActionTimer.cancel(false);
     }
@@ -619,6 +621,7 @@ public class DefaultSwingController extends
     }
     applicationToolBar.add(Box.createHorizontalGlue());
     applicationToolBar.add(repeatStatusLabel);
+    repeatStatusLabel.setVisible(false);
     applicationToolBar.add(Box.createHorizontalStrut(5));
     if (getHelpActions() != null && isAccessGranted(getHelpActions())) {
       try {
