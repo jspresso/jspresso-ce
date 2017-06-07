@@ -315,6 +315,8 @@ public class MongoBackendController extends AbstractBackendController {
               EMergeMode.MERGE_CLEAN_EAGER);
         }
       });
+    } else {
+      resetTransientEntity(entity);
     }
 
     // traverse the reachable dirty entities to explicitly reload the

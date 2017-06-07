@@ -74,4 +74,11 @@ public interface IEntityFactory extends IComponentFactory {
   <T extends IEntity> T createEntityInstance(Class<T> entityContract,
       Serializable id, boolean performInitialization);
 
+  /**
+   * Resets component to its initial transient values.
+   *
+   * @param entity
+   *     the entity to reset
+   */
+  void resetTransientEntity(IEntity entity);
 }

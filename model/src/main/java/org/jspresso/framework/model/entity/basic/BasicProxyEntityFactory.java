@@ -74,7 +74,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    * Performs necessary post instantiation initialization.
    *
    * @param entity
-   *          the instantiated entity.
+   *     the instantiated entity.
    */
   protected void initializeEntity(IEntity entity) {
     initializeComponent(entity);
@@ -93,7 +93,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    */
   @Override
   public final <T extends IEntity> T createEntityInstance(Class<T> entityContract, Serializable id,
-      boolean performInitialization) {
+                                                          boolean performInitialization) {
     final T createdEntity = createEntityInstance(entityContract, id, (Class<?>[]) null);
     createdEntity.addPropertyChangeListener(IEntity.VERSION, new PropertyChangeListener() {
 
@@ -116,7 +116,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    * Sets the entityGUIDGenerator.
    *
    * @param entityGUIDGenerator
-   *          the entityGUIDGenerator to set.
+   *     the entityGUIDGenerator to set.
    */
   public void setEntityGUIDGenerator(IGUIDGenerator<?> entityGUIDGenerator) {
     this.entityGUIDGenerator = entityGUIDGenerator;
@@ -126,7 +126,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    * Creates the entity proxy invocation handler.
    *
    * @param entityDescriptor
-   *          the entity descriptor.
+   *     the entity descriptor.
    * @return the entity proxy invocation handler.
    */
   protected InvocationHandler createEntityInvocationHandler(IComponentDescriptor<IEntity> entityDescriptor) {
@@ -145,10 +145,11 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
 
   @SuppressWarnings("unchecked")
   private <T extends IEntity> T createEntityInstance(Class<T> entityContract, Serializable id,
-      Class<?>... extraInterfaces) {
+                                                     Class<?>... extraInterfaces) {
     T entity;
     if (entityContract.isInterface()) {
-      IComponentDescriptor<IEntity> entityDescriptor = (IComponentDescriptor<IEntity>) getComponentDescriptor(entityContract);
+      IComponentDescriptor<IEntity> entityDescriptor = (IComponentDescriptor<IEntity>) getComponentDescriptor(
+          entityContract);
       if (entityDescriptor.isPurelyAbstract()) {
         throw new EntityException(entityDescriptor.getName() + " is purely abstract. It cannot be instantiated.");
       }
@@ -208,22 +209,41 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    * Performs necessary post instantiation initialization.
    *
    * @param component
-   *          the instantiated component.
+   *     the instantiated component.
    */
   protected void initializeComponent(IComponent component) {
-    IComponentDescriptor<?> componentDescriptor = getComponentDescriptor(component.getComponentContract());
+    initializeComponent(component, false);
+  }
+
+  /**
+   * Initialize component.
+   *
+   * @param component
+   *     the component
+   * @param resetValues
+   *     the reset values
+   */
+  protected void initializeComponent(IComponent component,boolean resetValues){
+      IComponentDescriptor<?> componentDescriptor = getComponentDescriptor(component.getComponentContract());
     for (IPropertyDescriptor propertyDescriptor : componentDescriptor.getPropertyDescriptors()) {
+      String propertyName = propertyDescriptor.getName();
       if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
-        component.straightSetProperty(propertyDescriptor.getName(),
+        component.straightSetProperty(propertyName,
             componentCollectionFactory.createComponentCollection(propertyDescriptor.getModelType()));
       } else if (propertyDescriptor instanceof IScalarPropertyDescriptor) {
         Object defaultValue = ((IScalarPropertyDescriptor) propertyDescriptor).getDefaultValue();
         if (defaultValue != null) {
           defaultValue = propertyDescriptor.interceptSetter(component, defaultValue);
           propertyDescriptor.preprocessSetter(component, defaultValue);
-          component.straightSetProperty(propertyDescriptor.getName(),
-              ((IScalarPropertyDescriptor) propertyDescriptor).getDefaultValue());
+          component.straightSetProperty(propertyName, defaultValue);
+        } else if (resetValues) {
+          if (!IEntity.ID.equals(propertyName) && !IEntity.VERSION.equals(propertyName) && propertyDescriptor
+              .isModifiable()) {
+            component.straightSetProperty(propertyName, null);
+          }
         }
+      } else if (resetValues && propertyDescriptor.isModifiable()) {
+        component.straightSetProperty(propertyName, null);
       }
     }
     if (component instanceof ILifecycleCapable) {
@@ -237,8 +257,9 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
   @Override
   @SuppressWarnings("unchecked")
   public IQueryComponent createQueryComponentInstance(Class<? extends IComponent> componentContract) {
-    return new QueryComponent(getQueryComponentDescriptorFactory().createQueryComponentDescriptor(
-        (IComponentDescriptor<IComponent>) getComponentDescriptor(componentContract)), this);
+    return new QueryComponent(getQueryComponentDescriptorFactory()
+        .createQueryComponentDescriptor((IComponentDescriptor<IComponent>) getComponentDescriptor(componentContract)),
+        this);
   }
 
   /**
@@ -261,7 +282,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    * Sets the componentCollectionFactory property.
    *
    * @param componentCollectionFactory
-   *          the componentCollectionFactory to set.
+   *     the componentCollectionFactory to set.
    */
   public void setComponentCollectionFactory(IComponentCollectionFactory componentCollectionFactory) {
     this.componentCollectionFactory = componentCollectionFactory;
@@ -271,7 +292,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    * Sets the componentDescriptorRegistry.
    *
    * @param componentDescriptorRegistry
-   *          the componentDescriptorRegistry to set.
+   *     the componentDescriptorRegistry to set.
    */
   public void setComponentDescriptorRegistry(IComponentDescriptorRegistry componentDescriptorRegistry) {
     this.componentDescriptorRegistry = componentDescriptorRegistry;
@@ -281,7 +302,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    * Sets the componentExtensionFactory property.
    *
    * @param componentExtensionFactory
-   *          the componentCollectionFactory to set.
+   *     the componentCollectionFactory to set.
    */
   public void setComponentExtensionFactory(IComponentExtensionFactory componentExtensionFactory) {
     this.componentExtensionFactory = componentExtensionFactory;
@@ -291,7 +312,7 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    * Creates the component proxy invocation handler.
    *
    * @param componentDescriptor
-   *          the component descriptor.
+   *     the component descriptor.
    * @return the component proxy invocation handler.
    */
   protected InvocationHandler createComponentInvocationHandler(IComponentDescriptor<IComponent> componentDescriptor) {
@@ -328,12 +349,13 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
 
   @SuppressWarnings("unchecked")
   private <T extends IComponent> T createComponentInstance(Class<T> componentContract, Object delegate,
-      Class<?>... extraInterfaces) {
+                                                           Class<?>... extraInterfaces) {
     if (IEntity.class.isAssignableFrom(componentContract)) {
-      throw new IllegalArgumentException(componentContract.getName()
-          + " is an entity contract. You should use createEntityInstance instead.");
+      throw new IllegalArgumentException(
+          componentContract.getName() + " is an entity contract. You should use createEntityInstance instead.");
     }
-    IComponentDescriptor<IComponent> componentDescriptor = (IComponentDescriptor<IComponent>) componentDescriptorRegistry
+    IComponentDescriptor<IComponent> componentDescriptor = (IComponentDescriptor<IComponent>)
+        componentDescriptorRegistry
         .getComponentDescriptor(componentContract);
     InvocationHandler componentHandler;
     if (delegate != null) {
@@ -379,9 +401,20 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    * Sets the queryComponentDescriptorFactory.
    *
    * @param queryComponentDescriptorFactory
-   *          the queryComponentDescriptorFactory to set.
+   *     the queryComponentDescriptorFactory to set.
    */
   public void setQueryComponentDescriptorFactory(IQueryComponentDescriptorFactory queryComponentDescriptorFactory) {
     this.queryComponentDescriptorFactory = queryComponentDescriptorFactory;
+  }
+
+  /**
+   * Resets entity to its initial transient values.
+   *
+   * @param entity
+   *     the entity to reset
+   */
+  @Override
+  public void resetTransientEntity(IEntity entity) {
+    initializeComponent(entity, true);
   }
 }

@@ -987,6 +987,8 @@ public class HibernateBackendController extends AbstractBackendController {
           }
         }
       });
+    } else {
+      resetTransientEntity(entity);
     }
 
     // traverse the reachable dirty entities to explicitly reload the

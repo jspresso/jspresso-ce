@@ -2697,4 +2697,16 @@ public abstract class AbstractBackendController extends AbstractController imple
   public IActionMonitoringPlugin getActionMonitoringPlugin() {
     return actionMonitoringPlugin;
   }
+
+  /**
+   * Resets a transient entity to its initial values.
+   *
+   * @param entity
+   *     the entity
+   */
+  protected void resetTransientEntity(IEntity entity) {
+    if (!entity.isPersistent()) {
+      getEntityFactory().resetTransientEntity(entity);
+    }
+  }
 }
