@@ -35,7 +35,6 @@ import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
 import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.gui.IconProvider;
 import org.jspresso.framework.util.lang.StringUtils;
-import org.jspresso.framework.view.descriptor.IDefaultViewDescriptorProvider;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.AbstractTreeViewDescriptor;
 
@@ -104,26 +103,30 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    */
   public static final String I18N_PAGE_HEADER_DESCRIPTION = "i18nPageHeaderDescription";
 
-  private String                         description;
-  private String                         pageHeaderDescription;
-  private String                         i18nHeaderDescription;
-  private String                         i18nPageHeaderDescription;
-  private Collection<String>             grantedRoles;
-  private String                         headerDescription;
-  private String                         i18nDescription;
-  private String                         i18nName;
-  private Icon                           icon;
-  private IconProvider                   iconProvider;
-  private IAction                        itemSelectionAction;
-  private List<Module>                   modules;
-  private String                         name;
-  private boolean                        startExpanded;
-  private boolean                        started;
-  private IAction                        startupAction;
-  private ISecurityHandler               securityHandler;
-  private IViewDescriptor                viewDescriptor;
-  private String                         permId;
-  private IDefaultViewDescriptorProvider defaultViewDescriptorProvider;
+  private String             description;
+  private String             pageHeaderDescription;
+  private String             i18nHeaderDescription;
+  private String             i18nPageHeaderDescription;
+  private Collection<String> grantedRoles;
+  private String             headerDescription;
+  private String             i18nDescription;
+  private String             i18nName;
+  private Icon               icon;
+  private IconProvider       iconProvider;
+  private IAction            itemSelectionAction;
+
+  private List<Module> modules;
+  private String       name;
+
+  private boolean startExpanded;
+  private boolean started;
+
+  private IAction          startupAction;
+  private ISecurityHandler securityHandler;
+
+  private IViewDescriptor viewDescriptor;
+
+  private String permId;
 
   /**
    * Constructs a new {@code Workspace} instance.
@@ -471,7 +474,6 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
     if (this.modules != null) {
       for (Module module : this.modules) {
         module.setSecurityHandler(getSecurityHandler());
-        module.setDefaultViewDescriptorProvider(getDefaultViewDescriptorProvider());
       }
     }
     firePropertyChange(MODULES, oldValue, getModules());
@@ -682,30 +684,5 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    */
   public void setStartExpanded(boolean startExpanded) {
     this.startExpanded = startExpanded;
-  }
-
-  /**
-   * Gets default view descriptor provider.
-   *
-   * @return the default view descriptor provider
-   */
-  public IDefaultViewDescriptorProvider getDefaultViewDescriptorProvider() {
-    return defaultViewDescriptorProvider;
-  }
-
-  /**
-   * Sets default view descriptor provider.
-   *
-   * @param defaultViewDescriptorProvider
-   *     the default view descriptor provider
-   */
-  public void setDefaultViewDescriptorProvider(IDefaultViewDescriptorProvider defaultViewDescriptorProvider) {
-    this.defaultViewDescriptorProvider = defaultViewDescriptorProvider;
-    List<Module> modules = getModules(true);
-    if (modules != null) {
-      for (Module module : modules) {
-        module.setDefaultViewDescriptorProvider(defaultViewDescriptorProvider);
-      }
-    }
   }
 }

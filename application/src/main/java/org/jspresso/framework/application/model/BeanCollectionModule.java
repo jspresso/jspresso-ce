@@ -32,7 +32,6 @@ import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
-import org.jspresso.framework.view.descriptor.IDefaultViewDescriptorProvider;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicCollectionViewDescriptor;
@@ -59,11 +58,11 @@ public class BeanCollectionModule extends Module {
    */
   public static final String MODULE_OBJECTS = "moduleObjects";
 
-  private IComponentDescriptor<?> elementComponentDescriptor;
-  private IViewDescriptor         elementViewDescriptor;
-  private List<?>                 moduleObjects;
-  private boolean                 detailViewIncluded;
-  private ActionList              navigateModuleObjectsActionList;
+  private IComponentDescriptor<Object> elementComponentDescriptor;
+  private IViewDescriptor              elementViewDescriptor;
+  private List<?>                      moduleObjects;
+  private boolean                      detailViewIncluded;
+  private ActionList                   navigateModuleObjectsActionList;
 
   /**
    * Instantiates a new Bean collection module.
@@ -123,11 +122,10 @@ public class BeanCollectionModule extends Module {
    */
   public IComponentDescriptor<?> getElementComponentDescriptor() {
     if (elementComponentDescriptor == null) {
-      IViewDescriptor pvDescriptor = getProjectedViewDescriptor();
-      if (pvDescriptor instanceof ICollectionViewDescriptor
-          && pvDescriptor.getModelDescriptor() != null) {
-        elementComponentDescriptor = ((ICollectionDescriptorProvider<?>) pvDescriptor
-            .getModelDescriptor()).getCollectionDescriptor().getElementDescriptor();
+      if (getProjectedViewDescriptor() instanceof ICollectionViewDescriptor
+          && getProjectedViewDescriptor().getModelDescriptor() != null) {
+        return ((ICollectionDescriptorProvider<?>) getProjectedViewDescriptor().getModelDescriptor())
+            .getCollectionDescriptor().getElementDescriptor();
       }
     }
     return elementComponentDescriptor;
@@ -139,15 +137,6 @@ public class BeanCollectionModule extends Module {
    * @return the elementViewDescriptor.
    */
   public IViewDescriptor getElementViewDescriptor() {
-    if (elementViewDescriptor == null) {
-      IComponentDescriptor<?> ecDescriptor = getElementComponentDescriptor();
-      if (ecDescriptor != null) {
-        IDefaultViewDescriptorProvider defaultViewDescriptorProvider = getDefaultViewDescriptorProvider();
-        if (defaultViewDescriptorProvider != null) {
-          elementViewDescriptor = defaultViewDescriptorProvider.getDefaultViewDescriptor(ecDescriptor);
-        }
-      }
-    }
     return elementViewDescriptor;
   }
 

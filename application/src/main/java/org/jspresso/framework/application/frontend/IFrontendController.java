@@ -29,7 +29,6 @@ import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.binding.IMvcBinder;
-import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.util.descriptor.IIconDescriptor;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.view.IView;
@@ -37,8 +36,6 @@ import org.jspresso.framework.view.IViewFactory;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IActionable;
 import org.jspresso.framework.view.action.IDisplayableAction;
-import org.jspresso.framework.view.descriptor.IDefaultViewDescriptorProvider;
-import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
  * General contract of frontend (view) application controllers.
@@ -51,8 +48,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  *     the actual action type used.
  * @author Vincent Vandenschrick
  */
-public interface IFrontendController<E, F, G> extends IController, IIconDescriptor, IActionable,
-    IDefaultViewDescriptorProvider {
+public interface IFrontendController<E, F, G> extends IController, IIconDescriptor, IActionable {
 
 
   /**

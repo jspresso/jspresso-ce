@@ -36,7 +36,6 @@ import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
 import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.lang.StringUtils;
-import org.jspresso.framework.view.descriptor.IDefaultViewDescriptorProvider;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptorProvider;
 
@@ -107,26 +106,25 @@ public class Module extends AbstractPropertyChangeCapable
    */
   public static final String I18N_HEADER_DESCRIPTION = "i18nHeaderDescription";
 
-  private String                         description;
-  private String                         i18nDescription;
-  private String                         headerDescription;
-  private String                         i18nHeaderDescription;
-  private boolean                        dirty;
-  private IAction                        entryAction;
-  private IAction                        exitAction;
-  private Collection<String>             grantedRoles;
-  private String                         i18nName;
-  private Icon                           icon;
-  private String                         name;
-  private Module                         parent;
-  private IViewDescriptor                projectedViewDescriptor;
-  private boolean                        started;
-  private IAction                        startupAction;
-  private ISecurityHandler               securityHandler;
-  private List<Module>                   subModules;
-  private Collection<Module>             stickySubModules;
-  private String                         permId;
-  private IDefaultViewDescriptorProvider defaultViewDescriptorProvider;
+  private String             description;
+  private String             i18nDescription;
+  private String             headerDescription;
+  private String             i18nHeaderDescription;
+  private boolean            dirty;
+  private IAction            entryAction;
+  private IAction            exitAction;
+  private Collection<String> grantedRoles;
+  private String             i18nName;
+  private Icon               icon;
+  private String             name;
+  private Module             parent;
+  private IViewDescriptor    projectedViewDescriptor;
+  private boolean            started;
+  private IAction            startupAction;
+  private ISecurityHandler   securityHandler;
+  private List<Module>       subModules;
+  private Collection<Module> stickySubModules;
+  private String             permId;
 
   /**
    * Constructs a new {@code Module} instance.
@@ -862,8 +860,7 @@ public class Module extends AbstractPropertyChangeCapable
   /**
    * Is sub module sticky and should not be removed when the module is restarted.
    *
-   * @param subModule
-   *     the sub module
+   * @param subModule the sub module
    * @return the boolean
    */
   public boolean isSubModuleSticky(Module subModule) {
@@ -914,30 +911,5 @@ public class Module extends AbstractPropertyChangeCapable
    */
   public void setI18nHeaderDescription(String i18nHeaderDescription) {
     this.i18nHeaderDescription = i18nHeaderDescription;
-  }
-
-  /**
-   * Gets default view descriptor provider.
-   *
-   * @return the default view descriptor provider
-   */
-  public IDefaultViewDescriptorProvider getDefaultViewDescriptorProvider() {
-    if (defaultViewDescriptorProvider != null) {
-      return defaultViewDescriptorProvider;
-    }
-    if (getParent() != null) {
-      return getParent().getDefaultViewDescriptorProvider();
-    }
-    return null;
-  }
-
-  /**
-   * Sets default view descriptor provider.
-   *
-   * @param defaultViewDescriptorProvider
-   *     the default view descriptor provider
-   */
-  public void setDefaultViewDescriptorProvider(IDefaultViewDescriptorProvider defaultViewDescriptorProvider) {
-    this.defaultViewDescriptorProvider = defaultViewDescriptorProvider;
   }
 }

@@ -33,7 +33,6 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.view.descriptor.EBorderType;
-import org.jspresso.framework.view.descriptor.IDefaultViewDescriptorProvider;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor;
@@ -132,13 +131,7 @@ public class BeanModule extends Module implements PropertyChangeListener {
         .getProjectedViewDescriptor();
     if (componentDescriptor != null) {
       if (projectedViewDescriptor == null) {
-        IDefaultViewDescriptorProvider defaultViewDescriptorProvider = getDefaultViewDescriptorProvider();
-        if (defaultViewDescriptorProvider != null) {
-          projectedViewDescriptor = defaultViewDescriptorProvider.getDefaultViewDescriptor(componentDescriptor);
-        }
-        if (projectedViewDescriptor == null) {
-          projectedViewDescriptor = createDefaultProjectedViewDescriptor();
-        }
+        projectedViewDescriptor = createDefaultProjectedViewDescriptor();
         setProjectedViewDescriptor(projectedViewDescriptor);
       }
       if (projectedViewDescriptor.getModelDescriptor() == null

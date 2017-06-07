@@ -70,7 +70,6 @@ import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
-import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.ISecurityContextBuilder;
 import org.jspresso.framework.security.SecurityHelper;
@@ -131,43 +130,42 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
   private static final   String LANG_KEY          = "LANG_KEY";
   private static final   String TZ_KEY            = "TZ_KEY";
   private static final   String CURR_DIALOG_VIEW  = "CURR_DIALOG_VIEW";
-  private final List<ModuleHistoryEntry>                      backwardHistoryEntries;
-  private final DefaultIconDescriptor                         controllerDescriptor;
-  private final List<Map<String, Object>>                     dialogContextStack;
-  private final List<ModuleHistoryEntry>                      forwardHistoryEntries;
-  private final Map<String, IMapView<E>>                      workspaceViews;
-  private final Map<String, Module>                           selectedModules;
-  private final Map<String, ICompositeValueConnector>         workspaceNavigatorConnectors;
-  private       boolean                                       started;
-  private       ActionMap                                     actionMap;
-  private       ActionMap                                     secondaryActionMap;
-  private       Locale                                        clientLocale;
-  private       IDisplayableAction                            exitAction;
-  private       String                                        forcedStartingLocale;
-  private       ActionMap                                     helpActionMap;
-  private       ActionMap                                     navigationActionMap;
-  private       UsernamePasswordHandler                       loginCallbackHandler;
-  private       String                                        loginContextName;
-  private       IViewDescriptor                               loginViewDescriptor;
-  private       boolean                                       moduleAutoPinEnabled;
-  private       IMvcBinder                                    mvcBinder;
-  private       IAction                                       onModuleEnterAction;
-  private       IAction                                       onModuleExitAction;
-  private       IAction                                       onModuleStartupAction;
-  private       String                                        selectedWorkspaceName;
-  private       IAction                                       loginAction;
-  private       IAction                                       startupAction;
-  private       boolean                                       tracksWorkspaceNavigator;
-  private       IViewFactory<E, F, G>                         viewFactory;
-  private       Map<String, Workspace>                        workspaces;
-  private       String                                        workspacesMenuIconImageUrl;
-  private       Integer                                       frameWidth;
-  private       Integer                                       frameHeight;
-  private       IPreferencesStore                             clientPreferencesStore;
-  private       boolean                                       checkActionThreadSafety;
-  private final PropertyChangeListener                        dirtInterceptor;
-  private       List<IAction>                                 actionStack;
-  private       Map<IComponentDescriptor<?>, IViewDescriptor> defaultViewDescriptors;
+  private final List<ModuleHistoryEntry>              backwardHistoryEntries;
+  private final DefaultIconDescriptor                 controllerDescriptor;
+  private final List<Map<String, Object>>             dialogContextStack;
+  private final List<ModuleHistoryEntry>              forwardHistoryEntries;
+  private final Map<String, IMapView<E>>              workspaceViews;
+  private final Map<String, Module>                   selectedModules;
+  private final Map<String, ICompositeValueConnector> workspaceNavigatorConnectors;
+  private       boolean                               started;
+  private       ActionMap                             actionMap;
+  private       ActionMap                             secondaryActionMap;
+  private       Locale                                clientLocale;
+  private       IDisplayableAction                    exitAction;
+  private       String                                forcedStartingLocale;
+  private       ActionMap                             helpActionMap;
+  private       ActionMap                             navigationActionMap;
+  private       UsernamePasswordHandler               loginCallbackHandler;
+  private       String                                loginContextName;
+  private       IViewDescriptor                       loginViewDescriptor;
+  private       boolean                               moduleAutoPinEnabled;
+  private       IMvcBinder                            mvcBinder;
+  private       IAction                               onModuleEnterAction;
+  private       IAction                               onModuleExitAction;
+  private       IAction                               onModuleStartupAction;
+  private       String                                selectedWorkspaceName;
+  private       IAction                               loginAction;
+  private       IAction                               startupAction;
+  private       boolean                               tracksWorkspaceNavigator;
+  private       IViewFactory<E, F, G>                 viewFactory;
+  private       Map<String, Workspace>                workspaces;
+  private       String                                workspacesMenuIconImageUrl;
+  private       Integer                               frameWidth;
+  private       Integer                               frameHeight;
+  private       IPreferencesStore                     clientPreferencesStore;
+  private       boolean                               checkActionThreadSafety;
+  private final PropertyChangeListener                dirtInterceptor;
+  private       List<IAction>                         actionStack;
 
   /**
    * Constructs a new {@code AbstractFrontendController} instance.
@@ -1796,7 +1794,6 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
           try {
             pushToSecurityContext(workspace);
             workspace.setSecurityHandler(this);
-            workspace.setDefaultViewDescriptorProvider(this);
             translateWorkspace(workspace);
             filteredWorkspaces.put(workspaceEntry.getKey(), workspaceEntry.getValue());
           } finally {
@@ -2492,26 +2489,5 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
   @Override
   public IActionMonitoringPlugin getActionMonitoringPlugin() {
     return getBackendController().getActionMonitoringPlugin();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public IViewDescriptor getDefaultViewDescriptor(IComponentDescriptor<?> componentDescriptor) {
-    if (defaultViewDescriptors != null) {
-      return defaultViewDescriptors.get(componentDescriptor);
-    }
-    return null;
-  }
-
-  /**
-   * Sets default view descriptors.
-   *
-   * @param defaultViewDescriptors
-   *     the default view descriptors
-   */
-  public void setDefaultViewDescriptors(Map<IComponentDescriptor<?>, IViewDescriptor> defaultViewDescriptors) {
-    this.defaultViewDescriptors = defaultViewDescriptors;
   }
 }
