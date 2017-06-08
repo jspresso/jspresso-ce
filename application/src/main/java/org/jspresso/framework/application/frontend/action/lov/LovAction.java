@@ -136,13 +136,14 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   private Map<String, Object>                        initializationMapping;
   private ILovViewDescriptorFactory                  lovViewDescriptorFactory;
   private ESelectionMode                             selectionMode;
-  private IDisplayableAction                         okAction;
-  private IAction                                    pagingAction;
-  private String                                     defaultIconImageURL;
-  private List<?>                                    staticComponentStore;
-  private IComponentDescriptorRegistry               componentDescriptorRegistry;
-  private IDisplayableAction                         createAction;
-  private ILovViewDescriptorForCreationFactory       lovViewDescriptorForCreationFactory;
+  private IDisplayableAction                   okAction;
+  private IAction                              pagingAction;
+  private String                               defaultIconImageURL;
+  private List<?>                              staticComponentStore;
+  private IComponentDescriptorRegistry         componentDescriptorRegistry;
+  private IDisplayableAction                   createAction;
+  private ILovViewDescriptorForCreationFactory lovViewDescriptorForCreationFactory;
+  private boolean                              preselectItems;
 
 
   /**
@@ -174,12 +175,15 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     context.put(CreateQueryComponentAction.COMPONENT_REF_DESCRIPTOR, erqDescriptor);
     context.put(REF_VIEW_DESCRIPTOR, getView(context).getDescriptor());
     IValueConnector viewConnector = getViewConnector(context);
-    Object preselectedItem = context.get(LOV_PRESELECTED_ITEM);
+    Object preselectedItem = null;
+    if (preselectItems) {
+      preselectedItem = context.get(LOV_PRESELECTED_ITEM);
+    }
     String autoCompletePropertyValue = getActionCommand(context);
 
     Object masterComponent = null;
     if (getModelDescriptor(context) instanceof IPropertyDescriptor && viewConnector.getParentConnector() != null) {
-      if (preselectedItem == null) {
+      if (preselectItems && preselectedItem == null) {
         preselectedItem = viewConnector.getConnectorValue();
       }
       // The following relies on a workaround used to determine the bean
@@ -890,5 +894,15 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    */
   public void setCreateAction(IDisplayableAction createAction) {
     this.createAction = createAction;
+  }
+
+  /**
+   * Should the LOV view pre-select items in the LOV view.
+   *
+   * @param preselectItems
+   *     Should the LOV view pre-select items in the LOV view
+   */
+  public void setPreselectItems(boolean preselectItems) {
+    this.preselectItems = preselectItems;
   }
 }

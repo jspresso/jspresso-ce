@@ -1382,6 +1382,7 @@
   <bean id="pickupAndAddAnyFrontAction" parent="lovAction">
     <property name="autoquery" value="true"/>
     <property name="selectionMode" value="MULTIPLE_INTERVAL_CUMULATIVE_SELECTION"/>
+    <property name="preselectItems" value="false" />
     <property name="okAction">
       <bean parent="lovOkFrontAction">
         <property name="nextAction" ref="addAnyToMasterFrontAction"/>
