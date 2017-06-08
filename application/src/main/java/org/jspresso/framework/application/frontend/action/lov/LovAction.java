@@ -33,6 +33,7 @@ import java.util.Set;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.AbstractQbeAction;
@@ -48,6 +49,8 @@ import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.IModelProvider;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
+import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
+import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorRegistry;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
@@ -98,17 +101,17 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   /**
    * {@code LOV_PRESELECTED_ITEM}.
    */
-  public static final  String LOV_PRESELECTED_ITEM     = "LOV_PRESELECTED_ITEM";
+  public static final String LOV_PRESELECTED_ITEM = "LOV_PRESELECTED_ITEM";
 
   /**
    * {@code LOV_SELECTED_ITEM}.
    */
-  public static final  String LOV_SELECTED_ITEM        = "LOV_SELECTED_ITEM";
+  public static final String LOV_SELECTED_ITEM = "LOV_SELECTED_ITEM";
 
   /**
    * {@code REF_VIEW_DESCRIPTOR}.
    */
-  public static final  String REF_VIEW_DESCRIPTOR      = "REF_VIEW_DESCRIPTOR";
+  public static final String REF_VIEW_DESCRIPTOR = "REF_VIEW_DESCRIPTOR";
 
   /**
    * {@code REF_VIEW_DESCRIPTOR}.
@@ -118,7 +121,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   /**
    * {@code LOV_DIALOG_ACTIONS}.
    */
-  public static final  String LOV_DIALOG_ACTIONS      = "LOV_DIALOG_ACTIONS";
+  public static final String LOV_DIALOG_ACTIONS = "LOV_DIALOG_ACTIONS";
 
   private static final String NON_LOV_TRIGGERING_CHARS =
       "%" + IQueryComponent.DISJUNCT + IQueryComponent.CONJUNCT + IQueryComponent.NOT_VAL + IQueryComponent.NULL_VAL;
@@ -164,7 +167,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     if (getStaticComponentStore() != null) {
       context.put(StaticQueryComponentsAction.COMPONENT_STORE_KEY, getStaticComponentStore());
     }
-    if (lovViewDescriptorForCreationFactory!=null) {
+    if (lovViewDescriptorForCreationFactory != null) {
       context.put(CREATE_ENTITY_LOV_VIEW_DESCRIPTOR_FACTORY, lovViewDescriptorForCreationFactory);
     }
     IReferencePropertyDescriptor<IComponent> erqDescriptor = getEntityRefQueryDescriptor(context);
@@ -186,7 +189,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
         masterComponent = ((IModelProvider) parentModelConnector).getModel();
       } else if (parentModelConnector instanceof ICollectionConnector) {
         IValueConnector parentCollectionConnector = viewConnector;
-        while (!(parentCollectionConnector instanceof ICollectionConnector) && parentCollectionConnector.getParentConnector() != null) {
+        while (!(parentCollectionConnector instanceof ICollectionConnector)
+            && parentCollectionConnector.getParentConnector() != null) {
           parentCollectionConnector = parentCollectionConnector.getParentConnector();
         }
         if (parentCollectionConnector != null && parentCollectionConnector instanceof ICollectionConnector) {
@@ -591,6 +595,16 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    */
   @SuppressWarnings("UnusedParameters")
   protected IComponentDescriptor<? extends IComponent> getEntityDescriptor(Map<String, Object> context) {
+    if (entityDescriptor == null) {
+      IModelDescriptor modelDescriptor = getModelDescriptor(context);
+      if (modelDescriptor instanceof ICollectionDescriptorProvider<?>) {
+        ICollectionDescriptor<?> collectionDescriptor = ((ICollectionDescriptorProvider<?>) modelDescriptor)
+            .getCollectionDescriptor();
+        if (collectionDescriptor != null) {
+          return (IComponentDescriptor<? extends IComponent>) collectionDescriptor.getElementDescriptor();
+        }
+      }
+    }
     return entityDescriptor;
   }
 
@@ -644,6 +658,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
   /**
    * Get initialization mapping.
+   *
    * @return the initialization mapping.
    */
   protected Map<String, Object> getInitializationMapping() {
@@ -667,7 +682,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    * @param lovViewDescriptorForCreationFactory
    *     the lovViewDescriptorForCreationFactory to set.
    */
-  public void setLovViewDescriptorForCreationFactory(ILovViewDescriptorForCreationFactory lovViewDescriptorForCreationFactory) {
+  public void setLovViewDescriptorForCreationFactory(
+      ILovViewDescriptorForCreationFactory lovViewDescriptorForCreationFactory) {
     this.lovViewDescriptorForCreationFactory = lovViewDescriptorForCreationFactory;
   }
 
