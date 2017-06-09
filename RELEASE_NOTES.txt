@@ -659,7 +659,7 @@ Create the it_IT, cs_CZ, sk_SK, ru_RU, bg_BG, tr_TR directories in startup/flex/
 
 - Ensure that antrun plugin and ant versions are at least the following. Otherwise, add the properties below to your
   root pom.xml :
-    <antrun-plugin.version>1.7</antrun-plugin.version>
+    <antrun-plugin.version>1.8</antrun-plugin.version>
     <ant-nodeps.version>1.8.1</ant-nodeps.version>
 
 - In order to speed up builds in Eclipse, please modify all project pom.xml by adding preserveLastModified="true" at the end

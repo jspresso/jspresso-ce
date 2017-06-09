@@ -14,16 +14,16 @@
 
 
     <!-- Plugins versions -->
-    <assembly-plugin.version>2.4</assembly-plugin.version>
-    <javadoc-plugin.version>2.9.1</javadoc-plugin.version>
-    <deploy-plugin.version>2.8.1</deploy-plugin.version>
-    <site-plugin.version>3.3</site-plugin.version>
-    <release-plugin.version>2.5.1</release-plugin.version>
-    <source-plugin.version>2.2.1</source-plugin.version>
-    <antrun-plugin.version>1.7</antrun-plugin.version>
-    <info-reports-plugin.version>2.7</info-reports-plugin.version>
+    <assembly-plugin.version>3.0.0</assembly-plugin.version>
+    <javadoc-plugin.version>2.10.4</javadoc-plugin.version>
+    <deploy-plugin.version>2.8.2</deploy-plugin.version>
+    <site-plugin.version>3.6</site-plugin.version>
+    <release-plugin.version>2.5.3</release-plugin.version>
+    <source-plugin.version>3.0.1</source-plugin.version>
+    <antrun-plugin.version>1.8</antrun-plugin.version>
+    <info-reports-plugin.version>2.9</info-reports-plugin.version>
     <webdav-jackrabbit.version>2.4</webdav-jackrabbit.version>
-    <dependency-plugin.version>2.8</dependency-plugin.version>
+    <dependency-plugin.version>3.0.1</dependency-plugin.version>
 
   </properties>
 
