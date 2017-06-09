@@ -1,5 +1,5 @@
-4.3
-===
+5.0.0
+=====
 - The new generator does not use anymore final "_" to name Java constants when they are SQL reserved keywords.
   Programs referencing such named constants should be modified accordingly.
 
