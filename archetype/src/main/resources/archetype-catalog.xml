@@ -1,0 +1,10 @@
+<archetype-catalog>
+  <archetypes>
+    <archetype>
+      <groupId>org.jspresso.framework</groupId>
+      <artifactId>jspresso-archetype</artifactId>
+      <version>${jspresso.version}</version>
+      <description>Jspresso CE Archetype (${jspresso.version})</description>
+    </archetype>
+  </archetypes>
+</archetype-catalog>

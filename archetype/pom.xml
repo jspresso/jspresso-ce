@@ -16,6 +16,7 @@
         <filtering>true</filtering>
         <includes>
           <include>**/archetype-metadata.xml</include>
+          <include>**/archetype-catalog.xml</include>
         </includes>
       </resource>
       <resource>
@@ -23,6 +24,7 @@
         <filtering>false</filtering>
         <excludes>
           <exclude>**/archetype-metadata.xml</exclude>
+          <exclude>**/archetype-catalog.xml</exclude>
         </excludes>
       </resource>
     </resources>
@@ -58,6 +60,52 @@
     </plugins>
   </build>
   <profiles>
+    <profile>
+      <id>deploy-catalog</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>deploy</phase>
+                <goals>
+                  <goal>bsh-property</goal>
+                </goals>
+                <configuration>
+                  <properties>
+                    <property>catalog.deploy.url</property>
+                  </properties>
+                  <source>catalog.deploy.url = project.getVersion().endsWith("-SNAPSHOT") ?
+                    project.getDistributionManagement().getSnapshotRepository().getUrl() :
+                    project.getDistributionManagement().getRepository().getUrl() ;
+                  </source>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>wagon-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>deploy-catalog</id>
+                <phase>deploy</phase>
+                <goals>
+                  <goal>upload-single</goal>
+                </goals>
+                <configuration>
+                  <fromFile>${project.build.directory}/classes/archetype-catalog.xml</fromFile>
+                  <url>${catalog.deploy.url}</url>
+                  <serverId>${project.distributionManagement.repository.id}</serverId>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
     <profile>
       <id>test</id>
       <build>
