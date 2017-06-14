@@ -74,7 +74,7 @@
     <qx-dark-theme.version>0.6</qx-dark-theme.version>
     <qx-java-rpc.version>0.8</qx-java-rpc.version>
     <jettison.version>1.3.4</jettison.version>
-    <hsql.version>2.3.4</hsql.version>
+    <hsql.version>2.3.5</hsql.version>
     <jnlp-servlet.version>1.1</jnlp-servlet.version>
     <servlet.version>2.5</servlet.version>
     <docbook.version>4.4</docbook.version>
@@ -129,6 +129,8 @@
     <jetty-plugin.version>9.2.17.v20160517</jetty-plugin.version>
     <appassembler-plugin.version>1.10</appassembler-plugin.version>
     <wagon-plugin.version>1.0</wagon-plugin.version>
+    <liquibase-plugin.version>3.6.0-SNAPSHOT</liquibase-plugin.version>
+    <liquibase-hibernate.version>3.6</liquibase-hibernate.version>
   </properties>
 
   <url>http://www.jspresso.org</url>
@@ -1567,6 +1569,28 @@
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>wagon-maven-plugin</artifactId>
           <version>${wagon-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.liquibase</groupId>
+          <artifactId>liquibase-maven-plugin</artifactId>
+          <version>${liquibase-plugin.version}</version>
+          <dependencies>
+            <dependency>
+              <groupId>${project.groupId}</groupId>
+              <artifactId>${project.parent.artifactId}-core</artifactId>
+              <version>${project.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>org.liquibase.ext</groupId>
+              <artifactId>liquibase-hibernate4</artifactId>
+              <version>${liquibase-hibernate.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>org.springframework</groupId>
+              <artifactId>spring-beans</artifactId>
+              <version>${spring.version}</version>
+            </dependency>
+          </dependencies>
         </plugin>
       </plugins>
     </pluginManagement>
