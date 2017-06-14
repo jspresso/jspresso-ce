@@ -107,7 +107,7 @@ public abstract class AbstractActionMonitoringPlugin extends AbstractActionConte
         currentModule = frontendController.getSelectedModule();
       } else {
         IBackendController backendController = getBackendController(context);
-        currentSession = frontendController.getApplicationSession();
+        currentSession = backendController.getApplicationSession();
         currentUser = backendController.getApplicationSession().getPrincipal();
       }
     }
