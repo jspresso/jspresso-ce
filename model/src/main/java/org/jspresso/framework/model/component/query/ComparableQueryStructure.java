@@ -384,6 +384,8 @@ public class ComparableQueryStructure extends QueryComponent {
    * @return the boolean
    */
   public boolean isInfValueUsed() {
-    return getComparator() != null;
+    return getComparator() != null
+        && !ComparableQueryStructureDescriptor.NU.equals(getComparator())
+        && !ComparableQueryStructureDescriptor.NN.equals(getComparator());
   }
 }
