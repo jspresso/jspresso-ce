@@ -1003,4 +1003,15 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
   public void setPrefetchProperties(List<String> prefetchProperties) {
     this.prefetchProperties = prefetchProperties;
   }
+
+  /**
+   * Create a defensive copy to avoid java.util.{@link java.util.ConcurrentModificationException} due to the fact that
+   * the {@link #get(Object)} method can lead to a {@link #put(String, Object)}.
+   * Fixes bug jspresso-ce-303.
+   * @return
+   */
+  @Override
+  public Set<String> keySet() {
+    return new HashSet<>(super.keySet());
+  }
 }
