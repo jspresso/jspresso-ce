@@ -3797,4 +3797,31 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   public void setDefaultHideActionWhenDisabled(boolean defaultHideActionWhenDisabled) {
     this.defaultHideActionWhenDisabled = defaultHideActionWhenDisabled;
   }
+
+  /**
+   * Is property view access granted boolean.
+   *
+   * @param propertyViewDescriptor
+   *     the property view descriptor
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param actionHandler
+   *     the action handler
+   * @return the boolean
+   */
+  protected boolean isPropertyViewAccessGranted(IPropertyViewDescriptor propertyViewDescriptor,
+                                                IComponentDescriptor<?> componentDescriptor,
+                                                IActionHandler actionHandler) {
+    boolean accessGranted = actionHandler.isAccessGranted(propertyViewDescriptor);
+    String path = propertyViewDescriptor.getModelDescriptor().getName();
+    while (path.indexOf(".") >= 0) {
+      path = path.substring(0, path.indexOf("."));
+      IPropertyDescriptor parentPropertyDescriptor = componentDescriptor.getPropertyDescriptor(path);
+      if (parentPropertyDescriptor != null) {
+        accessGranted = accessGranted && actionHandler.isAccessGranted(parentPropertyDescriptor);
+      }
+    }
+    return accessGranted;
+  }
+
 }

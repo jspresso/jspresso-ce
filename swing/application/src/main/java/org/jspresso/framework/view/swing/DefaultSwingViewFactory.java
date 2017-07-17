@@ -633,7 +633,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
         IView<JComponent> propertyView = createView(propertyViewDescriptor, actionHandler, locale);
         propertyView.setParent(view);
 
-        boolean forbidden = !actionHandler.isAccessGranted(propertyViewDescriptor);
+        boolean forbidden = !isPropertyViewAccessGranted(propertyViewDescriptor, modelDescriptor, actionHandler);
         if (forbidden) {
           propertyView.setPeer(createSecurityComponent());
         } else {
@@ -2310,7 +2310,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
         .entrySet()) {
       IPropertyViewDescriptor columnViewDescriptor = columnViewDescriptorEntry.getKey();
       String columnId = columnViewDescriptor.getModelDescriptor().getName();
-      if (actionHandler.isAccessGranted(columnViewDescriptor)) {
+      if (isPropertyViewAccessGranted(columnViewDescriptor, rowDescriptor, actionHandler)) {
         try {
           actionHandler.pushToSecurityContext(columnViewDescriptor);
           IValueConnector columnConnector = createColumnConnector(columnViewDescriptor, rowDescriptor, actionHandler);

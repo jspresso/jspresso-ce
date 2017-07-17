@@ -1568,7 +1568,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         propertyView.getPeer().setIcon(null);
         propertyView.setParent(view);
 
-        boolean forbidden = !actionHandler.isAccessGranted(propertyViewDescriptor);
+        boolean forbidden = !isPropertyViewAccessGranted(propertyViewDescriptor, modelDescriptor, actionHandler);
         if (forbidden) {
           RComponent securityComponent = createSecurityComponent();
           securityComponent.setPreferredSize(new Dimension(1, 1));

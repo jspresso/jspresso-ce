@@ -258,7 +258,7 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
         actionHandler);
     for (Map.Entry<IPropertyViewDescriptor, Object[]> columnViewDescriptorEntry : userColumnViewDescriptors.entrySet()) {
       IPropertyViewDescriptor columnViewDescriptor = columnViewDescriptorEntry.getKey();
-      if (actionHandler.isAccessGranted(columnViewDescriptor)) {
+      if (isPropertyViewAccessGranted(columnViewDescriptor, rowDescriptor, actionHandler)) {
         IView<RComponent> column = createView(columnViewDescriptor, actionHandler, locale);
         column.setParent(view);
         // Do not use standard createColumnConnector method to preserve
