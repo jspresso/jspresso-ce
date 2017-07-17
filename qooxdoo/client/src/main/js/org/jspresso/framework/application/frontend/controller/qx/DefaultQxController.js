@@ -792,11 +792,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      */
     _updateStatusCommand: function (remoteUpdateStatusCommand) {
       var status = remoteUpdateStatusCommand.getStatus();
-      if (status != null && status.length > 0) {
-        this.__statusBar.setValue(status);
-        this.__statusBar.setVisibility("visible");
-      } else {
-        this.__statusBar.setVisibility("excluded");
+      if (this.__statusBar) {
+        if (status != null && status.length > 0) {
+          this.__statusBar.setValue(status);
+          this.__statusBar.setVisibility("visible");
+        } else {
+          this.__statusBar.setVisibility("excluded");
+        }
       }
     },
 
