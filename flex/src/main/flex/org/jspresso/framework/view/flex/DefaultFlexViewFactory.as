@@ -716,7 +716,7 @@ public class DefaultFlexViewFactory {
   protected function decorateWithActions(remoteComponent:RComponent, component:UIComponent):UIComponent {
     if (remoteComponent.focusGainedAction) {
       component.addEventListener(FocusEvent.FOCUS_IN, function (event:FocusEvent):void {
-        getActionHandler().execute(remoteComponent.focusGainedAction);
+        getActionHandler().execute(remoteComponent.focusGainedAction, null, null, false);
       });
     }
     var decorator:UIComponent;
