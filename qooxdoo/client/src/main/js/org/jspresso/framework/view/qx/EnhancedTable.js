@@ -29,6 +29,17 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedTable", {
     this.addListener("pointermove", this._refineToolTip, this);
   },
 
+  properties: {
+    lastFocusedRow: {
+      check: "Integer",
+      nullable: true
+    },
+    lastFocusedColumn: {
+      check: "Integer",
+      nullable: true
+    }
+  },
+
   members: {
     _refineToolTip: function (e) {
       var v = null;

@@ -111,4 +111,11 @@ public interface IPropertyViewDescriptor extends IViewDescriptor, IClientTypeAwa
    */
   IAction getFocusGainedAction();
 
+  /**
+   * Gets the focus lost action.
+   *
+   * @return the the focus lost action
+   */
+  IAction getFocusLostAction();
+
 }

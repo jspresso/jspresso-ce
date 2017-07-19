@@ -49,6 +49,7 @@ public class RComponent extends RemotePeer implements IRemoteStateOwner {
   private var _preferredSize:Dimension;
   private var _styleName:String;
   private var _focusGainedAction:RAction;
+  private var _focusLostAction:RAction;
 
   private var _peer:Object;
 
@@ -206,6 +207,14 @@ public class RComponent extends RemotePeer implements IRemoteStateOwner {
 
   public function set focusGainedAction(value:RAction):void {
     _focusGainedAction = value;
+  }
+
+  public function get focusLostAction():RAction {
+    return _focusLostAction;
+  }
+
+  public function set focusLostAction(value:RAction):void {
+    _focusLostAction = value;
   }
 }
 }

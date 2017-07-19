@@ -42,6 +42,8 @@ public class EnhancedDataGrid extends DataGrid {
 
   private var preventEditing:Boolean;
 
+  private var _lastFocusedRow:int = -1;
+  private var _lastFocusedColumn:int = -1;
   private var lastClickedRow:int;
   private var lastClickedColumn:int;
   private var _savedSortIndex:int;
@@ -230,6 +232,23 @@ public class EnhancedDataGrid extends DataGrid {
   private function applyTargetHScroll(event:TimerEvent):void {
     super.horizontalScrollPosition = NaN;
     super.horizontalScrollPosition = _targetHScrollPosition;
+  }
+
+
+  public function get lastFocusedRow():int {
+    return _lastFocusedRow;
+  }
+
+  public function set lastFocusedRow(value:int):void {
+    _lastFocusedRow = value;
+  }
+
+  public function get lastFocusedColumn():int {
+    return _lastFocusedColumn;
+  }
+
+  public function set lastFocusedColumn(value:int):void {
+    _lastFocusedColumn = value;
   }
 }
 }

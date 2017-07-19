@@ -57,6 +57,7 @@ public abstract class RComponent extends RemotePeer implements
   private RemoteValueState toolTipState;
   private String           styleName;
   private RAction          focusGainedAction;
+  private RAction          focusLostAction;
 
   @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
   private final transient Set<RAction> actionHardReferences;
@@ -466,5 +467,24 @@ public abstract class RComponent extends RemotePeer implements
    */
   public void setFocusGainedAction(RAction focusGainedAction) {
     this.focusGainedAction = focusGainedAction;
+  }
+
+  /**
+   * Gets focus lost action.
+   *
+   * @return the focus lost action
+   */
+  public RAction getFocusLostAction() {
+    return focusLostAction;
+  }
+
+  /**
+   * Sets focus lost action.
+   *
+   * @param focusLostAction
+   *     the focus lost action
+   */
+  public void setFocusLostAction(RAction focusLostAction) {
+    this.focusLostAction = focusLostAction;
   }
 }

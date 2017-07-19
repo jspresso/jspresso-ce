@@ -1782,48 +1782,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    *     the component view descriptor.
    * @return the created table.
    */
-  protected JTable createJTable(ITableViewDescriptor viewDescriptor) {
-    JTable table = new JTable() {
-
-      private static final long serialVersionUID = -2766744091893464462L;
-
-      /**
-       * Override this method to fix a bug in the JVM which causes the table to
-       * start editing when a mnemonic key or function key is pressed.
-       */
-      @Override
-      protected boolean processKeyBinding(KeyStroke ks, KeyEvent e, int condition, boolean pressed) {
-        if (SwingUtilities.getUIInputMap(this, condition) != null && SwingUtilities.getUIInputMap(this, condition).get(
-            ks) != null) {
-          return super.processKeyBinding(ks, e, condition, pressed);
-        }
-        /**
-         * ignore all keys that have not been registered
-         */
-        if (getInputMap(condition).get(ks) != null) {
-          return false;
-        }
-        boolean foundInAncestors = false;
-        JComponent parent = null;
-        if (getParent() instanceof JComponent) {
-          parent = (JComponent) getParent();
-        }
-        while (!foundInAncestors && parent != null) {
-          if (parent.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).get(ks) != null) {
-            foundInAncestors = true;
-          }
-          if (parent.getParent() instanceof JComponent) {
-            parent = (JComponent) parent.getParent();
-          } else {
-            parent = null;
-          }
-        }
-        if (!foundInAncestors) {
-          return super.processKeyBinding(ks, e, condition, pressed);
-        }
-        return false;
-      }
-    };
+  protected EnhancedJTable createJTable(ITableViewDescriptor viewDescriptor) {
+    EnhancedJTable table = new EnhancedJTable();
     table.setSurrendersFocusOnKeystroke(true);
     // There is a bug regarding editing table when drag is enabled.
     // table.setDragEnabled(true);
@@ -2287,7 +2247,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
         modelDescriptor.getName() + "Element", rowDescriptor.getToHtmlProperty());
     ICollectionConnector connector = getConnectorFactory().createCollectionConnector(modelDescriptor.getName(),
         getMvcBinder(), rowConnectorPrototype);
-    JTable viewComponent = createJTable(viewDescriptor);
+    final EnhancedJTable viewComponent = createJTable(viewDescriptor);
     viewComponent.getTableHeader().setReorderingAllowed(viewDescriptor.isColumnReorderingAllowed());
     JScrollPane scrollPane = createJScrollPane();
     scrollPane.setViewportView(viewComponent);
@@ -2413,13 +2373,60 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     }
     tableModel.setRowFontProperty(dynamicFontProperty);
 
+    viewComponent.getColumnModel().addColumnModelListener(new TableColumnModelListener() {
+      @Override
+      public void columnAdded(TableColumnModelEvent e) {
+        // NO-OP
+      }
+
+      @Override
+      public void columnRemoved(TableColumnModelEvent e) {
+        // NO-OP
+      }
+
+      @Override
+      public void columnMoved(TableColumnModelEvent e) {
+        // NO-OP
+      }
+
+      @Override
+      public void columnMarginChanged(ChangeEvent e) {
+        // NO-OP
+      }
+
+      @Override
+      public void columnSelectionChanged(ListSelectionEvent lse) {
+        if (!lse.getValueIsAdjusting()) {
+          SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+              viewComponent.setLastFocusedColumn(viewComponent.getSelectedColumn());
+            }
+          });
+        }
+      }
+    });
+    viewComponent.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+      @Override
+      public void valueChanged(ListSelectionEvent lse) {
+        if (!lse.getValueIsAdjusting()) {
+          SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+              viewComponent.setLastFocusedRow(viewComponent.getSelectedRow());
+            }
+          });
+        }
+      }
+    });
+
     return view;
   }
 
   @SuppressWarnings("ConstantConditions")
   private void configureTableColumn(final IActionHandler actionHandler, Locale locale,
                                     ITableViewDescriptor viewDescriptor, ICollectionConnector connector,
-                                    ICompositeValueConnector rowConnectorPrototype, final JTable table,
+                                    ICompositeValueConnector rowConnectorPrototype, final EnhancedJTable table,
                                     final IView<JComponent> view, int maxColumnSize, final int columnIndex,
                                     Map.Entry<IPropertyViewDescriptor, Object[]> columnViewDescriptorEntry,
                                     IPropertyViewDescriptor columnViewDescriptor, String propertyName,
@@ -2461,7 +2468,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     if (cellRenderer instanceof JComponent) {
       configureComponent(columnViewDescriptor, actionHandler, locale, (JComponent) cellRenderer);
       if (cellRenderer instanceof EvenOddTableCellRenderer) {
-        // To preserve font that has been set and avoid JTable changing it.
+        // To preserve font that has been set and avoid EnhancedJTable changing it.
         ((EvenOddTableCellRenderer) cellRenderer).setCustomFont(((JComponent) cellRenderer).getFont());
       }
     }
@@ -2524,7 +2531,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       }
       headerRenderer.setText(decorateMandatoryPropertyLabel(headerRenderer.getText()));
     }
-    // To preserve font that has been set and avoid JTable changing it.
+    // To preserve font that has been set and avoid EnhancedJTable changing it.
     headerRenderer.setCustomFont(headerRenderer.getFont());
     String viewDescription = columnViewDescriptor.getI18nDescription(actionHandler, locale);
     viewDescription = completeDescriptionWithLiveDebugUI(columnViewDescriptor, viewDescription);
@@ -2581,29 +2588,156 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
 
         @Override
         public void columnSelectionChanged(ListSelectionEvent lse) {
-          handleTableCellSelectionEvent(lse, table, columnIndex, actionHandler, focusGainedAction, view);
+          handleTableCellSelectionEvent(lse, true, table, columnIndex, actionHandler, focusGainedAction, view);
         }
       });
       table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
         @Override
         public void valueChanged(ListSelectionEvent lse) {
-          handleTableCellSelectionEvent(lse, table, columnIndex, actionHandler, focusGainedAction, view);
+          handleTableCellSelectionEvent(lse, true, table, columnIndex, actionHandler, focusGainedAction, view);
+        }
+      });
+    }
+    final IAction focusLostAction = columnViewDescriptor.getFocusLostAction();
+    if (focusLostAction != null) {
+      table.getColumnModel().addColumnModelListener(new TableColumnModelListener() {
+        @Override
+        public void columnAdded(TableColumnModelEvent e) {
+          // NO-OP
+        }
+
+        @Override
+        public void columnRemoved(TableColumnModelEvent e) {
+          // NO-OP
+        }
+
+        @Override
+        public void columnMoved(TableColumnModelEvent e) {
+          // NO-OP
+        }
+
+        @Override
+        public void columnMarginChanged(ChangeEvent e) {
+          // NO-OP
+        }
+
+        @Override
+        public void columnSelectionChanged(ListSelectionEvent lse) {
+          handleTableCellSelectionEvent(lse, false, table, columnIndex, actionHandler, focusLostAction, view);
+        }
+      });
+      table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        @Override
+        public void valueChanged(ListSelectionEvent lse) {
+          handleTableCellSelectionEvent(lse, false, table, columnIndex, actionHandler, focusLostAction, view);
         }
       });
     }
   }
 
-  private void handleTableCellSelectionEvent(ListSelectionEvent lse, JTable table, int columnIndex,
-                                             IActionHandler actionHandler, IAction focusGainedAction,
+  private void handleTableCellSelectionEvent(ListSelectionEvent lse, boolean focusGained, EnhancedJTable table, int columnIndex,
+                                             IActionHandler actionHandler, IAction focusAction,
                                              IView<JComponent> view) {
     if (!lse.getValueIsAdjusting()) {
-      int selectedRow = table.getSelectedRow();
-      int selectedColumn = table.getSelectedColumn();
-      if (selectedColumn == table.convertColumnIndexToView(columnIndex)) {
-        actionHandler.execute(focusGainedAction, getActionFactory()
-            .createActionContext(actionHandler, view, view.getConnector(),
-                String.valueOf(selectedRow) + ";" + columnIndex, table));
+      int focusedRow;
+      int focusedColumn;
+      if (focusGained) {
+        focusedRow = table.getSelectedRow();
+        focusedColumn = table.getSelectedColumn();
+      } else {
+        focusedRow = table.getLastFocusedRow();
+        focusedColumn = table.getLastFocusedColumn();
       }
+      if (focusedRow >= 0 && focusedColumn >= 0) {
+        if (focusedColumn == table.convertColumnIndexToView(columnIndex)) {
+          actionHandler.execute(focusAction, getActionFactory()
+              .createActionContext(actionHandler, view, view.getConnector(),
+                  String.valueOf(focusedRow) + ";" + columnIndex, table));
+        }
+      }
+    }
+  }
+
+  private static class EnhancedJTable extends JTable {
+
+    private static final long serialVersionUID = -2766744091893464462L;
+
+    private int lastFocusedRow    = -1;
+    private int lastFocusedColumn = -1;
+
+    /**
+     * Gets last focused row.
+     *
+     * @return the last focused row
+     */
+    public int getLastFocusedRow() {
+      return lastFocusedRow;
+    }
+
+    /**
+     * Sets last focused row.
+     *
+     * @param lastFocusedRow
+     *     the last focused row
+     */
+    public void setLastFocusedRow(int lastFocusedRow) {
+      this.lastFocusedRow = lastFocusedRow;
+    }
+
+    /**
+     * Gets last focused column.
+     *
+     * @return the last focued column
+     */
+    public int getLastFocusedColumn() {
+      return lastFocusedColumn;
+    }
+
+    /**
+     * Sets last focused column.
+     *
+     * @param lastFocusedColumn
+     *     the last focused column
+     */
+    public void setLastFocusedColumn(int lastFocusedColumn) {
+      this.lastFocusedColumn = lastFocusedColumn;
+    }
+
+    /**
+     * Override this method to fix a bug in the JVM which causes the table to
+     * start editing when a mnemonic key or function key is pressed.
+     */
+    @Override
+    protected boolean processKeyBinding(KeyStroke ks, KeyEvent e, int condition, boolean pressed) {
+      if (SwingUtilities.getUIInputMap(this, condition) != null && SwingUtilities.getUIInputMap(this, condition).get(
+          ks) != null) {
+        return super.processKeyBinding(ks, e, condition, pressed);
+      }
+      /**
+       * ignore all keys that have not been registered
+       */
+      if (getInputMap(condition).get(ks) != null) {
+        return false;
+      }
+      boolean foundInAncestors = false;
+      JComponent parent = null;
+      if (getParent() instanceof JComponent) {
+        parent = (JComponent) getParent();
+      }
+      while (!foundInAncestors && parent != null) {
+        if (parent.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).get(ks) != null) {
+          foundInAncestors = true;
+        }
+        if (parent.getParent() instanceof JComponent) {
+          parent = (JComponent) parent.getParent();
+        } else {
+          parent = null;
+        }
+      }
+      if (!foundInAncestors) {
+        return super.processKeyBinding(ks, e, condition, pressed);
+      }
+      return false;
     }
   }
 
@@ -2624,7 +2758,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
      * @param actionHandler
      *     the action handler.
      */
-    public ColumnPreferencesListener(JTable table, String tableId, IActionHandler actionHandler) {
+    public ColumnPreferencesListener(EnhancedJTable table, String tableId, IActionHandler actionHandler) {
       this.columnModel = table.getColumnModel();
       this.tableId = tableId;
       this.actionHandler = actionHandler;
@@ -2679,7 +2813,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
   }
 
   private void setupTableModel(ITableViewDescriptor viewDescriptor, IActionHandler actionHandler,
-                               ICollectionConnector connector, JTable viewComponent, TableModel tableModel) {
+                               ICollectionConnector connector, EnhancedJTable viewComponent, TableModel tableModel) {
     if (viewDescriptor.isSortable()) {
       AbstractTableSorter sorterDecorator;
       if (viewDescriptor.getSortingAction() != null) {
@@ -3434,6 +3568,9 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       if (listener instanceof FocusGainedListener) {
         peer.removeFocusListener(listener);
       }
+      if (listener instanceof FocusLostListener) {
+        peer.removeFocusListener(listener);
+      }
     }
     if (peer instanceof JActionField && ((JActionField) peer).isShowingTextField()) {
       editor = new SwingViewCellEditorAdapter(editorView, getModelConnectorFactory(), getMvcBinder(), actionHandler) {
@@ -3961,6 +4098,10 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       peer.addFocusListener(
           new FocusGainedListener(actionHandler, propertyView, propertyViewDescriptor.getFocusGainedAction()));
     }
+    if (propertyViewDescriptor.getFocusLostAction() != null) {
+      peer.addFocusListener(
+          new FocusLostListener(actionHandler, propertyView, propertyViewDescriptor.getFocusLostAction()));
+    }
     return propertyView;
   }
 
@@ -4113,6 +4254,25 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
 
     @Override
     public void focusGained(FocusEvent e) {
+      Map<String, Object> context = getActionFactory().createActionContext(actionHandler, view, view.getConnector(),
+          null, view.getPeer());
+      actionHandler.execute(action, context);
+    }
+  }
+
+  private class FocusLostListener extends FocusAdapter {
+    private IActionHandler    actionHandler;
+    private IView<JComponent> view;
+    private IAction           action;
+
+    public FocusLostListener(IActionHandler actionHandler, IView<JComponent> view, IAction action) {
+      this.actionHandler = actionHandler;
+      this.view = view;
+      this.action = action;
+    }
+
+    @Override
+    public void focusLost(FocusEvent e) {
       Map<String, Object> context = getActionFactory().createActionContext(actionHandler, view, view.getConnector(),
           null, view.getPeer());
       actionHandler.execute(action, context);

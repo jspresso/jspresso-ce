@@ -1224,6 +1224,10 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         peer.setFocusGainedAction(getActionFactory()
             .createAction(propertyViewDescriptor.getFocusGainedAction(), actionHandler, propertyView, locale));
       }
+      if (propertyViewDescriptor.getFocusLostAction() != null) {
+        peer.setFocusLostAction(getActionFactory()
+            .createAction(propertyViewDescriptor.getFocusLostAction(), actionHandler, propertyView, locale));
+      }
     }
     return propertyView;
   }

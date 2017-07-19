@@ -62,6 +62,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements 
   private Boolean              sortable;
   private List<String>         forClientTypes;
   private IAction              focusGainedAction;
+  private IAction              focusLostAction;
 
   /**
    * Gets the labelBackground.
@@ -423,5 +424,26 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements 
    */
   public void setFocusGainedAction(IAction focusGainedAction) {
     this.focusGainedAction = focusGainedAction;
+  }
+
+  /**
+   * Configures a focus lost action. This action is triggered when the remote peer looses the focus in the client
+   * UI.
+   *
+   * @return the focus lost action
+   */
+  @Override
+  public IAction getFocusLostAction() {
+    return focusLostAction;
+  }
+
+  /**
+   * Sets focus lost action.
+   *
+   * @param focusLostAction
+   *     the focus lost action
+   */
+  public void setFocusLostAction(IAction focusLostAction) {
+    this.focusLostAction = focusLostAction;
   }
 }
