@@ -33,6 +33,16 @@ import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
  */
 public class UsernamePasswordHandler extends AbstractPropertyChangeCapable implements CallbackHandler {
 
+  /**
+   * The constant TIME_ZONE_ID.
+   */
+  public final static String TIME_ZONE_ID = "timeZoneId";
+
+  /**
+   * The constant LANGUAGE.
+   */
+  public final static String LANGUAGE = "language";
+
   private String  password;
   private String  username;
   private String  language;

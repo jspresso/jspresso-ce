@@ -70,6 +70,8 @@ import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.ISecurityContextBuilder;
 import org.jspresso.framework.security.SecurityHelper;
@@ -1344,6 +1346,7 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
    * @return a new login callback handler
    */
   protected UsernamePasswordHandler createLoginCallbackHandler() {
+    IComponentDescriptor<?> loginDescriptor = (IComponentDescriptor<?>) getLoginViewDescriptor().getModelDescriptor();
     UsernamePasswordHandler uph = createUsernamePasswordHandler();
     String[] savedUserPass = decodeUserPass(getClientPreference(UP_KEY));
     if (savedUserPass != null && savedUserPass.length == 2 && savedUserPass[0] != null) {
@@ -1359,13 +1362,15 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
     if (savedLang != null && !savedLang.isEmpty()) {
       uph.setLanguage(savedLang);
     } else {
-      uph.setLanguage(null);
+      uph.setLanguage((String) ((IScalarPropertyDescriptor) loginDescriptor.getPropertyDescriptor(
+          UsernamePasswordHandler.LANGUAGE)).getDefaultValue());
     }
     String savedTzId = getClientPreference(TZ_KEY);
     if (savedTzId != null && !savedTzId.isEmpty()) {
       uph.setTimeZoneId(savedTzId);
     } else {
-      uph.setTimeZoneId(null);
+      uph.setTimeZoneId((String) ((IScalarPropertyDescriptor) loginDescriptor.getPropertyDescriptor(
+          UsernamePasswordHandler.TIME_ZONE_ID)).getDefaultValue());
     }
     return uph;
   }
