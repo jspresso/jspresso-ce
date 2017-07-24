@@ -161,6 +161,23 @@ public abstract class AbstractActionContextAware {
    *
    * @param <T>
    *     type inference return.
+   * @param viewPermId
+   *     the view permId to search for. The view hierarchy is climed to the top and then a chid view with the searched
+   *     permId is recursively searched.
+   * @param context
+   *     the action context.
+   * @return the model.
+   */
+  protected <T> T getModelFromPermId(String viewPermId, Map<String, Object> context) {
+    int[] viewPathFromPermId = getViewPathFromPermId(viewPermId, getView(context));
+    return getModel(viewPathFromPermId, context);
+  }
+
+  /**
+   * Gets the model this action was triggered on.
+   *
+   * @param <T>
+   *     type inference return.
    * @param viewPath
    *     the view index path to follow.
    *     <ul>
@@ -197,6 +214,26 @@ public abstract class AbstractActionContextAware {
    */
   protected IValueConnector getModelConnector(Map<String, Object> context) {
     return getModelConnector((int[]) null, context);
+  }
+
+  /**
+   * Gets the model connector this action was triggered on. The model connector
+   * is the versatile binding structure that adapts the actual model to the
+   * Jspresso binding architecture. The actual model is stored in the model
+   * connector value. Unless developing very generic actions, this method will
+   * rarely be used in favor of the more concrete {@code getXXXModel}
+   * context accessors.
+   *
+   * @param viewPermId
+   *     the view permId to search for. The view hierarchy is climed to the top and then a chid view with the searched
+   *     permId is recursively searched.
+   * @param context
+   *     the action context.
+   * @return the model connector this action was triggered on.
+   */
+  protected IValueConnector getModelConnectorFromPermId(String viewPermId, Map<String, Object> context) {
+    int[] viewPathFromPermId = getViewPathFromPermId(viewPermId, getView(context));
+    return getModelConnector(viewPathFromPermId, context);
   }
 
   /**
@@ -274,6 +311,21 @@ public abstract class AbstractActionContextAware {
    */
   protected IModelDescriptor getModelDescriptor(Map<String, Object> context) {
     return (IModelDescriptor) context.get(ActionContextConstants.MODEL_DESCRIPTOR);
+  }
+
+  /**
+   * Gets the model descriptor this action was triggered on.
+   *
+   * @param viewPermId
+   *     the view permId to search for. The view hierarchy is climed to the top and then a chid view with the searched
+   *     permId is recursively searched.
+   * @param context
+   *     the action context.
+   * @return the model connector this action was triggered on.
+   */
+  protected IModelDescriptor getModelDescriptorFromPermId(String viewPermId, Map<String, Object> context) {
+    int[] viewPathFromPermId = getViewPathFromPermId(viewPermId, getView(context));
+    return getModelDescriptor(viewPathFromPermId, context);
   }
 
   /**
@@ -379,6 +431,24 @@ public abstract class AbstractActionContextAware {
    * taken from the view connector that adapts the UI component to the Jspresso
    * binding architecture.
    *
+   * @param viewPermId
+   *     the view permId to search for. The view hierarchy is climed to the top and then a chid view with the searched
+   *     permId is recursively searched.
+   * @param context
+   *     the action context.
+   * @return the selected indices stored in the action context.
+   */
+  protected int[] getSelectedIndicesFromPermId(String viewPermId, Map<String, Object> context) {
+    int[] viewPathFromPermId = getViewPathFromPermId(viewPermId, getView(context));
+    return getSelectedIndices(viewPathFromPermId, context);
+  }
+
+  /**
+   * Gets the selected indices out of the UI component if it is a collection
+   * component (table, list, ...). More accurately, the selected indices are
+   * taken from the view connector that adapts the UI component to the Jspresso
+   * binding architecture.
+   *
    * @param viewPath
    *     the view index path to follow.
    *     <ul>
@@ -429,6 +499,25 @@ public abstract class AbstractActionContextAware {
    *
    * @param <T>
    *     type inference return.
+   * @param viewPermId
+   *     the view permId to search for. The view hierarchy is climed to the top and then a chid view with the searched
+   *     permId is recursively searched.
+   * @param context
+   *     the action context.
+   * @return the selected model.
+   */
+  protected <T> T getSelectedModelFromPermId(String viewPermId, Map<String, Object> context) {
+    int[] viewPathFromPermId = getViewPathFromPermId(viewPermId, getView(context));
+    return getSelectedModel(viewPathFromPermId, context);
+  }
+
+  /**
+   * This is a versatile helper method that retrieves the selected model either
+   * from the 1st selected child connector if the action was triggered on a
+   * collection connector or from the connector itself.
+   *
+   * @param <T>
+   *     type inference return.
    * @param viewPath
    *     the view index path to follow.
    *     <ul>
@@ -466,6 +555,25 @@ public abstract class AbstractActionContextAware {
    */
   protected <T> List<T> getSelectedModels(Map<String, Object> context) {
     return getSelectedModels(null, context);
+  }
+
+  /**
+   * This is a versatile helper method that retrieves the selected models model
+   * either from the selected child connectors if the action was triggered on a
+   * collection connector or from the connector itself.
+   *
+   * @param <T>
+   *     type inference return.
+   * @param viewPermId
+   *     the view permId to search for. The view hierarchy is climed to the top and then a chid view with the searched
+   *     permId is recursively searched.
+   * @param context
+   *     the action context.
+   * @return the list of selected models.
+   */
+  protected <T> List<T> getSelectedModelsFromPermId(String viewPermId, Map<String, Object> context) {
+    int[] viewPathFromPermId = getViewPathFromPermId(viewPermId, getView(context));
+    return getSelectedModels(viewPathFromPermId, context);
   }
 
   /**
@@ -558,6 +666,25 @@ public abstract class AbstractActionContextAware {
    * to the view connector that adapts the UI component to the Jspresso binding
    * architecture.
    *
+   * @param viewPermId
+   *     the view permId to search for. The view hierarchy is climed to the top and then a chid view with the searched
+   *     permId is recursively searched.
+   * @param selectedIndices
+   *     the selected indices to store in the action context.
+   * @param context
+   *     the action context.
+   */
+  protected void setSelectedIndicesFromPermId(String viewPermId, int[] selectedIndices, Map<String, Object> context) {
+    int[] viewPathFromPermId = getViewPathFromPermId(viewPermId, getView(context));
+    setSelectedIndices(viewPathFromPermId, selectedIndices, context);
+  }
+
+  /**
+   * Sets the selected indices of the UI component if it is a collection
+   * component (table, list, ...). More accurately, the selected indices are set
+   * to the view connector that adapts the UI component to the Jspresso binding
+   * architecture.
+   *
    * @param viewPath
    *     the view index path to follow.
    *     <ul>
@@ -591,6 +718,25 @@ public abstract class AbstractActionContextAware {
    */
   protected void setSelectedModels(Collection<?> selectedModels, Map<String, Object> context) {
     setSelectedModels(null, selectedModels, context);
+  }
+
+  /**
+   * Retrieves the selected models indices out of the model connector if it's a
+   * collection connector and set them as selected indices in the action
+   * context.
+   *
+   * @param viewPermId
+   *     the view permId to search for. The view hierarchy is climed to the top and then a chid view with the searched
+   *     permId is recursively searched.
+   * @param selectedModels
+   *     the list of models to select in the view connector.
+   * @param context
+   *     the action context.
+   */
+  protected void setSelectedModelsFromPermId(String viewPermId, Collection<?> selectedModels,
+                                             Map<String, Object> context) {
+    int[] viewPathFromPermId = getViewPathFromPermId(viewPermId, getView(context));
+    setSelectedModels(viewPathFromPermId, selectedModels, context);
   }
 
   /**
@@ -667,6 +813,33 @@ public abstract class AbstractActionContextAware {
    *
    * @param <T>
    *     type inference return.
+   * @param viewPermId
+   *     the view permId to search for. The view hierarchy is climed to the top and then a chid view with the searched
+   *     permId is recursively searched.
+   * @param context
+   *     the action context.
+   * @return the view this action was triggered on.
+   */
+  @SuppressWarnings("unchecked")
+  protected <T> IView<T> getViewFromPermId(String viewPermId, Map<String, Object> context) {
+    int[] viewPathFromPermId = getViewPathFromPermId(viewPermId, getView(context));
+    return getView(viewPathFromPermId, context);
+  }
+
+  /**
+   * This is a utility method which is able to retrieve the view this action has
+   * been executed on from its context. It uses well-known context keys of the
+   * action context which are:
+   * <ul>
+   * <li> {@code ActionContextConstants.VIEW} to get the the view the action
+   * executes on.
+   * </ul>
+   * <p>
+   * The returned view mainly serves for acting on the view component the action
+   * has to be triggered on.
+   *
+   * @param <T>
+   *     type inference return.
    * @param viewPath
    *     the view index path to follow.
    *     <ul>
@@ -700,6 +873,30 @@ public abstract class AbstractActionContextAware {
    */
   protected IValueConnector getViewConnector(Map<String, Object> context) {
     return getViewConnector(null, context);
+  }
+
+  /**
+   * This is a utility method which is able to retrieve the view connector this
+   * action has been executed on from its context. It uses well-known context
+   * keys of the action context which are:
+   * <ul>
+   * <li> {@code ActionContextConstants.VIEW_CONNECTOR} to get the the view
+   * value connector the action executes on.
+   * </ul>
+   * <p>
+   * The returned connector mainly serves for acting on the view component the
+   * action has to be triggered on.
+   *
+   * @param viewPermId
+   *     the view permId to search for. The view hierarchy is climed to the top and then a chid view with the searched
+   *     permId is recursively searched.
+   * @param context
+   *     the action context.
+   * @return the value connector this action was triggered on.
+   */
+  protected IValueConnector getViewConnectorFromPermId(String viewPermId, Map<String, Object> context) {
+    int[] viewPathFromPermId = getViewPathFromPermId(viewPermId, getView(context));
+    return getViewConnector(viewPathFromPermId, context);
   }
 
   /**
@@ -774,5 +971,54 @@ public abstract class AbstractActionContextAware {
       }
     }
     return target;
+  }
+
+  private int[] getViewPathFromPermId(String permId, IView<?> fromView) {
+    List<Integer> viewPathAsList = new ArrayList<>();
+    IView<?> rootView = fromView;
+    IView<?> rootViewParent = rootView.getParent();
+    while (rootViewParent != null) {
+      // Climb up the view hierarchy
+      viewPathAsList.add(Integer.valueOf(-1));
+      rootView = rootViewParent;
+      rootViewParent = rootView.getParent();
+    }
+    // rootView is now the root of the view hierarchy
+    // we must now navigate the children until we find the right permId
+    boolean permIdFound = findPermId(permId, rootView, viewPathAsList);
+    if (permIdFound) {
+      int[] viewPath = new int[viewPathAsList.size()];
+      for (int i = 0; i < viewPath.length; i++) {
+        viewPath[i] = viewPathAsList.get(i);
+      }
+      return viewPath;
+    }
+    return null;
+  }
+
+  private boolean findPermId(String permId, IView<?> fromView, List<Integer> viewPathBuffer) {
+    String viewPermId = null;
+    if (fromView.getDescriptor() != null) {
+      viewPermId = fromView.getDescriptor().getPermId();
+    }
+    if (permId.equals(viewPermId)) {
+      return true;
+    }
+    if (fromView instanceof ICompositeView<?>) {
+      List<IView<?>> children = ((ICompositeView) fromView).getChildren();
+      if (children != null) {
+        for (int i = 0; i < children.size(); i++) {
+          IView<?> child = children.get(i);
+          List<Integer> childViewPathBuffer = new ArrayList<>();
+          boolean foundInChild = findPermId(permId, child, childViewPathBuffer);
+          if (foundInChild) {
+            viewPathBuffer.add(Integer.valueOf(i));
+            viewPathBuffer.addAll(childViewPathBuffer);
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   }
 }
