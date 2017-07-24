@@ -21,16 +21,20 @@ package org.jspresso.framework.application.action;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
+import org.jspresso.framework.application.frontend.IFrontendController;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.security.UserPrincipal;
+import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
  * A simple action monitoring plugin that logs the actions executions.
@@ -65,18 +69,12 @@ public class LoggingActionMonitoringPlugin extends AbstractActionMonitoringPlugi
       if (user != null) {
         userName = user.getName();
       }
+      String actionType = null;
       StringBuilder callStackNames = new StringBuilder();
       for (IAction action : callStack) {
-        Class<? extends IAction> actionClass = action.getClass();
-        String actionClassName = actionClass.getSimpleName();
-        if (actionClassName == null || actionClassName.isEmpty()) {
-          actionClassName = actionClass.getName();
-          int lastDotIndex = actionClassName.lastIndexOf(".");
-          if (lastDotIndex >= 0) {
-            actionClassName = actionClassName.substring(lastDotIndex + 1);
-          }
-        }
+        String actionClassName = getActionClassName(action);
         callStackNames.append(actionClassName).append("|");
+        actionType = action.isBackend() ? "B" : "F";
       }
       callStackNames.delete(callStackNames.length() - 1, callStackNames.length());
       SimpleDateFormat tsFormat = new SimpleDateFormat("HH:mm:ss.SSS");
@@ -85,9 +83,47 @@ public class LoggingActionMonitoringPlugin extends AbstractActionMonitoringPlugi
       SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
       String date = dateFormat.format(startTimestamp);
       long duration = endTimestamp.getTime() - startTimestamp.getTime();
-      LOG.trace("[{}][{}][{}][{}][{}][{}][{}][{}][{} ms.]", sessionId, userName, date, startTs, endTs, workspaceName,
-          moduleName, callStackNames, duration);
+      LOG.trace("[{}][{}][{}][{}][{}][{}][{}][{}][{}][{} ms.]", sessionId, userName, actionType, date, startTs, endTs,
+          workspaceName, moduleName, callStackNames, duration);
     }
+  }
+
+  /**
+   * Trace user actions inventory.
+   *
+   * @param userActions
+   *     the user actions
+   * @param frontendController
+   *     the frontend controller
+   */
+  @Override
+  protected void traceUserActionsInventory(Set<IDisplayableAction> userActions,
+                                           IFrontendController<?, ?, ?> frontendController) {
+    if (isEnabled()) {
+      StringBuilder userActionsInventory = new StringBuilder();
+      for (IDisplayableAction userAction : userActions) {
+        String actionClassName = getActionClassName(userAction);
+        String actionNameEN = userAction.getI18nName(frontendController, Locale.ENGLISH);
+        String actionNameFR = userAction.getI18nName(frontendController, Locale.FRENCH);
+        userActionsInventory.append(
+            "[" + actionClassName + "][" + Locale.ENGLISH + ":" + actionNameEN + "|" + Locale.FRENCH + ":"
+                + actionNameFR + "]\n");
+      }
+      LOG.trace("User actions inventory \n{}", userActionsInventory);
+    }
+  }
+
+  private String getActionClassName(IAction action) {
+    Class<? extends IAction> actionClass = action.getClass();
+    String actionClassName = actionClass.getSimpleName();
+    if (actionClassName == null || actionClassName.isEmpty()) {
+      actionClassName = actionClass.getName();
+      int lastDotIndex = actionClassName.lastIndexOf(".");
+      if (lastDotIndex >= 0) {
+        actionClassName = actionClassName.substring(lastDotIndex + 1);
+      }
+    }
+    return actionClassName;
   }
 
   @Override

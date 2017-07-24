@@ -99,8 +99,8 @@ public class ApplicationDirectoryBuilder {
    * elements into the directory.
    * 
    * @param frontendController
-   *          the application front controller to analyse.
-   * @return this.
+   *     the application front controller to analyse.
+   * @return this. application directory builder
    */
   public ApplicationDirectoryBuilder process(IFrontendController<?, ?, ?> frontendController) {
     if (frontendController.getActionMap() != null) {
@@ -110,7 +110,7 @@ public class ApplicationDirectoryBuilder {
       process(frontendController.getSecondaryActionMap());
     }
     for (String workspaceName : frontendController.getWorkspaceNames(true)) {
-      Workspace workspace = frontendController.getWorkspace(workspaceName);
+      Workspace workspace = frontendController.getWorkspace(workspaceName, true);
       String wsPermId = workspace.getPermId();
       if (wsPermId != null) {
         if (isPermIdExcluded(wsPermId) || navigationPermIds.contains(wsPermId)) {
@@ -125,7 +125,13 @@ public class ApplicationDirectoryBuilder {
     return this;
   }
 
-  private void process(IComponentDescriptor<?> componentDescriptor) {
+  /**
+   * Process.
+   *
+   * @param componentDescriptor
+   *     the component descriptor
+   */
+  protected void process(IComponentDescriptor<?> componentDescriptor) {
     String compPermId = componentDescriptor.getPermId();
     if (compPermId != null) {
       if (isPermIdExcluded(compPermId) || modelPermIds.contains(compPermId)) {
@@ -148,7 +154,17 @@ public class ApplicationDirectoryBuilder {
     }
   }
 
-  private void process(IPropertyDescriptor propertyDescriptor, String path,
+  /**
+   * Process.
+   *
+   * @param propertyDescriptor
+   *     the property descriptor
+   * @param path
+   *     the path
+   * @param permIdsSet
+   *     the perm ids set
+   */
+  protected void process(IPropertyDescriptor propertyDescriptor, String path,
       Set<String> permIdsSet) {
     String propertyPermId = propertyDescriptor.getPermId();
     if (propertyPermId != null) {
@@ -160,7 +176,15 @@ public class ApplicationDirectoryBuilder {
     }
   }
 
-  private void process(Module module, String path) {
+  /**
+   * Process.
+   *
+   * @param module
+   *     the module
+   * @param path
+   *     the path
+   */
+  protected void process(Module module, String path) {
     String modulePermId = module.getPermId();
     if (modulePermId != null) {
       if (path != null) {
@@ -186,7 +210,15 @@ public class ApplicationDirectoryBuilder {
     }
   }
 
-  private void process(IViewDescriptor viewDescriptor, String path) {
+  /**
+   * Process.
+   *
+   * @param viewDescriptor
+   *     the view descriptor
+   * @param path
+   *     the path
+   */
+  protected void process(IViewDescriptor viewDescriptor, String path) {
     String viewPermId = viewDescriptor.getPermId();
     if (viewPermId != null) {
       if (path != null) {
@@ -233,7 +265,13 @@ public class ApplicationDirectoryBuilder {
     }
   }
 
-  private void process(ActionMap actionMap) {
+  /**
+   * Process.
+   *
+   * @param actionMap
+   *     the action map
+   */
+  protected void process(ActionMap actionMap) {
     String amPermId = actionMap.getPermId();
     if (amPermId != null) {
       if (isPermIdExcluded(amPermId) || actionPermIds.contains(amPermId)) {
@@ -269,7 +307,15 @@ public class ApplicationDirectoryBuilder {
     }
   }
 
-  private void process(ActionList actionList, String path) {
+  /**
+   * Process.
+   *
+   * @param actionList
+   *     the action list
+   * @param path
+   *     the path
+   */
+  protected void process(ActionList actionList, String path) {
     String alPermId = actionList.getPermId();
     if (alPermId != null) {
       if (path != null) {
@@ -285,7 +331,15 @@ public class ApplicationDirectoryBuilder {
     }
   }
 
-  private void process(IDisplayableAction action, String path) {
+  /**
+   * Process.
+   *
+   * @param action
+   *     the action
+   * @param path
+   *     the path
+   */
+  protected void process(IDisplayableAction action, String path) {
     String actionPermId = action.getPermId();
     if (actionPermId != null) {
       if (path != null) {
@@ -328,7 +382,7 @@ public class ApplicationDirectoryBuilder {
    * Sets the excludePatterns.
    * 
    * @param excludePatterns
-   *          the excludePatterns to set.
+   *     the excludePatterns to set.
    */
   public void setExcludePatterns(String... excludePatterns) {
     this.excludePatterns = excludePatterns;

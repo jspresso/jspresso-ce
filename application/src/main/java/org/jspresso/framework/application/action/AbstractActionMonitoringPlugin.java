@@ -21,13 +21,18 @@ package org.jspresso.framework.application.action;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 import org.jspresso.framework.action.IAction;
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.action.IActionMonitoringPlugin;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.action.BackendAction;
@@ -36,7 +41,11 @@ import org.jspresso.framework.application.frontend.IFrontendController;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
+import org.jspresso.framework.application.security.ApplicationDirectoryBuilder;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.security.UserPrincipal;
+import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
  * Base class of action monitoring plugins. It mainly stores the action call stack in the chain as well as start
@@ -71,18 +80,118 @@ public abstract class AbstractActionMonitoringPlugin extends AbstractActionConte
     }
   }
 
+  private class ActionsDirectoryBuilder extends ApplicationDirectoryBuilder {
+
+    private Set<IDisplayableAction> userActions;
+
+    /**
+     * Instantiates a new Actions directory builder.
+     */
+    public ActionsDirectoryBuilder() {
+      userActions = new HashSet<>();
+    }
+
+    /**
+     * Process.
+     *
+     * @param componentDescriptor
+     *     the component descriptor
+     */
+    @Override
+    protected void process(IComponentDescriptor<?> componentDescriptor) {
+      // Don't care about model stuff
+    }
+
+    /**
+     * Process.
+     *
+     * @param propertyDescriptor
+     *     the property descriptor
+     * @param path
+     *     the path
+     * @param permIdsSet
+     *     the perm ids set
+     */
+    @Override
+    protected void process(IPropertyDescriptor propertyDescriptor, String path, Set<String> permIdsSet) {
+      // Don't care about model stuff
+    }
+
+    /**
+     * Process.
+     *
+     * @param action
+     *     the action
+     * @param path
+     *     the path
+     */
+    @Override
+    protected void process(IDisplayableAction action, String path) {
+      if (!isEnabled() || !filter(action)) {
+        return;
+      }
+      userActions.add(action);
+    }
+
+    /**
+     * Gets user actions.
+     *
+     * @return the user actions
+     */
+    public Set<IDisplayableAction> getUserActions() {
+      return userActions;
+    }
+  }
+
   private IApplicationSession currentSession;
   private UserPrincipal       currentUser;
   private Workspace           currentWorkspace;
   private Module              currentModule;
   private List<ActionEntry>   currentCallStack;
+  private boolean             started;
 
   /**
    * Instantiates a new Abstract action monitoring plugin.
    */
   public AbstractActionMonitoringPlugin() {
     currentCallStack = new ArrayList<>();
+    started = false;
   }
+
+  /**
+   * Trace results.
+   *
+   * @param session
+   *     the session
+   * @param user
+   *     the current user
+   * @param workspace
+   *     the current workspace
+   * @param module
+   *     the current module
+   * @param callStack
+   *     the call stack
+   * @param context
+   *     the context
+   * @param startTimestamp
+   *     the start timestamp
+   * @param endTimestamp
+   *     the end timestamp
+   */
+  protected abstract void traceResults(IApplicationSession session, UserPrincipal user, Workspace workspace,
+                                       Module module, List<IAction> callStack, Map<String, Object> context,
+                                       Date startTimestamp, Date endTimestamp);
+
+  /**
+   * Trace user actions inventory.
+   *
+   * @param userActions
+   *     the user actions
+   * @param frontendController
+   *     the frontend controller
+   */
+  protected abstract void traceUserActionsInventory(Set<IDisplayableAction> userActions,
+                                                    IFrontendController<?, ?, ?> frontendController);
 
   /**
    * Action start.
@@ -171,30 +280,28 @@ public abstract class AbstractActionMonitoringPlugin extends AbstractActionConte
   }
 
   /**
-   * Trace results.
+   * Is enabled boolean.
    *
-   * @param session
-   *     the session
-   * @param user
-   *     the current user
-   * @param workspace
-   *     the current workspace
-   * @param module
-   *     the current module
-   * @param callStack
-   *     the call stack
-   * @param context
-   *     the context
-   * @param startTimestamp
-   *     the start timestamp
-   * @param endTimestamp
-   *     the end timestamp
+   * @return the boolean
    */
-  protected abstract void traceResults(IApplicationSession session, UserPrincipal user, Workspace workspace,
-                                       Module module, List<IAction> callStack, Map<String, Object> context,
-                                       Date startTimestamp, Date endTimestamp);
-
   protected boolean isEnabled() {
     return true;
+  }
+
+  /**
+   * Starts the plugin.
+   *
+   * @param context
+   *     the context
+   */
+  @Override
+  public synchronized void start(Map<String, Object> context) {
+    if (!started) {
+      IFrontendController<?, ?, ?> frontendController = getFrontendController(context);
+      ActionsDirectoryBuilder actionsDirectoryBuilder = new ActionsDirectoryBuilder();
+      actionsDirectoryBuilder.process(frontendController);
+      traceUserActionsInventory(actionsDirectoryBuilder.getUserActions(), frontendController);
+      started = true;
+    }
   }
 }
