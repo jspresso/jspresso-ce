@@ -49,4 +49,12 @@ public interface IActionMonitoringPlugin {
    *     the context
    */
   void actionEnd(IAction action, Map<String, Object> context);
+
+  /**
+   * Starts the plugin.
+   *
+   * @param context
+   *     the context
+   */
+  void start(Map<String, Object> context);
 }
