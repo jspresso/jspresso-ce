@@ -99,6 +99,8 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
                     actionsHtmlContent += " height: " + iconDimension.getHeight() + "px;";
                   }
                 }
+                actionsHtmlContent += " margin-left: 5px;"
+                actionsHtmlContent += " margin-right: 5px;"
                 actionsHtmlContent += " background-position: center;";
                 actionsHtmlContent += " background-image: url(\"" + imageUrlSpec + "\");";
                 actionsHtmlContent += " background-repeat: no-repeat;'>";

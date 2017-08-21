@@ -2281,7 +2281,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
            focusIndicator.setZIndex(0);
          }
          */
-        focusIndicator.setZIndex(0);
+        if (!table.isEditing()) {
+          focusIndicator.setZIndex(0);
+        }
       }, this, true);
       paneScroller.addListener("pointerdown", function (e) {
         /*
@@ -2289,7 +2291,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
          focusIndicator.setZIndex(0);
          }
          */
-        focusIndicator.setZIndex(0);
+        if (!table.isEditing()) {
+          focusIndicator.setZIndex(0);
+        }
       }, this, true);
       paneScroller.addListener("pointerup", function (e) {
         /*
