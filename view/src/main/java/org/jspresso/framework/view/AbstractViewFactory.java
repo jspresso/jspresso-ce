@@ -2091,7 +2091,8 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     if (aGates != null) {
       aGates.remove(ModelTrackingGate.INSTANCE);
     }
-    G action = getActionFactory().createAction(listOfValueAction, actionHandler, propertyView, locale);
+    G action = getActionFactory().createAction(listOfValueAction, getIconFactory().getTinyIconSize(), actionHandler,
+        propertyView, locale);
     getActionFactory().setActionName(action, null);
     return action;
   }
@@ -3824,4 +3825,19 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     return accessGranted;
   }
 
+  /**
+   * Is aside action display boolean.
+   *
+   * @param viewDescriptor
+   *     the view descriptor
+   * @return the boolean
+   */
+  protected boolean isAsideActionDisplay(IViewDescriptor viewDescriptor) {
+    IModelDescriptor modelDescriptor = viewDescriptor.getModelDescriptor();
+    return modelDescriptor instanceof IStringPropertyDescriptor || modelDescriptor instanceof IDatePropertyDescriptor
+        || modelDescriptor instanceof INumberPropertyDescriptor || modelDescriptor instanceof ITimePropertyDescriptor
+        || modelDescriptor instanceof IEnumerationPropertyDescriptor
+        || modelDescriptor instanceof IBooleanPropertyDescriptor
+        || modelDescriptor instanceof IReferencePropertyDescriptor;
+  }
 }

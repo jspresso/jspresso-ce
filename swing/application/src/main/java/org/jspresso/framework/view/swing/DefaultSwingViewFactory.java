@@ -3025,12 +3025,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
 
       boolean asideActions = false;
       ERenderingOptions defaultRenderingOptions = null;
-      IModelDescriptor modelDescriptor = viewDescriptor.getModelDescriptor();
-      if (modelDescriptor instanceof IStringPropertyDescriptor || modelDescriptor instanceof IDatePropertyDescriptor
-          || modelDescriptor instanceof INumberPropertyDescriptor || modelDescriptor instanceof ITimePropertyDescriptor
-          || modelDescriptor instanceof IEnumerationPropertyDescriptor
-          || modelDescriptor instanceof IBooleanPropertyDescriptor
-          || modelDescriptor instanceof IReferencePropertyDescriptor) {
+      if (isAsideActionDisplay(viewDescriptor)) {
         asideActions = true;
         defaultRenderingOptions = ERenderingOptions.ICON;
       }

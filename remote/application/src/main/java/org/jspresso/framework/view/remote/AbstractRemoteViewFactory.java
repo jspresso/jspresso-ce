@@ -2135,7 +2135,11 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         viewActionList.setCollapsable(actionList.isCollapsable());
         viewActionList.setName(actionList.getName());
         viewActionList.setDescription(actionList.getDescription());
-        viewActionList.setIcon(getIconFactory().getIcon(actionList.getIcon(), getIconFactory().getSmallIconSize()));
+        Dimension iconDimension = getIconFactory().getSmallIconSize();
+        if (isAsideActionDisplay(view.getDescriptor())) {
+          iconDimension = getIconFactory().getTinyIconSize();
+        }
+        viewActionList.setIcon(getIconFactory().getIcon(actionList.getIcon(), iconDimension));
         List<RAction> actions = new ArrayList<>();
         for (IDisplayableAction action : actionList.getActions()) {
           if (actionHandler.isAccessGranted(action)) {
@@ -2145,7 +2149,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
                 hiddenWhenDisabled = action.getHiddenWhenDisabled();
               }
               actionHandler.pushToSecurityContext(action);
-              RAction rAction = getActionFactory().createAction(action, getIconFactory().getSmallIconSize(),
+              RAction rAction = getActionFactory().createAction(action, iconDimension,
                   actionHandler, view, locale);
               rAction.setAcceleratorAsString(action.getAcceleratorAsString());
               rAction.setHiddenWhenDisabled(hiddenWhenDisabled);
