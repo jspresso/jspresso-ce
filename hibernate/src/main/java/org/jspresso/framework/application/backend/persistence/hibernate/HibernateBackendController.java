@@ -988,7 +988,14 @@ public class HibernateBackendController extends AbstractBackendController {
         }
       });
     } else {
-      resetTransientEntity(entity);
+      getTransactionTemplate().execute(new TransactionCallbackWithoutResult() {
+        @Override
+        protected void doInTransactionWithoutResult(TransactionStatus status) {
+          IEntity entityClone = cloneInUnitOfWork(entity);
+          resetTransientEntity(entityClone);
+          merge(entityClone, EMergeMode.MERGE_EAGER);
+        }
+      });
     }
 
     // traverse the reachable dirty entities to explicitly reload the
