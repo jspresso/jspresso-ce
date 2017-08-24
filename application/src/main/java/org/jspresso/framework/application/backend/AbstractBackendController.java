@@ -46,6 +46,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -1956,6 +1957,23 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   protected Object unwrapProxy(Object componentOrProxy) {
     return componentOrProxy;
+  }
+
+  /**
+   * Reload transient entity.
+   *
+   * @param entity
+   *     the entity
+   */
+  protected void reloadTransientEntity(final IEntity entity) {
+    getTransactionTemplate().execute(new TransactionCallbackWithoutResult() {
+      @Override
+      protected void doInTransactionWithoutResult(TransactionStatus status) {
+        IEntity entityClone = cloneInUnitOfWork(entity);
+        resetTransientEntity(entityClone);
+        merge(entityClone, EMergeMode.MERGE_EAGER);
+      }
+    });
   }
 
   /**
