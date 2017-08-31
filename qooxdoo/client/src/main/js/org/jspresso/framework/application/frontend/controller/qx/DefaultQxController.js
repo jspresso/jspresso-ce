@@ -47,8 +47,16 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     var fieldSelectionForegroundColor = qx.theme.manager.Color.getInstance().resolve("field-selection-foreground");
     for (var i = 0; i < rules.length; i++) {
       try {
-        qx.ui.style.Stylesheet.getInstance().addRule(rules[i],
-            "background-color:" + fieldSelectionBackgroundColor + "; color:" + fieldSelectionForegroundColor);
+        var value = "";
+        if (fieldSelectionForegroundColor && fieldSelectionForegroundColor != "field-selection-foreground") {
+          value += "color:" + fieldSelectionForegroundColor + ";";
+        }
+        if (fieldSelectionBackgroundColor && fieldSelectionBackgroundColor != "field-selection-background") {
+          value += "background-color:" + fieldSelectionBackgroundColor + ";";
+        }
+        if (value && value.length > 0) {
+          qx.ui.style.Stylesheet.getInstance().addRule(rules[i], value);
+        }
       } catch (ex) {
         // ignore styling errors due to browsers differences
       }
