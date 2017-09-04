@@ -528,8 +528,8 @@ public abstract class ResourceProviderServlet extends HttpServlet {
       if (pathIndex > 0) {
         actualFileName = fileName.substring(pathIndex + 1);
       }
-      response.setHeader("Content-Disposition", "attachment; filename="
-          + actualFileName);
+      response.setHeader("Content-Disposition", "attachment; filename=\""
+          + actualFileName + "\"");
     }
   }
 
