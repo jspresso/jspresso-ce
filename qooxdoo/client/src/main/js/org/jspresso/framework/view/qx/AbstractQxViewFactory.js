@@ -23,7 +23,24 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
   type: "abstract",
 
   statics: {
-    __TAP_THRESHOLD: 500
+    __TAP_THRESHOLD: 500,
+
+    /**
+     * @param imageUrlSpec {String}
+     * @return {String}
+     */
+    completeForSVG: function (imageUrlSpec) {
+      if (imageUrlSpec && imageUrlSpec.indexOf("svg") < 0
+          /*QX resource loading will break on parameters*/ && (imageUrlSpec.indexOf("http") == 0
+              || imageUrlSpec.indexOf("file") == 0)) {
+        if (imageUrlSpec.indexOf("?") >= 0) {
+          return imageUrlSpec + "&preferSVG=true";
+        } else {
+          return imageUrlSpec + "?preferSVG=true";
+        }
+      }
+      return imageUrlSpec;
+    }
   },
 
   construct: function (remotePeerRegistry, actionHandler, commandHandler) {
@@ -235,23 +252,6 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
     },
 
     /**
-     * @param imageUrlSpec {String}
-     * @return {String}
-     */
-    _completeForSVG: function (imageUrlSpec) {
-      if (imageUrlSpec && imageUrlSpec.indexOf("svg") < 0
-          /*QX resource loading will break on parameters*/
-          && (imageUrlSpec.startsWith("http") || imageUrlSpec.startsWith("file"))) {
-        if (imageUrlSpec.indexOf("?") >= 0) {
-          return imageUrlSpec + "&preferSVG=true";
-        } else {
-          return imageUrlSpec + "?preferSVG=true";
-        }
-      }
-      return imageUrlSpec;
-    },
-
-    /**
      * @param component {qx.ui.core.Widget | qx.ui.core.mobile.Widget}
      * @param icon {org.jspresso.framework.gui.remote.RIcon}
      * @param preferSVG {Boolean}
@@ -264,7 +264,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
         if (typeof component.setIcon == 'function') {
           var imageUrlSpec = icon.getImageUrlSpec();
           if (preferSVG) {
-            imageUrlSpec = this._completeForSVG(imageUrlSpec);
+            imageUrlSpec = org.jspresso.framework.view.qx.AbstractQxViewFactory.completeForSVG(imageUrlSpec);
           }
           component.setIcon(imageUrlSpec);
         }

@@ -185,12 +185,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var extraButton = new qx.ui.mobile.toolbar.Button("...");
       extraButton.removeCssClass("toolbar-button");
       var extraMenu = new qx.ui.mobile.dialog.Menu();
-      var that = this;
       extraMenu.getSelectionList().setDelegate({
         configureItem: function (item, data, row) {
           item.setTitle(data.getName());
           if (data.getIcon()) {
-            item.setImage(that._completeForSVG(data.getIcon().getImageUrlSpec()));
+            item.setImage(org.jspresso.framework.view.qx.AbstractQxViewFactory.completeForSVG(data.getIcon().getImageUrlSpec()));
           }
           item.setEnabled(data.getEnabled());
           item.setSelectable(data.getEnabled());
@@ -321,7 +320,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       this._getRemotePeerRegistry().register(pageAction);
       page.setButtonText(pageAction.getName());
       if (pageAction.getIcon()) {
-        page.setButtonIcon(this._completeForSVG(pageAction.getIcon().getImageUrlSpec()));
+        page.setButtonIcon(org.jspresso.framework.view.qx.AbstractQxViewFactory.completeForSVG(pageAction.getIcon().getImageUrlSpec()));
       }
       page.addListener("action", function (event) {
         this._getActionHandler().execute(pageAction);
@@ -802,7 +801,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
               this._getRemotePeerRegistry().register(remotePageSection.getToolTipState());
             }
             listModel.push(remotePageSection);
-            var that = this;
             var list = new qx.ui.mobile.list.List({
               configureItem: function (item, data, row) {
                 var section = data;
@@ -817,7 +815,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
                   item.setSubtitle(section.getToolTip());
                 }
                 if (section.getIcon()) {
-                  item.setImage(that._completeForSVG(section.getIcon().getImageUrlSpec()));
+                  item.setImage(org.jspresso.framework.view.qx.AbstractQxViewFactory.completeForSVG(section.getIcon().getImageUrlSpec()));
                 }
                 item.setShowArrow(true);
               }

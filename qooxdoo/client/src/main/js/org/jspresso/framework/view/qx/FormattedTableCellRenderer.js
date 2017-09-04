@@ -74,11 +74,7 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
               var icon = remoteAction.getIcon();
               if (icon) {
                 var imageUrlSpec = icon.getImageUrlSpec();
-                if (imageUrlSpec.startsWith("http") && imageUrlSpec.indexOf("?") >= 0) {
-                  imageUrlSpec += "&preferSVG=true";
-                } else {
-                  imageUrlSpec += "?preferSVG=true";
-                }
+                imageUrlSpec = org.jspresso.framework.view.qx.AbstractQxViewFactory.completeForSVG(imageUrlSpec);
                 var iconDimension = new org.jspresso.framework.util.gui.Dimension().set({
                   width: 16,
                   height: 16
