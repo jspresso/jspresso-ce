@@ -69,7 +69,7 @@ import org.jspresso.framework.util.lang.ObjectUtils;
  *
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractChangePasswordAction extends BackendAction {
+public abstract class AbstractChangePasswordAction extends AbstractPasswordAction {
 
   /**
    * {@code PASSWD_CHANGE_DESCRIPTOR} is a unique reference to the model
@@ -93,22 +93,6 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
    * {@code PASSWD_TYPED}.
    */
   public static final String                                    PASSWD_TYPED             = "password_typed";
-
-  /**
-   * {@code BASE64_ENCODING} is &quot;BASE64&quot;.
-   */
-  public static final String                                    BASE64_ENCODING          = "BASE64";
-  /**
-   * {@code BASE16_ENCODING} is &quot;HEX&quot;.
-   */
-  public static final String                                    BASE16_ENCODING          = "BASE16";
-  /**
-   * {@code HEX_ENCODING} is &quot;HEX&quot;.
-   */
-  public static final String                                    HEX_ENCODING             = "HEX";
-
-  private String                                                digestAlgorithm;
-  private String                                                hashEncoding;
 
   private boolean allowEmptyPasswords = true;
   private boolean allowLoginPasswords = true;
@@ -182,33 +166,6 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
   }
 
   /**
-   * Sets the digestAlgorithm to use to hash the password before storing it (MD5
-   * for instance).
-   *
-   * @param digestAlgorithm
-   *          the digestAlgorithm to set.
-   */
-  public void setDigestAlgorithm(String digestAlgorithm) {
-    this.digestAlgorithm = digestAlgorithm;
-  }
-
-  /**
-   * Sets the hashEncoding to encode the password hash before storing it. You
-   * may choose between :
-   * <ul>
-   * <li>{@code BASE64} for base 64 encoding.</li>
-   * <li>{@code HEX} for base 16 encoding.</li>
-   * </ul>
-   * Default encoding is {@code BASE64}.
-   *
-   * @param hashEncoding
-   *          the hashEncoding to set.
-   */
-  public void setHashEncoding(String hashEncoding) {
-    this.hashEncoding = hashEncoding;
-  }
-
-  /**
    * Performs the effective password change depending on the underlying storage.
    *
    * @param userPrincipal
@@ -220,79 +177,6 @@ public abstract class AbstractChangePasswordAction extends BackendAction {
    * @return true if password was changed successfully.
    */
   protected abstract boolean changePassword(UserPrincipal userPrincipal, String currentPassword, String newPassword);
-
-  /**
-   * Hashes a char array using the algorithm parametrised in the instance.
-   *
-   * @param newPassword
-   *          the new password to hash.
-   * @return the password digest.
-   * @throws NoSuchAlgorithmException
-   *           when the digest algorithm is not supported.
-   * @throws IOException
-   *           whenever an I/O exception occurs.
-   */
-  protected String digestAndEncode(char... newPassword)
-      throws NoSuchAlgorithmException, IOException {
-    if (getDigestAlgorithm() != null) {
-      MessageDigest md = MessageDigest.getInstance(getDigestAlgorithm());
-      md.reset();
-      md.update(new String(newPassword).getBytes(StandardCharsets.UTF_8.name()));
-
-      byte[] digest = md.digest();
-      return getPasswordStorePrefix() + encode(digest);
-    }
-    return new String(newPassword);
-  }
-
-  /**
-   * Encodes the password hash based on the hash encoding parameter (either
-   * Base64, Base16). Defaults to Base64.
-   *
-   * @param source
-   *          the byte array (hash) to encode.
-   * @return the encoded string.
-   */
-  protected String encode(byte[] source) {
-    String he = getHashEncoding();
-    if (BASE64_ENCODING.equalsIgnoreCase(he)) {
-      return Base64.encodeBase64String(source);
-    }
-    if (BASE16_ENCODING.equalsIgnoreCase(he)
-        || HEX_ENCODING.equalsIgnoreCase(he)) {
-      return Hex.encodeHexString(source);
-    }
-    // defaults to Base64
-    return Base64.encodeBase64String(source);
-  }
-
-  /**
-   * Gets the digestAlgorithm.
-   *
-   * @return the digestAlgorithm.
-   */
-  protected String getDigestAlgorithm() {
-    return digestAlgorithm;
-  }
-
-  /**
-   * Gets the hashEncoding.
-   *
-   * @return the hashEncoding.
-   */
-  protected String getHashEncoding() {
-    return hashEncoding;
-  }
-
-  /**
-   * Returns a prefix to use before storing a password. An example usage is to
-   * prefix the password hash with the type of hash, e.g. {MD5}.
-   *
-   * @return a prefix to use before storing a password.
-   */
-  protected String getPasswordStorePrefix() {
-    return "";
-  }
 
   /**
    * Gets the allowEmptyPasswords.

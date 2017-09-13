@@ -386,7 +386,11 @@
     </property>
   </bean>
 
-  <bean id="changePasswordBackAction" class="org.jspresso.framework.application.backend.action.security.MockChangePasswordAction" />
+  <bean id="changePasswordBackAction"
+        class="org.jspresso.framework.application.backend.action.security.MockChangePasswordAction"/>
+
+  <bean id="resetPasswordBackAction"
+        class="org.jspresso.framework.application.backend.action.security.MockResetPasswordAction"/>
 
   <bean id="queryModuleFilterBackAction" class="org.jspresso.framework.application.backend.action.module.QueryModuleFilterAction">
     <property name="queryAction" ref="queryEntitiesBackAction" />

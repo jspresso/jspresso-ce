@@ -45,13 +45,13 @@ import org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor
  * backend</li>
  * </ul>
  *
- * @author Vincent Vandenschrick
  * @param <E>
- *          the actual gui component type used.
+ *     the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *     the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *     the actual action type used.
+ * @author Vincent Vandenschrick
  */
 public class ChangePasswordAction<E, F, G> extends EditComponentAction<E, F, G> {
 
@@ -60,8 +60,7 @@ public class ChangePasswordAction<E, F, G> extends EditComponentAction<E, F, G> 
    */
   public ChangePasswordAction() {
     BasicComponentViewDescriptor viewDescriptor = new BasicComponentViewDescriptor();
-    viewDescriptor
-        .setModelDescriptor(AbstractChangePasswordAction.PASSWD_CHANGE_DESCRIPTOR);
+    viewDescriptor.setModelDescriptor(AbstractChangePasswordAction.PASSWD_CHANGE_DESCRIPTOR);
     setViewDescriptor(viewDescriptor);
   }
 
@@ -69,9 +68,22 @@ public class ChangePasswordAction<E, F, G> extends EditComponentAction<E, F, G> 
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler,
-      Map<String, Object> context) {
-    setActionParameter(new HashMap<String, Object>(), context);
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+    if (getActionParameter(context) == null) {
+      setActionParameter(createPasswordChangeModel(context), context);
+    }
     return super.execute(actionHandler, context);
+  }
+
+  /**
+   * Create password change model hash map.
+   *
+   * @return the hash map
+   */
+  protected Map<String, Object> createPasswordChangeModel(Map<String, Object> context) {
+    HashMap<String, Object> passwordChangeModel = new HashMap<>();
+    passwordChangeModel.put(AbstractChangePasswordAction.PASSWD_CURRENT,
+        context.get(AbstractChangePasswordAction.PASSWD_CURRENT));
+    return passwordChangeModel;
   }
 }

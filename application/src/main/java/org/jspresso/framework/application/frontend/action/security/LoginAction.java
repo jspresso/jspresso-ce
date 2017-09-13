@@ -21,37 +21,62 @@ package org.jspresso.framework.application.frontend.action.security;
 import java.util.Map;
 
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.backend.action.security.AbstractChangePasswordAction;
+import org.jspresso.framework.application.backend.action.security.AbstractResetPasswordAction;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
+import org.jspresso.framework.security.UsernamePasswordHandler;
+import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
  * This is the frontend action to trigger the application login using the current credential in the frontend controller.
  * If the action is configured with {@code anonymous = true}, then an anonymous login is attempted. If not,
  * a normal login is performed.
  *
- * @author Vincent Vandenschrick
  * @param <E>
- *          the actual gui component type used.
+ *     the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *     the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *     the actual action type used.
+ * @author Vincent Vandenschrick
  */
 public class LoginAction<E, F, G> extends FrontendAction<E, F, G> {
 
   private boolean anonymous = false;
+  private ChangePasswordAction<E,F,G> changePasswordAction;
 
   /**
    * {@inheritDoc}
+   *
+   * @param actionHandler
+   *     the action handler
+   * @param context
+   *     the context
+   * @return the boolean
    */
   @Override
-  public boolean execute(IActionHandler actionHandler,
-      Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+    String typedPassword = null;
+    Object selectedModel = getSelectedModel(context);
+    if (selectedModel instanceof UsernamePasswordHandler) {
+      typedPassword = ((UsernamePasswordHandler) selectedModel).getPassword();
+    }
     if (isAnonymous()) {
       getFrontendController(context).loginAnonymously();
     } else {
       getFrontendController(context).login();
     }
-    return super.execute(actionHandler, context);
+    if (super.execute(actionHandler, context)) {
+      if (typedPassword != null
+          && typedPassword.startsWith(AbstractResetPasswordAction.ONE_TIME_PREFIX)
+          && changePasswordAction != null) {
+        context.put(AbstractChangePasswordAction.PASSWD_CURRENT, typedPassword);
+        return actionHandler.execute(getChangePasswordAction(), context);
+      }
+      return true;
+    } else {
+      return false;
+    }
   }
 
   /**
@@ -66,9 +91,29 @@ public class LoginAction<E, F, G> extends FrontendAction<E, F, G> {
   /**
    * Sets anonymous.
    *
-   * @param anonymous the anonymous
+   * @param anonymous
+   *     the anonymous
    */
   public void setAnonymous(boolean anonymous) {
     this.anonymous = anonymous;
+  }
+
+  /**
+   * Gets change password action.
+   *
+   * @return the change password action
+   */
+  protected ChangePasswordAction<E, F, G> getChangePasswordAction() {
+    return changePasswordAction;
+  }
+
+  /**
+   * Sets change password action.
+   *
+   * @param changePasswordAction
+   *     the change password action
+   */
+  public void setChangePasswordAction(ChangePasswordAction<E, F, G> changePasswordAction) {
+    this.changePasswordAction = changePasswordAction;
   }
 }

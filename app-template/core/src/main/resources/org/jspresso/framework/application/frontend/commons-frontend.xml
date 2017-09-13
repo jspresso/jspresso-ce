@@ -486,6 +486,18 @@
     </property>
   </bean>
 
+  <bean id="resetPasswordAction" parent="abstractFrontendAction"
+        class="org.jspresso.framework.application.frontend.action.security.ResetPasswordAction">
+    <property name="collectionBased" value="true"/>
+    <property name="name" value="password.reset"/>
+    <property name="iconImageURL">
+      <bean parent="abstractFwIconImageURL">
+        <constructor-arg index="0" value="password"/>
+      </bean>
+    </property>
+    <property name="wrappedAction" ref="resetPasswordBackAction"/>
+  </bean>
+
   <bean id="modalDialogAction" class="org.jspresso.framework.application.frontend.action.ModalDialogAction"/>
 
   <bean id="closeDialogAction" class="org.jspresso.framework.application.frontend.action.CloseDialogAction"/>
@@ -1245,6 +1257,7 @@
         <constructor-arg index="0" value="ok"/>
       </bean>
     </property>
+    <property name="changePasswordAction" ref="changePasswordAction" />
   </bean>
 
   <bean id="loginActionList" class="org.jspresso.framework.view.action.ActionList">
