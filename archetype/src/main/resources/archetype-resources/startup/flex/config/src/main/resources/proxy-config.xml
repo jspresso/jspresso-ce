@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<service id="proxy-service" 
+<service id="proxy-service"
     class="flex.messaging.services.HTTPProxyService">
 
     <properties>
@@ -16,6 +16,7 @@
     </adapters>
 
     <default-channels>
+        <channel ref="my-secure-amf"/>
         <channel ref="my-amf"/>
     </default-channels>
 
