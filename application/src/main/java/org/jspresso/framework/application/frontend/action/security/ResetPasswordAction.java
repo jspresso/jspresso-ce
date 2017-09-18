@@ -25,7 +25,7 @@ import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.security.AbstractResetPasswordAction;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
-import org.jspresso.framework.application.frontend.action.std.EditComponentAction;
+import org.jspresso.framework.util.html.HtmlHelper;
 
 /**
  * This is the frontend action to initiate a user password reset. The username to change the password for is
@@ -70,9 +70,11 @@ public class ResetPasswordAction<E, F, G> extends FrontendAction<E, F, G> {
     }
     context.put(AbstractResetPasswordAction.USERNAME_KEY, username);
     if (super.execute(actionHandler, context)) {
-      getFrontendController(context).popupInfo(getSourceComponent(context), "password.reset.title",
-          getIconFactory(context).getInfoIconImageURL(),
-          (String) context.get(AbstractResetPasswordAction.GENERATED_PASSWORD_KEY));
+      getFrontendController(context).popupInfo(getSourceComponent(context),
+          actionHandler.getTranslation("password.reset.title", getLocale(context)),
+          getIconFactory(context).getInfoIconImageURL(), HtmlHelper.toHtml(
+              actionHandler.getTranslation("password.reset.message", getLocale(context)) + HtmlHelper
+                  .emphasis((String) context.get(AbstractResetPasswordAction.GENERATED_PASSWORD_KEY))));
       return true;
     }
     return false;
