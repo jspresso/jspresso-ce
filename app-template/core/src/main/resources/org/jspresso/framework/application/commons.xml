@@ -310,7 +310,10 @@
     <property name="userPreferencesStore" ref="userPreferencesStore" />
     <property name="slaveControllerFactory" ref="backendControllerFactory"/>
     <property name="asyncActionsThreadGroup" ref="asyncActionsThreadGroup" />
-    <property name="actionMonitoringPlugin" ref="actionMonitoringPlugin" />
+    <property name="actionMonitoringPlugin">
+      <!-- Must be installed as a prototype bean. See bug #312-->
+      <bean parent="actionMonitoringPlugin"/>
+    </property>
   </bean>
 
   <bean abstract="true" id="abstractBackController" parent="abstractBackControllerBase" />
