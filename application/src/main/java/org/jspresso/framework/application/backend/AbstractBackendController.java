@@ -2704,18 +2704,6 @@ public abstract class AbstractBackendController extends AbstractController imple
   }
 
   /**
-   * Resets a transient entity to its initial values.
-   *
-   * @param entity
-   *     the entity
-   */
-  protected void resetTransientEntity(IEntity entity) {
-    if (!entity.isPersistent()) {
-      getEntityFactory().resetTransientEntity(entity);
-    }
-  }
-
-  /**
    * Perform login boolean.
    *
    * @param username
