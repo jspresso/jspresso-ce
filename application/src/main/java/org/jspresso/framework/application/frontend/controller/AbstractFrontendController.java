@@ -146,7 +146,6 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
   private       ActionMap                             helpActionMap;
   private       ActionMap                             navigationActionMap;
   private       UsernamePasswordHandler               loginCallbackHandler;
-  private       String                                loginContextName;
   private       IViewDescriptor                       loginViewDescriptor;
   private       boolean                               moduleAutoPinEnabled;
   private       IMvcBinder                            mvcBinder;
@@ -1077,19 +1076,6 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
   }
 
   /**
-   * Configures the name of the JAAS login context to use to authenticate users.
-   * It must reference a valid JAAS context that is installed in the JVM, either
-   * through setting the {@code java.security.auth.login.config} system
-   * property or through server-specific configuration.
-   *
-   * @param loginContextName
-   *     the loginContextName to set.
-   */
-  public void setLoginContextName(String loginContextName) {
-    this.loginContextName = loginContextName;
-  }
-
-  /**
    * Configures the view descriptor used to create the login dialog. The default
    * built-in login view descriptor includes a standard login/password form.
    *
@@ -1671,15 +1657,6 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
   }
 
   /**
-   * Gets the loginContextName.
-   *
-   * @return the loginContextName.
-   */
-  protected String getLoginContextName() {
-    return loginContextName;
-  }
-
-  /**
    * Should a login dialog be displayed or should we process login implicitly
    * (either through SSO or using an anonymous subject in case of un-protected
    * application).
@@ -1846,38 +1823,7 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
    * @return the logged-in subject or null if login failed.
    */
   protected Subject performJAASLogin() {
-    CallbackHandler lch = getLoginCallbackHandler();
-    try {
-      LoginContext lc;
-      try {
-        lc = new LoginContext(getLoginContextName(), lch);
-      } catch (LoginException le) {
-        LOG.error("Cannot create LoginContext.", le);
-        return null;
-      } catch (SecurityException se) {
-        LOG.error("Cannot create LoginContext.", se);
-        return null;
-      }
-      lc.login();
-      return lc.getSubject();
-    } catch (LoginException le) {
-      // le.getCause() is always null, so cannot rely on it.
-      // see bug #1019
-      if (!(le instanceof FailedLoginException)) {
-        String message = le.getMessage();
-        if (message.indexOf(':') > 0) {
-          String exceptionClassName = message.substring(0, message.indexOf(':'));
-          try {
-            if (Throwable.class.isAssignableFrom(Class.forName(exceptionClassName))) {
-              LOG.error("A technical exception occurred on login module.", le);
-            }
-          } catch (ClassNotFoundException ignored) {
-            // ignored.
-          }
-        }
-      }
-      return null;
-    }
+    return performJAASLogin(getLoginCallbackHandler());
   }
 
   /**

@@ -517,4 +517,15 @@ public interface IBackendController
    *     the client time zone
    */
   void setClientTimeZone(TimeZone clientTimeZone);
+
+  /**
+   * Perform login boolean.
+   *
+   * @param username
+   *     the username
+   * @param password
+   *     the password
+   * @return the boolean
+   */
+  boolean performLogin(String username, String password);
 }

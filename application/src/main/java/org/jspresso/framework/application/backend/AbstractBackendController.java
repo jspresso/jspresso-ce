@@ -39,6 +39,10 @@ import java.util.Set;
 import java.util.TimeZone;
 
 import javax.security.auth.Subject;
+import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.login.FailedLoginException;
+import javax.security.auth.login.LoginContext;
+import javax.security.auth.login.LoginException;
 
 import org.apache.commons.collections.map.LRUMap;
 import org.apache.commons.lang.LocaleUtils;
@@ -92,6 +96,7 @@ import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.ISecurityContextBuilder;
 import org.jspresso.framework.security.SecurityHelper;
 import org.jspresso.framework.security.UserPrincipal;
+import org.jspresso.framework.security.UsernamePasswordHandler;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.preferences.IPreferencesStore;
@@ -2697,4 +2702,61 @@ public abstract class AbstractBackendController extends AbstractController imple
   public IActionMonitoringPlugin getActionMonitoringPlugin() {
     return actionMonitoringPlugin;
   }
+
+  /**
+   * Resets a transient entity to its initial values.
+   *
+   * @param entity
+   *     the entity
+   */
+  protected void resetTransientEntity(IEntity entity) {
+    if (!entity.isPersistent()) {
+      getEntityFactory().resetTransientEntity(entity);
+    }
+  }
+
+  /**
+   * Perform login boolean.
+   *
+   * @param username
+   *     the username
+   * @param password
+   *     the password
+   * @return the boolean
+   */
+  @Override
+  public boolean performLogin(String username, String password) {
+    Subject subject = null;
+    String lcName = getLoginContextName();
+    if (lcName != null) {
+      subject = performJAASLogin(username, password);
+    }
+    if (subject == null) {
+      LOG.info("User {} failed to log in for session {}.", username,
+          getApplicationSession().getId());
+      return false;
+    }
+    LOG.info("User {} logged in  for session {}.", username,
+        getApplicationSession().getId());
+    loggedIn(subject);
+    return true;
+  }
+
+
+  /**
+   * Perform JAAS login.
+   *
+   * @param username
+   *     the username
+   * @param password
+   *     the password
+   * @return the logged-in subject or null if login failed.
+   */
+  protected Subject performJAASLogin(String username, String password) {
+    UsernamePasswordHandler lch = new UsernamePasswordHandler();
+    lch.setUsername(username);
+    lch.setPassword(password);
+    return performJAASLogin(lch);
+  }
+
 }

@@ -28,6 +28,10 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.security.auth.Subject;
+import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.login.FailedLoginException;
+import javax.security.auth.login.LoginContext;
+import javax.security.auth.login.LoginException;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.slf4j.Logger;
@@ -35,6 +39,7 @@ import org.slf4j.LoggerFactory;
 
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.backend.AbstractBackendController;
 import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
 import org.jspresso.framework.util.exception.IExceptionHandler;
 import org.jspresso.framework.util.gui.EClientType;
@@ -59,6 +64,7 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable i
   private       IExceptionHandler                             customExceptionHandler;
 
   private final static Logger LOG = LoggerFactory.getLogger(AbstractController.class);
+  private String loginContextName;
 
 
   /**
@@ -275,5 +281,69 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable i
   @Override
   public String toString() {
     return new ToStringBuilder(this).append("user", getApplicationSession().getUsername()).toString();
+  }
+
+  /**
+   * Configures the name of the JAAS login context to use to authenticate users.
+   * It must reference a valid JAAS context that is installed in the JVM, either
+   * through setting the {@code java.security.auth.login.config} system
+   * property or through server-specific configuration.
+   *
+   * @param loginContextName
+   *     the loginContextName to set.
+   */
+  @Override
+  public void setLoginContextName(String loginContextName) {
+    this.loginContextName = loginContextName;
+  }
+
+  /**
+   * Gets the loginContextName.
+   *
+   * @return the loginContextName.
+   */
+  protected String getLoginContextName() {
+    return loginContextName;
+  }
+
+  /**
+   * Perform jaas login subject.
+   *
+   * @param lch
+   *     the lch
+   * @return the subject
+   */
+  protected Subject performJAASLogin(CallbackHandler lch) {
+    try {
+      LoginContext lc;
+      try {
+        lc = new LoginContext(getLoginContextName(), lch);
+      } catch (LoginException le) {
+        LOG.error("Cannot create LoginContext.", le);
+        return null;
+      } catch (SecurityException se) {
+        LOG.error("Cannot create LoginContext.", se);
+        return null;
+      }
+      lc.login();
+      return lc.getSubject();
+    } catch (LoginException le) {
+      // le.getCause() is always null, so cannot rely on it.
+      // see bug #1019
+      if (!(le instanceof FailedLoginException)) {
+        String message = le.getMessage();
+        if (message.indexOf(':') > 0) {
+          String exceptionClassName = message.substring(0, message.indexOf(':'));
+          try {
+            if (Throwable.class.isAssignableFrom(Class.forName(exceptionClassName))) {
+              LOG.error("A technical exception occurred on login module.", le);
+            }
+          } catch (ClassNotFoundException ignored) {
+            // ignored.
+          }
+        }
+      }
+      return null;
+    }
   }
 }
