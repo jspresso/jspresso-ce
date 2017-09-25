@@ -37,7 +37,6 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
     },
 
     _getContentHtml: function (cellInfo) {
-      var cellViewState = cellInfo.rowData.getChildren().getItem(cellInfo.col + 1);
       if (!org.jspresso.framework.util.html.HtmlUtil.isHtml(cellInfo.value) && (typeof(cellInfo.value) == "string"
           || cellInfo.value instanceof String)) {
         if (cellInfo.value.indexOf("\n") >= 0) {
@@ -65,6 +64,7 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
       }
       htmlContent = org.jspresso.framework.util.html.HtmlUtil.bindActionToHtmlContent(htmlContent, this.__action);
       if ((!this.__disableActionsWithField || cellInfo.editable) && this.__asideActions) {
+        var cellViewState = cellInfo.rowData.getChildren().getItem(cellInfo.col + 1);
         var actionsHtmlContent = "";
         for (var i = 0; i < this.__asideActions.length; i++) {
           var actionList = this.__asideActions[i];
