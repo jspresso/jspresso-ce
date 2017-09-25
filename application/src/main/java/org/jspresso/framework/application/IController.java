@@ -103,4 +103,15 @@ public interface IController extends IActionHandler, IPropertyChangeCapable {
    * @return the action monitoring plugin
    */
   IActionMonitoringPlugin getActionMonitoringPlugin();
+
+  /**
+   * Configures the name of the JAAS login context to use to authenticate users.
+   * It must reference a valid JAAS context that is installed in the JVM, either
+   * through setting the {@code java.security.auth.login.config} system
+   * property or through server-specific configuration.
+   *
+   * @param loginContextName
+   *     the loginContextName to set.
+   */
+  void setLoginContextName(String loginContextName);
 }
