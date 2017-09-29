@@ -57,6 +57,7 @@ public class BeanCollectionModule extends Module {
   private IComponentDescriptor<Object> elementComponentDescriptor;
   private IViewDescriptor              elementViewDescriptor;
   private List<?>                      moduleObjects;
+  private IViewDescriptor              cachedViewDescriptor;
 
   /**
    * Adds an element to the module's projected object collection at the
@@ -169,17 +170,21 @@ public class BeanCollectionModule extends Module {
    */
   @Override
   public IViewDescriptor getViewDescriptor() {
-    IViewDescriptor projectedViewDescriptor = getProjectedViewDescriptor();
+    if (cachedViewDescriptor == null) {IViewDescriptor projectedViewDescriptor = getProjectedViewDescriptor();
     IViewDescriptor moduleObjectsView = BasicCollectionViewDescriptor.extractMainCollectionView(
         projectedViewDescriptor);
     BeanCollectionModuleDescriptor moduleDescriptor = getDescriptor();
-    ((BasicViewDescriptor) moduleObjectsView).setModelDescriptor(moduleDescriptor.getPropertyDescriptor(
-        BeanCollectionModule.MODULE_OBJECTS));
+    ((BasicViewDescriptor) moduleObjectsView).setModelDescriptor(
+        moduleDescriptor.getPropertyDescriptor(BeanCollectionModule.MODULE_OBJECTS));
     BasicBorderViewDescriptor moduleViewDescriptor = new BasicBorderViewDescriptor();
-    moduleViewDescriptor.setCenterViewDescriptor(projectedViewDescriptor);
+
+      moduleViewDescriptor.setCenterViewDescriptor(projectedViewDescriptor);
+
     moduleViewDescriptor.setModelDescriptor(moduleDescriptor);
 
-    return moduleViewDescriptor;
+      cachedViewDescriptor = moduleViewDescriptor;
+    }
+    return cachedViewDescriptor;
   }
 
   /**

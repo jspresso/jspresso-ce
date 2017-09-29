@@ -45,31 +45,34 @@ import org.jspresso.framework.view.descriptor.mobile.MobileNavPageViewDescriptor
  */
 public class MobileBeanCollectionModule extends BeanCollectionModule {
 
+  private IViewDescriptor cachedViewDescriptor;
+
   /**
    * {@inheritDoc}
    */
   @Override
   public IViewDescriptor getViewDescriptor() {
-    IListViewDescriptor moduleObjectsView = getProjectedViewDescriptor();
-    BeanCollectionModuleDescriptor moduleDescriptor = getDescriptor();
-    ((BasicViewDescriptor) moduleObjectsView).setModelDescriptor(moduleDescriptor.getPropertyDescriptor(
-        MobileBeanCollectionModule.MODULE_OBJECTS));
-    MobileNavPageViewDescriptor moduleViewDescriptor = new MobileNavPageViewDescriptor();
-    moduleViewDescriptor.setSelectionViewDescriptor(moduleObjectsView);
-    IMobilePageViewDescriptor nextPage;
-    if (getElementViewDescriptor() instanceof IMobilePageViewDescriptor) {
-      nextPage = (IMobilePageViewDescriptor) getElementViewDescriptor();
-    } else {
-      nextPage = new MobileCompositePageViewDescriptor();
-      ((MobileCompositePageViewDescriptor) nextPage).setPageSectionDescriptors(Collections.singletonList(
-          getElementViewDescriptor()));
+    if (cachedViewDescriptor == null) {
+      IListViewDescriptor moduleObjectsView = getProjectedViewDescriptor();
+      BeanCollectionModuleDescriptor moduleDescriptor = getDescriptor();
+      ((BasicViewDescriptor) moduleObjectsView).setModelDescriptor(moduleDescriptor.getPropertyDescriptor(MobileBeanCollectionModule.MODULE_OBJECTS));
+      MobileNavPageViewDescriptor moduleViewDescriptor = new MobileNavPageViewDescriptor();
+      moduleViewDescriptor.setSelectionViewDescriptor(moduleObjectsView);
+      IMobilePageViewDescriptor nextPage;
+      if (getElementViewDescriptor() instanceof IMobilePageViewDescriptor) {
+        nextPage = (IMobilePageViewDescriptor) getElementViewDescriptor();
+      } else {
+        nextPage = new MobileCompositePageViewDescriptor();
+        ((MobileCompositePageViewDescriptor) nextPage).setPageSectionDescriptors(Collections.singletonList(getElementViewDescriptor()));
+      }
+      moduleViewDescriptor.setNextPageViewDescriptor(nextPage);
+      moduleViewDescriptor.setModelDescriptor(moduleDescriptor);
+      moduleViewDescriptor.setI18nName(getI18nName());
+      moduleViewDescriptor.setI18nDescription(getI18nDescription());
+      moduleViewDescriptor.setI18nHeader(getI18nHeaderDescription());
+      cachedViewDescriptor = moduleViewDescriptor;
     }
-    moduleViewDescriptor.setNextPageViewDescriptor(nextPage);
-    moduleViewDescriptor.setModelDescriptor(moduleDescriptor);
-    moduleViewDescriptor.setI18nName(getI18nName());
-    moduleViewDescriptor.setI18nDescription(getI18nDescription());
-    moduleViewDescriptor.setI18nHeader(getI18nHeaderDescription());
-    return moduleViewDescriptor;
+    return cachedViewDescriptor;
   }
 
   /**
