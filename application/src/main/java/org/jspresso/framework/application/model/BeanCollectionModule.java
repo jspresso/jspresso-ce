@@ -63,6 +63,7 @@ public class BeanCollectionModule extends Module {
   private List<?>                      moduleObjects;
   private boolean                      detailViewIncluded;
   private ActionList                   navigateModuleObjectsActionList;
+  private IViewDescriptor              cachedViewDescriptor;
 
   /**
    * Instantiates a new Bean collection module.
@@ -188,38 +189,40 @@ public class BeanCollectionModule extends Module {
    */
   @Override
   public IViewDescriptor getViewDescriptor() {
-    IViewDescriptor projectedViewDescriptor = getProjectedViewDescriptor();
-    IViewDescriptor moduleObjectsView = BasicCollectionViewDescriptor.extractMainCollectionView(
-        projectedViewDescriptor);
-    BeanCollectionModuleDescriptor moduleDescriptor = getDescriptor();
-    ((BasicViewDescriptor) moduleObjectsView).setModelDescriptor(
-        moduleDescriptor.getPropertyDescriptor(BeanCollectionModule.MODULE_OBJECTS));
-    BasicBorderViewDescriptor moduleViewDescriptor = new BasicBorderViewDescriptor();
-    if (isDetailViewIncluded()) {
-      BasicTabViewDescriptor wrapperTabViewDescriptor = new BasicTabViewDescriptor();
-      wrapperTabViewDescriptor.setCascadingModels(true);
-      BasicViewDescriptor elementViewDescriptor = (BasicViewDescriptor) getElementViewDescriptor();
-      if (getNavigateModuleObjectsActionList() != null) {
-        ActionMap elementViewActionMap = elementViewDescriptor.getActionMap();
-        elementViewDescriptor = elementViewDescriptor.clone();
-        ActionMap actionMapWithNavigation = new ActionMap();
-        if (elementViewActionMap != null) {
-          actionMapWithNavigation.setParentActionMaps(Arrays.asList(elementViewActionMap));
+    if (cachedViewDescriptor == null) {
+      IViewDescriptor projectedViewDescriptor = getProjectedViewDescriptor();
+      IViewDescriptor moduleObjectsView = BasicCollectionViewDescriptor.extractMainCollectionView(
+          projectedViewDescriptor);
+      BeanCollectionModuleDescriptor moduleDescriptor = getDescriptor();
+      ((BasicViewDescriptor) moduleObjectsView).setModelDescriptor(moduleDescriptor.getPropertyDescriptor(BeanCollectionModule.MODULE_OBJECTS));
+      BasicBorderViewDescriptor moduleViewDescriptor = new BasicBorderViewDescriptor();
+      if (isDetailViewIncluded()) {
+        BasicTabViewDescriptor wrapperTabViewDescriptor = new BasicTabViewDescriptor();
+        wrapperTabViewDescriptor.setCascadingModels(true);
+        BasicViewDescriptor elementViewDescriptor = (BasicViewDescriptor) getElementViewDescriptor();
+        if (getNavigateModuleObjectsActionList() != null) {
+          ActionMap elementViewActionMap = elementViewDescriptor.getActionMap();
+          elementViewDescriptor = elementViewDescriptor.clone();
+          ActionMap actionMapWithNavigation = new ActionMap();
+          if (elementViewActionMap != null) {
+            actionMapWithNavigation.setParentActionMaps(Arrays.asList(elementViewActionMap));
+          }
+          actionMapWithNavigation.setActionLists(Arrays.asList(getNavigateModuleObjectsActionList()));
+          elementViewDescriptor.setActionMap(actionMapWithNavigation);
         }
-        actionMapWithNavigation.setActionLists(Arrays.asList(getNavigateModuleObjectsActionList()));
-        elementViewDescriptor.setActionMap(actionMapWithNavigation);
+        List<IViewDescriptor> tabs = new ArrayList<>();
+        tabs.add(moduleObjectsView);
+        tabs.add(elementViewDescriptor);
+        wrapperTabViewDescriptor.setTabs(tabs);
+        moduleViewDescriptor.setCenterViewDescriptor(wrapperTabViewDescriptor);
+      } else {
+        moduleViewDescriptor.setCenterViewDescriptor(projectedViewDescriptor);
       }
-      List<IViewDescriptor> tabs = new ArrayList<>();
-      tabs.add(moduleObjectsView);
-      tabs.add(elementViewDescriptor);
-      wrapperTabViewDescriptor.setTabs(tabs);
-      moduleViewDescriptor.setCenterViewDescriptor(wrapperTabViewDescriptor);
-    } else {
-      moduleViewDescriptor.setCenterViewDescriptor(projectedViewDescriptor);
-    }
-    moduleViewDescriptor.setModelDescriptor(moduleDescriptor);
+      moduleViewDescriptor.setModelDescriptor(moduleDescriptor);
 
-    return moduleViewDescriptor;
+      cachedViewDescriptor = moduleViewDescriptor;
+    }
+    return cachedViewDescriptor;
   }
 
   /**
