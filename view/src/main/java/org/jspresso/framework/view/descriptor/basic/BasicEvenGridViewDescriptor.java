@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.view.descriptor.basic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jspresso.framework.view.descriptor.EAxis;
@@ -65,7 +66,7 @@ public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
         previousViewDescriptor = cell;
       }
     }
-    return cells;
+    return cells == null ? cells : new ArrayList<IViewDescriptor>(cells);
   }
 
   /**

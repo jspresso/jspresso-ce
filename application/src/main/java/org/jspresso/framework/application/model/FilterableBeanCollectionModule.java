@@ -211,25 +211,25 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
   protected IViewDescriptor buildFilterViewDescriptor(IComponentDescriptor<?> moduleDescriptor) {
 
     IComponentDescriptor<IComponent> realComponentDesc = getFilterComponentDescriptor();
-    IViewDescriptor filterViewDesc = getFilterViewDescriptor();
+    IViewDescriptor filterView = getFilterViewDescriptor();
     IComponentDescriptorProvider<IQueryComponent> filterModelDescriptorProvider =
         (IComponentDescriptorProvider<IQueryComponent>) moduleDescriptor
         .getPropertyDescriptor(FilterableBeanCollectionModuleDescriptor.FILTER);
     boolean customFilterView = false;
-    if (filterViewDesc == null) {
-      filterViewDesc = getQueryViewDescriptorFactory().createQueryViewDescriptor(realComponentDesc,
+    if (filterView == null) {
+      filterView = getQueryViewDescriptorFactory().createQueryViewDescriptor(realComponentDesc,
           filterModelDescriptorProvider.getComponentDescriptor(), Collections.<String, Object>emptyMap());
     } else {
       customFilterView = true;
       // Deeply clean model descriptors on filter views
-      cleanupFilterViewDescriptor(filterViewDesc);
+      cleanupFilterViewDescriptor(filterView);
     }
-    if (filterViewDesc instanceof BasicViewDescriptor) {
-      ((BasicViewDescriptor) filterViewDesc).setBorderType(EBorderType.TITLED);
-      ((BasicViewDescriptor) filterViewDesc).setModelDescriptor(filterModelDescriptorProvider);
+    if (filterView instanceof BasicViewDescriptor) {
+      ((BasicViewDescriptor) filterView).setBorderType(EBorderType.TITLED);
+      ((BasicViewDescriptor) filterView).setModelDescriptor(filterModelDescriptorProvider);
     }
     if (customFilterView) {
-      getQueryViewDescriptorFactory().adaptExistingViewDescriptor(filterViewDesc);
+      getQueryViewDescriptorFactory().adaptExistingViewDescriptor(filterView);
     }
 
     BasicTabViewDescriptor tabFilterView = getFilterExtraViewDescriptor();
@@ -240,33 +240,42 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
             filterModelDescriptorProvider.getComponentDescriptor());
       }
     }
+    if (tabFilterView == null && filterView instanceof BasicTabViewDescriptor) {
+      // In that case, the filter view must be reworked for the model descriptor to be set on each tabs
+      tabFilterView = new BasicTabViewDescriptor();
+      tabFilterView.setTabs(new ArrayList<IViewDescriptor>());
+    }
     if (tabFilterView != null) {
       List<IViewDescriptor> tabs = new ArrayList<>();
-      for (IViewDescriptor view : tabFilterView.getChildViewDescriptors()) {
-        BasicViewDescriptor v = ((BasicViewDescriptor) view).clone();
-        v.setModelDescriptor(filterModelDescriptorProvider);
-        tabs.add(v);
-      }
-
-      if (filterViewDesc instanceof ITabViewDescriptor) {
-        for (IViewDescriptor view : ((ICompositeViewDescriptor) filterViewDesc).getChildViewDescriptors()) {
-          BasicViewDescriptor v = ((BasicViewDescriptor) view).clone();
-          v.setModelDescriptor(filterModelDescriptorProvider);
-          tabs.add(v);
+      for (IViewDescriptor tab : tabFilterView.getChildViewDescriptors()) {
+        if (tab instanceof BasicViewDescriptor) {
+          ((BasicViewDescriptor) tab).clone();
+          ((BasicViewDescriptor) tab).setModelDescriptor(filterModelDescriptorProvider);
+          tabs.add(tab);
         }
-      } else {
-        ((BasicViewDescriptor) filterViewDesc).setBorderType(EBorderType.NONE);
-        tabs.add(filterViewDesc);
       }
 
-      BasicTabViewDescriptor tabView = new BasicTabViewDescriptor();
-      tabView.setPermId(getPermId() + ".filter");
-      tabView.setRenderingOptions(ERenderingOptions.LABEL);
-      tabView.setTabs(tabs);
+      if (filterView instanceof ITabViewDescriptor) {
+        for (IViewDescriptor tab : ((ICompositeViewDescriptor) filterView).getChildViewDescriptors()) {
+          if (tab instanceof BasicViewDescriptor) {
+            tab = ((BasicViewDescriptor) tab).clone();
+            ((BasicViewDescriptor) tab).setModelDescriptor(filterModelDescriptorProvider);
+            tabs.add(tab);
+          }
+        }
+      } else if (filterView instanceof BasicViewDescriptor) {
+        ((BasicViewDescriptor) filterView).setBorderType(EBorderType.NONE);
+        tabs.add(filterView);
+      }
 
-      filterViewDesc = tabView;
+      BasicTabViewDescriptor newTabFilterView = new BasicTabViewDescriptor();
+      newTabFilterView.setPermId(getPermId() + ".filter");
+      newTabFilterView.setRenderingOptions(ERenderingOptions.LABEL);
+      newTabFilterView.setTabs(tabs);
+
+      filterView = newTabFilterView;
     }
-    return filterViewDesc;
+    return filterView;
   }
 
   /**

@@ -718,7 +718,10 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
                   tabViewConnector.setParentConnector(null);
                 }
               }
-              rebindTabViewIfNecessary(getChildView(getCurrentViewIndex()));
+              IView<E> childView = getChildView(getCurrentViewIndex());
+              if (childView != null) {
+                rebindTabViewIfNecessary(childView);
+              }
             }
           });
         }

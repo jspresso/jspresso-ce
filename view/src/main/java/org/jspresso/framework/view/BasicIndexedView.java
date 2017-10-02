@@ -47,7 +47,7 @@ public class BasicIndexedView<E> extends BasicCompositeView<E> implements
    */
   @Override
   public IView<E> getChildView(int index) {
-    if (index < 0 || super.getChildren() == null) {
+    if (index < 0 || super.getChildren() == null || index > super.getChildren().size() -1) {
       return null;
     }
     return super.getChildren().get(index);
