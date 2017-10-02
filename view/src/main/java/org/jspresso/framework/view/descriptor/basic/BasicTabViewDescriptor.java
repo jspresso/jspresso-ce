@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.view.descriptor.basic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jspresso.framework.action.IAction;
@@ -65,7 +66,7 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor impleme
         previousViewDescriptor = childViewDescriptor;
       }
     }
-    return tabs;
+    return tabs == null ? tabs : new ArrayList<IViewDescriptor>(tabs);
   }
 
   /**
