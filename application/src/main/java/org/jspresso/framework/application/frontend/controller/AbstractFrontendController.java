@@ -1247,11 +1247,17 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
     started = peerController.start(initialLocale, theClientTimeZone);
     peerController.addDirtInterceptor(dirtInterceptor);
     BackendControllerHolder.setSessionBackendController(peerController);
+    return started;
+  }
+
+  /**
+   * Start action monitoring plugin if necessary.
+   */
+  protected void startActionMonitoringPluginIfNecessary() {
     IActionMonitoringPlugin amp = getActionMonitoringPlugin();
     if (amp != null) {
       amp.start(getInitialActionContext());
     }
-    return started;
   }
 
   /**
@@ -1852,6 +1858,7 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
     LOG.info("User {} logged in  for session {}.", getLoginCallbackHandler().getUsername(),
         getApplicationSession().getId());
     loggedIn(subject);
+    startActionMonitoringPluginIfNecessary();
     return true;
   }
 

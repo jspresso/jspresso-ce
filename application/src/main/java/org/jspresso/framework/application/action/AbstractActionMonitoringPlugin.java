@@ -148,14 +148,13 @@ public abstract class AbstractActionMonitoringPlugin extends AbstractActionConte
   private Workspace           currentWorkspace;
   private Module              currentModule;
   private List<ActionEntry>   currentCallStack;
-  private boolean             started;
+  private static boolean      started = false;
 
   /**
    * Instantiates a new Abstract action monitoring plugin.
    */
   public AbstractActionMonitoringPlugin() {
     currentCallStack = new ArrayList<>();
-    started = false;
   }
 
   /**
