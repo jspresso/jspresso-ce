@@ -961,7 +961,7 @@ public class DefaultFlexViewFactory {
         var markersCoordinates:Array = JSON.parse(mapContent)["markers"] as Array;
         if (markersCoordinates && markersCoordinates.length > 0) {
           for (var i:int = 0; i < markersCoordinates.length; i++) {
-            var markerLocation = new Location(markersCoordinates[i][0], markersCoordinates[i][1])
+            var markerLocation:Location = new Location(markersCoordinates[i][0], markersCoordinates[i][1])
             if (i == 0) {
               map.center = markerLocation;
             }
