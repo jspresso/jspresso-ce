@@ -50,7 +50,9 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
      */
     _redrawMap: function () {
       if (this.__map !== null) {
-        this.__map.updateSize();
+        qx.event.Timer.once(function () {
+          this.__map.updateSize();
+        }, this, 10);
       }
     },
 
