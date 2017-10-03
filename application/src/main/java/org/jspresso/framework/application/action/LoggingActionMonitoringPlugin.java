@@ -109,7 +109,9 @@ public class LoggingActionMonitoringPlugin extends AbstractActionMonitoringPlugi
             "[" + actionClassName + "][" + Locale.ENGLISH + ":" + actionNameEN + "|" + Locale.FRENCH + ":"
                 + actionNameFR + "]\n");
       }
-      LOG.trace("User actions inventory \n{}", userActionsInventory);
+      LOG.trace("###### Start User actions inventory ######");
+      LOG.trace(userActionsInventory.toString());
+      LOG.trace("######  End User actions inventory  ######");
     }
   }
 
