@@ -18,12 +18,15 @@
  */
 package org.jspresso.framework.model.descriptor.basic;
 
+import org.jspresso.framework.model.descriptor.ITimeAwarePropertyDescriptor;
+
 /**
  * Abstract superclass for time-aware property descriptors.
  *
  * @author Vincent Vandenschrick
  */
-public abstract class BasicTimeAwarePropertyDescriptor extends BasicScalarPropertyDescriptor {
+public abstract class BasicTimeAwarePropertyDescriptor extends BasicScalarPropertyDescriptor implements
+    ITimeAwarePropertyDescriptor {
 
   private boolean secondsAware;
   private boolean millisecondsAware;
