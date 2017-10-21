@@ -47,13 +47,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 public class DefaultRemoteController extends AbstractRemoteController {
 
   /**
-   * Constructs a new {@code DefaultRemoteController} instance.
-   */
-  public DefaultRemoteController() {
-    super();
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
