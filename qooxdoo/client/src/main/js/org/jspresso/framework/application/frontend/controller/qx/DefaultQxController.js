@@ -71,7 +71,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     __workspaceStack: null,
     /** @type {qx.ui.embed.Iframe} */
     __dlFrame: null,
-    /** @type {qx.ui.basic.Label} */
+    /** @type {qx.ui.basic.Atom} */
     __statusBar: null,
     /** @type {Boolean} */
     __busy: false,
@@ -273,7 +273,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           }
         }
       }
-      toolBar.add(this._getStatusBar());
+      var statusBar = this._getStatusBar();
+      toolBar.add(statusBar);
+      statusBar.setAppearance("top-splitbutton");
       //toolBar.addSpacer();
       if (helpActions) {
         for (var i = 0; i < helpActions.length; i++) {
@@ -312,7 +314,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
 
       var applicationFrame = new qx.ui.container.Composite(new qx.ui.layout.VBox());
 
-      this.__statusBar = new qx.ui.basic.Label();
+      this.__statusBar = new qx.ui.basic.Atom();
+      this.__statusBar.setRich(true);
       this.__statusBar.setVisibility("excluded");
 
       var logo = new qx.ui.basic.Image("logo.png");
@@ -802,7 +805,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       var status = remoteUpdateStatusCommand.getStatus();
       if (this.__statusBar) {
         if (status != null && status.length > 0) {
-          this.__statusBar.setValue(status);
+          this.__statusBar.setLabel(status);
           this.__statusBar.setVisibility("visible");
         } else {
           this.__statusBar.setVisibility("excluded");
