@@ -46,7 +46,7 @@ public class StaticYesNoCancelAction<E, F, G> extends
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    setActionParameter(translate(messageCode, context), context);
+    setActionParameter(translate(getMessageCode(context), context), context);
     return super.execute(actionHandler, context);
   }
 
@@ -63,4 +63,14 @@ public class StaticYesNoCancelAction<E, F, G> extends
     this.messageCode = messageCode;
   }
 
+  /**
+   * Gets message code.
+   *
+   * @param context
+   *     the context
+   * @return the message code
+   */
+  protected String getMessageCode(Map<String, Object> context) {
+    return messageCode;
+  }
 }

@@ -28,13 +28,13 @@ import org.jspresso.framework.action.IActionHandler;
  * answer, another action is triggered. The Ok - Cancel alternative actions are
  * parametrized statically.
  *
- * @author Vincent Vandenschrick
  * @param <E>
- *          the actual gui component type used.
+ *     the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *     the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *     the actual action type used.
+ * @author Vincent Vandenschrick
  */
 public class OkCancelAction<E, F, G> extends AbstractMessageAction<E, F, G> {
 
@@ -45,6 +45,12 @@ public class OkCancelAction<E, F, G> extends AbstractMessageAction<E, F, G> {
    * Displays an ok cancel dialog
    * <p>
    * {@inheritDoc}
+   *
+   * @param actionHandler
+   *     the action handler
+   * @param context
+   *     the context
+   * @return the boolean
    */
   @Override
   public boolean execute(IActionHandler actionHandler,
@@ -52,7 +58,7 @@ public class OkCancelAction<E, F, G> extends AbstractMessageAction<E, F, G> {
     getController(context)
         .popupOkCancel(getSourceComponent(context),
             getI18nName(getTranslationProvider(context), getLocale(context)),
-            getIconImageURL(), getMessage(context), okAction, cancelAction,
+            getIconImageURL(), getMessage(context), getOkAction(context), getCancelAction(context),
             context);
     return super.execute(actionHandler, context);
   }
@@ -61,7 +67,7 @@ public class OkCancelAction<E, F, G> extends AbstractMessageAction<E, F, G> {
    * Assigns the action to execute when the user cancels the option.
    *
    * @param cancelAction
-   *          the cancelAction to set.
+   *     the cancelAction to set.
    */
   public void setCancelAction(IAction cancelAction) {
     this.cancelAction = cancelAction;
@@ -71,10 +77,31 @@ public class OkCancelAction<E, F, G> extends AbstractMessageAction<E, F, G> {
    * Assigns the action to execute when the user confirms the option.
    *
    * @param okAction
-   *          the okAction to set.
+   *     the okAction to set.
    */
   public void setOkAction(IAction okAction) {
     this.okAction = okAction;
   }
 
+  /**
+   * Gets cancel action.
+   *
+   * @param context
+   *     the context
+   * @return the cancel action
+   */
+  protected IAction getCancelAction(Map<String, Object> context) {
+    return cancelAction;
+  }
+
+  /**
+   * Gets ok action.
+   *
+   * @param context
+   *     the context
+   * @return the ok action
+   */
+  protected IAction getOkAction(Map<String, Object> context) {
+    return okAction;
+  }
 }

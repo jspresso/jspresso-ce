@@ -45,7 +45,7 @@ public class StaticOkCancelAction<E, F, G> extends OkCancelAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    setActionParameter(translate(messageCode, context), context);
+    setActionParameter(translate(getMessageCode(context), context), context);
     return super.execute(actionHandler, context);
   }
 
@@ -61,5 +61,17 @@ public class StaticOkCancelAction<E, F, G> extends OkCancelAction<E, F, G> {
   public void setMessageCode(String messageCode) {
     this.messageCode = messageCode;
   }
+
+  /**
+   * Gets message code.
+   *
+   * @param context
+   *     the context
+   * @return the message code
+   */
+  protected String getMessageCode(Map<String, Object> context) {
+    return messageCode;
+  }
+
 
 }

@@ -27,13 +27,13 @@ import org.jspresso.framework.action.IActionHandler;
  * extracted out of the context, is parametrized statically into the action
  * through its internationalization key.
  *
- * @author Vincent Vandenschrick
  * @param <E>
- *          the actual gui component type used.
+ *     the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *     the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *     the actual action type used.
+ * @author Vincent Vandenschrick
  */
 public class StaticYesNoAction<E, F, G> extends YesNoAction<E, F, G> {
 
@@ -41,11 +41,17 @@ public class StaticYesNoAction<E, F, G> extends YesNoAction<E, F, G> {
 
   /**
    * {@inheritDoc}
+   *
+   * @param actionHandler
+   *     the action handler
+   * @param context
+   *     the context
+   * @return the boolean
    */
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    setActionParameter(translate(messageCode, context), context);
+    setActionParameter(translate(getMessageCode(context), context), context);
     return super.execute(actionHandler, context);
   }
 
@@ -56,10 +62,20 @@ public class StaticYesNoAction<E, F, G> extends YesNoAction<E, F, G> {
    * popped-up.
    *
    * @param messageCode
-   *          the messageCode to set.
+   *     the messageCode to set.
    */
   public void setMessageCode(String messageCode) {
     this.messageCode = messageCode;
   }
 
+  /**
+   * Gets message code.
+   *
+   * @param context
+   *     the context
+   * @return the message code
+   */
+  protected String getMessageCode(Map<String, Object> context) {
+    return messageCode;
+  }
 }

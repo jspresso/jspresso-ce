@@ -28,13 +28,13 @@ import org.jspresso.framework.action.IActionHandler;
  * answer, another action is triggered. The Yes - No - Cancel alternative
  * actions are parametrized statically.
  *
- * @author Vincent Vandenschrick
  * @param <E>
- *          the actual gui component type used.
+ *     the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *     the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *     the actual action type used.
+ * @author Vincent Vandenschrick
  */
 public class YesNoCancelAction<E, F, G> extends AbstractMessageAction<E, F, G> {
 
@@ -46,14 +46,20 @@ public class YesNoCancelAction<E, F, G> extends AbstractMessageAction<E, F, G> {
    * Displays the message using a {@code JOptionPane.YES_NO_CANCEL_OPTION}.
    * <p>
    * {@inheritDoc}
+   *
+   * @param actionHandler
+   *     the action handler
+   * @param context
+   *     the context
+   * @return the boolean
    */
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     getController(context).popupYesNoCancel(getSourceComponent(context),
         getI18nName(getTranslationProvider(context), getLocale(context)),
-        getIconImageURL(), getMessage(context), yesAction, noAction,
-        cancelAction, context);
+        getIconImageURL(), getMessage(context), getYesAction(context), getNoAction(context),
+        getCancelAction(context), context);
     return super.execute(actionHandler, context);
   }
 
@@ -61,7 +67,7 @@ public class YesNoCancelAction<E, F, G> extends AbstractMessageAction<E, F, G> {
    * Assigns the action to execute when the user cancels the option.
    *
    * @param cancelAction
-   *          the cancelAction to set.
+   *     the cancelAction to set.
    */
   public void setCancelAction(IAction cancelAction) {
     this.cancelAction = cancelAction;
@@ -72,7 +78,7 @@ public class YesNoCancelAction<E, F, G> extends AbstractMessageAction<E, F, G> {
    * question.
    *
    * @param noAction
-   *          the noAction to set.
+   *     the noAction to set.
    */
   public void setNoAction(IAction noAction) {
     this.noAction = noAction;
@@ -83,9 +89,42 @@ public class YesNoCancelAction<E, F, G> extends AbstractMessageAction<E, F, G> {
    * question.
    *
    * @param yesAction
-   *          the yesAction to set.
+   *     the yesAction to set.
    */
   public void setYesAction(IAction yesAction) {
     this.yesAction = yesAction;
+  }
+
+  /**
+   * Gets cancel action.
+   *
+   * @param context
+   *     the context
+   * @return the cancel action
+   */
+  protected IAction getCancelAction(Map<String, Object> context) {
+    return cancelAction;
+  }
+
+  /**
+   * Gets no action.
+   *
+   * @param context
+   *     the context
+   * @return the no action
+   */
+  protected IAction getNoAction(Map<String, Object> context) {
+    return noAction;
+  }
+
+  /**
+   * Gets yes action.
+   *
+   * @param context
+   *     the context
+   * @return the yes action
+   */
+  protected IAction getYesAction(Map<String, Object> context) {
+    return yesAction;
   }
 }
