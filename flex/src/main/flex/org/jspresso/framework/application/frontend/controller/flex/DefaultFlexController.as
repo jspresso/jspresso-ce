@@ -133,9 +133,6 @@ import org.jspresso.framework.gui.remote.RIcon;
 import org.jspresso.framework.gui.remote.RSplitContainer;
 import org.jspresso.framework.gui.remote.RTabContainer;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
-import org.jspresso.framework.state.remote.RemoteCompositeValueState;
-import org.jspresso.framework.state.remote.RemoteCompositeValueState;
-import org.jspresso.framework.state.remote.RemoteFormattedValueState;
 import org.jspresso.framework.state.remote.RemoteFormattedValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.array.ArrayUtil;
@@ -204,6 +201,8 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     initRemoteController();
     registerRemoteClasses();
     initGeoLocation();
+    Alert.buttonHeight = 30;
+    Alert.buttonWidth = 90;
   }
 
   protected function createViewFactory():DefaultFlexViewFactory {
@@ -385,7 +384,8 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
       var rLoginView:RComponent = initLoginCommand.loginView;
       var loginView:UIComponent = getViewFactory().createComponent(rLoginView);
       popupDialog(rLoginView.label, rLoginView.toolTip, loginView, rLoginView.icon,
-                  extractAllActions(initLoginCommand.loginActionLists), false, null, initLoginCommand.secondaryLoginActionLists);
+                  extractAllActions(initLoginCommand.loginActionLists), false, null,
+                  initLoginCommand.secondaryLoginActionLists);
     } else if (command is RemoteCleanupCommand) {
       var removedPeerGuids:Array = (command as RemoteCleanupCommand).removedPeerGuids;
       for (var rpeerIndex:int = 0; rpeerIndex < removedPeerGuids.length; rpeerIndex++) {
@@ -556,9 +556,11 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
         var targetComponent:RComponent = targetPeer as RComponent;
         if (command is RemoteAddCardCommand) {
           getViewFactory().addCard(targetComponent.retrievePeer() as ViewStack, (command as RemoteAddCardCommand).card,
-                                   (command as RemoteAddCardCommand).cardName);
+                                                                                (command
+                                                                                    as RemoteAddCardCommand).cardName);
         } else if (command is RemoteAddRepeatedCommand) {
-          getViewFactory().addRepeated(targetComponent.retrievePeer() as ViewRepeater, (command as RemoteAddRepeatedCommand).newSections);
+          getViewFactory().addRepeated(targetComponent.retrievePeer() as ViewRepeater,
+              (command as RemoteAddRepeatedCommand).newSections);
         } else if (command is RemoteFocusCommand) {
           getViewFactory().focus(targetComponent.retrievePeer() as UIComponent);
         } else if (command is RemoteEditCommand) {
@@ -578,12 +580,14 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
         (registeredState as RemoteCompositeValueState).description = (state as RemoteCompositeValueState).description;
         (registeredState as RemoteCompositeValueState).iconImageUrl = (state as RemoteCompositeValueState).iconImageUrl;
         (registeredState as RemoteCompositeValueState).leadingIndex = (state as RemoteCompositeValueState).leadingIndex;
-        (registeredState as RemoteCompositeValueState).selectedIndices = (state as RemoteCompositeValueState).selectedIndices;
+        (registeredState as RemoteCompositeValueState).selectedIndices = (state
+            as RemoteCompositeValueState).selectedIndices;
         for each (var child:RemoteValueState in (state as RemoteCompositeValueState).children) {
           syncRegisteredState(child);
         }
       } else if (state is RemoteFormattedValueState) {
-        (registeredState as RemoteFormattedValueState).valueAsObject = (state as RemoteFormattedValueState).valueAsObject;
+        (registeredState as RemoteFormattedValueState).valueAsObject = (state
+            as RemoteFormattedValueState).valueAsObject;
       }
     }
     return registeredState;
@@ -599,7 +603,8 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     var browserManager:IBrowserManager = BrowserManager.getInstance();
     browserManager.init();
     browserManager.addEventListener(BrowserChangeEvent.BROWSER_URL_CHANGE, function (event:BrowserChangeEvent):void {
-      var oldSnapshotId:String = URLUtil.stringToObject(event.lastURL.substr(event.lastURL.lastIndexOf("#") + 1))["snapshotId"];
+      var oldSnapshotId:String = URLUtil.stringToObject(
+          event.lastURL.substr(event.lastURL.lastIndexOf("#") + 1))["snapshotId"];
       var newSnapshotId:String = URLUtil.stringToObject(event.url.substr(event.url.lastIndexOf("#") + 1))["snapshotId"];
       if (oldSnapshotId && newSnapshotId && oldSnapshotId != newSnapshotId) {
         var command:RemoteHistoryDisplayCommand = new RemoteHistoryDisplayCommand();
@@ -744,8 +749,8 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
         popFakeDialog();
       };
       pushFakeDialog();
-      var alert:Alert = Alert.show(translate("system.clipboard.continue"), translate("content.copy"),
-                                   Alert.YES | Alert.NO, null, alertCloseHandler, null, Alert.NO);
+      var alert:Alert = Alert.show(translate("system.clipboard.continue"), translate("content.copy"), Alert.YES
+          | Alert.NO, null, alertCloseHandler, null, Alert.NO);
       fixAlertSize(alert);
     }
   }
@@ -775,7 +780,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
   }
 
   protected function handleMessageCommand(messageCommand:RemoteMessageCommand):void {
-    if(messageCommand is RemoteErrorMessageCommand) {
+    if (messageCommand is RemoteErrorMessageCommand) {
       handleErrorMessageCommand(messageCommand as RemoteErrorMessageCommand);
     } else {
       var alert:Alert = createAlert(messageCommand);
@@ -812,10 +817,11 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     tabContainer.addChild(createErrorTab(translate("detail"), remoteErrorMessageCommand.detailMessage));
 
     var closeButton:Button = getViewFactory().createDialogButton("ok", null, remoteErrorMessageCommand.titleIcon);
-    closeButton.addEventListener(MouseEvent.CLICK, function(evt:MouseEvent):void {
+    closeButton.addEventListener(MouseEvent.CLICK, function (evt:MouseEvent):void {
       closeDialog();
     });
-    popupDialog(remoteErrorMessageCommand.title, translate("error.unexpected"), tabContainer, remoteErrorMessageCommand.titleIcon, [closeButton]);
+    popupDialog(remoteErrorMessageCommand.title, translate("error.unexpected"), tabContainer,
+                remoteErrorMessageCommand.titleIcon, [closeButton]);
   }
 
   private function createErrorTab(tabLabel:String, message:String):UIComponent {
@@ -977,7 +983,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
       popupMessage = buff;
     }
     var alert:Alert = Alert.show(popupMessageHeader + "\n\nDetails :\n" + popupMessage, popupTitle, Alert.OK, null,
-                                 null, null, Alert.OK);
+                                                                                        null, null, Alert.OK);
     fixAlertSize(alert);
   }
 
@@ -1083,7 +1089,8 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     }
     for (i = 0; i < _postponedEditionCommands.length; i++) {
       var delayedEditionCommand:RemoteEditCommand = _postponedEditionCommands[i] as RemoteEditCommand;
-      getViewFactory().edit((getRegistered(delayedEditionCommand.targetPeerGuid) as RComponent).retrievePeer() as UIComponent);
+      getViewFactory().edit((getRegistered(delayedEditionCommand.targetPeerGuid) as RComponent).retrievePeer()
+          as UIComponent);
     }
   }
 
@@ -1187,8 +1194,8 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     split.percentHeight = 100.0;
     assembleApplicationControlBar(exitAction, navigationActions, actions, helpActions);
     if (secondaryActions && secondaryActions.length > 0) {
-      var secondaryToolBar:UIComponent = getViewFactory().decorateWithSlideBar(getViewFactory().createToolBarFromActionLists(secondaryActions,
-                                                                                                                             applicationFrame));
+      var secondaryToolBar:UIComponent = getViewFactory().decorateWithSlideBar(
+          getViewFactory().createToolBarFromActionLists(secondaryActions, applicationFrame));
       var surroundingBox:VBox = new VBox();
       surroundingBox.percentWidth = 100.0;
       surroundingBox.percentHeight = 100.0;
@@ -1494,7 +1501,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     dialogBox.percentWidth = 100.0;
     dialogBox.percentHeight = 100.0;
     dialog.addChild(dialogBox);
-    dialogBox.addEventListener(FlexEvent.CREATION_COMPLETE, function (evt:FlexEvent):void {
+    dialog.addEventListener(FlexEvent.SHOW, function (evt:FlexEvent):void {
       if (dimension) {
         if (dimension.width > 0) {
           dialog.width = dimension.width;
@@ -1504,10 +1511,12 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
         }
       } else {
         var applicationFrame:Application = getTopLevelApplication();
-        dialog.width = Math.min(Math.max(dialog.width, dialogView.getExplicitOrMeasuredWidth() + 15),
-                                applicationFrame.width * 95 / 100);
-        dialog.height = Math.min(Math.max(dialog.height, dialogView.getExplicitOrMeasuredHeight()
-            + buttonBox.getExplicitOrMeasuredHeight() + 80), applicationFrame.height * 95 / 100);
+        dialog.width = Math.min(Math.max(dialog.width, Math.max(dialogView.getExplicitOrMeasuredWidth(),
+                                                                buttonBox.getExplicitOrMeasuredWidth())
+            + 15), applicationFrame.width * 95 / 100);
+        dialog.height = Math.min(
+            Math.max(dialog.height, dialogView.getExplicitOrMeasuredHeight() + buttonBox.getExplicitOrMeasuredHeight()
+                + 80), applicationFrame.height * 95 / 100);
         dialogView.width = NaN;
         dialogView.percentWidth = 100.0;
         dialogView.height = NaN;
@@ -1573,11 +1582,9 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
       const CHECK_GEOLOCATION:String = "document.insertScript = function() { checkGeoLocation = function() {"
           + "return (navigator && navigator.geolocation); } }";
       const GET_GEOLOCATION:String = "document.insertScript = function() { getGeoLocation = function() {"
-          + "var app = document.getElementById('" + appId + "');"
-          + "navigator.geolocation.getCurrentPosition(" +
-          "function(position) {app.geoLocationSuccessHandler(position);}," +
-          "function(error) {app.geoLocationErrorHandler(error);}" +
-          "); } }";
+          + "var app = document.getElementById('" + appId + "');" + "navigator.geolocation.getCurrentPosition("
+          + "function(position) {app.geoLocationSuccessHandler(position);},"
+          + "function(error) {app.geoLocationErrorHandler(error);}" + "); } }";
 
       ExternalInterface.call(CHECK_GEOLOCATION);
       var geoEnabled:Boolean = ExternalInterface.call("checkGeoLocation");
