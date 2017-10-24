@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2017 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -25,18 +25,26 @@ import java.sql.Types;
  *
  * @author Vincent Vandenschrick
  */
-public class MySQL5InnoDBDialect extends
-    org.hibernate.dialect.MySQL5InnoDBDialect {
+public class MySQL57InnoDBDialect extends
+    org.hibernate.dialect.MySQL57InnoDBDialect {
 
   /**
    * Constructs a new {@code MySQL5InnoDBDialect} instance. Overrides
    * tinyblob definition by replacing it with varbinary until 64 length.
    */
-  public MySQL5InnoDBDialect() {
+  public MySQL57InnoDBDialect() {
     super();
     registerColumnType(Types.VARBINARY, 63, "varbinary($l)");
     // for Hibernate 4 between 4.0 and 4.3, the Mysql mapping changed from bit to boolean - tinyint(1).
     // This was restored in Hibernate > 4.3 but for 4.2, we need to override this mapping.
     registerColumnType(Types.BOOLEAN, "bit");
+  }
+
+  @Override
+  protected void registerVarcharTypes() {
+    registerColumnType(Types.VARCHAR, "longtext");
+//		registerColumnType( Types.VARCHAR, 16777215, "mediumtext" );
+    registerColumnType(Types.VARCHAR, 8192, "varchar($l)");
+    registerColumnType(Types.LONGVARCHAR, "longtext");
   }
 }
