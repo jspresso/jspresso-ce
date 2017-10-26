@@ -41,6 +41,7 @@ import org.jspresso.framework.view.IView;
 public class RefreshCardViewFrontAction<E, F, G> extends FrontendAction<E, F, G> {
 
   private String cardViewId = null;
+  private int[] viewPath = null;
   
   /**
    * Sets the card view id.
@@ -58,7 +59,23 @@ public class RefreshCardViewFrontAction<E, F, G> extends FrontendAction<E, F, G>
   protected String getCardViewId(Map<String, Object> context) {
     return cardViewId;
   }
-  
+
+  /**
+   * Sets view path to start search from.
+   * @param viewPath The view path.
+   */
+  public void setViewPath(int[] viewPath) {
+    this.viewPath = viewPath;
+  }
+
+  /**
+   * Gets view path to start search from.
+   * @return The view path.
+   */
+  protected int[] getViewPath() {
+    return viewPath;
+  }
+
   /**
    * {@inheritDoc}
    */
@@ -66,7 +83,7 @@ public class RefreshCardViewFrontAction<E, F, G> extends FrontendAction<E, F, G>
   @Override
   public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     IMapView<E> cardView = null;
-    IView<?> view = getView(context);
+    IView<?> view = getView(viewPath, context);
     String cardId = getCardViewId(context);
     
     //
