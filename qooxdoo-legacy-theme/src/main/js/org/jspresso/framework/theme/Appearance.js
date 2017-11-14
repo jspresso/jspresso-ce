@@ -129,8 +129,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states, superStyles) {
             return {
               decorator: states.hovered ? superStyles.decorator : undefined,
-              padding: states.hovered ? [2, 4] : [3, 5],
-              margin: 2
+              padding: states.hovered ? [2, 4] : [3, 5]
             };
           }
         },
@@ -145,9 +144,65 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           base: true,
           style: function (states) {
             return {
-              marginLeft: 2,
               padding: [2, 4],
+              margin: [2, 2, 2, 4],
               backgroundColor : (states.disabled || states.readonly) ? "background-disabled" : "white"
+            };
+          }
+        },
+
+        "actionfield": {
+          style: function (states) {
+            return {
+              paddingRight: 2,
+              margin: [2, 2, 2, 4],
+              backgroundColor: "white"
+            };
+          }
+        },
+
+        "actionfield-field": {
+          include: "textfield",
+          style: function (states) {
+            return {
+              margin: 0
+            };
+          }
+        },
+
+        "datetimefield": {
+          style: function (states) {
+            return {
+              padding: [2, 2]
+            };
+          }
+        },
+
+        "datefield": {
+          base: true,
+          include: "textfield",
+          style: function (states) {
+            return {
+              backgroundColor: (states.disabled || states.readonly) ? "background-disabled" : "white"
+            };
+          }
+        },
+
+        "datefield/textfield": {
+          base: true,
+          style: function (states) {
+            return {
+              backgroundColor: undefined
+            };
+          }
+        },
+
+        "datefield/button": {
+          base: true,
+          style: function (states) {
+            return {
+              margin: 0,
+              padding: 0
             };
           }
         },
@@ -344,60 +399,6 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
               backgroundColor: "app-background",
               minWidth: 10,
               minHeight: 10
-            };
-          }
-        },
-
-        "actionfield": {
-          style: function (states) {
-            return {
-              backgroundColor: "white"
-            };
-          }
-        },
-
-        "actionfield-field": {
-          include: "textfield",
-          style: function (states) {
-            return {
-              marginRight: 2
-            };
-          }
-        },
-
-        "datetimefield": {
-          style: function (states) {
-            return {
-              padding: [2, 2]
-            };
-          }
-        },
-
-        "datefield": {
-          base: true,
-          include: "textfield",
-          style: function (states) {
-            return {
-              backgroundColor: (states.disabled || states.readonly) ? "background-disabled" : "white"
-            };
-          }
-        },
-
-        "datefield/textfield": {
-          base:true,
-          style: function (states) {
-            return {
-              backgroundColor: undefined
-            };
-          }
-        },
-
-        "datefield/button": {
-          base: true,
-          style: function (states) {
-            return {
-              margin: 0,
-              padding: 0
             };
           }
         },
