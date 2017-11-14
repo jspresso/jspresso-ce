@@ -149,10 +149,26 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           include: "button-frame",
           style: function (states, superStyles) {
             return {
-              decorator: states.hovered ? superStyles.decorator : undefined,
-              padding: states.hovered ? [1, 1] : [2, 2],
+              decorator: states.hovered || states.focused ? superStyles.decorator : undefined,
+              padding: states.hovered || states.focused ? [1, 1] : [2, 2],
               margin: states.labeled && (states.middle || states.right) ? [1, 1, 1, 20] : 1
             };
+          }
+        },
+
+        "splitbutton/button": {
+          base: true,
+          include: "button",
+          style: function (states, superStyles) {
+            return {};
+          }
+        },
+
+        "splitbutton/arrow": {
+          base: true,
+          include: "button",
+          style: function (states, superStyles) {
+            return {};
           }
         },
 
@@ -370,31 +386,6 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             return {
               padding: [0, 4, 0, 10]
-            };
-          }
-        },
-
-        "splitbutton/button": {
-          base: true,
-          include: "button-frame",
-          alias: "button-frame",
-          style: function (states, superStyles) {
-            return {
-              padding: states.hovered ? [1, 1] : [2, 2],
-              margin: [1, 0, 1, 1],
-              decorator: states.hovered ? superStyles.decorator : undefined
-            };
-          }
-        },
-
-        "splitbutton/arrow": {
-          base: true,
-          include: "button-frame",
-          style: function (states, superStyles) {
-            return {
-              padding: states.hovered ? [1, 1] : [2, 2],
-              margin: [1, 1, 1, 0],
-              decorator: states.hovered ? superStyles.decorator : undefined
             };
           }
         },
