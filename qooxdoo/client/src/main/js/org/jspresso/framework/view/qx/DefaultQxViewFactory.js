@@ -148,7 +148,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
                 remoteComponent.getForeground()));
           }
           if (remoteComponent.getBackground()) {
-            componentToStyle.setDecorator("main");
             componentToStyle.setBackgroundColor(org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(
                 remoteComponent.getBackground()));
           }
@@ -671,19 +670,14 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           for (var i = 0; i < componentsToStyle.length; i++) {
             componentsToStyle[i].addListenerOnce("appear", function (e) {
               var componentToStyle = e.getCurrentTarget();
-              var defaultDecorator = componentToStyle.getDecorator();
               var defaultBackgroundColor = componentToStyle.getBackgroundColor();
-              var mainDecorator = "main";
               this._getRemotePeerRegistry().register(backgroundState);
               var modelController = new qx.data.controller.Object(backgroundState);
               modelController.addTarget(componentToStyle, "backgroundColor", "value", false, {
                 converter: function (modelValue, model) {
                   if (modelValue) {
-                    // To allow for having the background color displayed instead of the decorator.
-                    componentToStyle.setDecorator(mainDecorator);
                     return org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(modelValue);
                   } else {
-                    componentToStyle.setDecorator(defaultDecorator);
                     return defaultBackgroundColor;
                   }
                 }
@@ -782,7 +776,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      */
     _createHtmlEditor: function (remoteHtmlArea) {
       var htmlEditor = new htmlarea.HtmlArea(null, null, "blank.html");
-      htmlEditor.setDecorator("main");
       var state = remoteHtmlArea.getState();
       var modelController = new qx.data.controller.Object(state);
       modelController.addTarget(htmlEditor, "value", "value", false, {
@@ -1417,9 +1410,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
               componentLabel.setAlignX("right");
             }
             componentLabel.setAlignY("middle");
+            componentLabel.setMarginTop(rowSpacing);
+            componentLabel.setMarginBottom(rowSpacing);
           } else {
             componentLabel.setAlignX("left");
             componentLabel.setAlignY("bottom");
+            componentLabel.setMarginTop(rowSpacing);
           }
           if (labelCol > 0) {
             componentLabel.setMarginLeft(columnSpacing);
@@ -1427,19 +1423,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             componentLabel.setMarginLeft(4);
           }
           componentLabel.setMarginRight(labelMarginRight);
-          componentLabel.setMarginTop(rowSpacing);
-          componentLabel.setMarginBottom(rowSpacing);
           componentLabel.setAllowStretchX(false, false);
           componentLabel.setAllowStretchY(false, false);
-          // if (componentLabel.getLabel() == "" && remoteForm.getLabelsPosition() == "ASIDE") {
-          //   formLayout.setColumnFlex(labelCol - 1, 0);
-          //   compColSpan++;
-          //   compCol--;
-          // } else {
           form.add(componentLabel, {
             row: labelRow, column: labelCol, rowSpan: 1, colSpan: labelColSpan
           });
-          // }
         }
         component.setAllowShrinkX(true);
         if (remoteForm.getLabelsPosition() == "ASIDE") {
@@ -1454,9 +1442,14 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 
         if (remoteForm.getLabelsPosition() == "ABOVE") {
           if (labelCol > 0) {
-            component.setMarginLeft(columnSpacing);
+            var componentsToStyle = component.getUserData("componentsToStyle");
+            var firstComponentLeftMargin = 0;
+            if (componentsToStyle && componentsToStyle.length > 0) {
+              componentsToStyle[0].syncAppearance();
+              firstComponentLeftMargin = componentsToStyle[0].getMarginLeft();
+            }
+            component.setMarginLeft(columnSpacing - firstComponentLeftMargin);
           }
-          component.setMarginBottom(rowSpacing);
         } else {
           if (!(rComponent instanceof org.jspresso.framework.gui.remote.RForm)) {
             component.setMarginTop(rowSpacing);
@@ -2148,7 +2141,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 
     _createAsideAction: function (remoteAction, remoteComponent, disableActionsWithField) {
       var button = this.createAction(remoteAction);
-      //button.setFocusable(false);
+      button.setFocusable(false);
       var remoteValueState = remoteComponent.getState();
       if (remoteValueState && disableActionsWithField) {
         remoteValueState.addListener("changeWritable", function (e) {
@@ -2170,6 +2163,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var decorated = component;
       if (remoteComponent.getActionLists()) {
         var actionField = new qx.ui.container.Composite(new qx.ui.layout.HBox(0));
+        actionField.setUserData("componentsToStyle", [component]);
         actionField.setFocusable(true);
         actionField.setAllowStretchY(false, false);
 
@@ -2951,6 +2945,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       resetButton.setAllowStretchX(false, false);
       resetButton.setAllowStretchY(false, false);
       resetButton.setAlignY("middle");
+      resetButton.setFocusable(false);
 
       // colorWidget.setWidth(resetButton.getWidth());
       this._sizeMaxComponentWidth(colorWidget, remoteColorField);

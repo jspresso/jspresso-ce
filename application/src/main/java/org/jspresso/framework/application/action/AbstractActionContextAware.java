@@ -19,6 +19,7 @@
 package org.jspresso.framework.application.action;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -39,6 +40,7 @@ import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.ICompositeView;
+import org.jspresso.framework.view.IMapView;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 
@@ -963,6 +965,9 @@ public abstract class AbstractActionContextAware {
             if (target instanceof ICompositeView<?> && ((ICompositeView<?>) target).getChildren() != null
                 && nextIndex < ((ICompositeView<?>) target).getChildren().size()) {
               target = ((ICompositeView<T>) target).getChildren().get(nextIndex);
+            } else if(target instanceof IMapView<?> && ((IMapView<?>) target).getCurrentView() != null
+                && nextIndex == 0) {
+              target = ((IMapView<T>) target).getCurrentView();
             } else {
               target = null;
             }
@@ -1004,18 +1009,24 @@ public abstract class AbstractActionContextAware {
     if (permId.equals(viewPermId)) {
       return true;
     }
+    List<? extends IView<?>> children = null;
     if (fromView instanceof ICompositeView<?>) {
-      List<IView<?>> children = ((ICompositeView) fromView).getChildren();
-      if (children != null) {
-        for (int i = 0; i < children.size(); i++) {
-          IView<?> child = children.get(i);
-          List<Integer> childViewPathBuffer = new ArrayList<>();
-          boolean foundInChild = findPermId(permId, child, childViewPathBuffer);
-          if (foundInChild) {
-            viewPathBuffer.add(Integer.valueOf(i));
-            viewPathBuffer.addAll(childViewPathBuffer);
-            return true;
-          }
+      children = ((ICompositeView) fromView).getChildren();
+    } else if(fromView instanceof IMapView<?>) {
+      IView<?> currentView = ((IMapView) fromView).getCurrentView();
+      if (currentView != null) {
+        children = Arrays.asList(currentView);
+      }
+    }
+    if (children != null) {
+      for (int i = 0; i < children.size(); i++) {
+        IView<?> child = children.get(i);
+        List<Integer> childViewPathBuffer = new ArrayList<>();
+        boolean foundInChild = findPermId(permId, child, childViewPathBuffer);
+        if (foundInChild) {
+          viewPathBuffer.add(Integer.valueOf(i));
+          viewPathBuffer.addAll(childViewPathBuffer);
+          return true;
         }
       }
     }

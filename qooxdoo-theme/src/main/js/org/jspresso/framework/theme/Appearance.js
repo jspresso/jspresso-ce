@@ -167,7 +167,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             return {
               padding: [2, 4],
-              marginLeft: 4,
+              margin: [2, 2, 2, 4],
               backgroundColor : (states.disabled || states.readonly) ? "background-disabled" : "white"
             };
           }
@@ -176,7 +176,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         "actionfield": {
           style: function (states) {
             return {
-              padding: [2, 2],
+              paddingRight: 2,
+              marginLeft: 2,
               backgroundColor: "white"
             };
           }
@@ -186,7 +187,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           include: "textfield",
           style: function (states) {
             return {
-              marginLeft: 2
+              margin: 2
             };
           }
         },
