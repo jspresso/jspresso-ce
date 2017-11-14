@@ -1198,6 +1198,7 @@ public class DefaultFlexViewFactory {
     if(remoteComponent.actionLists) {
       var actionField:HBox = new HBox();
       //syncSizes(actionField, component);
+      component.name = "componentToStyle"
       actionField.styleName = "actionField";
       actionField.regenerateStyleCache(false);
       actionField.horizontalScrollPolicy = ScrollPolicy.OFF;
