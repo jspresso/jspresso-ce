@@ -1442,7 +1442,13 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 
         if (remoteForm.getLabelsPosition() == "ABOVE") {
           if (labelCol > 0) {
-            component.setMarginLeft(columnSpacing);
+            var componentsToStyle = component.getUserData("componentsToStyle");
+            var firstComponentLeftMargin = 0;
+            if (componentsToStyle && componentsToStyle.length > 0) {
+              componentsToStyle[0].syncAppearance();
+              firstComponentLeftMargin = componentsToStyle[0].getMarginLeft();
+            }
+            component.setMarginLeft(columnSpacing - firstComponentLeftMargin);
           }
         } else {
           if (!(rComponent instanceof org.jspresso.framework.gui.remote.RForm)) {
@@ -2135,7 +2141,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 
     _createAsideAction: function (remoteAction, remoteComponent, disableActionsWithField) {
       var button = this.createAction(remoteAction);
-      //button.setFocusable(false);
+      button.setFocusable(false);
       var remoteValueState = remoteComponent.getState();
       if (remoteValueState && disableActionsWithField) {
         remoteValueState.addListener("changeWritable", function (e) {
@@ -2939,6 +2945,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       resetButton.setAllowStretchX(false, false);
       resetButton.setAllowStretchY(false, false);
       resetButton.setAlignY("middle");
+      resetButton.setFocusable(false);
 
       // colorWidget.setWidth(resetButton.getWidth());
       this._sizeMaxComponentWidth(colorWidget, remoteColorField);

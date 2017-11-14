@@ -155,7 +155,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             return {
               paddingRight: 2,
-              margin: [2, 2, 2, 4],
+              marginLeft: 2,
               backgroundColor: "white"
             };
           }
@@ -165,7 +165,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           include: "textfield",
           style: function (states) {
             return {
-              margin: 0
+              margin: 2
             };
           }
         },
