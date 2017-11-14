@@ -2157,6 +2157,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var decorated = component;
       if (remoteComponent.getActionLists()) {
         var actionField = new qx.ui.container.Composite(new qx.ui.layout.HBox(0));
+        actionField.setUserData("componentsToStyle", [component]);
         actionField.setFocusable(true);
         actionField.setAllowStretchY(false, false);
 
