@@ -106,6 +106,8 @@ public class Module extends AbstractPropertyChangeCapable
    */
   public static final String I18N_HEADER_DESCRIPTION = "i18nHeaderDescription";
 
+  public static final String DIRTY_MARKER = " \u2605"; //" \u2606";
+
   private String             description;
   private String             i18nDescription;
   private String             headerDescription;
@@ -262,10 +264,10 @@ public class Module extends AbstractPropertyChangeCapable
   public String getI18nName() {
     String dirtyMarker = "";
     if (isDirty()) {
-      dirtyMarker = "(*)";
+      dirtyMarker = DIRTY_MARKER;
     }
     if (i18nName != null) {
-      return dirtyMarker + i18nName;
+      return i18nName + dirtyMarker;
     }
     return getName();
   }
