@@ -74,7 +74,7 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
         if (((Double) obj).isNaN() || ((Double) obj).isInfinite()) {
           returnValue = null;
         } else {
-          returnValue = super.fromJava(((Double) obj).longValue());
+          returnValue = super.fromJava(((Double) obj).doubleValue());
         }
       } else {
         returnValue = super.fromJava(obj);
