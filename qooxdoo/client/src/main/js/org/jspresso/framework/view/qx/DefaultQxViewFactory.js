@@ -170,12 +170,20 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _decorateWithActions: function (remoteComponent, component) {
       if (remoteComponent.getFocusGainedAction()) {
         component.addListener("focusin", function (event) {
-          this._getActionHandler().execute(remoteComponent.getFocusGainedAction());
+          if (component.getUserData("focusActionDisabled")) {
+            component.setUserData("focusActionDisabled", false)
+          } else {
+            this._getActionHandler().execute(remoteComponent.getFocusGainedAction());
+          }
         }, this);
       }
       if (remoteComponent.getFocusLostAction()) {
         component.addListener("focusout", function (event) {
-          this._getActionHandler().execute(remoteComponent.getFocusLostAction());
+          if (component.getUserData("focusActionDisabled")) {
+            component.setUserData("focusActionDisabled", false)
+          } else {
+            this._getActionHandler().execute(remoteComponent.getFocusLostAction());
+          }
         }, this);
       }
       if (remoteComponent instanceof org.jspresso.framework.gui.remote.RTextField || remoteComponent
@@ -1238,6 +1246,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     focus: function (component) {
       var focusableChild = this._findFirstFocusableComponent(component);
       if (focusableChild) {
+        if (focusableChild instanceof qx.ui.core.Widget) {
+          focusableChild.setUserData("focusActionDisabled", true);
+        }
         focusableChild.focus();
       }
     },
