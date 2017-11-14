@@ -106,7 +106,10 @@ public class Module extends AbstractPropertyChangeCapable
    */
   public static final String I18N_HEADER_DESCRIPTION = "i18nHeaderDescription";
 
-  public static final String DIRTY_MARKER = " \u2605"; //" \u2606";
+  /**
+   * {@code DIRTY_MARKER} is black star UTF8 character
+   */
+  public static final String DIRTY_MARKER = " \u2605";
 
   private String             description;
   private String             i18nDescription;
