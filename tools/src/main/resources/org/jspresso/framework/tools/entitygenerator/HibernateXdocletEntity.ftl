@@ -133,7 +133,11 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     <#if !propertyDescriptor.computed || propertyDescriptor.persistenceFormula??>
       <#local propertyName=propertyDescriptor.name/>
         case <#--<#if propertyDescriptor.computed && propertyDescriptor.persistenceFormula??>${componentName}Extension.</#if>-->${generateConstantName(propertyName)}:
+        <#if instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor")>
+          return is${propertyName?cap_first}();
+        <#else>
           return get${propertyName?cap_first}();
+        </#if>
     </#if>
   </#list>
         default:
@@ -190,7 +194,11 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
      * The ${propertyName} getter.
      * @return the ${propertyName} value
      */
+  <#if instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor")>
+    public ${propertyType} is${propertyName?cap_first}() {
+  <#else>
     public ${propertyType} get${propertyName?cap_first}() {
+  </#if>
       return this.${propertyName};
     }
 
