@@ -126,21 +126,10 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <configuration>
-          <descriptors>
-            <descriptor>${symbol_dollar}{basedir}/src/main/assembly/dist-bin.xml</descriptor>
-            <descriptor>${symbol_dollar}{basedir}/src/main/assembly/dist-src.xml</descriptor>
-          </descriptors>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
         <configuration>
           <autoVersionSubmodules>true</autoVersionSubmodules>
           <goals>deploy</goals>
-          <!-- <goals>deploy site-deploy assembly:assembly</goals> -->
         </configuration>
       </plugin>
       <plugin>

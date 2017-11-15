@@ -79,7 +79,6 @@
     <servlet.version>2.5</servlet.version>
     <docbook.version>4.4</docbook.version>
     <ant-contrib.version>1.0b3</ant-contrib.version>
-    <spring-beandoc.version>0.8.1</spring-beandoc.version>
     <ant-nodeps.version>1.8.1</ant-nodeps.version>
     <stax-api.version>1.0.1</stax-api.version>
     <trove.version>3.0.3</trove.version>
@@ -183,16 +182,6 @@
     <pluginRepository>
       <id>sonatype-oss-repository</id>
       <url>https://oss.sonatype.org/content/repositories/releases</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-    <pluginRepository>
-      <id>beandoc-repository</id>
-      <url>http://spring-beandoc.sourceforge.net/repo</url>
       <releases>
         <enabled>true</enabled>
       </releases>
@@ -1463,17 +1452,6 @@
               <groupId>ant-contrib</groupId>
               <artifactId>ant-contrib</artifactId>
               <version>${ant-contrib.version}</version>
-              <exclusions>
-                <exclusion>
-                  <groupId>ant</groupId>
-                  <artifactId>ant</artifactId>
-                </exclusion>
-              </exclusions>
-            </dependency>
-            <dependency>
-              <groupId>org.springframework.beandoc</groupId>
-              <artifactId>spring-beandoc</artifactId>
-              <version>${spring-beandoc.version}</version>
               <exclusions>
                 <exclusion>
                   <groupId>ant</groupId>

@@ -10,8 +10,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <ant-contrib.version>1.0b3</ant-contrib.version>
-    <spring-beandoc.version>0.8.1</spring-beandoc.version>
-
 
     <!-- Plugins versions -->
     <assembly-plugin.version>3.0.0</assembly-plugin.version>
@@ -98,16 +96,6 @@
     <pluginRepository>
       <id>sonatype-repository</id>
       <url>http://repository.sonatype.org/content/groups/flexgroup</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-    <pluginRepository>
-      <id>beandoc-repository</id>
-      <url>http://spring-beandoc.sourceforge.net/repo</url>
       <releases>
         <enabled>true</enabled>
       </releases>
@@ -273,82 +261,10 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <inherited>false</inherited>
-        <executions>
-          <execution>
-            <id>beandoc</id>
-            <phase>pre-site</phase>
-            <configuration>
-              <target>
-                <taskdef name="beandoc" classname="org.springframework.beandoc.client.AntTask" />
-                <taskdef resource="net/sf/antcontrib/antlib.xml" />
-                <if>
-                  <equals arg1="${project.artifactId}" arg2="jspresso-framework" />
-                  <then>
-                    <mkdir dir="${project.reporting.outputDirectory}/beandocs" />
-                    <mkdir dir="${project.reporting.outputDirectory}/beandocs/tmp" />
-                    <copy todir="${project.reporting.outputDirectory}/beandocs/tmp" flatten="true">
-                      <fileset dir="${basedir}/app-template/core/src/main/resources">
-                        <include name="**/commons.xml" />
-                        <include name="**/commons-hibernate.xml" />
-                        <include name="**/commons-frontend.xml" />
-                      </fileset>
-                      <fileset dir="${basedir}/app-template/swing/src/main/resources">
-                        <include name="**/commons-swing.xml" />
-                      </fileset>
-                    </copy>
-                    <beandoc outputDir="${project.reporting.outputDirectory}/beandocs" beandocProps="${basedir}/src/main/beandoc/jspresso-beandoc.properties">
-                      <fileset dir="${project.reporting.outputDirectory}/beandocs/tmp">
-                        <include name="**/*.xml" />
-                      </fileset>
-                    </beandoc>
-                    <delete dir="${project.reporting.outputDirectory}/beandocs/tmp" />
-                  </then>
-                </if>
-              </target>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>ant-contrib</groupId>
-            <artifactId>ant-contrib</artifactId>
-            <version>${ant-contrib.version}</version>
-            <exclusions>
-              <exclusion>
-                <groupId>ant</groupId>
-                <artifactId>ant</artifactId>
-              </exclusion>
-            </exclusions>
-          </dependency>
-          <dependency>
-            <groupId>org.springframework.beandoc</groupId>
-            <artifactId>spring-beandoc</artifactId>
-            <version>${spring-beandoc.version}</version>
-          </dependency>
-        </dependencies>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <configuration>
-          <descriptors>
-            <descriptor>${basedir}/src/main/assembly/dist-bin.xml</descriptor>
-            <descriptor>${basedir}/src/main/assembly/dist-src.xml</descriptor>
-            <descriptor>${basedir}/src/main/assembly/project-dist-src.xml</descriptor>
-          </descriptors>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
         <configuration>
           <autoVersionSubmodules>true</autoVersionSubmodules>
-          <goals>deploy site-deploy assembly:assembly</goals>
+          <goals>deploy site-deploy</goals>
         </configuration>
       </plugin>
       <plugin>

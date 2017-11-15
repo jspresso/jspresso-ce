@@ -40,12 +40,6 @@
   </requiredProperties>
   <fileSets>
     <fileSet filtered="true" packaged="false" encoding="UTF-8">
-      <directory>src/main/assembly</directory>
-      <includes>
-        <include>**/*.xml</include>
-      </includes>
-    </fileSet>
-    <fileSet filtered="true" packaged="false" encoding="UTF-8">
       <directory>src/site</directory>
       <includes>
         <include>**/*.xml</include>
