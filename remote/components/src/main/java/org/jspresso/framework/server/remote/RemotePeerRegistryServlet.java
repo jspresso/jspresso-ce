@@ -201,6 +201,7 @@ public class RemotePeerRegistryServlet extends HttpServlet {
     IRemoteStateOwner stateOwner = (IRemoteStateOwner) peerRegistry.getRegistered(id);
     Object stateValue = stateOwner.actualValue();
     if (stateValue != null) {
+      String targetImageFormat = ImageHelper.refineImageFormat(stateValue);
       if (request.getParameter(IMAGE_WIDTH_PARAMETER) != null) {
         scaledWidth = Integer.parseInt(request.getParameter(IMAGE_WIDTH_PARAMETER));
       }
@@ -208,11 +209,14 @@ public class RemotePeerRegistryServlet extends HttpServlet {
         scaledHeight = Integer.parseInt(request.getParameter(IMAGE_HEIGHT_PARAMETER));
       }
       if (scaledWidth != null || scaledHeight != null) {
-        stateValue = ImageHelper.scaleImage(stateValue, scaledWidth, scaledHeight);
+        stateValue = ImageHelper.scaleImage(stateValue, scaledWidth, scaledHeight, targetImageFormat);
       }
       if (stateValue instanceof byte[]) {
         inputStream = new BufferedInputStream(new ByteArrayInputStream((byte[]) stateValue));
         response.setContentLength(((byte[]) stateValue).length);
+        if (ImageHelper.SVG.equals(targetImageFormat)) {
+          response.setContentType(ImageHelper.SVG_CONTENT_TYPE);
+        }
       } else {
         inputStream = new BufferedInputStream(new ByteArrayInputStream(stateValue.toString().getBytes(
             StandardCharsets.UTF_8.name())));

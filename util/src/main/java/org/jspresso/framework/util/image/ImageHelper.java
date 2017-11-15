@@ -137,6 +137,25 @@ public final class ImageHelper {
   }
 
   /**
+   * Refine image format string.
+   *
+   * @param originalImageInput
+   *     the original image input
+   * @return the string
+   */
+  public static String refineImageFormat(Object originalImageInput) {
+    try {
+      String svgImage = createSvgImage(originalImageInput);
+      if (svgImage != null && svgImage.toLowerCase().contains("<svg")) {
+        return SVG;
+      }
+    } catch (IOException ioe) {
+      // ignored
+    }
+    return null;
+  }
+
+  /**
    * Scale image.
    *
    * @param originalImageInput
