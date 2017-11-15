@@ -86,46 +86,6 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>beandoc</id>
-            <phase>pre-site</phase>
-            <inherited>false</inherited>
-            <configuration>
-              <target>
-                <taskdef name="beandoc" classname="org.springframework.beandoc.client.AntTask" />
-                <taskdef resource="net/sf/antcontrib/antlib.xml" />
-                <if>
-                  <equals arg1="${symbol_dollar}{project.artifactId}" arg2="${artifactId}" />
-                  <then>
-                    <mkdir dir="${symbol_dollar}{project.reporting.outputDirectory}/beandocs" />
-                    <mkdir dir="${symbol_dollar}{project.reporting.outputDirectory}/beandocs/tmp" />
-                    <copy todir="${symbol_dollar}{project.reporting.outputDirectory}/beandocs/tmp" flatten="true">
-                      <fileset dir="${symbol_dollar}{basedir}/core/src/main/resources">
-                        <include name="**/${packageInPathFormat}/**/*.xml" />
-                        <exclude name="**/${packageInPathFormat}/**/*.hbm.xml" />
-                      </fileset>
-                    </copy>
-                    <beandoc outputDir="${symbol_dollar}{project.reporting.outputDirectory}/beandocs" beandocProps="${symbol_dollar}{basedir}/conf/beandoc.properties">
-                      <fileset dir="${symbol_dollar}{project.reporting.outputDirectory}/beandocs/tmp">
-                        <include name="**/*.xml" />
-                      </fileset>
-                    </beandoc>
-                    <delete dir="${symbol_dollar}{project.reporting.outputDirectory}/beandocs/tmp" />
-                  </then>
-                </if>
-                <delete dir="${project.build.directory}/antrun" />
-              </target>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
         <configuration>
           <autoVersionSubmodules>true</autoVersionSubmodules>

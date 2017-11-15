@@ -17,11 +17,6 @@
         name="Introduction"
         href="index.html" />
     </menu>
-    <menu name="Beans Doc">
-      <item
-        name="Standard beans"
-        href="beandocs/index.html" />
-    </menu>
     <menu name="Reference Doc">
       <item
         name="Reference Documentation"
