@@ -39,7 +39,7 @@
   by
     <groupId>org.eclipse.jetty</groupId>
 
-- Rename all your sjs files from .sjs to .groovy and update your application.groovy content to reflect this change.
+- Rename all your sjs files from .groovy to .sjs and update your application.groovy content to reflect this change.
 
 - JasperReports plugin changed from codehaus to to alexnederlof
   (https://github.com/alexnederlof/Jasper-report-maven-plugin).
