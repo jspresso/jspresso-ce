@@ -272,7 +272,14 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
         tabs.add(filterView);
       }
 
-      BasicTabViewDescriptor newTabFilterView = new BasicTabViewDescriptor();
+      BasicTabViewDescriptor newTabFilterView;
+      if (tabFilterView!=null) {
+        // Clone it to copy all properties (border, background, etc.)
+        newTabFilterView = (BasicTabViewDescriptor) tabFilterView.clone();
+      }
+      else {
+        newTabFilterView = new BasicTabViewDescriptor();
+      }
       newTabFilterView.setPermId(getPermId() + ".filter");
       newTabFilterView.setRenderingOptions(ERenderingOptions.LABEL);
       newTabFilterView.setTabs(tabs);
