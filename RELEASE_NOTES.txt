@@ -1,5 +1,13 @@
 5.0.0
 =====
+- There seems to be a problem in Groovy with static constants inherited by interfaces. Jspresso 5 generates interfaces
+  for your extensions (holding the constants of the computed properties) and makes the entities inherit the generated
+  extension interfaces. So the constants defined int the new extensions generated interfaces should be available from
+  the entity classes. This is the case in Java, but seems problematic in Groovy... So unfortunately, when referencing
+  a constant, you have to reference the interface where it is explicitly defined and not a subclass or subinterface.
+  This is fully transparent in Java but unfortunately not in Groovy. So whenever you use groovy to code your extensions,
+  you have to reference the constants where they are actually defined (entity or extension interface).
+
 - The new generator does not use anymore final "_" to name Java constants when they are SQL reserved keywords.
   Programs referencing such named constants should be modified accordingly.
 
