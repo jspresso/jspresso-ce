@@ -310,6 +310,15 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           }
         },
 
+        "pagination-view": {
+          include: "form",
+          style: function (states) {
+            return {
+              padding: 5
+            };
+          }
+        },
+
         "bordered-container": {
           style: function (states) {
             return {
