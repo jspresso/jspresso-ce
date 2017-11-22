@@ -27,7 +27,11 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
   },
 
   members: {
-    __format: null, __table: null, __action: null, __asideActions: null, __disableActionsWithField: false,
+    __format: null,
+    __table: null,
+    __action: null,
+    __asideActions: null,
+    __disableActionsWithField: false,
 
     _formatValue: function (cellInfo) {
       if (this.__format && cellInfo.value) {
@@ -46,11 +50,13 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
       }
       if (org.jspresso.framework.util.html.HtmlUtil.isHtml(cellInfo.value) && this.__table.getRowHeight() < 150) {
         var contentHeight = qx.bom.Label.getHtmlSize(cellInfo.value).height;
-        if (contentHeight > 150) {
-          contentHeight = 150;
-        }
-        if (this.__table.getRowHeight() < contentHeight) {
-          this.__table.setRowHeight(parseInt(contentHeight + (cellInfo.styleHeight * 2 / 5) + 4));
+        if (contentHeight) {
+          if (contentHeight > 150) {
+            contentHeight = 150;
+          }
+          if (this.__table.getRowHeight() < contentHeight) {
+            this.__table.setRowHeight(parseInt(contentHeight + (cellInfo.styleHeight * 2 / 5) + 4));
+          }
         }
       }
       var htmlContent;
@@ -81,8 +87,8 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
                 });
 
                 actionsHtmlContent += "<div";
-                actionsHtmlContent += " onMouseUp='executeAction(\"" + remoteAction.getGuid() + "\", null, \""
-                    + cellViewState.getGuid() + "\", \"" + cellViewState.getPermId() + "\")'"
+                // actionsHtmlContent += " onMouseUp='executeAction(\"" + remoteAction.getGuid() + "\", null, \""
+                //     + cellViewState.getGuid() + "\", \"" + cellViewState.getPermId() + "\")'"
                 actionsHtmlContent += " style='overflow: hidden;";
                 actionsHtmlContent += " cursor: pointer;";
                 actionsHtmlContent += " top: 5px;";
@@ -96,7 +102,7 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
                   }
                 }
                 actionsHtmlContent += " margin-left: 5px;"
-                actionsHtmlContent += " margin-right: 5px;"
+                //actionsHtmlContent += " margin-right: 5px;"
                 actionsHtmlContent += " background-position: center;";
                 actionsHtmlContent += " background-image: url(\"" + imageUrlSpec + "\");";
                 actionsHtmlContent += " background-repeat: no-repeat;'>";
