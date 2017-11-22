@@ -63,7 +63,11 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
       if (org.jspresso.framework.util.html.HtmlUtil.isHtml(cellInfo.value)) {
         htmlContent = cellInfo.value;
       } else if (this.__action) {
-        htmlContent = "<u style='cursor: pointer;' onMouseUp='executeAction(\"" + this.__action.getGuid() + "\");'>"
+        htmlContent = "<u style='cursor: pointer;' "
+            + "onMouseUp='executeAction(\"" + this.__action.getGuid() + "\");' "
+            + "onPointerUp='executeAction(\"" + this.__action.getGuid() + "\");' "
+            + "onTouchEnd='executeAction(\"" + this.__action.getGuid() + "\");' "
+            + ">"
             + this.base(arguments, cellInfo) + "</u>";
       } else {
         htmlContent = this.base(arguments, cellInfo);
@@ -90,7 +94,7 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
                 // actionsHtmlContent += " onMouseUp='executeAction(\"" + remoteAction.getGuid() + "\", null, \""
                 //     + cellViewState.getGuid() + "\", \"" + cellViewState.getPermId() + "\")'"
                 actionsHtmlContent += " style='overflow: hidden;";
-                actionsHtmlContent += " cursor: pointer;";
+                // actionsHtmlContent += " cursor: pointer;";
                 actionsHtmlContent += " top: 5px;";
 
                 if (iconDimension) {

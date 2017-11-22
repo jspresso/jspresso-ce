@@ -1679,10 +1679,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
                 if (org.jspresso.framework.util.html.HtmlUtil.isHtml(modelValue)) {
                   htmlContent = modelValue;
                 } else {
-                  htmlContent = "<u onMouseUp='executeAction(\"" + remoteLabelAction.getGuid()
-                      + "\");' onPointerUp='executeAction(\"" + remoteLabelAction.getGuid()
-                      + "\");' onTouchEnd='executeAction(\"" + remoteLabelAction.getGuid() + "\");'>"
-                      + modelValue + "</u>";
+                  htmlContent = "<u "
+                      + "onMouseUp='executeAction(\"" + remoteLabelAction.getGuid() + "\");' "
+                      + "onPointerUp='executeAction(\"" + remoteLabelAction.getGuid() + "\");' "
+                      + "onTouchEnd='executeAction(\"" + remoteLabelAction.getGuid() + "\");'"
+                      + ">" + modelValue + "</u>";
                 }
                 htmlContent = org.jspresso.framework.util.html.HtmlUtil.bindActionToHtmlContent(htmlContent,
                     remoteLabel.getAction());

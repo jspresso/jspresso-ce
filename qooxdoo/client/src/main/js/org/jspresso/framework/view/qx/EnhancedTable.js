@@ -108,6 +108,20 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedTable", {
           this.getTableModel().fireDataEvent("dataChanged", data);
         }
       }
+    },
+
+    isCellEditable: function (row, col) {
+      var cellEditable = true;
+      var rowState = this.getTableModel().getRowData(row);
+      if (!rowState.getWritable()) {
+        return cellEditable = false;
+      }
+      /** @type {org.jspresso.framework.state.remote.RemoteValueState} */
+      var cellState = rowState.getChildren().getItem(col + 1);
+      if (!cellState.getWritable()) {
+        cellEditable = false;
+      }
+      return cellEditable;
     }
 
   }

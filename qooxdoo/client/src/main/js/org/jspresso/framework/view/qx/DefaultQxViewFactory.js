@@ -2269,16 +2269,23 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var paneModel = paneScroller.getTablePaneModel();
       var focusIndicator = paneScroller.getChildControl("focus-indicator");
       focusIndicator.addListener("move", function(e) {
-        var row = this.getRow();
-        var col = this.getColumn();
+        var row = focusIndicator.getRow();
+        var col = focusIndicator.getColumn();
         if (row != null && col != null && row >= 0 && col >= 0) {
           var firstRow = paneScroller.getTablePane().getFirstVisibleRow();
           var rowHeight = table.getRowHeight();
           var focusedColumnLeft = paneModel.getColumnLeft(col);
           var focusedColumnWidth = columnModel.getColumnWidth(col);
-          this.setUserBounds(focusedColumnLeft, (row - firstRow) * rowHeight, focusedColumnWidth, rowHeight);
+          focusIndicator.setUserBounds(focusedColumnLeft, (row - firstRow) * rowHeight, focusedColumnWidth, rowHeight);
+
+          if (table.isCellEditable(row, col)) {
+            focusIndicator.setZIndex(1000);
+          } else {
+            focusIndicator.setZIndex(0);
+          }
         }
-      });
+      }, this);
+
       table.setStatusBarVisible(false);
       table.highlightFocusedRow(false);
       table.setResetSelectionOnHeaderTap(false);
@@ -2797,8 +2804,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
                 if (org.jspresso.framework.util.html.HtmlUtil.isHtml(modelValue)) {
                   htmlContent = modelValue;
                 } else {
-                  htmlContent = "<u style='cursor: pointer;' onMouseUp='executeAction(\""
-                      + remoteLabelAction.getGuid() + "\");'>" + modelValue + "</u>";
+                  htmlContent = "<u style='cursor: pointer;' "
+                      + "onMouseUp='executeAction(\"" + remoteLabelAction.getGuid() + "\");' "
+                      + "onPointerUp='executeAction(\"" + remoteLabelAction.getGuid() + "\");' "
+                      + "onTouchEnd='executeAction(\"" + remoteLabelAction.getGuid() + "\");'"
+                      + " >" + modelValue + "</u>";
                 }
                 htmlContent = org.jspresso.framework.util.html.HtmlUtil.bindActionToHtmlContent(htmlContent,
                     remoteLabel.getAction());

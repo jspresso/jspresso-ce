@@ -51,16 +51,15 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
       var col = cellInfo.col;
       /** @type {qx.ui.table.Table} */
       var table = cellInfo.table;
-      /** @type {org.jspresso.framework.state.remote.RemoteCompositeValueState} */
-      var rowState = table.getTableModel().getRowData(row);
-      if (!rowState.getWritable()) {
+
+      if (!table.isCellEditable(row, col)) {
         return null;
       }
+
+      var rowState = table.getTableModel().getRowData(row);
       /** @type {org.jspresso.framework.state.remote.RemoteValueState} */
       var cellState = rowState.getChildren().getItem(col + 1);
-      if (!cellState.getWritable()) {
-        return null;
-      }
+
       this.__cleanCurrentCellBinding();
       this.__currentCellState = cellState;
       var state = this.__rComponent.getState();
