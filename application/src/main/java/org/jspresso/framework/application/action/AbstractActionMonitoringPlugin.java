@@ -28,17 +28,15 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 
 import org.jspresso.framework.action.IAction;
-import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.action.IActionMonitoringPlugin;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.application.frontend.IFrontendController;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
+import org.jspresso.framework.application.frontend.action.lov.LovAction;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
 import org.jspresso.framework.application.security.ApplicationDirectoryBuilder;
@@ -82,13 +80,15 @@ public abstract class AbstractActionMonitoringPlugin extends AbstractActionConte
 
   private class ActionsDirectoryBuilder extends ApplicationDirectoryBuilder {
 
-    private Set<IDisplayableAction> userActions;
+    private Set<IDisplayableAction>         userActions;
+    private Map<String, IDisplayableAction> lovActions;
 
     /**
      * Instantiates a new Actions directory builder.
      */
     public ActionsDirectoryBuilder() {
       userActions = new HashSet<>();
+      lovActions = new HashMap<>();
     }
 
     /**
@@ -130,7 +130,18 @@ public abstract class AbstractActionMonitoringPlugin extends AbstractActionConte
       if (!isEnabled() || !filter(action)) {
         return;
       }
-      userActions.add(action);
+      if (LovAction.class.equals(action.getClass())) {
+        String referencePropertyName = path;
+        if (referencePropertyName != null) {
+          int lastDotIndex = referencePropertyName.lastIndexOf(".");
+          if (lastDotIndex >= 0) {
+            referencePropertyName = referencePropertyName.substring(lastDotIndex + 1);
+          }
+        }
+        lovActions.put(referencePropertyName, action);
+      } else {
+        userActions.add(action);
+      }
     }
 
     /**
@@ -141,6 +152,10 @@ public abstract class AbstractActionMonitoringPlugin extends AbstractActionConte
     public Set<IDisplayableAction> getUserActions() {
       return userActions;
     }
+
+    public Map<String, IDisplayableAction> getLovActions() {
+      return lovActions;
+    }
   }
 
   private IApplicationSession currentSession;
@@ -148,7 +163,7 @@ public abstract class AbstractActionMonitoringPlugin extends AbstractActionConte
   private Workspace           currentWorkspace;
   private Module              currentModule;
   private List<ActionEntry>   currentCallStack;
-  private static boolean      started = false;
+  private static boolean started = false;
 
   /**
    * Instantiates a new Abstract action monitoring plugin.
@@ -190,6 +205,7 @@ public abstract class AbstractActionMonitoringPlugin extends AbstractActionConte
    *     the frontend controller
    */
   protected abstract void traceUserActionsInventory(Set<IDisplayableAction> userActions,
+                                                    Map<String, IDisplayableAction> lovActions,
                                                     IFrontendController<?, ?, ?> frontendController);
 
   /**
@@ -299,7 +315,8 @@ public abstract class AbstractActionMonitoringPlugin extends AbstractActionConte
       IFrontendController<?, ?, ?> frontendController = getFrontendController(context);
       ActionsDirectoryBuilder actionsDirectoryBuilder = new ActionsDirectoryBuilder();
       actionsDirectoryBuilder.process(frontendController);
-      traceUserActionsInventory(actionsDirectoryBuilder.getUserActions(), frontendController);
+      traceUserActionsInventory(actionsDirectoryBuilder.getUserActions(), actionsDirectoryBuilder.getLovActions(),
+          frontendController);
       started = true;
     }
   }

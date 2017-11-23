@@ -38,11 +38,15 @@ import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescripto
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.ISecurityContextBuilder;
 import org.jspresso.framework.security.ISecurityHandler;
+import org.jspresso.framework.view.AbstractViewFactory;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
+import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
+import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
+import org.jspresso.framework.view.descriptor.IStringPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
@@ -54,12 +58,12 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  */
 public class ApplicationDirectoryBuilder {
 
-  private String[]           excludePatterns;
+  private String[] excludePatterns;
 
   /**
    * {@code MODEL}.
    */
-  public static final String MODEL      = "MODEL";
+  public static final String MODEL = "MODEL";
 
   /**
    * {@code NAVIGATION}.
@@ -69,17 +73,19 @@ public class ApplicationDirectoryBuilder {
   /**
    * {@code VIEW}.
    */
-  public static final String VIEW       = "VIEW";
+  public static final String VIEW = "VIEW";
 
   /**
    * {@code ACTION}.
    */
-  public static final String ACTION     = "ACTION";
+  public static final String ACTION = "ACTION";
 
-  private final Set<String>        modelPermIds;
-  private final Set<String>        navigationPermIds;
-  private final Set<String>        viewPermIds;
-  private final Set<String>        actionPermIds;
+  private final Set<String> modelPermIds;
+  private final Set<String> navigationPermIds;
+  private final Set<String> viewPermIds;
+  private final Set<String> actionPermIds;
+
+  private IDisplayableAction defaultLovAction;
 
   /**
    * Constructs a new {@code ApplicationDirectoryBuilder} instance.
@@ -89,9 +95,7 @@ public class ApplicationDirectoryBuilder {
     navigationPermIds = new TreeSet<>();
     viewPermIds = new TreeSet<>();
     actionPermIds = new TreeSet<>();
-    excludePatterns = new String[] {
-      "org\\.jspresso\\.framework\\..*"
-    };
+    excludePatterns = new String[]{"org\\.jspresso\\.framework\\..*"};
   }
 
   /**
@@ -103,6 +107,7 @@ public class ApplicationDirectoryBuilder {
    * @return this. application directory builder
    */
   public ApplicationDirectoryBuilder process(IFrontendController<?, ?, ?> frontendController) {
+    defaultLovAction = ((AbstractViewFactory) frontendController.getViewFactory()).getLovAction();
     if (frontendController.getActionMap() != null) {
       process(frontendController.getActionMap());
     }
@@ -139,16 +144,14 @@ public class ApplicationDirectoryBuilder {
       }
       modelPermIds.add(compPermId);
     }
-    for (IPropertyDescriptor propertyDescriptor : componentDescriptor
-        .getPropertyDescriptors()) {
+    for (IPropertyDescriptor propertyDescriptor : componentDescriptor.getPropertyDescriptors()) {
       process(propertyDescriptor, compPermId, modelPermIds);
       if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
         if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
-          process(((IReferencePropertyDescriptor<?>) propertyDescriptor)
-              .getReferencedDescriptor());
+          process(((IReferencePropertyDescriptor<?>) propertyDescriptor).getReferencedDescriptor());
         } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
-          process(((ICollectionPropertyDescriptor<?>) propertyDescriptor)
-              .getReferencedDescriptor().getElementDescriptor());
+          process(
+              ((ICollectionPropertyDescriptor<?>) propertyDescriptor).getReferencedDescriptor().getElementDescriptor());
         }
       }
     }
@@ -164,8 +167,7 @@ public class ApplicationDirectoryBuilder {
    * @param permIdsSet
    *     the perm ids set
    */
-  protected void process(IPropertyDescriptor propertyDescriptor, String path,
-      Set<String> permIdsSet) {
+  protected void process(IPropertyDescriptor propertyDescriptor, String path, Set<String> permIdsSet) {
     String propertyPermId = propertyDescriptor.getPermId();
     if (propertyPermId != null) {
       if (path != null) {
@@ -190,8 +192,7 @@ public class ApplicationDirectoryBuilder {
       if (path != null) {
         modulePermId = path + "." + modulePermId;
       }
-      if (isPermIdExcluded(modulePermId)
-          || navigationPermIds.contains(modulePermId)) {
+      if (isPermIdExcluded(modulePermId) || navigationPermIds.contains(modulePermId)) {
         return;
       }
       navigationPermIds.add(modulePermId);
@@ -199,8 +200,7 @@ public class ApplicationDirectoryBuilder {
     if (module.getViewDescriptor() != null) {
       process(module.getViewDescriptor(), null);
     }
-    if (module instanceof BeanCollectionModule
-        && ((BeanCollectionModule) module).getElementViewDescriptor() != null) {
+    if (module instanceof BeanCollectionModule && ((BeanCollectionModule) module).getElementViewDescriptor() != null) {
       process(((BeanCollectionModule) module).getElementViewDescriptor(), null);
     }
     if (module.getSubModules() != null) {
@@ -232,8 +232,10 @@ public class ApplicationDirectoryBuilder {
     if (viewDescriptor.getModelDescriptor() instanceof IComponentDescriptorProvider<?>) {
       process(((IComponentDescriptorProvider<?>) viewDescriptor.getModelDescriptor()).getComponentDescriptor());
     } else if (viewDescriptor.getModelDescriptor() instanceof ICollectionDescriptorProvider<?>) {
-      process(((ICollectionDescriptorProvider<?>) viewDescriptor
-          .getModelDescriptor()).getCollectionDescriptor().getElementDescriptor());
+      process(((ICollectionDescriptorProvider<?>) viewDescriptor.getModelDescriptor()).getCollectionDescriptor()
+                                                                                      .getElementDescriptor());
+    } else if (viewDescriptor.getModelDescriptor() instanceof IPropertyDescriptor) {
+      process((IPropertyDescriptor) viewDescriptor.getModelDescriptor(), path, viewPermIds);
     }
     if (viewDescriptor.getActionMap() != null) {
       process(viewDescriptor.getActionMap());
@@ -241,27 +243,58 @@ public class ApplicationDirectoryBuilder {
     if (viewDescriptor.getSecondaryActionMap() != null) {
       process(viewDescriptor.getSecondaryActionMap());
     }
-    if (viewDescriptor instanceof ICompositeViewDescriptor) {
+    if (viewDescriptor instanceof IPropertyViewDescriptor) {
+      process((IPropertyViewDescriptor) viewDescriptor, viewPermId);
+    } else if (viewDescriptor instanceof ICompositeViewDescriptor) {
       for (IViewDescriptor childViewDescriptor : ((ICompositeViewDescriptor) viewDescriptor)
           .getChildViewDescriptors()) {
         process(childViewDescriptor, /* viewPermId */null);
       }
-    } else if (viewDescriptor instanceof ITableViewDescriptor
-        && viewPermId != null) {
-      for (IViewDescriptor columnViewDescriptor : ((ITableViewDescriptor) viewDescriptor)
-          .getColumnViewDescriptors()) {
-        process(
-            (IPropertyDescriptor) columnViewDescriptor.getModelDescriptor(),
-            viewPermId, viewPermIds);
+    } else if (viewDescriptor instanceof ITableViewDescriptor && viewPermId != null) {
+      for (IViewDescriptor columnViewDescriptor : ((ITableViewDescriptor) viewDescriptor).getColumnViewDescriptors()) {
+        process(columnViewDescriptor, viewPermId);
       }
-    } else if (viewDescriptor instanceof IComponentViewDescriptor
-        && viewPermId != null) {
+    } else if (viewDescriptor instanceof IComponentViewDescriptor && viewPermId != null) {
       for (IViewDescriptor propertyViewDescriptor : ((IComponentViewDescriptor) viewDescriptor)
           .getPropertyViewDescriptors()) {
-        process(
-            (IPropertyDescriptor) propertyViewDescriptor.getModelDescriptor(),
-            viewPermId, viewPermIds);
+        process(propertyViewDescriptor, viewPermId);
       }
+    }
+  }
+
+  /**
+   * Process.
+   *
+   * @param propertyViewDescriptor
+   *     the property view descriptor
+   * @param path
+   *     the path
+   */
+  protected void process(IPropertyViewDescriptor propertyViewDescriptor, String path) {
+    if (propertyViewDescriptor.getAction() instanceof IDisplayableAction) {
+      process((IDisplayableAction) propertyViewDescriptor.getAction(), path);
+    }
+    if (propertyViewDescriptor.getFocusGainedAction() instanceof IDisplayableAction) {
+      process((IDisplayableAction) propertyViewDescriptor.getFocusGainedAction(), path);
+    }
+    if (propertyViewDescriptor.getFocusLostAction() instanceof IDisplayableAction) {
+      process((IDisplayableAction) propertyViewDescriptor.getFocusLostAction(), path);
+    }
+    if (propertyViewDescriptor instanceof IStringPropertyViewDescriptor) {
+      if (((IStringPropertyViewDescriptor) propertyViewDescriptor).getCharacterAction() instanceof IDisplayableAction) {
+        process((IDisplayableAction) ((IStringPropertyViewDescriptor) propertyViewDescriptor).getCharacterAction(),
+            path);
+      }
+      if (propertyViewDescriptor instanceof IReferencePropertyViewDescriptor) {
+        if (((IReferencePropertyViewDescriptor) propertyViewDescriptor).getLovAction() instanceof IDisplayableAction) {
+          process((IDisplayableAction) ((IReferencePropertyViewDescriptor) propertyViewDescriptor).getLovAction(),
+              path);
+        } else {
+          process(defaultLovAction, path);
+        }
+      }
+    } else if (propertyViewDescriptor.getModelDescriptor() instanceof IReferencePropertyDescriptor) {
+      process(defaultLovAction, path);
     }
   }
 
@@ -279,30 +312,28 @@ public class ApplicationDirectoryBuilder {
       }
       actionPermIds.add(amPermId);
     }
-    for (ActionList actionList : actionMap
-        .getActionLists(new ISecurityHandler() {
+    for (ActionList actionList : actionMap.getActionLists(new ISecurityHandler() {
 
-          @Override
-          public ISecurityContextBuilder restoreLastSecurityContextSnapshot() {
-            return this;
-          }
+      @Override
+      public ISecurityContextBuilder restoreLastSecurityContextSnapshot() {
+        return this;
+      }
 
-          @Override
-          public ISecurityContextBuilder pushToSecurityContext(
-              Object contextElement) {
-            return this;
-          }
+      @Override
+      public ISecurityContextBuilder pushToSecurityContext(Object contextElement) {
+        return this;
+      }
 
-          @Override
-          public Map<String, Object> getSecurityContext() {
-            return null;
-          }
+      @Override
+      public Map<String, Object> getSecurityContext() {
+        return null;
+      }
 
-          @Override
-          public boolean isAccessGranted(ISecurable securable) {
-            return true;
-          }
-        })) {
+      @Override
+      public boolean isAccessGranted(ISecurable securable) {
+        return true;
+      }
+    })) {
       process(actionList, amPermId);
     }
   }
@@ -345,8 +376,7 @@ public class ApplicationDirectoryBuilder {
       if (path != null) {
         actionPermId = path + "." + actionPermId;
       }
-      if (isPermIdExcluded(actionPermId)
-          || actionPermIds.contains(actionPermId)) {
+      if (isPermIdExcluded(actionPermId) || actionPermIds.contains(actionPermId)) {
         return;
       }
       actionPermIds.add(actionPermId);
