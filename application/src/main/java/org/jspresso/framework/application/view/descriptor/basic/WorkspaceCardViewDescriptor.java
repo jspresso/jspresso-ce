@@ -22,8 +22,10 @@ import javax.security.auth.Subject;
 
 import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.Module;
+import org.jspresso.framework.view.descriptor.IScrollableViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.AbstractCardViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicCompositeViewDescriptor;
 
 /**
  * This is a card view descriptor which stacks the projected view descriptors of
@@ -43,7 +45,11 @@ public class WorkspaceCardViewDescriptor extends AbstractCardViewDescriptor {
       String cardName = computeModuleCardName((Module) model);
       if (cardName != null) {
         if (getCardViewDescriptor(cardName) == null) {
-          putCardViewDescriptor(cardName, getModuleViewDescriptor((Module) model));
+          IViewDescriptor moduleViewDescriptor = getModuleViewDescriptor((Module) model);
+          if (moduleViewDescriptor instanceof BasicCompositeViewDescriptor) {
+            ((BasicCompositeViewDescriptor) moduleViewDescriptor).setVerticallyScrollable(true);
+          }
+          putCardViewDescriptor(cardName, moduleViewDescriptor);
         }
         return cardName;
       }
