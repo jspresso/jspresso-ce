@@ -19,6 +19,7 @@
 package org.jspresso.framework.application.action;
 
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -29,10 +30,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.jspresso.framework.action.IAction;
+import org.jspresso.framework.application.backend.action.CreateQueryComponentAction;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.application.frontend.IFrontendController;
+import org.jspresso.framework.application.frontend.action.lov.LovAction;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
+import org.jspresso.framework.model.component.IComponent;
+import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
@@ -72,8 +77,8 @@ public class LoggingActionMonitoringPlugin extends AbstractActionMonitoringPlugi
       String actionType = null;
       StringBuilder callStackNames = new StringBuilder();
       for (IAction action : callStack) {
-        String actionClassName = getActionClassName(action);
-        callStackNames.append(actionClassName).append("|");
+        String actionDescription = getActionDescription(action, context);
+        callStackNames.append(actionDescription).append("|");
         actionType = action.isBackend() ? "B" : "F";
       }
       callStackNames.delete(callStackNames.length() - 1, callStackNames.length());
@@ -98,16 +103,25 @@ public class LoggingActionMonitoringPlugin extends AbstractActionMonitoringPlugi
    */
   @Override
   protected void traceUserActionsInventory(Set<IDisplayableAction> userActions,
+                                           Map<String, IDisplayableAction> lovActions,
                                            IFrontendController<?, ?, ?> frontendController) {
     if (isEnabled()) {
       StringBuilder userActionsInventory = new StringBuilder();
       for (IDisplayableAction userAction : userActions) {
-        String actionClassName = getActionClassName(userAction);
+        String actionDescription = getActionDescription(userAction, Collections.<String, Object>emptyMap());
         String actionNameEN = userAction.getI18nName(frontendController, Locale.ENGLISH);
         String actionNameFR = userAction.getI18nName(frontendController, Locale.FRENCH);
-        userActionsInventory.append(
-            "[" + actionClassName + "][" + Locale.ENGLISH + ":" + actionNameEN + "|" + Locale.FRENCH + ":"
-                + actionNameFR + "]\n");
+        appendToInventory(userActionsInventory, actionDescription, actionNameEN, actionNameFR);
+      }
+      for (Map.Entry<String, IDisplayableAction> lovActionEntry : lovActions.entrySet()) {
+        String referencePropertyName = lovActionEntry.getKey();
+        IDisplayableAction lovAction = lovActionEntry.getValue();
+
+        String actionDescription = getActionDescription(lovAction, Collections.<String, Object>emptyMap()) + "("
+            + referencePropertyName + ")";
+        String actionNameEN = "L.O.V. " + frontendController.getTranslation(referencePropertyName, Locale.ENGLISH);
+        String actionNameFR = "L.O.V. " + frontendController.getTranslation(referencePropertyName, Locale.FRENCH);
+        appendToInventory(userActionsInventory, actionDescription, actionNameEN, actionNameFR);
       }
       LOG.trace("###### Start User actions inventory ######");
       LOG.trace(userActionsInventory.toString());
@@ -115,17 +129,39 @@ public class LoggingActionMonitoringPlugin extends AbstractActionMonitoringPlugi
     }
   }
 
-  private String getActionClassName(IAction action) {
+  private void appendToInventory(StringBuilder userActionsInventory, String actionDescription, String actionNameEN,
+                                 String actionNameFR) {
+    userActionsInventory.append(
+        "[" + actionDescription + "][" + Locale.ENGLISH + ":" + actionNameEN + "|" + Locale.FRENCH + ":"
+            + actionNameFR + "]\n");
+  }
+
+  private String getActionDescription(IAction action, Map<String, Object> context) {
     Class<? extends IAction> actionClass = action.getClass();
-    String actionClassName = actionClass.getSimpleName();
-    if (actionClassName == null || actionClassName.isEmpty()) {
-      actionClassName = actionClass.getName();
-      int lastDotIndex = actionClassName.lastIndexOf(".");
+    String actionDescription = actionClass.getSimpleName();
+    if (actionDescription == null || actionDescription.isEmpty()) {
+      actionDescription = actionClass.getName();
+      int lastDotIndex = actionDescription.lastIndexOf(".");
       if (lastDotIndex >= 0) {
-        actionClassName = actionClassName.substring(lastDotIndex + 1);
+        actionDescription = actionDescription.substring(lastDotIndex + 1);
       }
     }
-    return actionClassName;
+    if (action instanceof LovAction<?, ?, ?>) {
+      IReferencePropertyDescriptor<IComponent> componentRefDescriptor = (IReferencePropertyDescriptor<IComponent>)
+          context
+          .get(CreateQueryComponentAction.COMPONENT_REF_DESCRIPTOR);
+      if (componentRefDescriptor != null) {
+        String referencePropertyName = componentRefDescriptor.getName();
+        if (referencePropertyName != null) {
+          int lastDotIndex = referencePropertyName.lastIndexOf(".");
+          if (lastDotIndex >= 0) {
+            referencePropertyName = referencePropertyName.substring(lastDotIndex + 1);
+          }
+        }
+        actionDescription = actionDescription + "(" + referencePropertyName + ")";
+      }
+    }
+    return actionDescription;
   }
 
   @Override

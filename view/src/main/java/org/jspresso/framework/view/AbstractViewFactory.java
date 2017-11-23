@@ -2795,7 +2795,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    *
    * @return the lovAction.
    */
-  protected IDisplayableAction getLovAction() {
+  public IDisplayableAction getLovAction() {
     return lovAction;
   }
 
