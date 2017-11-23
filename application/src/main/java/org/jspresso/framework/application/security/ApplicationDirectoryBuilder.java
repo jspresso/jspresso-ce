@@ -53,7 +53,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 /**
  * A Directory builder to list the application various application elements
  * available along with their permId.
- * 
+ *
  * @author Vincent Vandenschrick
  */
 public class ApplicationDirectoryBuilder {
@@ -101,7 +101,7 @@ public class ApplicationDirectoryBuilder {
   /**
    * Processes a workspace recursively to register all reachable application
    * elements into the directory.
-   * 
+   *
    * @param frontendController
    *     the application front controller to analyse.
    * @return this. application directory builder
@@ -277,9 +277,6 @@ public class ApplicationDirectoryBuilder {
     if (propertyViewDescriptor.getFocusGainedAction() instanceof IDisplayableAction) {
       process((IDisplayableAction) propertyViewDescriptor.getFocusGainedAction(), path);
     }
-    if (propertyViewDescriptor.getFocusLostAction() instanceof IDisplayableAction) {
-      process((IDisplayableAction) propertyViewDescriptor.getFocusLostAction(), path);
-    }
     if (propertyViewDescriptor instanceof IStringPropertyViewDescriptor) {
       if (((IStringPropertyViewDescriptor) propertyViewDescriptor).getCharacterAction() instanceof IDisplayableAction) {
         process((IDisplayableAction) ((IStringPropertyViewDescriptor) propertyViewDescriptor).getCharacterAction(),
@@ -385,7 +382,7 @@ public class ApplicationDirectoryBuilder {
 
   /**
    * Extracts the permId store from this directory builder.
-   * 
+   *
    * @return the application elements directory.
    */
   public Map<String, Set<String>> toApplicationDirectory() {
@@ -410,7 +407,7 @@ public class ApplicationDirectoryBuilder {
 
   /**
    * Sets the excludePatterns.
-   * 
+   *
    * @param excludePatterns
    *     the excludePatterns to set.
    */
