@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
 
+import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
@@ -146,7 +147,9 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
   @Override
   public String getI18nValue(String value,
       ITranslationProvider translationProvider, Locale locale) {
-    if (isTranslated()) {
+    if (value == null) {
+      return IQueryComponent.NULL_VAL;
+    } else if (isTranslated()) {
       return translationProvider.getTranslation(computeEnumerationKey(value),
           locale);
     }

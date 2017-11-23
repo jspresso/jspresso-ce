@@ -836,7 +836,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
             Arrays.asList(((String) value).substring(2, ((String) value).length() - 2).split("§")));
         EnumQueryStructure eqs = (EnumQueryStructure) query.get(key);
         for (EnumValueQueryStructure evqs : eqs.getEnumerationValues()) {
-          evqs.setSelected(enumValues.contains(evqs.getValue()));
+          evqs.setSelected(enumValues.contains(evqs.getValue() == null ? String.valueOf((Object) null) : evqs.getValue()));
         }
       } else {
         query.put(key, value);
