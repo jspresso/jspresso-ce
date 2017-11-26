@@ -36,6 +36,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
@@ -160,6 +163,8 @@ import org.jspresso.framework.view.descriptor.basic.PropertyViewDescriptorHelper
  */
 @SuppressWarnings("UnusedParameters")
 public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F, G> {
+
+  private static final Logger LOG = LoggerFactory.getLogger(AbstractViewFactory.class);
 
   /**
    * {@code BOLD_FONT}.
@@ -3817,12 +3822,19 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
                                                 IComponentDescriptor<?> componentDescriptor,
                                                 IActionHandler actionHandler) {
     boolean accessGranted = actionHandler.isAccessGranted(propertyViewDescriptor);
-    String path = propertyViewDescriptor.getModelDescriptor().getName();
-    while (path.indexOf(".") >= 0) {
-      path = path.substring(0, path.indexOf("."));
-      IPropertyDescriptor parentPropertyDescriptor = componentDescriptor.getPropertyDescriptor(path);
-      if (parentPropertyDescriptor != null) {
-        accessGranted = accessGranted && actionHandler.isAccessGranted(parentPropertyDescriptor);
+    IModelDescriptor modelDescriptor = propertyViewDescriptor.getModelDescriptor();
+    if (modelDescriptor != null) {
+      String path = modelDescriptor.getName();
+      while (path.indexOf(".") >= 0) {
+        path = path.substring(0, path.indexOf("."));
+        IPropertyDescriptor parentPropertyDescriptor = componentDescriptor.getPropertyDescriptor(path);
+        if (parentPropertyDescriptor != null) {
+          accessGranted = accessGranted && actionHandler.isAccessGranted(parentPropertyDescriptor);
+        }
+      }
+    } else {
+      if (!(propertyViewDescriptor instanceof IStaticTextViewDescriptor)) {
+        LOG.warn("The property view descriptor {} doe not have any model", propertyViewDescriptor.getName());
       }
     }
     return accessGranted;
