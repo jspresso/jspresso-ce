@@ -30,14 +30,13 @@ import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.persistence.mongo.MongoBackendController;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.entity.IEntity;
-import org.jspresso.framework.model.entity.IEntityFactory;
 
 /**
  * A utility class used to persist some test data.
  *
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractMongoTestDataPersister {
+public abstract class AbstractMongoTestDataPersister extends AbstractTestDataPersister {
 
   private final BeanFactory beanFactory;
 
@@ -45,7 +44,7 @@ public abstract class AbstractMongoTestDataPersister {
    * Constructs a new {@code AbstractMongoTestDataPersister} instance.
    *
    * @param beanFactory
-   *          the spring bean factory to use.
+   *     the spring bean factory to use.
    */
   public AbstractMongoTestDataPersister(BeanFactory beanFactory) {
     this.beanFactory = beanFactory;
@@ -55,13 +54,11 @@ public abstract class AbstractMongoTestDataPersister {
    * Creates and persist the test data.
    */
   public final void persistTestData() {
-    MongoBackendController hbc = (MongoBackendController) BackendControllerHolder
-        .getThreadBackendController();
+    MongoBackendController hbc = (MongoBackendController) BackendControllerHolder.getThreadBackendController();
     boolean wasNull = false;
     if (hbc == null) {
       wasNull = true;
-      hbc = (MongoBackendController) beanFactory
-          .getBean("applicationBackController");
+      hbc = (MongoBackendController) beanFactory.getBean("applicationBackController");
       BackendControllerHolder.setThreadBackendController(hbc);
     }
     try {
@@ -84,13 +81,12 @@ public abstract class AbstractMongoTestDataPersister {
    * Creates a component instance.
    *
    * @param <T>
-   *          the actual component type.
+   *     the actual component type.
    * @param componentContract
-   *          the component contract.
+   *     the component contract.
    * @return the created component.
    */
-  protected <T extends IComponent> T createComponentInstance(
-      Class<T> componentContract) {
+  protected <T extends IComponent> T createComponentInstance(Class<T> componentContract) {
     return getEntityFactory().createComponentInstance(componentContract);
   }
 
@@ -98,9 +94,9 @@ public abstract class AbstractMongoTestDataPersister {
    * Creates an entity instance.
    *
    * @param <T>
-   *          the actual entity type.
+   *     the actual entity type.
    * @param entityContract
-   *          the entity contract.
+   *     the entity contract.
    * @return the created entity.
    */
   protected <T extends IEntity> T createEntityInstance(Class<T> entityContract) {
@@ -111,7 +107,7 @@ public abstract class AbstractMongoTestDataPersister {
    * Persists or update an entity.
    *
    * @param entity
-   *          the entity to persist or update.
+   *     the entity to persist or update.
    */
   protected void saveOrUpdate(final IEntity entity) {
     final MongoBackendController mongoBackendController = getBackendController();
@@ -126,8 +122,10 @@ public abstract class AbstractMongoTestDataPersister {
   /**
    * Query entities by criteria.
    *
-   * @param query           the Mongo query.
-   * @param entityType the entity type
+   * @param query
+   *     the Mongo query.
+   * @param entityType
+   *     the entity type
    * @return the entity list.
    */
   protected List<?> findByQuery(Query query, Class<?> entityType) {
@@ -140,17 +138,7 @@ public abstract class AbstractMongoTestDataPersister {
    * @return the backend controller.
    */
   protected MongoBackendController getBackendController() {
-    return (MongoBackendController) BackendControllerHolder
-        .getCurrentBackendController();
-  }
-
-  /**
-   * Gets the entityFactory.
-   *
-   * @return the entityFactory.
-   */
-  protected IEntityFactory getEntityFactory() {
-    return getBackendController().getEntityFactory();
+    return (MongoBackendController) BackendControllerHolder.getCurrentBackendController();
   }
 
   /**

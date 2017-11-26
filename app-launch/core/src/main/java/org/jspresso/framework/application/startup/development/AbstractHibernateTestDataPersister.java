@@ -37,7 +37,7 @@ import org.jspresso.framework.model.entity.IEntityFactory;
  *
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractHibernateTestDataPersister {
+public abstract class AbstractHibernateTestDataPersister extends AbstractTestDataPersister {
 
   private final BeanFactory beanFactory;
 
@@ -45,7 +45,7 @@ public abstract class AbstractHibernateTestDataPersister {
    * Constructs a new {@code AbstractHibernateTestDataPersister} instance.
    *
    * @param beanFactory
-   *          the spring bean factory to use.
+   *     the spring bean factory to use.
    */
   public AbstractHibernateTestDataPersister(BeanFactory beanFactory) {
     this.beanFactory = beanFactory;
@@ -55,13 +55,11 @@ public abstract class AbstractHibernateTestDataPersister {
    * Creates and persist the test data.
    */
   public final void persistTestData() {
-    HibernateBackendController hbc = (HibernateBackendController) BackendControllerHolder
-        .getThreadBackendController();
+    HibernateBackendController hbc = (HibernateBackendController) BackendControllerHolder.getThreadBackendController();
     boolean wasNull = false;
     if (hbc == null) {
       wasNull = true;
-      hbc = (HibernateBackendController) beanFactory
-          .getBean("applicationBackController");
+      hbc = (HibernateBackendController) beanFactory.getBean("applicationBackController");
       BackendControllerHolder.setThreadBackendController(hbc);
     }
     try {
@@ -84,34 +82,20 @@ public abstract class AbstractHibernateTestDataPersister {
    * Creates a component instance.
    *
    * @param <T>
-   *          the actual component type.
+   *     the actual component type.
    * @param componentContract
-   *          the component contract.
+   *     the component contract.
    * @return the created component.
    */
-  protected <T extends IComponent> T createComponentInstance(
-      Class<T> componentContract) {
+  protected <T extends IComponent> T createComponentInstance(Class<T> componentContract) {
     return getEntityFactory().createComponentInstance(componentContract);
-  }
-
-  /**
-   * Creates an entity instance.
-   *
-   * @param <T>
-   *          the actual entity type.
-   * @param entityContract
-   *          the entity contract.
-   * @return the created entity.
-   */
-  protected <T extends IEntity> T createEntityInstance(Class<T> entityContract) {
-    return getEntityFactory().createEntityInstance(entityContract);
   }
 
   /**
    * Persists or update an entity.
    *
    * @param entity
-   *          the entity to persist or update.
+   *     the entity to persist or update.
    */
   protected void saveOrUpdate(final IEntity entity) {
     final HibernateBackendController hibernateBackendController = getBackendController();
@@ -127,7 +111,7 @@ public abstract class AbstractHibernateTestDataPersister {
    * Query entities.
    *
    * @param queryString
-   *          the HQL query string.
+   *     the HQL query string.
    * @return the entity list.
    */
   protected List<?> find(String queryString) {
@@ -138,7 +122,7 @@ public abstract class AbstractHibernateTestDataPersister {
    * Query entities by criteria.
    *
    * @param criteria
-   *          the Hibernate detached criteria.
+   *     the Hibernate detached criteria.
    * @return the entity list.
    */
   protected List<?> findByCriteria(DetachedCriteria criteria) {
@@ -151,8 +135,7 @@ public abstract class AbstractHibernateTestDataPersister {
    * @return the backend controller.
    */
   protected HibernateBackendController getBackendController() {
-    return (HibernateBackendController) BackendControllerHolder
-        .getCurrentBackendController();
+    return (HibernateBackendController) BackendControllerHolder.getCurrentBackendController();
   }
 
   /**
@@ -160,6 +143,7 @@ public abstract class AbstractHibernateTestDataPersister {
    *
    * @return the entityFactory.
    */
+  @Override
   protected IEntityFactory getEntityFactory() {
     return getBackendController().getEntityFactory();
   }
