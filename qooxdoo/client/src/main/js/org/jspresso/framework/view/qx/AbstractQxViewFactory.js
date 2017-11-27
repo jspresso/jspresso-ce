@@ -17,6 +17,10 @@
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * @asset(org/openlayers/js/ol.js)
+ * @asset(org/openlayers/css/ol.css)
+ */
 qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
   extend: qx.core.Object,
 
@@ -47,6 +51,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
     this.__remotePeerRegistry = remotePeerRegistry;
     this.__actionHandler = actionHandler;
     this.__commandHandler = commandHandler;
+    this.__setupOpenLayers();
   },
 
   members: {
@@ -80,6 +85,29 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
     __longDateTimeFormats: null,
     /** @type {Integer} */
     __firstDayOfWeek: null,
+
+    _loadScript: function (jsResource) {
+      var scriptSrc = qx.util.ResourceManager.getInstance().toUri(jsResource);
+      var req = new qx.bom.request.Script();
+      req.open("GET", scriptSrc);
+      req.send();
+    },
+
+    _loadCss: function (cssResource) {
+      var head = document.getElementsByTagName("head")[0];
+      var el = document.createElement("link");
+      el.type = "text/css";
+      el.rel = "stylesheet";
+      el.href = qx.util.ResourceManager.getInstance().toUri(cssResource);
+      setTimeout(function () {
+        head.appendChild(el);
+      }, 0);
+    },
+
+    __setupOpenLayers: function () {
+      this._loadScript("org/openlayers/js/ol.js");
+      this._loadCss("org/openlayers/css/ol.css");
+    },
 
     /**
      * @return {qx.ui.core.Widget | qx.ui.mobile.core.Widget}
