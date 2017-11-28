@@ -850,9 +850,9 @@ public class DefaultFlexViewFactory {
       if (!horizontallyScrollable) {
         component.percentWidth = 100;
       }
-      if (!verticallyScrollable) {
-        component.percentHeight = 100;
-      }
+      //if (!verticallyScrollable) {
+      component.percentHeight = 100;
+      //}
       scroller.addChild(component);
       scroller.horizontalScrollPolicy = horizontallyScrollable ? ScrollPolicy.AUTO : ScrollPolicy.OFF;
       scroller.verticalScrollPolicy = verticallyScrollable ? ScrollPolicy.AUTO : ScrollPolicy.OFF;
@@ -1198,13 +1198,13 @@ public class DefaultFlexViewFactory {
     if(remoteComponent.actionLists) {
       var actionField:HBox = new HBox();
       //syncSizes(actionField, component);
-      component.name = "componentToStyle"
       actionField.styleName = "actionField";
       actionField.regenerateStyleCache(false);
       actionField.horizontalScrollPolicy = ScrollPolicy.OFF;
       actionField.verticalScrollPolicy = ScrollPolicy.OFF;
 
       if(component) {
+        component.name = "componentToStyle"
         component.percentWidth = 100.0;
         actionField.addChild(component);
       }
