@@ -4715,7 +4715,7 @@ controller 'hrsample.name',
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import org.jspresso.framework.application.startup.development.AbstractTestDataPersister;
+import org.jspresso.framework.application.startup.development.AbstractHibernateTestDataPersister;
 import org.springframework.beans.factory.BeanFactory;
 
 import org.jspresso.hrsample.model.City;
@@ -4727,7 +4727,7 @@ import org.jspresso.hrsample.model.Team;
 /**
  * Persists some test data for the HR sample application.
  */
-public class TestDataPersister extends AbstractTestDataPersister {
+public class TestDataPersister extends AbstractHibernateTestDataPersister {
 
   /**
    * Constructs a new &lt;code&gt;TestDataPersister&lt;/code&gt; instance.
