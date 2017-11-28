@@ -2607,6 +2607,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           var column = e.getColumn();
           var cellState = tableModel.getRowData(row).getChildren().getItem(column + 1);
           if (!tableModel.isColumnEditable(column) || !cellState.isWritable()) {
+            if (selectionModel.getSelectionMode() == qx.ui.table.selection.Model.MULTIPLE_INTERVAL_SELECTION_TOGGLE) {
+              selectionModel.setSelectionInterval(row, row);
+            }
             this._getActionHandler().execute(remoteTable.getRowAction());
           }
         }, this);
