@@ -152,7 +152,7 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
             "initializing property : " + initializedAttribute.getKey() + " from " + initializedAttribute.getKey());
       }
       IAccessor accessor = getAccessorFactory().createPropertyAccessor(initializedAttribute.getKey(),
-          componentDescriptor.getComponentContract());
+          getComponentContract(component));
       try {
         Object initValue;
         initValue = extractInitValue(masterComponent, referencePath, initializedAttribute.getValue());
@@ -287,8 +287,6 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
     Class<?> masterComponentContract;
     if (masterComponent instanceof IComponent) {
       masterComponentContract = ((IComponent) masterComponent).getComponentContract();
-    } else if (masterComponent instanceof IQueryComponent) {
-      masterComponentContract = ((IQueryComponent) masterComponent).getQueryContract();
     } else {
       masterComponentContract = masterComponent.getClass();
     }
