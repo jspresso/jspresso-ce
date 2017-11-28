@@ -179,7 +179,7 @@ public abstract class AbstractCompositeValueConnector extends
       if (renderingConnector.getConnectorValue() != null) {
         return renderingConnector.getConnectorValue().toString();
       }
-      return "";
+      return null;
     }
     // if (displayValue != null) {
     // return displayValue;
