@@ -22,10 +22,10 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
+import gnu.trove.map.hash.THashMap;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import org.jspresso.framework.model.component.ComponentException;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
 import org.jspresso.framework.model.component.IComponentExtensionFactory;
@@ -46,6 +46,7 @@ public class BasicComponentInvocationHandler extends AbstractComponentInvocation
   private static final long serialVersionUID = -3178070064423598514L;
 
   private final IComponentPropertyStore properties;
+  private final Map<String, Object>     fallbackProperties;
 
   /**
    * Constructs a new {@code BasicComponentInvocationHandler} instance.
@@ -70,6 +71,11 @@ public class BasicComponentInvocationHandler extends AbstractComponentInvocation
                                          IComponentExtensionFactory extensionFactory) {
     super(componentDescriptor, inlineComponentFactory, collectionFactory, accessorFactory, extensionFactory);
     this.properties = createPropertyStore();
+    if (this.properties == null) {
+      this.fallbackProperties = createPropertyMap();
+    } else {
+      this.fallbackProperties = null;
+    }
   }
 
   private Object stackOverFlowEqualsWatchDog;
@@ -132,7 +138,11 @@ public class BasicComponentInvocationHandler extends AbstractComponentInvocation
    */
   @Override
   protected Object retrievePropertyValue(String propertyName) {
-    return properties.get(propertyName);
+    if (properties != null) {
+      return properties.get(propertyName);
+    } else {
+      return fallbackProperties.get(propertyName);
+    }
   }
 
   /**
@@ -140,7 +150,11 @@ public class BasicComponentInvocationHandler extends AbstractComponentInvocation
    */
   @Override
   protected void storeProperty(String propertyName, Object propertyValue) {
-    properties.set(propertyName, refinePropertyToStore(propertyValue));
+    if (properties != null) {
+      properties.set(propertyName, refinePropertyToStore(propertyValue));
+    } else {
+      fallbackProperties.put(propertyName, propertyValue);
+    }
   }
 
   private Object stackOverFlowToStringWatchDog;
@@ -173,8 +187,13 @@ public class BasicComponentInvocationHandler extends AbstractComponentInvocation
       store.setAccessorFactory(getAccessorFactory());
       return store;
     } catch (InstantiationException | IllegalAccessException | ClassNotFoundException ex) {
-      throw new ComponentException(ex,
-          "Can not create component property store for " + getComponentContract().getName());
+      // throw new ComponentException(ex,
+      //     "Can not create component property store for " + getComponentContract().getName());
+      return null;
     }
+  }
+
+  private Map<String, Object> createPropertyMap() {
+    return new THashMap<>(1, 1.0f);
   }
 }
