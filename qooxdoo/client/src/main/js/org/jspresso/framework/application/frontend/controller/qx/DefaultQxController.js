@@ -223,7 +223,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       dialog.add(dialogBox);
       dialog.open();
       if (newDialog) {
-        dialog.center();
+        this._centerDialog(dialog);
       }
       this._getViewFactory().focus(dialogBox);
     },
@@ -305,6 +305,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       verticalScroll.add(component);
       verticalScroll.setScrollbarX("off");
       verticalScroll.setScrollbarY("auto");
+      verticalScroll.addListenerOnce("appear", function (e) {
+        verticalScroll.setWidth(component.getWidth());
+        verticalScroll.setHeight(component.getHeight());
+      }, this);
       return verticalScroll;
     },
 
@@ -527,6 +531,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       }
     },
 
+    _centerDialog: function (dialog) {
+      var centerTask = new qx.util.DeferredCall(function () {
+        dialog.center();
+      });
+      centerTask.schedule();
+    },
+
     /**
      * @param messageCommand {org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand}
      */
@@ -609,7 +620,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       this._applyMaxDialogSize(messageDialog);
 
       messageDialog.open();
-      messageDialog.center();
+      this._centerDialog(messageDialog);
     },
 
     /**
