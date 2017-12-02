@@ -60,6 +60,13 @@ qx.Class.define("org.jspresso.framework.util.html.HtmlUtil", {
       return message;
     },
 
+    replaceWhiteSpaces: function (message) {
+      if (message != null) {
+        return message.replace(new RegExp(" ", 'g'), "&nbsp;");
+      }
+      return message;
+    },
+
     bindActionToHtmlContent: function (htmlContent, action) {
       if (htmlContent && action) {
         htmlContent = htmlContent.replace(/<a href='executeAction\(['"]?([^\)]*)['"]?\)'>/g,

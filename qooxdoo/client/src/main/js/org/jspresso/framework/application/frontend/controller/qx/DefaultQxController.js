@@ -501,6 +501,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       if (!org.jspresso.framework.util.html.HtmlUtil.isHtml(message)) {
         message = org.jspresso.framework.util.html.HtmlUtil.sanitizeHtml(message);
         message = org.jspresso.framework.util.html.HtmlUtil.replaceNewlines(message);
+        message = org.jspresso.framework.util.html.HtmlUtil.replaceWhiteSpaces(message);
         message = org.jspresso.framework.util.html.HtmlUtil.toHtml(message);
       }
       var messageComponent = new qx.ui.basic.Atom(message);
