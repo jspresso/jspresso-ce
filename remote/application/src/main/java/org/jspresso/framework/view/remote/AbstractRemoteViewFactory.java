@@ -125,6 +125,7 @@ import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.gui.ERenderingOptions;
 import org.jspresso.framework.util.gui.Font;
 import org.jspresso.framework.util.gui.FontHelper;
+import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.image.IScalableImageAware;
 import org.jspresso.framework.util.image.ImageHelper;
@@ -226,7 +227,6 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         return originalValue;
       }
     };
-
   }
 
   /**
@@ -1414,10 +1414,41 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     IStringPropertyDescriptor propertyDescriptor = (IStringPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
     IView<RComponent> view = super.createTextualPropertyView(propertyViewDescriptor, actionHandler, locale);
-    if (view.getPeer() instanceof RTextComponent) {
+    RComponent viewPeer = view.getPeer();
+    if (viewPeer instanceof RTextComponent) {
       Integer maxLength = propertyDescriptor.getMaxLength();
       if (maxLength != null && maxLength > 0) {
-        ((RTextComponent) view.getPeer()).setMaxLength(maxLength);
+        ((RTextComponent) viewPeer).setMaxLength(maxLength);
+      }
+    }
+    if (viewPeer instanceof RLabel || viewPeer instanceof RLink) {
+      IValueConnector viewConnector = view.getConnector();
+      if(viewConnector instanceof IRemoteStateOwner) {
+        final IRemoteStateValueMapper remoteStateValueMapper = ((IRemoteStateOwner) viewConnector)
+            .currentRemoteStateValueMapper();
+        IRemoteStateValueMapper sanitizingValueMapper = new IRemoteStateValueMapper() {
+          @Override
+          public Object getValueForState(RemoteValueState state, Object originalValue) {
+            Object valueForState = originalValue;
+            if (remoteStateValueMapper != null) {
+              valueForState = remoteStateValueMapper.getValueForState(state, originalValue);
+            }
+            if (valueForState instanceof String) {
+              valueForState = HtmlHelper.sanitizeHtml((String) valueForState);
+            }
+            return valueForState;
+          }
+
+          @Override
+          public Object getValueFromState(RemoteValueState state, Object originalValue) {
+            Object valueFromState = originalValue;
+            if (remoteStateValueMapper != null) {
+              valueFromState = remoteStateValueMapper.getValueFromState(state, originalValue);
+            }
+            return valueFromState;
+          }
+        };
+        ((IRemoteStateOwner) viewConnector).setRemoteStateValueMapper(sanitizingValueMapper);
       }
     }
     return view;

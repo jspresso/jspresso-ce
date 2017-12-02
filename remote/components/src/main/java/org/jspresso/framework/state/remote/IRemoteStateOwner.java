@@ -56,4 +56,11 @@ public interface IRemoteStateOwner {
    *          the remoteStateValueMapper to set.
    */
   void setRemoteStateValueMapper(IRemoteStateValueMapper remoteStateValueMapper);
+
+  /**
+   * Gets the remoteStateValueMapper.
+   *
+   * @return the remoteStateValueMapper.
+   */
+  IRemoteStateValueMapper currentRemoteStateValueMapper();
 }

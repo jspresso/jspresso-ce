@@ -173,7 +173,8 @@ public class RemoteCollectionConnectorListProvider extends
    *
    * @return the remoteStateValueMapper.
    */
-  protected IRemoteStateValueMapper getRemoteStateValueMapper() {
+  @Override
+  public IRemoteStateValueMapper currentRemoteStateValueMapper() {
     return remoteStateValueMapper;
   }
 
@@ -187,8 +188,8 @@ public class RemoteCollectionConnectorListProvider extends
    */
   protected Object getValueForState() {
     Object valueForState = getConnectorValue();
-    if (getRemoteStateValueMapper() != null) {
-      valueForState = getRemoteStateValueMapper().getValueForState(state, valueForState);
+    if (currentRemoteStateValueMapper() != null) {
+      valueForState = currentRemoteStateValueMapper().getValueForState(state, valueForState);
     }
     return valueForState;
   }
@@ -199,8 +200,8 @@ public class RemoteCollectionConnectorListProvider extends
   @Override
   public void setValueFromState(Object stateValue) {
     Object valueFromState;
-    if (getRemoteStateValueMapper() != null) {
-      valueFromState = getRemoteStateValueMapper()
+    if (currentRemoteStateValueMapper() != null) {
+      valueFromState = currentRemoteStateValueMapper()
           .getValueFromState(state, stateValue);
     } else {
       valueFromState = stateValue;

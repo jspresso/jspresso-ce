@@ -89,7 +89,6 @@ import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.gui.EClientType;
-import org.jspresso.framework.util.html.HtmlHelper;
 import org.jspresso.framework.util.http.CookiePreferencesStore;
 import org.jspresso.framework.util.http.HttpRequestHolder;
 import org.jspresso.framework.util.http.RequestParamsHttpFilter;
@@ -366,8 +365,7 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
         final String[] columnIds = ((RemoteTableChangedCommand) command).getColumnIds();
         final Integer[] columnWidths = ((RemoteTableChangedCommand) command).getColumnWidths();
         final boolean[] columnVisibilities = ((RemoteTableChangedCommand) command).getColumnVisibilities();
-        columnPrefs[i] = new Object[]{columnIds[i],
-                                      columnWidths[i],
+        columnPrefs[i] = new Object[]{columnIds[i], columnWidths[i],
                                       (columnVisibilities == null || columnVisibilities[i])};
       }
       getViewFactory().storeTablePreferences(((RemoteTableChangedCommand) command).getTableId(), columnPrefs, this);
@@ -388,9 +386,10 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
         RemoteValueCommand valueCommand = (RemoteValueCommand) command;
         Object commandValue = valueCommand.getValue();
         Object originalCommandValue = commandValue;
-        if (commandValue instanceof String) {
-          commandValue = HtmlHelper.sanitizeHtml((String) commandValue);
-        }
+        // Breaks saving < or > characters. Is now handled when sending back a label value.
+        //  if (commandValue instanceof String) {
+        //    commandValue = HtmlHelper.sanitizeHtml((String) commandValue);
+        //  }
         try {
           if (targetPeer instanceof IFormattedValueConnector) {
             ((IFormattedValueConnector) targetPeer).setFormattedValue(commandValue);
@@ -669,7 +668,7 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
     if (command instanceof RemoteChildrenCommand && ((RemoteChildrenCommand) command).isRemove()) {
       commandQueue.add(commandLowPriorityOffset, command);
       commandLowPriorityOffset++;
-    } else if(command instanceof RemoteAddRepeatedCommand) {
+    } else if (command instanceof RemoteAddRepeatedCommand) {
       commandQueue.add(0, command);
       commandLowPriorityOffset++;
     } else {

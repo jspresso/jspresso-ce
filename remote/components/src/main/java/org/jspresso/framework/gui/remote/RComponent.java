@@ -451,6 +451,16 @@ public abstract class RComponent extends RemotePeer implements
   }
 
   /**
+   * Gets remote state value mapper.
+   *
+   * @return always null
+   */
+  @Override
+  public IRemoteStateValueMapper currentRemoteStateValueMapper() {
+    return null;
+  }
+
+  /**
    * Gets focus gained action.
    *
    * @return the focus gained action

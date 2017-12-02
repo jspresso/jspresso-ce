@@ -163,7 +163,8 @@ public class RemoteValueConnector extends BasicValueConnector implements
    *
    * @return the remoteStateValueMapper.
    */
-  protected IRemoteStateValueMapper getRemoteStateValueMapper() {
+  @Override
+  public IRemoteStateValueMapper currentRemoteStateValueMapper() {
     return remoteStateValueMapper;
   }
 
@@ -177,8 +178,8 @@ public class RemoteValueConnector extends BasicValueConnector implements
    */
   protected Object getValueForState() {
     Object valueForState = getConnectorValue();
-    if (getRemoteStateValueMapper() != null) {
-      valueForState = getRemoteStateValueMapper().getValueForState(state, valueForState);
+    if (currentRemoteStateValueMapper() != null) {
+      valueForState = currentRemoteStateValueMapper().getValueForState(state, valueForState);
     }
     return valueForState;
   }
@@ -196,8 +197,8 @@ public class RemoteValueConnector extends BasicValueConnector implements
   @Override
   public void setValueFromState(Object stateValue) {
     Object valueFromState;
-    if (getRemoteStateValueMapper() != null) {
-      valueFromState = getRemoteStateValueMapper()
+    if (currentRemoteStateValueMapper() != null) {
+      valueFromState = currentRemoteStateValueMapper()
           .getValueFromState(state, stateValue);
     } else {
       valueFromState = stateValue;
