@@ -107,6 +107,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       return this._dialogStack && this._dialogStack.length > 1;
     },
 
+    _applyMaxDialogSize: function (dialog) {
+      if (this.__workspaceStack && this.__workspaceStack.getBounds()) {
+        dialog.setMaxWidth(Math.floor(this.__workspaceStack.getBounds().width * 98 / 100));
+        dialog.setMaxHeight(Math.floor(this.__workspaceStack.getBounds().height * 98 / 100));
+      }
+    },
+
     /**
      *
      * @param title {String}
@@ -212,11 +219,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           }
         });
       }
-
-      if (this.__workspaceStack && this.__workspaceStack.getBounds()) {
-        dialog.setMaxWidth(Math.floor(this.__workspaceStack.getBounds().width * 98 / 100));
-        dialog.setMaxHeight(Math.floor(this.__workspaceStack.getBounds().height * 98 / 100));
-      }
+      this._applyMaxDialogSize(dialog);
       dialog.add(dialogBox);
       dialog.open();
       if (newDialog) {
@@ -297,6 +300,14 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       return toolBar;
     },
 
+    _decorateWithVerticalScroll: function (component) {
+      var verticalScroll = new qx.ui.container.Scroll();
+      verticalScroll.add(component);
+      verticalScroll.setScrollbarX("off");
+      verticalScroll.setScrollbarY("auto");
+      return verticalScroll;
+    },
+
     /**
      * @param initCommand {org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand}
      * @return {undefined}
@@ -354,10 +365,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
 
       var splitContainer = new qx.ui.splitpane.Pane("horizontal");
       splitContainer.setAppearance("application-split");
-      var workspaceAccordionScroll = new qx.ui.container.Scroll();
-      workspaceAccordionScroll.add(workspaceAccordion);
-      workspaceAccordionScroll.setScrollbarX("off");
-      workspaceAccordionScroll.setScrollbarY("auto");
+      var workspaceAccordionScroll = this._decorateWithVerticalScroll(workspaceAccordion);
       workspaceAccordionScroll.setAppearance("application-accordion-scroll");
       splitContainer.add(workspaceAccordionScroll, 0);
       var workspaceStackWrapper = new qx.ui.container.Composite(new qx.ui.layout.VBox());
@@ -477,13 +485,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       }
     },
 
-    createErrorTab: function (tabLabel, message) {
+    _createErrorTab: function (tabLabel, message) {
       var tab = new qx.ui.tabview.Page(tabLabel);
       tab.setLayout(new qx.ui.layout.Grow());
-      var scrollContainer = new qx.ui.container.Scroll();
-      scrollContainer.setScrollbarX("off");
-      scrollContainer.setScrollbarY("auto");
-      scrollContainer.add(message);
+      var scrollContainer = this._decorateWithVerticalScroll(message);
       tab.add(scrollContainer);
       return tab;
     },
@@ -491,7 +496,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     /**
      * @param messageCommand {org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand}
      */
-    createMessageDialogContent: function (messageCommand) {
+    _createMessageDialogContent: function (messageCommand) {
       var message = messageCommand.getMessage();
       if (!org.jspresso.framework.util.html.HtmlUtil.isHtml(message)) {
         message = org.jspresso.framework.util.html.HtmlUtil.sanitizeHtml(message);
@@ -502,6 +507,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       messageComponent.setSelectable(true);
       messageComponent.setRich(org.jspresso.framework.util.html.HtmlUtil.isHtml(message));
       this._getViewFactory().setIcon(messageComponent, messageCommand.getMessageIcon());
+      var scrollContainer = this._decorateWithVerticalScroll(messageComponent);
       if (messageCommand
           instanceof org.jspresso.framework.application.frontend.command.remote.RemoteErrorMessageCommand) {
         var detailMessage = messageCommand.getDetailMessage();
@@ -510,13 +516,13 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         detailMessageComponent.setValue(detailMessage);
 
         var tabContainer = new qx.ui.tabview.TabView();
-        tabContainer.add(this.createErrorTab(this.translate("error"), messageComponent));
-        tabContainer.add(this.createErrorTab(this.translate("detail"), detailMessageComponent));
+        tabContainer.add(this._createErrorTab(this.translate("error"), scrollContainer));
+        tabContainer.add(this._createErrorTab(this.translate("detail"), detailMessageComponent));
         tabContainer.setWidth(600);
         tabContainer.setHeight(300);
         return tabContainer;
       } else {
-        return messageComponent;
+        return scrollContainer;
       }
     },
 
@@ -534,8 +540,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       messageDialog.setLayout(new qx.ui.layout.VBox(10));
       this._getViewFactory().setIcon(messageDialog, messageCommand.getTitleIcon());
       this._getApplication().getRoot().add(messageDialog);
-      var message = this.createMessageDialogContent(messageCommand);
-      messageDialog.add(message);
+      var message = this._createMessageDialogContent(messageCommand);
+      messageDialog.add(message, {flex: 1});
 
       var buttonBox = new qx.ui.container.Composite();
       buttonBox.setLayout(new qx.ui.layout.HBox(10, "right"));
@@ -598,6 +604,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         }, this);
         buttonBox.add(okButton);
       }
+
+      this._applyMaxDialogSize(messageDialog);
 
       messageDialog.open();
       messageDialog.center();
