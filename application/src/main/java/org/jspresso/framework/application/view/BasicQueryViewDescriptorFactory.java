@@ -191,7 +191,7 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements IQueryViewDescr
       String queriableProperty, IPropertyDescriptor actualPropertyDescriptor) {
     BasicComponentViewDescriptor comparableComponentViewDescriptor = new BasicComponentViewDescriptor();
     comparableComponentViewDescriptor.setLabelsPosition(ELabelPosition.NONE);
-    comparableComponentViewDescriptor.setWidthResizeable(false);
+    //comparableComponentViewDescriptor.setWidthResizeable(false);
     comparableComponentViewDescriptor.setColumnCount(3);
     comparableComponentViewDescriptor.setModelDescriptor(
         ((ComparableQueryStructureDescriptor) actualPropertyDescriptor).getReferencedDescriptor());

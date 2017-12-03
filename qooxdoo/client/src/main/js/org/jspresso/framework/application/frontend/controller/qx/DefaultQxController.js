@@ -532,6 +532,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
     },
 
     _centerDialog: function (dialog) {
+      dialog.center();
       var centerTask = new qx.util.DeferredCall(function () {
         dialog.center();
       });
