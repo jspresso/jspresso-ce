@@ -1509,32 +1509,32 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       // Since it's not resizeable anymore
       form.setMinWidth(form.getWidth());
 
-      var decoratedForm = form;
       if (!remoteForm.getWidthResizeable()) {
-        decoratedForm.setAllowStretchX(false, true);
+        form.setAllowStretchX(false, true);
         var lefter = new qx.ui.container.Composite(new qx.ui.layout.Dock());
-        lefter.add(decoratedForm, {flex: 1});
-        decoratedForm = lefter;
+        lefter.add(form, {flex: 1});
+        form = lefter;
       }
       if (wasConstructingForm) {
         // Nested form
         if (remoteForm.getWidthResizeable()) {
-          if (!decoratedForm.getWidth()) {
+          if (!form.getWidth()) {
             // Even if it's growing, it should have a non-null width.
-            decoratedForm.setWidth(0);
+            form.setWidth(0);
           }
         }
       } else {
         // Primary form
-        decoratedForm = new qx.ui.container.Composite();
+        var decoratedForm = new qx.ui.container.Composite();
         decoratedForm.setAppearance("form");
         decoratedForm.setLayout(new qx.ui.layout.Grow());
         decoratedForm.setAllowStretchY(false, false);
         decoratedForm.add(form);
         decoratedForm = this._applyComponentScrollability(decoratedForm, remoteForm);
+        form = decoratedForm;
       }
       this.__constructingForm = wasConstructingForm;
-      return decoratedForm;
+      return form;
     },
 
     /**
