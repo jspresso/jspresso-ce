@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javaxt.io.Image;
 import org.apache.commons.codec.binary.Base64;
@@ -79,18 +81,51 @@ public final class ImageHelper {
    */
   public static byte[] scaleImage(Object originalImageInput, Integer width, Integer height, String targetFormatName)
       throws IOException {
+    if (targetFormatName == null) {
+      targetFormatName = refineImageFormat(originalImageInput);
+    }
     if (SVG.equals(targetFormatName)) {
       String svgImage = createSvgImage(originalImageInput);
       if (width != null) {
-        if (svgImage.matches("(?s).*<svg[^>]*width\\s*=\\s*\"\\d*\".*")) {
+        Pattern widthPattern = Pattern.compile("(?s).*<svg[^>]*width\\s*=\\s*\"(\\d*)\".*");
+        Matcher widthMatcher = widthPattern.matcher(svgImage);
+        if (widthMatcher.find()) {
+          String originalWidthAsString = widthMatcher.group(1);
+          int originalWidth = Integer.parseInt(originalWidthAsString);
           svgImage = svgImage.replaceFirst("width\\s*=\\s*\"\\d*\"", "width=\"" + width + "\"");
+          if (height == null) {
+            // Must also scale height manually relative to width if explicit height is not set.
+            Pattern heightPattern = Pattern.compile("(?s).*<svg[^>]*height\\s*=\\s*\"(\\d*)\".*");
+            Matcher heightMatcher = heightPattern.matcher(svgImage);
+            if (heightMatcher.find()) {
+              String originalHeightAsString = heightMatcher.group(1);
+              int originalHeight = Integer.parseInt(originalHeightAsString);
+              int computedScaledHeight = (int) ((double) (originalHeight * width) / (double) originalWidth);
+              svgImage = svgImage.replaceFirst("height\\s*=\\s*\"\\d*\"", "height=\"" + computedScaledHeight + "\"");
+            }
+          }
         } else {
           svgImage = svgImage.replaceFirst("<svg", "<svg width=\"" + width + "\"");
         }
       }
       if (height != null) {
-        if (svgImage.matches("(?s).*<svg[^>]*height\\s*=\\s*\"\\d*\".*")) {
+        Pattern heightPattern = Pattern.compile("(?s).*<svg[^>]*height\\s*=\\s*\"(\\d*)\".*");
+        Matcher heightMatcher = heightPattern.matcher(svgImage);
+        if (heightMatcher.find()) {
+          String originalHeightAsString = heightMatcher.group(1);
+          int originalHeight = Integer.parseInt(originalHeightAsString);
           svgImage = svgImage.replaceFirst("height\\s*=\\s*\"\\d*\"", "height=\"" + height + "\"");
+          if (width == null) {
+            // Must also scale width manually relative to height if explicit width is not set.
+            Pattern widthPattern = Pattern.compile("(?s).*<svg[^>]*width\\s*=\\s*\"(\\d*)\".*");
+            Matcher widthMatcher = widthPattern.matcher(svgImage);
+            if (widthMatcher.find()) {
+              String originalWidthAsString = widthMatcher.group(1);
+              int originalWidth = Integer.parseInt(originalWidthAsString);
+              int computedScaledWidth = (int) ((double) (originalWidth * height) / (double) originalHeight);
+              svgImage = svgImage.replaceFirst("width\\s*=\\s*\"\\d*\"", "width=\"" + computedScaledWidth + "\"");
+            }
+          }
         } else {
           svgImage = svgImage.replaceFirst("<svg", "<svg height=\"" + height + "\"");
         }
