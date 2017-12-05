@@ -831,9 +831,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     // Compute dynamic tooltips
     for (IView<JComponent> propertyView : propertyViews) {
       IPropertyViewDescriptor propertyViewDescriptor = (IPropertyViewDescriptor) propertyView.getDescriptor();
-      IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor.getModelDescriptor();
-      String dynamicToolTipProperty = computePropertyDynamicToolTip(modelDescriptor, propertyViewDescriptor,
-          propertyDescriptor);
+      String dynamicToolTipProperty = computeDynamicToolTipPropertyName(propertyViewDescriptor, modelDescriptor, null);
       // Dynamic tooltip
       if (dynamicToolTipProperty != null) {
         IValueConnector tooltipConnector = connector.getChildConnector(dynamicToolTipProperty);
@@ -852,9 +850,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     // Compute dynamic background
     for (IView<JComponent> propertyView : propertyViews) {
       IPropertyViewDescriptor propertyViewDescriptor = (IPropertyViewDescriptor) propertyView.getDescriptor();
-      IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor.getModelDescriptor();
-      String dynamicBackgroundProperty = computePropertyDynamicBackground(modelDescriptor, propertyViewDescriptor,
-          propertyDescriptor);
+      String dynamicBackgroundProperty = computeDynamicBackgroundPropertyName(propertyViewDescriptor, modelDescriptor);
       // Dynamic background
       if (dynamicBackgroundProperty != null) {
         IValueConnector backgroundConnector = connector.getChildConnector(dynamicBackgroundProperty);
@@ -873,9 +869,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     // Compute dynamic foreground
     for (IView<JComponent> propertyView : propertyViews) {
       IPropertyViewDescriptor propertyViewDescriptor = (IPropertyViewDescriptor) propertyView.getDescriptor();
-      IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor.getModelDescriptor();
-      String dynamicForegroundProperty = computePropertyDynamicForeground(modelDescriptor, propertyViewDescriptor,
-          propertyDescriptor);
+      String dynamicForegroundProperty = computeDynamicForegroundPropertyName(propertyViewDescriptor, modelDescriptor);
       // Dynamic foreground
       if (dynamicForegroundProperty != null) {
         IValueConnector foregroundConnector = connector.getChildConnector(dynamicForegroundProperty);
@@ -894,9 +888,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     // Compute dynamic font
     for (IView<JComponent> propertyView : propertyViews) {
       IPropertyViewDescriptor propertyViewDescriptor = (IPropertyViewDescriptor) propertyView.getDescriptor();
-      IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor.getModelDescriptor();
-      String dynamicFontProperty = computePropertyDynamicFont(modelDescriptor, propertyViewDescriptor,
-          propertyDescriptor);
+      String dynamicFontProperty = computeDynamicFontPropertyName(propertyViewDescriptor, modelDescriptor);
       // Dynamic font
       if (dynamicFontProperty != null) {
         IValueConnector fontConnector = connector.getChildConnector(dynamicFontProperty);
@@ -2343,7 +2335,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
           new ColumnPreferencesListener(viewComponent, viewDescriptor.getPermId(), actionHandler));
     }
 
-    String dynamicBackgroundProperty = computeComponentDynamicBackground(viewDescriptor, rowDescriptor);
+    String dynamicBackgroundProperty = computeDynamicBackgroundPropertyName(viewDescriptor, rowDescriptor);
     if (dynamicBackgroundProperty != null) {
       IValueConnector backgroundConnector = rowConnectorPrototype.getChildConnector(dynamicBackgroundProperty);
       if (backgroundConnector == null) {
@@ -2353,7 +2345,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     }
     tableModel.setRowBackgroundProperty(dynamicBackgroundProperty);
 
-    String dynamicForegroundProperty = computeComponentDynamicForeground(viewDescriptor, rowDescriptor);
+    String dynamicForegroundProperty = computeDynamicForegroundPropertyName(viewDescriptor, rowDescriptor);
     if (dynamicForegroundProperty != null) {
       IValueConnector backgroundConnector = rowConnectorPrototype.getChildConnector(dynamicForegroundProperty);
       if (backgroundConnector == null) {
@@ -2363,7 +2355,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     }
     tableModel.setRowForegroundProperty(dynamicForegroundProperty);
 
-    String dynamicFontProperty = computeComponentDynamicFont(viewDescriptor, rowDescriptor);
+    String dynamicFontProperty = computeDynamicFontPropertyName(viewDescriptor, rowDescriptor);
     if (dynamicFontProperty != null) {
       IValueConnector backgroundConnector = rowConnectorPrototype.getChildConnector(dynamicFontProperty);
       if (backgroundConnector == null) {
@@ -2466,14 +2458,14 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       configureHorizontalAlignment((JLabel) cellRenderer, columnViewDescriptor.getHorizontalAlignment());
     }
     if (cellRenderer instanceof JComponent) {
-      configureComponent(columnViewDescriptor, actionHandler, locale, (JComponent) cellRenderer);
+      configureComponent((JComponent) cellRenderer, columnViewDescriptor, actionHandler, locale);
       if (cellRenderer instanceof EvenOddTableCellRenderer) {
         // To preserve font that has been set and avoid EnhancedJTable changing it.
         ((EvenOddTableCellRenderer) cellRenderer).setCustomFont(((JComponent) cellRenderer).getFont());
       }
     }
     if (cellRenderer instanceof DynamicStyleRenderer) {
-      String dynamicToolTipProperty = computePropertyDynamicToolTip(rowDescriptor, columnViewDescriptor,
+      String dynamicToolTipProperty = computeDynamicToolTipPropertyName(columnViewDescriptor, rowDescriptor,
           propertyDescriptor);
       if (dynamicToolTipProperty != null) {
         IValueConnector toolTipConnector = rowConnectorPrototype.getChildConnector(dynamicToolTipProperty);
@@ -2484,8 +2476,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       }
       ((DynamicStyleRenderer) cellRenderer).setToolTipProperty(dynamicToolTipProperty);
 
-      String dynamicBackgroundProperty = computePropertyDynamicBackground(rowDescriptor, columnViewDescriptor,
-          propertyDescriptor);
+      String dynamicBackgroundProperty = computeDynamicBackgroundPropertyName(columnViewDescriptor, rowDescriptor);
       if (dynamicBackgroundProperty != null) {
         IValueConnector backgroundConnector = rowConnectorPrototype.getChildConnector(dynamicBackgroundProperty);
         if (backgroundConnector == null) {
@@ -2495,8 +2486,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       }
       ((DynamicStyleRenderer) cellRenderer).setBackgroundProperty(dynamicBackgroundProperty);
 
-      String dynamicForegroundProperty = computePropertyDynamicForeground(rowDescriptor, columnViewDescriptor,
-          propertyDescriptor);
+      String dynamicForegroundProperty = computeDynamicForegroundPropertyName(columnViewDescriptor, rowDescriptor);
       if (dynamicForegroundProperty != null) {
         IValueConnector foregroundConnector = rowConnectorPrototype.getChildConnector(dynamicForegroundProperty);
         if (foregroundConnector == null) {
@@ -2506,7 +2496,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       }
       ((DynamicStyleRenderer) cellRenderer).setForegroundProperty(dynamicForegroundProperty);
 
-      String dynamicFontProperty = computePropertyDynamicFont(rowDescriptor, columnViewDescriptor, propertyDescriptor);
+      String dynamicFontProperty = computeDynamicFontPropertyName(columnViewDescriptor, rowDescriptor);
       if (dynamicFontProperty != null) {
         IValueConnector fontConnector = rowConnectorPrototype.getChildConnector(dynamicFontProperty);
         if (fontConnector == null) {
@@ -2635,8 +2625,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     }
   }
 
-  private void handleTableCellSelectionEvent(ListSelectionEvent lse, boolean focusGained, EnhancedJTable table, int columnIndex,
-                                             IActionHandler actionHandler, IAction focusAction,
+  private void handleTableCellSelectionEvent(ListSelectionEvent lse, boolean focusGained, EnhancedJTable table,
+                                             int columnIndex, IActionHandler actionHandler, IAction focusAction,
                                              IView<JComponent> view) {
     if (!lse.getValueIsAdjusting()) {
       int focusedRow;
@@ -2709,8 +2699,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
      */
     @Override
     protected boolean processKeyBinding(KeyStroke ks, KeyEvent e, int condition, boolean pressed) {
-      if (SwingUtilities.getUIInputMap(this, condition) != null && SwingUtilities.getUIInputMap(this, condition).get(
-          ks) != null) {
+      if (SwingUtilities.getUIInputMap(this, condition) != null && SwingUtilities.getUIInputMap(this, condition).get(ks)
+          != null) {
         return super.processKeyBinding(ks, e, condition, pressed);
       }
       /**
@@ -3014,8 +3004,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected void decorateWithActions(IViewDescriptor viewDescriptor, IActionHandler actionHandler, Locale locale,
-                                     IView<JComponent> view) {
+  protected void decorateWithActions(IView<JComponent> view, IActionHandler actionHandler, Locale locale) {
+    IViewDescriptor viewDescriptor = view.getDescriptor();
     ActionMap actionMap = viewDescriptor.getActionMap();
     ActionMap secondaryActionMap = viewDescriptor.getSecondaryActionMap();
     if (actionMap != null || secondaryActionMap != null) {
@@ -3300,14 +3290,15 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected void finishComponentConfiguration(IViewDescriptor viewDescriptor, ITranslationProvider translationProvider,
-                                              Locale locale, IView<JComponent> view) {
+  protected void finishComponentConfiguration(IView<JComponent> view, ITranslationProvider translationProvider,
+                                              Locale locale) {
     JComponent viewPeer = view.getPeer();
-    configureComponent(viewDescriptor, translationProvider, locale, viewPeer);
+    IViewDescriptor viewDescriptor = view.getDescriptor();
+    configureComponent(viewPeer, viewDescriptor, translationProvider, locale);
   }
 
-  private void configureComponent(IViewDescriptor viewDescriptor, ITranslationProvider translationProvider,
-                                  Locale locale, JComponent viewPeer) {
+  private void configureComponent(JComponent viewPeer, IViewDescriptor viewDescriptor,
+                                  ITranslationProvider translationProvider, Locale locale) {
     if (viewDescriptor.getForeground() != null) {
       viewPeer.setForeground(createColor(viewDescriptor.getForeground()));
     }

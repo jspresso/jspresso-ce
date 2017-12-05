@@ -224,24 +224,24 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
         view.setPeer(wrapper);
       }
       if (((IMobilePageAware) viewDescriptor).getEnterAction() != null) {
-        ((RMobilePageAware) view.getPeer()).setEnterAction(getActionFactory().createAction(
-            ((IMobilePageAware) viewDescriptor).getEnterAction(), actionHandler, view, locale));
+        ((RMobilePageAware) view.getPeer()).setEnterAction(getActionFactory()
+            .createAction(((IMobilePageAware) viewDescriptor).getEnterAction(), actionHandler, view, locale));
       }
       if (((IMobilePageAware) viewDescriptor).getBackAction() != null) {
-        ((RMobilePageAware) view.getPeer()).setBackAction(getActionFactory().createAction(
-            ((IMobilePageAware) viewDescriptor).getBackAction(), actionHandler, view, locale));
+        ((RMobilePageAware) view.getPeer()).setBackAction(getActionFactory()
+            .createAction(((IMobilePageAware) viewDescriptor).getBackAction(), actionHandler, view, locale));
       }
       if (((IMobilePageAware) viewDescriptor).getMainAction() != null) {
-        ((RMobilePageAware) view.getPeer()).setMainAction(getActionFactory().createAction(
-            ((IMobilePageAware) viewDescriptor).getMainAction(), actionHandler, view, locale));
+        ((RMobilePageAware) view.getPeer()).setMainAction(getActionFactory()
+            .createAction(((IMobilePageAware) viewDescriptor).getMainAction(), actionHandler, view, locale));
       }
       if (((IMobilePageAware) viewDescriptor).getPageEndAction() != null) {
-        ((RMobilePageAware) view.getPeer()).setPageEndAction(getActionFactory().createAction(
-            ((IMobilePageAware) viewDescriptor).getPageEndAction(), actionHandler, view, locale));
+        ((RMobilePageAware) view.getPeer()).setPageEndAction(getActionFactory()
+            .createAction(((IMobilePageAware) viewDescriptor).getPageEndAction(), actionHandler, view, locale));
       }
       if (((IMobilePageAware) viewDescriptor).getSwipeLeftAction() != null) {
-        ((RMobilePageAware) view.getPeer()).setSwipeLeftAction(getActionFactory().createAction(
-            ((IMobilePageAware) viewDescriptor).getSwipeLeftAction(), actionHandler, view, locale));
+        ((RMobilePageAware) view.getPeer()).setSwipeLeftAction(getActionFactory()
+            .createAction(((IMobilePageAware) viewDescriptor).getSwipeLeftAction(), actionHandler, view, locale));
       }
       if (((IMobilePageAware) viewDescriptor).getSwipeRightAction() != null) {
         ((RMobilePageAware) view.getPeer()).setSwipeRightAction(getActionFactory()
@@ -652,7 +652,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     IViewDescriptor viewDescriptor = pageView.getDescriptor();
 
     // Compute dynamic label
-    String dynamicLabelProperty = computePropertyDynamicLabel(modelDescriptor, viewDescriptor, propertyDescriptor);
+    String dynamicLabelProperty = computeDynamicLabelPropertyName(viewDescriptor, modelDescriptor, propertyDescriptor);
     // Dynamic label
     if (dynamicLabelProperty != null) {
       IValueConnector labelConnector = connector.getChildConnector(dynamicLabelProperty);
@@ -666,7 +666,8 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     }
 
     // Compute dynamic tooltip
-    String dynamicToolTipProperty = computePropertyDynamicToolTip(modelDescriptor, viewDescriptor, propertyDescriptor);
+    String dynamicToolTipProperty = computeDynamicToolTipPropertyName(viewDescriptor, modelDescriptor,
+        propertyDescriptor);
     // Dynamic tooltip
     if (dynamicToolTipProperty != null) {
       IValueConnector tooltipConnector = connector.getChildConnector(dynamicToolTipProperty);
@@ -751,8 +752,8 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
                                                       IActionHandler actionHandler, Locale locale) {
     IView<RComponent> imagePropertyView = super.createImagePropertyView(propertyViewDescriptor, actionHandler, locale);
     if (imagePropertyView.getPeer() instanceof RMobileImageComponent) {
-      ((RMobileImageComponent) imagePropertyView.getPeer()).setSubmitUrl(RemotePeerRegistryServlet.computeUploadUrl(
-          ((IRemotePeer) imagePropertyView.getConnector()).getGuid()));
+      ((RMobileImageComponent) imagePropertyView.getPeer()).setSubmitUrl(
+          RemotePeerRegistryServlet.computeUploadUrl(((IRemotePeer) imagePropertyView.getConnector()).getGuid()));
       Integer scaledWidth = ((IImageViewDescriptor) propertyViewDescriptor).getScaledWidth();
       Integer scaledHeight = ((IImageViewDescriptor) propertyViewDescriptor).getScaledHeight();
       if (scaledWidth == null) {

@@ -263,11 +263,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
           view = createCardView((ICardViewDescriptor) viewDescriptor, actionHandler, locale);
         } else if (viewDescriptor instanceof ITreeViewDescriptor) {
           view = createTreeView((ITreeViewDescriptor) viewDescriptor, actionHandler, locale);
-          if (((ITreeViewDescriptor) viewDescriptor).getItemSelectionAction() != null) {
-            ((IItemSelectable) view.getConnector()).addItemSelectionListener(
-                new ConnectorActionAdapter<>(((ITreeViewDescriptor) viewDescriptor).getItemSelectionAction(),
-                    getActionFactory(), actionHandler, view));
-          }
+          finishTreeViewConfiguration(view, (ITreeViewDescriptor) viewDescriptor, actionHandler, locale);
         } else if (viewDescriptor instanceof IMapViewDescriptor) {
           view = createMapView((IMapViewDescriptor) viewDescriptor, actionHandler, locale);
         } else if (viewDescriptor instanceof ICompositeViewDescriptor) {
@@ -275,7 +271,8 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
         }
       }
       if (view != null) {
-        view.getConnector().setSecurityHandler(actionHandler);
+        IValueConnector viewConnector = view.getConnector();
+        viewConnector.setSecurityHandler(actionHandler);
         boolean locallyWritable = !viewDescriptor.isReadOnly();
         if (locallyWritable) {
           try {
@@ -285,7 +282,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
             actionHandler.restoreLastSecurityContextSnapshot();
           }
         }
-        view.getConnector().setLocallyWritable(locallyWritable);
+        viewConnector.setLocallyWritable(locallyWritable);
         if (viewDescriptor.getReadabilityGates() != null) {
           for (IGate gate : viewDescriptor.getReadabilityGates()) {
             if (!(gate instanceof ISecurable) || actionHandler.isAccessGranted((ISecurable) gate)) {
@@ -293,7 +290,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
               if (clonedGate instanceof IActionHandlerAware) {
                 ((IActionHandlerAware) clonedGate).setActionHandler(actionHandler);
               }
-              view.getConnector().addReadabilityGate(clonedGate);
+              viewConnector.addReadabilityGate(clonedGate);
             }
           }
         }
@@ -304,14 +301,14 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
               if (clonedGate instanceof IActionHandlerAware) {
                 ((IActionHandlerAware) clonedGate).setActionHandler(actionHandler);
               }
-              view.getConnector().addWritabilityGate(clonedGate);
+              viewConnector.addWritabilityGate(clonedGate);
             }
           }
         }
-        finishComponentConfiguration(viewDescriptor, actionHandler, locale, view);
-        decorateWithActions(viewDescriptor, actionHandler, locale, view);
+        finishComponentConfiguration(view, actionHandler, locale);
+        decorateWithActions(view, actionHandler, locale);
         decorateWithBorder(view, actionHandler, locale);
-        view.getConnector().setModelDescriptor(viewDescriptor.getModelDescriptor());
+        viewConnector.setModelDescriptor(viewDescriptor.getModelDescriptor());
         if (!actionHandler.isAccessGranted(viewDescriptor)) {
           view.setPeer(createSecurityComponent());
         }
@@ -322,6 +319,29 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
       return view;
     } finally {
       actionHandler.restoreLastSecurityContextSnapshot();
+    }
+  }
+
+  /**
+   * Finish tree view configuration.
+   *
+   * @param view
+   *     the view
+   * @param viewDescriptor
+   *     the view descriptor
+   * @param actionHandler
+   *     the action handler
+   * @param locale
+   *     the locale
+   */
+  protected void finishTreeViewConfiguration(IView<E> view, ITreeViewDescriptor viewDescriptor,
+                                             IActionHandler actionHandler, Locale locale) {
+
+    if (viewDescriptor.getItemSelectionAction() != null) {
+      IItemSelectable viewConnector = (IItemSelectable) view.getConnector();
+      viewConnector.addItemSelectionListener(
+          new ConnectorActionAdapter<>(viewDescriptor.getItemSelectionAction(), getActionFactory(), actionHandler,
+              view));
     }
   }
 
@@ -1199,9 +1219,9 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
                                             Locale locale);
 
   /**
-   * Computes the property name used to compute a property view dynamic label
+   * Computes the property name used to compute a view dynamic label
    * or null if none or if the label is a static one. Note that for the label to be considered as a dynamic one,
-   * the name must be different from the bound property name.
+   * the name must be different from the bound property name if te view descriptor is a property descriptor.
    *
    * @param modelDescriptor
    *     the component model descriptor.
@@ -1212,14 +1232,17 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    * @return the property name used to compute a property view dynamic label
    * or null if none or if the label is a static one.
    */
-  protected String computePropertyDynamicLabel(IComponentDescriptor<?> modelDescriptor, IViewDescriptor viewDescriptor,
-                                               IPropertyDescriptor propertyDescriptor) {
+  protected String computeDynamicLabelPropertyName(IViewDescriptor viewDescriptor,
+                                                   IComponentDescriptor<?> modelDescriptor,
+                                                   IPropertyDescriptor propertyDescriptor) {
     String dynamicLabelProperty = null;
     String labelKey = null;
     if (viewDescriptor.getName() != null) {
       labelKey = viewDescriptor.getName();
+      // } else if (propertyDescriptor != null) {
+      //   labelKey = propertyDescriptor.getName();
     }
-    if (labelKey != null && !labelKey.equals(propertyDescriptor.getName())) {
+    if (labelKey != null && (propertyDescriptor == null || !labelKey.equals(propertyDescriptor.getName()))) {
       IPropertyDescriptor labelProperty = modelDescriptor.getPropertyDescriptor(labelKey);
       if (labelProperty != null) {
         dynamicLabelProperty = labelProperty.getName();
@@ -1229,27 +1252,28 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   }
 
   /**
-   * Computes the property name used to compute a property view dynamic tooltip
+   * Computes the property name used to compute a view view dynamic tooltip
    * or null if none or if the tooltip is a static one.
    *
-   * @param modelDescriptor
-   *     the component model descriptor.
    * @param viewDescriptor
    *     the view descriptor
+   * @param modelDescriptor
+   *     the component model descriptor.
    * @param propertyDescriptor
-   *     the property descriptor.
-   * @return the property name used to compute a property view dynamic tooltip
-   * or null if none or if the tooltip is a static one.
+   *     the property descriptor
+   * @return the property name used to compute a view dynamic tooltip or null if none or if the tooltip is a static one.
    */
-  protected String computePropertyDynamicToolTip(IComponentDescriptor<?> modelDescriptor,
-                                                 IViewDescriptor viewDescriptor,
-                                                 IPropertyDescriptor propertyDescriptor) {
+  protected String computeDynamicToolTipPropertyName(IViewDescriptor viewDescriptor,
+                                                     IComponentDescriptor<?> modelDescriptor,
+                                                     IPropertyDescriptor propertyDescriptor) {
     String dynamicToolTipProperty = null;
     String descriptionKey = null;
     if (viewDescriptor.getDescription() != null) {
       descriptionKey = viewDescriptor.getDescription();
     } else if (propertyDescriptor != null) {
       descriptionKey = propertyDescriptor.getDescription();
+    } else if (viewDescriptor.getModelDescriptor() != null) {
+      descriptionKey = viewDescriptor.getModelDescriptor().getDescription();
     }
     if (descriptionKey != null) {
       IPropertyDescriptor descriptionProperty = modelDescriptor.getPropertyDescriptor(descriptionKey);
@@ -1261,25 +1285,22 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   }
 
   /**
-   * Computes the property name used to compute a property view dynamic
+   * Computes the property name used to compute a view dynamic
    * background or null if none or if the background is a static one.
    *
+   * @param viewDescriptor
+   *     the view descriptor
    * @param modelDescriptor
    *     the component model descriptor.
-   * @param propertyViewDescriptor
-   *     the property view descriptor
-   * @param propertyDescriptor
-   *     the property descriptor.
-   * @return the property name used to compute a property view dynamic
-   * background or null if none or if the background is a static one.
+   * @return the property name used to compute a view dynamic background or null if none or if the background is a
+   * static one.
    */
-  protected String computePropertyDynamicBackground(IComponentDescriptor<?> modelDescriptor,
-                                                    IPropertyViewDescriptor propertyViewDescriptor,
-                                                    IPropertyDescriptor propertyDescriptor) {
+  protected String computeDynamicBackgroundPropertyName(IViewDescriptor viewDescriptor,
+                                                        IComponentDescriptor<?> modelDescriptor) {
     String dynamicBackgroundProperty = null;
     String backgroundKey = null;
-    if (propertyViewDescriptor.getBackground() != null) {
-      backgroundKey = propertyViewDescriptor.getBackground();
+    if (viewDescriptor.getBackground() != null) {
+      backgroundKey = viewDescriptor.getBackground();
     }
     if (backgroundKey != null) {
       IPropertyDescriptor backgroundProperty = modelDescriptor.getPropertyDescriptor(backgroundKey);
@@ -1291,25 +1312,22 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   }
 
   /**
-   * Computes the property name used to compute a property view dynamic
+   * Computes the property name used to compute a view dynamic
    * foreground or null if none or if the foreground is a static one.
    *
+   * @param viewDescriptor
+   *     the view descriptor
    * @param modelDescriptor
    *     the component model descriptor.
-   * @param propertyViewDescriptor
-   *     the property view descriptor
-   * @param propertyDescriptor
-   *     the property descriptor.
-   * @return the property name used to compute a property view dynamic
-   * foreground or null if none or if the foreground is a static one.
+   * @return the property name used to compute a property view dynamic foreground or null if none or if the
+   * foreground is a static one.
    */
-  protected String computePropertyDynamicForeground(IComponentDescriptor<?> modelDescriptor,
-                                                    IPropertyViewDescriptor propertyViewDescriptor,
-                                                    IPropertyDescriptor propertyDescriptor) {
+  protected String computeDynamicForegroundPropertyName(IViewDescriptor viewDescriptor,
+                                                        IComponentDescriptor<?> modelDescriptor) {
     String dynamicForegroundProperty = null;
     String foregroundKey = null;
-    if (propertyViewDescriptor.getForeground() != null) {
-      foregroundKey = propertyViewDescriptor.getForeground();
+    if (viewDescriptor.getForeground() != null) {
+      foregroundKey = viewDescriptor.getForeground();
     }
     if (foregroundKey != null) {
       IPropertyDescriptor foregroundProperty = modelDescriptor.getPropertyDescriptor(foregroundKey);
@@ -1321,25 +1339,22 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   }
 
   /**
-   * Computes the property name used to compute a property view dynamic font or
+   * Computes the property name used to compute a view dynamic font or
    * null if none or if the font is a static one.
    *
+   * @param viewDescriptor
+   *     the view descriptor
    * @param modelDescriptor
    *     the component model descriptor.
-   * @param propertyViewDescriptor
-   *     the property view descriptor
-   * @param propertyDescriptor
-   *     the property descriptor.
-   * @return the property name used to compute a property view dynamic font or
-   * null if none or if the font is a static one.
+   * @return the property name used to compute a view dynamic font or null if none or if the font is a
+   * static one.
    */
-  protected String computePropertyDynamicFont(IComponentDescriptor<?> modelDescriptor,
-                                              IPropertyViewDescriptor propertyViewDescriptor,
-                                              IPropertyDescriptor propertyDescriptor) {
+  protected String computeDynamicFontPropertyName(IViewDescriptor viewDescriptor,
+                                                  IComponentDescriptor<?> modelDescriptor) {
     String dynamicFontProperty = null;
     String fontKey = null;
-    if (propertyViewDescriptor.getFont() != null) {
-      fontKey = propertyViewDescriptor.getFont();
+    if (viewDescriptor.getFont() != null) {
+      fontKey = viewDescriptor.getFont();
     }
     if (fontKey != null) {
       IPropertyDescriptor fontProperty = modelDescriptor.getPropertyDescriptor(fontKey);
@@ -1373,75 +1388,6 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
       dynamicToolTipProperty = modelDescriptor.getToHtmlProperty();
     }
     return dynamicToolTipProperty;
-  }
-
-  /**
-   * Computes the property name used to compute a component view background or
-   * null if none or if the background is a static one.
-   *
-   * @param viewDescriptor
-   *     the component view descriptor.
-   * @param modelDescriptor
-   *     the model descriptor.
-   * @return the property name used to compute a component view dynamic
-   * background or null if none or if the background is a static one.
-   */
-  protected String computeComponentDynamicBackground(IViewDescriptor viewDescriptor,
-                                                     IComponentDescriptor<?> modelDescriptor) {
-    String dynamicBackgroundProperty = null;
-    if (viewDescriptor.getBackground() != null) {
-      IPropertyDescriptor backgroundProperty = modelDescriptor.getPropertyDescriptor(viewDescriptor.getBackground());
-      if (backgroundProperty != null) {
-        dynamicBackgroundProperty = backgroundProperty.getName();
-      }
-    }
-    return dynamicBackgroundProperty;
-  }
-
-  /**
-   * Computes the property name used to compute a component view foreground or
-   * null if none or if the foreground is a static one.
-   *
-   * @param viewDescriptor
-   *     the component view descriptor.
-   * @param modelDescriptor
-   *     the model descriptor.
-   * @return the property name used to compute a component view dynamic
-   * foreground or null if none or if the foreground is a static one.
-   */
-  protected String computeComponentDynamicForeground(IViewDescriptor viewDescriptor,
-                                                     IComponentDescriptor<?> modelDescriptor) {
-    String dynamicForegroundProperty = null;
-    if (viewDescriptor.getForeground() != null) {
-      IPropertyDescriptor foregroundProperty = modelDescriptor.getPropertyDescriptor(viewDescriptor.getForeground());
-      if (foregroundProperty != null) {
-        dynamicForegroundProperty = foregroundProperty.getName();
-      }
-    }
-    return dynamicForegroundProperty;
-  }
-
-  /**
-   * Computes the property name used to compute a component view font or null if
-   * none or if the font is a static one.
-   *
-   * @param viewDescriptor
-   *     the component view descriptor.
-   * @param modelDescriptor
-   *     the model descriptor.
-   * @return the property name used to compute a component view dynamic font or
-   * null if none or if the font is a static one.
-   */
-  protected String computeComponentDynamicFont(IViewDescriptor viewDescriptor,
-                                               IComponentDescriptor<?> modelDescriptor) {
-    String dynamicFontProperty = null;
-    if (viewDescriptor.getFont() != null) {
-      IPropertyDescriptor fontProperty = modelDescriptor.getPropertyDescriptor(viewDescriptor.getFont());
-      if (fontProperty != null) {
-        dynamicFontProperty = fontProperty.getName();
-      }
-    }
-    return dynamicFontProperty;
   }
 
   /**
@@ -2644,17 +2590,14 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   /**
    * Decorates a view with the actions registered in the view descriptor.
    *
-   * @param viewDescriptor
-   *     the view descriptor.
+   * @param view
+   *     the raw view.
    * @param actionHandler
    *     the action handler.
    * @param locale
    *     the locale.
-   * @param view
-   *     the raw view.
    */
-  protected abstract void decorateWithActions(IViewDescriptor viewDescriptor, IActionHandler actionHandler,
-                                              Locale locale, IView<E> view);
+  protected abstract void decorateWithActions(IView<E> view, IActionHandler actionHandler, Locale locale);
 
   /**
    * Decorates a view with a border.
@@ -2671,18 +2614,15 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   /**
    * Applies the font and color configuration to a view.
    *
-   * @param viewDescriptor
-   *     the view descriptor.
+   * @param view
+   *     the raw view.
    * @param translationProvider
    *     the translation provider.
    * @param locale
    *     the locale.
-   * @param view
-   *     the raw view.
    */
-  protected abstract void finishComponentConfiguration(IViewDescriptor viewDescriptor,
-                                                       ITranslationProvider translationProvider, Locale locale,
-                                                       IView<E> view);
+  protected abstract void finishComponentConfiguration(IView<E> view, ITranslationProvider translationProvider,
+                                                       Locale locale);
 
   /**
    * Computes the connector id for component view.

@@ -246,8 +246,8 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
 
     viewComponent.setSortable(viewDescriptor.isSortable());
     if (viewDescriptor.getSortingAction() != null) {
-      viewComponent.setSortingAction(getActionFactory().createAction(viewDescriptor.getSortingAction(), actionHandler,
-          view, locale));
+      viewComponent.setSortingAction(
+          getActionFactory().createAction(viewDescriptor.getSortingAction(), actionHandler, view, locale));
     }
     viewComponent.setHorizontallyScrollable(viewDescriptor.isHorizontallyScrollable());
     List<RComponent> columns = new ArrayList<>();
@@ -256,7 +256,8 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
     List<IView<RComponent>> propertyViews = new ArrayList<>();
     Map<IPropertyViewDescriptor, Object[]> userColumnViewDescriptors = getUserColumnViewDescriptors(viewDescriptor,
         actionHandler);
-    for (Map.Entry<IPropertyViewDescriptor, Object[]> columnViewDescriptorEntry : userColumnViewDescriptors.entrySet()) {
+    for (Map.Entry<IPropertyViewDescriptor, Object[]> columnViewDescriptorEntry : userColumnViewDescriptors
+        .entrySet()) {
       IPropertyViewDescriptor columnViewDescriptor = columnViewDescriptorEntry.getKey();
       if (isPropertyViewAccessGranted(columnViewDescriptor, rowDescriptor, actionHandler)) {
         IView<RComponent> column = createView(columnViewDescriptor, actionHandler, locale);
@@ -286,8 +287,8 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
           }
           // We must listen for incoming connector value change to trigger the
           // action.
-          columnConnector.addValueChangeListener(new ConnectorActionAdapter<>(columnViewDescriptor.getAction(),
-              getActionFactory(), actionHandler, view));
+          columnConnector.addValueChangeListener(
+              new ConnectorActionAdapter<>(columnViewDescriptor.getAction(), getActionFactory(), actionHandler, view));
         }
         columnConnector.setLocallyWritable(locallyWritable);
         IPropertyDescriptor propertyDescriptor = rowDescriptor.getPropertyDescriptor(propertyName);
@@ -326,8 +327,8 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
     viewComponent.setColumnIds(columnIds.toArray(new String[columnIds.size()]));
     viewComponent.setSelectionMode(viewDescriptor.getSelectionMode().name());
     if (viewDescriptor.getRowAction() != null) {
-      viewComponent.setRowAction(getActionFactory().createAction(viewDescriptor.getRowAction(), actionHandler, view,
-          locale));
+      viewComponent.setRowAction(
+          getActionFactory().createAction(viewDescriptor.getRowAction(), actionHandler, view, locale));
     }
 
     completeViewWithDynamicBackground(viewComponent, viewDescriptor, rowDescriptor, rowConnectorPrototype);
@@ -340,15 +341,15 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
     return view;
   }
 
-  private void completeViewWithDynamicBackground(RTable viewComponent, ITableViewDescriptor viewDescriptor,
-                                                 IComponentDescriptor<?> rowDescriptor,
-                                                 ICompositeValueConnector rowConnectorPrototype) {
-    String dynamicBackgroundProperty = computeComponentDynamicBackground(viewDescriptor, rowDescriptor);
+  private void completeViewWithDynamicBackground(RComponent viewComponent, IViewDescriptor viewDescriptor,
+                                                 IComponentDescriptor<?> componentDescriptor,
+                                                 ICompositeValueConnector connectorToComplete) {
+    String dynamicBackgroundProperty = computeDynamicBackgroundPropertyName(viewDescriptor, componentDescriptor);
     if (dynamicBackgroundProperty != null) {
-      IValueConnector backgroundConnector = rowConnectorPrototype.getChildConnector(dynamicBackgroundProperty);
+      IValueConnector backgroundConnector = connectorToComplete.getChildConnector(dynamicBackgroundProperty);
       if (backgroundConnector == null) {
         backgroundConnector = getConnectorFactory().createValueConnector(dynamicBackgroundProperty);
-        rowConnectorPrototype.addChildConnector(dynamicBackgroundProperty, backgroundConnector);
+        connectorToComplete.addChildConnector(dynamicBackgroundProperty, backgroundConnector);
       }
       if (backgroundConnector instanceof IRemoteStateOwner) {
         viewComponent.setBackgroundState(((IRemoteStateOwner) backgroundConnector).getState());
@@ -356,15 +357,15 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
     }
   }
 
-  private void completeViewWithDynamicForeground(RTable viewComponent, ITableViewDescriptor viewDescriptor,
-                                                 IComponentDescriptor<?> rowDescriptor,
-                                                 ICompositeValueConnector rowConnectorPrototype) {
-    String dynamicForegroundProperty = computeComponentDynamicForeground(viewDescriptor, rowDescriptor);
+  private void completeViewWithDynamicForeground(RComponent viewComponent, IViewDescriptor viewDescriptor,
+                                                 IComponentDescriptor<?> componentDescriptor,
+                                                 ICompositeValueConnector connectorToComplete) {
+    String dynamicForegroundProperty = computeDynamicForegroundPropertyName(viewDescriptor, componentDescriptor);
     if (dynamicForegroundProperty != null) {
-      IValueConnector foregroundConnector = rowConnectorPrototype.getChildConnector(dynamicForegroundProperty);
+      IValueConnector foregroundConnector = connectorToComplete.getChildConnector(dynamicForegroundProperty);
       if (foregroundConnector == null) {
         foregroundConnector = getConnectorFactory().createValueConnector(dynamicForegroundProperty);
-        rowConnectorPrototype.addChildConnector(dynamicForegroundProperty, foregroundConnector);
+        connectorToComplete.addChildConnector(dynamicForegroundProperty, foregroundConnector);
       }
       if (foregroundConnector instanceof IRemoteStateOwner) {
         viewComponent.setForegroundState(((IRemoteStateOwner) foregroundConnector).getState());
@@ -372,16 +373,16 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
     }
   }
 
-  private void completeViewWithDynamicFont(RTable viewComponent, ITableViewDescriptor viewDescriptor,
-                                           IComponentDescriptor<?> rowDescriptor,
-                                           ICompositeValueConnector rowConnectorPrototype) {
-    String dynamicFontProperty = computeComponentDynamicFont(viewDescriptor, rowDescriptor);
+  private void completeViewWithDynamicFont(RComponent viewComponent, IViewDescriptor viewDescriptor,
+                                           IComponentDescriptor<?> componentDescriptor,
+                                           ICompositeValueConnector connectorToComplete) {
+    String dynamicFontProperty = computeDynamicFontPropertyName(viewDescriptor, componentDescriptor);
     if (dynamicFontProperty != null) {
-      IValueConnector fontConnector = rowConnectorPrototype.getChildConnector(dynamicFontProperty);
+      IValueConnector fontConnector = connectorToComplete.getChildConnector(dynamicFontProperty);
       if (fontConnector == null) {
         fontConnector = getConnectorFactory().createValueConnector(dynamicFontProperty);
         ((RemoteValueConnector) fontConnector).setRemoteStateValueMapper(FONT_MAPPER);
-        rowConnectorPrototype.addChildConnector(dynamicFontProperty, fontConnector);
+        connectorToComplete.addChildConnector(dynamicFontProperty, fontConnector);
       }
       if (fontConnector instanceof IRemoteStateOwner) {
         viewComponent.setFontState(((IRemoteStateOwner) fontConnector).getState());
@@ -396,9 +397,7 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
     // Compute dynamic tooltips
     for (IView<RComponent> propertyView : propertyViews) {
       IPropertyViewDescriptor propertyViewDescriptor = (IPropertyViewDescriptor) propertyView.getDescriptor();
-      IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor.getModelDescriptor();
-      String dynamicToolTipProperty = computePropertyDynamicToolTip(modelDescriptor, propertyViewDescriptor,
-          propertyDescriptor);
+      String dynamicToolTipProperty = computeDynamicToolTipPropertyName(propertyViewDescriptor, modelDescriptor, null);
       // Dynamic tooltip
       if (dynamicToolTipProperty != null) {
         IValueConnector tooltipConnector = connector.getChildConnector(dynamicToolTipProperty);
@@ -421,8 +420,7 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
     for (IView<RComponent> propertyView : propertyViews) {
       IPropertyViewDescriptor propertyViewDescriptor = (IPropertyViewDescriptor) propertyView.getDescriptor();
       IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor.getModelDescriptor();
-      String dynamicBackgroundProperty = computePropertyDynamicBackground(modelDescriptor, propertyViewDescriptor,
-          propertyDescriptor);
+      String dynamicBackgroundProperty = computeDynamicBackgroundPropertyName(propertyViewDescriptor, modelDescriptor);
       // Dynamic background
       if (dynamicBackgroundProperty != null) {
         IValueConnector backgroundConnector = connector.getChildConnector(dynamicBackgroundProperty);
@@ -444,9 +442,7 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
     // Compute dynamic foreground
     for (IView<RComponent> propertyView : propertyViews) {
       IPropertyViewDescriptor propertyViewDescriptor = (IPropertyViewDescriptor) propertyView.getDescriptor();
-      IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor.getModelDescriptor();
-      String dynamicForegroundProperty = computePropertyDynamicForeground(modelDescriptor, propertyViewDescriptor,
-          propertyDescriptor);
+      String dynamicForegroundProperty = computeDynamicForegroundPropertyName(propertyViewDescriptor, modelDescriptor);
       // Dynamic foreground
       if (dynamicForegroundProperty != null) {
         IValueConnector foregroundConnector = connector.getChildConnector(dynamicForegroundProperty);
@@ -468,9 +464,7 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
     // Compute dynamic font
     for (IView<RComponent> propertyView : propertyViews) {
       IPropertyViewDescriptor propertyViewDescriptor = (IPropertyViewDescriptor) propertyView.getDescriptor();
-      IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor.getModelDescriptor();
-      String dynamicFontProperty = computePropertyDynamicFont(modelDescriptor, propertyViewDescriptor,
-          propertyDescriptor);
+      String dynamicFontProperty = computeDynamicFontPropertyName(propertyViewDescriptor, modelDescriptor);
       // Dynamic font
       if (dynamicFontProperty != null) {
         IValueConnector fontConnector = connector.getChildConnector(dynamicFontProperty);

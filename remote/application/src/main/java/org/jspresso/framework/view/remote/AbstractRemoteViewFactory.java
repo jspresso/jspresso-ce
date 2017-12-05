@@ -296,14 +296,10 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
    * {@inheritDoc}
    */
   @Override
-  protected void finishComponentConfiguration(IViewDescriptor viewDescriptor, ITranslationProvider translationProvider,
-                                              Locale locale, IView<RComponent> view) {
+  protected void finishComponentConfiguration(IView<RComponent> view,
+                                              ITranslationProvider translationProvider, Locale locale) {
     RComponent viewPeer = view.getPeer();
-    configureComponent(viewDescriptor, translationProvider, locale, viewPeer);
-  }
-
-  private void configureComponent(IViewDescriptor viewDescriptor, ITranslationProvider translationProvider,
-                                  Locale locale, RComponent viewPeer) {
+    IViewDescriptor viewDescriptor = view.getDescriptor();
     viewPeer.setLabel(viewDescriptor.getI18nName(translationProvider, locale));
     String viewDescription = viewDescriptor.getI18nDescription(translationProvider, locale);
     viewDescription = completeDescriptionWithLiveDebugUI(viewDescriptor, viewDescription);
@@ -1423,7 +1419,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     }
     if (viewPeer instanceof RLabel || viewPeer instanceof RLink) {
       IValueConnector viewConnector = view.getConnector();
-      if(viewConnector instanceof IRemoteStateOwner) {
+      if (viewConnector instanceof IRemoteStateOwner) {
         final IRemoteStateValueMapper remoteStateValueMapper = ((IRemoteStateOwner) viewConnector)
             .currentRemoteStateValueMapper();
         IRemoteStateValueMapper sanitizingValueMapper = new IRemoteStateValueMapper() {
@@ -1591,7 +1587,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         IModelDescriptor propertyModelDescriptor = propertyViewDescriptor.getModelDescriptor();
         if (propertyModelDescriptor != null) {
           propertyName = propertyModelDescriptor.getName();
-          propertyDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor.getModelDescriptor()).getComponentDescriptor().getPropertyDescriptor(propertyName);
+          propertyDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor.getModelDescriptor())
+              .getComponentDescriptor().getPropertyDescriptor(propertyName);
           if (propertyDescriptor == null) {
             throw new ViewException(
                 "Property descriptor [" + propertyName + "] does not exist for model descriptor " + viewDescriptor
@@ -2050,8 +2047,9 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
    * {@inheritDoc}
    */
   @Override
-  protected void decorateWithActions(IViewDescriptor viewDescriptor, IActionHandler actionHandler, Locale locale,
-                                     IView<RComponent> view) {
+  protected void decorateWithActions(IView<RComponent> view,
+                                     IActionHandler actionHandler, Locale locale) {
+    IViewDescriptor viewDescriptor = view.getDescriptor();
     ActionMap actionMap = viewDescriptor.getActionMap();
     ActionMap secondaryActionMap = viewDescriptor.getSecondaryActionMap();
     RComponent peer = view.getPeer();
@@ -2180,8 +2178,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
                 hiddenWhenDisabled = action.getHiddenWhenDisabled();
               }
               actionHandler.pushToSecurityContext(action);
-              RAction rAction = getActionFactory().createAction(action, iconDimension,
-                  actionHandler, view, locale);
+              RAction rAction = getActionFactory().createAction(action, iconDimension, actionHandler, view, locale);
               rAction.setAcceleratorAsString(action.getAcceleratorAsString());
               rAction.setHiddenWhenDisabled(hiddenWhenDisabled);
               actions.add(rAction);
