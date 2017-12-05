@@ -319,6 +319,11 @@ public class DefaultFlexViewFactory {
     if (remoteComponent.toolTip != null) {
       component.toolTip = remoteComponent.toolTip;
     }
+    applyComponentStyle(component, remoteComponent);
+    bindDynamicToolTip(component, remoteComponent);
+    bindDynamicBackground(component, remoteComponent);
+    bindDynamicForeground(component, remoteComponent);
+    bindDynamicFont(component, remoteComponent);
     component = decorateWithActions(remoteComponent, component);
     if (remoteComponent.borderType == "TITLED") {
       var decorator:Panel = createPanelComponent();
@@ -334,7 +339,7 @@ public class DefaultFlexViewFactory {
     } else if (remoteComponent.borderType == "SIMPLE") {
       component.setStyle("borderStyle", "solid");
     }
-    applyComponentStyle(component, remoteComponent);
+    bindDynamicLabel(component, remoteComponent);
     applyComponentPreferredSize(component, remoteComponent.preferredSize);
     if (registerPeers) {
       getRemotePeerRegistry().register(remoteComponent);
@@ -1849,8 +1854,6 @@ public class DefaultFlexViewFactory {
 
       if (rComponent is RSecurityComponent) {
         sizeMaxComponentWidth(component, rComponent);
-      } else {
-        bindDynamicAspects(component, rComponent);
       }
 
       if (remoteForm.labelsPosition != "NONE") {
@@ -2020,6 +2023,18 @@ public class DefaultFlexViewFactory {
     }
     decoratedForm = applyComponentScrollability(decoratedForm, remoteForm);
     return decoratedForm;
+  }
+
+  protected function bindDynamicLabel(component:UIComponent, rComponent:RComponent):void {
+    if (rComponent.labelState) {
+      if (component is Panel) {
+        getRemotePeerRegistry().register(rComponent.toolTipState);
+        var updateTitle:Function = function (value:Object):void {
+          (component as Panel).title = value as String;
+        };
+        BindingUtils.bindSetter(updateTitle, rComponent.labelState, "value", true);
+      }
+    }
   }
 
   protected function bindDynamicToolTip(component:UIComponent, rComponent:RComponent):void {
@@ -3683,19 +3698,5 @@ public class DefaultFlexViewFactory {
     }
     return null;
   }
-
-  private function bindDynamicAspects(component:UIComponent, rComponent:RComponent):void {
-    if (component is Container) {
-      for each(var child:UIComponent in (component as Container).getChildren()) {
-        bindDynamicAspects(child, rComponent);
-      }
-    } else {
-      bindDynamicToolTip(component, rComponent);
-      bindDynamicBackground(component, rComponent);
-      bindDynamicForeground(component, rComponent);
-      bindDynamicFont(component, rComponent);
-    }
-  }
-
 }
 }

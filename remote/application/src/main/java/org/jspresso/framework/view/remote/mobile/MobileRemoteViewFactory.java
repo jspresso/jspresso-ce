@@ -687,6 +687,84 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
    * {@inheritDoc}
    */
   @Override
+  protected void completeViewWithDynamicLabel(RComponent viewComponent, IViewDescriptor viewDescriptor,
+                                              IComponentDescriptor<?> componentDescriptor,
+                                              ICompositeValueConnector connectorToComplete) {
+    // Not supported in mobile environments.
+  }
+
+  /**
+   * Not supported in mobile environment.
+   * <p/>
+   * {@inheritDoc}
+   */
+  @Override
+  protected void completeViewWithDynamicToolTip(RComponent viewComponent, IViewDescriptor viewDescriptor,
+                                                IComponentDescriptor<?> componentDescriptor,
+                                                ICompositeValueConnector connectorToComplete) {
+    // Not supported in mobile environments.
+  }
+
+  /**
+   * Complete view with dynamic background.
+   *
+   * @param viewComponent
+   *     the view component
+   * @param viewDescriptor
+   *     the view descriptor
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param connectorToComplete
+   *     the connector to complete
+   */
+  protected void completeViewWithDynamicBackground(RComponent viewComponent, IViewDescriptor viewDescriptor,
+                                                   IComponentDescriptor<?> componentDescriptor,
+                                                   ICompositeValueConnector connectorToComplete) {
+    // Not supported in mobile environments.
+  }
+
+  /**
+   * Complete view with dynamic foreground.
+   *
+   * @param viewComponent
+   *     the view component
+   * @param viewDescriptor
+   *     the view descriptor
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param connectorToComplete
+   *     the connector to complete
+   */
+  protected void completeViewWithDynamicForeground(RComponent viewComponent, IViewDescriptor viewDescriptor,
+                                                   IComponentDescriptor<?> componentDescriptor,
+                                                   ICompositeValueConnector connectorToComplete) {
+    // Not supported in mobile environments.
+  }
+
+  /**
+   * Complete view with dynamic font.
+   *
+   * @param viewComponent
+   *     the view component
+   * @param viewDescriptor
+   *     the view descriptor
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param connectorToComplete
+   *     the connector to complete
+   */
+  protected void completeViewWithDynamicFont(RComponent viewComponent, IViewDescriptor viewDescriptor,
+                                             IComponentDescriptor<?> componentDescriptor,
+                                             ICompositeValueConnector connectorToComplete) {
+    // Not supported in mobile environments.
+  }
+
+  /**
+   * Not supported in mobile environment.
+   * <p/>
+   * {@inheritDoc}
+   */
+  @Override
   protected void completePropertyViewsWithDynamicToolTips(ICompositeValueConnector connector,
                                                           List<IView<RComponent>> propertyViews,
                                                           IComponentDescriptor<?> modelDescriptor) {

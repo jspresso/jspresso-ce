@@ -116,8 +116,13 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var component = this.base(arguments, remoteComponent, registerPeers);
       if (remoteComponent && component) {
         this._configureToolTip(remoteComponent, component);
+        this._bindDynamicToolTip(component, remoteComponent);
+        this._bindDynamicBackground(component, remoteComponent);
+        this._bindDynamicForeground(component, remoteComponent);
+        this._bindDynamicFont(component, remoteComponent);
         component = this._decorateWithActions(remoteComponent, component);
         component = this._decorateWithBorder(remoteComponent, component);
+        this._bindDynamicLabel(component, remoteComponent); // After border set
         this._applyPreferredSize(remoteComponent, component);
       }
       return component;
@@ -660,6 +665,25 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         gridLayout.setColumnFlex(i, 1);
       }
       return evenGridContainer;
+    },
+
+    _bindDynamicLabel: function (component, rComponent) {
+      var labelState = rComponent.getLabelState();
+      if (labelState) {
+        if (component instanceof org.jspresso.framework.view.qx.EnhancedCollapsiblePanel) {
+          this._getRemotePeerRegistry().register(labelState);
+          var modelController = new qx.data.controller.Object(labelState);
+          modelController.addTarget(component, "caption", "value", false, {
+            converter: function (modelValue, model) {
+              if (modelValue) {
+                return modelValue;
+              } else {
+                return rComponent.getLabel();
+              }
+            }
+          });
+        }
+      }
     },
 
     _bindDynamicToolTip: function (component, rComponent) {
@@ -1369,11 +1393,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         var compCol;
         var compColSpan;
         var compRowSpan;
-
-        this._bindDynamicToolTip(component, rComponent);
-        this._bindDynamicBackground(component, rComponent);
-        this._bindDynamicForeground(component, rComponent);
-        this._bindDynamicFont(component, rComponent);
 
         if (remoteForm.getLabelsPosition() != "NONE") {
           componentLabel = /** @type {qx.ui.basic.Label} */ this.createComponent(remoteForm.getElementLabels()[i],

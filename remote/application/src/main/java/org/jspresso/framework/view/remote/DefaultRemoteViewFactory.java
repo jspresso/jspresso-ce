@@ -341,51 +341,98 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
     return view;
   }
 
-  private void completeViewWithDynamicBackground(RComponent viewComponent, IViewDescriptor viewDescriptor,
-                                                 IComponentDescriptor<?> componentDescriptor,
-                                                 ICompositeValueConnector connectorToComplete) {
-    String dynamicBackgroundProperty = computeDynamicBackgroundPropertyName(viewDescriptor, componentDescriptor);
-    if (dynamicBackgroundProperty != null) {
-      IValueConnector backgroundConnector = connectorToComplete.getChildConnector(dynamicBackgroundProperty);
-      if (backgroundConnector == null) {
-        backgroundConnector = getConnectorFactory().createValueConnector(dynamicBackgroundProperty);
-        connectorToComplete.addChildConnector(dynamicBackgroundProperty, backgroundConnector);
-      }
-      if (backgroundConnector instanceof IRemoteStateOwner) {
-        viewComponent.setBackgroundState(((IRemoteStateOwner) backgroundConnector).getState());
-      }
-    }
-  }
-
-  private void completeViewWithDynamicForeground(RComponent viewComponent, IViewDescriptor viewDescriptor,
-                                                 IComponentDescriptor<?> componentDescriptor,
-                                                 ICompositeValueConnector connectorToComplete) {
-    String dynamicForegroundProperty = computeDynamicForegroundPropertyName(viewDescriptor, componentDescriptor);
-    if (dynamicForegroundProperty != null) {
-      IValueConnector foregroundConnector = connectorToComplete.getChildConnector(dynamicForegroundProperty);
-      if (foregroundConnector == null) {
-        foregroundConnector = getConnectorFactory().createValueConnector(dynamicForegroundProperty);
-        connectorToComplete.addChildConnector(dynamicForegroundProperty, foregroundConnector);
-      }
-      if (foregroundConnector instanceof IRemoteStateOwner) {
-        viewComponent.setForegroundState(((IRemoteStateOwner) foregroundConnector).getState());
+  @Override
+  protected void completeViewWithDynamicLabel(RComponent viewComponent, IViewDescriptor viewDescriptor,
+                                                   IComponentDescriptor<?> componentDescriptor,
+                                                   ICompositeValueConnector connectorToComplete) {
+    if (viewComponent.getLabelState() == null) { // Not previously set by view creation
+      String dynamicLabelProperty = computeDynamicLabelPropertyName(viewDescriptor, componentDescriptor, null);
+      if (dynamicLabelProperty != null) {
+        IValueConnector labelConnector = connectorToComplete.getChildConnector(dynamicLabelProperty);
+        if (labelConnector == null) {
+          labelConnector = getConnectorFactory().createValueConnector(dynamicLabelProperty);
+          connectorToComplete.addChildConnector(dynamicLabelProperty, labelConnector);
+        }
+        if (labelConnector instanceof IRemoteStateOwner) {
+          viewComponent.setLabelState(((IRemoteStateOwner) labelConnector).getState());
+        }
       }
     }
   }
 
-  private void completeViewWithDynamicFont(RComponent viewComponent, IViewDescriptor viewDescriptor,
+  @Override
+  protected void completeViewWithDynamicToolTip(RComponent viewComponent, IViewDescriptor viewDescriptor,
+                                                   IComponentDescriptor<?> componentDescriptor,
+                                                   ICompositeValueConnector connectorToComplete) {
+    if (viewComponent.getToolTipState() == null) { // Not previously set by view creation
+      String dynamicToolTipProperty = computeDynamicToolTipPropertyName(viewDescriptor, componentDescriptor, null);
+      if (dynamicToolTipProperty != null) {
+        IValueConnector toolTipConnector = connectorToComplete.getChildConnector(dynamicToolTipProperty);
+        if (toolTipConnector == null) {
+          toolTipConnector = getConnectorFactory().createValueConnector(dynamicToolTipProperty);
+          connectorToComplete.addChildConnector(dynamicToolTipProperty, toolTipConnector);
+        }
+        if (toolTipConnector instanceof IRemoteStateOwner) {
+          viewComponent.setToolTipState(((IRemoteStateOwner) toolTipConnector).getState());
+        }
+      }
+    }
+  }
+
+  @Override
+  protected void completeViewWithDynamicBackground(RComponent viewComponent, IViewDescriptor viewDescriptor,
+                                                 IComponentDescriptor<?> componentDescriptor,
+                                                 ICompositeValueConnector connectorToComplete) {
+    if (viewComponent.getBackgroundState() == null) { // Not previously set by view creation
+      String dynamicBackgroundProperty = computeDynamicBackgroundPropertyName(viewDescriptor, componentDescriptor);
+      if (dynamicBackgroundProperty != null) {
+        IValueConnector backgroundConnector = connectorToComplete.getChildConnector(dynamicBackgroundProperty);
+        if (backgroundConnector == null) {
+          backgroundConnector = getConnectorFactory().createValueConnector(dynamicBackgroundProperty);
+          connectorToComplete.addChildConnector(dynamicBackgroundProperty, backgroundConnector);
+        }
+        if (backgroundConnector instanceof IRemoteStateOwner) {
+          viewComponent.setBackgroundState(((IRemoteStateOwner) backgroundConnector).getState());
+        }
+      }
+    }
+  }
+
+  @Override
+  protected void completeViewWithDynamicForeground(RComponent viewComponent, IViewDescriptor viewDescriptor,
+                                                 IComponentDescriptor<?> componentDescriptor,
+                                                 ICompositeValueConnector connectorToComplete) {
+    if (viewComponent.getForegroundState() == null) { // Not previously set by view creation
+      String dynamicForegroundProperty = computeDynamicForegroundPropertyName(viewDescriptor, componentDescriptor);
+      if (dynamicForegroundProperty != null) {
+        IValueConnector foregroundConnector = connectorToComplete.getChildConnector(dynamicForegroundProperty);
+        if (foregroundConnector == null) {
+          foregroundConnector = getConnectorFactory().createValueConnector(dynamicForegroundProperty);
+          connectorToComplete.addChildConnector(dynamicForegroundProperty, foregroundConnector);
+        }
+        if (foregroundConnector instanceof IRemoteStateOwner) {
+          viewComponent.setForegroundState(((IRemoteStateOwner) foregroundConnector).getState());
+        }
+      }
+    }
+  }
+
+  @Override
+  protected void completeViewWithDynamicFont(RComponent viewComponent, IViewDescriptor viewDescriptor,
                                            IComponentDescriptor<?> componentDescriptor,
                                            ICompositeValueConnector connectorToComplete) {
-    String dynamicFontProperty = computeDynamicFontPropertyName(viewDescriptor, componentDescriptor);
-    if (dynamicFontProperty != null) {
-      IValueConnector fontConnector = connectorToComplete.getChildConnector(dynamicFontProperty);
-      if (fontConnector == null) {
-        fontConnector = getConnectorFactory().createValueConnector(dynamicFontProperty);
-        ((RemoteValueConnector) fontConnector).setRemoteStateValueMapper(FONT_MAPPER);
-        connectorToComplete.addChildConnector(dynamicFontProperty, fontConnector);
-      }
-      if (fontConnector instanceof IRemoteStateOwner) {
-        viewComponent.setFontState(((IRemoteStateOwner) fontConnector).getState());
+    if (viewComponent.getFontState() == null) { // Not previously set by view creation
+      String dynamicFontProperty = computeDynamicFontPropertyName(viewDescriptor, componentDescriptor);
+      if (dynamicFontProperty != null) {
+        IValueConnector fontConnector = connectorToComplete.getChildConnector(dynamicFontProperty);
+        if (fontConnector == null) {
+          fontConnector = getConnectorFactory().createValueConnector(dynamicFontProperty);
+          ((RemoteValueConnector) fontConnector).setRemoteStateValueMapper(FONT_MAPPER);
+          connectorToComplete.addChildConnector(dynamicFontProperty, fontConnector);
+        }
+        if (fontConnector instanceof IRemoteStateOwner) {
+          viewComponent.setFontState(((IRemoteStateOwner) fontConnector).getState());
+        }
       }
     }
   }

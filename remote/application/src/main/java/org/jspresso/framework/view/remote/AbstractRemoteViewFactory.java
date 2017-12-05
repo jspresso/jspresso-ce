@@ -296,10 +296,27 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
    * {@inheritDoc}
    */
   @Override
-  protected void finishComponentConfiguration(IView<RComponent> view,
-                                              ITranslationProvider translationProvider, Locale locale) {
+  protected void finishComponentConfiguration(IView<RComponent> view, ITranslationProvider translationProvider,
+                                              Locale locale) {
     RComponent viewPeer = view.getPeer();
     IViewDescriptor viewDescriptor = view.getDescriptor();
+    IValueConnector viewConnector = view.getConnector();
+    IModelDescriptor modelDescriptor = viewDescriptor.getModelDescriptor();
+
+    // Dynamic appearance states
+    if (modelDescriptor instanceof IComponentDescriptor<?> && viewConnector instanceof ICompositeValueConnector) {
+      completeViewWithDynamicLabel(viewPeer, viewDescriptor, (IComponentDescriptor<?>) modelDescriptor,
+          (ICompositeValueConnector) viewConnector);
+      completeViewWithDynamicToolTip(viewPeer, viewDescriptor, (IComponentDescriptor<?>) modelDescriptor,
+          (ICompositeValueConnector) viewConnector);
+      completeViewWithDynamicForeground(viewPeer, viewDescriptor, (IComponentDescriptor<?>) modelDescriptor,
+          (ICompositeValueConnector) viewConnector);
+      completeViewWithDynamicBackground(viewPeer, viewDescriptor, (IComponentDescriptor<?>) modelDescriptor,
+          (ICompositeValueConnector) viewConnector);
+      completeViewWithDynamicFont(viewPeer, viewDescriptor, (IComponentDescriptor<?>) modelDescriptor,
+          (ICompositeValueConnector) viewConnector);
+    }
+
     viewPeer.setLabel(viewDescriptor.getI18nName(translationProvider, locale));
     String viewDescription = viewDescriptor.getI18nDescription(translationProvider, locale);
     viewDescription = completeDescriptionWithLiveDebugUI(viewDescriptor, viewDescription);
@@ -1960,6 +1977,86 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
   }
 
   /**
+   * Complete view with dynamic label.
+   *
+   * @param viewComponent
+   *     the view component
+   * @param viewDescriptor
+   *     the view descriptor
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param connectorToComplete
+   *     the connector to complete
+   */
+  protected abstract void completeViewWithDynamicLabel(RComponent viewComponent, IViewDescriptor viewDescriptor,
+                                                       IComponentDescriptor<?> componentDescriptor,
+                                                       ICompositeValueConnector connectorToComplete);
+
+  /**
+   * Complete view with dynamic tooltip.
+   *
+   * @param viewComponent
+   *     the view component
+   * @param viewDescriptor
+   *     the view descriptor
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param connectorToComplete
+   *     the connector to complete
+   */
+  protected abstract void completeViewWithDynamicToolTip(RComponent viewComponent, IViewDescriptor viewDescriptor,
+                                                         IComponentDescriptor<?> componentDescriptor,
+                                                         ICompositeValueConnector connectorToComplete);
+
+  /**
+   * Complete view with dynamic background.
+   *
+   * @param viewComponent
+   *     the view component
+   * @param viewDescriptor
+   *     the view descriptor
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param connectorToComplete
+   *     the connector to complete
+   */
+  protected abstract void completeViewWithDynamicBackground(RComponent viewComponent, IViewDescriptor viewDescriptor,
+                                                            IComponentDescriptor<?> componentDescriptor,
+                                                            ICompositeValueConnector connectorToComplete);
+
+  /**
+   * Complete view with dynamic foreground.
+   *
+   * @param viewComponent
+   *     the view component
+   * @param viewDescriptor
+   *     the view descriptor
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param connectorToComplete
+   *     the connector to complete
+   */
+  protected abstract void completeViewWithDynamicForeground(RComponent viewComponent, IViewDescriptor viewDescriptor,
+                                                            IComponentDescriptor<?> componentDescriptor,
+                                                            ICompositeValueConnector connectorToComplete);
+
+  /**
+   * Complete view with dynamic font.
+   *
+   * @param viewComponent
+   *     the view component
+   * @param viewDescriptor
+   *     the view descriptor
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param connectorToComplete
+   *     the connector to complete
+   */
+  protected abstract void completeViewWithDynamicFont(RComponent viewComponent, IViewDescriptor viewDescriptor,
+                                                      IComponentDescriptor<?> componentDescriptor,
+                                                      ICompositeValueConnector connectorToComplete);
+
+  /**
    * Complete property views with dynamic tool tips.
    *
    * @param connector
@@ -2047,8 +2144,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
    * {@inheritDoc}
    */
   @Override
-  protected void decorateWithActions(IView<RComponent> view,
-                                     IActionHandler actionHandler, Locale locale) {
+  protected void decorateWithActions(IView<RComponent> view, IActionHandler actionHandler, Locale locale) {
     IViewDescriptor viewDescriptor = view.getDescriptor();
     ActionMap actionMap = viewDescriptor.getActionMap();
     ActionMap secondaryActionMap = viewDescriptor.getSecondaryActionMap();
