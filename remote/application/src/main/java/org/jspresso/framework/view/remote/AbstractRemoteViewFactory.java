@@ -300,22 +300,6 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
                                               Locale locale) {
     RComponent viewPeer = view.getPeer();
     IViewDescriptor viewDescriptor = view.getDescriptor();
-    IValueConnector viewConnector = view.getConnector();
-    IModelDescriptor modelDescriptor = viewDescriptor.getModelDescriptor();
-
-    // Dynamic appearance states
-    if (modelDescriptor instanceof IComponentDescriptor<?> && viewConnector instanceof ICompositeValueConnector) {
-      completeViewWithDynamicLabel(viewPeer, viewDescriptor, (IComponentDescriptor<?>) modelDescriptor,
-          (ICompositeValueConnector) viewConnector);
-      completeViewWithDynamicToolTip(viewPeer, viewDescriptor, (IComponentDescriptor<?>) modelDescriptor,
-          (ICompositeValueConnector) viewConnector);
-      completeViewWithDynamicForeground(viewPeer, viewDescriptor, (IComponentDescriptor<?>) modelDescriptor,
-          (ICompositeValueConnector) viewConnector);
-      completeViewWithDynamicBackground(viewPeer, viewDescriptor, (IComponentDescriptor<?>) modelDescriptor,
-          (ICompositeValueConnector) viewConnector);
-      completeViewWithDynamicFont(viewPeer, viewDescriptor, (IComponentDescriptor<?>) modelDescriptor,
-          (ICompositeValueConnector) viewConnector);
-    }
 
     viewPeer.setLabel(viewDescriptor.getI18nName(translationProvider, locale));
     String viewDescription = viewDescriptor.getI18nDescription(translationProvider, locale);
@@ -1976,141 +1960,42 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     return new RBorderContainer(getGuidGenerator().generateGUID());
   }
 
-  /**
-   * Complete view with dynamic label.
-   *
-   * @param viewComponent
-   *     the view component
-   * @param viewDescriptor
-   *     the view descriptor
-   * @param componentDescriptor
-   *     the component descriptor
-   * @param connectorToComplete
-   *     the connector to complete
-   */
-  protected abstract void completeViewWithDynamicLabel(RComponent viewComponent, IViewDescriptor viewDescriptor,
-                                                       IComponentDescriptor<?> componentDescriptor,
-                                                       ICompositeValueConnector connectorToComplete);
+  protected void completePropertyViewsWithDynamicToolTips(ICompositeValueConnector connector,
+                                                          List<IView<RComponent>> propertyViews,
+                                                          IComponentDescriptor<?> modelDescriptor) {
+    // Compute dynamic tooltips
+    for (IView<RComponent> propertyView : propertyViews) {
+      IPropertyViewDescriptor propertyViewDescriptor = (IPropertyViewDescriptor) propertyView.getDescriptor();
+      completeViewWithDynamicToolTip(propertyView.getPeer(), propertyView.getDescriptor(), modelDescriptor, connector);
+    }
+  }
 
-  /**
-   * Complete view with dynamic tooltip.
-   *
-   * @param viewComponent
-   *     the view component
-   * @param viewDescriptor
-   *     the view descriptor
-   * @param componentDescriptor
-   *     the component descriptor
-   * @param connectorToComplete
-   *     the connector to complete
-   */
-  protected abstract void completeViewWithDynamicToolTip(RComponent viewComponent, IViewDescriptor viewDescriptor,
-                                                         IComponentDescriptor<?> componentDescriptor,
-                                                         ICompositeValueConnector connectorToComplete);
+  protected void completePropertyViewsWithDynamicBackgrounds(ICompositeValueConnector connector,
+                                                             List<IView<RComponent>> propertyViews,
+                                                             IComponentDescriptor<?> modelDescriptor) {
+    // Compute dynamic background
+    for (IView<RComponent> propertyView : propertyViews) {
+      completeViewWithDynamicBackground(propertyView.getPeer(), propertyView.getDescriptor(), modelDescriptor, connector);
+    }
+  }
 
-  /**
-   * Complete view with dynamic background.
-   *
-   * @param viewComponent
-   *     the view component
-   * @param viewDescriptor
-   *     the view descriptor
-   * @param componentDescriptor
-   *     the component descriptor
-   * @param connectorToComplete
-   *     the connector to complete
-   */
-  protected abstract void completeViewWithDynamicBackground(RComponent viewComponent, IViewDescriptor viewDescriptor,
-                                                            IComponentDescriptor<?> componentDescriptor,
-                                                            ICompositeValueConnector connectorToComplete);
+  protected void completePropertyViewsWithDynamicForegrounds(ICompositeValueConnector connector,
+                                                             List<IView<RComponent>> propertyViews,
+                                                             IComponentDescriptor<?> modelDescriptor) {
+    // Compute dynamic foreground
+    for (IView<RComponent> propertyView : propertyViews) {
+      completeViewWithDynamicForeground(propertyView.getPeer(), propertyView.getDescriptor(), modelDescriptor, connector);
+    }
+  }
 
-  /**
-   * Complete view with dynamic foreground.
-   *
-   * @param viewComponent
-   *     the view component
-   * @param viewDescriptor
-   *     the view descriptor
-   * @param componentDescriptor
-   *     the component descriptor
-   * @param connectorToComplete
-   *     the connector to complete
-   */
-  protected abstract void completeViewWithDynamicForeground(RComponent viewComponent, IViewDescriptor viewDescriptor,
-                                                            IComponentDescriptor<?> componentDescriptor,
-                                                            ICompositeValueConnector connectorToComplete);
-
-  /**
-   * Complete view with dynamic font.
-   *
-   * @param viewComponent
-   *     the view component
-   * @param viewDescriptor
-   *     the view descriptor
-   * @param componentDescriptor
-   *     the component descriptor
-   * @param connectorToComplete
-   *     the connector to complete
-   */
-  protected abstract void completeViewWithDynamicFont(RComponent viewComponent, IViewDescriptor viewDescriptor,
-                                                      IComponentDescriptor<?> componentDescriptor,
-                                                      ICompositeValueConnector connectorToComplete);
-
-  /**
-   * Complete property views with dynamic tool tips.
-   *
-   * @param connector
-   *     the connector
-   * @param propertyViews
-   *     the property views
-   * @param modelDescriptor
-   *     the model descriptor
-   */
-  protected abstract void completePropertyViewsWithDynamicToolTips(ICompositeValueConnector connector,
-                                                                   List<IView<RComponent>> propertyViews,
-                                                                   IComponentDescriptor<?> modelDescriptor);
-
-  /**
-   * Complete property views with dynamic backgrounds.
-   *
-   * @param connector
-   *     the connector
-   * @param propertyViews
-   *     the property views
-   * @param modelDescriptor
-   *     the model descriptor
-   */
-  protected abstract void completePropertyViewsWithDynamicBackgrounds(ICompositeValueConnector connector,
-                                                                      List<IView<RComponent>> propertyViews,
-                                                                      IComponentDescriptor<?> modelDescriptor);
-
-  /**
-   * Complete property views with dynamic foregrounds.
-   *
-   * @param connector
-   *     the connector
-   * @param propertyViews
-   *     the property views
-   * @param modelDescriptor
-   *     the model descriptor
-   */
-  protected abstract void completePropertyViewsWithDynamicForegrounds(ICompositeValueConnector connector,
-                                                                      List<IView<RComponent>> propertyViews,
-                                                                      IComponentDescriptor<?> modelDescriptor);
-
-  /**
-   * Complete property views with dynamic fonts.
-   *
-   * @param connector
-   *     the connector
-   * @param propertyViews
-   *     the property views
-   * @param modelDescriptor
-   *     the model descriptor
-   */
-  protected abstract void completePropertyViewsWithDynamicFonts(ICompositeValueConnector connector,
-                                                                List<IView<RComponent>> propertyViews,
-                                                                IComponentDescriptor<?> modelDescriptor);
+  protected void completePropertyViewsWithDynamicFonts(ICompositeValueConnector connector,
+                                                       List<IView<RComponent>> propertyViews,
+                                                       IComponentDescriptor<?> modelDescriptor) {
+    // Compute dynamic font
+    for (IView<RComponent> propertyView : propertyViews) {
+      completeViewWithDynamicFont(propertyView.getPeer(), propertyView.getDescriptor(), modelDescriptor, connector);
+    }
+  }
 
   /**
    * Configures a property view action by initializing its static context.

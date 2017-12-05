@@ -760,54 +760,6 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
   }
 
   /**
-   * Not supported in mobile environment.
-   * <p/>
-   * {@inheritDoc}
-   */
-  @Override
-  protected void completePropertyViewsWithDynamicToolTips(ICompositeValueConnector connector,
-                                                          List<IView<RComponent>> propertyViews,
-                                                          IComponentDescriptor<?> modelDescriptor) {
-    // Not supported in mobile environments.
-  }
-
-  /**
-   * Not supported in mobile environment.
-   * <p/>
-   * {@inheritDoc}
-   */
-  @Override
-  protected void completePropertyViewsWithDynamicBackgrounds(ICompositeValueConnector connector,
-                                                             List<IView<RComponent>> propertyViews,
-                                                             IComponentDescriptor<?> modelDescriptor) {
-    // Not supported in mobile environments.
-  }
-
-  /**
-   * Not supported in mobile environment.
-   * <p/>
-   * {@inheritDoc}
-   */
-  @Override
-  protected void completePropertyViewsWithDynamicFonts(ICompositeValueConnector connector,
-                                                       List<IView<RComponent>> propertyViews,
-                                                       IComponentDescriptor<?> modelDescriptor) {
-    // Not supported in mobile environments.
-  }
-
-  /**
-   * Not supported in mobile environment.
-   * <p/>
-   * {@inheritDoc}
-   */
-  @Override
-  protected void completePropertyViewsWithDynamicForegrounds(ICompositeValueConnector connector,
-                                                             List<IView<RComponent>> propertyViews,
-                                                             IComponentDescriptor<?> modelDescriptor) {
-    // Not supported in mobile environments.
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
