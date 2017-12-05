@@ -55,6 +55,10 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
       if (!table.isCellEditable(row, col)) {
         return null;
       }
+      var selectionModel = table.getSelectionModel();
+      if (selectionModel.getSelectionMode() == qx.ui.table.selection.Model.MULTIPLE_INTERVAL_SELECTION_TOGGLE) {
+        selectionModel.setSelectionInterval(row, row);
+      }
 
       var rowState = table.getTableModel().getRowData(row);
       /** @type {org.jspresso.framework.state.remote.RemoteValueState} */
