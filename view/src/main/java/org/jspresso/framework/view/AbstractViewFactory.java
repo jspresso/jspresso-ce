@@ -306,13 +306,31 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
           }
         }
         finishComponentConfiguration(view, actionHandler, locale);
+        IModelDescriptor modelDescriptor = viewDescriptor.getModelDescriptor();
+        E viewPeer = view.getPeer();
+
+        // Dynamic appearance states
+        if (modelDescriptor instanceof IComponentDescriptor<?> && viewConnector instanceof ICompositeValueConnector) {
+          completeViewWithDynamicToolTip(viewPeer, viewDescriptor, (IComponentDescriptor<?>) modelDescriptor,
+              (ICompositeValueConnector) viewConnector);
+          completeViewWithDynamicForeground(viewPeer, viewDescriptor, (IComponentDescriptor<?>) modelDescriptor,
+              (ICompositeValueConnector) viewConnector);
+          completeViewWithDynamicBackground(viewPeer, viewDescriptor, (IComponentDescriptor<?>) modelDescriptor,
+              (ICompositeValueConnector) viewConnector);
+          completeViewWithDynamicFont(viewPeer, viewDescriptor, (IComponentDescriptor<?>) modelDescriptor,
+              (ICompositeValueConnector) viewConnector);
+        }
         decorateWithActions(view, actionHandler, locale);
         decorateWithBorder(view, actionHandler, locale);
+        if (modelDescriptor instanceof IComponentDescriptor<?> && viewConnector instanceof ICompositeValueConnector) {
+          completeViewWithDynamicLabel(viewPeer, viewDescriptor, (IComponentDescriptor<?>) modelDescriptor,
+              (ICompositeValueConnector) viewConnector);
+        }
         viewConnector.setModelDescriptor(viewDescriptor.getModelDescriptor());
         if (!actionHandler.isAccessGranted(viewDescriptor)) {
           view.setPeer(createSecurityComponent());
         }
-        applyPreferredSize(view.getPeer(), viewDescriptor.getPreferredSize());
+        applyPreferredSize(viewPeer, viewDescriptor.getPreferredSize());
       } else {
         view = createEmptyView(viewDescriptor, actionHandler, locale);
       }
@@ -321,6 +339,86 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
       actionHandler.restoreLastSecurityContextSnapshot();
     }
   }
+
+  /**
+   * Complete view with dynamic label.
+   *
+   * @param viewComponent
+   *     the view component
+   * @param viewDescriptor
+   *     the view descriptor
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param connectorToComplete
+   *     the connector to complete
+   */
+  protected abstract void completeViewWithDynamicLabel(E viewComponent, IViewDescriptor viewDescriptor,
+                                                       IComponentDescriptor<?> componentDescriptor,
+                                                       ICompositeValueConnector connectorToComplete);
+
+  /**
+   * Complete view with dynamic tooltip.
+   *
+   * @param viewComponent
+   *     the view component
+   * @param viewDescriptor
+   *     the view descriptor
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param connectorToComplete
+   *     the connector to complete
+   */
+  protected abstract void completeViewWithDynamicToolTip(E viewComponent, IViewDescriptor viewDescriptor,
+                                                         IComponentDescriptor<?> componentDescriptor,
+                                                         ICompositeValueConnector connectorToComplete);
+
+  /**
+   * Complete view with dynamic background.
+   *
+   * @param viewComponent
+   *     the view component
+   * @param viewDescriptor
+   *     the view descriptor
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param connectorToComplete
+   *     the connector to complete
+   */
+  protected abstract void completeViewWithDynamicBackground(E viewComponent, IViewDescriptor viewDescriptor,
+                                                            IComponentDescriptor<?> componentDescriptor,
+                                                            ICompositeValueConnector connectorToComplete);
+
+  /**
+   * Complete view with dynamic foreground.
+   *
+   * @param viewComponent
+   *     the view component
+   * @param viewDescriptor
+   *     the view descriptor
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param connectorToComplete
+   *     the connector to complete
+   */
+  protected abstract void completeViewWithDynamicForeground(E viewComponent, IViewDescriptor viewDescriptor,
+                                                            IComponentDescriptor<?> componentDescriptor,
+                                                            ICompositeValueConnector connectorToComplete);
+
+  /**
+   * Complete view with dynamic font.
+   *
+   * @param viewComponent
+   *     the view component
+   * @param viewDescriptor
+   *     the view descriptor
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param connectorToComplete
+   *     the connector to complete
+   */
+  protected abstract void completeViewWithDynamicFont(E viewComponent, IViewDescriptor viewDescriptor,
+                                                      IComponentDescriptor<?> componentDescriptor,
+                                                      ICompositeValueConnector connectorToComplete);
 
   /**
    * Finish tree view configuration.
