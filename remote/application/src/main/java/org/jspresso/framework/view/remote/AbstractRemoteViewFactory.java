@@ -1146,7 +1146,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
       configurePropertyViewAction(propertyViewDescriptor, action);
       viewComponent.setAction(action);
     }
-    if (propertyDescriptor instanceof IBinaryPropertyDescriptor) {
+    if (propertyDescriptor instanceof IBinaryPropertyDescriptor && !propertyViewDescriptor.isReadOnly()) {
       viewComponent.setActionLists(createBinaryActionList(view, actionHandler, locale));
     }
     return view;
