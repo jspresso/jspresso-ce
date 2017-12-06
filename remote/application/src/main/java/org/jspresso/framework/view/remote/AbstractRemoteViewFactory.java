@@ -769,11 +769,28 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     connector.setExceptionHandler(actionHandler);
     RActionField viewComponent = createRActionField(propertyViewDescriptor, false);
     IView<RComponent> propertyView = constructView(viewComponent, propertyViewDescriptor, connector);
+    RActionList actionList = createBinaryActionList(propertyView, actionHandler, locale);
+    viewComponent.setActionLists(actionList);
+    return propertyView;
+  }
+
+  /**
+   * Create binary action list r action list.
+   *
+   * @param propertyView
+   *     the property view
+   * @param actionHandler
+   *     the action handler
+   * @param locale
+   *     the locale
+   * @return the r action list
+   */
+  protected RActionList createBinaryActionList(IView<RComponent> propertyView, IActionHandler actionHandler,
+                                             Locale locale) {
     RActionList actionList = new RActionList(getGuidGenerator().generateGUID());
     List<RAction> binaryActions = createBinaryActions(propertyView, actionHandler, locale);
     actionList.setActions(binaryActions.toArray(new RAction[binaryActions.size()]));
-    viewComponent.setActionLists(actionList);
-    return propertyView;
+    return actionList;
   }
 
   /**
@@ -1063,78 +1080,76 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
   protected IView<RComponent> createImagePropertyView(final IPropertyViewDescriptor propertyViewDescriptor,
                                                       IActionHandler actionHandler, Locale locale) {
     final IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor.getModelDescriptor();
-    if (propertyViewDescriptor.isReadOnly() || propertyViewDescriptor instanceof IImageViewDescriptor
-        || !(propertyDescriptor instanceof IBinaryPropertyDescriptor)) {
-      IValueConnector connector = getConnectorFactory().createValueConnector(
-          propertyViewDescriptor.getModelDescriptor().getName());
-      connector.setExceptionHandler(actionHandler);
-      if (connector instanceof RemoteValueConnector) {
-        final RemoteValueConnector rConnector = (RemoteValueConnector) connector;
-        rConnector.setRemoteStateValueMapper(new IRemoteStateValueMapper() {
+    IValueConnector connector = getConnectorFactory().createValueConnector(
+        propertyViewDescriptor.getModelDescriptor().getName());
+    connector.setExceptionHandler(actionHandler);
+    if (connector instanceof RemoteValueConnector) {
+      final RemoteValueConnector rConnector = (RemoteValueConnector) connector;
+      rConnector.setRemoteStateValueMapper(new IRemoteStateValueMapper() {
 
-          @Override
-          public Object getValueForState(RemoteValueState state, Object originalValue) {
-            if (originalValue != null) {
-              Integer scaledWidth = null;
-              Integer scaledHeight = null;
-              if (propertyViewDescriptor instanceof IScalableImageAware) {
-                scaledWidth = ((IScalableImageAware) propertyViewDescriptor).getScaledWidth();
-                scaledHeight = ((IScalableImageAware) propertyViewDescriptor).getScaledHeight();
-              } else if (propertyDescriptor instanceof IScalableImageAware) {
-                scaledWidth = ((IScalableImageAware) propertyDescriptor).getScaledWidth();
-                scaledHeight = ((IScalableImageAware) propertyDescriptor).getScaledHeight();
-              }
-              String valueForStateUrl = null;
-              if (originalValue instanceof byte[] || scaledWidth != null || scaledHeight != null) {
-                valueForStateUrl = RemotePeerRegistryServlet.computeImageDownloadUrl(state.getGuid(), scaledWidth,
-                    scaledHeight);
-                byte[] checksumSource = null;
-                if (originalValue instanceof byte[]) {
-                  checksumSource = ((byte[]) originalValue);
-                } else if (originalValue instanceof String) {
-                  checksumSource = ((String) originalValue).getBytes();
-                }
-                if (checksumSource != null) {
-                  Checksum checksumEngine = new CRC32();
-                  checksumEngine.update(checksumSource, 0, checksumSource.length);
-                  // we must add a check sum so that the client knows when the url
-                  // content changes.
-                  valueForStateUrl += ("&cs=" + checksumEngine.getValue());
-                }
+        @Override
+        public Object getValueForState(RemoteValueState state, Object originalValue) {
+          if (originalValue != null) {
+            Integer scaledWidth = null;
+            Integer scaledHeight = null;
+            if (propertyViewDescriptor instanceof IScalableImageAware) {
+              scaledWidth = ((IScalableImageAware) propertyViewDescriptor).getScaledWidth();
+              scaledHeight = ((IScalableImageAware) propertyViewDescriptor).getScaledHeight();
+            } else if (propertyDescriptor instanceof IScalableImageAware) {
+              scaledWidth = ((IScalableImageAware) propertyDescriptor).getScaledWidth();
+              scaledHeight = ((IScalableImageAware) propertyDescriptor).getScaledHeight();
+            }
+            String valueForStateUrl = null;
+            if (originalValue instanceof byte[] || scaledWidth != null || scaledHeight != null) {
+              valueForStateUrl = RemotePeerRegistryServlet.computeImageDownloadUrl(state.getGuid(), scaledWidth,
+                  scaledHeight);
+              byte[] checksumSource = null;
+              if (originalValue instanceof byte[]) {
+                checksumSource = ((byte[]) originalValue);
               } else if (originalValue instanceof String) {
-                valueForStateUrl = ResourceProviderServlet.computeLocalResourceDownloadUrl((String) originalValue);
+                checksumSource = ((String) originalValue).getBytes();
               }
-              return valueForStateUrl;
+              if (checksumSource != null) {
+                Checksum checksumEngine = new CRC32();
+                checksumEngine.update(checksumSource, 0, checksumSource.length);
+                // we must add a check sum so that the client knows when the url
+                // content changes.
+                valueForStateUrl += ("&cs=" + checksumEngine.getValue());
+              }
+            } else if (originalValue instanceof String) {
+              valueForStateUrl = ResourceProviderServlet.computeLocalResourceDownloadUrl((String) originalValue);
             }
-            return null;
+            return valueForStateUrl;
           }
+          return null;
+        }
 
-          @Override
-          public Object getValueFromState(RemoteValueState state, Object originalValue) {
-            if (originalValue instanceof String && ((String) originalValue).contains("base64")) {
-              return ImageHelper.fromBase64Src((String) originalValue);
-            }
-            return originalValue;
+        @Override
+        public Object getValueFromState(RemoteValueState state, Object originalValue) {
+          if (originalValue instanceof String && ((String) originalValue).contains("base64")) {
+            return ImageHelper.fromBase64Src((String) originalValue);
           }
-        });
-      }
-      RImageComponent viewComponent = createRImageComponent(propertyViewDescriptor);
-      if (propertyViewDescriptor instanceof IScrollableViewDescriptor) {
-        viewComponent.setScrollable(((IScrollableViewDescriptor) propertyViewDescriptor).isScrollable());
-      } else {
-        viewComponent.setScrollable(false);
-      }
-      IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
-      if (propertyViewDescriptor.getAction() != null) {
-        RAction action = getActionFactory().createAction(propertyViewDescriptor.getAction(), actionHandler, view,
-            locale);
-        configurePropertyViewAction(propertyViewDescriptor, action);
-        viewComponent.setAction(action);
-      }
-      return view;
-    } else {
-      return createBinaryPropertyView(propertyViewDescriptor, actionHandler, locale);
+          return originalValue;
+        }
+      });
     }
+    RImageComponent viewComponent = createRImageComponent(propertyViewDescriptor);
+    if (propertyViewDescriptor instanceof IScrollableViewDescriptor) {
+      viewComponent.setScrollable(((IScrollableViewDescriptor) propertyViewDescriptor).isScrollable());
+    } else {
+      viewComponent.setScrollable(false);
+    }
+    IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
+    if (propertyViewDescriptor.getAction() != null) {
+      RAction action = getActionFactory().createAction(propertyViewDescriptor.getAction(), actionHandler, view,
+          locale);
+      configurePropertyViewAction(propertyViewDescriptor, action);
+      viewComponent.setAction(action);
+    }
+    if (propertyDescriptor instanceof IBinaryPropertyDescriptor) {
+      viewComponent.setActionLists(createBinaryActionList(view, actionHandler, locale));
+    }
+    return view;
   }
 
   /**
