@@ -75,8 +75,8 @@ public class DependsOnHelper {
     }
   }
 
-  private static void registerDependsOnListeners(DependsOn dependsOn, IPropertyChangeCapable sourceBean,
-                                                   Method method, IAccessorFactoryProvider accessorFactoryProvider) {
+  private static void registerDependsOnListeners(DependsOn dependsOn, IPropertyChangeCapable sourceBean, Method method,
+                                                 IAccessorFactoryProvider accessorFactoryProvider) {
     IAccessorFactory accessorFactory = accessorFactoryProvider.getAccessorFactory();
     AccessorInfo accessorInfo = accessorFactory.getAccessorInfo(method);
     String targetProperty = accessorInfo.getAccessedPropertyName();
@@ -176,11 +176,12 @@ public class DependsOnHelper {
       return;
     }
     if (sourceBean == targetBean && Arrays.binarySearch(forwardedProperty, sourceProperty) >= 0) {
-      throw new IllegalArgumentException("Forwarded properties " + Arrays.asList(forwardedProperty)
-          + " cannot contain source property " + sourceProperty + " when registering notification forwarding");
+      throw new IllegalArgumentException(
+          "Forwarded properties " + Arrays.asList(forwardedProperty) + " cannot contain source property "
+              + sourceProperty + " when registering notification forwarding");
     }
-    sourceBean.addPropertyChangeListener(sourceProperty, new ForwardingPropertyChangeListener(targetBean,
-        accessorFactoryProvider, forwardedProperty));
+    sourceBean.addPropertyChangeListener(sourceProperty,
+        new ForwardingPropertyChangeListener(targetBean, accessorFactoryProvider, forwardedProperty));
   }
 
   /**
@@ -208,8 +209,8 @@ public class DependsOnHelper {
     if (sourceBean == null) {
       return;
     }
-    sourceBean.addPropertyChangeListener(sourceProperty, new ForwardingPropertyChangeListener(targetBean,
-        accessorFactoryProvider, forwardedMethod));
+    sourceBean.addPropertyChangeListener(sourceProperty,
+        new ForwardingPropertyChangeListener(targetBean, accessorFactoryProvider, forwardedMethod));
   }
 
   /**
@@ -399,17 +400,8 @@ public class DependsOnHelper {
 
     // Setup listener for initial collection if it exists
     Collection<IPropertyChangeCapable> initialChildren;
-    if (sourceBean instanceof IComponent) {
-      initialChildren = (Collection<IPropertyChangeCapable>) ((IComponent) sourceBean).straightGetProperty(
-          sourceCollectionProperty);
-    } else {
-      try {
-        initialChildren = new BeanAccessorFactory().createPropertyAccessor(sourceCollectionProperty,
-            sourceBean.getClass()).getValue(sourceBean);
-      } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
-        throw new NestedRuntimeException(ex);
-      }
-    }
+    initialChildren = (Collection<IPropertyChangeCapable>) retrieveInitialPropertyValue(sourceBean,
+        sourceCollectionProperty);
     if (initialChildren != null && Hibernate.isInitialized(initialChildren)) {
       for (IPropertyChangeCapable child : initialChildren) {
         if (child != null) {
@@ -417,6 +409,33 @@ public class DependsOnHelper {
               forwardedProperties);
         }
       }
+    }
+  }
+
+  protected static Object retrieveInitialPropertyValue(Object sourceBean, String sourceProperty) {
+    int dotIndex = sourceProperty.lastIndexOf(".");
+    if (dotIndex > 0) {
+      String rootProperty = sourceProperty.substring(0, dotIndex);
+      String remainderProperty = sourceProperty.substring(dotIndex + 1);
+      Object root = retrieveInitialPropertyValue(sourceBean, rootProperty);
+      if (root != null && Hibernate.isInitialized(root)) {
+        return retrieveInitialPropertyValue(root, remainderProperty);
+      } else {
+        return null;
+      }
+    } else {
+      Object initialValue;
+      if (sourceBean instanceof IComponent) {
+        initialValue = ((IComponent) sourceBean).straightGetProperty(sourceProperty);
+      } else {
+        try {
+          initialValue = new BeanAccessorFactory().createPropertyAccessor(sourceProperty, sourceBean.getClass())
+                                                  .getValue(sourceBean);
+        } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
+          throw new NestedRuntimeException(ex);
+        }
+      }
+      return initialValue;
     }
   }
 
