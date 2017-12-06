@@ -136,14 +136,14 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   private Map<String, Object>                        initializationMapping;
   private ILovViewDescriptorFactory                  lovViewDescriptorFactory;
   private ESelectionMode                             selectionMode;
-  private IDisplayableAction                   okAction;
-  private IAction                              pagingAction;
-  private String                               defaultIconImageURL;
-  private List<?>                              staticComponentStore;
-  private IComponentDescriptorRegistry         componentDescriptorRegistry;
-  private IDisplayableAction                   createAction;
-  private ILovViewDescriptorForCreationFactory lovViewDescriptorForCreationFactory;
-  private boolean                              preselectItems;
+  private IDisplayableAction                         okAction;
+  private IAction                                    pagingAction;
+  private String                                     defaultIconImageURL;
+  private List<?>                                    staticComponentStore;
+  private IComponentDescriptorRegistry               componentDescriptorRegistry;
+  private IDisplayableAction                         createAction;
+  private ILovViewDescriptorForCreationFactory       lovViewDescriptorForCreationFactory;
+  private boolean                                    preselectItems;
 
 
   /**
@@ -430,8 +430,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
       context.put(ModalDialogAction.DIALOG_ACTIONS, context.get(LOV_DIALOG_ACTIONS));
     }
     context.put(ModalDialogAction.DIALOG_TITLE,
-        getI18nName(getTranslationProvider(context), getLocale(context)) + " : " + erqDescriptor
-            .getReferencedDescriptor().getI18nName(getTranslationProvider(context), getLocale(context)));
+        getI18nName(erqDescriptor.getReferencedDescriptor(), getTranslationProvider(context), getLocale(context)));
     context.put(ModalDialogAction.DIALOG_VIEW, lovView);
     if (lovView instanceof ICompositeView<?>) {
       context.put(ModalDialogAction.DIALOG_FOCUSED_COMPONENT,
@@ -500,15 +499,32 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    */
   @Override
   public String getI18nName(ITranslationProvider translationProvider, Locale locale) {
+    return getI18nName(entityDescriptor, translationProvider, locale);
+  }
+
+  /**
+   * Gets i 18 n name.
+   *
+   * @param entityDesc
+   *     the entity desc
+   * @param translationProvider
+   *     the translation provider
+   * @param locale
+   *     the locale
+   * @return the i 18 n name
+   */
+  protected String getI18nName(IComponentDescriptor<? extends IComponent> entityDesc,
+                               ITranslationProvider translationProvider, Locale locale) {
     if (getName() == null) {
-      if (entityDescriptor != null) {
+      if (entityDesc != null) {
         return translationProvider.getTranslation("lov.element.name",
-            new Object[]{entityDescriptor.getI18nName(translationProvider, locale)}, locale);
+            new Object[]{entityDesc.getI18nName(translationProvider, locale)}, locale);
       }
       return translationProvider.getTranslation("lov.name", locale);
     }
     return super.getI18nName(translationProvider, locale);
   }
+
 
   /**
    * {@inheritDoc}
