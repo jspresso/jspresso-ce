@@ -2247,12 +2247,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     },
 
     __isFocusedCellWritable: function (table) {
-      var tableModel = table.getTableModel();
       var row = table.getFocusedRow();
       if (row != null && row >= 0) {
         var column = table.getFocusedColumn();
-        var cellState = tableModel.getRowData(row).getChildren().getItem(column + 1);
-        return tableModel.isColumnEditable(table.getFocusedColumn()) && cellState.isWritable();
+        return table.isCellEditable(row, column);
       }
       return false;
     },
@@ -2291,25 +2289,42 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         };
         table = new org.jspresso.framework.view.qx.EnhancedTable(tableModel, custom);
       }
+
       table.setShowCellFocusIndicator(true);
       var paneScroller = table.getPaneScroller(0);
       var columnModel = table.getTableColumnModel();
       var paneModel = paneScroller.getTablePaneModel();
       var focusIndicator = paneScroller.getChildControl("focus-indicator");
+
+      var dblTapListener = function (e) {
+        var timeStamp = Date.now();
+        var lastTimeStamp = focusIndicator.getUserData("lastPointerDownTS")
+        var row = focusIndicator.getRow();
+        var column = focusIndicator.getColumn();
+        focusIndicator.setUserData("lastPointerDownTS", timeStamp)
+        if (!isNaN(lastTimeStamp)) {
+          if ((timeStamp - lastTimeStamp) < 200) {
+            if (!table.isCellEditable(row, column)) {
+              paneScroller.fireEvent("cellDbltap", qx.ui.table.pane.CellEvent, [paneScroller, e, row], true);
+            }
+          }
+        }
+      };
+      table.addListener("mousedown", dblTapListener);
+
       focusIndicator.addListener("move", function(e) {
         var row = focusIndicator.getRow();
-        var col = focusIndicator.getColumn();
-        if (row != null && col != null && row >= 0 && col >= 0) {
+        var column = focusIndicator.getColumn();
+        if (row != null && column != null && row >= 0 && column >= 0) {
           var firstRow = paneScroller.getTablePane().getFirstVisibleRow();
           var rowHeight = table.getRowHeight();
-          var focusedColumnLeft = paneModel.getColumnLeft(col);
-          var focusedColumnWidth = columnModel.getColumnWidth(col);
+          var focusedColumnLeft = paneModel.getColumnLeft(column);
+          var focusedColumnWidth = columnModel.getColumnWidth(column);
           focusIndicator.setUserBounds(focusedColumnLeft, (row - firstRow) * rowHeight, focusedColumnWidth, rowHeight);
-
-          if (table.isCellEditable(row, col)) {
-            focusIndicator.setZIndex(1000);
+          if (table.isCellEditable(row, column)) {
+            focusIndicator.getContentElement().setStyle("pointer-events","auto");
           } else {
-            focusIndicator.setZIndex(0);
+            focusIndicator.getContentElement().setStyle("pointer-events", "none");
           }
         }
       }, this);
@@ -2633,8 +2648,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         table.addListener("cellDbltap", function (e) {
           var row = e.getRow();
           var column = e.getColumn();
-          var cellState = tableModel.getRowData(row).getChildren().getItem(column + 1);
-          if (!tableModel.isColumnEditable(column) || !cellState.isWritable()) {
+          if (!table.isCellEditable(row, column)) {
             if (selectionModel.getSelectionMode() == qx.ui.table.selection.Model.MULTIPLE_INTERVAL_SELECTION_TOGGLE) {
               selectionModel.setSelectionInterval(row, row);
             }
