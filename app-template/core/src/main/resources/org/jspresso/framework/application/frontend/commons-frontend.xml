@@ -153,64 +153,48 @@
     </property>
   </bean>
 
-  <bean id="lovCancelFrontAction" parent="cancelDialogFrontAction"/>
+  <bean id="lovCancelFrontActionBase" parent="cancelDialogFrontAction">
+    <property name="iconImageURL">
+      <bean parent="abstractFwIconImageURL">
+        <constructor-arg index="0" value="reload"/>
+      </bean>
+    </property>
+  </bean>
 
-  <bean id="lovOkFrontAction" parent="okDialogFrontAction"
+  <bean id="lovCancelFrontAction" parent="lovCancelFrontActionBase" />
+
+  <bean id="lovOkFrontActionBase" parent="okDialogFrontAction"
         class="org.jspresso.framework.application.frontend.action.lov.OkLovAction">
+    <property name="iconImageURL">
+      <bean parent="abstractFwIconImageURL">
+        <constructor-arg index="0" value="save"/>
+      </bean>
+    </property>
     <property name="nextAction" ref="viewConnectorSetAction"/>
   </bean>
 
-  <bean id="lovFindFrontAction" class="org.jspresso.framework.application.frontend.action.FrontendAction">
+  <bean id="lovOkFrontAction" parent="lovOkFrontActionBase"/>
+
+  <bean id="lovFindFrontActionBase" class="org.jspresso.framework.application.frontend.action.FrontendAction">
     <property name="name" value="find.name"/>
     <property name="iconImageURL">
       <bean parent="abstractFwIconImageURL">
-        <constructor-arg index="0" value="lov_find"/>
+        <constructor-arg index="0" value="find"/>
       </bean>
     </property>
     <property name="wrappedAction" ref="lovFindBackAction"/>
   </bean>
+
+  <bean id="lovFindFrontAction" parent="lovFindFrontActionBase"/>
 
   <bean id="lovActionClass" class="org.jspresso.framework.application.frontend.action.lov.LovAction"/>
 
   <bean id="lovActionBase" parent="lovActionClass">
     <property name="lovViewDescriptorFactory" ref="lovViewDescriptorFactory"/>
     <property name="createQueryComponentAction" ref="createQueryComponentAction"/>
-    <property name="okAction">
-      <bean parent="lovOkFrontAction">
-        <property name="name">
-          <null/>
-        </property>
-        <property name="iconImageURL">
-          <bean parent="abstractFwIconImageURL">
-            <constructor-arg index="0" value="save"/>
-          </bean>
-        </property>
-      </bean>
-    </property>
-    <property name="cancelAction">
-      <bean parent="lovCancelFrontAction">
-        <property name="name">
-          <null/>
-        </property>
-        <property name="iconImageURL">
-          <bean parent="abstractFwIconImageURL">
-            <constructor-arg index="0" value="reload"/>
-          </bean>
-        </property>
-      </bean>
-    </property>
-    <property name="findAction">
-      <bean parent="lovFindFrontAction">
-        <property name="name">
-          <null/>
-        </property>
-        <property name="iconImageURL">
-          <bean parent="abstractFwIconImageURL">
-            <constructor-arg index="0" value="find"/>
-          </bean>
-        </property>
-      </bean>
-    </property>
+    <property name="okAction" ref="lovOkFrontAction" />
+    <property name="cancelAction" ref="lovCancelFrontAction" />
+    <property name="findAction" ref="lovFindFrontAction" />
     <property name="pagingAction" ref="lovFindBackAction"/>
     <property name="nextAction" ref="modalDialogAction"/>
     <property name="defaultIconImageURL">
