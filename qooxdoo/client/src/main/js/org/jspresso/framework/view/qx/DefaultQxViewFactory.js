@@ -1683,6 +1683,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _createComboBox: function (remoteComboBox) {
       if (remoteComboBox.getReadOnly()) {
         var atom = new qx.ui.basic.Atom();
+        atom.setAppearance("dynamicatom");
         var state = remoteComboBox.getState();
 
         var labels = {};
@@ -1692,6 +1693,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           icons[remoteComboBox.getValues()[i]] = remoteComboBox.getIcons()[i];
         }
 
+        var that = this;
         var synchAtomValue = function (value) {
           if (value) {
             /** @type {String} */
@@ -1703,7 +1705,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
               atom.setLabel("");
             }
             if (icon) {
-              this.setIcon(atom, icon);
+              that.setIcon(atom, icon);
             } else {
               atom.setIcon("");
             }
@@ -1712,11 +1714,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             atom.setIcon("");
           }
         };
-        synchAtomValue.call(this, state.getValue());
+        synchAtomValue.call(that, state.getValue());
 
         state.addListener("changeValue", function (e) {
           synchAtomValue(e.getData());
-        }, this);
+        }, that);
         return atom;
       } else {
         var comboBox = new qx.ui.form.SelectBox();

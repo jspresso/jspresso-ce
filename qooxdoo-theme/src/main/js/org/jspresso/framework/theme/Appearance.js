@@ -231,7 +231,17 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           style: function (states) {
             return {
               padding: 2,
-              margin: 2
+              margin: 2,
+              textColor: undefined
+            };
+          }
+        },
+
+        "radiobutton/label": {
+          base: true,
+          style: function (states) {
+            return {
+              textColor: undefined
             };
           }
         },
