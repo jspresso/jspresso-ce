@@ -238,12 +238,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         },
 
         "radiobutton/label": {
-          base: true,
-          style: function (states) {
-            return {
-              textColor: undefined
-            };
-          }
+          include:"dynamiclabel",
+          alias:"dynamiclabel"
         },
 
         "table": {
