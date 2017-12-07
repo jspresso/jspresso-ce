@@ -156,4 +156,23 @@ public class BasicImageViewDescriptor extends BasicPropertyViewDescriptor
   public void setDrawable(boolean drawable) {
     this.drawable = drawable;
   }
+
+  @Override
+  public Integer getPreferredWidth() {
+    Integer preferredWidth = super.getPreferredWidth();
+    if (preferredWidth == null) {
+      preferredWidth = getScaledWidth();
+    }
+    return preferredWidth;
+  }
+
+  @Override
+  public Integer getPreferredHeight() {
+    Integer preferredHeight = super.getPreferredHeight();
+    if (preferredHeight == null) {
+      Integer scaledHeight = getScaledHeight();
+      preferredHeight = scaledHeight == null ? scaledHeight : scaledHeight + 50; // Toolbar
+    }
+    return preferredHeight;
+  }
 }

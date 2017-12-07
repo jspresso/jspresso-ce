@@ -1463,50 +1463,57 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
   protected IView<JComponent> createImagePropertyView(IPropertyViewDescriptor propertyViewDescriptor,
                                                       IActionHandler actionHandler, Locale locale) {
     final IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor.getModelDescriptor();
-    if (propertyViewDescriptor.isReadOnly() || propertyViewDescriptor instanceof IImageViewDescriptor
-        || !(propertyDescriptor instanceof IBinaryPropertyDescriptor)) {
-      JLabel imageLabel;
-      if (propertyViewDescriptor.getAction() != null) {
-        imageLabel = createJLink(propertyViewDescriptor);
-      } else {
-        imageLabel = createJLabel(propertyViewDescriptor, false);
-      }
-      Integer scaledWidth = null;
-      Integer scaledHeight = null;
-      if (propertyViewDescriptor instanceof IScalableImageAware) {
-        scaledWidth = ((IScalableImageAware) propertyViewDescriptor).getScaledWidth();
-        scaledHeight = ((IScalableImageAware) propertyViewDescriptor).getScaledHeight();
-      } else if (propertyDescriptor instanceof IScalableImageAware) {
-        scaledWidth = ((IScalableImageAware) propertyDescriptor).getScaledWidth();
-        scaledHeight = ((IScalableImageAware) propertyDescriptor).getScaledHeight();
-      }
-      JImageConnector connector = new JImageConnector(propertyViewDescriptor.getModelDescriptor().getName(), imageLabel,
-          scaledWidth, scaledHeight);
-      connector.setExceptionHandler(actionHandler);
-      JPanel viewComponent = createJPanel();
-      BorderLayout layout = new BorderLayout();
-      viewComponent.setLayout(layout);
-      IView<JComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
-      if ((propertyViewDescriptor instanceof IScrollableViewDescriptor)
-          && ((IScrollableViewDescriptor) propertyViewDescriptor).isScrollable()) {
-        imageLabel.setHorizontalAlignment(SwingConstants.LEFT);
-        imageLabel.setVerticalAlignment(SwingConstants.TOP);
-        JScrollPane scrollPane = createJScrollPane();
-        scrollPane.setViewportView(imageLabel);
-        viewComponent.add(scrollPane, BorderLayout.CENTER);
-      } else {
-        imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        imageLabel.setVerticalAlignment(SwingConstants.CENTER);
-        viewComponent.add(imageLabel, BorderLayout.CENTER);
-      }
-      if (imageLabel instanceof JLink<?>) {
-        ((JLink<Action>) imageLabel).setTarget(
-            getActionFactory().createAction(propertyViewDescriptor.getAction(), actionHandler, view, locale));
-      }
-      return view;
+    JLabel imageLabel;
+    if (propertyViewDescriptor.getAction() != null) {
+      imageLabel = createJLink(propertyViewDescriptor);
     } else {
-      return createBinaryPropertyView(propertyViewDescriptor, actionHandler, locale);
+      imageLabel = createJLabel(propertyViewDescriptor, false);
     }
+    Integer scaledWidth = null;
+    Integer scaledHeight = null;
+    if (propertyViewDescriptor instanceof IScalableImageAware) {
+      scaledWidth = ((IScalableImageAware) propertyViewDescriptor).getScaledWidth();
+      scaledHeight = ((IScalableImageAware) propertyViewDescriptor).getScaledHeight();
+    } else if (propertyDescriptor instanceof IScalableImageAware) {
+      scaledWidth = ((IScalableImageAware) propertyDescriptor).getScaledWidth();
+      scaledHeight = ((IScalableImageAware) propertyDescriptor).getScaledHeight();
+    }
+    JImageConnector connector = new JImageConnector(propertyViewDescriptor.getModelDescriptor().getName(), imageLabel,
+        scaledWidth, scaledHeight);
+    connector.setExceptionHandler(actionHandler);
+    JPanel viewComponent = createJPanel();
+    BorderLayout layout = new BorderLayout();
+    viewComponent.setLayout(layout);
+    IView<JComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
+    if ((propertyViewDescriptor instanceof IScrollableViewDescriptor)
+        && ((IScrollableViewDescriptor) propertyViewDescriptor).isScrollable()) {
+      imageLabel.setHorizontalAlignment(SwingConstants.LEFT);
+      imageLabel.setVerticalAlignment(SwingConstants.TOP);
+      JScrollPane scrollPane = createJScrollPane();
+      scrollPane.setViewportView(imageLabel);
+      viewComponent.add(scrollPane, BorderLayout.CENTER);
+    } else {
+      imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+      imageLabel.setVerticalAlignment(SwingConstants.CENTER);
+      viewComponent.add(imageLabel, BorderLayout.CENTER);
+    }
+    if (imageLabel instanceof JLink<?>) {
+      ((JLink<Action>) imageLabel).setTarget(
+          getActionFactory().createAction(propertyViewDescriptor.getAction(), actionHandler, view, locale));
+    }
+    if (propertyDescriptor instanceof IBinaryPropertyDescriptor && !propertyViewDescriptor.isReadOnly()) {
+      List<Action> binaryActions = createBinaryActions(view, actionHandler, locale);
+      JPanel imagePanel = createJPanel();
+      imagePanel.setLayout(new BorderLayout());
+      imagePanel.add(view.getPeer(), BorderLayout.CENTER);
+      JToolBar toolBar = createJToolBar();
+      for (Action binaryAction : binaryActions) {
+        toolBar.add(binaryAction);
+      }
+      imagePanel.add(toolBar, BorderLayout.NORTH);
+      view.setPeer(imagePanel);
+    }
+    return view;
   }
 
   /**
@@ -3082,6 +3089,11 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     IViewDescriptor viewDescriptor = view.getDescriptor();
     ActionMap actionMap = viewDescriptor.getActionMap();
     ActionMap secondaryActionMap = viewDescriptor.getSecondaryActionMap();
+    decorateWithActions(view, viewDescriptor, actionMap, secondaryActionMap, actionHandler, locale);
+  }
+
+  protected void decorateWithActions(IView<JComponent> view, IViewDescriptor viewDescriptor, ActionMap actionMap,
+                                     ActionMap secondaryActionMap, IActionHandler actionHandler, Locale locale) {
     if (actionMap != null || secondaryActionMap != null) {
       JPanel viewPanel = createJPanel();
       viewPanel.setLayout(new BorderLayout());
@@ -3120,7 +3132,6 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
           actionHandler.restoreLastSecurityContextSnapshot();
         }
       }
-
       view.setPeer(viewPanel);
     }
   }

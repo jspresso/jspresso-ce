@@ -964,9 +964,9 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    * @return the action list.
    */
   protected List<G> createBinaryActions(IView<E> propertyView, IActionHandler actionHandler, Locale locale) {
-    G openAction = getActionFactory().createAction(openFileAsBinaryPropertyAction, actionHandler, propertyView, locale);
-    G saveAction = getActionFactory().createAction(saveBinaryPropertyAsFileAction, actionHandler, propertyView, locale);
-    G resetAction = getActionFactory().createAction(resetPropertyAction, actionHandler, propertyView, locale);
+    final G openAction = getActionFactory().createAction(openFileAsBinaryPropertyAction, actionHandler, propertyView, locale);
+    final G saveAction = getActionFactory().createAction(saveBinaryPropertyAsFileAction, actionHandler, propertyView, locale);
+    final G resetAction = getActionFactory().createAction(resetPropertyAction, actionHandler, propertyView, locale);
     G infoAction = getActionFactory().createAction(binaryPropertyInfoAction, actionHandler, propertyView, locale);
     List<G> binaryActions = new ArrayList<>();
     getActionFactory().setActionName(openAction, null);
@@ -977,6 +977,18 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     binaryActions.add(saveAction);
     binaryActions.add(resetAction);
     binaryActions.add(infoAction);
+    boolean writable = propertyView.getConnector().isWritable();
+    getActionFactory().setActionEnabled(openAction, writable);
+    getActionFactory().setActionEnabled(resetAction, writable);
+    propertyView.getConnector().addPropertyChangeListener(IValueConnector.WRITABLE_PROPERTY, new PropertyChangeListener() {
+
+      @Override
+      public void propertyChange(PropertyChangeEvent evt) {
+        boolean writable = (boolean) evt.getNewValue();
+        getActionFactory().setActionEnabled(openAction, writable);
+        getActionFactory().setActionEnabled(resetAction, writable);
+      }
+    });
     return binaryActions;
   }
 
