@@ -304,9 +304,11 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
         inListValues.add(inListValue.getValue());
       }
     }
-    if (!inListValues.isEmpty()) {
+    if (!inListValues.isEmpty() || nullAllowed) {
       List<Criteria> disjunctions = new ArrayList<>();
-      disjunctions.add(where(path).in(inListValues));
+      if (!inListValues.isEmpty()) {
+        disjunctions.add(where(path).in(inListValues));
+      }
       if (nullAllowed) {
         disjunctions.add(where(path).is(null));
       }
