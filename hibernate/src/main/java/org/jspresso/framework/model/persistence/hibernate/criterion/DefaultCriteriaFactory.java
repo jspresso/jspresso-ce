@@ -408,9 +408,11 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
       }
     }
     Junction queryStructureRestriction = null;
-    if (!inListValues.isEmpty()) {
+    if (!inListValues.isEmpty() || nullAllowed) {
       queryStructureRestriction = Restrictions.disjunction();
-      queryStructureRestriction.add(Restrictions.in(path, inListValues));
+      if (!inListValues.isEmpty()) {
+        queryStructureRestriction.add(Restrictions.in(path, inListValues));
+      }
       if (nullAllowed) {
         queryStructureRestriction.add(Restrictions.isNull(path));
       }
