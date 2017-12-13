@@ -53,7 +53,15 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     this._dialogStack.push([null, null, null]);
     qx.locale.Manager.getInstance().setLocale(this.__userLanguage);
     var actionHandler = this;
+    var lastActionGuidTS = null;
     window.executeAction = function (actionGuid, actionCommand, viewStateGuid, viewStatePermId) {
+      var now = Date.now();
+      if (lastActionGuidTS && lastActionGuidTS.length == 2) {
+        if (lastActionGuidTS[0] == actionGuid && now - lastActionGuidTS[1] < 50) {
+          return;
+        }
+      }
+      lastActionGuidTS = [actionGuid, now];
       actionCommand = (typeof actionCommand == 'undefined') ? null : actionCommand;
       viewStateGuid = (typeof viewStateGuid == 'undefined') ? null : viewStateGuid;
       viewStatePermId = (typeof viewStatePermId == 'undefined') ? null : viewStatePermId;
