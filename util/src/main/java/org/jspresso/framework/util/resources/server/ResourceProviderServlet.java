@@ -117,8 +117,9 @@ public abstract class ResourceProviderServlet extends HttpServlet {
    * the regex pattern to match in order to allow the download of a local
    * resource.
    */
-  private static final String DEFAULT_LOCAL_URL_REGEX      = "(classpath|http):[A-Za-z0-9_\\-/ ]*\\." +
-      "(png|jpg|jpeg|gif|pdf|swf|svg.?)(&width=\\d*+&height=\\d*+)?";
+  private static final String DEFAULT_LOCAL_URL_REGEX      = "(classpath|http|https):[A-Za-z0-9_\\-/ \\.]+(:\\d+)"
+      + "?[A-Za-z0-9_\\-/ \\.]*(\\.(png|jpg|jpeg|gif|pdf|swf.?)|(download\\?id=[A-F0-9]+))(&amp;width=\\d+&amp;"
+      + "height=\\d+)?";
 
   private static final String ALLOWED_LOCAL_URL_REGEX_KEY  = "allowedLocalUrlRegex";
 
