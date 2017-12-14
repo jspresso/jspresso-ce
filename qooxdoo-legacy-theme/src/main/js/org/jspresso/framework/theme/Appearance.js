@@ -28,7 +28,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           }
         },
 
-        label: {
+        "label": {
           base: true,
           style: function (states) {
             return {
@@ -37,7 +37,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           }
         },
 
-        atom: {
+        "atom": {
           base: true,
           style: function (states) {
             return {
@@ -55,7 +55,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           }
         },
 
-        dynamicatom: {
+        "dynamicatom": {
           include: "atom",
           alias: "atom",
           style: function (states) {
@@ -65,7 +65,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           }
         },
 
-        dynamiclabel: {
+        "dynamiclabel": {
           include: "label",
           alias: "label",
           style: function (states) {
@@ -305,6 +305,10 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         "form": {
           style: function (states) {
             return {
+              marginTop: 3,
+              marginLeft: 20,
+              marginRight: 3,
+              marginBottom: 0,
               padding: 20
             };
           }
@@ -840,6 +844,36 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           }
         },
 
-        "htmlarea": "textarea"
+        "htmlarea": "textarea",
+
+        "repeater": {
+          style: function (states) {
+            return {
+              margin: 10,
+              padding: 10
+            }
+          }
+        },
+
+        "compactrepeater": {
+          include: "repeater",
+          alias: "repeater",
+          style: function (states) {
+            return {
+              margin: 0
+            }
+          }
+        },
+
+        "compactform": {
+          include: "form",
+          alias: "form",
+          style: function (states) {
+            return {
+              padding: 0,
+              margin: 0
+            }
+          }
+        }
       }
     });
