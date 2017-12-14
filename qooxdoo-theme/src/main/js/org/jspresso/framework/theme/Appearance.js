@@ -335,7 +335,10 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         "form": {
           style: function (states) {
             return {
-              margin: [10, 1, 1, 1],
+              marginTop: 3,
+              marginLeft: 20,
+              marginRight: 3,
+              marginBottom: 0,
               padding: 20,
               backgroundColor: "app-background"
             };
@@ -914,6 +917,36 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           }
         },
 
-        "htmlarea": "textarea"
+        "htmlarea": "textarea",
+
+        "repeater": {
+          style: function (states) {
+            return {
+              margin: 10,
+              padding: 10
+            }
+          }
+        },
+
+        "compactrepeater": {
+          include: "repeater",
+          alias: "repeater",
+          style: function (states) {
+            return {
+              margin: 0
+            }
+          }
+        },
+
+        "compactform": {
+          include: "form",
+          alias: "form",
+          style: function (states) {
+            return {
+              padding: 0,
+              margin: 0
+            }
+          }
+        }
       }
     });

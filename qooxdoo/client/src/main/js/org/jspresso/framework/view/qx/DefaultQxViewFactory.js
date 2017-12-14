@@ -1373,11 +1373,29 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var columnSpacing = 20;
       var rowSpacing = 3;
       var labelMarginRight = 3;
+      var labelMarginBottom = 0;
 
       var wasConstructingForm = this.__constructingForm;
       this.__constructingForm = true;
 
       form.setLayout(formLayout);
+
+      form.setAppearance("form");
+      this._applyStyleName(form,  remoteForm.getStyleName());
+      form.syncAppearance();
+      if (form.getMarginLeft() != null) {
+        columnSpacing = form.getMarginLeft();
+      }
+      if (form.getMarginTop() != null) {
+        rowSpacing = form.getMarginTop();
+      }
+      if (form.getMarginRight() != null) {
+        labelMarginRight = form.getMarginRight();
+      }
+      if (form.getMarginBottom() != null) {
+        labelMarginBottom = form.getMarginBottom();
+      }
+      form.resetAppearance();
 
       for (var i = 0; i < remoteForm.getElements().length; i++) {
         var elementWidth = remoteForm.getElementWidths()[i];
@@ -1480,11 +1498,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             }
             component.setMarginLeft(columnSpacing - firstComponentLeftMargin);
           }
+          component.setMarginTop(labelMarginBottom);
         } else {
-          if (!(rComponent instanceof org.jspresso.framework.gui.remote.RForm)) {
-            component.setMarginTop(rowSpacing);
-            component.setMarginBottom(rowSpacing);
-          }
+          component.setMarginTop(rowSpacing);
+          component.setMarginBottom(rowSpacing);
         }
 
         component.setAlignY("middle");
@@ -3220,7 +3237,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @param remoteRepeater {org.jspresso.framework.gui.remote.RRepeater}
      */
     _createRepeater: function (remoteRepeater) {
-      var repeaterContainer = new qx.ui.container.Composite(new qx.ui.layout.VBox(4));
+      var vBox = new qx.ui.layout.VBox();
+      var repeaterContainer = new qx.ui.container.Composite(vBox);
       if (remoteRepeater.getRowAction()) {
         this._getRemotePeerRegistry().register(remoteRepeater.getRowAction())
       }
@@ -3232,6 +3250,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       scroller.setScrollbarX("off");
       scroller.setScrollbarY("auto");
       scroller.add(repeaterContainer);
+
+      scroller.setAppearance("repeater");
+      scroller.addListenerOnce("appear", function (appearEvent) {
+        vBox.setSpacing(scroller.getMarginTop());
+      });
 
       return scroller;
     },
