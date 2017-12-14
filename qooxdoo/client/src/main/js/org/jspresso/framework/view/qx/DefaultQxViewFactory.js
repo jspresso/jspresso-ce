@@ -1490,13 +1490,18 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 
         if (remoteForm.getLabelsPosition() == "ABOVE") {
           if (labelCol > 0) {
-            var componentsToStyle = component.getUserData("componentsToStyle");
-            var firstComponentLeftMargin = 0;
-            if (componentsToStyle && componentsToStyle.length > 0) {
-              componentsToStyle[0].syncAppearance();
-              firstComponentLeftMargin = componentsToStyle[0].getMarginLeft();
+            var firstNestedComponent = null;
+            if (component instanceof qx.ui.container.Composite) {
+              if (component.getChildren() && component.getChildren().length > 0) {
+                firstNestedComponent = component.getChildren()[0];
+              }
             }
-            component.setMarginLeft(columnSpacing - firstComponentLeftMargin);
+            if (firstNestedComponent) {
+              firstNestedComponent.syncAppearance();
+              component.setMarginLeft(columnSpacing - firstNestedComponent.getMarginLeft());
+            } else {
+              component.setMarginLeft(columnSpacing);
+            }
           }
           component.setMarginTop(labelMarginBottom);
         } else {
