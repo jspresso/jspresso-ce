@@ -179,34 +179,8 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
       } else if (viewDescriptor instanceof MobileTabViewDescriptor) {
         view = createTabView((MobileTabViewDescriptor) viewDescriptor, actionHandler, locale);
       }
-      bindCompositeView(view);
-      if (view != null && view.getPeer() instanceof RMobileCompositePage) {
-        if (((RMobileCompositePage) view.getPeer()).getEditAction() != null) {
-          final RAction editAction = ((RMobileCompositePage) view.getPeer()).getEditAction();
-          editAction.setEnabled(view.getConnector().isWritable());
-          view.getConnector().addPropertyChangeListener(IValueConnector.WRITABLE_PROPERTY,
-              new PropertyChangeListener() {
-                @Override
-                public void propertyChange(PropertyChangeEvent evt) {
-                  getActionFactory().setActionEnabled(editAction, (Boolean) evt.getNewValue());
-                }
-              });
-        }
-        for (IView<RComponent> child : view.getChildren()) {
-          if (child.getPeer() instanceof RMobileNavPage) {
-            completePageWithDynamicLabels((ICompositeValueConnector) view.getConnector(), child,
-                ((IComponentDescriptorProvider<?>) view.getDescriptor().getModelDescriptor()).getComponentDescriptor(),
-                (IPropertyDescriptor) ((MobileNavPageViewDescriptor) child.getDescriptor()).getSelectionViewDescriptor()
-                                                                                           .getModelDescriptor());
-          } else if (child.getPeer() instanceof RMobileCompositePage) {
-            IModelDescriptor sectionModelDescriptor = child.getDescriptor().getModelDescriptor();
-            if (sectionModelDescriptor instanceof IPropertyDescriptor) {
-              completePageWithDynamicLabels((ICompositeValueConnector) view.getConnector(), child,
-                  ((IComponentDescriptorProvider<?>) view.getDescriptor().getModelDescriptor())
-                      .getComponentDescriptor(), (IPropertyDescriptor) sectionModelDescriptor);
-            }
-          }
-        }
+      if (view.getConnector() == null) {
+        bindCompositeView(view);
       }
       return view;
     }
@@ -299,8 +273,6 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
             actionHandler);
         if (collectionBasedActionMap != null) {
           editorPageDescriptor = viewDescriptor.getEditorPage();
-//          ((BasicViewDescriptor) editorPageDescriptor.getSelectionViewDescriptor()).setActionMap(
-//              collectionBasedActionMap);
           selectionViewDescriptor = ((BasicViewDescriptor) selectionViewDescriptor).clone();
           ActionMap notCollectionBasedActionMap = filterActionMap(selectionViewDescriptor.getActionMap(), false,
               actionHandler);
@@ -376,11 +348,22 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
           actionHandler, locale);
       RMobileNavPage editorPage = (RMobileNavPage) editorPageView.getView().getPeer();
       viewComponent.setEditorPage(editorPage);
-      RAction editorAction = getActionFactory().createAction(getEditPageAction(), actionHandler, view, locale);
-      viewComponent.setEditAction(editorAction);
       childrenViews.add(editorPageView);
     }
     view.setChildren(childrenViews);
+    // Anticipate connector creation in order to have editor action correctly reacting to model change. see #391
+    bindCompositeView(view);
+    if (viewComponent.getEditorPage() != null) {
+      final RAction editAction = getActionFactory().createAction(getEditPageAction(), actionHandler, view, locale);
+      viewComponent.setEditAction(editAction);
+      editAction.setEnabled(view.getConnector().isWritable());
+      view.getConnector().addPropertyChangeListener(IValueConnector.WRITABLE_PROPERTY, new PropertyChangeListener() {
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
+          getActionFactory().setActionEnabled(editAction, (Boolean) evt.getNewValue());
+        }
+      });
+    }
     return view;
   }
 
@@ -427,11 +410,38 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
       RAction cancelAction = getActionFactory().createAction(getCancelPageAction(), actionHandler, view, locale);
       editorPage.setBackAction(cancelAction);
       viewComponent.setEditorPage(editorPage);
-      RAction editorAction = getActionFactory().createAction(getEditPageAction(), actionHandler, view, locale);
-      viewComponent.setEditAction(editorAction);
       childrenViews.add(editorPageView);
     }
     view.setChildren(childrenViews);
+    // Anticipate connector creation in order to have editor action correctly reacting to model change. see #391
+    bindCompositeView(view);
+    if (viewComponent.getEditorPage() != null) {
+      final RAction editAction = getActionFactory().createAction(getEditPageAction(), actionHandler, view, locale);
+      viewComponent.setEditAction(editAction);
+      editAction.setEnabled(view.getConnector().isWritable());
+      view.getConnector().addPropertyChangeListener(IValueConnector.WRITABLE_PROPERTY, new PropertyChangeListener() {
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
+          getActionFactory().setActionEnabled(editAction, (Boolean) evt.getNewValue());
+        }
+      });
+    }
+    for (IView<RComponent> child : view.getChildren()) {
+      IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor
+          .getModelDescriptor()).getComponentDescriptor();
+      if (child.getPeer() instanceof RMobileNavPage) {
+        IPropertyDescriptor selectionModelDescriptor = (IPropertyDescriptor) ((MobileNavPageViewDescriptor) child
+            .getDescriptor()).getSelectionViewDescriptor().getModelDescriptor();
+        completePageWithDynamicLabels((ICompositeValueConnector) view.getConnector(), child, componentDescriptor,
+            selectionModelDescriptor);
+      } else if (child.getPeer() instanceof RMobileCompositePage) {
+        IModelDescriptor sectionModelDescriptor = child.getDescriptor().getModelDescriptor();
+        if (sectionModelDescriptor instanceof IPropertyDescriptor) {
+          completePageWithDynamicLabels((ICompositeValueConnector) view.getConnector(), child, componentDescriptor,
+              (IPropertyDescriptor) sectionModelDescriptor);
+        }
+      }
+    }
     return view;
   }
 
