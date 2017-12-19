@@ -93,4 +93,24 @@ public class BasicCollectionConnector extends AbstractCollectionConnector {
       updateChildConnectors();
     }
   }
+
+  /**
+   * Overrides the default to ignore model connector writability condition
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isWritable() {
+    if (getParentConnector() != null && !getParentConnector().areChildrenWritable()) {
+      return false;
+    }
+    // overridden to remove model connector writability condition.
+    /*
+    if (getModelConnector() != null && !getModelConnector().isWritable()) {
+      return false;
+    }
+    */
+    return isLocallyWritable();
+  }
+
 }

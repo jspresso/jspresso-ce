@@ -74,9 +74,11 @@ public class BasicCompositeConnector extends AbstractCompositeValueConnector {
       return false;
     }
     // overridden to remove model connector writability condition.
-    // if (getModelConnector() != null && !getModelConnector().isWritable()) {
-    // return false;
-    // }
+    /*
+    if (getModelConnector() != null && !getModelConnector().isWritable()) {
+      return false;
+    }
+    */
     return isLocallyWritable();
   }
 
