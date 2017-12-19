@@ -31,6 +31,7 @@ import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import org.jspresso.framework.model.descriptor.query.EnumQueryStructureDescriptor;
 import org.jspresso.framework.util.descriptor.DefaultDescriptor;
@@ -38,7 +39,6 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.ELabelPosition;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
-import org.jspresso.framework.view.descriptor.INestedComponentPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactory;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
@@ -47,6 +47,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor
 import org.jspresso.framework.view.descriptor.basic.BasicNestedComponentPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicReferencePropertyViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicStringPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
 
 /**
@@ -83,28 +84,36 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements IQueryViewDescr
   public IViewDescriptor createQueryViewDescriptor(IComponentDescriptorProvider<IComponent> componentDescriptorProvider,
                                                    IComponentDescriptor<? extends IQueryComponent>
                                                        queryComponentDescriptor,
+                                                   IAction propertyViewAction,
+                                                   IDisplayableAction propertyViewCharAction,
                                                    Map<String, Object> actionContext) {
     BasicComponentViewDescriptor queryComponentViewDescriptor = new BasicComponentViewDescriptor();
     List<IPropertyViewDescriptor> propertyViewDescriptors = new ArrayList<>();
     for (String queriableProperty : componentDescriptorProvider.getQueryableProperties()) {
       IPropertyDescriptor actualPropertyDescriptor = queryComponentDescriptor.getPropertyDescriptor(queriableProperty);
+      BasicPropertyViewDescriptor propertyView = null;
       // To preserve col spans for query structures.
       if (actualPropertyDescriptor instanceof ComparableQueryStructureDescriptor) {
         if (isUseCompactComparableQueryStructures()) {
-          IPropertyViewDescriptor propertyView = createCompactComparablePropertyViewDescriptor(queriableProperty,
-              (ComparableQueryStructureDescriptor) actualPropertyDescriptor);
-          propertyViewDescriptors.add(propertyView);
+          propertyView = createCompactComparablePropertyViewDescriptor(queriableProperty,
+              (ComparableQueryStructureDescriptor) actualPropertyDescriptor, propertyViewAction);
         } else {
-          IPropertyViewDescriptor propertyView = createNestedComparablePropertyViewDescriptor(queriableProperty,
-              actualPropertyDescriptor);
-          propertyViewDescriptors.add(propertyView);
+          propertyView = createNestedComparablePropertyViewDescriptor(queriableProperty, actualPropertyDescriptor,
+              propertyViewAction);
         }
       } else if (actualPropertyDescriptor instanceof EnumQueryStructureDescriptor) {
-        BasicPropertyViewDescriptor propertyView = createEnumReferencePropertyViewDescriptor(queriableProperty,
-            (EnumQueryStructureDescriptor) actualPropertyDescriptor);
-        propertyViewDescriptors.add(propertyView);
+        propertyView = createEnumReferencePropertyViewDescriptor(queriableProperty,
+            (EnumQueryStructureDescriptor) actualPropertyDescriptor, propertyViewAction);
       } else {
-        BasicPropertyViewDescriptor propertyView = createDefaultPropertyViewDescriptor(queriableProperty);
+        propertyView = createDefaultPropertyViewDescriptor(queriableProperty, actualPropertyDescriptor);
+      }
+      if (propertyView != null) {
+        if (propertyViewAction != null) {
+          propertyView.setAction(propertyViewAction);
+        }
+        if (propertyViewCharAction != null && propertyView instanceof BasicStringPropertyViewDescriptor) {
+          ((BasicStringPropertyViewDescriptor) propertyView).setCharacterAction(propertyViewCharAction);
+        }
         propertyViewDescriptors.add(propertyView);
       }
     }
@@ -137,10 +146,19 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements IQueryViewDescr
    *
    * @param queriableProperty
    *     the queriable property
+   * @param actualPropertyDescriptor
+   *     the actual property descriptor
    * @return the basic property view descriptor
    */
-  protected BasicPropertyViewDescriptor createDefaultPropertyViewDescriptor(String queriableProperty) {
-    BasicPropertyViewDescriptor propertyView = new BasicPropertyViewDescriptor();
+  protected BasicPropertyViewDescriptor createDefaultPropertyViewDescriptor(String queriableProperty,
+                                                                            IPropertyDescriptor
+                                                                                actualPropertyDescriptor) {
+    BasicPropertyViewDescriptor propertyView;
+    if (actualPropertyDescriptor instanceof IStringPropertyDescriptor) {
+      propertyView = new BasicStringPropertyViewDescriptor();
+    } else {
+      propertyView = new BasicPropertyViewDescriptor();
+    }
     propertyView.setName(queriableProperty);
     return propertyView;
   }
@@ -156,10 +174,11 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements IQueryViewDescr
    */
   protected BasicPropertyViewDescriptor createEnumReferencePropertyViewDescriptor(String queriableProperty,
                                                                                   EnumQueryStructureDescriptor
-                                                                                      actualPropertyDescriptor) {
+                                                                                      actualPropertyDescriptor,
+                                                                                  IAction okNextAction) {
     BasicReferencePropertyViewDescriptor propertyView = new BasicReferencePropertyViewDescriptor();
     propertyView.setName(queriableProperty);
-    propertyView.setLovAction(createEnumSelectAction(actualPropertyDescriptor, null));
+    propertyView.setLovAction(createEnumSelectAction(actualPropertyDescriptor, okNextAction));
     propertyView.setAutoCompleteEnabled(false);
     return propertyView;
   }
@@ -174,10 +193,11 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements IQueryViewDescr
    * @return the basic reference property view descriptor
    */
   protected BasicPropertyViewDescriptor createCompactComparablePropertyViewDescriptor(String queriableProperty,
-                                                                                      ComparableQueryStructureDescriptor actualPropertyDescriptor) {
+                                                                                      ComparableQueryStructureDescriptor actualPropertyDescriptor,
+                                                                                      IAction okNextAction) {
     BasicReferencePropertyViewDescriptor propertyView = new BasicReferencePropertyViewDescriptor();
     propertyView.setName(queriableProperty);
-    propertyView.setLovAction(createComparableEditAction(actualPropertyDescriptor, null));
+    propertyView.setLovAction(createComparableEditAction(actualPropertyDescriptor, okNextAction));
     propertyView.setAutoCompleteEnabled(false);
     return propertyView;
   }
@@ -193,7 +213,8 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements IQueryViewDescr
    */
   protected BasicPropertyViewDescriptor createNestedComparablePropertyViewDescriptor(String queriableProperty,
                                                                                      IPropertyDescriptor
-                                                                                         actualPropertyDescriptor) {
+                                                                                         actualPropertyDescriptor,
+                                                                                     IAction propertyViewAction) {
     BasicComponentViewDescriptor comparableComponentViewDescriptor = new BasicComponentViewDescriptor();
     comparableComponentViewDescriptor.setLabelsPosition(ELabelPosition.NONE);
     //comparableComponentViewDescriptor.setWidthResizeable(false);
@@ -207,6 +228,21 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements IQueryViewDescr
     propertyView.setName(queriableProperty);
     propertyView.setNestedComponentViewDescriptor(comparableComponentViewDescriptor);
     propertyView.setModelDescriptor(actualPropertyDescriptor);
+    if (propertyViewAction != null) {
+      List<IPropertyViewDescriptor> refinedNestedPropertyViews = new ArrayList<>();
+      IComponentViewDescriptor nestedComponentViewDescriptor = propertyView.getNestedComponentViewDescriptor();
+      for (IPropertyViewDescriptor nestedPropertyViewDescriptor : nestedComponentViewDescriptor
+          .getPropertyViewDescriptors()) {
+        if (nestedPropertyViewDescriptor instanceof BasicPropertyViewDescriptor) {
+          ((BasicPropertyViewDescriptor) nestedPropertyViewDescriptor).setAction(propertyViewAction);
+        }
+        refinedNestedPropertyViews.add(nestedPropertyViewDescriptor);
+      }
+      if (nestedComponentViewDescriptor instanceof BasicComponentViewDescriptor) {
+        ((BasicComponentViewDescriptor) nestedComponentViewDescriptor).setPropertyViewDescriptors(
+            refinedNestedPropertyViews);
+      }
+    }
     return propertyView;
   }
 
@@ -390,6 +426,7 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements IQueryViewDescr
           .getPropertyViewDescriptors(false);
       for (int i = 0; i < propertyViews.size(); i++) {
         IPropertyViewDescriptor propertyView = propertyViews.get(i);
+        IAction propertyViewAction = propertyView.getAction();
         if ((propertyView.getModelDescriptor() instanceof ComparableQueryStructureDescriptor
             && isUseCompactComparableQueryStructures()) || propertyView
             .getModelDescriptor() instanceof EnumQueryStructureDescriptor) {
@@ -401,36 +438,18 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements IQueryViewDescr
             if (propertyView.getModelDescriptor() instanceof ComparableQueryStructureDescriptor) {
               ((BasicReferencePropertyViewDescriptor) propertyView).setLovAction(
                   createComparableEditAction((ComparableQueryStructureDescriptor) propertyView.getModelDescriptor(),
-                      propertyView.getAction()));
+                      propertyViewAction));
             } else if (propertyView.getModelDescriptor() instanceof EnumQueryStructureDescriptor) {
               ((BasicReferencePropertyViewDescriptor) propertyView).setLovAction(
                   createEnumSelectAction((EnumQueryStructureDescriptor) propertyView.getModelDescriptor(),
-                      propertyView.getAction()));
+                      propertyViewAction));
             }
           }
         } else if (propertyView.getModelDescriptor() instanceof ComparableQueryStructureDescriptor) {
           BasicPropertyViewDescriptor nestedComparablePropertyViewDescriptor =
               createNestedComparablePropertyViewDescriptor(
-              propertyView.getName(), (IPropertyDescriptor) propertyView.getModelDescriptor());
+              propertyView.getName(), (IPropertyDescriptor) propertyView.getModelDescriptor(), propertyViewAction);
           copyStyle(propertyView, nestedComparablePropertyViewDescriptor);
-          if (propertyView.getAction() != null
-              && nestedComparablePropertyViewDescriptor instanceof INestedComponentPropertyViewDescriptor) {
-            List<IPropertyViewDescriptor> refinedNestedPropertyViews = new ArrayList<>();
-            IComponentViewDescriptor nestedComponentViewDescriptor = ((INestedComponentPropertyViewDescriptor)
-                nestedComparablePropertyViewDescriptor)
-                .getNestedComponentViewDescriptor();
-            for (IPropertyViewDescriptor nestedPropertyViewDescriptor : nestedComponentViewDescriptor
-                .getPropertyViewDescriptors()) {
-              if (nestedPropertyViewDescriptor instanceof BasicPropertyViewDescriptor) {
-                ((BasicPropertyViewDescriptor) nestedPropertyViewDescriptor).setAction(propertyView.getAction());
-              }
-              refinedNestedPropertyViews.add(nestedPropertyViewDescriptor);
-            }
-            if (nestedComponentViewDescriptor instanceof BasicComponentViewDescriptor) {
-              ((BasicComponentViewDescriptor) nestedComponentViewDescriptor).setPropertyViewDescriptors(
-                  refinedNestedPropertyViews);
-            }
-          }
           propertyView = nestedComparablePropertyViewDescriptor;
           propertyViews.set(i, propertyView);
         }

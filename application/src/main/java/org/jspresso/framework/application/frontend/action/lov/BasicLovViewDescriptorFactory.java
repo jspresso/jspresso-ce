@@ -20,16 +20,14 @@ package org.jspresso.framework.application.frontend.action.lov;
 
 import java.util.Map;
 
-import org.jspresso.framework.application.action.AbstractActionContextAware;
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
-import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.ESelectionMode;
-import org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactory;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicCollectionViewDescriptor;
@@ -44,43 +42,39 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 public class BasicLovViewDescriptorFactory extends AbstractLovViewDescriptorFactory
     implements ILovViewDescriptorFactory {
 
-  private ActionMap                        resultViewActionMap;
-  private IDisplayableAction               sortingAction;
-  private IViewDescriptor                  paginationViewDescriptor;
+  private ActionMap          resultViewActionMap;
+  private IDisplayableAction sortingAction;
+  private IViewDescriptor    paginationViewDescriptor;
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public IViewDescriptor createLovViewDescriptor(
-      IComponentDescriptorProvider<IComponent> entityRefDescriptor,
-      ESelectionMode selectionMode, IDisplayableAction okAction,
-      Map<String, Object> lovContext) {
+  public IViewDescriptor createLovViewDescriptor(IComponentDescriptorProvider<IComponent> entityRefDescriptor,
+                                                 ESelectionMode selectionMode, IDisplayableAction okAction,
+                                                 IAction propertyViewAction, IDisplayableAction propertyViewCharAction,
+                                                 Map<String, Object> lovContext) {
     BasicBorderViewDescriptor lovViewDescriptor = new BasicBorderViewDescriptor();
     IComponentDescriptor<IQueryComponent> filterModelDescriptor = getQueryComponentDescriptorFactory()
         .createQueryComponentDescriptor(entityRefDescriptor);
-    IViewDescriptor filterViewDescriptor = getQueryViewDescriptorFactory()
-        .createQueryViewDescriptor(entityRefDescriptor, filterModelDescriptor, lovContext);
+    IViewDescriptor filterViewDescriptor = getQueryViewDescriptorFactory().createQueryViewDescriptor(
+        entityRefDescriptor, filterModelDescriptor, propertyViewAction, propertyViewCharAction, lovContext);
     lovViewDescriptor.setNorthViewDescriptor(filterViewDescriptor);
-    lovViewDescriptor.setModelDescriptor(filterViewDescriptor
-        .getModelDescriptor());
-    BasicViewDescriptor resultViewDescriptor = createResultViewDescriptor(
-        entityRefDescriptor, lovContext);
-    BasicCollectionViewDescriptor resultCollectionViewDescriptor = (BasicCollectionViewDescriptor) BasicCollectionViewDescriptor
+    lovViewDescriptor.setModelDescriptor(filterViewDescriptor.getModelDescriptor());
+    BasicViewDescriptor resultViewDescriptor = createResultViewDescriptor(entityRefDescriptor, lovContext);
+    BasicCollectionViewDescriptor resultCollectionViewDescriptor = (BasicCollectionViewDescriptor)
+        BasicCollectionViewDescriptor
         .extractMainCollectionView(resultViewDescriptor);
     resultCollectionViewDescriptor.setSelectionMode(selectionMode);
     if (resultCollectionViewDescriptor instanceof BasicTableViewDescriptor) {
-      ((BasicTableViewDescriptor) resultCollectionViewDescriptor)
-          .setSortingAction(sortingAction);
+      ((BasicTableViewDescriptor) resultCollectionViewDescriptor).setSortingAction(sortingAction);
     }
     resultCollectionViewDescriptor.setRowAction(okAction);
-    IQueryComponent queryComponent = (IQueryComponent) lovContext
-        .get(IQueryComponent.QUERY_COMPONENT);
+    IQueryComponent queryComponent = (IQueryComponent) lovContext.get(IQueryComponent.QUERY_COMPONENT);
     Integer pageSize = queryComponent.getPageSize();
     if (pageSize != null && pageSize > 0) {
       if (paginationViewDescriptor != null) {
-        resultCollectionViewDescriptor
-            .setPaginationViewDescriptor(paginationViewDescriptor);
+        resultCollectionViewDescriptor.setPaginationViewDescriptor(paginationViewDescriptor);
       }
     }
     if (resultViewActionMap != null) {
@@ -95,7 +89,7 @@ public class BasicLovViewDescriptorFactory extends AbstractLovViewDescriptorFact
    * Sets the resultViewActionMap.
    *
    * @param resultViewActionMap
-   *          the resultViewActionMap to set.
+   *     the resultViewActionMap to set.
    */
   public void setResultViewActionMap(ActionMap resultViewActionMap) {
     this.resultViewActionMap = resultViewActionMap;
@@ -105,7 +99,7 @@ public class BasicLovViewDescriptorFactory extends AbstractLovViewDescriptorFact
    * Sets the sortingAction.
    *
    * @param sortingAction
-   *          the sortingAction to set.
+   *     the sortingAction to set.
    */
   public void setSortingAction(IDisplayableAction sortingAction) {
     this.sortingAction = sortingAction;
@@ -115,10 +109,9 @@ public class BasicLovViewDescriptorFactory extends AbstractLovViewDescriptorFact
    * Sets the paginationViewDescriptor.
    *
    * @param paginationViewDescriptor
-   *          the paginationViewDescriptor to set.
+   *     the paginationViewDescriptor to set.
    */
-  public void setPaginationViewDescriptor(
-      BasicViewDescriptor paginationViewDescriptor) {
+  public void setPaginationViewDescriptor(BasicViewDescriptor paginationViewDescriptor) {
     this.paginationViewDescriptor = paginationViewDescriptor;
   }
 

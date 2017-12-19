@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jspresso.framework.application.backend.action.BackendAction;
+import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.model.descriptor.BeanCollectionModuleDescriptor;
 import org.jspresso.framework.application.model.descriptor.FilterableBeanCollectionModuleDescriptor;
 import org.jspresso.framework.model.component.IComponent;
@@ -47,6 +48,7 @@ import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.collection.IPageable;
 import org.jspresso.framework.util.gui.ERenderingOptions;
 import org.jspresso.framework.util.lang.ObjectUtils;
+import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.EBorderType;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IQueryExtraViewDescriptorFactory;
@@ -81,6 +83,8 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
   private IViewDescriptor                  paginationViewDescriptor;
   private BackendAction                    pagingAction;
   private IViewDescriptor                  cachedViewDescriptor;
+  private Boolean                          findOnType;
+  private Boolean                          findOnSet;
 
   /**
    * Gets the queryViewDescriptorFactory.
@@ -187,7 +191,8 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
       decorator.setNorthViewDescriptor(filterViewDesc);
       decorator.setCenterViewDescriptor(superViewDescriptor);
 
-      BasicCollectionViewDescriptor moduleObjectsView = (BasicCollectionViewDescriptor) BasicCollectionViewDescriptor.extractMainCollectionView(getProjectedViewDescriptor());
+      BasicCollectionViewDescriptor moduleObjectsView = (BasicCollectionViewDescriptor) BasicCollectionViewDescriptor
+          .extractMainCollectionView(getProjectedViewDescriptor());
       if (moduleObjectsView != null) {
         if (moduleObjectsView.getName() == null) {
           moduleObjectsView.setName(getName());
@@ -221,8 +226,22 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
         .getPropertyDescriptor(FilterableBeanCollectionModuleDescriptor.FILTER);
     boolean customFilterView = false;
     if (filterView == null) {
+      boolean fos = getFindOnSet();
+      boolean fot = getFindOnType();
+      IDisplayableAction charAction = null;
+      if (fot) {
+        if (pagingAction != null) {
+          if (pagingAction instanceof IDisplayableAction) {
+            charAction = (IDisplayableAction) pagingAction;
+          } else {
+            charAction = new FrontendAction<>();
+            ((FrontendAction) charAction).setWrappedAction(pagingAction);
+          }
+        }
+      }
       filterView = getQueryViewDescriptorFactory().createQueryViewDescriptor(realComponentDesc,
-          filterModelDescriptorProvider.getComponentDescriptor(), Collections.<String, Object>emptyMap());
+          filterModelDescriptorProvider.getComponentDescriptor(), fos ? pagingAction : null, fot ? charAction : null,
+          Collections.<String, Object>emptyMap());
     } else {
       customFilterView = true;
       // Deeply clean model descriptors on filter views
@@ -273,11 +292,10 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
       }
 
       BasicTabViewDescriptor newTabFilterView;
-      if (tabFilterView!=null) {
+      if (tabFilterView != null) {
         // Clone it to copy all properties (border, background, etc.)
         newTabFilterView = (BasicTabViewDescriptor) tabFilterView.clone();
-      }
-      else {
+      } else {
         newTabFilterView = new BasicTabViewDescriptor();
       }
       newTabFilterView.setPermId(getPermId() + ".filter");
@@ -421,6 +439,56 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
   @Override
   public void setPageSize(Integer pageSize) {
     this.pageSize = pageSize;
+  }
+
+  /**
+   * Whenever setting findOnSet to {@code true}, the module
+   * trigger the query each time a field is set in the filter view. This
+   * brings continuous autocomplete feature on the filter module.
+   *
+   * @param findOnSet
+   *     the find on set
+   */
+  public void setFindOnSet(Boolean findOnSet) {
+    this.findOnSet = findOnSet;
+  }
+
+  /**
+   * Gets find on set.
+   *
+   * @return the find on set
+   */
+  protected boolean getFindOnSet() {
+    if (findOnSet != null) {
+      return findOnSet;
+    }
+    Integer pageSize = getPageSize();
+    return pageSize != null && pageSize > 0;
+  }
+
+  /**
+   * Whenever setting findOnType to {@code true}, the module will
+   * trigger the query each time a field is typed-in in the module filter view. This
+   * brings continuous autocomplete feature on the filter module.
+   *
+   * @param findOnType
+   *     the find on type
+   */
+  public void setFindOnType(Boolean findOnType) {
+    this.findOnType = findOnType;
+  }
+
+  /**
+   * Gets find on type.
+   *
+   * @return the find on type
+   */
+  protected boolean getFindOnType() {
+    if (findOnType != null) {
+      return findOnType;
+    }
+    Integer pageSize = getPageSize();
+    return pageSize != null && pageSize > 0;
   }
 
   /**
@@ -836,7 +904,8 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
             Arrays.asList(((String) value).substring(2, ((String) value).length() - 2).split("§")));
         EnumQueryStructure eqs = (EnumQueryStructure) query.get(key);
         for (EnumValueQueryStructure evqs : eqs.getEnumerationValues()) {
-          evqs.setSelected(enumValues.contains(evqs.getValue() == null ? String.valueOf((Object) null) : evqs.getValue()));
+          evqs.setSelected(
+              enumValues.contains(evqs.getValue() == null ? String.valueOf((Object) null) : evqs.getValue()));
         }
       } else {
         query.put(key, value);

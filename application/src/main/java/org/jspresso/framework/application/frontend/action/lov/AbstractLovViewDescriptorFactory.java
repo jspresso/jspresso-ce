@@ -22,18 +22,9 @@ import java.util.Map;
 
 import org.jspresso.framework.application.action.AbstractActionContextAware;
 import org.jspresso.framework.model.component.IComponent;
-import org.jspresso.framework.model.component.IQueryComponent;
-import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
-import org.jspresso.framework.view.action.ActionMap;
-import org.jspresso.framework.view.action.IDisplayableAction;
-import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactory;
-import org.jspresso.framework.view.descriptor.IViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicCollectionViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
@@ -52,10 +43,9 @@ public abstract class AbstractLovViewDescriptorFactory extends AbstractActionCon
    * Sets the queryViewDescriptorFactory.
    *
    * @param queryViewDescriptorFactory
-   *          the queryViewDescriptorFactory to set.
+   *     the queryViewDescriptorFactory to set.
    */
-  public void setQueryViewDescriptorFactory(
-      IQueryViewDescriptorFactory queryViewDescriptorFactory) {
+  public void setQueryViewDescriptorFactory(IQueryViewDescriptorFactory queryViewDescriptorFactory) {
     this.queryViewDescriptorFactory = queryViewDescriptorFactory;
   }
 
@@ -63,16 +53,14 @@ public abstract class AbstractLovViewDescriptorFactory extends AbstractActionCon
    * Creates a result collection view.
    *
    * @param entityRefDescriptor
-   *          the entity reference descriptor.
+   *     the entity reference descriptor.
    * @param lovContext
-   *          the action context the LOV was triggered on.
+   *     the action context the LOV was triggered on.
    * @return a result collection view.
    */
-  protected BasicViewDescriptor createResultViewDescriptor(
-      IComponentDescriptorProvider<IComponent> entityRefDescriptor,
-      Map<String, Object> lovContext) {
-    return getResultViewDescriptorFactory().createResultViewDescriptor(
-        entityRefDescriptor, lovContext);
+  protected BasicViewDescriptor createResultViewDescriptor(IComponentDescriptorProvider<IComponent> entityRefDescriptor,
+                                                           Map<String, Object> lovContext) {
+    return getResultViewDescriptorFactory().createResultViewDescriptor(entityRefDescriptor, lovContext);
   }
 
   /**
@@ -88,10 +76,9 @@ public abstract class AbstractLovViewDescriptorFactory extends AbstractActionCon
    * Sets the resultViewDescriptorFactory.
    *
    * @param resultViewDescriptorFactory
-   *          the resultViewDescriptorFactory to set.
+   *     the resultViewDescriptorFactory to set.
    */
-  public void setResultViewDescriptorFactory(
-      ILovResultViewDescriptorFactory resultViewDescriptorFactory) {
+  public void setResultViewDescriptorFactory(ILovResultViewDescriptorFactory resultViewDescriptorFactory) {
     this.resultViewDescriptorFactory = resultViewDescriptorFactory;
   }
 
@@ -117,10 +104,9 @@ public abstract class AbstractLovViewDescriptorFactory extends AbstractActionCon
    * Sets the queryComponentDescriptorFactory.
    *
    * @param queryComponentDescriptorFactory
-   *          the queryComponentDescriptorFactory to set.
+   *     the queryComponentDescriptorFactory to set.
    */
-  public void setQueryComponentDescriptorFactory(
-      IQueryComponentDescriptorFactory queryComponentDescriptorFactory) {
+  public void setQueryComponentDescriptorFactory(IQueryComponentDescriptorFactory queryComponentDescriptorFactory) {
     this.queryComponentDescriptorFactory = queryComponentDescriptorFactory;
   }
 }

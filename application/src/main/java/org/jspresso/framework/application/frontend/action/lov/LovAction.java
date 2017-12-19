@@ -144,6 +144,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   private IDisplayableAction                         createAction;
   private ILovViewDescriptorForCreationFactory       lovViewDescriptorForCreationFactory;
   private boolean                                    preselectItems;
+  private Boolean                                    findOnType;
+  private Boolean                                    findOnSet;
 
 
   /**
@@ -215,7 +217,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
     actionHandler.execute(createQueryComponentAction, context);
     IQueryComponent queryComponent = (IQueryComponent) context.get(IQueryComponent.QUERY_COMPONENT);
-    queryComponent.setPageSize(getPageSize());
+    queryComponent.setPageSize(getPageSize(erqDescriptor));
 
     autoCompletePropertyValue = queryComponent.refineValue(autoCompletePropertyValue, null);
 
@@ -351,8 +353,10 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    */
   protected IViewDescriptor createLovViewDescriptor(IReferencePropertyDescriptor<IComponent> erqDescriptor,
                                                     Map<String, Object> context) {
+    boolean fos = getFindOnSet(erqDescriptor);
+    boolean fot = getFindOnType(erqDescriptor);
     return lovViewDescriptorFactory.createLovViewDescriptor(erqDescriptor, getSelectionMode(context), getOkAction(),
-        context);
+        fos ? getFindAction() : null, fot ? getFindAction() : null, context);
   }
 
   /**
@@ -558,6 +562,60 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    */
   public void setAutoquery(boolean autoquery) {
     this.autoquery = autoquery;
+  }
+
+  /**
+   * Whenever setting findOnSet to {@code true}, the LOV dialog will
+   * trigger the query each time a field is set in the LOV filter view. This
+   * brings continuous autocomplete feature on the LOV dialog.
+   *
+   * @param findOnSet
+   *     the find on set
+   */
+  public void setFindOnSet(Boolean findOnSet) {
+    this.findOnSet = findOnSet;
+  }
+
+  /**
+   * Gets find on set.
+   *
+   * @param erqDescriptor
+   *     the erq descriptor
+   * @return the find on set
+   */
+  protected boolean getFindOnSet(IReferencePropertyDescriptor<IComponent> erqDescriptor) {
+    if (findOnSet != null) {
+      return findOnSet;
+    }
+    Integer pageSize = getPageSize(erqDescriptor);
+    return pageSize != null && pageSize > 0;
+  }
+
+  /**
+   * Whenever setting findOnType to {@code true}, the LOV dialog will
+   * trigger the query each time a field is typed-in in the LOV filter view. This
+   * brings continuous autocomplete feature on the LOV dialog.
+   *
+   * @param findOnType
+   *     the find on type
+   */
+  public void setFindOnType(Boolean findOnType) {
+    this.findOnType = findOnType;
+  }
+
+  /**
+   * Gets find on type.
+   *
+   * @param erqDescriptor
+   *     the erq descriptor
+   * @return the find on type
+   */
+  protected boolean getFindOnType(IReferencePropertyDescriptor<IComponent> erqDescriptor) {
+    if (findOnType != null) {
+      return findOnType;
+    }
+    Integer pageSize = getPageSize(erqDescriptor);
+    return pageSize != null && pageSize > 0;
   }
 
   /**
@@ -841,8 +899,14 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    *
    * @return the page size
    */
-  protected Integer getPageSize() {
-    return pageSize;
+  protected Integer getPageSize(IReferencePropertyDescriptor<IComponent> erqDescriptor) {
+    if (pageSize != null) {
+      return pageSize;
+    }
+    if (erqDescriptor.getReferencedDescriptor().getPageSize() != null) {
+      return erqDescriptor.getReferencedDescriptor().getPageSize();
+    }
+    return null;
   }
 
   /**

@@ -20,6 +20,7 @@ package org.jspresso.framework.application.frontend.action.lov;
 
 import java.util.Map;
 
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.view.action.IDisplayableAction;
@@ -50,5 +51,6 @@ public interface ILovViewDescriptorFactory {
   IViewDescriptor createLovViewDescriptor(
       IComponentDescriptorProvider<IComponent> entityRefDescriptor,
       ESelectionMode selectionMode, IDisplayableAction okAction,
+      IAction propertyViewAction, IDisplayableAction propertyViewCharAction,
       Map<String, Object> lovContext);
 }

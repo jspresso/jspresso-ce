@@ -66,7 +66,8 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
     if (cachedViewDescriptor == null) {
       IListViewDescriptor moduleObjectsView = getProjectedViewDescriptor();
       BeanCollectionModuleDescriptor moduleDescriptor = getDescriptor();
-      ((BasicViewDescriptor) moduleObjectsView).setModelDescriptor(moduleDescriptor.getPropertyDescriptor(BeanCollectionModule.MODULE_OBJECTS));
+      ((BasicViewDescriptor) moduleObjectsView).setModelDescriptor(
+          moduleDescriptor.getPropertyDescriptor(BeanCollectionModule.MODULE_OBJECTS));
       MobileNavPageViewDescriptor modulePageView = new MobileNavPageViewDescriptor();
       modulePageView.setSelectionViewDescriptor(moduleObjectsView);
       if (getPagingAction() != null) {
@@ -79,30 +80,37 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
         nextPage = (IMobilePageViewDescriptor) getElementViewDescriptor();
       } else {
         nextPage = new MobileCompositePageViewDescriptor();
-        ((MobileCompositePageViewDescriptor) nextPage).setPageSectionDescriptors(Collections.singletonList(getElementViewDescriptor()));
+        ((MobileCompositePageViewDescriptor) nextPage).setPageSectionDescriptors(
+            Collections.singletonList(getElementViewDescriptor()));
       }
       modulePageView.setNextPageViewDescriptor(nextPage);
       modulePageView.setModelDescriptor(moduleDescriptor);
 
       IComponentDescriptor<IComponent> realComponentDesc = getFilterComponentDescriptor();
       IMobilePageSectionViewDescriptor filterViewDesc = (IMobilePageSectionViewDescriptor) getFilterViewDescriptor();
-      IComponentDescriptorProvider<IQueryComponent> filterModelDescriptorProvider = (IComponentDescriptorProvider<IQueryComponent>) moduleDescriptor
+      IComponentDescriptorProvider<IQueryComponent> filterModelDescriptorProvider =
+          (IComponentDescriptorProvider<IQueryComponent>) moduleDescriptor
           .getPropertyDescriptor(FilterableBeanCollectionModuleDescriptor.FILTER);
       boolean customFilterView = false;
       if (filterViewDesc == null) {
+        boolean fos = getFindOnSet();
+        boolean fot = getFindOnType();
         filterViewDesc = (MobileComponentViewDescriptor) getQueryViewDescriptorFactory().
                                                                                             createQueryViewDescriptor(
                                                                                                 realComponentDesc,
                                                                                                 filterModelDescriptorProvider
                                                                                                     .getComponentDescriptor(),
-                                                                                                Collections.<String, Object>emptyMap());
+                                                                                                fot ? getQueryModuleFilterAction() : null, fos ? getQueryModuleFilterAction() : null,
+                                                                                                Collections.<String,
+                                                                                                    Object>emptyMap());
       } else {
         customFilterView = true;
         // Deeply clean model descriptors on filter views
         cleanupFilterViewDescriptor(filterViewDesc);
       }
       if (filterViewDesc instanceof MobileCompositePageViewDescriptor) {
-        for (IMobilePageSectionViewDescriptor sectionViewDescriptor : ((MobileCompositePageViewDescriptor) filterViewDesc)
+        for (IMobilePageSectionViewDescriptor sectionViewDescriptor : ((MobileCompositePageViewDescriptor)
+            filterViewDesc)
             .getPageSectionDescriptors()) {
           if (sectionViewDescriptor instanceof BasicViewDescriptor) {
             ((BasicViewDescriptor) sectionViewDescriptor).setModelDescriptor(filterModelDescriptorProvider);
@@ -117,12 +125,14 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
       }
 
       if (getPageSize() != null && getPageSize() > 0) {
-        if (moduleObjectsView.getPaginationViewDescriptor() == null && moduleObjectsView instanceof BasicListViewDescriptor) {
+        if (moduleObjectsView.getPaginationViewDescriptor() == null
+            && moduleObjectsView instanceof BasicListViewDescriptor) {
           ((BasicListViewDescriptor) moduleObjectsView).setPaginationViewDescriptor(getPaginationViewDescriptor());
         }
       }
       if (filterViewDesc instanceof MobileCompositePageViewDescriptor) {
-        modulePageView.setHeaderSectionDescriptors(((MobileCompositePageViewDescriptor) filterViewDesc).getPageSectionDescriptors());
+        modulePageView.setHeaderSectionDescriptors(
+            ((MobileCompositePageViewDescriptor) filterViewDesc).getPageSectionDescriptors());
       } else {
         modulePageView.setHeaderSectionDescriptors(Arrays.asList(filterViewDesc));
       }
@@ -244,7 +254,8 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
   /**
    * Sets query module filter action.
    *
-   * @param queryModuleFilterAction the query module filter action
+   * @param queryModuleFilterAction
+   *     the query module filter action
    */
   public void setQueryModuleFilterAction(IDisplayableAction queryModuleFilterAction) {
     this.queryModuleFilterAction = queryModuleFilterAction;

@@ -3362,14 +3362,16 @@ public class DefaultFlexViewFactory {
       sizeMaxComponentWidth(textField, remoteTextField);
     }
     configureHorizontalAlignment(textField, remoteTextField.horizontalAlignment);
+    var remoteState:RemoteValueState = remoteTextField.state;
     if(remoteTextField.characterAction) {
       textField.addEventListener(Event.CHANGE, function (event:Event):void {
+        remoteState.value = textField.text == "" ? null: textField.text;
         var actionEvent:RActionEvent = new RActionEvent();
         actionEvent.actionCommand = textField.text;
         getActionHandler().execute(remoteTextField.characterAction, actionEvent, null, false);
       });
     }
-    bindTextInput(textField, remoteTextField.state);
+    bindTextInput(textField, remoteState);
     return textField;
   }
 

@@ -105,7 +105,7 @@ public interface IPageable {
    * Sets the page index to display.
    *
    * @param displayPageIndex
-   *          the page index to display.
+   *     the page index to display.
    */
   void setDisplayPageIndex(Integer displayPageIndex);
 
@@ -169,7 +169,7 @@ public interface IPageable {
    * Sets the page number used for query actions.
    *
    * @param page
-   *          the page number used for query actions.
+   *     the page number used for query actions.
    */
   void setPage(Integer page);
 
@@ -177,7 +177,7 @@ public interface IPageable {
    * Sets the page size used for query actions.
    *
    * @param pageSize
-   *          the page size used for query actions.
+   *     the page size used for query actions.
    */
   void setPageSize(Integer pageSize);
 
@@ -185,7 +185,7 @@ public interface IPageable {
    * Sets the current record count.
    *
    * @param recordCount
-   *          current record count.
+   *     current record count.
    */
   void setRecordCount(Integer recordCount);
 
@@ -193,7 +193,7 @@ public interface IPageable {
    * Gets the collection of sticky results.
    *
    * @param stickyResults
-   *          the collection of sticky results.
+   *     the collection of sticky results.
    */
   void setStickyResults(List<?> stickyResults);
 
@@ -207,7 +207,8 @@ public interface IPageable {
   /**
    * Sets selected record count.
    *
-   * @param selectedRecordCount the selected record count
+   * @param selectedRecordCount
+   *     the selected record count
    */
   void setSelectedRecordCount(Integer selectedRecordCount);
 

@@ -1065,6 +1065,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       });
       if (remoteTextField.getCharacterAction()) {
         textField.addListener("input", function (event) {
+          state.setValue(this._viewToModelFieldConverter(textField.getValue()));
           var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
           actionEvent.setActionCommand(textField.getValue());
           this._getActionHandler().execute(remoteTextField.getCharacterAction(), actionEvent);

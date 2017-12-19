@@ -18,15 +18,12 @@
  */
 package org.jspresso.framework.application.frontend.action.lov.mobile;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Map;
 
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.backend.action.BackendAction;
-import org.jspresso.framework.application.frontend.action.ModalDialogAction;
 import org.jspresso.framework.application.frontend.action.lov.AbstractLovViewDescriptorFactory;
 import org.jspresso.framework.application.frontend.action.lov.ILovViewDescriptorFactory;
-import org.jspresso.framework.application.frontend.action.lov.LovAction;
 import org.jspresso.framework.application.frontend.action.std.mobile.AddPageAction;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
@@ -55,12 +52,13 @@ public class MobileLovViewDescriptorFactory extends AbstractLovViewDescriptorFac
   @Override
   public IViewDescriptor createLovViewDescriptor(IComponentDescriptorProvider<IComponent> entityRefDescriptor,
                                                  ESelectionMode selectionMode, IDisplayableAction okAction,
+                                                 IAction propertyViewAction, IDisplayableAction propertyViewCharAction,
                                                  Map<String, Object> lovContext) {
     MobileBorderViewDescriptor lovViewDescriptor = new MobileBorderViewDescriptor();
     IComponentDescriptor<IQueryComponent> filterModelDescriptor = getQueryComponentDescriptorFactory()
         .createQueryComponentDescriptor(entityRefDescriptor);
     IViewDescriptor filterViewDescriptor = getQueryViewDescriptorFactory().createQueryViewDescriptor(
-        entityRefDescriptor, filterModelDescriptor, lovContext);
+        entityRefDescriptor, filterModelDescriptor, propertyViewAction, propertyViewCharAction, lovContext);
     lovViewDescriptor.setNorthViewDescriptor(filterViewDescriptor);
     lovViewDescriptor.setModelDescriptor(filterViewDescriptor.getModelDescriptor());
     BasicViewDescriptor resultViewDescriptor = createResultViewDescriptor(entityRefDescriptor, lovContext);
@@ -68,8 +66,8 @@ public class MobileLovViewDescriptorFactory extends AbstractLovViewDescriptorFac
         BasicCollectionViewDescriptor
         .extractMainCollectionView(resultViewDescriptor);
     resultCollectionViewDescriptor.setSelectionMode(selectionMode);
-    if (ESelectionMode.SINGLE_SELECTION.equals(selectionMode)
-        || ESelectionMode.SINGLE_CUMULATIVE_SELECTION.equals(selectionMode)) {
+    if (ESelectionMode.SINGLE_SELECTION.equals(selectionMode) || ESelectionMode.SINGLE_CUMULATIVE_SELECTION.equals(
+        selectionMode)) {
       resultCollectionViewDescriptor.setItemSelectionAction(okAction);
     }
     //lovContext.put(LovAction.LOV_DIALOG_ACTIONS, new ArrayList<>());
@@ -98,7 +96,8 @@ public class MobileLovViewDescriptorFactory extends AbstractLovViewDescriptorFac
   /**
    * Sets paging action.
    *
-   * @param pagingAction the paging action
+   * @param pagingAction
+   *     the paging action
    */
   public void setPagingAction(BackendAction pagingAction) {
     this.pagingAction = pagingAction;

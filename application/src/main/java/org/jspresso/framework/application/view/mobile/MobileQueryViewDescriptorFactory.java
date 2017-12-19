@@ -93,6 +93,8 @@ public class MobileQueryViewDescriptorFactory<E, F, G> extends BasicQueryViewDes
   public IViewDescriptor createQueryViewDescriptor(IComponentDescriptorProvider<IComponent> componentDescriptorProvider,
                                                    IComponentDescriptor<? extends IQueryComponent>
                                                        queryComponentDescriptor,
+                                                   IAction propertyViewAction,
+                                                   IDisplayableAction propertyViewCharAction,
                                                    Map<String, Object> actionContext) {
     MobileComponentViewDescriptor queryComponentViewDescriptor = new MobileComponentViewDescriptor();
     queryComponentViewDescriptor.setLabelsPosition(ELabelPosition.NONE);
@@ -108,10 +110,11 @@ public class MobileQueryViewDescriptorFactory<E, F, G> extends BasicQueryViewDes
         propertyViewDescriptors.add(propertyView);
       } else if (actualPropertyDescriptor instanceof EnumQueryStructureDescriptor) {
         BasicPropertyViewDescriptor propertyView = createEnumReferencePropertyViewDescriptor(queriableProperty,
-            (EnumQueryStructureDescriptor) actualPropertyDescriptor);
+            (EnumQueryStructureDescriptor) actualPropertyDescriptor, propertyViewAction);
         propertyViewDescriptors.add(propertyView);
       } else {
-        BasicPropertyViewDescriptor propertyView = createDefaultPropertyViewDescriptor(queriableProperty);
+        BasicPropertyViewDescriptor propertyView = createDefaultPropertyViewDescriptor(queriableProperty,
+            actualPropertyDescriptor);
         propertyViewDescriptors.add(propertyView);
       }
     }

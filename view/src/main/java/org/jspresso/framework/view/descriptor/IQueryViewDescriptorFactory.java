@@ -20,10 +20,12 @@ package org.jspresso.framework.view.descriptor;
 
 import java.util.Map;
 
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
+import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
  * Factory for query component view descriptor.
@@ -35,21 +37,29 @@ public interface IQueryViewDescriptorFactory {
   /**
    * Creates a new query component view descriptor.
    *
-   * @param componentDescriptorProvider           the component descriptor provider to create query descriptor for.
-   * @param queryComponentDescriptor           the actual query component descriptor that will be used as model.
-   * @param actionContext the action context
+   * @param componentDescriptorProvider
+   *     the component descriptor provider to create query descriptor for.
+   * @param queryComponentDescriptor
+   *     the actual query component descriptor that will be used as model.
+   * @param propertyViewAction
+   *     the property view action
+   * @param propertyViewCharAction
+   *     the property view char action
+   * @param actionContext
+   *     the action context
    * @return the created view descriptor.
    */
-  IViewDescriptor createQueryViewDescriptor(
-      IComponentDescriptorProvider<IComponent> componentDescriptorProvider,
-      IComponentDescriptor<? extends IQueryComponent> queryComponentDescriptor, @SuppressWarnings(
-      "UnusedParameters") Map<String, Object> actionContext);
+  IViewDescriptor createQueryViewDescriptor(IComponentDescriptorProvider<IComponent> componentDescriptorProvider,
+                                            IComponentDescriptor<? extends IQueryComponent> queryComponentDescriptor,
+                                            IAction propertyViewAction, IDisplayableAction propertyViewCharAction,
+                                            @SuppressWarnings("UnusedParameters") Map<String, Object> actionContext);
 
   /**
    * Performs necessary adaptations to an existing view descriptor in order to
    * make it support query component model.
    *
-   * @param viewDescriptor           the view descriptor to adapt.
+   * @param viewDescriptor
+   *     the view descriptor to adapt.
    * @return the adapted view descriptor (same instance as the parameter)
    */
   <V extends IViewDescriptor> V adaptExistingViewDescriptor(V viewDescriptor);
