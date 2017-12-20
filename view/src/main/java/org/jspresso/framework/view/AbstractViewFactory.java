@@ -1354,7 +1354,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     }
     if (labelKey != null && (propertyDescriptor == null || !labelKey.equals(propertyDescriptor.getName()))) {
       IPropertyDescriptor labelProperty = modelDescriptor.getPropertyDescriptor(labelKey);
-      if (labelProperty != null) {
+      if (labelProperty != null && labelProperty instanceof IStringPropertyDescriptor) {
         dynamicLabelProperty = labelProperty.getName();
       }
     }
@@ -1387,7 +1387,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     }
     if (descriptionKey != null) {
       IPropertyDescriptor descriptionProperty = modelDescriptor.getPropertyDescriptor(descriptionKey);
-      if (descriptionProperty != null) {
+      if (descriptionProperty != null && descriptionProperty instanceof IStringPropertyDescriptor) {
         dynamicToolTipProperty = descriptionProperty.getName();
       }
     }
@@ -1414,7 +1414,9 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     }
     if (backgroundKey != null) {
       IPropertyDescriptor backgroundProperty = modelDescriptor.getPropertyDescriptor(backgroundKey);
-      if (backgroundProperty != null) {
+      if (backgroundProperty != null
+          && (backgroundProperty instanceof IStringPropertyDescriptor
+          || backgroundProperty instanceof IColorPropertyDescriptor)) {
         dynamicBackgroundProperty = backgroundProperty.getName();
       }
     }
@@ -1441,7 +1443,8 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     }
     if (foregroundKey != null) {
       IPropertyDescriptor foregroundProperty = modelDescriptor.getPropertyDescriptor(foregroundKey);
-      if (foregroundProperty != null) {
+      if (foregroundProperty != null && (foregroundProperty instanceof IStringPropertyDescriptor
+          || foregroundProperty instanceof IColorPropertyDescriptor)) {
         dynamicForegroundProperty = foregroundProperty.getName();
       }
     }
@@ -1468,7 +1471,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     }
     if (fontKey != null) {
       IPropertyDescriptor fontProperty = modelDescriptor.getPropertyDescriptor(fontKey);
-      if (fontProperty != null) {
+      if (fontProperty != null && fontProperty instanceof IStringPropertyDescriptor) {
         dynamicFontProperty = fontProperty.getName();
       }
     }
@@ -1491,7 +1494,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     String dynamicToolTipProperty = null;
     if (viewDescriptor.getDescription() != null) {
       IPropertyDescriptor descriptionProperty = modelDescriptor.getPropertyDescriptor(viewDescriptor.getDescription());
-      if (descriptionProperty != null) {
+      if (descriptionProperty != null && descriptionProperty instanceof IStringPropertyDescriptor) {
         dynamicToolTipProperty = descriptionProperty.getName();
       }
     } else {
