@@ -1940,11 +1940,12 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
       }, this);
 
-      this.addComponentThresholdListener(list, "changeSelection", function (evt) {
-        if (remoteList.getRowAction()) {
+      if (remoteList.getRowAction()) {
+        this._getRemotePeerRegistry().register(remoteList.getRowAction())
+        this.addComponentThresholdListener(list, "changeSelection", function (evt) {
           this._getActionHandler().execute(remoteList.getRowAction());
-        }
-      }, this);
+        }, this);
+      }
 
       state.addListener("changeSelectedIndices", function (e) {
         if (!list.getUserData("tapEvent")) {
