@@ -19,7 +19,6 @@
 package org.jspresso.framework.application.action;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -30,6 +29,7 @@ import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.IFrontendController;
 import org.jspresso.framework.application.model.Module;
+import org.jspresso.framework.application.view.ViewHelper;
 import org.jspresso.framework.binding.ConnectorHelper;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
@@ -39,8 +39,6 @@ import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
-import org.jspresso.framework.view.ICompositeView;
-import org.jspresso.framework.view.IMapView;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 
@@ -171,7 +169,7 @@ public abstract class AbstractActionContextAware {
    * @return the model.
    */
   protected <T> T getModelFromPermId(String viewPermId, Map<String, Object> context) {
-    int[] viewPathFromPermId = getViewPathFromPermId(viewPermId, getView(context));
+    int[] viewPathFromPermId = ViewHelper.getViewPathFromPermId(viewPermId, getView(context));
     return getModel(viewPathFromPermId, context);
   }
 
@@ -234,7 +232,7 @@ public abstract class AbstractActionContextAware {
    * @return the model connector this action was triggered on.
    */
   protected IValueConnector getModelConnectorFromPermId(String viewPermId, Map<String, Object> context) {
-    int[] viewPathFromPermId = getViewPathFromPermId(viewPermId, getView(context));
+    int[] viewPathFromPermId = ViewHelper.getViewPathFromPermId(viewPermId, getView(context));
     return getModelConnector(viewPathFromPermId, context);
   }
 
@@ -326,7 +324,7 @@ public abstract class AbstractActionContextAware {
    * @return the model connector this action was triggered on.
    */
   protected IModelDescriptor getModelDescriptorFromPermId(String viewPermId, Map<String, Object> context) {
-    int[] viewPathFromPermId = getViewPathFromPermId(viewPermId, getView(context));
+    int[] viewPathFromPermId = ViewHelper.getViewPathFromPermId(viewPermId, getView(context));
     return getModelDescriptor(viewPathFromPermId, context);
   }
 
@@ -441,7 +439,7 @@ public abstract class AbstractActionContextAware {
    * @return the selected indices stored in the action context.
    */
   protected int[] getSelectedIndicesFromPermId(String viewPermId, Map<String, Object> context) {
-    int[] viewPathFromPermId = getViewPathFromPermId(viewPermId, getView(context));
+    int[] viewPathFromPermId = ViewHelper.getViewPathFromPermId(viewPermId, getView(context));
     return getSelectedIndices(viewPathFromPermId, context);
   }
 
@@ -509,7 +507,7 @@ public abstract class AbstractActionContextAware {
    * @return the selected model.
    */
   protected <T> T getSelectedModelFromPermId(String viewPermId, Map<String, Object> context) {
-    int[] viewPathFromPermId = getViewPathFromPermId(viewPermId, getView(context));
+    int[] viewPathFromPermId = ViewHelper.getViewPathFromPermId(viewPermId, getView(context));
     return getSelectedModel(viewPathFromPermId, context);
   }
 
@@ -574,7 +572,7 @@ public abstract class AbstractActionContextAware {
    * @return the list of selected models.
    */
   protected <T> List<T> getSelectedModelsFromPermId(String viewPermId, Map<String, Object> context) {
-    int[] viewPathFromPermId = getViewPathFromPermId(viewPermId, getView(context));
+    int[] viewPathFromPermId = ViewHelper.getViewPathFromPermId(viewPermId, getView(context));
     return getSelectedModels(viewPathFromPermId, context);
   }
 
@@ -677,7 +675,7 @@ public abstract class AbstractActionContextAware {
    *     the action context.
    */
   protected void setSelectedIndicesFromPermId(String viewPermId, int[] selectedIndices, Map<String, Object> context) {
-    int[] viewPathFromPermId = getViewPathFromPermId(viewPermId, getView(context));
+    int[] viewPathFromPermId = ViewHelper.getViewPathFromPermId(viewPermId, getView(context));
     setSelectedIndices(viewPathFromPermId, selectedIndices, context);
   }
 
@@ -737,7 +735,7 @@ public abstract class AbstractActionContextAware {
    */
   protected void setSelectedModelsFromPermId(String viewPermId, Collection<?> selectedModels,
                                              Map<String, Object> context) {
-    int[] viewPathFromPermId = getViewPathFromPermId(viewPermId, getView(context));
+    int[] viewPathFromPermId = ViewHelper.getViewPathFromPermId(viewPermId, getView(context));
     setSelectedModels(viewPathFromPermId, selectedModels, context);
   }
 
@@ -824,7 +822,7 @@ public abstract class AbstractActionContextAware {
    */
   @SuppressWarnings("unchecked")
   protected <T> IView<T> getViewFromPermId(String viewPermId, Map<String, Object> context) {
-    int[] viewPathFromPermId = getViewPathFromPermId(viewPermId, getView(context));
+    int[] viewPathFromPermId = ViewHelper.getViewPathFromPermId(viewPermId, getView(context));
     return getView(viewPathFromPermId, context);
   }
 
@@ -854,7 +852,7 @@ public abstract class AbstractActionContextAware {
    */
   @SuppressWarnings("unchecked")
   protected <T> IView<T> getView(int[] viewPath, Map<String, Object> context) {
-    return navigate((IView<T>) context.get(ActionContextConstants.VIEW), viewPath);
+    return ViewHelper.navigate((IView<T>) context.get(ActionContextConstants.VIEW), viewPath);
   }
 
   /**
@@ -897,7 +895,7 @@ public abstract class AbstractActionContextAware {
    * @return the value connector this action was triggered on.
    */
   protected IValueConnector getViewConnectorFromPermId(String viewPermId, Map<String, Object> context) {
-    int[] viewPathFromPermId = getViewPathFromPermId(viewPermId, getView(context));
+    int[] viewPathFromPermId = ViewHelper.getViewPathFromPermId(viewPermId, getView(context));
     return getViewConnector(viewPathFromPermId, context);
   }
 
@@ -934,102 +932,4 @@ public abstract class AbstractActionContextAware {
     return null;
   }
 
-  /**
-   * Starts from a view and navigates the view hierarchy following an index
-   * navigation path.
-   *
-   * @param <T>
-   *     The root class of the view peers.
-   * @param fromView
-   *     the view to start from.
-   * @param viewPath
-   *     the view index path to follow.
-   *     <ul>
-   *     <li>A positive integer n means the nth child.</li>
-   *     <li>A negative integer -n means the nth parent.</li>
-   *     </ul>
-   * @return the view navigated to.
-   */
-  protected <T> IView<T> navigate(IView<T> fromView, int... viewPath) {
-    IView<T> target = fromView;
-    if (viewPath != null) {
-      for (int nextIndex : viewPath) {
-        if (target != null) {
-          if (nextIndex < 0) {
-            for (int j = 0; j > nextIndex; j--) {
-              if (target != null) {
-                target = target.getParent();
-              }
-            }
-          } else {
-            if (target instanceof ICompositeView<?> && ((ICompositeView<?>) target).getChildren() != null
-                && nextIndex < ((ICompositeView<?>) target).getChildren().size()) {
-              target = ((ICompositeView<T>) target).getChildren().get(nextIndex);
-            } else if(target instanceof IMapView<?> && ((IMapView<?>) target).getCurrentView() != null
-                && nextIndex == 0) {
-              target = ((IMapView<T>) target).getCurrentView();
-            } else {
-              target = null;
-            }
-          }
-        }
-      }
-    }
-    return target;
-  }
-
-  private int[] getViewPathFromPermId(String permId, IView<?> fromView) {
-    List<Integer> viewPathAsList = new ArrayList<>();
-    IView<?> rootView = fromView;
-    IView<?> rootViewParent = rootView.getParent();
-    while (rootViewParent != null) {
-      // Climb up the view hierarchy
-      viewPathAsList.add(Integer.valueOf(-1));
-      rootView = rootViewParent;
-      rootViewParent = rootView.getParent();
-    }
-    // rootView is now the root of the view hierarchy
-    // we must now navigate the children until we find the right permId
-    boolean permIdFound = findPermId(permId, rootView, viewPathAsList);
-    if (permIdFound) {
-      int[] viewPath = new int[viewPathAsList.size()];
-      for (int i = 0; i < viewPath.length; i++) {
-        viewPath[i] = viewPathAsList.get(i);
-      }
-      return viewPath;
-    }
-    return null;
-  }
-
-  private boolean findPermId(String permId, IView<?> fromView, List<Integer> viewPathBuffer) {
-    String viewPermId = null;
-    if (fromView.getDescriptor() != null) {
-      viewPermId = fromView.getDescriptor().getPermId();
-    }
-    if (permId.equals(viewPermId)) {
-      return true;
-    }
-    List<? extends IView<?>> children = null;
-    if (fromView instanceof ICompositeView<?>) {
-      children = ((ICompositeView) fromView).getChildren();
-    } else if(fromView instanceof IMapView<?>) {
-      IView<?> currentView = ((IMapView) fromView).getCurrentView();
-      if (currentView != null) {
-        children = Arrays.asList(currentView);
-      }
-    }
-    if (children != null) {
-      for (int i = 0; i < children.size(); i++) {
-        IView<?> child = children.get(i);
-        List<Integer> childViewPathBuffer = new ArrayList<>();
-        boolean foundInChild = findPermId(permId, child, childViewPathBuffer);
-        if (foundInChild) {
-          viewPathBuffer.add(Integer.valueOf(i));
-          viewPathBuffer.addAll(childViewPathBuffer);
-          return true;
-        }
-      }
-    }
-    return false;
-  }
 }
