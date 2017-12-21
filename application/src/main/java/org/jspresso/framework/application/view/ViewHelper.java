@@ -54,26 +54,27 @@ public final class ViewHelper {
    * @return the view navigated to.
    */
   public static <T> IView<T> navigate(IView<T> fromView, int... viewPath) {
+    if (viewPath == null) {
+      return null;
+    }
     IView<T> target = fromView;
-    if (viewPath != null) {
-      for (int nextIndex : viewPath) {
-        if (target != null) {
-          if (nextIndex < 0) {
-            for (int j = 0; j > nextIndex; j--) {
-              if (target != null) {
-                target = target.getParent();
-              }
+    for (int nextIndex : viewPath) {
+      if (target != null) {
+        if (nextIndex < 0) {
+          for (int j = 0; j > nextIndex; j--) {
+            if (target != null) {
+              target = target.getParent();
             }
+          }
+        } else {
+          if (target instanceof ICompositeView<?> && ((ICompositeView<?>) target).getChildren() != null
+              && nextIndex < ((ICompositeView<?>) target).getChildren().size()) {
+            target = ((ICompositeView<T>) target).getChildren().get(nextIndex);
+          } else if (target instanceof IMapView<?> && ((IMapView<?>) target).getCurrentView() != null
+              && nextIndex == 0) {
+            target = ((IMapView<T>) target).getCurrentView();
           } else {
-            if (target instanceof ICompositeView<?> && ((ICompositeView<?>) target).getChildren() != null
-                && nextIndex < ((ICompositeView<?>) target).getChildren().size()) {
-              target = ((ICompositeView<T>) target).getChildren().get(nextIndex);
-            } else if (target instanceof IMapView<?> && ((IMapView<?>) target).getCurrentView() != null
-                && nextIndex == 0) {
-              target = ((IMapView<T>) target).getCurrentView();
-            } else {
-              target = null;
-            }
+            target = null;
           }
         }
       }
