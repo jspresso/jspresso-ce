@@ -19,6 +19,7 @@
 package org.jspresso.framework.view.descriptor.basic;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.jspresso.framework.view.ICompositeView;
@@ -31,6 +32,11 @@ import org.jspresso.framework.view.IView;
  * @author Vincent Vandenschrick
  */
 public final class ViewHelper {
+
+  /**
+   * The constant INVALID_VIEW_PATH.
+   */
+  public static int[] INVALID_VIEW_PATH = new int[0];
 
   /**
    * Constructs a new {@code ViewHelper} instance.
@@ -49,9 +55,9 @@ public final class ViewHelper {
    * @return The List of found view.
    */
   public static List<IView<?>> findChildViews(String permId, IView<?> root) {
-    List<IView<?>> found = new ArrayList<>();
-    findChildViews(permId, root, found);
-    return found;
+    List<IView<?>> childViews = new ArrayList<>();
+    findChildViews(permId, root, childViews);
+    return childViews;
   }
 
   private static void findChildViews(String permId, IView<?> parent, List<IView<?>> found) {
@@ -73,6 +79,116 @@ public final class ViewHelper {
         findChildViews(permId, currentView, found);
       }
     }
+  }
 
+  /**
+   * Starts from a view and navigates the view hierarchy following an index
+   * navigation path.
+   *
+   * @param <T>
+   *     The root class of the view peers.
+   * @param fromView
+   *     the view to start from.
+   * @param viewPath
+   *     the view index path to follow.
+   *     <ul>
+   *     <li>A positive integer n means the nth child.</li>
+   *     <li>A negative integer -n means the nth parent.</li>
+   *     </ul>
+   * @return the view navigated to.
+   */
+  public static <T> IView<T> navigate(IView<T> fromView, int... viewPath) {
+    if (viewPath == INVALID_VIEW_PATH) {
+      return null;
+    }
+    IView<T> target = fromView;
+    if (viewPath != null) {
+      for (int nextIndex : viewPath) {
+        if (target != null) {
+          if (nextIndex < 0) {
+            for (int j = 0; j > nextIndex; j--) {
+              if (target != null) {
+                target = target.getParent();
+              }
+            }
+          } else {
+            if (target instanceof ICompositeView<?> && ((ICompositeView<?>) target).getChildren() != null
+                && nextIndex < ((ICompositeView<?>) target).getChildren().size()) {
+              target = ((ICompositeView<T>) target).getChildren().get(nextIndex);
+            } else if (target instanceof IMapView<?> && ((IMapView<?>) target).getCurrentView() != null
+                && nextIndex == 0) {
+              target = ((IMapView<T>) target).getCurrentView();
+            } else {
+              target = null;
+            }
+          }
+        }
+      }
+    }
+    return target;
+  }
+
+  /**
+   * Computes a view path from a permId and a starting view.
+   *
+   * @param permId
+   *     the perm id
+   * @param fromView
+   *     the from view
+   * @return the int [ ]
+   */
+  public static int[] getViewPathFromPermId(String permId, IView<?> fromView) {
+    List<Integer> viewPathAsList = new ArrayList<>();
+    IView<?> rootView = fromView;
+    IView<?> rootViewParent = rootView.getParent();
+    while (rootViewParent != null) {
+      // Climb up the view hierarchy
+      viewPathAsList.add(Integer.valueOf(-1));
+      rootView = rootViewParent;
+      rootViewParent = rootView.getParent();
+    }
+    // rootView is now the root of the view hierarchy
+    // we must now navigate the children until we find the right permId
+    boolean permIdFound = findPermId(permId, rootView, viewPathAsList);
+    if (permIdFound) {
+      int[] viewPath = new int[viewPathAsList.size()];
+      for (int i = 0; i < viewPath.length; i++) {
+        viewPath[i] = viewPathAsList.get(i);
+      }
+      return viewPath;
+    }
+    return INVALID_VIEW_PATH;
+  }
+
+  private static boolean findPermId(String permId, IView<?> fromView, List<Integer> viewPathBuffer) {
+    String viewPermId = null;
+    if (fromView.getDescriptor() != null) {
+      viewPermId = fromView.getDescriptor().getPermId();
+    }
+    if (permId.equals(viewPermId)) {
+      return true;
+    }
+    List<? extends IView<?>> children = null;
+    if (fromView instanceof ICompositeView<?>) {
+      children = ((ICompositeView) fromView).getChildren();
+    } else if (fromView instanceof IMapView<?>) {
+      IView<?> currentView = ((IMapView) fromView).getCurrentView();
+      if (currentView != null) {
+        children = Arrays.asList(currentView);
+      }
+    }
+    if (children != null) {
+      for (int i = 0; i < children.size(); i++) {
+        IView<?> child = children.get(i);
+        List<Integer> childViewPathBuffer = new ArrayList<>();
+        boolean foundInChild = findPermId(permId, child, childViewPathBuffer);
+        if (foundInChild) {
+          viewPathBuffer.add(Integer.valueOf(i));
+          viewPathBuffer.addAll(childViewPathBuffer);
+          return true;
+        }
+      }
+    }
+    return false;
   }
 }

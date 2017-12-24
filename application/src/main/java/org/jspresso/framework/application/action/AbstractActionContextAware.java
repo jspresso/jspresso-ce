@@ -29,7 +29,6 @@ import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.IFrontendController;
 import org.jspresso.framework.application.model.Module;
-import org.jspresso.framework.application.view.ViewHelper;
 import org.jspresso.framework.binding.ConnectorHelper;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
@@ -41,6 +40,7 @@ import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.ViewHelper;
 
 /**
  * Abstract class for all objects that need to manipulate an action context. It
@@ -51,8 +51,6 @@ import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractActionContextAware {
-
-  private final static int[] EMPTY_PATH = new int[0];
 
   /**
    * Gets the (string) action command out of the context. The action command is
@@ -155,7 +153,7 @@ public abstract class AbstractActionContextAware {
    * @return the model.
    */
   protected <T> T getModel(Map<String, Object> context) {
-    return getModel(EMPTY_PATH, context);
+    return getModel(null, context);
   }
 
   /**
@@ -215,7 +213,7 @@ public abstract class AbstractActionContextAware {
    * @return the model connector this action was triggered on.
    */
   protected IValueConnector getModelConnector(Map<String, Object> context) {
-    return getModelConnector(EMPTY_PATH, context);
+    return getModelConnector((int[]) null, context);
   }
 
   /**
@@ -424,7 +422,7 @@ public abstract class AbstractActionContextAware {
    * @return the selected indices stored in the action context.
    */
   protected int[] getSelectedIndices(Map<String, Object> context) {
-    return getSelectedIndices(EMPTY_PATH, context);
+    return getSelectedIndices(null, context);
   }
 
   /**
@@ -491,7 +489,7 @@ public abstract class AbstractActionContextAware {
    * @return the selected model.
    */
   protected <T> T getSelectedModel(Map<String, Object> context) {
-    return getSelectedModel(EMPTY_PATH, context);
+    return getSelectedModel(null, context);
   }
 
   /**
@@ -556,7 +554,7 @@ public abstract class AbstractActionContextAware {
    * @return the list of selected models.
    */
   protected <T> List<T> getSelectedModels(Map<String, Object> context) {
-    return getSelectedModels(EMPTY_PATH, context);
+    return getSelectedModels(null, context);
   }
 
   /**
@@ -659,7 +657,7 @@ public abstract class AbstractActionContextAware {
    *     the action context.
    */
   protected void setSelectedIndices(int[] selectedIndices, Map<String, Object> context) {
-    setSelectedIndices(EMPTY_PATH, selectedIndices, context);
+    setSelectedIndices(null, selectedIndices, context);
   }
 
   /**
@@ -719,7 +717,7 @@ public abstract class AbstractActionContextAware {
    *     the action context.
    */
   protected void setSelectedModels(Collection<?> selectedModels, Map<String, Object> context) {
-    setSelectedModels(EMPTY_PATH, selectedModels, context);
+    setSelectedModels(null, selectedModels, context);
   }
 
   /**
@@ -798,7 +796,7 @@ public abstract class AbstractActionContextAware {
    * @return the view this action was triggered on.
    */
   protected <T> IView<T> getView(Map<String, Object> context) {
-    return getView(EMPTY_PATH, context);
+    return getView(null, context);
   }
 
   /**
@@ -874,7 +872,7 @@ public abstract class AbstractActionContextAware {
    * @return the value connector this action was triggered on.
    */
   protected IValueConnector getViewConnector(Map<String, Object> context) {
-    return getViewConnector(EMPTY_PATH, context);
+    return getViewConnector(null, context);
   }
 
   /**
