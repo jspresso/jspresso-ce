@@ -1162,6 +1162,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     if (propertyViewDescriptor.isMultiLine()) {
       viewComponent = createRHtmlArea(propertyViewDescriptor);
       ((RHtmlArea) viewComponent).setReadOnly(true);
+    } else if (propertyViewDescriptor.getAction() != null) {
+      viewComponent = createRLink(propertyViewDescriptor, false);
     } else {
       viewComponent = createRLabel(propertyViewDescriptor, false);
     }
