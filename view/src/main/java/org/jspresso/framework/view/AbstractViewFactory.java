@@ -964,8 +964,10 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    * @return the action list.
    */
   protected List<G> createBinaryActions(IView<E> propertyView, IActionHandler actionHandler, Locale locale) {
-    final G openAction = getActionFactory().createAction(openFileAsBinaryPropertyAction, actionHandler, propertyView, locale);
-    final G saveAction = getActionFactory().createAction(saveBinaryPropertyAsFileAction, actionHandler, propertyView, locale);
+    final G openAction = getActionFactory().createAction(openFileAsBinaryPropertyAction, actionHandler, propertyView,
+        locale);
+    final G saveAction = getActionFactory().createAction(saveBinaryPropertyAsFileAction, actionHandler, propertyView,
+        locale);
     final G resetAction = getActionFactory().createAction(resetPropertyAction, actionHandler, propertyView, locale);
     G infoAction = getActionFactory().createAction(binaryPropertyInfoAction, actionHandler, propertyView, locale);
     List<G> binaryActions = new ArrayList<>();
@@ -980,15 +982,16 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     boolean writable = propertyView.getConnector().isWritable();
     getActionFactory().setActionEnabled(openAction, writable);
     getActionFactory().setActionEnabled(resetAction, writable);
-    propertyView.getConnector().addPropertyChangeListener(IValueConnector.WRITABLE_PROPERTY, new PropertyChangeListener() {
+    propertyView.getConnector().addPropertyChangeListener(IValueConnector.WRITABLE_PROPERTY,
+        new PropertyChangeListener() {
 
-      @Override
-      public void propertyChange(PropertyChangeEvent evt) {
-        boolean writable = (boolean) evt.getNewValue();
-        getActionFactory().setActionEnabled(openAction, writable);
-        getActionFactory().setActionEnabled(resetAction, writable);
-      }
-    });
+          @Override
+          public void propertyChange(PropertyChangeEvent evt) {
+            boolean writable = (boolean) evt.getNewValue();
+            getActionFactory().setActionEnabled(openAction, writable);
+            getActionFactory().setActionEnabled(resetAction, writable);
+          }
+        });
     return binaryActions;
   }
 
@@ -1414,8 +1417,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     }
     if (backgroundKey != null) {
       IPropertyDescriptor backgroundProperty = modelDescriptor.getPropertyDescriptor(backgroundKey);
-      if (backgroundProperty != null
-          && (backgroundProperty instanceof IStringPropertyDescriptor
+      if (backgroundProperty != null && (backgroundProperty instanceof IStringPropertyDescriptor
           || backgroundProperty instanceof IColorPropertyDescriptor)) {
         dynamicBackgroundProperty = backgroundProperty.getName();
       }
@@ -3179,6 +3181,19 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
             (Collection<?>) viewSelectionConnector.getConnectorValue()));
       }
     });
+    viewConnector.addPropertyChangeListener(IValueConnector.MODEL_CONNECTOR_PROPERTY, new PropertyChangeListener() {
+
+      @Override
+      public void propertyChange(PropertyChangeEvent evt) {
+        ModelRefPropertyConnector parentConnector = (ModelRefPropertyConnector) viewConnector.getModelProvider();
+        if (parentConnector != null) {
+          getMvcBinder().bind(viewSelectionConnector,
+              parentConnector.getChildConnector(viewSelectionConnector.getId()));
+        } else {
+          getMvcBinder().bind(viewSelectionConnector, null);
+        }
+      }
+    });
     viewSelectionConnector.addPropertyChangeListener(IValueConnector.MODEL_CONNECTOR_PROPERTY,
         new PropertyChangeListener() {
 
@@ -3238,14 +3253,9 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
             selectionModelDescriptor.getName() + "Element", rowDescriptor.getToHtmlProperty());
         ICollectionConnector viewSelectionConnector = getConnectorFactory().createCollectionConnector(
             selectionModelDescriptor.getName(), getMvcBinder(), rowConnectorPrototype);
+        viewSelectionConnector.setModelDescriptor(selectionModelDescriptor);
         ICollectionConnectorProvider viewConnector = (ICollectionConnectorProvider) view.getConnector();
         bindSelectionConnector(viewConnector, viewSelectionConnector);
-        IConfigurableCollectionConnectorProvider wrapperConnector = getConnectorFactory()
-            .createConfigurableCollectionConnectorProvider(ModelRefPropertyConnector.THIS_PROPERTY, null);
-        wrapperConnector.addChildConnector(viewSelectionConnector);
-        wrapperConnector.addChildConnector(viewConnector);
-        wrapperConnector.setCollectionConnectorProvider(viewConnector);
-        view.setConnector(wrapperConnector);
       }
       if (viewDescriptor.getItemSelectionAction() != null) {
         ((IItemSelectable) view.getConnector()).addItemSelectionListener(

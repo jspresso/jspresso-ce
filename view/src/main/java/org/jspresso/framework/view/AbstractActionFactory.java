@@ -58,16 +58,15 @@ import org.jspresso.framework.view.action.IDisplayableAction;
 /**
  * Abstract base class for action factories.
  *
- * @author Vincent Vandenschrick
  * @param <E>
- *          the actual action class created.
+ *     the actual action class created.
  * @param <F>
- *          the actual component class the created actions are installed in.
+ *     the actual component class the created actions are installed in.
  * @param <G>
- *          the actual icon class the created actions support.
+ *     the actual icon class the created actions support.
+ * @author Vincent Vandenschrick
  */
-public abstract class AbstractActionFactory<E, F, G> implements
-    IActionFactory<E, F> {
+public abstract class AbstractActionFactory<E, F, G> implements IActionFactory<E, F> {
 
   private IIconFactory<G> iconFactory;
 
@@ -77,8 +76,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
    * {@inheritDoc}
    */
   @Override
-  public E createAction(IAction action, IActionHandler actionHandler,
-      IView<F> view, Locale locale) {
+  public E createAction(IAction action, IActionHandler actionHandler, IView<F> view, Locale locale) {
     if (action == null) {
       return null;
     }
@@ -89,21 +87,20 @@ public abstract class AbstractActionFactory<E, F, G> implements
    * Creates the initial action context.
    *
    * @param actionHandler
-   *          the action handler.
+   *     the action handler.
    * @param view
-   *          the view.
+   *     the view.
    * @param viewConnector
-   *          the view connector.
+   *     the view connector.
    * @param actionCommand
-   *          the action command.
+   *     the action command.
    * @param actionWidget
-   *          the widget this action was triggered from.
+   *     the widget this action was triggered from.
    * @return the initial action context.
    */
   @Override
-  public Map<String, Object> createActionContext(IActionHandler actionHandler,
-      IView<F> view, IValueConnector viewConnector, String actionCommand,
-      F actionWidget) {
+  public Map<String, Object> createActionContext(IActionHandler actionHandler, IView<F> view,
+                                                 IValueConnector viewConnector, String actionCommand, F actionWidget) {
     Map<String, Object> actionContext = new HashMap<>();
 
     IModelDescriptor modelDescriptor = null;
@@ -116,14 +113,12 @@ public abstract class AbstractActionFactory<E, F, G> implements
     }
     IValueConnector refinedViewConnector = viewConnector;
     if (modelDescriptor instanceof ICollectionDescriptor<?>) {
-      refinedViewConnector = ((ICollectionConnectorProvider) viewConnector)
-          .getCollectionConnector();
+      refinedViewConnector = ((ICollectionConnectorProvider) viewConnector).getCollectionConnector();
     }
     actionContext.put(ActionContextConstants.VIEW, view);
     actionContext.put(ActionContextConstants.MODEL_DESCRIPTOR, modelDescriptor);
     actionContext.put(ActionContextConstants.SOURCE_COMPONENT, sourceComponent);
-    actionContext.put(ActionContextConstants.VIEW_CONNECTOR,
-        refinedViewConnector);
+    actionContext.put(ActionContextConstants.VIEW_CONNECTOR, refinedViewConnector);
     actionContext.put(ActionContextConstants.ACTION_COMMAND, actionCommand);
     actionContext.put(ActionContextConstants.ACTION_WIDGET, actionWidget);
     return actionContext;
@@ -133,7 +128,7 @@ public abstract class AbstractActionFactory<E, F, G> implements
    * Sets the iconFactory.
    *
    * @param iconFactory
-   *          the iconFactory to set.
+   *     the iconFactory to set.
    */
   public void setIconFactory(IIconFactory<G> iconFactory) {
     this.iconFactory = iconFactory;
@@ -143,17 +138,16 @@ public abstract class AbstractActionFactory<E, F, G> implements
    * Creates and attach the necessary action gates.
    *
    * @param action
-   *          the displayable Jspresso action.
+   *     the displayable Jspresso action.
    * @param actionHandler
-   *          the action handler.
+   *     the action handler.
    * @param view
-   *          the view.
+   *     the view.
    * @param uiAction
-   *          the created ui specific action.
+   *     the created ui specific action.
    */
 
-  protected void attachActionGates(IDisplayableAction action,
-      IActionHandler actionHandler, IView<F> view, E uiAction) {
+  protected void attachActionGates(IDisplayableAction action, IActionHandler actionHandler, IView<F> view, E uiAction) {
     try {
       actionHandler.pushToSecurityContext(action);
       IModelDescriptor modelDescriptor = null;
@@ -168,73 +162,56 @@ public abstract class AbstractActionFactory<E, F, G> implements
       if (actionabilityGates != null) {
         Collection<IGate> clonedGates = new HashSet<>();
         for (IGate gate : actionabilityGates) {
-          if (!(gate instanceof ISecurable)
-              || actionHandler.isAccessGranted((ISecurable) gate)) {
+          if (!(gate instanceof ISecurable) || actionHandler.isAccessGranted((ISecurable) gate)) {
             final IGate clonedGate = gate.clone();
             applyGateDependencyInjection(clonedGate, actionHandler);
             if (clonedGate instanceof IModelGate && viewConnector != null) {
               if (((IModelGate) clonedGate).isCollectionBased()) {
-                if (/*
-                     * modelDescriptor instanceof
-                     * ICollectionPropertyDescriptor<?>
-                     */viewConnector instanceof ICollectionConnectorProvider) {
+                if (viewConnector instanceof ICollectionConnectorProvider) {
                   ((IModelGate) clonedGate).setModel(null);
                   // tracks children connectors selection
-                  ((ICollectionConnectorProvider) viewConnector)
-                      .getCollectionConnector().addSelectionChangeListener(
-                          new ISelectionChangeListener() {
-
-                            @Override
-                            public void selectionChange(SelectionChangeEvent evt) {
-                              ICollectionConnector collConnector = (ICollectionConnector) evt
-                                  .getSource();
-                              int[] newSelection = evt.getNewSelection();
-                              assignCollectionBasedGateModel(clonedGate,
-                                  collConnector, newSelection);
-                            }
-                          });
-                  // tracks selected children model change
-                  ((ICollectionConnectorProvider) viewConnector)
-                      .getCollectionConnector().addValueChangeListener(
-                          new IValueChangeListener() {
-
-                            @Override
-                            public void valueChange(ValueChangeEvent evt) {
-                              ICollectionConnector collConnector = (ICollectionConnector) evt
-                                  .getSource();
-                              int[] newSelection = collConnector
-                                  .getSelectedIndices();
-                              assignCollectionBasedGateModel(clonedGate,
-                                  collConnector, newSelection);
-                            }
-                          });
-                  // to respect init state
-                  assignCollectionBasedGateModel(clonedGate,
-                      ((ICollectionConnectorProvider) viewConnector)
-                          .getCollectionConnector(),
-                      ((ICollectionConnectorProvider) viewConnector)
-                          .getCollectionConnector().getSelectedIndices());
-                } else if (viewConnector instanceof IItemSelectable) {
-                  ((IModelGate) clonedGate).setModel(null);
-                  ((IItemSelectable) viewConnector)
-                      .addItemSelectionListener(new IItemSelectionListener() {
+                  ((ICollectionConnectorProvider) viewConnector).getCollectionConnector().addSelectionChangeListener(
+                      new ISelectionChangeListener() {
 
                         @Override
-                        public void selectedItemChange(ItemSelectionEvent event) {
-                          Object selectedItem = event.getSelectedItem();
-                          if (selectedItem == event.getSource()) {
-                            return;
-                          }
-                          assignCollectionBasedGateModel(clonedGate,
-                              selectedItem);
+                        public void selectionChange(SelectionChangeEvent evt) {
+                          ICollectionConnector collConnector = (ICollectionConnector) evt.getSource();
+                          int[] newSelection = evt.getNewSelection();
+                          assignCollectionBasedGateModel(clonedGate, collConnector, newSelection);
+                        }
+                      });
+                  // tracks selected children model change
+                  ((ICollectionConnectorProvider) viewConnector).getCollectionConnector().addValueChangeListener(
+                      new IValueChangeListener() {
+
+                        @Override
+                        public void valueChange(ValueChangeEvent evt) {
+                          ICollectionConnector collConnector = (ICollectionConnector) evt.getSource();
+                          int[] newSelection = collConnector.getSelectedIndices();
+                          assignCollectionBasedGateModel(clonedGate, collConnector, newSelection);
                         }
                       });
                   // to respect init state
                   assignCollectionBasedGateModel(clonedGate,
-                      ((IItemSelectable) viewConnector).getSelectedItem());
+                      ((ICollectionConnectorProvider) viewConnector).getCollectionConnector(),
+                      ((ICollectionConnectorProvider) viewConnector).getCollectionConnector().getSelectedIndices());
+                } else if (viewConnector instanceof IItemSelectable) {
+                  ((IModelGate) clonedGate).setModel(null);
+                  ((IItemSelectable) viewConnector).addItemSelectionListener(new IItemSelectionListener() {
+
+                    @Override
+                    public void selectedItemChange(ItemSelectionEvent event) {
+                      Object selectedItem = event.getSelectedItem();
+                      if (selectedItem == event.getSource()) {
+                        return;
+                      }
+                      assignCollectionBasedGateModel(clonedGate, selectedItem);
+                    }
+                  });
+                  // to respect init state
+                  assignCollectionBasedGateModel(clonedGate, ((IItemSelectable) viewConnector).getSelectedItem());
                 } else {
-                  bindSimpleGateModel(clonedGate, viewConnector,
-                      modelDescriptor);
+                  bindSimpleGateModel(clonedGate, viewConnector, modelDescriptor);
                 }
               } else {
                 bindSimpleGateModel(clonedGate, viewConnector, modelDescriptor);
@@ -254,12 +231,11 @@ public abstract class AbstractActionFactory<E, F, G> implements
    * Performs dependency injection on a gate.
    *
    * @param gate
-   *          the gate.
+   *     the gate.
    * @param actionHandler
-   *          the action handler.
+   *     the action handler.
    */
-  protected void applyGateDependencyInjection(IGate gate,
-      IActionHandler actionHandler) {
+  protected void applyGateDependencyInjection(IGate gate, IActionHandler actionHandler) {
     if (gate instanceof ISecurityHandlerAware) {
       ((ISecurityHandlerAware) gate).setSecurityHandler(actionHandler);
     }
@@ -271,14 +247,11 @@ public abstract class AbstractActionFactory<E, F, G> implements
     }
   }
 
-  private void bindSimpleGateModel(final IGate gate,
-      IValueConnector viewConnector, IModelDescriptor modelDescriptor) {
+  private void bindSimpleGateModel(final IGate gate, IValueConnector viewConnector, IModelDescriptor modelDescriptor) {
     if (modelDescriptor instanceof IPropertyDescriptor) {
       // Binds to the model provider
-      if (viewConnector.getModelConnector() != null
-          && viewConnector.getModelConnector().getModelProvider() != null) {
-        ((IModelGate) gate).setModel(viewConnector.getModelConnector()
-            .getModelProvider().getModel());
+      if (viewConnector.getModelConnector() != null && viewConnector.getModelConnector().getModelProvider() != null) {
+        ((IModelGate) gate).setModel(viewConnector.getModelConnector().getModelProvider().getModel());
         // the following disables table cell editors in swing.
         // } else {
         // ((IModelGate) gate).setModel(null);
@@ -290,32 +263,24 @@ public abstract class AbstractActionFactory<E, F, G> implements
           ((IModelGate) gate).setModel(evt.getNewValue());
         }
       };
-      viewConnector.addPropertyChangeListener(
-          IValueConnector.MODEL_CONNECTOR_PROPERTY,
-          new PropertyChangeListener() {
+      viewConnector.addPropertyChangeListener(IValueConnector.MODEL_CONNECTOR_PROPERTY, new PropertyChangeListener() {
 
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-              IValueConnector oldModelConnector = (IValueConnector) evt
-                  .getOldValue();
-              IValueConnector newModelConnector = (IValueConnector) evt
-                  .getNewValue();
-              if (oldModelConnector != null) {
-                oldModelConnector.getModelProvider().removeModelChangeListener(
-                    modelChangeListener);
-              }
-              if (newModelConnector != null
-                  && newModelConnector.getModelProvider() != null) {
-                ((IModelGate) gate).setModel(newModelConnector
-                    .getModelProvider().getModel());
-                newModelConnector.getModelProvider().addModelChangeListener(
-                    modelChangeListener);
-                // the following disables table cell editors in swing.
-                // } else {
-                // ((IModelGate) gate).setModel(null);
-              }
-            }
-          });
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
+          IValueConnector oldModelConnector = (IValueConnector) evt.getOldValue();
+          IValueConnector newModelConnector = (IValueConnector) evt.getNewValue();
+          if (oldModelConnector != null) {
+            oldModelConnector.getModelProvider().removeModelChangeListener(modelChangeListener);
+          }
+          if (newModelConnector != null && newModelConnector.getModelProvider() != null) {
+            ((IModelGate) gate).setModel(newModelConnector.getModelProvider().getModel());
+            newModelConnector.getModelProvider().addModelChangeListener(modelChangeListener);
+            // the following disables table cell editors in swing.
+            // } else {
+            // ((IModelGate) gate).setModel(null);
+          }
+        }
+      });
     } else {
       // simply binds to the value.
       ((IModelGate) gate).setModel(viewConnector.getConnectorValue());
@@ -350,20 +315,20 @@ public abstract class AbstractActionFactory<E, F, G> implements
   /**
    * Sets live debug UI structure.
    *
-   * @param liveDebugUI the live debug uI structure
+   * @param liveDebugUI
+   *     the live debug uI structure
    */
   public void setLiveDebugUI(boolean liveDebugUI) {
     this.liveDebugUI = liveDebugUI;
   }
 
-  private void assignCollectionBasedGateModel(final IGate gate,
-      ICollectionConnector collConnector, int... selectedIndices) {
+  private void assignCollectionBasedGateModel(final IGate gate, ICollectionConnector collConnector,
+                                              int... selectedIndices) {
     Set<Object> selectedModels = null;
     if (selectedIndices != null && selectedIndices.length > 0) {
       selectedModels = new HashSet<>();
       for (int selectedIndice : selectedIndices) {
-        IValueConnector childConnector = collConnector
-            .getChildConnector(selectedIndice);
+        IValueConnector childConnector = collConnector.getChildConnector(selectedIndice);
         if (childConnector != null) {
           selectedModels.add(childConnector.getConnectorValue());
         }
@@ -372,12 +337,10 @@ public abstract class AbstractActionFactory<E, F, G> implements
     ((IModelGate) gate).setModel(selectedModels);
   }
 
-  private void assignCollectionBasedGateModel(final IGate gate,
-      Object selectedItem) {
+  private void assignCollectionBasedGateModel(final IGate gate, Object selectedItem) {
     if (selectedItem != null) {
       if (selectedItem instanceof IValueConnector) {
-        Object connectorValue = ((IValueConnector) selectedItem)
-            .getConnectorValue();
+        Object connectorValue = ((IValueConnector) selectedItem).getConnectorValue();
         if (connectorValue != null) {
           ((IModelGate) gate).setModel(Collections.singleton(connectorValue));
         } else {
@@ -394,8 +357,10 @@ public abstract class AbstractActionFactory<E, F, G> implements
   /**
    * Complete description with live debug uI.
    *
-   * @param action the action
-   * @param i18nDescription the i 18 n description
+   * @param action
+   *     the action
+   * @param i18nDescription
+   *     the i 18 n description
    * @return the completed action description
    */
   protected String completeDescriptionWithLiveDebugUI(IAction action, String i18nDescription) {
@@ -419,9 +384,9 @@ public abstract class AbstractActionFactory<E, F, G> implements
      * Constructs a new {@code GatesListener} instance.
      *
      * @param action
-     *          the action to (de)activate based on gates state.
+     *     the action to (de)activate based on gates state.
      * @param gates
-     *          the gates that determine action state.
+     *     the gates that determine action state.
      */
     public GatesListener(E action, Collection<IGate> gates) {
       this.action = action;
