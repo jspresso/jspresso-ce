@@ -183,16 +183,22 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      */
     _createExtraActionsToolBarButton: function (extraActions) {
       var extraButton = new qx.ui.mobile.toolbar.Button("...");
-      extraButton.removeCssClass("toolbar-button");
+      //extraButton.removeCssClass("toolbar-button");
       var extraMenu = new qx.ui.mobile.dialog.Menu();
       extraMenu.getSelectionList().setDelegate({
         configureItem: function (item, data, row) {
           item.setTitle(data.getName());
           if (data.getIcon()) {
-            item.setImage(org.jspresso.framework.view.qx.AbstractQxViewFactory.completeForSVG(data.getIcon().getImageUrlSpec()));
+            item.setImage(
+                org.jspresso.framework.view.qx.AbstractQxViewFactory.completeForSVG(data.getIcon().getImageUrlSpec()));
           }
           item.setEnabled(data.getEnabled());
           item.setSelectable(data.getEnabled());
+          if (data.getHiddenWhenDisabled() && !data.getEnabled()) {
+            item.setVisibility("excluded");
+          } else {
+            item.setVisibility("visible");
+          }
         }
       });
       for (var i = 0; i < extraActions.length; i++) {
@@ -239,7 +245,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
         toolBar.add(actionComponent);
       }
-      toolBar.addListenerOnce("appear", function (e) {
+      toolBar.addListener("appear", function (e) {
         qx.event.Timer.once(function () {
               var maxH = 0;
               var children = toolBar.getChildren();
@@ -250,7 +256,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
               }
               if (maxH > 0) {
                 for (childI = 0; childI < children.length; childI++) {
-                  children[childI]._setStyle("height", maxH + "px");
+                  if (children[childI].getVisibility() == "visible") {
+                    children[childI]._setStyle("height", maxH + "px");
+                  }
                 }
               }
             }, this,
