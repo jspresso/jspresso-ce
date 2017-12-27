@@ -2351,27 +2351,25 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
       viewComponent.setRowAction(
           getActionFactory().createAction(viewDescriptor.getRowAction(), actionHandler, view, locale));
     }
-    bindRepeaterConnector(connector, viewComponent, viewDescriptor, actionHandler, locale);
+    bindRepeaterConnector(view, actionHandler, locale);
     return view;
   }
 
   /**
    * Bind repeater connector.
    *
-   * @param connector
-   *     the connector
-   * @param repeater
-   *     the repeater
-   * @param viewDescriptor
-   *     the view descriptor
+   * @param repeaterView
+   *     the repeater view
    * @param actionHandler
    *     the action handler
    * @param locale
    *     the locale
    */
-  protected void bindRepeaterConnector(ICollectionConnector connector, final RComponent repeater,
-                                       final IRepeaterViewDescriptor viewDescriptor, final IActionHandler actionHandler,
+  protected void bindRepeaterConnector(final IView<RComponent> repeaterView, final IActionHandler actionHandler,
                                        final Locale locale) {
+    IValueConnector connector = repeaterView.getConnector();
+    final IRepeaterViewDescriptor viewDescriptor = (IRepeaterViewDescriptor) repeaterView.getDescriptor();
+    final RComponent repeater = repeaterView.getPeer();
     final Map<Integer, IView<RComponent>> childIds = new HashMap<>();
     connector.addValueChangeListener(new IValueChangeListener() {
       @Override
@@ -2385,6 +2383,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
           if (!childIds.containsKey(childId)) {
             IView<RComponent> extraSection = createView(viewDescriptor.getRepeatedViewDescriptor(), actionHandler,
                 locale);
+            extraSection.setParent(repeaterView);
             RComponent peer = extraSection.getPeer();
             RemoteValueState state = ((IRemoteStateOwner) elementConnector).getState();
             peer.setState(state);

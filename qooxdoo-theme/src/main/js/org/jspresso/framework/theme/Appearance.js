@@ -920,6 +920,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         "htmlarea": "textarea",
 
         "repeater": {
+          include: "scrollarea",
+          alias: "scrollarea",
           style: function (states) {
             return {
               margin: 10,

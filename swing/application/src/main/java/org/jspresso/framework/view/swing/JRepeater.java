@@ -41,7 +41,7 @@ import org.jspresso.framework.util.event.IValueChangeListener;
 import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.IViewFactory;
-import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.jspresso.framework.view.descriptor.IRepeaterViewDescriptor;
 
 /**
  * Repeater for JComponents.
@@ -50,27 +50,23 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  */
 public class JRepeater {
 
-  private IViewDescriptor                        repeated;
+  private IView<JComponent>                      repeaterView;
   private Container                              container;
   private IViewFactory<JComponent, Icon, Action> viewFactory;
   private Action                                 rowAction;
   private IActionHandler                         actionHandler;
   private Locale                                 locale;
   private IMvcBinder                             mvcBinder;
-  private ICollectionConnector                   collectionConnector;
-
-  private Map<IValueConnector, JComponent> componentTank;
-  private MouseListener                    selectionListener;
+  private Map<IValueConnector, JComponent>       componentTank;
+  private MouseListener                          selectionListener;
 
   /**
    * Instantiates a new J repeater.
    *
+   * @param repeaterView
+   *     the repeater view
    * @param container
    *     the container
-   * @param repeated
-   *     the repeated
-   * @param connector
-   *     the connector
    * @param viewFactory
    *     the view factory
    * @param mvcBinder
@@ -82,18 +78,18 @@ public class JRepeater {
    * @param locale
    *     the locale
    */
-  public JRepeater(Container container, IViewDescriptor repeated, ICollectionConnector connector,
-                   DefaultSwingViewFactory viewFactory, IMvcBinder mvcBinder, Action rowAction, IActionHandler actionHandler,
-                   Locale locale) {
-    this.repeated = repeated;
+  public JRepeater(IView<JComponent> repeaterView, JComponent container, DefaultSwingViewFactory viewFactory,
+                   IMvcBinder mvcBinder, Action rowAction, IActionHandler actionHandler, Locale locale) {
+    this.repeaterView = repeaterView;
     this.container = container;
     this.viewFactory = viewFactory;
     this.mvcBinder = mvcBinder;
     this.componentTank = new HashMap<>();
     this.actionHandler = actionHandler;
     this.locale = locale;
-    this.collectionConnector = connector;
     this.rowAction = rowAction;
+
+    ICollectionConnector collectionConnector = (ICollectionConnector) repeaterView.getConnector();
     collectionConnector.addValueChangeListener(new IValueChangeListener() {
       @Override
       public void valueChange(ValueChangeEvent evt) {
@@ -113,12 +109,16 @@ public class JRepeater {
   }
 
   private void rebindDataProvider() {
+    IRepeaterViewDescriptor viewDescriptor = (IRepeaterViewDescriptor) repeaterView.getDescriptor();
+    ICollectionConnector collectionConnector = (ICollectionConnector) repeaterView.getConnector();
     container.removeAll();
     for (int i = 0; i < collectionConnector.getChildConnectorCount(); i++) {
       IValueConnector child = collectionConnector.getChildConnector(i);
       JComponent component = componentTank.get(child);
       if (component == null) {
-        IView<JComponent> repeatedView = viewFactory.createView(repeated, actionHandler, locale);
+        IView<JComponent> repeatedView = viewFactory.createView(viewDescriptor.getRepeatedViewDescriptor(),
+            actionHandler, locale);
+        repeatedView.setParent(repeaterView);
         component = repeatedView.getPeer();
         deepAttachListener(component);
         mvcBinder.bind(repeatedView.getConnector(), child);
@@ -138,6 +138,7 @@ public class JRepeater {
   }
 
   private void childClicked(MouseEvent evt) {
+    ICollectionConnector collectionConnector = (ICollectionConnector) repeaterView.getConnector();
     Component child = (Component) evt.getSource();
     int index = -1;
     while (index < 0 && child != null) {

@@ -2006,7 +2006,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     if (viewDescriptor.getRowAction() != null) {
       rowAction = getActionFactory().createAction(viewDescriptor.getRowAction(), actionHandler, view, locale);
     }
-    new JRepeater(repeaterContainer, viewDescriptor.getRepeatedViewDescriptor(), connector, this, getMvcBinder(),
+    new JRepeater(view, repeaterContainer, this, getMvcBinder(),
         rowAction, actionHandler, locale);
     return view;
   }
