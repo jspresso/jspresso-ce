@@ -59,7 +59,19 @@ import org.jspresso.framework.model.entity.IEntity;
  */
 public abstract class AbstractQueryComponentsAction extends BackendAction {
 
-  private static final String COMPONENT_REFINER = "COMPONENT_REFINER";
+  /**
+   * The constant CRITERIA_FACTORY is &quot;CRITERIA_FACTORY&quot;.
+   */
+  public static final String CRITERIA_FACTORY  = "CRITERIA_FACTORY";
+  /**
+   * The constant CRITERIA_REFINER is &quot;CRITERIA_REFINER&quot;.
+   */
+  public static final String CRITERIA_REFINER  = "CRITERIA_REFINER";
+  /**
+   * The constant COMPONENT_REFINER is &quot;COMPONENT_REFINER&quot;.
+   */
+  public static final String COMPONENT_REFINER = "COMPONENT_REFINER";
+
   private IQueryComponentRefiner queryComponentRefiner;
   private EMergeMode             mergeMode;
   private boolean                useCountForPagination;
@@ -232,7 +244,8 @@ public abstract class AbstractQueryComponentsAction extends BackendAction {
   /**
    * Sets use count for pagination.
    *
-   * @param useCountForPagination the use count for pagination
+   * @param useCountForPagination
+   *     the use count for pagination
    */
   public void setUseCountForPagination(boolean useCountForPagination) {
     this.useCountForPagination = useCountForPagination;

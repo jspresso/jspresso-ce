@@ -22,9 +22,12 @@ import java.util.Map;
 
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.backend.action.AbstractQueryComponentsAction;
+import org.jspresso.framework.application.backend.action.IQueryComponentRefiner;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.model.FilterableBeanCollectionModule;
 import org.jspresso.framework.application.model.Module;
+import org.jspresso.framework.model.component.IQueryComponent;
 
 /**
  * Queries filter module and notify user of empty record set.
@@ -37,9 +40,12 @@ import org.jspresso.framework.application.model.Module;
  *     the actual action type used.
  * @author Vincent Vandenschrick
  */
-public class QueryFilterModuleAction<E, F, G> extends FrontendAction<E,F,G> {
+public class QueryFilterModuleAction<E, F, G> extends FrontendAction<E, F, G> {
 
-  private IAction emptyResultAction;
+  private IAction                emptyResultAction;
+  private IQueryComponentRefiner queryComponentRefiner;
+  private Object                 criteriaRefiner;
+  private Object                 criteriaFactory;
 
   /**
    * Execute boolean.
@@ -52,8 +58,22 @@ public class QueryFilterModuleAction<E, F, G> extends FrontendAction<E,F,G> {
    */
   @Override
   public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+    Module module = getModule(context);
+    if (module instanceof FilterableBeanCollectionModule) {
+      IQueryComponent filter = ((FilterableBeanCollectionModule) module).getFilter();
+      if (filter != null) {
+        if (queryComponentRefiner != null) {
+          filter.put(AbstractQueryComponentsAction.COMPONENT_REFINER, queryComponentRefiner);
+        }
+        if (criteriaFactory != null) {
+          filter.put(AbstractQueryComponentsAction.CRITERIA_FACTORY, criteriaFactory);
+        }
+        if (criteriaRefiner != null) {
+          filter.put(AbstractQueryComponentsAction.CRITERIA_REFINER, criteriaRefiner);
+        }
+      }
+    }
     boolean success = super.execute(actionHandler, context);
-    final Module module = getModule(context);
     if (module instanceof FilterableBeanCollectionModule) {
       if (((FilterableBeanCollectionModule) module).getModuleObjects() == null
           || ((FilterableBeanCollectionModule) module).getModuleObjects().isEmpty()) {
@@ -81,4 +101,44 @@ public class QueryFilterModuleAction<E, F, G> extends FrontendAction<E,F,G> {
   public void setEmptyResultAction(IAction emptyResultAction) {
     this.emptyResultAction = emptyResultAction;
   }
+
+
+  /**
+   * Sets query component refiner.
+   *
+   * @param queryComponentRefiner
+   *     the query component refiner
+   */
+  public void setQueryComponentRefiner(IQueryComponentRefiner queryComponentRefiner) {
+    this.queryComponentRefiner = queryComponentRefiner;
+  }
+
+  /**
+   * Sets criteria factory. Depending on the persistence layer used, it should be an instance of :
+   * <ul>
+   * <li>org.jspresso.framework.model.persistence.hibernate.criterion.ICriteriaFactory</li>
+   * <li>org.jspresso.framework.model.persistence.mongo.criterion.IQueryFactory</li>
+   * </ul>
+   *
+   * @param criteriaFactory
+   *     the criteria factory
+   */
+  public void setCriteriaFactory(Object criteriaFactory) {
+    this.criteriaFactory = criteriaFactory;
+  }
+
+  /**
+   * Sets criteria refiner. Depending on the persistence layer used, it should be an instance of :
+   * <ul>
+   * <li>org.jspresso.framework.application.backend.action.persistence.hibernate.ICriteriaRefiner</li>
+   * <li>org.jspresso.framework.application.backend.action.persistence.mongo.IQueryRefiner</li>
+   * </ul>
+   *
+   * @param criteriaRefiner
+   *     the criteria refiner
+   */
+  public void setCriteriaRefiner(Object criteriaRefiner) {
+    this.criteriaRefiner = criteriaRefiner;
+  }
+
 }

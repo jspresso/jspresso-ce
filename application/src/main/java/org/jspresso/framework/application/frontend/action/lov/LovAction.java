@@ -37,7 +37,9 @@ import org.slf4j.LoggerFactory;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.AbstractQbeAction;
+import org.jspresso.framework.application.backend.action.AbstractQueryComponentsAction;
 import org.jspresso.framework.application.backend.action.CreateQueryComponentAction;
+import org.jspresso.framework.application.backend.action.IQueryComponentRefiner;
 import org.jspresso.framework.application.backend.action.StaticQueryComponentsAction;
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
@@ -146,6 +148,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   private boolean                                    preselectItems;
   private Boolean                                    findOnType;
   private Boolean                                    findOnSet;
+  private IQueryComponentRefiner                     queryComponentRefiner;
+  private Object                                     criteriaRefiner;
+  private Object                                     criteriaFactory;
 
 
   /**
@@ -217,6 +222,15 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
 
     actionHandler.execute(createQueryComponentAction, context);
     IQueryComponent queryComponent = (IQueryComponent) context.get(IQueryComponent.QUERY_COMPONENT);
+    if (queryComponentRefiner != null) {
+      queryComponent.put(AbstractQueryComponentsAction.COMPONENT_REFINER, queryComponentRefiner);
+    }
+    if (criteriaFactory != null) {
+      queryComponent.put(AbstractQueryComponentsAction.CRITERIA_FACTORY, criteriaFactory);
+    }
+    if (criteriaRefiner != null) {
+      queryComponent.put(AbstractQueryComponentsAction.CRITERIA_REFINER, criteriaRefiner);
+    }
     queryComponent.setPageSize(getPageSize(erqDescriptor));
 
     autoCompletePropertyValue = queryComponent.refineValue(autoCompletePropertyValue, null);
@@ -330,8 +344,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
         }
       }
       handlePreselectedItem(preselectedItem, queryComponent, lovView);
-    }
-    feedContextWithDialog(erqDescriptor, queryComponent, lovView, actionHandler, context);
+    } feedContextWithDialog(erqDescriptor, queryComponent, lovView, actionHandler, context);
     if (context.get(FrontendAction.COMPONENT_TO_FOCUS) == null) {
       // To return to the action field once the dialog closes if and only if
       // The focus has not been explicitly set to something else.
@@ -984,5 +997,43 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
    */
   public void setPreselectItems(boolean preselectItems) {
     this.preselectItems = preselectItems;
+  }
+
+  /**
+   * Sets query component refiner.
+   *
+   * @param queryComponentRefiner
+   *     the query component refiner
+   */
+  public void setQueryComponentRefiner(IQueryComponentRefiner queryComponentRefiner) {
+    this.queryComponentRefiner = queryComponentRefiner;
+  }
+
+  /**
+   * Sets criteria factory. Depending on the persistence layer used, it should be an instance of :
+   * <ul>
+   * <li>org.jspresso.framework.model.persistence.hibernate.criterion.ICriteriaFactory</li>
+   * <li>org.jspresso.framework.model.persistence.mongo.criterion.IQueryFactory</li>
+   * </ul>
+   *
+   * @param criteriaFactory
+   *     the criteria factory
+   */
+  public void setCriteriaFactory(Object criteriaFactory) {
+    this.criteriaFactory = criteriaFactory;
+  }
+
+  /**
+   * Sets criteria refiner. Depending on the persistence layer used, it should be an instance of :
+   * <ul>
+   * <li>org.jspresso.framework.application.backend.action.persistence.hibernate.ICriteriaRefiner</li>
+   * <li>org.jspresso.framework.application.backend.action.persistence.mongo.IQueryRefiner</li>
+   * </ul>
+   *
+   * @param criteriaRefiner
+   *     the criteria refiner
+   */
+  public void setCriteriaRefiner(Object criteriaRefiner) {
+    this.criteriaRefiner = criteriaRefiner;
   }
 }

@@ -34,10 +34,10 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 import org.jspresso.framework.application.backend.action.AbstractQueryComponentsAction;
-import org.jspresso.framework.model.persistence.mongo.criterion.IQueryFactory;
 import org.jspresso.framework.application.backend.persistence.mongo.MongoBackendController;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.model.persistence.mongo.criterion.IQueryFactory;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 
 /**
@@ -77,8 +77,6 @@ public class QueryEntitiesAction extends AbstractQueryComponentsAction {
 
   private static final Logger LOG = LoggerFactory.getLogger(QueryEntitiesAction.class);
 
-  private static final String QUERY_FACTORY = "QUERY_FACTORY";
-  private static final String QUERY_REFINER = "QUERY_REFINER";
   private IQueryFactory queryFactory;
   private IQueryRefiner queryRefiner;
 
@@ -130,10 +128,10 @@ public class QueryEntitiesAction extends AbstractQueryComponentsAction {
   @SuppressWarnings({"unchecked", "ConstantConditions"})
   public List<?> performQuery(final IQueryComponent queryComponent, final Map<String, Object> context) {
     MongoTemplate mongo = ((MongoBackendController) getController(context)).getMongoTemplate();
-    IQueryFactory qFactory = (IQueryFactory) queryComponent.get(QUERY_FACTORY);
+    IQueryFactory qFactory = (IQueryFactory) queryComponent.get(CRITERIA_FACTORY);
     if (qFactory == null) {
       qFactory = getQueryFactory(context);
-      queryComponent.put(QUERY_FACTORY, qFactory);
+      queryComponent.put(CRITERIA_FACTORY, qFactory);
     }
     Query query = qFactory.createQuery(queryComponent, context);
     List<? extends IEntity> entities;
@@ -142,11 +140,11 @@ public class QueryEntitiesAction extends AbstractQueryComponentsAction {
       entities = new ArrayList<>();
       queryComponent.setRecordCount(0);
     } else {
-      IQueryRefiner critRefiner = (IQueryRefiner) queryComponent.get(QUERY_REFINER);
+      IQueryRefiner critRefiner = (IQueryRefiner) queryComponent.get(CRITERIA_REFINER);
       if (critRefiner == null) {
         critRefiner = getQueryRefiner(context);
         if (critRefiner != null) {
-          queryComponent.put(QUERY_REFINER, critRefiner);
+          queryComponent.put(CRITERIA_REFINER, critRefiner);
         }
       }
       if (critRefiner != null) {
@@ -219,8 +217,8 @@ public class QueryEntitiesAction extends AbstractQueryComponentsAction {
    * @return the configured query refiner.
    */
   public IQueryRefiner getQueryRefiner(Map<String, Object> context) {
-    if (context.containsKey(QUERY_REFINER)) {
-      return (IQueryRefiner) context.get(QUERY_REFINER);
+    if (context.containsKey(CRITERIA_REFINER)) {
+      return (IQueryRefiner) context.get(CRITERIA_REFINER);
     }
     return this.queryRefiner;
   }
@@ -233,8 +231,8 @@ public class QueryEntitiesAction extends AbstractQueryComponentsAction {
    * @return the queryFactory.
    */
   protected IQueryFactory getQueryFactory(Map<String, Object> context) {
-    if (context.containsKey(QUERY_FACTORY)) {
-      return (IQueryFactory) context.get(QUERY_FACTORY);
+    if (context.containsKey(CRITERIA_FACTORY)) {
+      return (IQueryFactory) context.get(CRITERIA_FACTORY);
     }
     return queryFactory;
   }

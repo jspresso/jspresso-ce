@@ -86,8 +86,6 @@ public class QueryEntitiesAction extends AbstractQueryComponentsAction {
 
   private static final Logger LOG = LoggerFactory.getLogger(QueryEntitiesAction.class);
 
-  private static final String CRITERIA_FACTORY = "CRITERIA_FACTORY";
-  private static final String CRITERIA_REFINER = "CRITERIA_REFINER";
   private ICriteriaFactory criteriaFactory;
   private ICriteriaRefiner criteriaRefiner;
   private boolean          useInListForPagination;

@@ -31,7 +31,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.jspresso.framework.application.backend.action.AbstractQueryComponentsAction;
 import org.jspresso.framework.application.backend.action.BackendAction;
+import org.jspresso.framework.application.backend.action.IQueryComponentRefiner;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.model.descriptor.BeanCollectionModuleDescriptor;
 import org.jspresso.framework.application.model.descriptor.FilterableBeanCollectionModuleDescriptor;
@@ -85,6 +87,9 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
   private IViewDescriptor                  cachedViewDescriptor;
   private Boolean                          findOnType;
   private Boolean                          findOnSet;
+  private IQueryComponentRefiner           queryComponentRefiner;
+  private Object                           criteriaRefiner;
+  private Object                           criteriaFactory;
 
   /**
    * Gets the queryViewDescriptorFactory.
@@ -179,6 +184,8 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
 
   /**
    * {@inheritDoc}
+   *
+   * @return the view descriptor
    */
   @Override
   public IViewDescriptor getViewDescriptor() {
@@ -353,6 +360,15 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
     }
     this.filter = filter;
     if (filter != null) {
+      if (queryComponentRefiner != null) {
+        filter.put(AbstractQueryComponentsAction.COMPONENT_REFINER, queryComponentRefiner);
+      }
+      if (criteriaFactory != null) {
+        filter.put(AbstractQueryComponentsAction.CRITERIA_FACTORY, criteriaFactory);
+      }
+      if (criteriaRefiner != null) {
+        filter.put(AbstractQueryComponentsAction.CRITERIA_REFINER, criteriaRefiner);
+      }
       filter.setPageSize(getPageSize());
       filter.setDefaultOrderingProperties(getOrderingProperties());
       filter.addPropertyChangeListener(filterComponentTracker);
@@ -526,8 +542,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
    * Gets the query component descriptor factory used to create the filter model
    * descriptor.
    *
-   * @return the query component descriptor factory used to create the filter
-   * model descriptor.
+   * @return the query component descriptor factory used to create the filter model descriptor.
    */
   protected IQueryComponentDescriptorFactory getQueryComponentDescriptorFactory() {
     return queryComponentDescriptorFactory;
@@ -551,6 +566,9 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
 
     /**
      * {@inheritDoc}
+     *
+     * @param evt
+     *     the evt
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
@@ -591,6 +609,8 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
    * Delegates to filter.
    * <p>
    * {@inheritDoc}
+   *
+   * @return the display page index
    */
   @Override
   public Integer getDisplayPageIndex() {
@@ -604,6 +624,9 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
    * Delegates to filter.
    * <p>
    * {@inheritDoc}
+   *
+   * @param displayPageIndex
+   *     the display page index
    */
   @Override
   public void setDisplayPageIndex(Integer displayPageIndex) {
@@ -616,6 +639,8 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
    * Delegates to filter.
    * <p>
    * {@inheritDoc}
+   *
+   * @return the page
    */
   @Override
   public Integer getPage() {
@@ -629,6 +654,8 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
    * Delegates to filter.
    * <p/>
    * {@inheritDoc}
+   *
+   * @return the page count
    */
   @Override
   public Integer getPageCount() {
@@ -642,6 +669,8 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
    * Delegates to filter.
    * <p/>
    * {@inheritDoc}
+   *
+   * @return the display page count
    */
   @Override
   public String getDisplayPageCount() {
@@ -655,6 +684,8 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
    * Delegates to filter.
    * <p>
    * {@inheritDoc}
+   *
+   * @return the record count
    */
   @Override
   public Integer getRecordCount() {
@@ -668,6 +699,8 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
    * Delegates to filter.
    * <p/>
    * {@inheritDoc}
+   *
+   * @return the display record count
    */
   @Override
   public String getDisplayRecordCount() {
@@ -681,6 +714,8 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
    * Delegates to filter.
    * <p>
    * {@inheritDoc}
+   *
+   * @return the selected record count
    */
   @Override
   public Integer getSelectedRecordCount() {
@@ -694,6 +729,8 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
    * Delegates to filter.
    * <p>
    * {@inheritDoc}
+   *
+   * @return the boolean
    */
   @Override
   public boolean isNextPageEnabled() {
@@ -707,6 +744,8 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
    * Delegates to filter.
    * <p>
    * {@inheritDoc}
+   *
+   * @return the boolean
    */
   @Override
   public boolean isPageNavigationEnabled() {
@@ -720,6 +759,8 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
    * Delegates to filter.
    * <p>
    * {@inheritDoc}
+   *
+   * @return the boolean
    */
   @Override
   public boolean isPreviousPageEnabled() {
@@ -733,6 +774,9 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
    * Delegates to filter.
    * <p>
    * {@inheritDoc}
+   *
+   * @param page
+   *     the page
    */
   @Override
   public void setPage(Integer page) {
@@ -745,6 +789,9 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
    * Delegates to filter.
    * <p>
    * {@inheritDoc}
+   *
+   * @param recordCount
+   *     the record count
    */
   @Override
   public void setRecordCount(Integer recordCount) {
@@ -757,6 +804,9 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
    * Delegates to filter.
    * <p>
    * {@inheritDoc}
+   *
+   * @param selectedRecordCount
+   *     the selected record count
    */
   @Override
   public void setSelectedRecordCount(Integer selectedRecordCount) {
@@ -767,6 +817,8 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
 
   /**
    * {@inheritDoc}
+   *
+   * @return the filterable bean collection module
    */
   @Override
   public FilterableBeanCollectionModule clone() {
@@ -799,6 +851,9 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
 
   /**
    * Delegates to filter. {@inheritDoc}
+   *
+   * @param stickyResults
+   *     the sticky results
    */
   @Override
   public void setStickyResults(List<?> stickyResults) {
@@ -811,6 +866,8 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
    * Delegates to filter.
    * <p>
    * {@inheritDoc}
+   *
+   * @return the sticky results
    */
   @Override
   public List<?> getStickyResults() {
@@ -875,9 +932,7 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
    * @param query
    *     the query
    * @param filters
-   *     as table of
-   *     - Odd indexes : parameter key
-   *     - Even indexes : parameter value
+   *     as table of     - Odd indexes : parameter key     - Even indexes : parameter value
    * @throws IOException
    *     the iO exception
    * @throws ClassNotFoundException
@@ -911,6 +966,70 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
         query.put(key, value);
       }
     }
+  }
 
+  /**
+   * Sets query component refiner.
+   *
+   * @param queryComponentRefiner
+   *     the query component refiner
+   */
+  public void setQueryComponentRefiner(IQueryComponentRefiner queryComponentRefiner) {
+    this.queryComponentRefiner = queryComponentRefiner;
+  }
+
+  /**
+   * Sets criteria factory. Depending on the persistence layer used, it should be an instance of :
+   * <ul>
+   * <li>org.jspresso.framework.model.persistence.hibernate.criterion.ICriteriaFactory</li>
+   * <li>org.jspresso.framework.model.persistence.mongo.criterion.IQueryFactory</li>
+   * </ul>
+   *
+   * @param criteriaFactory
+   *     the criteria factory
+   */
+  public void setCriteriaFactory(Object criteriaFactory) {
+    this.criteriaFactory = criteriaFactory;
+  }
+
+  /**
+   * Sets criteria refiner. Depending on the persistence layer used, it should be an instance of :
+   * <ul>
+   * <li>org.jspresso.framework.application.backend.action.persistence.hibernate.ICriteriaRefiner</li>
+   * <li>org.jspresso.framework.application.backend.action.persistence.mongo.IQueryRefiner</li>
+   * </ul>
+   *
+   * @param criteriaRefiner
+   *     the criteria refiner
+   */
+  public void setCriteriaRefiner(Object criteriaRefiner) {
+    this.criteriaRefiner = criteriaRefiner;
+  }
+
+  /**
+   * Gets query component refiner.
+   *
+   * @return the query component refiner
+   */
+  public IQueryComponentRefiner getQueryComponentRefiner() {
+    return queryComponentRefiner;
+  }
+
+  /**
+   * Gets criteria refiner.
+   *
+   * @return the criteria refiner
+   */
+  public Object getCriteriaRefiner() {
+    return criteriaRefiner;
+  }
+
+  /**
+   * Gets criteria factory.
+   *
+   * @return the criteria factory
+   */
+  public Object getCriteriaFactory() {
+    return criteriaFactory;
   }
 }
