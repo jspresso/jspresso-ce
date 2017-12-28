@@ -2227,11 +2227,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var decorated = component;
       if (remoteComponent.getActionLists()) {
         var actionField = new qx.ui.container.Composite(new qx.ui.layout.HBox(0));
-        actionField.setUserData("componentsToStyle", [component]);
         actionField.setFocusable(true);
         actionField.setAllowStretchY(false, false);
 
         if (component) {
+          actionField.setUserData("componentsToStyle", [component]);
           component.setAlignY("middle");
           actionField.add(component, {
             flex: 1
@@ -2362,8 +2362,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         };
       }
       table.addListener("cellTap", function (e) {
-        if (columnModel.getDataCellRenderer(e.getColumn())
-            instanceof org.jspresso.framework.view.qx.BooleanTableCellRenderer) {
+        var dataCellRenderer = columnModel.getDataCellRenderer(e.getColumn());
+        if (   (dataCellRenderer instanceof org.jspresso.framework.view.qx.BooleanTableCellRenderer)
+            && !dataCellRenderer instanceof org.jspresso.framework.view.qx.BinaryTableCellRenderer) {
           this.startEditing();
         }
       }, table);

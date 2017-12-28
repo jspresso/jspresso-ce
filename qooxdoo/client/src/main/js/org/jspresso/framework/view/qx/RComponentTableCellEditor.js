@@ -116,6 +116,8 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
       editor = new qx.ui.container.Composite(layout).set({
         focusable: true
       });
+      var background = qx.theme.manager.Color.getInstance().resolve("app-background");
+      editor.setBackgroundColor(background);
       if (editorWidget instanceof qx.ui.form.CheckBox) {
         editorWidget.addListenerOnce("appear", function (e) {
           editorWidget.setValue(!editorWidget.getValue());
