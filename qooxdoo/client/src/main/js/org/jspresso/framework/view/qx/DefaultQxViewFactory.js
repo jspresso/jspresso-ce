@@ -2080,7 +2080,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       if (remoteBorderContainer.getCenter()) {
         var child = this.createComponent(remoteBorderContainer.getCenter());
         borderContainer.add(child, {
-          edge: "center"
+          edge: "center",
+          flex: 1
         });
       }
       if (remoteBorderContainer.getEast()) {
