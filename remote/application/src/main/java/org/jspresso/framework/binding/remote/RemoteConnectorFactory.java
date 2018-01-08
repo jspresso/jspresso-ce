@@ -63,8 +63,8 @@ import org.jspresso.framework.util.uid.IGUIDGenerator;
  *
  * @author Vincent Vandenschrick
  */
-public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
-    IRemoteValueStateFactory, IRemotePeerRegistry {
+public class RemoteConnectorFactory
+    implements IConfigurableConnectorFactory, IRemoteValueStateFactory, IRemotePeerRegistry {
 
   private IValueChangeListener     collectionConnectorValueChangeListener;
   private IValueChangeListener     formattedConnectorValueChangeListener;
@@ -94,8 +94,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
         IValueConnector connector = (IValueConnector) evt.getSource();
         IValueConnector parentConnector = connector.getParentConnector();
         if (parentConnector instanceof ICollectionConnectorProvider
-            && ((ICollectionConnectorProvider) parentConnector)
-                .getCollectionConnector() == connector
+            && ((ICollectionConnectorProvider) parentConnector).getCollectionConnector() == connector
             // The next condition is to prevent commands on master-detail
             // connector wrappers.
             && !isCascadingModelWrapperConnector((ICollectionConnectorProvider) parentConnector)) {
@@ -129,23 +128,23 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
       @Override
       public void valueChange(ValueChangeEvent evt) {
         IValueConnector connector = (IValueConnector) evt.getSource();
-        if (connector.getParentConnector() instanceof IRenderableCompositeValueConnector
-            && ((IRenderableCompositeValueConnector) connector
-                .getParentConnector()).getRenderingConnector() == connector) {
-          // don't listen to rendering connectors.
-          connector.removeValueChangeListener(this);
-        } else if (connector.getParentConnector() == null) {
-          // don't listen to root connectors.
-          connector.removeValueChangeListener(this);
-        } else {
-          if (!isRecycling(connector)) {
-            RemoteValueState state = ((IRemoteStateOwner) connector).getState();
-            RemoteValueCommand command = new RemoteValueCommand();
-            command.setTargetPeerGuid(state.getGuid());
-            command.setValue(state.getValue());
-            remoteCommandHandler.registerCommand(command);
-          }
+        // if (connector.getParentConnector() instanceof IRenderableCompositeValueConnector
+        //     && ((IRenderableCompositeValueConnector) connector
+        //         .getParentConnector()).getRenderingConnector() == connector) {
+        //   // don't listen to rendering connectors.
+        //   connector.removeValueChangeListener(this);
+        // } else if (connector.getParentConnector() == null) {
+        //   // don't listen to root connectors.
+        //   connector.removeValueChangeListener(this);
+        // } else {
+        if (!isRecycling(connector)) {
+          RemoteValueState state = ((IRemoteStateOwner) connector).getState();
+          RemoteValueCommand command = new RemoteValueCommand();
+          command.setTargetPeerGuid(state.getGuid());
+          command.setValue(state.getValue());
+          remoteCommandHandler.registerCommand(command);
         }
+        // }
       }
     };
     formattedConnectorValueChangeListener = new IValueChangeListener() {
@@ -196,20 +195,17 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
 
         List<RemoteValueState> removedChildren = new ArrayList<>();
         if (evt instanceof CollectionConnectorValueChangeEvent) {
-          if (((CollectionConnectorValueChangeEvent) evt)
-              .getRemovedChildrenConnectors() != null) {
+          if (((CollectionConnectorValueChangeEvent) evt).getRemovedChildrenConnectors() != null) {
             for (IValueConnector removedChildConnector : ((CollectionConnectorValueChangeEvent) evt)
                 .getRemovedChildrenConnectors()) {
               if (removedChildConnector instanceof IRemoteStateOwner) {
-                removedChildren.add(((IRemoteStateOwner) removedChildConnector)
-                    .getState());
+                removedChildren.add(((IRemoteStateOwner) removedChildConnector).getState());
               }
             }
           }
         }
         if (parentConnector instanceof ICollectionConnectorProvider
-            && ((ICollectionConnectorProvider) parentConnector)
-                .getCollectionConnector() == connector
+            && ((ICollectionConnectorProvider) parentConnector).getCollectionConnector() == connector
             // The next condition is to prevent commands on master-detail
             // connector wrappers.
             && !isCascadingModelWrapperConnector((ICollectionConnectorProvider) parentConnector)) {
@@ -224,8 +220,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
           RemoteChildrenCommand parentCommand = new RemoteChildrenCommand();
           parentCommand.setTargetPeerGuid(parentState.getGuid());
           if (parentState.getChildren() != null) {
-            parentCommand.setChildren(new ArrayList<>(
-                parentState.getChildren()));
+            parentCommand.setChildren(new ArrayList<>(parentState.getChildren()));
           } else {
             parentCommand.setChildren(null);
           }
@@ -244,15 +239,13 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
           RemoteChildrenCommand command = new RemoteChildrenCommand();
           command.setTargetPeerGuid(compositeValueState.getGuid());
           if (compositeValueState.getChildren() != null) {
-            command.setChildren(new ArrayList<>(
-                compositeValueState.getChildren()));
+            command.setChildren(new ArrayList<>(compositeValueState.getChildren()));
           } else {
             command.setChildren(null);
           }
           remoteCommandHandler.registerCommand(command);
         }
-        if (connector.getSelectedIndices() != null
-            && connector.getSelectedIndices().length > 0) {
+        if (connector.getSelectedIndices() != null && connector.getSelectedIndices().length > 0) {
           // reset selection to force details refresh if any.
           connector.setSelectedIndices(null, -1);
         }
@@ -261,7 +254,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
   }
 
   private void createAndRegisterRemoveChildrenCommand(RemoteCompositeValueState parentState,
-                                                        List<RemoteValueState> removedChildren) {
+                                                      List<RemoteValueState> removedChildren) {
     RemoteChildrenCommand parentRemoveCommand = new RemoteChildrenCommand();
     parentRemoveCommand.setTargetPeerGuid(parentState.getGuid());
     parentRemoveCommand.setRemove(true);
@@ -280,11 +273,10 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
       public void propertyChange(PropertyChangeEvent evt) {
         IValueConnector connector = (IValueConnector) evt.getSource();
         if (connector.getParentConnector() instanceof IRenderableCompositeValueConnector
-            && ((IRenderableCompositeValueConnector) connector
-                .getParentConnector()).getRenderingConnector() == connector) {
+            && ((IRenderableCompositeValueConnector) connector.getParentConnector()).getRenderingConnector()
+            == connector) {
           // don't listen to rendering connectors.
-          connector.removePropertyChangeListener(
-              IValueConnector.WRITABLE_PROPERTY, this);
+          connector.removePropertyChangeListener(IValueConnector.WRITABLE_PROPERTY, this);
           // The following breaks notification on detail tables !!!
           // } else if (connector.getParentConnector() instanceof
           // ICollectionConnectorProvider
@@ -293,16 +285,13 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
           // // don't listen to provided collection connector.
           // connector.removePropertyChangeListener(
           // IValueConnector.WRITABLE_PROPERTY, this);
-        } else if (connector.getParentConnector() == null
-            && connector.getId() == null) {
+        } else if (connector.getParentConnector() == null && connector.getId() == null) {
           // don't listen to root connectors.
-          connector.removePropertyChangeListener(
-              IValueConnector.WRITABLE_PROPERTY, this);
-        } else if (connector instanceof ICollectionConnectorProvider
-            && isCascadingModelWrapperConnector((ICollectionConnectorProvider) connector)) {
+          connector.removePropertyChangeListener(IValueConnector.WRITABLE_PROPERTY, this);
+        } else if (connector instanceof ICollectionConnectorProvider && isCascadingModelWrapperConnector(
+            (ICollectionConnectorProvider) connector)) {
           // don't listen to maser-detail wrappers.
-          connector.removePropertyChangeListener(
-              IValueConnector.WRITABLE_PROPERTY, this);
+          connector.removePropertyChangeListener(IValueConnector.WRITABLE_PROPERTY, this);
         } else {
           if (!isRecycling(connector)) {
             RemoteValueState state = ((IRemoteStateOwner) connector).getState();
@@ -321,17 +310,14 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
       public void propertyChange(PropertyChangeEvent evt) {
         IValueConnector connector = (IValueConnector) evt.getSource();
         if (connector.getParentConnector() instanceof IRenderableCompositeValueConnector
-            && ((IRenderableCompositeValueConnector) connector
-                .getParentConnector()).getRenderingConnector() == connector) {
+            && ((IRenderableCompositeValueConnector) connector.getParentConnector()).getRenderingConnector()
+            == connector) {
           // don't listen to rendering connectors.
-          connector.removePropertyChangeListener(
-              IValueConnector.READABLE_PROPERTY, this);
+          connector.removePropertyChangeListener(IValueConnector.READABLE_PROPERTY, this);
         } else if (connector.getParentConnector() instanceof ICollectionConnectorProvider
-            && ((ICollectionConnectorProvider) connector.getParentConnector())
-                .getCollectionConnector() == connector) {
+            && ((ICollectionConnectorProvider) connector.getParentConnector()).getCollectionConnector() == connector) {
           // don't listen to provided collection connector.
-          connector.removePropertyChangeListener(
-              IValueConnector.READABLE_PROPERTY, this);
+          connector.removePropertyChangeListener(IValueConnector.READABLE_PROPERTY, this);
         } else {
           if (!isRecycling(connector)) {
             RemoteValueState state = ((IRemoteStateOwner) connector).getState();
@@ -347,9 +333,8 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
 
   private boolean isRecycling(IValueConnector connector) {
     if (connector instanceof AbstractValueConnector) {
-      return ((AbstractValueConnector) connector).isMute()
-          || isCollectionConnectorDescendant(connector) && isRecycling(connector.getModelConnector())
-          || isRecycling(connector.getParentConnector());
+      return ((AbstractValueConnector) connector).isMute() || isCollectionConnectorDescendant(connector) && isRecycling(
+          connector.getModelConnector()) || isRecycling(connector.getParentConnector());
     } else {
       return false;
     }
@@ -377,10 +362,9 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
    * {@inheritDoc}
    */
   @Override
-  public ICollectionConnector createCollectionConnector(String id,
-      IMvcBinder binder, ICompositeValueConnector childConnectorPrototype) {
-    RemoteCollectionConnector connector = new RemoteCollectionConnector(id,
-        binder, childConnectorPrototype, this);
+  public ICollectionConnector createCollectionConnector(String id, IMvcBinder binder,
+                                                        ICompositeValueConnector childConnectorPrototype) {
+    RemoteCollectionConnector connector = new RemoteCollectionConnector(id, binder, childConnectorPrototype, this);
     attachListeners(connector);
     return connector;
   }
@@ -389,8 +373,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
    * {@inheritDoc}
    */
   @Override
-  public IRenderableCompositeValueConnector createCompositeValueConnector(
-      String id, String renderingConnectorId) {
+  public IRenderableCompositeValueConnector createCompositeValueConnector(String id, String renderingConnectorId) {
     RemoteCompositeConnector connector = new RemoteCompositeConnector(id, this);
     createAndAddRenderingChildConnector(connector, renderingConnectorId);
     attachListeners(connector);
@@ -401,10 +384,10 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
    * {@inheritDoc}
    */
   @Override
-  public IConfigurableCollectionConnectorListProvider createConfigurableCollectionConnectorListProvider(
-      String id, String renderingConnectorId) {
-    RemoteCollectionConnectorListProvider connector = new RemoteCollectionConnectorListProvider(
-        id, this);
+  public IConfigurableCollectionConnectorListProvider createConfigurableCollectionConnectorListProvider(String id,
+                                                                                                        String
+                                                                                                            renderingConnectorId) {
+    RemoteCollectionConnectorListProvider connector = new RemoteCollectionConnectorListProvider(id, this);
     createAndAddRenderingChildConnector(connector, renderingConnectorId);
     attachListeners(connector);
     return connector;
@@ -414,10 +397,10 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
    * {@inheritDoc}
    */
   @Override
-  public IConfigurableCollectionConnectorProvider createConfigurableCollectionConnectorProvider(
-      String id, String renderingConnectorId) {
-    RemoteCollectionConnectorProvider connector = new RemoteCollectionConnectorProvider(
-        id, this);
+  public IConfigurableCollectionConnectorProvider createConfigurableCollectionConnectorProvider(String id,
+                                                                                                String
+                                                                                                    renderingConnectorId) {
+    RemoteCollectionConnectorProvider connector = new RemoteCollectionConnectorProvider(id, this);
     createAndAddRenderingChildConnector(connector, renderingConnectorId);
     attachListeners(connector);
     return connector;
@@ -427,10 +410,8 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
    * {@inheritDoc}
    */
   @Override
-  public IFormattedValueConnector createFormattedValueConnector(String id,
-      IFormatter<?, ?> formatter) {
-    RemoteFormattedValueConnector connector = new RemoteFormattedValueConnector(
-        id, this, formatter);
+  public IFormattedValueConnector createFormattedValueConnector(String id, IFormatter<?, ?> formatter) {
+    RemoteFormattedValueConnector connector = new RemoteFormattedValueConnector(id, this, formatter);
     attachListeners(connector);
     return connector;
   }
@@ -439,8 +420,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
    * {@inheritDoc}
    */
   @Override
-  public RemoteCompositeValueState createRemoteCompositeValueState(String guid,
-      String permId) {
+  public RemoteCompositeValueState createRemoteCompositeValueState(String guid, String permId) {
     RemoteCompositeValueState state = new RemoteCompositeValueState(guid);
     state.setPermId(registerPermId(permId, guid));
     // connectors are registered with the same guid as their state.
@@ -464,8 +444,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
    * {@inheritDoc}
    */
   @Override
-  public RemoteFormattedValueState createRemoteFormattedValueState(String guid,
-      String permId) {
+  public RemoteFormattedValueState createRemoteFormattedValueState(String guid, String permId) {
     RemoteFormattedValueState state = new RemoteFormattedValueState(guid);
     state.setPermId(registerPermId(permId, guid));
     // connectors are registered with the same guid as their state.
@@ -535,8 +514,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
    * {@inheritDoc}
    */
   @Override
-  public void removeRemotePeerRegistryListener(
-      IRemotePeerRegistryListener listener) {
+  public void removeRemotePeerRegistryListener(IRemotePeerRegistryListener listener) {
     remotePeerRegistry.removeRemotePeerRegistryListener(listener);
   }
 
@@ -544,7 +522,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
    * Sets the guidGenerator.
    *
    * @param guidGenerator
-   *          the guidGenerator to set.
+   *     the guidGenerator to set.
    */
   public void setGuidGenerator(IGUIDGenerator<String> guidGenerator) {
     this.guidGenerator = guidGenerator;
@@ -554,7 +532,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
    * Sets the remoteCommandHandler.
    *
    * @param remoteCommandHandler
-   *          the remoteCommandHandler to set.
+   *     the remoteCommandHandler to set.
    */
   public void setRemoteCommandHandler(IRemoteCommandHandler remoteCommandHandler) {
     this.remoteCommandHandler = remoteCommandHandler;
@@ -564,7 +542,7 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
    * Sets the remotePeerRegistry.
    *
    * @param remotePeerRegistry
-   *          the remotePeerRegistry to set.
+   *     the remotePeerRegistry to set.
    */
   public void setRemotePeerRegistry(IRemotePeerRegistry remotePeerRegistry) {
     this.remotePeerRegistry = remotePeerRegistry;
@@ -583,23 +561,18 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
    * notifications get sent to the remote client side.
    *
    * @param connector
-   *          the connector to attach listeners to.
+   *     the connector to attach listeners to.
    */
   protected void attachListeners(IValueConnector connector) {
-    connector.addPropertyChangeListener(IValueConnector.READABLE_PROPERTY,
-        readabilityListener);
-    connector.addPropertyChangeListener(IValueConnector.WRITABLE_PROPERTY,
-        writabilityListener);
+    connector.addPropertyChangeListener(IValueConnector.READABLE_PROPERTY, readabilityListener);
+    connector.addPropertyChangeListener(IValueConnector.WRITABLE_PROPERTY, writabilityListener);
     if (connector instanceof ICollectionConnector) {
       connector.addValueChangeListener(collectionConnectorValueChangeListener);
-      ((ICollectionConnector) connector)
-          .addSelectionChangeListener(selectionChangeListener);
+      ((ICollectionConnector) connector).addSelectionChangeListener(selectionChangeListener);
     } else if (connector instanceof IRenderableCompositeValueConnector) {
-      if (((IRenderableCompositeValueConnector) connector)
-          .getRenderingConnector() != null) {
-        ((IRenderableCompositeValueConnector) connector)
-            .getRenderingConnector().addValueChangeListener(
-                renderingConnectorValueChangeListener);
+      if (((IRenderableCompositeValueConnector) connector).getRenderingConnector() != null) {
+        ((IRenderableCompositeValueConnector) connector).getRenderingConnector().addValueChangeListener(
+            renderingConnectorValueChangeListener);
       }
     } else if (connector instanceof IFormattedValueConnector) {
       connector.addValueChangeListener(formattedConnectorValueChangeListener);
@@ -612,23 +585,18 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
     return guidGenerator.generateGUID();
   }
 
-  private void createAndAddRenderingChildConnector(
-      AbstractCompositeValueConnector compositeValueConnector,
-      String renderingConnectorId) {
+  private void createAndAddRenderingChildConnector(AbstractCompositeValueConnector compositeValueConnector,
+                                                   String renderingConnectorId) {
     if (renderingConnectorId != null) {
-      compositeValueConnector.addChildConnector(renderingConnectorId,
-          createValueConnector(renderingConnectorId));
-      compositeValueConnector
-          .setRenderingChildConnectorId(renderingConnectorId);
+      compositeValueConnector.addChildConnector(renderingConnectorId, createValueConnector(renderingConnectorId));
+      compositeValueConnector.setRenderingChildConnectorId(renderingConnectorId);
     }
   }
 
-  private boolean isCascadingModelWrapperConnector(
-      ICollectionConnectorProvider connector) {
+  private boolean isCascadingModelWrapperConnector(ICollectionConnectorProvider connector) {
     boolean hasRenderingConnector = false;
     if (connector instanceof IRenderableCompositeValueConnector) {
-      hasRenderingConnector = (((IRenderableCompositeValueConnector) connector)
-          .getRenderingConnector() != null);
+      hasRenderingConnector = (((IRenderableCompositeValueConnector) connector).getRenderingConnector() != null);
     }
     // return (ModelRefPropertyConnector.THIS_PROPERTY.equals(connector.getId())
     // && connector.getParentConnector() == null && !hasRenderingConnector)
@@ -636,7 +604,6 @@ public class RemoteConnectorFactory implements IConfigurableConnectorFactory,
     // && connector.getParentConnector() != null
     // && ModelRefPropertyConnector.THIS_PROPERTY.equals(connector
     // .getParentConnector().getId()) && !hasRenderingConnector);
-    return ModelRefPropertyConnector.THIS_PROPERTY.equals(connector.getId())
-        && !hasRenderingConnector;
+    return ModelRefPropertyConnector.THIS_PROPERTY.equals(connector.getId()) && !hasRenderingConnector;
   }
 }

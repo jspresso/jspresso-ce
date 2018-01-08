@@ -939,31 +939,31 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      * @return {undefined}
      */
     _checkPostponedCommandsCompletion: function () {
-      for (var guid in this.__postponedCommands) {
-        if (this.__postponedCommands.hasOwnProperty(guid)) {
-          /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteCommand[]} */
-          var commands = this.__postponedCommands[guid];
-          for (var i = 0; i < commands.length; i++) {
-            var command = commands[i];
-            this._handleError("Target remote peer could not be retrieved :");
-            this._handleError("  guid    = " + command.getTargetPeerGuid());
-            this._handleError("  command = " + command);
-            if (command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand) {
-              this._handleError("  value   = " + command.getValue());
-            } else if (command
-                instanceof org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand) {
-              /** @type {org.jspresso.framework.state.remote.RemoteValueState[]} */
-              var children = command.getChildren().toArray();
-              for (var j = 0; j < children.length; j++) {
-                var childState = children[j];
-                this._handleError("  child = " + childState);
-                this._handleError("    guid  = " + childState.getGuid());
-                this._handleError("    value = " + childState.getValue());
-              }
-            }
-          }
-        }
-      }
+      // for (var guid in this.__postponedCommands) {
+      //   if (this.__postponedCommands.hasOwnProperty(guid)) {
+      //     /** @type {org.jspresso.framework.application.frontend.command.remote.RemoteCommand[]} */
+      //     var commands = this.__postponedCommands[guid];
+      //     for (var i = 0; i < commands.length; i++) {
+      //       var command = commands[i];
+      //       this._handleError("Target remote peer could not be retrieved :");
+      //       this._handleError("  guid    = " + command.getTargetPeerGuid());
+      //       this._handleError("  command = " + command);
+      //       if (command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand) {
+      //         this._handleError("  value   = " + command.getValue());
+      //       } else if (command
+      //           instanceof org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand) {
+      //         /** @type {org.jspresso.framework.state.remote.RemoteValueState[]} */
+      //         var children = command.getChildren().toArray();
+      //         for (var j = 0; j < children.length; j++) {
+      //           var childState = children[j];
+      //           this._handleError("  child = " + childState);
+      //           this._handleError("    guid  = " + childState.getGuid());
+      //           this._handleError("    value = " + childState.getValue());
+      //         }
+      //       }
+      //     }
+      //   }
+      // }
       for (var guid in this.__postponedChildrenNotificationBuffer) {
         //noinspection JSUnfilteredForInLoop
         var peer = this.getRegistered(guid);

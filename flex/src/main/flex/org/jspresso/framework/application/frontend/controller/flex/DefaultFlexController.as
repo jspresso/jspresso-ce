@@ -1051,24 +1051,24 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
   }
 
   protected function checkPostponedCommandsCompletion():void {
-    for (var guid:String in _postponedCommands) {
-      //noinspection JSUnfilteredForInLoop
-      var commands:IList = _postponedCommands[guid] as IList;
-      for each(var command:RemoteCommand in commands) {
-        traceError("Target remote peer could not be retrieved :");
-        traceError("  guid    = " + command.targetPeerGuid);
-        traceError("  command = " + command);
-        if (command is RemoteValueCommand) {
-          traceError("  value   = " + (command as RemoteValueCommand).value);
-        } else if (command is RemoteChildrenCommand) {
-          for each (var childState:RemoteValueState in (command as RemoteChildrenCommand).children) {
-            traceError("  child = " + childState);
-            traceError("    guid  = " + childState.guid);
-            traceError("    value = " + childState.value);
-          }
-        }
-      }
-    }
+    // for (var guid:String in _postponedCommands) {
+    //   //noinspection JSUnfilteredForInLoop
+    //   var commands:IList = _postponedCommands[guid] as IList;
+    //   for each(var command:RemoteCommand in commands) {
+    //     traceError("Target remote peer could not be retrieved :");
+    //     traceError("  guid    = " + command.targetPeerGuid);
+    //     traceError("  command = " + command);
+    //     if (command is RemoteValueCommand) {
+    //       traceError("  value   = " + (command as RemoteValueCommand).value);
+    //     } else if (command is RemoteChildrenCommand) {
+    //       for each (var childState:RemoteValueState in (command as RemoteChildrenCommand).children) {
+    //         traceError("  child = " + childState);
+    //         traceError("    guid  = " + childState.guid);
+    //         traceError("    value = " + childState.value);
+    //       }
+    //     }
+    //   }
+    // }
     var i:int;
     for (i = 0; i < _postponedChildrenNotificationBuffer.length; i++) {
       var peer:IRemotePeer = getRegistered(_postponedChildrenNotificationBuffer[i]);
