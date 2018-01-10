@@ -3062,6 +3062,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         var tabComponent = this.createComponent(remoteTab);
 
         var tab = new qx.ui.tabview.Page(remoteTab.getLabel());
+        if (remoteTabContainer.getStyleName()) {
+          tab.setAppearance(remoteTabContainer.getStyleName() + "-page")
+        }
         this.setIcon(tab.getChildControl("button"), remoteTab.getIcon());
         tab.setLayout(new qx.ui.layout.Grow());
         tabComponent.setAllowStretchY(true, true);

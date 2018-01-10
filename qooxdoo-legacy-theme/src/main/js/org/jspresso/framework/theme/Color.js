@@ -54,6 +54,7 @@ qx.Theme.define("org.jspresso.framework.theme.Color",
         "dark-background": "#E2E2E2",
 
         "section-header-text": "app-foreground",
+        "panel-header-text": "app-foreground",
 
         "window-caption-background": "light-background",
         "window-border": "#979797",
