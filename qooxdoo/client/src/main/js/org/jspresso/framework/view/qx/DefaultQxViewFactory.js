@@ -546,6 +546,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      */
     _createCardContainer: function (remoteCardContainer) {
       var cardContainer = this._createCardContainerComponent();
+      cardContainer.setDynamic(true);
 
       for (var i = 0; i < remoteCardContainer.getCardNames().length; i++) {
         var rCardComponent = remoteCardContainer.getCards()[i];

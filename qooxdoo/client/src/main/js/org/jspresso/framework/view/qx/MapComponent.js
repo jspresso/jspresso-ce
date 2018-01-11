@@ -28,6 +28,7 @@ qx.Class.define("org.jspresso.framework.view.qx.MapComponent", {
   construct: function () {
     this.base(arguments);
     this.addListenerOnce("appear", this._initializeMap, this);
+    this.addListener("appear", this._redrawMap, this);
     this.addListener("resize", this._redrawMap, this);
   },
 
