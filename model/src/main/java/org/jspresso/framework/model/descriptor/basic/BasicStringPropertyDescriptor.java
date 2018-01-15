@@ -143,6 +143,17 @@ public class BasicStringPropertyDescriptor extends BasicScalarPropertyDescriptor
     return false;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isModifiable() {
+    if (isTranslatable()) {
+      return true;
+    }
+    return super.isModifiable();
+  }
+
   @Override
   public void preprocessSetter(final Object component, final Object newValue) {
     super.preprocessSetter(component, newValue);

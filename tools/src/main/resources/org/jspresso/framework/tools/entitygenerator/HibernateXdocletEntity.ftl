@@ -895,7 +895,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#if componentDescriptor.ancestorDescriptors??>
     <#list componentDescriptor.ancestorDescriptors as ancestorDescriptor>
       <#list ancestorDescriptor.propertyDescriptors as ancestorPropertyDescriptor>
-        <#if ancestorPropertyDescriptor.name == propertyDescriptor.name>
+        <#if ancestorPropertyDescriptor.name == propertyDescriptor.name && !(ancestorPropertyDescriptor.computed && !ancestorPropertyDescriptor.delegateClassName??)>
           <#assign overridden=true/>
         </#if>
       </#list>
@@ -916,7 +916,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#if componentDescriptor.declaredPropertyDescriptors??>
     <#assign empty=true/>
     <#list componentDescriptor.declaredPropertyDescriptors as propertyDescriptor>
-      <#if propertyDescriptor.name != "id" && propertyDescriptor.name != "version" && (!propertyDescriptor.computed || instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IStringPropertyDescriptor") && (propertyDescriptor.translatable || propertyDescriptor.name?ends_with("Nls") || propertyDescriptor.name?ends_with("Raw")))>
+      <#if propertyDescriptor.name != "id" && propertyDescriptor.name != "version" && (!(propertyDescriptor.computed && propertyDescriptor.delegateClassName??) || instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IStringPropertyDescriptor") && (propertyDescriptor.translatable || propertyDescriptor.name?ends_with("Nls") || propertyDescriptor.name?ends_with("Raw")))>
         <@generatePropertyAccessors componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
         <#assign empty=false/>
       </#if>
@@ -943,7 +943,7 @@ public interface I${componentName}Extension {
   <#if componentDescriptor.declaredPropertyDescriptors??>
     <#assign empty=true/>
     <#list componentDescriptor.declaredPropertyDescriptors as propertyDescriptor>
-      <#if propertyDescriptor.computed && (!instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IStringPropertyDescriptor") || !(propertyDescriptor.translatable || propertyDescriptor.name?ends_with("Nls") || propertyDescriptor.name?ends_with("Raw")))>
+      <#if propertyDescriptor.computed && propertyDescriptor.delegateClassName?? && (!instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IStringPropertyDescriptor") || !(propertyDescriptor.translatable || propertyDescriptor.name?ends_with("Nls") || propertyDescriptor.name?ends_with("Raw")))>
         <@generatePropertyAccessors componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
         <#assign empty=false/>
       </#if>

@@ -1960,7 +1960,7 @@ Entity('OrganizationalUnit'...) {
 
 Entity('Team'...) {
   ...
-  set 'teamMembers', ref:'Employee', <emphasis role="bold">reverse:'Employee-teams'</emphasis>
+  set 'members', ref:'Employee', <emphasis role="bold">reverse:'Employee-teams'</emphasis>
 }</programlisting></para>
 
         <para>Of course, when re-generating the entities code,
@@ -4794,14 +4794,14 @@ public class TestDataPersister extends AbstractHibernateTestDataPersister {
     Team hr001Team = createTeam("HR 001 Team", "HR-001",
         "124 avenue de la Liberté", paris, "hr001@design2see.com",
         "+33 123 456 101", hrDepartment, mikeDen);
-    hr001Team.addToTeamMembers(johnDoe);
-    hr001Team.addToTeamMembers(mikeDen);
+    hr001Team.addToMembers(johnDoe);
+    hr001Team.addToMembers(mikeDen);
 
     Team hr002Team = createTeam("HR 002 Team", "HR-002",
         "124 avenue de la Liberté", paris, "hr002@design2see.com",
         "+33 123 456 102", hrDepartment, evaGreen);
-    hr002Team.addToTeamMembers(johnDoe);
-    hr002Team.addToTeamMembers(evaGreen);
+    hr002Team.addToMembers(johnDoe);
+    hr002Team.addToMembers(evaGreen);
 
     Department itDepartment = createDepartment("Information Technology",
         "IT-000", "125 avenue de la Liberté", paris, "it@design2see.com",
@@ -4810,14 +4810,14 @@ public class TestDataPersister extends AbstractHibernateTestDataPersister {
     Team it001Team = createTeam("IT 001 Team", "IT-001",
         "125 avenue de la Liberté", paris, "it001@design2see.com",
         "+33 123 456 201", itDepartment, mariaTrulli);
-    it001Team.addToTeamMembers(gloriaSan);
-    it001Team.addToTeamMembers(mariaTrulli);
+    it001Team.addToMembers(gloriaSan);
+    it001Team.addToMembers(mariaTrulli);
 
     Team it002Team = createTeam("IT 002 Team", "IT-002",
         "125 avenue de la Liberté", paris, "it002@design2see.com",
         "+33 123 456 202", itDepartment, isabelleMartin);
-    it002Team.addToTeamMembers(gloriaSan);
-    it002Team.addToTeamMembers(isabelleMartin);
+    it002Team.addToMembers(gloriaSan);
+    it002Team.addToMembers(isabelleMartin);
 
     saveOrUpdate(design2see);
   }
@@ -5438,11 +5438,11 @@ public class OrganizationalUnitPropertyProcessors {
           :</para>
 
           <para><programlisting language="groovy">listView<co
-                id="Team-teamMembers.table" />('Team-teamMembers.list'<co
-                id="Team-teamMembers" />) {
-  actionMap<co id="teamMembers-actionMap" /> {
-    actionList<co id="teamMembers-actionList" />('EDIT'){<co
-                id="teamMembers-actions" />
+                id="Team-Members.table" />('Team-Members.list'<co
+                id="Team-Members" />) {
+  actionMap<co id="Members-actionMap" /> {
+    actionList<co id="Members-actionList" />('EDIT'){<co
+                id="Members-actions" />
       action(parent:'lovAction'<co id="lovAction" />,
         custom:[
           autoquery:false<co id="autoquery" />,
@@ -5465,32 +5465,32 @@ split_vertical('Departments.and.teams.view',
   bottom {
     split_horizontal<co id="department-rightBottomViewDescriptor" /> (
       left<co id="team-rightBottomViewDescriptor" />:'Department-teams.table',
-      right:'Team-teamMembers.list',
+      right:'Team-Members.list',
       cascadingModels:true<co id="teams-cascadingModels" />
     )
   }
 }</programlisting><calloutlist>
-              <callout arearefs="Team-teamMembers.table">
+              <callout arearefs="Team-Members.table">
                 <para>We declare a new list view to present the team members
                 of a team.</para>
               </callout>
 
-              <callout arearefs="Team-teamMembers">
+              <callout arearefs="Team-Members">
                 <para>This view is backed by the team -&gt; team members
                 relationship.</para>
               </callout>
 
-              <callout arearefs="teamMembers-actionMap">
+              <callout arearefs="Members-actionMap">
                 <para>We assemble a brand new action map (map of action lists)
                 for this view. This action map will contain a single action
                 list that holds our 2 actions.</para>
               </callout>
 
-              <callout arearefs="teamMembers-actionList">
+              <callout arearefs="Members-actionList">
                 <para>We declare the single action list...</para>
               </callout>
 
-              <callout arearefs="teamMembers-actions">
+              <callout arearefs="Members-actions">
                 <para>... and the actions it holds.</para>
               </callout>
 

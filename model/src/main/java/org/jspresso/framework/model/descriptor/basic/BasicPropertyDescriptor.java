@@ -260,7 +260,7 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
   @Override
   public boolean isModifiable() {
     if (getDelegateClassName() == null) {
-      return true;
+      return !computed;
     }
     if (delegateWritable != null) {
       return delegateWritable;
