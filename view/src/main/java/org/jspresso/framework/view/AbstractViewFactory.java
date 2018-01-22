@@ -67,6 +67,7 @@ import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IColorPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IDurationPropertyDescriptor;
@@ -310,20 +311,26 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
         E viewPeer = view.getPeer();
 
         // Dynamic appearance states
-        if (modelDescriptor instanceof IComponentDescriptor<?> && viewConnector instanceof ICompositeValueConnector) {
-          completeViewWithDynamicToolTip(viewPeer, viewDescriptor, (IComponentDescriptor<?>) modelDescriptor,
+        if (modelDescriptor instanceof IComponentDescriptorProvider<?>
+            && viewConnector instanceof ICompositeValueConnector) {
+          IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) modelDescriptor)
+              .getComponentDescriptor();
+          completeViewWithDynamicToolTip(viewPeer, viewDescriptor, componentDescriptor,
               (ICompositeValueConnector) viewConnector);
-          completeViewWithDynamicForeground(viewPeer, viewDescriptor, (IComponentDescriptor<?>) modelDescriptor,
+          completeViewWithDynamicForeground(viewPeer, viewDescriptor, componentDescriptor,
               (ICompositeValueConnector) viewConnector);
-          completeViewWithDynamicBackground(viewPeer, viewDescriptor, (IComponentDescriptor<?>) modelDescriptor,
+          completeViewWithDynamicBackground(viewPeer, viewDescriptor, componentDescriptor,
               (ICompositeValueConnector) viewConnector);
-          completeViewWithDynamicFont(viewPeer, viewDescriptor, (IComponentDescriptor<?>) modelDescriptor,
+          completeViewWithDynamicFont(viewPeer, viewDescriptor, componentDescriptor,
               (ICompositeValueConnector) viewConnector);
         }
         decorateWithActions(view, actionHandler, locale);
         decorateWithBorder(view, actionHandler, locale);
-        if (modelDescriptor instanceof IComponentDescriptor<?> && viewConnector instanceof ICompositeValueConnector) {
-          completeViewWithDynamicLabel(viewPeer, viewDescriptor, (IComponentDescriptor<?>) modelDescriptor,
+        if (modelDescriptor instanceof IComponentDescriptorProvider<?>
+            && viewConnector instanceof ICompositeValueConnector) {
+          IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) modelDescriptor)
+              .getComponentDescriptor();
+          completeViewWithDynamicLabel(viewPeer, viewDescriptor, componentDescriptor,
               (ICompositeValueConnector) viewConnector);
         }
         viewConnector.setModelDescriptor(viewDescriptor.getModelDescriptor());
