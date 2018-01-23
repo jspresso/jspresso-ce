@@ -3053,7 +3053,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      */
     _createTabContainer: function (remoteTabContainer) {
       // view remoteTabContainer may have to be retrieved for late update
-      // of cards.
+      // of tabs.
       this._getRemotePeerRegistry().register(remoteTabContainer);
 
       var tabContainer = new qx.ui.tabview.TabView();
@@ -3071,7 +3071,36 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         tabComponent.setAllowStretchY(true, true);
         tab.add(tabComponent);
 
-        tabContainer.add(tab);
+        var tabState = remoteTab.getState();
+        tabState.setUserData("tab", tab);
+        tabState.setUserData("remoteTab", remoteTab);
+        this._getRemotePeerRegistry().register(tabState);
+        if (tabState) {
+          tabState.addListener("changeReadable", function (e) {
+            var state = e.getTarget();
+            var sourceTab = state.getUserData("tab");
+            if (e.getData()) {
+              var sourceRemoteTab = state.getUserData("remoteTab");
+              var tabIndex = 0;
+              for (var j = 0; j < remoteTabContainer.getTabs().length; j++) {
+                var existingRemoteTab = remoteTabContainer.getTabs()[j];
+                if (sourceRemoteTab == existingRemoteTab) {
+                  break;
+                } else {
+                  if (existingRemoteTab.getState().isReadable()) {
+                    tabIndex++;
+                  }
+                }
+              }
+              tabContainer.addAt(sourceTab, tabIndex);
+            } else {
+              tabContainer.remove(sourceTab);
+            }
+          }, this);
+        }
+        if (tabState.isReadable()) {
+          tabContainer.add(tab);
+        }
       }
       remoteTabContainer.addListener("changeSelectedIndex", function (event) {
         tabContainer.setSelection([tabContainer.getChildren()[event.getData()]]);

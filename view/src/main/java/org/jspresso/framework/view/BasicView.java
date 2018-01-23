@@ -21,6 +21,7 @@ package org.jspresso.framework.view;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
@@ -30,7 +31,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  *     the type of component this view uses.
  * @author Vincent Vandenschrick
  */
-public class BasicView<E> implements IView<E> {
+public class BasicView<E> extends AbstractPropertyChangeCapable implements IView<E>{
 
   private IValueConnector connector;
   private IViewDescriptor descriptor;
@@ -105,7 +106,9 @@ public class BasicView<E> implements IView<E> {
    */
   @Override
   public void setConnector(IValueConnector connector) {
+    IValueConnector oldConnector = this.connector;
     this.connector = connector;
+    firePropertyChange(CONNECTOR_PROPERTY, oldConnector,connector);
   }
 
   /**
@@ -115,7 +118,9 @@ public class BasicView<E> implements IView<E> {
    *     the descriptor to set.
    */
   public void setDescriptor(IViewDescriptor descriptor) {
+    IViewDescriptor oldDescriptor = this.descriptor;
     this.descriptor = descriptor;
+    firePropertyChange(DESCRIPTOR_PROPERTY, oldDescriptor, descriptor);
   }
 
   /**
@@ -126,7 +131,9 @@ public class BasicView<E> implements IView<E> {
    */
   @Override
   public void setParent(IView<E> parent) {
+    IView<E> oldParent = this.parent;
     this.parent = parent;
+    firePropertyChange(PARENT_PROPERTY, oldParent, parent);
   }
 
   /**
@@ -137,7 +144,9 @@ public class BasicView<E> implements IView<E> {
    */
   @Override
   public void setPeer(E peer) {
+    E oldPeer = this.peer;
     this.peer = peer;
+    firePropertyChange("peer", oldPeer, peer);
   }
 
   /**

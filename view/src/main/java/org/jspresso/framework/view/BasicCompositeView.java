@@ -57,6 +57,7 @@ public class BasicCompositeView<E> extends BasicView<E> implements
    *          the children to set.
    */
   public void setChildren(List<IView<E>> children) {
+    List<IView<E>> oldChildren = this.children;
     if (this.children != null) {
       for (IView<E> child : this.children) {
         child.setParent(null);
@@ -68,5 +69,6 @@ public class BasicCompositeView<E> extends BasicView<E> implements
         child.setParent(this);
       }
     }
+    firePropertyChange(CHILDREN_PROPERTY, oldChildren, children);
   }
 }

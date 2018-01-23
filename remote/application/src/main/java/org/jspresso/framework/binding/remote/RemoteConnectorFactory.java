@@ -314,13 +314,25 @@ public class RemoteConnectorFactory
             == connector) {
           // don't listen to rendering connectors.
           connector.removePropertyChangeListener(IValueConnector.READABLE_PROPERTY, this);
-        } else if (connector.getParentConnector() instanceof ICollectionConnectorProvider
-            && ((ICollectionConnectorProvider) connector.getParentConnector()).getCollectionConnector() == connector) {
-          // don't listen to provided collection connector.
+          // The following breaks notification on detail tables !!!
+          // } else if (connector.getParentConnector() instanceof
+          // ICollectionConnectorProvider
+          // && ((ICollectionConnectorProvider) connector.getParentConnector())
+          // .getCollectionConnector() == connector) {
+          // // don't listen to provided collection connector.
+          // connector.removePropertyChangeListener(
+          // IValueConnector.READABLE_PROPERTY, this);
+        } else if (connector.getParentConnector() == null && connector.getId() == null) {
+          // don't listen to root connectors.
+          connector.removePropertyChangeListener(IValueConnector.READABLE_PROPERTY, this);
+        } else if (connector instanceof ICollectionConnectorProvider && isCascadingModelWrapperConnector(
+            (ICollectionConnectorProvider) connector)) {
+          // don't listen to maser-detail wrappers.
           connector.removePropertyChangeListener(IValueConnector.READABLE_PROPERTY, this);
         } else {
           if (!isRecycling(connector)) {
             RemoteValueState state = ((IRemoteStateOwner) connector).getState();
+            // state.setReadable(((Boolean) evt.getNewValue()).booleanValue());
             RemoteReadabilityCommand command = new RemoteReadabilityCommand();
             command.setTargetPeerGuid(state.getGuid());
             command.setReadable(state.isReadable());

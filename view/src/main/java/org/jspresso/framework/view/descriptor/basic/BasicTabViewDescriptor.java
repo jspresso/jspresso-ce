@@ -39,7 +39,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  */
 public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor implements ITabViewDescriptor {
 
-  private ERenderingOptions renderingOptions;
+  private ERenderingOptions     renderingOptions;
   private List<IViewDescriptor> tabs;
   private boolean               lazy;
   private IAction               tabSelectionAction;
@@ -129,6 +129,12 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor impleme
    */
   @Override
   public boolean isLazy() {
+    for (IViewDescriptor tab : tabs) {
+      if (tab.getReadabilityGates() != null) {
+        // Hiding / showing tabs based on dynamic readability prevents from using lazy tab binding
+        return false;
+      };
+    }
     return lazy && !isCascadingModels();
   }
 

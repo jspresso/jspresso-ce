@@ -80,6 +80,7 @@ import mx.events.IndexChangedEvent;
 import mx.events.ItemClickEvent;
 import mx.events.ListEvent;
 import mx.events.MenuEvent;
+import mx.events.PropertyChangeEvent;
 import mx.events.ResizeEvent;
 import mx.formatters.Formatter;
 import mx.formatters.NumberBase;
@@ -2228,7 +2229,24 @@ public class DefaultFlexViewFactory {
       tabCanvas.label = rTab.label;
       tabCanvas.horizontalScrollPolicy = ScrollPolicy.OFF;
       tabCanvas.verticalScrollPolicy = ScrollPolicy.OFF;
+
+      var tabState:RemoteValueState = rTab.state;
+      tabState["tabIndex"] = i;
+      tabState["remoteTab"] = rTab;
+      this._remotePeerRegistry.register(tabState);
       tabContainer.addChild(tabCanvas);
+      if (tabState) {
+        tabState.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, function (e:PropertyChangeEvent):void {
+          if (e.property == "readable") {
+            var state:RemoteValueState = e.source as RemoteValueState;
+            var sourceTab = state["tab"];
+            var sourceTabIndex:int = state["tabIndex"];
+            var tabButton:Button = tabContainer.getTabAt(sourceTabIndex);
+            tabButton.visible = e.newValue;
+            tabButton.includeInLayout = e.newValue;
+          }
+        });
+      }
       if (rTab.toolTip != null) {
         tabCanvas.toolTip = rTab.toolTip;
       }
@@ -2251,7 +2269,7 @@ public class DefaultFlexViewFactory {
       tabCanvas.addChild(tabContent);
     }
 
-    var assignTabsIcons:Function = function (event:FlexEvent):void {
+    var completeCreation:Function = function (event:FlexEvent):void {
       if (event.target is TabNavigator) {
         var tabContainer:TabNavigator = event.target as TabNavigator;
         for (var tabIndex:int = 0; tabIndex < tabContainer.getChildren().length; tabIndex++) {
@@ -2266,10 +2284,18 @@ public class DefaultFlexViewFactory {
             tabContainer.measuredHeight = tab.getExplicitOrMeasuredHeight();
           }
         }
-        tabContainer.removeEventListener(FlexEvent.CREATION_COMPLETE, assignTabsIcons);
+        for (var i:int = 0; i < remoteTabContainer.tabs.length; i++) {
+          var rTab:RComponent = remoteTabContainer.tabs[i] as RComponent;
+          if (!rTab.state.readable) {
+            var tabButton:Button = tabContainer.getTabAt(i);
+            tabButton.visible = false
+            tabButton.includeInLayout = false;
+          }
+        }
+        tabContainer.removeEventListener(FlexEvent.CREATION_COMPLETE, completeCreation);
       }
     };
-    tabContainer.addEventListener(FlexEvent.CREATION_COMPLETE, assignTabsIcons);
+    tabContainer.addEventListener(FlexEvent.CREATION_COMPLETE, completeCreation);
 
     BindingUtils.bindProperty(tabContainer, "selectedIndex", remoteTabContainer, "selectedIndex", true);
     BindingUtils.bindSetter(function (index:int):void {

@@ -151,7 +151,6 @@ import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEnumerationPropertyViewDescriptor;
-import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IMapViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
@@ -182,6 +181,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
   private IRemotePeerRegistry     remotePeerRegistry;
   private IRemoteStateValueMapper binaryStateValueMapper;
   private IRemoteStateValueMapper enumerationStateValueMapper;
+  private PropertyChangeListener  connectorStateListener;
 
   /**
    * Instantiates a new Abstract remote view factory.
@@ -225,6 +225,20 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
           return null;
         }
         return originalValue;
+      }
+    };
+
+    connectorStateListener = new PropertyChangeListener() {
+      @Override
+      public void propertyChange(PropertyChangeEvent evt) {
+        IView<RComponent> view = (IView<RComponent>) evt.getSource();
+        RComponent peer = view.getPeer();
+        IValueConnector connector = (IValueConnector) evt.getNewValue();
+        if (connector instanceof IRemoteStateOwner) {
+          peer.setState(((IRemoteStateOwner) connector).getState());
+        } else {
+          peer.setState(null);
+        }
       }
     };
   }
@@ -786,7 +800,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
    * @return the r action list
    */
   protected RActionList createBinaryActionList(IView<RComponent> propertyView, IActionHandler actionHandler,
-                                             Locale locale) {
+                                               Locale locale) {
     RActionList actionList = new RActionList(getGuidGenerator().generateGUID());
     List<RAction> binaryActions = createBinaryActions(propertyView, actionHandler, locale);
     actionList.setActions(binaryActions.toArray(new RAction[binaryActions.size()]));
@@ -1141,8 +1155,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     }
     IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
     if (propertyViewDescriptor.getAction() != null) {
-      RAction action = getActionFactory().createAction(propertyViewDescriptor.getAction(), actionHandler, view,
-          locale);
+      RAction action = getActionFactory().createAction(propertyViewDescriptor.getAction(), actionHandler, view, locale);
       configurePropertyViewAction(propertyViewDescriptor, action);
       viewComponent.setAction(action);
     }
@@ -1992,7 +2005,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
                                                              IComponentDescriptor<?> modelDescriptor) {
     // Compute dynamic background
     for (IView<RComponent> propertyView : propertyViews) {
-      completeViewWithDynamicBackground(propertyView.getPeer(), propertyView.getDescriptor(), modelDescriptor, connector);
+      completeViewWithDynamicBackground(propertyView.getPeer(), propertyView.getDescriptor(), modelDescriptor,
+          connector);
     }
   }
 
@@ -2001,7 +2015,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
                                                              IComponentDescriptor<?> modelDescriptor) {
     // Compute dynamic foreground
     for (IView<RComponent> propertyView : propertyViews) {
-      completeViewWithDynamicForeground(propertyView.getPeer(), propertyView.getDescriptor(), modelDescriptor, connector);
+      completeViewWithDynamicForeground(propertyView.getPeer(), propertyView.getDescriptor(), modelDescriptor,
+          connector);
     }
   }
 
@@ -2259,12 +2274,21 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     return view;
   }
 
+  @Override
+  protected BasicCompositeView<RComponent> constructCompositeView(RComponent viewComponent,
+                                                                  IViewDescriptor descriptor) {
+    final BasicCompositeView<RComponent> compositeView = super.constructCompositeView(viewComponent, descriptor);
+    compositeView.addPropertyChangeListener(IView.CONNECTOR_PROPERTY, connectorStateListener);
+    return compositeView;
+  }
+
   /**
    * {@inheritDoc}
    */
   @Override
   protected BasicIndexedView<RComponent> constructIndexedView(RComponent viewComponent, ITabViewDescriptor descriptor) {
     BasicIndexedView<RComponent> indexedView = super.constructIndexedView(viewComponent, descriptor);
+    indexedView.addPropertyChangeListener(IView.CONNECTOR_PROPERTY, connectorStateListener);
     getRemotePeerRegistry().register(viewComponent);
     viewComponent.setPermId(getRemotePeerRegistry().registerPermId(descriptor.getPermId(), viewComponent.getGuid()));
     return indexedView;

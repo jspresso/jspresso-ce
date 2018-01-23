@@ -29,7 +29,7 @@ import org.jspresso.framework.util.bean.SinglePropertyChangeSupport;
  */
 public class RTabContainer extends RContainer {
 
-  private static final long           serialVersionUID = 8976562094649779477L;
+  private static final long serialVersionUID = 8976562094649779477L;
 
   private RComponent[]                tabs;
   private int                         selectedIndex;
@@ -39,7 +39,7 @@ public class RTabContainer extends RContainer {
    * Constructs a new {@code RTabContainer} instance.
    *
    * @param guid
-   *          the guid
+   *     the guid
    */
   public RTabContainer(String guid) {
     super(guid);
@@ -67,7 +67,7 @@ public class RTabContainer extends RContainer {
    * Sets the tabs.
    *
    * @param tabs
-   *          the tabs to set.
+   *     the tabs to set.
    */
   public void setTabs(RComponent... tabs) {
     this.tabs = tabs;
@@ -86,18 +86,19 @@ public class RTabContainer extends RContainer {
    * Sets the selectedIndex.
    *
    * @param selectedIndex
-   *          the selectedIndex to set.
+   *     the selectedIndex to set.
    */
   public void setSelectedIndex(int selectedIndex) {
     int oldSelectedIndex = this.selectedIndex;
     this.selectedIndex = selectedIndex;
-    propertyChangeSupport.firePropertyChange("selectedIndex", oldSelectedIndex,
-        selectedIndex);
+    propertyChangeSupport.firePropertyChange("selectedIndex", oldSelectedIndex, selectedIndex);
   }
 
   /**
    * Delegates to support.
-   * @param listener the listener.
+   *
+   * @param listener
+   *     the listener.
    * @see java.beans.PropertyChangeSupport#addPropertyChangeListener(java.beans.PropertyChangeListener)
    */
   public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -106,7 +107,9 @@ public class RTabContainer extends RContainer {
 
   /**
    * Delegates to support.
-   * @param listener the listener.
+   *
+   * @param listener
+   *     the listener.
    * @see java.beans.PropertyChangeSupport#removePropertyChangeListener(java.beans.PropertyChangeListener)
    */
   public void removePropertyChangeListener(PropertyChangeListener listener) {
@@ -115,26 +118,29 @@ public class RTabContainer extends RContainer {
 
   /**
    * Delegates to support.
-   * @param propertyName the property name.
-   * @param listener the listener.
-   * @see java.beans.PropertyChangeSupport#addPropertyChangeListener(java.lang.String,
-   *      java.beans.PropertyChangeListener)
+   *
+   * @param propertyName
+   *     the property name.
+   * @param listener
+   *     the listener.
+   * @see java.beans.PropertyChangeSupport#addPropertyChangeListener(java.lang.String, * java.beans
+   * .PropertyChangeListener)
    */
-  public void addPropertyChangeListener(String propertyName,
-      PropertyChangeListener listener) {
+  public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
     propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
   }
 
   /**
    * Delegates to support.
-   * @param propertyName the property name.
-   * @param listener the listener.
-   * @see java.beans.PropertyChangeSupport#removePropertyChangeListener(java.lang.String,
-   *      java.beans.PropertyChangeListener)
+   *
+   * @param propertyName
+   *     the property name.
+   * @param listener
+   *     the listener.
+   * @see java.beans.PropertyChangeSupport#removePropertyChangeListener(java.lang.String, * java.beans
+   * .PropertyChangeListener)
    */
-  public void removePropertyChangeListener(String propertyName,
-      PropertyChangeListener listener) {
+  public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
     propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
   }
-
 }

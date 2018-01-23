@@ -30,6 +30,11 @@ import java.util.List;
 public interface ICompositeView<E> extends IView<E> {
 
   /**
+   * The constant CHILDREN_PROPERTY.
+   */
+  public static final String CHILDREN_PROPERTY = "children";
+
+  /**
    * Gets the child views.
    *
    * @return the child views.

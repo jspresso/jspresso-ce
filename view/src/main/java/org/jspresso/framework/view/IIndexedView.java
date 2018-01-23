@@ -28,6 +28,11 @@ package org.jspresso.framework.view;
 public interface IIndexedView<E> extends ICompositeView<E> {
 
   /**
+   * The constant CURRENT_VIEW_INDEX_PROPERTY.
+   */
+  public static final String CURRENT_VIEW_INDEX_PROPERTY = "currentViewIndex";
+
+  /**
    * Gets the indexed child view.
    *
    * @param index

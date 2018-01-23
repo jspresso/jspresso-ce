@@ -32,6 +32,19 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 public interface IView<E> extends IViewProvider<E> {
 
   /**
+   * The constant CONNECTOR_PROPERTY.
+   */
+  public static final String CONNECTOR_PROPERTY  = "connector";
+  /**
+   * The constant DESCRIPTOR_PROPERTY.
+   */
+  public static final String DESCRIPTOR_PROPERTY = "descriptor";
+  /**
+   * The constant PARENT_PROPERTY.
+   */
+  public static final String PARENT_PROPERTY     = "parent";
+
+  /**
    * Gets the view connector of this view. This connector is built connected to
    * the view peer.
    *

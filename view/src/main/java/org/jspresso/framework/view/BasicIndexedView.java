@@ -66,7 +66,9 @@ public class BasicIndexedView<E> extends BasicCompositeView<E> implements
    */
   @Override
   public void setCurrentViewIndex(int currentViewIndex) {
+    int oldCurrentViewIndex = this.currentViewIndex;
     this.currentViewIndex = currentViewIndex;
+    firePropertyChange(CURRENT_VIEW_INDEX_PROPERTY, oldCurrentViewIndex, currentViewIndex);
   }
 
   /**
