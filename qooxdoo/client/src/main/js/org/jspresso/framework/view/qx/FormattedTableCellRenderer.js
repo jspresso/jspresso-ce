@@ -63,10 +63,11 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
       if (org.jspresso.framework.util.html.HtmlUtil.isHtml(cellInfo.value)) {
         htmlContent = cellInfo.value;
       } else if (this.__action) {
+        var executeAction = "'executeAction(\\\"\" + this.__action.getGuid() + \"\\\");' ";
         htmlContent = "<u style='cursor: pointer;' "
-            + "onMouseUp='executeAction(\"" + this.__action.getGuid() + "\");' "
-            + "onPointerUp='executeAction(\"" + this.__action.getGuid() + "\");' "
-            + "onTouchEnd='executeAction(\"" + this.__action.getGuid() + "\");' "
+            + "onMouseUp=" + executeAction
+            + "onPointerUp=" + executeAction
+            + "onTouchEnd=" + executeAction
             + ">"
             + this.base(arguments, cellInfo) + "</u>";
       } else {
@@ -91,10 +92,13 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
                 });
 
                 actionsHtmlContent += "<div";
-                // actionsHtmlContent += " onMouseUp='executeAction(\"" + remoteAction.getGuid() + "\", null, \""
-                //     + cellViewState.getGuid() + "\", \"" + cellViewState.getPermId() + "\")'"
+                var executeAction = "'executeAction(\"" + remoteAction.getGuid() + "\", null, \""
+                    + cellViewState.getGuid() + "\", \"" + cellViewState.getPermId() + "\")'";
+                actionsHtmlContent += " onMouseUp=" + executeAction
+                actionsHtmlContent += " onPointerUp=" + executeAction
+                actionsHtmlContent += " onTouchEnd=" + executeAction
                 actionsHtmlContent += " style='overflow: hidden;";
-                // actionsHtmlContent += " cursor: pointer;";
+                actionsHtmlContent += " cursor: pointer;";
                 actionsHtmlContent += " top: 5px;";
 
                 if (iconDimension) {

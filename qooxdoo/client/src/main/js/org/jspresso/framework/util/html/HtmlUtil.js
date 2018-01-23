@@ -69,11 +69,12 @@ qx.Class.define("org.jspresso.framework.util.html.HtmlUtil", {
 
     bindActionToHtmlContent: function (htmlContent, action) {
       if (htmlContent && action) {
+        var executeAction = "'executeAction(\"$1\")' ";
         htmlContent = htmlContent.replace(/<a href='executeAction\(['"]?([^\)]*)['"]?\)'>/g,
             "<u "
-            + "onMouseUp='executeAction(\"$1\")' "
-            + "onPointerUp='executeAction(\"$1\")' "
-            + "onTouchEnd='executeAction(\"$1\")'>");
+            + "onMouseUp=" + executeAction
+            + "onPointerUp=" + executeAction
+            + "onTouchEnd=" + executeAction);
         htmlContent = htmlContent.replace(/<\/a>/g, "</u>");
         htmlContent = htmlContent.replace(/executeAction\(/g, "executeAction(\"" + action.getGuid() + "\",");
         htmlContent = htmlContent.replace(/\,\)/g, ")");

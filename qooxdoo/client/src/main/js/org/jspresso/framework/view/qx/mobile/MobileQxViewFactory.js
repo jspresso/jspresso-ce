@@ -1687,10 +1687,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
                 if (org.jspresso.framework.util.html.HtmlUtil.isHtml(modelValue)) {
                   htmlContent = modelValue;
                 } else {
+                  var executeAction = "'executeAction(\\\"\" + remoteLabelAction.getGuid() + \"\\\");' ";
                   htmlContent = "<u "
-                      + "onMouseUp='executeAction(\"" + remoteLabelAction.getGuid() + "\");' "
-                      + "onPointerUp='executeAction(\"" + remoteLabelAction.getGuid() + "\");' "
-                      + "onTouchEnd='executeAction(\"" + remoteLabelAction.getGuid() + "\");'"
+                      + "onMouseUp=" + executeAction
+                      + "onPointerUp=" + executeAction
+                      + "onTouchEnd=" + executeAction
                       + ">" + modelValue + "</u>";
                 }
                 htmlContent = org.jspresso.framework.util.html.HtmlUtil.bindActionToHtmlContent(htmlContent,
