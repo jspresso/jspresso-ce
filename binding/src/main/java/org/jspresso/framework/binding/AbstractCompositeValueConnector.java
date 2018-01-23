@@ -207,7 +207,7 @@ public abstract class AbstractCompositeValueConnector extends
    */
   @Override
   public void readabilityChange() {
-    super.writabilityChange();
+    super.readabilityChange();
     for (String key : getChildConnectorKeys()) {
       getChildConnector(key).readabilityChange();
     }
