@@ -1687,7 +1687,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
                 if (org.jspresso.framework.util.html.HtmlUtil.isHtml(modelValue)) {
                   htmlContent = modelValue;
                 } else {
-                  var executeAction = "'executeAction(\\\"\" + remoteLabelAction.getGuid() + \"\\\");' ";
+                  var executeAction = "'executeAction(\"" + remoteLabelAction.getGuid() + "\");' ";
                   htmlContent = "<u "
                       + "onMouseUp=" + executeAction
                       + "onPointerUp=" + executeAction

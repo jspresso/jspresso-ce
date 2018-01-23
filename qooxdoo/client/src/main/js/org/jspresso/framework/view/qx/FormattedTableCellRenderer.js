@@ -63,7 +63,7 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
       if (org.jspresso.framework.util.html.HtmlUtil.isHtml(cellInfo.value)) {
         htmlContent = cellInfo.value;
       } else if (this.__action) {
-        var executeAction = "'executeAction(\\\"\" + this.__action.getGuid() + \"\\\");' ";
+        var executeAction = "'executeAction(\"" + this.__action.getGuid() + " \");' ";
         htmlContent = "<u style='cursor: pointer;' "
             + "onMouseUp=" + executeAction
             + "onPointerUp=" + executeAction
