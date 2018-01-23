@@ -3072,10 +3072,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         tab.add(tabComponent);
 
         var tabState = remoteTab.getState();
-        tabState.setUserData("tab", tab);
-        tabState.setUserData("remoteTab", remoteTab);
-        this._getRemotePeerRegistry().register(tabState);
         if (tabState) {
+          this._getRemotePeerRegistry().register(tabState);
+          tabState.setUserData("tab", tab);
+          tabState.setUserData("remoteTab", remoteTab);
           tabState.addListener("changeReadable", function (e) {
             var state = e.getTarget();
             var sourceTab = state.getUserData("tab");
@@ -3098,7 +3098,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             }
           }, this);
         }
-        if (tabState.isReadable()) {
+        if (!tabState || tabState.isReadable()) {
           tabContainer.add(tab);
         }
       }
