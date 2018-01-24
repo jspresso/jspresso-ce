@@ -2421,7 +2421,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           cellRenderer.setAction(rColumn.getAction());
         } else {
           var format = this._createFormat(rColumn);
-          cellRenderer = new org.jspresso.framework.view.qx.FormattedTableCellRenderer(table, format);
+          cellRenderer = new org.jspresso.framework.view.qx.FormattedTableCellRenderer(table, format, this._getRemotePeerRegistry());
           cellRenderer.setUseAutoAlign(false);
 
           if (rColumn instanceof org.jspresso.framework.gui.remote.RLink || rColumn

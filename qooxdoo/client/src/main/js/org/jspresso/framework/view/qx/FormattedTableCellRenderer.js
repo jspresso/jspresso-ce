@@ -20,15 +20,17 @@
 qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
   extend: qx.ui.table.cellrenderer.Default, include: [org.jspresso.framework.view.qx.MCellAdditionalStyle],
 
-  construct: function (table, format) {
+  construct: function (table, format, peerRegistry) {
     this.base(arguments);
     this.__table = table;
     this.__format = format;
+    this.__peerRegistry = peerRegistry;
   },
 
   members: {
     __format: null,
     __table: null,
+    __peerRegistry: null,
     __action: null,
     __asideActions: null,
     __disableActionsWithField: false,
@@ -128,6 +130,11 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
     },
 
     setAction: function (action) {
+      if (action) {
+        if (!this.__peerRegistry.getRegistered(action)) {
+          this.__peerRegistry.register(action)
+        }
+      }
       this.__action = action;
     },
 
@@ -136,6 +143,17 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
     },
 
     setAsideActions: function (asideActions) {
+      if (asideActions) {
+        for (var i = 0; i < asideActions.length; i++) {
+          var actionList = asideActions[i];
+          for (var j = 0; j < actionList.getActions().length; j++) {
+            var action = actionList.getActions()[j];
+            if (!this.__peerRegistry.getRegistered(action)) {
+              this.__peerRegistry.register(action)
+            }
+          }
+        }
+      }
       this.__asideActions = asideActions;
     },
 
