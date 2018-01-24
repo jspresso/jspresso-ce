@@ -112,6 +112,12 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    */
   static class State extends org.jspresso.framework.model.component.basic.BasicComponentPropertyStore {
 
+  <#list componentDescriptor.propertyDescriptors as propertyDescriptor>
+    <#if !propertyDescriptor.computed || propertyDescriptor.persistenceFormula??>
+      <#local propertyName=propertyDescriptor.name/>
+    private final static String ${generateConstantName(propertyName)} = "${propertyName}";
+    </#if>
+  </#list>
   <@generateStateGet componentDescriptor=componentDescriptor/>
   <@generateStateSet componentDescriptor=componentDescriptor/>
   <#list componentDescriptor.propertyDescriptors as propertyDescriptor>
