@@ -2231,11 +2231,11 @@ public class DefaultFlexViewFactory {
       tabCanvas.verticalScrollPolicy = ScrollPolicy.OFF;
 
       var tabState:RemoteValueState = rTab.state;
-      tabState["tabIndex"] = i;
-      tabState["remoteTab"] = rTab;
-      this._remotePeerRegistry.register(tabState);
       tabContainer.addChild(tabCanvas);
       if (tabState) {
+        tabState["tabIndex"] = i;
+        tabState["remoteTab"] = rTab;
+        this._remotePeerRegistry.register(tabState);
         tabState.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, function (e:PropertyChangeEvent):void {
           if (e.property == "readable") {
             var state:RemoteValueState = e.source as RemoteValueState;
@@ -2286,7 +2286,7 @@ public class DefaultFlexViewFactory {
         }
         for (var i:int = 0; i < remoteTabContainer.tabs.length; i++) {
           var rTab:RComponent = remoteTabContainer.tabs[i] as RComponent;
-          if (!rTab.state.readable) {
+          if (rTab && rTab.state && !rTab.state.readable) {
             var tabButton:Button = tabContainer.getTabAt(i);
             tabButton.visible = false
             tabButton.includeInLayout = false;
