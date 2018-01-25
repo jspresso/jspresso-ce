@@ -31,6 +31,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -130,6 +131,9 @@ public abstract class AbstractComponentInvocationHandler implements
   // the same fake PCL that will be removed when the referent is detached.
   private              PropertyChangeListener fakePcl;
 
+  private final Set<String> firedComputedPropertiesInitialization;
+
+
   static {
     Collection<String> methodNames = new THashSet<>(6);
     for (Method m : ILifecycleCapable.class.getMethods()) {
@@ -165,6 +169,7 @@ public abstract class AbstractComponentInvocationHandler implements
     this.propertyProcessorsEnabled = true;
     this.propertyChangeEnabled = true;
     this.collectionSortEnabled = true;
+    this.firedComputedPropertiesInitialization = new HashSet<>();
   }
 
   /**
@@ -1675,6 +1680,10 @@ public abstract class AbstractComponentInvocationHandler implements
         invokeExtensionMethod(extensionDelegate, method, args);
       } else {
         computedPropertyValue = invokeExtensionMethod(extensionDelegate, method, args);
+        if (!firedComputedPropertiesInitialization.contains(propertyName)) {
+          firedComputedPropertiesInitialization.add(propertyName);
+          firePropertyChange(proxy, propertyName, IPropertyChangeCapable.UNKNOWN, computedPropertyValue);
+        }
       }
       if (accessorInfo.isModifier()) {
         Object newComputedPropertyValue = getAccessorFactory().createPropertyAccessor(propertyDescriptor.getName(),
