@@ -66,11 +66,11 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
 
       var markerStyle = new ol.style.Style({
         image: new ol.style.Icon(/** @type {olx.style.IconOptions} */ {
-          anchor: [0.5, 46],
+          anchor: [0.5, 1],
           anchorXUnits: 'fraction',
-          anchorYUnits: 'pixels',
-          opacity: 0.75,
-          src: qx.util.ResourceManager.getInstance().toUri("org/jspresso/framework/map_marker.png")
+          anchorYUnits: 'fraction',
+          opacity: 0.65,
+          src: qx.util.ResourceManager.getInstance().toUri("org/jspresso/framework/map_marker.svg")
         })
       });
       var markerFeature = new ol.Feature({
@@ -126,10 +126,17 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
         if (markers && markers.length > 0) {
           var markersFeatures = [];
           for (var i = 0; i < markers.length; i++) {
-            var markerNode = ol.proj.fromLonLat(markers[i]);
-            markersFeatures.push(new ol.Feature({
+            var jsonMarker = markers[i];
+            var markerNode = ol.proj.fromLonLat(jsonMarker.coord ? jsonMarker.coord : jsonMarker);
+            var marker = new ol.Feature({
               geometry: new ol.geom.Point(markerNode)
-            }));
+            });
+            if (jsonMarker.image) {
+              marker.setStyle(new ol.style.Style({
+                image: new ol.style.Icon(jsonMarker.image)
+              }));
+            }
+            markersFeatures.push(marker);
             coordinates.push(markerNode);
           }
           this.__markersSource.clear(true);
@@ -142,15 +149,22 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
           var routesFeatures = [];
           for (var i = 0; i < routes.length; i++) {
             var routeNodes = [];
-            var route = routes[i];
-            for (var j = 0; j < route.length; j++) {
-              var routeNode = ol.proj.fromLonLat(route[j]);
+            var jsonRoute = routes[i];
+            var jsonRouteCoord = jsonRoute.path ? jsonRoute.path : jsonRoute;
+            for (var j = 0; j < jsonRouteCoord.length; j++) {
+              var routeNode = ol.proj.fromLonLat(jsonRouteCoord[j]);
               routeNodes.push(routeNode);
               coordinates.push(routeNode);
             }
-            routesFeatures.push(new ol.Feature({
+            var routeSegment = new ol.Feature({
               geometry: new ol.geom.LineString(routeNodes)
-            }));
+            });
+            if (jsonRoute.style) {
+              routeSegment.setStyle(new ol.style.Style({
+                stroke: new ol.style.Stroke(jsonRoute.style)
+              }));
+            }
+            routesFeatures.push(routeSegment);
           }
           this.__routesSource.clear(true);
           this.__routesSource.addFeatures(routesFeatures);

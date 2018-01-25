@@ -959,11 +959,11 @@ public class DefaultFlexViewFactory {
     // mapnik.maxExtent = new Bounds(-20037508.34, -20037508.34, 20037508.34, 20037508.34, mapnik.projection);
     map.addLayer(mapnik);
 
-    var markers:VectorLayer = new VectorLayer("markers");
+    var markersLayer:VectorLayer = new VectorLayer("markers");
     //markers.projection = new ProjProjection("EPSG:4326");
-    markers.generateResolutions(19);
-    markers.style = Style.getDefaultPointStyle();
-    map.addLayer(markers);
+    markersLayer.generateResolutions(19);
+    markersLayer.style = Style.getDefaultPointStyle();
+    map.addLayer(markersLayer);
 
     map.addControl(new EnhancedZoom(getActionHandler()));
     map.addControl(new WheelHandler());
@@ -974,16 +974,17 @@ public class DefaultFlexViewFactory {
     var updateMapLocation:Function = function():void {
       var mapContent:String = mapContentState.value as String;
       if (mapContent) {
-        var markersCoordinates:Array = JSON.parse(mapContent)["markers"] as Array;
-        if (markersCoordinates && markersCoordinates.length > 0) {
-          for (var i:int = 0; i < markersCoordinates.length; i++) {
-            var markerLocation:Location = new Location(markersCoordinates[i][0], markersCoordinates[i][1])
+        var markers:Array = JSON.parse(mapContent)["markers"] as Array;
+        if (markers && markers.length > 0) {
+          for (var i:int = 0; i < markers.length; i++) {
+            var markersCoordinates = markers[i]["coord"] ? markers[i]["coord"] : markers[i];
+            var markerLocation:Location = new Location(markersCoordinates[0], markersCoordinates[1])
             if (i == 0) {
               map.center = markerLocation;
             }
             var marker:PointFeature = PointFeature.createPointFeature(markerLocation);
-            markers.clear();
-            markers.addFeature(marker);
+            markersLayer.clear();
+            markersLayer.addFeature(marker);
           }
           map.visible = true;
         } else {
