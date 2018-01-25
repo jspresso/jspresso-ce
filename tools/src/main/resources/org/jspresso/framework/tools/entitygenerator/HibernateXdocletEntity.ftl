@@ -13,6 +13,7 @@ package ${package};
   </#if>
   <#global reducedTableName=reduceSQLName(tableName)/>
 </#macro>
+
 <#macro generateClassHeader componentDescriptor translationInnerClass>
   <#local componentName=componentDescriptor.name[componentDescriptor.name?last_index_of(".")+1..]/>
   <#local superInterfaceList=[]/>
@@ -225,7 +226,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 
 <#macro generateScalarGetter componentDescriptor propertyDescriptor overridden>
   <#local propertyName=propertyDescriptor.name/>
-  <#if propertyDescriptor.name ="id">
+  <#if isEntity && propertyDescriptor.name ="id">
     <#local propertyType="java.io.Serializable"/>
   <#else>
     <#local propertyType=propertyDescriptor.modelTypeName/>
@@ -248,7 +249,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    * Gets the ${propertyName}.
    *
   <#if !propertyDescriptor.computed>
-    <#if propertyDescriptor.name ="id">
+    <#if isEntity && propertyDescriptor.name ="id">
    * @hibernate.id
    *           generator-class = "assigned"
       <#if hibernateTypeRegistry.getRegisteredType(propertyDescriptor.modelTypeName)??>
@@ -298,7 +299,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
           || instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor")
          )
       && (propertyDescriptor.maxLength??)>
-      <#if propertyDescriptor.name ="id">
+      <#if isEntity && propertyDescriptor.name ="id">
         <#assign idTypeLength = propertyDescriptor.maxLength>
       </#if>
    *           length = "${propertyDescriptor.maxLength?c}"
@@ -922,7 +923,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#if componentDescriptor.declaredPropertyDescriptors??>
     <#assign empty=true/>
     <#list componentDescriptor.declaredPropertyDescriptors as propertyDescriptor>
-      <#if propertyDescriptor.name != "id" && propertyDescriptor.name != "version" && (!(propertyDescriptor.computed && propertyDescriptor.delegateClassName??) || instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IStringPropertyDescriptor") && (propertyDescriptor.translatable || propertyDescriptor.name?ends_with("Nls") || propertyDescriptor.name?ends_with("Raw")))>
+      <#if (!isEntity || propertyDescriptor.name != "id" && propertyDescriptor.name != "version") && (!(propertyDescriptor.computed && propertyDescriptor.delegateClassName??) || instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IStringPropertyDescriptor") && (propertyDescriptor.translatable || propertyDescriptor.name?ends_with("Nls") || propertyDescriptor.name?ends_with("Raw")))>
         <@generatePropertyAccessors componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
         <#assign empty=false/>
       </#if>
@@ -961,6 +962,7 @@ public interface I${componentName}Extension {
   // THIS IS JUST A MARKER INTERFACE.
   </#if>
 </#macro>
+<#global isEntity=componentDescriptor.entity/>
 <@generatePackageHeader componentDescriptor=componentDescriptor/>
 <#if extension>
   <@generateExtensionSource componentDescriptor=componentDescriptor/>
