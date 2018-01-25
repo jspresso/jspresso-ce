@@ -29,9 +29,10 @@ public class RActionEvent implements Serializable {
 
   private static final long serialVersionUID = -4440788717317944053L;
 
-  private String            actionCommand;
-  private String            viewStatePermId;
-  private String            viewStateGuid;
+  private String eventType;
+  private String actionCommand;
+  private String viewStatePermId;
+  private String viewStateGuid;
 
   /**
    * Gets the parameter.
@@ -46,7 +47,7 @@ public class RActionEvent implements Serializable {
    * Sets the parameter.
    *
    * @param parameter
-   *          the parameter to set.
+   *     the parameter to set.
    */
   public void setActionCommand(String parameter) {
     this.actionCommand = parameter;
@@ -74,7 +75,7 @@ public class RActionEvent implements Serializable {
    * Sets the viewStatePermId.
    *
    * @param viewStatePermId
-   *          the viewStatePermId to set.
+   *     the viewStatePermId to set.
    */
   public void setViewStatePermId(String viewStatePermId) {
     this.viewStatePermId = viewStatePermId;
@@ -84,9 +85,28 @@ public class RActionEvent implements Serializable {
    * Sets the viewStateGuid.
    *
    * @param viewStateGuid
-   *          the viewStateGuid to set.
+   *     the viewStateGuid to set.
    */
   public void setViewStateGuid(String viewStateGuid) {
     this.viewStateGuid = viewStateGuid;
+  }
+
+  /**
+   * Gets event type.
+   *
+   * @return the event type
+   */
+  public String getEventType() {
+    return eventType;
+  }
+
+  /**
+   * Sets event type.
+   *
+   * @param eventType
+   *     the event type
+   */
+  public void setEventType(String eventType) {
+    this.eventType = eventType;
   }
 }

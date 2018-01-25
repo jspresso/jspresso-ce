@@ -20,6 +20,7 @@
 package org.jspresso.framework.view.flex {
 
 import flash.display.DisplayObject;
+import flash.display.InteractiveObject;
 import flash.events.Event;
 import flash.events.FocusEvent;
 import flash.events.KeyboardEvent;
@@ -720,16 +721,6 @@ public class DefaultFlexViewFactory {
   }
 
   protected function decorateWithActions(remoteComponent:RComponent, component:UIComponent):UIComponent {
-    if (remoteComponent.focusGainedAction) {
-      component.addEventListener(FocusEvent.FOCUS_IN, function (event:FocusEvent):void {
-        getActionHandler().execute(remoteComponent.focusGainedAction, null, null, false);
-      });
-    }
-    if (remoteComponent.focusLostAction) {
-      component.addEventListener(FocusEvent.FOCUS_OUT, function (event:FocusEvent):void {
-        getActionHandler().execute(remoteComponent.focusLostAction, null, null, false);
-      });
-    }
     var decorator:UIComponent;
     if(remoteComponent is RTextField
         || remoteComponent is RDateField
@@ -742,6 +733,25 @@ public class DefaultFlexViewFactory {
       decorator = decorateWithAsideActions(component, remoteComponent, false);
     } else {
       decorator = decorateWithToolbars(component, remoteComponent);
+    }
+    if (remoteComponent.focusGainedAction) {
+      component.addEventListener(FocusEvent.FOCUS_IN, function (event:FocusEvent):void {
+        getActionHandler().execute(remoteComponent.focusGainedAction, null, null, false);
+      });
+    }
+    if (remoteComponent.focusLostAction) {
+      component.addEventListener(FocusEvent.FOCUS_OUT, function (event:FocusEvent):void {
+        var triggerAction = true;
+        var relatedObject:InteractiveObject = event.relatedObject;
+        if (relatedObject == null) {
+          triggerAction = false;
+        } else if (decorator is Container && (decorator as Container).contains(relatedObject)) {
+          triggerAction = false;
+        }
+        if (triggerAction) {
+          getActionHandler().execute(remoteComponent.focusLostAction, null, null, false);
+        }
+      });
     }
     return decorator;
   }

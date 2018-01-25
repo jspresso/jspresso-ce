@@ -173,24 +173,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @return {qx.ui.core.Widget}
      */
     _decorateWithActions: function (remoteComponent, component) {
-      if (remoteComponent.getFocusGainedAction()) {
-        component.addListener("focusin", function (event) {
-          if (component.getUserData("focusActionDisabled")) {
-            component.setUserData("focusActionDisabled", false)
-          } else {
-            this._getActionHandler().execute(remoteComponent.getFocusGainedAction());
-          }
-        }, this);
-      }
-      if (remoteComponent.getFocusLostAction()) {
-        component.addListener("focusout", function (event) {
-          if (component.getUserData("focusActionDisabled")) {
-            component.setUserData("focusActionDisabled", false)
-          } else {
-            this._getActionHandler().execute(remoteComponent.getFocusLostAction());
-          }
-        }, this);
-      }
+      var decorated;
       if (remoteComponent instanceof org.jspresso.framework.gui.remote.RTextField || remoteComponent
           instanceof org.jspresso.framework.gui.remote.RDateField || remoteComponent
           instanceof org.jspresso.framework.gui.remote.RNumericComponent || remoteComponent
@@ -199,10 +182,42 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           instanceof org.jspresso.framework.gui.remote.RComboBox || remoteComponent
           instanceof org.jspresso.framework.gui.remote.RCheckBox || remoteComponent
           instanceof org.jspresso.framework.gui.remote.RColorField) {
-        return this._decorateWithAsideActions(component, remoteComponent, false);
+        decorated  = this._decorateWithAsideActions(component, remoteComponent, false);
       } else {
-        return this._decorateWithToolbars(component, remoteComponent);
+        decorated = this._decorateWithToolbars(component, remoteComponent);
       }
+      if (remoteComponent.getFocusGainedAction()) {
+        component.addListener("focusin", function (event) {
+          this._getActionHandler().execute(remoteComponent.getFocusGainedAction());
+        }, this);
+      }
+      if (remoteComponent.getFocusLostAction()) {
+        var listener = function (event) {
+          var triggerAction = false;
+          var actionEvent = null;
+          var eventType = event.getType();
+          if (eventType == "keypress") {
+            if (event.getKeyIdentifier() == "Tab") {
+              triggerAction = true;
+              actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
+              actionEvent.setEventType("keyboard")
+            }
+          } else if(eventType == "focusout") {
+            var relatedTarget = event.getRelatedTarget();
+            if (relatedTarget != null && relatedTarget != component && relatedTarget != decorated && decorated.getLayoutChildren().indexOf(relatedTarget) < 0) {
+              triggerAction = true;
+              actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
+              actionEvent.setEventType("mouse")
+            }
+          }
+          if (triggerAction) {
+            this._getActionHandler().execute(remoteComponent.getFocusLostAction(), actionEvent);
+          }
+        };
+        component.addListener("focusout", listener, this);
+        component.addListener("keypress", listener, this);
+      }
+      return decorated;
     },
 
     _createDefaultToolBar: function (remoteComponent, component) {
@@ -1272,9 +1287,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     focus: function (component) {
       var focusableChild = this._findFirstFocusableComponent(component);
       if (focusableChild) {
-        if (focusableChild instanceof qx.ui.core.Widget) {
-          focusableChild.setUserData("focusActionDisabled", true);
-        }
         focusableChild.focus();
       }
     },

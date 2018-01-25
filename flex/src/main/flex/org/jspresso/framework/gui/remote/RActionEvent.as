@@ -24,6 +24,7 @@ package org.jspresso.framework.gui.remote {
 [RemoteClass(alias="org.jspresso.framework.gui.remote.RActionEvent")]
 public class RActionEvent {
 
+  private var _eventType:String;
   private var _actionCommand:String;
   private var _viewStateGuid:String;
   private var _viewStatePermId:String;
@@ -54,6 +55,14 @@ public class RActionEvent {
 
   public function get viewStatePermId():String {
     return _viewStatePermId;
+  }
+
+  public function get eventType():String {
+    return _eventType;
+  }
+
+  public function set eventType(value:String):void {
+    _eventType = value;
   }
 }
 }

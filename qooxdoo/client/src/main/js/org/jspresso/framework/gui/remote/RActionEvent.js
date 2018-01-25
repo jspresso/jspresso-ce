@@ -25,6 +25,10 @@ qx.Class.define("org.jspresso.framework.gui.remote.RActionEvent", {
   },
 
   properties: {
+    eventType: {
+      check: "String",
+      nullable: true
+    },
     actionCommand: {
       check: "String",
       nullable: true
