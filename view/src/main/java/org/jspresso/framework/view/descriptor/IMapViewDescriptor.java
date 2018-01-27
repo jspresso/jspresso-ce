@@ -26,32 +26,6 @@ package org.jspresso.framework.view.descriptor;
 public interface IMapViewDescriptor extends IViewDescriptor {
 
   /**
-   * The constant MARKERS_KEY is &quot;markers&quot;.
-   */
-  public final String MARKERS_KEY = "markers";
-  /**
-   * The constant MARKER_IMAGE_KEY is &quot;image&quot;.
-   */
-  public final String MARKER_IMAGE_KEY = "image";
-  /**
-   * The constant MARKER_COORD_KEY is &quot;coord&quot;.
-   */
-  public final String MARKER_COORD_KEY = "coord";
-
-  /**
-   * The constant ROUTES_KEY is &quot;routes&quot;.
-   */
-  public final String ROUTES_KEY = "routes";
-  /**
-   * The constant ROUTE_PATH_KEY is &quot;path&quot;.
-   */
-  public final String ROUTE_PATH_KEY = "path";
-  /**
-   * The constant ROUTE_STYLE_KEY is &quot;style&quot;.
-   */
-  public final String ROUTE_STYLE_KEY = "style";
-
-  /**
    * Gets map content property.
    *
    * @return the map content property
