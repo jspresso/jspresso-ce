@@ -28,7 +28,7 @@ import org.jspresso.framework.binding.basic.BasicCompositeConnector;
 import org.jspresso.framework.binding.basic.BasicValueConnector;
 import org.jspresso.framework.util.event.IValueChangeListener;
 import org.jspresso.framework.util.event.ValueChangeEvent;
-import org.jspresso.framework.view.descriptor.IMapViewDescriptor;
+import org.jspresso.framework.util.gui.map.MapHelper;
 
 /**
  * JMapViewConnector connector.
@@ -65,7 +65,7 @@ public class JMapViewConnector extends BasicCompositeConnector {
         if (mapContent != null) {
           try {
             JSONObject mapContentAsJson = new JSONObject(mapContent);
-            JSONArray markers = mapContentAsJson.optJSONArray(IMapViewDescriptor.MARKERS_KEY);
+            JSONArray markers = mapContentAsJson.optJSONArray(MapHelper.MARKERS_KEY);
             if (markers != null && markers.length() > 0) {
               JSONArray marker = markers.getJSONArray(0);
               mapView.setCenter(marker.getDouble(1), marker.getDouble(0));
