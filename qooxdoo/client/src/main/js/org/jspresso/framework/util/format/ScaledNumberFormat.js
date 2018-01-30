@@ -87,9 +87,14 @@ qx.Class.define("org.jspresso.framework.util.format.ScaledNumberFormat", {
       var groupSepEsc = qx.lang.String.escapeRegexpChars(this.getThousandsSeparator());
       var decimalSepEsc = '[' + qx.lang.String.escapeRegexpChars(this.getDecimalSeparator()) + '\\.]';
 
+      var postFixNoBlank = this.getPostfix();
+      if (postFixNoBlank) {
+        postFixNoBlank = postFixNoBlank.replace(" ", "");
+      }
       var regex = new RegExp("^" + qx.lang.String.escapeRegexpChars(this.getPrefix()) + '([-+]){0,1}' + '([0-9]{1,3}(?:'
           + groupSepEsc + '{0,1}[0-9]{3}){0,})' + '(' + decimalSepEsc + '\\d+){0,1}'
-          + qx.lang.String.escapeRegexpChars(this.getPostfix()) + "$");
+          + '[ ]*'
+          + '(' + qx.lang.String.escapeRegexpChars(postFixNoBlank) + '){0,1}' + "$");
 
       var hit = regex.exec(str);
 

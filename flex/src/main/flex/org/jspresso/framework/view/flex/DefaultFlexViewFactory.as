@@ -3589,7 +3589,15 @@ public class DefaultFlexViewFactory {
       numberFormatter.thousandsSeparatorFrom = "";
       numberFormatter.rounding = NumberBaseRoundType.NEAREST;
       if (remoteComponent is RDecimalComponent) {
-        numberFormatter.precision = (remoteComponent as RDecimalComponent).maxFractionDigit;
+        var precision:int = (remoteComponent as RDecimalComponent).maxFractionDigit;
+        if (remoteComponent is RPercentField) {
+          if (precision >= 2) {
+            precision -= 2;
+          } else {
+            precision = 0;
+          }
+        }
+        numberFormatter.precision = precision;
       } else if (remoteComponent is RIntegerField) {
         numberFormatter.precision = 0;
       }
