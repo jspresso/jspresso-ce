@@ -137,7 +137,7 @@ public class MapHelper {
                     routeStyle.put("color", route.getColor());
                     routeStyle.put("width", route.getWidth());
                     if (route.getOptions()!=null) {
-                        applyOptions(route, json);
+                        applyOptions(route, routeStyle);
                     }
 
                     json.put(ROUTE_STYLE_KEY, routeStyle);
@@ -161,6 +161,22 @@ public class MapHelper {
             Object value = entry.getValue();
             if (value instanceof Collection) {
                 json.put(entry.getKey(), (Collection)value);
+            }
+            else if (value instanceof int[]) {
+                List<Integer> ints = new ArrayList<>();
+                for (int i : (int[])value)
+                    ints.add(i);
+
+                json.put(entry.getKey(), ints);
+            }
+            else if (value instanceof Integer) {
+                json.put(entry.getKey(), (int)value);
+            }
+            else if (value instanceof Boolean) {
+                json.put(entry.getKey(), (boolean)value);
+            }
+            else if (value instanceof Double) {
+                json.put(entry.getKey(), (double)value);
             }
             else {
                 json.put(entry.getKey(), value);

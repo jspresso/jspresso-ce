@@ -24,7 +24,6 @@ import java.util.Map;
 
 /**
  * Abstract data
- * @see <a href="https://openlayers.org/en/latest/apidoc/ol.style.Icon.html">Open layers</a>
  *
  * @author Maxime HAMM
  * Date: 27/01/2018
@@ -35,7 +34,6 @@ class AbstractData implements Serializable {
 
     /**
      * Gets options
-     * @see <a href="https://openlayers.org/en/latest/apidoc/ol.style.Icon.html">Open layers</a>
      *
      * @return The options
      */
@@ -45,7 +43,8 @@ class AbstractData implements Serializable {
 
     /**
      * Add option
-     * @see <a href="https://openlayers.org/en/latest/apidoc/ol.style.Icon.html">Open layers</a>
+     * @see <a href="https://openlayers.org/en/latest/apidoc/ol.style.Icon.html">Open layers (point's icon)</a>
+     * @see <a href="https://openlayers.org/en/latest/apidoc/ol.style.Stroke.html">Open layers (route's lines)</a>
      *
      * @param option The option key
      * @param object The option value

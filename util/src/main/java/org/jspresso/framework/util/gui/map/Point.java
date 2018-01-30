@@ -25,6 +25,8 @@ import java.io.Serializable;
 
 /**
  * Point
+ * @see <a href="https://openlayers.org/en/latest/apidoc/ol.style.Icon.html">Open layers icon</a>
+ *
  * @author Maxime HAMM
  * Date: 27/01/2018
  */
