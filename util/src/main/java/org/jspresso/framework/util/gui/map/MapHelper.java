@@ -97,9 +97,11 @@ public class MapHelper {
                     JSONObject marker = new JSONObject();
                     marker.put(MARKER_COORD_KEY, Arrays.asList(p.getLongitude(), p.getLatitude()));
 
-                    if (p.getImagePath() != null) {
+                    String imageUrl = p.getImageUrl();
+                    if (imageUrl != null) {
+
                         JSONObject image = new JSONObject();
-                        image.put("src", getImageUrl(p.getImagePath(), p.getImageDimension()));
+                        image.put("src", imageUrl);
 
                         if (p.getColor() != null) {
                             image.put("color", p.getColor());
@@ -150,21 +152,6 @@ public class MapHelper {
         } catch (JSONException ex) {
             throw new NestedRuntimeException(ex);
         }
-    }
-
-    /**
-     * Gets image URL from resource path
-     * @param path The resource path
-     * @return The url
-     */
-    public static String getImageUrl(String path, Dimension dimension) {
-
-        if (!path.startsWith("classpath:")) {
-
-            String slash = path.startsWith("/") ? "" : "/";
-            path = "classpath:" + slash + path;
-        }
-        return ResourceProviderServlet.computeImageResourceDownloadUrl(path, dimension);
     }
 
     private static void applyOptions(AbstractData data, JSONObject json) throws JSONException {

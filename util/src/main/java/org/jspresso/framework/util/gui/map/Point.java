@@ -19,6 +19,7 @@
 package org.jspresso.framework.util.gui.map;
 
 import org.jspresso.framework.util.gui.Dimension;
+import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 
 import java.io.Serializable;
 
@@ -42,6 +43,7 @@ public class Point extends AbstractData {
 
     double longitude, latitude;
     String imagePath;
+    String imageUrl;
     Dimension imageDimension;
     String color;
 
@@ -88,6 +90,30 @@ public class Point extends AbstractData {
      */
     public String getImagePath() {
         return imagePath!=null ? imagePath : MapHelper.RED_MARK;
+    }
+
+    /**
+     * Sets resource image URL
+     * @param imageUrl The image path
+     */
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    /**
+     * Gets resource image URL
+     * @return The resource image path
+     */
+    public String getImageUrl() {
+        if (imageUrl == null && imagePath != null) {
+            if (!imagePath.startsWith("classpath:")) {
+
+                String slash = imagePath.startsWith("/") ? "" : "/";
+                imagePath = "classpath:" + slash + imagePath;
+            }
+            return ResourceProviderServlet.computeImageResourceDownloadUrl(imagePath, getImageDimension());
+        }
+        return imageUrl;
     }
 
     /**
