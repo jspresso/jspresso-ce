@@ -534,13 +534,21 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
         format.setDecimalSeparator(this._getDecimalSeparator());
         format.setGroupingUsed(remoteComponent.getThousandsGroupingUsed());
         if (remoteComponent instanceof org.jspresso.framework.gui.remote.RDecimalComponent) {
+          var maxFractionDigit = remoteComponent.getMaxFractionDigit();
           if (remoteComponent instanceof org.jspresso.framework.gui.remote.RPercentField) {
             format.setScale(100);
             format.setPostfix(" %");
+            if (maxFractionDigit) {
+              if (maxFractionDigit >= 2) {
+                maxFractionDigit -= 2;
+              } else {
+                maxFractionDigit = 0;
+              }
+            }
           }
-          if (remoteComponent.getMaxFractionDigit()) {
-            format.setMaximumFractionDigits(remoteComponent.getMaxFractionDigit());
-            format.setMinimumFractionDigits(remoteComponent.getMaxFractionDigit());
+          if (maxFractionDigit) {
+            format.setMaximumFractionDigits(maxFractionDigit);
+            format.setMinimumFractionDigits(maxFractionDigit);
           }
         } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RIntegerField) {
           format.setMaximumFractionDigits(0);
