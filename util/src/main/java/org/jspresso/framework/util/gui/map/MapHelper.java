@@ -21,8 +21,6 @@ package org.jspresso.framework.util.gui.map;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
-import org.jspresso.framework.util.gui.Dimension;
-import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 
 import java.util.*;
 
