@@ -385,7 +385,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
       var loginView:UIComponent = getViewFactory().createComponent(rLoginView);
       popupDialog(rLoginView.label, rLoginView.toolTip, loginView, rLoginView.icon,
                   extractAllActions(initLoginCommand.loginActionLists), false, null,
-                  initLoginCommand.secondaryLoginActionLists);
+                  initLoginCommand.secondaryLoginActionLists, true);
     } else if (command is RemoteCleanupCommand) {
       var removedPeerGuids:Array = (command as RemoteCleanupCommand).removedPeerGuids;
       for (var rpeerIndex:int = 0; rpeerIndex < removedPeerGuids.length; rpeerIndex++) {
@@ -1431,7 +1431,7 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
 
   protected function popupDialog(title:String, message:String, dialogView:UIComponent, icon:RIcon, actions:Array,
                                  useCurrent:Boolean = false, dimension:Dimension = null,
-                                 secondaryActionLists:Array = null):void {
+                                 secondaryActionLists:Array = null, triggerOnEnter:Boolean = false):void {
     stopCurrentActionTimer();
     dialogView.percentWidth = 100.0;
     dialogView.percentHeight = 100.0;

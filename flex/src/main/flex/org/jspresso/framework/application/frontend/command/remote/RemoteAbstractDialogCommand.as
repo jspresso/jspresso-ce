@@ -29,6 +29,7 @@ public class RemoteAbstractDialogCommand extends RemoteCommand {
   private var _title:String;
   private var _useCurrent:Boolean;
   private var _dimension:Dimension;
+  private var _triggerOnEnter:Boolean;
 
   public function RemoteAbstractDialogCommand() {
     //default constructor.
@@ -64,6 +65,14 @@ public class RemoteAbstractDialogCommand extends RemoteCommand {
 
   public function get dimension():Dimension {
     return _dimension;
+  }
+
+  public function get triggerOnEnter():Boolean {
+    return _triggerOnEnter;
+  }
+
+  public function set triggerOnEnter(value:Boolean):void {
+    _triggerOnEnter = value;
   }
 }
 }

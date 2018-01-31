@@ -447,10 +447,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      * @param useCurrent {Boolean}
      * @param dimension {org.jspresso.framework.util.gui.Dimension}
      * @param secondaryActionLists {org.jspresso.framework.gui.remote.RActionList[]}
+     * @param triggerOnEnter {Boolean}
      * @return {undefined}
      */
     _popupDialog: function (title, message, remoteDialogView, icon, actions, useCurrent, dimension,
-                            secondaryActionLists) {
+                            secondaryActionLists, triggerOnEnter) {
       useCurrent = (typeof useCurrent == 'undefined') ? false : useCurrent;
 
       var dialogView = remoteDialogView;

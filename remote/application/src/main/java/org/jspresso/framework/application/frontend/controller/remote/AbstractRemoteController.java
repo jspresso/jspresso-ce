@@ -953,7 +953,8 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
    */
   @Override
   public void displayDialog(RComponent mainView, List<RAction> actions, String title, RComponent sourceComponent,
-                            Map<String, Object> context, Dimension dimension, boolean reuseCurrent, boolean modal) {
+                            Map<String, Object> context, Dimension dimension, boolean reuseCurrent, boolean modal,
+                            boolean triggerOnEnter) {
     displayModalDialog(mainView, context, reuseCurrent);
     RemoteDialogCommand dialogCommand = new RemoteDialogCommand();
     dialogCommand.setTitle(title);
@@ -961,6 +962,7 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
     dialogCommand.setActions(actions.toArray(new RAction[actions.size()]));
     dialogCommand.setUseCurrent(reuseCurrent);
     dialogCommand.setDimension(dimension);
+    dialogCommand.setTriggerOnEnter(triggerOnEnter);
     registerCommand(dialogCommand);
   }
 

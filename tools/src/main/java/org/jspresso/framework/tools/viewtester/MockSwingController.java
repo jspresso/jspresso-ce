@@ -88,7 +88,7 @@ public class MockSwingController extends
   @Override
   public void displayDialog(JComponent mainView, List<Action> actions,
       String title, JComponent sourceComponent, Map<String, Object> context,
-      Dimension dimension, boolean reuseCurrent, boolean modal) {
+      Dimension dimension, boolean reuseCurrent, boolean modal, boolean triggerOnEnter) {
     displayModalDialog(mainView, context, reuseCurrent);
     final JDialog dialog;
     Window window = SwingUtil.getVisibleWindow(sourceComponent);
