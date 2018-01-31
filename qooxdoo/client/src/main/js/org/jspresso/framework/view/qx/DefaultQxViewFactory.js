@@ -204,7 +204,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             }
           } else if(eventType == "focusout") {
             var relatedTarget = event.getRelatedTarget();
-            if (relatedTarget != null && relatedTarget != component && relatedTarget != decorated && decorated.getLayoutChildren().indexOf(relatedTarget) < 0) {
+            if (relatedTarget != null
+                && !(relatedTarget instanceof qx.ui.root.Abstract)
+                && relatedTarget != component
+                && relatedTarget != decorated
+                && decorated.getLayoutChildren().indexOf(relatedTarget) < 0) {
               triggerAction = true;
               actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
               actionEvent.setEventType("mouse")
