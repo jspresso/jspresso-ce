@@ -125,16 +125,8 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
       } else {
         // propagate focus
         editor.addListener("focus", function () {
-          editorWidget.focus();
-        });
-        /* Can make the browser loop indefinitely. See #347
-        // propagate active state
-        editor.addListener("activate", function () {
-          if (table.isEditing()) {
-            editorWidget.activate();
-          }
-        });
-        */
+          this.__viewFactory.focus(editorWidget);
+        }, this);
         editorWidget.setAllowStretchX(true, true);
       }
       editorWidget.setMaxWidth(null);

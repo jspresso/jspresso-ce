@@ -89,7 +89,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         root.setGlobalCursor("wait");
         qx.event.Timer.once(function () {
           if (this.__busy && !root.isBlocked() && !this._isShowingDialog()) {
-            root.block();
+            root.blockContent();
           }
         }, this, 500);
       } else {
@@ -98,13 +98,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           root.unblock();
         }
       }
-    },
-
-    /**
-     * @return {Boolean}
-     */
-    _isShowingDialog: function () {
-      return this._dialogStack && this._dialogStack.length > 1;
     },
 
     _applyMaxDialogSize: function (dialog) {
@@ -189,11 +182,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         newDialog = false;
       } else {
         var dialogParent;
-        //        if(this._isShowingDialog()) {
-        //          dialogParent = this._dialogStack[_dialogStack.length -1];
-        //        } else {
-        //          dialogParent = this._getApplication().getRoot();
-        //        }
         dialogParent = this._getApplication().getRoot();
         dialog = new qx.ui.window.Window();
         dialog.setLayout(new qx.ui.layout.Grow());
@@ -225,7 +213,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       if (newDialog) {
         this._centerDialog(dialog);
       }
-      this._getViewFactory().focus(dialogBox);
+      this._getViewFactory().focus(dialog);
     },
 
     /**
@@ -622,6 +610,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
 
       messageDialog.open();
       this._centerDialog(messageDialog);
+      this._getViewFactory().focus(messageDialog);
     },
 
     /**

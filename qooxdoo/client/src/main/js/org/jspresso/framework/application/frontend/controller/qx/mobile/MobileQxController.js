@@ -431,13 +431,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
     },
 
     /**
-     * @return {Boolean}
-     */
-    _isShowingDialog: function () {
-      return this._dialogStack && this._dialogStack.length > 1;
-    },
-
-    /**
      *
      * @param title {String}
      * @param message {String}

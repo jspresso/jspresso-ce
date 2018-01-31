@@ -1293,7 +1293,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     focus: function (component) {
       var focusableChild = this._findFirstFocusableComponent(component);
       if (focusableChild) {
-        focusableChild.focus();
+        var focusTask = new qx.util.DeferredCall(function () {
+          focusableChild.focus();
+        }, this);
+        focusTask.schedule();
       }
     },
 
@@ -1857,7 +1860,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       }
       var r;
       if (root instanceof qx.ui.container.Composite || root instanceof qx.ui.splitpane.Pane || root
-          instanceof qx.ui.tabview.TabView) {
+          instanceof qx.ui.tabview.TabView || root instanceof qx.ui.window.Window) {
         r = /** @type {qx.ui.core.MChildrenHandling} */ root;
         for (var i = 0; i < r.getChildren().length; i++) {
           var child = r.getChildren()[i];
@@ -2144,20 +2147,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var mainButton = actionField.getLayoutChildren()[1];
       if (textField) {
         actionField.setUserData("componentsToStyle", [textField]);
-        // propagate focus
-        actionField.addListener("focus", function (e) {
-          if (textField.isFocusable()) {
-            textField.focus();
-          }
-        });
-
-        // propagate active state
-        // This is a very bad idea since it produces an infinite loop.
-        /*
-         actionField.addListener("activate", function (e) {
-         textField.activate();
-         });
-         */
 
         if (remoteActionField.getFieldEditable()) {
           modelController.addTarget(textField, "readOnly", "writable", false, {
@@ -2254,7 +2243,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var decorated = component;
       if (remoteComponent.getActionLists()) {
         var actionField = new qx.ui.container.Composite(new qx.ui.layout.HBox(0));
-        actionField.setFocusable(true);
         actionField.setAllowStretchY(false, false);
 
         if (component) {
@@ -2262,13 +2250,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           component.setAlignY("middle");
           actionField.add(component, {
             flex: 1
-          });
-
-          // propagate focus
-          actionField.addListener("focus", function (e) {
-            if (component.isFocusable()) {
-              component.focus();
-            }
           });
         }
         for (var i = 0; i < remoteComponent.getActionLists().length; i++) {
@@ -3008,7 +2989,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      */
     _createColorField: function (remoteColorField) {
       var colorField = new qx.ui.container.Composite(new qx.ui.layout.HBox())
-      colorField.setFocusable(true);
       colorField.setAllowStretchY(false, false);
 
       var colorPopup = new qx.ui.control.ColorPopup();

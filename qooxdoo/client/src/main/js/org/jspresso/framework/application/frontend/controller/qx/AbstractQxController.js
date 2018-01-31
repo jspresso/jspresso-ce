@@ -202,7 +202,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      * @return {Boolean}
      */
     _isShowingDialog: function () {
-      throw new Error("_isShowingDialog is abstract");
+      return this._dialogStack && this._dialogStack.length > 1;
     },
 
     /**
@@ -876,6 +876,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
        * @param result {qx.event.type.Data}
        */
       var commandsHandler = function (result) {
+        this.showBusy(false);
         this.__postponedCommands = {};
         this.__postponedChildrenNotificationBuffer = {};
         this.__postponedSelectionCommands = {};
@@ -889,7 +890,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
         } catch (e) {
           throw e;
         } finally {
-          this.showBusy(false);
           this.__roundTrip = false;
           this._checkPostponedCommandsCompletion();
           this.__postponedCommands = null;

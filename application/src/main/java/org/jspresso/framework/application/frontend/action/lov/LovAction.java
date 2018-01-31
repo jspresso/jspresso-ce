@@ -449,10 +449,10 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     context.put(ModalDialogAction.DIALOG_TITLE,
         getI18nName(erqDescriptor.getReferencedDescriptor(), getTranslationProvider(context), getLocale(context)));
     context.put(ModalDialogAction.DIALOG_VIEW, lovView);
-    if (lovView instanceof ICompositeView<?>) {
-      context.put(ModalDialogAction.DIALOG_FOCUSED_COMPONENT,
-          ((ICompositeView<E>) lovView).getChildren().get(1).getPeer());
-    }
+    //if (lovView instanceof ICompositeView<?>) {
+    //  context.put(ModalDialogAction.DIALOG_FOCUSED_COMPONENT,
+    //    ((ICompositeView<E>) lovView).getChildren().get(1).getPeer());
+    //}
 
     if (pagingAction != null) {
       PropertyChangeListener paginationListener = new PropertyChangeListener() {

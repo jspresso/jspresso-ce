@@ -160,7 +160,7 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
           if (initValue instanceof String && (((String) initValue).endsWith("null") || ((String) initValue).endsWith(
               IQueryComponent.NULL_VAL))) {
             if (((String) initValue).startsWith(IQueryComponent.NOT_VAL)) {
-              initValue = IQueryComponent.NULL_VAL + IQueryComponent.NULL_VAL;
+              initValue = IQueryComponent.NOT_VAL + IQueryComponent.NULL_VAL;
               if (LOG.isDebugEnabled()) {
                 LOG.debug("Init value set to not null");
               }
@@ -177,8 +177,9 @@ public abstract class AbstractComponentFactory implements IComponentFactory {
             if (initializedPropertyDescriptor != null) {
               Class<?> expectedType = initializedPropertyDescriptor.getModelType();
               Class<?> initValueType = initValue.getClass();
-              if (!IQueryComponent.class.isAssignableFrom(initValueType) && !expectedType.isAssignableFrom(
-                  initValueType)) {
+              if (initValue instanceof IQueryComponent) {
+                initValue = ((IQueryComponent) initValue).clone();
+              } else if(!expectedType.isAssignableFrom(initValueType)) {
                 if (Boolean.TYPE.equals(expectedType)) {
                   expectedType = Boolean.class;
                 }
