@@ -28,6 +28,8 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
 
   statics: {
     __TAP_THRESHOLD: 500,
+    _INPUT_THRESHOLD: 400,
+    _INPUT_TIMESTAMP: "inputTimestamp",
 
     /**
      * @param imageUrlSpec {String}

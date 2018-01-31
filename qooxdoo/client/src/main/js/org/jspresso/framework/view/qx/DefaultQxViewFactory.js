@@ -1081,10 +1081,16 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       });
       if (remoteTextField.getCharacterAction()) {
         textField.addListener("input", function (event) {
-          state.setValue(this._viewToModelFieldConverter(textField.getValue()));
-          var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
-          actionEvent.setActionCommand(textField.getValue());
-          this._getActionHandler().execute(remoteTextField.getCharacterAction(), actionEvent);
+          textField.setUserData(org.jspresso.framework.view.qx.AbstractQxViewFactory._INPUT_TIMESTAMP, event.getTimeStamp());
+          qx.event.Timer.once(function (e) {
+            if (e.getTimeStamp() - textField.getUserData(org.jspresso.framework.view.qx.AbstractQxViewFactory._INPUT_TIMESTAMP)
+                >= org.jspresso.framework.view.qx.AbstractQxViewFactory._INPUT_THRESHOLD) {
+              state.setValue(this._viewToModelFieldConverter(textField.getValue()));
+              var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
+              actionEvent.setActionCommand(textField.getValue());
+              this._getActionHandler().execute(remoteTextField.getCharacterAction(), actionEvent);
+            }
+          }, this, org.jspresso.framework.view.qx.AbstractQxViewFactory._INPUT_THRESHOLD);
         }, this);
       }
     },
@@ -2195,9 +2201,16 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         });
         if (remoteActionField.getCharacterAction()) {
           textField.addListener("input", function (event) {
-            var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
-            actionEvent.setActionCommand(textField.getValue());
-            this._getActionHandler().execute(remoteActionField.getCharacterAction(), actionEvent);
+            textField.setUserData(org.jspresso.framework.view.qx.AbstractQxViewFactory._INPUT_TIMESTAMP, event.getTimeStamp());
+            qx.event.Timer.once(function (e) {
+              if (e.getTimeStamp() - textField.getUserData(
+                      org.jspresso.framework.view.qx.AbstractQxViewFactory._INPUT_TIMESTAMP)
+                  >= org.jspresso.framework.view.qx.AbstractQxViewFactory._INPUT_THRESHOLD) {
+                var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
+                actionEvent.setActionCommand(textField.getValue());
+                this._getActionHandler().execute(remoteActionField.getCharacterAction(), actionEvent);
+              }
+            }, this, org.jspresso.framework.view.qx.AbstractQxViewFactory._INPUT_THRESHOLD);
           }, this);
         }
         actionField.setAppearance("actionfield");
@@ -2336,7 +2349,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var focusIndicator = paneScroller.getChildControl("focus-indicator");
 
       var dblTapListener = function (e) {
-        var timeStamp = Date.now();
+        var timeStamp = e.getTimeStamp();
         var lastTimeStamp = focusIndicator.getUserData("lastPointerDownTS")
         var row = focusIndicator.getRow();
         var column = focusIndicator.getColumn();
