@@ -124,10 +124,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @param useCurrent {Boolean}
      * @param dimension {org.jspresso.framework.util.gui.Dimension}
      * @param secondaryActionLists {org.jspresso.framework.gui.remote.RActionList[]}
+     * @param triggerOnEnter {Boolean}
      * @return {undefined}
      */
     _popupDialog: function (title, message, remoteDialogView, icon, actions, useCurrent, dimension,
-                            secondaryActionLists) {
+                            secondaryActionLists, triggerOnEnter) {
       useCurrent = (typeof useCurrent == 'undefined') ? false : useCurrent;
 
       this._stopCurrentActionTimer();
@@ -210,8 +211,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       if (actions.length > 0) {
         dialog.addListener("keypress", function (e) {
           if (e.getKeyIdentifier() == "Enter" && !qx.ui.core.FocusHandler.getInstance().isFocused(buttons[0])
-              && (!(qx.ui.core.FocusHandler.getInstance().getFocusedWidget() instanceof qx.ui.form.AbstractField)
-              || qx.ui.core.FocusHandler.getInstance().getFocusedWidget() instanceof qx.ui.form.PasswordField)) {
+              && triggerOnEnter) {
             buttons[0].focus();
             new qx.util.DeferredCall(function () {
               buttons[0].execute(); // and call the default button's
@@ -863,7 +863,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
         dialogView.setVariables(flashVars);
       }
       this._popupDialog(abstractDialogCommand.getTitle(), null, dialogView, icon, dialogButtons,
-          abstractDialogCommand.getUseCurrent(), abstractDialogCommand.getDimension());
+          abstractDialogCommand.getUseCurrent(), abstractDialogCommand.getDimension(), null,
+          abstractDialogCommand.getTriggerOnEnter());
     },
 
     /**

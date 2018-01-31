@@ -58,7 +58,7 @@ public class MockFrontendController<E, F, G> extends
   @Override
   public void displayDialog(E mainView, List<G> actions, String title,
       E sourceComponent, Map<String, Object> context, Dimension dimension,
-      boolean reuseCurrent, boolean modal) {
+      boolean reuseCurrent, boolean modal, boolean triggerOnEnter) {
     // NO-OP
   }
 

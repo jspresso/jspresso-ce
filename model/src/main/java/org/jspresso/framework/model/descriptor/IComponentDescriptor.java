@@ -100,6 +100,13 @@ public interface IComponentDescriptor<E> extends IIconDescriptor,
   Integer getPageSize();
 
   /**
+   * Whenever this component is used as a query filter, this enables / disables auto-query when typing.
+   *
+   * @return the auto-query capability when used as query filter.
+   */
+  Boolean getAutoQueryEnabled();
+
+  /**
    * Retrieves the {@code IPropertyDescriptor} describing the property
    * whose name is passed in parameter.
    *

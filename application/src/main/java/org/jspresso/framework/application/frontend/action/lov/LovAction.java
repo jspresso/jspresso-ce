@@ -600,6 +600,10 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     if (findOnSet != null) {
       return findOnSet;
     }
+    Boolean autoQueryEnabled = erqDescriptor.getReferencedDescriptor().getAutoQueryEnabled();
+    if (autoQueryEnabled != null) {
+      return autoQueryEnabled;
+    }
     Integer pageSize = getPageSize(erqDescriptor);
     return pageSize != null && pageSize > 0;
   }
@@ -626,6 +630,10 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   protected boolean getFindOnType(IReferencePropertyDescriptor<IComponent> erqDescriptor) {
     if (findOnType != null) {
       return findOnType;
+    }
+    Boolean autoQueryEnabled = erqDescriptor.getReferencedDescriptor().getAutoQueryEnabled();
+    if (autoQueryEnabled != null) {
+      return autoQueryEnabled;
     }
     Integer pageSize = getPageSize(erqDescriptor);
     return pageSize != null && pageSize > 0;

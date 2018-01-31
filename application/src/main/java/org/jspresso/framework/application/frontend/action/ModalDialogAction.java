@@ -43,13 +43,13 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  * size of the content view.</li>
  * </ul>
  *
- * @author Vincent Vandenschrick
  * @param <E>
- *          the actual gui component type used.
+ *     the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *     the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *     the actual action type used.
+ * @author Vincent Vandenschrick
  */
 public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
 
@@ -79,10 +79,21 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
   public static final String DIALOG_FOCUSED_COMPONENT = "DIALOG_FOCUSED_COMPONENT";
 
   /**
+   * Should enter force triggering the main action.
+   */
+  private boolean triggerOnEnter = false;
+
+  /**
    * Shows a modal dialog containing a main view and a button panel with the list
    * of registered actions.
    * <p>
    * {@inheritDoc}
+   *
+   * @param actionHandler
+   *     the action handler
+   * @param context
+   *     the context
+   * @return the boolean
    */
   @Override
   public boolean execute(IActionHandler actionHandler,
@@ -100,8 +111,8 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
       actions.add(getActionFactory(context).createAction(action, getIconFactory(context).getSmallIconSize(),
           actionHandler, mainView, getLocale(context)));
     }
-    getController(context).displayModalDialog(mainView.getPeer(), actions,
-        title, sourceComponent, context, getDialogSize(context), false);
+    getController(context).displayDialog(mainView.getPeer(), actions,
+        title, sourceComponent, context, getDialogSize(context), false, true, triggerOnEnter);
     E focusedComponent = getFocusedComponent(context);
     if (focusedComponent != null) {
       getController(context).focus(focusedComponent);
@@ -113,7 +124,7 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
    * Gets the actions.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the actions.
    */
   @SuppressWarnings("unchecked")
@@ -125,7 +136,7 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
    * Gets the dialog size.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the dialog size.
    */
   public Dimension getDialogSize(Map<String, Object> context) {
@@ -136,7 +147,7 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
    * Gets the mainView.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the mainView.
    */
   @SuppressWarnings("unchecked")
@@ -148,7 +159,7 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
    * Gets the title.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the dialog title.
    */
   public String getTitle(Map<String, Object> context) {
@@ -159,11 +170,30 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
    * Gets the focused component.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the focused component or null if not set.
    */
   @SuppressWarnings("unchecked")
   public E getFocusedComponent(Map<String, Object> context) {
     return (E) context.get(DIALOG_FOCUSED_COMPONENT);
+  }
+
+  /**
+   * Is trigger on enter boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isTriggerOnEnter() {
+    return triggerOnEnter;
+  }
+
+  /**
+   * Sets trigger on enter.
+   *
+   * @param triggerOnEnter
+   *     the trigger on enter
+   */
+  public void setTriggerOnEnter(boolean triggerOnEnter) {
+    this.triggerOnEnter = triggerOnEnter;
   }
 }

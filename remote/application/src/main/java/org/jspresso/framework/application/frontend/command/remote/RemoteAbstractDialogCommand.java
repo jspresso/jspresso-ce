@@ -30,10 +30,11 @@ public abstract class RemoteAbstractDialogCommand extends RemoteCommand {
 
   private static final long serialVersionUID = -5918787333137992725L;
 
-  private RAction[]         actions;
-  private Dimension         dimension;
-  private String            title;
-  private boolean           useCurrent;
+  private RAction[] actions;
+  private Dimension dimension;
+  private String    title;
+  private boolean   useCurrent;
+  private boolean   triggerOnEnter;
 
   /**
    * Gets the actions.
@@ -75,7 +76,7 @@ public abstract class RemoteAbstractDialogCommand extends RemoteCommand {
    * Sets the actions.
    *
    * @param actions
-   *          the actions to set.
+   *     the actions to set.
    */
   public void setActions(RAction... actions) {
     this.actions = actions;
@@ -85,7 +86,7 @@ public abstract class RemoteAbstractDialogCommand extends RemoteCommand {
    * Sets the dimension.
    *
    * @param dimension
-   *          the dimension to set.
+   *     the dimension to set.
    */
   public void setDimension(Dimension dimension) {
     this.dimension = dimension;
@@ -95,7 +96,7 @@ public abstract class RemoteAbstractDialogCommand extends RemoteCommand {
    * Sets the title.
    *
    * @param title
-   *          the title to set.
+   *     the title to set.
    */
   public void setTitle(String title) {
     this.title = title;
@@ -105,9 +106,28 @@ public abstract class RemoteAbstractDialogCommand extends RemoteCommand {
    * Sets the useCurrent.
    *
    * @param useCurrent
-   *          the useCurrent to set.
+   *     the useCurrent to set.
    */
   public void setUseCurrent(boolean useCurrent) {
     this.useCurrent = useCurrent;
+  }
+
+  /**
+   * Is trigger on enter boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isTriggerOnEnter() {
+    return triggerOnEnter;
+  }
+
+  /**
+   * Sets trigger on enter.
+   *
+   * @param triggerOnEnter
+   *     the trigger on enter
+   */
+  public void setTriggerOnEnter(boolean triggerOnEnter) {
+    this.triggerOnEnter = triggerOnEnter;
   }
 }

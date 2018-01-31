@@ -149,7 +149,8 @@ public class DefaultSwingController extends
   @Override
   public void displayDialog(final JComponent mainView, final List<Action> actions, final String title,
                             final JComponent sourceComponent, final Map<String, Object> context,
-                            final Dimension dimension, final boolean reuseCurrent, final boolean modal) {
+                            final Dimension dimension, final boolean reuseCurrent, final boolean modal,
+                            final boolean triggerOnEnter) {
     cancelCurrentActionTimer();
     displayModalDialog(mainView, context, reuseCurrent);
     SwingUtilities.invokeLater(new Runnable() {

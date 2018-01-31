@@ -2441,6 +2441,16 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
    * {@inheritDoc}
    */
   @Override
+  public final void displayDialog(E mainView, final List<G> actions, final String title, final E sourceComponent,
+                                       final Map<String, Object> context, final Dimension dimension,
+                                       boolean reuseCurrent, boolean modal) {
+    displayDialog(mainView, actions, title, sourceComponent, context, dimension, reuseCurrent, modal, false);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public void displayUrl(String urlSpec) {
     displayUrl(urlSpec, UrlHelper.BLANK_TARGET);
   }

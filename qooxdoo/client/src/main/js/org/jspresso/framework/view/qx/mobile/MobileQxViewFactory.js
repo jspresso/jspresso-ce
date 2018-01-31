@@ -1138,9 +1138,16 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       textField.addListener("input", function (event) {
         this.__textFieldToBlur = textField;
         if (remoteTextField.getCharacterAction()) {
-          var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
-          actionEvent.setActionCommand(textField.getValue());
-          this._getActionHandler().execute(remoteTextField.getCharacterAction(), actionEvent);
+          textField.setUserData(org.jspresso.framework.view.qx.AbstractQxViewFactory._INPUT_TIMESTAMP, event.getTimeStamp());
+          qx.event.Timer.once(function (e) {
+            if (e.getTimeStamp() - textField.getUserData(
+                    org.jspresso.framework.view.qx.AbstractQxViewFactory._INPUT_TIMESTAMP)
+                >= org.jspresso.framework.view.qx.AbstractQxViewFactory._INPUT_THRESHOLD) {
+              var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
+              actionEvent.setActionCommand(textField.getValue());
+              this._getActionHandler().execute(remoteTextField.getCharacterAction(), actionEvent);
+            }
+          }, this, org.jspresso.framework.view.qx.AbstractQxViewFactory._INPUT_THRESHOLD);
         }
       }, this);
       this.__bindReadOnlyBorder(state, textField);
@@ -1632,9 +1639,16 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         textField.addListener("input", function (event) {
           this.__textFieldToBlur = textField;
           if (remoteActionField.getCharacterAction()) {
-            var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
-            actionEvent.setActionCommand(textField.getValue());
-            this._getActionHandler().execute(remoteActionField.getCharacterAction(), actionEvent);
+            textField.setUserData(org.jspresso.framework.view.qx.AbstractQxViewFactory._INPUT_TIMESTAMP, event.getTimeStamp());
+            qx.event.Timer.once(function (e) {
+              if (e.getTimeStamp() - textField.getUserData(
+                      org.jspresso.framework.view.qx.AbstractQxViewFactory._INPUT_TIMESTAMP)
+                  >= org.jspresso.framework.view.qx.AbstractQxViewFactory._INPUT_THRESHOLD) {
+                var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
+                actionEvent.setActionCommand(textField.getValue());
+                this._getActionHandler().execute(remoteActionField.getCharacterAction(), actionEvent);
+              }
+            }, this, org.jspresso.framework.view.qx.AbstractQxViewFactory._INPUT_THRESHOLD);
           }
         }, this);
         textField.addListener("tap", function (event) {

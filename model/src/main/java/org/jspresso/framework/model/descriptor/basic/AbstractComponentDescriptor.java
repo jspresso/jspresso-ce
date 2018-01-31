@@ -102,6 +102,7 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
   private List<ILifecycleInterceptor<?>>   lifecycleInterceptors;
   private Map<String, ESort>               orderingProperties;
   private Integer                          pageSize;
+  private Boolean                          autoQueryEnabled;
   private Map<String, IPropertyDescriptor> propertyDescriptorsMap;
 
   private volatile List<String>            queryableProperties;
@@ -322,6 +323,14 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
   @Override
   public Integer getPageSize() {
     return pageSize;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Boolean getAutoQueryEnabled() {
+    return autoQueryEnabled;
   }
 
   private static final BasicObjectPropertyDescriptor NULL_PROPERTY_DESCRIPTOR = new BasicObjectPropertyDescriptor();
@@ -826,6 +835,17 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
     } else {
       orderingProperties = null;
     }
+  }
+
+  /**
+   * Whenever this component type is presented as a filter,
+   * this property gives the capability to enable / disable auto-search when typing the filter fields.
+   *
+   * @param autoQueryEnabled
+   *     the autoQueryEnabled to set.
+   */
+  public void setAutoQueryEnabled(Boolean autoQueryEnabled) {
+    this.autoQueryEnabled = autoQueryEnabled;
   }
 
   /**

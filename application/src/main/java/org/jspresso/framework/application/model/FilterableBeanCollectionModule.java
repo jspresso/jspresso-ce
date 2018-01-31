@@ -478,6 +478,10 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
     if (findOnSet != null) {
       return findOnSet;
     }
+    Boolean autoQueryEnabled = getElementComponentDescriptor().getAutoQueryEnabled();
+    if (autoQueryEnabled != null) {
+      return autoQueryEnabled;
+    }
     Integer pageSize = getPageSize();
     return pageSize != null && pageSize > 0;
   }
@@ -502,6 +506,10 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule impleme
   protected boolean getFindOnType() {
     if (findOnType != null) {
       return findOnType;
+    }
+    Boolean autoQueryEnabled = getElementComponentDescriptor().getAutoQueryEnabled();
+    if (autoQueryEnabled != null) {
+      return autoQueryEnabled;
     }
     Integer pageSize = getPageSize();
     return pageSize != null && pageSize > 0;

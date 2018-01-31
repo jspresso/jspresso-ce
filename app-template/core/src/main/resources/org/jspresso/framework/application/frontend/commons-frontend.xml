@@ -196,13 +196,17 @@
     <property name="cancelAction" ref="lovCancelFrontAction" />
     <property name="findAction" ref="lovFindFrontAction" />
     <property name="pagingAction" ref="lovFindBackAction"/>
-    <property name="nextAction" ref="modalDialogAction"/>
     <property name="defaultIconImageURL">
       <bean parent="abstractFwIconImageURL">
         <constructor-arg index="0" value="lov_find"/>
       </bean>
     </property>
     <property name="componentDescriptorRegistry" ref="componentDescriptorRegistry"/>
+    <property name="nextAction">
+      <bean parent="modalDialogAction">
+        <property name="triggerOnEnter" value="true"/>
+      </bean>
+    </property>
   </bean>
 
   <bean id="lovAction" parent="lovActionBase"/>

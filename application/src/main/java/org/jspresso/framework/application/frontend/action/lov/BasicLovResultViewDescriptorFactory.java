@@ -47,6 +47,7 @@ public class BasicLovResultViewDescriptorFactory extends
       IComponentDescriptorProvider<IComponent> entityRefDescriptor,
       Map<String, Object> lovContext) {
     BasicTableViewDescriptor resultViewDescriptor = new BasicTableViewDescriptor();
+    resultViewDescriptor.setAutoSelectFirstRow(true);
 
     ICollectionPropertyDescriptor<IComponent> queriedEntitiesDescriptor;
     queriedEntitiesDescriptor = (ICollectionPropertyDescriptor<IComponent>) getQueryComponentDescriptorFactory()

@@ -190,10 +190,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      * @param useCurrent {Boolean}
      * @param dimension {org.jspresso.framework.util.gui.Dimension}
      * @param secondaryActionLists {org.jspresso.framework.gui.remote.RActionList[]}
+     * @param triggerOnEnter {Boolean}
      * @return {undefined}
      */
     _popupDialog: function (title, message, remoteDialogView, icon, actions, useCurrent, dimension,
-                            secondaryActionLists) {
+                            secondaryActionLists, triggerOnEnter) {
       throw new Error("_popupDialog is abstract");
     },
 
@@ -1016,7 +1017,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
       var loginView = loginCommand.getLoginView();
       this._popupDialog(loginView.getLabel(), loginView.getToolTip(), loginView, loginView.getIcon(),
           this._getViewFactory().extractAllActions(loginCommand.getLoginActionLists()), false, null,
-          loginCommand.getSecondaryLoginActionLists());
+          loginCommand.getSecondaryLoginActionLists(), true);
     },
 
     /**
