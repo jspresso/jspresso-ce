@@ -24,7 +24,6 @@ package org.jspresso.framework.util.gui.map;
  *
  * @see <a href="https://openlayers.org/en/latest/apidoc/ol.style.Stroke.html">Open layers stroke</a>
  *
- * https://openlayers.org/en/latest/apidoc/ol.style.Stroke.html
  * Date: 27/01/2018
  */
 @SuppressWarnings("WeakerAccess")
