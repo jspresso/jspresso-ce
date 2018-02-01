@@ -1298,7 +1298,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var focusableChild = this._findFirstFocusableComponent(component);
       if (focusableChild) {
         var focusTask = new qx.util.DeferredCall(function () {
-          focusableChild.focus();
+          qx.event.Timer.once(function () {
+            focusableChild.focus();
+          }, this, 100);
         }, this);
         focusTask.schedule();
       }

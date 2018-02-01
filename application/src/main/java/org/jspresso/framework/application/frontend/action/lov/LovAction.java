@@ -215,10 +215,10 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
     }
     context.put(CreateQueryComponentAction.MASTER_COMPONENT, masterComponent);
 
-    IView<E> parentView = getView(new int[]{-1}, context);
-    if (parentView != null && parentView.getDescriptor() instanceof ITableViewDescriptor) {
-      context.put(FrontendAction.COMPONENT_TO_FOCUS, parentView.getPeer());
-    }
+    // IView<E> parentView = getView(new int[]{-1}, context);
+    // if (parentView != null && parentView.getDescriptor() instanceof ITableViewDescriptor) {
+    //   context.put(FrontendAction.COMPONENT_TO_FOCUS, parentView.getPeer());
+    // }
 
     actionHandler.execute(createQueryComponentAction, context);
     IQueryComponent queryComponent = (IQueryComponent) context.get(IQueryComponent.QUERY_COMPONENT);
@@ -344,12 +344,15 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
         }
       }
       handlePreselectedItem(preselectedItem, queryComponent, lovView);
-    } feedContextWithDialog(erqDescriptor, queryComponent, lovView, actionHandler, context);
-    if (context.get(FrontendAction.COMPONENT_TO_FOCUS) == null) {
-      // To return to the action field once the dialog closes if and only if
-      // The focus has not been explicitly set to something else.
-      context.put(FrontendAction.COMPONENT_TO_FOCUS, getSourceComponent(context));
     }
+    feedContextWithDialog(erqDescriptor, queryComponent, lovView, actionHandler, context);
+
+    // if (context.get(FrontendAction.COMPONENT_TO_FOCUS) == null) {
+    //   // To return to the action field once the dialog closes if and only if
+    //   // The focus has not been explicitly set to something else.
+    //   context.put(FrontendAction.COMPONENT_TO_FOCUS, getSourceComponent(context));
+    // }
+
     boolean success = super.execute(actionHandler, context);
     context.remove(LOV_DIALOG_ACTIONS);
     return success;
