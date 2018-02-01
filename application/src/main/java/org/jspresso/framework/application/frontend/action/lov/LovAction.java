@@ -891,7 +891,7 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   protected ESelectionMode getDefaultSelectionMode(Map<String, Object> lovContext) {
     if (getModel(lovContext) instanceof IQueryComponent) {
       // We are on a filter view that supports multi selection
-      return ESelectionMode.MULTIPLE_INTERVAL_CUMULATIVE_SELECTION;
+      return ESelectionMode.MULTIPLE_INTERVAL_SELECTION;
     }
     return ESelectionMode.SINGLE_SELECTION;
   }

@@ -65,7 +65,9 @@ public class BasicLovViewDescriptorFactory extends AbstractLovViewDescriptorFact
     BasicCollectionViewDescriptor resultCollectionViewDescriptor = (BasicCollectionViewDescriptor)
         BasicCollectionViewDescriptor
         .extractMainCollectionView(resultViewDescriptor);
-    resultCollectionViewDescriptor.setSelectionMode(selectionMode);
+    if (selectionMode != null) {
+      resultCollectionViewDescriptor.setSelectionMode(selectionMode);
+    }
     if (resultCollectionViewDescriptor instanceof BasicTableViewDescriptor) {
       ((BasicTableViewDescriptor) resultCollectionViewDescriptor).setSortingAction(sortingAction);
     }

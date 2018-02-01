@@ -65,7 +65,9 @@ public class MobileLovViewDescriptorFactory extends AbstractLovViewDescriptorFac
     BasicCollectionViewDescriptor resultCollectionViewDescriptor = (BasicCollectionViewDescriptor)
         BasicCollectionViewDescriptor
         .extractMainCollectionView(resultViewDescriptor);
-    resultCollectionViewDescriptor.setSelectionMode(selectionMode);
+    if (selectionMode != null) {
+      resultCollectionViewDescriptor.setSelectionMode(selectionMode);
+    }
     if (ESelectionMode.SINGLE_SELECTION.equals(selectionMode) || ESelectionMode.SINGLE_CUMULATIVE_SELECTION.equals(
         selectionMode)) {
       resultCollectionViewDescriptor.setItemSelectionAction(okAction);
