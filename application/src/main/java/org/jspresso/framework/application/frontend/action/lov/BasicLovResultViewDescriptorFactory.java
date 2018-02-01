@@ -38,8 +38,16 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 public class BasicLovResultViewDescriptorFactory extends
     AbstractLovResultViewDescriptorFactory {
 
+  private ESelectionMode multiSelectionMode = ESelectionMode.MULTIPLE_INTERVAL_SELECTION;
+
   /**
    * {@inheritDoc}
+   *
+   * @param entityRefDescriptor
+   *     the entity ref descriptor
+   * @param lovContext
+   *     the lov context
+   * @return the basic view descriptor
    */
   @SuppressWarnings("unchecked")
   @Override
@@ -61,12 +69,31 @@ public class BasicLovResultViewDescriptorFactory extends
     if (getModel(lovContext) instanceof IQueryComponent) {
       // We are on a filter view that supports multi selection
       resultViewDescriptor
-          .setSelectionMode(ESelectionMode.MULTIPLE_INTERVAL_CUMULATIVE_SELECTION);
+          .setSelectionMode(getMultiSelectionMode());
     } else {
       resultViewDescriptor.setSelectionMode(ESelectionMode.SINGLE_SELECTION);
     }
 
     resultViewDescriptor.setPermId("Lov." + entityRefDescriptor.getName());
     return resultViewDescriptor;
+  }
+
+  /**
+   * Gets multi selection mode.
+   *
+   * @return the multi selection mode
+   */
+  protected ESelectionMode getMultiSelectionMode() {
+    return multiSelectionMode;
+  }
+
+  /**
+   * Sets multi selection mode.
+   *
+   * @param multiSelectionMode
+   *     the multi selection mode
+   */
+  public void setMultiSelectionMode(ESelectionMode multiSelectionMode) {
+    this.multiSelectionMode = multiSelectionMode;
   }
 }
