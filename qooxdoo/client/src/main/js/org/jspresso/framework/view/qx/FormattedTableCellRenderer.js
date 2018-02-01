@@ -76,8 +76,8 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
         htmlContent = this.base(arguments, cellInfo);
       }
       htmlContent = org.jspresso.framework.util.html.HtmlUtil.bindActionToHtmlContent(htmlContent, this.__action);
-      if ((!this.__disableActionsWithField || cellInfo.editable) && this.__asideActions) {
-        var cellViewState = cellInfo.rowData.getChildren().getItem(cellInfo.col + 1);
+      var cellViewState = cellInfo.rowData.getChildren().getItem(cellInfo.col + 1);
+      if ((!this.__disableActionsWithField || cellViewState.isWritable()) && this.__asideActions) {
         var actionsHtmlContent = "";
         for (var i = 0; i < this.__asideActions.length; i++) {
           var actionList = this.__asideActions[i];
