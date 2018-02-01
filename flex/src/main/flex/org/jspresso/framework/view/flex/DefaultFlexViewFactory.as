@@ -741,7 +741,7 @@ public class DefaultFlexViewFactory {
     }
     if (remoteComponent.focusLostAction) {
       component.addEventListener(FocusEvent.FOCUS_OUT, function (event:FocusEvent):void {
-        var triggerAction = true;
+        var triggerAction:Boolean = true;
         var relatedObject:InteractiveObject = event.relatedObject;
         if (relatedObject == null) {
           triggerAction = false;
@@ -977,7 +977,7 @@ public class DefaultFlexViewFactory {
         var markers:Array = JSON.parse(mapContent)["markers"] as Array;
         if (markers && markers.length > 0) {
           for (var i:int = 0; i < markers.length; i++) {
-            var markersCoordinates = markers[i]["coord"] ? markers[i]["coord"] : markers[i];
+            var markersCoordinates:Array = markers[i]["coord"] ? markers[i]["coord"] : markers[i];
             var markerLocation:Location = new Location(markersCoordinates[0], markersCoordinates[1])
             if (i == 0) {
               map.center = markerLocation;
@@ -2245,12 +2245,10 @@ public class DefaultFlexViewFactory {
       tabContainer.addChild(tabCanvas);
       if (tabState) {
         tabState["tabIndex"] = i;
-        tabState["remoteTab"] = rTab;
         this._remotePeerRegistry.register(tabState);
         tabState.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, function (e:PropertyChangeEvent):void {
           if (e.property == "readable") {
             var state:RemoteValueState = e.source as RemoteValueState;
-            var sourceTab = state["tab"];
             var sourceTabIndex:int = state["tabIndex"];
             var tabButton:Button = tabContainer.getTabAt(sourceTabIndex);
             tabButton.visible = e.newValue;
