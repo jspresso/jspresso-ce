@@ -243,7 +243,9 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
           viewConnector)
           .getRenderingConnector().getModelDescriptor();
       if (propertyDescriptor.isModifiable()) {
-        autoCompletePropertyName = propertyDescriptor.getName();
+        // The next line will fail for nested autoComplete property names
+        // autoCompletePropertyName = propertyDescriptor.getName();
+        autoCompletePropertyName = ((IRenderableCompositeValueConnector) viewConnector).getRenderingConnector().getId();
       } else {
         autoCompletePropertyName = erqDescriptor.getReferencedDescriptor().getAutoCompleteProperty();
       }
