@@ -193,13 +193,18 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       }
       if (remoteComponent.getFocusLostAction()) {
         var listener = function (event) {
-          var triggerAction = false;
+          var content = null;
+          if (component instanceof qx.ui.form.TextField) {
+            content = component.getValue();
+          }
           var actionEvent = null;
           var eventType = event.getType();
+          var triggerAction = false;
           if (eventType == "keypress") {
             if (event.getKeyIdentifier() == "Tab") {
               triggerAction = true;
               actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
+              actionEvent.setActionCommand(content);
               actionEvent.setEventType("keyboard")
             }
           } else if(eventType == "focusout") {
@@ -211,6 +216,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
                 && decorated.getLayoutChildren().indexOf(relatedTarget) < 0) {
               triggerAction = true;
               actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
+              actionEvent.setActionCommand(content);
               actionEvent.setEventType("mouse")
             }
           }
