@@ -221,7 +221,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             }
           }
           if (triggerAction) {
-            this._getActionHandler().execute(remoteComponent.getFocusLostAction(), actionEvent);
+            var actionTask = new qx.util.DeferredCall(function () {
+              this._getActionHandler().execute(remoteComponent.getFocusLostAction(), actionEvent);
+            }, this);
+            actionTask.schedule();
           }
         };
         component.addListener("focusout", listener, this);
