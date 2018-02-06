@@ -79,6 +79,11 @@ public class BasicStaticTextViewDescriptor extends BasicPropertyViewDescriptor i
     return true;
   }
 
+  @Override
+  public boolean isReadOnlyExplicitlyConfigured() {
+    return true;
+  }
+
   /**
    * Sets read only.
    *
@@ -86,8 +91,8 @@ public class BasicStaticTextViewDescriptor extends BasicPropertyViewDescriptor i
    *     the read only
    */
   @Override
-  public void setReadOnly(boolean readOnly) {
-    if (!readOnly) {
+  public void setReadOnly(Boolean readOnly) {
+    if (readOnly != null && !readOnly) {
       throw new UnsupportedOperationException("Static text can not be R/W.");
     }
   }

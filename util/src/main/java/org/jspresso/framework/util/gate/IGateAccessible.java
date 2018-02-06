@@ -47,4 +47,10 @@ public interface IGateAccessible {
    * @return true if read-only.
    */
   boolean isReadOnly();
+
+  /**
+   * Wether read-only is explicitly configured.
+   * @return true if read-only is explicitly configured.
+   */
+  boolean isReadOnlyExplicitlyConfigured();
 }

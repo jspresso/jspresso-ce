@@ -136,7 +136,8 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   public boolean isWritable() {
     // A model property collection connector should never be made read-only,
     // by its parent connector.
-    return isLocallyWritable();
+    Boolean locallyWritable = isLocallyWritable();
+    return locallyWritable == null || locallyWritable;
   }
 
   /**

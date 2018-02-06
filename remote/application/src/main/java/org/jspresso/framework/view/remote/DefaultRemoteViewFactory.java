@@ -269,11 +269,11 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
         IValueConnector columnConnector = column.getConnector();
         String propertyName = columnViewDescriptor.getModelDescriptor().getName();
         rowConnectorPrototype.addChildConnector(propertyName, columnConnector);
-        boolean locallyWritable = !columnViewDescriptor.isReadOnly();
-        if (locallyWritable) {
+        boolean writable = !columnViewDescriptor.isReadOnly();
+        if (writable) {
           try {
             actionHandler.pushToSecurityContext(EAuthorization.ENABLED);
-            locallyWritable = actionHandler.isAccessGranted(columnViewDescriptor);
+            writable = actionHandler.isAccessGranted(columnViewDescriptor);
           } finally {
             actionHandler.restoreLastSecurityContextSnapshot();
           }
@@ -290,7 +290,11 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
           columnConnector.addValueChangeListener(
               new ConnectorActionAdapter<>(columnViewDescriptor.getAction(), getActionFactory(), actionHandler, view));
         }
-        columnConnector.setLocallyWritable(locallyWritable);
+        if (!writable) {
+          columnConnector.setLocallyWritable(false);
+        } else if (columnViewDescriptor.isReadOnlyExplicitlyConfigured()) {
+          columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
+        }
         IPropertyDescriptor propertyDescriptor = rowDescriptor.getPropertyDescriptor(propertyName);
         columns.add(column.getPeer());
         RLabel headerLabel = createPropertyLabel(columnViewDescriptor, column.getPeer(), actionHandler, locale);

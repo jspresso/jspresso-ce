@@ -504,7 +504,9 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements IQueryViewDescr
     dest.setPermId(source.getPermId());
     dest.setPreferredSize(source.getPreferredSize());
     dest.setReadabilityGates(source.getReadabilityGates());
-    dest.setReadOnly(source.isReadOnly());
+    if (source.isReadOnlyExplicitlyConfigured()) {
+      dest.setReadOnly(source.isReadOnly());
+    }
     dest.setWritabilityGates(source.getWritabilityGates());
     dest.setWidth(source.getWidth());
   }

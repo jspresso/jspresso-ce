@@ -92,18 +92,22 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
     }
     modelConnector.setSecurityHandler(securityHandler);
     if (modelDescriptor instanceof IGateAccessible) {
-      boolean locallyWritable = !((IGateAccessible) modelDescriptor)
+      boolean writable = !((IGateAccessible) modelDescriptor)
           .isReadOnly();
-      if (locallyWritable && modelDescriptor instanceof ISecurable) {
+      if (writable && modelDescriptor instanceof ISecurable) {
         try {
           securityHandler.pushToSecurityContext(EAuthorization.ENABLED);
-          locallyWritable = securityHandler
+          writable = securityHandler
               .isAccessGranted((ISecurable) modelDescriptor);
         } finally {
           securityHandler.restoreLastSecurityContextSnapshot();
         }
       }
-      modelConnector.setLocallyWritable(locallyWritable);
+      if (!writable) {
+        modelConnector.setLocallyWritable(false);
+      } else if (((IGateAccessible) modelDescriptor).isReadOnlyExplicitlyConfigured()) {
+        modelConnector.setLocallyWritable(!((IGateAccessible) modelDescriptor).isReadOnly());
+      }
       if (((IGateAccessible) modelDescriptor).getReadabilityGates() != null) {
         for (IGate gate : ((IGateAccessible) modelDescriptor)
             .getReadabilityGates()) {

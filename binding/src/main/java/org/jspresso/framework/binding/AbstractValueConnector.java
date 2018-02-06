@@ -59,8 +59,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
     implements IValueConnector {
 
   private IExceptionHandler exceptionHandler;
-  private boolean           locallyReadable;
-  private boolean           locallyWritable;
+  private Boolean           locallyReadable;
+  private Boolean           locallyWritable;
   private boolean           mute;
 
   private IValueConnector          modelConnector;
@@ -94,8 +94,6 @@ public abstract class AbstractValueConnector extends AbstractConnector
    */
   public AbstractValueConnector(String id) {
     super(id);
-    locallyReadable = true;
-    locallyWritable = true;
     oldReadability = isReadable();
     oldWritability = isWritable();
     mute = false;
@@ -388,14 +386,16 @@ public abstract class AbstractValueConnector extends AbstractConnector
    */
   @Override
   public boolean isReadable() {
-    if (getParentConnector() != null
-        && !getParentConnector().areChildrenReadable()) {
-      return false;
-    }
     if (getModelConnector() != null && !getModelConnector().isReadable()) {
       return false;
     }
-    return isLocallyReadable();
+    Boolean locallyReadable = isLocallyReadable();
+    if (getParentConnector() != null && !getParentConnector().areChildrenReadable()) {
+      if (locallyReadable == null) {
+        return false;
+      }
+    }
+    return locallyReadable == null || locallyReadable;
   }
 
   /**
@@ -405,14 +405,17 @@ public abstract class AbstractValueConnector extends AbstractConnector
    */
   @Override
   public boolean isWritable() {
-    if (getParentConnector() != null
-        && !getParentConnector().areChildrenWritable()) {
-      return false;
-    }
     if (getModelConnector() != null && !getModelConnector().isWritable()) {
       return false;
     }
-    return isLocallyWritable();
+    Boolean locallyWritable = isLocallyWritable();
+    if (getParentConnector() != null
+        && !getParentConnector().areChildrenWritable()) {
+      if (locallyWritable == null) {
+        return false;
+      }
+    }
+    return locallyWritable == null || locallyWritable;
   }
 
   /**
@@ -527,7 +530,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * {@inheritDoc}
    */
   @Override
-  public void setLocallyReadable(boolean locallyReadable) {
+  public void setLocallyReadable(Boolean locallyReadable) {
     this.locallyReadable = locallyReadable;
     readabilityChange();
   }
@@ -536,7 +539,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * {@inheritDoc}
    */
   @Override
-  public void setLocallyWritable(boolean locallyWritable) {
+  public void setLocallyWritable(Boolean locallyWritable) {
     this.locallyWritable = locallyWritable;
     writabilityChange();
   }
@@ -822,8 +825,11 @@ public abstract class AbstractValueConnector extends AbstractConnector
    *
    * @return the locallyReadable.
    */
-  protected boolean isLocallyReadable() {
-    return locallyReadable && GateHelper.areGatesOpen(getReadabilityGates());
+  protected Boolean isLocallyReadable() {
+    if (!GateHelper.areGatesOpen(getReadabilityGates())) {
+      return false;
+    }
+    return locallyReadable;
   }
 
   /**
@@ -831,8 +837,11 @@ public abstract class AbstractValueConnector extends AbstractConnector
    *
    * @return the locallyWritable.
    */
-  protected boolean isLocallyWritable() {
-    return locallyWritable && GateHelper.areGatesOpen(getWritabilityGates());
+  protected Boolean isLocallyWritable() {
+    if (!GateHelper.areGatesOpen(getWritabilityGates())) {
+      return false;
+    }
+    return locallyWritable;
   }
 
   /**

@@ -69,9 +69,9 @@ public final class PropertyViewDescriptorHelper {
      * Exclude explicitly configured reference property view filled with a
      * custom LOV action and nested component view descriptors
      */
-    boolean toExplode = !(propertyViewDescriptor instanceof INestedComponentPropertyViewDescriptor)
-        && (!(propertyViewDescriptor instanceof IReferencePropertyViewDescriptor)
-        || ((IReferencePropertyViewDescriptor) propertyViewDescriptor).getLovAction() == null);
+    boolean toExplode = !(propertyViewDescriptor instanceof INestedComponentPropertyViewDescriptor) && (
+        !(propertyViewDescriptor instanceof IReferencePropertyViewDescriptor)
+            || ((IReferencePropertyViewDescriptor) propertyViewDescriptor).getLovAction() == null);
 
     /*
      * Include inline component reference
@@ -88,7 +88,9 @@ public final class PropertyViewDescriptorHelper {
         nestedPropertyViewDescriptor.setName(propertyDescriptor.getName() + "." + nestedRenderedProperty);
         nestedPropertyViewDescriptor.setModelDescriptor(
             rootComponentDescriptor.getPropertyDescriptor(nestedPropertyViewDescriptor.getName()));
-        nestedPropertyViewDescriptor.setReadOnly(propertyViewDescriptor.isReadOnly());
+        if (propertyViewDescriptor.isReadOnlyExplicitlyConfigured()) {
+          nestedPropertyViewDescriptor.setReadOnly(propertyViewDescriptor.isReadOnly());
+        }
         nestedPropertyViewDescriptor.setGrantedRoles(propertyViewDescriptor.getGrantedRoles());
         nestedPropertyViewDescriptor.setWritabilityGates(propertyViewDescriptor.getWritabilityGates());
         nestedPropertyViewDescriptor.setReadabilityGates(propertyViewDescriptor.getReadabilityGates());

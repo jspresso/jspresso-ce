@@ -54,7 +54,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor implemen
   private Integer            preferredHeight;
   private Integer            preferredWidth;
   private Collection<IGate>  readabilityGates;
-  private boolean            readOnly;
+  private Boolean            readOnly;
   private Collection<IGate>  writabilityGates;
   private String             styleName;
 
@@ -262,7 +262,15 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor implemen
    */
   @Override
   public boolean isReadOnly() {
-    return readOnly;
+    return readOnly != null && readOnly;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isReadOnlyExplicitlyConfigured() {
+    return readOnly != null;
   }
 
   /**
@@ -467,7 +475,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor implemen
    * @param readOnly
    *     the readOnly to set.
    */
-  public void setReadOnly(boolean readOnly) {
+  public void setReadOnly(Boolean readOnly) {
     this.readOnly = readOnly;
   }
 

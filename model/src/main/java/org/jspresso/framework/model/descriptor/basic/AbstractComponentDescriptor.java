@@ -715,6 +715,14 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isReadOnlyExplicitlyConfigured() {
+    return true;
+  }
+
+  /**
    * Registers this descriptor with a collection of ancestors. It directly
    * translates the components inheritance hierarchy since the component
    * property descriptors are the union of the declared property descriptors of

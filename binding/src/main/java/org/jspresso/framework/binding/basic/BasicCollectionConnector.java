@@ -110,7 +110,8 @@ public class BasicCollectionConnector extends AbstractCollectionConnector {
       return false;
     }
     */
-    return isLocallyWritable();
+    Boolean locallyWritable = isLocallyWritable();
+    return locallyWritable == null || locallyWritable;
   }
 
 }

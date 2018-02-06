@@ -217,7 +217,7 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
    * @param locallyReadable
    *          true if readable.
    */
-  void setLocallyReadable(boolean locallyReadable);
+  void setLocallyReadable(Boolean locallyReadable);
 
   /**
    * Sets the connector locally writable. Calling this method does not guarantee
@@ -228,7 +228,7 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
    * @param locallyWritable
    *          true if writable.
    */
-  void setLocallyWritable(boolean locallyWritable);
+  void setLocallyWritable(Boolean locallyWritable);
 
   /**
    * Sets the connector this connector is attached to in mvc relationship.

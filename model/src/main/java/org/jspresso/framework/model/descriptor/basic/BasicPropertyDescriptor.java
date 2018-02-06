@@ -286,11 +286,23 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
    */
   @Override
   public boolean isReadOnly() {
-    if (readOnly != null) {
-      return readOnly;
+    if (!isModifiable()) {
+      return true;
     }
-    return !isModifiable();
+    return readOnly != null && readOnly;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isReadOnlyExplicitlyConfigured() {
+    if (!isModifiable()) {
+      return true;
+    }
+    return readOnly != null;
+  }
+
 
   /**
    * {@inheritDoc}

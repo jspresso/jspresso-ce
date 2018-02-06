@@ -281,13 +281,12 @@ public abstract class AbstractComponentViewDescriptor extends BasicViewDescripto
    */
   @Override
   public boolean isReadOnly() {
-    boolean readOnly = super.isReadOnly();
-    if (!readOnly && getModelDescriptor() != null) {
-      if (getModelDescriptor() instanceof IComponentDescriptorProvider<?>) {
-        return ((IComponentDescriptorProvider<?>) getModelDescriptor()).getComponentDescriptor().isReadOnly();
+    if (getModelDescriptor() instanceof IComponentDescriptorProvider<?>) {
+      if(((IComponentDescriptorProvider<?>) getModelDescriptor()).getComponentDescriptor().isReadOnly()) {
+        return true;
       }
     }
-    return readOnly;
+    return super.isReadOnly();
   }
 
   /**

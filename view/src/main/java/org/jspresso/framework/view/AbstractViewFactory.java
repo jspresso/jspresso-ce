@@ -274,16 +274,20 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
       if (view != null) {
         IValueConnector viewConnector = view.getConnector();
         viewConnector.setSecurityHandler(actionHandler);
-        boolean locallyWritable = !viewDescriptor.isReadOnly();
-        if (locallyWritable) {
+        boolean writable = !viewDescriptor.isReadOnly();
+        if (writable) {
           try {
             actionHandler.pushToSecurityContext(EAuthorization.ENABLED);
-            locallyWritable = actionHandler.isAccessGranted(viewDescriptor);
+            writable = actionHandler.isAccessGranted(viewDescriptor);
           } finally {
             actionHandler.restoreLastSecurityContextSnapshot();
           }
         }
-        viewConnector.setLocallyWritable(locallyWritable);
+        if (!writable) {
+          viewConnector.setLocallyWritable(false);
+        } else if (viewDescriptor.isReadOnlyExplicitlyConfigured()) {
+          viewConnector.setLocallyWritable(!viewDescriptor.isReadOnly());
+        }
         if (viewDescriptor.getReadabilityGates() != null) {
           for (IGate gate : viewDescriptor.getReadabilityGates()) {
             if (!(gate instanceof ISecurable) || actionHandler.isAccessGranted((ISecurable) gate)) {
@@ -1234,16 +1238,20 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     }
 
     columnConnector.setSecurityHandler(actionHandler);
-    boolean locallyWritable = !columnViewDescriptor.isReadOnly();
-    if (locallyWritable) {
+    boolean writable = !columnViewDescriptor.isReadOnly();
+    if (writable) {
       try {
         actionHandler.pushToSecurityContext(EAuthorization.ENABLED);
-        locallyWritable = actionHandler.isAccessGranted(columnViewDescriptor);
+        writable = actionHandler.isAccessGranted(columnViewDescriptor);
       } finally {
         actionHandler.restoreLastSecurityContextSnapshot();
       }
     }
-    columnConnector.setLocallyWritable(locallyWritable);
+    if (!writable) {
+      columnConnector.setLocallyWritable(false);
+    } else if (columnViewDescriptor.isReadOnlyExplicitlyConfigured()) {
+      columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
+    }
     if (columnViewDescriptor.getReadabilityGates() != null) {
       for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
         if (!(gate instanceof ISecurable) || actionHandler.isAccessGranted((ISecurable) gate)) {

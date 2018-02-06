@@ -346,13 +346,12 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements 
    */
   @Override
   public boolean isReadOnly() {
-    boolean readOnly = super.isReadOnly();
-    if (!readOnly && getModelDescriptor() != null) {
-      if (getModelDescriptor() instanceof IGateAccessible) {
-        return ((IGateAccessible) getModelDescriptor()).isReadOnly();
+    if (getModelDescriptor() instanceof IGateAccessible) {
+      if (((IGateAccessible) getModelDescriptor()).isReadOnly()) {
+        return true;
       }
     }
-    return readOnly;
+    return super.isReadOnly();
   }
 
   /**
