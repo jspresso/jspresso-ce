@@ -138,6 +138,8 @@
 
   <bean id="initModuleFilterAction" parent="initModuleFilterActionBase" />
 
+  <bean id="liveUIDebugPlugin" class="org.jspresso.framework.view.DefaultUIDebugPlugin" />
+
   <!-- The implementation used as view factory. View factory is not defined as singleton since it can implement some cache
     a the session level. -->
   <bean id="abstractViewFactory" class="org.jspresso.framework.view.AbstractViewFactory" abstract="true">
@@ -155,6 +157,7 @@
     <property name="binaryPropertyInfoAction" ref="binaryPropertyInfoAction" />
     <property name="componentCollectionFactory" ref="componentCollectionFactory"/>
     <property name="liveDebugUI" value="#{systemProperties['jspresso.liveDebugUI']?:false}"/>
+    <property name="liveUIDebugPlugin" ref="liveUIDebugPlugin" />
   </bean>
 
   <bean id="viewFactoryBase" parent="abstractViewFactory" abstract="true" />
@@ -162,6 +165,7 @@
   <bean id="abstractActionFactory" abstract="true" class="org.jspresso.framework.view.AbstractActionFactory">
     <property name="iconFactory" ref="iconFactory" />
     <property name="liveDebugUI" value="#{systemProperties['jspresso.liveDebugUI']?:false}"/>
+    <property name="liveUIDebugPlugin" ref="liveUIDebugPlugin" />
   </bean>
 
   <bean id="actionFactoryBase" parent="abstractActionFactory" abstract="true" />

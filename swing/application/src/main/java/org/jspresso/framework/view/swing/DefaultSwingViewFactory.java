@@ -2604,8 +2604,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     }
     // To preserve font that has been set and avoid EnhancedJTable changing it.
     headerRenderer.setCustomFont(headerRenderer.getFont());
-    String viewDescription = columnViewDescriptor.getI18nDescription(actionHandler, locale);
-    viewDescription = completeDescriptionWithLiveDebugUI(columnViewDescriptor, viewDescription);
+    String viewDescription = computeViewDescription(columnViewDescriptor, actionHandler, locale);
     if (viewDescription != null && viewDescription.length() > 0) {
       headerRenderer.setToolTipText(viewDescription);
     }
@@ -3395,8 +3394,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     if (viewDescriptor.getFont() != null && FontHelper.isFontSpec(viewDescriptor.getFont())) {
       viewPeer.setFont(createFont(viewDescriptor.getFont(), viewPeer.getFont()));
     }
-    String viewDescription = viewDescriptor.getI18nDescription(translationProvider, locale);
-    viewDescription = completeDescriptionWithLiveDebugUI(viewDescriptor, viewDescription);
+    String viewDescription = computeViewDescription(viewDescriptor, translationProvider, locale);
     if (viewDescription != null && viewDescription.length() > 0) {
       viewPeer.setToolTipText(viewDescription);
     }

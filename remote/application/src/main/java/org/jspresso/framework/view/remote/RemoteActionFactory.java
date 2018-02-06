@@ -139,11 +139,9 @@ public class RemoteActionFactory extends
     if (action instanceof IDisplayableAction) {
       remoteAction.setName(((IDisplayableAction) action).getI18nName(
           actionHandler, locale));
-      String i18nDescription = ((IDisplayableAction) action)
-          .getI18nDescription(actionHandler, locale);
-      i18nDescription = completeDescriptionWithLiveDebugUI(action, i18nDescription);
-      if (i18nDescription != null && i18nDescription.length() > 0) {
-        remoteAction.setDescription(i18nDescription + TOOLTIP_ELLIPSIS);
+      String actionDescription = computeActionDescription(action, actionHandler, locale);
+      if (actionDescription != null && actionDescription.length() > 0) {
+        remoteAction.setDescription(actionDescription + TOOLTIP_ELLIPSIS);
       }
       remoteAction.setIcon(getIconFactory().getIcon(
           ((IDisplayableAction) action).getIcon(), dimension));

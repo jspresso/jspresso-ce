@@ -316,8 +316,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     IViewDescriptor viewDescriptor = view.getDescriptor();
 
     viewPeer.setLabel(viewDescriptor.getI18nName(translationProvider, locale));
-    String viewDescription = viewDescriptor.getI18nDescription(translationProvider, locale);
-    viewDescription = completeDescriptionWithLiveDebugUI(viewDescriptor, viewDescription);
+    String viewDescription = computeViewDescription(viewDescriptor, translationProvider, locale);
     if (viewDescription != null && viewDescription.length() > 0) {
       viewPeer.setToolTip(viewDescription);
     }

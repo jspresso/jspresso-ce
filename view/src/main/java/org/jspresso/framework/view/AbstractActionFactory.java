@@ -53,6 +53,7 @@ import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.gate.GateHelper;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gate.IModelGate;
+import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
@@ -71,6 +72,7 @@ public abstract class AbstractActionFactory<E, F, G> implements IActionFactory<E
   private IIconFactory<G> iconFactory;
 
   private boolean liveDebugUI = false;
+  private IUIDebugPlugin liveUIDebugPlugin;
 
   /**
    * {@inheritDoc}
@@ -313,6 +315,25 @@ public abstract class AbstractActionFactory<E, F, G> implements IActionFactory<E
   }
 
   /**
+   * Gets live ui debug plugin.
+   *
+   * @return the live ui debug plugin
+   */
+  protected IUIDebugPlugin getLiveUIDebugPlugin() {
+    return liveUIDebugPlugin;
+  }
+
+  /**
+   * Sets live ui debug plugin.
+   *
+   * @param liveUIDebugPlugin
+   *     the live ui debug plugin
+   */
+  public void setLiveUIDebugPlugin(IUIDebugPlugin liveUIDebugPlugin) {
+    this.liveUIDebugPlugin = liveUIDebugPlugin;
+  }
+
+  /**
    * Sets live debug UI structure.
    *
    * @param liveDebugUI
@@ -359,20 +380,21 @@ public abstract class AbstractActionFactory<E, F, G> implements IActionFactory<E
    *
    * @param action
    *     the action
-   * @param i18nDescription
-   *     the i 18 n description
+   * @param translationProvider
+   *     the translation provider
+   * @param locale
+   *     the locale
    * @return the completed action description
    */
-  protected String completeDescriptionWithLiveDebugUI(IAction action, String i18nDescription) {
-    if (isLiveDebugUI()) {
-      if (i18nDescription == null) {
-        i18nDescription = "";
-      } else {
-        i18nDescription = i18nDescription + " ";
-      }
-      i18nDescription = i18nDescription + "(Action PermId -> [" + action.getPermId() + "])";
+  protected String computeActionDescription(IAction action, ITranslationProvider translationProvider,
+                                            Locale locale) {
+    String actionDescription = ((IDisplayableAction) action).getI18nDescription(translationProvider, locale);
+    IUIDebugPlugin liveDebugUIPlugin = getLiveUIDebugPlugin();
+    if (isLiveDebugUI() && liveDebugUIPlugin != null) {
+      actionDescription = liveDebugUIPlugin.computeTechnicalDescription(actionDescription, action, translationProvider,
+          locale);
     }
-    return i18nDescription;
+    return actionDescription;
   }
 
   private final class GatesListener implements PropertyChangeListener {

@@ -221,10 +221,11 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   private IDisplayableAction openFileAsBinaryPropertyAction;
   private IDisplayableAction resetPropertyAction;
   private IDisplayableAction saveBinaryPropertyAsFileAction;
-  private String formLabelMandatoryPropertyColorHex   = "0xFFFF0000";
-  private String tableHeaderMandatoryPropertyColorHex = null;
+  private String formLabelMandatoryPropertyColorHex = "0xFFFF0000";
+  private String tableHeaderMandatoryPropertyColorHex;
 
   private boolean liveDebugUI = false;
+  private IUIDebugPlugin liveUIDebugPlugin;
 
   /**
    * Constructs a new {@code AbstractViewFactory} instance.
@@ -3467,31 +3468,49 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    * Sets live debug UI structure.
    *
    * @param liveDebugUI
-   *     the live debug uI structure
+   *     the live debug UI structure
    */
   public void setLiveDebugUI(boolean liveDebugUI) {
     this.liveDebugUI = liveDebugUI;
   }
 
   /**
-   * Complete description with live debug uI.
+   * Gets live debug ui plugin.
+   *
+   * @return the live debug ui plugin
+   */
+  protected IUIDebugPlugin getLiveUIDebugPlugin() {
+    return liveUIDebugPlugin;
+  }
+
+  /**
+   * Sets live debug ui plugin.
+   *
+   * @param liveUIDebugPlugin
+   *     the live debug ui plugin
+   */
+  public void setLiveUIDebugPlugin(IUIDebugPlugin liveUIDebugPlugin) {
+    this.liveUIDebugPlugin = liveUIDebugPlugin;
+  }
+
+  /**
+   * Compute view description string.
    *
    * @param viewDescriptor
    *     the view descriptor
-   * @param viewDescription
-   *     the view description
-   * @return the completed view description.
+   * @param translationProvider
+   *     the translation provider
+   * @param locale
+   *     the locale
+   * @return the string
    */
-  protected String completeDescriptionWithLiveDebugUI(IViewDescriptor viewDescriptor, String viewDescription) {
-    if (isLiveDebugUI()) {
-      if (viewDescriptor.getPermId() != null) {
-        if (viewDescription == null) {
-          viewDescription = "";
-        } else {
-          viewDescription = viewDescription + " ";
-        }
-        viewDescription = viewDescription + "(Descriptor PermId -> [" + viewDescriptor.getPermId() + "])";
-      }
+  protected String computeViewDescription(IViewDescriptor viewDescriptor, ITranslationProvider translationProvider,
+                                          Locale locale) {
+    String viewDescription = viewDescriptor.getI18nDescription(translationProvider, locale);
+    IUIDebugPlugin liveDebugUIPlugin = getLiveUIDebugPlugin();
+    if (isLiveDebugUI() && liveDebugUIPlugin != null) {
+      viewDescription = liveDebugUIPlugin.computeTechnicalDescription(viewDescription, viewDescriptor,
+          translationProvider, locale);
     }
     return viewDescription;
   }
