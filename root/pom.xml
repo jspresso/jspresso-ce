@@ -262,8 +262,28 @@
       </snapshots>
     </repository>
     <repository>
-      <id>jasperreports-repository</id>
+      <id>jasperreports-legacy-repository</id>
       <url>http://jasperreports.sourceforge.net/maven2</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>jasperreports-repository</id>
+      <url>https://jaspersoft.jfrog.io/jaspersoft/jr-ce-releases</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>jasperreports-third-party-repository</id>
+      <url>http://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts</url>
       <releases>
         <enabled>true</enabled>
       </releases>
