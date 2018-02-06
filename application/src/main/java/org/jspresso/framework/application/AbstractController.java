@@ -39,7 +39,6 @@ import org.slf4j.LoggerFactory;
 
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
-import org.jspresso.framework.application.backend.AbstractBackendController;
 import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
 import org.jspresso.framework.util.exception.IExceptionHandler;
 import org.jspresso.framework.util.gui.EClientType;
@@ -65,6 +64,7 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable i
 
   private final static Logger LOG = LoggerFactory.getLogger(AbstractController.class);
   private String loginContextName;
+
   private boolean liveDebugUI;
 
 
