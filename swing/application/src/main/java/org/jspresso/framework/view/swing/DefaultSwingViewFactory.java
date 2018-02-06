@@ -3374,17 +3374,17 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected void finishComponentConfiguration(IView<JComponent> view, ITranslationProvider translationProvider,
+  protected void finishComponentConfiguration(IView<JComponent> view, IActionHandler actionHandler,
                                               Locale locale) {
     JComponent viewPeer = view.getPeer();
     IViewDescriptor viewDescriptor = view.getDescriptor();
     IValueConnector viewConnector = view.getConnector();
     IModelDescriptor modelDescriptor = viewDescriptor.getModelDescriptor();
-    configureComponent(viewPeer, viewDescriptor, translationProvider, locale);
+    configureComponent(viewPeer, viewDescriptor, actionHandler, locale);
   }
 
   private void configureComponent(JComponent viewPeer, IViewDescriptor viewDescriptor,
-                                  ITranslationProvider translationProvider, Locale locale) {
+                                  IActionHandler actionHandler, Locale locale) {
     if (viewDescriptor.getForeground() != null) {
       viewPeer.setForeground(createColor(viewDescriptor.getForeground()));
     }
@@ -3394,7 +3394,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     if (viewDescriptor.getFont() != null && FontHelper.isFontSpec(viewDescriptor.getFont())) {
       viewPeer.setFont(createFont(viewDescriptor.getFont(), viewPeer.getFont()));
     }
-    String viewDescription = computeViewDescription(viewDescriptor, translationProvider, locale);
+    String viewDescription = computeViewDescription(viewDescriptor, actionHandler, locale);
     if (viewDescription != null && viewDescription.length() > 0) {
       viewPeer.setToolTipText(viewDescription);
     }

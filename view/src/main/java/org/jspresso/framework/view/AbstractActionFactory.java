@@ -71,7 +71,6 @@ public abstract class AbstractActionFactory<E, F, G> implements IActionFactory<E
 
   private IIconFactory<G> iconFactory;
 
-  private boolean liveDebugUI = false;
   private IUIDebugPlugin liveUIDebugPlugin;
 
   /**
@@ -306,15 +305,6 @@ public abstract class AbstractActionFactory<E, F, G> implements IActionFactory<E
   }
 
   /**
-   * Is live debug UI structure.
-   *
-   * @return the boolean
-   */
-  protected boolean isLiveDebugUI() {
-    return liveDebugUI;
-  }
-
-  /**
    * Gets live ui debug plugin.
    *
    * @return the live ui debug plugin
@@ -331,16 +321,6 @@ public abstract class AbstractActionFactory<E, F, G> implements IActionFactory<E
    */
   public void setLiveUIDebugPlugin(IUIDebugPlugin liveUIDebugPlugin) {
     this.liveUIDebugPlugin = liveUIDebugPlugin;
-  }
-
-  /**
-   * Sets live debug UI structure.
-   *
-   * @param liveDebugUI
-   *     the live debug uI structure
-   */
-  public void setLiveDebugUI(boolean liveDebugUI) {
-    this.liveDebugUI = liveDebugUI;
   }
 
   private void assignCollectionBasedGateModel(final IGate gate, ICollectionConnector collConnector,
@@ -380,18 +360,18 @@ public abstract class AbstractActionFactory<E, F, G> implements IActionFactory<E
    *
    * @param action
    *     the action
-   * @param translationProvider
-   *     the translation provider
+   * @param actionHandler
+   *     the action handler
    * @param locale
    *     the locale
    * @return the completed action description
    */
-  protected String computeActionDescription(IAction action, ITranslationProvider translationProvider,
+  protected String computeActionDescription(IAction action, IActionHandler actionHandler,
                                             Locale locale) {
-    String actionDescription = ((IDisplayableAction) action).getI18nDescription(translationProvider, locale);
+    String actionDescription = ((IDisplayableAction) action).getI18nDescription(actionHandler, locale);
     IUIDebugPlugin liveDebugUIPlugin = getLiveUIDebugPlugin();
-    if (isLiveDebugUI() && liveDebugUIPlugin != null) {
-      actionDescription = liveDebugUIPlugin.computeTechnicalDescription(actionDescription, action, translationProvider,
+    if (liveDebugUIPlugin != null) {
+      actionDescription = liveDebugUIPlugin.computeTechnicalDescription(actionDescription, action, actionHandler,
           locale);
     }
     return actionDescription;

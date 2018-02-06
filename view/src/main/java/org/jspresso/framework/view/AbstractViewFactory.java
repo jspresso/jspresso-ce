@@ -224,7 +224,6 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   private String formLabelMandatoryPropertyColorHex = "0xFFFF0000";
   private String tableHeaderMandatoryPropertyColorHex;
 
-  private boolean liveDebugUI = false;
   private IUIDebugPlugin liveUIDebugPlugin;
 
   /**
@@ -2747,12 +2746,12 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    *
    * @param view
    *     the raw view.
-   * @param translationProvider
-   *     the translation provider.
+   * @param actionHandler
+   *     the action handler.
    * @param locale
    *     the locale.
    */
-  protected abstract void finishComponentConfiguration(IView<E> view, ITranslationProvider translationProvider,
+  protected abstract void finishComponentConfiguration(IView<E> view, IActionHandler actionHandler,
                                                        Locale locale);
 
   /**
@@ -3456,25 +3455,6 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   }
 
   /**
-   * Is live debug UI structure.
-   *
-   * @return the boolean
-   */
-  protected boolean isLiveDebugUI() {
-    return liveDebugUI;
-  }
-
-  /**
-   * Sets live debug UI structure.
-   *
-   * @param liveDebugUI
-   *     the live debug UI structure
-   */
-  public void setLiveDebugUI(boolean liveDebugUI) {
-    this.liveDebugUI = liveDebugUI;
-  }
-
-  /**
    * Gets live debug ui plugin.
    *
    * @return the live debug ui plugin
@@ -3498,19 +3478,18 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    *
    * @param viewDescriptor
    *     the view descriptor
-   * @param translationProvider
-   *     the translation provider
+   * @param actionHandler
+   *     the action handler
    * @param locale
    *     the locale
    * @return the string
    */
-  protected String computeViewDescription(IViewDescriptor viewDescriptor, ITranslationProvider translationProvider,
-                                          Locale locale) {
-    String viewDescription = viewDescriptor.getI18nDescription(translationProvider, locale);
+  protected String computeViewDescription(IViewDescriptor viewDescriptor, IActionHandler actionHandler, Locale locale) {
+    String viewDescription = viewDescriptor.getI18nDescription(actionHandler, locale);
     IUIDebugPlugin liveDebugUIPlugin = getLiveUIDebugPlugin();
-    if (isLiveDebugUI() && liveDebugUIPlugin != null) {
-      viewDescription = liveDebugUIPlugin.computeTechnicalDescription(viewDescription, viewDescriptor,
-          translationProvider, locale);
+    if (liveDebugUIPlugin != null) {
+      viewDescription = liveDebugUIPlugin.computeTechnicalDescription(viewDescription, viewDescriptor, actionHandler,
+          locale);
     }
     return viewDescription;
   }

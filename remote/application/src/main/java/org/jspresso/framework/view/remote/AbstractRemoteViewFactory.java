@@ -310,13 +310,13 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
    * {@inheritDoc}
    */
   @Override
-  protected void finishComponentConfiguration(IView<RComponent> view, ITranslationProvider translationProvider,
+  protected void finishComponentConfiguration(IView<RComponent> view, IActionHandler actionHandler,
                                               Locale locale) {
     RComponent viewPeer = view.getPeer();
     IViewDescriptor viewDescriptor = view.getDescriptor();
 
-    viewPeer.setLabel(viewDescriptor.getI18nName(translationProvider, locale));
-    String viewDescription = computeViewDescription(viewDescriptor, translationProvider, locale);
+    viewPeer.setLabel(viewDescriptor.getI18nName(actionHandler, locale));
+    String viewDescription = computeViewDescription(viewDescriptor, actionHandler, locale);
     if (viewDescription != null && viewDescription.length() > 0) {
       viewPeer.setToolTip(viewDescription);
     }

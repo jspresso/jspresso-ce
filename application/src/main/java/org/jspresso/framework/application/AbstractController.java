@@ -65,6 +65,7 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable i
 
   private final static Logger LOG = LoggerFactory.getLogger(AbstractController.class);
   private String loginContextName;
+  private boolean liveDebugUI;
 
 
   /**
@@ -78,6 +79,8 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable i
    * Gets the subject out of the application session.
    * <p>
    * {@inheritDoc}
+   *
+   * @return the subject
    */
   @Override
   public Subject getSubject() {
@@ -89,8 +92,7 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable i
    *
    * @return the translationProvider.
    *
-   * @deprecated the controller is itself a translation provider. will return
-   * this.
+   * @deprecated the controller is itself a translation provider. will return this.
    */
   @Override
   @Deprecated
@@ -104,6 +106,12 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable i
    * that the exception should be forwarded.
    * <p>
    * {@inheritDoc}
+   *
+   * @param ex
+   *     the ex
+   * @param context
+   *     the context
+   * @return the boolean
    */
   @Override
   public boolean handleException(Throwable ex, Map<String, Object> context) {
@@ -140,6 +148,10 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable i
 
   /**
    * {@inheritDoc}
+   *
+   * @param locale
+   *     the locale
+   * @return the date pattern
    */
   @Override
   public String getDatePattern(Locale locale) {
@@ -148,6 +160,10 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable i
 
   /**
    * {@inheritDoc}
+   *
+   * @param locale
+   *     the locale
+   * @return the first day of week
    */
   @Override
   public int getFirstDayOfWeek(Locale locale) {
@@ -156,6 +172,10 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable i
 
   /**
    * {@inheritDoc}
+   *
+   * @param locale
+   *     the locale
+   * @return the time pattern
    */
   @Override
   public String getTimePattern(Locale locale) {
@@ -164,6 +184,10 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable i
 
   /**
    * {@inheritDoc}
+   *
+   * @param locale
+   *     the locale
+   * @return the long time pattern
    */
   @Override
   public String getLongTimePattern(Locale locale) {
@@ -172,6 +196,10 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable i
 
   /**
    * {@inheritDoc}
+   *
+   * @param locale
+   *     the locale
+   * @return the short time pattern
    */
   @Override
   public String getShortTimePattern(Locale locale) {
@@ -180,6 +208,10 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable i
 
   /**
    * {@inheritDoc}
+   *
+   * @param locale
+   *     the locale
+   * @return the decimal separator
    */
   @Override
   public String getDecimalSeparator(Locale locale) {
@@ -188,6 +220,10 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable i
 
   /**
    * {@inheritDoc}
+   *
+   * @param locale
+   *     the locale
+   * @return the thousands separator
    */
   @Override
   public String getThousandsSeparator(Locale locale) {
@@ -206,8 +242,8 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable i
    * @return the internal action chain state.
    *
    * @throws IllegalAccessException
-   *     whenever an exception occurs accessing the internal private state
-   *     of the action through reflection.
+   *     whenever an exception occurs accessing the internal private state     of the
+   *     action through reflection.
    */
   public static Map<String, Object> extractInternalActionState(IAction action) throws IllegalAccessException {
     HashMap<String, Object> state = new HashMap<>();
@@ -345,5 +381,26 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable i
       }
       return null;
     }
+  }
+
+  /**
+   * Is live debug ui boolean.
+   *
+   * @return the boolean
+   */
+  @Override
+  public boolean isLiveDebugUI() {
+    return liveDebugUI;
+  }
+
+  /**
+   * Sets live debug ui.
+   *
+   * @param liveDebugUI
+   *     the live debug ui
+   */
+  @Override
+  public void setLiveDebugUI(boolean liveDebugUI) {
+    this.liveDebugUI = liveDebugUI;
   }
 }

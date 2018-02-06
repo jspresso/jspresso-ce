@@ -115,4 +115,18 @@ public interface IActionHandler extends IExceptionHandler, ISecurityHandler,
    * @return the client type
    */
   EClientType getClientType();
+
+  /**
+   * Is live debug UI enabled.
+   * @return live debug UI enabled.
+   */
+  boolean isLiveDebugUI();
+
+  /**
+   * Sets live debug ui.
+   *
+   * @param liveDebugUI
+   *     the live debug ui
+   */
+  public void setLiveDebugUI(boolean liveDebugUI);
 }

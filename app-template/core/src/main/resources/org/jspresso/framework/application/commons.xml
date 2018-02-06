@@ -138,7 +138,7 @@
 
   <bean id="initModuleFilterAction" parent="initModuleFilterActionBase" />
 
-  <bean id="liveUIDebugPlugin" class="org.jspresso.framework.view.DefaultUIDebugPlugin" />
+  <bean id="liveUIDebugPlugin" class="org.jspresso.framework.view.DefaultUIDebugPlugin"/>
 
   <!-- The implementation used as view factory. View factory is not defined as singleton since it can implement some cache
     a the session level. -->
@@ -156,7 +156,6 @@
     <property name="resetPropertyAction" ref="resetPropertyFrontAction" />
     <property name="binaryPropertyInfoAction" ref="binaryPropertyInfoAction" />
     <property name="componentCollectionFactory" ref="componentCollectionFactory"/>
-    <property name="liveDebugUI" value="#{systemProperties['jspresso.liveDebugUI']?:false}"/>
     <property name="liveUIDebugPlugin" ref="liveUIDebugPlugin" />
   </bean>
 
@@ -164,7 +163,6 @@
 
   <bean id="abstractActionFactory" abstract="true" class="org.jspresso.framework.view.AbstractActionFactory">
     <property name="iconFactory" ref="iconFactory" />
-    <property name="liveDebugUI" value="#{systemProperties['jspresso.liveDebugUI']?:false}"/>
     <property name="liveUIDebugPlugin" ref="liveUIDebugPlugin" />
   </bean>
 
@@ -201,6 +199,7 @@
     <property name="onModuleExitAction" ref="checkAllModulesDirtyStateFrontAction" />
     <property name="exitAction" ref="exitFrontAction" />
     <property name="customExceptionHandler" ref="customExceptionHandler" />
+    <property name="liveDebugUI" value="#{systemProperties['jspresso.liveDebugUI']?:false}"/>
   </bean>
 
   <bean abstract="true" id="abstractFrontController" parent="abstractFrontControllerBase" />

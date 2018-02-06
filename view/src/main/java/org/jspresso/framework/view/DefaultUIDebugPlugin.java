@@ -21,6 +21,7 @@ package org.jspresso.framework.view;
 import java.util.Locale;
 
 import org.jspresso.framework.action.IAction;
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
@@ -36,16 +37,22 @@ public class DefaultUIDebugPlugin implements IUIDebugPlugin {
    * {@inheritDoc}
    */
   public String computeTechnicalDescription(String originalDescription, IViewDescriptor viewDescriptor,
-                                            ITranslationProvider translationProvider, Locale locale) {
-    return appendPermIdDescription(originalDescription, viewDescriptor, translationProvider, locale);
+                                            IActionHandler actionHandler, Locale locale) {
+    if (actionHandler.isLiveDebugUI()) {
+      return appendPermIdDescription(originalDescription, viewDescriptor, actionHandler, locale);
+    }
+    return originalDescription;
   }
 
   /**
    * {@inheritDoc}
    */
   public String computeTechnicalDescription(String originalDescription, IAction action,
-                                            ITranslationProvider translationProvider, Locale locale) {
-    return appendPermIdDescription(originalDescription, action, translationProvider, locale);
+                                            IActionHandler actionHandler, Locale locale) {
+    if (actionHandler.isLiveDebugUI()) {
+      return appendPermIdDescription(originalDescription, action, actionHandler, locale);
+    }
+    return originalDescription;
   }
 
   /**

@@ -21,6 +21,7 @@ package org.jspresso.framework.view;
 import java.util.Locale;
 
 import org.jspresso.framework.action.IAction;
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
@@ -39,14 +40,14 @@ public interface IUIDebugPlugin {
    *     the originalDescription
    * @param viewDescriptor
    *     the view descriptor
-   * @param translationProvider
-   *     the translation provider
+   * @param actionHandler
+   *     the action handler
    * @param locale
    *     the locale
    * @return a technical arbitrary string use to give technical information about a given view.
    */
   String computeTechnicalDescription(String originalDescription, IViewDescriptor viewDescriptor,
-                                     ITranslationProvider translationProvider, Locale locale);
+                                     IActionHandler actionHandler, Locale locale);
 
   /**
    * Computes a technical arbitrary string use to give technical information about a given view.
@@ -55,12 +56,12 @@ public interface IUIDebugPlugin {
    *     the originalDescription
    * @param action
    *     the displayable action
-   * @param translationProvider
-   *     the translation provider
+   * @param actionHandler
+   *     the action handler
    * @param locale
    *     the locale
    * @return a technical arbitrary string use to give technical information about a given view.
    */
   String computeTechnicalDescription(String originalDescription, IAction action,
-                                     ITranslationProvider translationProvider, Locale locale);
+                                     IActionHandler actionHandler, Locale locale);
 }
