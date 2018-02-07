@@ -108,11 +108,18 @@ qx.Class.define("org.jspresso.framework.util.format.DateFormatDecorator", {
       parsedDate = new Date(parsedYear, parsedMonth, parsedDay, parsedDate.getHours(), parsedDate.getMinutes(),
           parsedDate.getSeconds(), parsedDate.getMilliseconds());
       if (existingValue != null) {
-        if (this.getRemoteComponent() instanceof org.jspresso.framework.gui.remote.RDateField) {
+        if (this.getRemoteComponent() instanceof org.jspresso.framework.gui.remote.RDateField
+            && parsedDate.getHours() == 0
+            && parsedDate.getMinutes() == 0
+            && parsedDate.getSeconds() == 0
+            && parsedDate.getMilliseconds() == 0) {
           parsedDate = new Date(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate(),
               existingDate.getHours(), existingDate.getMinutes(), existingDate.getSeconds(),
               existingDate.getMilliseconds());
-        } else if (this.getRemoteComponent() instanceof org.jspresso.framework.gui.remote.RTimeField) {
+        } else if (this.getRemoteComponent() instanceof org.jspresso.framework.gui.remote.RTimeField
+            && parsedDate.getFullYear() == 1970
+            && parsedDate.getMonth() == 0
+            && parsedDate.getDate() == 1) {
           parsedDate = new Date(existingDate.getFullYear(), existingDate.getMonth(), existingDate.getDate(),
               parsedDate.getHours(), parsedDate.getMinutes(), parsedDate.getSeconds(), parsedDate.getMilliseconds());
         }

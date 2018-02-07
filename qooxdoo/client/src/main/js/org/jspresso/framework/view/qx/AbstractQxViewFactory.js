@@ -458,6 +458,30 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
       }, this);
     },
 
+    _initDateAndTimeFormatsIfNecessary: function () {
+      if (!this.__longDateTimeFormats) {
+        this.__longDateTimeFormats = this._createDateFormats(this._createLongDateTimeFormatPatterns());
+      }
+      if (!this.__dateTimeFormats) {
+        this.__dateTimeFormats = this._createDateFormats(this._createDateTimeFormatPatterns());
+      }
+      if (!this.__shortDateTimeFormats) {
+        this.__shortDateTimeFormats = this._createDateFormats(this._createShortDateTimeFormatPatterns());
+      }
+      if (!this.__dateFormats) {
+        this.__dateFormats = this._createDateFormats(this._createDateFormatPatterns());
+      }
+      if (!this.__longTimeFormats) {
+        this.__longTimeFormats = this._createDateFormats(this._createLongTimeFormatPatterns());
+      }
+      if (!this.__timeFormats) {
+        this.__timeFormats = this._createDateFormats(this._createTimeFormatPatterns());
+      }
+      if (!this.__shortTimeFormats) {
+        this.__shortTimeFormats = this._createDateFormats(this._createShortTimeFormatPatterns());
+      }
+    },
+
     /**
      *
      * @return {qx.util.format.IFormat}
@@ -466,6 +490,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
     _createFormat: function (remoteComponent) {
       var format;
       if (remoteComponent instanceof org.jspresso.framework.gui.remote.RDateField) {
+        this._initDateAndTimeFormatsIfNecessary();
         var formatDelegates = [];
         if (remoteComponent.getFormatPattern()) {
           formatDelegates.push(new org.jspresso.framework.util.format.DateFormat(remoteComponent.getFormatPattern()));
@@ -473,57 +498,71 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
         if (remoteComponent.getType() == "DATE_TIME") {
           var dateTimeFormat = new org.jspresso.framework.util.format.DateFormatDecorator();
           if (remoteComponent.getMillisecondsAware()) {
-            if (!this.__longDateTimeFormats) {
-              this.__longDateTimeFormats = this._createDateFormats(this._createLongDateTimeFormatPatterns());
-            }
             formatDelegates = formatDelegates.concat(this.__longDateTimeFormats);
+            // For a lenient parsing
+            formatDelegates = formatDelegates.concat(this.__dateTimeFormats);
+            formatDelegates = formatDelegates.concat(this.__shortDateTimeFormats);
+            formatDelegates = formatDelegates.concat(this.__dateFormats);
             dateTimeFormat.setFormatDelegates(formatDelegates);
           } else if (remoteComponent.getSecondsAware()) {
-            if (!this.__dateTimeFormats) {
-              this.__dateTimeFormats = this._createDateFormats(this._createDateTimeFormatPatterns());
-            }
             formatDelegates = formatDelegates.concat(this.__dateTimeFormats);
+            // For a lenient parsing
+            formatDelegates = formatDelegates.concat(this.__longDateTimeFormats);
+            formatDelegates = formatDelegates.concat(this.__shortDateTimeFormats);
+            formatDelegates = formatDelegates.concat(this.__dateFormats);
             dateTimeFormat.setFormatDelegates(formatDelegates);
           } else {
-            if (!this.__shortDateTimeFormats) {
-              this.__shortDateTimeFormats = this._createDateFormats(this._createShortDateTimeFormatPatterns());
-            }
             formatDelegates = formatDelegates.concat(this.__shortDateTimeFormats);
+            // For a lenient parsing
+            formatDelegates = formatDelegates.concat(this.__dateTimeFormats);
+            formatDelegates = formatDelegates.concat(this.__longDateTimeFormats);
+            formatDelegates = formatDelegates.concat(this.__dateFormats);
             dateTimeFormat.setFormatDelegates(formatDelegates);
           }
           dateTimeFormat.setRemoteComponent(remoteComponent);
           return dateTimeFormat;
         } else {
           var dateFormat = new org.jspresso.framework.util.format.DateFormatDecorator();
-          if (!this.__dateFormats) {
-            this.__dateFormats = this._createDateFormats(this._createDateFormatPatterns());
-          }
           formatDelegates = formatDelegates.concat(this.__dateFormats);
+          // For a lenient parsing
+          formatDelegates = formatDelegates.concat(this.__longDateTimeFormats);
+          formatDelegates = formatDelegates.concat(this.__dateTimeFormats);
+          formatDelegates = formatDelegates.concat(this.__shortDateTimeFormats);
           dateFormat.setFormatDelegates(formatDelegates);
           dateFormat.setRemoteComponent(remoteComponent);
           return dateFormat;
         }
       } else if (remoteComponent instanceof org.jspresso.framework.gui.remote.RTimeField) {
+        this._initDateAndTimeFormatsIfNecessary();
         var formatDelegates = [];
         if (remoteComponent.getFormatPattern()) {
           formatDelegates.push(new org.jspresso.framework.util.format.DateFormat(remoteComponent.getFormatPattern()));
         }
         var timeFormat = new org.jspresso.framework.util.format.DateFormatDecorator();
         if (remoteComponent.getMillisecondsAware()) {
-          if (!this.__longTimeFormats) {
-            this.__longTimeFormats = this._createDateFormats(this._createLongTimeFormatPatterns());
-          }
           formatDelegates = formatDelegates.concat(this.__longTimeFormats);
-        } else if (remoteComponent.getSecondsAware()) {
-          if (!this.__timeFormats) {
-            this.__timeFormats = this._createDateFormats(this._createTimeFormatPatterns());
-          }
+          // For a lenient parsing
           formatDelegates = formatDelegates.concat(this.__timeFormats);
-        } else {
-          if (!this.__shortTimeFormats) {
-            this.__shortTimeFormats = this._createDateFormats(this._createShortTimeFormatPatterns());
-          }
           formatDelegates = formatDelegates.concat(this.__shortTimeFormats);
+          formatDelegates = formatDelegates.concat(this.__longDateTimeFormats);
+          formatDelegates = formatDelegates.concat(this.__dateTimeFormats);
+          formatDelegates = formatDelegates.concat(this.__shortDateTimeFormats);
+        } else if (remoteComponent.getSecondsAware()) {
+          formatDelegates = formatDelegates.concat(this.__timeFormats);
+          // For a lenient parsing
+          formatDelegates = formatDelegates.concat(this.__longTimeFormats);
+          formatDelegates = formatDelegates.concat(this.__shortTimeFormats);
+          formatDelegates = formatDelegates.concat(this.__longDateTimeFormats);
+          formatDelegates = formatDelegates.concat(this.__dateTimeFormats);
+          formatDelegates = formatDelegates.concat(this.__shortDateTimeFormats);
+        } else {
+          formatDelegates = formatDelegates.concat(this.__shortTimeFormats);
+          // For a lenient parsing
+          formatDelegates = formatDelegates.concat(this.__longTimeFormats);
+          formatDelegates = formatDelegates.concat(this.__timeFormats);
+          formatDelegates = formatDelegates.concat(this.__longDateTimeFormats);
+          formatDelegates = formatDelegates.concat(this.__dateTimeFormats);
+          formatDelegates = formatDelegates.concat(this.__shortDateTimeFormats);
         }
         timeFormat.setFormatDelegates(formatDelegates);
         timeFormat.setRemoteComponent(remoteComponent);
