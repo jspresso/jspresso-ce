@@ -76,8 +76,11 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
         htmlContent = this.base(arguments, cellInfo);
       }
       htmlContent = org.jspresso.framework.util.html.HtmlUtil.bindActionToHtmlContent(htmlContent, this.__action);
-      var cellViewState = cellInfo.rowData.getChildren().getItem(cellInfo.col + 1);
-      if ((!this.__disableActionsWithField || cellViewState.isWritable()) && this.__asideActions) {
+      var cellViewState = null;
+      if (cellInfo.rowData instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
+        cellViewState = cellInfo.rowData.getChildren().getItem(cellInfo.col + 1);
+      }
+      if (cellViewState && (!this.__disableActionsWithField || cellViewState.isWritable()) && this.__asideActions) {
         var actionsHtmlContent = "";
         for (var i = 0; i < this.__asideActions.length; i++) {
           var actionList = this.__asideActions[i];
