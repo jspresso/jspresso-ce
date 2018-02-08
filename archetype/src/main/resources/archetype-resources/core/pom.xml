@@ -137,6 +137,13 @@
             </goals>
           </execution>
         </executions>
+        <dependencies>
+          <dependency>
+            <groupId>org.jspresso.contrib</groupId>
+            <artifactId>jspresso-sjs</artifactId>
+            <version>${symbol_dollar}{sjs.version}</version>
+          </dependency>
+        </dependencies>
       </plugin>
       <plugin>
         <groupId>org.jspresso.maven</groupId>
