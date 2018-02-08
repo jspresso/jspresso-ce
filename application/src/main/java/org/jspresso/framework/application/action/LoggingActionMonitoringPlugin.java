@@ -146,6 +146,9 @@ public class LoggingActionMonitoringPlugin extends AbstractActionMonitoringPlugi
         actionDescription = actionDescription.substring(lastDotIndex + 1);
       }
     }
+    if (action.getPermId() != null) {
+      actionDescription += ("@"+action.getPermId());
+    }
     if (action instanceof LovAction<?, ?, ?>) {
       IReferencePropertyDescriptor<IComponent> componentRefDescriptor = (IReferencePropertyDescriptor<IComponent>)
           context
