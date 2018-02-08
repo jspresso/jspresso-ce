@@ -2920,6 +2920,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             }
           });
         }
+        // Since the label cannot grow, we must decorate it with the actions before it is added to the wrapper.
+        // See bug #434
+        if (remoteLabel.getActionLists()) {
+          labelComponent = this._decorateWithActions(remoteLabel, labelComponent);
+          remoteLabel.setActionLists(null);
+        }
         // Do not size dynamic labels
         // this._sizeMaxComponentWidth(labelComponent, remoteLabel, remoteLabel.getMaxLength());
 
