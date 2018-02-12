@@ -2345,7 +2345,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var focusIndicator = paneScroller.getChildControl("focus-indicator");
 
       var dblTapListener = function (e) {
-        timeStamp = new Date().getTime();
+        var timeStamp = new Date().getTime();
         var lastTimeStamp = focusIndicator.getUserData("lastPointerDownTS")
         var row = focusIndicator.getRow();
         var column = focusIndicator.getColumn();
