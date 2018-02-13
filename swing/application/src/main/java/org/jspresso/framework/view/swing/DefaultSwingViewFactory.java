@@ -2127,18 +2127,9 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
             ((IReferencePropertyViewDescriptor) propertyViewDescriptor).isAutoCompleteEnabled());
       }
       Action lovAction = createLovAction(view, actionHandler, locale);
-      // lovAction.putValue(Action.NAME,
-      // actionHandler.getTranslation(
-      // "lov.element.name",
-      // new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
-      // actionHandler, locale)}, locale));
       lovAction.putValue(Action.SHORT_DESCRIPTION, actionHandler.getTranslation("lov.element.description",
           new Object[]{propertyDescriptor.getReferencedDescriptor().getI18nName(actionHandler, locale)}, locale)
           + IActionFactory.TOOLTIP_ELLIPSIS);
-      if (propertyDescriptor.getReferencedDescriptor().getIcon() != null) {
-        lovAction.putValue(Action.SMALL_ICON, getIconFactory()
-            .getIcon(propertyDescriptor.getReferencedDescriptor().getIcon(), getIconFactory().getTinyIconSize()));
-      }
       ((JActionField) viewComponent).setActions(Collections.singletonList(lovAction));
       if (propertyViewDescriptor instanceof IStringPropertyViewDescriptor) {
         attachCharAction(view, ((JActionField) viewComponent).getTextField(),

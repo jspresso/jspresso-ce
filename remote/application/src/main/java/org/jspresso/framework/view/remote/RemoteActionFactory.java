@@ -103,6 +103,14 @@ public class RemoteActionFactory extends
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setActionIcon(RAction action, RIcon icon) {
+    action.setIcon(icon);
+  }
+
+  /**
    * Sets the guidGenerator.
    *
    * @param guidGenerator

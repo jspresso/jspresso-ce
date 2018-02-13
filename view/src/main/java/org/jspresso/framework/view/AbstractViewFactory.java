@@ -199,7 +199,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    */
   protected static final Date TEMPLATE_TIME = new Date(366000);
 
-  private IActionFactory<G, E>          actionFactory;
+  private IActionFactory<G, E, F>       actionFactory;
   private IDisplayableAction            binaryPropertyInfoAction;
   private IConfigurableConnectorFactory connectorFactory;
   private ERenderingOptions defaultActionMapRenderingOptions = ERenderingOptions.ICON;
@@ -210,6 +210,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   private       IComponentCollectionFactory componentCollectionFactory;
 
   private IDisplayableAction lovAction;
+  private boolean useEntityIconsForLov = false;
   private IDisplayableAction componentsLovActionTemplate;
 
   private int maxCharacterLength       = 32;
@@ -243,6 +244,14 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
 
   /**
    * {@inheritDoc}
+   *
+   * @param viewDescriptor
+   *     the view descriptor
+   * @param actionHandler
+   *     the action handler
+   * @param locale
+   *     the locale
+   * @return the view
    */
   @SuppressWarnings("ConstantConditions")
   @Override
@@ -492,7 +501,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    * @return the actionFactory.
    */
   @Override
-  public IActionFactory<G, E> getActionFactory() {
+  public IActionFactory<G, E, F> getActionFactory() {
     return actionFactory;
   }
 
@@ -522,7 +531,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    * @param actionFactory
    *     the actionFactory to set.
    */
-  public void setActionFactory(IActionFactory<G, E> actionFactory) {
+  public void setActionFactory(IActionFactory<G, E, F> actionFactory) {
     this.actionFactory = actionFactory;
   }
 
@@ -1089,6 +1098,15 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
 
   /**
    * {@inheritDoc}
+   *
+   * @param cardView
+   *     the card view
+   * @param unbindPrevious
+   *     the unbind previous
+   * @param actionHandler
+   *     the action handler
+   * @param locale
+   *     the locale
    */
   @Override
   public void refreshCardView(IMapView<E> cardView, boolean unbindPrevious, IActionHandler actionHandler,
@@ -1351,14 +1369,14 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    * or null if none or if the label is a static one. Note that for the label to be considered as a dynamic one,
    * the name must be different from the bound property name if te view descriptor is a property descriptor.
    *
-   * @param modelDescriptor
-   *     the component model descriptor.
    * @param viewDescriptor
    *     the view descriptor
+   * @param modelDescriptor
+   *     the component model descriptor.
    * @param propertyDescriptor
    *     the property descriptor.
-   * @return the property name used to compute a property view dynamic label
-   * or null if none or if the label is a static one.
+   * @return the property name used to compute a property view dynamic label or null if none or if the label is a
+   * static one.
    */
   protected String computeDynamicLabelPropertyName(IViewDescriptor viewDescriptor,
                                                    IComponentDescriptor<?> modelDescriptor,
@@ -1482,8 +1500,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    *     the view descriptor
    * @param modelDescriptor
    *     the component model descriptor.
-   * @return the property name used to compute a view dynamic font or null if none or if the font is a
-   * static one.
+   * @return the property name used to compute a view dynamic font or null if none or if the font is a static one.
    */
   protected String computeDynamicFontPropertyName(IViewDescriptor viewDescriptor,
                                                   IComponentDescriptor<?> modelDescriptor) {
@@ -1509,8 +1526,8 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    *     the component view descriptor.
    * @param modelDescriptor
    *     the model descriptor.
-   * @return the property name used to compute a component view dynamic tooltip
-   * or null if none or if the tooltip is a static one.
+   * @return the property name used to compute a component view dynamic tooltip or null if none or if the tooltip is
+   * a static one.
    */
   protected String computeComponentDynamicToolTip(IViewDescriptor viewDescriptor,
                                                   IComponentDescriptor<?> modelDescriptor) {
@@ -1586,11 +1603,10 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    * default.
    *
    * @param viewDescriptor
-   *     the view descriptor being the root of the view hierarchy to be
-   *     constructed.
+   *     the view descriptor being the root of the view hierarchy to be     constructed.
    * @param actionHandler
-   *     the object responsible for executing the view actions (generally
-   *     the frontend controller itself).
+   *     the object responsible for executing the view actions (generally     the frontend
+   *     controller itself).
    * @param locale
    *     the locale the view must use for i18n.
    * @return the created view or null.
@@ -1729,8 +1745,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    * @param propertyDescriptor
    *     the enumeration property descriptor
    * @param translationProvider
-   *     the translation provider to use to translate the enumeration
-   *     values.
+   *     the translation provider to use to translate the enumeration     values.
    * @param locale
    *     the locale to create the formatter for.
    * @return the formatter.
@@ -2171,9 +2186,11 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   protected G createLovAction(IView<E> propertyView, IActionHandler actionHandler, Locale locale) {
     IPropertyViewDescriptor propertyViewDescriptor = (IPropertyViewDescriptor) propertyView.getDescriptor();
     IDisplayableAction listOfValueAction;
+    boolean genericLovAction = true;
     if (propertyViewDescriptor instanceof IReferencePropertyViewDescriptor
         && ((IReferencePropertyViewDescriptor) propertyViewDescriptor).getLovAction() != null) {
       listOfValueAction = ((IReferencePropertyViewDescriptor) propertyViewDescriptor).getLovAction();
+      genericLovAction = false;
     } else {
       listOfValueAction = getLovAction();
     }
@@ -2184,6 +2201,12 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     G action = getActionFactory().createAction(listOfValueAction, getIconFactory().getTinyIconSize(), actionHandler,
         propertyView, locale);
     getActionFactory().setActionName(action, null);
+    IReferencePropertyDescriptor<?> propertyDescriptor = (IReferencePropertyDescriptor<?>) propertyViewDescriptor
+        .getModelDescriptor();
+    if (isUseEntityIconsForLov() && genericLovAction && propertyDescriptor.getReferencedDescriptor().getIcon() != null) {
+      getActionFactory().setActionIcon(action, getIconFactory()
+          .getIcon(propertyDescriptor.getReferencedDescriptor().getIcon(), getIconFactory().getTinyIconSize()));
+    }
     return action;
   }
 
@@ -2757,8 +2780,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    * @param locale
    *     the locale.
    */
-  protected abstract void finishComponentConfiguration(IView<E> view, IActionHandler actionHandler,
-                                                       Locale locale);
+  protected abstract void finishComponentConfiguration(IView<E> view, IActionHandler actionHandler, Locale locale);
 
   /**
    * Computes the connector id for component view.
@@ -2856,8 +2878,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    * @param propertyDescriptor
    *     the property descriptor.
    * @param translationProvider
-   *     the translation provider to use to translate the enumeration
-   *     values.
+   *     the translation provider to use to translate the enumeration     values.
    * @param locale
    *     the locale.
    * @return the enumeration template value.
@@ -3092,8 +3113,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    *
    * @param propertyViewDescriptor
    *     the property view descriptor.
-   * @return true if a property view is considered to fill all the available
-   * height space.
+   * @return true if a property view is considered to fill all the available height space.
    */
   protected boolean isHeightExtensible(IPropertyViewDescriptor propertyViewDescriptor) {
     if (propertyViewDescriptor.getPreferredSize() == null
@@ -3507,22 +3527,23 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    *     the actual component type.
    * @param <F>
    *     the actual action type.
+   * @param <G>
+   *     the actual icon type.
    * @author Vincent Vandenschrick
    */
-  protected static class ConnectorActionAdapter<E, F>
+  protected static class ConnectorActionAdapter<E, F, G>
       implements IItemSelectionListener, IValueChangeListener, ICloneable {
 
-    private final IAction              actionDelegate;
-    private final IActionFactory<F, E> actionFactory;
-    private final IActionHandler       actionHandler;
-    private final IView<E>             view;
+    private final IAction                 actionDelegate;
+    private final IActionFactory<F, E, G> actionFactory;
+    private final IActionHandler          actionHandler;
+    private final IView<E>                view;
 
     /**
      * Constructs a new {@code ConnectorActionAdapter} instance.
      *
      * @param actionDelegate
-     *     the action to trigger when the connector value/selection
-     *     changes.
+     *     the action to trigger when the connector value/selection     changes.
      * @param actionFactory
      *     the action factory.
      * @param actionHandler
@@ -3530,7 +3551,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
      * @param view
      *     the view to use in the context.
      */
-    public ConnectorActionAdapter(IAction actionDelegate, IActionFactory<F, E> actionFactory,
+    public ConnectorActionAdapter(IAction actionDelegate, IActionFactory<F, E, G> actionFactory,
                                   IActionHandler actionHandler, IView<E> view) {
       this.actionDelegate = actionDelegate;
       this.actionFactory = actionFactory;
@@ -3540,12 +3561,14 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
 
     /**
      * {@inheritDoc}
+     *
+     * @return the connector action adapter
      */
     @SuppressWarnings("unchecked")
     @Override
-    public ConnectorActionAdapter<E, F> clone() {
+    public ConnectorActionAdapter<E, F, G> clone() {
       try {
-        return (ConnectorActionAdapter<E, F>) super.clone();
+        return (ConnectorActionAdapter<E, F, G>) super.clone();
       } catch (CloneNotSupportedException ex) {
         // Cannot happen.
         return null;
@@ -3554,6 +3577,9 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
 
     /**
      * {@inheritDoc}
+     *
+     * @param event
+     *     the event
      */
     @Override
     public void selectedItemChange(ItemSelectionEvent event) {
@@ -3563,6 +3589,9 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
 
     /**
      * {@inheritDoc}
+     *
+     * @param evt
+     *     the evt
      */
     @Override
     public void valueChange(ValueChangeEvent evt) {
@@ -3936,5 +3965,24 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
         || modelDescriptor instanceof IEnumerationPropertyDescriptor
         || modelDescriptor instanceof IBooleanPropertyDescriptor
         || modelDescriptor instanceof IReferencePropertyDescriptor;
+  }
+
+  /**
+   * Is use entity icons for lov boolean.
+   *
+   * @return the boolean
+   */
+  protected boolean isUseEntityIconsForLov() {
+    return useEntityIconsForLov;
+  }
+
+  /**
+   * Sets use entity icons for lov.
+   *
+   * @param useEntityIconsForLov
+   *     the use entity icons for lov
+   */
+  public void setUseEntityIconsForLov(boolean useEntityIconsForLov) {
+    this.useEntityIconsForLov = useEntityIconsForLov;
   }
 }

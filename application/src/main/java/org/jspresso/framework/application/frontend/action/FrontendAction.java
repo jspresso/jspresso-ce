@@ -420,7 +420,7 @@ public class FrontendAction<E, F, G> extends AbstractAction implements IDisplaya
    *     the action context.
    * @return the actionFactory.
    */
-  protected IActionFactory<G, E> getActionFactory(Map<String, Object> context) {
+  protected IActionFactory<G, E, F> getActionFactory(Map<String, Object> context) {
     return getViewFactory(context).getActionFactory();
   }
 

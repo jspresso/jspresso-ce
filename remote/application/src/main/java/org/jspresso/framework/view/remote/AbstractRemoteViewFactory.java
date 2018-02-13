@@ -1856,17 +1856,9 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         ((RActionField) viewComponent).setFieldEditable(true);
       }
       RAction lovAction = createLovAction(view, actionHandler, locale);
-      // lovAction.setName(actionHandler.getTranslation(
-      // "lov.element.name",
-      // new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
-      // actionHandler, locale)}, locale));
       lovAction.setDescription(actionHandler.getTranslation("lov.element.description",
           new Object[]{propertyDescriptor.getReferencedDescriptor().getI18nName(actionHandler, locale)}, locale)
           + IActionFactory.TOOLTIP_ELLIPSIS);
-      // if (propertyDescriptor.getReferencedDescriptor().getIcon() != null) {
-      //   lovAction.setIcon(getIconFactory()
-      //     .getIcon(propertyDescriptor.getReferencedDescriptor().getIcon(), getIconFactory().getTinyIconSize()));
-      // }
       RActionList actionList = new RActionList(getGuidGenerator().generateGUID());
       actionList.setActions(lovAction);
       viewComponent.setActionLists(actionList);

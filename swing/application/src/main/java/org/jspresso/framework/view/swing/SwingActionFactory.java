@@ -84,6 +84,14 @@ public class SwingActionFactory extends
     action.putValue(Action.NAME, name);
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setActionIcon(Action action, Icon icon) {
+    action.putValue(Action.SMALL_ICON, icon);
+  }
+
   private final class ActionAdapter extends AbstractAction {
 
     private static final long serialVersionUID = 5819377672533326496L;

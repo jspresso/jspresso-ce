@@ -884,7 +884,7 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
       ((AbstractRemoteViewFactory) viewFactory).setRemoteCommandHandler(this);
       ((AbstractRemoteViewFactory) viewFactory).setRemotePeerRegistry(this);
     }
-    IActionFactory<RAction, RComponent> actionFactory = viewFactory.getActionFactory();
+    IActionFactory<RAction, RComponent, RIcon> actionFactory = viewFactory.getActionFactory();
     if (actionFactory instanceof RemoteActionFactory) {
       ((RemoteActionFactory) actionFactory).setRemoteCommandHandler(this);
       ((RemoteActionFactory) actionFactory).setRemotePeerRegistry(this);

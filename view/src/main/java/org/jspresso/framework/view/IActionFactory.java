@@ -34,9 +34,11 @@ import org.jspresso.framework.util.gui.Dimension;
  *          the actual action class created.
  * @param <F>
  *          the actual component class the created actions are installed in.
+ * @param <G>
+ *          the actual icon class.
  */
 @SuppressWarnings("UnusedParameters")
-public interface IActionFactory<E, F> {
+public interface IActionFactory<E, F, G> {
 
   /**
    * {@code TOOLTIP_ELLIPSIS} is "...".
@@ -116,4 +118,13 @@ public interface IActionFactory<E, F> {
    */
   void setActionName(E action, String name);
 
+  /**
+   * Sets an action icon.
+   *
+   * @param action
+   *     the action to work on.
+   * @param icon
+   *     the action icon.
+   */
+  void setActionIcon(E action, G icon);
 }

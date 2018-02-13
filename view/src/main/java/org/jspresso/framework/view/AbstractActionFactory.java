@@ -67,7 +67,7 @@ import org.jspresso.framework.view.action.IDisplayableAction;
  *     the actual icon class the created actions support.
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractActionFactory<E, F, G> implements IActionFactory<E, F> {
+public abstract class AbstractActionFactory<E, F, G> implements IActionFactory<E, F, G> {
 
   private IIconFactory<G> iconFactory;
 

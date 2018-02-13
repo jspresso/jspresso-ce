@@ -58,7 +58,7 @@ public interface IViewFactory<E, F, G> {
    *
    * @return the action factory.
    */
-  IActionFactory<G, E> getActionFactory();
+  IActionFactory<G, E, F> getActionFactory();
 
   /**
    * Gets the view connector factory.
