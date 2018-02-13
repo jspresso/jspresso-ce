@@ -201,4 +201,10 @@ public interface IPropertyDescriptor extends IModelDescriptor, ICloneable, ISecu
    * @return {@code true} if this property is only used in filters.
    */
   boolean isFilterOnly();
+
+  /**
+   * Allows to configure an alternative property used to sort this one.
+   * @return the an alternative property used to sort this one.
+   */
+  String getAlternativeSortProperty();
 }

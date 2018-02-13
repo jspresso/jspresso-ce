@@ -74,7 +74,7 @@ public abstract class BasicScalarPropertyDescriptor extends
    * delegated to the property descriptor.
    *
    * @param defaultValue
-   *          the defaultValue to set.
+   *     the defaultValue to set.
    */
   public void setDefaultValue(Object defaultValue) {
     if (defaultValue != null) {
@@ -103,16 +103,17 @@ public abstract class BasicScalarPropertyDescriptor extends
    * String parameter.
    *
    * @param valueAsString
-   *          the value to set as String.
+   *     the value to set as String.
+   *
    * @return the parsed value.
    * @throws InstantiationException
-   *           whenever an exception occurs.
+   *     whenever an exception occurs.
    * @throws IllegalAccessException
-   *           whenever an exception occurs.
+   *     whenever an exception occurs.
    * @throws InvocationTargetException
-   *           whenever an exception occurs.
+   *     whenever an exception occurs.
    * @throws NoSuchMethodException
-   *           whenever an exception occurs.
+   *     whenever an exception occurs.
    */
   protected Object parseStringValue(String valueAsString)
       throws InstantiationException, IllegalAccessException,
@@ -120,4 +121,5 @@ public abstract class BasicScalarPropertyDescriptor extends
     return getModelType().getConstructor(String.class).newInstance(
         valueAsString);
   }
+
 }

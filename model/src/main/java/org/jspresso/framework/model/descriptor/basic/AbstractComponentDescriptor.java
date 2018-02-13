@@ -298,7 +298,6 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
    */
   @Override
   public Map<String, ESort> getOrderingProperties() {
-    // use a set to avoid duplicates.
     Map<String, ESort> properties = new LinkedHashMap<>();
     if (orderingProperties != null) {
       properties.putAll(orderingProperties);
@@ -314,7 +313,21 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
     if (properties.isEmpty()) {
       return null;
     }
-    return properties;
+    return reworkOrderingProperties(properties);
+  }
+
+  public Map<String, ESort> reworkOrderingProperties(Map<String, ESort> properties) {
+    Map<String, ESort> reworkedProperties = new LinkedHashMap<>();
+    for (Entry<String, ESort> ord : properties.entrySet()) {
+      IPropertyDescriptor propertyDescriptor = getPropertyDescriptor(ord.getKey());
+      String alternativeSortProperty = propertyDescriptor.getAlternativeSortProperty();
+      if (alternativeSortProperty != null) {
+        reworkedProperties.put(alternativeSortProperty, ord.getValue());
+      } else {
+        reworkedProperties.put(ord.getKey(), ord.getValue());
+      }
+    }
+    return reworkedProperties;
   }
 
   /**
@@ -827,7 +840,7 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
    * @param untypedOrderingProperties
    *     the orderingProperties to set.
    */
-  public void setOrderingProperties(Map<String, ?> untypedOrderingProperties) {
+  public void setOrderingProperties(Map<String, ESort> untypedOrderingProperties) {
     if (untypedOrderingProperties != null) {
       orderingProperties = new LinkedHashMap<>();
       for (Map.Entry<String, ?> untypedOrderingProperty : untypedOrderingProperties.entrySet()) {

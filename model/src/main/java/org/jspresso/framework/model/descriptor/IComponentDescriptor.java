@@ -27,6 +27,7 @@ import org.jspresso.framework.model.component.service.IComponentService;
 import org.jspresso.framework.model.component.service.ILifecycleInterceptor;
 import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.collection.ESort;
+import org.jspresso.framework.util.collection.ISortable;
 import org.jspresso.framework.util.descriptor.IIconDescriptor;
 import org.jspresso.framework.util.gate.IGateAccessible;
 
@@ -40,7 +41,7 @@ import org.jspresso.framework.util.gate.IGateAccessible;
  *          the concrete type of component.
  */
 public interface IComponentDescriptor<E> extends IIconDescriptor,
-    IComponentDescriptorProvider<E>, IGateAccessible, IPermIdSource {
+    IComponentDescriptorProvider<E>, IGateAccessible, IPermIdSource, ISortable {
 
   /**
    * The constant RAW_SUFFIX is "Raw".
@@ -81,15 +82,6 @@ public interface IComponentDescriptor<E> extends IIconDescriptor,
    * @return the list of entity lifecycle interceptors.
    */
   List<ILifecycleInterceptor<?>> getLifecycleInterceptors();
-
-  /**
-   * Get the list of properties ordering the collections containing this
-   * component along with their individual sorting direction.
-   *
-   * @return the map of properties ordering the collections containing this
-   *         component.
-   */
-  Map<String, ESort> getOrderingProperties();
 
   /**
    * Whenever this component is used as a query filter, this is the default page
@@ -204,4 +196,11 @@ public interface IComponentDescriptor<E> extends IIconDescriptor,
    * @return the boolean
    */
   boolean isTranslatable();
+
+  /**
+   * Rework ordering properties in order to replace alternative properties where possible.
+   * @param properties the default ordering properties
+   * @return the reworked ordering properties.
+   */
+  Map<String, ESort> reworkOrderingProperties(Map<String, ESort> properties);
 }

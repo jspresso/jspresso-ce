@@ -420,9 +420,9 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
       if (defaultOrderingProperties == null) {
         return componentDescriptor.getOrderingProperties();
       }
-      return defaultOrderingProperties;
+      return componentDescriptor.reworkOrderingProperties(defaultOrderingProperties);
     }
-    return orderingProperties;
+    return componentDescriptor.reworkOrderingProperties(orderingProperties);
   }
 
   /**

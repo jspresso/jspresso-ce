@@ -74,6 +74,7 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
   private Collection<IGate>              writabilityGates;
   private Boolean                        filterComparable;
   private boolean                        filterOnly;
+  private String                         alternativeSortProperty;
 
   /**
    * Constructs a new {@code BasicPropertyDescriptor} instance.
@@ -848,5 +849,24 @@ public abstract class BasicPropertyDescriptor extends DefaultIconDescriptor
    */
   public void setFilterOnly(boolean filterOnly) {
     this.filterOnly = filterOnly;
+  }
+
+  /**
+   * {@inheritDoc}
+   *
+   * @return the alternative sort property
+   */
+  public String getAlternativeSortProperty() {
+    return alternativeSortProperty;
+  }
+
+  /**
+   * Allows to configure an alternative property used to sort this one.
+   *
+   * @param alternativeSortProperty
+   *     the alternative sort property
+   */
+  public void setAlternativeSortProperty(String alternativeSortProperty) {
+    this.alternativeSortProperty = alternativeSortProperty;
   }
 }
