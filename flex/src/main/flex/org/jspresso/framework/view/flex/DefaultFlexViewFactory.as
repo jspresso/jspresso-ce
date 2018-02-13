@@ -2275,8 +2275,9 @@ public class DefaultFlexViewFactory {
     var completeCreation:Function = function (event:FlexEvent):void {
       if (event.target is TabNavigator) {
         var tabContainer:TabNavigator = event.target as TabNavigator;
+        var tabButton:Button;
         for (var tabIndex:int = 0; tabIndex < tabContainer.getChildren().length; tabIndex++) {
-          var tabButton:Button = tabContainer.getTabAt(tabIndex);
+          tabButton = tabContainer.getTabAt(tabIndex);
           tabButton.setStyle("icon",
                              getIconForComponent(tabButton, (remoteTabContainer.tabs[tabIndex] as RComponent).icon));
           var tab:UIComponent = tabContainer.getChildAt(tabIndex) as UIComponent;
@@ -2290,7 +2291,7 @@ public class DefaultFlexViewFactory {
         for (var i:int = 0; i < remoteTabContainer.tabs.length; i++) {
           var rTab:RComponent = remoteTabContainer.tabs[i] as RComponent;
           if (rTab && rTab.state && !rTab.state.readable) {
-            var tabButton:Button = tabContainer.getTabAt(i);
+            tabButton = tabContainer.getTabAt(i);
             tabButton.visible = false
             tabButton.includeInLayout = false;
           }
