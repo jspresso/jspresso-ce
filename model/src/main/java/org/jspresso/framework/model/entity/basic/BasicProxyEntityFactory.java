@@ -200,8 +200,18 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    */
   @Override
   public <T extends IComponent> T createComponentInstance(Class<T> componentContract, Object delegate) {
+    return createComponentInstance(componentContract, delegate, true);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public <T extends IComponent> T createComponentInstance(Class<T> componentContract, Object delegate, boolean initialize) {
     T createdComponent = createComponentInstance(componentContract, delegate, (Class<?>[]) null);
-    initializeComponent(createdComponent);
+    if (initialize) {
+      initializeComponent(createdComponent);
+    }
     return createdComponent;
   }
 

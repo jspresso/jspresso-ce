@@ -57,6 +57,22 @@ public interface IComponentFactory extends IComponentDescriptorRegistry {
   <T extends IComponent> T createComponentInstance(Class<T> componentContract, Object delegate);
 
   /**
+   * Creates a new component instance based on the component descriptor. All
+   * method calls are handled by the component delegate.
+   *
+   * @param <T>
+   *     the concrete class of the created component.
+   * @param componentContract
+   *     the class of the component to create.
+   * @param delegate
+   *     the component delegate instance.
+   * @param initialize
+   *     should the new component be initialized with its property defaults
+   * @return the component instance.
+   */
+  <T extends IComponent> T createComponentInstance(Class<T> componentContract, Object delegate, boolean initialize);
+
+  /**
    * Creates a new query component instance based on the component descriptor.
    *
    * @param componentContract
