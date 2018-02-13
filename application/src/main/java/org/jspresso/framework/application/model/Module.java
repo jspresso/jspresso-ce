@@ -116,6 +116,7 @@ public class Module extends AbstractPropertyChangeCapable
   private String             headerDescription;
   private String             i18nHeaderDescription;
   private boolean            dirty;
+  private boolean            displayDirtyState;
   private IAction            entryAction;
   private IAction            exitAction;
   private Collection<String> grantedRoles;
@@ -266,7 +267,7 @@ public class Module extends AbstractPropertyChangeCapable
    */
   public String getI18nName() {
     String dirtyMarker = "";
-    if (isDirty()) {
+    if (isDirty() && isDisplayDirtyState()) {
       dirtyMarker = DIRTY_MARKER;
     }
     if (i18nName != null) {
@@ -916,5 +917,24 @@ public class Module extends AbstractPropertyChangeCapable
    */
   public void setI18nHeaderDescription(String i18nHeaderDescription) {
     this.i18nHeaderDescription = i18nHeaderDescription;
+  }
+
+  /**
+   * Is display dirty state boolean.
+   *
+   * @return the boolean
+   */
+  protected boolean isDisplayDirtyState() {
+    return displayDirtyState;
+  }
+
+  /**
+   * Sets display dirty state.
+   *
+   * @param displayDirtyState
+   *     the display dirty state
+   */
+  public void setDisplayDirtyState(boolean displayDirtyState) {
+    this.displayDirtyState = displayDirtyState;
   }
 }
