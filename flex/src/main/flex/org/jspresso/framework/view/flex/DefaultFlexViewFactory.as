@@ -2016,12 +2016,6 @@ public class DefaultFlexViewFactory {
       }
     }
     form.addChild(resizerRow);
-    // Special toolTip handling
-    var remoteState:RemoteValueState = remoteForm.state;
-    var updateToolTip:Function = function (value:Object):void {
-      form.toolTip = value as String;
-    };
-    BindingUtils.bindSetter(updateToolTip, remoteState, "value", true);
     form.horizontalScrollPolicy = ScrollPolicy.OFF;
     form.verticalScrollPolicy = ScrollPolicy.OFF;
 

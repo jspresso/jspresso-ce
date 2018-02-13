@@ -91,6 +91,7 @@ public final class PageableDescriptor {
     propertyDescriptors.add(selectedRecordCountDesc);
 
     descriptor.setPropertyDescriptors(propertyDescriptors);
+    descriptor.setDescription("");
 
     return descriptor;
   }

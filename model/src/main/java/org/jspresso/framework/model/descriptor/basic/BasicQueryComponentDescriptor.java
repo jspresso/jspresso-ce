@@ -70,6 +70,7 @@ public class BasicQueryComponentDescriptor<E> extends RefQueryComponentDescripto
     List<IComponentDescriptor<?>> ancestors = new ArrayList<>();
     ancestors.add(PageableDescriptor.INSTANCE);
     setAncestorDescriptors(ancestors);
+    setDescription("");
     finishConfiguration();
   }
 

@@ -1383,7 +1383,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           component.setBlockToolTip(true);
         }
       });
-      if (!state.getValue()) {
+      if (state.getValue()) {
+        component.setBlockToolTip(false);
+      } else {
         component.setBlockToolTip(true);
       }
       var modelController = new qx.data.controller.Object(state);
@@ -1580,9 +1582,6 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           lastCol = Math.max(compCol + compColSpan, labelCol + labelColSpan);
         }
       }
-      // Special toolTip handling
-      var state = remoteForm.getState();
-      this._attachStateToolTip(state, form);
       // Before decoration happen
       this._applyPreferredSize(remoteForm, form);
       // Since it's not resizeable anymore

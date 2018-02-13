@@ -1385,14 +1385,14 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    *
    * @param viewDescriptor
    *     the view descriptor
-   * @param modelDescriptor
+   * @param componentDescriptor
    *     the component model descriptor.
    * @param propertyDescriptor
    *     the property descriptor
    * @return the property name used to compute a view dynamic tooltip or null if none or if the tooltip is a static one.
    */
   protected String computeDynamicToolTipPropertyName(IViewDescriptor viewDescriptor,
-                                                     IComponentDescriptor<?> modelDescriptor,
+                                                     IComponentDescriptor<?> componentDescriptor,
                                                      IPropertyDescriptor propertyDescriptor) {
     String dynamicToolTipProperty = null;
     String descriptionKey = null;
@@ -1400,11 +1400,17 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
       descriptionKey = viewDescriptor.getDescription();
     } else if (propertyDescriptor != null) {
       descriptionKey = propertyDescriptor.getDescription();
-    } else if (viewDescriptor.getModelDescriptor() != null) {
-      descriptionKey = viewDescriptor.getModelDescriptor().getDescription();
+    } else {
+      IModelDescriptor modelDescriptor = viewDescriptor.getModelDescriptor();
+      if (modelDescriptor != null) {
+        descriptionKey = modelDescriptor.getDescription();
+        if (descriptionKey == null && modelDescriptor instanceof IComponentDescriptor) {
+          descriptionKey = ((IComponentDescriptor) modelDescriptor).getToHtmlProperty();
+        }
+      }
     }
     if (descriptionKey != null) {
-      IPropertyDescriptor descriptionProperty = modelDescriptor.getPropertyDescriptor(descriptionKey);
+      IPropertyDescriptor descriptionProperty = componentDescriptor.getPropertyDescriptor(descriptionKey);
       if (descriptionProperty != null && descriptionProperty instanceof IStringPropertyDescriptor) {
         dynamicToolTipProperty = descriptionProperty.getName();
       }
