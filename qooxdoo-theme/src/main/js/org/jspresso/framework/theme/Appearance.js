@@ -748,7 +748,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
             return {
               margin: 0,
               padding: 0,
-              backgroundColor: "navigator"
+              backgroundColor: "navigator",
+              showRootOpenClose: true
             };
           }
         },

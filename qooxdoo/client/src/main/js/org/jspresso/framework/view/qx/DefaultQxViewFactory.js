@@ -1923,7 +1923,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @param remoteTree {org.jspresso.framework.gui.remote.RTree}
      */
     _createTree: function (remoteTree) {
-      var tree = new qx.ui.tree.Tree();
+      var tree = new org.jspresso.framework.view.qx.EnhancedTree();
       var state = remoteTree.getState();
       var treeController = new qx.data.controller.Tree();
       treeController.setChildPath("children");
