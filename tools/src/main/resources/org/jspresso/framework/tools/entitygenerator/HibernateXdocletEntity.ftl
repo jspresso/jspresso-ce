@@ -859,6 +859,22 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   </#list>
 </#macro>
 
+<#macro generateEnumerationEnum propertyDescriptor>
+  <#local propertyName=propertyDescriptor.name/>
+  /**
+   * Enumeration for ${propertyName}.
+   */
+  enum E${propertyName?cap_first} {
+  <#list propertyDescriptor.enumerationValues as enumerationValue>
+    /**
+     * enumeration value for ${enumerationValue}.
+     */
+    ${enumerationValue},
+  </#list>
+  }
+
+</#macro>
+
 <#macro generateCollectionPropertyAccessors componentDescriptor propertyDescriptor overridden>
   <#if !overridden>
     <@generatePropertyNameConstant propertyDescriptor=propertyDescriptor/>
@@ -888,6 +904,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     <@generatePropertyNameConstant propertyDescriptor=propertyDescriptor/>
     <#if instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor")>
       <@generateEnumerationConstants propertyDescriptor=propertyDescriptor/>
+      <#--<@generateEnumerationEnum propertyDescriptor=propertyDescriptor/>-->
     </#if>
   </#if>
   <@generateScalarGetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor overridden=overridden/>
