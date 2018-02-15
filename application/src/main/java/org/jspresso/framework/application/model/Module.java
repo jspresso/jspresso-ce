@@ -847,7 +847,9 @@ public class Module extends AbstractPropertyChangeCapable
         }
       }
     }
-    depthDirtyness = depthDirtyness || isLocallyDirty(backendController);
+    if (isDisplayDirtyState()) {
+      depthDirtyness = depthDirtyness || isLocallyDirty(backendController);
+    }
     setDirty(depthDirtyness);
     return depthDirtyness;
   }
