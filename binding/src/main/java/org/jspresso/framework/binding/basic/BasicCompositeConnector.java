@@ -68,46 +68,6 @@ public class BasicCompositeConnector extends AbstractCompositeValueConnector {
    * {@inheritDoc}
    */
   @Override
-  public boolean areChildrenReadable() {
-    // overridden to remove model connector writability condition.
-    /*
-    if (getModelConnector() != null && !getModelConnector().isReadable()) {
-      return false;
-    }
-    */
-    Boolean locallyReadable = isLocallyReadable();
-    if (getParentConnector() != null && !getParentConnector().areChildrenReadable()) {
-      if (locallyReadable == null) {
-        return false;
-      }
-    }
-    return locallyReadable == null || locallyReadable;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean areChildrenWritable() {
-    // overridden to remove model connector writability condition.
-    /*
-    if (getModelConnector() != null && !getModelConnector().isWritable()) {
-      return false;
-    }
-    */
-    Boolean locallyWritable = isLocallyWritable();
-    if (getParentConnector() != null && !getParentConnector().areChildrenWritable()) {
-      if (locallyWritable == null) {
-        return false;
-      }
-    }
-    return locallyWritable == null || locallyWritable;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   public BasicCompositeConnector clone() {
     return clone(getId());
   }

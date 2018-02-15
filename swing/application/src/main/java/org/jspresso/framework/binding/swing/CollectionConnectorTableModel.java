@@ -138,9 +138,10 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
    */
   @Override
   public boolean isCellEditable(int rowIndex, int columnIndex) {
-    return collectionConnector.isWritable()
-        && collectionConnector.getChildConnector(rowIndex).isWritable()
-        && getConnectorAt(rowIndex, columnIndex).isWritable();
+    // Editability is only handled at cell level
+    //collectionConnector.isWritable()
+    //    && collectionConnector.getChildConnector(rowIndex).isWritable()
+    return getConnectorAt(rowIndex, columnIndex).isWritable();
   }
 
   private Coordinates computeCoordinates(IValueConnector connector) {

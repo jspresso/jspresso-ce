@@ -2979,7 +2979,9 @@ public class DefaultFlexViewFactory {
 
   protected function bindTable(table:EnhancedDataGrid, remoteTable:RTable):void {
     var state:RemoteCompositeValueState = remoteTable.state as RemoteCompositeValueState;
-    BindingUtils.bindProperty(table, "editable", state, "writable");
+    // Editability is only handled at cell level
+    // BindingUtils.bindProperty(table, "editable", state, "writable");
+    table.editable = true;
     if (remoteTable.sortable) {
       if (remoteTable.sortingAction) {
         table.addEventListener(DataGridEvent.HEADER_RELEASE, function (event:DataGridEvent):void {
@@ -3140,17 +3142,17 @@ public class DefaultFlexViewFactory {
       if (col < dg.columnCount && row < rowCollection.length) {
         var column:DataGridColumn = dg.columns[col];
         var rowValueState:RemoteCompositeValueState = rowCollection.getItemAt(row) as RemoteCompositeValueState;
-        if (!rowValueState.writable) {
-          return false;
-        } else {
-          var cellValueState:RemoteValueState;
-          var columnRenderer:ClassFactory = column.itemRenderer as ClassFactory;
-          // watch out checkbox selection column...
-          if (columnRenderer.properties && !isNaN(columnRenderer.properties["index"])) {
-            cellValueState = rowValueState.children[columnRenderer.properties["index"] as int] as RemoteValueState;
-            if (!cellValueState.writable) {
-              return false;
-            }
+        // Editability is only handled at cell level
+        //if (!rowValueState.writable) {
+        //  return false;
+        //}
+        var cellValueState:RemoteValueState;
+        var columnRenderer:ClassFactory = column.itemRenderer as ClassFactory;
+        // watch out checkbox selection column...
+        if (columnRenderer.properties && !isNaN(columnRenderer.properties["index"])) {
+          cellValueState = rowValueState.children[columnRenderer.properties["index"] as int] as RemoteValueState;
+          if (!cellValueState.writable) {
+            return false;
           }
         }
         return true;

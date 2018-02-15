@@ -104,14 +104,6 @@ public abstract class AbstractCollectionConnector extends
    * {@inheritDoc}
    */
   @Override
-  public boolean areChildrenWritable() {
-    return true;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   public AbstractCollectionConnector clone() {
     return clone(getId());
   }

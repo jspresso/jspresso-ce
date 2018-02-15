@@ -2309,9 +2309,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _createTable: function (remoteTable) {
       /** @type {org.jspresso.framework.state.remote.RemoteCompositeValueState} */
       var state = remoteTable.getState();
+      // Editability is only handled at cell level
+      //var modelController = new qx.data.controller.Object(state);
+      //modelController.addTarget(tableModel, "editable", "writable", false);
       var tableModel = new org.jspresso.framework.view.qx.RTableModel(state, remoteTable.getSortable(), remoteTable.getSortingAction(), this._getCommandHandler());
-      var modelController = new qx.data.controller.Object(state);
-      modelController.addTarget(tableModel, "editable", "writable", false);
       var columnIds = remoteTable.getColumnIds();
       var columnLabels = [];
       var columnToolTips = [];
