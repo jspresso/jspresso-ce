@@ -138,6 +138,7 @@ public class Module extends AbstractPropertyChangeCapable
   public Module() {
     started = false;
     dirty = false;
+    displayDirtyState = true;
   }
 
   /**
