@@ -31,6 +31,10 @@ qx.Class.define("org.jspresso.framework.gui.remote.RImageComponent", {
     action: {
       check: "org.jspresso.framework.gui.remote.RAction",
       nullable: true
+    },
+    horizontalAlignment: {
+      check: "String",
+      nullable: true
     }
   }
 });

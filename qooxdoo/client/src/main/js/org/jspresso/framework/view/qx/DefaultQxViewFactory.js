@@ -281,8 +281,17 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         var borderLayout = new qx.ui.layout.Dock();
         borderLayout.setSort("y");
         borderContainer.setLayout(borderLayout);
+        var edge = "center";
+        var alignment = remoteImageComponent.getHorizontalAlignment();
+        if (alignment == "LEFT") {
+          edge = "west";
+        } else if (alignment == "CENTER") {
+          edge = "center";
+        } else if (alignment == "RIGHT") {
+          edge = "east";
+        }
         borderContainer.add(imageComponent, {
-          edge: "center"
+          edge: edge
         });
         imageComponent = borderContainer;
       }

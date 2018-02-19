@@ -1245,6 +1245,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         configureAlignment((RTextField) peer, propertyViewDescriptor.getHorizontalAlignment());
       } else if (peer instanceof RNumericComponent) {
         configureAlignment((RNumericComponent) peer, propertyViewDescriptor.getHorizontalAlignment());
+      } else if (peer instanceof RImageComponent) {
+        configureAlignment((RImageComponent) peer, propertyViewDescriptor.getHorizontalAlignment());
       }
       if (propertyViewDescriptor.getFocusGainedAction() != null) {
         peer.setFocusGainedAction(getActionFactory()
@@ -1390,6 +1392,12 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
   private void configureAlignment(RNumericComponent numericField, EHorizontalAlignment horizontalAlignment) {
     if (horizontalAlignment != null) {
       numericField.setHorizontalAlignment(horizontalAlignment.name());
+    }
+  }
+
+  private void configureAlignment(RImageComponent image, EHorizontalAlignment horizontalAlignment) {
+    if (horizontalAlignment != null) {
+      image.setHorizontalAlignment(horizontalAlignment.name());
     }
   }
 

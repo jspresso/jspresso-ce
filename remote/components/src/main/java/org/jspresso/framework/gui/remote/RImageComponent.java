@@ -27,14 +27,16 @@ public class RImageComponent extends RComponent implements RActionable {
 
   private static final long serialVersionUID = 7583953076670140848L;
 
-  private boolean           scrollable;
-  private RAction           action;
+  private boolean scrollable;
+  private RAction action;
+  private String  horizontalAlignment;
+
 
   /**
    * Constructs a new {@code RImageComponent} instance.
    *
    * @param guid
-   *          the guid.
+   *     the guid.
    */
   public RImageComponent(String guid) {
     super(guid);
@@ -61,7 +63,7 @@ public class RImageComponent extends RComponent implements RActionable {
    * Sets the scrollable.
    *
    * @param scrollable
-   *          the scrollable to set.
+   *     the scrollable to set.
    */
   public void setScrollable(boolean scrollable) {
     this.scrollable = scrollable;
@@ -80,10 +82,29 @@ public class RImageComponent extends RComponent implements RActionable {
    * Sets the action.
    *
    * @param action
-   *          the action to set.
+   *     the action to set.
    */
   @Override
   public void setAction(RAction action) {
     this.action = action;
+  }
+
+  /**
+   * Gets horizontal alignment.
+   *
+   * @return the horizontal alignment
+   */
+  public String getHorizontalAlignment() {
+    return horizontalAlignment;
+  }
+
+  /**
+   * Sets horizontal alignment.
+   *
+   * @param horizontalAlignment
+   *     the horizontal alignment
+   */
+  public void setHorizontalAlignment(String horizontalAlignment) {
+    this.horizontalAlignment = horizontalAlignment;
   }
 }
