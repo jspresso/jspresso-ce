@@ -3265,7 +3265,12 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
             }
           }
         }
-        viewSelectionConnector.setConnectorValue(selectedElements);
+        IValueConnector modelConnector = viewSelectionConnector.getModelConnector();
+        if (modelConnector != null) {
+          modelConnector.setConnectorValue(selectedElements);
+        } else {
+          viewSelectionConnector.setConnectorValue(null);
+        }
       }
     });
   }
