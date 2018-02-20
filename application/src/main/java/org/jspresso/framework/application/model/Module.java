@@ -38,6 +38,7 @@ import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.lang.StringUtils;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptorProvider;
+import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
  * A module is an entry point in the application. Modules are organized in
@@ -670,6 +671,9 @@ public class Module extends AbstractPropertyChangeCapable
    *     the projectedViewDescriptor to set.
    */
   public void setProjectedViewDescriptor(IViewDescriptor projectedViewDescriptor) {
+    if (projectedViewDescriptor instanceof BasicViewDescriptor) {
+      ((BasicViewDescriptor) projectedViewDescriptor).setModelDescriptor(null);
+    }
     this.projectedViewDescriptor = projectedViewDescriptor;
   }
 

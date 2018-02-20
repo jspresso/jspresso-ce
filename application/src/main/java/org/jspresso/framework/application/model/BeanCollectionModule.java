@@ -123,9 +123,10 @@ public class BeanCollectionModule extends Module {
    */
   public IComponentDescriptor<?> getElementComponentDescriptor() {
     if (elementComponentDescriptor == null) {
-      if (getProjectedViewDescriptor() instanceof ICollectionViewDescriptor
-          && getProjectedViewDescriptor().getModelDescriptor() != null) {
-        return ((ICollectionDescriptorProvider<?>) getProjectedViewDescriptor().getModelDescriptor())
+      IViewDescriptor projectedViewDescriptor = getProjectedViewDescriptor();
+      if (projectedViewDescriptor instanceof ICollectionViewDescriptor
+          && projectedViewDescriptor.getModelDescriptor() != null) {
+        return ((ICollectionDescriptorProvider<?>) projectedViewDescriptor.getModelDescriptor())
             .getCollectionDescriptor().getElementDescriptor();
       }
     }
