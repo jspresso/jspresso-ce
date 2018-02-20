@@ -68,6 +68,6 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedCollapsiblePanel", {
           break;
       }
       return control || this.base(arguments, id);
-    },
+    }
   }
 });
