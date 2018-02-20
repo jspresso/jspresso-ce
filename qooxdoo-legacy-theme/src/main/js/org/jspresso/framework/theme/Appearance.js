@@ -644,7 +644,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         "accordion-section/barContainer": {
           style: function (states) {
             return {
-              backgroundColor: "navigator-header",
+              backgroundColor: "navigator-header"
             }
           }
         },
