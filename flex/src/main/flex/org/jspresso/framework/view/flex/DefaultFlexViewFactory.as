@@ -327,7 +327,7 @@ public class DefaultFlexViewFactory {
     bindDynamicForeground(component, remoteComponent);
     bindDynamicFont(component, remoteComponent);
     component = decorateWithActions(remoteComponent, component);
-    if (remoteComponent.borderType == "TITLED") {
+    if (remoteComponent.borderType == "TITLED" || remoteComponent.borderType == "TITLED_ACTIONS") {
       var decorator:Panel = createPanelComponent();
       syncSizes(decorator, component);
       component.percentWidth = 100.0;

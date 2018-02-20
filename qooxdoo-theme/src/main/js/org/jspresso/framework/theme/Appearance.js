@@ -711,13 +711,20 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           }
         },
 
+        "accordion-section/barContainer": {
+          style: function (states) {
+            return {
+              backgroundColor: "navigator-header",
+            }
+          }
+        },
+
         "accordion-section/bar": {
           style: function (states) {
             return {
               minHeight: 30,
               padding: [0, 10],
               gap: 20,
-              backgroundColor: "navigator-header",
               font: "headline-bold"
             }
           }

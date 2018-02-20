@@ -3354,6 +3354,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
         view.getPeer().setBorder(BorderFactory.createEtchedBorder());
         break;
       case TITLED:
+      case TITLED_ACTIONS:
         decorateWithTitle(view, translationProvider, locale);
         break;
       default:

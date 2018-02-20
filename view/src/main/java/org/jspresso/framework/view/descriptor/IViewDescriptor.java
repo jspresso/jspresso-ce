@@ -49,6 +49,7 @@ public interface IViewDescriptor extends IIconDescriptor, IStylable,
    * @return the border type : <li> {@code NONE} means no border. <li>
    *         {@code SIMPLE} means a simple line border. <li>
    *         {@code TITLED} means a titled border. The title will be the
+   *         {@code TITLED_ACTIONS} means a titled border with action map next to it. The title will be the
    *         name of the view.
    */
   EBorderType getBorderType();

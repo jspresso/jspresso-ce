@@ -37,5 +37,11 @@ public enum EBorderType {
   /**
    * {@code TITLED}.
    */
-  TITLED
+  TITLED,
+
+  /**
+   * {@code TITLED_ACTIONS}.
+   */
+  TITLED_ACTIONS,
+
 }

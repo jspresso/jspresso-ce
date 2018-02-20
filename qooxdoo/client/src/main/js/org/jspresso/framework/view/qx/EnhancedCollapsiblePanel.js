@@ -35,24 +35,39 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedCollapsiblePanel", {
 
   members: {
 
+    addToBar: function(widget) {
+      this.getChildControl("barContainer").add(widget);
+    },
+
+    // property apply
+    _applyValue: function (value, old) {
+      this.getChildControl("barContainer");
+      this.base(arguments, value, old);
+    },
+
     // overridden
     // Condition toggle state based on collapsible flag.
     _createChildControlImpl: function (id) {
-      var control = this.base(arguments, id);
-
-      if (id == "bar") {
-        control.removeListener("click", this.toggleValue, this);
-        control.addListener("click", function (e) {
-          if (this.getCollapsible()) {
-            // do not close an open panel that belongs to an accordion.
-            if (!this.getGroup() || !this.getValue()) {
-              this.toggleValue();
+      var control;
+      switch (id) {
+        case "barContainer":
+          control = new qx.ui.container.Composite(new qx.ui.layout.HBox());
+          control.add(this.getChildControl("bar"), {flex: 0});
+          this._add(control, {flex: 0});
+          break;
+        case "bar":
+          control = new qx.ui.basic.Atom(this.getCaption());
+          control.addListener("click", function (e) {
+            if (this.getCollapsible()) {
+              // do not close an open panel that belongs to an accordion.
+              if (!this.getGroup() || !this.getValue()) {
+                this.toggleValue();
+              }
             }
-          }
-        }, this);
+          }, this);
+          break;
       }
-      return control;
-    }
-
+      return control || this.base(arguments, id);
+    },
   }
 });

@@ -1646,9 +1646,13 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _decorateWithBorder: function (remoteComponent, component) {
       var decorator = component;
       if (remoteComponent.getBorderType() && remoteComponent.getBorderType() != "NONE") {
-        if (remoteComponent.getBorderType() == "TITLED") {
+        if (remoteComponent.getBorderType() == "TITLED" || remoteComponent.getBorderType() == "TITLED_ACTIONS") {
           decorator = new org.jspresso.framework.view.qx.EnhancedCollapsiblePanel(remoteComponent.getLabel());
           this.setIcon(decorator.getChildControl("bar"), remoteComponent.getIcon())
+          if (remoteComponent.getBorderType() == "TITLED_ACTIONS") {
+            var toolBar = this._createToolBar(remoteComponent, component);
+            decorator.addToBar(toolBar);
+          }
         } else {
           decorator = new qx.ui.container.Composite();
           decorator.setAppearance("bordered-container");
@@ -2746,11 +2750,13 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var decorated = component;
       var toolBar;
       var secondaryToolBar;
-      if (!(remoteComponent instanceof org.jspresso.framework.gui.remote.RActionField)
-          && remoteComponent.getActionLists() != null) {
-        toolBar = this._createToolBar(remoteComponent, component);
-      } else {
-        toolBar = this._createDefaultToolBar(remoteComponent, component);
+      if (remoteComponent.getBorderType() != "TITLED_ACTIONS") {
+        if (!(remoteComponent instanceof org.jspresso.framework.gui.remote.RActionField)
+            && remoteComponent.getActionLists() != null) {
+          toolBar = this._createToolBar(remoteComponent, component);
+        } else {
+          toolBar = this._createDefaultToolBar(remoteComponent, component);
+        }
       }
       if (remoteComponent.getSecondaryActionLists()) {
         secondaryToolBar = this._createSecondaryToolBar(remoteComponent, component);
