@@ -3235,6 +3235,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       if (remoteList.getSelectionMode() == "SINGLE_SELECTION" || remoteList.getSelectionMode()
           == "SINGLE_CUMULATIVE_SELECTION") {
         list.setSelectionMode("single");
+      } else if (remoteList.getSelectionMode() == "SINGLE_INTERVAL_CUMULATIVE_SELECTION" || remoteList.getSelectionMode()
+          == "MULTIPLE_INTERVAL_CUMULATIVE_SELECTION") {
+        list.setSelectionMode("additive");
       } else {
         list.setSelectionMode("multi");
       }
