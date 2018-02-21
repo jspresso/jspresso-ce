@@ -1210,9 +1210,10 @@ public class DefaultFlexViewFactory {
   }
 
   protected function decorateWithAsideActions(component:UIComponent, remoteComponent:RComponent,
-                                              disableActionsWithField:Boolean):UIComponent {
+                                              disableMainActionWithField:Boolean):UIComponent {
+    var button:mx.controls.Button;
     var decorated:UIComponent = component;
-    if(remoteComponent.actionLists) {
+    if (remoteComponent.actionLists) {
       var actionField:HBox = new HBox();
       //syncSizes(actionField, component);
       actionField.styleName = "actionField";
@@ -1220,7 +1221,7 @@ public class DefaultFlexViewFactory {
       actionField.horizontalScrollPolicy = ScrollPolicy.OFF;
       actionField.verticalScrollPolicy = ScrollPolicy.OFF;
 
-      if(component) {
+      if (component) {
         component.name = "componentToStyle"
         component.percentWidth = 100.0;
         actionField.addChild(component);
@@ -1230,7 +1231,11 @@ public class DefaultFlexViewFactory {
         var actionList:RActionList = remoteComponent.actionLists[i] as RActionList;
         for (var j:int = 0; j < actionList.actions.length; j++) {
           var remoteAction:RAction = actionList.actions[j];
-          var button:Button = createAsideAction(remoteAction, actionField, remoteComponent, disableActionsWithField);
+          if (i == 0 && j == 0) {
+            button = createAsideAction(remoteAction, actionField, remoteComponent, disableMainActionWithField);
+          } else {
+            button = createAsideAction(remoteAction, actionField, remoteComponent, false);
+          }
           actionField.addChild(button);
         }
       }
@@ -1240,7 +1245,7 @@ public class DefaultFlexViewFactory {
   }
 
   protected function createAsideAction(remoteAction:RAction, actionField:HBox, remoteComponent:RComponent,
-                                       disableActionsWithField:Boolean):Button {
+                                       disableActionWithField:Boolean):Button {
     var button:Button = createAction(remoteAction, actionField);
     button.label = null;
     button.addEventListener(FlexEvent.CREATION_COMPLETE, function (event:FlexEvent):void {
@@ -1249,7 +1254,7 @@ public class DefaultFlexViewFactory {
       b.width = b.height;
     });
     var remoteValueState:RemoteValueState = remoteComponent.state;
-    if (remoteValueState && disableActionsWithField) {
+    if (remoteValueState && disableActionWithField) {
       var updateButtonState:Function = function (enabled:Boolean):void {
         button.enabled = enabled && remoteAction.enabled;
       };
