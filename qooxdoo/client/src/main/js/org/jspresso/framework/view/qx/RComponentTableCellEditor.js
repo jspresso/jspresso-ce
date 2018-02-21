@@ -202,13 +202,16 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
       var fieldToFlush;
       if (this.__editorWidget instanceof qx.ui.form.DateField) {
         fieldToFlush = this.__editorWidget;
-      } else if (this.__editorWidget instanceof qx.ui.container.Composite && this.__editorWidget.getUserData("df")) {
-        fieldToFlush = this.__editorWidget.getUserData("df");
-      }
-      if (this.__editorWidget instanceof qx.ui.form.TextField) {
+      } else if (this.__editorWidget instanceof qx.ui.container.Composite) {
+        if (this.__editorWidget.getUserData("df")) {
+          fieldToFlush = this.__editorWidget.getUserData("df");
+        } else if(this.__editorWidget.getUserData("actionsDecorated")) {
+          fieldToFlush = this.__editorWidget.getUserData("actionsDecorated");
+        }
+      } else if (this.__editorWidget instanceof qx.ui.form.TextField) {
         fieldToFlush = this.__editorWidget;
       }
-      if (fieldToFlush) {
+      if (fieldToFlush && fieldToFlush.getValue) {
         // Forces synchronization of the field to flush
         fieldToFlush.fireDataEvent("changeValue", fieldToFlush.getValue());
       }

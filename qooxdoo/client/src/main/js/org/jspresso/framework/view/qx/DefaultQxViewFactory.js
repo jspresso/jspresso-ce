@@ -173,7 +173,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @return {qx.ui.core.Widget}
      */
     _decorateWithActions: function (remoteComponent, component) {
-      var decorated;
+      var decorator;
       if (remoteComponent instanceof org.jspresso.framework.gui.remote.RTextField || remoteComponent
           instanceof org.jspresso.framework.gui.remote.RDateField || remoteComponent
           instanceof org.jspresso.framework.gui.remote.RNumericComponent || remoteComponent
@@ -182,9 +182,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           instanceof org.jspresso.framework.gui.remote.RComboBox || remoteComponent
           instanceof org.jspresso.framework.gui.remote.RCheckBox || remoteComponent
           instanceof org.jspresso.framework.gui.remote.RColorField) {
-        decorated  = this._decorateWithAsideActions(component, remoteComponent, false);
+        decorator  = this._decorateWithAsideActions(component, remoteComponent, false);
+        decorator.setUserData("actionsDecorated", component);
       } else {
-        decorated = this._decorateWithToolbars(component, remoteComponent);
+        decorator = this._decorateWithToolbars(component, remoteComponent);
+        decorator.setUserData("actionsDecorated", component);
       }
       if (remoteComponent.getFocusGainedAction()) {
         component.addListener("focusin", function (event) {
@@ -212,8 +214,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             if (relatedTarget != null
                 && !(relatedTarget instanceof qx.ui.root.Abstract)
                 && relatedTarget != component
-                && relatedTarget != decorated
-                && decorated.getLayoutChildren().indexOf(relatedTarget) < 0) {
+                && relatedTarget != decorator
+                && decorator.getLayoutChildren().indexOf(relatedTarget) < 0) {
               triggerAction = true;
               actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
               actionEvent.setActionCommand(content);
@@ -230,7 +232,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         component.addListener("focusout", listener, this);
         component.addListener("keypress", listener, this);
       }
-      return decorated;
+      return decorator;
     },
 
     _createDefaultToolBar: function (remoteComponent, component) {
@@ -2246,11 +2248,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       return actionField;
     },
 
-    _createAsideAction: function (remoteAction, remoteComponent, disableActionsWithField) {
+    _createAsideAction: function (remoteAction, remoteComponent, disableActionWithField) {
       var button = this.createAction(remoteAction);
       button.setFocusable(false);
       var remoteValueState = remoteComponent.getState();
-      if (remoteValueState && disableActionsWithField) {
+      if (remoteValueState && disableActionWithField) {
         remoteValueState.addListener("changeWritable", function (e) {
           button.setEnabled(e.getData() && remoteAction.isEnabled());
         }, this);
@@ -2262,11 +2264,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     /**
      * @param component {qx.ui.core.Widget}
      * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
-     * @param disableActionsWithField {Boolean}
+     * @param disableMainActionWithField {Boolean}
      * @returns {qx.ui.core.Widget}
      * @protected
      */
-    _decorateWithAsideActions: function (component, remoteComponent, disableActionsWithField) {
+    _decorateWithAsideActions: function (component, remoteComponent, disableMainActionWithField) {
       var decorated = component;
       if (remoteComponent.getActionLists()) {
         var actionField = new qx.ui.container.Composite(new qx.ui.layout.HBox(0));
@@ -2274,6 +2276,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 
         if (component) {
           actionField.setUserData("componentsToStyle", [component]);
+          actionField.setUserData("actionsDecorated", component);
           component.setAlignY("middle");
           actionField.add(component, {
             flex: 1
@@ -2283,7 +2286,13 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           var actionList = remoteComponent.getActionLists()[i];
           for (var j = 0; j < actionList.getActions().length; j++) {
             var remoteAction = actionList.getActions()[j];
-            var button = this._createAsideAction(remoteAction, remoteComponent, disableActionsWithField);
+            var button;
+            if (i == 0 && j == 0) {
+              // Main action
+              button = this._createAsideAction(remoteAction, remoteComponent, disableMainActionWithField);
+            } else {
+              button = this._createAsideAction(remoteAction, remoteComponent, false);
+            }
             button.setLabel(null);
             button.setAllowStretchY(false, false);
             button.setAlignY("middle");
@@ -2464,7 +2473,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             cellRenderer.setAction(rColumn.getAction());
           }
           cellRenderer.setAsideActions(rColumn.getActionLists());
-          cellRenderer.setDisableActionsWithField(rColumn instanceof org.jspresso.framework.gui.remote.RActionField);
+          cellRenderer.setDisableMainActionWithField(rColumn instanceof org.jspresso.framework.gui.remote.RActionField);
         }
         if (cellRenderer) {
           var alignment = null;

@@ -33,7 +33,7 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
     __peerRegistry: null,
     __action: null,
     __asideActions: null,
-    __disableActionsWithField: false,
+    __disableMainActionWithField: false,
 
     _formatValue: function (cellInfo) {
       if (this.__format && cellInfo.value) {
@@ -80,13 +80,13 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
       if (cellInfo.rowData instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
         cellViewState = cellInfo.rowData.getChildren().getItem(cellInfo.col + 1);
       }
-      if (cellViewState && (!this.__disableActionsWithField || cellViewState.isWritable()) && this.__asideActions) {
+      if (cellViewState && this.__asideActions) {
         var actionsHtmlContent = "";
         for (var i = 0; i < this.__asideActions.length; i++) {
           var actionList = this.__asideActions[i];
           for (var j = 0; j < actionList.getActions().length ; j++) {
             var remoteAction = actionList.getActions()[j];
-            if (remoteAction.isEnabled()) {
+            if (remoteAction.isEnabled() && (cellViewState.isWritable() || !this.__disableMainActionWithField || i != 0 || j != 0)) {
               var icon = remoteAction.getIcon();
               if (icon) {
                 var imageUrlSpec = icon.getImageUrlSpec();
@@ -160,8 +160,8 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
       this.__asideActions = asideActions;
     },
 
-    setDisableActionsWithField: function (disableActionsWithField) {
-      this.__disableActionsWithField = disableActionsWithField;
+    setDisableMainActionWithField: function (disableActionsWithField) {
+      this.__disableMainActionWithField = disableActionsWithField;
     },
 
     _getCellStyle: function (cellInfo) {
