@@ -80,13 +80,15 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
       if (cellInfo.rowData instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
         cellViewState = cellInfo.rowData.getChildren().getItem(cellInfo.col + 1);
       }
-      if (cellViewState && this.__asideActions) {
+      if (cellViewState && this.__asideActions && cellInfo.selected) {
         var actionsHtmlContent = "";
         for (var i = 0; i < this.__asideActions.length; i++) {
           var actionList = this.__asideActions[i];
           for (var j = 0; j < actionList.getActions().length ; j++) {
             var remoteAction = actionList.getActions()[j];
-            if (remoteAction.isEnabled() && (cellViewState.isWritable() || !this.__disableMainActionWithField || i != 0 || j != 0)) {
+            var isMainAction = (i != 0 || j != 0);
+            if (remoteAction.isEnabled() && ((cellViewState.isWritable()
+                    || !this.__disableMainActionWithField || isMainAction))) {
               var icon = remoteAction.getIcon();
               if (icon) {
                 var imageUrlSpec = icon.getImageUrlSpec();

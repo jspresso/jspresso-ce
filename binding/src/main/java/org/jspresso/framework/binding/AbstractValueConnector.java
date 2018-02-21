@@ -231,7 +231,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
     clonedConnector.oldConnectorValue = null;
     clonedConnector.valueChangeSupport = null;
     for (IValueChangeListener listener : getValueChangeListeners()) {
-      if (listener instanceof ICloneable) {
+      if (listener instanceof ICloneable && !(listener instanceof IValueConnector)) {
         clonedConnector
             .addValueChangeListener((IValueChangeListener) ((ICloneable) listener)
                 .clone());

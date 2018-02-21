@@ -2472,7 +2472,26 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             this._getRemotePeerRegistry().register(rColumn.getAction());
             cellRenderer.setAction(rColumn.getAction());
           }
-          cellRenderer.setAsideActions(rColumn.getActionLists());
+          var columnActionMap = rColumn.getActionLists();
+          cellRenderer.setAsideActions(columnActionMap);
+          if (columnActionMap) {
+            for (var ali = 0; ali < columnActionMap.length; ali++) {
+              var actionList = columnActionMap[ali];
+              for (var ai = 0; ai < actionList.getActions().length; ai++) {
+                var remoteAction = actionList.getActions()[ai];
+                remoteAction.addListener("changeEnabled", function (e) {
+                  var data = {
+                    firstRow: 0,
+                    lastRow: tableModel.getRowCount() - 1,
+                    firstColumn: i,
+                    lastColumn: i
+                  };
+                  // For the cell to repaint itself and provide different programmatic rendering based on selection.
+                  tableModel.fireDataEvent("dataChanged", data);
+                }, this);
+              }
+            }
+          }
           cellRenderer.setDisableMainActionWithField(rColumn instanceof org.jspresso.framework.gui.remote.RActionField);
         }
         if (cellRenderer) {

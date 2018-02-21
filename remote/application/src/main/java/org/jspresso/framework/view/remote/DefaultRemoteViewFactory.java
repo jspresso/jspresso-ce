@@ -48,7 +48,10 @@ import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.IRemoteStateValueMapper;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 import org.jspresso.framework.state.remote.RemoteValueState;
+import org.jspresso.framework.util.event.ISelectionChangeListener;
 import org.jspresso.framework.util.event.IValueChangeListener;
+import org.jspresso.framework.util.event.SelectionChangeEvent;
+import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.gui.CellConstraints;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.gui.Font;
@@ -236,9 +239,9 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
     IComponentDescriptor<?> rowDescriptor = modelDescriptor.getCollectionDescriptor().getElementDescriptor();
-    ICompositeValueConnector rowConnectorPrototype = getConnectorFactory().createCompositeValueConnector(
+    final ICompositeValueConnector rowConnectorPrototype = getConnectorFactory().createCompositeValueConnector(
         modelDescriptor.getName() + "Element", rowDescriptor.getToHtmlProperty());
-    ICollectionConnector connector = getConnectorFactory().createCollectionConnector(modelDescriptor.getName(),
+    final ICollectionConnector connector = getConnectorFactory().createCollectionConnector(modelDescriptor.getName(),
         getMvcBinder(), rowConnectorPrototype);
     RTable viewComponent = createRTable(viewDescriptor);
     viewComponent.setColumnReorderingAllowed(viewDescriptor.isColumnReorderingAllowed());
@@ -342,6 +345,22 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
     if (rowConnectorPrototype instanceof IRemoteStateOwner) {
       viewComponent.setRowPrototype((RemoteCompositeValueState) ((IRemoteStateOwner) rowConnectorPrototype).getState());
     }
+
+    // bind rowConnectorPrototype for column action gates.
+    connector.addSelectionChangeListener(new ISelectionChangeListener() {
+      @Override
+      public void selectionChange(SelectionChangeEvent evt) {
+        int leadingIndex = evt.getLeadingIndex();
+        IValueConnector selectedModelConnector = null;
+        if (leadingIndex >= 0) {
+          IValueConnector selectedViewConnector = connector.getChildConnector(leadingIndex);
+          if (selectedViewConnector != null) {
+            selectedModelConnector = selectedViewConnector.getModelConnector();
+          }
+        }
+        getMvcBinder().bind(rowConnectorPrototype, selectedModelConnector);
+      }
+    });
     return view;
   }
 
