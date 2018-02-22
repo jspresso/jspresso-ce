@@ -36,6 +36,7 @@ import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.IModelChangeListener;
+import org.jspresso.framework.model.IModelProvider;
 import org.jspresso.framework.model.ModelChangeEvent;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
@@ -271,7 +272,10 @@ public abstract class AbstractActionFactory<E, F, G> implements IActionFactory<E
           IValueConnector oldModelConnector = (IValueConnector) evt.getOldValue();
           IValueConnector newModelConnector = (IValueConnector) evt.getNewValue();
           if (oldModelConnector != null) {
-            oldModelConnector.getModelProvider().removeModelChangeListener(modelChangeListener);
+            IModelProvider oldModelProvider = oldModelConnector.getModelProvider();
+            if (oldModelProvider != null) {
+              oldModelProvider.removeModelChangeListener(modelChangeListener);
+            }
           }
           if (newModelConnector != null && newModelConnector.getModelProvider() != null) {
             ((IModelGate) gate).setModel(newModelConnector.getModelProvider().getModel());

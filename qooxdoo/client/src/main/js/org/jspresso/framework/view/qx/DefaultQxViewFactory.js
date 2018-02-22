@@ -1961,7 +1961,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           }
           item.getChildControl("label").setRich(true);
           return item;
-        }, bindItem: function (controller, treeNode, modelNode) {
+        },
+        bindItem: function (controller, treeNode, modelNode) {
           controller.bindProperty(controller.getLabelPath(), "label", controller.getLabelOptions(), treeNode,
               modelNode);
           controller.bindProperty(controller.getIconPath(), "icon", controller.getIconOptions(), treeNode, modelNode);
@@ -1995,6 +1996,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             }, this);
           }
         }
+      });
+      treeController.setLabelOptions({
+        converter: this._modelToViewFieldConverter
       });
       treeController.setModel(state);
       treeController.setTarget(tree);
