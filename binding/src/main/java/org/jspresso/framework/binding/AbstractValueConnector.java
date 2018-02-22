@@ -29,6 +29,7 @@ import java.util.Set;
 
 import gnu.trove.set.hash.THashSet;
 
+import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.model.IModelProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
@@ -881,7 +882,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
     }
     /* connector.getModelDescriptor() instanceof IComponentDescriptorProvider<?> */
     if (connector instanceof ICompositeValueConnector
-        && !(connector instanceof ICollectionConnector)) {
+        && !(connector instanceof ICollectionConnector)
+        && !(ModelRefPropertyConnector.THIS_PROPERTY.equals(connector.getId()))) {
       return connector;
     }
     return getComponentConnector(connector.getParentConnector());
