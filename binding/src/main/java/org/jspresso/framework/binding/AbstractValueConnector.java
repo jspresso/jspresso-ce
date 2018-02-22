@@ -882,8 +882,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
     }
     /* connector.getModelDescriptor() instanceof IComponentDescriptorProvider<?> */
     if (connector instanceof ICompositeValueConnector
-        && !(connector instanceof ICollectionConnector)
-        && !(ModelRefPropertyConnector.THIS_PROPERTY.equals(connector.getId()))) {
+        && !(connector instanceof ICollectionConnector)) {
       return connector;
     }
     return getComponentConnector(connector.getParentConnector());

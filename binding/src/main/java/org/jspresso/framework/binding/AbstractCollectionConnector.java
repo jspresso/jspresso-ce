@@ -42,32 +42,30 @@ import org.jspresso.framework.util.event.ValueChangeEvent;
  *
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractCollectionConnector extends
-    AbstractCompositeValueConnector implements ICollectionConnector,
-    IItemSelectable {
+public abstract class AbstractCollectionConnector extends AbstractCompositeValueConnector
+    implements ICollectionConnector, IItemSelectable {
 
   private final ICompositeValueConnector childConnectorPrototype;
   private final IMvcBinder               mvcBinder;
 
-  private List<IValueConnector>    removedChildrenConnectors;
-  private SelectionChangeSupport   selectionChangeSupport;
+  private List<IValueConnector>  removedChildrenConnectors;
+  private SelectionChangeSupport selectionChangeSupport;
 
-  private List<IValueConnector>    connectorTank;
+  private List<IValueConnector> connectorTank;
 
   /**
    * Creates a new {@code AbstractCollectionConnector}.
    *
    * @param id
-   *          the connector id.
+   *     the connector id.
    * @param binder
-   *          the {@code IMvcBinder} used to bind dynamically created
-   *          child connectors.
+   *     the {@code IMvcBinder} used to bind dynamically created
+   *     child connectors.
    * @param childConnectorPrototype
-   *          the connector prototype used to create new instances of child
-   *          connectors.
+   *     the connector prototype used to create new instances of child
+   *     connectors.
    */
-  public AbstractCollectionConnector(String id, IMvcBinder binder,
-      ICompositeValueConnector childConnectorPrototype) {
+  public AbstractCollectionConnector(String id, IMvcBinder binder, ICompositeValueConnector childConnectorPrototype) {
     super(id);
     this.mvcBinder = binder;
     this.childConnectorPrototype = childConnectorPrototype;
@@ -113,8 +111,7 @@ public abstract class AbstractCollectionConnector extends
    */
   @Override
   public AbstractCollectionConnector clone(String newConnectorId) {
-    AbstractCollectionConnector clonedConnector = (AbstractCollectionConnector) super
-        .clone(newConnectorId);
+    AbstractCollectionConnector clonedConnector = (AbstractCollectionConnector) super.clone(newConnectorId);
     clonedConnector.selectionChangeSupport = null;
     clonedConnector.removedChildrenConnectors = null;
     clonedConnector.connectorTank = null;
@@ -227,15 +224,13 @@ public abstract class AbstractCollectionConnector extends
       selectionChangeSupport = new SelectionChangeSupport(this);
     }
     if (sourceIsScl) {
-      selectionChangeSupport
-          .addInhibitedListener((ISelectionChangeListener) evt.getSource());
+      selectionChangeSupport.addInhibitedListener((ISelectionChangeListener) evt.getSource());
     }
     try {
       setSelectedIndices(evt.getNewSelection(), evt.getLeadingIndex());
     } finally {
       if (sourceIsScl) {
-        selectionChangeSupport
-            .removeInhibitedListener((ISelectionChangeListener) evt.getSource());
+        selectionChangeSupport.removeInhibitedListener((ISelectionChangeListener) evt.getSource());
       }
     }
   }
@@ -270,9 +265,9 @@ public abstract class AbstractCollectionConnector extends
     }
     selectionChangeSupport.setSelectedIndices(newSelectedIndices, leadingIndex);
 
-    if ((oldSelectedIndices == null && newSelectedIndices != null)
-        || (oldSelectedIndices != null && newSelectedIndices == null)
-        || (oldSelectedIndices != null && !Arrays.equals(oldSelectedIndices, newSelectedIndices))) {
+    if ((oldSelectedIndices == null && newSelectedIndices != null) || (oldSelectedIndices != null
+        && newSelectedIndices == null) || (oldSelectedIndices != null && !Arrays.equals(oldSelectedIndices,
+        newSelectedIndices))) {
       if (newSelectedIndices == null) {
         implFireSelectedConnectorChange(null);
       } else {
@@ -327,10 +322,9 @@ public abstract class AbstractCollectionConnector extends
    * {@inheritDoc}
    */
   @Override
-  protected ValueChangeEvent createChangeEvent(Object oldConnectorValue,
-      Object newConnectorValue) {
-    CollectionConnectorValueChangeEvent changeEvent = new CollectionConnectorValueChangeEvent(
-        this, oldConnectorValue, newConnectorValue, removedChildrenConnectors);
+  protected ValueChangeEvent createChangeEvent(Object oldConnectorValue, Object newConnectorValue) {
+    CollectionConnectorValueChangeEvent changeEvent = new CollectionConnectorValueChangeEvent(this, oldConnectorValue,
+        newConnectorValue, removedChildrenConnectors);
     removedChildrenConnectors = null;
     return changeEvent;
   }
@@ -352,12 +346,10 @@ public abstract class AbstractCollectionConnector extends
 
     for (String connectorKey : new ArrayList<>(getChildConnectorKeys())) {
       IValueConnector childConnector = getChildConnector(connectorKey);
-      List<IValueConnector> existingConnectors = existingConnectorsByModel
-          .get(childConnector.getModelConnector());
+      List<IValueConnector> existingConnectors = existingConnectorsByModel.get(childConnector.getModelConnector());
       if (existingConnectors == null) {
         existingConnectors = new ArrayList<>();
-        existingConnectorsByModel.put(childConnector.getModelConnector(),
-            existingConnectors);
+        existingConnectorsByModel.put(childConnector.getModelConnector(), existingConnectors);
       }
       existingConnectors.add(childConnector);
       removeChildConnector(connectorKey);
@@ -365,20 +357,21 @@ public abstract class AbstractCollectionConnector extends
     if (modelConnector != null && modelConnector.getChildConnectorCount() > 0) {
       for (int i = 0; i < modelConnector.getChildConnectorCount(); i++) {
         IValueConnector connector;
-        IValueConnector nextModelConnector = modelConnector
-            .getChildConnector(i);
-        List<IValueConnector> existingConnectors = existingConnectorsByModel
-            .get(nextModelConnector);
+        IValueConnector nextModelConnector = modelConnector.getChildConnector(i);
+        List<IValueConnector> existingConnectors = existingConnectorsByModel.get(nextModelConnector);
         if (existingConnectors != null && !existingConnectors.isEmpty()) {
           connector = existingConnectors.remove(0);
         } else {
           connector = createChildConnector(getId() + "Element");
+          /* Muting the connector breaks gates
           try {
             ((AbstractValueConnector) connector).setMute(true);
             mvcBinder.bind(connector, nextModelConnector);
           } finally {
             ((AbstractValueConnector) connector).setMute(false);
           }
+          */
+          mvcBinder.bind(connector, nextModelConnector);
         }
         addChildConnector(computeStorageKey(i), connector);
         if (removedChildrenConnectors != null) {
@@ -389,8 +382,7 @@ public abstract class AbstractCollectionConnector extends
     if (removedChildrenConnectors == null) {
       removedChildrenConnectors = new ArrayList<>();
     }
-    for (List<IValueConnector> obsoleteConnectors : existingConnectorsByModel
-        .values()) {
+    for (List<IValueConnector> obsoleteConnectors : existingConnectorsByModel.values()) {
       for (IValueConnector obsoleteConnector : obsoleteConnectors) {
         cleanupConnector(obsoleteConnector);
         removedChildrenConnectors.add(obsoleteConnector);
