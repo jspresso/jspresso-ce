@@ -43,6 +43,7 @@ import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.action.IActionHandlerAware;
+import org.jspresso.framework.binding.AbstractCollectionConnector;
 import org.jspresso.framework.binding.AbstractCompositeValueConnector;
 import org.jspresso.framework.binding.ConnectorHelper;
 import org.jspresso.framework.binding.ICollectionConnector;
@@ -107,6 +108,7 @@ import org.jspresso.framework.util.format.FormatAdapter;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.format.NullableSimpleDateFormat;
 import org.jspresso.framework.util.gate.IGate;
+import org.jspresso.framework.util.gate.IModelGate;
 import org.jspresso.framework.util.gate.ModelTrackingGate;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.gui.ERenderingOptions;
@@ -304,7 +306,13 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
               if (clonedGate instanceof IActionHandlerAware) {
                 ((IActionHandlerAware) clonedGate).setActionHandler(actionHandler);
               }
-              viewConnector.addReadabilityGate(clonedGate);
+              if (clonedGate instanceof IModelGate && ((IModelGate) clonedGate).isCollectionBased()
+                  && viewConnector instanceof AbstractCollectionConnector) {
+                ((AbstractCollectionConnector) viewConnector).getChildConnectorPrototype().addReadabilityGate(
+                    clonedGate);
+              } else {
+                viewConnector.addReadabilityGate(clonedGate);
+              }
             }
           }
         }
@@ -315,7 +323,13 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
               if (clonedGate instanceof IActionHandlerAware) {
                 ((IActionHandlerAware) clonedGate).setActionHandler(actionHandler);
               }
-              viewConnector.addWritabilityGate(clonedGate);
+              if (clonedGate instanceof IModelGate && ((IModelGate) clonedGate).isCollectionBased()
+                  && viewConnector instanceof AbstractCollectionConnector) {
+                ((AbstractCollectionConnector) viewConnector).getChildConnectorPrototype().addWritabilityGate(
+                    clonedGate);
+              } else {
+                viewConnector.addWritabilityGate(clonedGate);
+              }
             }
           }
         }
@@ -2203,7 +2217,8 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     getActionFactory().setActionName(action, null);
     IReferencePropertyDescriptor<?> propertyDescriptor = (IReferencePropertyDescriptor<?>) propertyViewDescriptor
         .getModelDescriptor();
-    if (isUseEntityIconsForLov() && genericLovAction && propertyDescriptor.getReferencedDescriptor().getIcon() != null) {
+    if (isUseEntityIconsForLov() && genericLovAction
+        && propertyDescriptor.getReferencedDescriptor().getIcon() != null) {
       getActionFactory().setActionIcon(action, getIconFactory()
           .getIcon(propertyDescriptor.getReferencedDescriptor().getIcon(), getIconFactory().getTinyIconSize()));
     }
