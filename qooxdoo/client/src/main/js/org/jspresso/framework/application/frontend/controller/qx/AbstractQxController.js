@@ -665,8 +665,12 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
         if (targetPeerGuid) {
           var targetPeer = this.getRegistered(targetPeerGuid);
           if (targetPeer == null) {
-            if (!(command
-                instanceof org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand)) {
+            if (!(command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand
+                // Do not modify state after it has been created on the client. see bug #464
+                || command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteWritabilityCommand
+                || command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteReadabilityCommand
+                || command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand
+                || command instanceof org.jspresso.framework.application.frontend.command.remote.RemoteChildrenCommand)) {
               if (!this.__postponedCommands[targetPeerGuid]) {
                 this.__postponedCommands[targetPeerGuid] = [];
               }

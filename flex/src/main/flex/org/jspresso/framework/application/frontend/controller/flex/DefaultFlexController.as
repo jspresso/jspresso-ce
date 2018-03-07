@@ -465,10 +465,17 @@ public class DefaultFlexController implements IRemotePeerRegistry, IActionHandle
     } else {
       var targetPeer:IRemotePeer = getRegistered(command.targetPeerGuid);
       if (targetPeer == null) {
-        if (!_postponedCommands[command.targetPeerGuid]) {
-          _postponedCommands[command.targetPeerGuid] = new ArrayCollection([]);
+        if (!(command is org.jspresso.framework.application.frontend.command.remote.RemoteEnablementCommand
+            // Do not modify state after it has been created on the client. see bug #464
+            || command is RemoteWritabilityCommand
+            || command is RemoteReadabilityCommand
+            || command is RemoteValueCommand
+            || command is RemoteChildrenCommand)) {
+          if (!_postponedCommands[command.targetPeerGuid]) {
+            _postponedCommands[command.targetPeerGuid] = new ArrayCollection([]);
+          }
+          (_postponedCommands[command.targetPeerGuid] as IList).addItem(command);
         }
-        (_postponedCommands[command.targetPeerGuid] as IList).addItem(command);
         return;
       }
       if (command is RemoteValueCommand) {
