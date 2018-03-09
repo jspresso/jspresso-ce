@@ -40,7 +40,7 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
  * master domain object. The only method to be implemented by concrete subclasses
  * to retrieve the instances to be added to the master is :
  * <p>
- *
+ * <p>
  * <pre>
  * protected abstract List&lt;?&gt;
  *           getAddedComponents(Map&lt;String, Object&gt; context)
@@ -48,10 +48,10 @@ import org.jspresso.framework.util.bean.IPropertyChangeCapable;
  *
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractAddCollectionToMasterAction extends
-    AbstractCollectionAction {
+public abstract class AbstractAddCollectionToMasterAction extends AbstractCollectionAction {
 
-  private Map<String, Object>                        initializationMapping;
+  private Map<String, Object> initializationMapping;
+  private boolean             ignoreSelection = false;
 
   /**
    * Constructs a new {@code AbstractAddCollectionToMasterAction} instance.
@@ -66,10 +66,15 @@ public abstract class AbstractAddCollectionToMasterAction extends
    * then creates a new detail and adds it to the managed collection.
    * <p>
    * {@inheritDoc}
+   *
+   * @param actionHandler
+   *     the action handler
+   * @param context
+   *     the context
+   * @return the boolean
    */
   @Override
-  public boolean execute(IActionHandler actionHandler,
-      Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     ICollectionConnector collectionConnector = getModelConnector(context);
     if (collectionConnector == null) {
       return false;
@@ -78,26 +83,19 @@ public abstract class AbstractAddCollectionToMasterAction extends
     List<?> newComponents = getAddedComponents(context);
     if (newComponents != null && newComponents.size() > 0) {
       IComponentDescriptor<?> addedComponentDescriptor = getAddedElementDescriptor(context);
-      Class<?> newComponentContract = addedComponentDescriptor
-          .getComponentContract();
-      Object master = collectionConnector.getParentConnector()
-          .getConnectorValue();
-      ICollectionAccessor collectionAccessor = getAccessorFactory(context)
-          .createCollectionPropertyAccessor(
-              collectionConnector.getId(),
-              master.getClass()
+      Class<?> newComponentContract = addedComponentDescriptor.getComponentContract();
+      Object master = collectionConnector.getParentConnector().getConnectorValue();
+      ICollectionAccessor collectionAccessor = getAccessorFactory(context).createCollectionPropertyAccessor(
+          collectionConnector.getId(), master.getClass()
               /*collectionConnector.getModelProvider().getModelDescriptor()
-                  .getComponentDescriptor().getComponentContract()*/,
-              newComponentContract);
+                  .getComponentDescriptor().getComponentContract()*/, newComponentContract);
       if (collectionAccessor instanceof IModelDescriptorAware) {
-        ((IModelDescriptorAware) collectionAccessor)
-            .setModelDescriptor(getModelDescriptor(context));
+        ((IModelDescriptorAware) collectionAccessor).setModelDescriptor(getModelDescriptor(context));
       }
       try {
         int index = -1;
-        if (collectionAccessor instanceof IListAccessor) {
-          if (getSelectedIndices(context) != null
-              && getSelectedIndices(context).length > 0) {
+        if (!isIgnoreSelection() && collectionAccessor instanceof IListAccessor) {
+          if (getSelectedIndices(context) != null && getSelectedIndices(context).length > 0) {
             index = getSelectedIndices(context)[getSelectedIndices(context).length - 1];
           }
         }
@@ -108,18 +106,15 @@ public abstract class AbstractAddCollectionToMasterAction extends
             getEntityFactory(context).applyInitializationMapping(addedComponent, addedComponentDescriptor, master,
                 getInitializationMapping(), null);
           }
-          if (existingCollection == null
-              || !existingCollection.contains(addedComponent)) {
+          if (existingCollection == null || !existingCollection.contains(addedComponent)) {
             if (index >= 0 && collectionAccessor instanceof IListAccessor) {
-              ((IListAccessor) collectionAccessor).addToValue(master, index + 1
-                  + i, addedComponent);
+              ((IListAccessor) collectionAccessor).addToValue(master, index + 1 + i, addedComponent);
             } else {
               collectionAccessor.addToValue(master, addedComponent);
             }
           }
         }
-        if (!(master instanceof IPropertyChangeCapable)
-            && collectionConnector instanceof ModelPropertyConnector) {
+        if (!(master instanceof IPropertyChangeCapable) && collectionConnector instanceof ModelPropertyConnector) {
           ((ModelPropertyConnector) collectionConnector).propertyChange(null);
         }
       } catch (IllegalAccessException | NoSuchMethodException ex) {
@@ -139,7 +134,8 @@ public abstract class AbstractAddCollectionToMasterAction extends
   /**
    * Gets added element descriptor.
    *
-   * @param context the context
+   * @param context
+   *     the context
    * @return the added element descriptor
    */
   protected IComponentDescriptor<?> getAddedElementDescriptor(Map<String, Object> context) {
@@ -163,7 +159,7 @@ public abstract class AbstractAddCollectionToMasterAction extends
    * in the context.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the entity to add to the collection.
    */
   protected abstract List<?> getAddedComponents(Map<String, Object> context);
@@ -180,9 +176,29 @@ public abstract class AbstractAddCollectionToMasterAction extends
   /**
    * Sets initialization mapping.
    *
-   * @param initializationMapping the initialization mapping
+   * @param initializationMapping
+   *     the initialization mapping
    */
   public void setInitializationMapping(Map<String, Object> initializationMapping) {
     this.initializationMapping = initializationMapping;
+  }
+
+  /**
+   * Is ignore selection boolean.
+   *
+   * @return the boolean
+   */
+  protected boolean isIgnoreSelection() {
+    return ignoreSelection;
+  }
+
+  /**
+   * Sets ignore selection.
+   *
+   * @param ignoreSelection
+   *     the ignore selection
+   */
+  public void setIgnoreSelection(boolean ignoreSelection) {
+    this.ignoreSelection = ignoreSelection;
   }
 }
