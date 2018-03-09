@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.model.gate;
 
+import java.util.Collection;
+
 /**
  * This gate opens and closes based on the value of a boolean property of the
  * assigned model.
@@ -68,6 +70,8 @@ public class BooleanPropertyModelGate extends AbstractPropertyModelGate<Object> 
     boolean shouldOpen = propertyValue != null;
     if (propertyValue instanceof Boolean) {
       shouldOpen = (Boolean) propertyValue;
+    } else if (propertyValue instanceof Collection<?>) {
+      shouldOpen = !((Collection<?>) propertyValue).isEmpty();
     }
     if (negatedByName) {
       return !shouldOpen;
