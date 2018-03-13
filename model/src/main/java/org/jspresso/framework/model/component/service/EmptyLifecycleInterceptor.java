@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.model.component.service;
 
+import java.util.Map;
+
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 import org.jspresso.framework.security.UserPrincipal;
@@ -85,4 +87,12 @@ public abstract class EmptyLifecycleInterceptor<E> implements
     return false;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean onReloadTransient(E component, Map<String, Object> previousState, IEntityFactory entityFactory,
+                                   UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
+    return onCreate(component, entityFactory, principal, entityLifecycleHandler);
+  }
 }

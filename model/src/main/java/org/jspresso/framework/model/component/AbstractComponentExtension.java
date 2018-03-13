@@ -229,4 +229,12 @@ public abstract class AbstractComponentExtension<T extends IComponent>
     }
     return accessorFactory;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void reset() {
+    // Empty implementation
+  }
 }

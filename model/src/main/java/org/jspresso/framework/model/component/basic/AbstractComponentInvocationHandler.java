@@ -63,6 +63,7 @@ import org.jspresso.framework.model.component.service.OnCreate;
 import org.jspresso.framework.model.component.service.OnDelete;
 import org.jspresso.framework.model.component.service.OnLoad;
 import org.jspresso.framework.model.component.service.OnPersist;
+import org.jspresso.framework.model.component.service.OnReloadTransient;
 import org.jspresso.framework.model.component.service.OnUpdate;
 import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
@@ -515,6 +516,17 @@ public abstract class AbstractComponentInvocationHandler implements InvocationHa
   }
 
   /**
+   * Reset extensions custom internal state.
+   */
+  protected void resetExtensions() {
+    if (componentExtensions != null) {
+      for (IComponentExtension<IComponent> extension : componentExtensions.values()) {
+        extension.reset();
+      }
+    }
+  }
+
+  /**
    * Gives a chance to the implementor to decorate a component reference before
    * returning it when fetching association ends.
    *
@@ -851,6 +863,23 @@ public abstract class AbstractComponentInvocationHandler implements InvocationHa
   }
 
   /**
+   * An empty hook that gets called when an component is reloaded while being transient.
+   *
+   * @param proxy
+   *     the proxy
+   * @param entityFactory
+   *     an entity factory instance which can be used to complete the     lifecycle step.
+   * @param principal
+   *     the principal triggering the action.
+   * @param entityLifecycleHandler
+   *     entityLifecycleHandler.
+   */
+  protected void onReloadTransient(Object proxy, Map<String, Object> previousState, IEntityFactory entityFactory, UserPrincipal principal,
+                          IEntityLifecycleHandler entityLifecycleHandler) {
+    // defaults to no-op.
+  }
+
+  /**
    * An empty hook that gets called whenever an entity is to be persisted.
    *
    * @param proxy
@@ -912,6 +941,7 @@ public abstract class AbstractComponentInvocationHandler implements InvocationHa
    */
   protected void onLoad(Object proxy) {
     registerServicesForwardingListenersIfNecessary(proxy);
+    resetExtensions();
   }
 
   /**
@@ -926,6 +956,7 @@ public abstract class AbstractComponentInvocationHandler implements InvocationHa
    */
   protected <E extends IComponent> void onClone(Object proxy, E sourceComponent) {
     registerServicesForwardingListenersIfNecessary(proxy);
+    resetExtensions();
   }
 
   private boolean servicesForwardingListenersRegistered = false;
@@ -1729,6 +1760,10 @@ public abstract class AbstractComponentInvocationHandler implements InvocationHa
     if (ILifecycleCapable.ON_CREATE_METHOD_NAME.equals(methodName)) {
       onCreate(proxy, (IEntityFactory) args[0], (UserPrincipal) args[1], (IEntityLifecycleHandler) args[2]);
       lifecycleAnnotation = OnCreate.class;
+    } else if (ILifecycleCapable.ON_RELOAD_TRANSIENT_METHOD_NAME.equals(methodName)) {
+      onReloadTransient(proxy, (Map<String, Object>) args[0], (IEntityFactory) args[1], (UserPrincipal) args[2],
+          (IEntityLifecycleHandler) args[3]);
+      lifecycleAnnotation = OnReloadTransient.class;
     } else if (ILifecycleCapable.ON_PERSIST_METHOD_NAME.equals(methodName)) {
       onPersist(proxy, (IEntityFactory) args[0], (UserPrincipal) args[1], (IEntityLifecycleHandler) args[2]);
       lifecycleAnnotation = OnPersist.class;

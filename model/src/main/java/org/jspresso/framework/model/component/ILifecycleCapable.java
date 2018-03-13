@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.model.component;
 
+import java.util.Map;
+
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 import org.jspresso.framework.security.UserPrincipal;
@@ -32,22 +34,22 @@ public interface ILifecycleCapable {
   /**
    * {@code ON_CREATE_METHOD_NAME}.
    */
-  String ON_CREATE_METHOD_NAME  = "onCreate";
+  String ON_CREATE_METHOD_NAME = "onCreate";
 
   /**
    * {@code ON_DELETE_METHOD_NAME}.
    */
-  String ON_DELETE_METHOD_NAME  = "onDelete";
+  String ON_DELETE_METHOD_NAME = "onDelete";
 
   /**
    * {@code ON_LOAD_METHOD_NAME}.
    */
-  String ON_LOAD_METHOD_NAME    = "onLoad";
+  String ON_LOAD_METHOD_NAME = "onLoad";
 
   /**
    * {@code ON_CLONE_METHOD_NAME}.
    */
-  String ON_CLONE_METHOD_NAME   = "onClone";
+  String ON_CLONE_METHOD_NAME = "onClone";
 
   /**
    * {@code ON_PERSIST_METHOD_NAME}.
@@ -57,37 +59,42 @@ public interface ILifecycleCapable {
   /**
    * {@code ON_UPDATE_METHOD_NAME}.
    */
-  String ON_UPDATE_METHOD_NAME  = "onUpdate";
+  String ON_UPDATE_METHOD_NAME = "onUpdate";
+
+  /**
+   * {@code ON_RELOAD_TRANSIENT_METHOD_NAME}.
+   */
+  String ON_RELOAD_TRANSIENT_METHOD_NAME = "onReloadTransient";
 
   /**
    * Called when an component is created (still transient).
    *
    * @param entityFactory
-   *          an entity factory instance which can be used to complete the
-   *          lifecycle step.
+   *     an entity factory instance which can be used to complete the
+   *     lifecycle step.
    * @param principal
-   *          the principal triggering the action.
+   *     the principal triggering the action.
    * @param entityLifecycleHandler
-   *          entityLifecycleHandler.
+   *     entityLifecycleHandler.
    * @return true if the state of the component has been updated.
    */
   boolean onCreate(IEntityFactory entityFactory, UserPrincipal principal,
-      IEntityLifecycleHandler entityLifecycleHandler);
+                   IEntityLifecycleHandler entityLifecycleHandler);
 
   /**
    * Called just before an component is deleted (delete).
    *
    * @param entityFactory
-   *          an entity factory instance which can be used to complete the
-   *          lifecycle step.
+   *     an entity factory instance which can be used to complete the
+   *     lifecycle step.
    * @param principal
-   *          the principal triggering the action.
+   *     the principal triggering the action.
    * @param entityLifecycleHandler
-   *          entityLifecycleHandler.
+   *     entityLifecycleHandler.
    * @return true if the state of the component has been updated.
    */
   boolean onDelete(IEntityFactory entityFactory, UserPrincipal principal,
-      IEntityLifecycleHandler entityLifecycleHandler);
+                   IEntityLifecycleHandler entityLifecycleHandler);
 
   /**
    * Called when an component is loaded from the persistent store or merged back
@@ -104,9 +111,9 @@ public interface ILifecycleCapable {
    * registering some listeners or initializing some non persistent properties.
    *
    * @param <E>
-   *          tha actual component type.
+   *     tha actual component type.
    * @param sourceComponent
-   *          the component that is the source of the cloning.
+   *     the component that is the source of the cloning.
    */
   <E extends IComponent> void onClone(E sourceComponent);
 
@@ -114,29 +121,46 @@ public interface ILifecycleCapable {
    * Called just before an component is persisted (insert).
    *
    * @param entityFactory
-   *          an entity factory instance which can be used to complete the
-   *          lifecycle step.
+   *     an entity factory instance which can be used to complete the
+   *     lifecycle step.
    * @param principal
-   *          the principal triggering the action.
+   *     the principal triggering the action.
    * @param entityLifecycleHandler
-   *          entityLifecycleHandler.
+   *     entityLifecycleHandler.
    * @return true if the state of the component has been updated.
    */
   boolean onPersist(IEntityFactory entityFactory, UserPrincipal principal,
-      IEntityLifecycleHandler entityLifecycleHandler);
+                    IEntityLifecycleHandler entityLifecycleHandler);
 
   /**
    * Called just before an component is updated (update).
    *
    * @param entityFactory
-   *          an entity factory instance which can be used to complete the
-   *          lifecycle step.
+   *     an entity factory instance which can be used to complete the
+   *     lifecycle step.
    * @param principal
-   *          the principal triggering the action.
+   *     the principal triggering the action.
    * @param entityLifecycleHandler
-   *          entityLifecycleHandler.
+   *     entityLifecycleHandler.
    * @return true if the state of the component has been updated.
    */
   boolean onUpdate(IEntityFactory entityFactory, UserPrincipal principal,
-      IEntityLifecycleHandler entityLifecycleHandler);
+                   IEntityLifecycleHandler entityLifecycleHandler);
+
+  /**
+   * Called when an component is reloaded while being still transient. Default implementation will call the onCreate
+   * method.
+   *
+   * @param previousState the state of the component when the reload is performed.
+   * @param entityFactory
+   *     an entity factory instance which can be used to complete the
+   *     lifecycle step.
+   * @param principal
+   *     the principal triggering the action.
+   * @param entityLifecycleHandler
+   *     entityLifecycleHandler.
+   * @return true if the state of the component has been updated.
+   */
+  boolean onReloadTransient(Map<String, Object> previousState, IEntityFactory entityFactory, UserPrincipal principal,
+                            IEntityLifecycleHandler entityLifecycleHandler);
 }

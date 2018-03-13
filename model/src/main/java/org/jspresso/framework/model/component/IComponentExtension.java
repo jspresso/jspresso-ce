@@ -42,4 +42,9 @@ public interface IComponentExtension<T extends IComponent> {
    * configured in order to perform extra initialization.
    */
   void postCreate();
+
+  /**
+   * This method can be called when needed to reset the internal state of the extension.
+   */
+  void reset();
 }

@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 import java.util.Collection;
+import java.util.Map;
 
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
@@ -207,7 +208,8 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    * {@inheritDoc}
    */
   @Override
-  public <T extends IComponent> T createComponentInstance(Class<T> componentContract, Object delegate, boolean initialize) {
+  public <T extends IComponent> T createComponentInstance(Class<T> componentContract, Object delegate,
+                                                          boolean initialize) {
     T createdComponent = createComponentInstance(componentContract, delegate, (Class<?>[]) null);
     if (initialize) {
       initializeComponent(createdComponent);
@@ -230,11 +232,15 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
    *
    * @param component
    *     the component
-   * @param resetValues
-   *     the reset values
+   * @param isReload
+   *     is it trigerred from a reload
    */
-  protected void initializeComponent(IComponent component,boolean resetValues){
-      IComponentDescriptor<?> componentDescriptor = getComponentDescriptor(component.getComponentContract());
+  protected void initializeComponent(IComponent component, boolean isReload) {
+    Map<String, Object> previousState = null;
+    if (isReload) {
+      previousState = component.straightGetProperties();
+    }
+    IComponentDescriptor<?> componentDescriptor = getComponentDescriptor(component.getComponentContract());
     for (IPropertyDescriptor propertyDescriptor : componentDescriptor.getPropertyDescriptors()) {
       String propertyName = propertyDescriptor.getName();
       if (propertyDescriptor instanceof ICollectionPropertyDescriptor<?>) {
@@ -246,18 +252,23 @@ public class BasicProxyEntityFactory extends AbstractComponentFactory implements
           defaultValue = propertyDescriptor.interceptSetter(component, defaultValue);
           propertyDescriptor.preprocessSetter(component, defaultValue);
           component.straightSetProperty(propertyName, defaultValue);
-        } else if (resetValues) {
+        } else if (isReload) {
           if (!IEntity.ID.equals(propertyName) && !IEntity.VERSION.equals(propertyName) && propertyDescriptor
               .isModifiable()) {
             component.straightSetProperty(propertyName, null);
           }
         }
-      } else if (resetValues && propertyDescriptor.isModifiable()) {
+      } else if (isReload && propertyDescriptor.isModifiable()) {
         component.straightSetProperty(propertyName, null);
       }
     }
     if (component instanceof ILifecycleCapable) {
-      ((ILifecycleCapable) component).onCreate(this, getPrincipal(), getEntityLifecycleHandler());
+      if (isReload) {
+        ((ILifecycleCapable) component).onReloadTransient(previousState, this, getPrincipal(),
+            getEntityLifecycleHandler());
+      } else {
+        ((ILifecycleCapable) component).onCreate(this, getPrincipal(), getEntityLifecycleHandler());
+      }
     }
   }
 
