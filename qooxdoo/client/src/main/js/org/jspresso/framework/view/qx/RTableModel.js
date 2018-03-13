@@ -51,25 +51,25 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel", {
       } else if (obj2 instanceof org.jspresso.framework.util.lang.DateDto) {
         obj2 = org.jspresso.framework.util.format.DateUtils.fromDateDto(obj2);
       }
-      return (obj1 > obj2) ? 1 : ((obj1 == obj2) ? 0 : -1);
+      if (obj1 == null) {
+        if (obj2 != null) {
+          return -1;
+        } else {
+          return 0;
+        }
+      } else if (obj2 == null) {
+        if (obj1 != null) {
+          return 1;
+        } else {
+          return 0;
+        }
+      } else {
+        return (obj1 > obj2) ? 1 : ((obj1 == obj2) ? 0 : -1);
+      }
     },
 
     _defaultSortComparatorDescending: function (row1, row2) {
-      var obj1 = org.jspresso.framework.view.qx.RTableModel._extractCompareValueFromState(row1.getChildren().getItem(arguments.callee.columnIndex
-          + 1));
-      var obj2 = org.jspresso.framework.view.qx.RTableModel._extractCompareValueFromState(row2.getChildren().getItem(arguments.callee.columnIndex
-          + 1));
-      if (obj1 instanceof String) {
-        obj1 = obj1.toLowerCase();
-      } else if (obj1 instanceof org.jspresso.framework.util.lang.DateDto) {
-        obj1 = org.jspresso.framework.util.format.DateUtils.fromDateDto(obj1);
-      }
-      if (obj2 instanceof String) {
-        obj2 = obj2.toLowerCase();
-      } else if (obj2 instanceof org.jspresso.framework.util.lang.DateDto) {
-        obj2 = org.jspresso.framework.util.format.DateUtils.fromDateDto(obj2);
-      }
-      return (obj1 < obj2) ? 1 : ((obj1 == obj2) ? 0 : -1);
+      return org.jspresso.framework.view.qx.RTableModel._defaultSortComparatorAscending(row1,  row2) * -1;
     },
 
     _extractCompareValueFromState: function (cell) {
