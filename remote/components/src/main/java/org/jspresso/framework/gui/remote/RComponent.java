@@ -58,6 +58,7 @@ public abstract class RComponent extends RemotePeer implements
   private String           styleName;
   private RAction          focusGainedAction;
   private RAction          focusLostAction;
+  private boolean          collapsible;
 
   @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
   private final transient Set<RAction> actionHardReferences;
@@ -496,5 +497,24 @@ public abstract class RComponent extends RemotePeer implements
    */
   public void setFocusLostAction(RAction focusLostAction) {
     this.focusLostAction = focusLostAction;
+  }
+
+  /**
+   * Is collapsible boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isCollapsible() {
+    return collapsible;
+  }
+
+  /**
+   * Sets collapsible.
+   *
+   * @param collapsible
+   *     the collapsible
+   */
+  public void setCollapsible(boolean collapsible) {
+    this.collapsible = collapsible;
   }
 }

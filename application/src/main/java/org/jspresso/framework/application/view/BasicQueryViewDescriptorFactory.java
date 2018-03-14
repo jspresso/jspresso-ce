@@ -487,6 +487,7 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements IQueryViewDescr
     dest.setAction(source.getAction());
     dest.setBackground(source.getBackground());
     dest.setBorderType(source.getBorderType());
+    dest.setCollapsible(source.isCollapsible());
     dest.setDescription(source.getDescription());
     dest.setFont(source.getFont());
     dest.setForeground(source.getForeground());

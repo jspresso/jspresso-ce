@@ -50,6 +50,7 @@ public class RComponent extends RemotePeer implements IRemoteStateOwner {
   private var _styleName:String;
   private var _focusGainedAction:RAction;
   private var _focusLostAction:RAction;
+  private var _collapsible:Boolean;
 
   private var _peer:Object;
 
@@ -215,6 +216,14 @@ public class RComponent extends RemotePeer implements IRemoteStateOwner {
 
   public function set focusLostAction(value:RAction):void {
     _focusLostAction = value;
+  }
+
+  public function get collapsible():Boolean {
+    return _collapsible;
+  }
+
+  public function set collapsible(value:Boolean):void {
+    _collapsible = value;
   }
 }
 }

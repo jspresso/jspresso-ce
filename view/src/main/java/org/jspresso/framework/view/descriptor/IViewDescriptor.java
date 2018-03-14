@@ -85,4 +85,10 @@ public interface IViewDescriptor extends IIconDescriptor, IStylable,
    * @return the preferred dimension of the view peer component.
    */
   Dimension getPreferredSize();
+
+  /**
+   * Gets wether the view is collapsible when installed in a collapsible peer (a titled border for instance).
+   * @return
+   */
+  boolean isCollapsible();
 }

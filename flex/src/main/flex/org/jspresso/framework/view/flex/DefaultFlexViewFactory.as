@@ -329,6 +329,9 @@ public class DefaultFlexViewFactory {
     component = decorateWithActions(remoteComponent, component);
     if (remoteComponent.borderType == "TITLED" || remoteComponent.borderType == "TITLED_ACTIONS") {
       var decorator:Panel = createPanelComponent();
+      if (decorator is CollapsiblePanel) {
+        (decorator as CollapsiblePanel).isCollapsible = remoteComponent.collapsible;
+      }
       syncSizes(decorator, component);
       component.percentWidth = 100.0;
       component.percentHeight = 100.0;

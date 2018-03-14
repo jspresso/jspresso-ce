@@ -107,6 +107,10 @@ qx.Class.define("org.jspresso.framework.gui.remote.RComponent", {
     focusLostAction: {
       check: "org.jspresso.framework.gui.remote.RAction",
       nullable: true
+    },
+    collapsible: {
+      check: 'Boolean',
+      nullable: true
     }
   },
 

@@ -338,6 +338,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     if (viewDescriptor.getStyleName() != null) {
       viewPeer.setStyleName(viewDescriptor.getStyleName());
     }
+    viewPeer.setCollapsible(viewDescriptor.isCollapsible());
   }
 
   private Font createFont(String fontString) {
