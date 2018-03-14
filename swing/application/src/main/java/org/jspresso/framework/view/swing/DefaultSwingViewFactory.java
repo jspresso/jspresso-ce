@@ -2947,6 +2947,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       }
     }
     view.setChildren(childrenViews);
+    attachFirstTabSelectorIfNecessary(viewDescriptor, view);
     viewComponent.setSelectedIndex(getTabSelectionPreference(viewDescriptor, actionHandler));
     return view;
   }

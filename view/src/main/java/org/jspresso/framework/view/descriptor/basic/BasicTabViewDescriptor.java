@@ -43,6 +43,7 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor impleme
   private List<IViewDescriptor> tabs;
   private boolean               lazy;
   private IAction               tabSelectionAction;
+  private boolean               selectFirstTab;
 
 
   /**
@@ -50,6 +51,7 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor impleme
    */
   public BasicTabViewDescriptor() {
     this.lazy = true;
+    this.selectFirstTab = false;
   }
 
   /**
@@ -133,7 +135,8 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor impleme
       if (tab.getReadabilityGates() != null) {
         // Hiding / showing tabs based on dynamic readability prevents from using lazy tab binding
         return false;
-      };
+      }
+      ;
     }
     return lazy && !isCascadingModels();
   }
@@ -171,5 +174,24 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor impleme
    */
   public void setTabSelectionAction(IAction tabSelectionAction) {
     this.tabSelectionAction = tabSelectionAction;
+  }
+
+  /**
+   * Is select first tab boolean.
+   *
+   * @return the select first tab option.
+   */
+  public boolean isSelectFirstTab() {
+    return selectFirstTab;
+  }
+
+  /**
+   * If {@code true}, the tab view will select its the first tab each time its model changes. Default value is {@false}.
+   *
+   * @param selectFirstTab
+   *     the select first tab
+   */
+  public void setSelectFirstTab(boolean selectFirstTab) {
+    this.selectFirstTab = selectFirstTab;
   }
 }

@@ -138,6 +138,7 @@ import org.jspresso.framework.view.BasicIndexedView;
 import org.jspresso.framework.view.BasicMapView;
 import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.ICompositeView;
+import org.jspresso.framework.view.IIndexedView;
 import org.jspresso.framework.view.IMapView;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.ViewException;
@@ -2339,6 +2340,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
       }
     }
     viewComponent.setTabs(tabs.toArray(new RComponent[tabs.size()]));
+    attachFirstTabSelectorIfNecessary(viewDescriptor, view);
     view.setChildren(childrenViews);
     view.setCurrentViewIndex(getTabSelectionPreference(viewDescriptor, actionHandler));
     return view;

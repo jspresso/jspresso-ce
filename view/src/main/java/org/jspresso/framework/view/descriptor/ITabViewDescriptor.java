@@ -49,4 +49,12 @@ public interface ITabViewDescriptor extends ICompositeViewDescriptor {
    * @return the tab selection action
    */
   IAction getTabSelectionAction();
+
+  /**
+   * Is select first tab boolean.
+   *
+   * @return the select first tab option.
+   */
+  boolean isSelectFirstTab();
+
 }

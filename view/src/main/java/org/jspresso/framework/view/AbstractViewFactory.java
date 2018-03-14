@@ -4005,4 +4005,29 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   public void setUseEntityIconsForLov(boolean useEntityIconsForLov) {
     this.useEntityIconsForLov = useEntityIconsForLov;
   }
+
+  protected void attachFirstTabSelectorIfNecessary(ITabViewDescriptor viewDescriptor,
+                                                   final BasicIndexedView<E> view) {
+    if (viewDescriptor.isSelectFirstTab()) {
+      final IValueChangeListener firstTabSelector = new IValueChangeListener() {
+        @Override
+        public void valueChange(ValueChangeEvent evt) {
+          view.setCurrentViewIndex(0);
+        }
+      };
+      view.addPropertyChangeListener(IView.CONNECTOR_PROPERTY, new PropertyChangeListener() {
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
+          IValueConnector oldConnector = (IValueConnector) evt.getOldValue();
+          IValueConnector newConnector = (IValueConnector) evt.getNewValue();
+          if (oldConnector != null) {
+            oldConnector.removeValueChangeListener(firstTabSelector);
+          }
+          if (newConnector != null) {
+            newConnector.addValueChangeListener(firstTabSelector);
+          }
+        }
+      });
+    }
+  }
 }
