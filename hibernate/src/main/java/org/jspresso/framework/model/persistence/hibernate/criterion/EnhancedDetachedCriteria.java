@@ -204,10 +204,10 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
    * @return the new or previously registered sub-criteria.
    */
   public DetachedCriteria getSubCriteriaFor(DetachedCriteria masterCriteria, String associationPath, String alias) {
-    DetachedCriteria subCriteria = getRegisteredSubCriteria(masterCriteria, alias);
+    DetachedCriteria subCriteria = getRegisteredSubCriteria(masterCriteria, associationPath);
     if (subCriteria == null) {
       subCriteria = masterCriteria.createCriteria(associationPath, alias);
-      registerSubCriteria(masterCriteria, alias, subCriteria);
+      registerSubCriteria(masterCriteria, associationPath, subCriteria);
     }
     return subCriteria;
   }
@@ -250,10 +250,10 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
    */
   public DetachedCriteria getSubCriteriaFor(DetachedCriteria masterCriteria, String associationPath, String alias,
                                             JoinType joinType) {
-    DetachedCriteria subCriteria = getRegisteredSubCriteria(masterCriteria, alias);
+    DetachedCriteria subCriteria = getRegisteredSubCriteria(masterCriteria, associationPath);
     if (subCriteria == null) {
       subCriteria = masterCriteria.createCriteria(associationPath, alias, joinType);
-      registerSubCriteria(masterCriteria, alias, subCriteria);
+      registerSubCriteria(masterCriteria, associationPath, subCriteria);
     }
     return subCriteria;
   }
@@ -345,7 +345,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
     return orders;
   }
 
-  private DetachedCriteria getRegisteredSubCriteria(DetachedCriteria masterCriteria, String associationPathOrAlias) {
+  private DetachedCriteria getRegisteredSubCriteria(DetachedCriteria masterCriteria, String associationPath) {
     if (subCriteriaRegistry == null) {
       return null;
     }
@@ -353,7 +353,7 @@ public class EnhancedDetachedCriteria extends DetachedCriteria {
     if (subCriterias == null) {
       return null;
     }
-    return subCriterias.get(associationPathOrAlias);
+    return subCriterias.get(associationPath);
   }
 
   private void registerSubCriteria(DetachedCriteria masterCriteria, String associationPathOrAlias,

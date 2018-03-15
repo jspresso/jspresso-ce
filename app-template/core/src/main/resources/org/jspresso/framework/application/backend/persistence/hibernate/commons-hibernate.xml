@@ -72,6 +72,7 @@
   <bean id="criteriaFactoryBase" abstract="true"
         class="org.jspresso.framework.model.persistence.hibernate.criterion.DefaultCriteriaFactory">
     <property name="triStateBooleanSupported" ref="triStateBooleanSupported"/>
+    <property name="useAliasesForJoins" value="true" />
   </bean>
 
   <bean id="criteriaFactory" parent="criteriaFactoryBase"/>
