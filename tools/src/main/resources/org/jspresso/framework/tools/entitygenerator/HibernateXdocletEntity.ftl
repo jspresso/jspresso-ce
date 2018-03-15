@@ -870,7 +870,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     /**
      * enumeration value for ${enumerationValue}.
      */
-    ${enumerationValue}<#if enumerationValue != lastEnumValue>,</#if>
+    ${enumerationValue?replace("%", "P")}<#if enumerationValue != lastEnumValue>,</#if>
   </#list>
   };
 
