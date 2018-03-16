@@ -854,7 +854,16 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   /**
    * Constant enumeration value for ${propertyName} : ${enumerationValue}.
    */
-  String ${generateConstantName(propertyName + "_" + enumerationValue)} = "${enumerationValue}";
+  <#local reworkedEnumValue=enumerationValue />
+  <#local reworkedEnumValue=reworkedEnumValue?replace("%", "PE") />
+  <#local reworkedEnumValue=reworkedEnumValue?replace("+", "PL") />
+  <#local reworkedEnumValue=reworkedEnumValue?replace("-", "MI") />
+  <#local reworkedEnumValue=reworkedEnumValue?replace("*", "MU") />
+  <#local reworkedEnumValue=reworkedEnumValue?replace("/", "DI") />
+  <#local reworkedEnumValue=reworkedEnumValue?replace("<", "LT") />
+  <#local reworkedEnumValue=reworkedEnumValue?replace(">", "GT") />
+  <#local reworkedEnumValue=reworkedEnumValue?replace("=", "EQ") />
+  String ${generateConstantName(propertyName + "_" + reworkedEnumValue)} = "${enumerationValue}";
 
   </#list>
 </#macro>
@@ -870,7 +879,19 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     /**
      * enumeration value for ${enumerationValue}.
      */
-    ${enumerationValue?replace("%", "P")}<#if enumerationValue != lastEnumValue>,</#if>
+    <#local reworkedEnumValue=enumerationValue />
+    <#if "1234567890"?contains(reworkedEnumValue[0])>
+      <#local reworkedEnumValue="_"+reworkedEnumValue />
+    </#if>
+    <#local reworkedEnumValue=reworkedEnumValue?replace("%", "PE") />
+    <#local reworkedEnumValue=reworkedEnumValue?replace("+", "PL") />
+    <#local reworkedEnumValue=reworkedEnumValue?replace("-", "MI") />
+    <#local reworkedEnumValue=reworkedEnumValue?replace("*", "MU") />
+    <#local reworkedEnumValue=reworkedEnumValue?replace("/", "DI") />
+    <#local reworkedEnumValue=reworkedEnumValue?replace("<", "LT") />
+    <#local reworkedEnumValue=reworkedEnumValue?replace(">", "GT") />
+    <#local reworkedEnumValue=reworkedEnumValue?replace("=", "EQ") />
+    ${reworkedEnumValue}<#if enumerationValue != lastEnumValue>,</#if>
   </#list>
   };
 
