@@ -85,6 +85,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
   private boolean                       sortable;
   private IDisplayableAction            sortingAction;
   private boolean                       columnReorderingAllowed;
+  private boolean                       singleClickEdit;
 
   /**
    * Constructs a new {@code BasicTableViewDescriptor} instance.
@@ -93,10 +94,13 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
     horizontallyScrollable = true;
     sortable = true;
     columnReorderingAllowed = true;
+    singleClickEdit = false;
   }
 
   /**
    * {@inheritDoc}
+   *
+   * @return the column view descriptors
    */
   @Override
   public List<IPropertyViewDescriptor> getColumnViewDescriptors() {
@@ -159,6 +163,8 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
    * Returns {@code true}.
    * <p>
    * {@inheritDoc}
+   *
+   * @return the boolean
    */
   @Override
   public boolean isVerticallyScrollable() {
@@ -167,6 +173,8 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
 
   /**
    * {@inheritDoc}
+   *
+   * @return the boolean
    */
   @Override
   public boolean isScrollable() {
@@ -210,7 +218,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
    * the model.
    *
    * @param columnViewDescriptors
-   *          the columnViewDescriptors to set.
+   *     the columnViewDescriptors to set.
    */
   public void setColumnViewDescriptors(
       List<IPropertyViewDescriptor> columnViewDescriptors) {
@@ -226,7 +234,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
    * default size and tha table will scroll horizontally as needed.
    *
    * @param horizontallyScrollable
-   *          the horizontallyScrollable to set.
+   *     the horizontallyScrollable to set.
    */
   public void setHorizontallyScrollable(boolean horizontallyScrollable) {
     this.horizontallyScrollable = horizontallyScrollable;
@@ -244,7 +252,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
    * {@code renderedProperties} property.
    *
    * @param renderedProperties
-   *          the renderedProperties to set.
+   *     the renderedProperties to set.
    */
   public void setRenderedProperties(List<String> renderedProperties) {
     this.renderedProperties = renderedProperties;
@@ -259,7 +267,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
    * sorted.
    *
    * @param sortable
-   *          the sortable to set.
+   *     the sortable to set.
    */
   public void setSortable(boolean sortable) {
     this.sortable = sortable;
@@ -270,7 +278,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
    * It should be used with caution and rarely be overridden from the default.
    *
    * @param sortingAction
-   *          the sortingAction to set.
+   *     the sortingAction to set.
    */
   public void setSortingAction(IDisplayableAction sortingAction) {
     this.sortingAction = sortingAction;
@@ -304,9 +312,29 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
    * Configures if the table view should allow for column reordering.
    * The default value is {@code true}.
    *
-   * @param columnReorderingAllowed the column reordering allowed boolean.
+   * @param columnReorderingAllowed
+   *     the column reordering allowed boolean.
    */
   public void setColumnReorderingAllowed(boolean columnReorderingAllowed) {
     this.columnReorderingAllowed = columnReorderingAllowed;
+  }
+
+  /**
+   * Is single click edit boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isSingleClickEdit() {
+    return singleClickEdit;
+  }
+
+  /**
+   * Configures the table view to enter edition on single clicks instead of double clicks.
+   *
+   * @param singleClickEdit
+   *     the single click edit
+   */
+  public void setSingleClickEdit(boolean singleClickEdit) {
+    this.singleClickEdit = singleClickEdit;
   }
 }

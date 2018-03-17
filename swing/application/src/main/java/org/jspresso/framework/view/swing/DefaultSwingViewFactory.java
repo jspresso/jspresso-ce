@@ -2520,7 +2520,13 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     if (editorView.getConnector().getParentConnector() == null) {
       editorView.getConnector().setParentConnector(connector);
     }
-    column.setCellEditor(createTableCellEditor(editorView, actionHandler));
+    SwingViewCellEditorAdapter tableCellEditor = createTableCellEditor(editorView, actionHandler);
+    if (viewDescriptor.isSingleClickEdit()) {
+      tableCellEditor.setClickCountToStart(1);
+    } else {
+      tableCellEditor.setClickCountToStart(2);
+    }
+    column.setCellEditor(tableCellEditor);
     TableCellRenderer cellRenderer = createTableCellRenderer(propertyDescriptor, columnViewDescriptor, actionHandler,
         locale);
     if (cellRenderer == null) {
@@ -3624,7 +3630,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     return new FormattedTableCellRenderer(null);
   }
 
-  private TableCellEditor createTableCellEditor(IView<JComponent> editorView, IActionHandler actionHandler) {
+  private SwingViewCellEditorAdapter createTableCellEditor(IView<JComponent> editorView, IActionHandler actionHandler) {
     SwingViewCellEditorAdapter editor;
     JComponent peer = editorView.getPeer();
     FocusListener[] listeners = peer.getListeners(FocusListener.class);

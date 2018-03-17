@@ -33,6 +33,7 @@ public class RTable extends RCollectionComponent {
   private var _horizontallyScrollable:Boolean;
   private var _sortable:Boolean;
   private var _columnReorderingAllowed:Boolean;
+  private var _singleClickEdit:Boolean;
 
   public function RTable() {
     //default constructor.
@@ -100,6 +101,14 @@ public class RTable extends RCollectionComponent {
 
   public function set columnReorderingAllowed(value:Boolean):void {
     _columnReorderingAllowed = value;
+  }
+
+  public function get singleClickEdit():Boolean {
+    return _singleClickEdit;
+  }
+
+  public function set singleClickEdit(value:Boolean):void {
+    _singleClickEdit = value;
   }
 }
 }

@@ -66,6 +66,7 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements Ta
       new HashMap<String, Object>());
   private static final long                serialVersionUID = 8182961519931949735L;
   private final IView<JComponent> editorView;
+  private int clickCountToStart;
 
   /**
    * Constructs a new {@code SwingViewCellEditorAdapter} instance.
@@ -81,6 +82,7 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements Ta
    */
   public SwingViewCellEditorAdapter(IView<JComponent> editorView, IModelConnectorFactory modelConnectorFactory,
                                     IMvcBinder mvcBinder, ISecurityHandler securityHandler) {
+    this.clickCountToStart = 2;
     this.editorView = editorView;
     if (editorView.getPeer() instanceof AbstractButton) {
       ((AbstractButton) editorView.getPeer()).setHorizontalAlignment(SwingConstants.CENTER);
@@ -115,6 +117,8 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements Ta
    * Returns the value of the swing view's connector.
    * <p/>
    * {@inheritDoc}
+   *
+   * @return the cell editor value
    */
   @Override
   public Object getCellEditorValue() {
@@ -129,6 +133,18 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements Ta
    * Returns the JComponent peer of the swing view.
    * <p/>
    * {@inheritDoc}
+   *
+   * @param table
+   *     the table
+   * @param value
+   *     the value
+   * @param isSelected
+   *     the is selected
+   * @param row
+   *     the row
+   * @param column
+   *     the column
+   * @return the table cell editor component
    */
   @Override
   public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
@@ -166,6 +182,20 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements Ta
    * Gets the component peer of the editor view.
    * <p/>
    * {@inheritDoc}
+   *
+   * @param tree
+   *     the tree
+   * @param value
+   *     the value
+   * @param isSelected
+   *     the is selected
+   * @param expanded
+   *     the expanded
+   * @param leaf
+   *     the leaf
+   * @param row
+   *     the row
+   * @return the tree cell editor component
    */
   @Override
   public Component getTreeCellEditorComponent(JTree tree, Object value, boolean isSelected, boolean expanded,
@@ -177,6 +207,10 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements Ta
    * Returns false if the event object is a single mouse click.
    * <p/>
    * {@inheritDoc}
+   *
+   * @param anEvent
+   *     the an event
+   * @return the boolean
    */
   @Override
   public boolean isCellEditable(EventObject anEvent) {
@@ -184,7 +218,7 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements Ta
       if (editorView.getPeer() instanceof AbstractButton) {
         return ((MouseEvent) anEvent).getClickCount() >= 1;
       }
-      return ((MouseEvent) anEvent).getClickCount() >= 2;
+      return ((MouseEvent) anEvent).getClickCount() >= getClickCountToStart();
     }
     return super.isCellEditable(anEvent);
   }
@@ -198,4 +232,22 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements Ta
     return editorView;
   }
 
+  /**
+   * Gets click count to start.
+   *
+   * @return the click count to start
+   */
+  public int getClickCountToStart() {
+    return clickCountToStart;
+  }
+
+  /**
+   * Sets click count to start.
+   *
+   * @param clickCountToStart
+   *     the click count to start
+   */
+  public void setClickCountToStart(int clickCountToStart) {
+    this.clickCountToStart = clickCountToStart;
+  }
 }

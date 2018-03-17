@@ -245,6 +245,7 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
         getMvcBinder(), rowConnectorPrototype);
     RTable viewComponent = createRTable(viewDescriptor);
     viewComponent.setColumnReorderingAllowed(viewDescriptor.isColumnReorderingAllowed());
+    viewComponent.setSingleClickEdit(viewDescriptor.isSingleClickEdit());
     IView<RComponent> view = constructView(viewComponent, viewDescriptor, connector);
 
     viewComponent.setSortable(viewDescriptor.isSortable());

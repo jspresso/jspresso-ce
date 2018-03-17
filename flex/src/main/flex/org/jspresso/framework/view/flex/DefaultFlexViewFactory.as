@@ -2662,6 +2662,7 @@ public class DefaultFlexViewFactory {
         == "MULTIPLE_INTERVAL_CUMULATIVE_SELECTION" || remoteTable.selectionMode == "SINGLE_CUMULATIVE_SELECTION") {
       table.cbMultiSelection = true;
     }
+    table.singleClickEdit = remoteTable.singleClickEdit;
     var width:Number = 0;
     if (table.cbMultiSelection) {
       var selectionColumn:DataGridColumn = new DataGridColumn();

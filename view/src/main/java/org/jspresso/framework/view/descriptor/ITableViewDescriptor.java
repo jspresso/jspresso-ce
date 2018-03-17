@@ -43,7 +43,7 @@ public interface ITableViewDescriptor extends ICollectionViewDescriptor {
    * supported by the UI).
    *
    * @return the action triggered when sorting is triggered by the used (if
-   *         supported by the UI).
+   * supported by the UI).
    */
   IDisplayableAction getSortingAction();
 
@@ -60,4 +60,11 @@ public interface ITableViewDescriptor extends ICollectionViewDescriptor {
    * @return {@code true} if column reordering is allowed. False otherwise.
    */
   boolean isColumnReorderingAllowed();
+
+  /**
+   * If {@code true}, configures the table view to enter edition on single clicks instead of double clicks.
+   *
+   * @return {@code true} if the table should enter edition on single clicks.
+   */
+  boolean isSingleClickEdit();
 }

@@ -50,6 +50,7 @@ public class EnhancedDataGrid extends DataGrid {
   private var _savedSortDirection:String;
   private var _customSort:Boolean;
   private var _cbMultiSelection:Boolean;
+  private var _singleClickEdit:Boolean;
 
   private static var H_SCROLL_DELAY_MAX_VISIBLE_CELLS:int = 500;
   private var _targetHScrollPosition:Number;
@@ -67,6 +68,7 @@ public class EnhancedDataGrid extends DataGrid {
     addEventListener(DataGridEvent.ITEM_EDIT_BEGINNING, itemEditBeginning);
     _hScrollTimer = new Timer(200, 1);
     _hScrollTimer.addEventListener(TimerEvent.TIMER_COMPLETE, applyTargetHScroll);
+    _singleClickEdit = false;
   }
 
   override protected function mouseDoubleClickHandler(event:MouseEvent):void {
@@ -81,7 +83,8 @@ public class EnhancedDataGrid extends DataGrid {
 
     if (r && r is IDropInListItemRenderer) {
       var dilr:IDropInListItemRenderer = r as IDropInListItemRenderer;
-      preventEditing = dilr.listData.rowIndex != lastClickedRow || dilr.listData.columnIndex != lastClickedColumn;
+      preventEditing = !singleClickEdit
+          && (dilr.listData.rowIndex != lastClickedRow || dilr.listData.columnIndex != lastClickedColumn);
       lastClickedRow = dilr.listData.rowIndex;
       lastClickedColumn = dilr.listData.columnIndex;
     } else {
@@ -135,6 +138,14 @@ public class EnhancedDataGrid extends DataGrid {
 
   public function get cbMultiSelection():Boolean {
     return _cbMultiSelection;
+  }
+
+  public function get singleClickEdit():Boolean {
+    return _singleClickEdit;
+  }
+
+  public function set singleClickEdit(value:Boolean):void {
+    _singleClickEdit = value;
   }
 
   override protected function selectItem(item:IListItemRenderer, shiftKey:Boolean, ctrlKey:Boolean,

@@ -73,10 +73,11 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer
       } else if (getToolTipProperty() != null) {
         setToolTipText(tm.getCellToolTip(row, getToolTipProperty()));
       } else {
-        if (HtmlHelper.isHtml(getText())
-            || fm.stringWidth(getText()) > table.getColumnModel()
-                .getColumn(column).getWidth()) {
-          setToolTipText(getText());
+        String text = getText();
+        if (text != null && (HtmlHelper.isHtml(text)
+            || fm.stringWidth(text) > table.getColumnModel()
+                                                .getColumn(column).getWidth())) {
+          setToolTipText(text);
         } else {
           setToolTipText(null);
         }

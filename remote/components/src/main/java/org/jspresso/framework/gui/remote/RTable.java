@@ -37,12 +37,13 @@ public class RTable extends RCollectionComponent {
   private boolean                   sortable;
   private RAction                   sortingAction;
   private boolean                   columnReorderingAllowed;
+  private boolean                   singleClickEdit;
 
   /**
    * Constructs a new {@code RTable} instance.
    *
    * @param guid
-   *          the guid
+   *     the guid
    */
   public RTable(String guid) {
     super(guid);
@@ -105,7 +106,7 @@ public class RTable extends RCollectionComponent {
    * Sets the columnIds.
    *
    * @param columnIds
-   *          the columnIds to set.
+   *     the columnIds to set.
    */
   public void setColumnIds(String... columnIds) {
     this.columnIds = columnIds;
@@ -115,7 +116,7 @@ public class RTable extends RCollectionComponent {
    * Sets the columns.
    *
    * @param columns
-   *          the columns to set.
+   *     the columns to set.
    */
   public void setColumns(RComponent... columns) {
     this.columns = columns;
@@ -125,7 +126,7 @@ public class RTable extends RCollectionComponent {
    * Sets the horizontallyScrollable.
    *
    * @param horizontallyScrollable
-   *          the horizontallyScrollable to set.
+   *     the horizontallyScrollable to set.
    */
   public void setHorizontallyScrollable(boolean horizontallyScrollable) {
     this.horizontallyScrollable = horizontallyScrollable;
@@ -135,7 +136,7 @@ public class RTable extends RCollectionComponent {
    * Sets the sortable.
    *
    * @param sortable
-   *          the sortable to set.
+   *     the sortable to set.
    */
   public void setSortable(boolean sortable) {
     this.sortable = sortable;
@@ -145,7 +146,7 @@ public class RTable extends RCollectionComponent {
    * Sets the sortingAction.
    *
    * @param sortingAction
-   *          the sortingAction to set.
+   *     the sortingAction to set.
    */
   public void setSortingAction(RAction sortingAction) {
     this.sortingAction = sortingAction;
@@ -164,7 +165,7 @@ public class RTable extends RCollectionComponent {
    * Sets the columnHeaders.
    *
    * @param columnHeaders
-   *          the columnHeaders to set.
+   *     the columnHeaders to set.
    */
   public void setColumnHeaders(RComponent... columnHeaders) {
     this.columnHeaders = columnHeaders;
@@ -183,7 +184,7 @@ public class RTable extends RCollectionComponent {
    * Sets the rowPrototype.
    *
    * @param rowPrototype
-   *          the rowPrototype to set.
+   *     the rowPrototype to set.
    */
   public void setRowPrototype(RemoteCompositeValueState rowPrototype) {
     this.rowPrototype = rowPrototype;
@@ -201,9 +202,29 @@ public class RTable extends RCollectionComponent {
   /**
    * Sets column reordering allowed.
    *
-   * @param columnReorderingAllowed the column reordering allowed
+   * @param columnReorderingAllowed
+   *     the column reordering allowed
    */
   public void setColumnReorderingAllowed(boolean columnReorderingAllowed) {
     this.columnReorderingAllowed = columnReorderingAllowed;
+  }
+
+  /**
+   * Is single click edit boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isSingleClickEdit() {
+    return singleClickEdit;
+  }
+
+  /**
+   * Sets single click edit.
+   *
+   * @param singleClickEdit
+   *     the single click edit
+   */
+  public void setSingleClickEdit(boolean singleClickEdit) {
+    this.singleClickEdit = singleClickEdit;
   }
 }

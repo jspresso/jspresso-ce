@@ -2413,8 +2413,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       }
       table.addListener("cellTap", function (e) {
         var dataCellRenderer = columnModel.getDataCellRenderer(e.getColumn());
-        if (   (dataCellRenderer instanceof org.jspresso.framework.view.qx.BooleanTableCellRenderer)
-            && !dataCellRenderer instanceof org.jspresso.framework.view.qx.BinaryTableCellRenderer) {
+        if (remoteTable.getSingleClickEdit() ||
+               (dataCellRenderer instanceof org.jspresso.framework.view.qx.BooleanTableCellRenderer)
+            && !(dataCellRenderer instanceof org.jspresso.framework.view.qx.BinaryTableCellRenderer)) {
           this.startEditing();
         }
       }, table);
