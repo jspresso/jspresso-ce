@@ -627,6 +627,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
   @Override
   public void setParentConnector(ICompositeValueConnector parentConnector) {
     this.parentConnector = parentConnector;
+    writabilityChange();
+    readabilityChange();
   }
 
   /**
