@@ -238,7 +238,9 @@ public class QueryComponentMatcher {
           String regex = (String) v;
           regex = regex.replaceAll("%", ".*");
           regex = regex.replaceAll("_", ".");
-          if (!regex.contains(IQueryComponent.CONJUNCT) && !regex.contains(IQueryComponent.DISJUNCT) && !regex.contains(
+          if (regex.endsWith(IQueryComponent.WHOLE_WORD)) {
+            regex = regex.substring(0, regex.length() - 1);
+          } else if (!regex.contains(IQueryComponent.CONJUNCT) && !regex.contains(IQueryComponent.DISJUNCT) && !regex.contains(
               IQueryComponent.NOT_VAL) && !regex.contains(IQueryComponent.NULL_VAL)) {
             regex += ".*";
           }
