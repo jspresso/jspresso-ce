@@ -836,8 +836,10 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     boolean sortable = columnDescriptor.isSortable();
     if (sortable && PropertyViewDescriptorHelper.isComputed(rowDescriptor, propertyName)) {
       if (viewDescriptor.getPaginationViewDescriptor() != null) {
-        // disable sort only if the table is not paginated
-        sortable = rowDescriptor.getPropertyDescriptor(propertyName).getPersistenceFormula() != null;
+        // disable sort only if the table is paginated
+        IPropertyDescriptor propertyDescriptor = rowDescriptor.getPropertyDescriptor(propertyName);
+        sortable = propertyDescriptor.getAlternativeSortProperty() != null
+            || propertyDescriptor.getPersistenceFormula() != null;
       }
     }
     if (!sortable) {
@@ -4006,8 +4008,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     this.useEntityIconsForLov = useEntityIconsForLov;
   }
 
-  protected void attachFirstTabSelectorIfNecessary(ITabViewDescriptor viewDescriptor,
-                                                   final BasicIndexedView<E> view) {
+  protected void attachFirstTabSelectorIfNecessary(ITabViewDescriptor viewDescriptor, final BasicIndexedView<E> view) {
     if (viewDescriptor.isSelectFirstTab()) {
       final IValueChangeListener firstTabSelector = new IValueChangeListener() {
         @Override

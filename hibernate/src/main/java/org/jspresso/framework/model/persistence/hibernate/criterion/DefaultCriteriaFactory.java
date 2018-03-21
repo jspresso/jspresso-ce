@@ -90,8 +90,9 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
     criteria.setProjection(null);
     criteria.setResultTransformer(CriteriaSpecification.ROOT_ENTITY);
     // complete sorting properties
-    if (queryComponent.getOrderingProperties() != null) {
-      for (Map.Entry<String, ESort> orderingProperty : queryComponent.getOrderingProperties().entrySet()) {
+    Map<String, ESort> orderingProperties = queryComponent.getOrderingProperties();
+    if (orderingProperties != null) {
+      for (Map.Entry<String, ESort> orderingProperty : orderingProperties.entrySet()) {
         String propertyName = orderingProperty.getKey();
         String[] propElts = propertyName.split("\\.");
         DetachedCriteria orderingCriteria = criteria;
