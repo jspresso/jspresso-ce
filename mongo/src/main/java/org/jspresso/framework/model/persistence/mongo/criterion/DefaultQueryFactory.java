@@ -481,6 +481,11 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
               val = val.substring(1);
               negate = true;
             }
+            boolean wholeWord = false;
+            if (val.endsWith(IQueryComponent.WHOLE_WORD)) {
+              val = val.substring(0, val.length() - 1);
+              wholeWord = true;
+            }
             if (IQueryComponent.NULL_VAL.equals(val)) {
               if (negate) {
                 crit = where(prefixedProperty).ne(null);
@@ -488,7 +493,7 @@ public class DefaultQueryFactory extends AbstractActionContextAware implements I
                 crit = where(prefixedProperty).is(null);
               }
             } else {
-              if (IEntity.ID.equals(propertyDescriptor.getName())
+              if (wholeWord || IEntity.ID.equals(propertyDescriptor.getName())
                   || propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
                 if (negate) {
                   crit = where(prefixedProperty).ne(val);

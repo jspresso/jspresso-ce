@@ -19,6 +19,7 @@
 package org.jspresso.framework.application.model.descriptor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.jspresso.framework.application.model.Module;
@@ -90,5 +91,7 @@ public class ModuleDescriptor extends BasicComponentDescriptor<Module> {
     propertyDescriptors.add(parentDescriptor);
     propertyDescriptors.add(subModulesDescriptor);
     setPropertyDescriptors(propertyDescriptors);
+
+    setRenderedProperties(Arrays.asList(Module.NAME));
   }
 }

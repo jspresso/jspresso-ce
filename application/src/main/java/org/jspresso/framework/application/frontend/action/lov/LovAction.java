@@ -65,11 +65,9 @@ import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.collection.IPageable;
 import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
-import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.ESelectionMode;
-import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**
@@ -126,7 +124,8 @@ public class LovAction<E, F, G> extends FrontendAction<E, F, G> {
   public static final String LOV_DIALOG_ACTIONS = "LOV_DIALOG_ACTIONS";
 
   private static final String NON_LOV_TRIGGERING_CHARS =
-      "%" + IQueryComponent.DISJUNCT + IQueryComponent.CONJUNCT + IQueryComponent.NOT_VAL + IQueryComponent.NULL_VAL;
+      "%" + IQueryComponent.DISJUNCT + IQueryComponent.CONJUNCT + IQueryComponent.NOT_VAL + IQueryComponent.NULL_VAL
+          + IQueryComponent.WHOLE_WORD;
 
   private boolean                                    autoquery;
   private Integer                                    pageSize;

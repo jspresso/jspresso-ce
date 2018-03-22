@@ -77,6 +77,11 @@ public interface IQueryComponent extends Map<String, Object>, IPageable, ISortab
   String CONJUNCT = "&";
 
   /**
+   * Whole word
+   */
+  String WHOLE_WORD = "|";
+
+  /**
    * Gets the descriptor of this query component.
    *
    * @return the descriptor of this query component.

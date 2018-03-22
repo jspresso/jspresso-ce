@@ -25,6 +25,7 @@ import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
 
+import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.EnumQueryStructureDescriptor;
 import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
@@ -232,5 +233,20 @@ public class EnumQueryStructure extends AbstractPropertyChangeCapable {
             getTranslationProvider(), getLocale()));
       }
     }
+  }
+
+  public String getRestrictionString() {
+    StringBuilder restrictionString = new StringBuilder();
+    for (EnumValueQueryStructure inListValue : getSelectedEnumerationValues()) {
+      if (restrictionString.length() > 0) {
+        restrictionString.append(IQueryComponent.DISJUNCT);
+      }
+      if (inListValue.getValue() == null || "".equals(inListValue.getValue())) {
+        restrictionString.append(IQueryComponent.NULL_VAL);
+      } else {
+        restrictionString.append(inListValue.getValue());
+      }
+    }
+    return restrictionString.toString();
   }
 }

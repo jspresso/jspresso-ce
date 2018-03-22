@@ -290,7 +290,7 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
    */
   @Override
   public String getModelTypeName() {
-    return getName().replaceAll("\\$",".");
+    return getName().replaceAll("\\$", ".");
   }
 
   /**
@@ -1147,15 +1147,18 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
     this.writabilityGates = writabilityGates;
   }
 
-  private static ThreadLocal<Collection<Class<?>>> sofeWatchdog = new ThreadLocal<>();
+  private static ThreadLocal<Collection<IComponentDescriptor<?>>> sofeWatchdog = new ThreadLocal<>();
 
   static List<String> explodeComponentReferences(IComponentDescriptor<?> componentDescriptor,
                                                  List<String> propertyNames) {
     boolean createdWatchDog = false;
-    Collection<Class<?>> watchDog = sofeWatchdog.get();
+    Collection<IComponentDescriptor<?>> watchDog = sofeWatchdog.get();
     if (watchDog == null) {
       createdWatchDog = true;
       watchDog = new LinkedHashSet<>();
+      if (EntityHelper.isInlineComponentReference(componentDescriptor)) {
+        watchDog.add(componentDescriptor);
+      }
       sofeWatchdog.set(watchDog);
     }
     try {
@@ -1164,21 +1167,23 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
         IPropertyDescriptor propertyDescriptor = componentDescriptor.getPropertyDescriptor(propertyName);
         if (propertyDescriptor instanceof IReferencePropertyDescriptor<?> && EntityHelper.isInlineComponentReference(
             (IReferencePropertyDescriptor<?>) propertyDescriptor)) {
-          if (watchDog.contains(componentDescriptor.getComponentContract())) {
+          IComponentDescriptor referencedDescriptor = ((IReferencePropertyDescriptor) propertyDescriptor)
+              .getReferencedDescriptor();
+          if (watchDog.contains(referencedDescriptor)) {
             // Whenever there are circular references between inline components, do not try to resolve them since it's
             // impossible, but log the warning.
             LOG.warn("A circular reference has been detected on inline {} components. You should explicitly declare "
                 + "their rendered properties since they cannot be computed automatically.", watchDog);
           } else {
-            watchDog.add(componentDescriptor.getComponentContract());
+            watchDog.add(referencedDescriptor);
             List<String> nestedProperties = new ArrayList<>();
             List<String> nestedRenderedProperties;
-            nestedRenderedProperties = ((IReferencePropertyDescriptor<?>) propertyDescriptor).getReferencedDescriptor()
-                                                                                             .getRenderedProperties();
+            nestedRenderedProperties = referencedDescriptor.getRenderedProperties();
             for (String nestedRenderedProperty : nestedRenderedProperties) {
               nestedProperties.add(propertyName + "." + nestedRenderedProperty);
             }
             explodedProperties.addAll(explodeComponentReferences(componentDescriptor, nestedProperties));
+            watchDog.remove(referencedDescriptor);
           }
         } else {
           explodedProperties.add(propertyName);
@@ -1470,7 +1475,8 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
    *
    * @return the component translation descriptor template
    */
-  public static synchronized BasicCollectionPropertyDescriptor<IComponent> getComponentTranslationsDescriptorTemplate() {
+  public static synchronized BasicCollectionPropertyDescriptor<IComponent> getComponentTranslationsDescriptorTemplate
+  () {
     return componentTranslationsDescriptorTemplate;
   }
 }

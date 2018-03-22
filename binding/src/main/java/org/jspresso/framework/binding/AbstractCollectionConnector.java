@@ -363,15 +363,12 @@ public abstract class AbstractCollectionConnector extends AbstractCompositeValue
           connector = existingConnectors.remove(0);
         } else {
           connector = createChildConnector(getId() + "Element");
-          /* Muting the connector breaks gates
           try {
             ((AbstractValueConnector) connector).setMute(true);
             mvcBinder.bind(connector, nextModelConnector);
           } finally {
             ((AbstractValueConnector) connector).setMute(false);
           }
-          */
-          mvcBinder.bind(connector, nextModelConnector);
         }
         addChildConnector(computeStorageKey(i), connector);
         if (removedChildrenConnectors != null) {
