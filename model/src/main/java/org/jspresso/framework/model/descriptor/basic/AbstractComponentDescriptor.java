@@ -1156,7 +1156,9 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
     if (watchDog == null) {
       createdWatchDog = true;
       watchDog = new LinkedHashSet<>();
-      watchDog.add(componentDescriptor);
+      if (EntityHelper.isInlineComponentReference(componentDescriptor)) {
+        watchDog.add(componentDescriptor);
+      }
       sofeWatchdog.set(watchDog);
     }
     try {

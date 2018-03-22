@@ -48,15 +48,15 @@ public final class EntityHelper {
    * Determines if a reference property descriptor references an inline
    * component.
    *
-   * @param propertyDescriptor
+   * @param componentDescriptorProvider
    *          the reference property descriptor to test.
    * @return {@code true} if the reference property descriptor references
    *         an inline component.
    */
   public static boolean isInlineComponentReference(
-      IComponentDescriptorProvider<?> propertyDescriptor) {
-    return !propertyDescriptor.getComponentDescriptor().isEntity()
-        && !propertyDescriptor.getComponentDescriptor().isPurelyAbstract();
+      IComponentDescriptorProvider<?> componentDescriptorProvider) {
+    return !componentDescriptorProvider.getComponentDescriptor().isEntity()
+        && !componentDescriptorProvider.getComponentDescriptor().isPurelyAbstract();
   }
 
   /**
