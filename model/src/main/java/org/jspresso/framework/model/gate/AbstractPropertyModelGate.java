@@ -23,6 +23,8 @@ import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
+import org.hibernate.Hibernate;
+
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.accessor.IAccessor;
@@ -97,7 +99,14 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
       if (getModel() instanceof Collection<?>) {
         this.open = computeCollectionOpenState((Collection<?>) getModel());
       } else {
-        this.open = shouldOpen((E) evt.getNewValue());
+        E newValue = (E) evt.getNewValue();
+        if (!Hibernate.isInitialized(newValue)) {
+          // In case of collections gate invoking isEmpty()
+          IAccessor propertyAccessor = accessorFactory.createPropertyAccessor(propertyName, evt.getSource().getClass());
+          // Will force initialization
+          propertyAccessor.getValue(evt.getSource());
+        }
+        this.open = shouldOpen(newValue);
         if (!openOnTrue) {
           this.open = !this.open;
         }
