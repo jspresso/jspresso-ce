@@ -171,7 +171,7 @@ public class BasicImageViewDescriptor extends BasicPropertyViewDescriptor
     Integer preferredHeight = super.getPreferredHeight();
     if (preferredHeight == null) {
       Integer scaledHeight = getScaledHeight();
-      preferredHeight = scaledHeight == null ? scaledHeight : scaledHeight + 50; // Toolbar
+      preferredHeight = scaledHeight == null ? null : scaledHeight + 50; // Toolbar
     }
     return preferredHeight;
   }
