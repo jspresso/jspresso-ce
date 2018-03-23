@@ -228,7 +228,8 @@
     </property>
   </bean>
 
-  <bean id="beanModuleActionMap" class="org.jspresso.framework.view.action.ActionMap">
+  <bean id="beanModuleActionMap" parent="mobileBeanModuleActionMap"/>
+  <bean id="mobileBeanModuleActionMap" class="org.jspresso.framework.view.action.ActionMap">
     <property name="actionLists">
       <bean class="org.jspresso.framework.view.action.ActionList">
         <property name="name" value="ACTION"/>
