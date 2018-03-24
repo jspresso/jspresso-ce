@@ -32,8 +32,8 @@ import org.jspresso.framework.view.action.IActionable;
  *
  * @author Vincent Vandenschrick
  */
-public interface IViewDescriptor extends IIconDescriptor, IStylable,
-    ISecurable, IActionable, IGateAccessible, IPermIdSource {
+public interface IViewDescriptor
+    extends IIconDescriptor, IStylable, ISecurable, IActionable, IGateAccessible, IPermIdSource, IReadOnlyCloneable {
 
   /**
    * Gets the background color of this view as hex string representation argb
@@ -47,10 +47,10 @@ public interface IViewDescriptor extends IIconDescriptor, IStylable,
    * Gets the border type used to surround view.
    *
    * @return the border type : <li> {@code NONE} means no border. <li>
-   *         {@code SIMPLE} means a simple line border. <li>
-   *         {@code TITLED} means a titled border. The title will be the
-   *         {@code TITLED_ACTIONS} means a titled border with action map next to it. The title will be the
-   *         name of the view.
+   * {@code SIMPLE} means a simple line border. <li>
+   * {@code TITLED} means a titled border. The title will be the
+   * {@code TITLED_ACTIONS} means a titled border with action map next to it. The title will be the
+   * name of the view.
    */
   EBorderType getBorderType();
 
@@ -88,6 +88,7 @@ public interface IViewDescriptor extends IIconDescriptor, IStylable,
 
   /**
    * Gets wether the view is collapsible when installed in a collapsible peer (a titled border for instance).
+   *
    * @return
    */
   boolean isCollapsible();

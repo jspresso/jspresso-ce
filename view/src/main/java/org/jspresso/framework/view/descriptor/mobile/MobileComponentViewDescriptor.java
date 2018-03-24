@@ -117,16 +117,6 @@ public class MobileComponentViewDescriptor extends AbstractComponentViewDescript
   }
 
   /**
-   * Clone read only.
-   *
-   * @return the mobile component view descriptor
-   */
-  @Override
-  public MobileComponentViewDescriptor cloneReadOnly() {
-    return (MobileComponentViewDescriptor) super.cloneReadOnly();
-  }
-
-  /**
    * Gets position.
    *
    * @return the position

@@ -42,22 +42,24 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  */
 public abstract class BasicViewDescriptor extends DefaultIconDescriptor implements IViewDescriptor {
 
-  private ActionMap          actionMap;
-  private ActionMap          secondaryActionMap;
-  private String             permId;
-  private String             background;
-  private EBorderType        borderType;
-  private String             font;
-  private String             foreground;
-  private Collection<String> grantedRoles;
-  private IModelDescriptor   modelDescriptor;
-  private Integer            preferredHeight;
-  private Integer            preferredWidth;
-  private Collection<IGate>  readabilityGates;
-  private Boolean            readOnly;
-  private Collection<IGate>  writabilityGates;
-  private String             styleName;
-  private boolean            collapsible;
+  private   ActionMap           actionMap;
+  private   ActionMap           secondaryActionMap;
+  private   String              permId;
+  private   String              background;
+  private   EBorderType         borderType;
+  private   String              font;
+  private   String              foreground;
+  private   Collection<String>  grantedRoles;
+  private   IModelDescriptor    modelDescriptor;
+  private   Integer             preferredHeight;
+  private   Integer             preferredWidth;
+  private   Collection<IGate>   readabilityGates;
+  private   Boolean             readOnly;
+  private   Collection<IGate>   writabilityGates;
+  private   String              styleName;
+  private   boolean             collapsible;
+  protected BasicViewDescriptor readOnlyClone;
+
 
   /**
    * Creates a new {@code BasicViewDescriptor} instance.
@@ -598,5 +600,13 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor implemen
    */
   public void setCollapsible(boolean collapsible) {
     this.collapsible = collapsible;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public synchronized BasicViewDescriptor cloneReadOnly() {
+    return this;
   }
 }

@@ -85,14 +85,10 @@ public class MobileCompositePageViewDescriptor extends AbstractMobilePageViewDes
       for (IMobilePageSectionViewDescriptor pageSection : pageSectionDescriptors) {
         completeChildDescriptor(pageSection, previousViewDescriptor);
         previousViewDescriptor = pageSection;
-        if (pageSection instanceof MobileComponentViewDescriptor) {
-          if (isInlineEditing()) {
-            refinedPageSections.add(pageSection);
-          } else {
-            refinedPageSections.add(((MobileComponentViewDescriptor) pageSection).cloneReadOnly());
-          }
-        } else {
+        if (isInlineEditing()) {
           refinedPageSections.add(pageSection);
+        } else {
+          refinedPageSections.add((IMobilePageSectionViewDescriptor) pageSection.cloneReadOnly());
         }
       }
       return refinedPageSections;

@@ -94,4 +94,18 @@ public abstract class AbstractRepeaterViewDescriptor extends BasicCollectionView
     return false;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public synchronized AbstractRepeaterViewDescriptor cloneReadOnly() {
+    if (readOnlyClone == null) {
+      readOnlyClone = clone();
+      if (getRepeatedViewDescriptor() != null) {
+        ((AbstractRepeaterViewDescriptor) readOnlyClone).setRepeatedViewDescriptor(
+            (IViewDescriptor) getRepeatedViewDescriptor().cloneReadOnly());
+      }
+    }
+    return (AbstractRepeaterViewDescriptor) readOnlyClone;
+  }
 }

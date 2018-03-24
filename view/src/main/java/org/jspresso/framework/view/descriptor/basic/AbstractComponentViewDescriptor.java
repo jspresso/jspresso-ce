@@ -38,12 +38,11 @@ import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
  */
 public abstract class AbstractComponentViewDescriptor extends BasicViewDescriptor implements IComponentViewDescriptor {
 
-  private ELabelPosition                  labelsPosition;
-  private List<String>                    renderedProperties;
-  private List<IPropertyViewDescriptor>   propertyViewDescriptors;
-  private AbstractComponentViewDescriptor readOnlyClone;
-  private String                          labelFont;
-  private String                          valueFont;
+  private ELabelPosition                labelsPosition;
+  private List<String>                  renderedProperties;
+  private List<IPropertyViewDescriptor> propertyViewDescriptors;
+  private String                        labelFont;
+  private String                        valueFont;
 
   /**
    * Instantiates a new Abstract component view descriptor.
@@ -107,8 +106,8 @@ public abstract class AbstractComponentViewDescriptor extends BasicViewDescripto
     } else {
       for (IPropertyViewDescriptor pvd : declaredPropertyViewDescriptors) {
         if (pvd.getModelDescriptor() == null && pvd instanceof BasicPropertyViewDescriptor) {
-          ((BasicPropertyViewDescriptor) pvd).setModelDescriptor(componentDescriptor.getPropertyDescriptor(
-              pvd.getName()));
+          ((BasicPropertyViewDescriptor) pvd).setModelDescriptor(
+              componentDescriptor.getPropertyDescriptor(pvd.getName()));
           if (pvd.getLabelFont() == null) {
             ((BasicPropertyViewDescriptor) pvd).setLabelFont(getLabelFont());
           }
@@ -282,7 +281,7 @@ public abstract class AbstractComponentViewDescriptor extends BasicViewDescripto
   @Override
   public boolean isReadOnly() {
     if (getModelDescriptor() instanceof IComponentDescriptorProvider<?>) {
-      if(((IComponentDescriptorProvider<?>) getModelDescriptor()).getComponentDescriptor().isReadOnly()) {
+      if (((IComponentDescriptorProvider<?>) getModelDescriptor()).getComponentDescriptor().isReadOnly()) {
         return true;
       }
     }
@@ -294,7 +293,8 @@ public abstract class AbstractComponentViewDescriptor extends BasicViewDescripto
    *
    * @return the read-only component view descriptor.
    */
-  protected synchronized AbstractComponentViewDescriptor cloneReadOnly() {
+  @Override
+  public synchronized AbstractComponentViewDescriptor cloneReadOnly() {
     if (readOnlyClone == null && getModelDescriptor() != null) {
       readOnlyClone = (AbstractComponentViewDescriptor) clone();
       List<IPropertyViewDescriptor> readOnlyDescriptors = new ArrayList<>();
@@ -305,9 +305,9 @@ public abstract class AbstractComponentViewDescriptor extends BasicViewDescripto
         readOnlyDescriptor.setReadOnly(true);
         readOnlyDescriptors.add(readOnlyDescriptor);
       }
-      readOnlyClone.setPropertyViewDescriptors(readOnlyDescriptors);
+      ((AbstractComponentViewDescriptor) readOnlyClone).setPropertyViewDescriptors(readOnlyDescriptors);
     }
-    return readOnlyClone;
+    return (AbstractComponentViewDescriptor) readOnlyClone;
   }
 
   /**

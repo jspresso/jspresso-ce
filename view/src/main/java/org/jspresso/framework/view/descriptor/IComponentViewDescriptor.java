@@ -42,7 +42,7 @@ public interface IComponentViewDescriptor extends IScrollableViewDescriptor {
    * Gets the position of the labels naming the displayed properties.
    *
    * @return the relative position of the labels ({@code ABOVE} or
-   *         {@code ASIDE}).
+   * {@code ASIDE}).
    */
   ELabelPosition getLabelsPosition();
 
@@ -56,7 +56,8 @@ public interface IComponentViewDescriptor extends IScrollableViewDescriptor {
   /**
    * Gets the property view descriptors.
    *
-   * @param explodeComponentReferences explode component references ?
+   * @param explodeComponentReferences
+   *     explode component references ?
    * @return the property view descriptors.
    */
   List<IPropertyViewDescriptor> getPropertyViewDescriptors(boolean explodeComponentReferences);

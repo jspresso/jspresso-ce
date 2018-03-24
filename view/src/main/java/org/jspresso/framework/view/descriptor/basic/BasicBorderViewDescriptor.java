@@ -42,8 +42,7 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  *
  * @author Vincent Vandenschrick
  */
-public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
-    implements IBorderViewDescriptor {
+public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor implements IBorderViewDescriptor {
 
   private IViewDescriptor centerViewDescriptor;
   private IViewDescriptor eastViewDescriptor;
@@ -147,7 +146,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    * will be resized both horizontally and vertically.
    *
    * @param centerViewDescriptor
-   *          the centerViewDescriptor to set.
+   *     the centerViewDescriptor to set.
    */
   public void setCenterViewDescriptor(IViewDescriptor centerViewDescriptor) {
     this.centerViewDescriptor = centerViewDescriptor;
@@ -158,7 +157,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    * be resized vertically.
    *
    * @param eastViewDescriptor
-   *          the eastViewDescriptor to set.
+   *     the eastViewDescriptor to set.
    */
   public void setEastViewDescriptor(IViewDescriptor eastViewDescriptor) {
     this.eastViewDescriptor = eastViewDescriptor;
@@ -169,7 +168,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    * be resized horizontally.
    *
    * @param northViewDescriptor
-   *          the northViewDescriptor to set.
+   *     the northViewDescriptor to set.
    */
   public void setNorthViewDescriptor(IViewDescriptor northViewDescriptor) {
     this.northViewDescriptor = northViewDescriptor;
@@ -180,7 +179,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    * be resized horizontally.
    *
    * @param southViewDescriptor
-   *          the southViewDescriptor to set.
+   *     the southViewDescriptor to set.
    */
   public void setSouthViewDescriptor(IViewDescriptor southViewDescriptor) {
     this.southViewDescriptor = southViewDescriptor;
@@ -191,9 +190,40 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    * be resized vertically.
    *
    * @param westViewDescriptor
-   *          the westViewDescriptor to set.
+   *     the westViewDescriptor to set.
    */
   public void setWestViewDescriptor(IViewDescriptor westViewDescriptor) {
     this.westViewDescriptor = westViewDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public synchronized BasicBorderViewDescriptor cloneReadOnly() {
+    if (readOnlyClone == null) {
+      readOnlyClone = clone();
+      if (getNorthViewDescriptor() != null) {
+        ((BasicBorderViewDescriptor) readOnlyClone).setNorthViewDescriptor(
+            (IViewDescriptor) getNorthViewDescriptor().cloneReadOnly());
+      }
+      if (getWestViewDescriptor() != null) {
+        ((BasicBorderViewDescriptor) readOnlyClone).setWestViewDescriptor(
+            (IViewDescriptor) getWestViewDescriptor().cloneReadOnly());
+      }
+      if (getCenterViewDescriptor() != null) {
+        ((BasicBorderViewDescriptor) readOnlyClone).setCenterViewDescriptor(
+            (IViewDescriptor) getCenterViewDescriptor().cloneReadOnly());
+      }
+      if (getEastViewDescriptor() != null) {
+        ((BasicBorderViewDescriptor) readOnlyClone).setEastViewDescriptor(
+            (IViewDescriptor) getEastViewDescriptor().cloneReadOnly());
+      }
+      if (getSouthViewDescriptor() != null) {
+        ((BasicBorderViewDescriptor) readOnlyClone).setSouthViewDescriptor(
+            (IViewDescriptor) getSouthViewDescriptor().cloneReadOnly());
+      }
+    }
+    return (BasicBorderViewDescriptor) readOnlyClone;
   }
 }

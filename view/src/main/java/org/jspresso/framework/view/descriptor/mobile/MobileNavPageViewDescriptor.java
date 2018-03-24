@@ -85,7 +85,7 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
    */
   public IViewDescriptor getSelectionViewDescriptor() {
     completeChildDescriptor(selectionViewDescriptor, null);
-    return selectionViewDescriptor;
+    return (IViewDescriptor) selectionViewDescriptor.cloneReadOnly();
   }
 
   /**
@@ -95,8 +95,7 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
    *     the selection view
    */
   public void setSelectionViewDescriptor(IViewDescriptor selectionViewDescriptor) {
-    if (selectionViewDescriptor instanceof IListViewDescriptor
-        || selectionViewDescriptor instanceof ITreeViewDescriptor
+    if (selectionViewDescriptor instanceof IListViewDescriptor || selectionViewDescriptor instanceof ITreeViewDescriptor
         || selectionViewDescriptor instanceof IRepeaterViewDescriptor) {
       this.selectionViewDescriptor = selectionViewDescriptor;
     } else {
