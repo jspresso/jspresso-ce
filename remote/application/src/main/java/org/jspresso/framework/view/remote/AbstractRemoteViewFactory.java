@@ -588,6 +588,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
   protected IView<RComponent> createCardView(ICardViewDescriptor viewDescriptor, IActionHandler actionHandler,
                                              Locale locale) {
     RCardContainer viewComponent = createRCardContainer(viewDescriptor);
+    viewComponent.setState(((IRemoteValueStateFactory) getConnectorFactory())
+        .createRemoteValueState(getGuidGenerator().generateGUID(), viewDescriptor.getPermId()));
     List<String> cardNames = new ArrayList<>();
     List<RComponent> cards = new ArrayList<>();
     cardNames.add(ICardViewDescriptor.DEFAULT_CARD);
@@ -612,8 +614,6 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
    */
   protected RCardContainer createRCardContainer(ICardViewDescriptor viewDescriptor) {
     RCardContainer cardContainer = new RCardContainer(getGuidGenerator().generateGUID());
-    cardContainer.setState(((IRemoteValueStateFactory) getConnectorFactory())
-        .createRemoteValueState(getGuidGenerator().generateGUID(), viewDescriptor.getPermId()));
     return cardContainer;
   }
 

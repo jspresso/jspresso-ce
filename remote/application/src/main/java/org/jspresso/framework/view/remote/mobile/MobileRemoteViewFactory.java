@@ -48,6 +48,7 @@ import org.jspresso.framework.gui.remote.RTree;
 import org.jspresso.framework.gui.remote.mobile.RImageCanvas;
 import org.jspresso.framework.gui.remote.mobile.RImagePicker;
 import org.jspresso.framework.gui.remote.mobile.RMobileBorderContainer;
+import org.jspresso.framework.gui.remote.mobile.RMobileCardContainer;
 import org.jspresso.framework.gui.remote.mobile.RMobileCardPage;
 import org.jspresso.framework.gui.remote.mobile.RMobileCompositePage;
 import org.jspresso.framework.gui.remote.mobile.RMobileForm;
@@ -95,6 +96,7 @@ import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITreeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicCardViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.AbstractMobilePageViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.IMobilePageAware;
@@ -102,6 +104,7 @@ import org.jspresso.framework.view.descriptor.mobile.IMobilePageViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.IMobileViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileCardPageViewDescriptor;
+import org.jspresso.framework.view.descriptor.mobile.MobileCardViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileCompositePageViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileListViewDescriptor;
@@ -537,12 +540,28 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
   @Override
   protected ICompositeView<RComponent> createBorderView(IBorderViewDescriptor viewDescriptor,
                                                         IActionHandler actionHandler, Locale locale) {
-    ICompositeView<RComponent> view = super.createBorderView(viewDescriptor, actionHandler, locale);
+    ICompositeView<RComponent> borderView = super.createBorderView(viewDescriptor, actionHandler, locale);
     if (viewDescriptor instanceof MobileBorderViewDescriptor) {
-      ((RMobileBorderContainer) view.getPeer()).setPosition(
+      ((RMobileBorderContainer) borderView.getPeer()).setPosition(
           ((MobileBorderViewDescriptor) viewDescriptor).getPosition().name());
     }
-    return view;
+    return borderView;
+  }
+
+  /**
+   * Completes with horizontal position property.
+   * <p/>
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createCardView(ICardViewDescriptor viewDescriptor, IActionHandler actionHandler,
+                                             Locale locale) {
+    IView<RComponent> cardView = super.createCardView(viewDescriptor, actionHandler, locale);
+    if (viewDescriptor instanceof MobileCardViewDescriptor) {
+      ((RMobileCardContainer) cardView.getPeer()).setPosition(
+          ((MobileCardViewDescriptor) viewDescriptor).getPosition().name());
+    }
+    return cardView;
   }
 
   /**
@@ -902,6 +921,22 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
   protected RBorderContainer createRBorderContainer(IBorderViewDescriptor viewDescriptor) {
     RMobileBorderContainer mobileBorderContainer = new RMobileBorderContainer(getGuidGenerator().generateGUID());
     return mobileBorderContainer;
+  }
+
+  /**
+   * Creates a mobile remote card container.
+   *
+   * @param viewDescriptor
+   *     the card view descriptor.
+   * @return the created remote component.
+   */
+  @Override
+  protected RCardContainer createRCardContainer(ICardViewDescriptor viewDescriptor) {
+    if (viewDescriptor instanceof BasicCardViewDescriptor) {
+      RMobileCardContainer mobileCardContainer = new RMobileCardContainer(getGuidGenerator().generateGUID());
+      return mobileCardContainer;
+    }
+    return super.createRCardContainer(viewDescriptor);
   }
 
 
