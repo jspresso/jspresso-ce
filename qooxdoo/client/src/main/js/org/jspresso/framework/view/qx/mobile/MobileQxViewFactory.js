@@ -612,6 +612,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         navPage.setUserData("editorPage", editorPage);
         if (remoteNavPage.getMainAction() == null) {
           remoteNavPage.setMainAction(rEditAction);
+        /*
         } else {
           var editActionList = new org.jspresso.framework.gui.remote.RActionList();
           editActionList.setActions([rEditAction]);
@@ -620,6 +621,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
             actionLists = actionLists.concat(remoteNavPage.getActionLists());
           }
           remoteNavPage.setActionLists(actionLists);
+        */
         }
       }
       navPage.addListener("initialize", function (e) {
@@ -869,6 +871,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         compositePage.setUserData("editorPage", editorPage);
         if (remoteCompositePage.getMainAction() == null) {
           remoteCompositePage.setMainAction(rEditAction);
+        /*
         } else {
           var editActionList = new org.jspresso.framework.gui.remote.RActionList();
           editActionList.setActions([rEditAction]);
@@ -877,6 +880,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
             actionLists = actionLists.concat(remoteCompositePage.getActionLists());
           }
           remoteCompositePage.setActionLists(actionLists);
+        */
         }
       }
       compositePage.addListener("initialize", function (e) {
