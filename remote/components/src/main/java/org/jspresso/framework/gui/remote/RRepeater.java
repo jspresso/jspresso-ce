@@ -28,7 +28,6 @@ import org.jspresso.framework.state.remote.RemoteCompositeValueState;
 public class RRepeater extends RCollectionComponent {
 
   private static final long serialVersionUID = 3448113257778789L;
-  private String position;
 
 
   /**
@@ -47,24 +46,5 @@ public class RRepeater extends RCollectionComponent {
    */
   public RRepeater() {
     // For serialization support
-  }
-
-  /**
-   * Gets position.
-   *
-   * @return the position
-   */
-  public String getPosition() {
-    return position;
-  }
-
-  /**
-   * Sets position.
-   *
-   * @param position
-   *     the position
-   */
-  public void setPosition(String position) {
-    this.position = position;
   }
 }
