@@ -27,7 +27,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
   type: "abstract",
 
   statics: {
-    __TAP_THRESHOLD: 500,
+    _TAP_THRESHOLD: 500,
     _INPUT_THRESHOLD: 400,
     _INPUT_TIMESTAMP: "inputTimestamp",
 
@@ -429,7 +429,7 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
         var lastTimeStamp = b.getUserData("lastExecTimeStamp");
         var eventTimeStamp = new Date().getTime();
         if (lastTimeStamp == null || eventTimeStamp - lastTimeStamp
-            > org.jspresso.framework.view.qx.AbstractQxViewFactory.__TAP_THRESHOLD) {
+            > org.jspresso.framework.view.qx.AbstractQxViewFactory._TAP_THRESHOLD) {
           listener.call(that, event);
           b.setUserData("lastExecTimeStamp", eventTimeStamp);
         }

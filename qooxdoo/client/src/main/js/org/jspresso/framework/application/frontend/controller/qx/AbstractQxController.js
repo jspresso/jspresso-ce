@@ -57,7 +57,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     window.executeAction = function (actionGuid, actionCommand, viewStateGuid, viewStatePermId) {
       var now = Date.now();
       if (lastActionGuidTS && lastActionGuidTS.length == 2) {
-        if (lastActionGuidTS[0] == actionGuid && now - lastActionGuidTS[1] < 50) {
+        if (lastActionGuidTS[0] == actionGuid && now - lastActionGuidTS[1] < org.jspresso.framework.view.qx.AbstractQxViewFactory._TAP_THRESHOLD) {
           return;
         }
       }
