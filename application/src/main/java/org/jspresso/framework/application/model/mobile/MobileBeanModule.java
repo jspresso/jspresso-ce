@@ -27,7 +27,7 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.view.descriptor.EBorderType;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.AbstractMobilePageViewDescriptor;
-import org.jspresso.framework.view.descriptor.mobile.IMobilePageSectionViewDescriptor;
+import org.jspresso.framework.view.descriptor.mobile.IMobileViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileCompositePageViewDescriptor;
@@ -64,8 +64,8 @@ public class MobileBeanModule extends BeanModule {
         beanViewDescriptor.setBorderType(EBorderType.TITLED);
         beanViewDescriptor.setName(componentDescriptor.getName());
         projectedViewDescriptor = new MobileCompositePageViewDescriptor();
-        ((MobileCompositePageViewDescriptor) projectedViewDescriptor).setPageSectionDescriptors(Collections
-            .singletonList((IMobilePageSectionViewDescriptor) beanViewDescriptor));
+        ((MobileCompositePageViewDescriptor) projectedViewDescriptor).setPageSectionDescriptors(
+            Collections.singletonList((IMobileViewDescriptor) beanViewDescriptor));
         setProjectedViewDescriptor(projectedViewDescriptor);
       }
       if (projectedViewDescriptor.getModelDescriptor() == null) {
@@ -110,8 +110,8 @@ public class MobileBeanModule extends BeanModule {
   public void setProjectedViewDescriptor(IViewDescriptor elementViewDescriptor) {
     if (!(elementViewDescriptor instanceof AbstractMobilePageViewDescriptor)) {
       throw new IllegalArgumentException(
-          "Mobile bean module views only support page views as element views and not : "
-              + elementViewDescriptor.getClass().getSimpleName());
+          "Mobile bean module views only support page views as element views and not : " + elementViewDescriptor
+              .getClass().getSimpleName());
     }
     super.setProjectedViewDescriptor(elementViewDescriptor);
   }
@@ -140,7 +140,7 @@ public class MobileBeanModule extends BeanModule {
     MobileCompositePageViewDescriptor defaultProjectedViewDescriptor = new MobileCompositePageViewDescriptor();
     defaultProjectedViewDescriptor.setInlineEditing(true);
     defaultProjectedViewDescriptor.setPageSectionDescriptors(
-        Arrays.<IMobilePageSectionViewDescriptor>asList(componentViewDescriptor));
+        Arrays.<IMobileViewDescriptor>asList(componentViewDescriptor));
     return defaultProjectedViewDescriptor;
   }
 }

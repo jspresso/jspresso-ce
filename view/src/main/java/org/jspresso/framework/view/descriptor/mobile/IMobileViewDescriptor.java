@@ -25,6 +25,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  *
  * @author Vincent Vandenschrick
  */
-public interface IMobileViewDescriptor extends IViewDescriptor {
+public interface IMobileViewDescriptor extends IViewDescriptor, IMobilePageSection {
   // This is just a marker interface to flag mobile compatible descriptors
 }

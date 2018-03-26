@@ -41,7 +41,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
  */
 public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescriptor {
 
-  private List<IMobilePageSectionViewDescriptor> headerSectionDescriptors;
+  private List<IMobileViewDescriptor> headerSectionDescriptors;
   private IViewDescriptor                        selectionViewDescriptor;
   private IMobilePageViewDescriptor              nextPageViewDescriptor;
   private MobileNavPageViewDescriptor            editorPage;
@@ -70,7 +70,7 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
   @Override
   public List<IViewDescriptor> getChildViewDescriptors() {
     List<IViewDescriptor> childViewDescriptors = new ArrayList<>();
-    List<IMobilePageSectionViewDescriptor> hsd = getHeaderSectionsDescriptors();
+    List<IMobileViewDescriptor> hsd = getHeaderSectionsDescriptors();
     if (hsd != null) {
       childViewDescriptors.addAll(hsd);
     }
@@ -165,9 +165,9 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
    *
    * @return the header sections descriptors
    */
-  public List<IMobilePageSectionViewDescriptor> getHeaderSectionsDescriptors() {
+  public List<IMobileViewDescriptor> getHeaderSectionsDescriptors() {
     if (headerSectionDescriptors != null) {
-      for (IMobilePageSectionViewDescriptor headerSectionDescriptor : headerSectionDescriptors) {
+      for (IMobileViewDescriptor headerSectionDescriptor : headerSectionDescriptors) {
         completeChildDescriptor(headerSectionDescriptor, null);
       }
     }
@@ -180,7 +180,7 @@ public class MobileNavPageViewDescriptor extends AbstractMobilePageViewDescripto
    * @param headerSectionDescriptors
    *     the header section descriptors
    */
-  public void setHeaderSectionDescriptors(List<IMobilePageSectionViewDescriptor> headerSectionDescriptors) {
+  public void setHeaderSectionDescriptors(List<IMobileViewDescriptor> headerSectionDescriptors) {
     this.headerSectionDescriptors = headerSectionDescriptors;
   }
 

@@ -32,7 +32,7 @@ import org.jspresso.framework.view.descriptor.basic.AbstractComponentViewDescrip
  * @author Vincent Vandenschrick
  */
 public class MobileComponentViewDescriptor extends AbstractComponentViewDescriptor
-    implements IMobilePageSectionViewDescriptor {
+    implements IMobileViewDescriptor {
 
   private EPosition    position;
   private List<String> forClientTypes;

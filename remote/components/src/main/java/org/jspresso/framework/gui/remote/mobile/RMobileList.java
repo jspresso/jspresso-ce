@@ -29,12 +29,14 @@ public class RMobileList extends RList {
 
   private static final long serialVersionUID = -1860119417583708817L;
   private boolean showArrow;
+  private String  position;
+
 
   /**
    * Constructs a new {@code RMobileList} instance.
    *
    * @param guid
-   *          the guid.
+   *     the guid.
    */
   public RMobileList(String guid) {
     super(guid);
@@ -60,9 +62,29 @@ public class RMobileList extends RList {
   /**
    * Sets show arrow.
    *
-   * @param showArrow the show arrow
+   * @param showArrow
+   *     the show arrow
    */
   public void setShowArrow(boolean showArrow) {
     this.showArrow = showArrow;
+  }
+
+  /**
+   * Gets position.
+   *
+   * @return the position
+   */
+  public String getPosition() {
+    return position;
+  }
+
+  /**
+   * Sets position.
+   *
+   * @param position
+   *     the position
+   */
+  public void setPosition(String position) {
+    this.position = position;
   }
 }

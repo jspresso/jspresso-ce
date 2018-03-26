@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005-2016 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2018 Vincent Vandenschrick. All rights reserved.
  *
  *  This file is part of the Jspresso framework.
  *
@@ -16,36 +16,37 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.gui.remote;
+package org.jspresso.framework.gui.remote.mobile;
 
-import org.jspresso.framework.state.remote.RemoteCompositeValueState;
+import org.jspresso.framework.gui.remote.RList;
+import org.jspresso.framework.gui.remote.RRepeater;
 
 /**
- * A repeater component.
+ * A remote mobile repeater component.
  *
  * @author Vincent Vandenschrick
  */
-public class RRepeater extends RCollectionComponent {
+public class RMobileRepeater extends RRepeater {
 
-  private static final long serialVersionUID = 3448113257778789L;
-  private String position;
+  private static final long serialVersionUID = -1860119417583708817L;
+  private String  position;
 
 
   /**
-   * Constructs a new {@code RRepeater} instance.
+   * Constructs a new {@code RMobileRepeater} instance.
    *
-   * @param guid
-   *     the guid
+   * @PARAM GUID
+   *     THE GUID.
    */
-  public RRepeater(String guid) {
+  public RMobileRepeater(String guid) {
     super(guid);
   }
 
   /**
-   * Constructs a new {@code RRepeater} instance. Only used for serialization
-   * support.
+   * Constructs a new {@code RMobileRepeater} instance. Only used for
+   * serialization support.
    */
-  public RRepeater() {
+  public RMobileRepeater() {
     // For serialization support
   }
 

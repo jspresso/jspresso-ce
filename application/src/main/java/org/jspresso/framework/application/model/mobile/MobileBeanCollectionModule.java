@@ -25,8 +25,8 @@ import org.jspresso.framework.application.model.descriptor.BeanCollectionModuleD
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
-import org.jspresso.framework.view.descriptor.mobile.IMobilePageSectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.IMobilePageViewDescriptor;
+import org.jspresso.framework.view.descriptor.mobile.IMobileViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileCompositePageViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileNavPageViewDescriptor;
 
@@ -55,7 +55,8 @@ public class MobileBeanCollectionModule extends BeanCollectionModule {
     if (cachedViewDescriptor == null) {
       IListViewDescriptor moduleObjectsView = getProjectedViewDescriptor();
       BeanCollectionModuleDescriptor moduleDescriptor = getDescriptor();
-      ((BasicViewDescriptor) moduleObjectsView).setModelDescriptor(moduleDescriptor.getPropertyDescriptor(MobileBeanCollectionModule.MODULE_OBJECTS));
+      ((BasicViewDescriptor) moduleObjectsView).setModelDescriptor(
+          moduleDescriptor.getPropertyDescriptor(MobileBeanCollectionModule.MODULE_OBJECTS));
       MobileNavPageViewDescriptor moduleViewDescriptor = new MobileNavPageViewDescriptor();
       moduleViewDescriptor.setSelectionViewDescriptor(moduleObjectsView);
       IMobilePageViewDescriptor nextPage;
@@ -63,7 +64,8 @@ public class MobileBeanCollectionModule extends BeanCollectionModule {
         nextPage = (IMobilePageViewDescriptor) getElementViewDescriptor();
       } else {
         nextPage = new MobileCompositePageViewDescriptor();
-        ((MobileCompositePageViewDescriptor) nextPage).setPageSectionDescriptors(Collections.singletonList(getElementViewDescriptor()));
+        ((MobileCompositePageViewDescriptor) nextPage).setPageSectionDescriptors(
+            Collections.singletonList((IMobileViewDescriptor) getElementViewDescriptor()));
       }
       moduleViewDescriptor.setNextPageViewDescriptor(nextPage);
       moduleViewDescriptor.setModelDescriptor(moduleDescriptor);
@@ -109,7 +111,7 @@ public class MobileBeanCollectionModule extends BeanCollectionModule {
    * {@inheritDoc}
    */
   @Override
-  public IMobilePageSectionViewDescriptor getElementViewDescriptor() {
+  public IMobilePageViewDescriptor getElementViewDescriptor() {
     return (IMobilePageViewDescriptor) super.getElementViewDescriptor();
   }
 
@@ -121,7 +123,7 @@ public class MobileBeanCollectionModule extends BeanCollectionModule {
    */
   @Override
   public void setElementViewDescriptor(IViewDescriptor elementViewDescriptor) {
-    if (!(elementViewDescriptor instanceof IMobilePageSectionViewDescriptor)) {
+    if (!(elementViewDescriptor instanceof IMobileViewDescriptor)) {
       throw new IllegalArgumentException(
           "Mobile bean collection module views only support page views as element views and not :"
               + elementViewDescriptor.getClass().getSimpleName());

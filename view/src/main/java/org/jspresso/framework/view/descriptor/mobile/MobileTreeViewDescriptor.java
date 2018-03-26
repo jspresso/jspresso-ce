@@ -18,7 +18,9 @@
  */
 package org.jspresso.framework.view.descriptor.mobile;
 
-import org.jspresso.framework.action.IAction;
+import java.util.List;
+
+import org.jspresso.framework.view.descriptor.EPosition;
 import org.jspresso.framework.view.descriptor.basic.AbstractTreeViewDescriptor;
 
 /**
@@ -33,19 +35,25 @@ import org.jspresso.framework.view.descriptor.basic.AbstractTreeViewDescriptor;
  */
 public class MobileTreeViewDescriptor extends AbstractTreeViewDescriptor implements IMobileViewDescriptor {
 
-  private boolean showArrow;
+  private boolean      showArrow;
+  private EPosition    position;
+  private List<String> forClientTypes;
+
 
   /**
    * Instantiates a new Mobile tree view descriptor.
    */
   public MobileTreeViewDescriptor() {
     showArrow = true;
+    this.position = EPosition.LEFT;
   }
 
   /**
    * Always true in mobile environment.
    * <p>
    * {@inheritDoc}
+   *
+   * @return the boolean
    */
   @Override
   public boolean isExpanded() {
@@ -64,9 +72,50 @@ public class MobileTreeViewDescriptor extends AbstractTreeViewDescriptor impleme
   /**
    * Sets show arrow.
    *
-   * @param showArrow the show arrow
+   * @param showArrow
+   *     the show arrow
    */
   public void setShowArrow(boolean showArrow) {
     this.showArrow = showArrow;
+  }
+
+  /**
+   * Gets position.
+   *
+   * @return the position
+   */
+  @Override
+  public EPosition getPosition() {
+    return position;
+  }
+
+  /**
+   * Sets position.
+   *
+   * @param position
+   *     the position
+   */
+  public void setPosition(EPosition position) {
+    this.position = position;
+  }
+
+  /**
+   * Gets for client types.
+   *
+   * @return the for client types
+   */
+  @Override
+  public List<String> getForClientTypes() {
+    return forClientTypes;
+  }
+
+  /**
+   * Sets for client types.
+   *
+   * @param forClientTypes
+   *     the for client types
+   */
+  public void setForClientTypes(List<String> forClientTypes) {
+    this.forClientTypes = forClientTypes;
   }
 }

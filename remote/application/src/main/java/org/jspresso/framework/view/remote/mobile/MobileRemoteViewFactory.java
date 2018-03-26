@@ -42,6 +42,7 @@ import org.jspresso.framework.gui.remote.RForm;
 import org.jspresso.framework.gui.remote.RImageComponent;
 import org.jspresso.framework.gui.remote.RList;
 import org.jspresso.framework.gui.remote.RMap;
+import org.jspresso.framework.gui.remote.RRepeater;
 import org.jspresso.framework.gui.remote.RTabContainer;
 import org.jspresso.framework.gui.remote.RTree;
 import org.jspresso.framework.gui.remote.mobile.RImageCanvas;
@@ -57,6 +58,7 @@ import org.jspresso.framework.gui.remote.mobile.RMobileNavPage;
 import org.jspresso.framework.gui.remote.mobile.RMobilePage;
 import org.jspresso.framework.gui.remote.mobile.RMobilePageAware;
 import org.jspresso.framework.gui.remote.mobile.RMobilePageAwareContainer;
+import org.jspresso.framework.gui.remote.mobile.RMobileRepeater;
 import org.jspresso.framework.gui.remote.mobile.RMobileTabContainer;
 import org.jspresso.framework.gui.remote.mobile.RMobileTree;
 import org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor;
@@ -87,6 +89,7 @@ import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IMapViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
+import org.jspresso.framework.view.descriptor.IRepeaterViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITabViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
@@ -95,7 +98,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.AbstractMobilePageViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.IMobilePageAware;
-import org.jspresso.framework.view.descriptor.mobile.IMobilePageSectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.IMobilePageViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.IMobileViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileBorderViewDescriptor;
@@ -105,6 +107,7 @@ import org.jspresso.framework.view.descriptor.mobile.MobileCompositePageViewDesc
 import org.jspresso.framework.view.descriptor.mobile.MobileListViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileMapViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileNavPageViewDescriptor;
+import org.jspresso.framework.view.descriptor.mobile.MobileRepeaterViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileTabViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileTreeViewDescriptor;
 import org.jspresso.framework.view.remote.AbstractRemoteViewFactory;
@@ -133,15 +136,16 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     if (viewDescriptor instanceof IMobileViewDescriptor || viewDescriptor instanceof IPropertyViewDescriptor
         || viewDescriptor instanceof ICardViewDescriptor) {
       IView<RComponent> view = super.createView(viewDescriptor, actionHandler, locale);
-      if (viewDescriptor instanceof AbstractMobilePageViewDescriptor && view.getPeer() instanceof RMobilePage) {
+      RComponent viewPeer = view.getPeer();
+      if (viewDescriptor instanceof AbstractMobilePageViewDescriptor && viewPeer instanceof RMobilePage) {
         if (((AbstractMobilePageViewDescriptor) viewDescriptor).getI18nName() != null) {
-          view.getPeer().setLabel(((AbstractMobilePageViewDescriptor) viewDescriptor).getI18nName());
+          viewPeer.setLabel(((AbstractMobilePageViewDescriptor) viewDescriptor).getI18nName());
         }
         if (((AbstractMobilePageViewDescriptor) viewDescriptor).getI18nDescription() != null) {
-          view.getPeer().setToolTip(((AbstractMobilePageViewDescriptor) viewDescriptor).getI18nDescription());
+          viewPeer.setToolTip(((AbstractMobilePageViewDescriptor) viewDescriptor).getI18nDescription());
         }
         if (((AbstractMobilePageViewDescriptor) viewDescriptor).getI18nDescription() != null) {
-          view.getPeer().setToolTip(((AbstractMobilePageViewDescriptor) viewDescriptor).getI18nDescription());
+          viewPeer.setToolTip(((AbstractMobilePageViewDescriptor) viewDescriptor).getI18nDescription());
         }
       }
       decorateWithPageAwareContainer(view, viewDescriptor, actionHandler, locale);
@@ -285,7 +289,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     List<IView<RComponent>> childrenViews = new ArrayList<>();
     List<RComponent> headerSections = new ArrayList<>();
     if (viewDescriptor.getHeaderSectionsDescriptors() != null) {
-      for (IMobilePageSectionViewDescriptor hsd : viewDescriptor.getHeaderSectionsDescriptors()) {
+      for (IMobileViewDescriptor hsd : viewDescriptor.getHeaderSectionsDescriptors()) {
         try {
           actionHandler.pushToSecurityContext(hsd);
           if (actionHandler.isAccessGranted(hsd) && isAllowedForClientType(hsd, actionHandler)) {
@@ -385,8 +389,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     BasicCompositeView<RComponent> view = constructCompositeView(viewComponent, filteredViewDescriptor);
     List<IView<RComponent>> childrenViews = new ArrayList<>();
     List<RComponent> pageSections = new ArrayList<>();
-    for (IMobilePageSectionViewDescriptor pageSectionViewDescriptor : filteredViewDescriptor
-        .getPageSectionDescriptors()) {
+    for (IMobileViewDescriptor pageSectionViewDescriptor : filteredViewDescriptor.getPageSectionDescriptors()) {
       try {
         actionHandler.pushToSecurityContext(pageSectionViewDescriptor);
         if (actionHandler.isAccessGranted(pageSectionViewDescriptor) && isAllowedForClientType(
@@ -446,19 +449,24 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
   }
 
   private RMobileCompositePage createRMobileCompositePage(MobileCompositePageViewDescriptor viewDescriptor) {
-    return new RMobileCompositePage(getGuidGenerator().generateGUID());
+    RMobileCompositePage mobileCompositePage = new RMobileCompositePage(getGuidGenerator().generateGUID());
+    return mobileCompositePage;
   }
 
   private RMobileNavPage createRMobileNavPage(MobileNavPageViewDescriptor viewDescriptor) {
-    return new RMobileNavPage(getGuidGenerator().generateGUID());
+    RMobileNavPage mobileNavPage = new RMobileNavPage(getGuidGenerator().generateGUID());
+    return mobileNavPage;
   }
 
   private RMobileCardPage createRMobileCardPage(MobileCardPageViewDescriptor viewDescriptor) {
-    return new RMobileCardPage(getGuidGenerator().generateGUID());
+    RMobileCardPage mobileCardPage = new RMobileCardPage(getGuidGenerator().generateGUID());
+    return mobileCardPage;
   }
 
   private RMobilePageAwareContainer createRMobilePageAwareContainer() {
-    return new RMobilePageAwareContainer(getGuidGenerator().generateGUID());
+    RMobilePageAwareContainer mobilePageAwareContainer = new RMobilePageAwareContainer(
+        getGuidGenerator().generateGUID());
+    return mobilePageAwareContainer;
   }
 
   /**
@@ -472,6 +480,21 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     IView<RComponent> view = super.createListView(viewDescriptor, actionHandler, locale);
     if (viewDescriptor instanceof MobileListViewDescriptor) {
       ((RMobileList) view.getPeer()).setShowArrow(((MobileListViewDescriptor) viewDescriptor).isShowArrow());
+      ((RMobileList) view.getPeer()).setPosition(((MobileListViewDescriptor) viewDescriptor).getPosition().name());
+    }
+    return view;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IView<RComponent> createRepeaterView(IRepeaterViewDescriptor viewDescriptor, IActionHandler actionHandler,
+                                                 Locale locale) {
+    IView<RComponent> view = super.createRepeaterView(viewDescriptor, actionHandler, locale);
+    if (viewDescriptor instanceof MobileRepeaterViewDescriptor) {
+      ((RMobileRepeater) view.getPeer()).setPosition(
+          ((MobileRepeaterViewDescriptor) viewDescriptor).getPosition().name());
     }
     return view;
   }
@@ -529,8 +552,19 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
    */
   @Override
   protected RList createRList(IListViewDescriptor viewDescriptor) {
-    RMobileList component = new RMobileList(getGuidGenerator().generateGUID());
-    return component;
+    RMobileList mobileList = new RMobileList(getGuidGenerator().generateGUID());
+    return mobileList;
+  }
+
+  /**
+   * Creates a mobile repeater.
+   * <p/>
+   * {@inheritDoc}
+   */
+  @Override
+  protected RRepeater createRRepeater(IRepeaterViewDescriptor viewDescriptor) {
+    RMobileRepeater mobileRepeater = new RMobileRepeater(getGuidGenerator().generateGUID());
+    return mobileRepeater;
   }
 
   /**
@@ -543,6 +577,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
                                              Locale locale) {
     IView<RComponent> view = super.createTreeView(viewDescriptor, actionHandler, locale);
     if (viewDescriptor instanceof MobileTreeViewDescriptor) {
+      ((RMobileTree) view.getPeer()).setPosition(((MobileTreeViewDescriptor) viewDescriptor).getPosition().name());
       ((RMobileTree) view.getPeer()).setShowArrow(((MobileTreeViewDescriptor) viewDescriptor).isShowArrow());
     }
     return view;
@@ -555,8 +590,8 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
    */
   @Override
   protected RTree createRTree(ITreeViewDescriptor viewDescriptor) {
-    RMobileTree component = new RMobileTree(getGuidGenerator().generateGUID());
-    return component;
+    RMobileTree mobileTree = new RMobileTree(getGuidGenerator().generateGUID());
+    return mobileTree;
   }
 
   /**
@@ -566,8 +601,8 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
    */
   @Override
   protected RTabContainer createRTabContainer(ITabViewDescriptor viewDescriptor) {
-    RMobileTabContainer component = new RMobileTabContainer(getGuidGenerator().generateGUID());
-    return component;
+    RMobileTabContainer mobileTabContainer = new RMobileTabContainer(getGuidGenerator().generateGUID());
+    return mobileTabContainer;
   }
 
 
@@ -839,7 +874,8 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
    */
   @Override
   protected RForm createRForm(IComponentViewDescriptor viewDescriptor) {
-    return new RMobileForm(getGuidGenerator().generateGUID());
+    RMobileForm mobileForm = new RMobileForm(getGuidGenerator().generateGUID());
+    return mobileForm;
   }
 
   /**
@@ -851,7 +887,8 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
    */
   @Override
   protected RMap createRMap(IMapViewDescriptor viewDescriptor) {
-    return new RMobileMap(getGuidGenerator().generateGUID());
+    RMobileMap mobileMap = new RMobileMap(getGuidGenerator().generateGUID());
+    return mobileMap;
   }
 
   /**
@@ -863,7 +900,8 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
    */
   @Override
   protected RBorderContainer createRBorderContainer(IBorderViewDescriptor viewDescriptor) {
-    return new RMobileBorderContainer(getGuidGenerator().generateGUID());
+    RMobileBorderContainer mobileBorderContainer = new RMobileBorderContainer(getGuidGenerator().generateGUID());
+    return mobileBorderContainer;
   }
 
 
@@ -1006,20 +1044,4 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     }
     return filteredActionMap;
   }
-
-/*
-  public RMobileForm createHeaderForm(String i18nHeaderDescription) {
-    RMobileForm headerForm = new RMobileForm(getGuidGenerator().generateGUID());
-    RLabel headerLabel = new RLabel(getGuidGenerator().generateGUID());
-    headerLabel.setLabel(i18nHeaderDescription);
-    headerForm.setPosition(EPosition.TOP.name());
-    headerForm.setBorderType(EBorderType.NONE.name());
-    headerForm.setLabelsPosition(ELabelPosition.NONE.name());
-    headerForm.setElementLabels(headerLabel);
-    headerForm.setElements(headerLabel);
-    headerForm.setElementWidths(1);
-    headerForm.setLabelHorizontalPositions(EHorizontalPosition.LEFT.name());
-    return headerForm;
-  }
-*/
 }

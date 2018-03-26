@@ -18,6 +18,9 @@
  */
 package org.jspresso.framework.view.descriptor.mobile;
 
+import java.util.List;
+
+import org.jspresso.framework.view.descriptor.EPosition;
 import org.jspresso.framework.view.descriptor.basic.AbstractRepeaterViewDescriptor;
 
 /**
@@ -28,5 +31,53 @@ import org.jspresso.framework.view.descriptor.basic.AbstractRepeaterViewDescript
  */
 public class MobileRepeaterViewDescriptor extends AbstractRepeaterViewDescriptor implements IMobileViewDescriptor {
 
-  // Empty as of now.
+  private EPosition    position;
+  private List<String> forClientTypes;
+
+  /**
+   * Instantiates a new Mobile repeater view descriptor.
+   */
+  public MobileRepeaterViewDescriptor() {
+    this.position = EPosition.LEFT;
+  }
+
+  /**
+   * Gets position.
+   *
+   * @return the position
+   */
+  @Override
+  public EPosition getPosition() {
+    return position;
+  }
+
+  /**
+   * Sets position.
+   *
+   * @param position
+   *     the position
+   */
+  public void setPosition(EPosition position) {
+    this.position = position;
+  }
+
+  /**
+   * Gets for client types.
+   *
+   * @return the for client types
+   */
+  @Override
+  public List<String> getForClientTypes() {
+    return forClientTypes;
+  }
+
+  /**
+   * Sets for client types.
+   *
+   * @param forClientTypes
+   *     the for client types
+   */
+  public void setForClientTypes(List<String> forClientTypes) {
+    this.forClientTypes = forClientTypes;
+  }
 }

@@ -31,9 +31,9 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  */
 public class MobileCompositePageViewDescriptor extends AbstractMobilePageViewDescriptor {
 
-  private List<IMobilePageSectionViewDescriptor> pageSectionDescriptors;
-  private boolean                                inlineEditing;
-  private MobileCompositePageViewDescriptor      editorPage;
+  private List<IMobileViewDescriptor>       pageSectionDescriptors;
+  private boolean                           inlineEditing;
+  private MobileCompositePageViewDescriptor editorPage;
 
   /**
    * Instantiates a new Mobile composite page view descriptor.
@@ -69,7 +69,7 @@ public class MobileCompositePageViewDescriptor extends AbstractMobilePageViewDes
    * @param pageSectionDescriptors
    *     the page sections
    */
-  public void setPageSectionDescriptors(List<IMobilePageSectionViewDescriptor> pageSectionDescriptors) {
+  public void setPageSectionDescriptors(List<IMobileViewDescriptor> pageSectionDescriptors) {
     this.pageSectionDescriptors = pageSectionDescriptors;
   }
 
@@ -78,17 +78,17 @@ public class MobileCompositePageViewDescriptor extends AbstractMobilePageViewDes
    *
    * @return the page sections
    */
-  public List<IMobilePageSectionViewDescriptor> getPageSectionDescriptors() {
+  public List<IMobileViewDescriptor> getPageSectionDescriptors() {
     if (pageSectionDescriptors != null) {
-      List<IMobilePageSectionViewDescriptor> refinedPageSections = new ArrayList<>();
+      List<IMobileViewDescriptor> refinedPageSections = new ArrayList<>();
       IViewDescriptor previousViewDescriptor = null;
-      for (IMobilePageSectionViewDescriptor pageSection : pageSectionDescriptors) {
+      for (IMobileViewDescriptor pageSection : pageSectionDescriptors) {
         completeChildDescriptor(pageSection, previousViewDescriptor);
         previousViewDescriptor = pageSection;
         if (isInlineEditing()) {
           refinedPageSections.add(pageSection);
         } else {
-          refinedPageSections.add((IMobilePageSectionViewDescriptor) pageSection.cloneReadOnly());
+          refinedPageSections.add((IMobileViewDescriptor) pageSection.cloneReadOnly());
         }
       }
       return refinedPageSections;
@@ -105,7 +105,7 @@ public class MobileCompositePageViewDescriptor extends AbstractMobilePageViewDes
    */
   @Override
   public List<IViewDescriptor> getChildViewDescriptors() {
-    List<IMobilePageSectionViewDescriptor> childViewDescriptors = getPageSectionDescriptors();
+    List<IMobileViewDescriptor> childViewDescriptors = getPageSectionDescriptors();
     if (childViewDescriptors != null) {
       return new ArrayList<IViewDescriptor>(childViewDescriptors);
     }
@@ -125,8 +125,8 @@ public class MobileCompositePageViewDescriptor extends AbstractMobilePageViewDes
     }
     editableClone.setInlineEditing(true);
     if (pageSectionDescriptors != null) {
-      List<IMobilePageSectionViewDescriptor> editableSections = new ArrayList<>();
-      for (IMobilePageSectionViewDescriptor section : pageSectionDescriptors) {
+      List<IMobileViewDescriptor> editableSections = new ArrayList<>();
+      for (IMobileViewDescriptor section : pageSectionDescriptors) {
         if (section instanceof MobileComponentViewDescriptor) {
           editableSections.add(section);
         }
@@ -176,9 +176,9 @@ public class MobileCompositePageViewDescriptor extends AbstractMobilePageViewDes
    * @return the mobile composite page view descriptor
    */
   public MobileCompositePageViewDescriptor filterForReading() {
-    List<IMobilePageSectionViewDescriptor> sections = getPageSectionDescriptors();
-    List<IMobilePageSectionViewDescriptor> filteredSections = new ArrayList<>();
-    for (IMobilePageSectionViewDescriptor section : sections) {
+    List<IMobileViewDescriptor> sections = getPageSectionDescriptors();
+    List<IMobileViewDescriptor> filteredSections = new ArrayList<>();
+    for (IMobileViewDescriptor section : sections) {
       if (section instanceof MobileComponentViewDescriptor) {
         MobileComponentViewDescriptor filteredSection = ((MobileComponentViewDescriptor) section).filterForReading();
         if (filteredSection.getPropertyViewDescriptors().size() > 0) {
@@ -199,9 +199,9 @@ public class MobileCompositePageViewDescriptor extends AbstractMobilePageViewDes
    * @return the mobile composite page view descriptor
    */
   public MobileCompositePageViewDescriptor filterForWriting() {
-    List<IMobilePageSectionViewDescriptor> sections = getPageSectionDescriptors();
-    List<IMobilePageSectionViewDescriptor> filteredSections = new ArrayList<>();
-    for (IMobilePageSectionViewDescriptor section : sections) {
+    List<IMobileViewDescriptor> sections = getPageSectionDescriptors();
+    List<IMobileViewDescriptor> filteredSections = new ArrayList<>();
+    for (IMobileViewDescriptor section : sections) {
       if (section instanceof MobileComponentViewDescriptor) {
         MobileComponentViewDescriptor filteredSection = ((MobileComponentViewDescriptor) section).filterForWriting();
         if (filteredSection.getPropertyViewDescriptors().size() > 0) {

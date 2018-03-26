@@ -18,6 +18,9 @@
  */
 package org.jspresso.framework.view.descriptor.mobile;
 
+import java.util.List;
+
+import org.jspresso.framework.view.descriptor.EPosition;
 import org.jspresso.framework.view.descriptor.ESelectionMode;
 import org.jspresso.framework.view.descriptor.basic.AbstractListViewDescriptor;
 
@@ -39,13 +42,17 @@ import org.jspresso.framework.view.descriptor.basic.AbstractListViewDescriptor;
  */
 public class MobileListViewDescriptor extends AbstractListViewDescriptor implements IMobileViewDescriptor {
 
-  private boolean showArrow;
+  private boolean      showArrow;
+  private EPosition    position;
+  private List<String> forClientTypes;
+
 
   /**
    * Instantiates a new Mobile list view descriptor.
    */
   public MobileListViewDescriptor() {
     showArrow = true;
+    this.position = EPosition.LEFT;
     setSelectionMode(ESelectionMode.SINGLE_SELECTION);
   }
 
@@ -53,6 +60,8 @@ public class MobileListViewDescriptor extends AbstractListViewDescriptor impleme
    * Returns {@code false}.
    * <p>
    * {@inheritDoc}
+   *
+   * @return the boolean
    */
   @Override
   public boolean isHorizontallyScrollable() {
@@ -63,6 +72,8 @@ public class MobileListViewDescriptor extends AbstractListViewDescriptor impleme
    * Always false in mobile environment.
    * <p>
    * {@inheritDoc}
+   *
+   * @return the boolean
    */
   @Override
   public boolean isAutoSelectFirstRow() {
@@ -73,6 +84,9 @@ public class MobileListViewDescriptor extends AbstractListViewDescriptor impleme
    * Not supported in mobile environment.
    * <p>
    * {@inheritDoc}
+   *
+   * @param autoSelectFirstRow
+   *     the auto select first row
    */
   @Override
   public void setAutoSelectFirstRow(boolean autoSelectFirstRow) {
@@ -91,9 +105,50 @@ public class MobileListViewDescriptor extends AbstractListViewDescriptor impleme
   /**
    * Sets show arrow.
    *
-   * @param showArrow the show arrow
+   * @param showArrow
+   *     the show arrow
    */
   public void setShowArrow(boolean showArrow) {
     this.showArrow = showArrow;
+  }
+
+  /**
+   * Gets position.
+   *
+   * @return the position
+   */
+  @Override
+  public EPosition getPosition() {
+    return position;
+  }
+
+  /**
+   * Sets position.
+   *
+   * @param position
+   *     the position
+   */
+  public void setPosition(EPosition position) {
+    this.position = position;
+  }
+
+  /**
+   * Gets for client types.
+   *
+   * @return the for client types
+   */
+  @Override
+  public List<String> getForClientTypes() {
+    return forClientTypes;
+  }
+
+  /**
+   * Sets for client types.
+   *
+   * @param forClientTypes
+   *     the for client types
+   */
+  public void setForClientTypes(List<String> forClientTypes) {
+    this.forClientTypes = forClientTypes;
   }
 }

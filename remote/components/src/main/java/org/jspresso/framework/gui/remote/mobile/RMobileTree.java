@@ -29,12 +29,14 @@ public class RMobileTree extends RTree {
 
   private static final long serialVersionUID = 3702939429412474203L;
   private boolean showArrow;
+  private String  position;
+
 
   /**
    * Constructs a new {@code RMobileTree} instance.
    *
    * @param guid
-   *          the guid.
+   *     the guid.
    */
   public RMobileTree(String guid) {
     super(guid);
@@ -60,9 +62,29 @@ public class RMobileTree extends RTree {
   /**
    * Sets show arrow.
    *
-   * @param showArrow the show arrow
+   * @param showArrow
+   *     the show arrow
    */
   public void setShowArrow(boolean showArrow) {
     this.showArrow = showArrow;
+  }
+
+  /**
+   * Gets position.
+   *
+   * @return the position
+   */
+  public String getPosition() {
+    return position;
+  }
+
+  /**
+   * Sets position.
+   *
+   * @param position
+   *     the position
+   */
+  public void setPosition(String position) {
+    this.position = position;
   }
 }

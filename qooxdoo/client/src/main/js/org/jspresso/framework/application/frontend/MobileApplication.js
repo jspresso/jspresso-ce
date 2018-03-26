@@ -59,7 +59,7 @@
  * @use(org.jspresso.framework.gui.remote.mobile.RMobileMap)
  * @use(org.jspresso.framework.gui.remote.mobile.RMobileBorderContainer)
  * @use(org.jspresso.framework.gui.remote.mobile.RMobileTabContainer)
- * @use(org.jspresso.framework.gui.remote.mobile.RMobileTabContainer)
+ * @use(org.jspresso.framework.gui.remote.mobile.RMobileRepeater)
  * @use(org.jspresso.framework.gui.remote.mobile.RMobileImageComponent)
  * @use(org.jspresso.framework.gui.remote.mobile.RImagePicker)
  * @use(org.jspresso.framework.gui.remote.mobile.RImageCanvas)

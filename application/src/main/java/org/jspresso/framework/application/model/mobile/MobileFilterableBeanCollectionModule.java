@@ -36,8 +36,8 @@ import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
-import org.jspresso.framework.view.descriptor.mobile.IMobilePageSectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.IMobilePageViewDescriptor;
+import org.jspresso.framework.view.descriptor.mobile.IMobileViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileCompositePageViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileNavPageViewDescriptor;
@@ -87,7 +87,7 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
       modulePageView.setModelDescriptor(moduleDescriptor);
 
       IComponentDescriptor<IComponent> realComponentDesc = getFilterComponentDescriptor();
-      IMobilePageSectionViewDescriptor filterViewDesc = (IMobilePageSectionViewDescriptor) getFilterViewDescriptor();
+      IMobileViewDescriptor filterViewDesc = (IMobileViewDescriptor) getFilterViewDescriptor();
       IComponentDescriptorProvider<IQueryComponent> filterModelDescriptorProvider =
           (IComponentDescriptorProvider<IQueryComponent>) moduleDescriptor
           .getPropertyDescriptor(FilterableBeanCollectionModuleDescriptor.FILTER);
@@ -100,7 +100,11 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
                                                                                                 realComponentDesc,
                                                                                                 filterModelDescriptorProvider
                                                                                                     .getComponentDescriptor(),
-                                                                                                fot ? getQueryModuleFilterAction() : null, fos ? getQueryModuleFilterAction() : null,
+                                                                                                fot ?
+                                                                                                    getQueryModuleFilterAction() :
+                                                                                                    null, fos ?
+                                                                                                    getQueryModuleFilterAction() :
+                                                                                                    null,
                                                                                                 Collections.<String,
                                                                                                     Object>emptyMap());
       } else {
@@ -109,7 +113,7 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
         cleanupFilterViewDescriptor(filterViewDesc);
       }
       if (filterViewDesc instanceof MobileCompositePageViewDescriptor) {
-        for (IMobilePageSectionViewDescriptor sectionViewDescriptor : ((MobileCompositePageViewDescriptor)
+        for (IMobileViewDescriptor sectionViewDescriptor : ((MobileCompositePageViewDescriptor)
             filterViewDesc)
             .getPageSectionDescriptors()) {
           if (sectionViewDescriptor instanceof BasicViewDescriptor) {
@@ -188,9 +192,8 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
    * {@inheritDoc}
    */
   @Override
-  public IMobilePageSectionViewDescriptor getElementViewDescriptor() {
-    IMobilePageSectionViewDescriptor elementViewDescriptor = (IMobilePageSectionViewDescriptor) super
-        .getElementViewDescriptor();
+  public IMobileViewDescriptor getElementViewDescriptor() {
+    IMobileViewDescriptor elementViewDescriptor = (IMobileViewDescriptor) super.getElementViewDescriptor();
     if (elementViewDescriptor == null) {
       elementViewDescriptor = new MobileComponentViewDescriptor();
       ((BasicViewDescriptor) elementViewDescriptor).setModelDescriptor(getElementComponentDescriptor());
@@ -207,7 +210,7 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
    */
   @Override
   public void setElementViewDescriptor(IViewDescriptor elementViewDescriptor) {
-    if (!(elementViewDescriptor instanceof IMobilePageSectionViewDescriptor)) {
+    if (!(elementViewDescriptor instanceof IMobileViewDescriptor)) {
       throw new IllegalArgumentException(
           "Mobile filterable bean collection module views only support page views as element views and not :"
               + elementViewDescriptor.getClass().getSimpleName());

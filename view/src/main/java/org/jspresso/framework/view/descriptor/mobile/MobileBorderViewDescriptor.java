@@ -31,7 +31,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
  * @author Vincent Vandenschrick
  */
 public class MobileBorderViewDescriptor extends BasicBorderViewDescriptor
-    implements IMobilePageSectionViewDescriptor, IMobilePageAware {
+    implements IMobileViewDescriptor, IMobilePageAware {
 
   private IDisplayableAction enterAction;
   private IDisplayableAction backAction;
@@ -51,7 +51,7 @@ public class MobileBorderViewDescriptor extends BasicBorderViewDescriptor
   }
 
   /**
-   *  Not supported in mobile environment.
+   * Not supported in mobile environment.
    * <p>
    * {@inheritDoc}
    */
@@ -61,7 +61,7 @@ public class MobileBorderViewDescriptor extends BasicBorderViewDescriptor
   }
 
   /**
-   *  Not supported in mobile environment.
+   * Not supported in mobile environment.
    * <p>
    * {@inheritDoc}
    */
@@ -83,7 +83,8 @@ public class MobileBorderViewDescriptor extends BasicBorderViewDescriptor
   /**
    * Sets enter action.
    *
-   * @param enterAction the enter action
+   * @param enterAction
+   *     the enter action
    */
   @Override
   public void setEnterAction(IDisplayableAction enterAction) {
@@ -103,7 +104,8 @@ public class MobileBorderViewDescriptor extends BasicBorderViewDescriptor
   /**
    * Sets back action.
    *
-   * @param backAction the back action
+   * @param backAction
+   *     the back action
    */
   @Override
   public void setBackAction(IDisplayableAction backAction) {
@@ -123,7 +125,8 @@ public class MobileBorderViewDescriptor extends BasicBorderViewDescriptor
   /**
    * Sets main action.
    *
-   * @param mainAction the main action
+   * @param mainAction
+   *     the main action
    */
   @Override
   public void setMainAction(IDisplayableAction mainAction) {
@@ -165,7 +168,8 @@ public class MobileBorderViewDescriptor extends BasicBorderViewDescriptor
   /**
    * Sets swipe left action.
    *
-   * @param swipeLeftAction the swipe left action
+   * @param swipeLeftAction
+   *     the swipe left action
    */
   @Override
   public void setSwipeLeftAction(IDisplayableAction swipeLeftAction) {
@@ -185,7 +189,8 @@ public class MobileBorderViewDescriptor extends BasicBorderViewDescriptor
   /**
    * Sets swipe right action.
    *
-   * @param swipeRightAction the swipe right action
+   * @param swipeRightAction
+   *     the swipe right action
    */
   @Override
   public void setSwipeRightAction(IDisplayableAction swipeRightAction) {

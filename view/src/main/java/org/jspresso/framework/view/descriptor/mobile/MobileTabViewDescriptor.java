@@ -28,7 +28,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicTabViewDescriptor;
  *
  * @author Vincent Vandenschrick
  */
-public class MobileTabViewDescriptor extends BasicTabViewDescriptor implements IMobilePageSectionViewDescriptor {
+public class MobileTabViewDescriptor extends BasicTabViewDescriptor implements IMobileViewDescriptor {
 
   private boolean      carouselMode;
   private EPosition    position;

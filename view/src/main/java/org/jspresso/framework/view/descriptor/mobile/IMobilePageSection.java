@@ -18,12 +18,20 @@
  */
 package org.jspresso.framework.view.descriptor.mobile;
 
+import org.jspresso.framework.util.gui.IClientTypeAware;
+import org.jspresso.framework.view.descriptor.EPosition;
+
 /**
- * Marker interface for mobile page view descriptors.
+ * Marker interface for mobile page sections view descriptors.
  *
  * @author Vincent Vandenschrick
  */
-public interface IMobilePageViewDescriptor extends IMobileViewDescriptor, IMobilePageAware {
+public interface IMobilePageSection extends IClientTypeAware {
 
-  // Jus a marker as of now.
+  /**
+   * Gets position, either LEFT, RIGHT, TOP or BOTTOM.
+   *
+   * @return the position
+   */
+  EPosition getPosition();
 }

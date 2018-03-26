@@ -27,6 +27,10 @@ qx.Class.define("org.jspresso.framework.gui.remote.mobile.RMobileTree", {
   properties: {
     showArrow: {
       check: "Boolean"
+    },
+    position: {
+      check: "String",
+      nullable: true
     }
   }
 
