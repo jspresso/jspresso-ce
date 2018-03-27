@@ -25,13 +25,24 @@
 
   <bean id="editPageAction" class="org.jspresso.framework.application.frontend.action.remote.mobile.EditCurrentPageAction">
     <property name="name" value="modify"/>
+    <property name="iconImageURL">
+      <bean parent="abstractFwIconImageURL">
+        <constructor-arg index="0" value="modify"/>
+      </bean>
+    </property>
   </bean>
 
   <bean id="backPageAction" class="org.jspresso.framework.application.frontend.action.remote.mobile.BackPageAction">
     <property name="name" value="back"/>
+    <property name="iconImageURL">
+      <bean parent="abstractFwIconImageURL">
+        <constructor-arg index="0" value="backward"/>
+      </bean>
+    </property>
   </bean>
 
   <bean id="cleanModuleAndGoBackIfTransient"
+        parent="backPageAction"
         class="org.jspresso.framework.application.frontend.action.remote.mobile.CleanModuleAndGoBackIfTransientAction">
   </bean>
 
