@@ -120,17 +120,11 @@ qx.Mixin.define("org.jspresso.framework.patch.MCard", {
      */
     _swapWidget: function () {
       if (this.__patchCurrentWidget) {
-        var pageToExclude = this.__patchCurrentWidget;
-        if (pageToExclude.getContainerElement()) {
+        var widgetToExclude = this.__patchCurrentWidget;
+        if (widgetToExclude.getContainerElement()) {
             // Might already be destroyed
-          pageToExclude.removeCssClass("active");
-          // Makes the page flicker
-          /*
-          qx.event.Timer.once(function () {
-            pageToExclude.exclude();
-          }, this, 0);
-          */
-          pageToExclude.exclude();
+          widgetToExclude.removeCssClass("active");
+          widgetToExclude.exclude();
         }
       }
       this.__patchCurrentWidget = this.__patchNextWidget;

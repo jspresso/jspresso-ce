@@ -1364,7 +1364,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @param remoteCardContainer {org.jspresso.framework.gui.remote.RCardContainer}
      */
     _createCardContainer: function (remoteCardContainer) {
-      var cardContainer = this._createCardContainerComponent();
+      var showAnimation = true;
+      if (remoteCardContainer instanceof org.jspresso.framework.gui.remote.mobile.RMobileCardContainer) {
+        showAnimation = false;
+      }
+      var cardContainer = this._createCardContainerComponent(showAnimation);
       cardContainer.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__EXISTING_CARD_NAMES, []);
       cardContainer.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__EXISTING_CARDS, []);
 
@@ -1561,10 +1565,13 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     },
 
     /**
+     * @param showAnimation {Boolean}
      * @return {qx.ui.mobile.core.Widget}
      */
-    _createCardContainerComponent: function () {
-      return new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.Card());
+    _createCardContainerComponent: function (showAnimation) {
+      var cardLayout = new qx.ui.mobile.layout.Card();
+      cardLayout.setShowAnimation(showAnimation);
+      return new qx.ui.mobile.container.Composite(cardLayout);
     },
 
     /**
@@ -1577,15 +1584,21 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       if (selectedCard && !(selectedCard instanceof qx.ui.mobile.page.NavigationPage)) {
         selectedCard.show();
       }
-      var pageToShow = this.getActualPageToShow(selectedCard);
-      var pageToHide = cardContainer.getUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE);
-      if (pageToHide && pageToHide != pageToShow) {
-        pageToHide.setVisibility("excluded");
-      }
-      // Put selectedCard as current page and not pageToShow since selectedCard can be a nested card container.
-      cardContainer.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE, selectedCard);
-      if (pageToShow) {
-        this._getActionHandler().showPage(pageToShow);
+      if (selectedCard instanceof qx.ui.mobile.page.NavigationPage) {
+        var pageToShow = this.getActualPageToShow(selectedCard);
+        var pageToHide = cardContainer.getUserData(
+            org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE);
+        if (pageToHide instanceof qx.ui.mobile.page.NavigationPage && pageToHide != pageToShow) {
+          pageToHide.setVisibility("excluded");
+        }
+        // Put selectedCard as current page and not pageToShow since selectedCard can be a nested card container.
+        if (selectedCard instanceof qx.ui.mobile.page.NavigationPage) {
+          cardContainer.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE,
+              selectedCard);
+        }
+        if (pageToShow) {
+          this._getActionHandler().showPage(pageToShow);
+        }
       }
     },
 
