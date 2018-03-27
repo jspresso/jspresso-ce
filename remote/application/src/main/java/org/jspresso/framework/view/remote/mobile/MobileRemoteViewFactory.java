@@ -363,6 +363,9 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     if (viewComponent.getEditorPage() != null) {
       final RAction editAction = getActionFactory().createAction(getEditPageAction(), actionHandler, view, locale);
       viewComponent.setEditAction(editAction);
+      if (viewComponent.getMainAction() == null) {
+        viewComponent.setMainAction(editAction);
+      }
       editAction.setEnabled(view.getConnector().isWritable());
       view.getConnector().addPropertyChangeListener(IValueConnector.WRITABLE_PROPERTY, new PropertyChangeListener() {
         @Override
@@ -406,17 +409,24 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
       }
     }
     viewComponent.setPageSections(pageSections.toArray(new RComponent[pageSections.size()]));
-    if (!viewDescriptor.isInlineEditing() && !viewDescriptor.isReadOnly()) {
-      MobileCompositePageViewDescriptor filteredEditorPage = viewDescriptor.getEditorPage().filterForWriting();
-      ICompositeView<RComponent> editorPageView = (ICompositeView<RComponent>) createView(filteredEditorPage,
-          actionHandler, locale);
-      RMobileCompositePage editorPage = (RMobileCompositePage) editorPageView.getView().getPeer();
+    if (!viewDescriptor.isReadOnly()) {
       RAction saveAction = getActionFactory().createAction(getSavePageAction(), actionHandler, view, locale);
-      editorPage.setMainAction(saveAction);
       RAction cancelAction = getActionFactory().createAction(getCancelPageAction(), actionHandler, view, locale);
-      editorPage.setBackAction(cancelAction);
-      viewComponent.setEditorPage(editorPage);
-      childrenViews.add(editorPageView);
+      if (viewDescriptor.isInlineEditing()) {
+        if (viewComponent.getMainAction() == null) {
+          viewComponent.setMainAction(saveAction);
+        }
+        viewComponent.setBackAction(cancelAction);
+      } else {
+        MobileCompositePageViewDescriptor filteredEditorPage = viewDescriptor.getEditorPage().filterForWriting();
+        ICompositeView<RComponent> editorPageView = (ICompositeView<RComponent>) createView(filteredEditorPage,
+            actionHandler, locale);
+        RMobileCompositePage editorPage = (RMobileCompositePage) editorPageView.getView().getPeer();
+        editorPage.setMainAction(saveAction);
+        editorPage.setBackAction(cancelAction);
+        viewComponent.setEditorPage(editorPage);
+        childrenViews.add(editorPageView);
+      }
     }
     view.setChildren(childrenViews);
     // Anticipate connector creation in order to have editor action correctly reacting to model change. see #391
@@ -424,6 +434,9 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     if (viewComponent.getEditorPage() != null) {
       final RAction editAction = getActionFactory().createAction(getEditPageAction(), actionHandler, view, locale);
       viewComponent.setEditAction(editAction);
+      if (viewComponent.getMainAction() == null) {
+        viewComponent.setMainAction(editAction);
+      }
       editAction.setEnabled(view.getConnector().isWritable());
       view.getConnector().addPropertyChangeListener(IValueConnector.WRITABLE_PROPERTY, new PropertyChangeListener() {
         @Override
