@@ -2594,6 +2594,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         columnToolTips[i] = -1;
         if (rColumn.getToolTipState()) {
           columnToolTips[i] = remoteTable.getRowPrototype().getChildren().indexOf(rColumn.getToolTipState());
+        } else if (rColumn.getToolTip() == "") {
+          columnToolTips[i] = -2; // To get rid of tooltips
         }
       }
       tableModel.setDynamicToolTipIndices(columnToolTips);

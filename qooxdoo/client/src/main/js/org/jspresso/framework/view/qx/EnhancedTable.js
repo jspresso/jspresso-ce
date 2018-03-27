@@ -64,12 +64,13 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedTable", {
       /** @type {qx.ui.tooltip.ToolTip } */
       var tt = this.getToolTip();
       if (v != null && v != "") {
+        this.setBlockToolTip(false);
         tt.setLabel(v);
         if (tt.isVisible()) {
           tt.placeToPointer(e);
         }
       } else {
-        tt.hide();
+        this.setBlockToolTip(true);
       }
     },
 

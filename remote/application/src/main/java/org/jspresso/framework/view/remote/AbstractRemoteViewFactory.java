@@ -318,9 +318,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
 
     viewPeer.setLabel(viewDescriptor.getI18nName(actionHandler, locale));
     String viewDescription = computeViewDescription(viewDescriptor, actionHandler, locale);
-    if (viewDescription != null && viewDescription.length() > 0) {
-      viewPeer.setToolTip(viewDescription);
-    }
+    viewPeer.setToolTip(viewDescription);
     if (viewDescriptor.getForeground() != null && ColorHelper.isColorSpec(viewDescriptor.getForeground())) {
       viewPeer.setForeground(viewDescriptor.getForeground());
     }

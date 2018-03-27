@@ -301,7 +301,10 @@ qx.Class.define("org.jspresso.framework.view.qx.RTableModel", {
     getToolTip: function (column, row) {
       if (row != null && row >= 0) {
         if (column != null && column >= 0) {
-          if (this.__dynamicToolTipIndices[column] >= 0) {
+          if (this.__dynamicToolTipIndices[column] == -2) {
+            // This is a special handling to remove tooltips.
+            return null;
+          } else if (this.__dynamicToolTipIndices[column] >= 0) {
             var v = this.getRowData(row).getChildren().getItem(this.__dynamicToolTipIndices[column]).getValue();
             if (v != null && (v instanceof String || typeof(v) === 'string')) {
               return v;
