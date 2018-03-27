@@ -62,7 +62,7 @@ public class BasicCardViewDescriptor extends AbstractCardViewDescriptor {
    * their names.
    *
    * @param cardNameSelector
-   *          the cardNameSelector to set.
+   *     the cardNameSelector to set.
    */
   public void setCardNameSelector(ICardNameSelector cardNameSelector) {
     this.cardNameSelector = cardNameSelector;
@@ -74,11 +74,10 @@ public class BasicCardViewDescriptor extends AbstractCardViewDescriptor {
    * registered card name selector.
    *
    * @param cardViewDescriptors
-   *          the cardViewDescriptors to set.
+   *     the cardViewDescriptors to set.
    */
   @Override
-  public void setCardViewDescriptors(
-      Map<String, IViewDescriptor> cardViewDescriptors) {
+  public void setCardViewDescriptors(Map<String, IViewDescriptor> cardViewDescriptors) {
     super.setCardViewDescriptors(cardViewDescriptors);
   }
 
@@ -92,11 +91,40 @@ public class BasicCardViewDescriptor extends AbstractCardViewDescriptor {
     IViewDescriptor cardViewDescriptor = super.getCardViewDescriptor(cardName);
     if (cardViewDescriptor == null) {
       if (cardNameSelector instanceof ICardProvider) {
-        cardViewDescriptor = ((ICardProvider) cardNameSelector)
-            .getCardViewDescriptor(cardName);
+        cardViewDescriptor = ((ICardProvider) cardNameSelector).getCardViewDescriptor(cardName);
         putCardViewDescriptor(cardName, cardViewDescriptor);
       }
     }
     return cardViewDescriptor;
   }
+
+  /**
+   * Clone read only basic card view descriptor.
+   *
+   * @return the basic card view descriptor
+   */
+  @Override
+  public synchronized BasicCardViewDescriptor cloneReadOnly() {
+    if (readOnlyClone == null) {
+      readOnlyClone = new BasicCardViewDescriptor() {
+        @Override
+        public IViewDescriptor getCardViewDescriptor(String cardName) {
+          IViewDescriptor cardViewDescriptor = super.getCardViewDescriptor(cardName);
+          if (cardViewDescriptor == null) {
+            IViewDescriptor delegate = BasicCardViewDescriptor.this.getCardViewDescriptor(cardName);
+            cardViewDescriptor = (IViewDescriptor) delegate.cloneReadOnly();
+            putCardViewDescriptor(cardName, cardViewDescriptor);
+          }
+          return cardViewDescriptor;
+        }
+
+        @Override
+        public String getCardNameForModel(Object model, Subject subject) {
+          return BasicCardViewDescriptor.this.getCardNameForModel(model, subject);
+        }
+      };
+    }
+    return (BasicCardViewDescriptor) readOnlyClone;
+  }
+
 }

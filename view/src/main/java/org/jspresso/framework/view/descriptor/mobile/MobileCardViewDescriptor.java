@@ -20,10 +20,10 @@ package org.jspresso.framework.view.descriptor.mobile;
 
 import java.util.List;
 
-import org.jspresso.framework.view.action.IDisplayableAction;
+import javax.security.auth.Subject;
+
 import org.jspresso.framework.view.descriptor.EPosition;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicCardViewDescriptor;
 
 /**
@@ -47,7 +47,7 @@ public class MobileCardViewDescriptor extends BasicCardViewDescriptor
   /**
    * Gets  position.
    *
-   * @return the  position
+   * @return the position
    */
   @Override
   public EPosition getPosition() {
@@ -83,5 +83,36 @@ public class MobileCardViewDescriptor extends BasicCardViewDescriptor
    */
   public void setForClientTypes(List<String> forClientTypes) {
     this.forClientTypes = forClientTypes;
+  }
+
+  /**
+   * Clone read only mobile card view descriptor.
+   *
+   * @return the mobile card view descriptor
+   */
+  @Override
+  public synchronized MobileCardViewDescriptor cloneReadOnly() {
+    if (readOnlyClone == null) {
+      readOnlyClone = new MobileCardViewDescriptor() {
+        @Override
+        public IViewDescriptor getCardViewDescriptor(String cardName) {
+          IViewDescriptor cardViewDescriptor = super.getCardViewDescriptor(cardName);
+          if (cardViewDescriptor == null) {
+            IViewDescriptor delegate = MobileCardViewDescriptor.this.getCardViewDescriptor(cardName);
+            cardViewDescriptor = (IViewDescriptor) delegate.cloneReadOnly();
+            putCardViewDescriptor(cardName, cardViewDescriptor);
+          }
+          return cardViewDescriptor;
+        }
+
+        @Override
+        public String getCardNameForModel(Object model, Subject subject) {
+          return MobileCardViewDescriptor.this.getCardNameForModel(model, subject);
+        }
+      };
+      ((MobileCardViewDescriptor) readOnlyClone).position = MobileCardViewDescriptor.this.position;
+      ((MobileCardViewDescriptor) readOnlyClone).forClientTypes = MobileCardViewDescriptor.this.forClientTypes;
+    }
+    return (MobileCardViewDescriptor) readOnlyClone;
   }
 }
