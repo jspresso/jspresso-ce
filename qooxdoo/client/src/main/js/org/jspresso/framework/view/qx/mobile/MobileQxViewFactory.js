@@ -1573,7 +1573,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           if (rCardComponent instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
             if (cardContainer.getUserData("position")) {
               // the card view is actually a page section... Should add the card page as a section.
-              var holdingPage = cardContainer.getUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE);
+              var holdingPage = cardContainer.getUserData(
+                  org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE);
               cardComponent = this.__createPageSectionForNavPage(cardComponent, holdingPage, rCardComponent);
               cardContainer.add(cardComponent);
             }
@@ -1609,21 +1610,20 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @param selectedCard  {qx.ui.mobile.core.Widget}
      */
     _selectCard: function (cardContainer, selectedCard) {
+      var isSection = cardContainer.getUserData("position");
       if (selectedCard && !(selectedCard instanceof qx.ui.mobile.page.NavigationPage)) {
         selectedCard.show();
       }
-      if (selectedCard instanceof qx.ui.mobile.page.NavigationPage) {
+      if (!isSection) {
         var pageToShow = this.getActualPageToShow(selectedCard);
         var pageToHide = cardContainer.getUserData(
             org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE);
-        if (pageToHide instanceof qx.ui.mobile.page.NavigationPage && pageToHide != pageToShow) {
+        if (pageToHide && pageToHide != pageToShow) {
           pageToHide.setVisibility("excluded");
         }
         // Put selectedCard as current page and not pageToShow since selectedCard can be a nested card container.
-        if (selectedCard instanceof qx.ui.mobile.page.NavigationPage) {
-          cardContainer.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE,
-              selectedCard);
-        }
+        cardContainer.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE,
+            selectedCard);
         if (pageToShow) {
           this._getActionHandler().showPage(pageToShow);
         }
