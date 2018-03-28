@@ -764,18 +764,6 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
    * {@inheritDoc}
    */
   @Override
-  protected void completeViewWithDynamicLabel(RComponent viewComponent, IViewDescriptor viewDescriptor,
-                                              IComponentDescriptor<?> componentDescriptor,
-                                              ICompositeValueConnector connectorToComplete) {
-    // Not supported in mobile environments.
-  }
-
-  /**
-   * Not supported in mobile environment.
-   * <p/>
-   * {@inheritDoc}
-   */
-  @Override
   protected void completeViewWithDynamicToolTip(RComponent viewComponent, IViewDescriptor viewDescriptor,
                                                 IComponentDescriptor<?> componentDescriptor,
                                                 ICompositeValueConnector connectorToComplete) {

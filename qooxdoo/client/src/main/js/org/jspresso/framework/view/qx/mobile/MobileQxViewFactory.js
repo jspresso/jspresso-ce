@@ -488,12 +488,32 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         container = this._createTabContainer(remoteContainer);
       }
       if (container instanceof qx.ui.mobile.page.NavigationPage) {
+        this._bindDynamicTitle(container, remoteContainer);
         if (remoteContainer instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAware) {
           this.installPageActions(remoteContainer, container);
         }
         container.setUserData("pageGuid", remoteContainer.getGuid());
       }
       return container;
+    },
+
+    _bindDynamicTitle: function (component, rComponent) {
+      var labelState = rComponent.getLabelState();
+      if (labelState) {
+        if (component instanceof qx.ui.mobile.page.NavigationPage) {
+          this._getRemotePeerRegistry().register(labelState);
+          var modelController = new qx.data.controller.Object(labelState);
+          modelController.addTarget(component, "title", "value", false, {
+            converter: function (modelValue, model) {
+              if (modelValue) {
+                return modelValue;
+              } else {
+                return rComponent.getLabel();
+              }
+            }
+          });
+        }
+      }
     },
 
     __copyPageActions: function (source, target) {

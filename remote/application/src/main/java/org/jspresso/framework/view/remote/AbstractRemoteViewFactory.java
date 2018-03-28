@@ -2028,6 +2028,25 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     }
   }
 
+  @Override
+  protected void completeViewWithDynamicLabel(RComponent viewComponent, IViewDescriptor viewDescriptor,
+                                              IComponentDescriptor<?> componentDescriptor,
+                                              ICompositeValueConnector connectorToComplete) {
+    if (viewComponent.getLabelState() == null) { // Not previously set by view creation
+      String dynamicLabelProperty = computeDynamicLabelPropertyName(viewDescriptor, componentDescriptor, null);
+      if (dynamicLabelProperty != null) {
+        IValueConnector labelConnector = connectorToComplete.getChildConnector(dynamicLabelProperty);
+        if (labelConnector == null) {
+          labelConnector = getConnectorFactory().createValueConnector(dynamicLabelProperty);
+          connectorToComplete.addChildConnector(dynamicLabelProperty, labelConnector);
+        }
+        if (labelConnector instanceof IRemoteStateOwner) {
+          viewComponent.setLabelState(((IRemoteStateOwner) labelConnector).getState());
+        }
+      }
+    }
+  }
+
   /**
    * Configures a property view action by initializing its static context.
    *
