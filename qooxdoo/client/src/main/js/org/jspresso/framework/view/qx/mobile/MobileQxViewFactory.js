@@ -794,6 +794,54 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       }
     },
 
+    __createPageSectionForNavPage: function (navPage, holdingPage, remoteNavPage) {
+      /** @type {qx.ui.mobile.page.NavigationPage} */
+      var nextPage = navPage;
+      this.linkNextPageBackButton(nextPage, holdingPage, null, null);
+      var listModel = new qx.data.Array();
+      remoteNavPage.setUserData("next", nextPage);
+      if (remoteNavPage.getLabelState()) {
+        this._getRemotePeerRegistry().register(remoteNavPage.getLabelState());
+      }
+      if (remoteNavPage.getToolTipState()) {
+        this._getRemotePeerRegistry().register(remoteNavPage.getToolTipState());
+      }
+      listModel.push(remoteNavPage);
+      var list = new qx.ui.mobile.list.List({
+        configureItem: function (item, data, row) {
+          var section = data;
+          if (section.getLabelState()) {
+            item.setTitle(section.getLabelState().getValue());
+          } else {
+            item.setTitle(section.getLabel());
+          }
+          if (section.getToolTipState()) {
+            item.setSubtitle(section.getToolTipState().getValue());
+          } else {
+            item.setSubtitle(section.getToolTip());
+          }
+          if (section.getIcon()) {
+            item.setImage(org.jspresso.framework.view.qx.AbstractQxViewFactory.completeForSVG(
+                section.getIcon().getImageUrlSpec()));
+          }
+          item.setShowArrow(true);
+        }
+      });
+      list.addCssClass("jspresso-list");
+      list.setModel(listModel);
+      list.addListener("changeSelection", function (evt) {
+        var selectedIndex = evt.getData();
+        /** @type {qx.ui.mobile.list.List} */
+        var l = evt.getCurrentTarget();
+        var pageToShow = this.getActualPageToShow(l.getModel().getItem(selectedIndex).getUserData("next"));
+        if (pageToShow && pageToShow.getVisibility() != "visible") {
+          this._getActionHandler().showDetailPage(pageToShow);
+        }
+      }, this);
+      list.setUserData("position", remoteNavPage.getPosition());
+      return list;
+    },
+
     /**
      *
      * @param rPageSections {org.jspresso.framework.gui.remote.RComponent[]}
@@ -807,54 +855,13 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           var remotePageSection = rPageSections[i];
           var pageSection = this.createComponent(remotePageSection);
           if (pageSection instanceof qx.ui.mobile.page.NavigationPage) {
-            /** @type {qx.ui.mobile.page.NavigationPage} */
-            var nextPage = pageSection;
-            this.linkNextPageBackButton(nextPage, holdingPage, null, null);
-            var listModel = new qx.data.Array();
-            remotePageSection.setUserData("next", nextPage);
-            if (remotePageSection.getLabelState()) {
-              this._getRemotePeerRegistry().register(remotePageSection.getLabelState());
-            }
-            if (remotePageSection.getToolTipState()) {
-              this._getRemotePeerRegistry().register(remotePageSection.getToolTipState());
-            }
-            listModel.push(remotePageSection);
-            var list = new qx.ui.mobile.list.List({
-              configureItem: function (item, data, row) {
-                var section = data;
-                if (section.getLabelState()) {
-                  item.setTitle(section.getLabelState().getValue());
-                } else {
-                  item.setTitle(section.getLabel());
-                }
-                if (section.getToolTipState()) {
-                  item.setSubtitle(section.getToolTipState().getValue());
-                } else {
-                  item.setSubtitle(section.getToolTip());
-                }
-                if (section.getIcon()) {
-                  item.setImage(org.jspresso.framework.view.qx.AbstractQxViewFactory.completeForSVG(
-                      section.getIcon().getImageUrlSpec()));
-                }
-                item.setShowArrow(true);
-              }
-            });
-            list.addCssClass("jspresso-list");
-            list.setModel(listModel);
-            list.addListener("changeSelection", function (evt) {
-              var selectedIndex = evt.getData();
-              /** @type {qx.ui.mobile.list.List} */
-              var l = evt.getCurrentTarget();
-              var pageToShow = this.getActualPageToShow(l.getModel().getItem(selectedIndex).getUserData("next"));
-              if (pageToShow && pageToShow.getVisibility() != "visible") {
-                this._getActionHandler().showDetailPage(pageToShow);
-              }
-            }, this);
-            list.setUserData("position", remotePageSection.getPosition());
+            var list = this.__createPageSectionForNavPage(pageSection, holdingPage, remotePageSection);
             sections.push(list);
           } else {
             remotePageSection.setUserData("position", remotePageSection.getPosition());
             pageSection.setUserData("position", remotePageSection.getPosition());
+            pageSection.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE,
+                holdingPage);
             sections.push(remotePageSection);
             sections.push(pageSection);
           }
@@ -1563,15 +1570,21 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
             this.__copyPageActions(remoteMobileCardPage, rCardComponent);
           }
           var cardComponent = this.createComponent(rCardComponent);
-          existingCards.push(cardComponent);
-          cardComponent.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CARD_NAME, cardName);
           if (rCardComponent instanceof org.jspresso.framework.gui.remote.mobile.RMobilePage) {
+            if (cardContainer.getUserData("position")) {
+              // the card view is actually a page section... Should add the card page as a section.
+              var holdingPage = cardContainer.getUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE);
+              cardComponent = this.__createPageSectionForNavPage(cardComponent, holdingPage, rCardComponent);
+              cardContainer.add(cardComponent);
+            }
             // Do not actually add the card to the card container since it's added to the manager.
             // cardContainer.add(cardComponent);
           } else {
             cardContainer.add(cardComponent);
-            this._selectCard(cardContainer, cardComponent);
           }
+          existingCards.push(cardComponent);
+          cardComponent.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CARD_NAME, cardName);
+          this._selectCard(cardContainer, cardComponent);
           this.linkNextPageBackButton(cardComponent, cardContainer.getUserData("previousPage"), null, null);
         } else {
           this._selectCard(cardContainer, existingCards[existingCardNames.indexOf(cardName)]);

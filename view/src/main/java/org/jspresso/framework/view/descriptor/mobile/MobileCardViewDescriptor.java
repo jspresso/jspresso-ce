@@ -99,7 +99,9 @@ public class MobileCardViewDescriptor extends BasicCardViewDescriptor
           IViewDescriptor cardViewDescriptor = super.getCardViewDescriptor(cardName);
           if (cardViewDescriptor == null) {
             IViewDescriptor delegate = MobileCardViewDescriptor.this.getCardViewDescriptor(cardName);
-            cardViewDescriptor = (IViewDescriptor) delegate.cloneReadOnly();
+            if (delegate != null) {
+              cardViewDescriptor = (IViewDescriptor) delegate.cloneReadOnly();
+            }
             putCardViewDescriptor(cardName, cardViewDescriptor);
           }
           return cardViewDescriptor;
