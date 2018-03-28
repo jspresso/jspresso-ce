@@ -65,7 +65,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
   members: {
 
     /** @type {Array} */
-    __monthNames: null, /** @type {qx.ui.mobile.form.TextField} */
+    __monthNames: null,
+    /** @type {qx.ui.mobile.form.TextField} */
     __textFieldToBlur: null,
 
     /**
@@ -194,10 +195,17 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           }
           item.setEnabled(data.getEnabled());
           item.setSelectable(data.getEnabled());
+          var atLeastOneAction = false;
           if (data.getHiddenWhenDisabled() && !data.getEnabled()) {
             item.setVisibility("excluded");
           } else {
             item.setVisibility("visible");
+            atLeastOneAction = true;
+          }
+          if (atLeastOneAction) {
+            extraButton.setVisibility("visible");
+          } else {
+            extraButton.setVisibility("excluded");
           }
         }
       });
@@ -328,7 +336,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       this._getRemotePeerRegistry().register(pageAction);
       page.setButtonText(pageAction.getName());
       if (pageAction.getIcon()) {
-        page.setButtonIcon(org.jspresso.framework.view.qx.AbstractQxViewFactory.completeForSVG(pageAction.getIcon().getImageUrlSpec()));
+        page.setButtonIcon(org.jspresso.framework.view.qx.AbstractQxViewFactory.completeForSVG(
+            pageAction.getIcon().getImageUrlSpec()));
       }
       page.addListener("action", function (event) {
         this._getActionHandler().execute(pageAction);
@@ -549,10 +558,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           // This is a card container or a border container with a nested page
           pageToShow = this.getActualPageToShow(currentPage);
         } else {
-          var pages = nextPage.getUserData(
-              org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__EXISTING_CARDS);
+          var pages = nextPage.getUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__EXISTING_CARDS);
           if (pages && pages.length > 0) {
-            pageToShow = pages[pages.length -1];
+            pageToShow = pages[pages.length - 1];
           } else if (nextPage[org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__GET_CHILDREN_METHOD]) {
             var children = nextPage.getChildren();
             if (children && children.length == 1) {
@@ -825,7 +833,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
                   item.setSubtitle(section.getToolTip());
                 }
                 if (section.getIcon()) {
-                  item.setImage(org.jspresso.framework.view.qx.AbstractQxViewFactory.completeForSVG(section.getIcon().getImageUrlSpec()));
+                  item.setImage(org.jspresso.framework.view.qx.AbstractQxViewFactory.completeForSVG(
+                      section.getIcon().getImageUrlSpec()));
                 }
                 item.setShowArrow(true);
               }
@@ -1022,9 +1031,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     },
 
     _addSectionHeader: function (container, remoteSection) {
-      if (remoteSection
-          && (remoteSection.getBorderType() == "TITLED" || remoteSection.getBorderType() == "TITLED_ACTIONS")
-          && remoteSection.getLabel()) {
+      if (remoteSection && (remoteSection.getBorderType() == "TITLED" || remoteSection.getBorderType()
+          == "TITLED_ACTIONS") && remoteSection.getLabel()) {
         var header = new qx.ui.mobile.form.Row();
         header.addCssClasses(["form-row-group-title", "jspresso-form-row-group-title"]);
         header.add(new qx.ui.mobile.basic.Label(remoteSection.getLabel()));
@@ -1144,10 +1152,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       textField.addListener("input", function (event) {
         this.__textFieldToBlur = textField;
         if (remoteTextField.getCharacterAction()) {
-          textField.setUserData(org.jspresso.framework.view.qx.AbstractQxViewFactory._INPUT_TIMESTAMP, event.getTimeStamp());
+          textField.setUserData(org.jspresso.framework.view.qx.AbstractQxViewFactory._INPUT_TIMESTAMP,
+              event.getTimeStamp());
           qx.event.Timer.once(function (e) {
             if (e.getTimeStamp() - textField.getUserData(
-                    org.jspresso.framework.view.qx.AbstractQxViewFactory._INPUT_TIMESTAMP)
+                org.jspresso.framework.view.qx.AbstractQxViewFactory._INPUT_TIMESTAMP)
                 >= org.jspresso.framework.view.qx.AbstractQxViewFactory._INPUT_THRESHOLD) {
               var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
               actionEvent.setActionCommand(textField.getValue());
@@ -1299,7 +1308,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
               remoteTree.getDisplayIcon());
           item.setShowArrow(remoteTree.getShowArrow() && row > 0);
           item.setLevel(data.level);
-        }, createItemRenderer: function () {
+        },
+        createItemRenderer: function () {
           return new org.jspresso.framework.view.qx.mobile.TreeItemRenderer();
         }
       });
@@ -1326,7 +1336,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         for (var i = selectedIndex - 1; i >= 0; i--) {
           var upperNode = treeListModel.getItem(i);
           if (upperNode.level < currentNode.level) {
-            futureSelections = [{state: upperNode.state, selection: [localIndex]}].concat(futureSelections);
+            futureSelections = [{
+              state: upperNode.state,
+              selection: [localIndex]
+            }].concat(futureSelections);
             var j = futureDeselections.indexOf(upperNode.state);
             if (j >= 0) {
               futureDeselections[j] = null;
@@ -1543,8 +1556,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         var existingCard = existingCardNames.indexOf(cardName) >= 0;
         if (!existingCard) {
           existingCardNames.push(cardName);
-          var remoteMobileCardPage = this._getRemotePeerRegistry().getRegistered(cardContainer.getUserData("jspressoGuid"));
-          if (remoteMobileCardPage && rCardComponent instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAware) {
+          var remoteMobileCardPage = this._getRemotePeerRegistry().getRegistered(
+              cardContainer.getUserData("jspressoGuid"));
+          if (remoteMobileCardPage && rCardComponent
+              instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAware) {
             this.__copyPageActions(remoteMobileCardPage, rCardComponent);
           }
           var cardComponent = this.createComponent(rCardComponent);
@@ -1658,10 +1673,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         textField.addListener("input", function (event) {
           this.__textFieldToBlur = textField;
           if (remoteActionField.getCharacterAction()) {
-            textField.setUserData(org.jspresso.framework.view.qx.AbstractQxViewFactory._INPUT_TIMESTAMP, event.getTimeStamp());
+            textField.setUserData(org.jspresso.framework.view.qx.AbstractQxViewFactory._INPUT_TIMESTAMP,
+                event.getTimeStamp());
             qx.event.Timer.once(function (e) {
               if (e.getTimeStamp() - textField.getUserData(
-                      org.jspresso.framework.view.qx.AbstractQxViewFactory._INPUT_TIMESTAMP)
+                  org.jspresso.framework.view.qx.AbstractQxViewFactory._INPUT_TIMESTAMP)
                   >= org.jspresso.framework.view.qx.AbstractQxViewFactory._INPUT_THRESHOLD) {
                 var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
                 actionEvent.setActionCommand(textField.getValue());
@@ -1721,11 +1737,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
                   htmlContent = modelValue;
                 } else {
                   var executeAction = "'executeAction(\"" + remoteLabelAction.getGuid() + "\");' ";
-                  htmlContent = "<u "
-                      + "onMouseUp=" + executeAction
-                      + "onPointerUp=" + executeAction
-                      + "onTouchEnd=" + executeAction
-                      + ">" + modelValue + "</u>";
+                  htmlContent = "<u " + "onMouseUp=" + executeAction + "onPointerUp=" + executeAction + "onTouchEnd="
+                      + executeAction + ">" + modelValue + "</u>";
                 }
                 htmlContent = org.jspresso.framework.util.html.HtmlUtil.bindActionToHtmlContent(htmlContent,
                     remoteLabel.getAction());
@@ -1933,7 +1946,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           if (remoteList instanceof org.jspresso.framework.gui.remote.mobile.RMobileList) {
             item.setShowArrow(remoteList.getShowArrow());
           }
-        }, createItemRenderer: function () {
+        },
+        createItemRenderer: function () {
           return new rendererType();
         }
       });
@@ -2012,7 +2026,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       if (remoteRepeater.getRowAction()) {
         this._getRemotePeerRegistry().register(remoteRepeater.getRowAction())
       }
-      var repeater = new org.jspresso.framework.view.qx.ViewRepeater(repeaterContainer, remoteRepeater, this, this._getActionHandler());
+      var repeater = new org.jspresso.framework.view.qx.ViewRepeater(repeaterContainer, remoteRepeater, this,
+          this._getActionHandler());
       repeater.setDataProvider(remoteRepeater.getState().getChildren());
       remoteRepeater.assignPeer(repeater);
 
@@ -2227,7 +2242,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }, this);
       }
       var wrapper = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.HBox().set({
-        alignX: "center", alignY: "middle"
+        alignX: "center",
+        alignY: "middle"
       }));
       wrapper.addCssClass("jspresso-cropper");
       wrapper.add(imageComponent);
@@ -2407,7 +2423,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           instanceof org.jspresso.framework.gui.remote.RTextArea || rComponent
           instanceof org.jspresso.framework.gui.remote.RList || rComponent
           instanceof org.jspresso.framework.gui.remote.RHtmlArea || (rComponent
-          instanceof org.jspresso.framework.gui.remote.RImageComponent && !rComponent.isScrollable());
+              instanceof org.jspresso.framework.gui.remote.RImageComponent && !rComponent.isScrollable());
     },
 
     /**
@@ -2417,7 +2433,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     isFixedWidth: function (rComponent) {
       return rComponent instanceof org.jspresso.framework.gui.remote.RCheckBox || rComponent
           instanceof org.jspresso.framework.gui.remote.RLabel || (rComponent
-          instanceof org.jspresso.framework.gui.remote.RActionField && !rComponent.isShowTextField());
+              instanceof org.jspresso.framework.gui.remote.RActionField && !rComponent.isShowTextField());
     },
 
 
