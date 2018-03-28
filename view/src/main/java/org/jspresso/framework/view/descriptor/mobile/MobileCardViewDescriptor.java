@@ -22,6 +22,8 @@ import java.util.List;
 
 import javax.security.auth.Subject;
 
+import org.springframework.beans.BeanUtils;
+
 import org.jspresso.framework.view.descriptor.EPosition;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicCardViewDescriptor;
@@ -112,8 +114,7 @@ public class MobileCardViewDescriptor extends BasicCardViewDescriptor
           return MobileCardViewDescriptor.this.getCardNameForModel(model, subject);
         }
       };
-      ((MobileCardViewDescriptor) readOnlyClone).position = MobileCardViewDescriptor.this.position;
-      ((MobileCardViewDescriptor) readOnlyClone).forClientTypes = MobileCardViewDescriptor.this.forClientTypes;
+      BeanUtils.copyProperties(this, readOnlyClone);
     }
     return (MobileCardViewDescriptor) readOnlyClone;
   }

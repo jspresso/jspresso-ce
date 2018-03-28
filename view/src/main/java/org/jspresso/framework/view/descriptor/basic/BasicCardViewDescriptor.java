@@ -22,6 +22,8 @@ import java.util.Map;
 
 import javax.security.auth.Subject;
 
+import org.springframework.beans.BeanUtils;
+
 import org.jspresso.framework.view.descriptor.ICardNameSelector;
 import org.jspresso.framework.view.descriptor.ICardProvider;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
@@ -123,6 +125,7 @@ public class BasicCardViewDescriptor extends AbstractCardViewDescriptor {
           return BasicCardViewDescriptor.this.getCardNameForModel(model, subject);
         }
       };
+      BeanUtils.copyProperties(this, readOnlyClone);
     }
     return (BasicCardViewDescriptor) readOnlyClone;
   }
