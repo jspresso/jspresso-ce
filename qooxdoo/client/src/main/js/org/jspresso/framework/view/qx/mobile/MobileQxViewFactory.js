@@ -2237,6 +2237,49 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
 
     /**
      * @return {qx.ui.mobile.core.Widget}
+     * @param remoteActionComponent {org.jspresso.framework.gui.remote.RActionComponent}
+     */
+    _createActionComponent: function (remoteActionComponent) {
+      var list = new org.jspresso.framework.view.qx.mobile.EnhancedList({
+        configureItem: function (item, data, row) {
+          item.setShowArrow(false);
+          item.setTitle(data.getName());
+          if (data.getIcon()) {
+            item.setImage(
+                org.jspresso.framework.view.qx.AbstractQxViewFactory.completeForSVG(data.getIcon().getImageUrlSpec()));
+          }
+          item.setEnabled(data.getEnabled());
+          item.setSelectable(data.getEnabled());
+          if (data.getHiddenWhenDisabled() && !data.getEnabled()) {
+            item.setVisibility("excluded");
+          } else {
+            item.setVisibility("visible");
+          }
+        }
+      });
+      list.addCssClass("jspresso-list");
+
+      var actionList = remoteActionComponent.getActionList();
+      var listModel = [];
+      if (actionList) {
+        listModel = actionList.getActions();
+      } else {
+        listModel = [remoteActionComponent.getAction()];
+      }
+      for (var i = 0; i < listModel.length; i++) {
+        this._getRemotePeerRegistry().register(listModel[i]);
+      }
+      list.setModel(new qx.data.Array(listModel));
+
+      this.addComponentThresholdListener(list, "changeSelection", function (evt) {
+        var selectedIndex = evt.getData();
+        this._getActionHandler().execute(listModel[selectedIndex]);
+      }, this);
+      return list;
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
      * @param remoteImageComponent {org.jspresso.framework.gui.remote.RImageComponent}
      */
     _createImageComponent: function (remoteImageComponent) {

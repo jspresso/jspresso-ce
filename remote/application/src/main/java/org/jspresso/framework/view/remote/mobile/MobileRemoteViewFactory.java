@@ -35,6 +35,7 @@ import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.gui.remote.RAction;
+import org.jspresso.framework.gui.remote.RActionComponent;
 import org.jspresso.framework.gui.remote.RBorderContainer;
 import org.jspresso.framework.gui.remote.RCardContainer;
 import org.jspresso.framework.gui.remote.RComponent;
@@ -47,6 +48,7 @@ import org.jspresso.framework.gui.remote.RTabContainer;
 import org.jspresso.framework.gui.remote.RTree;
 import org.jspresso.framework.gui.remote.mobile.RImageCanvas;
 import org.jspresso.framework.gui.remote.mobile.RImagePicker;
+import org.jspresso.framework.gui.remote.mobile.RMobileActionComponent;
 import org.jspresso.framework.gui.remote.mobile.RMobileBorderContainer;
 import org.jspresso.framework.gui.remote.mobile.RMobileCardContainer;
 import org.jspresso.framework.gui.remote.mobile.RMobileCardPage;
@@ -80,6 +82,7 @@ import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
@@ -586,6 +589,18 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
   protected RList createRList(IListViewDescriptor viewDescriptor) {
     RMobileList mobileList = new RMobileList(getGuidGenerator().generateGUID());
     return mobileList;
+  }
+
+  /**
+   * Creates a remote button component.
+   *
+   * @param viewDescriptor
+   *     the component view descriptor.
+   * @return the created remote component.
+   */
+  protected RActionComponent createRActionComponent(IActionViewDescriptor viewDescriptor) {
+    RMobileActionComponent component = new RMobileActionComponent(getGuidGenerator().generateGUID());
+    return component;
   }
 
   /**
