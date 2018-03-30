@@ -1602,9 +1602,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     IComponentDescriptor<?> modelDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor.getModelDescriptor())
         .getComponentDescriptor();
     // Dynamic toolTips
-    String toolTipProperty = computeComponentDynamicToolTip(viewDescriptor, modelDescriptor);
     ICompositeValueConnector connector = getConnectorFactory().createCompositeValueConnector(
-        getConnectorIdForBeanView(viewDescriptor), toolTipProperty);
+        getConnectorIdForBeanView(viewDescriptor), modelDescriptor.getToHtmlProperty());
     RForm viewComponent = createRForm(viewDescriptor);
     viewComponent.setWidthResizeable(viewDescriptor.isWidthResizeable());
     viewComponent.setColumnCount(viewDescriptor.getColumnCount());

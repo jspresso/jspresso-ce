@@ -603,9 +603,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     final JPanel viewComponent = createJPanel();
     IComponentDescriptor<?> modelDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor.getModelDescriptor())
         .getComponentDescriptor();
-    String toolTipProperty = computeComponentDynamicToolTip(viewDescriptor, modelDescriptor);
     IRenderableCompositeValueConnector connector = getConnectorFactory().createCompositeValueConnector(
-        getConnectorIdForBeanView(viewDescriptor), toolTipProperty);
+        getConnectorIdForBeanView(viewDescriptor), modelDescriptor.getToHtmlProperty());
     attachToolTipListener(viewComponent, connector.getRenderingConnector());
     IView<JComponent> view = constructView(viewComponent, viewDescriptor, connector);
 

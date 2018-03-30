@@ -1271,7 +1271,6 @@
   <bean abstract="true" id="abstractLoginViewDescriptorBase"
         class="org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor">
     <property name="name" value="login.name"/>
-    <property name="description" value="credentialMessage"/>
     <property name="iconImageURL">
       <bean parent="abstractFwIconImageURL">
         <constructor-arg index="0" value="password"/>
