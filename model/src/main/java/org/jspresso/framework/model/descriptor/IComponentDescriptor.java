@@ -44,14 +44,24 @@ public interface IComponentDescriptor<E> extends IIconDescriptor,
     IComponentDescriptorProvider<E>, IGateAccessible, IPermIdSource, ISortable {
 
   /**
-   * The constant RAW_SUFFIX is "Raw".
+   * The constant RAW_SUFFIX is &quot;Raw&quot;.
    */
   String RAW_SUFFIX = "Raw";
 
   /**
-   * The constant NLS_SUFFIX is "Nls".
+   * The constant NLS_SUFFIX is &quot;Nls&quot;.
    */
   String NLS_SUFFIX = "Nls";
+
+  /**
+   * The constant TO_STRING is &quot;toString&quot;.
+   */
+  String TO_STRING = "toString";
+
+  /**
+   * The constant TO_HTML is &quot;toHtml&quot;.
+   */
+  String TO_HTML = "toHtml";
 
   /**
    * Creates a new component descriptor to allow for querying.

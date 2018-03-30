@@ -1432,6 +1432,11 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     String descriptionKey = null;
     if (viewDescriptor.getDescription() != null) {
       descriptionKey = viewDescriptor.getDescription();
+      if (IComponentDescriptor.TO_STRING.equals(descriptionKey)) {
+        descriptionKey = componentDescriptor.getToStringProperty();
+      } else if (IComponentDescriptor.TO_HTML.equals(descriptionKey)) {
+        descriptionKey = componentDescriptor.getToHtmlProperty();
+      }
     } else if (propertyDescriptor != null) {
       descriptionKey = propertyDescriptor.getDescription();
       // see #492

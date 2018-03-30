@@ -70,7 +70,7 @@ public class ComparableQueryStructure extends QueryComponent {
 
       @Override
       public void propertyChange(PropertyChangeEvent evt) {
-        firePropertyChange(ComparableQueryStructureDescriptor.TO_STRING, null, getToString());
+        firePropertyChange(IComponentDescriptor.TO_STRING, null, getToString());
       }
     };
     addPropertyChangeListener(ComparableQueryStructureDescriptor.COMPARATOR, toStringListener);

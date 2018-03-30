@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jspresso.framework.model.component.query.ComparableQueryStructure;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicEnumerationPropertyDescriptor;
@@ -43,11 +44,6 @@ import org.jspresso.framework.util.gate.IGate;
  */
 public class ComparableQueryStructureDescriptor extends
     BasicReferencePropertyDescriptor<ComparableQueryStructure> {
-
-  /**
-   * {@code TO_STRING} value.
-   */
-  public static final String             TO_STRING          = "toString";
 
   /**
    * {@code LG} between.
@@ -174,7 +170,7 @@ public class ComparableQueryStructureDescriptor extends
     supValuePropertyDescriptor.setWritabilityGates(Arrays.asList((IGate) supValueGate));
 
     BasicStringPropertyDescriptor toStringPropertyDescriptor = new BasicStringPropertyDescriptor();
-    toStringPropertyDescriptor.setName(TO_STRING);
+    toStringPropertyDescriptor.setName(IComponentDescriptor.TO_STRING);
 
     List<IPropertyDescriptor> propertyDescriptors = new ArrayList<>();
     propertyDescriptors.add(comparatorPropertyDescriptor);
@@ -184,7 +180,7 @@ public class ComparableQueryStructureDescriptor extends
 
     refDescriptor.setPropertyDescriptors(propertyDescriptors);
     refDescriptor.setRenderedProperties(Arrays.asList(COMPARATOR, INF_VALUE, SUP_VALUE));
-    refDescriptor.setToStringProperty(TO_STRING);
+    refDescriptor.setToStringProperty(IComponentDescriptor.TO_STRING);
 
     setReferencedDescriptor(refDescriptor);
     setComputed(propertyDescriptor.isComputed());
