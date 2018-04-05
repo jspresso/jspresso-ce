@@ -18,13 +18,7 @@
  */
 package org.jspresso.framework.model.gate;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
-
 import org.hibernate.Hibernate;
-
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.accessor.IAccessor;
@@ -32,6 +26,11 @@ import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 import org.jspresso.framework.util.gate.AbstractModelGate;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 
 /**
  * This is the base abstract class of gates whose opening rules are based on a
@@ -232,6 +231,15 @@ public abstract class AbstractPropertyModelGate<E> extends AbstractModelGate
    */
   public void setPropertyName(String propertyName) {
     this.propertyName = propertyName;
+  }
+
+  /**
+   * Gets property name.
+   *
+   * @return The property name
+   */
+  protected String getPropertyName() {
+    return propertyName;
   }
 
   /**
