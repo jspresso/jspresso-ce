@@ -556,6 +556,22 @@ public interface IFrontendController<E, F, G> extends IController, IIconDescript
   void setName(String name);
 
   /**
+   * Sets i 18 n name.
+   *
+   * @param i18nName
+   *     the 18 n name
+   */
+  void setI18nName(String i18nName);
+
+  /**
+   * Sets i 18 n description.
+   *
+   * @param i18nDescription
+   *     the 18 n description
+   */
+  void setI18nDescription(String i18nDescription);
+
+  /**
    * Notify application description change.
    */
   void notifyApplicationDescriptionChange();

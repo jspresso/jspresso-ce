@@ -32,10 +32,6 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import javax.security.auth.Subject;
-import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.login.FailedLoginException;
-import javax.security.auth.login.LoginContext;
-import javax.security.auth.login.LoginException;
 
 import org.apache.commons.lang3.LocaleUtils;
 import org.hibernate.HibernateException;
@@ -125,49 +121,52 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
   /**
    * {@code MAX_LOGIN_RETRIES}.
    */
-  protected static final int    MAX_LOGIN_RETRIES = 3;
-  private static final   Logger LOG               = LoggerFactory.getLogger(AbstractFrontendController.class);
-  private static final   String UP_KEY            = "UP_KEY";
-  private static final   String UP_SEP            = "!";
-  private static final   String UP_GUID           = "UP_GUID";
-  private static final   String LANG_KEY          = "LANG_KEY";
-  private static final   String TZ_KEY            = "TZ_KEY";
-  private static final   String CURR_DIALOG_VIEW  = "CURR_DIALOG_VIEW";
-  private final List<ModuleHistoryEntry>              backwardHistoryEntries;
-  private final DefaultIconDescriptor                 controllerDescriptor;
-  private final List<Map<String, Object>>             dialogContextStack;
-  private final List<ModuleHistoryEntry>              forwardHistoryEntries;
-  private final Map<String, IMapView<E>>              workspaceViews;
-  private final Map<String, Module>                   selectedModules;
-  private final Map<String, ICompositeValueConnector> workspaceNavigatorConnectors;
-  private       boolean                               started;
-  private       ActionMap                             actionMap;
-  private       ActionMap                             secondaryActionMap;
-  private       Locale                                clientLocale;
-  private       IDisplayableAction                    exitAction;
-  private       String                                forcedStartingLocale;
-  private       ActionMap                             helpActionMap;
-  private       ActionMap                             navigationActionMap;
-  private       UsernamePasswordHandler               loginCallbackHandler;
-  private       IViewDescriptor                       loginViewDescriptor;
-  private       boolean                               moduleAutoPinEnabled;
-  private       IMvcBinder                            mvcBinder;
-  private       IAction                               onModuleEnterAction;
-  private       IAction                               onModuleExitAction;
-  private       IAction                               onModuleStartupAction;
-  private       String                                selectedWorkspaceName;
-  private       IAction                               loginAction;
-  private       IAction                               startupAction;
-  private       boolean                               tracksWorkspaceNavigator;
-  private       IViewFactory<E, F, G>                 viewFactory;
-  private       Map<String, Workspace>                workspaces;
-  private       String                                workspacesMenuIconImageUrl;
-  private       Integer                               frameWidth;
-  private       Integer                               frameHeight;
-  private       IPreferencesStore                     clientPreferencesStore;
-  private       boolean                               checkActionThreadSafety;
-  private final PropertyChangeListener                dirtInterceptor;
-  private       List<IAction>                         actionStack;
+  protected static final int                                   MAX_LOGIN_RETRIES = 3;
+  private static final   Logger                                LOG               = LoggerFactory.getLogger(
+      AbstractFrontendController.class);
+  private static final   String                                UP_KEY            = "UP_KEY";
+  private static final   String                                UP_SEP            = "!";
+  private static final   String                                UP_GUID           = "UP_GUID";
+  private static final   String                                LANG_KEY          = "LANG_KEY";
+  private static final   String                                TZ_KEY            = "TZ_KEY";
+  private static final   String                                CURR_DIALOG_VIEW  = "CURR_DIALOG_VIEW";
+  private final          List<ModuleHistoryEntry>              backwardHistoryEntries;
+  private final          DefaultIconDescriptor                 controllerDescriptor;
+  private final          List<Map<String, Object>>             dialogContextStack;
+  private final          List<ModuleHistoryEntry>              forwardHistoryEntries;
+  private final          Map<String, IMapView<E>>              workspaceViews;
+  private final          Map<String, Module>                   selectedModules;
+  private final          Map<String, ICompositeValueConnector> workspaceNavigatorConnectors;
+  private                boolean                               started;
+  private                ActionMap                             actionMap;
+  private                ActionMap                             secondaryActionMap;
+  private                Locale                                clientLocale;
+  private                IDisplayableAction                    exitAction;
+  private                String                                forcedStartingLocale;
+  private                ActionMap                             helpActionMap;
+  private                ActionMap                             navigationActionMap;
+  private                UsernamePasswordHandler               loginCallbackHandler;
+  private                IViewDescriptor                       loginViewDescriptor;
+  private                boolean                               moduleAutoPinEnabled;
+  private                IMvcBinder                            mvcBinder;
+  private                IAction                               onModuleEnterAction;
+  private                IAction                               onModuleExitAction;
+  private                IAction                               onModuleStartupAction;
+  private                String                                selectedWorkspaceName;
+  private                IAction                               loginAction;
+  private                IAction                               startupAction;
+  private                boolean                               tracksWorkspaceNavigator;
+  private                IViewFactory<E, F, G>                 viewFactory;
+  private                Map<String, Workspace>                workspaces;
+  private                String                                workspacesMenuIconImageUrl;
+  private                Integer                               frameWidth;
+  private                Integer                               frameHeight;
+  private                IPreferencesStore                     clientPreferencesStore;
+  private                boolean                               checkActionThreadSafety;
+  private final          PropertyChangeListener                dirtInterceptor;
+  private                List<IAction>                         actionStack;
+  private                String                                i18nName;
+  private                String                                i18nDescription;
 
   /**
    * Constructs a new {@code AbstractFrontendController} instance.
@@ -766,6 +765,9 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
    */
   @Override
   public String getI18nDescription(ITranslationProvider translationProvider, Locale locale) {
+    if (i18nDescription != null) {
+      return i18nDescription;
+    }
     return controllerDescriptor.getI18nDescription(translationProvider, locale);
   }
 
@@ -774,6 +776,9 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
    */
   @Override
   public String getI18nName(ITranslationProvider translationProvider, Locale locale) {
+    if (i18nName != null) {
+      return i18nName;
+    }
     return controllerDescriptor.getI18nName(translationProvider, locale);
   }
 
@@ -1112,7 +1117,33 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
    *     the name to set.
    */
   public void setName(String name) {
+    if (getName() != null) {
+      throw new UnsupportedOperationException(
+          "Cannot change application name once set. Use setI18nName(\"My super translated name\") instead.");
+    }
     controllerDescriptor.setName(name);
+  }
+
+  /**
+   * Sets i 18 n name.
+   *
+   * @param i18nName
+   *     the 18 n name
+   */
+  public void setI18nName(String i18nName) {
+    this.i18nName = i18nName;
+    notifyApplicationDescriptionChange();
+  }
+
+  /**
+   * Sets i 18 n description.
+   *
+   * @param i18nDescription
+   *     the 18 n description
+   */
+  public void setI18nDescription(String i18nDescription) {
+    this.i18nDescription = i18nDescription;
+    notifyApplicationDescriptionChange();
   }
 
   /**
@@ -2445,8 +2476,8 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
    */
   @Override
   public final void displayDialog(E mainView, final List<G> actions, final String title, final E sourceComponent,
-                                       final Map<String, Object> context, final Dimension dimension,
-                                       boolean reuseCurrent, boolean modal) {
+                                  final Map<String, Object> context, final Dimension dimension, boolean reuseCurrent,
+                                  boolean modal) {
     displayDialog(mainView, actions, title, sourceComponent, context, dimension, reuseCurrent, modal, false);
   }
 
