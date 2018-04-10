@@ -112,20 +112,22 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedTable", {
     },
 
     isCellEditable: function (row, column) {
-      var tableModel = this.getTableModel();
-      var cellEditable = tableModel.isColumnEditable(column);
-      if (cellEditable) {
-        var rowState = tableModel.getRowData(row);
-        /* Editability is only determined at cell level
-        if (!rowState.getWritable()) {
-          cellEditable = false;
-        }
-        */
+      if (row >= 0 && column >= 0) {
+        var tableModel = this.getTableModel();
+        var cellEditable = tableModel.isColumnEditable(column);
         if (cellEditable) {
-          /** @type {org.jspresso.framework.state.remote.RemoteValueState} */
-          var cellState = rowState.getChildren().getItem(column + 1);
-          if (!cellState.getWritable()) {
+          var rowState = tableModel.getRowData(row);
+          /* Editability is only determined at cell level
+          if (!rowState.getWritable()) {
             cellEditable = false;
+          }
+          */
+          if (/*cellEditable*/ rowState) {
+            /** @type {org.jspresso.framework.state.remote.RemoteValueState} */
+            var cellState = rowState.getChildren().getItem(column + 1);
+            if (!cellState.getWritable()) {
+              cellEditable = false;
+            }
           }
         }
       }

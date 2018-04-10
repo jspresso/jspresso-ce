@@ -2742,13 +2742,15 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       if (remoteTable.getRowAction()) {
         this._getRemotePeerRegistry().register(remoteTable.getRowAction());
         table.addListener("cellDbltap", function (e) {
-          var row = e.getRow();
-          var column = e.getColumn();
-          if (!table.isCellEditable(row, column)) {
-            if (selectionModel.getSelectionMode() == qx.ui.table.selection.Model.MULTIPLE_INTERVAL_SELECTION_TOGGLE) {
-              selectionModel.setSelectionInterval(row, row);
+          if (!(e.getTarget() instanceof qx.ui.table.headerrenderer.HeaderCell)) {
+            var row = e.getRow();
+            var column = e.getColumn();
+            if (!table.isCellEditable(row, column)) {
+              if (selectionModel.getSelectionMode() == qx.ui.table.selection.Model.MULTIPLE_INTERVAL_SELECTION_TOGGLE) {
+                selectionModel.setSelectionInterval(row, row);
+              }
+              this._getActionHandler().execute(remoteTable.getRowAction());
             }
-            this._getActionHandler().execute(remoteTable.getRowAction());
           }
         }, this);
       }
