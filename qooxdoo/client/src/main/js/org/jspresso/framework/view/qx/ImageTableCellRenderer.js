@@ -25,6 +25,13 @@ qx.Class.define("org.jspresso.framework.view.qx.ImageTableCellRenderer", {
     __action: null,
 
     _getContentHtml: function (cellInfo) {
+      var cellViewState = null;
+      if (cellInfo.rowData instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
+        cellViewState = cellInfo.rowData.getChildren().getItem(cellInfo.col + 1);
+      }
+      if (cellViewState && !cellViewState.getReadable()) {
+        return "";
+      }
       if (cellInfo.value) {
         return '<img src="' + cellInfo.value + '"/>';
       }

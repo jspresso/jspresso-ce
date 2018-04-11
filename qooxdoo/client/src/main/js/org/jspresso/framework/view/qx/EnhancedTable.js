@@ -125,7 +125,7 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedTable", {
           if (/*cellEditable*/ rowState) {
             /** @type {org.jspresso.framework.state.remote.RemoteValueState} */
             var cellState = rowState.getChildren().getItem(column + 1);
-            if (!cellState.getWritable()) {
+            if (!cellState.getWritable() || !cellState.getReadable()) {
               cellEditable = false;
             }
           }

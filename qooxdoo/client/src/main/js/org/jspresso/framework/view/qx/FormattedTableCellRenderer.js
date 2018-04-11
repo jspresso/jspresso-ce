@@ -80,48 +80,53 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
       if (cellInfo.rowData instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
         cellViewState = cellInfo.rowData.getChildren().getItem(cellInfo.col + 1);
       }
-      if (cellViewState && this.__asideActions && cellInfo.selected) {
-        var actionsHtmlContent = "";
-        for (var i = 0; i < this.__asideActions.length; i++) {
-          var actionList = this.__asideActions[i];
-          for (var j = 0; j < actionList.getActions().length ; j++) {
-            var remoteAction = actionList.getActions()[j];
-            var isMainAction = (i != 0 || j != 0);
-            if (remoteAction.isEnabled() && ((cellViewState.isWritable()
-                    || !this.__disableMainActionWithField || isMainAction))) {
-              var icon = remoteAction.getIcon();
-              if (icon) {
-                var imageUrlSpec = icon.getImageUrlSpec();
-                imageUrlSpec = org.jspresso.framework.view.qx.AbstractQxViewFactory.completeForSVG(imageUrlSpec);
-                var iconDimension = new org.jspresso.framework.util.gui.Dimension().set({
-                  width: 16,
-                  height: 16
-                });
+      if (cellViewState) {
+        if (!cellViewState.getReadable()) {
+          return "";
+        }
+        if (this.__asideActions && cellInfo.selected) {
+          var actionsHtmlContent = "";
+          for (var i = 0; i < this.__asideActions.length; i++) {
+            var actionList = this.__asideActions[i];
+            for (var j = 0; j < actionList.getActions().length; j++) {
+              var remoteAction = actionList.getActions()[j];
+              var isMainAction = (i != 0 || j != 0);
+              if (remoteAction.isEnabled() && ((cellViewState.isWritable() || !this.__disableMainActionWithField
+                  || isMainAction))) {
+                var icon = remoteAction.getIcon();
+                if (icon) {
+                  var imageUrlSpec = icon.getImageUrlSpec();
+                  imageUrlSpec = org.jspresso.framework.view.qx.AbstractQxViewFactory.completeForSVG(imageUrlSpec);
+                  var iconDimension = new org.jspresso.framework.util.gui.Dimension().set({
+                    width: 16,
+                    height: 16
+                  });
 
-                actionsHtmlContent += "<div";
-                var executeAction = "'executeAction(\"" + remoteAction.getGuid() + "\", null, \""
-                    + cellViewState.getGuid() + "\", \"" + cellViewState.getPermId() + "\")'";
-                actionsHtmlContent += " onMouseUp=" + executeAction
-                actionsHtmlContent += " onPointerUp=" + executeAction
-                actionsHtmlContent += " onTouchEnd=" + executeAction
-                actionsHtmlContent += " style='overflow: hidden;";
-                actionsHtmlContent += " cursor: pointer;";
-                actionsHtmlContent += " top: 5px;";
+                  actionsHtmlContent += "<div";
+                  var executeAction = "'executeAction(\"" + remoteAction.getGuid() + "\", null, \""
+                      + cellViewState.getGuid() + "\", \"" + cellViewState.getPermId() + "\")'";
+                  actionsHtmlContent += " onMouseUp=" + executeAction
+                  actionsHtmlContent += " onPointerUp=" + executeAction
+                  actionsHtmlContent += " onTouchEnd=" + executeAction
+                  actionsHtmlContent += " style='overflow: hidden;";
+                  actionsHtmlContent += " cursor: pointer;";
+                  actionsHtmlContent += " top: 5px;";
 
-                if (iconDimension) {
-                  if (iconDimension.getWidth()) {
-                    actionsHtmlContent += " width: " + iconDimension.getWidth() + "px;";
+                  if (iconDimension) {
+                    if (iconDimension.getWidth()) {
+                      actionsHtmlContent += " width: " + iconDimension.getWidth() + "px;";
+                    }
+                    if (iconDimension.getHeight()) {
+                      actionsHtmlContent += " height: " + iconDimension.getHeight() + "px;";
+                    }
                   }
-                  if (iconDimension.getHeight()) {
-                    actionsHtmlContent += " height: " + iconDimension.getHeight() + "px;";
-                  }
+                  actionsHtmlContent += " margin-left: 5px;"
+                  //actionsHtmlContent += " margin-right: 5px;"
+                  actionsHtmlContent += " background-position: center;";
+                  actionsHtmlContent += " background-image: url(\"" + imageUrlSpec + "\");";
+                  actionsHtmlContent += " background-repeat: no-repeat;'>";
+                  actionsHtmlContent += "</div>";
                 }
-                actionsHtmlContent += " margin-left: 5px;"
-                //actionsHtmlContent += " margin-right: 5px;"
-                actionsHtmlContent += " background-position: center;";
-                actionsHtmlContent += " background-image: url(\"" + imageUrlSpec + "\");";
-                actionsHtmlContent += " background-repeat: no-repeat;'>";
-                actionsHtmlContent += "</div>";
               }
             }
           }

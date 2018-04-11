@@ -67,6 +67,7 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
       this.__cleanCurrentCellBinding();
       this.__currentCellState = cellState;
       var state = this.__rComponent.getState();
+      state.setReadable(true);
       state.setWritable(true);
       if (state.getBindings()) {
         state.removeAllBindings();

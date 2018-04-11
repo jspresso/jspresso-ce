@@ -107,6 +107,12 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       return component;
     },
 
+    _bindVisibility: function (remoteComponent, component) {
+      if (component instanceof qx.ui.core.Widget) {
+        this.base(arguments, remoteComponent, component);
+      }
+    },
+
     /**
      * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
      * @param registerPeers {Boolean}
@@ -125,6 +131,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         this._bindDynamicLabel(component, remoteComponent); // After border set
         this._applyPreferredSize(remoteComponent, component);
       }
+      this._bindVisibility(remoteComponent, component);
       return component;
     },
 
@@ -1466,6 +1473,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         if (remoteForm.getLabelsPosition() != "NONE") {
           componentLabel = /** @type {qx.ui.basic.Label} */ this.createComponent(remoteForm.getElementLabels()[i],
               false);
+          component.bind("visibility", componentLabel, "visibility");
         }
 
         if (elementWidth > columnCount) {

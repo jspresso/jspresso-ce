@@ -89,6 +89,12 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       return null;
     },
 
+    _bindVisibility: function (remoteComponent, component) {
+      if (component instanceof qx.ui.mobile.core.Widget) {
+        this.base(arguments, remoteComponent, component);
+      }
+    },
+
     /**
      * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
      * @param registerPeers {Boolean}
@@ -99,6 +105,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       if (remoteComponent && component) {
         component = this._decorateWithActions(remoteComponent, component);
       }
+      this._bindVisibility(remoteComponent, component);
       return component;
     },
 
@@ -1092,6 +1099,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
         if (remoteForm.getLabelsPosition() != "NONE") {
           var label = new qx.ui.mobile.form.Label("<p>" + rComponent.getLabel() + "</p>");
+          component.bind("visibility", label, "visibility");
           // Changes label color when disabled
           // label.setLabelFor(component.getId());
           if (remoteForm.getLabelsPosition() == "ASIDE") {
@@ -1813,7 +1821,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
       }
       var datePickerButton = this.createButton("...", null, null);
-      remoteDateField.getState().bind("writable", datePickerButton, "enabled");
+      var state = remoteDateField.getState();
+      var modelController = new qx.data.controller.Object(state);
+      modelController.addTarget(datePickerButton, "enabled", "writable", false);
       datePickerButton.removeCssClass("button");
       //datePickerButton.removeCssClass("gap");
       var datePicker = new org.jspresso.framework.view.qx.mobile.DatePicker(this.__monthNames);
@@ -1874,7 +1884,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     _createTimeField: function (remoteTimeField) {
       var timeField = this._createFormattedField(remoteTimeField);
       var timePickerButton = this.createButton("...", null, null);
-      remoteTimeField.getState().bind("writable", timePickerButton, "enabled");
+      var state = remoteTimeField.getState();
+      var modelController = new qx.data.controller.Object(state);
+      modelController.addTarget(timePickerButton, "enabled", "writable", false);
       timePickerButton.removeCssClass("button");
       //timePickerButton.removeCssClass("gap");
       var secondsAware = remoteTimeField.getSecondsAware();

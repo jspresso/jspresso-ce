@@ -35,6 +35,13 @@ qx.Class.define("org.jspresso.framework.view.qx.EnumerationTableCellRenderer", {
     __icons: null,
 
     _getContentHtml: function (cellInfo) {
+      var cellViewState = null;
+      if (cellInfo.rowData instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
+        cellViewState = cellInfo.rowData.getChildren().getItem(cellInfo.col + 1);
+      }
+      if (cellViewState && !cellViewState.getReadable()) {
+        return "";
+      }
       return this.__getImgHtml(cellInfo) + (this.__labels[cellInfo.value] || "");
     },
 

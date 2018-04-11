@@ -28,6 +28,18 @@ qx.Class.define("org.jspresso.framework.view.qx.ColorTableCellRenderer", {
 
 
   members: {
+
+    _getContentHtml: function (cellInfo) {
+      var cellViewState = null;
+      if (cellInfo.rowData instanceof org.jspresso.framework.state.remote.RemoteCompositeValueState) {
+        cellViewState = cellInfo.rowData.getChildren().getItem(cellInfo.col + 1);
+      }
+      if (cellViewState && !cellViewState.getReadable()) {
+        return "";
+      }
+      return this.base(arguments, cellInfo);
+    },
+
     _getCellStyle: function (cellInfo) {
       var superStyle = this.base(arguments, cellInfo);
       if (cellInfo.value) {

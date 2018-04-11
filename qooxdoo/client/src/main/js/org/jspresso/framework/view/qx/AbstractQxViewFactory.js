@@ -120,6 +120,20 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
 
     /**
      * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
+     * @param component {qx.ui.core.Widget | qx.ui.mobile.core.Widget}
+     */
+    _bindVisibility: function (remoteComponent, component) {
+      var state = remoteComponent.getState();
+      if (state) {
+        var modelController = new qx.data.controller.Object(state);
+        modelController.addTarget(component, "visibility", "readable", false, {
+          converter: this._visibleFieldConverter
+        });
+      }
+    },
+
+    /**
+     * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
      * @param registerPeers {Boolean}
      * @return {qx.ui.core.Widget | qx.ui.mobile.core.Widget}
      */
@@ -421,6 +435,10 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
 
     _readOnlyFieldConverter: function (writable, model) {
       return !writable;
+    },
+
+    _visibleFieldConverter: function (readable, model) {
+      return readable ? "visible" : "hidden";
     },
 
     addComponentThresholdListener: function (component, type, listener, that) {
