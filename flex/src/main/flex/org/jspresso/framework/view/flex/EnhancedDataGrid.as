@@ -43,6 +43,7 @@ public class EnhancedDataGrid extends DataGrid {
   private var _savedSortDirection:String;
   private var _customSort:Boolean;
   private var _cbMultiSelection:Boolean;
+  private var _disableScrollOptimization:Boolean;
 
   private static var H_SCROLL_DELAY_MAX_VISIBLE_CELLS:int = 500;
   private var _targetHScrollPosition:Number;
@@ -57,13 +58,17 @@ public class EnhancedDataGrid extends DataGrid {
     _savedSortIndex = -1;
     _customSort = false;
     _cbMultiSelection = false;
+    _disableScrollOptimization = false;
     addEventListener(DataGridEvent.ITEM_EDIT_BEGINNING, itemEditBeginning);
+    addEventListener(DataGridEvent.ITEM_EDIT_BEGIN, itemEditBegin);
+    addEventListener(DataGridEvent.ITEM_EDIT_END, itemEditEnd);
     _hScrollTimer = new Timer(200, 1);
     _hScrollTimer.addEventListener(TimerEvent.TIMER_COMPLETE, applyTargetHScroll);
   }
 
   override protected function mouseDoubleClickHandler(event:MouseEvent):void {
     preventEditing = false;
+    _disableScrollOptimization = true;
     super.mouseDoubleClickHandler(event);
   }
 
@@ -90,6 +95,14 @@ public class EnhancedDataGrid extends DataGrid {
     if (preventEditing) {
       event.preventDefault();
     }
+  }
+
+  public function itemEditBegin(event:DataGridEvent):void {
+    _disableScrollOptimization = true;
+  }
+
+  public function itemEditEnd(event:DataGridEvent):void {
+    _disableScrollOptimization = false;
   }
 
   public function set customSort(value:Boolean):void {
@@ -213,7 +226,7 @@ public class EnhancedDataGrid extends DataGrid {
   }
 
   override public function set horizontalScrollPosition(value:Number):void {
-    if ((rowCount * columnCount) > H_SCROLL_DELAY_MAX_VISIBLE_CELLS) {
+    if (!_disableScrollOptimization && (rowCount * columnCount) > H_SCROLL_DELAY_MAX_VISIBLE_CELLS) {
       _targetHScrollPosition = value;
       _hScrollTimer.reset();
       _hScrollTimer.start();
