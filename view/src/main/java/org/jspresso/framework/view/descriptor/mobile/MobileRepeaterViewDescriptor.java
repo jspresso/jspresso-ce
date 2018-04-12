@@ -80,4 +80,31 @@ public class MobileRepeaterViewDescriptor extends AbstractRepeaterViewDescriptor
   public void setForClientTypes(List<String> forClientTypes) {
     this.forClientTypes = forClientTypes;
   }
+
+  /**
+   * Always false in mobile environment.
+   * <p>
+   * {@inheritDoc}
+   *
+   * @return the boolean
+   */
+  @Override
+  public boolean isAutoSelectFirstRow() {
+    return false;
+  }
+
+  /**
+   * Not supported in mobile environment.
+   * <p>
+   * {@inheritDoc}
+   *
+   * @param autoSelectFirstRow
+   *     the auto select first row
+   */
+  @Override
+  public void setAutoSelectFirstRow(boolean autoSelectFirstRow) {
+    throw new UnsupportedOperationException("Not supported in mobile environment.");
+  }
+
+
 }

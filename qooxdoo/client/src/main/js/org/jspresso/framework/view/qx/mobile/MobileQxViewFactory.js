@@ -105,7 +105,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       if (remoteComponent && component) {
         component = this._decorateWithActions(remoteComponent, component);
       }
-      this._bindVisibility(remoteComponent, component);
+      if (!(remoteComponent instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAware)
+          && !(component instanceof qx.ui.mobile.page.Page)) {
+        this._bindVisibility(remoteComponent, component);
+      }
       return component;
     },
 
