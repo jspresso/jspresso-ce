@@ -967,7 +967,7 @@ public abstract class AbstractComponentInvocationHandler implements InvocationHa
       Collection<Class<?>> serviceContracts = componentDescriptor.getServiceContracts();
       if (serviceContracts != null) {
         for (Class<?> serviceContract : serviceContracts) {
-          DependsOnHelper.registerDependsOnListeners(serviceContract, (IPropertyChangeCapable) proxy, accessorFactory);
+          new DependsOnHelper().registerDependsOnListeners(serviceContract, (IPropertyChangeCapable) proxy, accessorFactory);
         }
       }
     }

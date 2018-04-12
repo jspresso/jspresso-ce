@@ -25,11 +25,11 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import gnu.trove.set.hash.THashSet;
 
-import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.model.IModelProvider;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
@@ -42,6 +42,7 @@ import org.jspresso.framework.util.exception.IExceptionHandler;
 import org.jspresso.framework.util.gate.GateHelper;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.lang.ICloneable;
+import org.jspresso.framework.util.lang.IContextAware;
 import org.jspresso.framework.util.lang.IModelAware;
 import org.jspresso.framework.util.lang.ObjectUtils;
 
@@ -108,6 +109,9 @@ public abstract class AbstractValueConnector extends AbstractConnector
     if (gate instanceof ISecurityHandlerAware) {
       ((ISecurityHandlerAware) gate).setSecurityHandler(getSecurityHandler());
     }
+    if (gate instanceof IContextAware) {
+      ((IContextAware) gate).setContext(createGateContext());
+    }
     if (readabilityGates == null) {
       readabilityGates = new THashSet<>(4);
     }
@@ -157,6 +161,9 @@ public abstract class AbstractValueConnector extends AbstractConnector
   public void addWritabilityGate(IGate gate) {
     if (gate instanceof ISecurityHandlerAware) {
       ((ISecurityHandlerAware) gate).setSecurityHandler(getSecurityHandler());
+    }
+    if (gate instanceof IContextAware) {
+      ((IContextAware) gate).setContext(createGateContext());
     }
     if (writabilityGates == null) {
       writabilityGates = new THashSet<>(4);
@@ -876,6 +883,12 @@ public abstract class AbstractValueConnector extends AbstractConnector
         }
       }
     }
+  }
+
+  protected Map<String, Object> createGateContext() {
+    Map<String, Object> gateContext = new HashMap<>();
+    gateContext.put("CONNECTOR", this);
+    return gateContext;
   }
 
   private IValueConnector getComponentConnector(IValueConnector connector) {

@@ -83,7 +83,7 @@ public abstract class AbstractComponentExtension<T extends IComponent>
    */
   @Override
   public void postCreate() {
-    DependsOnHelper.registerDependsOnListeners(getClass(), getComponent(), this);
+    new DependsOnHelper().registerDependsOnListeners(getClass(), getComponent(), this);
   }
 
   /**
@@ -96,7 +96,7 @@ public abstract class AbstractComponentExtension<T extends IComponent>
    */
   protected void registerNotificationForwarding(String sourceProperty,
                                                 String forwardedProperty) {
-    DependsOnHelper.registerNotificationForwarding(getComponent(), this, sourceProperty, forwardedProperty);
+    new DependsOnHelper().registerNotificationForwarding(getComponent(), this, sourceProperty, forwardedProperty);
   }
 
   /**
@@ -111,7 +111,7 @@ public abstract class AbstractComponentExtension<T extends IComponent>
    */
   protected void registerNotificationForwarding(IPropertyChangeCapable sourceBean, String sourceProperty,
                                                 String forwardedProperty) {
-    DependsOnHelper.registerNotificationForwarding(sourceBean, this, sourceProperty, forwardedProperty);
+    new DependsOnHelper().registerNotificationForwarding(sourceBean, this, sourceProperty, forwardedProperty);
   }
 
   /**
@@ -124,7 +124,7 @@ public abstract class AbstractComponentExtension<T extends IComponent>
    */
   protected void registerNotificationForwarding(String sourceProperty,
                                                 String... forwardedProperty) {
-    DependsOnHelper.registerNotificationForwarding(getComponent(), this, sourceProperty, forwardedProperty);
+    new DependsOnHelper().registerNotificationForwarding(getComponent(), this, sourceProperty, forwardedProperty);
   }
 
   /**
@@ -139,7 +139,7 @@ public abstract class AbstractComponentExtension<T extends IComponent>
    */
   protected void registerNotificationForwarding(IPropertyChangeCapable sourceBean, String sourceProperty,
                                                 String... forwardedProperty) {
-    DependsOnHelper.registerNotificationForwarding(sourceBean, this, sourceProperty, forwardedProperty);
+    new DependsOnHelper().registerNotificationForwarding(sourceBean, this, sourceProperty, forwardedProperty);
   }
 
   /**
@@ -154,7 +154,7 @@ public abstract class AbstractComponentExtension<T extends IComponent>
    */
   protected void registerNotificationCollectionForwarding(String sourceCollectionProperty, String sourceElementProperty,
                                                           String forwardedProperty) {
-    DependsOnHelper.registerNotificationCollectionForwarding(getComponent(), this, sourceCollectionProperty, sourceElementProperty,
+    new DependsOnHelper().registerNotificationCollectionForwarding(getComponent(), this, sourceCollectionProperty, sourceElementProperty,
         forwardedProperty);
   }
 
@@ -173,7 +173,7 @@ public abstract class AbstractComponentExtension<T extends IComponent>
   protected void registerNotificationCollectionForwarding(IPropertyChangeCapable sourceBean,
                                                           String sourceCollectionProperty, String sourceElementProperty,
                                                           String forwardedProperty) {
-    DependsOnHelper.registerNotificationCollectionForwarding(sourceBean, this, sourceCollectionProperty, sourceElementProperty,
+    new DependsOnHelper().registerNotificationCollectionForwarding(sourceBean, this, sourceCollectionProperty, sourceElementProperty,
         forwardedProperty);
   }
 
@@ -191,7 +191,7 @@ public abstract class AbstractComponentExtension<T extends IComponent>
   protected void registerNotificationCollectionForwarding(String sourceCollectionProperty,
                                                           String sourceElementProperty,
                                                           String... forwardedProperty) {
-    DependsOnHelper.registerNotificationCollectionForwarding(getComponent(), this, sourceCollectionProperty,
+    new DependsOnHelper().registerNotificationCollectionForwarding(getComponent(), this, sourceCollectionProperty,
         sourceElementProperty, forwardedProperty);
   }
 
@@ -212,7 +212,7 @@ public abstract class AbstractComponentExtension<T extends IComponent>
                                                           final String sourceCollectionProperty,
                                                           final String sourceElementProperty,
                                                           final String... forwardedProperty) {
-    DependsOnHelper.registerNotificationCollectionForwarding(sourceBean, this, sourceCollectionProperty,
+    new DependsOnHelper().registerNotificationCollectionForwarding(sourceBean, this, sourceCollectionProperty,
         sourceElementProperty, forwardedProperty);
   }
 

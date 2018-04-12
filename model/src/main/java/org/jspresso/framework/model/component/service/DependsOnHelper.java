@@ -26,6 +26,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.Hibernate;
 
 import org.jspresso.framework.model.component.IComponent;
@@ -44,8 +46,23 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
  */
 public class DependsOnHelper {
 
-  private DependsOnHelper() {
-    // private helper constructor.
+  private PropertyChangeListener propertyChangeListener;
+
+  /**
+   * Instantiates a new Depends on helper.
+   */
+  public DependsOnHelper() {
+    this(null);
+  }
+
+  /**
+   * Instantiates a new Depends on helper.
+   *
+   * @param propertyChangeListener
+   *     the property change listener
+   */
+  public DependsOnHelper(PropertyChangeListener propertyChangeListener) {
+    this.propertyChangeListener = propertyChangeListener;
   }
 
   /**
@@ -58,25 +75,82 @@ public class DependsOnHelper {
    * @param accessorFactoryProvider
    *     the accessor factory
    */
-  public static void registerDependsOnListeners(Class<?> annotatedClass, IPropertyChangeCapable sourceBean,
-                                                IAccessorFactoryProvider accessorFactoryProvider) {
+  public void registerDependsOnListeners(Class<?> annotatedClass, IPropertyChangeCapable sourceBean,
+                                         IAccessorFactoryProvider accessorFactoryProvider) {
     Method[] methods = annotatedClass.getMethods();
     for (Method method : methods) {
-      DependsOn dependsOn = method.getAnnotation(DependsOn.class);
-      if (dependsOn != null) {
-        registerDependsOnListeners(dependsOn, sourceBean, method, accessorFactoryProvider);
-      }
-      DependsOnGroup dependsOnGroup = method.getAnnotation(DependsOnGroup.class);
-      if (dependsOnGroup != null) {
-        for (DependsOn groupedDependsOn : dependsOnGroup.value()) {
-          registerDependsOnListeners(groupedDependsOn, sourceBean, method, accessorFactoryProvider);
-        }
+      registerDependsOnListeners(method, sourceBean, accessorFactoryProvider);
+    }
+  }
+
+  /**
+   * Unregister depends on listeners.
+   *
+   * @param annotatedClass
+   *     the annotated class
+   * @param sourceBean
+   *     the source bean
+   * @param accessorFactoryProvider
+   *     the accessor factory provider
+   */
+  public void unregisterDependsOnListeners(Class<?> annotatedClass, IPropertyChangeCapable sourceBean,
+                                           IAccessorFactoryProvider accessorFactoryProvider) {
+    Method[] methods = annotatedClass.getMethods();
+    for (Method method : methods) {
+      unregisterDependsOnListeners(method, sourceBean, accessorFactoryProvider);
+    }
+  }
+
+  /**
+   * Register depends on listeners.
+   *
+   * @param method
+   *     the method
+   * @param sourceBean
+   *     the source bean
+   * @param accessorFactoryProvider
+   *     the accessor factory provider
+   */
+  public void registerDependsOnListeners(Method method, IPropertyChangeCapable sourceBean,
+                                         IAccessorFactoryProvider accessorFactoryProvider) {
+    DependsOn dependsOn = method.getAnnotation(DependsOn.class);
+    if (dependsOn != null) {
+      registerDependsOnListeners(dependsOn, sourceBean, method, accessorFactoryProvider);
+    }
+    DependsOnGroup dependsOnGroup = method.getAnnotation(DependsOnGroup.class);
+    if (dependsOnGroup != null) {
+      for (DependsOn groupedDependsOn : dependsOnGroup.value()) {
+        registerDependsOnListeners(groupedDependsOn, sourceBean, method, accessorFactoryProvider);
       }
     }
   }
 
-  private static void registerDependsOnListeners(DependsOn dependsOn, IPropertyChangeCapable sourceBean, Method method,
-                                                 IAccessorFactoryProvider accessorFactoryProvider) {
+  /**
+   * Unregister depends on listeners.
+   *
+   * @param method
+   *     the method
+   * @param sourceBean
+   *     the source bean
+   * @param accessorFactoryProvider
+   *     the accessor factory provider
+   */
+  public void unregisterDependsOnListeners(Method method, IPropertyChangeCapable sourceBean,
+                                           IAccessorFactoryProvider accessorFactoryProvider) {
+    DependsOn dependsOn = method.getAnnotation(DependsOn.class);
+    if (dependsOn != null) {
+      unregisterDependsOnListeners(dependsOn, sourceBean, method, accessorFactoryProvider);
+    }
+    DependsOnGroup dependsOnGroup = method.getAnnotation(DependsOnGroup.class);
+    if (dependsOnGroup != null) {
+      for (DependsOn groupedDependsOn : dependsOnGroup.value()) {
+        unregisterDependsOnListeners(groupedDependsOn, sourceBean, method, accessorFactoryProvider);
+      }
+    }
+  }
+
+  private void registerDependsOnListeners(DependsOn dependsOn, IPropertyChangeCapable sourceBean, Method method,
+                                          IAccessorFactoryProvider accessorFactoryProvider) {
     IAccessorFactory accessorFactory = accessorFactoryProvider.getAccessorFactory();
     AccessorInfo accessorInfo = accessorFactory.getAccessorInfo(method);
     String targetProperty = accessorInfo.getAccessedPropertyName();
@@ -96,7 +170,7 @@ public class DependsOnHelper {
           }
         }
       }
-    } else if (method.getParameterTypes().length == 0) {
+    } else if (method.getParameterTypes().length == 0 || propertyChangeListener != null) {
       if (sourceProperties != null && sourceProperties.length > 0) {
         String sourceCollectionProperty = dependsOn.sourceCollection();
         if (sourceCollectionProperty != null && sourceCollectionProperty.length() > 0) {
@@ -107,6 +181,44 @@ public class DependsOnHelper {
         } else {
           for (String sourceProperty : sourceProperties) {
             registerNotificationForwarding(sourceBean, accessorFactoryProvider, sourceProperty, method);
+          }
+        }
+      }
+    }
+  }
+
+  private void unregisterDependsOnListeners(DependsOn dependsOn, IPropertyChangeCapable sourceBean, Method method,
+                                            IAccessorFactoryProvider accessorFactoryProvider) {
+    IAccessorFactory accessorFactory = accessorFactoryProvider.getAccessorFactory();
+    AccessorInfo accessorInfo = accessorFactory.getAccessorInfo(method);
+    String targetProperty = accessorInfo.getAccessedPropertyName();
+    EAccessorType accessorType = accessorInfo.getAccessorType();
+    String[] sourceProperties = dependsOn.value();
+    if (accessorType != EAccessorType.NONE && targetProperty != null) {
+      if (sourceProperties != null && sourceProperties.length > 0) {
+        String sourceCollectionProperty = dependsOn.sourceCollection();
+        if (sourceCollectionProperty != null && sourceCollectionProperty.length() > 0) {
+          for (String sourceProperty : sourceProperties) {
+            unregisterNotificationCollectionForwarding(sourceBean, accessorFactoryProvider, sourceCollectionProperty,
+                sourceProperty, targetProperty);
+          }
+        } else {
+          for (String sourceProperty : sourceProperties) {
+            unregisterNotificationForwarding(sourceBean, accessorFactoryProvider, sourceProperty, targetProperty);
+          }
+        }
+      }
+    } else if (method.getParameterTypes().length == 0 || propertyChangeListener != null) {
+      if (sourceProperties != null && sourceProperties.length > 0) {
+        String sourceCollectionProperty = dependsOn.sourceCollection();
+        if (sourceCollectionProperty != null && sourceCollectionProperty.length() > 0) {
+          for (String sourceProperty : sourceProperties) {
+            unregisterNotificationCollectionForwarding(sourceBean, accessorFactoryProvider, sourceCollectionProperty,
+                sourceProperty, method);
+          }
+        } else {
+          for (String sourceProperty : sourceProperties) {
+            unregisterNotificationForwarding(sourceBean, accessorFactoryProvider, sourceProperty, method);
           }
         }
       }
@@ -125,10 +237,29 @@ public class DependsOnHelper {
    * @param forwardedProperty
    *     the name of the forwarded property.
    */
-  public static void registerNotificationForwarding(IPropertyChangeCapable sourceBean,
-                                                    IAccessorFactoryProvider accessorFactoryProvider,
-                                                    String sourceProperty, String forwardedProperty) {
+  public void registerNotificationForwarding(IPropertyChangeCapable sourceBean,
+                                             IAccessorFactoryProvider accessorFactoryProvider, String sourceProperty,
+                                             String forwardedProperty) {
     registerNotificationForwarding(sourceBean, accessorFactoryProvider, sourceProperty,
+        new String[]{forwardedProperty});
+  }
+
+  /**
+   * Unregister notification forwarding.
+   *
+   * @param sourceBean
+   *     the source bean
+   * @param accessorFactoryProvider
+   *     the accessor factory provider
+   * @param sourceProperty
+   *     the source property
+   * @param forwardedProperty
+   *     the forwarded property
+   */
+  public void unregisterNotificationForwarding(IPropertyChangeCapable sourceBean,
+                                               IAccessorFactoryProvider accessorFactoryProvider, String sourceProperty,
+                                               String forwardedProperty) {
+    unregisterNotificationForwarding(sourceBean, accessorFactoryProvider, sourceProperty,
         new String[]{forwardedProperty});
   }
 
@@ -144,10 +275,29 @@ public class DependsOnHelper {
    * @param forwardedMethod
    *     the name of the forwarded method.
    */
-  public static void registerNotificationForwarding(IPropertyChangeCapable sourceBean,
-                                                    IAccessorFactoryProvider accessorFactoryProvider,
-                                                    String sourceProperty, Method forwardedMethod) {
+  public void registerNotificationForwarding(IPropertyChangeCapable sourceBean,
+                                             IAccessorFactoryProvider accessorFactoryProvider, String sourceProperty,
+                                             Method forwardedMethod) {
     registerNotificationForwarding(sourceBean, accessorFactoryProvider, sourceProperty, new Method[]{forwardedMethod});
+  }
+
+  /**
+   * Uregister notification forwarding.
+   *
+   * @param sourceBean
+   *     the source bean
+   * @param accessorFactoryProvider
+   *     the accessor factory provider
+   * @param sourceProperty
+   *     the source property
+   * @param forwardedMethod
+   *     the forwarded method
+   */
+  public void uregisterNotificationForwarding(IPropertyChangeCapable sourceBean,
+                                              IAccessorFactoryProvider accessorFactoryProvider, String sourceProperty,
+                                              Method forwardedMethod) {
+    unregisterNotificationForwarding(sourceBean, accessorFactoryProvider, sourceProperty,
+        new Method[]{forwardedMethod});
   }
 
   /**
@@ -162,16 +312,34 @@ public class DependsOnHelper {
    * @param forwardedProperty
    *     the name of the forwarded property.
    */
-  public static void registerNotificationForwarding(IPropertyChangeCapable sourceBean,
-                                                    IAccessorFactoryProvider accessorFactoryProvider,
-                                                    String sourceProperty, String... forwardedProperty) {
+  public void registerNotificationForwarding(IPropertyChangeCapable sourceBean,
+                                             IAccessorFactoryProvider accessorFactoryProvider, String sourceProperty,
+                                             String... forwardedProperty) {
     registerNotificationForwarding(sourceBean, sourceBean, accessorFactoryProvider, sourceProperty, forwardedProperty);
   }
 
-  private static void registerNotificationForwarding(IPropertyChangeCapable sourceBean,
-                                                     IPropertyChangeCapable targetBean,
-                                                     IAccessorFactoryProvider accessorFactoryProvider,
-                                                     String sourceProperty, String... forwardedProperty) {
+  /**
+   * Unregister notification forwarding.
+   *
+   * @param sourceBean
+   *     the source bean
+   * @param accessorFactoryProvider
+   *     the accessor factory provider
+   * @param sourceProperty
+   *     the source property
+   * @param forwardedProperty
+   *     the forwarded property
+   */
+  public void unregisterNotificationForwarding(IPropertyChangeCapable sourceBean,
+                                               IAccessorFactoryProvider accessorFactoryProvider, String sourceProperty,
+                                               String... forwardedProperty) {
+    unregisterNotificationForwarding(sourceBean, sourceBean, accessorFactoryProvider, sourceProperty,
+        forwardedProperty);
+  }
+
+  private void registerNotificationForwarding(IPropertyChangeCapable sourceBean, IPropertyChangeCapable targetBean,
+                                              IAccessorFactoryProvider accessorFactoryProvider, String sourceProperty,
+                                              String... forwardedProperty) {
     if (sourceBean == null) {
       return;
     }
@@ -181,7 +349,22 @@ public class DependsOnHelper {
               + sourceProperty + " when registering notification forwarding");
     }
     sourceBean.addPropertyChangeListener(sourceProperty,
-        new ForwardingPropertyChangeListener(targetBean, accessorFactoryProvider, forwardedProperty));
+        createOrGetPropertyChangeListener(targetBean, accessorFactoryProvider, forwardedProperty));
+  }
+
+  private void unregisterNotificationForwarding(IPropertyChangeCapable sourceBean, IPropertyChangeCapable targetBean,
+                                                IAccessorFactoryProvider accessorFactoryProvider, String sourceProperty,
+                                                String... forwardedProperty) {
+    if (sourceBean == null) {
+      return;
+    }
+    if (sourceBean == targetBean && Arrays.binarySearch(forwardedProperty, sourceProperty) >= 0) {
+      throw new IllegalArgumentException(
+          "Forwarded properties " + Arrays.asList(forwardedProperty) + " cannot contain source property "
+              + sourceProperty + " when registering notification forwarding");
+    }
+    sourceBean.removePropertyChangeListener(sourceProperty,
+        createOrGetPropertyChangeListener(targetBean, accessorFactoryProvider, forwardedProperty));
   }
 
   /**
@@ -196,21 +379,48 @@ public class DependsOnHelper {
    * @param forwardedMethod
    *     the name of the forwarded method.
    */
-  public static void registerNotificationForwarding(IPropertyChangeCapable sourceBean,
-                                                    IAccessorFactoryProvider accessorFactoryProvider,
-                                                    String sourceProperty, Method... forwardedMethod) {
+  public void registerNotificationForwarding(IPropertyChangeCapable sourceBean,
+                                             IAccessorFactoryProvider accessorFactoryProvider, String sourceProperty,
+                                             Method... forwardedMethod) {
     registerNotificationForwarding(sourceBean, sourceBean, accessorFactoryProvider, sourceProperty, forwardedMethod);
   }
 
-  private static void registerNotificationForwarding(IPropertyChangeCapable sourceBean,
-                                                     IPropertyChangeCapable targetBean,
-                                                     IAccessorFactoryProvider accessorFactoryProvider,
-                                                     String sourceProperty, Method... forwardedMethod) {
+  /**
+   * Unregister notification forwarding.
+   *
+   * @param sourceBean
+   *     the source bean
+   * @param accessorFactoryProvider
+   *     the accessor factory provider
+   * @param sourceProperty
+   *     the source property
+   * @param forwardedMethod
+   *     the forwarded method
+   */
+  public void unregisterNotificationForwarding(IPropertyChangeCapable sourceBean,
+                                               IAccessorFactoryProvider accessorFactoryProvider, String sourceProperty,
+                                               Method... forwardedMethod) {
+    unregisterNotificationForwarding(sourceBean, sourceBean, accessorFactoryProvider, sourceProperty, forwardedMethod);
+  }
+
+  private void registerNotificationForwarding(IPropertyChangeCapable sourceBean, IPropertyChangeCapable targetBean,
+                                              IAccessorFactoryProvider accessorFactoryProvider, String sourceProperty,
+                                              Method... forwardedMethod) {
     if (sourceBean == null) {
       return;
     }
     sourceBean.addPropertyChangeListener(sourceProperty,
-        new ForwardingPropertyChangeListener(targetBean, accessorFactoryProvider, forwardedMethod));
+        createOrGetPropertyChangeListener(targetBean, accessorFactoryProvider, forwardedMethod));
+  }
+
+  private void unregisterNotificationForwarding(IPropertyChangeCapable sourceBean, IPropertyChangeCapable targetBean,
+                                                IAccessorFactoryProvider accessorFactoryProvider, String sourceProperty,
+                                                Method... forwardedMethod) {
+    if (sourceBean == null) {
+      return;
+    }
+    sourceBean.removePropertyChangeListener(sourceProperty,
+        createOrGetPropertyChangeListener(targetBean, accessorFactoryProvider, forwardedMethod));
   }
 
   /**
@@ -227,11 +437,33 @@ public class DependsOnHelper {
    * @param forwardedProperty
    *     the name of the forwarded property.
    */
-  public static void registerNotificationCollectionForwarding(IPropertyChangeCapable sourceBean,
-                                                              IAccessorFactoryProvider accessorFactoryProvider,
-                                                              String sourceCollectionProperty,
-                                                              String sourceElementProperty, String forwardedProperty) {
+  public void registerNotificationCollectionForwarding(IPropertyChangeCapable sourceBean,
+                                                       IAccessorFactoryProvider accessorFactoryProvider,
+                                                       String sourceCollectionProperty, String sourceElementProperty,
+                                                       String forwardedProperty) {
     registerNotificationCollectionForwarding(sourceBean, accessorFactoryProvider, sourceCollectionProperty,
+        sourceElementProperty, new String[]{forwardedProperty});
+  }
+
+  /**
+   * Unregister notification collection forwarding.
+   *
+   * @param sourceBean
+   *     the source bean
+   * @param accessorFactoryProvider
+   *     the accessor factory provider
+   * @param sourceCollectionProperty
+   *     the source collection property
+   * @param sourceElementProperty
+   *     the source element property
+   * @param forwardedProperty
+   *     the forwarded property
+   */
+  public void unregisterNotificationCollectionForwarding(IPropertyChangeCapable sourceBean,
+                                                         IAccessorFactoryProvider accessorFactoryProvider,
+                                                         String sourceCollectionProperty, String sourceElementProperty,
+                                                         String forwardedProperty) {
+    unregisterNotificationCollectionForwarding(sourceBean, accessorFactoryProvider, sourceCollectionProperty,
         sourceElementProperty, new String[]{forwardedProperty});
   }
 
@@ -249,11 +481,33 @@ public class DependsOnHelper {
    * @param forwardedMethod
    *     the name of the forwarded method.
    */
-  public static void registerNotificationCollectionForwarding(IPropertyChangeCapable sourceBean,
-                                                              IAccessorFactoryProvider accessorFactoryProvider,
-                                                              String sourceCollectionProperty,
-                                                              String sourceElementProperty, Method forwardedMethod) {
+  public void registerNotificationCollectionForwarding(IPropertyChangeCapable sourceBean,
+                                                       IAccessorFactoryProvider accessorFactoryProvider,
+                                                       String sourceCollectionProperty, String sourceElementProperty,
+                                                       Method forwardedMethod) {
     registerNotificationCollectionForwarding(sourceBean, accessorFactoryProvider, sourceCollectionProperty,
+        sourceElementProperty, new Method[]{forwardedMethod});
+  }
+
+  /**
+   * Unregister notification collection forwarding.
+   *
+   * @param sourceBean
+   *     the source bean
+   * @param accessorFactoryProvider
+   *     the accessor factory provider
+   * @param sourceCollectionProperty
+   *     the source collection property
+   * @param sourceElementProperty
+   *     the source element property
+   * @param forwardedMethod
+   *     the forwarded method
+   */
+  public void unregisterNotificationCollectionForwarding(IPropertyChangeCapable sourceBean,
+                                                         IAccessorFactoryProvider accessorFactoryProvider,
+                                                         String sourceCollectionProperty, String sourceElementProperty,
+                                                         Method forwardedMethod) {
+    unregisterNotificationCollectionForwarding(sourceBean, accessorFactoryProvider, sourceCollectionProperty,
         sourceElementProperty, new Method[]{forwardedMethod});
   }
 
@@ -271,13 +525,35 @@ public class DependsOnHelper {
    * @param forwardedProperty
    *     the name of the forwarded property.
    */
-  @SuppressWarnings("unchecked")
-  public static void registerNotificationCollectionForwarding(final IPropertyChangeCapable sourceBean,
-                                                              final IAccessorFactoryProvider accessorFactoryProvider,
-                                                              final String sourceCollectionProperty,
-                                                              final String sourceElementProperty,
-                                                              final String... forwardedProperty) {
+  public void registerNotificationCollectionForwarding(final IPropertyChangeCapable sourceBean,
+                                                       final IAccessorFactoryProvider accessorFactoryProvider,
+                                                       final String sourceCollectionProperty,
+                                                       final String sourceElementProperty,
+                                                       final String... forwardedProperty) {
     registerNotificationCollectionForwarding(sourceBean, accessorFactoryProvider, sourceCollectionProperty,
+        sourceElementProperty, forwardedProperty, null);
+  }
+
+  /**
+   * Unregister notification collection forwarding.
+   *
+   * @param sourceBean
+   *     the source bean
+   * @param accessorFactoryProvider
+   *     the accessor factory provider
+   * @param sourceCollectionProperty
+   *     the source collection property
+   * @param sourceElementProperty
+   *     the source element property
+   * @param forwardedProperty
+   *     the forwarded property
+   */
+  public void unregisterNotificationCollectionForwarding(final IPropertyChangeCapable sourceBean,
+                                                         final IAccessorFactoryProvider accessorFactoryProvider,
+                                                         final String sourceCollectionProperty,
+                                                         final String sourceElementProperty,
+                                                         final String... forwardedProperty) {
+    unregisterNotificationCollectionForwarding(sourceBean, accessorFactoryProvider, sourceCollectionProperty,
         sourceElementProperty, forwardedProperty, null);
   }
 
@@ -295,13 +571,35 @@ public class DependsOnHelper {
    * @param forwardedMethod
    *     the name of the forwarded method.
    */
-  @SuppressWarnings("unchecked")
-  public static void registerNotificationCollectionForwarding(final IPropertyChangeCapable sourceBean,
-                                                              final IAccessorFactoryProvider accessorFactoryProvider,
-                                                              final String sourceCollectionProperty,
-                                                              final String sourceElementProperty,
-                                                              final Method... forwardedMethod) {
+  public void registerNotificationCollectionForwarding(final IPropertyChangeCapable sourceBean,
+                                                       final IAccessorFactoryProvider accessorFactoryProvider,
+                                                       final String sourceCollectionProperty,
+                                                       final String sourceElementProperty,
+                                                       final Method... forwardedMethod) {
     registerNotificationCollectionForwarding(sourceBean, accessorFactoryProvider, sourceCollectionProperty,
+        sourceElementProperty, null, forwardedMethod);
+  }
+
+  /**
+   * Unregister notification collection forwarding.
+   *
+   * @param sourceBean
+   *     the source bean
+   * @param accessorFactoryProvider
+   *     the accessor factory provider
+   * @param sourceCollectionProperty
+   *     the source collection property
+   * @param sourceElementProperty
+   *     the source element property
+   * @param forwardedMethod
+   *     the forwarded method
+   */
+  public void unregisterNotificationCollectionForwarding(final IPropertyChangeCapable sourceBean,
+                                                         final IAccessorFactoryProvider accessorFactoryProvider,
+                                                         final String sourceCollectionProperty,
+                                                         final String sourceElementProperty,
+                                                         final Method... forwardedMethod) {
+    unregisterNotificationCollectionForwarding(sourceBean, accessorFactoryProvider, sourceCollectionProperty,
         sourceElementProperty, null, forwardedMethod);
   }
 
@@ -321,13 +619,12 @@ public class DependsOnHelper {
    * @param forwardedMethods
    *     the forwarded methods
    */
-  @SuppressWarnings({"unchecked", "MethodCanBeVariableArityMethod"})
-  public static void registerNotificationCollectionForwarding(final IPropertyChangeCapable sourceBean,
-                                                              final IAccessorFactoryProvider accessorFactoryProvider,
-                                                              final String sourceCollectionProperty,
-                                                              final String sourceElementProperty,
-                                                              final String[] forwardedProperties,
-                                                              final Method[] forwardedMethods) {
+  public void registerNotificationCollectionForwarding(final IPropertyChangeCapable sourceBean,
+                                                       final IAccessorFactoryProvider accessorFactoryProvider,
+                                                       final String sourceCollectionProperty,
+                                                       final String sourceElementProperty,
+                                                       final String[] forwardedProperties,
+                                                       final Method[] forwardedMethods) {
     if (sourceBean == null) {
       return;
     }
@@ -342,61 +639,9 @@ public class DependsOnHelper {
 
     // setup collection listener to attach / detach property change listeners on
     // elements
-    sourceBean.addPropertyChangeListener(sourceCollectionProperty, new PropertyChangeListener() {
-
-      @SuppressWarnings({"rawtypes", "unchecked", "SuspiciousMethodCalls"})
-      @Override
-      public void propertyChange(PropertyChangeEvent evt) {
-        // add listeners
-        if (evt.getNewValue() != null && evt.getNewValue() instanceof Collection<?> && Hibernate.isInitialized(
-            evt.getNewValue())) {
-          Collection<IPropertyChangeCapable> newChildren = new HashSet<>(
-              (Collection<IPropertyChangeCapable>) evt.getNewValue());
-          if (evt.getOldValue() != null && evt.getOldValue() instanceof Collection<?> && Hibernate.isInitialized(
-              evt.getOldValue())) {
-            newChildren.removeAll((Collection<?>) evt.getOldValue());
-          }
-          for (IPropertyChangeCapable child : newChildren) {
-            if (child != null) {
-              if (forwardedProperties != null) {
-                registerNotificationForwarding(child, sourceBean, accessorFactoryProvider, sourceElementProperty,
-                    forwardedProperties);
-              }
-              if (forwardedMethods != null) {
-                registerNotificationForwarding(child, sourceBean, accessorFactoryProvider, sourceElementProperty,
-                    forwardedMethods);
-              }
-            }
-          }
-        }
-        // remove listeners
-        if (evt.getOldValue() != null && evt.getOldValue() instanceof Collection<?> && Hibernate.isInitialized(
-            evt.getOldValue())) {
-          Collection<IPropertyChangeCapable> removedChildren = new HashSet<>(
-              (Collection<IPropertyChangeCapable>) evt.getOldValue());
-
-          if (evt.getNewValue() != null && evt.getNewValue() instanceof Collection<?> && Hibernate.isInitialized(
-              evt.getNewValue())) {
-            removedChildren.removeAll((Collection<?>) evt.getNewValue());
-          }
-          for (IPropertyChangeCapable child : removedChildren) {
-            if (child != null) {
-              for (PropertyChangeListener listener : child.getPropertyChangeListeners(sourceElementProperty)) {
-                if (listener instanceof DependsOnHelper.ForwardingPropertyChangeListener) {
-                  if (Arrays.equals(
-                      ((DependsOnHelper.ForwardingPropertyChangeListener) listener).getForwardedProperties(),
-                      forwardedProperties) || Arrays.equals(
-                      ((DependsOnHelper.ForwardingPropertyChangeListener) listener).getForwardedMethods(),
-                      forwardedMethods)) {
-                    child.removePropertyChangeListener(sourceElementProperty, listener);
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    });
+    sourceBean.addPropertyChangeListener(sourceCollectionProperty,
+        new CollectionPropertyChangeListener(forwardedProperties, sourceBean, accessorFactoryProvider,
+            sourceElementProperty, forwardedMethods));
 
     // Setup listener for initial collection if it exists
     Collection<IPropertyChangeCapable> initialChildren;
@@ -412,7 +657,70 @@ public class DependsOnHelper {
     }
   }
 
-  protected static Object retrieveInitialPropertyValue(Object sourceBean, String sourceProperty) {
+  /**
+   * Unregister notification collection forwarding.
+   *
+   * @param sourceBean
+   *     the source bean
+   * @param accessorFactoryProvider
+   *     the accessor factory provider
+   * @param sourceCollectionProperty
+   *     the source collection property
+   * @param sourceElementProperty
+   *     the source element property
+   * @param forwardedProperties
+   *     the forwarded properties
+   * @param forwardedMethods
+   *     the forwarded methods
+   */
+  public void unregisterNotificationCollectionForwarding(final IPropertyChangeCapable sourceBean,
+                                                         final IAccessorFactoryProvider accessorFactoryProvider,
+                                                         final String sourceCollectionProperty,
+                                                         final String sourceElementProperty,
+                                                         final String[] forwardedProperties,
+                                                         final Method[] forwardedMethods) {
+    if (sourceBean == null) {
+      return;
+    }
+    // listen normally to collection changes
+    if (forwardedProperties != null) {
+      unregisterNotificationForwarding(sourceBean, accessorFactoryProvider, sourceCollectionProperty,
+          forwardedProperties);
+    }
+    if (forwardedMethods != null) {
+      unregisterNotificationForwarding(sourceBean, accessorFactoryProvider, sourceCollectionProperty, forwardedMethods);
+    }
+
+    // setup collection listener to attach / detach property change listeners on
+    // elements
+    sourceBean.removePropertyChangeListener(sourceCollectionProperty,
+        new CollectionPropertyChangeListener(forwardedProperties, sourceBean, accessorFactoryProvider,
+            sourceElementProperty, forwardedMethods));
+
+    // Remove listener for current collection if it exists
+    Collection<IPropertyChangeCapable> initialChildren;
+    initialChildren = (Collection<IPropertyChangeCapable>) retrieveInitialPropertyValue(sourceBean,
+        sourceCollectionProperty);
+    if (initialChildren != null && Hibernate.isInitialized(initialChildren)) {
+      for (IPropertyChangeCapable child : initialChildren) {
+        if (child != null) {
+          unregisterNotificationForwarding(child, sourceBean, accessorFactoryProvider, sourceElementProperty,
+              forwardedProperties);
+        }
+      }
+    }
+  }
+
+  /**
+   * Retrieve initial property value object.
+   *
+   * @param sourceBean
+   *     the source bean
+   * @param sourceProperty
+   *     the source property
+   * @return the object
+   */
+  protected Object retrieveInitialPropertyValue(Object sourceBean, String sourceProperty) {
     int dotIndex = sourceProperty.lastIndexOf(".");
     if (dotIndex > 0) {
       String rootProperty = sourceProperty.substring(0, dotIndex);
@@ -439,7 +747,25 @@ public class DependsOnHelper {
     }
   }
 
-  private static class ForwardingPropertyChangeListener implements PropertyChangeListener {
+  private PropertyChangeListener createOrGetPropertyChangeListener(IPropertyChangeCapable targetBean,
+                                                                   IAccessorFactoryProvider accessorFactoryProvider,
+                                                                   String... forwardedProperties) {
+    if (propertyChangeListener != null) {
+      return propertyChangeListener;
+    }
+    return new ForwardingPropertyChangeListener(targetBean, accessorFactoryProvider, forwardedProperties);
+  }
+
+  private PropertyChangeListener createOrGetPropertyChangeListener(IPropertyChangeCapable targetBean,
+                                                                   IAccessorFactoryProvider accessorFactoryProvider,
+                                                                   Method... forwardedMethods) {
+    if (propertyChangeListener != null) {
+      return propertyChangeListener;
+    }
+    return new ForwardingPropertyChangeListener(targetBean, accessorFactoryProvider, forwardedMethods);
+  }
+
+  private class ForwardingPropertyChangeListener implements PropertyChangeListener {
 
     private IPropertyChangeCapable   targetBean;
     private String[]                 forwardedProperties;
@@ -482,6 +808,57 @@ public class DependsOnHelper {
       this.forwardedMethods = forwardedMethods;
     }
 
+    /**
+     * Equals boolean.
+     *
+     * @param obj
+     *     the obj
+     * @return the boolean
+     */
+    @Override
+    public boolean equals(Object obj) {
+      if (!(obj instanceof ForwardingPropertyChangeListener)) {
+        return false;
+      }
+      if (this == obj) {
+        return true;
+      }
+      ForwardingPropertyChangeListener rhs = (ForwardingPropertyChangeListener) obj;
+      EqualsBuilder equalsBuilder = new EqualsBuilder();
+      equalsBuilder.append(targetBean, rhs.targetBean);
+      if (forwardedProperties != null) {
+        equalsBuilder.append(forwardedProperties, rhs.forwardedProperties);
+      }
+      if (forwardedMethods != null) {
+        equalsBuilder.append(forwardedMethods, rhs.forwardedMethods);
+      }
+      return equalsBuilder.isEquals();
+    }
+
+    /**
+     * Hash code int.
+     *
+     * @return the int
+     */
+    @Override
+    public int hashCode() {
+      HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
+      hashCodeBuilder.append(targetBean);
+      if (forwardedProperties != null) {
+        hashCodeBuilder.append(forwardedProperties);
+      }
+      if (forwardedMethods != null) {
+        hashCodeBuilder.append(forwardedMethods);
+      }
+      return hashCodeBuilder.toHashCode();
+    }
+
+    /**
+     * Property change.
+     *
+     * @param evt
+     *     the evt
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
       if (forwardedProperties != null) {
@@ -543,6 +920,143 @@ public class DependsOnHelper {
      */
     public Method[] getForwardedMethods() {
       return forwardedMethods;
+    }
+  }
+
+  private class CollectionPropertyChangeListener implements PropertyChangeListener {
+
+    private final String[]                 forwardedProperties;
+    private final IPropertyChangeCapable   sourceBean;
+    private final IAccessorFactoryProvider accessorFactoryProvider;
+    private final String                   sourceElementProperty;
+    private final Method[]                 forwardedMethods;
+
+    /**
+     * Instantiates a new Collection property change listener.
+     *
+     * @param forwardedProperties
+     *     the forwarded properties
+     * @param sourceBean
+     *     the source bean
+     * @param accessorFactoryProvider
+     *     the accessor factory provider
+     * @param sourceElementProperty
+     *     the source element property
+     * @param forwardedMethods
+     *     the forwarded methods
+     */
+    public CollectionPropertyChangeListener(String[] forwardedProperties, IPropertyChangeCapable sourceBean,
+                                            IAccessorFactoryProvider accessorFactoryProvider,
+                                            String sourceElementProperty, Method[] forwardedMethods) {
+      this.forwardedProperties = forwardedProperties;
+      this.sourceBean = sourceBean;
+      this.accessorFactoryProvider = accessorFactoryProvider;
+      this.sourceElementProperty = sourceElementProperty;
+      this.forwardedMethods = forwardedMethods;
+    }
+
+    /**
+     * Equals boolean.
+     *
+     * @param obj
+     *     the obj
+     * @return the boolean
+     */
+    @Override
+    public boolean equals(Object obj) {
+      if (!(obj instanceof CollectionPropertyChangeListener)) {
+        return false;
+      }
+      if (this == obj) {
+        return true;
+      }
+      CollectionPropertyChangeListener rhs = (CollectionPropertyChangeListener) obj;
+      EqualsBuilder equalsBuilder = new EqualsBuilder();
+      equalsBuilder.append(sourceBean, rhs.sourceBean);
+      equalsBuilder.append(sourceElementProperty, rhs.sourceElementProperty);
+      if (forwardedProperties != null) {
+        equalsBuilder.append(forwardedProperties, rhs.forwardedProperties);
+      }
+      if (forwardedMethods != null) {
+        equalsBuilder.append(forwardedMethods, rhs.forwardedMethods);
+      }
+      return equalsBuilder.isEquals();
+    }
+
+    /**
+     * Hash code int.
+     *
+     * @return the int
+     */
+    @Override
+    public int hashCode() {
+      HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
+      hashCodeBuilder.append(sourceBean);
+      hashCodeBuilder.append(sourceElementProperty);
+      if (forwardedProperties != null) {
+        hashCodeBuilder.append(forwardedProperties);
+      }
+      if (forwardedMethods != null) {
+        hashCodeBuilder.append(forwardedMethods);
+      }
+      return hashCodeBuilder.toHashCode();
+    }
+
+    /**
+     * Property change.
+     *
+     * @param evt
+     *     the evt
+     */
+    @SuppressWarnings({"rawtypes", "unchecked", "SuspiciousMethodCalls"})
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+      // add listeners
+      if (evt.getNewValue() != null && evt.getNewValue() instanceof Collection<?> && Hibernate.isInitialized(
+          evt.getNewValue())) {
+        Collection<IPropertyChangeCapable> newChildren = new HashSet<>(
+            (Collection<IPropertyChangeCapable>) evt.getNewValue());
+        if (evt.getOldValue() != null && evt.getOldValue() instanceof Collection<?> && Hibernate.isInitialized(
+            evt.getOldValue())) {
+          newChildren.removeAll((Collection<?>) evt.getOldValue());
+        }
+        for (IPropertyChangeCapable child : newChildren) {
+          if (child != null) {
+            if (forwardedProperties != null) {
+              registerNotificationForwarding(child, sourceBean, accessorFactoryProvider, sourceElementProperty,
+                  forwardedProperties);
+            }
+            if (forwardedMethods != null) {
+              registerNotificationForwarding(child, sourceBean, accessorFactoryProvider, sourceElementProperty,
+                  forwardedMethods);
+            }
+          }
+        }
+      }
+      // remove listeners
+      if (evt.getOldValue() != null && evt.getOldValue() instanceof Collection<?> && Hibernate.isInitialized(
+          evt.getOldValue())) {
+        Collection<IPropertyChangeCapable> removedChildren = new HashSet<>(
+            (Collection<IPropertyChangeCapable>) evt.getOldValue());
+
+        if (evt.getNewValue() != null && evt.getNewValue() instanceof Collection<?> && Hibernate.isInitialized(
+            evt.getNewValue())) {
+          removedChildren.removeAll((Collection<?>) evt.getNewValue());
+        }
+        for (IPropertyChangeCapable child : removedChildren) {
+          if (child != null) {
+            for (PropertyChangeListener listener : child.getPropertyChangeListeners(sourceElementProperty)) {
+              if (listener instanceof ForwardingPropertyChangeListener) {
+                if (Arrays.equals(((ForwardingPropertyChangeListener) listener).getForwardedProperties(),
+                    forwardedProperties) || Arrays.equals(
+                    ((ForwardingPropertyChangeListener) listener).getForwardedMethods(), forwardedMethods)) {
+                  child.removePropertyChangeListener(sourceElementProperty, listener);
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

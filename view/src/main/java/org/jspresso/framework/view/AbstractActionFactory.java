@@ -54,7 +54,7 @@ import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.gate.GateHelper;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gate.IModelGate;
-import org.jspresso.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.util.lang.IContextAware;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
 /**
@@ -126,6 +126,12 @@ public abstract class AbstractActionFactory<E, F, G> implements IActionFactory<E
     return actionContext;
   }
 
+  public Map<String, Object> createGateContext(IView<F> view) {
+    Map<String, Object> gateContext = new HashMap<>();
+    gateContext.put(ActionContextConstants.VIEW, view);
+    return gateContext;
+  }
+
   /**
    * Sets the iconFactory.
    *
@@ -166,6 +172,9 @@ public abstract class AbstractActionFactory<E, F, G> implements IActionFactory<E
         for (IGate gate : actionabilityGates) {
           if (!(gate instanceof ISecurable) || actionHandler.isAccessGranted((ISecurable) gate)) {
             final IGate clonedGate = gate.clone();
+            if (clonedGate instanceof IContextAware) {
+              ((IContextAware) clonedGate).setContext(createGateContext(view));
+            }
             applyGateDependencyInjection(clonedGate, actionHandler);
             if (clonedGate instanceof IModelGate && viewConnector != null) {
               if (((IModelGate) clonedGate).isCollectionBased()) {
@@ -213,10 +222,10 @@ public abstract class AbstractActionFactory<E, F, G> implements IActionFactory<E
                   // to respect init state
                   assignCollectionBasedGateModel(clonedGate, ((IItemSelectable) viewConnector).getSelectedItem());
                 } else {
-                  bindSimpleGateModel(clonedGate, viewConnector, modelDescriptor);
+                  bindSimpleGateModel((IModelGate) clonedGate, viewConnector, modelDescriptor);
                 }
               } else {
-                bindSimpleGateModel(clonedGate, viewConnector, modelDescriptor);
+                bindSimpleGateModel((IModelGate) clonedGate, viewConnector, modelDescriptor);
               }
             }
             clonedGates.add(clonedGate);
@@ -249,11 +258,12 @@ public abstract class AbstractActionFactory<E, F, G> implements IActionFactory<E
     }
   }
 
-  private void bindSimpleGateModel(final IGate gate, IValueConnector viewConnector, IModelDescriptor modelDescriptor) {
+  private void bindSimpleGateModel(final IModelGate gate, IValueConnector viewConnector,
+                                   IModelDescriptor modelDescriptor) {
     if (modelDescriptor instanceof IPropertyDescriptor) {
       // Binds to the model provider
       if (viewConnector.getModelConnector() != null && viewConnector.getModelConnector().getModelProvider() != null) {
-        ((IModelGate) gate).setModel(viewConnector.getModelConnector().getModelProvider().getModel());
+        gate.setModel(viewConnector.getModelConnector().getModelProvider().getModel());
         // the following disables table cell editors in swing.
         // } else {
         // ((IModelGate) gate).setModel(null);
@@ -262,7 +272,7 @@ public abstract class AbstractActionFactory<E, F, G> implements IActionFactory<E
 
         @Override
         public void modelChange(ModelChangeEvent evt) {
-          ((IModelGate) gate).setModel(evt.getNewValue());
+          gate.setModel(evt.getNewValue());
         }
       };
       viewConnector.addPropertyChangeListener(IValueConnector.MODEL_CONNECTOR_PROPERTY, new PropertyChangeListener() {
@@ -278,7 +288,7 @@ public abstract class AbstractActionFactory<E, F, G> implements IActionFactory<E
             }
           }
           if (newModelConnector != null && newModelConnector.getModelProvider() != null) {
-            ((IModelGate) gate).setModel(newModelConnector.getModelProvider().getModel());
+            gate.setModel(newModelConnector.getModelProvider().getModel());
             newModelConnector.getModelProvider().addModelChangeListener(modelChangeListener);
             // the following disables table cell editors in swing.
             // } else {
@@ -288,12 +298,12 @@ public abstract class AbstractActionFactory<E, F, G> implements IActionFactory<E
       });
     } else {
       // simply binds to the value.
-      ((IModelGate) gate).setModel(viewConnector.getConnectorValue());
+      gate.setModel(viewConnector.getConnectorValue());
       viewConnector.addValueChangeListener(new IValueChangeListener() {
 
         @Override
         public void valueChange(ValueChangeEvent evt) {
-          ((IModelGate) gate).setModel(evt.getNewValue());
+          gate.setModel(evt.getNewValue());
         }
       });
     }
@@ -370,8 +380,7 @@ public abstract class AbstractActionFactory<E, F, G> implements IActionFactory<E
    *     the locale
    * @return the completed action description
    */
-  protected String computeActionDescription(IAction action, IActionHandler actionHandler,
-                                            Locale locale) {
+  protected String computeActionDescription(IAction action, IActionHandler actionHandler, Locale locale) {
     String actionDescription = ((IDisplayableAction) action).getI18nDescription(actionHandler, locale);
     IUIDebugPlugin liveDebugUIPlugin = getLiveUIDebugPlugin();
     if (liveDebugUIPlugin != null) {

@@ -447,6 +447,8 @@ public class RemoteConnectorFactory
   public RemoteValueState createRemoteValueState(String guid, String permId) {
     RemoteValueState state = new RemoteValueState(guid);
     state.setPermId(registerPermId(permId, guid));
+    state.setReadable(true);
+    state.setWritable(true);
     // connectors are registered with the same guid as their state.
     // remotePeerRegistry.register(state);
     return state;

@@ -36,7 +36,7 @@ import java.util.Collection;
  * This is the base abstract class of gates whose opening rules are based on a
  * single model property value.
  *
- * @author Vincent Vandenschrick the actual type of property.
+ * @author Vincent Vandenschrick
  * @param <E>
  *          the actual property type.
  */

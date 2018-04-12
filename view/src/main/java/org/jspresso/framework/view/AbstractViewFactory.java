@@ -64,6 +64,7 @@ import org.jspresso.framework.model.descriptor.EDateType;
 import org.jspresso.framework.model.descriptor.EDuration;
 import org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IColorPropertyDescriptor;
@@ -115,6 +116,7 @@ import org.jspresso.framework.util.gui.ERenderingOptions;
 import org.jspresso.framework.util.gui.IClientTypeAware;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.lang.ICloneable;
+import org.jspresso.framework.util.lang.IContextAware;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
@@ -306,6 +308,9 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
               if (clonedGate instanceof IActionHandlerAware) {
                 ((IActionHandlerAware) clonedGate).setActionHandler(actionHandler);
               }
+              if (clonedGate instanceof IContextAware) {
+                ((IContextAware) clonedGate).setContext(createGateContext(view));
+              }
               if (clonedGate instanceof IModelGate && ((IModelGate) clonedGate).isCollectionBased()
                   && viewConnector instanceof AbstractCollectionConnector) {
                 ((AbstractCollectionConnector) viewConnector).getChildConnectorPrototype().addReadabilityGate(
@@ -322,6 +327,9 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
               IGate clonedGate = gate.clone();
               if (clonedGate instanceof IActionHandlerAware) {
                 ((IActionHandlerAware) clonedGate).setActionHandler(actionHandler);
+              }
+              if (clonedGate instanceof IContextAware) {
+                ((IContextAware) clonedGate).setContext(createGateContext(view));
               }
               if (clonedGate instanceof IModelGate && ((IModelGate) clonedGate).isCollectionBased()
                   && viewConnector instanceof AbstractCollectionConnector) {
@@ -372,6 +380,27 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     } finally {
       actionHandler.restoreLastSecurityContextSnapshot();
     }
+  }
+
+  /**
+   * Create gate context map.
+   *
+   * @param actionHandler
+   *     the action handler
+   * @param view
+   *     the view
+   * @param viewConnector
+   *     the view connector
+   * @param actionCommand
+   *     the action command
+   * @param actionWidget
+   *     the action widget
+   * @return the map
+   */
+  protected Map<String, Object> createGateContext(IView<E> view) {
+    Map<String, Object> gateContext = new HashMap<>();
+    gateContext.put(ActionContextConstants.VIEW, view);
+    return gateContext;
   }
 
   /**
