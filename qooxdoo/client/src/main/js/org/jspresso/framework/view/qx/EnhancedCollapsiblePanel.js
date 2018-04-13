@@ -29,6 +29,7 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedCollapsiblePanel", {
     collapsible: {
       check: "Boolean",
       init: true,
+      apply: "_applyCollapsible",
       event: "changeCollapsible"
     }
   },
@@ -39,10 +40,28 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedCollapsiblePanel", {
       this.getChildControl("barContainer").add(widget);
     },
 
-    // property apply
     _applyValue: function (value, old) {
       this.getChildControl("barContainer");
+      this._applyCaption(this.getCaption());
       this.base(arguments, value, old);
+    },
+
+    _applyCaption: function (caption) {
+      if (this.isCollapsible()) {
+        var refinedCaption;
+        if (this.getValue()) {
+          refinedCaption = "\u25BF " + caption;
+        } else {
+          refinedCaption = "\u25B9 " + caption;
+        }
+        this.base(arguments, refinedCaption);
+      } else {
+        this.base(arguments, caption);
+      }
+    },
+
+    _applyCollapsible: function (collapsible) {
+      this._applyCaption(this.getCaption());
     },
 
     // overridden
