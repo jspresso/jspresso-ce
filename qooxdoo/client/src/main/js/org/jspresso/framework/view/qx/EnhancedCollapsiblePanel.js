@@ -50,9 +50,9 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedCollapsiblePanel", {
       if (this.isCollapsible()) {
         var refinedCaption;
         if (this.getValue()) {
-          refinedCaption = "\u25BF " + caption;
+          refinedCaption = caption;
         } else {
-          refinedCaption = "\u25B9 " + caption;
+          refinedCaption = caption + " \u25FF";
         }
         this.base(arguments, refinedCaption);
       } else {
