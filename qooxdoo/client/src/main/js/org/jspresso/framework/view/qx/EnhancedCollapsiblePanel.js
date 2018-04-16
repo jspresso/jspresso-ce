@@ -20,6 +20,10 @@
 qx.Class.define("org.jspresso.framework.view.qx.EnhancedCollapsiblePanel", {
   extend: collapsablepanel.Panel,
 
+  statics: {
+    __MARKER_CHAR : "\u25B9"
+  },
+
   construct: function (label, layout) {
     this.base(arguments, label, layout);
   },
@@ -59,7 +63,7 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedCollapsiblePanel", {
         if (this.getValue()) {
           refinedCaption = caption;
         } else {
-          refinedCaption = caption + " \u25FF";
+          refinedCaption = caption + " " + org.jspresso.framework.view.qx.EnhancedCollapsiblePanel.__MARKER_CHAR;
         }
         this.base(arguments, refinedCaption);
       } else {
