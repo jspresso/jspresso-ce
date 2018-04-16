@@ -334,6 +334,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       this.__workspaceAccordionGroup.setAllowEmptySelection(false);
       for (var i = 0; i < workspaceActions.getActions().length; i++) {
         var workspacePanel = new org.jspresso.framework.view.qx.EnhancedCollapsiblePanel(workspaceActions.getActions()[i].getName());
+        workspacePanel.setDisplayMarker(false);
         workspacePanel.setAppearance("accordion-section");
         workspacePanel._getLayout().setSeparator("accordion-section-box");
         if (i == 0) {

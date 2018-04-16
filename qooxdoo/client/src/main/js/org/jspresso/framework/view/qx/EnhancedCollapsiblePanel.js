@@ -31,6 +31,13 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedCollapsiblePanel", {
       init: true,
       apply: "_applyCollapsible",
       event: "changeCollapsible"
+    },
+
+    displayMarker: {
+      check: "Boolean",
+      init: true,
+      nullable: true,
+      apply: "_applyDisplayMarker"
     }
   },
 
@@ -47,7 +54,7 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedCollapsiblePanel", {
     },
 
     _applyCaption: function (caption) {
-      if (this.isCollapsible()) {
+      if (this.isDisplayMarker() && this.isCollapsible()) {
         var refinedCaption;
         if (this.getValue()) {
           refinedCaption = caption;
@@ -61,6 +68,10 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedCollapsiblePanel", {
     },
 
     _applyCollapsible: function (collapsible) {
+      this._applyCaption(this.getCaption());
+    },
+
+    _applyDisplayMarker: function (displayMarker) {
       this._applyCaption(this.getCaption());
     },
 
