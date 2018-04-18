@@ -3226,43 +3226,46 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
 
       splitContainer.addListenerOnce("appear", function (appearEvent) {
         var ltSize, rbSize, splitSize;
-        var wrapper;
+        var ltWrapper;
+        var rbWrapper;
         if (ltComponent) {
           if (remoteSplitContainer.getOrientation() == "VERTICAL") {
             ltSize = ltComponent.getSizeHint().height;
             splitSize = splitContainer.getBounds().height;
+            ltComponent.setAllowStretchY(true, true);
           } else {
             ltSize = ltComponent.getSizeHint().width;
             splitSize = splitContainer.getBounds().width;
+            ltComponent.setAllowStretchX(true, true);
           }
-          wrapper = new qx.ui.container.Composite(new qx.ui.layout.Grow());
+          ltWrapper = new qx.ui.container.Composite(new qx.ui.layout.Grow());
           ltComponent.syncAppearance();
-          wrapper.setPadding([ltComponent.getMarginTop(), ltComponent.getMarginRight(), ltComponent.getMarginBottom(),
+          ltWrapper.setPadding([ltComponent.getMarginTop(), ltComponent.getMarginRight(), ltComponent.getMarginBottom(),
                               ltComponent.getMarginLeft()]);
-          wrapper.add(ltComponent);
-          ltComponent = wrapper;
+          ltWrapper.add(ltComponent);
         }
         if (rbComponent) {
           if (remoteSplitContainer.getOrientation() == "VERTICAL") {
             rbSize = rbComponent.getSizeHint().height;
             splitSize = splitContainer.getBounds().height;
+            rbComponent.setAllowStretchY(true, true);
           } else {
             rbSize = rbComponent.getSizeHint().width;
             splitSize = splitContainer.getBounds().width;
+            rbComponent.setAllowStretchX(true, true);
           }
-          wrapper = new qx.ui.container.Composite(new qx.ui.layout.Grow());
+          rbWrapper = new qx.ui.container.Composite(new qx.ui.layout.Grow());
           rbComponent.syncAppearance();
-          wrapper.setPadding([rbComponent.getMarginTop(), rbComponent.getMarginRight(), rbComponent.getMarginBottom(),
+          rbWrapper.setPadding([rbComponent.getMarginTop(), rbComponent.getMarginRight(), rbComponent.getMarginBottom(),
                               rbComponent.getMarginLeft()]);
-          wrapper.add(rbComponent);
-          rbComponent = wrapper;
+          rbWrapper.add(rbComponent);
         }
         if ((ltSize + rbSize) < splitSize) {
-          splitContainer.add(ltComponent, 0);
-          splitContainer.add(rbComponent, 1);
+          splitContainer.add(ltWrapper, 0);
+          splitContainer.add(rbWrapper, 1);
         } else {
-          splitContainer.add(ltComponent, ltSize);
-          splitContainer.add(rbComponent, rbSize);
+          splitContainer.add(ltWrapper, ltSize);
+          splitContainer.add(rbWrapper, rbSize);
         }
       }, this);
       return splitContainer;
