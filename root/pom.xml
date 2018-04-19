@@ -16,7 +16,7 @@
 
     <!-- Jspresso dependencies versions -->
     <jspresso.version>6.0.0-SNAPSHOT</jspresso.version>
-    <sjs.version>3.1.7</sjs.version>
+    <sjs.version>3.2.0</sjs.version>
 
     <junit.version>4.12</junit.version>
     <mockito.version>1.10.19</mockito.version>
@@ -128,7 +128,7 @@
     <jetty-plugin.version>9.2.17.v20160517</jetty-plugin.version>
     <appassembler-plugin.version>1.10</appassembler-plugin.version>
     <wagon-plugin.version>1.0</wagon-plugin.version>
-    <liquibase.version>3.5.3</liquibase.version>
+    <liquibase.version>3.6.1</liquibase.version>
     <liquibase-plugin.version>${liquibase.version}</liquibase-plugin.version>
     <liquibase-hibernate.version>3.6</liquibase-hibernate.version>
   </properties>
