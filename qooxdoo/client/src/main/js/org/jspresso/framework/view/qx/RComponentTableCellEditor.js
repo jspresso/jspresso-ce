@@ -147,7 +147,6 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
         });
       }
       editor.addListener("keypress", function (e) {
-        var timer = qx.util.TimerManager.getInstance();
         var iden = e.getKeyIdentifier();
         if (iden == "Tab") {
           e.stop();
@@ -201,15 +200,13 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentTableCellEditor", {
 
     __flushEditorValue: function () {
       var fieldToFlush;
-      if (this.__editorWidget instanceof qx.ui.form.DateField) {
-        fieldToFlush = this.__editorWidget;
-      } else if (this.__editorWidget instanceof qx.ui.container.Composite) {
+      if (this.__editorWidget instanceof qx.ui.container.Composite) {
         if (this.__editorWidget.getUserData("df")) {
           fieldToFlush = this.__editorWidget.getUserData("df");
         } else if(this.__editorWidget.getUserData("actionsDecorated")) {
           fieldToFlush = this.__editorWidget.getUserData("actionsDecorated");
         }
-      } else if (this.__editorWidget instanceof qx.ui.form.TextField) {
+      } else {
         fieldToFlush = this.__editorWidget;
       }
       if (fieldToFlush && fieldToFlush.getValue) {
