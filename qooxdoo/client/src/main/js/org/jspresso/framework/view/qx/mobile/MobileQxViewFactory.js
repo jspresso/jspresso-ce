@@ -67,7 +67,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     /** @type {Array} */
     __monthNames: null,
     /** @type {qx.ui.mobile.form.TextField} */
-    __textFieldToBlur: null,
+    __textComponentToBlur: null,
 
     /**
      * @return {qx.ui.mobile.core.Widget}
@@ -333,8 +333,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     },
 
     loseFocus: function () {
-      if (this.__textFieldToBlur) {
-        this.__textFieldToBlur.blur();
+      if (this.__textComponentToBlur) {
+        this.__textComponentToBlur.blur();
       }
     },
 
@@ -1188,7 +1188,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         converter: this._readOnlyFieldConverter
       });
       textField.addListener("input", function (event) {
-        this.__textFieldToBlur = textField;
+        this.__textComponentToBlur = textField;
         if (remoteTextField.getCharacterAction()) {
           textField.setUserData(org.jspresso.framework.view.qx.AbstractQxViewFactory._INPUT_TIMESTAMP,
               event.getTimeStamp());
@@ -1715,7 +1715,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           converter: this._modelToViewFieldConverter
         });
         textField.addListener("input", function (event) {
-          this.__textFieldToBlur = textField;
+          this.__textComponentToBlur = textField;
           if (remoteActionField.getCharacterAction()) {
             textField.setUserData(org.jspresso.framework.view.qx.AbstractQxViewFactory._INPUT_TIMESTAMP,
                 event.getTimeStamp());
@@ -2491,6 +2491,15 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       if (remoteTextArea.getPreferredSize() && remoteTextArea.getPreferredSize().getHeight()) {
         textArea._setStyle("height", remoteTextArea.getPreferredSize().getHeight() + "px");
       }
+      this._bindTextArea(remoteTextArea, textArea);
+      return textArea;
+    },
+
+    /**
+     * @param remoteTextArea {org.jspresso.framework.gui.remote.RTextArea}
+     * @param textArea {qx.ui.mobile.form.TextArea}
+     */
+    _bindTextArea: function (remoteTextArea, textArea) {
       var state = remoteTextArea.getState();
       var modelController = new qx.data.controller.Object(state);
       modelController.addTarget(textArea, "value", "value", true, {
@@ -2501,8 +2510,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       modelController.addTarget(textArea, "readOnly", "writable", false, {
         converter: this._readOnlyFieldConverter
       });
+      textArea.addListener("input", function (event) {
+        this.__textComponentToBlur = textArea;
+      }, this);
       this.__bindReadOnlyBorder(state, textArea);
-      return textArea;
     },
 
     /**
