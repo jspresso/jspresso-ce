@@ -152,6 +152,7 @@ import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEnumerationPropertyViewDescriptor;
+import org.jspresso.framework.view.descriptor.IHtmlViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IMapViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
@@ -513,6 +514,9 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     } else {
       viewComponent.setVerticallyScrollable(true);
       viewComponent.setHorizontallyScrollable(false);
+    }
+    if (propertyViewDescriptor instanceof IHtmlViewDescriptor) {
+      viewComponent.setEditorConfiguration(((IHtmlViewDescriptor) propertyViewDescriptor).getEditorConfiguration());
     }
     IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
     viewComponent.setAction(

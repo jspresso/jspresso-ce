@@ -37,6 +37,10 @@ qx.Class.define("org.jspresso.framework.gui.remote.RHtmlArea", {
     action: {
       check: "org.jspresso.framework.gui.remote.RAction",
       nullable: true
+    },
+    editorConfiguration: {
+      check: "String",
+      nullable: true
     }
   }
 

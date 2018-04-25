@@ -27,11 +27,11 @@ import org.jspresso.framework.view.descriptor.IHtmlViewDescriptor;
  *
  * @author Vincent Vandenschrick
  */
-public class BasicHtmlViewDescriptor extends BasicPropertyViewDescriptor
-    implements IHtmlViewDescriptor {
+public class BasicHtmlViewDescriptor extends BasicPropertyViewDescriptor implements IHtmlViewDescriptor {
 
   private boolean verticallyScrollable;
   private boolean horizontallyScrollable;
+  private String  editorConfiguration;
 
   /**
    * Constructs a new {@code BasicImageViewDescriptor} instance.
@@ -66,7 +66,7 @@ public class BasicHtmlViewDescriptor extends BasicPropertyViewDescriptor
    * display area is too small to display it.
    *
    * @param verticallyScrollable
-   *          the verticallyScrollable to set.
+   *     the verticallyScrollable to set.
    */
   public void setVerticallyScrollable(boolean verticallyScrollable) {
     this.verticallyScrollable = verticallyScrollable;
@@ -87,10 +87,29 @@ public class BasicHtmlViewDescriptor extends BasicPropertyViewDescriptor
    * Sets the horizontallyScrollable.
    *
    * @param horizontallyScrollable
-   *          the horizontallyScrollable to set.
+   *     the horizontallyScrollable to set.
    */
   public void setHorizontallyScrollable(boolean horizontallyScrollable) {
     this.horizontallyScrollable = horizontallyScrollable;
   }
 
+  /**
+   * Gets editor configuration.
+   *
+   * @return the editor configuration
+   */
+  @Override
+  public String getEditorConfiguration() {
+    return editorConfiguration;
+  }
+
+  /**
+   * Sets editor configuration.
+   *
+   * @param editorConfiguration
+   *     the editor configuration
+   */
+  public void setEditorConfiguration(String editorConfiguration) {
+    this.editorConfiguration = editorConfiguration;
+  }
 }

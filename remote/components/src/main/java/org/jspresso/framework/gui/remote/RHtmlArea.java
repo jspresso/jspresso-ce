@@ -31,6 +31,7 @@ public class RHtmlArea extends RTextComponent implements RActionable {
   private boolean verticallyScrollable;
   private boolean horizontallyScrollable;
   private RAction action;
+  private String  editorConfiguration;
 
 
   /**
@@ -125,5 +126,24 @@ public class RHtmlArea extends RTextComponent implements RActionable {
    */
   public void setAction(RAction action) {
     this.action = action;
+  }
+
+  /**
+   * Gets editor configuration.
+   *
+   * @return the editor configuration
+   */
+  public String getEditorConfiguration() {
+    return editorConfiguration;
+  }
+
+  /**
+   * Sets editor configuration.
+   *
+   * @param editorConfiguration
+   *     the editor configuration
+   */
+  public void setEditorConfiguration(String editorConfiguration) {
+    this.editorConfiguration = editorConfiguration;
   }
 }

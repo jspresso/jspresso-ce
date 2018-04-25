@@ -28,6 +28,7 @@ public class RHtmlArea extends RTextComponent {
   private var _verticallyScrollable:Boolean;
   private var _horizontallyScrollable:Boolean;
   private var _action:RAction;
+  private var _editorConfiguration:String;
 
   public function RHtmlArea() {
     //default constructor.
@@ -63,6 +64,14 @@ public class RHtmlArea extends RTextComponent {
 
   public function set action(value:RAction):void {
     _action = value;
+  }
+
+  public function get editorConfiguration():String {
+    return _editorConfiguration;
+  }
+
+  public function set editorConfiguration(value:String):void {
+    _editorConfiguration = value;
   }
 }
 }
