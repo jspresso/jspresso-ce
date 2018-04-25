@@ -293,6 +293,8 @@ public abstract class AbstractActionFactory<E, F, G> implements IActionFactory<E
             // the following disables table cell editors in swing.
             // } else {
             // ((IModelGate) gate).setModel(null);
+          } else {
+            gate.setModel(null);
           }
         }
       });
