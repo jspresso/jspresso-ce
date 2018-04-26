@@ -150,9 +150,6 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
         if (((AbstractMobilePageViewDescriptor) viewDescriptor).getI18nDescription() != null) {
           viewPeer.setToolTip(((AbstractMobilePageViewDescriptor) viewDescriptor).getI18nDescription());
         }
-        if (((AbstractMobilePageViewDescriptor) viewDescriptor).getI18nDescription() != null) {
-          viewPeer.setToolTip(((AbstractMobilePageViewDescriptor) viewDescriptor).getI18nDescription());
-        }
       }
       decorateWithPageAwareContainer(view, viewDescriptor, actionHandler, locale);
       return view;

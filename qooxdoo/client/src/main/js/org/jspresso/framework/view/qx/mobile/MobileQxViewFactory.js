@@ -31,6 +31,18 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     __EXISTING_CARDS: "existingCards",
     __EXISTING_CARD_NAMES: "existingCardNames",
 
+    refineListItemClasses: function (item, title, subtitle) {
+      var htmlRegExp = /.*<\/.*>.*/;
+      if (title && title.match(htmlRegExp)) {
+        // Title is self formatted
+        item.getTitleWidget().removeCssClass("list-item-title");
+      }
+      if (subtitle && subtitle.match(htmlRegExp)) {
+        // Subtitle is self formatted
+        item.getSubtitleWidget().removeCssClass("list-item-subtitle");
+      }
+    },
+
     bindListItem: function (item, state, selected, displayIcon) {
       var children = state.getChildren();
       var title;
@@ -41,12 +53,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       } else {
         title = "";
       }
+      var subtitle = state.getDescription();
       item.setTitle(title);
-      if (title && title.match(/.*<\/.*>.*/)) {
-        // Title is self formatted
-        item.getTitleWidget().removeCssClass("list-item-title");
-      }
-      item.setSubtitle(state.getDescription());
+      item.setSubtitle(subtitle);
+      org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.refineListItemClasses(item, title, subtitle);
       if (displayIcon) {
         if (state.getIconImageUrl()) {
           item.setImage(state.getIconImageUrl());
@@ -143,7 +153,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     },
 
     /**
-     *
      * @return {qx.ui.mobile.form.Button}
      * @param remoteAction {org.jspresso.framework.gui.remote.RAction}
      */
@@ -845,16 +854,21 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var list = new qx.ui.mobile.list.List({
         configureItem: function (item, data, row) {
           var section = data;
+          var title;
+          var subtitle;
           if (section.getLabelState()) {
-            item.setTitle(section.getLabelState().getValue());
+            title = section.getLabelState().getValue();
           } else {
-            item.setTitle(section.getLabel());
+            title = section.getLabel();
           }
           if (section.getToolTipState()) {
-            item.setSubtitle(section.getToolTipState().getValue());
+            subtitle = section.getToolTipState().getValue();
           } else {
-            item.setSubtitle(section.getToolTip());
+            subtitle = section.getToolTip();
           }
+          item.setTitle(title);
+          item.setSubtitle(subtitle);
+          org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.refineListItemClasses(item, title, subtitle);
           if (section.getIcon()) {
             item.setImage(org.jspresso.framework.view.qx.AbstractQxViewFactory.completeForSVG(
                 section.getIcon().getImageUrlSpec()));
