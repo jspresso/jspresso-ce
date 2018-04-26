@@ -311,6 +311,10 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     viewComponent.setHeaderSections(headerSections.toArray(new RComponent[headerSections.size()]));
     if (selectionViewDescriptor != null) {
       IView<RComponent> selectionView = createView(selectionViewDescriptor, actionHandler, locale);
+      if (selectionViewDescriptor.getName() == null) {
+        // If not overriden, Navigation page title will be taken from the nav page title. see #514
+        selectionView.getPeer().setLabel(null);
+      }
       viewComponent.setSelectionView(selectionView.getPeer());
       childrenViews.add(selectionView);
       IValueConnector selectionViewConnector = selectionView.getConnector();
