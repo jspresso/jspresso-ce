@@ -248,19 +248,27 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       extraActions.removeAll();
       toolBar.removeAll();
       var countAdded = 0;
+      var extraActionFirstIndex = -1;
       for (var i = 0; i < toolBarButtons.length; i++) {
         var toolBarButton = toolBarButtons[i];
         if (toolBarButton.isVisible()) {
-          if (countAdded < (maxToolbarActionCount - 1 - (extraActionsToolBarButton ? 1 : 0))) {
+          if (countAdded < (maxToolbarActionCount - (extraActionsToolBarButton ? 1 : 0))) {
             toolBar.add(toolBarButton);
             countAdded++;
           } else {
+            if (extraActionFirstIndex < 0) {
+              extraActionFirstIndex = i;
+            }
             extraActions.push(actions[i]);
           }
         }
       }
-      if (extraActionsToolBarButton && extraActions.getLength() > 0) {
-        toolBar.add(extraActionsToolBarButton);
+      if (extraActionsToolBarButton) {
+        if (extraActions.getLength() > 1) {
+          toolBar.add(extraActionsToolBarButton);
+        } else if (extraActionFirstIndex >= 0) {
+          toolBar.add(toolBarButtons[extraActionFirstIndex]);
+        }
       }
     },
 
@@ -324,7 +332,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @param component {qx.ui.mobile.core.Widget}
      */
     _addToolBarActions: function (remoteComponent, component) {
-      var maxToolbarActionCount = 4;
+      var maxToolbarActionCount = 3;
       var actions = this.extractAllActions(remoteComponent.getActionLists());
       if (actions.length > 0) {
         var toolBar = this.createToolBarFromActions(actions, maxToolbarActionCount, null);
