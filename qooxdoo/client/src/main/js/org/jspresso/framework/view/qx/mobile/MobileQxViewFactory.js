@@ -198,7 +198,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
     },
 
     /**
-     * @param extraActions {Array}
+     * @param extraActions {qx.data.Array}
      * @return {qx.ui.mobile.toolbar.Button}
      */
     _createExtraActionsToolBarButton: function (extraActions) {
@@ -228,19 +228,40 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           }
         }
       });
-      for (var i = 0; i < extraActions.length; i++) {
-        this._getRemotePeerRegistry().register(extraActions[i]);
+      for (var i = 0; i < extraActions.getLength(); i++) {
+        this._getRemotePeerRegistry().register(extraActions.getItem(i));
       }
-      extraMenu.getSelectionList().setModel(new qx.data.Array(extraActions));
+      extraMenu.getSelectionList().setModel(extraActions);
       extraMenu.setAnchor(extraButton);
       extraMenu.addListener("changeSelection", function (evt) {
         var selectedIndex = evt.getData()["index"];
-        this._getActionHandler().execute(extraActions[selectedIndex]);
+        this._getActionHandler().execute(extraActions.getItem(selectedIndex));
       }, this);
       this.addButtonListener(extraButton, function (evt) {
         extraMenu.show();
       }, this);
       return extraButton;
+    },
+
+    _reworkToolBar: function (toolBar, maxToolbarActionCount, toolBarButtons, actions, extraActions,
+                              extraActionsToolBarButton) {
+      extraActions.removeAll();
+      toolBar.removeAll();
+      var countAdded = 0;
+      for (var i = 0; i < toolBarButtons.length; i++) {
+        var toolBarButton = toolBarButtons[i];
+        if (toolBarButton.isVisible()) {
+          if (countAdded < (maxToolbarActionCount - 1 - (extraActionsToolBarButton ? 1 : 0))) {
+            toolBar.add(toolBarButton);
+            countAdded++;
+          } else {
+            extraActions.push(actions[i]);
+          }
+        }
+      }
+      if (extraActionsToolBarButton && extraActions.getLength() > 0) {
+        toolBar.add(extraActionsToolBarButton);
+      }
     },
 
     /**
@@ -250,27 +271,31 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @return {qx.ui.mobile.toolbar.ToolBar}
      */
     createToolBarFromActions: function (actions, maxToolbarActionCount, modelController) {
-      var extraActions = [];
       var toolBar = new qx.ui.mobile.toolbar.ToolBar();
       toolBar.addCssClass("jspresso-toolbar");
-      var actionComponent;
+      var toolBarButtons = [];
+      var extraActions = new qx.data.Array();
       for (var i = 0; i < actions.length; i++) {
-        if (i < maxToolbarActionCount - 1 || actions.length == maxToolbarActionCount) {
-          actionComponent = this.createToolBarAction(actions[i]);
-          if (modelController) {
-            modelController.addTarget(actionComponent, "enabled", "writable", false);
-          }
-          toolBar.add(actionComponent);
-        } else {
-          extraActions.push(actions[i]);
+        var toolBarButton = this.createToolBarAction(actions[i]);
+        toolBarButtons.push(toolBarButton);
+        if (modelController) {
+          modelController.addTarget(toolBarButton, "enabled", "writable", false);
         }
       }
-      if (extraActions.length > 0) {
-        actionComponent = this._createExtraActionsToolBarButton(extraActions);
+      var extraActionsToolBarButton = null;
+      if (actions.length > maxToolbarActionCount) {
+        extraActionsToolBarButton = this._createExtraActionsToolBarButton(extraActions);
         if (modelController) {
-          modelController.addTarget(actionComponent, "enabled", "writable", false);
+          modelController.addTarget(extraActionsToolBarButton, "enabled", "writable", false);
         }
-        toolBar.add(actionComponent);
+      }
+      this._reworkToolBar(toolBar, maxToolbarActionCount, toolBarButtons, actions, extraActions,
+          extraActionsToolBarButton);
+      for (var i = 0; i < toolBarButtons.length; i++) {
+        toolBarButtons[i].addListener("changeVisibility", function (e) {
+          this._reworkToolBar(toolBar, maxToolbarActionCount, toolBarButtons, actions, extraActions,
+              extraActionsToolBarButton);
+        }, this);
       }
       toolBar.addListener("appear", function (e) {
         qx.event.Timer.once(function () {
