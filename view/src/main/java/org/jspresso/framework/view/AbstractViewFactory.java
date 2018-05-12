@@ -64,7 +64,6 @@ import org.jspresso.framework.model.descriptor.EDateType;
 import org.jspresso.framework.model.descriptor.EDuration;
 import org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IColorPropertyDescriptor;
@@ -135,6 +134,7 @@ import org.jspresso.framework.view.descriptor.IImageViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IMapViewDescriptor;
 import org.jspresso.framework.view.descriptor.INestedComponentPropertyViewDescriptor;
+import org.jspresso.framework.view.descriptor.IPropertyCardViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IReferencePropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.IRepeaterViewDescriptor;
@@ -203,22 +203,22 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    */
   protected static final Date TEMPLATE_TIME = new Date(366000);
 
-  private IActionFactory<G, E, F>       actionFactory;
-  private IDisplayableAction            binaryPropertyInfoAction;
-  private IConfigurableConnectorFactory connectorFactory;
-  private ERenderingOptions defaultActionMapRenderingOptions = ERenderingOptions.ICON;
-  private ERenderingOptions defaultTabRenderingOptions       = ERenderingOptions.LABEL_ICON;
-  private boolean           defaultHideActionWhenDisabled    = false;
-  private final IValueChangeListener        firstRowSelector;
-  private       IIconFactory<F>             iconFactory;
-  private       IComponentCollectionFactory componentCollectionFactory;
+  private       IActionFactory<G, E, F>       actionFactory;
+  private       IDisplayableAction            binaryPropertyInfoAction;
+  private       IConfigurableConnectorFactory connectorFactory;
+  private       ERenderingOptions             defaultActionMapRenderingOptions = ERenderingOptions.ICON;
+  private       ERenderingOptions             defaultTabRenderingOptions       = ERenderingOptions.LABEL_ICON;
+  private       boolean                       defaultHideActionWhenDisabled    = false;
+  private final IValueChangeListener          firstRowSelector;
+  private       IIconFactory<F>               iconFactory;
+  private       IComponentCollectionFactory   componentCollectionFactory;
 
   private IDisplayableAction lovAction;
-  private boolean useEntityIconsForLov = false;
+  private boolean            useEntityIconsForLov = false;
   private IDisplayableAction componentsLovActionTemplate;
 
-  private int maxCharacterLength       = 32;
-  private int maxColumnCharacterLength = 32;
+  private int                    maxCharacterLength       = 32;
+  private int                    maxColumnCharacterLength = 32;
   private IModelCascadingBinder  modelCascadingBinder;
   private IModelConnectorFactory modelConnectorFactory;
   private IMvcBinder             mvcBinder;
@@ -226,8 +226,8 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
   private IDisplayableAction openFileAsBinaryPropertyAction;
   private IDisplayableAction resetPropertyAction;
   private IDisplayableAction saveBinaryPropertyAsFileAction;
-  private String formLabelMandatoryPropertyColorHex = "0xFFFF0000";
-  private String tableHeaderMandatoryPropertyColorHex;
+  private String             formLabelMandatoryPropertyColorHex = "0xFFFF0000";
+  private String             tableHeaderMandatoryPropertyColorHex;
 
   private IUIDebugPlugin liveUIDebugPlugin;
 
@@ -1129,10 +1129,23 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    */
   protected IValueConnector createCardViewConnector(final IMapView<E> cardView, final IActionHandler actionHandler,
                                                     final Locale locale) {
-    IValueConnector cardViewConnector = getConnectorFactory().createValueConnector(
-        getConnectorIdForBeanView(cardView.getDescriptor()));
+    ICardViewDescriptor cardViewDescriptor = cardView.getDescriptor();
+    IValueConnector cardViewConnector;
+    if (cardViewDescriptor instanceof IPropertyCardViewDescriptor) {
+      cardViewConnector = getConnectorFactory().createCompositeValueConnector(
+          getConnectorIdForBeanView(cardViewDescriptor),
+          ((IPropertyCardViewDescriptor) cardViewDescriptor).getPropertyName());
+      ((IRenderableCompositeValueConnector) cardViewConnector).getRenderingConnector().addValueChangeListener(
+          new IValueChangeListener() {
+            @Override
+            public void valueChange(ValueChangeEvent evt) {
+              refreshCardView(cardView, false, actionHandler, locale);
+            }
+          });
+    } else {
+      cardViewConnector = getConnectorFactory().createValueConnector(getConnectorIdForBeanView(cardViewDescriptor));
+    }
     cardViewConnector.addValueChangeListener(new IValueChangeListener() {
-
       @Override
       public void valueChange(ValueChangeEvent evt) {
         refreshCardView(cardView, false, actionHandler, locale);
@@ -1435,7 +1448,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     }
     if (labelKey != null && (propertyDescriptor == null || !labelKey.equals(propertyDescriptor.getName()))) {
       IPropertyDescriptor labelProperty = modelDescriptor.getPropertyDescriptor(labelKey);
-      if (labelProperty != null && labelProperty instanceof IStringPropertyDescriptor) {
+      if (labelProperty instanceof IStringPropertyDescriptor) {
         dynamicLabelProperty = labelProperty.getName();
       }
     }
@@ -1480,7 +1493,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     }
     if (descriptionKey != null) {
       IPropertyDescriptor descriptionProperty = componentDescriptor.getPropertyDescriptor(descriptionKey);
-      if (descriptionProperty != null && descriptionProperty instanceof IStringPropertyDescriptor) {
+      if (descriptionProperty instanceof IStringPropertyDescriptor) {
         dynamicToolTipProperty = descriptionProperty.getName();
       }
     }
@@ -1507,7 +1520,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     }
     if (backgroundKey != null) {
       IPropertyDescriptor backgroundProperty = modelDescriptor.getPropertyDescriptor(backgroundKey);
-      if (backgroundProperty != null && (backgroundProperty instanceof IStringPropertyDescriptor
+      if ((backgroundProperty instanceof IStringPropertyDescriptor
           || backgroundProperty instanceof IColorPropertyDescriptor)) {
         dynamicBackgroundProperty = backgroundProperty.getName();
       }
@@ -1535,7 +1548,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     }
     if (foregroundKey != null) {
       IPropertyDescriptor foregroundProperty = modelDescriptor.getPropertyDescriptor(foregroundKey);
-      if (foregroundProperty != null && (foregroundProperty instanceof IStringPropertyDescriptor
+      if ((foregroundProperty instanceof IStringPropertyDescriptor
           || foregroundProperty instanceof IColorPropertyDescriptor)) {
         dynamicForegroundProperty = foregroundProperty.getName();
       }
@@ -1562,7 +1575,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     }
     if (fontKey != null) {
       IPropertyDescriptor fontProperty = modelDescriptor.getPropertyDescriptor(fontKey);
-      if (fontProperty != null && fontProperty instanceof IStringPropertyDescriptor) {
+      if (fontProperty instanceof IStringPropertyDescriptor) {
         dynamicFontProperty = fontProperty.getName();
       }
     }
