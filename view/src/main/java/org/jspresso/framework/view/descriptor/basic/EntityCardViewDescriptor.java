@@ -25,12 +25,14 @@ import java.util.Map;
 
 import javax.security.auth.Subject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.view.ViewException;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This card view provides a simple card determination strategy that is based on
@@ -111,5 +113,35 @@ public class EntityCardViewDescriptor extends AbstractCardViewDescriptor {
       }
     }
     return super.getCardViewDescriptor(cardName);
+  }
+
+  /**
+   * Clone read only basic card view descriptor.
+   *
+   * @return the basic card view descriptor
+   */
+  @Override
+  public synchronized EntityCardViewDescriptor cloneReadOnly() {
+    if (readOnlyClone == null) {
+      readOnlyClone = new EntityCardViewDescriptor() {
+        @Override
+        public IViewDescriptor getCardViewDescriptor(String cardName) {
+          IViewDescriptor cardViewDescriptor = super.getCardViewDescriptor(cardName);
+          if (cardViewDescriptor == null) {
+            IViewDescriptor delegate = EntityCardViewDescriptor.this.getCardViewDescriptor(cardName);
+            cardViewDescriptor = (IViewDescriptor) delegate.cloneReadOnly();
+            putCardViewDescriptor(cardName, cardViewDescriptor);
+          }
+          return cardViewDescriptor;
+        }
+
+        @Override
+        public String getCardNameForModel(Object model, Subject subject) {
+          return EntityCardViewDescriptor.this.getCardNameForModel(model, subject);
+        }
+      };
+      BeanUtils.copyProperties(this, readOnlyClone);
+    }
+    return (EntityCardViewDescriptor) readOnlyClone;
   }
 }
