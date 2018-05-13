@@ -120,7 +120,7 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
       }
     },
 
-    drawMapContent: function (markers, routes) {
+    drawMapContent: function (markers, routes, defaultZoom) {
       if (this.__map) {
         var coordinates = [];
         if (markers && markers.length > 0) {
@@ -178,7 +178,7 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
             view.fit(ol.extent.boundingExtent(coordinates), this.__map.getSize());
           } else {
             view.setCenter(coordinates[0]);
-            view.setZoom(12);
+            view.setZoom(defaultZoom ? defaultZoom : 12);
           }
         }
       }

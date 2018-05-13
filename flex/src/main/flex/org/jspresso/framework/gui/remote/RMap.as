@@ -24,9 +24,18 @@ package org.jspresso.framework.gui.remote {
 [RemoteClass(alias="org.jspresso.framework.gui.remote.RMap")]
 public class RMap extends RComponent {
 
+  private var _defaultZoom:Number;
+
   public function RMap() {
     //default constructor.
   }
 
+  public function get defaultZoom():Number {
+    return _defaultZoom;
+  }
+
+  public function set defaultZoom(value:Number):void {
+    _defaultZoom = value;
+  }
 }
 }

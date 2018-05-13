@@ -1763,6 +1763,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
   protected IView<RComponent> createMapView(IMapViewDescriptor viewDescriptor, IActionHandler actionHandler,
                                             Locale locale) {
     RMap viewComponent = createRMap(viewDescriptor);
+    viewComponent.setDefaultZoom(viewDescriptor.getDefaultZoom());
     String connectorId = ModelRefPropertyConnector.THIS_PROPERTY;
     if (viewDescriptor.getModelDescriptor() instanceof IPropertyDescriptor) {
       connectorId = viewDescriptor.getModelDescriptor().getName();

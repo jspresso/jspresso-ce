@@ -22,5 +22,13 @@ qx.Class.define("org.jspresso.framework.gui.remote.RMap", {
 
   construct: function () {
     this.base(arguments);
+  },
+
+  properties: {
+    defaultZoom: {
+      check: "Integer",
+      nullable: true
+    }
   }
+
 });

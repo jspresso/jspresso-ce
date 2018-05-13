@@ -25,14 +25,14 @@ package org.jspresso.framework.gui.remote;
  */
 public class RMap extends RComponent {
 
-
+  private Integer defaultZoom;
   private static final long serialVersionUID = 4763812955008036950L;
 
   /**
    * Constructs a new {@code RMap} instance.
    *
    * @param guid
-   *          the guid.
+   *     the guid.
    */
   public RMap(String guid) {
     super(guid);
@@ -44,5 +44,24 @@ public class RMap extends RComponent {
    */
   public RMap() {
     // For serialization support
+  }
+
+  /**
+   * Gets default zoom.
+   *
+   * @return the default zoom
+   */
+  public Integer getDefaultZoom() {
+    return defaultZoom;
+  }
+
+  /**
+   * Sets default zoom.
+   *
+   * @param defaultZoom
+   *     the default zoom
+   */
+  public void setDefaultZoom(Integer defaultZoom) {
+    this.defaultZoom = defaultZoom;
   }
 }

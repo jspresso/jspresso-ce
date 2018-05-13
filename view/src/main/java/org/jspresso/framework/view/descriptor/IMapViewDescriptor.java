@@ -31,4 +31,11 @@ public interface IMapViewDescriptor extends IViewDescriptor {
    * @return the map content property
    */
   String getMapContentProperty();
+
+  /**
+   * Gets default zoom.
+   *
+   * @return the default zoom
+   */
+  Integer getDefaultZoom();
 }

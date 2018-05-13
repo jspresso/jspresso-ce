@@ -1368,7 +1368,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           var routes = mapContent["routes"];
           if (markers || routes) {
             map.showMap();
-            map.drawMapContent(markers, routes);
+            map.drawMapContent(markers, routes, remoteMap.getDefaultZoom());
           }
         } else {
           map.hideMap();

@@ -27,7 +27,8 @@ import org.jspresso.framework.view.descriptor.IMapViewDescriptor;
  */
 public class BasicMapViewDescriptor extends BasicViewDescriptor implements IMapViewDescriptor {
 
-  private String mapContentProperty;
+  private String  mapContentProperty;
+  private Integer defaultZoom;
 
   /**
    * Gets map content property.
@@ -48,5 +49,25 @@ public class BasicMapViewDescriptor extends BasicViewDescriptor implements IMapV
    */
   public void setMapContentProperty(String mapContentProperty) {
     this.mapContentProperty = mapContentProperty;
+  }
+
+  /**
+   * Gets default zoom.
+   *
+   * @return the default zoom
+   */
+  @Override
+  public Integer getDefaultZoom() {
+    return defaultZoom;
+  }
+
+  /**
+   * Sets default zoom to display when there is no route and a single marker.
+   *
+   * @param defaultZoom
+   *     the default zoom
+   */
+  public void setDefaultZoom(Integer defaultZoom) {
+    this.defaultZoom = defaultZoom;
   }
 }

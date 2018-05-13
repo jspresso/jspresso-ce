@@ -1930,7 +1930,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           var routes = mapContent["routes"];
           if (markers || routes) {
             map.showMap();
-            map.drawMapContent(markers, routes);
+            map.drawMapContent(markers, routes, remoteMap.getDefaultZoom());
           }
         } else {
           map.hideMap();
