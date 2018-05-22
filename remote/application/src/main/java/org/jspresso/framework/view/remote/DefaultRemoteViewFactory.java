@@ -302,6 +302,8 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
         IPropertyDescriptor propertyDescriptor = rowDescriptor.getPropertyDescriptor(propertyName);
         columns.add(column.getPeer());
         RLabel headerLabel = createPropertyLabel(columnViewDescriptor, column.getPeer(), actionHandler, locale);
+        String viewDescription = computeViewDescription(columnViewDescriptor, actionHandler, locale);
+        headerLabel.setToolTip(viewDescription);
         columnHeaders.add(headerLabel);
         if (!columnViewDescriptor.isReadOnly() && propertyDescriptor.isMandatory()
             && !(propertyDescriptor instanceof IBooleanPropertyDescriptor)) {
