@@ -1943,6 +1943,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         }
       };
       map.addListenerOnce("appear", updateMap);
+      if (remoteMap.getPermId()) {
+        map.addListener("changeZoom", function (event) {
+          this.notifyMapChanged(remoteMap, event.getData());
+        }, this);
+      }
       mapContentState.addListener("changeValue", updateMap, this);
       return map;
     },

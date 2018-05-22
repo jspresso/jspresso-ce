@@ -34,6 +34,11 @@ import java.util.TimeZone;
 import java.util.zip.CRC32;
 import java.util.zip.Checksum;
 
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
@@ -138,7 +143,6 @@ import org.jspresso.framework.view.BasicIndexedView;
 import org.jspresso.framework.view.BasicMapView;
 import org.jspresso.framework.view.IActionFactory;
 import org.jspresso.framework.view.ICompositeView;
-import org.jspresso.framework.view.IIndexedView;
 import org.jspresso.framework.view.IMapView;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.ViewException;
@@ -175,15 +179,17 @@ import org.jspresso.framework.view.descriptor.basic.BasicTimePropertyViewDescrip
 @SuppressWarnings("UnusedParameters")
 public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFactory<RComponent, RIcon, RAction> {
 
-  private boolean                 dateServerParse;
-  private boolean                 durationServerParse;
-  private IRemoteCommandHandler   remoteCommandHandler;
-  private IGUIDGenerator<String>  guidGenerator;
-  private boolean                 numberServerParse;
-  private IRemotePeerRegistry     remotePeerRegistry;
-  private IRemoteStateValueMapper binaryStateValueMapper;
-  private IRemoteStateValueMapper enumerationStateValueMapper;
-  private PropertyChangeListener  connectorStateListener;
+  private static final Logger                  LOG = LoggerFactory.getLogger(AbstractRemoteViewFactory.class);
+
+  private              boolean                 dateServerParse;
+  private              boolean                 durationServerParse;
+  private              IRemoteCommandHandler   remoteCommandHandler;
+  private              IGUIDGenerator<String>  guidGenerator;
+  private              boolean                 numberServerParse;
+  private              IRemotePeerRegistry     remotePeerRegistry;
+  private              IRemoteStateValueMapper binaryStateValueMapper;
+  private              IRemoteStateValueMapper enumerationStateValueMapper;
+  private              PropertyChangeListener  connectorStateListener;
 
   /**
    * Instantiates a new Abstract remote view factory.
@@ -1764,6 +1770,15 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
                                             Locale locale) {
     RMap viewComponent = createRMap(viewDescriptor);
     viewComponent.setDefaultZoom(viewDescriptor.getDefaultZoom());
+    JSONObject mapPreferences = getMapPreferences(viewDescriptor, actionHandler);
+    if (mapPreferences != null && mapPreferences.has(IMapViewDescriptor.ZOOM)) {
+      try {
+        viewComponent.setDefaultZoom(mapPreferences.getInt(IMapViewDescriptor.ZOOM));
+      } catch (JSONException e) {
+        LOG.warn("Could not restore default map zoom");
+      }
+    }
+
     String connectorId = ModelRefPropertyConnector.THIS_PROPERTY;
     if (viewDescriptor.getModelDescriptor() instanceof IPropertyDescriptor) {
       connectorId = viewDescriptor.getModelDescriptor().getName();

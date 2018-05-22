@@ -18,11 +18,16 @@
  */
 package org.jspresso.framework.util.gui.map;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.jspresso.framework.util.exception.NestedRuntimeException;
 
-import java.util.*;
+import org.jspresso.framework.util.exception.NestedRuntimeException;
 
 /**
  * Helper for map building
@@ -33,170 +38,146 @@ import java.util.*;
 @SuppressWarnings("WeakerAccess")
 public class MapHelper {
 
-    /**
-     * The constant MARKERS_KEY is &quot;markers&quot;.
-     */
-    public static final String MARKERS_KEY = "markers";
-    /**
-     * The constant MARKER_IMAGE_KEY is &quot;image&quot;.
-     */
-    public static final String MARKER_IMAGE_KEY = "image";
-    /**
-     * The constant MARKER_COORD_KEY is &quot;coord&quot;.
-     */
-    public static final String MARKER_COORD_KEY = "coord";
+  /**
+   * The constant MARKERS_KEY is &quot;markers&quot;.
+   */
+  public static final String MARKERS_KEY      = "markers";
+  /**
+   * The constant MARKER_IMAGE_KEY is &quot;image&quot;.
+   */
+  public static final String MARKER_IMAGE_KEY = "image";
+  /**
+   * The constant MARKER_COORD_KEY is &quot;coord&quot;.
+   */
+  public static final String MARKER_COORD_KEY = "coord";
 
-    /**
-     * The constant ROUTES_KEY is &quot;routes&quot;.
-     */
-    public static final String ROUTES_KEY = "routes";
-    /**
-     * The constant ROUTE_PATH_KEY is &quot;path&quot;.
-     */
-    public static final String ROUTE_PATH_KEY = "path";
-    /**
-     * The constant ROUTE_STYLE_KEY is &quot;style&quot;.
-     */
-    public static final String ROUTE_STYLE_KEY = "style";
-    
-    /**
-     * Red mark icon
-     */
-    public static final String RED_MARK = "org/jspresso/contrib/images/map/marker-red.svg";
+  /**
+   * The constant ROUTES_KEY is &quot;routes&quot;.
+   */
+  public static final String ROUTES_KEY      = "routes";
+  /**
+   * The constant ROUTE_PATH_KEY is &quot;path&quot;.
+   */
+  public static final String ROUTE_PATH_KEY  = "path";
+  /**
+   * The constant ROUTE_STYLE_KEY is &quot;style&quot;.
+   */
+  public static final String ROUTE_STYLE_KEY = "style";
 
-    /**
-     * Green mark icon
-     */
-    public static final String GREEN_MARK = "org/jspresso/contrib/images/map/marker-green.svg";
+  /**
+   * Red mark icon
+   */
+  public static final String RED_MARK = "org/jspresso/contrib/images/map/marker-red.svg";
 
-    /**
-     * Build markers.
-     *
-     * @param points One or more points
-     */
-    public static String buildMarkers(Point... points) {
-        return buildMap(points, null);
-    }
+  /**
+   * Green mark icon
+   */
+  public static final String GREEN_MARK = "org/jspresso/contrib/images/map/marker-green.svg";
 
-    /**
-     * Build routes.
-     *
-     * @param routes One or more couple of longitude and latitude
-     */
-    public static String buildMap(Point[] points, Route[] routes) {
-        try {
+  /**
+   * Build markers.
+   *
+   * @param points
+   *     One or more points
+   */
+  public static String buildMarkers(Point... points) {
+    return buildMap(points, null);
+  }
 
-            JSONObject mapContent = new JSONObject();
-            if (points != null) {
-
-                List<JSONObject> keys = new ArrayList<>();
-                for (Point p : points) {
-
-                    JSONObject marker = new JSONObject();
-                    marker.put(MARKER_COORD_KEY, Arrays.asList(p.getLongitude(), p.getLatitude()));
-
-                    String imageUrl = p.getImageUrl();
-                    if (imageUrl != null) {
-
-                        JSONObject image = new JSONObject();
-                        image.put("src", imageUrl);
-
-                        if (p.getColor() != null) {
-                            image.put("color", p.getColor());
-                        }
-
-                        if (p.getOptions()!=null) {
-                            applyOptions(p, image);
-                        }
-
-                        marker.put(MARKER_IMAGE_KEY, image);
-                    }
-
-
-                    keys.add(marker);
-                }
-                mapContent.put(MARKERS_KEY, keys);
+  /**
+   * Build routes.
+   *
+   * @param routes
+   *     One or more couple of longitude and latitude
+   */
+  public static String buildMap(Point[] points, Route[] routes) {
+    try {
+      JSONObject mapContent = new JSONObject();
+      if (points != null) {
+        List<JSONObject> keys = new ArrayList<>();
+        for (Point p : points) {
+          JSONObject marker = new JSONObject();
+          marker.put(MARKER_COORD_KEY, Arrays.asList(p.getLongitude(), p.getLatitude()));
+          String imageUrl = p.getImageUrl();
+          if (imageUrl != null) {
+            JSONObject image = new JSONObject();
+            image.put("src", imageUrl);
+            if (p.getColor() != null) {
+              image.put("color", p.getColor());
             }
-
-            if (routes != null) {
-
-                List<JSONObject> routesList = new ArrayList<>();
-                for (Route route : routes) {
-
-                    double[][] routePath = convertRoutes(route)[0];
-                    List<List<Double>> routeAsList = new ArrayList<>();
-                    for (double[] aRoute : routePath) {
-                        routeAsList.add(Arrays.asList(aRoute[0], aRoute[1]));
-                    }
-
-                    JSONObject json = new JSONObject();
-                    json.put(ROUTE_PATH_KEY, routeAsList);
-                    JSONObject routeStyle = new JSONObject();
-                    routeStyle.put("color", route.getColor());
-                    routeStyle.put("width", route.getWidth());
-                    if (route.getOptions()!=null) {
-                        applyOptions(route, routeStyle);
-                    }
-
-                    json.put(ROUTE_STYLE_KEY, routeStyle);
-
-                    routesList.add(json);
-                }
-                mapContent.put(ROUTES_KEY, routesList);
+            if (p.getOptions() != null) {
+              applyOptions(p, image);
             }
-
-            return mapContent.toString(2);
-
-        } catch (JSONException ex) {
-            throw new NestedRuntimeException(ex);
+            marker.put(MARKER_IMAGE_KEY, image);
+          }
+          keys.add(marker);
         }
-    }
+        mapContent.put(MARKERS_KEY, keys);
+      }
 
-    private static void applyOptions(AbstractData data, JSONObject json) throws JSONException {
-
-        for (Map.Entry<String, Object> entry : data.getOptions().entrySet()) {
-
-            Object value = entry.getValue();
-            if (value instanceof Collection) {
-                json.put(entry.getKey(), (Collection)value);
-            }
-            else if (value instanceof int[]) {
-                List<Integer> ints = new ArrayList<>();
-                for (int i : (int[])value)
-                    ints.add(i);
-
-                json.put(entry.getKey(), ints);
-            }
-            else if (value instanceof Integer) {
-                json.put(entry.getKey(), (int)value);
-            }
-            else if (value instanceof Boolean) {
-                json.put(entry.getKey(), (boolean)value);
-            }
-            else if (value instanceof Double) {
-                json.put(entry.getKey(), (double)value);
-            }
-            else {
-                json.put(entry.getKey(), value);
-            }
+      if (routes != null) {
+        List<JSONObject> routesList = new ArrayList<>();
+        for (Route route : routes) {
+          double[][] routePath = convertRoutes(route)[0];
+          List<List<Double>> routeAsList = new ArrayList<>();
+          for (double[] aRoute : routePath) {
+            routeAsList.add(Arrays.asList(aRoute[0], aRoute[1]));
+          }
+          JSONObject json = new JSONObject();
+          json.put(ROUTE_PATH_KEY, routeAsList);
+          JSONObject routeStyle = new JSONObject();
+          routeStyle.put("color", route.getColor());
+          routeStyle.put("width", route.getWidth());
+          if (route.getOptions() != null) {
+            applyOptions(route, routeStyle);
+          }
+          json.put(ROUTE_STYLE_KEY, routeStyle);
+          routesList.add(json);
         }
+        mapContent.put(ROUTES_KEY, routesList);
+      }
+      return mapContent.toString(2);
+    } catch (JSONException ex) {
+      throw new NestedRuntimeException(ex);
     }
+  }
 
-    private static double[][] convertPoints(Point... points) {
-        double[][] markers = new double[points.length][];
-        for (int i = 0; i < points.length; i++) {
-            markers[i] = new double[]{points[i].longitude, points[i].latitude};
+  private static void applyOptions(AbstractData data, JSONObject json) throws JSONException {
+    for (Map.Entry<String, Object> entry : data.getOptions().entrySet()) {
+      Object value = entry.getValue();
+      if (value instanceof Collection) {
+        json.put(entry.getKey(), (Collection) value);
+      } else if (value instanceof int[]) {
+        List<Integer> ints = new ArrayList<>();
+        for (int i : (int[]) value) {
+          ints.add(i);
         }
-        return markers;
+        json.put(entry.getKey(), ints);
+      } else if (value instanceof Integer) {
+        json.put(entry.getKey(), (int) value);
+      } else if (value instanceof Boolean) {
+        json.put(entry.getKey(), (boolean) value);
+      } else if (value instanceof Double) {
+        json.put(entry.getKey(), (double) value);
+      } else {
+        json.put(entry.getKey(), value);
+      }
     }
+  }
 
-    private static double[][][] convertRoutes(Route... routes) {
-        double[][][] routes2 = new double[routes.length][][];
-        for (int i = 0; i < routes.length; i++) {
-            routes2[i] = convertPoints(routes[i].points);
-        }
-        return routes2;
+  private static double[][] convertPoints(Point... points) {
+    double[][] markers = new double[points.length][];
+    for (int i = 0; i < points.length; i++) {
+      markers[i] = new double[]{points[i].longitude, points[i].latitude};
     }
+    return markers;
+  }
 
-
+  private static double[][][] convertRoutes(Route... routes) {
+    double[][][] routes2 = new double[routes.length][][];
+    for (int i = 0; i < routes.length; i++) {
+      routes2[i] = convertPoints(routes[i].points);
+    }
+    return routes2;
+  }
 }

@@ -807,7 +807,14 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
 
     addRepeated: function (repeater, newSections) {
       repeater.addRepeated(newSections);
-    }
+    },
 
+    notifyMapChanged: function (remoteMap, zoom) {
+      var notificationCommand = new org.jspresso.framework.application.frontend.command.remote.RemoteMapChangedCommand();
+      notificationCommand.setMapId(remoteMap.getPermId());
+      notificationCommand.setZoom(zoom);
+      //noinspection JSPotentiallyInvalidUsageOfThis
+      this._getCommandHandler().registerCommand(notificationCommand);
+    }
   }
 });

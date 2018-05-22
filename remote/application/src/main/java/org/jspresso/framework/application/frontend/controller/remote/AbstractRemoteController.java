@@ -53,6 +53,7 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteHistoryD
 import org.jspresso.framework.application.frontend.command.remote.RemoteInitCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteInitLoginCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteLocaleCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteMapChangedCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteOkCancelCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteOpenUrlCommand;
@@ -369,6 +370,9 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
                                       (columnVisibilities == null || columnVisibilities[i])};
       }
       getViewFactory().storeTablePreferences(((RemoteTableChangedCommand) command).getTableId(), columnPrefs, this);
+    } else if (command instanceof RemoteMapChangedCommand) {
+      getViewFactory().storeMapPreferences(((RemoteMapChangedCommand) command).getMapId(),
+          ((RemoteMapChangedCommand) command).getZoom(), this);
     } else {
       IRemotePeer targetPeer = null;
       if (command.getPermId() != null) {

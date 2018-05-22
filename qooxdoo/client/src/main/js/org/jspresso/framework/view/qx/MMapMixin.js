@@ -26,6 +26,9 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
     this.__geolocationEnabled = qx.core.Environment.get("html.geolocation");
   },
 
+  events: {
+    changeZoom: "qx.event.type.Data"
+  },
 
   members: {
     __map: null,
@@ -102,10 +105,15 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
         style: routeStyle
       });
       this.__map.addLayer(this.__routesLayer);
-      this.__map.setView(new ol.View({
+      var mapView = new ol.View({
         center: ol.proj.fromLonLat([0,0]),
         zoom: 12
-      }));
+      });
+      //mapView.on("change:resolution", function (event) {
+      this.__map.on("moveend", function (event) {
+        this.fireDataEvent("changeZoom", Math.round(mapView.getZoom()));
+      }, this);
+      this.__map.setView(mapView);
     },
 
     zoomToPosition: function (lonLat, zoom) {

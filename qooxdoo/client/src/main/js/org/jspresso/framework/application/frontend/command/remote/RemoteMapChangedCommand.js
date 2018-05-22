@@ -16,29 +16,20 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.view.descriptor;
 
-/**
- * This public interface is implemented by cartographic view descriptors.
- *
- * @author Vincent Vandenschrick
- */
-public interface IMapViewDescriptor extends IViewDescriptor {
+qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteMapChangedCommand", {
+  extend: org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
 
-  /** the &quot;zoom&quot; constant */
-  public final String ZOOM = "zoom";
+  construct: function () {
+    this.base(arguments);
+  },
 
-  /**
-   * Gets map content property.
-   *
-   * @return the map content property
-   */
-  String getMapContentProperty();
-
-  /**
-   * Gets default zoom.
-   *
-   * @return the default zoom
-   */
-  Integer getDefaultZoom();
-}
+  properties: {
+    mapId: {
+      check: "String"
+    },
+    zoom: {
+      check: "Integer"
+    }
+  }
+});

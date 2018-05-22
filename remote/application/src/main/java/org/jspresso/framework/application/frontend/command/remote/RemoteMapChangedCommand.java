@@ -16,29 +16,55 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.view.descriptor;
+package org.jspresso.framework.application.frontend.command.remote;
 
 /**
- * This public interface is implemented by cartographic view descriptors.
+ * A command to notify of table columns reordering / resize.
  *
  * @author Vincent Vandenschrick
  */
-public interface IMapViewDescriptor extends IViewDescriptor {
+public class RemoteMapChangedCommand extends RemoteCommand {
 
-  /** the &quot;zoom&quot; constant */
-  public final String ZOOM = "zoom";
+  private static final long serialVersionUID = -1034273084659844092L;
 
-  /**
-   * Gets map content property.
-   *
-   * @return the map content property
-   */
-  String getMapContentProperty();
+  private String mapId;
+  private Integer zoom;
 
   /**
-   * Gets default zoom.
+   * Gets map id.
    *
-   * @return the default zoom
+   * @return the map id
    */
-  Integer getDefaultZoom();
+  public String getMapId() {
+    return mapId;
+  }
+
+  /**
+   * Sets map id.
+   *
+   * @param mapId
+   *     the map id
+   */
+  public void setMapId(String mapId) {
+    this.mapId = mapId;
+  }
+
+  /**
+   * Gets zoom.
+   *
+   * @return the zoom
+   */
+  public Integer getZoom() {
+    return zoom;
+  }
+
+  /**
+   * Sets zoom.
+   *
+   * @param zoom
+   *     the zoom
+   */
+  public void setZoom(Integer zoom) {
+    this.zoom = zoom;
+  }
 }

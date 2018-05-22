@@ -88,6 +88,18 @@ public interface IViewFactory<E, F, G> {
       IActionHandler actionHandler);
 
   /**
+   * Stores user map preferences.
+   *
+   * @param mapId
+   *     the map id used as preference key in the user store.
+   * @param zoom
+   *     the map zoom.
+   * @param actionHandler
+   *     the action handler.
+   */
+  void storeMapPreferences(String tableId, Integer zoom, IActionHandler actionHandler);
+
+  /**
    * Request focus for a component.
    *
    * @param component

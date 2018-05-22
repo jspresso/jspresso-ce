@@ -1375,6 +1375,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
       };
       map.addListener("initialize", updateMap);
+      if (remoteMap.getPermId()) {
+        map.addListener("changeZoom", function (event) {
+          this.notifyMapChanged(remoteMap, event.getData());
+        }, this);
+      }
       mapContentState.addListener("changeValue", updateMap, this);
       map.setTitle(remoteMap.getLabel());
       map.setShowButton(true);

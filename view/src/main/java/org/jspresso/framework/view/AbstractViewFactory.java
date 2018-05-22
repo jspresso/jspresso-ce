@@ -36,6 +36,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -3748,6 +3750,51 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
       }
     }
     return userColumnViewDescriptors;
+  }
+
+  /**
+   * Stores user map preferences.
+   *
+   * @param mapId
+   *     the map id used as preference key in the user store.
+   * @param zoom
+   *     the map zoom.
+   * @param actionHandler
+   *     the action handler.
+   */
+  @Override
+  public void storeMapPreferences(String mapId, Integer zoom, IActionHandler actionHandler) {
+    if (actionHandler.getSubject() != null) {
+      try {
+        JSONObject mapPreferences = new JSONObject();
+        mapPreferences.put(IMapViewDescriptor.ZOOM, zoom);
+        actionHandler.putUserPreference(mapId, mapPreferences.toString());
+      } catch (JSONException e) {
+        LOG.warn("unable to store preferences for map " + mapId);
+      }
+    }
+  }
+
+  /**
+   * Gets map preferences.
+   *
+   * @param mapViewDescriptor
+   *     the map view descriptor
+   * @param actionHandler
+   *     the action handler
+   * @return the map preferences
+   */
+  protected JSONObject getMapPreferences(IMapViewDescriptor mapViewDescriptor, IActionHandler actionHandler) {
+    if (mapViewDescriptor.getPermId() != null && actionHandler.getSubject() != null) {
+      String mapPreferences = actionHandler.getUserPreference(mapViewDescriptor.getPermId());
+      if (mapPreferences != null) {
+        try {
+          return new JSONObject(mapPreferences);
+        } catch (JSONException e) {
+          LOG.warn("Invalid map preferences stored for map " + mapViewDescriptor.getPermId());
+        }
+      }
+    } return null;
   }
 
   /**
