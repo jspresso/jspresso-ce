@@ -717,10 +717,16 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     _bindDynamicLabel: function (component, rComponent) {
       var labelState = rComponent.getLabelState();
       if (labelState) {
+        var labelProperty;
         if (component instanceof org.jspresso.framework.view.qx.EnhancedCollapsiblePanel) {
+          labelProperty = "caption";
+        } else if (component instanceof qx.ui.basic.Atom) {
+          labelProperty = "label";
+        }
+        if (labelProperty) {
           this._getRemotePeerRegistry().register(labelState);
           var modelController = new qx.data.controller.Object(labelState);
-          modelController.addTarget(component, "caption", "value", false, {
+          modelController.addTarget(component, labelProperty, "value", false, {
             converter: function (modelValue, model) {
               if (modelValue) {
                 return modelValue;
@@ -3152,7 +3158,14 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         if (remoteTabContainer.getStyleName()) {
           tab.setAppearance(remoteTabContainer.getStyleName() + "-page")
         }
-        this.setIcon(tab.getChildControl("button"), remoteTab.getIcon());
+        var tabButton = tab.getChildControl("button");
+        this._configureToolTip(remoteTab, tabButton);
+        this._bindDynamicToolTip(tabButton, remoteTab);
+        this._bindDynamicBackground(tabButton, remoteTab);
+        this._bindDynamicForeground(tabButton, remoteTab);
+        this._bindDynamicFont(tabButton, remoteTab);
+        this._bindDynamicLabel(tabButton, remoteTab);
+        this.setIcon(tabButton, remoteTab.getIcon());
         tab.setLayout(new qx.ui.layout.Grow());
         tabComponent.setAllowStretchY(true, true);
         tab.add(tabComponent);
