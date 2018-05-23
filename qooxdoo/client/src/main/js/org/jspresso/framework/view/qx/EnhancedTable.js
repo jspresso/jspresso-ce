@@ -24,6 +24,14 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedTable", {
     this.base(arguments, tableModel, custom);
 
     var tt = new qx.ui.tooltip.ToolTip("");
+    tt.addListener("changeVisibility", function (e) {
+      if (e.getData() == "visible") {
+        var label = tt.getLabel();
+        if (label == null || label == "") {
+          tt.hide();
+        }
+      }
+    }, this);
     tt.setRich(true);
     this.setToolTip(tt);
     this.addListener("pointermove", this._refineToolTip, this);
@@ -41,8 +49,9 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedTable", {
   },
 
   members: {
+    __lastHoveredCol: null,
+    __lastHoveredRow: null,
     _refineToolTip: function (e) {
-      var v = null;
       var pageX = e.getDocumentLeft();
       var pageY = e.getDocumentTop();
       var sc = this.getTablePaneScrollerAtPageX(pageX);
@@ -51,26 +60,23 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedTable", {
         if (tm != null) {
           var row = sc._getRowForPagePos(pageX, pageY);
           var col = sc._getColumnForPageX(pageX);
-          /**/
-          if (row != null && col != null && row >= 0 && col >= 0) {
-            try {
-              v = tm.getToolTip(col, row);
-            } catch (az) {
-              v = "";
+          if (row != this.__lastHoveredRow || col != this.__lastHoveredCol)  {
+            this.__lastHoveredRow = row;
+            this.__lastHoveredCol = col;
+            //this.debug("Coords [" + row + ", " + col + "]");
+            var label = null;
+            if (row != null && col != null && row >= 0 && col >= 0) {
+              try {
+                label = tm.getToolTip(col, row);
+              } catch (az) {
+                label = null;
+              }
             }
+            /** @type {qx.ui.tooltip.ToolTip } */
+            var tt = this.getToolTip();
+            tt.setLabel(label);
           }
         }
-      }
-      /** @type {qx.ui.tooltip.ToolTip } */
-      var tt = this.getToolTip();
-      if (v != null && v != "") {
-        this.setBlockToolTip(false);
-        tt.setLabel(v);
-        if (tt.isVisible()) {
-          tt.placeToPointer(e);
-        }
-      } else {
-        this.setBlockToolTip(true);
       }
     },
 
