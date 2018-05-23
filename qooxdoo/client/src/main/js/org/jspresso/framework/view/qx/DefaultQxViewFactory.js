@@ -1181,6 +1181,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @param actionList {org.jspresso.framework.gui.remote.RActionList}
      */
     createSplitButton: function (actionList) {
+      var splitButton = new qx.ui.form.SplitButton();
       var actions = actionList.getActions();
       if (actions == null || actions.length == 0) {
         return null;
@@ -1189,10 +1190,26 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         return this.createAction(actions[0], true);
       }
       var menuItems = this.createMenuItems(actions);
+      var applyArrowVisibility = function () {
+        var visibles = 0;
+        for (var i = 0; i < menuItems.length; i++) {
+          var menuItem = menuItems[i];
+          if (menuItem.isVisible()) {
+            visibles++;
+          }
+        }
+        var arrow = splitButton.getChildControl("arrow");
+        if (visibles > 1) {
+          arrow.show();
+        } else {
+          arrow.hide();
+        }
+      };
       var menu = new qx.ui.menu.Menu();
       var menuWidth = 0;
       for (var i = 0; i < menuItems.length; i++) {
         var menuItem = menuItems[i];
+        menuItem.addListener("changeVisibility", applyArrowVisibility, this);
         menu.add(menuItem);
         var menuItemWidth = 0;
         if (actions[i].getIcon() && actions[i].getIcon()) {
@@ -1210,8 +1227,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       if (menuWidth > 0) {
         menu.setWidth(menuWidth + menu.getPaddingLeft() + menu.getPaddingRight());
       }
-      var button = new qx.ui.form.SplitButton(menuItems[0].getLabel(), menuItems[0].getIcon(), menu, menuItems[0].getCommand());
-      return button;
+      splitButton.setLabel(menuItems[0].getLabel());
+      splitButton.setIcon(menuItems[0].getIcon());
+      splitButton.setMenu(menu);
+      splitButton.setCommand(menuItems[0].getCommand());
+      return splitButton;
     },
 
     /**
