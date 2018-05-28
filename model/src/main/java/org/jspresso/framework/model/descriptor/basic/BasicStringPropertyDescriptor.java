@@ -174,6 +174,7 @@ public class BasicStringPropertyDescriptor extends BasicScalarPropertyDescriptor
         }
 
       };
+      throw ie;
     }
     if (propertyValueAsString != null && getRegexpPattern() != null && !Pattern.matches(getRegexpPattern(),
         propertyValueAsString)) {
