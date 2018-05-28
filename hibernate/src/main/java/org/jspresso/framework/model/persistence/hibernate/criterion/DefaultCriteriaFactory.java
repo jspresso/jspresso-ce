@@ -137,17 +137,21 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
             if (sortable) {
               String orderingCriteriaAlias = null;
               for (String pathElt : path) {
-                if (isUseAliasesForJoins()) {
-                  if (orderingCriteriaAlias == null) {
-                    orderingCriteriaAlias = pathElt;
-                  } else {
-                    orderingCriteriaAlias += ("." + pathElt);
-                  }
-                  orderingCriteriaAlias = orderingCriteriaAlias.replaceAll("\\.", "__");
-                  orderingCriteria = criteria.getSubCriteriaFor(orderingCriteria, pathElt, pathElt,
-                      JoinType.LEFT_OUTER_JOIN);
+                if (EntityHelper.isInlineComponentReference(currentCompDesc)) {
+                  name.insert(0, pathElt + ".");
                 } else {
-                  orderingCriteria = criteria.getSubCriteriaFor(orderingCriteria, pathElt, JoinType.LEFT_OUTER_JOIN);
+                  if (isUseAliasesForJoins()) {
+                    if (orderingCriteriaAlias == null) {
+                      orderingCriteriaAlias = pathElt;
+                    } else {
+                      orderingCriteriaAlias += ("." + pathElt);
+                    }
+                    orderingCriteriaAlias = orderingCriteriaAlias.replaceAll("\\.", "__");
+                    orderingCriteria = criteria.getSubCriteriaFor(orderingCriteria, pathElt, pathElt,
+                        JoinType.LEFT_OUTER_JOIN);
+                  } else {
+                    orderingCriteria = criteria.getSubCriteriaFor(orderingCriteria, pathElt, JoinType.LEFT_OUTER_JOIN);
+                  }
                 }
               }
               propertyName = name.toString();
