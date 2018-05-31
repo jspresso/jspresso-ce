@@ -512,8 +512,9 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
    */
   @Override
   public void login() {
+    boolean loginInteractive = isLoginInteractive();
     if (performLogin()) {
-      if (isLoginInteractive()) {
+      if (loginInteractive) {
         registerCommand(new RemoteCloseDialogCommand());
       }
       List<RemoteCommand> initCommands = createInitCommands();
