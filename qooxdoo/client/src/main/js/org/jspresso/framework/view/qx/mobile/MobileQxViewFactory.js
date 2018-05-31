@@ -99,6 +99,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       return null;
     },
 
+    _visibleFieldConverter: function (readable, model) {
+      return readable ? "visible" : "excluded";
+    },
+
     _bindVisibility: function (remoteComponent, component) {
       if (component instanceof qx.ui.mobile.core.Widget) {
         this.base(arguments, remoteComponent, component);
@@ -1145,6 +1149,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         } else {
           row.setLayout(new qx.ui.mobile.layout.HBox());
         }
+        component.bind("visibility", row,  "visibility");
         if (remoteForm.getLabelsPosition() != "NONE") {
           var label = new qx.ui.mobile.form.Label("<p>" + rComponent.getLabel() + "</p>");
           component.bind("visibility", label, "visibility");
