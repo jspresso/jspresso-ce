@@ -369,11 +369,13 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
       if (rootProp instanceof IComponentDescriptorProvider<?>) {
         IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) rootProp)
             .getComponentDescriptor();
-        descriptor = componentDescriptor.getPropertyDescriptor(propertyName.substring(nestedDotIndex + 1));
-        if (descriptor != null) {
-          descriptor = descriptor.clone();
-          if (descriptor instanceof BasicPropertyDescriptor) {
-            ((BasicPropertyDescriptor) descriptor).setName(propertyName);
+        if (componentDescriptor != null) {
+          descriptor = componentDescriptor.getPropertyDescriptor(propertyName.substring(nestedDotIndex + 1));
+          if (descriptor != null) {
+            descriptor = descriptor.clone();
+            if (descriptor instanceof BasicPropertyDescriptor) {
+              ((BasicPropertyDescriptor) descriptor).setName(propertyName);
+            }
           }
         }
       }

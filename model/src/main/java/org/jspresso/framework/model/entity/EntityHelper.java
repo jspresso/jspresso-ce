@@ -27,8 +27,8 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
-import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 
 /**
  * Helper class for entities utility methods.
@@ -49,14 +49,13 @@ public final class EntityHelper {
    * component.
    *
    * @param componentDescriptorProvider
-   *          the reference property descriptor to test.
+   *     the reference property descriptor to test.
    * @return {@code true} if the reference property descriptor references
-   *         an inline component.
+   * an inline component.
    */
-  public static boolean isInlineComponentReference(
-      IComponentDescriptorProvider<?> componentDescriptorProvider) {
-    return !componentDescriptorProvider.getComponentDescriptor().isEntity()
-        && !componentDescriptorProvider.getComponentDescriptor().isPurelyAbstract();
+  public static boolean isInlineComponentReference(IComponentDescriptorProvider<?> componentDescriptorProvider) {
+    IComponentDescriptor<?> componentDescriptor = componentDescriptorProvider.getComponentDescriptor();
+    return componentDescriptor != null && !componentDescriptor.isEntity() && !componentDescriptor.isPurelyAbstract();
   }
 
   /**
@@ -77,8 +76,8 @@ public final class EntityHelper {
       }
     };
     provider.addIncludeFilter(new AssignableTypeFilter(entityContract));
-    Set<BeanDefinition> components = provider.findCandidateComponents(entityContract.getPackage().getName().replace('.',
-        '/'));
+    Set<BeanDefinition> components = provider.findCandidateComponents(
+        entityContract.getPackage().getName().replace('.', '/'));
     for (BeanDefinition component : components) {
       try {
         Class<IEntity> entitySubContract = (Class<IEntity>) Class.forName(component.getBeanClassName());
