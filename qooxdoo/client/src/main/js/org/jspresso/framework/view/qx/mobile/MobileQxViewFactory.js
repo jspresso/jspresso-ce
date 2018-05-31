@@ -1122,6 +1122,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         var sectionLabel = new qx.ui.mobile.basic.Label(remoteSection.getLabel());
         header.add(sectionLabel);
         this._bindDynamicLabel(sectionLabel, remoteSection);
+        this._bindVisibility(remoteSection, header);
         container.add(header);
       }
     },
