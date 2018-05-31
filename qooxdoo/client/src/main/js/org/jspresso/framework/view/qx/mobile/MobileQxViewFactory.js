@@ -540,7 +540,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         container = this._createTabContainer(remoteContainer);
       }
       if (container instanceof qx.ui.mobile.page.NavigationPage) {
-        this._bindDynamicTitle(container, remoteContainer);
+        this._bindDynamicLabel(container, remoteContainer);
         if (remoteContainer instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAware) {
           this.installPageActions(remoteContainer, container);
         }
@@ -549,23 +549,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       return container;
     },
 
-    _bindDynamicTitle: function (component, rComponent) {
-      var labelState = rComponent.getLabelState();
-      if (labelState) {
-        if (component instanceof qx.ui.mobile.page.NavigationPage) {
-          this._getRemotePeerRegistry().register(labelState);
-          var modelController = new qx.data.controller.Object(labelState);
-          modelController.addTarget(component, "title", "value", false, {
-            converter: function (modelValue, model) {
-              if (modelValue) {
-                return modelValue;
-              } else {
-                return rComponent.getLabel();
-              }
-            }
-          });
-        }
+    _computeLabelProperty: function (component) {
+      var labelProperty;
+      if (component instanceof qx.ui.mobile.page.NavigationPage) {
+        labelProperty = "title";
+      } else if (component instanceof qx.ui.mobile.basic.Label) {
+        labelProperty = "value";
       }
+      return labelProperty;
     },
 
     __copyPageActions: function (source, target) {
@@ -1124,7 +1115,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           == "TITLED_ACTIONS") && remoteSection.getLabel()) {
         var header = new qx.ui.mobile.form.Row();
         header.addCssClasses(["form-row-group-title", "jspresso-form-row-group-title"]);
-        header.add(new qx.ui.mobile.basic.Label(remoteSection.getLabel()));
+        var sectionLabel = new qx.ui.mobile.basic.Label(remoteSection.getLabel());
+        header.add(sectionLabel);
+        this._bindDynamicLabel(sectionLabel, remoteSection);
         container.add(header);
       }
     },

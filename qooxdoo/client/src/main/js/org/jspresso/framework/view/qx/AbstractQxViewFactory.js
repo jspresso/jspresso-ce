@@ -132,6 +132,30 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
       }
     },
 
+    _computeLabelProperty: function (component) {
+      throw new Error("_computeLabelProperty is abstract.");
+    },
+
+    _bindDynamicLabel: function (component, rComponent) {
+      var labelState = rComponent.getLabelState();
+      if (labelState) {
+        var labelProperty = this._computeLabelProperty(component);
+        if (labelProperty) {
+          this._getRemotePeerRegistry().register(labelState);
+          var modelController = new qx.data.controller.Object(labelState);
+          modelController.addTarget(component, labelProperty, "value", false, {
+            converter: function (modelValue, model) {
+              if (modelValue) {
+                return modelValue;
+              } else {
+                return rComponent.getLabel();
+              }
+            }
+          });
+        }
+      }
+    },
+
     /**
      * @param remoteComponent {org.jspresso.framework.gui.remote.RComponent}
      * @param registerPeers {Boolean}
