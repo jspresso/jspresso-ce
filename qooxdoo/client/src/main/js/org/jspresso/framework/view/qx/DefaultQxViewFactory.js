@@ -1688,7 +1688,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           this.setIcon(decorator.getChildControl("bar"), remoteComponent.getIcon())
           if (remoteComponent.getBorderType() == "TITLED_ACTIONS") {
             var toolBar = this._createToolBar(remoteComponent, component);
-            decorator.addToBar(toolBar);
+            if (toolBar) {
+              decorator.addToBar(toolBar);
+            }
           }
         } else {
           decorator = new qx.ui.container.Composite();
