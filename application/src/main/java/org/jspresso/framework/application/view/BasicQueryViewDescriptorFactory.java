@@ -510,5 +510,6 @@ public class BasicQueryViewDescriptorFactory<E, F, G> implements IQueryViewDescr
     }
     dest.setWritabilityGates(source.getWritabilityGates());
     dest.setWidth(source.getWidth());
+    dest.setForClientTypes(source.getForClientTypes());
   }
 }

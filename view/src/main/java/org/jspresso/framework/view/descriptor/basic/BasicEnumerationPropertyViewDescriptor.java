@@ -34,10 +34,10 @@ import org.jspresso.framework.view.descriptor.IEnumerationPropertyViewDescriptor
 public class BasicEnumerationPropertyViewDescriptor extends BasicPropertyViewDescriptor
     implements IEnumerationPropertyViewDescriptor {
 
-  private Set<String> allowedValues;
-  private Set<String> forbiddenValues;
-  private boolean     radio;
-  private Dimension   enumIconDimension;
+  private Set<String>  allowedValues;
+  private Set<String>  forbiddenValues;
+  private boolean      radio;
+  private Dimension    enumIconDimension;
   private EOrientation orientation = EOrientation.VERTICAL;
 
   /**
