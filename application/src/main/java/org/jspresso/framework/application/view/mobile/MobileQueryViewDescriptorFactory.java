@@ -239,6 +239,9 @@ public class MobileQueryViewDescriptorFactory<E, F, G> extends BasicQueryViewDes
               ((BasicReferencePropertyViewDescriptor) propertyView).setLovAction(
                   createComparableEditAction((ComparableQueryStructureDescriptor) propertyView.getModelDescriptor(),
                       null));
+            } else if (propertyView.getModelDescriptor() instanceof EnumQueryStructureDescriptor) {
+              ((BasicReferencePropertyViewDescriptor) propertyView).setLovAction(
+                  createEnumSelectAction((EnumQueryStructureDescriptor) propertyView.getModelDescriptor(), null));
             }
           }
         }
