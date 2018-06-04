@@ -1,3 +1,7 @@
+6.0.0
+=====
+- Module headerDescription property has been renamed to pageHeaderDescription
+
 5.0.0
 =====
 - There seems to be a problem in Groovy with static constants inherited by interfaces. Jspresso 5 generates interfaces
