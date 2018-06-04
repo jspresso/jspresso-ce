@@ -1201,6 +1201,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           var separator = new qx.ui.mobile.form.Row();
           separator.addCssClass("form-separation-row");
           form.add(separator);
+          row.bind("visibility", separator,  "visibility");
         }
       }
       var bottom = new qx.ui.mobile.form.Row();
