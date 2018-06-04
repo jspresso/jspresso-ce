@@ -94,7 +94,7 @@ public class MobileBeanModule extends BeanModule {
       MobileBorderViewDescriptor viewDescriptor = new MobileBorderViewDescriptor();
       viewDescriptor.setModelDescriptor(beanModuleDescriptor);
       viewDescriptor.setCenterViewDescriptor(wrapperDescriptor);
-      viewDescriptor.setI18nHeader(getI18nHeaderDescription());
+      viewDescriptor.setI18nHeader(getI18nPageHeaderDescription());
       return viewDescriptor;
     }
     return null;

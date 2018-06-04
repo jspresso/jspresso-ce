@@ -101,14 +101,14 @@ public class Module extends AbstractPropertyChangeCapable
   public static final String DIRTY = "dirty";
 
   /**
-   * {@code HEADER_DESCRIPTION} is "headerDescription".
+   * {@code PAGE_HEADER_DESCRIPTION} is "pageHeaderDescription".
    */
-  public static final String HEADER_DESCRIPTION = "headerDescription";
+  public static final String PAGE_HEADER_DESCRIPTION = "pageHeaderDescription";
 
   /**
-   * {@code I18N_HEADER_DESCRIPTION} is "i18nHeaderDescription".
+   * {@code I18N_PAGE_HEADER_DESCRIPTION} is "i18nPageHeaderDescription".
    */
-  public static final String I18N_HEADER_DESCRIPTION = "i18nHeaderDescription";
+  public static final String I18N_PAGE_HEADER_DESCRIPTION = "i18nPageHeaderDescription";
 
   /**
    * {@code DIRTY_MARKER} is black star UTF8 character
@@ -117,8 +117,8 @@ public class Module extends AbstractPropertyChangeCapable
 
   private String             description;
   private String             i18nDescription;
-  private String             headerDescription;
-  private String             i18nHeaderDescription;
+  private String             pageHeaderDescription;
+  private String             i18nPageHeaderDescription;
   private boolean            dirty;
   private boolean            displayDirtyState;
   private IAction            entryAction;
@@ -929,8 +929,8 @@ public class Module extends AbstractPropertyChangeCapable
    *
    * @return the header description
    */
-  public String getHeaderDescription() {
-    return headerDescription;
+  public String getPageHeaderDescription() {
+    return pageHeaderDescription;
   }
 
   /**
@@ -938,11 +938,11 @@ public class Module extends AbstractPropertyChangeCapable
    * header description. The resulting translation will generally be leveraged as a
    * text header on the UI side.
    *
-   * @param headerDescription
+   * @param pageHeaderDescription
    *     the header description
    */
-  public void setHeaderDescription(String headerDescription) {
-    this.headerDescription = headerDescription;
+  public void setPageHeaderDescription(String pageHeaderDescription) {
+    this.pageHeaderDescription = pageHeaderDescription;
   }
 
   /**
@@ -950,21 +950,21 @@ public class Module extends AbstractPropertyChangeCapable
    *
    * @return the i 18 n header description
    */
-  public String getI18nHeaderDescription() {
-    if (i18nHeaderDescription != null) {
-      return i18nHeaderDescription;
+  public String getI18nPageHeaderDescription() {
+    if (i18nPageHeaderDescription != null) {
+      return i18nPageHeaderDescription;
     }
-    return getHeaderDescription();
+    return getPageHeaderDescription();
   }
 
   /**
    * Sets i 18 n header description.
    *
-   * @param i18nHeaderDescription
+   * @param i18nPageHeaderDescription
    *     the i 18 n header description
    */
-  public void setI18nHeaderDescription(String i18nHeaderDescription) {
-    this.i18nHeaderDescription = i18nHeaderDescription;
+  public void setI18nPageHeaderDescription(String i18nPageHeaderDescription) {
+    this.i18nPageHeaderDescription = i18nPageHeaderDescription;
   }
 
   /**

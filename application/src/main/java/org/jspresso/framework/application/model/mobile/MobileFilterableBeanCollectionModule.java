@@ -143,7 +143,7 @@ public class MobileFilterableBeanCollectionModule extends FilterableBeanCollecti
       modulePageView.setMainAction(getQueryModuleFilterAction());
       modulePageView.setI18nName(getI18nName());
       modulePageView.setI18nDescription(getI18nDescription());
-      modulePageView.setI18nHeader(getI18nHeaderDescription());
+      modulePageView.setI18nHeader(getI18nPageHeaderDescription());
       cachedViewDescriptor = modulePageView;
     }
     return cachedViewDescriptor;

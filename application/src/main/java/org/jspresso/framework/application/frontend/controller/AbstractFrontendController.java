@@ -2092,7 +2092,7 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
   private void translateModule(Module module) {
     module.setI18nName(getTranslation(module.getName(), getLocale()));
     module.setI18nDescription(getTranslation(module.getDescription(), getLocale()));
-    module.setI18nHeaderDescription(getTranslation(module.getHeaderDescription(), getLocale()));
+    module.setI18nPageHeaderDescription(getTranslation(module.getPageHeaderDescription(), getLocale()));
     if (module.getSubModules() != null) {
       for (Module subModule : module.getSubModules()) {
         translateModule(subModule);
