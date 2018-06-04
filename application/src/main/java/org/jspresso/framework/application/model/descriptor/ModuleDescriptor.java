@@ -93,5 +93,8 @@ public class ModuleDescriptor extends BasicComponentDescriptor<Module> {
     setPropertyDescriptors(propertyDescriptors);
 
     setRenderedProperties(Arrays.asList(Module.NAME));
+
+    setToStringProperty(Module.I18N_NAME);
+    setToHtmlProperty(Module.I18N_DESCRIPTION);
   }
 }

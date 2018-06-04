@@ -96,6 +96,8 @@ import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.ISecurityHandlerAware;
 import org.jspresso.framework.security.ISubjectAware;
 import org.jspresso.framework.util.collection.IPageable;
+import org.jspresso.framework.util.descriptor.IDescriptor;
+import org.jspresso.framework.util.descriptor.IIconDescriptor;
 import org.jspresso.framework.util.event.IItemSelectable;
 import org.jspresso.framework.util.event.IItemSelectionListener;
 import org.jspresso.framework.util.event.ISelectionChangeListener;
@@ -2179,24 +2181,42 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
                                                         IActionHandler actionHandler, Locale locale);
 
   /**
-   * Creates a list column connector.
+   * Create list view connector collection connector.
    *
-   * @param renderedProperty
-   *     the list rendered property.
-   * @param descriptor
-   *     the component descriptor this list relies on.
-   * @return the connector for the list.
+   * @param viewDescriptor
+   *     the view descriptor
+   * @return the collection connector
    */
-  protected IValueConnector createListConnector(String renderedProperty, IComponentDescriptor<?> descriptor) {
-    IPropertyDescriptor propertyDescriptor = descriptor.getPropertyDescriptor(renderedProperty);
-    if (propertyDescriptor == null) {
-      throw new ViewException("No property " + renderedProperty + " defined for " + descriptor.getComponentContract());
+  protected ICollectionConnector createListViewConnector(IListViewDescriptor viewDescriptor) {
+    ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
+        .getModelDescriptor());
+    IComponentDescriptor<?> rowDescriptor = modelDescriptor.getCollectionDescriptor().getElementDescriptor();
+    ICompositeValueConnector rowConnectorPrototype = getConnectorFactory().createCompositeValueConnector(
+        modelDescriptor.getName() + "Element", rowDescriptor.getToHtmlProperty());
+    ICollectionConnector connector = getConnectorFactory().createCollectionConnector(modelDescriptor.getName(),
+        getMvcBinder(), rowConnectorPrototype);
+    if (rowConnectorPrototype instanceof AbstractCompositeValueConnector) {
+      ((AbstractCompositeValueConnector) rowConnectorPrototype).setDisplayIcon(viewDescriptor.getIcon());
+      ((AbstractCompositeValueConnector) rowConnectorPrototype).setIconImageURLProvider(
+          viewDescriptor.getIconImageURLProvider());
     }
-    if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
-      return getConnectorFactory().createCompositeValueConnector(renderedProperty,
-          ((IReferencePropertyDescriptor<?>) propertyDescriptor).getReferencedDescriptor().getToStringProperty());
+    String renderedProperty = viewDescriptor.getRenderedProperty();
+    if (renderedProperty != null) {
+      IValueConnector cellConnector;
+      IPropertyDescriptor propertyDescriptor = rowDescriptor.getPropertyDescriptor(renderedProperty);
+      if (propertyDescriptor == null) {
+        throw new ViewException(
+            "No property " + renderedProperty + " defined for " + rowDescriptor.getComponentContract());
+      }
+      if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>) {
+        cellConnector = getConnectorFactory().createCompositeValueConnector(renderedProperty,
+            ((IReferencePropertyDescriptor<?>) propertyDescriptor).getReferencedDescriptor().getToStringProperty());
+      } else {
+        cellConnector = getConnectorFactory().createValueConnector(propertyDescriptor.getName());
+      }
+      rowConnectorPrototype.addChildConnector(renderedProperty, cellConnector);
     }
-    return getConnectorFactory().createValueConnector(propertyDescriptor.getName());
+    return connector;
   }
 
   /**
@@ -2759,11 +2779,8 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     }
 
     if (connector instanceof AbstractCompositeValueConnector) {
-      ((AbstractCompositeValueConnector) connector).setDisplayValue(viewDescriptor.getI18nName(actionHandler, locale));
-      ((AbstractCompositeValueConnector) connector).setDisplayDescription(
-          viewDescriptor.getI18nDescription(actionHandler, locale));
-      ((AbstractCompositeValueConnector) connector).setDisplayIcon(viewDescriptor.getIcon());
-      ((AbstractCompositeValueConnector) connector).setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
+      syncTreeLevelConnectorDisplayValues(((AbstractCompositeValueConnector) connector), viewDescriptor, viewDescriptor,
+          actionHandler, locale);
     }
 
     //noinspection ConstantConditions
@@ -3432,19 +3449,63 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     }
     nodeGroupPrototypeConnector.setCollectionConnectorProviders(subtreeConnectors);
     if (nodeGroupPrototypeConnector instanceof AbstractCompositeValueConnector) {
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector).setDisplayValue(
-          subtreeViewDescriptor.getNodeGroupDescriptor().getI18nName(actionHandler, locale));
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector).setDisplayDescription(
-          subtreeViewDescriptor.getNodeGroupDescriptor().getI18nDescription(actionHandler, locale));
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector).setDisplayIcon(
-          subtreeViewDescriptor.getNodeGroupDescriptor().getIcon());
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector).setIconImageURLProvider(
-          viewDescriptor.getIconImageURLProvider());
+      syncTreeLevelConnectorDisplayValues((AbstractCompositeValueConnector) nodeGroupPrototypeConnector, viewDescriptor,
+          subtreeViewDescriptor.getNodeGroupDescriptor(), actionHandler, locale);
     }
 
     ICollectionConnector nodeGroupCollectionConnector = connectorFactory.createCollectionConnector(
         nodeGroupModelDescriptor.getName(), mvcBinder, nodeGroupPrototypeConnector);
     return nodeGroupCollectionConnector;
+  }
+
+  private void syncTreeLevelConnectorDisplayValues(final AbstractCompositeValueConnector nodeGroupPrototypeConnector,
+                                                   ITreeViewDescriptor viewDescriptor,
+                                                   IViewDescriptor treeLevelDescriptor, IActionHandler actionHandler,
+                                                   Locale locale) {
+    // nodeGroupPrototypeConnector.setDisplayValue(treeLevelDescriptor.getI18nName(actionHandler, locale));
+    // nodeGroupPrototypeConnector.setDisplayDescription(treeLevelDescriptor.getI18nDescription(actionHandler, locale));
+    // nodeGroupPrototypeConnector.setDisplayIcon(treeLevelDescriptor.getIcon());
+    nodeGroupPrototypeConnector.setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
+    nodeGroupPrototypeConnector.addValueChangeListener(new TreeConnectorSyncer(actionHandler, locale));
+  }
+
+  private static class TreeConnectorSyncer implements IValueChangeListener, ICloneable {
+
+    private IActionHandler actionHandler;
+    private Locale         locale;
+
+    public TreeConnectorSyncer(IActionHandler actionHandler, Locale locale) {
+      this.actionHandler = actionHandler;
+      this.locale = locale;
+    }
+
+    @Override
+    public void valueChange(ValueChangeEvent evt) {
+      AbstractCompositeValueConnector connector = (AbstractCompositeValueConnector) evt.getSource();
+      Object newValue = evt.getNewValue();
+      if (newValue instanceof IDescriptor) {
+        connector.setDisplayValue(((IDescriptor) newValue).getI18nName(actionHandler, locale));
+        connector.setDisplayDescription(((IDescriptor) newValue).getI18nDescription(actionHandler, locale));
+        if (newValue instanceof IIconDescriptor) {
+          connector.setDisplayIcon(((IIconDescriptor) newValue).getIcon());
+        } else {
+          connector.setDisplayIcon(null);
+        }
+      } else {
+        connector.setDisplayValue(null);
+        connector.setDisplayDescription(null);
+        connector.setDisplayIcon(null);
+      }
+    }
+
+    @Override
+    public TreeConnectorSyncer clone() {
+      try {
+        return (TreeConnectorSyncer) super.clone();
+      } catch (CloneNotSupportedException e) {
+        return null; // Cannot happen
+      }
+    }
   }
 
   /**
@@ -3479,13 +3540,8 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
           (ISimpleTreeLevelDescriptor) subtreeViewDescriptor, depth);
     }
     if (connector instanceof AbstractCompositeValueConnector) {
-      ((AbstractCompositeValueConnector) connector).setDisplayValue(
-          subtreeViewDescriptor.getNodeGroupDescriptor().getI18nName(actionHandler, locale));
-      ((AbstractCompositeValueConnector) connector).setDisplayDescription(
-          subtreeViewDescriptor.getNodeGroupDescriptor().getI18nDescription(actionHandler, locale));
-      ((AbstractCompositeValueConnector) connector).setDisplayIcon(
-          subtreeViewDescriptor.getNodeGroupDescriptor().getIcon());
-      ((AbstractCompositeValueConnector) connector).setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
+      syncTreeLevelConnectorDisplayValues((AbstractCompositeValueConnector) connector, viewDescriptor,
+          subtreeViewDescriptor.getNodeGroupDescriptor(), actionHandler, locale);
     }
     return connector;
   }
@@ -3513,14 +3569,8 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
       }
     }
     if (nodeGroupPrototypeConnector instanceof AbstractCompositeValueConnector) {
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector).setDisplayValue(
-          subtreeViewDescriptor.getNodeGroupDescriptor().getI18nName(actionHandler, locale));
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector).setDisplayDescription(
-          subtreeViewDescriptor.getNodeGroupDescriptor().getI18nDescription(actionHandler, locale));
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector).setDisplayIcon(
-          subtreeViewDescriptor.getNodeGroupDescriptor().getIcon());
-      ((AbstractCompositeValueConnector) nodeGroupPrototypeConnector).setIconImageURLProvider(
-          viewDescriptor.getIconImageURLProvider());
+      syncTreeLevelConnectorDisplayValues((AbstractCompositeValueConnector) nodeGroupPrototypeConnector, viewDescriptor,
+          subtreeViewDescriptor.getNodeGroupDescriptor(), actionHandler, locale);
     }
     ICollectionConnector nodeGroupCollectionConnector = connectorFactory.createCollectionConnector(
         nodeGroupModelDescriptor.getName(), mvcBinder, nodeGroupPrototypeConnector);
@@ -3794,7 +3844,8 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
           LOG.warn("Invalid map preferences stored for map " + mapViewDescriptor.getPermId());
         }
       }
-    } return null;
+    }
+    return null;
   }
 
   /**

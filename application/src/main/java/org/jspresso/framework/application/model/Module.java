@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -33,7 +34,9 @@ import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.ISecurityHandler;
 import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
+import org.jspresso.framework.util.descriptor.IIconDescriptor;
 import org.jspresso.framework.util.gui.Icon;
+import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.util.lang.StringUtils;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
@@ -60,7 +63,7 @@ import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
  * @author Vincent Vandenschrick
  */
 public class Module extends AbstractPropertyChangeCapable
-    implements IViewDescriptorProvider, ISecurable, IPermIdSource {
+    implements IIconDescriptor, IViewDescriptorProvider, ISecurable, IPermIdSource {
 
   /**
    * {@code DESCRIPTION} is "description".
@@ -220,6 +223,20 @@ public class Module extends AbstractPropertyChangeCapable
   }
 
   /**
+   * Gets i 18 n description.
+   *
+   * @param translationProvider
+   *     the translation provider
+   * @param locale
+   *     the locale
+   * @return the i 18 n description
+   */
+  @Override
+  public String getI18nDescription(ITranslationProvider translationProvider, Locale locale) {
+    return getI18nDescription();
+  }
+
+  /**
    * Gets the entryAction.
    *
    * @return the entryAction.
@@ -279,6 +296,20 @@ public class Module extends AbstractPropertyChangeCapable
   }
 
   /**
+   * Gets i 18 n name.
+   *
+   * @param translationProvider
+   *     the translation provider
+   * @param locale
+   *     the locale
+   * @return the i 18 n name
+   */
+  @Override
+  public String getI18nName(ITranslationProvider translationProvider, Locale locale) {
+    return getI18nName();
+  }
+
+  /**
    * Gets the icon.
    *
    * @return the icon.
@@ -294,6 +325,16 @@ public class Module extends AbstractPropertyChangeCapable
    */
   public String getName() {
     return name;
+  }
+
+  /**
+   * Gets last updated.
+   *
+   * @return the last updated
+   */
+  @Override
+  public long getLastUpdated() {
+    return 0;
   }
 
   /**

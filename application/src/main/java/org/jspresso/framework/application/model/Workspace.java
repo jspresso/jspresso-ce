@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -32,8 +33,10 @@ import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.ISecurityHandler;
 import org.jspresso.framework.util.automation.IPermIdSource;
 import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
+import org.jspresso.framework.util.descriptor.IIconDescriptor;
 import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.gui.IconProvider;
+import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.lang.StringUtils;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.AbstractTreeViewDescriptor;
@@ -56,7 +59,7 @@ import org.jspresso.framework.view.descriptor.basic.AbstractTreeViewDescriptor;
  *
  * @author Vincent Vandenschrick
  */
-public class Workspace extends AbstractPropertyChangeCapable implements ISecurable, IPermIdSource {
+public class Workspace extends AbstractPropertyChangeCapable implements IIconDescriptor, ISecurable, IPermIdSource {
 
   /**
    * {@code DESCRIPTION} is "description".
@@ -163,6 +166,20 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
   }
 
   /**
+   * Gets i 18 n description.
+   *
+   * @param translationProvider
+   *     the translation provider
+   * @param locale
+   *     the locale
+   * @return the i 18 n description
+   */
+  @Override
+  public String getI18nDescription(ITranslationProvider translationProvider, Locale locale) {
+    return getI18nDescription();
+  }
+
+  /**
    * Gets the grantedRoles.
    *
    * @return the grantedRoles.
@@ -194,6 +211,20 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
       return i18nName;
     }
     return getName();
+  }
+
+  /**
+   * Gets i 18 n name.
+   *
+   * @param translationProvider
+   *     the translation provider
+   * @param locale
+   *     the locale
+   * @return the i 18 n name
+   */
+  @Override
+  public String getI18nName(ITranslationProvider translationProvider, Locale locale) {
+    return getI18nName();
   }
 
   /**
@@ -260,6 +291,16 @@ public class Workspace extends AbstractPropertyChangeCapable implements ISecurab
    */
   public String getName() {
     return name;
+  }
+
+  /**
+   * Gets last updated.
+   *
+   * @return the last updated
+   */
+  @Override
+  public long getLastUpdated() {
+    return 0;
   }
 
   /**

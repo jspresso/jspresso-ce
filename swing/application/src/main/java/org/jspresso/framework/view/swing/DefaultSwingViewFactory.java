@@ -98,7 +98,6 @@ import javax.swing.event.TableColumnModelListener;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -133,7 +132,6 @@ import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.view.ControllerAwareViewFactory;
-import org.jspresso.framework.binding.AbstractCompositeValueConnector;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICollectionConnectorProvider;
 import org.jspresso.framework.binding.ICompositeValueConnector;
@@ -1938,27 +1936,12 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
   @Override
   protected IView<JComponent> createListView(IListViewDescriptor viewDescriptor, IActionHandler actionHandler,
                                              Locale locale) {
-    ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
-        .getModelDescriptor());
-    IComponentDescriptor<?> rowDescriptor = modelDescriptor.getCollectionDescriptor().getElementDescriptor();
-    ICompositeValueConnector rowConnectorPrototype = getConnectorFactory().createCompositeValueConnector(
-        modelDescriptor.getName() + "Element", rowDescriptor.getToHtmlProperty());
-    if (rowConnectorPrototype instanceof AbstractCompositeValueConnector) {
-      ((AbstractCompositeValueConnector) rowConnectorPrototype).setDisplayIcon(viewDescriptor.getIcon());
-      ((AbstractCompositeValueConnector) rowConnectorPrototype).setIconImageURLProvider(
-          viewDescriptor.getIconImageURLProvider());
-    }
-    ICollectionConnector connector = getConnectorFactory().createCollectionConnector(modelDescriptor.getName(),
-        getMvcBinder(), rowConnectorPrototype);
+    ICollectionConnector connector = createListViewConnector(viewDescriptor);
     JList<IValueConnector> viewComponent = createJList(viewDescriptor);
     JScrollPane scrollPane = createJScrollPane();
     scrollPane.setViewportView(viewComponent);
     IView<JComponent> view = constructView(scrollPane, viewDescriptor, connector);
 
-    if (viewDescriptor.getRenderedProperty() != null) {
-      IValueConnector cellConnector = createListConnector(viewDescriptor.getRenderedProperty(), rowDescriptor);
-      rowConnectorPrototype.addChildConnector(viewDescriptor.getRenderedProperty(), cellConnector);
-    }
     viewComponent.setCellRenderer(new EvenOddListCellRenderer(getIconFactory(), viewDescriptor.getRenderedProperty(),
         viewDescriptor.isDisplayIcon()));
     viewComponent.setModel(new CollectionConnectorListModel(connector));

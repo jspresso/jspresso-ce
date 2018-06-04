@@ -1995,6 +1995,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           controller.bindProperty(controller.getLabelPath(), "label", controller.getLabelOptions(), treeNode,
               modelNode);
           controller.bindProperty(controller.getIconPath(), "icon", controller.getIconOptions(), treeNode, modelNode);
+          controller.bindProperty("description", "toolTipText", null, treeNode, modelNode);
           if (modelNode) {
             modelNode.addListener("changeSelectedIndices", function (e) {
               if (controller.getUserData("blockSelectionEvents")) {

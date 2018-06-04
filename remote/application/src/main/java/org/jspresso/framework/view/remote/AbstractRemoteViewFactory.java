@@ -1905,27 +1905,11 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
   @Override
   protected IView<RComponent> createListView(IListViewDescriptor viewDescriptor, IActionHandler actionHandler,
                                              Locale locale) {
-    ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
-        .getModelDescriptor());
-    IComponentDescriptor<?> rowDescriptor = modelDescriptor.getCollectionDescriptor().getElementDescriptor();
-    ICompositeValueConnector rowConnectorPrototype = getConnectorFactory().createCompositeValueConnector(
-        modelDescriptor.getName() + "Element", rowDescriptor.getToHtmlProperty());
-    if (rowConnectorPrototype instanceof AbstractCompositeValueConnector) {
-      ((AbstractCompositeValueConnector) rowConnectorPrototype).setDisplayIcon(viewDescriptor.getIcon());
-      ((AbstractCompositeValueConnector) rowConnectorPrototype).setIconImageURLProvider(
-          viewDescriptor.getIconImageURLProvider());
-    }
-    ICollectionConnector connector = getConnectorFactory().createCollectionConnector(modelDescriptor.getName(),
-        getMvcBinder(), rowConnectorPrototype);
+    ICollectionConnector connector = createListViewConnector(viewDescriptor);
     RList viewComponent = createRList(viewDescriptor);
     viewComponent.setDisplayIcon(viewDescriptor.isDisplayIcon());
     IView<RComponent> view = constructView(viewComponent, viewDescriptor, connector);
 
-    String renderedProperty = viewDescriptor.getRenderedProperty();
-    if (renderedProperty != null) {
-      IValueConnector cellConnector = createListConnector(renderedProperty, rowDescriptor);
-      rowConnectorPrototype.addChildConnector(renderedProperty, cellConnector);
-    }
     viewComponent.setSelectionMode(viewDescriptor.getSelectionMode().name());
     if (viewDescriptor.getRowAction() != null) {
       viewComponent.setRowAction(
