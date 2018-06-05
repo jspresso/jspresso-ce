@@ -677,10 +677,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       } else {
         navPage = new qx.ui.mobile.page.NavigationPage();
       }
-      if (remoteSelectionComponent.getLabel()) {
-        navPage.setTitle(remoteSelectionComponent.getLabel());
-      } else {
+      if (remoteNavPage.getLabel()) {
         navPage.setTitle(remoteNavPage.getLabel());
+      } else {
+        navPage.setTitle(remoteSelectionComponent.getLabel());
       }
 
       var headerSections = this._createPageSections(rHeaderSections, navPage);
