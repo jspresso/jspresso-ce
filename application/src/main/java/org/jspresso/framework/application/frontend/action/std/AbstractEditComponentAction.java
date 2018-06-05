@@ -36,35 +36,35 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  * This action serves as a base class for actions that pop-pup a dialog to edit
  * a component.
  *
- * @author Vincent Vandenschrick
  * @param <E>
- *          the actual gui component type used.
+ *     the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *     the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *     the actual action type used.
+ * @author Vincent Vandenschrick
  */
-public abstract class AbstractEditComponentAction<E, F, G> extends
-    FrontendAction<E, F, G> {
+public abstract class AbstractEditComponentAction<E, F, G> extends FrontendAction<E, F, G> {
 
-  private IViewDescriptor                    viewDescriptor;
-  private List<? extends IDisplayableAction> complementaryActions;
+  /**
+   * The View descriptor key in the context.
+   */
+  public final static String                             VIEW_DESCRIPTOR = "VIEW_DESCRIPTOR";
+  private             IViewDescriptor                    viewDescriptor;
+  private             List<? extends IDisplayableAction> complementaryActions;
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler,
-      Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     List<IDisplayableAction> actions = getDialogActions();
     context.put(ModalDialogAction.DIALOG_ACTIONS, actions);
 
     IViewDescriptor editViewDescriptor = getViewDescriptor(context);
 
-    IView<E> dialogView = getViewFactory(context).createView(
-        editViewDescriptor, actionHandler, getLocale(context));
-    String dialogTitle = getI18nName(getTranslationProvider(context),
-        getLocale(context));
+    IView<E> dialogView = getViewFactory(context).createView(editViewDescriptor, actionHandler, getLocale(context));
+    String dialogTitle = getI18nName(getTranslationProvider(context), getLocale(context));
     if (dialogTitle != null && dialogTitle.length() > 0) {
       context.put(ModalDialogAction.DIALOG_TITLE, dialogTitle);
     }
@@ -72,21 +72,19 @@ public abstract class AbstractEditComponentAction<E, F, G> extends
 
     Object component = getComponentToEdit(context);
     IModelDescriptor modelDescriptor = getEditModelDescriptor(context);
-    if (modelDescriptor == null
-        && editViewDescriptor instanceof ICardViewDescriptor) {
+    if (modelDescriptor == null && editViewDescriptor instanceof ICardViewDescriptor) {
       ICardViewDescriptor cvd = (ICardViewDescriptor) editViewDescriptor;
-      String cardName = cvd.getCardNameForModel(component,
-          getBackendController(context).getApplicationSession().getSubject());
+      String cardName = cvd.getCardNameForModel(component, getBackendController(context).getApplicationSession()
+                                                                                        .getSubject());
       IViewDescriptor vd = cvd.getCardViewDescriptor(cardName);
       modelDescriptor = vd.getModelDescriptor();
     }
 
-    IValueConnector componentConnector = getBackendController(context)
-        .createModelConnector(ACTION_MODEL_NAME, modelDescriptor);
+    IValueConnector componentConnector = getBackendController(context).createModelConnector(ACTION_MODEL_NAME,
+        modelDescriptor);
     componentConnector.setConnectorValue(component);
 
-    getMvcBinder(context)
-        .bind(dialogView.getConnector(), componentConnector);
+    getMvcBinder(context).bind(dialogView.getConnector(), componentConnector);
 
     return super.execute(actionHandler, context);
   }
@@ -129,7 +127,7 @@ public abstract class AbstractEditComponentAction<E, F, G> extends
    * view that will be installed in the dialog.
    *
    * @param viewDescriptor
-   *          the viewDescriptor to set.
+   *     the viewDescriptor to set.
    */
   public void setViewDescriptor(IViewDescriptor viewDescriptor) {
     this.viewDescriptor = viewDescriptor;
@@ -139,7 +137,7 @@ public abstract class AbstractEditComponentAction<E, F, G> extends
    * Gets the model.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the model.
    */
   protected abstract Object getComponentToEdit(Map<String, Object> context);
@@ -148,18 +146,21 @@ public abstract class AbstractEditComponentAction<E, F, G> extends
    * Gets the viewDescriptor.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the viewDescriptor.
    */
   protected IViewDescriptor getViewDescriptor(Map<String, Object> context) {
-    return viewDescriptor;
+    if (viewDescriptor != null) {
+      return viewDescriptor;
+    }
+    return (IViewDescriptor) context.get(VIEW_DESCRIPTOR);
   }
 
   /**
    * Gets the modelDescriptor.
    *
    * @param context
-   *          the action context.
+   *     the action context.
    * @return the modelDescriptor.
    */
   protected IModelDescriptor getEditModelDescriptor(Map<String, Object> context) {
@@ -180,10 +181,9 @@ public abstract class AbstractEditComponentAction<E, F, G> extends
    * cancel actions.
    *
    * @param complementaryActions
-   *          the complementaryActions to set.
+   *     the complementaryActions to set.
    */
-  public void setComplementaryActions(
-      List<? extends IDisplayableAction> complementaryActions) {
+  public void setComplementaryActions(List<? extends IDisplayableAction> complementaryActions) {
     this.complementaryActions = complementaryActions;
   }
 
