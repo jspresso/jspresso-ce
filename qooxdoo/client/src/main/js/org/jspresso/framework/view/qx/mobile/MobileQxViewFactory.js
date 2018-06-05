@@ -238,8 +238,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       extraMenu.getSelectionList().setModel(extraActions);
       extraMenu.setAnchor(extraButton);
       extraMenu.addListener("changeSelection", function (evt) {
+        extraMenu.hide();
         var selectedIndex = evt.getData()["index"];
         this._getActionHandler().execute(extraActions.getItem(selectedIndex));
+        extraMenu.setSelectedIndex(-1);
       }, this);
       this.addButtonListener(extraButton, function (evt) {
         extraMenu.show();
