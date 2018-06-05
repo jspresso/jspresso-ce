@@ -119,8 +119,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       if (remoteComponent && component) {
         component = this._decorateWithActions(remoteComponent, component);
       }
-      if (!(remoteComponent instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAware)
-          && !(component instanceof qx.ui.mobile.page.Page)) {
+      if (!(remoteComponent instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAware) && !(component
+          instanceof qx.ui.mobile.page.Page)) {
         this._bindVisibility(remoteComponent, component);
       }
       return component;
@@ -535,7 +535,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.mobile.RMobileCompositePage) {
         container = this._createMobileCompositePage(remoteContainer);
       } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAwareContainer) {
-        container = this.createComponent(remoteContainer.getContent());
+        var content = remoteContainer.getContent();
+        content.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE, remoteContainer.getUserData(
+            org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE));
+        container = this.createComponent(content);
       } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.RCardContainer) {
         container = this._createCardContainer(remoteContainer);
       } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.RBorderContainer) {
@@ -930,6 +933,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       if (rPageSections) {
         for (var i = 0; i < rPageSections.length; i++) {
           var remotePageSection = rPageSections[i];
+          remotePageSection.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE,
+              holdingPage);
           var pageSection = this.createComponent(remotePageSection);
           if (pageSection instanceof qx.ui.mobile.page.NavigationPage) {
             var list = this.__createPageSectionForNavPage(pageSection, holdingPage, remotePageSection);
@@ -1150,7 +1155,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         } else {
           row.setLayout(new qx.ui.mobile.layout.HBox());
         }
-        component.bind("visibility", row,  "visibility");
+        component.bind("visibility", row, "visibility");
         if (remoteForm.getLabelsPosition() != "NONE") {
           var label = new qx.ui.mobile.form.Label("<p>" + rComponent.getLabel() + "</p>");
           component.bind("visibility", label, "visibility");
@@ -1201,7 +1206,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           var separator = new qx.ui.mobile.form.Row();
           separator.addCssClass("form-separation-row");
           form.add(separator);
-          row.bind("visibility", separator,  "visibility");
+          row.bind("visibility", separator, "visibility");
         }
       }
       var bottom = new qx.ui.mobile.form.Row();
@@ -1519,11 +1524,19 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var borderLayout = new qx.ui.mobile.layout.VBox();
       borderContainer.setLayout(borderLayout);
       this._addSectionHeader(borderContainer, remoteBorderContainer);
+      var holdingPage = remoteBorderContainer.getUserData(
+          org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE);
       var north = remoteBorderContainer.getNorth();
       if (north) {
         var child = this.createComponent(north);
         if (child instanceof qx.ui.mobile.page.NavigationPage) {
-          borderContainer.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE, child);
+          if (holdingPage) {
+            child = this.__createPageSectionForNavPage(child, holdingPage, north);
+            borderContainer.add(child);
+          } else {
+            borderContainer.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE,
+                child);
+          }
         } else {
           this._addSectionHeader(borderContainer, north);
           borderContainer.add(child);
@@ -1533,7 +1546,13 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       if (center) {
         var child = this.createComponent(center);
         if (child instanceof qx.ui.mobile.page.NavigationPage) {
-          borderContainer.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE, child);
+          if (holdingPage) {
+            child = this.__createPageSectionForNavPage(child, holdingPage, center);
+            borderContainer.add(child);
+          } else {
+            borderContainer.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE,
+                child);
+          }
         } else {
           this._addSectionHeader(borderContainer, center);
           borderContainer.add(child, {flex: 1});
@@ -1543,7 +1562,13 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       if (south) {
         var child = this.createComponent(south);
         if (child instanceof qx.ui.mobile.page.NavigationPage) {
-          borderContainer.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE, child);
+          if (holdingPage) {
+            child = this.__createPageSectionForNavPage(child, holdingPage, south);
+            borderContainer.add(child);
+          } else {
+            borderContainer.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE,
+                child);
+          }
         } else {
           this._addSectionHeader(borderContainer, south);
           borderContainer.add(child);
