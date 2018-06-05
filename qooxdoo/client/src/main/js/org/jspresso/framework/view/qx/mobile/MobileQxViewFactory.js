@@ -240,8 +240,10 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       extraMenu.addListener("changeSelection", function (evt) {
         extraMenu.hide();
         var selectedIndex = evt.getData()["index"];
-        this._getActionHandler().execute(extraActions.getItem(selectedIndex));
-        extraMenu.setSelectedIndex(-1);
+        if (selectedIndex >= 0) {
+          this._getActionHandler().execute(extraActions.getItem(selectedIndex));
+          extraMenu.setSelectedIndex(-1);
+        }
       }, this);
       this.addButtonListener(extraButton, function (evt) {
         extraMenu.show();
