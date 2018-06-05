@@ -58,7 +58,7 @@ public abstract class AbstractEditComponentAction<E, F, G> extends FrontendActio
    */
   @Override
   public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
-    List<IDisplayableAction> actions = getDialogActions();
+    List<IDisplayableAction> actions = getDialogActions(context);
     context.put(ModalDialogAction.DIALOG_ACTIONS, actions);
 
     IViewDescriptor editViewDescriptor = getViewDescriptor(context);
@@ -87,6 +87,19 @@ public abstract class AbstractEditComponentAction<E, F, G> extends FrontendActio
     getMvcBinder(context).bind(dialogView.getConnector(), componentConnector);
 
     return super.execute(actionHandler, context);
+  }
+
+  /**
+   * Retrieves the list of actions that will be installed on the dialog toolbar.
+   *
+   * @return the list of actions that will be installed on the dialog toolbar.
+   */
+  protected List<IDisplayableAction> getDialogActions(Map<String, Object> context) {
+    List<IDisplayableAction> actions = (List<IDisplayableAction>) context.get(ModalDialogAction.DIALOG_ACTIONS);
+    if (actions == null) {
+      actions = getDialogActions();
+    }
+    return actions;
   }
 
   /**
