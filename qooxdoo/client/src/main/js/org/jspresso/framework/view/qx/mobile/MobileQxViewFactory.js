@@ -274,6 +274,24 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           toolBar.add(toolBarButtons[extraActionFirstIndex]);
         }
       }
+      this.__sizeToolBarContent(toolBar);
+    },
+
+    __sizeToolBarContent: function (toolBar) {
+      var maxH = 0;
+      var children = toolBar.getChildren();
+      for (var childI = 0; childI < children.length; childI++) {
+        if (children[childI].getContainerElement().offsetHeight > maxH) {
+          maxH = children[childI].getContainerElement().offsetHeight;
+        }
+      }
+      if (maxH > 0) {
+        for (childI = 0; childI < children.length; childI++) {
+          if (children[childI].getVisibility() == "visible") {
+            children[childI]._setStyle("height", maxH + "px");
+          }
+        }
+      }
     },
 
     /**
@@ -309,25 +327,6 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
               extraActionsToolBarButton);
         }, this);
       }
-      toolBar.addListener("appear", function (e) {
-        qx.event.Timer.once(function () {
-              var maxH = 0;
-              var children = toolBar.getChildren();
-              for (var childI = 0; childI < children.length; childI++) {
-                if (children[childI].getContainerElement().offsetHeight > maxH) {
-                  maxH = children[childI].getContainerElement().offsetHeight;
-                }
-              }
-              if (maxH > 0) {
-                for (childI = 0; childI < children.length; childI++) {
-                  if (children[childI].getVisibility() == "visible") {
-                    children[childI]._setStyle("height", maxH + "px");
-                  }
-                }
-              }
-            }, this,
-            org.jspresso.framework.application.frontend.controller.qx.mobile.MobileQxController.ANIMATION_DURATION);
-      }, this);
       return toolBar;
     },
 
