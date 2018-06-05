@@ -327,6 +327,12 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
               extraActionsToolBarButton);
         }, this);
       }
+      toolBar.addListener("appear", function (e) {
+        qx.event.Timer.once(function () {
+              this.__sizeToolBarContent(toolBar);
+            }, this,
+            org.jspresso.framework.application.frontend.controller.qx.mobile.MobileQxController.ANIMATION_DURATION);
+      }, this);
       return toolBar;
     },
 
@@ -535,8 +541,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         container = this._createMobileCompositePage(remoteContainer);
       } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.mobile.RMobilePageAwareContainer) {
         var content = remoteContainer.getContent();
-        content.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE, remoteContainer.getUserData(
-            org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE));
+        content.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE,
+            remoteContainer.getUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE));
         container = this.createComponent(content);
       } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.RCardContainer) {
         container = this._createCardContainer(remoteContainer);
@@ -1079,6 +1085,13 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       this._completeButton(button, label, toolTip, icon);
       if (button.getShow() == "both") {
         button.setIconPosition("top");
+        // The following is for fixing #542
+        var layout = button._getChildren()[0]._getLayout();
+        var iconWidget = button.getIconWidget();
+        var labelWidget = button.getLabelWidget();
+        labelWidget.removeCssClass("label");
+        layout._setLayoutProperty(iconWidget, "flex", 1);
+        layout._setLayoutProperty(labelWidget, "flex", 0);
       }
       return button;
     },
