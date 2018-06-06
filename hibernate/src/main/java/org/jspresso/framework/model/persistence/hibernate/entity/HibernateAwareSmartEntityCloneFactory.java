@@ -19,6 +19,9 @@
 package org.jspresso.framework.model.persistence.hibernate.entity;
 
 import org.hibernate.Hibernate;
+
+import org.jspresso.framework.application.backend.persistence.hibernate.HibernateHelper;
+import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.entity.SmartEntityCloneFactory;
 
 /**
@@ -27,8 +30,7 @@ import org.jspresso.framework.model.entity.SmartEntityCloneFactory;
  *
  * @author Vincent Vandenschrick
  */
-public class HibernateAwareSmartEntityCloneFactory extends
-    SmartEntityCloneFactory {
+public class HibernateAwareSmartEntityCloneFactory extends SmartEntityCloneFactory {
 
   /**
    * {@inheritDoc}
@@ -36,5 +38,13 @@ public class HibernateAwareSmartEntityCloneFactory extends
   @Override
   protected boolean isInitialized(Object objectOrProxy) {
     return Hibernate.isInitialized(objectOrProxy);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected <E extends IComponent> Class<? extends E> getComponentContract(E component) {
+    return HibernateHelper.getComponentContract(component);
   }
 }
