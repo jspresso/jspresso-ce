@@ -49,7 +49,6 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteEditComm
 import org.jspresso.framework.application.frontend.command.remote.RemoteFocusCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteValueCommand;
 import org.jspresso.framework.application.view.ControllerAwareViewFactory;
-import org.jspresso.framework.binding.AbstractCompositeValueConnector;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;

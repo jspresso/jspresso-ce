@@ -155,6 +155,9 @@ public class RemoteActionFactory extends
           ((IDisplayableAction) action).getIcon(), dimension));
       remoteAction.setMnemonicAsString(((IDisplayableAction) action).getMnemonicAsString());
       remoteAction.setRepeatPeriodMillis(((IDisplayableAction) action).getRepeatPeriodMillis());
+      if (((IDisplayableAction) action).getHiddenWhenDisabled() != null) {
+        remoteAction.setHiddenWhenDisabled(((IDisplayableAction) action).getHiddenWhenDisabled());
+      }
     }
     ActionAdapter remoteActionAdapter = new ActionAdapter(remoteAction, action,
         actionHandler, view);
