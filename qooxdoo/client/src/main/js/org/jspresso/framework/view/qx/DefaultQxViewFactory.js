@@ -1676,7 +1676,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           if (remoteComponent.getBorderType() == "TITLED_ACTIONS") {
             var toolBar = this._createToolBar(remoteComponent, component);
             if (toolBar) {
-              decorator.addToBar(toolBar);
+              decorator.addToBar(this._decorateWithSlideBar(toolBar));
             }
           }
         } else {
@@ -2811,6 +2811,13 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       return table;
     },
 
+    _decorateWithSlideBar: function(component) {
+      var slideBar = new qx.ui.container.SlideBar();
+      slideBar.add(component);
+      slideBar.setScrollStep(100);
+      return slideBar;
+    },
+
     _decorateWithToolbars: function (component, remoteComponent) {
       var decorated = component;
       var toolBar;
@@ -2829,19 +2836,14 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       if (toolBar || secondaryToolBar) {
         var surroundingBox = new qx.ui.container.Composite(new qx.ui.layout.VBox())
         //surroundingBox.setPadding(2);
-        var slideBar;
         if (toolBar) {
-          slideBar = new qx.ui.container.SlideBar();
-          slideBar.add(toolBar, {flex: 1});
-          surroundingBox.add(slideBar);
+          surroundingBox.add(this._decorateWithSlideBar(toolBar));
         }
         surroundingBox.add(component, {
           flex: 1
         });
         if (secondaryToolBar) {
-          slideBar = new qx.ui.container.SlideBar();
-          slideBar.add(secondaryToolBar, {flex: 1});
-          surroundingBox.add(slideBar);
+          surroundingBox.add(this._decorateWithSlideBar(secondaryToolBar));
         }
         decorated = surroundingBox;
       }
@@ -2852,6 +2854,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       if (actionLists && actionLists.length > 0) {
         var toolBar = new qx.ui.toolbar.ToolBar();
         this.installActionLists(toolBar, actionLists);
+        toolBar.setMinWidth(0);
         return toolBar;
       }
       return null;

@@ -47,8 +47,8 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedCollapsiblePanel", {
 
   members: {
 
-    addToBar: function(widget) {
-      this.getChildControl("barContainer").add(widget);
+    addToBar: function(toolBar) {
+      this.getChildControl("barContainer").add(toolBar, {flex:1});
     },
 
     _applyValue: function (value, old) {
