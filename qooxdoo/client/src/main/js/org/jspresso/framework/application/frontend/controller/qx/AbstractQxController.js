@@ -302,22 +302,24 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
      * @return {undefined}
      */
     execute: function (action, actionEvent, actionCallback) {
-      actionEvent = (typeof actionEvent == 'undefined') ? null : actionEvent;
-      actionCallback = (typeof actionCallback == 'undefined') ? null : actionCallback;
-      this._stopCurrentActionTimer();
-      if (!actionEvent) {
-        actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
-      }
-      if (action.getRepeatPeriodMillis() > 0) {
-        this._startCurrentActionTimer();
-        this.__doExecute(action, actionEvent, actionCallback);
-        this.__currentActionTimer = new qx.event.Timer(action.getRepeatPeriodMillis());
-        this.__currentActionTimer.addListener("interval", function(event) {
+      if (action) {
+        actionEvent = (typeof actionEvent == 'undefined') ? null : actionEvent;
+        actionCallback = (typeof actionCallback == 'undefined') ? null : actionCallback;
+        this._stopCurrentActionTimer();
+        if (!actionEvent) {
+          actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
+        }
+        if (action.getRepeatPeriodMillis() > 0) {
+          this._startCurrentActionTimer();
           this.__doExecute(action, actionEvent, actionCallback);
-        }, this);
-        this.__currentActionTimer.start();
-      } else {
-        this.__doExecute(action, actionEvent, actionCallback);
+          this.__currentActionTimer = new qx.event.Timer(action.getRepeatPeriodMillis());
+          this.__currentActionTimer.addListener("interval", function (event) {
+            this.__doExecute(action, actionEvent, actionCallback);
+          }, this);
+          this.__currentActionTimer.start();
+        } else {
+          this.__doExecute(action, actionEvent, actionCallback);
+        }
       }
     },
 

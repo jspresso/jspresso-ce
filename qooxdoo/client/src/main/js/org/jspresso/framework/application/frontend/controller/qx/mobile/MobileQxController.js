@@ -733,7 +733,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       }
       var label = new qx.ui.mobile.basic.Label(messageCommand.getMessage());
       label.setWrap(true);
-      messageDialogContent.add(label);
+      var scroll = new qx.ui.mobile.container.Scroll();
+      scroll.add(label);
+      scroll._setStyle("maxHeight", (this._getApplication().getRoot().getContentElement().offsetHeight * 0.5) + "px");
+      messageDialogContent.add(new qx.ui.mobile.form.Row());
+      messageDialogContent.add(scroll);
       messageDialogContent.add(new qx.ui.mobile.form.Row());
 
       var buttonBox = new qx.ui.mobile.container.Composite();
