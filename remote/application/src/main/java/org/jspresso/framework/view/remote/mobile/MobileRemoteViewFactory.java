@@ -422,7 +422,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
         }
         viewComponent.setBackAction(cancelAction);
       } else {
-        MobileCompositePageViewDescriptor filteredEditorPage = viewDescriptor.getEditorPage().filterForWriting();
+        MobileCompositePageViewDescriptor filteredEditorPage = viewDescriptor.getEditorPage();
         ICompositeView<RComponent> editorPageView = (ICompositeView<RComponent>) createView(filteredEditorPage,
             actionHandler, locale);
         RMobileCompositePage editorPage = (RMobileCompositePage) editorPageView.getView().getPeer();

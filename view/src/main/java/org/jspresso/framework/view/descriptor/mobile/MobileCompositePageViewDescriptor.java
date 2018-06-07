@@ -128,7 +128,7 @@ public class MobileCompositePageViewDescriptor extends AbstractMobilePageViewDes
       List<IMobileViewDescriptor> editableSections = new ArrayList<>();
       for (IMobileViewDescriptor section : pageSectionDescriptors) {
         if (section instanceof MobileComponentViewDescriptor) {
-          editableSections.add(section);
+          editableSections.add(((MobileComponentViewDescriptor) section).filterForWriting());
         }
       }
       editableClone.setPageSectionDescriptors(editableSections);
@@ -186,27 +186,6 @@ public class MobileCompositePageViewDescriptor extends AbstractMobilePageViewDes
         }
       } else {
         filteredSections.add(section);
-      }
-    }
-    MobileCompositePageViewDescriptor filteredPage = (MobileCompositePageViewDescriptor) clone();
-    filteredPage.setPageSectionDescriptors(filteredSections);
-    return filteredPage;
-  }
-
-  /**
-   * Filter properties.
-   *
-   * @return the mobile composite page view descriptor
-   */
-  public MobileCompositePageViewDescriptor filterForWriting() {
-    List<IMobileViewDescriptor> sections = getPageSectionDescriptors();
-    List<IMobileViewDescriptor> filteredSections = new ArrayList<>();
-    for (IMobileViewDescriptor section : sections) {
-      if (section instanceof MobileComponentViewDescriptor) {
-        MobileComponentViewDescriptor filteredSection = ((MobileComponentViewDescriptor) section).filterForWriting();
-        if (filteredSection.getPropertyViewDescriptors().size() > 0) {
-          filteredSections.add(filteredSection);
-        }
       }
     }
     MobileCompositePageViewDescriptor filteredPage = (MobileCompositePageViewDescriptor) clone();
