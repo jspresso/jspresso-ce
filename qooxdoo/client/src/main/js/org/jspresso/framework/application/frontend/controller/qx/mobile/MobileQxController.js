@@ -905,7 +905,6 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       var downloadButton = new qx.ui.mobile.form.Button("Download");
       downloadButton.addListener("tap", function (e) {
         window.open(remoteOpenUrlCommand.getUrlSpec(), remoteOpenUrlCommand.getTarget());
-        popup.destroy();
       }, this);
       var drawer = this._popupDrawer("bottom", downloadButton);
       drawer.setHideOnBack(true);
