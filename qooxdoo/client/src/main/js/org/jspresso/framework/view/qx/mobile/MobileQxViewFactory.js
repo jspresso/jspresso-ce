@@ -2142,10 +2142,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
       }, this);
 
-      if (remoteList.getRowAction()) {
-        this._getRemotePeerRegistry().register(remoteList.getRowAction())
+      var rowAction = remoteList.getRowAction();
+      if (rowAction) {
+        this._getRemotePeerRegistry().register(rowAction)
         this.addComponentThresholdListener(list, "changeSelection", function (evt) {
-          this._getActionHandler().execute(remoteList.getRowAction());
+          // Since the client won't be notified yet about selection change and action enablement,
+          // force it enabled on client side and let the server decide...
+          rowAction.setEnabled(true);
+          this._getActionHandler().execute(rowAction);
         }, this);
       }
 
