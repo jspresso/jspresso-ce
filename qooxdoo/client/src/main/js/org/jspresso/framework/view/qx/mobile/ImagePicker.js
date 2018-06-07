@@ -40,12 +40,12 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImagePicker", {
    * @param imageSize {org.jspresso.framework.util.gui.Dimension} image size
    * @param formatName {String} format name
    */
-
   construct: function (submitUrl, label, imageSize, formatName) {
     this.base(arguments, label);
     this.__imageSize = imageSize;
     this.__formatName = formatName;
-    this.__formEl = this._createForm(submitUrl);
+    this.__submitUrl = submitUrl;
+    this.__formEl = this._createForm();
     this.addListenerOnce('appear', function () {
       this.getContentElement().appendChild(this.__formEl);
     }, this);
@@ -56,7 +56,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImagePicker", {
   // --------------------------------------------------------------------------
 
   events: {
-    "imagePicked": "qx.event.type.Data"
+    "imagePicked": "qx.event.type.Data",
+    "uploadComplete": "qx.event.type.Data"
   },
 
   // --------------------------------------------------------------------------
@@ -66,8 +67,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImagePicker", {
   members: {
 
     __formEl: null,
+    __iframeNode: null,
     __imageSize: null,
     __formatName: null,
+    __submitUrl: null,
+    __isSent: null,
 
     // ------------------------------------------------------------------------
     // [Modifiers]
@@ -125,6 +129,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImagePicker", {
       qx.bom.element.Style.setStyles(input, css, true);
       var that = this;
       qx.event.Registration.addListener(input, "change", function (event) {
+
+        if (this.__submitUrl) {
+          this.__formEl.submit();
+          this.__isSent = true;
+        }
         // Read in file
         var file = event.getTarget().files[0];
 
@@ -139,8 +148,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImagePicker", {
             image.onload = function (imageEvent) {
 
               // Resize the image
-              var canvas = document.createElement('canvas'),
-                  width = image.width, height = image.height;
+              var canvas = document.createElement('canvas'), width = image.width, height = image.height;
               var maxWidth = 600;
               var maxHeight = 600;
               if (that.__imageSize) {
@@ -206,17 +214,24 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImagePicker", {
       return input;
     },
 
-    _createForm: function (submitUrl) {
+    _createForm: function () {
       var form;
       var css = {
         'margin-top': '-30px'
       };
-      form = qx.dom.Element.create('form', {
-        // method: 'post',
-        // action: submitUrl,
-        // enctype: 'multipart/form-data',
-        target: this._createIFrameTarget()
-      });
+      this.__iframeNode = this._createIframeNode();
+      if (this.__submitUrl) {
+        form = qx.dom.Element.create('form', {
+          method: 'post',
+          action: this.__submitUrl,
+          enctype: 'multipart/form-data',
+          target: this.__iframeNode.name
+        });
+      } else {
+        form = qx.dom.Element.create('form', {
+          target: this.__iframeNode.name
+        });
+      }
       qx.bom.element.Style.setStyles(form, css, true);
       form.appendChild(this._createInput());
       return form;
@@ -229,7 +244,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImagePicker", {
      *
      * @return {String}
      */
-    _createIFrameTarget: function () {
+    _createIframeNode: function () {
       var frameName = "hiddenFrame_" + this.toHashCode();
       var frameNode;
       if (qx.core.Environment.get('browser.name') == 'ie' && qx.core.Environment.get('browser.version') < 8) {
@@ -240,7 +255,44 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImagePicker", {
       frameNode.id = (frameNode.name = frameName);
       frameNode.style.display = "none";
       document.body.appendChild(frameNode);
-      return frameName;
+      frameNode.onload = qx.lang.Function.bind(this._onLoad, this);
+      frameNode.onreadystatechange = qx.lang.Function.bind(this._onReadyStateChange, this);
+      return frameNode;
+    },
+
+    fireUploadCompleteEvent: function () {
+      var resource = qx.bom.Iframe.getDocument(this.__iframeNode).firstChild;
+      var id = resource.getAttribute("id");
+      this.fireDataEvent("uploadComplete", id);
+    },
+
+    /**
+     * Catch the onreadystatechange event of the target iframe.
+     *
+     * @type member
+     * @param e {Event}
+     * @return {void}
+     */
+    _onReadyStateChange: function (e) {
+      if (this.__iframeNode.readyState == "complete" && this.__isSent) {
+        this.fireUploadCompleteEvent();
+        delete this.__isSent;
+      }
+    },
+
+
+    /**
+     * Catch the onload event of the target iframe
+     *
+     * @type member
+     * @param e {Event}
+     * @return {void}
+     */
+    _onLoad: function (e) {
+      if (this.__isSent) {
+        this.fireUploadCompleteEvent();
+        delete this.__isSent;
+      }
     }
   }
 });

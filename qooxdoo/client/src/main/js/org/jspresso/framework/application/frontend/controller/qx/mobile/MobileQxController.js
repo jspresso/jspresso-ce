@@ -902,15 +902,36 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      * @return {undefined}
      */
     _handleOpenUrlCommand: function (remoteOpenUrlCommand) {
-      var popup = new qx.ui.mobile.dialog.Popup();
-      popup.setTitle("Download");
       var downloadButton = new qx.ui.mobile.form.Button("Download");
       downloadButton.addListener("tap", function (e) {
         window.open(remoteOpenUrlCommand.getUrlSpec(), remoteOpenUrlCommand.getTarget());
         popup.destroy();
       }, this);
-      popup.add(downloadButton);
-      popup.show();
+      var drawer = this._popupDrawer("bottom", downloadButton);
+      drawer.setHideOnBack(true);
+      drawer.setHideOnParentTap(true);
+    },
+
+    /**
+     * @param uploadCommand {org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand}
+     */
+    _handleFileUpload: function (uploadCommand) {
+      var imagePicker = new org.jspresso.framework.view.qx.mobile.ImagePicker(uploadCommand.getFileUrl(),
+          "Upload photo");
+      var drawer = this._popupDrawer("bottom", imagePicker);
+      drawer.setHideOnBack(true);
+      drawer.setHideOnParentTap(true);
+      imagePicker.addListener("uploadComplete", function (e) {
+        drawer.hide();
+        if (uploadCommand.getSuccessCallbackAction()) {
+          var id = e.getData();
+          if (id) {
+            var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
+            actionEvent.setActionCommand(id);
+            this.execute(uploadCommand.getSuccessCallbackAction(), actionEvent);
+          }
+        }
+      }, this);
     },
 
     /**
