@@ -733,6 +733,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       }
       var label = new qx.ui.mobile.basic.Label(messageCommand.getMessage());
       label.setWrap(true);
+      label._setStyle("color", "white");
       var scroll = new qx.ui.mobile.container.Scroll();
       scroll.add(label);
       scroll._setStyle("maxHeight", (this._getApplication().getRoot().getContentElement().offsetHeight * 0.5) + "px");
