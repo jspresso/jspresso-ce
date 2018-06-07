@@ -69,8 +69,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><code>mvn archetype:generate
-          -DarchetypeCatalog=http://repository.jspresso.org/maven2/</code></para>
+          <para><code>mvn archetype:generate -DarchetypeCatalog=http://repository.jspresso.org/maven2/</code></para>
         </listitem>
       </itemizedlist>
 
