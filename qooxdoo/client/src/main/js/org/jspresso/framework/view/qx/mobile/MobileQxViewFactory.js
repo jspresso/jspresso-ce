@@ -2076,8 +2076,9 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var listModel = state.getChildren();
 
       var rendererType;
-      if (remoteList.getSelectionMode() == "SINGLE_SELECTION" || remoteList.getSelectionMode()
-          == "SINGLE_CUMULATIVE_SELECTION") {
+      var singleSelectionMode = remoteList.getSelectionMode() == "SINGLE_SELECTION" || remoteList.getSelectionMode()
+          == "SINGLE_CUMULATIVE_SELECTION";
+      if (singleSelectionMode) {
         rendererType = qx.ui.mobile.list.renderer.Default;
       } else {
         rendererType = org.jspresso.framework.view.qx.mobile.SelectableListItemRenderer;
@@ -2157,8 +2158,13 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         if (!list.getUserData("tapEvent")) {
           /** @type {Array} */
           var stateSelection = e.getTarget().getSelectedIndices();
-          if (stateSelection && stateSelection.length > 0) {
-            list.fireDataEvent("changeSelection", stateSelection[0]);
+          if (singleSelectionMode) {
+            if (stateSelection && stateSelection.length > 0) {
+              list.fireDataEvent("changeSelection", stateSelection[0]);
+            }
+          } else {
+            // For multi selection sync
+            list.render();
           }
         }
       }, this);
