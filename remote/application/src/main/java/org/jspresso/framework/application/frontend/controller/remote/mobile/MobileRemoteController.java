@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.application.frontend.action.workspace.WorkspaceSelectionAction;
+import org.jspresso.framework.application.frontend.command.remote.RemoteHistoryDisplayCommand;
 import org.jspresso.framework.application.frontend.command.remote.mobile.RemoteAnimationCommand;
 import org.jspresso.framework.application.frontend.command.remote.mobile.RemoteBackCommand;
 import org.jspresso.framework.application.frontend.controller.remote.AbstractRemoteController;
@@ -219,15 +220,20 @@ public class MobileRemoteController extends AbstractRemoteController {
   protected void displayWorkspace(String workspaceName, boolean bypassModuleBoundaryActions) {
     boolean navigateToModule = workspaceName != null && !workspaceName.equals(getSelectedWorkspaceName());
     super.displayWorkspace(workspaceName, bypassModuleBoundaryActions);
-    if (navigateToModule) {
-      Workspace workspace = getWorkspace(workspaceName);
-      List<Module> modules = workspace.getModules();
-      if (isShortcutToSingleModule(modules)) {
-        Module singleModule = modules.get(0);
-        // This is a hack to detect that we are called for the second time. So we must not re-display the module,
-        // otherwise the entry action is executed twice.
-        if (!bypassModuleBoundaryActions) {
-          displayModule(singleModule);
+    Workspace workspace = getWorkspace(workspaceName);
+    if (workspace != null) {
+      RemoteHistoryDisplayCommand historyCommand = new RemoteHistoryDisplayCommand();
+      historyCommand.setName(workspace.getI18nName());
+      registerCommand(historyCommand);
+      if (navigateToModule) {
+        List<Module> modules = workspace.getModules();
+        if (isShortcutToSingleModule(modules)) {
+          Module singleModule = modules.get(0);
+          // This is a hack to detect that we are called for the second time. So we must not re-display the module,
+          // otherwise the entry action is executed twice.
+          if (!bypassModuleBoundaryActions) {
+            displayModule(singleModule);
+          }
         }
       }
     }

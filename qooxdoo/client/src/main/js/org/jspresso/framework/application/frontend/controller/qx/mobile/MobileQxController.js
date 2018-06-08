@@ -653,6 +653,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
           }
         }
       }, this);
+      this.__workspacesMasterPage.addListener("changeVisibility", function (e) {
+        if (this.__workspacesMasterPage.isVisible()) {
+          qx.bom.History.getInstance().setTitle(this.getName());
+        }
+      }, this);
       this.bind("name", this.__workspacesMasterPage, "title");
       this._getManager().addMaster(this.__workspacesMasterPage);
       if (this.isTablet()) {
@@ -979,7 +984,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      * @return {undefined}
      */
     _handleHistoryDisplayCommand: function (historyDisplayCommand) {
-      // Not supported in mobile environment
+      qx.bom.History.getInstance().setTitle(historyDisplayCommand.getName());
     },
 
     /**
