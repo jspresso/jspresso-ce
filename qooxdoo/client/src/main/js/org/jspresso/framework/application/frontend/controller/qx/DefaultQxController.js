@@ -679,7 +679,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
           ["change_font_family", "change_font_size", "format_bold", "format_italic", "format_underline",
            "format_strikethrough", "remove_format", "align_left", "align_center", "align_right", "align_justify",
            "indent_more", "indent_less", "insert_ordered_list", "insert_unordered_list", "undo", "redo", "error",
-           "file.too.big"]);
+           "file.too.big", "upload_file", "select_file"]);
       return keysToTranslate;
     },
 
@@ -695,7 +695,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @param uploadCommand {org.jspresso.framework.application.frontend.command.remote.RemoteFileUploadCommand}
      */
     _handleFileUpload: function (uploadCommand) {
-      var uploadDialog = new qx.ui.window.Window("Upload file");
+      var uploadDialog = new qx.ui.window.Window(this.translate("upload_file"));
       uploadDialog.set({
         modal: true,
         showClose: false,
@@ -706,11 +706,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       //this._getViewFactory().setIcon(uploadDialog, messageCommand.getTitleIcon());
       this._getApplication().getRoot().add(uploadDialog);
 
-      var uploadForm = new uploadwidget.UploadForm('uploadForm', uploadCommand.getFileUrl());
+      var uploadForm = new uploadwidget.UploadForm("uploadForm", uploadCommand.getFileUrl());
       uploadForm.setAppearance("upload-form");
       uploadForm.setLayout(new qx.ui.layout.VBox(10));
 
-      var uploadField = new uploadwidget.UploadField('uploadFile', 'Select File', 'org/jspresso/framework/cloud_upload.svg');
+      var uploadField = new uploadwidget.UploadField("uploadFile", this.translate("select_file"), "org/jspresso/framework/cloud_upload.svg");
       uploadForm.add(uploadField);
 
       uploadDialog.add(uploadForm, {flex: 1});
@@ -721,7 +721,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
 
       uploadForm.addListener("completed", function (e) {
         this.showBusy(false);
-        uploadField.setFileName('');
+        uploadField.setFileName("");
         var document = uploadForm.getIframeDocument();
         var resource = document.firstChild;
         var id = resource.getAttribute("id");
@@ -937,10 +937,10 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
       var browserManager = qx.bom.History.getInstance();
       browserManager.addListener("request", function (e) {
         var state = e.getData();
-        var vars = state.split('&');
+        var vars = state.split("&");
         var decodedFragment = {};
         for (var i = 0; i < vars.length; i++) {
-          var tmp = vars[i].split('=');
+          var tmp = vars[i].split("=");
           decodedFragment[tmp[0]] = tmp[1];
         }
         if (decodedFragment.snapshotId && decodedFragment.snapshotId != this.__lastReceivedSnapshotId) {
