@@ -167,7 +167,11 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
       <#local propertyName=propertyDescriptor.name/>
       <#local propertyType=propertyDescriptor.modelTypeName/>
         case <#--<#if propertyDescriptor.computed && propertyDescriptor.persistenceFormula??>${componentName}Extension.</#if>-->${generateConstantName(propertyName)}:
+          <#if propertyType == "boolean">
+          set${propertyName?cap_first}(propertyValue == null ? false : (${propertyType}) propertyValue);
+          <#else>
           set${propertyName?cap_first}((${propertyType}) propertyValue);
+          </#if>
           break;
     </#if>
   </#list>
