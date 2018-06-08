@@ -1619,7 +1619,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
                 cellComponent);
           }
         } else {
-          this._addSectionHeader(evenGridContainer, north);
+          this._addSectionHeader(evenGridContainer, remoteCellComponent);
           evenGridContainer.add(cellComponent);
         }
       }
