@@ -125,29 +125,6 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected ICompositeView<RComponent> createEvenGridView(IEvenGridViewDescriptor viewDescriptor,
-                                                          IActionHandler actionHandler, Locale locale) {
-    REvenGridContainer viewComponent = createREvenGridContainer(viewDescriptor);
-    viewComponent.setDrivingDimension(viewDescriptor.getDrivingDimension().name());
-    viewComponent.setDrivingDimensionCellCount(viewDescriptor.getDrivingDimensionCellCount());
-    List<RComponent> cells = new ArrayList<>();
-    BasicCompositeView<RComponent> view = constructCompositeView(viewComponent, viewDescriptor);
-    List<IView<RComponent>> childrenViews = new ArrayList<>();
-
-    for (IViewDescriptor childViewDescriptor : viewDescriptor.getChildViewDescriptors()) {
-      IView<RComponent> childView = createView(childViewDescriptor, actionHandler, locale);
-      cells.add(childView.getPeer());
-      childrenViews.add(childView);
-    }
-    viewComponent.setCells(cells.toArray(new RComponent[cells.size()]));
-    view.setChildren(childrenViews);
-    return view;
-  }
-
-  /**
    * Creates a remote constrained grid container.
    *
    * @param viewDescriptor
@@ -156,17 +133,6 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
    */
   protected RConstrainedGridContainer createRConstrainedGridContainer(IConstrainedGridViewDescriptor viewDescriptor) {
     return new RConstrainedGridContainer(getGuidGenerator().generateGUID());
-  }
-
-  /**
-   * Creates a remote even grid container.
-   *
-   * @param viewDescriptor
-   *     the component view descriptor.
-   * @return the created remote component.
-   */
-  protected REvenGridContainer createREvenGridContainer(IEvenGridViewDescriptor viewDescriptor) {
-    return new REvenGridContainer(getGuidGenerator().generateGUID());
   }
 
   /**

@@ -552,6 +552,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         container = this._createCardContainer(remoteContainer);
       } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.RBorderContainer) {
         container = this._createBorderContainer(remoteContainer);
+      } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.REvenGridContainer) {
+        container = this._createEvenGridContainer(remoteContainer);
       } else if (remoteContainer instanceof org.jspresso.framework.gui.remote.mobile.RMobileTabContainer) {
         container = this._createTabContainer(remoteContainer);
       }
@@ -1591,6 +1593,37 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
       }
       return borderContainer;
+    },
+
+    /**
+     * @return {qx.ui.mobile.core.Widget}
+     * @param remoteEvenGridContainer {org.jspresso.framework.gui.remote.REvenGridContainer}
+     */
+    _createEvenGridContainer: function (remoteEvenGridContainer) {
+      var evenGridContainer = new qx.ui.mobile.container.Composite();
+      var evenGridLayout = new qx.ui.mobile.layout.VBox();
+      evenGridContainer.setLayout(evenGridLayout);
+      this._addSectionHeader(evenGridContainer, remoteEvenGridContainer);
+      var holdingPage = remoteEvenGridContainer.getUserData(
+          org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE);
+
+      for (var i = 0; i < remoteEvenGridContainer.getCells().length; i++) {
+        var remoteCellComponent = remoteEvenGridContainer.getCells()[i];
+        var cellComponent = this.createComponent(remoteCellComponent);
+        if (cellComponent instanceof qx.ui.mobile.page.NavigationPage) {
+          if (holdingPage) {
+            cellComponent = this.__createPageSectionForNavPage(cellComponent, holdingPage, remoteCellComponent);
+            evenGridContainer.add(cellComponent);
+          } else {
+            evenGridContainer.setUserData(org.jspresso.framework.view.qx.mobile.MobileQxViewFactory.__CURRENT_PAGE,
+                cellComponent);
+          }
+        } else {
+          this._addSectionHeader(evenGridContainer, north);
+          evenGridContainer.add(cellComponent);
+        }
+      }
+      return evenGridContainer;
     },
 
     /**

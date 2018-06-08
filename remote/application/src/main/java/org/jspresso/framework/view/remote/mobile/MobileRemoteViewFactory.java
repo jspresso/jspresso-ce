@@ -39,6 +39,7 @@ import org.jspresso.framework.gui.remote.RActionComponent;
 import org.jspresso.framework.gui.remote.RBorderContainer;
 import org.jspresso.framework.gui.remote.RCardContainer;
 import org.jspresso.framework.gui.remote.RComponent;
+import org.jspresso.framework.gui.remote.REvenGridContainer;
 import org.jspresso.framework.gui.remote.RForm;
 import org.jspresso.framework.gui.remote.RImageComponent;
 import org.jspresso.framework.gui.remote.RList;
@@ -53,6 +54,7 @@ import org.jspresso.framework.gui.remote.mobile.RMobileBorderContainer;
 import org.jspresso.framework.gui.remote.mobile.RMobileCardContainer;
 import org.jspresso.framework.gui.remote.mobile.RMobileCardPage;
 import org.jspresso.framework.gui.remote.mobile.RMobileCompositePage;
+import org.jspresso.framework.gui.remote.mobile.RMobileEvenGridContainer;
 import org.jspresso.framework.gui.remote.mobile.RMobileForm;
 import org.jspresso.framework.gui.remote.mobile.RMobileImageComponent;
 import org.jspresso.framework.gui.remote.mobile.RMobileList;
@@ -110,6 +112,7 @@ import org.jspresso.framework.view.descriptor.mobile.MobileCardPageViewDescripto
 import org.jspresso.framework.view.descriptor.mobile.MobileCardViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileCompositePageViewDescriptor;
+import org.jspresso.framework.view.descriptor.mobile.MobileEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileListViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileMapViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.MobileNavPageViewDescriptor;
@@ -183,6 +186,8 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
         }
       } else if (viewDescriptor instanceof MobileBorderViewDescriptor) {
         view = createBorderView((MobileBorderViewDescriptor) viewDescriptor, actionHandler, locale);
+      } else if (viewDescriptor instanceof MobileEvenGridViewDescriptor) {
+        view = createEvenGridView((MobileEvenGridViewDescriptor) viewDescriptor, actionHandler, locale);
       } else if (viewDescriptor instanceof MobileTabViewDescriptor) {
         view = createTabView((MobileTabViewDescriptor) viewDescriptor, actionHandler, locale);
       }
@@ -571,6 +576,22 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
    * {@inheritDoc}
    */
   @Override
+  protected ICompositeView<RComponent> createEvenGridView(IEvenGridViewDescriptor viewDescriptor,
+                                                        IActionHandler actionHandler, Locale locale) {
+    ICompositeView<RComponent> evenGridView = super.createEvenGridView(viewDescriptor, actionHandler, locale);
+    if (viewDescriptor instanceof MobileEvenGridViewDescriptor) {
+      ((RMobileEvenGridContainer) evenGridView.getPeer()).setPosition(
+          ((MobileEvenGridViewDescriptor) viewDescriptor).getPosition().name());
+    }
+    return evenGridView;
+  }
+
+  /**
+   * Completes with horizontal position property.
+   * <p/>
+   * {@inheritDoc}
+   */
+  @Override
   protected IView<RComponent> createCardView(ICardViewDescriptor viewDescriptor, IActionHandler actionHandler,
                                              Locale locale) {
     IView<RComponent> cardView = super.createCardView(viewDescriptor, actionHandler, locale);
@@ -673,17 +694,6 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
   @Override
   protected IView<RComponent> createTableView(ITableViewDescriptor viewDescriptor, IActionHandler actionHandler,
                                               Locale locale) {
-    throw new UnsupportedOperationException("Not supported in mobile environment.");
-  }
-
-  /**
-   * Not supported in mobile environment.
-   * <p/>
-   * {@inheritDoc}
-   */
-  @Override
-  protected ICompositeView<RComponent> createEvenGridView(IEvenGridViewDescriptor viewDescriptor,
-                                                          IActionHandler actionHandler, Locale locale) {
     throw new UnsupportedOperationException("Not supported in mobile environment.");
   }
 
@@ -938,6 +948,19 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
   protected RBorderContainer createRBorderContainer(IBorderViewDescriptor viewDescriptor) {
     RMobileBorderContainer mobileBorderContainer = new RMobileBorderContainer(getGuidGenerator().generateGUID());
     return mobileBorderContainer;
+  }
+
+  /**
+   * Creates a mobile remote even grid container.
+   *
+   * @param viewDescriptor
+   *     the even grid view descriptor.
+   * @return the created remote component.
+   */
+  @Override
+  protected REvenGridContainer createREvenGridContainer(IEvenGridViewDescriptor viewDescriptor) {
+    RMobileEvenGridContainer mobileEvenGridContainer = new RMobileEvenGridContainer(getGuidGenerator().generateGUID());
+    return mobileEvenGridContainer;
   }
 
   /**

@@ -72,6 +72,7 @@ import org.jspresso.framework.gui.remote.RDecimalField;
 import org.jspresso.framework.gui.remote.RDurationField;
 import org.jspresso.framework.gui.remote.REmptyComponent;
 import org.jspresso.framework.gui.remote.REnumBox;
+import org.jspresso.framework.gui.remote.REvenGridContainer;
 import org.jspresso.framework.gui.remote.RForm;
 import org.jspresso.framework.gui.remote.RHtmlArea;
 import org.jspresso.framework.gui.remote.RIcon;
@@ -155,6 +156,7 @@ import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.IEnumerationPropertyViewDescriptor;
+import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IHtmlViewDescriptor;
 import org.jspresso.framework.view.descriptor.IListViewDescriptor;
 import org.jspresso.framework.view.descriptor.IMapViewDescriptor;
@@ -1989,6 +1991,40 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
    */
   protected RBorderContainer createRBorderContainer(IBorderViewDescriptor viewDescriptor) {
     return new RBorderContainer(getGuidGenerator().generateGUID());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected ICompositeView<RComponent> createEvenGridView(IEvenGridViewDescriptor viewDescriptor,
+                                                          IActionHandler actionHandler, Locale locale) {
+    REvenGridContainer viewComponent = createREvenGridContainer(viewDescriptor);
+    viewComponent.setDrivingDimension(viewDescriptor.getDrivingDimension().name());
+    viewComponent.setDrivingDimensionCellCount(viewDescriptor.getDrivingDimensionCellCount());
+    List<RComponent> cells = new ArrayList<>();
+    BasicCompositeView<RComponent> view = constructCompositeView(viewComponent, viewDescriptor);
+    List<IView<RComponent>> childrenViews = new ArrayList<>();
+
+    for (IViewDescriptor childViewDescriptor : viewDescriptor.getChildViewDescriptors()) {
+      IView<RComponent> childView = createView(childViewDescriptor, actionHandler, locale);
+      cells.add(childView.getPeer());
+      childrenViews.add(childView);
+    }
+    viewComponent.setCells(cells.toArray(new RComponent[cells.size()]));
+    view.setChildren(childrenViews);
+    return view;
+  }
+
+  /**
+   * Creates a remote even grid container.
+   *
+   * @param viewDescriptor
+   *     the component view descriptor.
+   * @return the created remote component.
+   */
+  protected REvenGridContainer createREvenGridContainer(IEvenGridViewDescriptor viewDescriptor) {
+    return new REvenGridContainer(getGuidGenerator().generateGUID());
   }
 
   protected void completePropertyViewsWithDynamicToolTips(ICompositeValueConnector connector,

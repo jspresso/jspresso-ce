@@ -58,6 +58,7 @@
  * @use(org.jspresso.framework.gui.remote.mobile.RMobileForm)
  * @use(org.jspresso.framework.gui.remote.mobile.RMobileMap)
  * @use(org.jspresso.framework.gui.remote.mobile.RMobileBorderContainer)
+ * @use(org.jspresso.framework.gui.remote.mobile.RMobileEvenGridContainer)
  * @use(org.jspresso.framework.gui.remote.mobile.RMobileCardContainer)
  * @use(org.jspresso.framework.gui.remote.mobile.RMobileTabContainer)
  * @use(org.jspresso.framework.gui.remote.mobile.RMobileRepeater)
