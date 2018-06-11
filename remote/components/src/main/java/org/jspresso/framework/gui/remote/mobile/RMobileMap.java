@@ -29,11 +29,13 @@ public class RMobileMap extends RMap {
 
   private static final long serialVersionUID = 2672012641048981941L;
   private String position;
+  private boolean inline;
 
   /**
    * Constructs a new {@code RMobileMap} instance.
    *
-   * @param guid           the guid.
+   * @param guid
+   *     the guid.
    */
   public RMobileMap(String guid) {
     super(guid);
@@ -59,9 +61,29 @@ public class RMobileMap extends RMap {
   /**
    * Sets position.
    *
-   * @param position the position
+   * @param position
+   *     the position
    */
   public void setPosition(String position) {
     this.position = position;
+  }
+
+  /**
+   * Is inline boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isInline() {
+    return inline;
+  }
+
+  /**
+   * Sets inline.
+   *
+   * @param inline
+   *     the inline
+   */
+  public void setInline(boolean inline) {
+    this.inline = inline;
   }
 }

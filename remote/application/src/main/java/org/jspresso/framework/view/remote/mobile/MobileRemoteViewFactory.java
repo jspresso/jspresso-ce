@@ -550,6 +550,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
     IView<RComponent> view = super.createMapView(viewDescriptor, actionHandler, locale);
     if (viewDescriptor instanceof MobileMapViewDescriptor) {
       ((RMobileMap) view.getPeer()).setPosition(((MobileMapViewDescriptor) viewDescriptor).getPosition().name());
+      ((RMobileMap) view.getPeer()).setInline(((MobileMapViewDescriptor) viewDescriptor).isInline());
     }
     return view;
   }

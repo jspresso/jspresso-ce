@@ -1371,15 +1371,27 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
 
     /**
      * @return {qx.ui.mobile.core.Widget}
-     * @param remoteMap {org.jspresso.framework.gui.remote.RMap}
+     * @param remoteMap {org.jspresso.framework.gui.remote.RMobileMap}
      */
     _createMap: function (remoteMap) {
-      var map = new org.jspresso.framework.view.qx.mobile.MapNavigationPage();
-      map.setUserData("pageGuid", remoteMap.getGuid());
-      map.setButtonIcon("org/jspresso/framework/mobile/my_location-mobile.svg");
-      map.addListener("action", function (event) {
-        map.moveToCurrentPosition();
-      }, this);
+      var map;
+      if (remoteMap.isInline()) {
+        map = new org.jspresso.framework.view.qx.mobile.MapComponent();
+        if (remoteMap.getPreferredSize() && remoteMap.getPreferredSize().getHeight()) {
+          map._setStyle("height", remoteMap.getPreferredSize().getHeight() + "px");
+        }
+        map.addCssClass("jspresso-map");
+      } else {
+        map = new org.jspresso.framework.view.qx.mobile.MapNavigationPage();
+        map.setUserData("pageGuid", remoteMap.getGuid());
+        map.setButtonIcon("org/jspresso/framework/mobile/my_location-mobile.svg");
+        map.addListener("action", function (event) {
+          map.moveToCurrentPosition();
+        }, this);
+        map.setTitle(remoteMap.getLabel());
+        map.setShowButton(true);
+        this._addDetailPage(map);
+      }
       var state = remoteMap.getState();
       var childrenStates = state.getChildren();
       var mapContentState = childrenStates.getItem(0);
@@ -1397,16 +1409,17 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           map.hideMap();
         }
       };
-      map.addListener("initialize", updateMap);
       if (remoteMap.getPermId()) {
         map.addListener("changeZoom", function (event) {
           this.notifyMapChanged(remoteMap, event.getData());
         }, this);
       }
       mapContentState.addListener("changeValue", updateMap, this);
-      map.setTitle(remoteMap.getLabel());
-      map.setShowButton(true);
-      this._addDetailPage(map);
+      if (remoteMap.isInline()) {
+        map.addListenerOnce("appear", updateMap);
+      } else {
+        map.addListener("initialize", updateMap);
+      }
       return map;
     },
 

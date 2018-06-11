@@ -164,3 +164,10 @@
   padding-top: rem(20);
   padding-bottom: rem(20);
 }
+
+.jspresso-map {
+  padding: rem(5);
+  border: rem(1) solid $form-border-color;
+  border-radius: rem(3);
+  background: $form-background;
+}

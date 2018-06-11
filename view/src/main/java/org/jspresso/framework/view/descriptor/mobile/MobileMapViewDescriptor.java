@@ -32,12 +32,14 @@ public class MobileMapViewDescriptor extends BasicMapViewDescriptor implements I
 
   private EPosition    position;
   private List<String> forClientTypes;
+  private boolean      inline;
 
   /**
    * Instantiates a new Mobile map view descriptor.
    */
   public MobileMapViewDescriptor() {
     this.position = EPosition.RIGHT;
+    this.inline = false;
   }
 
   /**
@@ -80,4 +82,22 @@ public class MobileMapViewDescriptor extends BasicMapViewDescriptor implements I
     this.forClientTypes = forClientTypes;
   }
 
+  /**
+   * Is inline boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isInline() {
+    return inline;
+  }
+
+  /**
+   * Sets inline.
+   *
+   * @param inline
+   *     the inline
+   */
+  public void setInline(boolean inline) {
+    this.inline = inline;
+  }
 }

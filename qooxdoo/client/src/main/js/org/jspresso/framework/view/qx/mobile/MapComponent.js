@@ -17,22 +17,42 @@
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.mobile.RMobileMap", {
-  extend: org.jspresso.framework.gui.remote.RMap,
+/**
+ * A Widget showing an OpenStreetMap map.
+ */
+qx.Class.define("org.jspresso.framework.view.qx.mobile.MapComponent", {
+  extend: qx.ui.mobile.core.Widget,
+
+  include: [org.jspresso.framework.view.qx.MMapMixin],
 
   construct: function () {
     this.base(arguments);
+    this.addListenerOnce("appear", this._initializeMap, this);
+    this.addListener("appear", this._redrawMap, this);
+    //this.addListener("resize", this._redrawMap, this);
   },
 
-  properties: {
-    position: {
-      check: "String",
-      nullable: true
-    },
-    inline: {
-      check: "Boolean",
-      nullable: false
-    }
-  }
 
+  members: {
+
+    _getMapDomTarget: function () {
+      return this.getId();
+    },
+
+    showMap: function () {
+      var redraw = false;
+      if (this.getVisibility() != "visible") {
+        redraw = true;
+      }
+      this.show();
+      if (redraw) {
+        qx.event.Timer.once(this._redrawMap, this, 100);
+      }
+    },
+
+    hideMap: function () {
+      this.hide()
+    }
+
+  }
 });
