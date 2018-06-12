@@ -17,31 +17,19 @@
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-qx.Class.define("org.jspresso.framework.gui.remote.RSplitContainer", {
-  extend: org.jspresso.framework.gui.remote.RContainer,
+qx.Class.define("org.jspresso.framework.application.frontend.command.remote.RemoteSplitChangedCommand", {
+  extend: org.jspresso.framework.application.frontend.command.remote.RemoteCommand,
 
   construct: function () {
     this.base(arguments);
   },
 
   properties: {
-    leftTop: {
-      check: "org.jspresso.framework.gui.remote.RComponent",
-      nullable: true
-    },
-    orientation: {
+    splitPaneId: {
       check: "String"
     },
-    rightBottom: {
-      check: "org.jspresso.framework.gui.remote.RComponent",
-      nullable: true
-    },
     separatorPosition: {
-      check: "Integer",
-      nullable: true
+      check: "Integer"
     }
-  },
-
-  members: {
   }
 });

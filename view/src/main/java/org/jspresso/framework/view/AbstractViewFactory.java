@@ -3763,7 +3763,6 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    */
   protected Map<IPropertyViewDescriptor, Object[]> getUserColumnViewDescriptors(ITableViewDescriptor viewDescriptor,
                                                                                 IActionHandler actionHandler) {
-
     Object[][] columnPrefs = null;
     if (viewDescriptor.getPermId() != null && actionHandler.getSubject() != null) {
       String prefs = actionHandler.getUserPreference(viewDescriptor.getPermId());
@@ -3800,6 +3799,48 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
       }
     }
     return userColumnViewDescriptors;
+  }
+
+  /**
+   * Stores user split panepreferences.
+   *
+   * @param splitPaneId
+   *     the split pane id
+   * @param separatorPosition
+   *     the separator position
+   * @param actionHandler
+   *     the action handler.
+   */
+  @Override
+  public void storeSplitPanePreferences(String splitPaneId, int separatorPosition, IActionHandler actionHandler) {
+    if (actionHandler.getSubject() != null) {
+      StringBuilder buff = new StringBuilder();
+      buff.append(separatorPosition);
+      actionHandler.putUserPreference(splitPaneId, buff.toString());
+    }
+  }
+
+  /**
+   * Retrieves the separator position of the split pane from the user preferences.
+   *
+   * @param viewDescriptor
+   *     the split view descriptor.
+   * @param actionHandler
+   *     the action handler to load the user preferences from.
+   * @return the user saved separator position.
+   */
+  protected Integer getUserSplitSeparatorPosition(ISplitViewDescriptor viewDescriptor, IActionHandler actionHandler) {
+    if (viewDescriptor.getPermId() != null && actionHandler.getSubject() != null) {
+      String prefs = actionHandler.getUserPreference(viewDescriptor.getPermId());
+      if (prefs != null) {
+        try {
+          return Integer.parseInt(prefs);
+        } catch (Exception ignored) {
+          LOG.warn("Failed to restore the split separator position for permId " + viewDescriptor.getPermId());
+        }
+      }
+    }
+    return null;
   }
 
   /**

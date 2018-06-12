@@ -3260,16 +3260,27 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         var ltWrapper;
         var rbWrapper;
         if (ltComponent) {
+          ltWrapper = new qx.ui.container.Composite(new qx.ui.layout.Grow());
+          var separatorPosition = remoteSplitContainer.getSeparatorPosition();
           if (remoteSplitContainer.getOrientation() == "VERTICAL") {
-            ltSize = ltComponent.getSizeHint().height;
+            if (separatorPosition > 0) {
+              ltSize = separatorPosition;
+              ltWrapper.setHeight(separatorPosition);
+            } else {
+              ltSize = ltComponent.getSizeHint().height;
+            }
             splitSize = splitContainer.getBounds().height;
             ltComponent.setAllowStretchY(true, true);
           } else {
-            ltSize = ltComponent.getSizeHint().width;
+            if (separatorPosition > 0) {
+              ltSize = separatorPosition;
+              ltWrapper.setWidth(separatorPosition);
+            } else {
+              ltSize = ltComponent.getSizeHint().width;
+            }
             splitSize = splitContainer.getBounds().width;
             ltComponent.setAllowStretchX(true, true);
           }
-          ltWrapper = new qx.ui.container.Composite(new qx.ui.layout.Grow());
           ltComponent.syncAppearance();
           ltWrapper.setPadding([ltComponent.getMarginTop(), ltComponent.getMarginRight(), ltComponent.getMarginBottom(),
                               ltComponent.getMarginLeft()]);
@@ -3285,6 +3296,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             splitSize = splitContainer.getBounds().width;
             rbComponent.setAllowStretchX(true, true);
           }
+          if (separatorPosition > 0) {
+            rbSize = 0;
+          }
           rbWrapper = new qx.ui.container.Composite(new qx.ui.layout.Grow());
           rbComponent.syncAppearance();
           rbWrapper.setPadding([rbComponent.getMarginTop(), rbComponent.getMarginRight(), rbComponent.getMarginBottom(),
@@ -3297,6 +3311,21 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         } else {
           splitContainer.add(ltWrapper, ltSize);
           splitContainer.add(rbWrapper, rbSize);
+        }
+        if (remoteSplitContainer.getPermId()) {
+          var blocker = splitContainer.getBlocker();
+          var notifySplitPaneChanged = function (event) {
+            var notificationCommand = new org.jspresso.framework.application.frontend.command.remote.RemoteSplitChangedCommand();
+            notificationCommand.setSplitPaneId(remoteSplitContainer.getPermId());
+            if (splitContainer.getOrientation() == "horizontal") {
+              notificationCommand.setSeparatorPosition(ltWrapper.getBounds().width);
+            } else {
+              notificationCommand.setSeparatorPosition(ltWrapper.getBounds().height);
+            }
+            //noinspection JSPotentiallyInvalidUsageOfThis
+            this._getCommandHandler().registerCommand(notificationCommand);
+          };
+          blocker.addListener("losecapture", notifySplitPaneChanged, this);
         }
       }, this);
       return splitContainer;

@@ -44,9 +44,12 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
   private IViewDescriptor leftTopViewDescriptor;
   private EOrientation    orientation = EOrientation.VERTICAL;
   private IViewDescriptor rightBottomViewDescriptor;
+  private Integer         separatorPosition;
 
   /**
    * {@inheritDoc}
+   *
+   * @return the child view descriptors
    */
   @Override
   public List<IViewDescriptor> getChildViewDescriptors() {
@@ -62,6 +65,8 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
 
   /**
    * {@inheritDoc}
+   *
+   * @return the left top view descriptor
    */
   @Override
   public IViewDescriptor getLeftTopViewDescriptor() {
@@ -71,6 +76,8 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
 
   /**
    * {@inheritDoc}
+   *
+   * @return the orientation
    */
   @Override
   public EOrientation getOrientation() {
@@ -79,6 +86,8 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
 
   /**
    * {@inheritDoc}
+   *
+   * @return the right bottom view descriptor
    */
   @Override
   public IViewDescriptor getRightBottomViewDescriptor() {
@@ -92,7 +101,7 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
    * nested view.
    *
    * @param leftTopViewDescriptor
-   *          the leftTopViewDescriptor to set.
+   *     the leftTopViewDescriptor to set.
    */
   public void setLeftTopViewDescriptor(IViewDescriptor leftTopViewDescriptor) {
     this.leftTopViewDescriptor = leftTopViewDescriptor;
@@ -112,7 +121,7 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
    * split vertically.
    *
    * @param orientation
-   *          the orientation to set.
+   *     the orientation to set.
    */
   public void setOrientation(EOrientation orientation) {
     this.orientation = orientation;
@@ -123,10 +132,30 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
    * nested view.
    *
    * @param rightBottomViewDescriptor
-   *          the rightBottomViewDescriptor to set.
+   *     the rightBottomViewDescriptor to set.
    */
   public void setRightBottomViewDescriptor(
       IViewDescriptor rightBottomViewDescriptor) {
     this.rightBottomViewDescriptor = rightBottomViewDescriptor;
+  }
+
+  /**
+   * Gets separator position.
+   *
+   * @return the separator position
+   */
+  @Override
+  public Integer getSeparatorPosition() {
+    return separatorPosition;
+  }
+
+  /**
+   * Sets separator position.
+   *
+   * @param separatorPosition
+   *     the separator position
+   */
+  public void setSeparatorPosition(Integer separatorPosition) {
+    this.separatorPosition = separatorPosition;
   }
 }

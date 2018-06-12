@@ -27,13 +27,13 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 /**
  * Factory for views.
  *
- * @author Vincent Vandenschrick
  * @param <E>
- *          the actual gui component type used.
+ *     the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *     the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *     the actual action type used.
+ * @author Vincent Vandenschrick
  */
 public interface IViewFactory<E, F, G> {
 
@@ -41,17 +41,16 @@ public interface IViewFactory<E, F, G> {
    * Creates a new view from a view descriptor.
    *
    * @param viewDescriptor
-   *          the view descriptor being the root of the view hierarchy to be
-   *          constructed.
+   *     the view descriptor being the root of the view hierarchy to be
+   *     constructed.
    * @param actionHandler
-   *          the object responsible for executing the view actions (generally
-   *          the frontend controller itself).
+   *     the object responsible for executing the view actions (generally
+   *     the frontend controller itself).
    * @param locale
-   *          the locale the view must use for i18n.
+   *     the locale the view must use for i18n.
    * @return the created view.
    */
-  IView<E> createView(IViewDescriptor viewDescriptor,
-      IActionHandler actionHandler, Locale locale);
+  IView<E> createView(IViewDescriptor viewDescriptor, IActionHandler actionHandler, Locale locale);
 
   /**
    * Gets the action factory.
@@ -75,17 +74,28 @@ public interface IViewFactory<E, F, G> {
   IIconFactory<F> getIconFactory();
 
   /**
+   * Stores user split pane preferences.
+   *
+   * @param splitPaneId
+   *     the split pane Id.
+   * @param separatorPosition
+   *     the separator position.
+   * @param actionHandler
+   *     the action handler.
+   */
+  void storeSplitPanePreferences(String splitPaneId, int separatorPosition, IActionHandler actionHandler);
+
+  /**
    * Stores user table preferences.
    *
    * @param tableId
-   *          the table id used as preference key in the user store.
+   *     the table id used as preference key in the user store.
    * @param columnPrefs
-   *          the array of {columnId,columnSize} for the table
+   *     the array of {columnId,columnSize} for the table
    * @param actionHandler
-   *          the action handler.
+   *     the action handler.
    */
-  void storeTablePreferences(String tableId, Object[][] columnPrefs,
-      IActionHandler actionHandler);
+  void storeTablePreferences(String tableId, Object[][] columnPrefs, IActionHandler actionHandler);
 
   /**
    * Stores user map preferences.
@@ -103,7 +113,7 @@ public interface IViewFactory<E, F, G> {
    * Request focus for a component.
    *
    * @param component
-   *          the component to focus.
+   *     the component to focus.
    */
   void focus(E component);
 
@@ -111,7 +121,7 @@ public interface IViewFactory<E, F, G> {
    * Request editing for a component.
    *
    * @param component
-   *          the component to turn to editing mode.
+   *     the component to turn to editing mode.
    */
   void edit(E component);
 
@@ -119,15 +129,14 @@ public interface IViewFactory<E, F, G> {
    * Forces the refresh of a card view, potentially changing its visible card.
    *
    * @param cardView
-   *          the card view to re-compute the visible card for.
+   *     the card view to re-compute the visible card for.
    * @param unbindPrevious
-   *          Should current view be unbound ?
+   *     Should current view be unbound ?
    * @param actionHandler
-   *          the action handler.
+   *     the action handler.
    * @param locale
-   *          the locale.
+   *     the locale.
    */
-  void refreshCardView(IMapView<E> cardView, boolean unbindPrevious, IActionHandler actionHandler,
-      Locale locale);
+  void refreshCardView(IMapView<E> cardView, boolean unbindPrevious, IActionHandler actionHandler, Locale locale);
 
 }

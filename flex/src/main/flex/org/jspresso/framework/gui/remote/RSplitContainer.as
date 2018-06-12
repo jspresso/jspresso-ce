@@ -27,6 +27,7 @@ public class RSplitContainer extends RContainer {
   private var _leftTop:RComponent;
   private var _orientation:String;
   private var _rightBottom:RComponent;
+  private var _separatorPosition:int;
 
   public function RSplitContainer() {
     //default constructor.
@@ -54,6 +55,14 @@ public class RSplitContainer extends RContainer {
 
   public function get rightBottom():RComponent {
     return _rightBottom;
+  }
+
+  public function get separatorPosition():int {
+    return _separatorPosition;
+  }
+
+  public function set separatorPosition(value:int):void {
+    _separatorPosition = value;
   }
 }
 }

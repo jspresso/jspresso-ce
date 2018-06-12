@@ -2335,6 +2335,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
                                                                   IViewDescriptor descriptor) {
     final BasicCompositeView<RComponent> compositeView = super.constructCompositeView(viewComponent, descriptor);
     compositeView.addPropertyChangeListener(IView.CONNECTOR_PROPERTY, connectorStateListener);
+    viewComponent.setPermId(descriptor.getPermId());
     return compositeView;
   }
 

@@ -180,6 +180,10 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
       viewComponent.setRightBottom(rightBottomView.getPeer());
       childrenViews.add(rightBottomView);
     }
+    Integer userSplitSeparatorPosition = getUserSplitSeparatorPosition(viewDescriptor, actionHandler);
+    if (userSplitSeparatorPosition != null && userSplitSeparatorPosition > 0) {
+      viewComponent.setSeparatorPosition(userSplitSeparatorPosition);
+    }
     view.setChildren(childrenViews);
     return view;
   }

@@ -61,6 +61,7 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteRefreshC
 import org.jspresso.framework.application.frontend.command.remote.RemoteRestartCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSortCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteSplitChangedCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteStartCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteTableChangedCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteUpdateStatusCommand;
@@ -370,6 +371,9 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
                                       (columnVisibilities == null || columnVisibilities[i])};
       }
       getViewFactory().storeTablePreferences(((RemoteTableChangedCommand) command).getTableId(), columnPrefs, this);
+    } else if (command instanceof RemoteSplitChangedCommand) {
+      getViewFactory().storeSplitPanePreferences(((RemoteSplitChangedCommand) command).getSplitPaneId(),
+          ((RemoteSplitChangedCommand) command).getSeparatorPosition(), this);
     } else if (command instanceof RemoteMapChangedCommand) {
       getViewFactory().storeMapPreferences(((RemoteMapChangedCommand) command).getMapId(),
           ((RemoteMapChangedCommand) command).getZoom(), this);

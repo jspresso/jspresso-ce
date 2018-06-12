@@ -16,32 +16,33 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
+package org.jspresso.framework.application.frontend.command.remote;
 
-qx.Class.define("org.jspresso.framework.gui.remote.RSplitContainer", {
-  extend: org.jspresso.framework.gui.remote.RContainer,
+/**
+ * A command to notify of splitpane resize.
+ *
+ * @author Vincent Vandenschrick
+ */
+public class RemoteSplitChangedCommand extends RemoteCommand {
 
-  construct: function () {
-    this.base(arguments);
-  },
+  private static final long serialVersionUID = -5255633559795952041L;
 
-  properties: {
-    leftTop: {
-      check: "org.jspresso.framework.gui.remote.RComponent",
-      nullable: true
-    },
-    orientation: {
-      check: "String"
-    },
-    rightBottom: {
-      check: "org.jspresso.framework.gui.remote.RComponent",
-      nullable: true
-    },
-    separatorPosition: {
-      check: "Integer",
-      nullable: true
-    }
-  },
+  private String splitPaneId;
+  private int    separatorPosition;
 
-  members: {
+  public String getSplitPaneId() {
+    return splitPaneId;
   }
-});
+
+  public void setSplitPaneId(String splitPaneId) {
+    this.splitPaneId = splitPaneId;
+  }
+
+  public int getSeparatorPosition() {
+    return separatorPosition;
+  }
+
+  public void setSeparatorPosition(int separatorPosition) {
+    this.separatorPosition = separatorPosition;
+  }
+}

@@ -50,4 +50,11 @@ public interface ISplitViewDescriptor extends ICompositeViewDescriptor {
    * @return the right / bottom sub view descriptor.
    */
   IViewDescriptor getRightBottomViewDescriptor();
+
+  /**
+   * Gets separator position.
+   *
+   * @return the separator position
+   */
+  Integer getSeparatorPosition();
 }

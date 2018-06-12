@@ -30,12 +30,13 @@ public class RSplitContainer extends RContainer {
   private RComponent        leftTop;
   private String            orientation;
   private RComponent        rightBottom;
+  private Integer           separatorPosition;
 
   /**
    * Constructs a new {@code RSplitContainer} instance.
    *
    * @param guid
-   *          the guid
+   *     the guid
    */
   public RSplitContainer(String guid) {
     super(guid);
@@ -80,7 +81,7 @@ public class RSplitContainer extends RContainer {
    * Sets the leftTop.
    *
    * @param leftTop
-   *          the leftTop to set.
+   *     the leftTop to set.
    */
   public void setLeftTop(RComponent leftTop) {
     this.leftTop = leftTop;
@@ -90,7 +91,7 @@ public class RSplitContainer extends RContainer {
    * Sets the orientation.
    *
    * @param orientation
-   *          the orientation to set.
+   *     the orientation to set.
    */
   public void setOrientation(String orientation) {
     this.orientation = orientation;
@@ -100,9 +101,28 @@ public class RSplitContainer extends RContainer {
    * Sets the rightBottom.
    *
    * @param rightBottom
-   *          the rightBottom to set.
+   *     the rightBottom to set.
    */
   public void setRightBottom(RComponent rightBottom) {
     this.rightBottom = rightBottom;
+  }
+
+  /**
+   * Gets separator position.
+   *
+   * @return the separator position
+   */
+  public Integer getSeparatorPosition() {
+    return separatorPosition;
+  }
+
+  /**
+   * Sets separator position.
+   *
+   * @param separatorPosition
+   *     the separator position
+   */
+  public void setSeparatorPosition(Integer separatorPosition) {
+    this.separatorPosition = separatorPosition;
   }
 }

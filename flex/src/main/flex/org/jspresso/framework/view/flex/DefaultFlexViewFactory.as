@@ -48,6 +48,7 @@ import mx.containers.Panel;
 import mx.containers.TabNavigator;
 import mx.containers.VBox;
 import mx.containers.ViewStack;
+import mx.containers.dividedBoxClasses.BoxDivider;
 import mx.controls.Button;
 import mx.controls.CheckBox;
 import mx.controls.ColorPicker;
@@ -76,6 +77,7 @@ import mx.events.CollectionEventKind;
 import mx.events.ColorPickerEvent;
 import mx.events.DataGridEvent;
 import mx.events.DataGridEventReason;
+import mx.events.DividerEvent;
 import mx.events.FlexEvent;
 import mx.events.IndexChangedEvent;
 import mx.events.ItemClickEvent;
@@ -97,6 +99,7 @@ import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSelectionCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteSortCommand;
+import org.jspresso.framework.application.frontend.command.remote.RemoteSplitChangedCommand;
 import org.jspresso.framework.application.frontend.command.remote.RemoteTableChangedCommand;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RActionComponent;
@@ -725,14 +728,9 @@ public class DefaultFlexViewFactory {
 
   protected function decorateWithActions(remoteComponent:RComponent, component:UIComponent):UIComponent {
     var decorator:UIComponent;
-    if(remoteComponent is RTextField
-        || remoteComponent is RDateField
-        || remoteComponent is RNumericComponent
-        || remoteComponent is RLabel
-        || remoteComponent is RTimeField
-        || remoteComponent is RComboBox
-        || remoteComponent is RCheckBox
-        || remoteComponent is RColorField) {
+    if (remoteComponent is RTextField || remoteComponent is RDateField || remoteComponent is RNumericComponent
+        || remoteComponent is RLabel || remoteComponent is RTimeField || remoteComponent is RComboBox || remoteComponent
+        is RCheckBox || remoteComponent is RColorField) {
       decorator = decorateWithAsideActions(component, remoteComponent, false);
     } else {
       decorator = decorateWithToolbars(component, remoteComponent);
@@ -974,7 +972,7 @@ public class DefaultFlexViewFactory {
 
     var state:RemoteCompositeValueState = remoteMap.state as RemoteCompositeValueState;
     var mapContentState:RemoteValueState = state.children[0];
-    var updateMapLocation:Function = function():void {
+    var updateMapLocation:Function = function ():void {
       var mapContent:String = mapContentState.value as String;
       if (mapContent) {
         var markers:Array = JSON.parse(mapContent)["markers"] as Array;
@@ -1000,10 +998,10 @@ public class DefaultFlexViewFactory {
     BindingUtils.bindSetter(updateMapLocation, mapContentState, "value", true);
 
     var wrapper:UIComponent = new UIComponent();
-    wrapper.addEventListener(Event.RESIZE, function(e:Event):void {
+    wrapper.addEventListener(Event.RESIZE, function (e:Event):void {
       map.x = 2;
       map.y = 2;
-      map.size = new Size(wrapper.width -4, wrapper.height-4);
+      map.size = new Size(wrapper.width - 4, wrapper.height - 4);
     });
     wrapper.addChild(map);
     return wrapper;
@@ -1057,8 +1055,8 @@ public class DefaultFlexViewFactory {
     }
   }
 
-  private function finalizeSubItems(tree:SelectionTrackingTree, remoteState:RemoteCompositeValueState, expandAll:Boolean,
-                             newSelectedItems:Array):void {
+  private function finalizeSubItems(tree:SelectionTrackingTree, remoteState:RemoteCompositeValueState,
+                                    expandAll:Boolean, newSelectedItems:Array):void {
     if (expandAll) {
       tree.expandItem(remoteState, true, true, true);
     }
@@ -1182,7 +1180,7 @@ public class DefaultFlexViewFactory {
     }
   }
 
-  private function _getComponentToStyle (component:*):* {
+  private function _getComponentToStyle(component:*):* {
     var componentToStyle:* = component;
     if (component is Container) {
       if (component.getChildByName("componentToStyle")) {
@@ -1198,7 +1196,7 @@ public class DefaultFlexViewFactory {
       textField = createTextInputComponent();
       textField.name = "componentToStyle";
       sizeMaxComponentWidth(textField, remoteActionField);
-      if(remoteActionField.characterAction) {
+      if (remoteActionField.characterAction) {
         textField.addEventListener(Event.CHANGE, function (event:Event):void {
           var actionEvent:RActionEvent = new RActionEvent();
           actionEvent.actionCommand = textField.text;
@@ -1214,7 +1212,7 @@ public class DefaultFlexViewFactory {
 
   protected function decorateWithAsideActions(component:UIComponent, remoteComponent:RComponent,
                                               disableMainActionWithField:Boolean):UIComponent {
-    var button:mx.controls.Button;
+    var button:Button;
     var decorated:UIComponent = component;
     if (remoteComponent.actionLists) {
       var actionField:HBox = new HBox();
@@ -1287,7 +1285,7 @@ public class DefaultFlexViewFactory {
     BindingUtils.bindSetter(updateView, remoteState, "value", true);
 
     if (textInput) {
-      if(textFieldEditable) {
+      if (textFieldEditable) {
         var updateEditability:Function = function (value:Object):void {
           if (value) {
             textInput.setStyle("backgroundColor", null);
@@ -1328,7 +1326,7 @@ public class DefaultFlexViewFactory {
             tf.text = remoteState.value.toString();
           }
           if (event is FocusEvent && (event as FocusEvent).relatedObject
-            // Not a key focus event
+              // Not a key focus event
               && ((event as FocusEvent).relatedObject.parent == actionField && (event as FocusEvent).keyCode == 0)) {
             return;
           }
@@ -1345,8 +1343,8 @@ public class DefaultFlexViewFactory {
       // specifically.
       // textInput.addEventListener(FocusEvent.FOCUS_OUT, triggerAction);
       textInput.addEventListener(FocusEvent.FOCUS_OUT, function (event:FocusEvent):void {
-        if ( event.relatedObject == null /* An external window has been focused */
-          || event.relatedObject is DataGrid /* The datagrid has been focused */) {
+        if (event.relatedObject == null /* An external window has been focused */ || event.relatedObject
+            is DataGrid /* The datagrid has been focused */) {
           triggerAction(event);
         }
       });
@@ -1465,7 +1463,12 @@ public class DefaultFlexViewFactory {
       bindComboBox(comboBox, remoteComboBox);
 
       var itemRenderer:ClassFactory = createComboBoxItemRenderer();
-      itemRenderer.properties = {labels: remoteComboBox.translations, icons: remoteComboBox.icons, iconTemplate: _iconTemplate, showIcon: hasIcon};
+      itemRenderer.properties = {
+        labels: remoteComboBox.translations,
+        icons: remoteComboBox.icons,
+        iconTemplate: _iconTemplate,
+        showIcon: hasIcon
+      };
       comboBox.itemRenderer = itemRenderer;
 
       var maxTr:String = "";
@@ -1863,7 +1866,7 @@ public class DefaultFlexViewFactory {
     for (var i:int = 0; i < remoteForm.elements.length; i++) {
       var elementWidth:int = remoteForm.elementWidths[i] as int;
       var labelHorizontalPosition:String = "LEFT";
-      if(remoteForm.labelHorizontalPositions) {
+      if (remoteForm.labelHorizontalPositions) {
         labelHorizontalPosition = remoteForm.labelHorizontalPositions[i] as String;
       }
       var rComponent:RComponent = remoteForm.elements[i] as RComponent;
@@ -1887,7 +1890,7 @@ public class DefaultFlexViewFactory {
       }
 
       var componentCell:GridItem = new GridItem();
-      if(labelHorizontalPosition == "RIGHT") {
+      if (labelHorizontalPosition == "RIGHT") {
         if (rComponent is RLabel || rComponent is RCheckBox) {
           componentCell.styleName = "rightLabelComponentCell";
           component.setStyle("paddingLeft", 4);
@@ -1930,7 +1933,7 @@ public class DefaultFlexViewFactory {
         labelCell.colSpan = elementWidth;
         componentCell.colSpan = elementWidth;
       } else if (remoteForm.labelsPosition == "ASIDE") {
-        if(labelHorizontalPosition == "RIGHT") {
+        if (labelHorizontalPosition == "RIGHT") {
           labelCell.styleName = "rightAsideLabelCell";
         } else {
           labelCell.styleName = "leftAsideLabelCell";
@@ -1965,7 +1968,7 @@ public class DefaultFlexViewFactory {
         component.percentWidth = 100.0;
         component.percentHeight = 100.0;
         componentCell.rowSpan = 2;
-        if(!rowSpanRow) {
+        if (!rowSpanRow) {
           rowSpanRow = new GridRow();
           rowSpanRow.percentWidth = 100.0;
           rowSpanRow.percentHeight = 100.0;
@@ -1993,7 +1996,7 @@ public class DefaultFlexViewFactory {
       componentCell.addChild(component);
 
       if (remoteForm.labelsPosition != "NONE") {
-        if(labelHorizontalPosition == "RIGHT") {
+        if (labelHorizontalPosition == "RIGHT") {
           componentsRow.addChild(componentCell);
           labelsRow.addChild(labelCell);
         } else {
@@ -2127,7 +2130,7 @@ public class DefaultFlexViewFactory {
   protected function createSplitContainer(remoteSplitContainer:RSplitContainer):Container {
     var splitContainer:DividedBox = new DividedBox();
     splitContainer.resizeToContent = !(remoteSplitContainer.preferredSize != null
-    && (remoteSplitContainer.preferredSize.height > 0 || remoteSplitContainer.preferredSize.width > 0));
+        && (remoteSplitContainer.preferredSize.height > 0 || remoteSplitContainer.preferredSize.width > 0));
 
     splitContainer.liveDragging = true;
 
@@ -2168,6 +2171,30 @@ public class DefaultFlexViewFactory {
     splitContainer.addEventListener(FlexEvent.CREATION_COMPLETE, function (event:FlexEvent):void {
       var splitC:DividedBox = event.currentTarget as DividedBox;
       computeRelativeSizes(splitC, remoteSplitContainer);
+      if (remoteSplitContainer.separatorPosition > 0) {
+        var divider:BoxDivider = splitC.getDividerAt(0);
+        if (splitC.direction == BoxDirection.HORIZONTAL) {
+          divider.x = remoteSplitContainer.separatorPosition;
+        } else {
+          divider.y = remoteSplitContainer.separatorPosition;
+        }
+      }
+      if(remoteSplitContainer.permId) {
+        splitContainer.addEventListener("dividerRelease", function(e:DividerEvent):void {
+          var splitC:DividedBox = event.currentTarget as DividedBox;
+          var divider:BoxDivider = splitC.getDividerAt(0);
+          var separatorPosition:int;
+          if (splitC.direction == BoxDirection.HORIZONTAL) {
+            separatorPosition = divider.x;
+          } else {
+            separatorPosition = divider.y;
+          }
+          var notificationCommand:RemoteSplitChangedCommand = new RemoteSplitChangedCommand();
+          notificationCommand.splitPaneId = remoteSplitContainer.permId;
+          notificationCommand.separatorPosition = separatorPosition;
+          _commandHandler.registerCommand(notificationCommand);
+        });
+      }
     });
     return splitContainer;
   }
@@ -2335,7 +2362,7 @@ public class DefaultFlexViewFactory {
   protected function createDateField(remoteDateField:RDateField):UIComponent {
     var dateField:DateField = new EnhancedDateField();
     dateField.firstDayOfWeek = firstDayOfWeek;
-    if(remoteDateField.formatPattern) {
+    if (remoteDateField.formatPattern) {
       dateField.formatString = remoteDateField.formatPattern;
     } else {
       dateField.formatString = datePattern;
@@ -2380,10 +2407,8 @@ public class DefaultFlexViewFactory {
           var currentTarget:UIComponent = (event as FocusEvent).currentTarget as UIComponent;
           var relatedObject:DisplayObject = (event as FocusEvent).relatedObject as DisplayObject;
 
-          if (currentTarget != dateField || (relatedObject != null && (    dateField.contains(relatedObject)
-              || dateField.dropdown.contains(relatedObject)
-              )
-              )) {
+          if (currentTarget != dateField || (relatedObject != null && (dateField.contains(relatedObject)
+                  || dateField.dropdown.contains(relatedObject)))) {
             // do not listen to inner focus events.
             processEvent = false;
           }
@@ -2745,7 +2770,8 @@ public class DefaultFlexViewFactory {
           backgroundIndex: bgIndex,
           foregroundIndex: fgIndex,
           fontIndex: foIndex,
-          remoteComponent: rColumn};
+          remoteComponent: rColumn
+        };
       } else if (rColumn is RCheckBox || (rColumn is RActionField && !(rColumn as RActionField).showTextField)
           || rColumn is RImageComponent) {
         itemRenderer = new ClassFactory(UIComponentDgItemRenderer);
@@ -2757,7 +2783,8 @@ public class DefaultFlexViewFactory {
           toolTipIndex: ttIndex,
           backgroundIndex: bgIndex,
           foregroundIndex: fgIndex,
-          fontIndex: foIndex};
+          fontIndex: foIndex
+        };
         column.rendererIsEditor = true;
       } else {
         //Breaks boolean writability gates by making all columns always read only.
@@ -2802,7 +2829,8 @@ public class DefaultFlexViewFactory {
           backgroundIndex: bgIndex,
           foregroundIndex: fgIndex,
           fontIndex: foIndex,
-          remoteComponent: rColumn};
+          remoteComponent: rColumn
+        };
         column.editable = !readOnly;
       }
       column.itemRenderer = itemRenderer;
@@ -2810,11 +2838,11 @@ public class DefaultFlexViewFactory {
       if (!column.rendererIsEditor) {
         var itemEditor:ClassFactory = new ClassFactory(RemoteValueDgItemEditor);
         rColumn.state.writable = true;
-        itemEditor.properties = {editor: editorComponent,
-          state: rColumn.state,
-          index: i + 1};
+        itemEditor.properties = {
+          editor: editorComponent, state: rColumn.state, index: i + 1
+        };
         column.itemEditor = itemEditor;
-        if(rColumn is RTextArea) {
+        if (rColumn is RTextArea) {
           column.editorUsesEnterKey = true;
         }
       }
@@ -2826,7 +2854,7 @@ public class DefaultFlexViewFactory {
           column.width = table.measureText(column.headerText).width + 16;
         } else {
           column.width = Math.max(Math.min(table.measureText(TEMPLATE_CHAR).width * COLUMN_MAX_CHAR_COUNT,
-                                           editorComponent.maxWidth), table.measureText(column.headerText).width + 16);
+              editorComponent.maxWidth), table.measureText(column.headerText).width + 16);
         }
       }
       width += column.width;
@@ -2853,10 +2881,9 @@ public class DefaultFlexViewFactory {
       }
 
       var headerRenderer:ClassFactory = createDataGridHeaderRenderer();
-      headerRenderer.properties = { index: i + 1,
-        toolTip: editorComponent.toolTip,
-        viewFactory: this,
-        rTemplate: rColumnHeader};
+      headerRenderer.properties = {
+        index: i + 1, toolTip: editorComponent.toolTip, viewFactory: this, rTemplate: rColumnHeader
+      };
       column.headerRenderer = headerRenderer;
 
       columns.push(column);
@@ -3293,7 +3320,8 @@ public class DefaultFlexViewFactory {
       if (value == null) {
         htmlText.htmlText = null;
       } else {
-        htmlText.htmlText = HtmlUtil.bindActionToHtmlContent(HtmlUtil.convertFromXHtml(value.toString()), remoteHtmlArea.action);
+        htmlText.htmlText = HtmlUtil.bindActionToHtmlContent(HtmlUtil.convertFromXHtml(value.toString()),
+                                                             remoteHtmlArea.action);
       }
     };
     if (remoteHtmlArea.action) {
@@ -3359,7 +3387,8 @@ public class DefaultFlexViewFactory {
         } else {
           var labelText:String = remoteState.value.toString();
           if (HtmlUtil.isHtml(labelText)) {
-            labelText = HtmlUtil.bindActionToHtmlContent(HtmlUtil.sanitizeHtml(labelText), (remoteLabel as RLink).action);
+            labelText = HtmlUtil.bindActionToHtmlContent(HtmlUtil.sanitizeHtml(labelText),
+                                                         (remoteLabel as RLink).action);
           }
           if (((remoteLabel as RLink).action).enabled) {
             label.htmlText = "<u><a href='event:action'>" + labelText + "</a></u>";
@@ -3404,9 +3433,9 @@ public class DefaultFlexViewFactory {
     }
     configureHorizontalAlignment(textField, remoteTextField.horizontalAlignment);
     var remoteState:RemoteValueState = remoteTextField.state;
-    if(remoteTextField.characterAction) {
+    if (remoteTextField.characterAction) {
       textField.addEventListener(Event.CHANGE, function (event:Event):void {
-        remoteState.value = textField.text == "" ? null: textField.text;
+        remoteState.value = textField.text == "" ? null : textField.text;
         var actionEvent:RActionEvent = new RActionEvent();
         actionEvent.actionCommand = textField.text;
         getActionHandler().execute(remoteTextField.characterAction, actionEvent, null, false);

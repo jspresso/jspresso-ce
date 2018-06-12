@@ -1829,7 +1829,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    */
   protected JSplitPane createJSplitPane(ISplitViewDescriptor viewDescriptor) {
     JSplitPane splitPane = new JSplitPane();
-    splitPane.setContinuousLayout(true);
+    splitPane.setContinuousLayout(false);
     splitPane.setOneTouchExpandable(true);
     return splitPane;
   }
@@ -2151,9 +2151,9 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected ICompositeView<JComponent> createSplitView(ISplitViewDescriptor viewDescriptor,
-                                                       IActionHandler actionHandler, Locale locale) {
-    JSplitPane viewComponent = createJSplitPane(viewDescriptor);
+  protected ICompositeView<JComponent> createSplitView(final ISplitViewDescriptor viewDescriptor,
+                                                       final IActionHandler actionHandler, Locale locale) {
+    final JSplitPane viewComponent = createJSplitPane(viewDescriptor);
     BasicCompositeView<JComponent> view = constructCompositeView(viewComponent, viewDescriptor);
     List<IView<JComponent>> childrenViews = new ArrayList<>();
 
@@ -2179,6 +2179,19 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       viewComponent.setRightComponent(rightBottomView.getPeer());
       rightBottomView.getPeer().setMinimumSize(new Dimension(0, 0));
       childrenViews.add(rightBottomView);
+    }
+    Integer userSplitSeparatorPosition = getUserSplitSeparatorPosition(viewDescriptor, actionHandler);
+    if (userSplitSeparatorPosition != null && userSplitSeparatorPosition > 0) {
+      viewComponent.setDividerLocation(userSplitSeparatorPosition);
+    }
+    final String splitId = viewDescriptor.getPermId();
+    if (splitId != null) {
+      viewComponent.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, new PropertyChangeListener() {
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
+          storeSplitPanePreferences(splitId, viewComponent.getDividerLocation(), actionHandler);
+        }
+      });
     }
     view.setChildren(childrenViews);
     return view;
