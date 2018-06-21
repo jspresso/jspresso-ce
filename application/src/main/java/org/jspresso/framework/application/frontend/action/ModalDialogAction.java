@@ -117,6 +117,7 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
     if (focusedComponent != null) {
       getController(context).focus(focusedComponent);
     }
+    clearDialogContext(context);
     return super.execute(actionHandler, context);
   }
 
@@ -195,5 +196,13 @@ public class ModalDialogAction<E, F, G> extends FrontendAction<E, F, G> {
    */
   public void setTriggerOnEnter(boolean triggerOnEnter) {
     this.triggerOnEnter = triggerOnEnter;
+  }
+
+  private void clearDialogContext(Map<String, Object> context) {
+    context.remove(DIALOG_ACTIONS);
+    context.remove(DIALOG_SIZE);
+    context.remove(DIALOG_TITLE);
+    context.remove(DIALOG_VIEW);
+    context.remove(DIALOG_FOCUSED_COMPONENT);
   }
 }
