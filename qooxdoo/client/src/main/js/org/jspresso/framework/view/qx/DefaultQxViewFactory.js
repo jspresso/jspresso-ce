@@ -1954,7 +1954,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       map.addListenerOnce("appear", updateMap);
       if (remoteMap.getPermId()) {
         map.addListener("changeZoom", function (event) {
-          this.notifyMapChanged(remoteMap, event.getData());
+          var zoom = event.getData();
+          this.notifyMapChanged(remoteMap, zoom);
+          remoteMap.setDefaultZoom(zoom);
         }, this);
       }
       mapContentState.addListener("changeValue", updateMap, this);
