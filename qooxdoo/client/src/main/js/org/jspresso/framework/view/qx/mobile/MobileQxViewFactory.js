@@ -1161,10 +1161,12 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
       var top = new qx.ui.mobile.form.Row();
       top.addCssClass("form-row-group-first");
       form.add(top);
+      var formComponents = [];
       for (var i = 0; i < remoteForm.getElements().length; i++) {
         var rComponent = remoteForm.getElements()[i];
 
         var component = /** @type {qx.ui.mobile.core.Widget} */ this.createComponent(rComponent);
+        formComponents.push(component);
 
         var row = new qx.ui.mobile.container.Composite();
         row.addCssClass("form-row");
@@ -1229,6 +1231,18 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           form.add(separator);
           row.bind("visibility", separator, "visibility");
         }
+      }
+      var updateFormVisibility = function() {
+        for (var j = 0; j < formComponents.length; j++) {
+          if (formComponents[j].isVisible()) {
+            remoteForm.getState().setReadable(true);
+            return;
+          }
+        }
+        remoteForm.getState().setReadable(false);
+      };
+      for (var k = 0; k < formComponents.length; k++) {
+        formComponents[k].addListener("changeVisibility", updateFormVisibility, this);
       }
       var bottom = new qx.ui.mobile.form.Row();
       bottom.addCssClass("form-row-group-last");
