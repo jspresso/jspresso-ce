@@ -467,6 +467,9 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
         if (sectionModelDescriptor instanceof IPropertyDescriptor) {
           completePageWithDynamicLabels((ICompositeValueConnector) view.getConnector(), child, componentDescriptor,
               (IPropertyDescriptor) sectionModelDescriptor);
+        } else {
+          completePageWithDynamicLabels((ICompositeValueConnector) view.getConnector(), child, componentDescriptor,
+              null);
         }
       }
     }
