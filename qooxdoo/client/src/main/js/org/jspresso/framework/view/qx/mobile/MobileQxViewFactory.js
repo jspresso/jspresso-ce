@@ -930,6 +930,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
       }, this);
       list.setUserData("position", remoteNavPage.getPosition());
+      this._bindVisibility(remoteNavPage, list);
       return list;
     },
 
