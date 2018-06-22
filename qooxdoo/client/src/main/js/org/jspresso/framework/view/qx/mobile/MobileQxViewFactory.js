@@ -1208,12 +1208,14 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }
 
         component.addCssClass("jspresso-form-element");
+        if (component instanceof qx.ui.mobile.basic.Atom) {
+          var atomContainer = component._getChildren()[0];
+          atomContainer.removeCssClass("qx-flex-center");
+        }
         if (this.isFixedWidth(rComponent)) {
           row.add(component);
         } else {
-          if (remoteForm.getLabelsPosition() == "ASIDE") {
-            component.addCssClass("jspresso-form-element-grow-aside");
-          }
+          component.addCssClass("jspresso-form-element-grow-aside");
           row.add(component, {flex: 1});
         }
         if (this.isMultiline(rComponent)) {
@@ -2688,8 +2690,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
      * @param rComponent {org.jspresso.framework.gui.remote.RComponent}
      */
     isFixedWidth: function (rComponent) {
-      return rComponent instanceof org.jspresso.framework.gui.remote.RCheckBox || rComponent
-          instanceof org.jspresso.framework.gui.remote.RLabel || (rComponent
+      return rComponent instanceof org.jspresso.framework.gui.remote.RCheckBox /*|| rComponent
+          instanceof org.jspresso.framework.gui.remote.RLabel*/ || (rComponent
               instanceof org.jspresso.framework.gui.remote.RActionField && !rComponent.isShowTextField());
     },
 
