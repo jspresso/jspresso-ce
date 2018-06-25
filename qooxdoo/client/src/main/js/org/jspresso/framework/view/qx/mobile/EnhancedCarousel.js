@@ -49,8 +49,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.EnhancedCarousel", {
         this._setStyle("height", "initial");
       }
       for (var i = 0; i < this.__pagesCopy.length; i++) {
-        var pageContentElement = this.__pagesCopy[i].getContentElement();
-        qx.bom.element.Style.set(pageContentElement, "height", "initial");
+        this.__pagesCopy[i]._setStyle("height", "initial");
       }
     }
   },

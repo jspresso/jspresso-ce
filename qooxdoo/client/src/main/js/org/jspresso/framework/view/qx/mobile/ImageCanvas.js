@@ -70,8 +70,8 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.ImageCanvas", {
       canvas.addListener("touchstart", qx.bom.Event.stopPropagation, this);
       canvas.addListener("tap", qx.bom.Event.stopPropagation, this);
 
-      qx.bom.element.Style.set(canvas.getContentElement(), "width", "95%");
-      qx.bom.element.Style.set(canvas.getContentElement(), "height", this.__canvasHeight + "px");
+      canvas._setStyle("width", "95%");
+      canvas._setStyle("height", this.__canvasHeight + "px");
 
       canvas.setHeight(this._to(this.__canvasHeight));
 

@@ -2427,10 +2427,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           var focusedColumnLeft = paneModel.getColumnLeft(column);
           var focusedColumnWidth = columnModel.getColumnWidth(column);
           focusIndicator.setUserBounds(focusedColumnLeft, (row - firstRow) * rowHeight, focusedColumnWidth, rowHeight);
+          var contentElement = focusIndicator.getContentElement();
           if (table.isCellEditable(row, column)) {
-            focusIndicator.getContentElement().setStyle("pointer-events","auto");
+            contentElement.setStyle("pointer-events","auto");
           } else {
-            focusIndicator.getContentElement().setStyle("pointer-events", "none");
+            contentElement.setStyle("pointer-events", "none");
           }
         }
       }, this);
