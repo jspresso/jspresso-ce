@@ -598,4 +598,10 @@
   </bean>
 
   <bean lazy-init="false" class="org.jspresso.framework.security.auth.ProxyAuthenticatorInit"/>
+
+  <bean id="pageableStatusModel" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+    <property name="staticField"
+              value="org.jspresso.framework.model.descriptor.basic.PageableDescriptor.INSTANCE"/>
+  </bean>
+
 </beans>

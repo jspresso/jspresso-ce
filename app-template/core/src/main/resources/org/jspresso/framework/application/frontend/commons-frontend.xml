@@ -64,11 +64,6 @@
 
 
   <!-- Standard views -->
-  <bean id="pageableStatusModel" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField"
-              value="org.jspresso.framework.model.descriptor.basic.PageableDescriptor.INSTANCE"/>
-  </bean>
-
   <bean id="pageableStatusView" class="org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor">
     <property name="name" value="pageableStatus"/>
     <property name="modelDescriptor" ref="pageableStatusModel"/>
