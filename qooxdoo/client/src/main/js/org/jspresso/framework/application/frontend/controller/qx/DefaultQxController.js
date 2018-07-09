@@ -124,7 +124,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
                             secondaryActionLists, triggerOnEnter) {
       useCurrent = (typeof useCurrent == 'undefined') ? false : useCurrent;
 
-      this._stopCurrentActionTimer();
+      //this._stopCurrentActionTimer();
       var dialogView = remoteDialogView;
       if (remoteDialogView instanceof org.jspresso.framework.gui.remote.RComponent) {
         dialogView = this._getViewFactory().createComponent(remoteDialogView);
