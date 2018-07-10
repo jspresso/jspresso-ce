@@ -722,6 +722,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      * @param messageCommand {org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand}
      */
     _handleMessageCommand: function (messageCommand) {
+
+      this._stopCurrentActionTimer();
+
       var messageDialogContent = new qx.ui.mobile.container.Composite(new qx.ui.mobile.layout.VBox());
 
       var messageDialog = new qx.ui.mobile.dialog.Popup(messageDialogContent);

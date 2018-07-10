@@ -532,6 +532,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Defau
      * @param messageCommand {org.jspresso.framework.application.frontend.command.remote.RemoteMessageCommand}
      */
     _handleMessageCommand: function (messageCommand) {
+
+      this._stopCurrentActionTimer();
+
       var messageDialog = new qx.ui.window.Window(messageCommand.getTitle());
       messageDialog.set({
         modal: true,
