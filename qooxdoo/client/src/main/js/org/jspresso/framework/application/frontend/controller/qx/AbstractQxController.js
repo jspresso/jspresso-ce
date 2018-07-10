@@ -133,6 +133,8 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
     _dialogStack: null,
     /** @type {qx.event.Timer} */
     __currentActionTimer: null,
+    /** @type {Number} */
+    __timerTickCount: 0,
 
     _getApplication: function () {
       return qx.core.Init.getApplication();
@@ -311,9 +313,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
         }
         if (action.getRepeatPeriodMillis() > 0) {
           this._startCurrentActionTimer();
+          actionEvent.setActionCommand(this.__timerTickCount);
           this.__doExecute(action, actionEvent, actionCallback);
           this.__currentActionTimer = new qx.event.Timer(action.getRepeatPeriodMillis());
           this.__currentActionTimer.addListener("interval", function (event) {
+            this.__timerTickCount ++;
             this.__doExecute(action, actionEvent, actionCallback);
           }, this);
           this.__currentActionTimer.start();
@@ -330,6 +334,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
       if (this.__currentActionTimer) {
         this.__currentActionTimer.stop();
         this.__currentActionTimer = null;
+        this.__timerTickCount = 0;
       }
     },
 
