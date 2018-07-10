@@ -313,7 +313,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
         }
         if (action.getRepeatPeriodMillis() > 0) {
           this._startCurrentActionTimer();
-          actionEvent.setActionCommand(this.__timerTickCount);
+          actionEvent.setActionCommand(this.__timerTickCount + "");
           this.__doExecute(action, actionEvent, actionCallback);
           this.__currentActionTimer = new qx.event.Timer(action.getRepeatPeriodMillis());
           this.__currentActionTimer.addListener("interval", function (event) {
