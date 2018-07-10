@@ -27,7 +27,9 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 
 /**
  * This filter needs to be installed on any broker servlet so that iot keeps
@@ -53,10 +55,14 @@ public class HttpRequestHolder implements Filter {
    * Assigns the servlet request for this current thread.
    *
    * @param request
-   *          the servlet request.
+   *     the servlet request.
    */
   public static final void setServletRequest(HttpServletRequest request) {
-    CURRENT_HTTP_REQUEST.set(request);
+    AsyncDefensiveServletRequest defensiveServletRequest = null;
+    if (request != null) {
+      defensiveServletRequest = new AsyncDefensiveServletRequest(request);
+    }
+    CURRENT_HTTP_REQUEST.set(defensiveServletRequest);
   }
 
   /**
@@ -72,10 +78,14 @@ public class HttpRequestHolder implements Filter {
    * Assigns the servlet response for this current thread.
    *
    * @param response
-   *          the servlet response.
+   *     the servlet response.
    */
   public static final void setServletResponse(HttpServletResponse response) {
-    CURRENT_HTTP_RESPONSE.set(response);
+    AsyncDefensiveServletResponse defensiveServletResponse = null;
+    if (response != null) {
+      defensiveServletResponse = new AsyncDefensiveServletResponse(response);
+    }
+    CURRENT_HTTP_RESPONSE.set(defensiveServletResponse);
   }
 
   /**
@@ -88,6 +98,17 @@ public class HttpRequestHolder implements Filter {
 
   /**
    * {@inheritDoc}
+   *
+   * @param request
+   *     the request
+   * @param response
+   *     the response
+   * @param chain
+   *     the chain
+   * @throws IOException
+   *     the io exception
+   * @throws ServletException
+   *     the servlet exception
    */
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -103,6 +124,9 @@ public class HttpRequestHolder implements Filter {
 
   /**
    * {@inheritDoc}
+   *
+   * @param config
+   *     the config
    */
   @Override
   public void init(FilterConfig config) {
@@ -118,4 +142,82 @@ public class HttpRequestHolder implements Filter {
     return CURRENT_HTTP_REQUEST.get() != null;
   }
 
+  private static class AsyncDefensiveServletRequest extends HttpServletRequestWrapper {
+
+    private final String scheme;
+    private final String serverName;
+    private final int    serverPort;
+    private final String contextPath;
+
+    /**
+     * Constructs a request object wrapping the given request.
+     *
+     * @param request
+     *     the request
+     * @throws IllegalArgumentException
+     *     if the request is null
+     */
+    public AsyncDefensiveServletRequest(HttpServletRequest request) {
+      super(request);
+      this.scheme = request.getScheme();
+      this.serverName = request.getServerName();
+      this.serverPort = request.getServerPort();
+      this.contextPath = request.getContextPath();
+    }
+
+    /**
+     * Gets scheme.
+     *
+     * @return the scheme
+     */
+    @Override
+    public String getScheme() {
+      return scheme;
+    }
+
+    /**
+     * Gets server name.
+     *
+     * @return the server name
+     */
+    @Override
+    public String getServerName() {
+      return serverName;
+    }
+
+    /**
+     * Gets server port.
+     *
+     * @return the server port
+     */
+    @Override
+    public int getServerPort() {
+      return serverPort;
+    }
+
+    /**
+     * Gets context path.
+     *
+     * @return the context path
+     */
+    @Override
+    public String getContextPath() {
+      return contextPath;
+    }
+  }
+
+  private static class AsyncDefensiveServletResponse extends HttpServletResponseWrapper {
+
+    /**
+     * Constructs a response adaptor wrapping the given response.
+     *
+     * @param response
+     *     the response
+     * @throws IllegalArgumentException
+     *     if the response is null
+     */
+    public AsyncDefensiveServletResponse(HttpServletResponse response) {
+      super(response);
+    }
+  }
 }
