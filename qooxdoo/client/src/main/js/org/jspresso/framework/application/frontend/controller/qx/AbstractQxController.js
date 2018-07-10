@@ -317,9 +317,11 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
           this.__doExecute(action, actionEvent, actionCallback);
           this.__currentActionTimer = new qx.event.Timer(action.getRepeatPeriodMillis());
           this.__currentActionTimer.addListener("interval", function (event) {
-            this.__timerTickCount ++;
-            actionEvent.setActionCommand(this.__timerTickCount + "");
-            this.__doExecute(action, actionEvent, actionCallback);
+            if (action.isEnabled() && !this.__roundTrip) {
+              this.__timerTickCount++;
+              actionEvent.setActionCommand(this.__timerTickCount + "");
+              this.__doExecute(action, actionEvent, actionCallback);
+            }
           }, this);
           this.__currentActionTimer.start();
         } else {
