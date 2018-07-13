@@ -18,15 +18,15 @@
  */
 package org.jspresso.framework.util.format;
 
-import java.text.ParseException;
-import java.util.Locale;
-
 import org.joda.time.Instant;
 import org.joda.time.Period;
 import org.joda.time.PeriodType;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
+
+import java.text.ParseException;
+import java.util.Locale;
 
 /**
  * A formatter / parser to deal with duration properties.
@@ -64,11 +64,13 @@ public class DurationFormatter implements IFormatter<Number, String> {
         " " + translationProvider.getTranslation("minute", locale), " "
             + translationProvider.getTranslation("minutes", locale));
     if (secondsAware) {
+      builder.appendSeparator(" ");
       builder.appendSeconds();
       builder.appendSuffix(" " + translationProvider.getTranslation("second", locale),
           " " + translationProvider.getTranslation("seconds", locale));
     }
     if (millisecondsAware) {
+      builder.appendSeparator(" ");
       builder.appendMillis();
       builder.appendSuffix(" " + translationProvider.getTranslation("millisecond", locale),
           " " + translationProvider.getTranslation("milliseconds", locale));
