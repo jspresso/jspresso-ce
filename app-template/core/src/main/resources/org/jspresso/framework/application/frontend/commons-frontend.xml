@@ -1186,8 +1186,18 @@
           <property name="name" value="name"/>
           <property name="maxLength" value="256"/>
         </bean>
+        <bean class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor">
+          <property name="name" value="i18nName"/>
+          <property name="i18nNameKey" value="name"/>
+          <property name="maxLength" value="256"/>
+        </bean>
         <bean class="org.jspresso.framework.model.descriptor.basic.BasicDatePropertyDescriptor">
           <property name="name" value="startedTimestamp"/>
+          <property name="timeZoneAware" value="true"/>
+          <property name="type" value="DATE_TIME"/>
+        </bean>
+        <bean class="org.jspresso.framework.model.descriptor.basic.BasicDatePropertyDescriptor">
+          <property name="name" value="endedTimestamp"/>
           <property name="timeZoneAware" value="true"/>
           <property name="type" value="DATE_TIME"/>
         </bean>
@@ -1196,6 +1206,16 @@
           <property name="maxFractionDigit" value="2"/>
           <property name="minValue" value="0"/>
           <property name="maxValue" value="100"/>
+        </bean>
+        <bean class="org.jspresso.framework.model.descriptor.basic.BasicDurationPropertyDescriptor">
+          <property name="name" value="estimatedRemainingTime"/>
+        </bean>
+        <bean class="org.jspresso.framework.model.descriptor.basic.BasicDurationPropertyDescriptor">
+          <property name="name" value="totalDuration"/>
+        </bean>
+        <bean class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor">
+          <property name="name" value="status"/>
+          <property name="maxLength" value="256"/>
         </bean>
       </list>
     </property>
@@ -1385,7 +1405,9 @@
     </property>
   </bean>
 
-  <bean id="showRunningExecutorsAction" parent="editComponentAction"
+  <bean id="showRunningExecutorsAction" parent="showRunningExecutorsBaseAction"/>
+
+  <bean id="showRunningExecutorsBaseAction" parent="editComponentAction"
         class="org.jspresso.framework.application.frontend.action.controller.EditBackendControllerAction">
     <property name="name" value="runningExecutors"/>
     <property name="iconImageURL">

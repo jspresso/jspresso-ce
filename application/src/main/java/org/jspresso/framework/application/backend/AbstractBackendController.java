@@ -18,47 +18,9 @@
  */
 package org.jspresso.framework.application.backend;
 
-import java.beans.PropertyChangeListener;
-import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.IdentityHashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.TimeZone;
-
-import javax.security.auth.Subject;
-import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.login.FailedLoginException;
-import javax.security.auth.login.LoginContext;
-import javax.security.auth.login.LoginException;
-
 import org.apache.commons.collections4.map.LRUMap;
 import org.apache.commons.lang3.LocaleUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
-import org.springframework.transaction.support.TransactionTemplate;
-
-import org.jspresso.framework.action.ActionBusinessException;
-import org.jspresso.framework.action.ActionContextConstants;
-import org.jspresso.framework.action.ActionException;
-import org.jspresso.framework.action.IAction;
-import org.jspresso.framework.action.IActionMonitoringPlugin;
+import org.jspresso.framework.action.*;
 import org.jspresso.framework.application.AbstractController;
 import org.jspresso.framework.application.backend.action.Asynchronous;
 import org.jspresso.framework.application.backend.action.Transactional;
@@ -82,25 +44,30 @@ import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
 import org.jspresso.framework.model.component.ILifecycleCapable;
 import org.jspresso.framework.model.datatransfer.ComponentTransferStructure;
-import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.IComponentDescriptor;
-import org.jspresso.framework.model.descriptor.IModelDescriptor;
-import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
-import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.*;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityCloneFactory;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityRegistry;
 import org.jspresso.framework.model.entity.basic.BasicEntityRegistry;
-import org.jspresso.framework.security.ISecurable;
-import org.jspresso.framework.security.ISecurityContextBuilder;
-import org.jspresso.framework.security.SecurityHelper;
-import org.jspresso.framework.security.UserPrincipal;
-import org.jspresso.framework.security.UsernamePasswordHandler;
+import org.jspresso.framework.security.*;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.preferences.IPreferencesStore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
+import org.springframework.transaction.support.TransactionTemplate;
+
+import javax.security.auth.Subject;
+import java.beans.PropertyChangeListener;
+import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.text.NumberFormat;
+import java.util.*;
 
 /**
  * Base class for backend application controllers. Backend controllers are
@@ -2461,7 +2428,11 @@ public abstract class AbstractBackendController extends AbstractController imple
       int activeCount = controllerAsyncActionsThreadGroup.activeCount();
       AsyncActionExecutor[] activeExecutors = new AsyncActionExecutor[activeCount];
       controllerAsyncActionsThreadGroup.enumerate(activeExecutors);
-      return new LinkedHashSet<>(Arrays.asList(activeExecutors));
+
+      List<AsyncActionExecutor> asyncActionExecutors = Arrays.asList(activeExecutors);
+      Collections.reverse(asyncActionExecutors);
+
+      return new LinkedHashSet<>(asyncActionExecutors);
     }
     return Collections.emptySet();
   }
@@ -2471,9 +2442,12 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   @Override
   public Set<AsyncActionExecutor> getCompletedExecutors() {
-    Set<AsyncActionExecutor> completedExecutors = new LinkedHashSet<>(asyncExecutors);
+
+    List<AsyncActionExecutor> completedExecutors = new ArrayList<>(asyncExecutors);
     completedExecutors.removeAll(getRunningExecutors());
-    return completedExecutors;
+    Collections.reverse(completedExecutors);
+
+    return new LinkedHashSet<>(completedExecutors);
   }
 
   /**

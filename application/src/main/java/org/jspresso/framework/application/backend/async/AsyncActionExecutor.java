@@ -18,10 +18,6 @@
  */
 package org.jspresso.framework.application.backend.async;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
@@ -31,6 +27,10 @@ import org.jspresso.framework.application.backend.action.Asynchronous;
 import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.application.backend.action.Transactional;
 import org.jspresso.framework.application.backend.session.EMergeMode;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A specialized thread dedicated to executing asynchronous actions. It is able
@@ -42,24 +42,25 @@ public class AsyncActionExecutor extends Thread {
 
   private IAction                   action;
   private Map<String, Object>       context;
+  private Map<String, Object>       progressionData;
   private AbstractBackendController slaveBackendController;
 
   private Date   startedTimestamp;
+  private Date   endedTimestamp;
   private double progress;
+  private String i18nName;
+  private String status;
+
   private static final String EXCEPTION_KEY            = "EXCEPTION_KEY";
   private static final String COMPLETED_CONTROLLER_KEY = "COMPLETED_CONTROLLER_KEY";
 
   /**
    * Constructs a new {@code AsyncActionExecutor} instance.
    *
-   * @param action
-   *          the action to execute asynchronously.
-   * @param context
-   *          the action context.
-   * @param group
-   *          the thread group.
-   * @param slaveBackendController
-   *          the slave backend controller used to execute the action.
+   * @param action                 the action to execute asynchronously.
+   * @param context                the action context.
+   * @param group                  the thread group.
+   * @param slaveBackendController the slave backend controller used to execute the action.
    */
   public AsyncActionExecutor(IAction action, Map<String, Object> context,
       ThreadGroup group, AbstractBackendController slaveBackendController) {
@@ -70,6 +71,7 @@ public class AsyncActionExecutor extends Thread {
     this.action = action;
     this.context = context;
     this.slaveBackendController = slaveBackendController;
+    this.progressionData = new HashMap<>();
   }
 
   /**
@@ -127,8 +129,10 @@ public class AsyncActionExecutor extends Thread {
             throw (RuntimeException) innerContext.get(EXCEPTION_KEY);
           }
         }, exceptionContext);
+        status = "exception";
       }
     } finally {
+      endedTimestamp = new Date();
       slaveBackendController.cleanupRequestResources();
       slaveBackendController.stop();
       BackendControllerHolder.setThreadBackendController(null);
@@ -150,8 +154,7 @@ public class AsyncActionExecutor extends Thread {
   /**
    * Sets the progress.
    *
-   * @param progress
-   *          the progress to set.
+   * @param progress the progress to set.
    */
   public void setProgress(double progress) {
     this.progress = progress;
@@ -165,4 +168,112 @@ public class AsyncActionExecutor extends Thread {
   public Date getStartedTimestamp() {
     return startedTimestamp;
   }
+
+  /**
+   * Gets ended timestamp.
+   *
+   * @return the ended timestamp
+   */
+  public Date getEndedTimestamp() {
+    return endedTimestamp;
+  }
+
+  /**
+   * Sets i18n name.
+   *
+   * @param i18nName the 18n name
+   */
+  public void setI18nName(String i18nName) {
+    this.i18nName = i18nName;
+  }
+
+  /**
+   * Gets i18n name.
+   *
+   * @return the i18n name if not null, otherwise return's thread's name.
+   */
+  public String getI18nName() {
+
+    if (i18nName!=null)
+      return i18nName;
+
+    return getName();
+  }
+
+  /**
+   * Sets i18n status.
+   *
+   * @param status the i18n status
+   */
+  public void setStatus(String status) {
+    this.status = status;
+  }
+
+  /**
+   * Gets i18n status.
+   *
+   * @return the i18n status
+   */
+  public String getStatus() {
+    return status;
+  }
+
+  /**
+   * Gets progression data.
+   *
+   * @return the progression data
+   */
+  public Map<String, Object> getProgressionData() {
+    return progressionData;
+  }
+
+  /**
+   * Gets estimated remaining time asn string.
+   *
+   * @return the estimated remaining time
+   */
+  public Long getEstimatedRemainingTime() {
+
+    Date startedTimestamp = getStartedTimestamp();
+    if (startedTimestamp == null)
+      return null;
+
+    Date endedTimestamp = getEndedTimestamp();
+    if (endedTimestamp != null)
+      return null;
+
+    double progress = getProgress();
+    if (progress<0.05d)
+      return null;
+
+    long elapsed = new Date().getTime() - startedTimestamp.getTime();
+    double eta = elapsed / (1.0d - progress);
+    if (eta < 1)
+      return null;
+
+    return new Double(eta).longValue();
+  }
+
+  /**
+   * Gets estimated remaining time asn string.
+   *
+   * @return the estimated remaining time
+   */
+  public Long getTotalDuration() {
+
+    Date startedTimestamp = getStartedTimestamp();
+    if (startedTimestamp == null)
+      return null;
+
+    Date endedTimestamp = getEndedTimestamp();
+    if (endedTimestamp == null)
+      return null;
+
+    long elapsed = endedTimestamp.getTime() - startedTimestamp.getTime();
+    if (elapsed < 1)
+      return null;
+
+    return elapsed;
+  }
+
 }
