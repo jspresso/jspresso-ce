@@ -68,6 +68,7 @@ import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor;
+import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.ISecurityContextBuilder;
 import org.jspresso.framework.security.SecurityHelper;
@@ -187,14 +188,17 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
     dirtInterceptor = new PropertyChangeListener() {
       @Override
       public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getOldValue() != IPropertyChangeCapable.UNKNOWN) {
-          Module module = getSelectedModule();
-          if (module != null && !module.isDirty()) {
-            // Retrieve the top module
-            while (module.getParent() != null) {
-              module = module.getParent();
+        Object source = evt.getSource();
+        if (source instanceof IEntity && ((IEntity) source).isPersistent()) {
+          if (evt.getOldValue() != IPropertyChangeCapable.UNKNOWN) {
+            Module module = getSelectedModule();
+            if (module != null && !module.isDirty()) {
+              // Retrieve the top module
+              while (module.getParent() != null) {
+                module = module.getParent();
+              }
+              module.refreshDirtinessInDepth(getBackendController());
             }
-            module.refreshDirtinessInDepth(getBackendController());
           }
         }
       }
