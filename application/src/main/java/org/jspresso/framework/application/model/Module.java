@@ -884,7 +884,7 @@ public class Module extends AbstractPropertyChangeCapable
    *     the backend controller
    * @return true if the module or one of its sub-module is dirty
    */
-  public final boolean refreshDirtinessInDepth(IBackendController backendController) {
+  public boolean refreshDirtinessInDepth(IBackendController backendController) {
     boolean depthDirtyness = false;
     if (getSubModules() != null) {
       for (Module subModule : getSubModules()) {
