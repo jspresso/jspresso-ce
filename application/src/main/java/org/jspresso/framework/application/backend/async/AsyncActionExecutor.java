@@ -51,6 +51,9 @@ public class AsyncActionExecutor extends Thread {
   private String i18nName;
   private String status;
 
+  private boolean stopeable = false;
+  private boolean canceleable = false;
+
   private static final String EXCEPTION_KEY            = "EXCEPTION_KEY";
   private static final String COMPLETED_CONTROLLER_KEY = "COMPLETED_CONTROLLER_KEY";
 
@@ -219,6 +222,42 @@ public class AsyncActionExecutor extends Thread {
   }
 
   /**
+   * Is stopeable boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isStopeable() {
+    return stopeable;
+  }
+
+  /**
+   * Sets stopeable.
+   *
+   * @param stopeable the stopeable
+   */
+  public void setStopeable(boolean stopeable) {
+    this.stopeable = stopeable;
+  }
+
+  /**
+   * Is canceleable boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isCanceleable() {
+    return canceleable;
+  }
+
+  /**
+   * Sets canceleable.
+   *
+   * @param canceleable the canceleable
+   */
+  public void setCanceleable(boolean canceleable) {
+    this.canceleable = canceleable;
+  }
+
+  /**
    * Gets progression data.
    *
    * @return the progression data
@@ -275,5 +314,4 @@ public class AsyncActionExecutor extends Thread {
 
     return elapsed;
   }
-
 }
