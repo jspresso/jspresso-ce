@@ -48,6 +48,11 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  */
 public class AddBeanAsSubModuleFrontAction<E, F, G> extends FrontendAction<E, F, G> {
 
+  /**
+   * The constant MODULE_REFERENCE_PATH.
+   */
+  public static final String MODULE_REFERENCE_PATH = "MODULE_REFERENCE_PATH";
+
   private String          parentWorkspaceName;
   private String          parentModuleName;
   private IViewDescriptor childModuleProjectedViewDescriptor;
@@ -134,7 +139,7 @@ public class AddBeanAsSubModuleFrontAction<E, F, G> extends FrontendAction<E, F,
    */
   protected List<?> getComponentsToAdd(Map<String, Object> context) {
     List<?> componentsToAdd = getSelectedModels(context);
-    if (getReferencePath() == null || componentsToAdd == null || componentsToAdd.isEmpty()) {
+    if (getReferencePath(context) == null || componentsToAdd == null || componentsToAdd.isEmpty()) {
       return componentsToAdd;
     }
 
@@ -148,7 +153,7 @@ public class AddBeanAsSubModuleFrontAction<E, F, G> extends FrontendAction<E, F,
         } else {
           componentContract = component.getClass();
         }
-        IAccessor accessor = accessorFactory.createPropertyAccessor(getReferencePath(), componentContract);
+        IAccessor accessor = accessorFactory.createPropertyAccessor(getReferencePath(context), componentContract);
         Object reference = accessor.getValue(component);
         if (reference instanceof Collection<?>) {
           references.addAll((Collection<?>) reference);
@@ -186,10 +191,16 @@ public class AddBeanAsSubModuleFrontAction<E, F, G> extends FrontendAction<E, F,
   /**
    * Gets the referencePath.
    *
+   * @param context
+   *     the action context.
    * @return the referencePath.
    */
-  protected String getReferencePath() {
-    return referencePath;
+  protected String getReferencePath(Map<String, Object> context) {
+    String referencePath = (String) context.get(MODULE_REFERENCE_PATH);
+    if (referencePath != null) {
+      return referencePath;
+    }
+    return this.referencePath;
   }
 
   /**
