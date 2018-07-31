@@ -264,9 +264,8 @@ public abstract class AbstractActionFactory<E, F, G> implements IActionFactory<E
       // Binds to the model provider
       if (viewConnector.getModelConnector() != null && viewConnector.getModelConnector().getModelProvider() != null) {
         gate.setModel(viewConnector.getModelConnector().getModelProvider().getModel());
-        // the following disables table cell editors in swing.
-        // } else {
-        // ((IModelGate) gate).setModel(null);
+      } else {
+        gate.setModel(null);
       }
       final IModelChangeListener modelChangeListener = new IModelChangeListener() {
 
@@ -290,9 +289,6 @@ public abstract class AbstractActionFactory<E, F, G> implements IActionFactory<E
           if (newModelConnector != null && newModelConnector.getModelProvider() != null) {
             gate.setModel(newModelConnector.getModelProvider().getModel());
             newModelConnector.getModelProvider().addModelChangeListener(modelChangeListener);
-            // the following disables table cell editors in swing.
-            // } else {
-            // ((IModelGate) gate).setModel(null);
           } else {
             gate.setModel(null);
           }
