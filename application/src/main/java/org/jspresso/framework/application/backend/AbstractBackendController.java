@@ -18,9 +18,42 @@
  */
 package org.jspresso.framework.application.backend;
 
+import java.beans.PropertyChangeListener;
+import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.IdentityHashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.TimeZone;
+
+import javax.security.auth.Subject;
+
 import org.apache.commons.collections4.map.LRUMap;
 import org.apache.commons.lang3.LocaleUtils;
-import org.jspresso.framework.action.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
+import org.springframework.transaction.support.TransactionTemplate;
+
+import org.jspresso.framework.action.ActionBusinessException;
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.ActionException;
+import org.jspresso.framework.action.IAction;
+import org.jspresso.framework.action.IActionMonitoringPlugin;
 import org.jspresso.framework.application.AbstractController;
 import org.jspresso.framework.application.backend.action.Asynchronous;
 import org.jspresso.framework.application.backend.action.Transactional;
@@ -44,30 +77,25 @@ import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
 import org.jspresso.framework.model.component.ILifecycleCapable;
 import org.jspresso.framework.model.datatransfer.ComponentTransferStructure;
-import org.jspresso.framework.model.descriptor.*;
+import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityCloneFactory;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityRegistry;
 import org.jspresso.framework.model.entity.basic.BasicEntityRegistry;
-import org.jspresso.framework.security.*;
+import org.jspresso.framework.security.ISecurable;
+import org.jspresso.framework.security.ISecurityContextBuilder;
+import org.jspresso.framework.security.SecurityHelper;
+import org.jspresso.framework.security.UserPrincipal;
+import org.jspresso.framework.security.UsernamePasswordHandler;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.preferences.IPreferencesStore;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
-import org.springframework.transaction.support.TransactionTemplate;
-
-import javax.security.auth.Subject;
-import java.beans.PropertyChangeListener;
-import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
-import java.text.NumberFormat;
-import java.util.*;
 
 /**
  * Base class for backend application controllers. Backend controllers are
@@ -95,9 +123,10 @@ import java.util.*;
 public abstract class AbstractBackendController extends AbstractController implements IBackendController {
 
   private static final Logger LOG = LoggerFactory.getLogger(AbstractBackendController.class);
+
   private final IEntityUnitOfWork                      unitOfWork;
-  private final IEntityUnitOfWork                      sessionUnitOfWork;
-  private final LRUMap<Module, IValueConnector>        moduleConnectors;
+  private       IEntityUnitOfWork                      sessionUnitOfWork;
+  private       LRUMap<Module, IValueConnector>        moduleConnectors;
   private final ISecurityContextBuilder                securityContextBuilder;
   private final Set<AsyncActionExecutor>               asyncExecutors;
   private       ThreadGroup                            asyncActionsThreadGroup;
@@ -130,7 +159,7 @@ public abstract class AbstractBackendController extends AbstractController imple
     unitOfWork = createUnitOfWork();
     sessionUnitOfWork = createUnitOfWork();
     sessionUnitOfWork.begin();
-    moduleConnectors = new LRUMap<>(20);
+    moduleConnectors = new LRUMap(20);
     securityContextBuilder = new SecurityContextBuilder();
     throwExceptionOnBadUsage = true;
     asyncExecutors = new LinkedHashSet<>();
@@ -463,6 +492,9 @@ public abstract class AbstractBackendController extends AbstractController imple
     slaveBackendController.start(getLocale(), getClientTimeZone());
     // Use the same application session
     slaveBackendController.setApplicationSession(getApplicationSession());
+    slaveBackendController.sessionUnitOfWork = sessionUnitOfWork;
+    slaveBackendController.workspaceConnectors = workspaceConnectors;
+    slaveBackendController.moduleConnectors = moduleConnectors;
     slaveBackendController.masterController = this;
     return slaveBackendController;
   }
@@ -697,11 +729,10 @@ public abstract class AbstractBackendController extends AbstractController imple
     }
     // we must rehash entries in case in case modules hashcode have changed and
     // still preserve LRU order.
-    Map<Module, IValueConnector> buff = new LinkedHashMap<>();
-    buff.putAll(moduleConnectors);
+    Map<Module, IValueConnector> buff = new LinkedHashMap<>(moduleConnectors);
     moduleConnectors.clear();
     moduleConnectors.putAll(buff);
-    IValueConnector moduleConnector = moduleConnectors.get(module);
+    IValueConnector moduleConnector = (IValueConnector) moduleConnectors.get(module);
     if (moduleConnector == null) {
       moduleConnector = createModelConnector(module.getName(), ModuleDescriptor.MODULE_DESCRIPTOR);
       moduleConnectors.put(module, moduleConnector);
@@ -1150,27 +1181,29 @@ public abstract class AbstractBackendController extends AbstractController imple
   public boolean stop() {
     // The application session can now be shared across async slave
     // controllers.
-    // if (applicationSession != null) {
-    // applicationSession.clear();
-    // }
-    if (getUserPreferencesStore() != null) {
-      getUserPreferencesStore().setStorePath(IPreferencesStore.GLOBAL_STORE);
-    }
-    if (sessionUnitOfWork != null) {
-      sessionUnitOfWork.clear();
-      sessionUnitOfWork.begin();
-    }
     if (unitOfWork != null) {
       unitOfWork.clear();
     }
-    if (workspaceConnectors != null) {
-      workspaceConnectors.clear();
+    if (masterController == null) {
+      if (applicationSession != null) {
+        applicationSession.clear();
+      }
+      if (getUserPreferencesStore() != null) {
+        getUserPreferencesStore().setStorePath(IPreferencesStore.GLOBAL_STORE);
+      }
+      if (sessionUnitOfWork != null) {
+        sessionUnitOfWork.clear();
+        sessionUnitOfWork.begin();
+      }
+      if (workspaceConnectors != null) {
+        workspaceConnectors.clear();
+      }
+      if (moduleConnectors != null) {
+        moduleConnectors.clear();
+      }
+      transferStructure = null;
+      cleanupControllerAsyncActionsThreadGroup();
     }
-    if (moduleConnectors != null) {
-      moduleConnectors.clear();
-    }
-    transferStructure = null;
-    cleanupControllerAsyncActionsThreadGroup();
     return true;
   }
 
@@ -1371,7 +1404,7 @@ public abstract class AbstractBackendController extends AbstractController imple
                 Collection<Object> snapshotCollection = null;
                 Object originalProperty = dirtyProperties.get(propertyName);
                 // Workaround bug #1148
-                if (originalProperty != null && originalProperty instanceof Collection<?>) {
+                if (originalProperty instanceof Collection<?>) {
                   snapshotCollection = (Collection<Object>) originalProperty;
                   Collection<Object> clonedSnapshotCollection = createTransientEntityCollection(snapshotCollection);
                   for (Object snapshotCollectionElement : snapshotCollection) {
@@ -1876,8 +1909,8 @@ public abstract class AbstractBackendController extends AbstractController imple
                 }
               } else if (propertyDescriptor.isModifiable() && !((Collection<?>) propertyValue).isEmpty()) {
                 if (((ICollectionPropertyDescriptor<?>) propertyDescriptor).getReverseRelationEnd() != null) {
-                  IPropertyDescriptor reversePropertyDescriptor = ((ICollectionPropertyDescriptor<?>)
-                      propertyDescriptor)
+                  IPropertyDescriptor reversePropertyDescriptor =
+                      ((ICollectionPropertyDescriptor<?>) propertyDescriptor)
                       .getReverseRelationEnd();
                   for (Object collectionElement : new ArrayList<>((Collection<?>) propertyValue)) {
                     if (collectionElement instanceof IComponent && !clearedEntities.contains(collectionElement)) {
@@ -1929,23 +1962,6 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   protected Object unwrapProxy(Object componentOrProxy) {
     return componentOrProxy;
-  }
-
-  /**
-   * Reload transient entity.
-   *
-   * @param entity
-   *     the entity
-   */
-  protected void reloadTransientEntity(final IEntity entity) {
-    getTransactionTemplate().execute(new TransactionCallbackWithoutResult() {
-      @Override
-      protected void doInTransactionWithoutResult(TransactionStatus status) {
-        IEntity entityClone = cloneInUnitOfWork(entity);
-        resetTransientEntity(entityClone);
-        merge(entityClone, EMergeMode.MERGE_EAGER);
-      }
-    });
   }
 
   /**
@@ -2428,11 +2444,7 @@ public abstract class AbstractBackendController extends AbstractController imple
       int activeCount = controllerAsyncActionsThreadGroup.activeCount();
       AsyncActionExecutor[] activeExecutors = new AsyncActionExecutor[activeCount];
       controllerAsyncActionsThreadGroup.enumerate(activeExecutors);
-
-      List<AsyncActionExecutor> asyncActionExecutors = Arrays.asList(activeExecutors);
-      Collections.reverse(asyncActionExecutors);
-
-      return new LinkedHashSet<>(asyncActionExecutors);
+      return new LinkedHashSet<>(Arrays.asList(activeExecutors));
     }
     return Collections.emptySet();
   }
@@ -2442,12 +2454,9 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   @Override
   public Set<AsyncActionExecutor> getCompletedExecutors() {
-
-    List<AsyncActionExecutor> completedExecutors = new ArrayList<>(asyncExecutors);
+    Set<AsyncActionExecutor> completedExecutors = new LinkedHashSet<>(asyncExecutors);
     completedExecutors.removeAll(getRunningExecutors());
-    Collections.reverse(completedExecutors);
-
-    return new LinkedHashSet<>(completedExecutors);
+    return completedExecutors;
   }
 
   /**
@@ -2504,8 +2513,7 @@ public abstract class AbstractBackendController extends AbstractController imple
    * @return a new entity registry.
    */
   protected IEntityRegistry createEntityRegistry(String name,
-                                                 Map<Class<? extends IEntity>, Map<Serializable, IEntity>>
-                                                     backingStore) {
+                                                 Map<Class<? extends IEntity>, Map<Serializable, IEntity>> backingStore) {
     return new BasicEntityRegistry(name, backingStore);
   }
 
@@ -2696,18 +2704,6 @@ public abstract class AbstractBackendController extends AbstractController imple
   }
 
   /**
-   * Resets a transient entity to its initial values.
-   *
-   * @param entity
-   *     the entity
-   */
-  protected void resetTransientEntity(IEntity entity) {
-    if (!entity.isPersistent()) {
-      getEntityFactory().resetTransientEntity(entity);
-    }
-  }
-
-  /**
    * Perform login boolean.
    *
    * @param username
@@ -2724,12 +2720,10 @@ public abstract class AbstractBackendController extends AbstractController imple
       subject = performJAASLogin(username, password);
     }
     if (subject == null) {
-      LOG.info("User {} failed to log in for session {}.", username,
-          getApplicationSession().getId());
+      LOG.info("User {} failed to log in for session {}.", username, getApplicationSession().getId());
       return false;
     }
-    LOG.info("User {} logged in  for session {}.", username,
-        getApplicationSession().getId());
+    LOG.info("User {} logged in  for session {}.", username, getApplicationSession().getId());
     loggedIn(subject);
     return true;
   }
