@@ -128,8 +128,8 @@ public abstract class AbstractBackendController extends AbstractController imple
 
   private static final Logger LOG = LoggerFactory.getLogger(AbstractBackendController.class);
   private final IEntityUnitOfWork                      unitOfWork;
-  private final IEntityUnitOfWork                      sessionUnitOfWork;
-  private final LRUMap                                 moduleConnectors;
+  private       IEntityUnitOfWork                      sessionUnitOfWork;
+  private       LRUMap                                 moduleConnectors;
   private final ISecurityContextBuilder                securityContextBuilder;
   private final Set<AsyncActionExecutor>               asyncExecutors;
   private       ThreadGroup                            asyncActionsThreadGroup;
@@ -495,6 +495,9 @@ public abstract class AbstractBackendController extends AbstractController imple
     slaveBackendController.start(getLocale(), getClientTimeZone());
     // Use the same application session
     slaveBackendController.setApplicationSession(getApplicationSession());
+    slaveBackendController.sessionUnitOfWork = sessionUnitOfWork;
+    slaveBackendController.workspaceConnectors = workspaceConnectors;
+    slaveBackendController.moduleConnectors = moduleConnectors;
     slaveBackendController.masterController = this;
     return slaveBackendController;
   }
@@ -729,8 +732,7 @@ public abstract class AbstractBackendController extends AbstractController imple
     }
     // we must rehash entries in case in case modules hashcode have changed and
     // still preserve LRU order.
-    Map<Module, IValueConnector> buff = new LinkedHashMap<>();
-    buff.putAll(moduleConnectors);
+    Map<Module, IValueConnector> buff = new LinkedHashMap<>(moduleConnectors);
     moduleConnectors.clear();
     moduleConnectors.putAll(buff);
     IValueConnector moduleConnector = (IValueConnector) moduleConnectors.get(module);
@@ -1182,27 +1184,29 @@ public abstract class AbstractBackendController extends AbstractController imple
   public boolean stop() {
     // The application session can now be shared across async slave
     // controllers.
-    // if (applicationSession != null) {
-    // applicationSession.clear();
-    // }
-    if (getUserPreferencesStore() != null) {
-      getUserPreferencesStore().setStorePath(IPreferencesStore.GLOBAL_STORE);
-    }
-    if (sessionUnitOfWork != null) {
-      sessionUnitOfWork.clear();
-      sessionUnitOfWork.begin();
-    }
     if (unitOfWork != null) {
       unitOfWork.clear();
     }
-    if (workspaceConnectors != null) {
-      workspaceConnectors.clear();
+    if (masterController == null) {
+      if (applicationSession != null) {
+        applicationSession.clear();
+      }
+      if (getUserPreferencesStore() != null) {
+        getUserPreferencesStore().setStorePath(IPreferencesStore.GLOBAL_STORE);
+      }
+      if (sessionUnitOfWork != null) {
+        sessionUnitOfWork.clear();
+        sessionUnitOfWork.begin();
+      }
+      if (workspaceConnectors != null) {
+        workspaceConnectors.clear();
+      }
+      if (moduleConnectors != null) {
+        moduleConnectors.clear();
+      }
+      transferStructure = null;
+      cleanupControllerAsyncActionsThreadGroup();
     }
-    if (moduleConnectors != null) {
-      moduleConnectors.clear();
-    }
-    transferStructure = null;
-    cleanupControllerAsyncActionsThreadGroup();
     return true;
   }
 
@@ -1403,7 +1407,7 @@ public abstract class AbstractBackendController extends AbstractController imple
                 Collection<Object> snapshotCollection = null;
                 Object originalProperty = dirtyProperties.get(propertyName);
                 // Workaround bug #1148
-                if (originalProperty != null && originalProperty instanceof Collection<?>) {
+                if (originalProperty instanceof Collection<?>) {
                   snapshotCollection = (Collection<Object>) originalProperty;
                   Collection<Object> clonedSnapshotCollection = createTransientEntityCollection(snapshotCollection);
                   for (Object snapshotCollectionElement : snapshotCollection) {
