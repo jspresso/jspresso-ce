@@ -2453,7 +2453,7 @@ public abstract class AbstractComponentInvocationHandler implements InvocationHa
             }
           }
           // for ui notification
-          for (String trackedProperty : trackedProperties) {
+          for (String trackedProperty : new ArrayList<>(this.trackedProperties)) {
             if (trackedProperty.equals(evtPropertyName)) {
               if (!(evtOldValue instanceof IComponent) // FAKE OLD COMPONENT VALUE
                   || AbstractComponentInvocationHandler.this.isInitialized(evtOldValue)
