@@ -78,12 +78,12 @@ public class BasicEntityRegistry implements IEntityRegistry {
     }
     if (registeredEntity == null) {
       // we may try subclasses / superclasses
-      for (Map.Entry<Class<? extends IEntity>, Map<Serializable, IEntity>> suberclassContractStore : backingStore
+      for (Map.Entry<Class<? extends IEntity>, Map<Serializable, IEntity>> superClassContractStore : backingStore
           .entrySet()) {
-        Class<? extends IEntity> suberClass = suberclassContractStore.getKey();
-        if (suberClass != entityContract && (entityContract.isAssignableFrom(suberClass) || suberClass.isAssignableFrom(
+        Class<? extends IEntity> superClass = superClassContractStore.getKey();
+        if (superClass != entityContract && (entityContract.isAssignableFrom(superClass) || superClass.isAssignableFrom(
             entityContract))) {
-          contractStore = suberclassContractStore.getValue();
+          contractStore = superClassContractStore.getValue();
           if (contractStore != null) {
             registeredEntity = contractStore.get(id);
             if (registeredEntity == null) {

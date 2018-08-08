@@ -115,7 +115,7 @@ public class HibernateBackendController extends AbstractBackendController {
       // prevent detach/attach entities that were previously in the UOW for performance reasons.
       // see bug jspresso-ce-#103
       if (uowEntity != null && uowEntityRegistry.get(getComponentContract(uowEntity), uowEntity.getId()) == null) {
-        detachFromHibernateInDepth(uowEntity, getHibernateSession(), alreadyDetached);
+        detachFromHibernate(uowEntity, getHibernateSession(), alreadyDetached);
         lockInHibernateInDepth(uowEntity, getHibernateSession(), alreadyLocked);
       }
     }
@@ -358,7 +358,7 @@ public class HibernateBackendController extends AbstractBackendController {
       IEntityRegistry alreadyDetached = createEntityRegistry("detachFromHibernateInDepth");
       if (componentOrEntity instanceof IEntity) {
         if (((IEntity) componentOrEntity).isPersistent()) {
-          detachFromHibernateInDepth(componentOrEntity, hibernateSession, alreadyDetached);
+          detachFromHibernate(componentOrEntity, hibernateSession, alreadyDetached);
           lockInHibernate((IEntity) componentOrEntity, hibernateSession);
         } else if (IEntity.DELETED_VERSION.equals(((IEntity) componentOrEntity).getVersion())) {
           LOG.error("Trying to initialize a property ({}) on a deleted object ({} : {}).", propertyName,
@@ -367,12 +367,12 @@ public class HibernateBackendController extends AbstractBackendController {
               "Trying to initialize a property (" + propertyName + ") on a deleted object (" + componentOrEntity
                   .getComponentContract().getName() + " : " + componentOrEntity + ")");
         } else if (propertyValue instanceof IEntity) {
-          detachFromHibernateInDepth((IEntity) propertyValue, hibernateSession, alreadyDetached);
+          detachFromHibernate((IEntity) propertyValue, hibernateSession, alreadyDetached);
           lockInHibernate((IEntity) propertyValue, hibernateSession);
         }
       } else if (propertyValue instanceof IEntity) {
         // to handle initialization of component properties.
-        detachFromHibernateInDepth((IEntity) propertyValue, hibernateSession, alreadyDetached);
+        detachFromHibernate((IEntity) propertyValue, hibernateSession, alreadyDetached);
         lockInHibernate((IEntity) propertyValue, hibernateSession);
       }
 
@@ -675,8 +675,12 @@ public class HibernateBackendController extends AbstractBackendController {
   }
 
   @SuppressWarnings("unchecked")
-  void detachFromHibernateInDepth(IComponent component, Session hibernateSession, IEntityRegistry alreadyDetached) {
-    if (component == null) {
+  void detachFromHibernate(IComponent component, Session hibernateSession, IEntityRegistry alreadyDetached) {
+    detachFromHibernate(component, hibernateSession, alreadyDetached, true);
+  }
+
+  void detachFromHibernate(IComponent component, Session hibernateSession, IEntityRegistry alreadyDetached, boolean recursive){
+      if (component == null) {
       return;
     }
     boolean isEntity = component instanceof IEntity;
@@ -696,13 +700,17 @@ public class HibernateBackendController extends AbstractBackendController {
         for (Map.Entry<String, Object> property : properties.entrySet()) {
           Object propertyValue = property.getValue();
           if (propertyValue instanceof IComponent) {
-            detachFromHibernateInDepth((IComponent) propertyValue, hibernateSession, alreadyDetached);
+            if (recursive || !(propertyValue instanceof IEntity)) {
+              detachFromHibernate((IComponent) propertyValue, hibernateSession, alreadyDetached, recursive);
+            }
           } else if (propertyValue instanceof PersistentCollection) {
             HibernateHelper.unsetCollectionHibernateSession((PersistentCollection) propertyValue, hibernateSession);
-            if (propertyValue instanceof Collection<?> && isInitialized(propertyValue)) {
-              for (Object element : ((Collection<?>) propertyValue)) {
-                if (element instanceof IComponent) {
-                  detachFromHibernateInDepth((IComponent) element, hibernateSession, alreadyDetached);
+            if (recursive) {
+              if (propertyValue instanceof Collection<?> && isInitialized(propertyValue)) {
+                for (Object element : ((Collection<?>) propertyValue)) {
+                  if (element instanceof IComponent) {
+                    detachFromHibernate((IComponent) element, hibernateSession, alreadyDetached, recursive);
+                  }
                 }
               }
             }

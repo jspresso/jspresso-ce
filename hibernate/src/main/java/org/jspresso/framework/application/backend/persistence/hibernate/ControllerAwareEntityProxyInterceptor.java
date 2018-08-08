@@ -139,9 +139,9 @@ public class ControllerAwareEntityProxyInterceptor extends EntityProxyIntercepto
     if (registeredEntity != null && !registeredEntity.isPersistent()) {
       registeredEntity = null;
     }
-    ((HibernateBackendController) getBackendController()).detachFromHibernateInDepth(registeredEntity,
+    ((HibernateBackendController) getBackendController()).detachFromHibernate(registeredEntity,
         ((HibernateBackendController) getBackendController()).getHibernateSession(), new HibernateEntityRegistry(
-            "detachFromHibernateInDepth"));
+            "detachFromHibernateInDepth"), false);
     return registeredEntity;
   }
 
