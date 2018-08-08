@@ -1217,7 +1217,11 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         if (this.isFixedWidth(rComponent)) {
           row.add(component);
         } else {
-          component.addCssClass("jspresso-form-element-grow-aside");
+          if (remoteForm.getLabelsPosition() == "ASIDE") {
+            component.addCssClass("jspresso-form-element-grow-aside");
+          } else {
+            component.addCssClass("jspresso-form-element-grow-100");
+          }
           row.add(component, {flex: 1});
         }
         if (this.isMultiline(rComponent)) {
