@@ -37,11 +37,11 @@
 }
 
 .jspresso-form-element-grow-aside {
-  width: 65%;
+  width: 65% !important;
 }
 
-.text-field.jspresso-form-element-grow-aside, .number-field.jspresso-form-element-grow-aside, .password-field.jspresso-form-element-grow-aside {
-  width: 65%;
+.jspresso-form-element-grow-100 {
+  width: 100% !important;
 }
 
 .jspresso-color-field {
