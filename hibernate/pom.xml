@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.jspresso.framework</groupId>
     <artifactId>jspresso-root</artifactId>
-    <version>5.4.1-SNAPSHOT</version>
+    <version>5.4.1</version>
     <relativePath>../root/pom.xml</relativePath>
   </parent>
   <artifactId>jspresso-hibernate</artifactId>
