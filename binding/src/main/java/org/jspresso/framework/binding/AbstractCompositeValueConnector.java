@@ -192,6 +192,9 @@ public abstract class AbstractCompositeValueConnector extends
     Icon icon;
     if (iconImageURLProvider != null) {
       icon = iconImageURLProvider.getIconForObject(getConnectorValue());
+      if (icon == null) {
+        return displayIcon;
+      }
     } else {
       icon = displayIcon;
     }
@@ -211,15 +214,8 @@ public abstract class AbstractCompositeValueConnector extends
       if (renderingConnector.getConnectorValue() != null) {
         return renderingConnector.getConnectorValue().toString();
       }
-      return null;
+      return displayValue;
     }
-    // if (displayValue != null) {
-    // return displayValue;
-    // }
-    // Object value = getConnectorValue();
-    // if (value != null) {
-    // return value.toString();
-    // }
     return displayValue;
   }
 

@@ -3462,9 +3462,9 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
                                                    ITreeViewDescriptor viewDescriptor,
                                                    IViewDescriptor treeLevelDescriptor, IActionHandler actionHandler,
                                                    Locale locale) {
-    // nodeGroupPrototypeConnector.setDisplayValue(treeLevelDescriptor.getI18nName(actionHandler, locale));
-    // nodeGroupPrototypeConnector.setDisplayDescription(treeLevelDescriptor.getI18nDescription(actionHandler, locale));
-    // nodeGroupPrototypeConnector.setDisplayIcon(treeLevelDescriptor.getIcon());
+    nodeGroupPrototypeConnector.setDisplayValue(treeLevelDescriptor.getI18nName(actionHandler, locale));
+    nodeGroupPrototypeConnector.setDisplayDescription(treeLevelDescriptor.getI18nDescription(actionHandler, locale));
+    nodeGroupPrototypeConnector.setDisplayIcon(treeLevelDescriptor.getIcon());
     nodeGroupPrototypeConnector.setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
     nodeGroupPrototypeConnector.addValueChangeListener(new TreeConnectorSyncer(actionHandler, locale));
   }
@@ -3483,6 +3483,10 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     public void valueChange(ValueChangeEvent evt) {
       AbstractCompositeValueConnector connector = (AbstractCompositeValueConnector) evt.getSource();
       Object newValue = evt.getNewValue();
+      syncTreeLevelConnectorDisplayValues(connector, newValue);
+    }
+
+    protected void syncTreeLevelConnectorDisplayValues(AbstractCompositeValueConnector connector, Object newValue) {
       if (newValue instanceof IDescriptor) {
         connector.setDisplayValue(((IDescriptor) newValue).getI18nName(actionHandler, locale));
         connector.setDisplayDescription(((IDescriptor) newValue).getI18nDescription(actionHandler, locale));
