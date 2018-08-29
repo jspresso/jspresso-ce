@@ -47,7 +47,7 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
         },
 
         "atom/label": {
-          base: true,
+          include: "label",
           style: function (states) {
             return {
               textColor: undefined
