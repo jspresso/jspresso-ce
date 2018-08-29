@@ -143,7 +143,9 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
     filteredMap.remove("parent");
     Map<String, Object> encodedMap = new HashMap();
     for (Map.Entry<String, Object> entry : filteredMap.entrySet()) {
-      encodedMap.put(encode(entry.getKey()), entry.getValue());
+      if (entry.getValue() != null) {
+        encodedMap.put(encode(entry.getKey()), entry.getValue());
+      }
     }
     return encodedMap;
   }

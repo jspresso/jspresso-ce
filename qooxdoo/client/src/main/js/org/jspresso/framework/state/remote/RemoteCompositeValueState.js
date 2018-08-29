@@ -22,6 +22,7 @@ qx.Class.define("org.jspresso.framework.state.remote.RemoteCompositeValueState",
 
   construct: function () {
     this.base(arguments);
+    this.setChildren(null);
   },
 
   statics: {
