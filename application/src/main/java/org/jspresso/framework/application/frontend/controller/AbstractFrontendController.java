@@ -1336,8 +1336,9 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
    */
   protected void clearImplicitLogin(String username) {
     if (!SecurityHelper.ANONYMOUS_USER_NAME.equals(username)) {
-      removeClientPreference(UP_KEY);
       removeUserPreference(getGlobalUserPreferenceGuidKey(username));
+      // Just login should be remembered
+      rememberLogin(username, null);
     } else {
       UsernamePasswordHandler uph = getLoginCallbackHandler();
       uph.clear();
@@ -2209,8 +2210,10 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
       buff.append(username);
     }
     buff.append(UP_SEP);
-    buff.append(loginGuid);
-    putUserPreference(getGlobalUserPreferenceGuidKey(username), loginGuid);
+    if (password != null) {
+      buff.append(loginGuid);
+      putUserPreference(getGlobalUserPreferenceGuidKey(username), loginGuid);
+    }
     return buff.toString();
   }
 
