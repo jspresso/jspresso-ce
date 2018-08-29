@@ -915,6 +915,9 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       var drawer = this._popupDrawer("bottom", downloadButton);
       drawer.setHideOnBack(true);
       drawer.setHideOnParentTap(true);
+      downloadButton.addListener("tap", function (e) {
+        drawer.hide();
+      }, this);
     },
 
     /**
