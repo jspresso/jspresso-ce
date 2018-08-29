@@ -1311,8 +1311,9 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
    */
   @Override
   public boolean stop() {
+    String username = getApplicationSession().getUsername();
     if (getApplicationSession().getPrincipal() != null) {
-      LOG.info("User {} logged out for session {}.", getApplicationSession().getUsername(),
+      LOG.info("User {} logged out for session {}.", username,
           getApplicationSession().getId());
     }
     selectedModules.clear();
@@ -1326,25 +1327,21 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
     loginCallbackHandler = null;
     getBackendController().removeDirtInterceptor(dirtInterceptor);
     started = !getBackendController().stop();
-    clearImplicitLogin();
+    clearImplicitLogin(username);
     return !started;
   }
 
   /**
    * Clear implicit principal, i.e. SSO principal or "remember me" login.
    */
-  protected void clearImplicitLogin() {
-    String username = getApplicationSession().getUsername();
+  protected void clearImplicitLogin(String username) {
     if (!SecurityHelper.ANONYMOUS_USER_NAME.equals(username)) {
-      if (getClientPreference(UP_KEY) != null) {
-        // reset get through pass
-        rememberLogin(username, null);
-      }
+      removeClientPreference(UP_KEY);
+      removeUserPreference(getGlobalUserPreferenceGuidKey(username));
     } else {
       UsernamePasswordHandler uph = getLoginCallbackHandler();
       uph.clear();
     }
-    removeUserPreference(UP_GUID);
   }
 
   /**
@@ -2212,9 +2209,7 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
       buff.append(username);
     }
     buff.append(UP_SEP);
-    if (password != null) {
-      buff.append(loginGuid);
-    }
+    buff.append(loginGuid);
     putUserPreference(getGlobalUserPreferenceGuidKey(username), loginGuid);
     return buff.toString();
   }

@@ -177,7 +177,7 @@ public class JdbcPreferencesStore implements IPreferencesStore {
       if (defaultRestrictions != null && defaultRestrictions.size() > 0) {
         restrictionsValues = new String[defaultRestrictions.size() + 2];
         restrictionsTypes = new int[defaultRestrictions.size() + 2];
-        int i = 1;
+        int i = 2;
         for (Map.Entry<String, String> restriction : defaultRestrictions
             .entrySet()) {
           restrictionsValues[i] = restriction.getValue();
