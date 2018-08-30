@@ -861,6 +861,18 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
         .getCollectionDescriptor().getElementDescriptor();
     String propertyName = columnDescriptor.getModelDescriptor().getName();
     String identifier = propertyName;
+    int dups = 0;
+    for (IPropertyViewDescriptor previousColumnDescritor : viewDescriptor.getColumnViewDescriptors()) {
+      if (previousColumnDescritor == columnDescriptor) {
+        break;
+      }
+      if (identifier.equals(previousColumnDescritor.getModelDescriptor().getName())) {
+        dups++;
+      }
+    }
+    if (dups > 0) {
+      identifier += ("_" + dups);
+    }
     String renderedProperty = computeRenderedProperty(columnDescriptor);
     if (renderedProperty != null) {
       // for ref sorting to occur properly.
