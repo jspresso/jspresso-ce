@@ -2461,7 +2461,7 @@ public abstract class AbstractComponentInvocationHandler implements InvocationHa
                 doFirePropertyChange(source, referencePropertyName + IAccessor.NESTED_DELIM + trackedProperty,
                     evtOldValue, evtNewValue);
               }
-            } else if (trackedProperty.startsWith(evtPropertyName)) {
+            } else if (trackedProperty.startsWith(evtPropertyName + IAccessor.NESTED_DELIM)) {
               String remainderProperty = trackedProperty.substring(evtPropertyName.length() + 1);
               if (remainderProperty.indexOf(IAccessor.NESTED_DELIM) >= 0) {
                 // If the remainder is a nested property, we have to take
