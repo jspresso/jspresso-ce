@@ -866,7 +866,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
 
         RemoteSelectionCommand selectionCommand = new RemoteSelectionCommand();
         selectionCommand.setTargetPeerGuid(rTab.getGuid());
-        selectionCommand.setLeadingIndex(index);
+        selectionCommand.setLeadingIndex(rTab.translateExcludingHiddenChildren(index));
         getRemoteCommandHandler().registerCommand(selectionCommand);
       }
     }

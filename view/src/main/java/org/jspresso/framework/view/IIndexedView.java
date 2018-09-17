@@ -55,4 +55,20 @@ public interface IIndexedView<E> extends ICompositeView<E> {
    *          the currently displayed view.
    */
   void setCurrentViewIndex(int index);
+
+  /**
+   * translates an index including hidden children.
+   *
+   * @param index
+   *     the currently displayed view.
+   */
+  int translateIncludingHiddenChildren(int index);
+
+  /**
+   * translates an index excluding hidden children.
+   *
+   * @param index
+   *     the currently displayed view.
+   */
+  int translateExcludingHiddenChildren(int index);
 }

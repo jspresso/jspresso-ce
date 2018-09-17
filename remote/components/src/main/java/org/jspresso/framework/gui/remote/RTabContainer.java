@@ -143,4 +143,38 @@ public class RTabContainer extends RContainer {
   public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
     propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
   }
+
+  /**
+   * translates an index including hidden children.
+   *
+   * @param index
+   *     the currently displayed view.
+   */
+  public int translateIncludingHiddenChildren(int index) {
+    RComponent[] tabs = getTabs();
+    int indexWithHidden = index;
+    for (int i = 0; i < indexWithHidden; i++) {
+      if (!tabs[i].getState().isReadable()) {
+        indexWithHidden++;
+      }
+    }
+    return indexWithHidden;
+  }
+
+  /**
+   * translates an index excluding hidden children.
+   *
+   * @param index
+   *     the currently displayed view.
+   */
+  public int translateExcludingHiddenChildren(int index) {
+    RComponent[] tabs = getTabs();
+    int indexWithoutHidden = index;
+    for (int i = 0; i < index; i++) {
+      if (!tabs[i].getState().isReadable()) {
+        indexWithoutHidden--;
+      }
+    }
+    return indexWithoutHidden;
+  }
 }

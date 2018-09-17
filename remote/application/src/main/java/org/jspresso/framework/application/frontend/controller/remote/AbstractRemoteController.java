@@ -451,8 +451,10 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
           }
         }
       } else if (command instanceof RemoteSelectionCommand) {
+        int leadingIndex = ((RemoteSelectionCommand) command).getLeadingIndex();
         if (targetPeer instanceof RTabContainer) {
-          ((RTabContainer) targetPeer).setSelectedIndex(((RemoteSelectionCommand) command).getLeadingIndex());
+          RTabContainer tabContainer = (RTabContainer) targetPeer;
+          tabContainer.setSelectedIndex(tabContainer.translateIncludingHiddenChildren(leadingIndex));
         } else {
           ISelectable selectable = null;
           if (targetPeer instanceof ICollectionConnectorProvider) {
@@ -462,7 +464,7 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
           }
           if (selectable != null) {
             selectable.setSelectedIndices(((RemoteSelectionCommand) command).getSelectedIndices(),
-                ((RemoteSelectionCommand) command).getLeadingIndex());
+                leadingIndex);
           }
         }
       } else if (command instanceof RemoteActionCommand) {
