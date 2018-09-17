@@ -18,9 +18,44 @@
  */
 package org.jspresso.framework.application.backend;
 
+import java.beans.PropertyChangeListener;
+import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.IdentityHashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.TimeZone;
+
+import javax.security.auth.Subject;
+
 import org.apache.commons.collections4.map.LRUMap;
 import org.apache.commons.lang3.LocaleUtils;
-import org.jspresso.framework.action.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.helpers.MessageFormatter;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionCallbackWithoutResult;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
+import org.springframework.transaction.support.TransactionTemplate;
+
+import org.jspresso.framework.action.ActionBusinessException;
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.ActionException;
+import org.jspresso.framework.action.IAction;
+import org.jspresso.framework.action.IActionMonitoringPlugin;
 import org.jspresso.framework.application.AbstractController;
 import org.jspresso.framework.application.backend.action.Asynchronous;
 import org.jspresso.framework.application.backend.action.Transactional;
@@ -44,30 +79,25 @@ import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IComponentCollectionFactory;
 import org.jspresso.framework.model.component.ILifecycleCapable;
 import org.jspresso.framework.model.datatransfer.ComponentTransferStructure;
-import org.jspresso.framework.model.descriptor.*;
+import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityCloneFactory;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityRegistry;
 import org.jspresso.framework.model.entity.basic.BasicEntityRegistry;
-import org.jspresso.framework.security.*;
+import org.jspresso.framework.security.ISecurable;
+import org.jspresso.framework.security.ISecurityContextBuilder;
+import org.jspresso.framework.security.SecurityHelper;
+import org.jspresso.framework.security.UserPrincipal;
+import org.jspresso.framework.security.UsernamePasswordHandler;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.preferences.IPreferencesStore;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
-import org.springframework.transaction.support.TransactionTemplate;
-
-import javax.security.auth.Subject;
-import java.beans.PropertyChangeListener;
-import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
-import java.text.NumberFormat;
-import java.util.*;
 
 /**
  * Base class for backend application controllers. Backend controllers are
@@ -894,13 +924,15 @@ public abstract class AbstractBackendController extends AbstractController imple
     if (isUnitOfWorkActive()) {
       Map<String, Object> hasActuallyBeenFlushed = getDirtyProperties(flushedEntity, false);
       if (hasActuallyBeenFlushed == null) {
-        LOG.error("*BAD UOW USAGE* You are flushing an entity ({})[{}] that you have not cloned before in the UOW.\n"
+        String message = MessageFormatter.arrayFormat(
+            "*BAD UOW USAGE* You are flushing an entity ({})[{}] that you have not cloned before in the UOW.\n"
                 + "You should only work on entities copies you obtain using the "
                 + "backendController.cloneInUnitOfWork(...) method.",
-            new Object[]{flushedEntity, flushedEntity.getComponentContract().getSimpleName()});
+            new Object[]{flushedEntity, flushedEntity.getComponentContract().getSimpleName()}).getMessage();
+        LOG.error(message);
         throw new BackendException(
-            "An entity has been flushed to the persistent store without being first registered" + " in the UOW : "
-                + flushedEntity);
+            "An entity has been flushed to the persistent store without being first registered" + " in the UOW :\n"
+                + message);
       }
       unitOfWork.clearDirtyState(flushedEntity);
       if (isEntityRegisteredForDeletion(flushedEntity)) {
@@ -1690,15 +1722,16 @@ public abstract class AbstractBackendController extends AbstractController imple
   private <E extends IEntity> void checkBadMergeUsage(E entity) {
     if (isUnitOfWorkActive()) {
       if (isInitialized(entity) && entity.isPersistent() && isDirty(entity)) {
-        LOG.error(
+        String message = MessageFormatter.arrayFormat(
             "*BAD MERGE USAGE* An attempt is made to merge a UOW dirty entity ({})[{}] to the application session.\n"
                 + "This will break transaction isolation since, if the transaction is rolled back,"
                 + " the UOW dirty state will be kept.\n"
-                + "Dirty UOW entities will be automatically merged whenever the transaction is committed.", entity,
-            getComponentContract(entity).getSimpleName());
+                + "Dirty UOW entities will be automatically merged whenever the transaction is committed.",
+            new Object[]{entity, getComponentContract(entity).getSimpleName()}).getMessage();
+        LOG.error(message);
         if (isThrowExceptionOnBadUsage()) {
           throw new BackendException("A bad usage has been detected on the backend controller."
-              + "This is certainly an application coding problem. Please check the logs.");
+              + "This is certainly an application coding problem:\n" + message);
         }
       }
     }
@@ -2300,58 +2333,66 @@ public abstract class AbstractBackendController extends AbstractController imple
       if (targetEntity != null && objectEquals(targetEntity, sessionTargetEntity)) {
         // We are modifying on a session entity inside a unit of work. This is
         // not legal.
-        LOG.error("*BAD UOW USAGE* You are modifying a session registered entity ({})[{}] inside an ongoing UOW.\n"
+        String message = MessageFormatter.arrayFormat(
+            "*BAD UOW USAGE* You are modifying a session registered entity ({})[{}] inside an ongoing UOW.\n"
                 + "You should only work on entities copies you obtain using the "
-                + "backendController.cloneInUnitOfWork(...) method.\n" + "The property being modified is [{}].",
-            targetEntity, getComponentContract(targetEntity).getSimpleName(), propertyDescriptor.getName());
+                + "backendController.cloneInUnitOfWork(...) method.\nThe property being modified is [{}].",
+            new Object[]{targetEntity, getComponentContract(targetEntity).getSimpleName(),
+                         propertyDescriptor.getName()}).getMessage();
+        LOG.error(message);
         if (isThrowExceptionOnBadUsage()) {
           throw new BackendException(
-              "An invalid modification on a session entity has been detected while having an active Unit of Work. "
-                  + "Please check the logs.");
+              "An invalid modification on a session entity has been detected while having an active Unit of Work:\n"
+                  + message);
         }
       }
       if (paramEntity != null && objectEquals(paramEntity, sessionParamEntity)) {
         // We are linking an entity with a session entity inside a unit of work.
         // This is not legal.
-        LOG.error(
+        String message = MessageFormatter.arrayFormat(
             "*BAD UOW USAGE* You are linking an entity ({})[{}] with a session entity ({})[{}] inside an ongoing UOW.\n"
                 + "You should only work on entities copies you obtain using the "
-                + "backendController.cloneInUnitOfWork(...) method\n" + "The property being modified is [{}].", target,
-            targetClass.getSimpleName(), paramEntity, getComponentContract(paramEntity).getSimpleName(),
-            propertyDescriptor.getName());
+                + "backendController.cloneInUnitOfWork(...) method\n" + "The property being modified is [{}].",
+            new Object[]{target, targetClass.getSimpleName(), paramEntity, getComponentContract(
+                paramEntity).getSimpleName(), propertyDescriptor.getName()}).getMessage();
+        LOG.error(message);
         if (isThrowExceptionOnBadUsage()) {
           throw new BackendException(
-              "An invalid usage of a session entity has been detected while having an active Unit of Work. "
-                  + "Please check the logs.");
+              "An invalid usage of a session entity has been detected while having an active Unit of Work:\n"
+                  + message);
         }
       }
     } else {
       if (targetEntity != null && !objectEquals(targetEntity, sessionTargetEntity)) {
         // We are working on an entity that has not been registered in the
         // session. This is not legal.
-        LOG.error("*BAD SESSION USAGE* You are modifying an entity ({})[{}] that has not been previously merged in the "
-                + "session.\n" + "You should 1st merge your entities in the session by using the "
-                + "backendController.merge(...) method.\n" + "The property being modified is [{}].", targetEntity,
-            getComponentContract(targetEntity).getSimpleName(), propertyDescriptor.getName());
+        String message = MessageFormatter.format(
+            "*BAD SESSION USAGE* You are modifying an entity ({})[{}] that has not been previously merged in the "
+                + "session.\nYou should 1st merge your entities in the session by using the "
+                + "backendController.merge(...) method.\nThe property being modified is [{}].",
+            new Object[]{targetEntity, getComponentContract(targetEntity).getSimpleName(),
+                         propertyDescriptor.getName()}).getMessage();
+        LOG.error(message);
         if (isThrowExceptionOnBadUsage()) {
           throw new BackendException(
               "An invalid modification of an entity that was not previously registered in the session has been "
-                  + "detected. " + "Please check the logs.");
+                  + "detected:\n" + message);
         }
       }
       if (paramEntity != null && !objectEquals(paramEntity, sessionParamEntity)) {
         // We are linking an entity with another one that has not been
         // registered in the session. This is not legal.
-        LOG.error("*BAD SESSION USAGE* You are linking an entity ({})[{}] with another one ({})[{}] "
-                + "that has not been previously merged in the session.\n"
-                + "You should 1st merge your entities in the session by using the "
-                + "backendController.merge(...) method.\n" + "The property being modified is [{}].", target,
-            targetClass.getSimpleName(), paramEntity, getComponentContract(paramEntity).getSimpleName(),
-            propertyDescriptor.getName());
+        String message = MessageFormatter.format(
+            "*BAD SESSION USAGE* You are linking an entity ({})[{}] with another one ({})[{}] "
+                + "that has not been previously merged in the session.\nYou should 1st merge your entities in the "
+                + "session by using the backendController.merge(...) method.\nThe property being modified is [{}].",
+            new Object[]{target, targetClass.getSimpleName(), paramEntity, getComponentContract(
+                paramEntity).getSimpleName(), propertyDescriptor.getName()}).getMessage();
+        LOG.error(message);
         if (isThrowExceptionOnBadUsage()) {
           throw new BackendException(
-              "An invalid usage of an entity that was not previously registered in the session has been detected. "
-                  + "Please check the logs.");
+              "An invalid usage of an entity that was not previously registered in the session has been detected:\n"
+                  + message);
         }
       }
     }
