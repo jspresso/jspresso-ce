@@ -1362,6 +1362,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
     createButton: function (label, toolTip, icon) {
       var button = new qx.ui.form.Button();
       this._completeButton(button, label, toolTip, icon);
+      button.setAllowGrowX(false);
+      button.setAllowGrowY(false);
       return button;
     },
 
@@ -2155,18 +2157,22 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       borderContainer.setLayout(borderLayout);
       if (remoteBorderContainer.getNorth()) {
         var child = this.createComponent(remoteBorderContainer.getNorth());
+        child.setAlignX("center");
         borderContainer.add(child, {
           edge: "north"
         });
       }
       if (remoteBorderContainer.getWest()) {
         var child = this.createComponent(remoteBorderContainer.getWest());
+        child.setAlignY("middle");
         borderContainer.add(child, {
           edge: "west"
         });
       }
       if (remoteBorderContainer.getCenter()) {
         var child = this.createComponent(remoteBorderContainer.getCenter());
+        child.setAlignX("center");
+        child.setAlignY("middle");
         borderContainer.add(child, {
           edge: "center",
           flex: 1
@@ -2174,11 +2180,13 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       }
       if (remoteBorderContainer.getEast()) {
         var child = this.createComponent(remoteBorderContainer.getEast());
+        child.setAlignY("middle");
         borderContainer.add(child, {
           edge: "east"
         });
       }
       if (remoteBorderContainer.getSouth()) {
+        child.setAlignX("center");
         var child = this.createComponent(remoteBorderContainer.getSouth());
         borderContainer.add(child, {
           edge: "south"
