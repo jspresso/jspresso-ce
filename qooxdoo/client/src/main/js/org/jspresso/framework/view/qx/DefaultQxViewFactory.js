@@ -633,6 +633,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         /** @type {org.jspresso.framework.util.gui.CellConstraints} */
         var cellConstraint = remoteConstrainedGridContainer.getCellConstraints()[i];
         var cellComponent = this.createComponent(remoteConstrainedGridContainer.getCells()[i]);
+        cellComponent.setAllowStretchX(cellConstraint.getWidthResizable());
+        cellComponent.setAllowStretchY(cellConstraint.getHeightResizable());
+        cellComponent.setAlignX("left");
+        cellComponent.setAlignY("middle");
         constrainedGridContainer.add(cellComponent, {
           row: cellConstraint.getRow(),
           rowSpan: cellConstraint.getHeight(),
@@ -1361,6 +1365,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      */
     createButton: function (label, toolTip, icon) {
       var button = new qx.ui.form.Button();
+      button.setCenter(false);
       this._completeButton(button, label, toolTip, icon);
       button.setAllowGrowX(false);
       button.setAllowGrowY(false);
@@ -2158,12 +2163,14 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       if (remoteBorderContainer.getNorth()) {
         var child = this.createComponent(remoteBorderContainer.getNorth());
         child.setAlignX("center");
+        child.setAlignY("middle");
         borderContainer.add(child, {
           edge: "north"
         });
       }
       if (remoteBorderContainer.getWest()) {
         var child = this.createComponent(remoteBorderContainer.getWest());
+        child.setAlignX("center");
         child.setAlignY("middle");
         borderContainer.add(child, {
           edge: "west"
@@ -2180,6 +2187,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       }
       if (remoteBorderContainer.getEast()) {
         var child = this.createComponent(remoteBorderContainer.getEast());
+        child.setAlignX("center");
         child.setAlignY("middle");
         borderContainer.add(child, {
           edge: "east"
@@ -2187,6 +2195,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       }
       if (remoteBorderContainer.getSouth()) {
         child.setAlignX("center");
+        child.setAlignY("middle");
         var child = this.createComponent(remoteBorderContainer.getSouth());
         borderContainer.add(child, {
           edge: "south"
