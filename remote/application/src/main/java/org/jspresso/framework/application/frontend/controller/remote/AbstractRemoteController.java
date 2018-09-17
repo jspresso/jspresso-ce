@@ -87,6 +87,7 @@ import org.jspresso.framework.gui.remote.RTabContainer;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
 import org.jspresso.framework.state.remote.RemoteValueState;
+import org.jspresso.framework.util.bean.PropertyHelper;
 import org.jspresso.framework.util.collection.ESort;
 import org.jspresso.framework.util.event.ISelectable;
 import org.jspresso.framework.util.gui.Dimension;
@@ -486,7 +487,8 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
         Map<String, ESort> typedOrderingProperties = new LinkedHashMap<>();
         if (orderingProperties != null) {
           for (Map.Entry<String, String> orderingProperty : orderingProperties.entrySet()) {
-            typedOrderingProperties.put(orderingProperty.getKey(), ESort.valueOf(orderingProperty.getValue()));
+            typedOrderingProperties.put(PropertyHelper.cleanupPropertyName(orderingProperty.getKey()),
+                ESort.valueOf(orderingProperty.getValue()));
           }
         }
         Map<String, Object> context = new HashMap<>();

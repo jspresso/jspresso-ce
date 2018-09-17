@@ -38,6 +38,16 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
  */
 public final class PropertyHelper {
 
+  /**
+   * The constant COL_ID_DEDUP_SEP is &quot;!&quot;.
+   */
+  public static final String COL_ID_DEDUP_SEP         = "%";
+  /**
+   * The constant COL_ID_UNSORTABLE_PREFIX is &quot;#&quot;.
+   */
+  public static final String COL_ID_UNSORTABLE_PREFIX = "#";
+
+
   private PropertyHelper() {
     // Just here to prevent direct instantiation.
   }
@@ -48,56 +58,51 @@ public final class PropertyHelper {
    * processed.
    *
    * @param beanClass
-   *          the class to get the property descriptor of.
+   *     the class to get the property descriptor of.
    * @param property
-   *          the property to be searched for its descriptor.
+   *     the property to be searched for its descriptor.
    * @return the property descriptor found.
    */
-  public static PropertyDescriptor getPropertyDescriptor(Class<?> beanClass,
-      String property) {
-    PropertyDescriptor descriptor = getPropertyDescriptorNoException(beanClass,
-        property);
+  public static PropertyDescriptor getPropertyDescriptor(Class<?> beanClass, String property) {
+    PropertyDescriptor descriptor = getPropertyDescriptorNoException(beanClass, property);
     if (descriptor == null) {
-      throw new MissingPropertyException("Missing property " + property
-          + " for bean class " + beanClass);
+      throw new MissingPropertyException("Missing property " + property + " for bean class " + beanClass);
     }
     return descriptor;
   }
 
-  private static PropertyDescriptor getPropertyDescriptorNoException(
-      Class<?> beanClass, String property) {
+  private static PropertyDescriptor getPropertyDescriptorNoException(Class<?> beanClass, String property) {
     PropertyDescriptor descriptorToReturn = null;
     int nestedDotIndex = property.indexOf(IAccessor.NESTED_DELIM);
     if (nestedDotIndex > 0) {
-      PropertyDescriptor rootDescriptor = getPropertyDescriptorNoException(
-          beanClass, property.substring(0, nestedDotIndex));
+      PropertyDescriptor rootDescriptor = getPropertyDescriptorNoException(beanClass,
+          property.substring(0, nestedDotIndex));
       if (rootDescriptor != null) {
-        descriptorToReturn = getPropertyDescriptorNoException(
-            rootDescriptor.getPropertyType(),
+        descriptorToReturn = getPropertyDescriptorNoException(rootDescriptor.getPropertyType(),
             property.substring(nestedDotIndex + 1));
       }
     } else {
-      PropertyDescriptor[] descriptors = PropertyUtils
-          .getPropertyDescriptors(beanClass);
+      PropertyDescriptor[] descriptors = PropertyUtils.getPropertyDescriptors(beanClass);
       for (PropertyDescriptor descriptor : descriptors) {
-        if (property.substring(0, 1).equalsIgnoreCase(
-            descriptor.getName().substring(0, 1))
-            && property.substring(1).equals(descriptor.getName().substring(1))) {
+        if (property.substring(0, 1).equalsIgnoreCase(descriptor.getName().substring(0, 1)) && property.substring(1)
+                                                                                                       .equals(
+                                                                                                           descriptor
+                                                                                                               .getName()
+                                                                                                               .substring(
+                                                                                                                   1))) {
           // 1st letter might be uppercase in descriptor and lowercase in
           // property when property name is like 'tEst'.
           descriptorToReturn = descriptor;
         }
       }
     }
-    if (descriptorToReturn == null
-        || descriptorToReturn.getWriteMethod() == null) {
+    if (descriptorToReturn == null || descriptorToReturn.getWriteMethod() == null) {
       // If we reach this point, no property with the given name has been found.
       // or the found descriptor is read-only.
       // If beanClass is indeed an interface, we must also deal with all its
       // super-interfaces.
       List<Class<?>> superTypes = new ArrayList<>();
-      if (beanClass.getSuperclass() != null
-          && beanClass.getSuperclass() != Object.class) {
+      if (beanClass.getSuperclass() != null && beanClass.getSuperclass() != Object.class) {
         superTypes.add(beanClass.getSuperclass());
       }
       Collections.addAll(superTypes, beanClass.getInterfaces());
@@ -124,13 +129,12 @@ public final class PropertyHelper {
    * Retrieves all property names declared by a bean class.
    *
    * @param beanClass
-   *          the class to introspect.
+   *     the class to introspect.
    * @return the collection of property names.
    */
   public static Collection<String> getPropertyNames(Class<?> beanClass) {
     Collection<String> propertyNames = new HashSet<>();
-    PropertyDescriptor[] descriptors = PropertyUtils
-        .getPropertyDescriptors(beanClass);
+    PropertyDescriptor[] descriptors = PropertyUtils.getPropertyDescriptors(beanClass);
     for (PropertyDescriptor descriptor : descriptors) {
       propertyNames.add(descriptor.getName());
     }
@@ -146,9 +150,9 @@ public final class PropertyHelper {
    * Retrieves the type of a bean property.
    *
    * @param beanClass
-   *          the bean class on which to look for the property.
+   *     the bean class on which to look for the property.
    * @param property
-   *          the property to look for.
+   *     the property to look for.
    * @return the type of the property.
    */
   public static Class<?> getPropertyType(Class<?> beanClass, String property) {
@@ -192,4 +196,19 @@ public final class PropertyHelper {
     }
     return prop;
   }
+
+
+  /**
+   * Cleanup property name from table column Ids that may be reworked to include some extra information
+   *
+   * @param propertyName
+   * @return
+   */
+  public static String cleanupPropertyName(String propertyName) {
+    String refinedPropertyName;
+    refinedPropertyName = propertyName.replaceAll(COL_ID_UNSORTABLE_PREFIX, "");
+    refinedPropertyName = propertyName.replaceAll("\\" + COL_ID_DEDUP_SEP + "\\d*", "");
+    return refinedPropertyName;
+  }
+
 }

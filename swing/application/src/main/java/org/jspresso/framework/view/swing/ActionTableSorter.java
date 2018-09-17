@@ -31,6 +31,7 @@ import javax.swing.table.TableModel;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.model.component.IQueryComponent;
+import org.jspresso.framework.util.bean.PropertyHelper;
 import org.jspresso.framework.util.collection.ESort;
 
 /**
@@ -109,7 +110,7 @@ public class ActionTableSorter extends AbstractTableSorter {
         direction = null;
       }
       if (direction != null) {
-        orderingProperties.put(property, direction);
+        orderingProperties.put(PropertyHelper.cleanupPropertyName(property), direction);
       }
     }
     actionContext

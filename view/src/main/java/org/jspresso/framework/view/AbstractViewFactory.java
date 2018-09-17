@@ -95,6 +95,8 @@ import org.jspresso.framework.security.EAuthorization;
 import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.security.ISecurityHandlerAware;
 import org.jspresso.framework.security.ISubjectAware;
+import org.jspresso.framework.util.accessor.IAccessor;
+import org.jspresso.framework.util.bean.PropertyHelper;
 import org.jspresso.framework.util.collection.IPageable;
 import org.jspresso.framework.util.descriptor.IDescriptor;
 import org.jspresso.framework.util.descriptor.IIconDescriptor;
@@ -871,12 +873,12 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
       }
     }
     if (dups > 0) {
-      identifier += ("_" + dups);
+      identifier += (PropertyHelper.COL_ID_DEDUP_SEP + dups);
     }
     String renderedProperty = computeRenderedProperty(columnDescriptor);
     if (renderedProperty != null) {
       // for ref sorting to occur properly.
-      identifier = identifier + "." + renderedProperty;
+      identifier = identifier + IAccessor.NESTED_DELIM + renderedProperty;
     }
     boolean sortable = columnDescriptor.isSortable();
     if (sortable && PropertyViewDescriptorHelper.isComputed(rowDescriptor, propertyName)) {
@@ -888,7 +890,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
       }
     }
     if (!sortable) {
-      return "#" + identifier;
+      return PropertyHelper.COL_ID_UNSORTABLE_PREFIX + identifier;
     }
     return identifier;
   }
@@ -3327,8 +3329,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
         if (selectedIndices != null && selectedIndices.length > 0 && elements != null && elements.size() > 0) {
           selectedElements = getComponentCollectionFactory().createComponentCollection(
               ((ICollectionDescriptorProvider<?>) viewSelectionConnector.getModelDescriptor()).getCollectionDescriptor()
-                                                                                              .getCollectionInterface
-                                                                                                  ());
+                                                                                              .getCollectionInterface());
           List<?> elementsList = new ArrayList<Object>(elements);
           for (int iselectedIndex : selectedIndices) {
             if (iselectedIndex >= 0 && iselectedIndex < elementsList.size()) {
@@ -3434,11 +3435,10 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
 
   private ICollectionConnectorProvider createCompositeNodeGroupConnector(ITreeViewDescriptor viewDescriptor,
                                                                          IActionHandler actionHandler, Locale locale,
-                                                                         ICompositeTreeLevelDescriptor
-                                                                             subtreeViewDescriptor,
+                                                                         ICompositeTreeLevelDescriptor subtreeViewDescriptor,
                                                                          int depth) {
-    ICollectionDescriptorProvider<?> nodeGroupModelDescriptor = ((ICollectionDescriptorProvider<?>)
-        subtreeViewDescriptor
+    ICollectionDescriptorProvider<?> nodeGroupModelDescriptor =
+        ((ICollectionDescriptorProvider<?>) subtreeViewDescriptor
         .getNodeGroupDescriptor().getModelDescriptor());
     IConfigurableCollectionConnectorListProvider nodeGroupPrototypeConnector = connectorFactory
         .createConfigurableCollectionConnectorListProvider(nodeGroupModelDescriptor.getName() + "Element",
@@ -4136,8 +4136,8 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     IModelDescriptor modelDescriptor = propertyViewDescriptor.getModelDescriptor();
     if (modelDescriptor != null) {
       String path = modelDescriptor.getName();
-      while (path.indexOf(".") >= 0) {
-        path = path.substring(0, path.indexOf("."));
+      while (path.indexOf(IAccessor.NESTED_DELIM) >= 0) {
+        path = path.substring(0, path.indexOf(IAccessor.NESTED_DELIM));
         IPropertyDescriptor parentPropertyDescriptor = componentDescriptor.getPropertyDescriptor(path);
         if (parentPropertyDescriptor != null) {
           accessGranted = accessGranted && actionHandler.isAccessGranted(parentPropertyDescriptor);
