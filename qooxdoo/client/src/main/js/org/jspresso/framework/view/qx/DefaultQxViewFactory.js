@@ -1672,6 +1672,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         if (remoteComponent.getBorderType() == "TITLED" || remoteComponent.getBorderType() == "TITLED_ACTIONS") {
           decorator = new org.jspresso.framework.view.qx.EnhancedCollapsiblePanel(remoteComponent.getLabel());
           decorator.setCollapsible(remoteComponent.getCollapsible());
+          decorator.setValue(!remoteComponent.getCollapsed())
           this.setIcon(decorator.getChildControl("bar"), remoteComponent.getIcon())
           if (remoteComponent.getBorderType() == "TITLED_ACTIONS") {
             var toolBar = this._createToolBar(remoteComponent, component);

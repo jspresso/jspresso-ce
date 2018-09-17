@@ -92,4 +92,11 @@ public interface IViewDescriptor
    * @return
    */
   boolean isCollapsible();
+
+  /**
+   * Gets wether the view is collapsed by default when installed in a collapsible peer (a titled border for instance).
+   *
+   * @return
+   */
+  boolean isCollapsed();
 }

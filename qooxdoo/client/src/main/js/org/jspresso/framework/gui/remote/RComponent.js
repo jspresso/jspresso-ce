@@ -111,6 +111,10 @@ qx.Class.define("org.jspresso.framework.gui.remote.RComponent", {
     collapsible: {
       check: 'Boolean',
       nullable: true
+    },
+    collapsed: {
+      check: 'Boolean',
+      nullable: true
     }
   },
 

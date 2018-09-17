@@ -58,6 +58,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor implemen
   private   Collection<IGate>   writabilityGates;
   private   String              styleName;
   private   boolean             collapsible;
+  private   boolean             collapsed;
   protected BasicViewDescriptor readOnlyClone;
 
 
@@ -67,6 +68,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor implemen
   protected BasicViewDescriptor() {
     borderType = EBorderType.NONE;
     collapsible = true;
+    collapsed = false;
   }
 
   /**
@@ -600,6 +602,26 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor implemen
    */
   public void setCollapsible(boolean collapsible) {
     this.collapsible = collapsible;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isCollapsed() {
+    return collapsed;
+  }
+
+  /**
+   * Configures wether the view is collapsed by default. Some UI frontends allow the user to collapse
+   * views when they are surrounded by a titled border. This is {@code false} by default. if set to {@code true}, the
+   * view will appear collapsed by default if and only if it is collapsible.
+   *
+   * @param collapsed
+   *     the collapsed
+   */
+  public void setCollapsed(boolean collapsed) {
+    this.collapsed = collapsed;
   }
 
   /**
