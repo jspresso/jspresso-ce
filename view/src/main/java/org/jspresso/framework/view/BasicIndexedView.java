@@ -88,7 +88,7 @@ public class BasicIndexedView<E> extends BasicCompositeView<E> implements
   @Override
   public int translateIncludingHiddenChildren(int index) {
     int indexWithHidden = index;
-    for (int i = 0; i < indexWithHidden; i++) {
+    for (int i = 0; i <= indexWithHidden; i++) {
       if (!getChildView(i).getConnector().isReadable()) {
         indexWithHidden ++;
       }
@@ -102,7 +102,7 @@ public class BasicIndexedView<E> extends BasicCompositeView<E> implements
   @Override
   public int translateExcludingHiddenChildren(int index) {
     int indexWithoutHidden = index;
-    for (int i = 0; i < index; i++) {
+    for (int i = 0; i <= index; i++) {
       if (!getChildView(i).getConnector().isReadable()) {
         indexWithoutHidden--;
       }

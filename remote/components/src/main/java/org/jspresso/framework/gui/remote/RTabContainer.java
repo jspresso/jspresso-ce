@@ -153,7 +153,7 @@ public class RTabContainer extends RContainer {
   public int translateIncludingHiddenChildren(int index) {
     RComponent[] tabs = getTabs();
     int indexWithHidden = index;
-    for (int i = 0; i < indexWithHidden; i++) {
+    for (int i = 0; i <= indexWithHidden; i++) {
       if (!tabs[i].getState().isReadable()) {
         indexWithHidden++;
       }
@@ -170,7 +170,7 @@ public class RTabContainer extends RContainer {
   public int translateExcludingHiddenChildren(int index) {
     RComponent[] tabs = getTabs();
     int indexWithoutHidden = index;
-    for (int i = 0; i < index; i++) {
+    for (int i = 0; i <= index; i++) {
       if (!tabs[i].getState().isReadable()) {
         indexWithoutHidden--;
       }
