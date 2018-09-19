@@ -1,6 +1,8 @@
 6.0.0
 =====
 - Module headerDescription property has been renamed to pageHeaderDescription
+- WEST and EAST components in border containers are now vertically centered if their height is not resizable.
+- NORTH and SOUTH components in border containers are now horizontally centered if their width is not resizable.
 
 5.0.0
 =====
