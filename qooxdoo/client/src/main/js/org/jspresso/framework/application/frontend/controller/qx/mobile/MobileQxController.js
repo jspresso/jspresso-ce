@@ -928,7 +928,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      */
     _handleFileUpload: function (uploadCommand) {
       var imagePicker = new org.jspresso.framework.view.qx.mobile.ImagePicker(uploadCommand.getFileUrl(),
-          this.translate("upload_photo"));
+          this.translate("upload_file"));
       var drawer = this._popupDrawer("bottom", imagePicker);
       drawer.setHideOnBack(true);
       drawer.setHideOnParentTap(true);
@@ -966,7 +966,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       var keysToTranslate = this.base(arguments);
       keysToTranslate = keysToTranslate.concat([
         "m_01", "m_02", "m_03", "m_04", "m_05", "m_06", "m_07", "m_08", "m_09", "m_10", "m_11", "m_12", "Hide", "Wait",
-        "Loading", "Clear", "Choose", "Replace", "Reconnect", "reconnection.message", "upload_photo", "download"]);
+        "Loading", "Clear", "Choose", "Replace", "Reconnect", "reconnection.message", "upload_photo", "upload_file", "download"]);
       var bookmarkHintKey = this._determineBrowserBookmarkHintKey();
       if (bookmarkHintKey) {
         keysToTranslate = keysToTranslate.concat([bookmarkHintKey]);
