@@ -2414,6 +2414,13 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         table = new org.jspresso.framework.view.qx.EnhancedTable(tableModel, custom);
       }
 
+      table.addListener("columnVisibilityMenuCreateEnd", function (evt) {
+        var menuItems = evt.getData().menu.getChildren();
+        for (var i = 0; i < menuItems.length; i++) {
+          // Allow for HTML headers
+          menuItems[i].getChildControl("label").setRich(true);
+        }
+      });
       table.setShowCellFocusIndicator(true);
       var paneScroller = table.getPaneScroller(0);
       var columnModel = table.getTableColumnModel();
