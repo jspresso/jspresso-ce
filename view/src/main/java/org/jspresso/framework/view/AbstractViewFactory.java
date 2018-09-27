@@ -3301,6 +3301,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
       public void propertyChange(PropertyChangeEvent evt) {
         ModelRefPropertyConnector parentConnector = (ModelRefPropertyConnector) viewConnector.getModelProvider();
         if (parentConnector != null) {
+          getMvcBinder().bind(viewSelectionConnector, null);
           getMvcBinder().bind(viewSelectionConnector,
               parentConnector.getChildConnector(viewSelectionConnector.getId()));
         } else {
@@ -3315,7 +3316,8 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
           public void propertyChange(PropertyChangeEvent evt) {
             IValueConnector oldModelConnector = (IValueConnector) evt.getOldValue();
             if (oldModelConnector != null) {
-              oldModelConnector.setConnectorValue(null);
+              // Keep selection between model change.
+              // oldModelConnector.setConnectorValue(null);
             }
           }
         });
