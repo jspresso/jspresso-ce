@@ -253,9 +253,9 @@ import org.jspresso.framework.view.descriptor.TreeDescriptorHelper;
 @SuppressWarnings("UnusedParameters")
 public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JComponent, Icon, Action> {
 
-  private static final Dimension TREE_PREFERRED_SIZE = new Dimension(128, 128);
-  private IListSelectionModelBinder listSelectionModelBinder;
-  private ITreeSelectionModelBinder treeSelectionModelBinder;
+  private static final Dimension                 TREE_PREFERRED_SIZE = new Dimension(128, 128);
+  private              IListSelectionModelBinder listSelectionModelBinder;
+  private              ITreeSelectionModelBinder treeSelectionModelBinder;
 
   /**
    * {@inheritDoc}
@@ -482,11 +482,11 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
                                                         IActionHandler actionHandler, Locale locale) {
     IBooleanPropertyDescriptor propertyDescriptor = (IBooleanPropertyDescriptor) propertyViewDescriptor
         .getModelDescriptor();
-    JComponent viewComponent;
+    JCheckBox viewComponent;
     IValueConnector connector;
     if (propertyDescriptor.isMandatory()) {
       viewComponent = createJCheckBox(propertyViewDescriptor);
-      connector = new JToggleButtonConnector<>(propertyDescriptor.getName(), (JCheckBox) viewComponent);
+      connector = new JToggleButtonConnector<>(propertyDescriptor.getName(), viewComponent);
     } else {
       viewComponent = createJTriStateCheckBox(propertyViewDescriptor);
       connector = new JTriStateCheckBoxConnector(propertyDescriptor.getName(), (JTriStateCheckBox) viewComponent);
@@ -849,8 +849,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
   }
 
   protected void completeViewWithDynamicToolTip(JComponent viewComponent, IViewDescriptor viewDescriptor,
-                                              IComponentDescriptor<?> modelDescriptor,
-                                              ICompositeValueConnector connector) {
+                                                IComponentDescriptor<?> modelDescriptor,
+                                                ICompositeValueConnector connector) {
     String dynamicToolTipProperty = computeDynamicToolTipPropertyName(viewDescriptor, modelDescriptor, null);
     // Dynamic tooltip
     if (dynamicToolTipProperty != null) {
@@ -864,8 +864,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
   }
 
   protected void completeViewWithDynamicBackground(JComponent viewComponent, IViewDescriptor viewDescriptor,
-                                              IComponentDescriptor<?> modelDescriptor,
-                                              ICompositeValueConnector connector) {
+                                                   IComponentDescriptor<?> modelDescriptor,
+                                                   ICompositeValueConnector connector) {
     String dynamicBackgroundProperty = computeDynamicBackgroundPropertyName(viewDescriptor, modelDescriptor);
     // Dynamic background
     if (dynamicBackgroundProperty != null) {
@@ -879,8 +879,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
   }
 
   protected void completeViewWithDynamicForeground(JComponent viewComponent, IViewDescriptor viewDescriptor,
-                                              IComponentDescriptor<?> modelDescriptor,
-                                              ICompositeValueConnector connector) {
+                                                   IComponentDescriptor<?> modelDescriptor,
+                                                   ICompositeValueConnector connector) {
     String dynamicForegroundProperty = computeDynamicForegroundPropertyName(viewDescriptor, modelDescriptor);
     // Dynamic foreground
     if (dynamicForegroundProperty != null) {
@@ -894,8 +894,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
   }
 
   protected void completeViewWithDynamicFont(JComponent viewComponent, IViewDescriptor viewDescriptor,
-                                              IComponentDescriptor<?> modelDescriptor,
-                                              ICompositeValueConnector connector) {
+                                             IComponentDescriptor<?> modelDescriptor,
+                                             ICompositeValueConnector connector) {
     String dynamicFontProperty = computeDynamicFontPropertyName(viewDescriptor, modelDescriptor);
     // Dynamic font
     if (dynamicFontProperty != null) {
@@ -922,7 +922,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
                                                            IComponentDescriptor<?> modelDescriptor) {
     // Compute dynamic background
     for (IView<JComponent> propertyView : propertyViews) {
-      completeViewWithDynamicBackground(propertyView.getPeer(), propertyView.getDescriptor(), modelDescriptor, connector);
+      completeViewWithDynamicBackground(propertyView.getPeer(), propertyView.getDescriptor(), modelDescriptor,
+          connector);
     }
   }
 
@@ -931,7 +932,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
                                                            IComponentDescriptor<?> modelDescriptor) {
     // Compute dynamic foreground
     for (IView<JComponent> propertyView : propertyViews) {
-      completeViewWithDynamicForeground(propertyView.getPeer(), propertyView.getDescriptor(), modelDescriptor, connector);
+      completeViewWithDynamicForeground(propertyView.getPeer(), propertyView.getDescriptor(), modelDescriptor,
+          connector);
     }
   }
 
@@ -1169,7 +1171,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     DateFormat format = createDateFormat(propertyViewDescriptor, propertyDescriptor, timeZone, actionHandler, locale);
     IFormatter<?, String> formatter = createFormatter(format);
     if (propertyViewDescriptor.isReadOnly()) {
-      if (propertyViewDescriptor.getAction() != null) {
+      if (propertyViewDescriptor.getAction() != null && actionHandler.isAccessGranted(
+          propertyViewDescriptor.getAction())) {
         viewComponent = createJLink(propertyViewDescriptor);
       } else {
         viewComponent = createJLabel(propertyViewDescriptor, true);
@@ -1205,7 +1208,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     JComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
-      if (propertyViewDescriptor.getAction() != null) {
+      if (propertyViewDescriptor.getAction() != null && actionHandler.isAccessGranted(
+          propertyViewDescriptor.getAction())) {
         viewComponent = createJLink(propertyViewDescriptor);
       } else {
         viewComponent = createJLabel(propertyViewDescriptor, true);
@@ -1235,7 +1239,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     IFormatter<?, String> formatter = createDurationFormatter(propertyViewDescriptor, propertyDescriptor, actionHandler,
         locale);
     if (propertyViewDescriptor.isReadOnly()) {
-      if (propertyViewDescriptor.getAction() != null) {
+      if (propertyViewDescriptor.getAction() != null && actionHandler.isAccessGranted(
+          propertyViewDescriptor.getAction())) {
         viewComponent = createJLink(propertyViewDescriptor);
       } else {
         viewComponent = createJLabel(propertyViewDescriptor, true);
@@ -1272,12 +1277,13 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     if (propertyViewDescriptor.isReadOnly()) {
       IFormatter<?, String> formatter = createEnumerationFormatter(propertyDescriptor, actionHandler, locale);
       final JLabel viewComponent;
-      if (propertyViewDescriptor.getAction() != null) {
+      if (propertyViewDescriptor.getAction() != null && actionHandler.isAccessGranted(
+          propertyViewDescriptor.getAction())) {
         viewComponent = createJLink(propertyViewDescriptor);
       } else {
         viewComponent = createJLabel(propertyViewDescriptor, true);
       }
-      IValueConnector connector = new JLabelConnector(propertyDescriptor.getName(), viewComponent);
+      JLabelConnector connector = new JLabelConnector(propertyDescriptor.getName(), viewComponent);
       connector.addValueChangeListener(new IValueChangeListener() {
 
         @Override
@@ -1287,7 +1293,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
                   getEnumerationIconDimension(propertyViewDescriptor)));
         }
       });
-      ((JLabelConnector) connector).setFormatter(formatter);
+      connector.setFormatter(formatter);
       adjustSizes(propertyViewDescriptor, viewComponent, null,
           getEnumerationTemplateValue(propertyDescriptor, actionHandler, locale),
           Toolkit.getDefaultToolkit().getScreenResolution() * 2 / 6);
@@ -1461,7 +1467,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
                                                       IActionHandler actionHandler, Locale locale) {
     final IPropertyDescriptor propertyDescriptor = (IPropertyDescriptor) propertyViewDescriptor.getModelDescriptor();
     JLabel imageLabel;
-    if (propertyViewDescriptor.getAction() != null) {
+    if (propertyViewDescriptor.getAction() != null && actionHandler.isAccessGranted(
+        propertyViewDescriptor.getAction())) {
       imageLabel = createJLink(propertyViewDescriptor);
     } else {
       imageLabel = createJLabel(propertyViewDescriptor, false);
@@ -1547,7 +1554,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     JComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
-      if (propertyViewDescriptor.getAction() != null) {
+      if (propertyViewDescriptor.getAction() != null && actionHandler.isAccessGranted(
+          propertyViewDescriptor.getAction())) {
         viewComponent = createJLink(propertyViewDescriptor);
       } else {
         viewComponent = createJLabel(propertyViewDescriptor, true);
@@ -1988,8 +1996,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     if (viewDescriptor.getRowAction() != null) {
       rowAction = getActionFactory().createAction(viewDescriptor.getRowAction(), actionHandler, view, locale);
     }
-    new JRepeater(view, repeaterContainer, this, getMvcBinder(),
-        rowAction, actionHandler, locale);
+    new JRepeater(view, repeaterContainer, this, getMvcBinder(), rowAction, actionHandler, locale);
     return view;
   }
 
@@ -2021,7 +2028,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     JComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
-      if (propertyViewDescriptor.getAction() != null) {
+      if (propertyViewDescriptor.getAction() != null && actionHandler.isAccessGranted(
+          propertyViewDescriptor.getAction())) {
         viewComponent = createJLink(propertyViewDescriptor);
       } else {
         viewComponent = createJLabel(propertyViewDescriptor, true);
@@ -2089,7 +2097,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     IValueConnector connector;
     String renderedProperty = computeRenderedProperty(propertyViewDescriptor);
     if (propertyViewDescriptor.isReadOnly()) {
-      if (propertyViewDescriptor.getAction() != null) {
+      if (propertyViewDescriptor.getAction() != null && actionHandler.isAccessGranted(
+          propertyViewDescriptor.getAction())) {
         viewComponent = createJLink(propertyViewDescriptor);
       } else {
         viewComponent = createJLabel(propertyViewDescriptor, true);
@@ -2208,7 +2217,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     JComponent viewComponent;
     IValueConnector connector;
     if (propertyViewDescriptor.isReadOnly()) {
-      if (propertyViewDescriptor.getAction() != null) {
+      if (propertyViewDescriptor.getAction() != null && actionHandler.isAccessGranted(
+          propertyViewDescriptor.getAction())) {
         viewComponent = createJLink(propertyViewDescriptor);
       } else {
         viewComponent = createJLabel(propertyViewDescriptor, true);
@@ -2994,7 +3004,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     IFormatter<?, String> formatter = createTimeFormatter(propertyViewDescriptor, propertyDescriptor, actionHandler,
         locale);
     if (propertyViewDescriptor.isReadOnly()) {
-      if (propertyViewDescriptor.getAction() != null) {
+      if (propertyViewDescriptor.getAction() != null && actionHandler.isAccessGranted(
+          propertyViewDescriptor.getAction())) {
         viewComponent = createJLink(propertyViewDescriptor);
       } else {
         viewComponent = createJLabel(propertyViewDescriptor, true);
@@ -3368,8 +3379,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
    * {@inheritDoc}
    */
   @Override
-  protected void finishComponentConfiguration(IView<JComponent> view, IActionHandler actionHandler,
-                                              Locale locale) {
+  protected void finishComponentConfiguration(IView<JComponent> view, IActionHandler actionHandler, Locale locale) {
     JComponent viewPeer = view.getPeer();
     IViewDescriptor viewDescriptor = view.getDescriptor();
     IValueConnector viewConnector = view.getConnector();
@@ -3377,8 +3387,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     configureComponent(viewPeer, viewDescriptor, actionHandler, locale);
   }
 
-  private void configureComponent(JComponent viewPeer, IViewDescriptor viewDescriptor,
-                                  IActionHandler actionHandler, Locale locale) {
+  private void configureComponent(JComponent viewPeer, IViewDescriptor viewDescriptor, IActionHandler actionHandler,
+                                  Locale locale) {
     if (viewDescriptor.getForeground() != null) {
       viewPeer.setForeground(createColor(viewDescriptor.getForeground()));
     }
@@ -3418,7 +3428,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
   }
 
   static Color createColor(String colorAsHexString) {
-    if (colorAsHexString != null && ColorHelper.isColorSpec(colorAsHexString)) {
+    if (ColorHelper.isColorSpec(colorAsHexString)) {
       int[] rgba = ColorHelper.fromHexString(colorAsHexString);
       return new Color(rgba[0], rgba[1], rgba[2], rgba[3]);
     }
@@ -3827,8 +3837,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
 
   private final class ConnectorTreeCellRenderer extends DefaultTreeCellRenderer {
 
-    private static final long serialVersionUID = -5153268751092971328L;
-    private final boolean displayIcon;
+    private static final long    serialVersionUID = -5153268751092971328L;
+    private final        boolean displayIcon;
 
     public ConnectorTreeCellRenderer(boolean displayIcon) {
       this.displayIcon = displayIcon;
@@ -3914,11 +3924,11 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
 
   private final class TranslatedEnumerationListCellRenderer extends DefaultListCellRenderer {
 
-    private static final long serialVersionUID = -5694559709701757582L;
-    private final ITranslationProvider                      translationProvider;
-    private final Locale                                    locale;
-    private final IEnumerationPropertyDescriptor            propertyDescriptor;
-    private final org.jspresso.framework.util.gui.Dimension iconDimension;
+    private static final long                                      serialVersionUID = -5694559709701757582L;
+    private final        ITranslationProvider                      translationProvider;
+    private final        Locale                                    locale;
+    private final        IEnumerationPropertyDescriptor            propertyDescriptor;
+    private final        org.jspresso.framework.util.gui.Dimension iconDimension;
 
     /**
      * Constructs a new {@code TranslatedEnumerationCellRenderer} instance.
@@ -3966,11 +3976,11 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
 
   private final class TranslatedEnumerationTableCellRenderer extends EvenOddTableCellRenderer {
 
-    private static final long serialVersionUID = -4500472602998482756L;
-    private final ITranslationProvider                      translationProvider;
-    private final Locale                                    locale;
-    private final IEnumerationPropertyDescriptor            propertyDescriptor;
-    private final org.jspresso.framework.util.gui.Dimension iconDimension;
+    private static final long                                      serialVersionUID = -4500472602998482756L;
+    private final        ITranslationProvider                      translationProvider;
+    private final        Locale                                    locale;
+    private final        IEnumerationPropertyDescriptor            propertyDescriptor;
+    private final        org.jspresso.framework.util.gui.Dimension iconDimension;
 
     /**
      * Constructs a new {@code TranslatedEnumerationTableCellRenderer}

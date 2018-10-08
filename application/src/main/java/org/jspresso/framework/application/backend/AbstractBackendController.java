@@ -387,6 +387,9 @@ public abstract class AbstractBackendController extends AbstractController imple
     if (action == null) {
       return true;
     }
+    if (!isAccessGranted(action)) {
+      return false;
+    }
     if (!action.isBackend()) {
       throw new ActionException(
           "The backend controller is executing a frontend action. Please check the action chaining : " + action

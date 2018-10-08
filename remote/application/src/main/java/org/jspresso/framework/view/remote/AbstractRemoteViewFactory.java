@@ -180,17 +180,17 @@ import org.jspresso.framework.view.descriptor.basic.BasicTimePropertyViewDescrip
 @SuppressWarnings("UnusedParameters")
 public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFactory<RComponent, RIcon, RAction> {
 
-  private static final Logger                  LOG = LoggerFactory.getLogger(AbstractRemoteViewFactory.class);
+  private static final Logger LOG = LoggerFactory.getLogger(AbstractRemoteViewFactory.class);
 
-  private              boolean                 dateServerParse;
-  private              boolean                 durationServerParse;
-  private              IRemoteCommandHandler   remoteCommandHandler;
-  private              IGUIDGenerator<String>  guidGenerator;
-  private              boolean                 numberServerParse;
-  private              IRemotePeerRegistry     remotePeerRegistry;
-  private              IRemoteStateValueMapper binaryStateValueMapper;
-  private              IRemoteStateValueMapper enumerationStateValueMapper;
-  private              PropertyChangeListener  connectorStateListener;
+  private boolean                 dateServerParse;
+  private boolean                 durationServerParse;
+  private IRemoteCommandHandler   remoteCommandHandler;
+  private IGUIDGenerator<String>  guidGenerator;
+  private boolean                 numberServerParse;
+  private IRemotePeerRegistry     remotePeerRegistry;
+  private IRemoteStateValueMapper binaryStateValueMapper;
+  private IRemoteStateValueMapper enumerationStateValueMapper;
+  private PropertyChangeListener  connectorStateListener;
 
   /**
    * Instantiates a new Abstract remote view factory.
@@ -319,8 +319,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
    * {@inheritDoc}
    */
   @Override
-  protected void finishComponentConfiguration(IView<RComponent> view, IActionHandler actionHandler,
-                                              Locale locale) {
+  protected void finishComponentConfiguration(IView<RComponent> view, IActionHandler actionHandler, Locale locale) {
     RComponent viewPeer = view.getPeer();
     IViewDescriptor viewDescriptor = view.getDescriptor();
 
@@ -420,7 +419,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
-      if (propertyViewDescriptor.getAction() != null) {
+      if (propertyViewDescriptor.getAction() != null && actionHandler.isAccessGranted(propertyViewDescriptor.getAction())) {
         viewComponent = createRLink(propertyViewDescriptor, false);
       } else {
         viewComponent = createRLabel(propertyViewDescriptor, false);
@@ -670,7 +669,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     connector.setExceptionHandler(actionHandler);
     RComponent viewComponent;
     if (propertyViewDescriptor.isReadOnly()) {
-      if (propertyViewDescriptor.getAction() != null) {
+      if (propertyViewDescriptor.getAction() != null && actionHandler.isAccessGranted(propertyViewDescriptor.getAction())) {
         viewComponent = createRLink(propertyViewDescriptor, false);
       } else {
         viewComponent = createRLabel(propertyViewDescriptor, false);
@@ -724,7 +723,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     RComponent viewComponent;
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
-      if (propertyViewDescriptor.getAction() != null) {
+      if (propertyViewDescriptor.getAction() != null && actionHandler.isAccessGranted(propertyViewDescriptor.getAction())) {
         viewComponent = createRLink(propertyViewDescriptor, false);
       } else {
         viewComponent = createRLabel(propertyViewDescriptor, false);
@@ -861,7 +860,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
-      if (propertyViewDescriptor.getAction() != null) {
+      if (propertyViewDescriptor.getAction() != null && actionHandler.isAccessGranted(propertyViewDescriptor.getAction())) {
         viewComponent = createRLink(propertyViewDescriptor, false);
       } else {
         viewComponent = createRLabel(propertyViewDescriptor, false);
@@ -961,7 +960,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
-      if (propertyViewDescriptor.getAction() != null) {
+      if (propertyViewDescriptor.getAction() != null && actionHandler.isAccessGranted(propertyViewDescriptor.getAction())) {
         viewComponent = createRLink(propertyViewDescriptor, false);
       } else {
         viewComponent = createRLabel(propertyViewDescriptor, false);
@@ -997,7 +996,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
-      if (propertyViewDescriptor.getAction() != null) {
+      if (propertyViewDescriptor.getAction() != null && actionHandler.isAccessGranted(propertyViewDescriptor.getAction())) {
         viewComponent = createRLink(propertyViewDescriptor, false);
       } else {
         viewComponent = createRLabel(propertyViewDescriptor, false);
@@ -1035,7 +1034,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     // it's important to keep this special case for enumeration property views that are read-only.
     // r/o enumeration property views, if not assigned an action, should be transmitted as a read-only combo-box.
     // If not, enumeration images will disappear (see bug #1200)
-    if (propertyViewDescriptor.isReadOnly() && propertyViewDescriptor.getAction() != null) {
+    if (propertyViewDescriptor.isReadOnly() && propertyViewDescriptor.getAction() != null && actionHandler.isAccessGranted(propertyViewDescriptor.getAction())) {
       connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
       viewComponent = createRLink(propertyViewDescriptor, false);
       ((RLabel) viewComponent).setMaxLength(
@@ -1186,7 +1185,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     if (propertyViewDescriptor.isMultiLine()) {
       viewComponent = createRHtmlArea(propertyViewDescriptor);
       ((RHtmlArea) viewComponent).setReadOnly(true);
-    } else if (propertyViewDescriptor.getAction() != null) {
+    } else if (propertyViewDescriptor.getAction() != null && actionHandler.isAccessGranted(propertyViewDescriptor.getAction())) {
       viewComponent = createRLink(propertyViewDescriptor, false);
     } else {
       viewComponent = createRLabel(propertyViewDescriptor, false);
@@ -1868,7 +1867,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     connector.setExceptionHandler(actionHandler);
     RComponent viewComponent;
     if (propertyViewDescriptor.isReadOnly()) {
-      if (propertyViewDescriptor.getAction() != null) {
+      if (propertyViewDescriptor.getAction() != null && actionHandler.isAccessGranted(
+          propertyViewDescriptor.getAction())) {
         viewComponent = createRLink(propertyViewDescriptor, false);
       } else {
         viewComponent = createRLabel(propertyViewDescriptor, false);

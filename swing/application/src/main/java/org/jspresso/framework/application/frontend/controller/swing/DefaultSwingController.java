@@ -321,6 +321,9 @@ public class DefaultSwingController extends
     if (action == null) {
       return true;
     }
+    if (!isAccessGranted(action)) {
+      return false;
+    }
     if (action instanceof IDisplayableAction) {
       Integer repeatPeriodMillis = ((IDisplayableAction) action).getRepeatPeriodMillis();
       if(repeatPeriodMillis != null && repeatPeriodMillis > 0) {

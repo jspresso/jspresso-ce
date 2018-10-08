@@ -566,6 +566,9 @@ public abstract class AbstractFrontendController<E, F, G> extends AbstractContro
     if (action == null) {
       return true;
     }
+    if (!isAccessGranted(action)) {
+      return false;
+    }
     Map<String, Object> actionContext = getInitialActionContext();
     // Retain only entries from the initial action context that are not in the
     // action context.
