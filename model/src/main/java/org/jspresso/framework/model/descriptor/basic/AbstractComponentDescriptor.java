@@ -509,7 +509,8 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
             for (IPropertyDescriptor propertyDescriptor : declaredPropertyDescriptors) {
               if (!(propertyDescriptor instanceof ICollectionPropertyDescriptor<?>)
                   && !(propertyDescriptor instanceof ITextPropertyDescriptor)
-                  && !(propertyDescriptor instanceof IObjectPropertyDescriptor)) {
+                  && !(propertyDescriptor instanceof IObjectPropertyDescriptor)
+                  && !propertyDescriptor.isFilterOnly()) {
                 String propertyName = propertyDescriptor.getName();
                 if (!propertyName.endsWith(RAW_SUFFIX) && !propertyName.endsWith(NLS_SUFFIX)) {
                   renderedPropertiesSet.add(propertyName);
