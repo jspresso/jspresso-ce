@@ -132,11 +132,16 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
           }
         }
       }
-      htmlContent = "<div style='overflow: hidden; text-overflow: ellipsis; flex: 1'>" + htmlContent + "</div>"
+      htmlContent = "<div "
+          + "style = '"
+          + "overflow: hidden; text-overflow: ellipsis; flex: 1;"
+          + "'>"
+          + htmlContent
+          + "</div>"
       if (actionsHtmlContent) {
         htmlContent += actionsHtmlContent;
       }
-      return "<div style='display: flex'>" + htmlContent + "</div>";
+      return "<div style='display: flex';>" + htmlContent + "</div>";
     },
 
     setAction: function (action) {
