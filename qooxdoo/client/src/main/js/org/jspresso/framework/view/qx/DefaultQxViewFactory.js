@@ -2444,6 +2444,16 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       table.addListener("mousedown", dblTapListener);
 
       focusIndicator.addListener("move", function(e) {
+        // Firefox Quantum text selection problem
+        if (window.getSelection) {
+          if (window.getSelection().empty) {
+            window.getSelection().empty();
+          } else if (window.getSelection().removeAllRanges) {
+            window.getSelection().removeAllRanges();
+          }
+        } else if (document.selection && document.selection.empty) {
+          document.selection.empty();
+        }
         var row = focusIndicator.getRow();
         var column = focusIndicator.getColumn();
         if (row != null && column != null && row >= 0 && column >= 0) {
@@ -2614,9 +2624,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           cellRenderer.setAdditionalAttributes(additionalAttributes);
 
           columnModel.setDataCellRenderer(i, cellRenderer);
-          columnModel.setHeaderCellRenderer(i,
-              new org.jspresso.framework.view.qx.RComponentHeaderRenderer(table, this, rColumnHeader));
         }
+        columnModel.setHeaderCellRenderer(i,
+            new org.jspresso.framework.view.qx.RComponentHeaderRenderer(table, this, rColumnHeader));
         tableModel.setDynamicStylesIndices(dynamicStylesIndices);
         var columnWidth;
         if (rColumn.getPreferredSize() && rColumn.getPreferredSize().getWidth() > 0) {

@@ -96,6 +96,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.Application", {
       this.base(arguments);
 
       qx.Class.patch(qx.ui.form.CheckBox, org.jspresso.framework.patch.MCheckBox);
+      qx.Class.patch(qx.event.handler.TouchCore, org.jspresso.framework.patch.MTouchCore);
 
       // patch the original decorator class
       qx.Class.patch(qx.ui.decoration.Decorator, org.jspresso.framework.patch.MTransition);
