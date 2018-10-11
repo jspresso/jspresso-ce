@@ -420,7 +420,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
-      if (propertyViewDescriptor.getAction() != null) {
+      if (propertyViewDescriptor.getAction() != null && actionHandler.isAccessGranted(
+          propertyViewDescriptor.getAction())) {
         viewComponent = createRLink(propertyViewDescriptor, false);
       } else {
         viewComponent = createRLabel(propertyViewDescriptor, false);
@@ -670,7 +671,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     connector.setExceptionHandler(actionHandler);
     RComponent viewComponent;
     if (propertyViewDescriptor.isReadOnly()) {
-      if (propertyViewDescriptor.getAction() != null) {
+      if (propertyViewDescriptor.getAction() != null && actionHandler.isAccessGranted(
+          propertyViewDescriptor.getAction())) {
         viewComponent = createRLink(propertyViewDescriptor, false);
       } else {
         viewComponent = createRLabel(propertyViewDescriptor, false);
@@ -724,7 +726,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     RComponent viewComponent;
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
-      if (propertyViewDescriptor.getAction() != null) {
+      if (propertyViewDescriptor.getAction() != null && actionHandler.isAccessGranted(
+          propertyViewDescriptor.getAction())) {
         viewComponent = createRLink(propertyViewDescriptor, false);
       } else {
         viewComponent = createRLabel(propertyViewDescriptor, false);
@@ -861,7 +864,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
-      if (propertyViewDescriptor.getAction() != null) {
+      if (propertyViewDescriptor.getAction() != null && actionHandler.isAccessGranted(
+          propertyViewDescriptor.getAction())) {
         viewComponent = createRLink(propertyViewDescriptor, false);
       } else {
         viewComponent = createRLabel(propertyViewDescriptor, false);
@@ -961,7 +965,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         actionHandler, locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
-      if (propertyViewDescriptor.getAction() != null) {
+      if (propertyViewDescriptor.getAction() != null && actionHandler.isAccessGranted(
+          propertyViewDescriptor.getAction())) {
         viewComponent = createRLink(propertyViewDescriptor, false);
       } else {
         viewComponent = createRLabel(propertyViewDescriptor, false);
@@ -997,7 +1002,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         locale);
     if (propertyViewDescriptor.isReadOnly()) {
       connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
-      if (propertyViewDescriptor.getAction() != null) {
+      if (propertyViewDescriptor.getAction() != null && actionHandler.isAccessGranted(
+          propertyViewDescriptor.getAction())) {
         viewComponent = createRLink(propertyViewDescriptor, false);
       } else {
         viewComponent = createRLabel(propertyViewDescriptor, false);
@@ -1035,7 +1041,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     // it's important to keep this special case for enumeration property views that are read-only.
     // r/o enumeration property views, if not assigned an action, should be transmitted as a read-only combo-box.
     // If not, enumeration images will disappear (see bug #1200)
-    if (propertyViewDescriptor.isReadOnly() && propertyViewDescriptor.getAction() != null) {
+    if (propertyViewDescriptor.isReadOnly() && propertyViewDescriptor.getAction() != null && actionHandler
+        .isAccessGranted(propertyViewDescriptor.getAction())) {
       connector = getConnectorFactory().createFormattedValueConnector(propertyDescriptor.getName(), formatter);
       viewComponent = createRLink(propertyViewDescriptor, false);
       ((RLabel) viewComponent).setMaxLength(
@@ -1186,7 +1193,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     if (propertyViewDescriptor.isMultiLine()) {
       viewComponent = createRHtmlArea(propertyViewDescriptor);
       ((RHtmlArea) viewComponent).setReadOnly(true);
-    } else if (propertyViewDescriptor.getAction() != null) {
+    } else if (propertyViewDescriptor.getAction() != null && actionHandler.isAccessGranted(
+        propertyViewDescriptor.getAction())) {
       viewComponent = createRLink(propertyViewDescriptor, false);
     } else {
       viewComponent = createRLabel(propertyViewDescriptor, false);
@@ -2401,6 +2409,28 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     attachFirstTabSelectorIfNecessary(viewDescriptor, view);
     view.setChildren(childrenViews);
     view.setCurrentViewIndex(getTabSelectionPreference(viewDescriptor, actionHandler));
+    if (viewDescriptor.getTabSelectionAction() != null) {
+      view.addPropertyChangeListener(IView.CONNECTOR_PROPERTY, new PropertyChangeListener() {
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
+          final IValueChangeListener vcl = new IValueChangeListener() {
+            @Override
+            public void valueChange(ValueChangeEvent evt) {
+              triggerTabSelectionAction(viewComponent.getSelectedIndex(), viewComponent, viewDescriptor, view,
+                  actionHandler);
+            }
+          };
+          IValueConnector oldConnector = (IValueConnector) evt.getOldValue();
+          if (oldConnector != null) {
+            oldConnector.removeValueChangeListener(vcl);
+          }
+          IValueConnector newConnector = (IValueConnector) evt.getNewValue();
+          if (newConnector != null) {
+            newConnector.addValueChangeListener(vcl);
+          }
+        }
+      });
+    }
     return view;
   }
 
