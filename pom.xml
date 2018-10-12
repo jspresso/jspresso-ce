@@ -3,7 +3,7 @@
   <groupId>org.jspresso.framework</groupId>
   <artifactId>jspresso-framework</artifactId>
   <packaging>pom</packaging>
-  <version>5.5.2-SNAPSHOT</version>
+  <version>5.5.2</version>
 
   <properties>
 
@@ -43,7 +43,7 @@
   </licenses>
   <scm>
     <connection>scm:git:https://github.com/jspresso/jspresso-ce.git</connection>
-    <tag>jspresso-framework-5.5.x</tag>
+    <tag>jspresso-framework-5.5.2</tag>
   </scm>
   <issueManagement>
     <system>Jspresso CE Issue Tracker</system>
