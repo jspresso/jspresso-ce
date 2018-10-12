@@ -3302,8 +3302,13 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
         ModelRefPropertyConnector parentConnector = (ModelRefPropertyConnector) viewConnector.getModelProvider();
         if (parentConnector != null) {
           getMvcBinder().bind(viewSelectionConnector, null);
-          getMvcBinder().bind(viewSelectionConnector,
-              parentConnector.getChildConnector(viewSelectionConnector.getId()));
+          ICollectionConnector viewSelectionModelConnector = (ICollectionConnector) parentConnector.getChildConnector(
+              viewSelectionConnector.getId());
+          if (viewSelectionModelConnector != null) {
+            // Force sync of children connectors on viewSelectionConnector
+            viewSelectionConnector.setConnectorValue(viewSelectionModelConnector.getConnectorValue());
+          }
+          getMvcBinder().bind(viewSelectionConnector, viewSelectionModelConnector);
         } else {
           getMvcBinder().bind(viewSelectionConnector, null);
         }
