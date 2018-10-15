@@ -3278,12 +3278,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      * @param remoteSplitContainer {org.jspresso.framework.gui.remote.RSplitContainer}
      */
     _createSplitContainer: function (remoteSplitContainer) {
-      var splitContainer = new qx.ui.splitpane.Pane();
-      if (remoteSplitContainer.getOrientation() == "VERTICAL") {
-        splitContainer.setOrientation("vertical");
-      } else {
-        splitContainer.setOrientation("horizontal");
-      }
+      var splitContainer = new qx.ui.splitpane.Pane(
+          remoteSplitContainer.getOrientation() == "VERTICAL" ? "vertical" : "horizontal"
+      );
 
       var ltComponent, rbComponent;
       if (remoteSplitContainer.getLeftTop() != null) {
