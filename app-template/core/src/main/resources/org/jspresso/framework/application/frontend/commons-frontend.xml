@@ -105,18 +105,48 @@
     <property name="borderType" value="NONE"/>
     <property name="modelDescriptor" ref="pageableStatusModel"/>
     <property name="westViewDescriptor">
-      <bean class="org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor">
-        <property name="westViewDescriptor">
-          <bean class="org.jspresso.framework.view.descriptor.basic.BasicActionViewDescriptor">
-            <property name="action" ref="previousPageFrontAction"/>
-          </bean>
+      <bean class="org.jspresso.framework.view.descriptor.basic.BasicConstrainedGridViewDescriptor">
+        <property name="cells">
+          <map>
+            <entry>
+              <key>
+                <bean class="org.jspresso.framework.view.descriptor.basic.BasicActionViewDescriptor">
+                  <property name="action" ref="previousPageFrontAction"/>
+                </bean>
+              </key>
+              <bean class="org.jspresso.framework.util.gui.CellConstraints">
+                <property name="row" value="0"/>
+                <property name="column" value="0"/>
+                <property name="heightResizable" value="false"/>
+                <property name="widthResizable" value="false"/>
+              </bean>
+            </entry>
+            <entry>
+              <key>
+                <bean class="org.jspresso.framework.view.descriptor.basic.BasicActionViewDescriptor">
+                  <property name="action" ref="nextPageFrontAction"/>
+                </bean>
+              </key>
+              <bean class="org.jspresso.framework.util.gui.CellConstraints">
+                <property name="row" value="0"/>
+                <property name="column" value="1"/>
+                <property name="heightResizable" value="false"/>
+                <property name="widthResizable" value="false"/>
+              </bean>
+            </entry>
+            <entry>
+              <key>
+                <ref bean="pageableStatusView"/>
+              </key>
+              <bean class="org.jspresso.framework.util.gui.CellConstraints">
+                <property name="row" value="0"/>
+                <property name="column" value="2"/>
+                <property name="heightResizable" value="false"/>
+                <property name="widthResizable" value="true"/>
+              </bean>
+            </entry>
+          </map>
         </property>
-        <property name="centerViewDescriptor">
-          <bean class="org.jspresso.framework.view.descriptor.basic.BasicActionViewDescriptor">
-            <property name="action" ref="nextPageFrontAction"/>
-          </bean>
-        </property>
-        <property name="eastViewDescriptor" ref="pageableStatusView"/>
       </bean>
     </property>
   </bean>
