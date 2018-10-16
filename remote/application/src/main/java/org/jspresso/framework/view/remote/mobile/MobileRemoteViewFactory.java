@@ -410,7 +410,27 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
         if (actionHandler.isAccessGranted(pageSectionViewDescriptor) && isAllowedForClientType(
             pageSectionViewDescriptor, actionHandler)) {
           IView<RComponent> pageSectionView = createView(pageSectionViewDescriptor, actionHandler, locale);
-          pageSections.add(pageSectionView.getPeer());
+          RComponent peer = pageSectionView.getPeer();
+          if (peer instanceof RMobileCompositePage
+              && pageSectionViewDescriptor instanceof MobileCompositePageViewDescriptor
+              && !pageSectionViewDescriptor.isReadOnly()) {
+            if (((MobileCompositePageViewDescriptor) pageSectionViewDescriptor).isInlineEditing()) {
+              if (((MobileCompositePageViewDescriptor) pageSectionViewDescriptor).getMainAction() == null) {
+                ((RMobileCompositePage) peer).setMainAction(null);
+              }
+              if (((MobileCompositePageViewDescriptor) pageSectionViewDescriptor).getBackAction() == null) {
+                ((RMobileCompositePage) peer).setBackAction(null);
+              }
+            } else {
+              if (((MobileCompositePageViewDescriptor) pageSectionViewDescriptor).getMainAction() == null) {
+                ((RMobileCompositePage) peer).getEditorPage().setMainAction(null);
+              }
+              if (((MobileCompositePageViewDescriptor) pageSectionViewDescriptor).getBackAction() == null) {
+                ((RMobileCompositePage) peer).getEditorPage().setBackAction(null);
+              }
+            }
+          }
+          pageSections.add(peer);
           childrenViews.add(pageSectionView);
         }
       } finally {
