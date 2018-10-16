@@ -51,7 +51,8 @@ public abstract class BusinessException extends RuntimeException {
    * @param message
    *     the exception message.
    * @param staticI18nKey
-   *     the static i18n key if any. It will be used by default to get the internationalized message.
+   *     the static i18n key if any. It will be used by default to get the internationalized
+   *     message.
    */
   public BusinessException(String message, String staticI18nKey) {
     this(message, staticI18nKey, (Object[]) null);
@@ -63,7 +64,8 @@ public abstract class BusinessException extends RuntimeException {
    * @param message
    *     the exception message.
    * @param staticI18nKey
-   *     the static i18n key if any. It will be used by default to get the internationalized message.
+   *     the static i18n key if any. It will be used by default to get the internationalized
+   *     message.
    * @param i18nParams
    *     the parameters of the translated message or null.
    */
@@ -85,12 +87,29 @@ public abstract class BusinessException extends RuntimeException {
    */
   public String getI18nMessage(ITranslationProvider translationProvider,
       Locale locale) {
-    if (i18nParams != null) {
-      return translationProvider.getTranslation(staticI18nKey, i18nParams,
+    if (getI18nParams() != null) {
+      return translationProvider.getTranslation(getStaticI18nKey(), getI18nParams(),
           locale);
     }
     return translationProvider
-        .getTranslation(staticI18nKey, (String) null, locale);
+        .getTranslation(getStaticI18nKey(), (String) null, locale);
   }
 
+  /**
+   * Get i 18 n params object [ ].
+   *
+   * @return the object [ ]
+   */
+  protected Object[] getI18nParams() {
+    return i18nParams;
+  }
+
+  /**
+   * Gets static i 18 n key.
+   *
+   * @return the static i 18 n key
+   */
+  protected String getStaticI18nKey() {
+    return staticI18nKey;
+  }
 }
