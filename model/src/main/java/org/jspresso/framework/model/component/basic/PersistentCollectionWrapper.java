@@ -101,7 +101,7 @@ public class PersistentCollectionWrapper<E> implements InvocationHandler {
           wrappedAccessor.addToValue(holder, args[0]);
           return true;
         } else if (method.getParameterTypes().length == 2) {
-          ((IListAccessor) wrappedAccessor).addToValue(wrappedAccessor, (Integer) args[0], args[1]);
+          ((IListAccessor) wrappedAccessor).addToValue(holder, (Integer) args[0], args[1]);
           return null;
         }
         break;
