@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.security.auth.Subject;
 
@@ -45,7 +46,7 @@ public final class SecurityHelper {
   /**
    * {@code ROLES_GROUP_NAME}.
    */
-  public static final String ROLES_GROUP_NAME    = "Roles";
+  public static final String ROLES_GROUP_NAME = "Roles";
 
   private SecurityHelper() {
     // private constructor for helper class
@@ -69,9 +70,9 @@ public final class SecurityHelper {
    * Tests whether the passed subject has sufficient roles.
    *
    * @param subject
-   *          the subject to test.
+   *     the subject to test.
    * @param securable
-   *          the securable to test.
+   *     the securable to test.
    * @return true if the subject has sufficient privilege.
    */
   public static boolean isSubjectGranted(Subject subject, ISecurable securable) {
@@ -100,7 +101,7 @@ public final class SecurityHelper {
       boolean granted = false;
       if (!grantedRoles.isEmpty()) {
         for (String grantedRole : grantedRoles) {
-          if (subjectRoles.isMember(new SimplePrincipal(grantedRole))) {
+          if (isMember(subjectRoles, grantedRole)) {
             granted = true;
             break;
           }
@@ -109,7 +110,7 @@ public final class SecurityHelper {
       if (!granted && !ungrantedRoles.isEmpty()) {
         granted = true;
         for (String ungrantedRole : ungrantedRoles) {
-          if (subjectRoles.isMember(new SimplePrincipal(ungrantedRole))) {
+          if (isMember(subjectRoles, ungrantedRole)) {
             granted = false;
             break;
           }
@@ -120,12 +121,31 @@ public final class SecurityHelper {
     return false;
   }
 
+  protected static boolean isMember(Group subjectRoles, String grantedRole) {
+    if (subjectRoles.isMember(new SimplePrincipal(grantedRole))) {
+      return true;
+    } else {
+      // Try regexps
+      try {
+        Pattern regex = Pattern.compile(grantedRole);
+        for (String role : getRoles(subjectRoles)) {
+          if (regex.matcher(role).matches()) {
+            return true;
+          }
+        }
+      } catch (Throwable t) {
+        // Nothing to do here
+      }
+      List<String> roles = getRoles(subjectRoles);
+    }
+    return false;
+  }
+
   private static Group getRolesGroup(Subject subject) {
     Group subjectRoles = null;
     if (subject != null) {
       for (Principal p : subject.getPrincipals()) {
-        if (p instanceof Group
-            && ROLES_GROUP_NAME.equalsIgnoreCase(p.getName())) {
+        if (p instanceof Group && ROLES_GROUP_NAME.equalsIgnoreCase(p.getName())) {
           subjectRoles = (Group) p;
         }
       }
@@ -137,15 +157,19 @@ public final class SecurityHelper {
    * Extracts the role names contained in this JAAS subject.
    *
    * @param subject
-   *          the subject to extract the roles for.
+   *     the subject to extract the roles for.
    * @return the roles list.
    */
   public static List<String> getRoles(Subject subject) {
-    List<String> roles = new ArrayList<>();
     Group subjectRoles = getRolesGroup(subject);
+    List<String> roles = getRoles(subjectRoles);
+    return roles;
+  }
+
+  protected static List<String> getRoles(Group subjectRoles) {
+    List<String> roles = new ArrayList<>();
     if (subjectRoles != null) {
-      for (Enumeration<? extends Principal> rolesEnum = subjectRoles.members(); rolesEnum
-          .hasMoreElements();) {
+      for (Enumeration<? extends Principal> rolesEnum = subjectRoles.members(); rolesEnum.hasMoreElements(); ) {
         roles.add(rolesEnum.nextElement().getName());
       }
     }
