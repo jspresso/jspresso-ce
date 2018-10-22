@@ -2472,12 +2472,16 @@ public abstract class AbstractBackendController extends AbstractController imple
   public Set<AsyncActionExecutor> getRunningExecutors() {
     if (controllerAsyncActionsThreadGroup != null) {
       int activeCount = controllerAsyncActionsThreadGroup.activeCount();
-      AsyncActionExecutor[] activeExecutors = new AsyncActionExecutor[activeCount];
-      controllerAsyncActionsThreadGroup.enumerate(activeExecutors);
+      Thread[] groupThreads = new Thread[activeCount];
+      controllerAsyncActionsThreadGroup.enumerate(groupThreads);
 
-      List<AsyncActionExecutor> asyncActionExecutors = Arrays.asList(activeExecutors);
+      List<AsyncActionExecutor> asyncActionExecutors = new ArrayList<>();
+      for (Thread thread : groupThreads) {
+        if (thread instanceof AsyncActionExecutor) {
+          asyncActionExecutors.add((AsyncActionExecutor) thread);
+        }
+      }
       Collections.reverse(asyncActionExecutors);
-
       return new LinkedHashSet<>(asyncActionExecutors);
     }
     return Collections.emptySet();
