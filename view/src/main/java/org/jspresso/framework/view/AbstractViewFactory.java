@@ -839,7 +839,10 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
           ICompositeValueConnector connector = getConnectorFactory().createCompositeValueConnector(connectorId, null);
           view.setConnector(connector);
           for (IView<E> childView : view.getChildren()) {
-            connector.addChildConnector(childView.getConnector().getId(), childView.getConnector());
+            String childConnectorId = childView.getConnector().getId();
+            if (childConnectorId != null) {
+              connector.addChildConnector(childConnectorId, childView.getConnector());
+            }
           }
         }
       }
