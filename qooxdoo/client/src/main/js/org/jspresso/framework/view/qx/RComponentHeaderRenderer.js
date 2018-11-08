@@ -54,6 +54,14 @@ qx.Class.define("org.jspresso.framework.view.qx.RComponentHeaderRenderer", {
         this.__viewFactory.setIcon(widget, this.__rComponent.getIcon());
       }
       return widget;
+    },
+
+    updateHeaderCell: function (cellInfo, cellWidget) {
+      if (cellInfo && this.__rComponent) {
+        cellInfo.name = this.__rComponent.getLabel();
+      }
+      this.base(arguments, cellInfo, cellWidget);
     }
+
   }
 });
