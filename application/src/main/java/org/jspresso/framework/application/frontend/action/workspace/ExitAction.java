@@ -18,20 +18,24 @@
  */
 package org.jspresso.framework.application.frontend.action.workspace;
 
-import java.util.List;
-import java.util.Map;
-
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.model.Module;
 import org.jspresso.framework.application.model.Workspace;
 
+import java.util.List;
+import java.util.Map;
+
 /**
- * This action exits the application. Before doing so, user activated application
- * modules are traversed ton check that no pending changes need to be forwarded
- * to the persistent store. Whenever the dirty checking is positive, then the
- * user is notified and given a chance to cancel the exit.
+ * This action exits the application.
+ * Before doing so, user activated application modules are traversed
+ * to check that no pending changes need to be forwarded to the persistent
+ * store.
+ * Also asynchronous executor thread are traversed to check for still alive
+ * one.
+ * Whenever the dirty checking is positive, or any asynchronous executor is
+ * still alive, then the user is notified and given a chance to cancel the exit.
  *
  * @author Vincent Vandenschrick
  * @param <E>
@@ -68,9 +72,74 @@ public class ExitAction<E, F, G> extends FrontendAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
+
+    String checkBeforeExitMsg = checkBeforeExitFrontAction(actionHandler, context);
+    if (checkBeforeExitMsg!=null) {
+
+      checkBeforeExitMsg = "<html>" + checkBeforeExitMsg + "<br><br>"
+              + getTranslationProvider(context).getTranslation("exit.question.message", getLocale(context))
+              + "</html>";
+
+      getController(context).popupYesNo(
+              getSourceComponent(context),
+              getTranslationProvider(context).getTranslation("module.content.dirty.title", getLocale(context)),
+              getIconFactory(context).getQuestionIconImageURL(),
+              checkBeforeExitMsg,
+              actualExitAction, null, context);
+    }
+    else {
+
+      return actualExitAction.execute(actionHandler, context);
+    }
+
+    return false;
+  }
+
+  /**
+   * Check before exiting.
+   * 1/ Traverse module to check that no pending changes need to be forwarded
+   * 2/ Traverse asynchronous executor to check that none if them are still alive
+   * @param context
+   *             The context.
+   * @return the i18n message to display or null
+   */
+  protected String checkBeforeExitFrontAction(IActionHandler actionHandler, Map<String, Object> context) {
+
+    StringBuilder sb = new StringBuilder();
+
+    if (hasDirtyModules(actionHandler, context)) {
+      sb.append(getTranslationProvider(context).getTranslation(
+                            "module.content.dirty.message", getLocale(context)));
+    }
+
+    if (hasAliveAsynchronousExecutors(actionHandler, context)) {
+      if (sb.length()>0) {
+        sb.append("<br/>");
+      }
+      sb.append(getTranslationProvider(context).getTranslation(
+              "asynchronous.tasks.alive.message", getLocale(context)));
+    }
+
+    return sb.length()==0 ? null : sb.toString();
+  }
+
+  /**
+   * Traverse module to check that no pending changes need to be forwarded
+   * @param actionHandler
+   *          the action handler this action has been told to execute by. It may
+   *          be used to post another action execution upon completion of this
+   *          one.
+   * @param context
+   *          the execution context. The action should update it depending on
+   *          its result.
+   * @return true if one or more module is dirty.
+   */
+  protected boolean hasDirtyModules(IActionHandler actionHandler, Map<String, Object> context) {
+
     if (getCheckCurrentModuleDirtyStateAction() != null) {
       getCheckCurrentModuleDirtyStateAction().execute(actionHandler, context);
     }
+
     boolean hasDirtyModules = false;
     for (String workspaceName : getController(context).getWorkspaceNames()) {
       Workspace ws = getController(context).getWorkspace(workspaceName);
@@ -87,20 +156,26 @@ public class ExitAction<E, F, G> extends FrontendAction<E, F, G> {
         break;
       }
     }
-    if (hasDirtyModules) {
-      getController(context).popupYesNo(
-          getSourceComponent(context),
-          getTranslationProvider(context).getTranslation(
-              "module.content.dirty.title", getLocale(context)),
-          getIconFactory(context).getQuestionIconImageURL(),
-          getTranslationProvider(context).getTranslation(
-              "module.content.dirty.message", getLocale(context)),
-          actualExitAction, null, context);
-    } else {
-      return actualExitAction.execute(actionHandler, context);
-    }
-    return false;
+
+    return hasDirtyModules;
   }
+
+  /**
+   * Traverse asynchronous executor to check that none are still alive
+   * @param actionHandler
+   *          the action handler this action has been told to execute by. It may
+   *          be used to post another action execution upon completion of this
+   *          one.
+   * @param context
+   *          the execution context. The action should update it depending on
+   *          its result.
+   * @return true if one or more module is dirty.
+   */
+  protected boolean hasAliveAsynchronousExecutors(IActionHandler actionHandler, Map<String, Object> context) {
+
+    return !getBackendController(context).getRunningExecutors().isEmpty();
+  }
+
 
   /**
    * Configures the action used to perform dirty checking on current module to
