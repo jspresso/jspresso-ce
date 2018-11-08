@@ -2393,7 +2393,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var columnLabels = [];
       var columnToolTips = [];
       for (var i = 0; i < remoteTable.getColumnIds().length; i++) {
-        var columnLabel = remoteTable.getColumns()[i].getLabel();
+        var columnLabel = remoteTable.getColumnHeaders()[i].getLabel();
         columnLabel = org.jspresso.framework.util.html.HtmlUtil.replaceNewlines(columnLabel);
         columnLabels[i] = columnLabel;
       }
