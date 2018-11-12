@@ -30,7 +30,7 @@ import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RSplitContainer;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.view.IView;
-import org.jspresso.framework.view.descriptor.EOrientation;
+import org.jspresso.framework.util.gui.EOrientation;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**

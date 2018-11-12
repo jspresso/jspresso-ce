@@ -1,6 +1,17 @@
 6.0.0
 =====
+- Importing excel files improvements :
+  - The sheet used by the import is the last visited one (i.e it was always the 1st)
+  - Hidden rows and columns are ignored (i.e hidden rows and columns were imported)
+  - Formulas are supported
+  - Cell formatting is ignored, you can use any colors, font, etc.
+
 - Module headerDescription property has been renamed to pageHeaderDescription
+
+- EAxis, EBorderType, EHorizontalAlignment, EHorizontalPosition, ELabelPosition, EOrientation, EPosition,
+  ESelectionMode enums are now part of the util.gui package (and module). In the rare case where you use them
+  programmatically, you have to change the import package of those classes.
+
 
 5.0.0
 =====

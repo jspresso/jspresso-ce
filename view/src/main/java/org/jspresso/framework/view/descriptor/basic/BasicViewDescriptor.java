@@ -31,7 +31,7 @@ import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.lang.StringUtils;
 import org.jspresso.framework.view.action.ActionMap;
-import org.jspresso.framework.view.descriptor.EBorderType;
+import org.jspresso.framework.util.gui.EBorderType;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**

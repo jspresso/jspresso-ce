@@ -67,7 +67,7 @@ import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.action.IDisplayableAction;
-import org.jspresso.framework.view.descriptor.ESelectionMode;
+import org.jspresso.framework.util.gui.ESelectionMode;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
 /**

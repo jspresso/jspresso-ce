@@ -932,8 +932,8 @@ qx.Theme.define("org.jspresso.framework.theme.Appearance",
           alias: "scrollarea",
           style: function (states) {
             return {
-              margin: 10,
-              padding: 10
+              margin: 0,
+              padding: 0
             }
           }
         },

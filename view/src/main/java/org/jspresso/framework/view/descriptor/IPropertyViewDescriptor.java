@@ -21,6 +21,8 @@ package org.jspresso.framework.view.descriptor;
 import java.util.List;
 
 import org.jspresso.framework.action.IAction;
+import org.jspresso.framework.util.gui.EHorizontalAlignment;
+import org.jspresso.framework.util.gui.EHorizontalPosition;
 import org.jspresso.framework.util.gui.IClientTypeAware;
 
 /**

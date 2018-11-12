@@ -24,7 +24,7 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicListDescriptor;
 import org.jspresso.framework.util.gui.Icon;
-import org.jspresso.framework.view.descriptor.ESelectionMode;
+import org.jspresso.framework.util.gui.ESelectionMode;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptorProvider;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;

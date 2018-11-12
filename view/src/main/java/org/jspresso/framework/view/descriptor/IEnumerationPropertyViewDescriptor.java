@@ -21,6 +21,7 @@ package org.jspresso.framework.view.descriptor;
 import java.util.Set;
 
 import org.jspresso.framework.util.gui.Dimension;
+import org.jspresso.framework.util.gui.EOrientation;
 
 /**
  * A property view descriptor used to refine (filter) values that are displayed

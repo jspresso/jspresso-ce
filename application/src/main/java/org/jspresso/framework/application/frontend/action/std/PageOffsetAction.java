@@ -27,7 +27,7 @@ import org.jspresso.framework.application.frontend.action.FrontendAction;
 import org.jspresso.framework.application.model.FilterableBeanCollectionModule;
 import org.jspresso.framework.util.collection.IPageable;
 import org.jspresso.framework.view.IView;
-import org.jspresso.framework.view.descriptor.ESelectionMode;
+import org.jspresso.framework.util.gui.ESelectionMode;
 import org.jspresso.framework.view.descriptor.ICollectionViewDescriptor;
 
 /**

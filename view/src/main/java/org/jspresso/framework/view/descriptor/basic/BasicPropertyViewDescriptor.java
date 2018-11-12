@@ -28,8 +28,8 @@ import org.jspresso.framework.model.descriptor.INumberPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.util.gate.IGateAccessible;
-import org.jspresso.framework.view.descriptor.EHorizontalAlignment;
-import org.jspresso.framework.view.descriptor.EHorizontalPosition;
+import org.jspresso.framework.util.gui.EHorizontalAlignment;
+import org.jspresso.framework.util.gui.EHorizontalPosition;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 
 /**

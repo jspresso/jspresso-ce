@@ -28,8 +28,7 @@ import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
-import org.jspresso.framework.view.descriptor.EHorizontalPosition;
-import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
+import org.jspresso.framework.util.gui.EHorizontalPosition;
 
 /**
  * Component view descriptors are surely one of the most commonly used view

@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.view.descriptor;
 
+import org.jspresso.framework.util.gui.EOrientation;
+
 /**
  * This public interface is implemented by a composite view descriptor which
  * organizes 2 view descriptors in a split manner. The described view can

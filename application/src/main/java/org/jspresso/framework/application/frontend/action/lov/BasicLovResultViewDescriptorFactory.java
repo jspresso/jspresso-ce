@@ -20,13 +20,11 @@ package org.jspresso.framework.application.frontend.action.lov;
 
 import java.util.Map;
 
-import org.jspresso.framework.application.action.AbstractActionContextAware;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
-import org.jspresso.framework.model.descriptor.IQueryComponentDescriptorFactory;
-import org.jspresso.framework.view.descriptor.ESelectionMode;
+import org.jspresso.framework.util.gui.ESelectionMode;
 import org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
 

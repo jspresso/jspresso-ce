@@ -36,7 +36,7 @@ import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDes
 import org.jspresso.framework.model.descriptor.query.EnumQueryStructureDescriptor;
 import org.jspresso.framework.util.descriptor.DefaultDescriptor;
 import org.jspresso.framework.view.action.IDisplayableAction;
-import org.jspresso.framework.view.descriptor.ELabelPosition;
+import org.jspresso.framework.util.gui.ELabelPosition;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;

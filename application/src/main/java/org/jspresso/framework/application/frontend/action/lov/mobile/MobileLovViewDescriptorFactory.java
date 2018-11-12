@@ -30,7 +30,7 @@ import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
 import org.jspresso.framework.view.action.IDisplayableAction;
-import org.jspresso.framework.view.descriptor.ESelectionMode;
+import org.jspresso.framework.util.gui.ESelectionMode;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicCollectionViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicViewDescriptor;
