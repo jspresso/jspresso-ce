@@ -16,42 +16,32 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.view.descriptor;
+package org.jspresso.framework.util.gui;
 
 /**
- * Selection mode constants.
+ * View border type constants.
  *
  * @author Vincent Vandenschrick
  */
-public enum ESelectionMode {
+public enum EBorderType {
+  /**
+   * {@code NONE}.
+   */
+  NONE,
 
   /**
-   * {@code MULTIPLE_INTERVAL_SELECTION}.
+   * {@code SIMPLE}.
    */
-  MULTIPLE_INTERVAL_SELECTION,
+  SIMPLE,
 
   /**
-   * {@code SINGLE_INTERVAL_SELECTION}.
+   * {@code TITLED}.
    */
-  SINGLE_INTERVAL_SELECTION,
+  TITLED,
 
   /**
-   * {@code MULTIPLE_INTERVAL_CUMULATIVE_SELECTION}.
+   * {@code TITLED_ACTIONS}.
    */
-  MULTIPLE_INTERVAL_CUMULATIVE_SELECTION,
+  TITLED_ACTIONS,
 
-  /**
-   * {@code SINGLE_INTERVAL_CUMULATIVE_SELECTION}.
-   */
-  SINGLE_INTERVAL_CUMULATIVE_SELECTION,
-
-  /**
-   * {@code SINGLE_SELECTION}.
-   */
-  SINGLE_SELECTION,
-
-  /**
-   * {@code SINGLE_CUMULATIVE_SELECTION}.
-   */
-  SINGLE_CUMULATIVE_SELECTION
 }

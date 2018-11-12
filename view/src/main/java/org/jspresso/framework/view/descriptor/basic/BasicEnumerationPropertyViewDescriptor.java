@@ -21,7 +21,7 @@ package org.jspresso.framework.view.descriptor.basic;
 import java.util.Set;
 
 import org.jspresso.framework.util.gui.Dimension;
-import org.jspresso.framework.view.descriptor.EOrientation;
+import org.jspresso.framework.util.gui.EOrientation;
 import org.jspresso.framework.view.descriptor.IEnumerationPropertyViewDescriptor;
 
 /**

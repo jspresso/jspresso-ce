@@ -20,6 +20,7 @@ package org.jspresso.framework.view.descriptor;
 
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.util.gui.ESelectionMode;
 
 /**
  * This public interface is implemented by any collection view descriptor. For

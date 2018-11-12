@@ -42,6 +42,18 @@ qx.Class.define("org.jspresso.framework.util.gui.CellConstraints", {
     },
     widthResizable: {
       check: "Boolean"
+    },
+    fillWidth: {
+      check: "Boolean"
+    },
+    fillHeight: {
+      check: "Boolean"
+    },
+    horizontalAlignment: {
+      check: "String"
+    },
+    verticalAlignment: {
+      check: "String"
     }
   }
 });

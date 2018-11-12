@@ -21,7 +21,7 @@ package org.jspresso.framework.view.descriptor.mobile;
 import java.util.List;
 
 import org.jspresso.framework.view.action.IDisplayableAction;
-import org.jspresso.framework.view.descriptor.EPosition;
+import org.jspresso.framework.util.gui.EPosition;
 import org.jspresso.framework.view.descriptor.basic.BasicCompositeViewDescriptor;
 
 /**

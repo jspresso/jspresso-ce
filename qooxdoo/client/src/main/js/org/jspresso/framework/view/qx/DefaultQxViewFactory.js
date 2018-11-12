@@ -633,10 +633,30 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         /** @type {org.jspresso.framework.util.gui.CellConstraints} */
         var cellConstraint = remoteConstrainedGridContainer.getCellConstraints()[i];
         var cellComponent = this.createComponent(remoteConstrainedGridContainer.getCells()[i]);
-        cellComponent.setAllowStretchX(cellConstraint.getWidthResizable());
-        cellComponent.setAllowStretchY(cellConstraint.getHeightResizable());
-        cellComponent.setAlignX("left");
-        cellComponent.setAlignY("middle");
+        if (cellConstraint.getFillWidth()) {
+          cellComponent.resetMaxWidth();
+          cellComponent.setAllowStretchX(true);
+        }
+        if (cellConstraint.getFillHeight()) {
+          cellComponent.resetMaxHeight();
+          cellComponent.setAllowStretchY(true);
+        }
+        var horizontalAlignment = cellConstraint.getHorizontalAlignment();
+        if (horizontalAlignment == "CENTER") {
+          cellComponent.setAlignX("center");
+        } else if (horizontalAlignment == "RIGHT") {
+          cellComponent.setAlignX("right");
+        } else {
+          cellComponent.setAlignX("left");
+        }
+        var verticalAlignment = cellConstraint.getVerticalAlignment();
+        if (verticalAlignment == "TOP") {
+          cellComponent.setAlignY("top");
+        } else if (verticalAlignment == "BOTTOM") {
+          cellComponent.setAlignY("bottom");
+        } else {
+          cellComponent.setAlignY("middle");
+        }
         constrainedGridContainer.add(cellComponent, {
           row: cellConstraint.getRow(),
           rowSpan: cellConstraint.getHeight(),
@@ -3485,8 +3505,9 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       scroller.setAppearance("repeater");
       scroller.addListenerOnce("appear", function (appearEvent) {
         vBox.setSpacing(scroller.getMarginTop());
+        scroller.setWidth(repeaterContainer.getWidth());
+        scroller.setHeight(repeaterContainer.getHeight());
       });
-
       return scroller;
     },
 

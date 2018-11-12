@@ -20,6 +20,9 @@ package org.jspresso.framework.view.descriptor;
 
 import java.util.List;
 
+import org.jspresso.framework.util.gui.EHorizontalPosition;
+import org.jspresso.framework.util.gui.ELabelPosition;
+
 /**
  * This public interface is implemented by view descriptors which are used to
  * display a model in a form way. A form view will typically display a

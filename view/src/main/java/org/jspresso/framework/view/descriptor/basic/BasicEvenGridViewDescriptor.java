@@ -21,7 +21,7 @@ package org.jspresso.framework.view.descriptor.basic;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jspresso.framework.view.descriptor.EAxis;
+import org.jspresso.framework.util.gui.EAxis;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 

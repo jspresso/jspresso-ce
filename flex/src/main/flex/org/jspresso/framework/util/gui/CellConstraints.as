@@ -30,6 +30,10 @@ public class CellConstraints {
   private var _row:int;
   private var _width:int;
   private var _widthResizable:Boolean;
+  private var _fillWidth:Boolean;
+  private var _fillHeight:Boolean;
+  private var _horizontalAlignment:String;
+  private var _verticalAlignment:String;
 
   public function CellConstraints() {
     //default constructor.
@@ -81,6 +85,38 @@ public class CellConstraints {
 
   public function get widthResizable():Boolean {
     return _widthResizable;
+  }
+
+  public function get fillWidth():Boolean {
+    return _fillWidth;
+  }
+
+  public function set fillWidth(value:Boolean):void {
+    _fillWidth = value;
+  }
+
+  public function get fillHeight():Boolean {
+    return _fillHeight;
+  }
+
+  public function set fillHeight(value:Boolean):void {
+    _fillHeight = value;
+  }
+
+  public function get horizontalAlignment():String {
+    return _horizontalAlignment;
+  }
+
+  public function set horizontalAlignment(value:String):void {
+    _horizontalAlignment = value;
+  }
+
+  public function get verticalAlignment():String {
+    return _verticalAlignment;
+  }
+
+  public function set verticalAlignment(value:String):void {
+    _verticalAlignment = value;
   }
 }
 }

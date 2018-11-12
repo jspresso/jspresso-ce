@@ -8,9 +8,10 @@
 
 - Module headerDescription property has been renamed to pageHeaderDescription
 
-- WEST and EAST components in border containers are now vertically centered if their height is not resizable.
+- EAxis, EBorderType, EHorizontalAlignment, EHorizontalPosition, ELabelPosition, EOrientation, EPosition,
+  ESelectionMode enums are now part of the util.gui package (and module). In the rare case where you use them
+  programmatically, you have to change the import package of those classes.
 
-- NORTH and SOUTH components in border containers are now horizontally centered if their width is not resizable.
 
 5.0.0
 =====
