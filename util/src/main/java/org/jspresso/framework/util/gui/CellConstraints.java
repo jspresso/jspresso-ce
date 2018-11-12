@@ -29,12 +29,16 @@ public class CellConstraints implements Serializable {
 
   private static final long serialVersionUID = -7074571604039727117L;
 
-  private int               column;
-  private int               height;
-  private boolean           heightResizable;
-  private int               row;
-  private int               width;
-  private boolean           widthResizable;
+  private int                  row;
+  private int                  column;
+  private int                  width;
+  private int                  height;
+  private boolean              widthResizable;
+  private boolean              heightResizable;
+  private boolean              fillWidth;
+  private boolean              fillHeight;
+  private EHorizontalAlignment horizontalAlignment;
+  private EVerticalAlignment   verticalAlignment;
 
   /**
    * Constructs a new {@code CellConstraints} instance.
@@ -44,26 +48,29 @@ public class CellConstraints implements Serializable {
     height = 1;
     widthResizable = true;
     heightResizable = true;
+    fillWidth = false;
+    fillHeight = false;
+    horizontalAlignment = EHorizontalAlignment.LEFT;
+    verticalAlignment = EVerticalAlignment.MIDDLE;
   }
 
   /**
    * Constructs a new {@code CellConstraints} instance.
    *
    * @param row
-   *          the row.
+   *     the row.
    * @param column
-   *          the column.
+   *     the column.
    * @param width
-   *          the width.
+   *     the width.
    * @param height
-   *          the height.
+   *     the height.
    * @param widthResizable
-   *          is resizable in width ?
+   *     is resizable in width ?
    * @param heightResizable
-   *          is resizable in height ?
+   *     is resizable in height ?
    */
-  public CellConstraints(int row, int column, int width, int height,
-      boolean widthResizable, boolean heightResizable) {
+  public CellConstraints(int row, int column, int width, int height, boolean widthResizable, boolean heightResizable) {
     super();
     this.row = row;
     this.column = column;
@@ -131,7 +138,7 @@ public class CellConstraints implements Serializable {
    * Sets the column.
    *
    * @param column
-   *          the column to set.
+   *     the column to set.
    */
   public void setColumn(int column) {
     this.column = column;
@@ -141,7 +148,7 @@ public class CellConstraints implements Serializable {
    * Sets the height.
    *
    * @param height
-   *          the height to set.
+   *     the height to set.
    */
   public void setHeight(int height) {
     this.height = height;
@@ -151,7 +158,7 @@ public class CellConstraints implements Serializable {
    * Sets the heightResizable.
    *
    * @param heightResizable
-   *          the heightResizable to set.
+   *     the heightResizable to set.
    */
   public void setHeightResizable(boolean heightResizable) {
     this.heightResizable = heightResizable;
@@ -161,7 +168,7 @@ public class CellConstraints implements Serializable {
    * Sets the row.
    *
    * @param row
-   *          the row to set.
+   *     the row to set.
    */
   public void setRow(int row) {
     this.row = row;
@@ -171,7 +178,7 @@ public class CellConstraints implements Serializable {
    * Sets the width.
    *
    * @param width
-   *          the width to set.
+   *     the width to set.
    */
   public void setWidth(int width) {
     this.width = width;
@@ -181,9 +188,85 @@ public class CellConstraints implements Serializable {
    * Sets the widthResizable.
    *
    * @param widthResizable
-   *          the widthResizable to set.
+   *     the widthResizable to set.
    */
   public void setWidthResizable(boolean widthResizable) {
     this.widthResizable = widthResizable;
+  }
+
+  /**
+   * Is fill width boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isFillWidth() {
+    return fillWidth;
+  }
+
+  /**
+   * Sets fill width.
+   *
+   * @param fillWidth
+   *     the fill width
+   */
+  public void setFillWidth(boolean fillWidth) {
+    this.fillWidth = fillWidth;
+  }
+
+  /**
+   * Is fill height boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isFillHeight() {
+    return fillHeight;
+  }
+
+  /**
+   * Sets fill height.
+   *
+   * @param fillHeight
+   *     the fill height
+   */
+  public void setFillHeight(boolean fillHeight) {
+    this.fillHeight = fillHeight;
+  }
+
+  /**
+   * Gets horizontal alignment.
+   *
+   * @return the horizontal alignment
+   */
+  public EHorizontalAlignment getHorizontalAlignment() {
+    return horizontalAlignment;
+  }
+
+  /**
+   * Sets horizontal alignment.
+   *
+   * @param horizontalAlignment
+   *     the horizontal alignment
+   */
+  public void setHorizontalAlignment(EHorizontalAlignment horizontalAlignment) {
+    this.horizontalAlignment = horizontalAlignment;
+  }
+
+  /**
+   * Gets vertical alignment.
+   *
+   * @return the vertical alignment
+   */
+  public EVerticalAlignment getVerticalAlignment() {
+    return verticalAlignment;
+  }
+
+  /**
+   * Sets vertical alignment.
+   *
+   * @param verticalAlignment
+   *     the vertical alignment
+   */
+  public void setVerticalAlignment(EVerticalAlignment verticalAlignment) {
+    this.verticalAlignment = verticalAlignment;
   }
 }

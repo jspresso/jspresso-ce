@@ -76,6 +76,8 @@ public class RemoteCallUtils extends net.sf.qooxdoo.rpc.RemoteCallUtils {
         } else {
           returnValue = super.fromJava(((Double) obj).doubleValue());
         }
+      } else if (obj instanceof Enum<?>) {
+        returnValue = super.fromJava(((Enum) obj).name());
       } else {
         returnValue = super.fromJava(obj);
       }

@@ -24,7 +24,7 @@ import java.util.Collections;
 import org.jspresso.framework.application.model.BeanModule;
 import org.jspresso.framework.application.model.descriptor.BeanModuleDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
-import org.jspresso.framework.view.descriptor.EBorderType;
+import org.jspresso.framework.util.gui.EBorderType;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.AbstractMobilePageViewDescriptor;
 import org.jspresso.framework.view.descriptor.mobile.IMobileViewDescriptor;

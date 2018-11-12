@@ -16,23 +16,28 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.view.descriptor;
+package org.jspresso.framework.util.gui;
 
 /**
- * Axis grid view constants.
+ * Enumeration for vertical alignment constants.
  *
  * @author Vincent Vandenschrick
  */
-public enum EAxis {
+public enum EVerticalAlignment {
 
   /**
-   * {@code COLUMN}.
+   * {@code TOP}.
    */
-  COLUMN,
+  TOP,
 
   /**
-   * {@code ROW}.
+   * {@code MIDDLE}.
    */
-  ROW
+  MIDDLE,
+
+  /**
+   * {@code BOTTOM}.
+   */
+  BOTTOM
 
 }

@@ -21,7 +21,7 @@ package org.jspresso.framework.view.descriptor.basic;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jspresso.framework.view.descriptor.EOrientation;
+import org.jspresso.framework.util.gui.EOrientation;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 

@@ -16,27 +16,32 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.view.descriptor;
+package org.jspresso.framework.util.gui;
 
 /**
- * Component views label position.
+ * Enumeration for position constants.
  *
  * @author Vincent Vandenschrick
  */
-public enum ELabelPosition {
+public enum EPosition {
 
   /**
-   * {@code ABOVE}.
+   * {@code LEFT}.
    */
-  ABOVE,
+  LEFT,
 
   /**
-   * {@code ASIDE}.
+   * {@code RIGHT}.
    */
-  ASIDE,
+  RIGHT,
 
   /**
-   * {@code NONE}.
+   * {@code TOP}.
    */
-  NONE
+  TOP,
+
+  /**
+   * {@code BOTTOM}.
+   */
+  BOTTOM
 }

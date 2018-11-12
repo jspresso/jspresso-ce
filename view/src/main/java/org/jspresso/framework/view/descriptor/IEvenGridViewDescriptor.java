@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.view.descriptor;
 
+import org.jspresso.framework.util.gui.EAxis;
+
 /**
  * A grid view descriptor which organises its contained views in fixed-sized
  * cells. This kind of described container view might typically be implemented

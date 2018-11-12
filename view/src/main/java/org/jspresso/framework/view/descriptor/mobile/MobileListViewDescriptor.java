@@ -20,8 +20,8 @@ package org.jspresso.framework.view.descriptor.mobile;
 
 import java.util.List;
 
-import org.jspresso.framework.view.descriptor.EPosition;
-import org.jspresso.framework.view.descriptor.ESelectionMode;
+import org.jspresso.framework.util.gui.EPosition;
+import org.jspresso.framework.util.gui.ESelectionMode;
 import org.jspresso.framework.view.descriptor.basic.AbstractListViewDescriptor;
 
 /**

@@ -25,6 +25,7 @@ import org.jspresso.framework.util.descriptor.IIconDescriptor;
 import org.jspresso.framework.util.descriptor.IStylable;
 import org.jspresso.framework.util.gate.IGateAccessible;
 import org.jspresso.framework.util.gui.Dimension;
+import org.jspresso.framework.util.gui.EBorderType;
 import org.jspresso.framework.view.action.IActionable;
 
 /**

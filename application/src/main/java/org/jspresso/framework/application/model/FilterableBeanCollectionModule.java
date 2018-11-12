@@ -51,7 +51,7 @@ import org.jspresso.framework.util.collection.IPageable;
 import org.jspresso.framework.util.gui.ERenderingOptions;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.view.action.IDisplayableAction;
-import org.jspresso.framework.view.descriptor.EBorderType;
+import org.jspresso.framework.util.gui.EBorderType;
 import org.jspresso.framework.view.descriptor.ICompositeViewDescriptor;
 import org.jspresso.framework.view.descriptor.IQueryExtraViewDescriptorFactory;
 import org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactory;

@@ -20,14 +20,8 @@ package org.jspresso.framework.view.descriptor.mobile;
 
 import java.util.List;
 
-import javax.security.auth.Subject;
-
-import org.springframework.beans.BeanUtils;
-
-import org.jspresso.framework.view.descriptor.EPosition;
-import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.jspresso.framework.util.gui.EPosition;
 import org.jspresso.framework.view.descriptor.basic.BasicActionViewDescriptor;
-import org.jspresso.framework.view.descriptor.basic.BasicCardViewDescriptor;
 
 /**
  * A mobile action view descriptor.

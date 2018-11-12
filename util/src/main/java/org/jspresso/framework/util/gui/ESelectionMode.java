@@ -16,23 +16,42 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.view.descriptor;
+package org.jspresso.framework.util.gui;
 
 /**
- * Enumeration for horizontal position constants.
+ * Selection mode constants.
  *
  * @author Vincent Vandenschrick
  */
-public enum EHorizontalPosition {
+public enum ESelectionMode {
 
   /**
-   * {@code LEFT}.
+   * {@code MULTIPLE_INTERVAL_SELECTION}.
    */
-  LEFT,
+  MULTIPLE_INTERVAL_SELECTION,
 
   /**
-   * {@code RIGHT}.
+   * {@code SINGLE_INTERVAL_SELECTION}.
    */
-  RIGHT
+  SINGLE_INTERVAL_SELECTION,
 
+  /**
+   * {@code MULTIPLE_INTERVAL_CUMULATIVE_SELECTION}.
+   */
+  MULTIPLE_INTERVAL_CUMULATIVE_SELECTION,
+
+  /**
+   * {@code SINGLE_INTERVAL_CUMULATIVE_SELECTION}.
+   */
+  SINGLE_INTERVAL_CUMULATIVE_SELECTION,
+
+  /**
+   * {@code SINGLE_SELECTION}.
+   */
+  SINGLE_SELECTION,
+
+  /**
+   * {@code SINGLE_CUMULATIVE_SELECTION}.
+   */
+  SINGLE_CUMULATIVE_SELECTION
 }

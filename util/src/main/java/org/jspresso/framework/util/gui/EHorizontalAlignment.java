@@ -16,32 +16,28 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with Jspresso.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jspresso.framework.view.descriptor;
+package org.jspresso.framework.util.gui;
 
 /**
- * View border type constants.
+ * Enumeration for horizontal alignment constants.
  *
  * @author Vincent Vandenschrick
  */
-public enum EBorderType {
-  /**
-   * {@code NONE}.
-   */
-  NONE,
+public enum EHorizontalAlignment {
 
   /**
-   * {@code SIMPLE}.
+   * {@code LEFT}.
    */
-  SIMPLE,
+  LEFT,
 
   /**
-   * {@code TITLED}.
+   * {@code CENTER}.
    */
-  TITLED,
+  CENTER,
 
   /**
-   * {@code TITLED_ACTIONS}.
+   * {@code RIGHT}.
    */
-  TITLED_ACTIONS,
+  RIGHT
 
 }
