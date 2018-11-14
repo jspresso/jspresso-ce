@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.jspresso.framework</groupId>
     <artifactId>jspresso-root</artifactId>
-    <version>5.5.5</version>
+    <version>5.5.6-SNAPSHOT</version>
     <relativePath>../root/pom.xml</relativePath>
   </parent>
   <artifactId>jspresso-app-launch</artifactId>
