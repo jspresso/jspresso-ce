@@ -1042,9 +1042,9 @@
     <property name="collapsable" value="true"/>
     <property name="actions">
       <list>
+        <ref local="pasteCollectionFrontAction"/>
         <ref local="copyCollectionFrontAction"/>
         <ref bean="cutCollectionFrontAction"/>
-        <ref local="pasteCollectionFrontAction"/>
       </list>
     </property>
   </bean>
