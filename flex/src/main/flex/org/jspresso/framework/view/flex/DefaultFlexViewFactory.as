@@ -71,6 +71,7 @@ import mx.core.ClassFactory;
 import mx.core.Container;
 import mx.core.IFlexDisplayObject;
 import mx.core.ScrollPolicy;
+import mx.core.ScrollPolicy;
 import mx.core.UIComponent;
 import mx.events.CollectionEvent;
 import mx.events.CollectionEventKind;
@@ -2034,12 +2035,13 @@ public class DefaultFlexViewFactory {
     var decoratedForm:Container = form;
     if (!remoteForm.widthResizeable) {
       var lefter:Canvas = new Canvas();
-      lefter.horizontalScrollPolicy = ScrollPolicy.OFF;
-      lefter.verticalScrollPolicy = ScrollPolicy.OFF;
+      lefter.horizontalScrollPolicy = remoteForm.horizontallyScrollable ? ScrollPolicy.AUTO : ScrollPolicy.OFF;
+      lefter.verticalScrollPolicy = remoteForm.verticallyScrollable ? ScrollPolicy.AUTO : ScrollPolicy.OFF;
       lefter.addChild(decoratedForm);
       decoratedForm = lefter;
+    } else {
+      decoratedForm = applyComponentScrollability(decoratedForm, remoteForm);
     }
-    decoratedForm = applyComponentScrollability(decoratedForm, remoteForm);
     return decoratedForm;
   }
 
