@@ -1965,10 +1965,10 @@ public class DefaultFlexViewFactory {
       scroller.addChild(form);
       scroller.horizontalScrollPolicy = ScrollPolicy.OFF;
       scroller.verticalScrollPolicy = ScrollPolicy.AUTO;
-      scroller.addEventListener(FlexEvent.CREATION_COMPLETE, function (e:FlexEvent):void {
-        scroller.width = form.getExplicitOrMeasuredWidth();
-        scroller.height = form.getExplicitOrMeasuredHeight();
-      });
+//      scroller.addEventListener(FlexEvent.CREATION_COMPLETE, function (e:FlexEvent):void {
+//        scroller.width = form.getExplicitOrMeasuredWidth();
+//        scroller.height = form.getExplicitOrMeasuredHeight();
+//      });
       decoratedForm = scroller;
     }
     return decoratedForm;

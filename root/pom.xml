@@ -892,6 +892,10 @@
             <groupId>com.adobe.flex.framework</groupId>
             <artifactId>playerglobal</artifactId>
           </exclusion>
+          <exclusion>
+            <groupId>com.adobe</groupId>
+            <artifactId>as3corelib</artifactId>
+          </exclusion>
         </exclusions>
       </dependency>
       <dependency>
