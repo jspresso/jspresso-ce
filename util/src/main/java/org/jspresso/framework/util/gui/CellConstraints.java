@@ -35,8 +35,8 @@ public class CellConstraints implements Serializable {
   private int                  height;
   private boolean              widthResizable;
   private boolean              heightResizable;
-  private boolean              fillWidth;
-  private boolean              fillHeight;
+  private Boolean              fillWidth;
+  private Boolean              fillHeight;
   private EHorizontalAlignment horizontalAlignment;
   private EVerticalAlignment   verticalAlignment;
 
@@ -48,8 +48,6 @@ public class CellConstraints implements Serializable {
     height = 1;
     widthResizable = true;
     heightResizable = true;
-    fillWidth = false;
-    fillHeight = false;
     horizontalAlignment = EHorizontalAlignment.LEFT;
     verticalAlignment = EVerticalAlignment.MIDDLE;
   }
@@ -200,6 +198,9 @@ public class CellConstraints implements Serializable {
    * @return the boolean
    */
   public boolean isFillWidth() {
+    if (fillWidth == null) {
+      fillWidth = widthResizable;
+    }
     return fillWidth;
   }
 
@@ -219,6 +220,9 @@ public class CellConstraints implements Serializable {
    * @return the boolean
    */
   public boolean isFillHeight() {
+    if (fillHeight == null) {
+      fillHeight = heightResizable;
+    }
     return fillHeight;
   }
 

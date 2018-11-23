@@ -629,6 +629,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var gridLayout = new qx.ui.layout.Grid();
       constrainedGridContainer.setLayout(gridLayout);
 
+      var spanningColumnsCellConstraints = [];
+      var spanningRowsCellConstraints = [];
       for (var i = 0; i < remoteConstrainedGridContainer.getCellConstraints().length; i++) {
         /** @type {org.jspresso.framework.util.gui.CellConstraints} */
         var cellConstraint = remoteConstrainedGridContainer.getCellConstraints()[i];
@@ -636,10 +638,14 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         if (cellConstraint.getFillWidth()) {
           cellComponent.resetMaxWidth();
           cellComponent.setAllowStretchX(true);
+        } else {
+          cellComponent.setAllowStretchX(false);
         }
         if (cellConstraint.getFillHeight()) {
           cellComponent.resetMaxHeight();
           cellComponent.setAllowStretchY(true);
+        } else {
+          cellComponent.setAllowStretchY(false);
         }
         var horizontalAlignment = cellConstraint.getHorizontalAlignment();
         if (horizontalAlignment == "CENTER") {
@@ -663,18 +669,55 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           column: cellConstraint.getColumn(),
           colSpan: cellConstraint.getWidth()
         });
-        for (var j = cellConstraint.getColumn(); j < cellConstraint.getColumn() + cellConstraint.getWidth(); j++) {
+        // First pass only deals with cellConstraints that are not spanning columns
+        if (cellConstraint.getWidth() == 1) {
           if (cellConstraint.getWidthResizable()) {
-            gridLayout.setColumnFlex(j, 1);
-          } else {
-            gridLayout.setColumnFlex(j, 0);
+            gridLayout.setColumnFlex(cellConstraint.getColumn(), 1);
+          }
+        } else {
+          spanningColumnsCellConstraints.push(cellConstraint);
+        }
+        // First pass only deals with cellConstraints that are not spanning rows
+        if (cellConstraint.getHeight() == 1) {
+          if (cellConstraint.getHeightResizable()) {
+            gridLayout.setRowFlex(cellConstraint.getRow(), 1);
+          }
+        } else {
+          spanningRowsCellConstraints.push(cellConstraint);
+        }
+      }
+      // now deal with spanning cellConstraints
+      for (var i = 0; i < spanningColumnsCellConstraints.length; i++) {
+        var cellConstraint = spanningColumnsCellConstraints[i];
+        if (cellConstraint.getWidthResizable()) {
+          // if one of the spanned column is already resizable, do nothing
+          var alreadyResizable = false;
+          for (var col = cellConstraint.getColumn(); col < cellConstraint.getColumn() + cellConstraint.getWidth();
+               col++) {
+            if (gridLayout.getColumnFlex(col) > 0) {
+              alreadyResizable = true;
+              break;
+            }
+          }
+          if (!alreadyResizable) {
+            gridLayout.setColumnFlex(cellConstraint.getColumn(), 1);
           }
         }
-        for (var j = cellConstraint.getRow(); j < cellConstraint.getRow() + cellConstraint.getHeight(); j++) {
-          if (cellConstraint.getHeightResizable()) {
-            gridLayout.setRowFlex(j, 1);
-          } else {
-            gridLayout.setRowFlex(j, 0);
+      }
+      for (var i = 0; i < spanningRowsCellConstraints.length; i++) {
+        var cellConstraint = spanningRowsCellConstraints[i];
+        if (cellConstraint.getHeightResizable()) {
+          // if one of the spanned rows is already resizable, do nothing
+          var alreadyResizable = false;
+          for (var row = cellConstraint.getRow(); row < cellConstraint.getRow() + cellConstraint.getHeight();
+               row++) {
+            if (gridLayout.getRowFlex(row) > 0) {
+              alreadyResizable = true;
+              break;
+            }
+          }
+          if (!alreadyResizable) {
+            gridLayout.setRowFlex(cellConstraint.getRow(), 1);
           }
         }
       }
