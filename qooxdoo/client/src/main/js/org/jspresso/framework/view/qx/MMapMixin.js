@@ -175,7 +175,7 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
               qx.dom.Element.empty(popup);
               var popupContent = qx.dom.Element.create("div");
               qx.dom.Element.insertEnd(popupContent, popup);
-              popupContent.outerHTML = jsonMarker.htmlDescription;
+              popupContent.outerHTML = "<div>" + jsonMarker.htmlDescription + "</div>";
               overlay.setPosition(ol.proj.fromLonLat(jsonMarker.coord ? jsonMarker.coord : jsonMarker));
               this.__map.addOverlay(overlay);
               overlayIndex ++;
