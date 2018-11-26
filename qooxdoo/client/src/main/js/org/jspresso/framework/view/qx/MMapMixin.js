@@ -37,6 +37,7 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
     __markersSource: null,
     __routesLayer: null,
     __routesSource: null,
+    __overlays:[],
 
 
     _initializeMap: function () {
@@ -113,24 +114,29 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
       this.__map.on("moveend", function (event) {
         this.fireDataEvent("changeZoom", Math.round(mapView.getZoom()));
       }, this);
+/*
+      var markerSelect = new ol.interaction.Select();
+      this.__map.addInteraction(markerSelect);
+      markerSelect.on('select', function (evt) {
+        if (evt.selected && evt.selected.length) {
+          alert("toto");
+        }
+      });
+      this.__map.on('pointermove', function (evt) {
+        this.__map.getTargetElement().style.cursor = this.__map.hasFeatureAtPixel(evt.pixel) ? 'pointer' : '';
+      }, this);
+*/
       this.__map.setView(mapView);
-    },
-
-    zoomToPosition: function (lonLat, zoom) {
-      if (this.__map) {
-        var view = this.__map.getView();
-        if (lonLat) {
-          view.setCenter(ol.proj.fromLonLat(lonLat));
-        }
-        if (zoom) {
-          view.setZoom(zoom);
-        }
-      }
     },
 
     drawMapContent: function (markers, routes, defaultZoom) {
       if (this.__map) {
         var coordinates = [];
+        // cleanup overlays;
+        for (var i = 0; i < this.__overlays.length; i++) {
+          this.__map.removeOverlay(this.__overlays[i]);
+        }
+        var overlayIndex = 0;
         if (markers && markers.length > 0) {
           var markersFeatures = [];
           for (var i = 0; i < markers.length; i++) {
@@ -143,6 +149,36 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
               marker.setStyle(new ol.style.Style({
                 image: new ol.style.Icon(jsonMarker.image)
               }));
+            }
+            if (jsonMarker.htmlDescription) {
+              var overlay;
+              var popup;
+              if (this.__overlays.length - 1 < overlayIndex) {
+                popup = new qx.dom.Element.create("div", {
+                  style: 'font-family:sans-serif;'
+                });
+                qx.dom.Element.insertEnd(popup, this._getMapDomTarget());
+                overlay = new ol.Overlay({
+                  element: popup,
+                  autoPan: true,
+                  offset: [-10,5],
+                  autoPanAnimation: {
+                    duration: 250
+                  },
+                  map: this._map
+                });
+                this.__overlays.push(overlay);
+              } else {
+                overlay = this.__overlays[overlayIndex];
+                popup = overlay.getElement();
+              }
+              qx.dom.Element.empty(popup);
+              var popupContent = qx.dom.Element.create("div");
+              qx.dom.Element.insertEnd(popupContent, popup);
+              popupContent.outerHTML = jsonMarker.htmlDescription;
+              overlay.setPosition(ol.proj.fromLonLat(jsonMarker.coord ? jsonMarker.coord : jsonMarker));
+              this.__map.addOverlay(overlay);
+              overlayIndex ++;
             }
             markersFeatures.push(marker);
             coordinates.push(markerNode);
@@ -188,6 +224,18 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
             view.setCenter(coordinates[0]);
             view.setZoom(defaultZoom ? defaultZoom : 12);
           }
+        }
+      }
+    },
+
+    zoomToPosition: function (lonLat, zoom) {
+      if (this.__map) {
+        var view = this.__map.getView();
+        if (lonLat) {
+          view.setCenter(ol.proj.fromLonLat(lonLat));
+        }
+        if (zoom) {
+          view.setZoom(zoom);
         }
       }
     },
