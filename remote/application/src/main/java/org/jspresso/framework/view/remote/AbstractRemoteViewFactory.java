@@ -2408,7 +2408,7 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     viewComponent.setTabs(tabs.toArray(new RComponent[tabs.size()]));
     attachFirstTabSelectorIfNecessary(viewDescriptor, view);
     view.setChildren(childrenViews);
-    view.setCurrentViewIndex(getTabSelectionPreference(viewDescriptor, actionHandler));
+    view.setCurrentViewIndex(Math.min(getTabSelectionPreference(viewDescriptor, actionHandler), childrenViews.size() -1));
     if (viewDescriptor.getTabSelectionAction() != null) {
       view.addPropertyChangeListener(IView.CONNECTOR_PROPERTY, new PropertyChangeListener() {
         @Override

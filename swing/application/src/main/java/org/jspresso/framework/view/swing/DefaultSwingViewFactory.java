@@ -2959,7 +2959,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     }
     view.setChildren(childrenViews);
     attachFirstTabSelectorIfNecessary(viewDescriptor, view);
-    viewComponent.setSelectedIndex(getTabSelectionPreference(viewDescriptor, actionHandler));
+    viewComponent.setSelectedIndex(Math.min(getTabSelectionPreference(viewDescriptor, actionHandler), childrenViews.size() -1));
     if (viewDescriptor.getTabSelectionAction() != null) {
       view.addPropertyChangeListener(IView.CONNECTOR_PROPERTY, new PropertyChangeListener() {
         @Override
