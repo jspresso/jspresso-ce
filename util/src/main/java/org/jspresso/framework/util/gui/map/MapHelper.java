@@ -32,8 +32,7 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
 /**
  * Helper for map building
  *
- * @author Maxime HAMM
- * Date: 27/01/2018
+ * @author Maxime HAMM Date: 27/01/2018
  */
 @SuppressWarnings("WeakerAccess")
 public class MapHelper {
@@ -42,23 +41,32 @@ public class MapHelper {
    * The constant MARKERS_KEY is &quot;markers&quot;.
    */
   public static final String MARKERS_KEY      = "markers";
+
   /**
    * The constant MARKER_IMAGE_KEY is &quot;image&quot;.
    */
   public static final String MARKER_IMAGE_KEY = "image";
+
   /**
    * The constant MARKER_COORD_KEY is &quot;coord&quot;.
    */
   public static final String MARKER_COORD_KEY = "coord";
 
   /**
+   * The constant MARKER_DESCRIPTION is &quot;htmlDescription&quot;.
+   */
+  public static final String MARKER_DESCRIPTION = "htmlDescription";
+
+  /**
    * The constant ROUTES_KEY is &quot;routes&quot;.
    */
   public static final String ROUTES_KEY      = "routes";
+
   /**
    * The constant ROUTE_PATH_KEY is &quot;path&quot;.
    */
   public static final String ROUTE_PATH_KEY  = "path";
+
   /**
    * The constant ROUTE_STYLE_KEY is &quot;style&quot;.
    */
@@ -77,8 +85,8 @@ public class MapHelper {
   /**
    * Build markers.
    *
-   * @param points
-   *     One or more points
+   * @param points One or more points
+   * @return the string
    */
   public static String buildMarkers(Point... points) {
     return buildMap(points, null);
@@ -87,15 +95,18 @@ public class MapHelper {
   /**
    * Build routes.
    *
-   * @param routes
-   *     One or more couple of longitude and latitude
+   * @param points the points
+   * @param routes One or more couple of longitude and latitude
+   * @return the string
    */
   public static String buildMap(Point[] points, Route[] routes) {
     try {
       JSONObject mapContent = new JSONObject();
       if (points != null) {
+
         List<JSONObject> keys = new ArrayList<>();
         for (Point p : points) {
+
           JSONObject marker = new JSONObject();
           marker.put(MARKER_COORD_KEY, Arrays.asList(p.getLongitude(), p.getLatitude()));
           String imageUrl = p.getImageUrl();
@@ -110,12 +121,20 @@ public class MapHelper {
             }
             marker.put(MARKER_IMAGE_KEY, image);
           }
+
+          String htmlDescription = p.getHtmlDescription();
+          if (htmlDescription!=null) {
+
+            marker.put(MARKER_DESCRIPTION, htmlDescription);
+          }
+
           keys.add(marker);
         }
         mapContent.put(MARKERS_KEY, keys);
       }
 
       if (routes != null) {
+
         List<JSONObject> routesList = new ArrayList<>();
         for (Route route : routes) {
           double[][] routePath = convertRoutes(route)[0];

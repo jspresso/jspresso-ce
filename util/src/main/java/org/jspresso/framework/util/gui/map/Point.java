@@ -46,13 +46,14 @@ public class Point extends AbstractData {
     double longitude, latitude;
     String imagePath;
     String imageUrl;
+    String htmlDescription;
     Dimension imageDimension;
     String color;
 
     /**
      * Point constructor
      * @param longitude The longitude
-     * @param latitude The latitude
+     * @param latitude  The latitude
      */
     public Point(double longitude, double latitude) {
         this.longitude = longitude;
@@ -116,6 +117,24 @@ public class Point extends AbstractData {
             return ResourceProviderServlet.computeImageResourceDownloadUrl(imagePath, getImageDimension());
         }
         return imageUrl;
+    }
+
+    /**
+     * Gets html description.
+     *
+     * @return the html description
+     */
+    public String getHtmlDescription() {
+        return htmlDescription;
+    }
+
+    /**
+     * Sets html description.
+     *
+     * @param htmlDescription the html description
+     */
+    public void setHtmlDescription(String htmlDescription) {
+        this.htmlDescription = htmlDescription;
     }
 
     /**
