@@ -20,6 +20,7 @@ package org.jspresso.framework.gui.remote;
 
 import java.beans.PropertyChangeListener;
 
+import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.bean.SinglePropertyChangeSupport;
 
 /**
@@ -154,7 +155,8 @@ public class RTabContainer extends RContainer {
     RComponent[] tabs = getTabs();
     int indexWithHidden = index;
     for (int i = 0; i <= indexWithHidden; i++) {
-      if (!tabs[i].getState().isReadable()) {
+      RemoteValueState tabState = tabs[i].getState();
+      if (tabState != null && !tabState.isReadable()) {
         indexWithHidden++;
       }
     }
@@ -171,7 +173,8 @@ public class RTabContainer extends RContainer {
     RComponent[] tabs = getTabs();
     int indexWithoutHidden = index;
     for (int i = 0; i <= index; i++) {
-      if (!tabs[i].getState().isReadable()) {
+      RemoteValueState tabState = tabs[i].getState();
+      if (tabState != null && !tabState.isReadable()) {
         indexWithoutHidden--;
       }
     }
