@@ -18,6 +18,10 @@
  */
 package org.jspresso.framework.application.backend.async;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.action.IActionHandler;
@@ -27,10 +31,6 @@ import org.jspresso.framework.application.backend.action.Asynchronous;
 import org.jspresso.framework.application.backend.action.BackendAction;
 import org.jspresso.framework.application.backend.action.Transactional;
 import org.jspresso.framework.application.backend.session.EMergeMode;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * A specialized thread dedicated to executing asynchronous actions. It is able
@@ -51,7 +51,7 @@ public class AsyncActionExecutor extends Thread {
   private String i18nName;
   private String status;
 
-  private boolean stopeable = false;
+  private boolean stopeable   = false;
   private boolean canceleable = false;
 
   private static final String EXCEPTION_KEY            = "EXCEPTION_KEY";
@@ -60,17 +60,20 @@ public class AsyncActionExecutor extends Thread {
   /**
    * Constructs a new {@code AsyncActionExecutor} instance.
    *
-   * @param action                 the action to execute asynchronously.
-   * @param context                the action context.
-   * @param group                  the thread group.
-   * @param slaveBackendController the slave backend controller used to execute the action.
+   * @param action
+   *     the action to execute asynchronously.
+   * @param context
+   *     the action context.
+   * @param group
+   *     the thread group.
+   * @param slaveBackendController
+   *     the slave backend controller used to execute the action.
    */
-  public AsyncActionExecutor(IAction action, Map<String, Object> context,
-      ThreadGroup group, AbstractBackendController slaveBackendController) {
+  public AsyncActionExecutor(IAction action, Map<String, Object> context, ThreadGroup group,
+                             AbstractBackendController slaveBackendController) {
     super(group, /* "Jspresso Asynchronous Action Runner " + */
-    action.getClass().getSimpleName() + "["
-        + slaveBackendController.getApplicationSession().getId() + "]["
-        + slaveBackendController.getApplicationSession().getUsername() + "]");
+        action.getClass().getSimpleName() + "[" + slaveBackendController.getApplicationSession().getId() + "]["
+            + slaveBackendController.getApplicationSession().getUsername() + "]");
     this.action = action;
     this.context = context;
     this.slaveBackendController = slaveBackendController;
@@ -113,11 +116,10 @@ public class AsyncActionExecutor extends Thread {
         slaveBackendController.executeLater(new BackendAction() {
           @Override
           public boolean execute(IActionHandler actionHandler, Map<String, Object> innerContext) {
-            AbstractBackendController completedController =
-                (AbstractBackendController) innerContext.get(COMPLETED_CONTROLLER_KEY);
+            AbstractBackendController completedController = (AbstractBackendController) innerContext.get(
+                COMPLETED_CONTROLLER_KEY);
             AbstractBackendController mainController = (AbstractBackendController) getBackendController(innerContext);
-            mainController.merge(completedController.getRecordedUowMergedEntitiesAndClear(),
-                EMergeMode.MERGE_LAZY);
+            mainController.merge(completedController.getRecordedUowMergedEntitiesAndClear(), EMergeMode.MERGE_LAZY);
             return super.execute(actionHandler, innerContext);
           }
         }, mergeContext);
@@ -157,7 +159,8 @@ public class AsyncActionExecutor extends Thread {
   /**
    * Sets the progress.
    *
-   * @param progress the progress to set.
+   * @param progress
+   *     the progress to set.
    */
   public void setProgress(double progress) {
     this.progress = progress;
@@ -184,7 +187,8 @@ public class AsyncActionExecutor extends Thread {
   /**
    * Sets i18n name.
    *
-   * @param i18nName the 18n name
+   * @param i18nName
+   *     the 18n name
    */
   public void setI18nName(String i18nName) {
     this.i18nName = i18nName;
@@ -197,8 +201,9 @@ public class AsyncActionExecutor extends Thread {
    */
   public String getI18nName() {
 
-    if (i18nName!=null)
+    if (i18nName != null) {
       return i18nName;
+    }
 
     return getName();
   }
@@ -206,7 +211,8 @@ public class AsyncActionExecutor extends Thread {
   /**
    * Sets i18n status.
    *
-   * @param status the i18n status
+   * @param status
+   *     the i18n status
    */
   public void setStatus(String status) {
     this.status = status;
@@ -233,7 +239,8 @@ public class AsyncActionExecutor extends Thread {
   /**
    * Sets stopeable.
    *
-   * @param stopeable the stopeable
+   * @param stopeable
+   *     the stopeable
    */
   public void setStopeable(boolean stopeable) {
     this.stopeable = stopeable;
@@ -251,7 +258,8 @@ public class AsyncActionExecutor extends Thread {
   /**
    * Sets canceleable.
    *
-   * @param canceleable the canceleable
+   * @param canceleable
+   *     the canceleable
    */
   public void setCanceleable(boolean canceleable) {
     this.canceleable = canceleable;
@@ -274,21 +282,25 @@ public class AsyncActionExecutor extends Thread {
   public Long getEstimatedRemainingTime() {
 
     Date startedTimestamp = getStartedTimestamp();
-    if (startedTimestamp == null)
+    if (startedTimestamp == null) {
       return null;
+    }
 
     Date endedTimestamp = getEndedTimestamp();
-    if (endedTimestamp != null)
+    if (endedTimestamp != null) {
       return null;
+    }
 
     double progress = getProgress();
-    if (progress<0.05d)
+    if (progress < 0.05d) {
       return null;
+    }
 
     long elapsed = new Date().getTime() - startedTimestamp.getTime();
-    double eta = elapsed / (1.0d - progress);
-    if (eta < 1)
+    double eta = elapsed * (1.0d - progress) / progress;
+    if (eta < 1) {
       return null;
+    }
 
     return new Double(eta).longValue();
   }
@@ -301,16 +313,19 @@ public class AsyncActionExecutor extends Thread {
   public Long getTotalDuration() {
 
     Date startedTimestamp = getStartedTimestamp();
-    if (startedTimestamp == null)
+    if (startedTimestamp == null) {
       return null;
+    }
 
     Date endedTimestamp = getEndedTimestamp();
-    if (endedTimestamp == null)
+    if (endedTimestamp == null) {
       return null;
+    }
 
     long elapsed = endedTimestamp.getTime() - startedTimestamp.getTime();
-    if (elapsed < 1)
+    if (elapsed < 1) {
       return null;
+    }
 
     return elapsed;
   }
