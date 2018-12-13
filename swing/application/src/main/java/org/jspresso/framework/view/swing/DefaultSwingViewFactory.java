@@ -200,6 +200,9 @@ import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.format.PasswordFormatter;
 import org.jspresso.framework.util.gui.CellConstraints;
 import org.jspresso.framework.util.gui.ColorHelper;
+import org.jspresso.framework.util.gui.EHorizontalAlignment;
+import org.jspresso.framework.util.gui.EHorizontalPosition;
+import org.jspresso.framework.util.gui.ELabelPosition;
 import org.jspresso.framework.util.gui.ERenderingOptions;
 import org.jspresso.framework.util.gui.FontHelper;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
@@ -218,9 +221,6 @@ import org.jspresso.framework.view.ViewException;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
-import org.jspresso.framework.util.gui.EHorizontalAlignment;
-import org.jspresso.framework.util.gui.EHorizontalPosition;
-import org.jspresso.framework.util.gui.ELabelPosition;
 import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
@@ -743,10 +743,10 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       }
       viewComponent.add(filler, constraints);
     }
-    completePropertyViewsWithDynamicToolTips(connector, propertyViews, modelDescriptor);
-    completePropertyViewsWithDynamicBackgrounds(connector, propertyViews, modelDescriptor);
-    completePropertyViewsWithDynamicForegrounds(connector, propertyViews, modelDescriptor);
-    completePropertyViewsWithDynamicFonts(connector, propertyViews, modelDescriptor);
+    completeChildrenViewsWithDynamicToolTips(connector, propertyViews, modelDescriptor);
+    completeChildrenViewsWithDynamicBackgrounds(connector, propertyViews, modelDescriptor);
+    completeChildrenViewsWithDynamicForegrounds(connector, propertyViews, modelDescriptor);
+    completeChildrenViewsWithDynamicFonts(connector, propertyViews, modelDescriptor);
     if (!viewDescriptor.isWidthResizeable()) {
       JPanel lefter = new JPanel(new BorderLayout());
       lefter.setForeground(null);
@@ -830,117 +830,6 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
         break;
       default:
         break;
-    }
-  }
-
-  protected void completeViewWithDynamicLabel(JComponent viewComponent, IViewDescriptor viewDescriptor,
-                                              IComponentDescriptor<?> modelDescriptor,
-                                              ICompositeValueConnector connector) {
-    String dynamicLabelProperty = computeDynamicLabelPropertyName(viewDescriptor, modelDescriptor, null);
-    // Dynamic label
-    if (dynamicLabelProperty != null) {
-      IValueConnector labelConnector = connector.getChildConnector(dynamicLabelProperty);
-      if (labelConnector == null) {
-        labelConnector = getConnectorFactory().createValueConnector(dynamicLabelProperty);
-        connector.addChildConnector(dynamicLabelProperty, labelConnector);
-      }
-      attachLabelListener(viewComponent, labelConnector);
-    }
-  }
-
-  protected void completeViewWithDynamicToolTip(JComponent viewComponent, IViewDescriptor viewDescriptor,
-                                              IComponentDescriptor<?> modelDescriptor,
-                                              ICompositeValueConnector connector) {
-    String dynamicToolTipProperty = computeDynamicToolTipPropertyName(viewDescriptor, modelDescriptor, null);
-    // Dynamic tooltip
-    if (dynamicToolTipProperty != null) {
-      IValueConnector tooltipConnector = connector.getChildConnector(dynamicToolTipProperty);
-      if (tooltipConnector == null) {
-        tooltipConnector = getConnectorFactory().createValueConnector(dynamicToolTipProperty);
-        connector.addChildConnector(dynamicToolTipProperty, tooltipConnector);
-      }
-      attachToolTipListener(viewComponent, tooltipConnector);
-    }
-  }
-
-  protected void completeViewWithDynamicBackground(JComponent viewComponent, IViewDescriptor viewDescriptor,
-                                              IComponentDescriptor<?> modelDescriptor,
-                                              ICompositeValueConnector connector) {
-    String dynamicBackgroundProperty = computeDynamicBackgroundPropertyName(viewDescriptor, modelDescriptor);
-    // Dynamic background
-    if (dynamicBackgroundProperty != null) {
-      IValueConnector backgroundConnector = connector.getChildConnector(dynamicBackgroundProperty);
-      if (backgroundConnector == null) {
-        backgroundConnector = getConnectorFactory().createValueConnector(dynamicBackgroundProperty);
-        connector.addChildConnector(dynamicBackgroundProperty, backgroundConnector);
-      }
-      attachBackgroundListener(viewComponent, backgroundConnector);
-    }
-  }
-
-  protected void completeViewWithDynamicForeground(JComponent viewComponent, IViewDescriptor viewDescriptor,
-                                              IComponentDescriptor<?> modelDescriptor,
-                                              ICompositeValueConnector connector) {
-    String dynamicForegroundProperty = computeDynamicForegroundPropertyName(viewDescriptor, modelDescriptor);
-    // Dynamic foreground
-    if (dynamicForegroundProperty != null) {
-      IValueConnector foregroundConnector = connector.getChildConnector(dynamicForegroundProperty);
-      if (foregroundConnector == null) {
-        foregroundConnector = getConnectorFactory().createValueConnector(dynamicForegroundProperty);
-        connector.addChildConnector(dynamicForegroundProperty, foregroundConnector);
-      }
-      attachForegroundListener(viewComponent, foregroundConnector);
-    }
-  }
-
-  protected void completeViewWithDynamicFont(JComponent viewComponent, IViewDescriptor viewDescriptor,
-                                              IComponentDescriptor<?> modelDescriptor,
-                                              ICompositeValueConnector connector) {
-    String dynamicFontProperty = computeDynamicFontPropertyName(viewDescriptor, modelDescriptor);
-    // Dynamic font
-    if (dynamicFontProperty != null) {
-      IValueConnector fontConnector = connector.getChildConnector(dynamicFontProperty);
-      if (fontConnector == null) {
-        fontConnector = getConnectorFactory().createValueConnector(dynamicFontProperty);
-        connector.addChildConnector(dynamicFontProperty, fontConnector);
-      }
-      attachFontListener(viewComponent, fontConnector);
-    }
-  }
-
-  private void completePropertyViewsWithDynamicToolTips(ICompositeValueConnector connector,
-                                                        List<IView<JComponent>> propertyViews,
-                                                        IComponentDescriptor<?> modelDescriptor) {
-    // Compute dynamic tooltips
-    for (IView<JComponent> propertyView : propertyViews) {
-      completeViewWithDynamicToolTip(propertyView.getPeer(), propertyView.getDescriptor(), modelDescriptor, connector);
-    }
-  }
-
-  private void completePropertyViewsWithDynamicBackgrounds(ICompositeValueConnector connector,
-                                                           List<IView<JComponent>> propertyViews,
-                                                           IComponentDescriptor<?> modelDescriptor) {
-    // Compute dynamic background
-    for (IView<JComponent> propertyView : propertyViews) {
-      completeViewWithDynamicBackground(propertyView.getPeer(), propertyView.getDescriptor(), modelDescriptor, connector);
-    }
-  }
-
-  private void completePropertyViewsWithDynamicForegrounds(ICompositeValueConnector connector,
-                                                           List<IView<JComponent>> propertyViews,
-                                                           IComponentDescriptor<?> modelDescriptor) {
-    // Compute dynamic foreground
-    for (IView<JComponent> propertyView : propertyViews) {
-      completeViewWithDynamicForeground(propertyView.getPeer(), propertyView.getDescriptor(), modelDescriptor, connector);
-    }
-  }
-
-  private void completePropertyViewsWithDynamicFonts(ICompositeValueConnector connector,
-                                                     List<IView<JComponent>> propertyViews,
-                                                     IComponentDescriptor<?> modelDescriptor) {
-    // Compute dynamic font
-    for (IView<JComponent> propertyView : propertyViews) {
-      completeViewWithDynamicFont(propertyView.getPeer(), propertyView.getDescriptor(), modelDescriptor, connector);
     }
   }
 
@@ -2713,8 +2602,7 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
       if (focusedRow >= 0 && focusedColumn >= 0) {
         if (focusedColumn == table.convertColumnIndexToView(columnIndex)) {
           actionHandler.execute(focusAction, getActionFactory()
-              .createActionContext(actionHandler, view, view.getConnector(),
-                  String.valueOf(focusedRow) + ";" + columnIndex, table));
+              .createActionContext(actionHandler, view, view.getConnector(), focusedRow + ";" + columnIndex, table));
         }
       }
     }
@@ -2949,7 +2837,8 @@ public class DefaultSwingViewFactory extends ControllerAwareViewFactory<JCompone
     }
     view.setChildren(childrenViews);
     attachFirstTabSelectorIfNecessary(viewDescriptor, view);
-    viewComponent.setSelectedIndex(getTabSelectionPreference(viewDescriptor, actionHandler));
+    viewComponent.setSelectedIndex(
+        Math.min(getTabSelectionPreference(viewDescriptor, actionHandler), childrenViews.size() - 1));
     return view;
   }
 
