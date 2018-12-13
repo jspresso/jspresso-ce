@@ -127,6 +127,8 @@ import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.gui.ColorHelper;
 import org.jspresso.framework.util.gui.Dimension;
+import org.jspresso.framework.util.gui.EHorizontalAlignment;
+import org.jspresso.framework.util.gui.EHorizontalPosition;
 import org.jspresso.framework.util.gui.ERenderingOptions;
 import org.jspresso.framework.util.gui.Font;
 import org.jspresso.framework.util.gui.FontHelper;
@@ -149,8 +151,6 @@ import org.jspresso.framework.view.ViewException;
 import org.jspresso.framework.view.action.ActionList;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IDisplayableAction;
-import org.jspresso.framework.util.gui.EHorizontalAlignment;
-import org.jspresso.framework.util.gui.EHorizontalPosition;
 import org.jspresso.framework.view.descriptor.IActionViewDescriptor;
 import org.jspresso.framework.view.descriptor.IBorderViewDescriptor;
 import org.jspresso.framework.view.descriptor.ICardViewDescriptor;
@@ -191,6 +191,25 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
   private IRemoteStateValueMapper binaryStateValueMapper;
   private IRemoteStateValueMapper enumerationStateValueMapper;
   private PropertyChangeListener  connectorStateListener;
+
+  private static final IRemoteStateValueMapper FONT_MAPPER = new IRemoteStateValueMapper() {
+
+    @Override
+    public Object getValueFromState(RemoteValueState state, Object originalValue) {
+      if (originalValue instanceof Font) {
+        return FontHelper.toString((Font) originalValue);
+      }
+      return null;
+    }
+
+    @Override
+    public Object getValueForState(RemoteValueState state, Object originalValue) {
+      if (originalValue instanceof String && FontHelper.isFontSpec((String) originalValue)) {
+        return FontHelper.fromString((String) originalValue);
+      }
+      return null;
+    }
+  };
 
   /**
    * Instantiates a new Abstract remote view factory.
@@ -1699,10 +1718,10 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         }
       }
     }
-    completePropertyViewsWithDynamicToolTips(connector, propertyViews, modelDescriptor);
-    completePropertyViewsWithDynamicBackgrounds(connector, propertyViews, modelDescriptor);
-    completePropertyViewsWithDynamicForegrounds(connector, propertyViews, modelDescriptor);
-    completePropertyViewsWithDynamicFonts(connector, propertyViews, modelDescriptor);
+    completeChildrenViewsWithDynamicToolTips(connector, propertyViews, modelDescriptor);
+    completeChildrenViewsWithDynamicBackgrounds(connector, propertyViews, modelDescriptor);
+    completeChildrenViewsWithDynamicForegrounds(connector, propertyViews, modelDescriptor);
+    completeChildrenViewsWithDynamicFonts(connector, propertyViews, modelDescriptor);
     viewComponent.setElementWidths(elementWidths.toArray(new Integer[elementWidths.size()]));
     viewComponent.setElements(elements.toArray(new RComponent[elements.size()]));
     viewComponent.setElementLabels(elementLabels.toArray(new RComponent[elementLabels.size()]));
@@ -2036,64 +2055,6 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     return new REvenGridContainer(getGuidGenerator().generateGUID());
   }
 
-  protected void completePropertyViewsWithDynamicToolTips(ICompositeValueConnector connector,
-                                                          List<IView<RComponent>> propertyViews,
-                                                          IComponentDescriptor<?> modelDescriptor) {
-    // Compute dynamic tooltips
-    for (IView<RComponent> propertyView : propertyViews) {
-      IPropertyViewDescriptor propertyViewDescriptor = (IPropertyViewDescriptor) propertyView.getDescriptor();
-      completeViewWithDynamicToolTip(propertyView.getPeer(), propertyView.getDescriptor(), modelDescriptor, connector);
-    }
-  }
-
-  protected void completePropertyViewsWithDynamicBackgrounds(ICompositeValueConnector connector,
-                                                             List<IView<RComponent>> propertyViews,
-                                                             IComponentDescriptor<?> modelDescriptor) {
-    // Compute dynamic background
-    for (IView<RComponent> propertyView : propertyViews) {
-      completeViewWithDynamicBackground(propertyView.getPeer(), propertyView.getDescriptor(), modelDescriptor,
-          connector);
-    }
-  }
-
-  protected void completePropertyViewsWithDynamicForegrounds(ICompositeValueConnector connector,
-                                                             List<IView<RComponent>> propertyViews,
-                                                             IComponentDescriptor<?> modelDescriptor) {
-    // Compute dynamic foreground
-    for (IView<RComponent> propertyView : propertyViews) {
-      completeViewWithDynamicForeground(propertyView.getPeer(), propertyView.getDescriptor(), modelDescriptor,
-          connector);
-    }
-  }
-
-  protected void completePropertyViewsWithDynamicFonts(ICompositeValueConnector connector,
-                                                       List<IView<RComponent>> propertyViews,
-                                                       IComponentDescriptor<?> modelDescriptor) {
-    // Compute dynamic font
-    for (IView<RComponent> propertyView : propertyViews) {
-      completeViewWithDynamicFont(propertyView.getPeer(), propertyView.getDescriptor(), modelDescriptor, connector);
-    }
-  }
-
-  @Override
-  protected void completeViewWithDynamicLabel(RComponent viewComponent, IViewDescriptor viewDescriptor,
-                                              IComponentDescriptor<?> componentDescriptor,
-                                              ICompositeValueConnector connectorToComplete) {
-    if (viewComponent.getLabelState() == null) { // Not previously set by view creation
-      String dynamicLabelProperty = computeDynamicLabelPropertyName(viewDescriptor, componentDescriptor, null);
-      if (dynamicLabelProperty != null) {
-        IValueConnector labelConnector = connectorToComplete.getChildConnector(dynamicLabelProperty);
-        if (labelConnector == null) {
-          labelConnector = getConnectorFactory().createValueConnector(dynamicLabelProperty);
-          connectorToComplete.addChildConnector(dynamicLabelProperty, labelConnector);
-        }
-        if (labelConnector instanceof IRemoteStateOwner) {
-          viewComponent.setLabelState(((IRemoteStateOwner) labelConnector).getState());
-        }
-      }
-    }
-  }
-
   /**
    * Configures a property view action by initializing its static context.
    *
@@ -2408,7 +2369,8 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     viewComponent.setTabs(tabs.toArray(new RComponent[tabs.size()]));
     attachFirstTabSelectorIfNecessary(viewDescriptor, view);
     view.setChildren(childrenViews);
-    view.setCurrentViewIndex(Math.min(getTabSelectionPreference(viewDescriptor, actionHandler), childrenViews.size() -1));
+    view.setCurrentViewIndex(
+        Math.min(getTabSelectionPreference(viewDescriptor, actionHandler), childrenViews.size() - 1));
     if (viewDescriptor.getTabSelectionAction() != null) {
       view.addPropertyChangeListener(IView.CONNECTOR_PROPERTY, new PropertyChangeListener() {
         @Override
@@ -2536,5 +2498,51 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
    */
   protected RRepeater createRRepeater(IRepeaterViewDescriptor viewDescriptor) {
     return new RRepeater(getGuidGenerator().generateGUID());
+  }
+
+  @Override
+  protected void attachLabelListener(RComponent viewComponent, IValueConnector labelConnector) {
+    if (viewComponent.getLabelState() == null) { // Not previously set by view creation
+      if (labelConnector instanceof IRemoteStateOwner) {
+        viewComponent.setLabelState(((IRemoteStateOwner) labelConnector).getState());
+      }
+    }
+  }
+
+  @Override
+  protected void attachFontListener(RComponent viewComponent, IValueConnector fontConnector) {
+    ((RemoteValueConnector) fontConnector).setRemoteStateValueMapper(FONT_MAPPER);
+    if (viewComponent.getFontState() == null) { // Not previously set by view creation
+      if (fontConnector instanceof IRemoteStateOwner) {
+        viewComponent.setFontState(((IRemoteStateOwner) fontConnector).getState());
+      }
+    }
+  }
+
+  @Override
+  protected void attachForegroundListener(RComponent viewComponent, IValueConnector foregroundConnector) {
+    if (viewComponent.getForegroundState() == null) { // Not previously set by view creation
+      if (foregroundConnector instanceof IRemoteStateOwner) {
+        viewComponent.setForegroundState(((IRemoteStateOwner) foregroundConnector).getState());
+      }
+    }
+  }
+
+  @Override
+  protected void attachBackgroundListener(RComponent viewComponent, IValueConnector backgroundConnector) {
+    if (viewComponent.getBackgroundState() == null) { // Not previously set by view creation
+      if (backgroundConnector instanceof IRemoteStateOwner) {
+        viewComponent.setBackgroundState(((IRemoteStateOwner) backgroundConnector).getState());
+      }
+    }
+  }
+
+  @Override
+  protected void attachToolTipListener(RComponent viewComponent, IValueConnector toolTipConnector) {
+    if (viewComponent.getToolTipState() == null) { // Not previously set by view creation
+      if (toolTipConnector instanceof IRemoteStateOwner) {
+        viewComponent.setToolTipState(((IRemoteStateOwner) toolTipConnector).getState());
+      }
+    }
   }
 }

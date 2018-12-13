@@ -28,13 +28,11 @@ import org.jspresso.framework.application.frontend.command.remote.RemoteSelectio
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.ICompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
-import org.jspresso.framework.binding.remote.RemoteValueConnector;
 import org.jspresso.framework.gui.remote.RAction;
 import org.jspresso.framework.gui.remote.RActionable;
 import org.jspresso.framework.gui.remote.RBorderContainer;
 import org.jspresso.framework.gui.remote.RComponent;
 import org.jspresso.framework.gui.remote.RConstrainedGridContainer;
-import org.jspresso.framework.gui.remote.REvenGridContainer;
 import org.jspresso.framework.gui.remote.RLabel;
 import org.jspresso.framework.gui.remote.RSplitContainer;
 import org.jspresso.framework.gui.remote.RTabContainer;
@@ -45,22 +43,16 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.security.EAuthorization;
 import org.jspresso.framework.state.remote.IRemoteStateOwner;
-import org.jspresso.framework.state.remote.IRemoteStateValueMapper;
 import org.jspresso.framework.state.remote.RemoteCompositeValueState;
-import org.jspresso.framework.state.remote.RemoteValueState;
 import org.jspresso.framework.util.event.ISelectionChangeListener;
 import org.jspresso.framework.util.event.IValueChangeListener;
 import org.jspresso.framework.util.event.SelectionChangeEvent;
-import org.jspresso.framework.util.event.ValueChangeEvent;
 import org.jspresso.framework.util.gui.CellConstraints;
 import org.jspresso.framework.util.gui.Dimension;
-import org.jspresso.framework.util.gui.Font;
-import org.jspresso.framework.util.gui.FontHelper;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.ICompositeView;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor;
-import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IPropertyViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
@@ -73,25 +65,6 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
  */
 @SuppressWarnings("UnusedParameters")
 public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
-
-  private static final IRemoteStateValueMapper FONT_MAPPER = new IRemoteStateValueMapper() {
-
-    @Override
-    public Object getValueFromState(RemoteValueState state, Object originalValue) {
-      if (originalValue instanceof Font) {
-        return FontHelper.toString((Font) originalValue);
-      }
-      return null;
-    }
-
-    @Override
-    public Object getValueForState(RemoteValueState state, Object originalValue) {
-      if (originalValue instanceof String && FontHelper.isFontSpec((String) originalValue)) {
-        return FontHelper.fromString((String) originalValue);
-      }
-      return null;
-    }
-  };
 
   /**
    * Constructs a new {@code DefaultRemoteViewFactory} instance.
@@ -298,10 +271,10 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
         propertyViews.add(column);
       }
     }
-    completePropertyViewsWithDynamicToolTips(rowConnectorPrototype, propertyViews, rowDescriptor);
-    completePropertyViewsWithDynamicBackgrounds(rowConnectorPrototype, propertyViews, rowDescriptor);
-    completePropertyViewsWithDynamicForegrounds(rowConnectorPrototype, propertyViews, rowDescriptor);
-    completePropertyViewsWithDynamicFonts(rowConnectorPrototype, propertyViews, rowDescriptor);
+    completeChildrenViewsWithDynamicToolTips(rowConnectorPrototype, propertyViews, rowDescriptor);
+    completeChildrenViewsWithDynamicBackgrounds(rowConnectorPrototype, propertyViews, rowDescriptor);
+    completeChildrenViewsWithDynamicForegrounds(rowConnectorPrototype, propertyViews, rowDescriptor);
+    completeChildrenViewsWithDynamicFonts(rowConnectorPrototype, propertyViews, rowDescriptor);
     viewComponent.setColumns(columns.toArray(new RComponent[columns.size()]));
     viewComponent.setColumnHeaders(columnHeaders.toArray(new RComponent[columnHeaders.size()]));
     viewComponent.setColumnIds(columnIds.toArray(new String[columnIds.size()]));
@@ -335,83 +308,6 @@ public class DefaultRemoteViewFactory extends AbstractRemoteViewFactory {
       }
     });
     return view;
-  }
-
-  @Override
-  protected void completeViewWithDynamicToolTip(RComponent viewComponent, IViewDescriptor viewDescriptor,
-                                                   IComponentDescriptor<?> componentDescriptor,
-                                                   ICompositeValueConnector connectorToComplete) {
-    if (viewComponent.getToolTipState() == null) { // Not previously set by view creation
-      String dynamicToolTipProperty = computeDynamicToolTipPropertyName(viewDescriptor, componentDescriptor, null);
-      if (dynamicToolTipProperty != null) {
-        IValueConnector toolTipConnector = connectorToComplete.getChildConnector(dynamicToolTipProperty);
-        if (toolTipConnector == null) {
-          toolTipConnector = getConnectorFactory().createValueConnector(dynamicToolTipProperty);
-          connectorToComplete.addChildConnector(dynamicToolTipProperty, toolTipConnector);
-        }
-        if (toolTipConnector instanceof IRemoteStateOwner) {
-          viewComponent.setToolTipState(((IRemoteStateOwner) toolTipConnector).getState());
-        }
-      }
-    }
-  }
-
-  @Override
-  protected void completeViewWithDynamicBackground(RComponent viewComponent, IViewDescriptor viewDescriptor,
-                                                 IComponentDescriptor<?> componentDescriptor,
-                                                 ICompositeValueConnector connectorToComplete) {
-    if (viewComponent.getBackgroundState() == null) { // Not previously set by view creation
-      String dynamicBackgroundProperty = computeDynamicBackgroundPropertyName(viewDescriptor, componentDescriptor);
-      if (dynamicBackgroundProperty != null) {
-        IValueConnector backgroundConnector = connectorToComplete.getChildConnector(dynamicBackgroundProperty);
-        if (backgroundConnector == null) {
-          backgroundConnector = getConnectorFactory().createValueConnector(dynamicBackgroundProperty);
-          connectorToComplete.addChildConnector(dynamicBackgroundProperty, backgroundConnector);
-        }
-        if (backgroundConnector instanceof IRemoteStateOwner) {
-          viewComponent.setBackgroundState(((IRemoteStateOwner) backgroundConnector).getState());
-        }
-      }
-    }
-  }
-
-  @Override
-  protected void completeViewWithDynamicForeground(RComponent viewComponent, IViewDescriptor viewDescriptor,
-                                                 IComponentDescriptor<?> componentDescriptor,
-                                                 ICompositeValueConnector connectorToComplete) {
-    if (viewComponent.getForegroundState() == null) { // Not previously set by view creation
-      String dynamicForegroundProperty = computeDynamicForegroundPropertyName(viewDescriptor, componentDescriptor);
-      if (dynamicForegroundProperty != null) {
-        IValueConnector foregroundConnector = connectorToComplete.getChildConnector(dynamicForegroundProperty);
-        if (foregroundConnector == null) {
-          foregroundConnector = getConnectorFactory().createValueConnector(dynamicForegroundProperty);
-          connectorToComplete.addChildConnector(dynamicForegroundProperty, foregroundConnector);
-        }
-        if (foregroundConnector instanceof IRemoteStateOwner) {
-          viewComponent.setForegroundState(((IRemoteStateOwner) foregroundConnector).getState());
-        }
-      }
-    }
-  }
-
-  @Override
-  protected void completeViewWithDynamicFont(RComponent viewComponent, IViewDescriptor viewDescriptor,
-                                           IComponentDescriptor<?> componentDescriptor,
-                                           ICompositeValueConnector connectorToComplete) {
-    if (viewComponent.getFontState() == null) { // Not previously set by view creation
-      String dynamicFontProperty = computeDynamicFontPropertyName(viewDescriptor, componentDescriptor);
-      if (dynamicFontProperty != null) {
-        IValueConnector fontConnector = connectorToComplete.getChildConnector(dynamicFontProperty);
-        if (fontConnector == null) {
-          fontConnector = getConnectorFactory().createValueConnector(dynamicFontProperty);
-          ((RemoteValueConnector) fontConnector).setRemoteStateValueMapper(FONT_MAPPER);
-          connectorToComplete.addChildConnector(dynamicFontProperty, fontConnector);
-        }
-        if (fontConnector instanceof IRemoteStateOwner) {
-          viewComponent.setFontState(((IRemoteStateOwner) fontConnector).getState());
-        }
-      }
-    }
   }
 
   /**

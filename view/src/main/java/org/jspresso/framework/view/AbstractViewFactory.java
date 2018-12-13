@@ -364,6 +364,16 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
               (ICompositeValueConnector) viewConnector);
           completeViewWithDynamicFont(viewPeer, viewDescriptor, componentDescriptor,
               (ICompositeValueConnector) viewConnector);
+          if (view instanceof ICompositeView) {
+            completeChildrenViewsWithDynamicToolTips((ICompositeValueConnector) viewConnector,
+                ((ICompositeView<E>) view).getChildren(), componentDescriptor);
+            completeChildrenViewsWithDynamicForegrounds((ICompositeValueConnector) viewConnector,
+                ((ICompositeView<E>) view).getChildren(), componentDescriptor);
+            completeChildrenViewsWithDynamicBackgrounds((ICompositeValueConnector) viewConnector,
+                ((ICompositeView<E>) view).getChildren(), componentDescriptor);
+            completeChildrenViewsWithDynamicFonts((ICompositeValueConnector) viewConnector,
+                ((ICompositeView<E>) view).getChildren(), componentDescriptor);
+          }
         }
         decorateWithActions(view, actionHandler, locale);
         decorateWithBorder(view, actionHandler, locale);
@@ -373,6 +383,10 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
               .getComponentDescriptor();
           completeViewWithDynamicLabel(viewPeer, viewDescriptor, componentDescriptor,
               (ICompositeValueConnector) viewConnector);
+          if (view instanceof ICompositeView) {
+            completeChildrenViewsWithDynamicLabels((ICompositeValueConnector) viewConnector,
+                ((ICompositeView<E>) view).getChildren(), componentDescriptor);
+          }
         }
         viewConnector.setModelDescriptor(viewDescriptor.getModelDescriptor());
         if (!actionHandler.isAccessGranted(viewDescriptor)) {
@@ -408,86 +422,6 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     gateContext.put(ActionContextConstants.VIEW, view);
     return gateContext;
   }
-
-  /**
-   * Complete view with dynamic label.
-   *
-   * @param viewComponent
-   *     the view component
-   * @param viewDescriptor
-   *     the view descriptor
-   * @param componentDescriptor
-   *     the component descriptor
-   * @param connectorToComplete
-   *     the connector to complete
-   */
-  protected abstract void completeViewWithDynamicLabel(E viewComponent, IViewDescriptor viewDescriptor,
-                                                       IComponentDescriptor<?> componentDescriptor,
-                                                       ICompositeValueConnector connectorToComplete);
-
-  /**
-   * Complete view with dynamic tooltip.
-   *
-   * @param viewComponent
-   *     the view component
-   * @param viewDescriptor
-   *     the view descriptor
-   * @param componentDescriptor
-   *     the component descriptor
-   * @param connectorToComplete
-   *     the connector to complete
-   */
-  protected abstract void completeViewWithDynamicToolTip(E viewComponent, IViewDescriptor viewDescriptor,
-                                                         IComponentDescriptor<?> componentDescriptor,
-                                                         ICompositeValueConnector connectorToComplete);
-
-  /**
-   * Complete view with dynamic background.
-   *
-   * @param viewComponent
-   *     the view component
-   * @param viewDescriptor
-   *     the view descriptor
-   * @param componentDescriptor
-   *     the component descriptor
-   * @param connectorToComplete
-   *     the connector to complete
-   */
-  protected abstract void completeViewWithDynamicBackground(E viewComponent, IViewDescriptor viewDescriptor,
-                                                            IComponentDescriptor<?> componentDescriptor,
-                                                            ICompositeValueConnector connectorToComplete);
-
-  /**
-   * Complete view with dynamic foreground.
-   *
-   * @param viewComponent
-   *     the view component
-   * @param viewDescriptor
-   *     the view descriptor
-   * @param componentDescriptor
-   *     the component descriptor
-   * @param connectorToComplete
-   *     the connector to complete
-   */
-  protected abstract void completeViewWithDynamicForeground(E viewComponent, IViewDescriptor viewDescriptor,
-                                                            IComponentDescriptor<?> componentDescriptor,
-                                                            ICompositeValueConnector connectorToComplete);
-
-  /**
-   * Complete view with dynamic font.
-   *
-   * @param viewComponent
-   *     the view component
-   * @param viewDescriptor
-   *     the view descriptor
-   * @param componentDescriptor
-   *     the component descriptor
-   * @param connectorToComplete
-   *     the connector to complete
-   */
-  protected abstract void completeViewWithDynamicFont(E viewComponent, IViewDescriptor viewDescriptor,
-                                                      IComponentDescriptor<?> componentDescriptor,
-                                                      ICompositeValueConnector connectorToComplete);
 
   /**
    * Finish tree view configuration.
@@ -4217,6 +4151,280 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
           }
         }
       });
+    }
+  }
+
+  /**
+   * Attaches a dynamic label listener.
+   *
+   * @param viewComponent
+   *     the view component to attach the label to
+   * @param connector
+   *     the view connector responsible for the label.
+   */
+  protected abstract void attachLabelListener(E viewComponent, IValueConnector connector);
+
+  /**
+   * Attaches a dynamic tooltip listener.
+   *
+   * @param viewComponent
+   *     the view component to attach the tooltip to
+   * @param connector
+   *     the view connector responsible for the tooltip.
+   */
+  protected abstract void attachToolTipListener(E viewComponent, IValueConnector connector);
+
+  /**
+   * Attaches a dynamic background listener.
+   *
+   * @param viewComponent
+   *     the view component to attach the background to
+   * @param connector
+   *     the view connector responsible for the background.
+   */
+  protected abstract void attachBackgroundListener(E viewComponent, IValueConnector connector);
+
+  /**
+   * Attaches a dynamic foreground listener.
+   *
+   * @param viewComponent
+   *     the view component to attach the foreground to
+   * @param connector
+   *     the view connector responsible for the foreground.
+   */
+  protected abstract void attachForegroundListener(E viewComponent, IValueConnector connector);
+
+  /**
+   * Attaches a dynamic font listener.
+   *
+   * @param viewComponent
+   *     the view component to attach the font to
+   * @param connector
+   *     the view connector responsible for the font.
+   */
+  protected abstract void attachFontListener(E viewComponent, IValueConnector connector);
+
+  /**
+   * Complete children views with dynamic tool tips.
+   *
+   * @param connector
+   *     the connector
+   * @param childrenViews
+   *     the children views
+   * @param modelDescriptor
+   *     the model descriptor
+   */
+  protected void completeChildrenViewsWithDynamicToolTips(ICompositeValueConnector connector,
+                                                          List<IView<E>> childrenViews,
+                                                          IComponentDescriptor<?> modelDescriptor) {
+    // Compute dynamic tooltips
+    for (IView<E> childView : childrenViews) {
+      completeViewWithDynamicToolTip(childView.getPeer(), childView.getDescriptor(), modelDescriptor, connector);
+    }
+  }
+
+  /**
+   * Complete children views with dynamic backgrounds.
+   *
+   * @param connector
+   *     the connector
+   * @param childrenViews
+   *     the children views
+   * @param modelDescriptor
+   *     the model descriptor
+   */
+  protected void completeChildrenViewsWithDynamicBackgrounds(ICompositeValueConnector connector,
+                                                             List<IView<E>> childrenViews,
+                                                             IComponentDescriptor<?> modelDescriptor) {
+    // Compute dynamic background
+    for (IView<E> childView : childrenViews) {
+      completeViewWithDynamicBackground(childView.getPeer(), childView.getDescriptor(), modelDescriptor, connector);
+    }
+  }
+
+  /**
+   * Complete children views with dynamic foregrounds.
+   *
+   * @param connector
+   *     the connector
+   * @param childrenViews
+   *     the children views
+   * @param modelDescriptor
+   *     the model descriptor
+   */
+  protected void completeChildrenViewsWithDynamicForegrounds(ICompositeValueConnector connector,
+                                                             List<IView<E>> childrenViews,
+                                                             IComponentDescriptor<?> modelDescriptor) {
+    // Compute dynamic foreground
+    for (IView<E> childView : childrenViews) {
+      completeViewWithDynamicForeground(childView.getPeer(), childView.getDescriptor(), modelDescriptor, connector);
+    }
+  }
+
+  /**
+   * Complete children views with dynamic fonts.
+   *
+   * @param connector
+   *     the connector
+   * @param childrenViews
+   *     the children views
+   * @param modelDescriptor
+   *     the model descriptor
+   */
+  protected void completeChildrenViewsWithDynamicFonts(ICompositeValueConnector connector, List<IView<E>> childrenViews,
+                                                       IComponentDescriptor<?> modelDescriptor) {
+    // Compute dynamic font
+    for (IView<E> childView : childrenViews) {
+      completeViewWithDynamicFont(childView.getPeer(), childView.getDescriptor(), modelDescriptor, connector);
+    }
+  }
+
+  /**
+   * Complete children views with dynamic labels.
+   *
+   * @param connector
+   *     the connector
+   * @param childrenViews
+   *     the children views
+   * @param modelDescriptor
+   *     the model descriptor
+   */
+  protected void completeChildrenViewsWithDynamicLabels(ICompositeValueConnector connector,
+                                                        List<IView<E>> childrenViews,
+                                                        IComponentDescriptor<?> modelDescriptor) {
+    // Compute dynamic font
+    for (IView<E> childView : childrenViews) {
+      completeViewWithDynamicLabel(childView.getPeer(), childView.getDescriptor(), modelDescriptor, connector);
+    }
+  }
+
+  /**
+   * Complete view with dynamic label.
+   *
+   * @param viewComponent
+   *     the view component
+   * @param viewDescriptor
+   *     the view descriptor
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param connectorToComplete
+   *     the connector to complete
+   */
+  protected void completeViewWithDynamicLabel(E viewComponent, IViewDescriptor viewDescriptor,
+                                              IComponentDescriptor<?> componentDescriptor,
+                                              ICompositeValueConnector connectorToComplete) {
+    String dynamicLabelProperty = computeDynamicLabelPropertyName(viewDescriptor, componentDescriptor, null);
+    if (dynamicLabelProperty != null) {
+      IValueConnector labelConnector = connectorToComplete.getChildConnector(dynamicLabelProperty);
+      if (labelConnector == null) {
+        labelConnector = getConnectorFactory().createValueConnector(dynamicLabelProperty);
+        connectorToComplete.addChildConnector(dynamicLabelProperty, labelConnector);
+      }
+      attachLabelListener(viewComponent, labelConnector);
+    }
+  }
+
+  /**
+   * Complete view with dynamic tooltip.
+   *
+   * @param viewComponent
+   *     the view component
+   * @param viewDescriptor
+   *     the view descriptor
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param connectorToComplete
+   *     the connector to complete
+   */
+  protected void completeViewWithDynamicToolTip(E viewComponent, IViewDescriptor viewDescriptor,
+                                                IComponentDescriptor<?> componentDescriptor,
+                                                ICompositeValueConnector connectorToComplete) {
+    String dynamicToolTipProperty = computeDynamicToolTipPropertyName(viewDescriptor, componentDescriptor, null);
+    if (dynamicToolTipProperty != null) {
+      IValueConnector toolTipConnector = connectorToComplete.getChildConnector(dynamicToolTipProperty);
+      if (toolTipConnector == null) {
+        toolTipConnector = getConnectorFactory().createValueConnector(dynamicToolTipProperty);
+        connectorToComplete.addChildConnector(dynamicToolTipProperty, toolTipConnector);
+      }
+      attachToolTipListener(viewComponent, toolTipConnector);
+    }
+  }
+
+  /**
+   * Complete view with dynamic background.
+   *
+   * @param viewComponent
+   *     the view component
+   * @param viewDescriptor
+   *     the view descriptor
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param connectorToComplete
+   *     the connector to complete
+   */
+  protected void completeViewWithDynamicBackground(E viewComponent, IViewDescriptor viewDescriptor,
+                                                   IComponentDescriptor<?> componentDescriptor,
+                                                   ICompositeValueConnector connectorToComplete) {
+    String dynamicBackgroundProperty = computeDynamicBackgroundPropertyName(viewDescriptor, componentDescriptor);
+    if (dynamicBackgroundProperty != null) {
+      IValueConnector backgroundConnector = connectorToComplete.getChildConnector(dynamicBackgroundProperty);
+      if (backgroundConnector == null) {
+        backgroundConnector = getConnectorFactory().createValueConnector(dynamicBackgroundProperty);
+        connectorToComplete.addChildConnector(dynamicBackgroundProperty, backgroundConnector);
+      }
+      attachBackgroundListener(viewComponent, backgroundConnector);
+    }
+  }
+
+  /**
+   * Complete view with dynamic foreground.
+   *
+   * @param viewComponent
+   *     the view component
+   * @param viewDescriptor
+   *     the view descriptor
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param connectorToComplete
+   *     the connector to complete
+   */
+  protected void completeViewWithDynamicForeground(E viewComponent, IViewDescriptor viewDescriptor,
+                                                   IComponentDescriptor<?> componentDescriptor,
+                                                   ICompositeValueConnector connectorToComplete) {
+    String dynamicForegroundProperty = computeDynamicForegroundPropertyName(viewDescriptor, componentDescriptor);
+    if (dynamicForegroundProperty != null) {
+      IValueConnector foregroundConnector = connectorToComplete.getChildConnector(dynamicForegroundProperty);
+      if (foregroundConnector == null) {
+        foregroundConnector = getConnectorFactory().createValueConnector(dynamicForegroundProperty);
+        connectorToComplete.addChildConnector(dynamicForegroundProperty, foregroundConnector);
+      }
+      attachForegroundListener(viewComponent, foregroundConnector);
+    }
+  }
+
+  /**
+   * Complete view with dynamic font.
+   *
+   * @param viewComponent
+   *     the view component
+   * @param viewDescriptor
+   *     the view descriptor
+   * @param componentDescriptor
+   *     the component descriptor
+   * @param connectorToComplete
+   *     the connector to complete
+   */
+  protected void completeViewWithDynamicFont(E viewComponent, IViewDescriptor viewDescriptor,
+                                             IComponentDescriptor<?> componentDescriptor,
+                                             ICompositeValueConnector connectorToComplete) {
+    String dynamicFontProperty = computeDynamicFontPropertyName(viewDescriptor, componentDescriptor);
+    if (dynamicFontProperty != null) {
+      IValueConnector fontConnector = connectorToComplete.getChildConnector(dynamicFontProperty);
+      if (fontConnector == null) {
+        fontConnector = getConnectorFactory().createValueConnector(dynamicFontProperty);
+        connectorToComplete.addChildConnector(dynamicFontProperty, fontConnector);
+      }
+      attachFontListener(viewComponent, fontConnector);
     }
   }
 }
