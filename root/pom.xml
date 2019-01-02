@@ -50,7 +50,7 @@
     <commons-io.version>2.4</commons-io.version>
     <commons-httpclient.version>3.1</commons-httpclient.version>
     <commons-httpclient4.version>4.5.1</commons-httpclient4.version>
-    <commons-fileupload.version>1.3.1</commons-fileupload.version>
+    <commons-fileupload.version>1.3.3</commons-fileupload.version>
     <commons-cli.version>1.3.1</commons-cli.version>
     <commons-dbcp2.version>2.1.1</commons-dbcp2.version>
     <slf4j.version>1.7.13</slf4j.version>
