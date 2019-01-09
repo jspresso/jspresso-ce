@@ -184,6 +184,13 @@ public class ComparableQueryStructureDescriptor extends
 
     setReferencedDescriptor(refDescriptor);
     setComputed(propertyDescriptor.isComputed());
+    if (isComputed()) {
+      if (propertyDescriptor.isFilterOnly()) {
+        setFilterOnly(true);
+      } else if (propertyDescriptor.isModifiable()) {
+        setDelegateWritable(true);
+      }
+    }
     setSqlName(propertyDescriptor.getSqlName());
   }
 
