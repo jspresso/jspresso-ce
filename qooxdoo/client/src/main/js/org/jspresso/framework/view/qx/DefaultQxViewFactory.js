@@ -1744,9 +1744,11 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         //tf.selectAllText();
         var oldValue = tf.getValue();
         qx.event.Timer.once(function () {
-          var newValue = tf.getValue();
-          if (newValue && oldValue && newValue == oldValue) {
-            tf.selectAllText();
+          if (qx.ui.core.FocusHandler.getInstance().isFocused(tf)) {
+            var newValue = tf.getValue();
+            if (newValue && oldValue && newValue == oldValue) {
+              tf.selectAllText();
+            }
           }
         }, {}, 0);
       });
