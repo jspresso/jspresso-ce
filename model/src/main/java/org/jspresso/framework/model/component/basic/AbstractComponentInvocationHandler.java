@@ -1707,10 +1707,6 @@ public abstract class AbstractComponentInvocationHandler implements InvocationHa
         invokeExtensionMethod(extensionDelegate, method, args);
       } else {
         computedPropertyValue = invokeExtensionMethod(extensionDelegate, method, args);
-        if (!firedComputedPropertiesInitialization.contains(propertyName)) {
-          firedComputedPropertiesInitialization.add(propertyName);
-          firePropertyChange(proxy, propertyName, IPropertyChangeCapable.UNKNOWN, computedPropertyValue);
-        }
       }
       if (accessorInfo.isModifier()) {
         Object newComputedPropertyValue = getAccessorFactory().createPropertyAccessor(propertyDescriptor.getName(),
@@ -1730,11 +1726,18 @@ public abstract class AbstractComponentInvocationHandler implements InvocationHa
           default:
             break;
         }
-      } else if (propertyDescriptor.isCacheable()) {
-        if (computedPropertiesCache == null) {
-          computedPropertiesCache = new THashMap<>(1, 1.0f);
+      } else {
+        if (propertyDescriptor.isCacheable()) {
+          if (computedPropertiesCache == null) {
+            computedPropertiesCache = new THashMap<>(1, 1.0f);
+          }
+          computedPropertiesCache.put(propertyName, computedPropertyValue);
         }
-        computedPropertiesCache.put(propertyName, computedPropertyValue);
+        if (!firedComputedPropertiesInitialization.contains(propertyName)) {
+          firedComputedPropertiesInitialization.add(propertyName);
+          // Do not use firePropertyChange since it breaks the cache...
+          doFirePropertyChange(proxy, propertyName, IPropertyChangeCapable.UNKNOWN, computedPropertyValue);
+        }
       }
       return computedPropertyValue;
     } catch (IllegalAccessException | NoSuchMethodException ex) {
