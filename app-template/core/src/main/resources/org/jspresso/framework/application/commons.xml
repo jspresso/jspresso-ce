@@ -82,10 +82,6 @@
 
   <bean id="guidGenerator" parent="jvmStringGUIDGenerator" scope="prototype" />
 
-  <!-- The root abstract implementation used as Application Session. -->
-  <bean id="applicationSession" scope="prototype"
-    class="org.jspresso.framework.application.backend.session.basic.BasicApplicationSession" />
-
   <!-- The implementation used as ComponentDescriptorRegistry. -->
   <bean id="componentDescriptorRegistry" class="org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptorRegistry" />
 
@@ -301,7 +297,6 @@
     <property name="entityFactory" ref="controllerAwareEntityFactory" />
     <property name="modelConnectorFactory" ref="modelConnectorFactory" />
     <property name="translationProvider" ref="translationProvider" />
-    <property name="applicationSession" ref="applicationSession" />
     <property name="collectionFactory" ref="componentCollectionFactory" />
     <property name="carbonEntityCloneFactory">
       <bean class="org.jspresso.framework.model.entity.CarbonEntityCloneFactory" />
