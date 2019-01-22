@@ -27,6 +27,8 @@ import java.util.TimeZone;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.LocaleUtils;
+
+import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.frontend.IFrontendController;
 import org.jspresso.framework.application.frontend.command.remote.IRemoteCommandHandler;
 import org.jspresso.framework.application.frontend.command.remote.RemoteCommand;
@@ -125,6 +127,25 @@ public abstract class RemoteStartup extends
       }
     }
   }
+
+  /**
+   * Invalidates the http session if requested.
+   * <p>
+   * {@inheritDoc}
+   */
+  protected void stop(boolean invalidateSession) {
+    super.stop(invalidateSession);
+    if (invalidateSession) {
+      BackendControllerHolder.setSessionBackendController(null);
+      if (HttpRequestHolder.isAvailable()) {
+        HttpSession session = HttpRequestHolder.getServletRequest().getSession();
+        if (session != null) {
+          session.invalidate();
+        }
+      }
+    }
+  }
+
 
   /**
    * Starts the remote application passing it the client locale.
