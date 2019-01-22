@@ -516,6 +516,7 @@ public abstract class AbstractBackendController extends AbstractController imple
     slaveBackendController.start(getLocale(), getClientTimeZone());
     // Use the same application session
     slaveBackendController.setApplicationSession(getApplicationSession());
+    slaveBackendController.configureUserPreferenceStore();
     slaveBackendController.sessionUnitOfWork = sessionUnitOfWork;
     slaveBackendController.workspaceConnectors = workspaceConnectors;
     slaveBackendController.moduleConnectors = moduleConnectors;
@@ -1209,9 +1210,7 @@ public abstract class AbstractBackendController extends AbstractController imple
   @Override
   public boolean stop() {
     initState();
-    if (getUserPreferencesStore() != null) {
-      getUserPreferencesStore().setStorePath(IPreferencesStore.GLOBAL_STORE);
-    }
+    configureUserPreferenceStore();
     cleanupControllerAsyncActionsThreadGroup();
     return true;
   }
@@ -2018,8 +2017,19 @@ public abstract class AbstractBackendController extends AbstractController imple
     if (userPreferredLanguageCode != null) {
       getApplicationSession().setLocale(LocaleUtils.toLocale(userPreferredLanguageCode));
     }
+    configureUserPreferenceStore();
+  }
+
+  /**
+   * Configure user preference store.
+   */
+  protected void configureUserPreferenceStore() {
     if (getUserPreferencesStore() != null) {
-      getUserPreferencesStore().setStorePath(getApplicationSession().getUsername());
+      if (getApplicationSession().getPrincipal() != null) {
+        getUserPreferencesStore().setStorePath(getApplicationSession().getUsername());
+      } else {
+        getUserPreferencesStore().setStorePath(IPreferencesStore.GLOBAL_STORE);
+      }
     }
   }
 
