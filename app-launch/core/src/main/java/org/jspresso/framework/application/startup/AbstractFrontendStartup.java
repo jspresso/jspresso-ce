@@ -18,9 +18,13 @@
  */
 package org.jspresso.framework.application.startup;
 
+import javax.servlet.http.HttpSession;
+
 import org.jspresso.framework.application.backend.BackendControllerHolder;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.frontend.IFrontendController;
+import org.jspresso.framework.util.http.HttpRequestHolder;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +56,7 @@ public abstract class AbstractFrontendStartup<E, F, G> extends AbstractStartup {
   @Override
   public void start() {
     // start on brand new instances.
-    stop();
+    stop(false);
     IBackendController backendController;
     try {
       backendController = (IBackendController) getApplicationContext().getBean(
@@ -85,12 +89,21 @@ public abstract class AbstractFrontendStartup<E, F, G> extends AbstractStartup {
   /**
    * Programmatically stops the application and performs all necessary cleanups.
    */
-  public void stop() {
+  public final void stop() {
+    stop(true);
+  }
+
+  /**
+   * Stop.
+   *
+   * @param invalidateSession
+   *     the invalidate session
+   */
+  protected void stop(boolean invalidateSession) {
     // Breaks SSO. Useless to perform before garbage collecting.
     // if (frontendController != null) {
     // frontendController.stop();
     // }
     frontendController = null;
-    BackendControllerHolder.setSessionBackendController(null);
   }
 }
