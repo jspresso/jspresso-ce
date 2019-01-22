@@ -136,7 +136,6 @@ public abstract class RemoteStartup extends
   protected void stop(boolean invalidateSession) {
     super.stop(invalidateSession);
     if (invalidateSession) {
-      BackendControllerHolder.setSessionBackendController(null);
       if (HttpRequestHolder.isAvailable()) {
         HttpSession session = HttpRequestHolder.getServletRequest().getSession();
         if (session != null) {
