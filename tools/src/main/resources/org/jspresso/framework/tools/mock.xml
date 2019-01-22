@@ -53,9 +53,6 @@
     parent="abstractBackController"
     class="org.jspresso.framework.tools.viewtester.MockBackController"
     scope="prototype">
-    <property
-      name="applicationSession"
-      ref="applicationSession" />
     <property name="transactionTemplate"><null/></property>
   </bean>
 

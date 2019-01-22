@@ -63,7 +63,7 @@ public abstract class AbstractController extends AbstractPropertyChangeCapable i
   private       IExceptionHandler                             customExceptionHandler;
 
   private final static Logger LOG = LoggerFactory.getLogger(AbstractController.class);
-  private String loginContextName;
+  private              String loginContextName;
 
   private boolean liveDebugUI;
 

@@ -23,7 +23,6 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -64,6 +63,7 @@ import org.jspresso.framework.application.backend.entity.ControllerAwareProxyEnt
 import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.application.backend.session.IEntityUnitOfWork;
+import org.jspresso.framework.application.backend.session.basic.BasicApplicationSession;
 import org.jspresso.framework.application.backend.session.basic.BasicEntityUnitOfWork;
 import org.jspresso.framework.application.i18n.ITranslationPlugin;
 import org.jspresso.framework.application.model.Module;
@@ -126,46 +126,65 @@ public abstract class AbstractBackendController extends AbstractController imple
 
   private static final Logger LOG = LoggerFactory.getLogger(AbstractBackendController.class);
 
-  private final IEntityUnitOfWork                      unitOfWork;
-  private       IEntityUnitOfWork                      sessionUnitOfWork;
-  private       LRUMap<Module, IValueConnector>        moduleConnectors;
-  private final ISecurityContextBuilder                securityContextBuilder;
-  private final Set<AsyncActionExecutor>               asyncExecutors;
-  private       ThreadGroup                            asyncActionsThreadGroup;
-  private       ThreadGroup                            controllerAsyncActionsThreadGroup;
-  private       IApplicationSession                    applicationSession;
-  private       IEntityCloneFactory                    carbonEntityCloneFactory;
-  private       IComponentCollectionFactory            collectionFactory;
-  private       IEntityFactory                         entityFactory;
-  private       IModelConnectorFactory                 modelConnectorFactory;
-  private       TransactionTemplate                    transactionTemplate;
-  private       ComponentTransferStructure<IComponent> transferStructure;
-  private       Map<String, IValueConnector>           workspaceConnectors;
-  private       IPreferencesStore                      userPreferencesStore;
-  private       ITranslationProvider                   translationProvider;
-  private       ISecurityPlugin                        customSecurityPlugin;
-  private       ITranslationPlugin                     customTranslationPlugin;
-  private       IActionMonitoringPlugin                actionMonitoringPlugin;
-  private       TimeZone                               referenceTimeZone;
-  private       TimeZone                               clientTimeZone;
-  private       boolean                                throwExceptionOnBadUsage;
-  private       IBackendControllerFactory              slaveControllerFactory;
-  private       int                                    asyncExecutorsMaxCount;
-  private       IBackendController                     masterController;
+  private IEntityUnitOfWork                      unitOfWork;
+  private IEntityUnitOfWork                      sessionUnitOfWork;
+  private LRUMap<Module, IValueConnector>        moduleConnectors;
+  private ISecurityContextBuilder                securityContextBuilder;
+  private Set<AsyncActionExecutor>               asyncExecutors;
+  private ThreadGroup                            asyncActionsThreadGroup;
+  private ThreadGroup                            controllerAsyncActionsThreadGroup;
+  private IApplicationSession                    applicationSession;
+  private IEntityCloneFactory                    carbonEntityCloneFactory;
+  private IComponentCollectionFactory            collectionFactory;
+  private IEntityFactory                         entityFactory;
+  private IModelConnectorFactory                 modelConnectorFactory;
+  private TransactionTemplate                    transactionTemplate;
+  private ComponentTransferStructure<IComponent> transferStructure;
+  private Map<String, IValueConnector>           workspaceConnectors;
+  private IPreferencesStore                      userPreferencesStore;
+  private ITranslationProvider                   translationProvider;
+  private ISecurityPlugin                        customSecurityPlugin;
+  private ITranslationPlugin                     customTranslationPlugin;
+  private IActionMonitoringPlugin                actionMonitoringPlugin;
+  private TimeZone                               referenceTimeZone;
+  private TimeZone                               clientTimeZone;
+  private boolean                                throwExceptionOnBadUsage;
+  private IBackendControllerFactory              slaveControllerFactory;
+  private int                                    asyncExecutorsMaxCount;
+  private IBackendController                     masterController;
 
   /**
    * Constructs a new {@code AbstractBackendController} instance.
    */
   @SuppressWarnings("unchecked")
   protected AbstractBackendController() {
+    initState();
+    throwExceptionOnBadUsage = true;
+    setAsyncExecutorsMaxCount(10);
+  }
+
+  protected void initState() {
+    if (unitOfWork != null) {
+      unitOfWork.clear();
+    }
+    if (sessionUnitOfWork != null) {
+      sessionUnitOfWork.clear();
+    }
+    if (workspaceConnectors != null) {
+      workspaceConnectors.clear();
+    }
+    if (moduleConnectors != null) {
+      moduleConnectors.clear();
+    }
+    applicationSession = createApplicationSession();
     unitOfWork = createUnitOfWork();
     sessionUnitOfWork = createUnitOfWork();
     sessionUnitOfWork.begin();
+    workspaceConnectors = new HashMap<>();
     moduleConnectors = new LRUMap<>(20);
     securityContextBuilder = new SecurityContextBuilder();
-    throwExceptionOnBadUsage = true;
     asyncExecutors = new LinkedHashSet<>();
-    setAsyncExecutorsMaxCount(10);
+    transferStructure = null;
   }
 
   /**
@@ -762,7 +781,6 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   @Override
   public void installWorkspaces(Map<String, Workspace> workspaces) {
-    workspaceConnectors = new HashMap<>();
     for (Map.Entry<String, Workspace> workspaceEntry : workspaces.entrySet()) {
       String workspaceName = workspaceEntry.getKey();
       Workspace workspace = workspaceEntry.getValue();
@@ -1137,6 +1155,10 @@ public abstract class AbstractBackendController extends AbstractController imple
     this.transactionTemplate = transactionTemplate;
   }
 
+  protected IApplicationSession createApplicationSession() {
+    return new BasicApplicationSession();
+  }
+
   /**
    * Creates a &quot;Unit of Work&quot; to be used by this controller.
    *
@@ -1186,31 +1208,11 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   @Override
   public boolean stop() {
-    // The application session can now be shared across async slave
-    // controllers.
-    if (unitOfWork != null) {
-      unitOfWork.clear();
+    initState();
+    if (getUserPreferencesStore() != null) {
+      getUserPreferencesStore().setStorePath(IPreferencesStore.GLOBAL_STORE);
     }
-    if (masterController == null) {
-      if (applicationSession != null) {
-        applicationSession.clear();
-      }
-      if (getUserPreferencesStore() != null) {
-        getUserPreferencesStore().setStorePath(IPreferencesStore.GLOBAL_STORE);
-      }
-      if (sessionUnitOfWork != null) {
-        sessionUnitOfWork.clear();
-        sessionUnitOfWork.begin();
-      }
-      if (workspaceConnectors != null) {
-        workspaceConnectors.clear();
-      }
-      if (moduleConnectors != null) {
-        moduleConnectors.clear();
-      }
-      transferStructure = null;
-      cleanupControllerAsyncActionsThreadGroup();
-    }
+    cleanupControllerAsyncActionsThreadGroup();
     return true;
   }
 
