@@ -158,33 +158,36 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   @SuppressWarnings("unchecked")
   protected AbstractBackendController() {
-    initState();
+    resetState();
     throwExceptionOnBadUsage = true;
     setAsyncExecutorsMaxCount(10);
   }
 
-  protected void initState() {
+  protected void resetState() {
     if (unitOfWork != null) {
       unitOfWork.clear();
     }
-    if (sessionUnitOfWork != null) {
-      sessionUnitOfWork.clear();
+    if (masterController == null) {
+      // Since the following state is shared between master and child controllers, do not reset
+      if (sessionUnitOfWork != null) {
+        sessionUnitOfWork.clear();
+      }
+      if (workspaceConnectors != null) {
+        workspaceConnectors.clear();
+      }
+      if (moduleConnectors != null) {
+        moduleConnectors.clear();
+      }
+      applicationSession = createApplicationSession();
+      unitOfWork = createUnitOfWork();
+      sessionUnitOfWork = createUnitOfWork();
+      sessionUnitOfWork.begin();
+      workspaceConnectors = new HashMap<>();
+      moduleConnectors = new LRUMap<>(20);
+      securityContextBuilder = new SecurityContextBuilder();
+      asyncExecutors = new LinkedHashSet<>();
+      transferStructure = null;
     }
-    if (workspaceConnectors != null) {
-      workspaceConnectors.clear();
-    }
-    if (moduleConnectors != null) {
-      moduleConnectors.clear();
-    }
-    applicationSession = createApplicationSession();
-    unitOfWork = createUnitOfWork();
-    sessionUnitOfWork = createUnitOfWork();
-    sessionUnitOfWork.begin();
-    workspaceConnectors = new HashMap<>();
-    moduleConnectors = new LRUMap<>(20);
-    securityContextBuilder = new SecurityContextBuilder();
-    asyncExecutors = new LinkedHashSet<>();
-    transferStructure = null;
   }
 
   /**
@@ -1209,7 +1212,7 @@ public abstract class AbstractBackendController extends AbstractController imple
    */
   @Override
   public boolean stop() {
-    initState();
+    resetState();
     configureUserPreferenceStore();
     cleanupControllerAsyncActionsThreadGroup();
     return true;
