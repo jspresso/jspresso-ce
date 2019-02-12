@@ -4219,7 +4219,13 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
                                                           IComponentDescriptor<?> modelDescriptor) {
     // Compute dynamic tooltips
     for (IView<E> childView : childrenViews) {
-      completeViewWithDynamicToolTip(childView.getPeer(), childView.getDescriptor(), modelDescriptor, connector);
+      ICompositeValueConnector connectorToComplete = connector;
+      if (childView.getConnector() instanceof ICompositeValueConnector && !(childView
+          .getDescriptor() instanceof IPropertyViewDescriptor)) {
+        connectorToComplete = (ICompositeValueConnector) childView.getConnector();
+      }
+      completeViewWithDynamicToolTip(childView.getPeer(), childView.getDescriptor(), modelDescriptor,
+          connectorToComplete);
     }
   }
 
@@ -4238,7 +4244,13 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
                                                              IComponentDescriptor<?> modelDescriptor) {
     // Compute dynamic background
     for (IView<E> childView : childrenViews) {
-      completeViewWithDynamicBackground(childView.getPeer(), childView.getDescriptor(), modelDescriptor, connector);
+      ICompositeValueConnector connectorToComplete = connector;
+      if (childView.getConnector() instanceof ICompositeValueConnector && !(childView
+          .getDescriptor() instanceof IPropertyViewDescriptor)) {
+        connectorToComplete = (ICompositeValueConnector) childView.getConnector();
+      }
+      completeViewWithDynamicBackground(childView.getPeer(), childView.getDescriptor(), modelDescriptor,
+          connectorToComplete);
     }
   }
 
@@ -4257,7 +4269,13 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
                                                              IComponentDescriptor<?> modelDescriptor) {
     // Compute dynamic foreground
     for (IView<E> childView : childrenViews) {
-      completeViewWithDynamicForeground(childView.getPeer(), childView.getDescriptor(), modelDescriptor, connector);
+      ICompositeValueConnector connectorToComplete = connector;
+      if (childView.getConnector() instanceof ICompositeValueConnector && !(childView
+          .getDescriptor() instanceof IPropertyViewDescriptor)) {
+        connectorToComplete = (ICompositeValueConnector) childView.getConnector();
+      }
+      completeViewWithDynamicForeground(childView.getPeer(), childView.getDescriptor(), modelDescriptor,
+          connectorToComplete);
     }
   }
 
@@ -4275,7 +4293,12 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
                                                        IComponentDescriptor<?> modelDescriptor) {
     // Compute dynamic font
     for (IView<E> childView : childrenViews) {
-      completeViewWithDynamicFont(childView.getPeer(), childView.getDescriptor(), modelDescriptor, connector);
+      ICompositeValueConnector connectorToComplete = connector;
+      if (childView.getConnector() instanceof ICompositeValueConnector && !(childView
+          .getDescriptor() instanceof IPropertyViewDescriptor)) {
+        connectorToComplete = (ICompositeValueConnector) childView.getConnector();
+      }
+      completeViewWithDynamicFont(childView.getPeer(), childView.getDescriptor(), modelDescriptor, connectorToComplete);
     }
   }
 
@@ -4294,7 +4317,13 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
                                                         IComponentDescriptor<?> modelDescriptor) {
     // Compute dynamic font
     for (IView<E> childView : childrenViews) {
-      completeViewWithDynamicLabel(childView.getPeer(), childView.getDescriptor(), modelDescriptor, connector);
+      ICompositeValueConnector connectorToComplete = connector;
+      if (childView.getConnector() instanceof ICompositeValueConnector && !(childView
+          .getDescriptor() instanceof IPropertyViewDescriptor)) {
+        connectorToComplete = (ICompositeValueConnector) childView.getConnector();
+      }
+      completeViewWithDynamicLabel(childView.getPeer(), childView.getDescriptor(), modelDescriptor,
+          connectorToComplete);
     }
   }
 
