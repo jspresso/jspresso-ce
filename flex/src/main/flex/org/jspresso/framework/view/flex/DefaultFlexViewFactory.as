@@ -26,7 +26,9 @@ import flash.events.FocusEvent;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 import flash.events.TextEvent;
+import flash.events.TimerEvent;
 import flash.ui.Keyboard;
+import flash.utils.Timer;
 
 import flex.utils.ui.resize.ResizablePanel;
 
@@ -70,7 +72,6 @@ import mx.controls.dataGridClasses.DataGridColumn;
 import mx.core.ClassFactory;
 import mx.core.Container;
 import mx.core.IFlexDisplayObject;
-import mx.core.ScrollPolicy;
 import mx.core.ScrollPolicy;
 import mx.core.UIComponent;
 import mx.events.CollectionEvent;
@@ -187,6 +188,8 @@ public class DefaultFlexViewFactory {
   private static const TIME_TEMPLATE:String = "00:00:00.000";
   private static const SHORT_TIME_TEMPLATE:String = "00:00";
   private static const ICON_WIDTH:int = 24;
+  private static const _INPUT_THRESHOLD:int = 400;
+  private static const _INPUT_TIMESTAMP:String = "inputTimestamp";
   [Embed(source="../../../../../../resources/assets/images/reset-16x16.png")]
   private var _resetIcon:Class;
   private var _remotePeerRegistry:IRemotePeerRegistry;
@@ -1194,21 +1197,29 @@ public class DefaultFlexViewFactory {
 
   protected function createActionField(remoteActionField:RActionField):UIComponent {
     var textField:TextInput = null;
+    var remoteState:RemoteValueState = remoteActionField.state;
     if (remoteActionField.showTextField) {
       textField = createTextInputComponent();
       textField.name = "componentToStyle";
       sizeMaxComponentWidth(textField, remoteActionField);
       if (remoteActionField.characterAction) {
         textField.addEventListener(Event.CHANGE, function (event:Event):void {
-          var actionEvent:RActionEvent = new RActionEvent();
-          actionEvent.actionCommand = textField.text;
-          getActionHandler().execute(remoteActionField.characterAction, actionEvent, null, false);
+          remoteState[DefaultFlexViewFactory._INPUT_TIMESTAMP] = new Date();
+          var thresholdTimer:Timer = new Timer(DefaultFlexViewFactory._INPUT_THRESHOLD, 1);
+          thresholdTimer.addEventListener(TimerEvent.TIMER, function (event:TimerEvent):void {
+            if (new Date().time - (remoteState[DefaultFlexViewFactory._INPUT_TIMESTAMP] as Date).time
+                >= DefaultFlexViewFactory._INPUT_THRESHOLD) {
+              var actionEvent:RActionEvent = new RActionEvent();
+              actionEvent.actionCommand = textField.text;
+              getActionHandler().execute(remoteActionField.characterAction, actionEvent, null, false);
+            }
+          });
         });
       }
     }
     var actionField:UIComponent = decorateWithAsideActions(textField, remoteActionField, true);
-    bindActionField(actionField, textField, remoteActionField.state,
-                    (remoteActionField.actionLists[0] as RActionList).actions[0], remoteActionField.fieldEditable);
+    bindActionField(actionField, textField, remoteState, (remoteActionField.actionLists[0] as RActionList).actions[0],
+                    remoteActionField.fieldEditable);
     return actionField;
   }
 
@@ -1466,10 +1477,7 @@ public class DefaultFlexViewFactory {
 
       var itemRenderer:ClassFactory = createComboBoxItemRenderer();
       itemRenderer.properties = {
-        labels: remoteComboBox.translations,
-        icons: remoteComboBox.icons,
-        iconTemplate: _iconTemplate,
-        showIcon: hasIcon
+        labels: remoteComboBox.translations, icons: remoteComboBox.icons, iconTemplate: _iconTemplate, showIcon: hasIcon
       };
       comboBox.itemRenderer = itemRenderer;
 
@@ -2182,8 +2190,8 @@ public class DefaultFlexViewFactory {
           divider.y = remoteSplitContainer.separatorPosition;
         }
       }
-      if(remoteSplitContainer.permId) {
-        splitContainer.addEventListener("dividerRelease", function(e:DividerEvent):void {
+      if (remoteSplitContainer.permId) {
+        splitContainer.addEventListener("dividerRelease", function (e:DividerEvent):void {
           var splitC:DividedBox = event.currentTarget as DividedBox;
           var divider:BoxDivider = splitC.getDividerAt(0);
           var separatorPosition:int;
@@ -2411,7 +2419,7 @@ public class DefaultFlexViewFactory {
           var relatedObject:DisplayObject = (event as FocusEvent).relatedObject as DisplayObject;
 
           if (currentTarget != dateField || (relatedObject != null && (dateField.contains(relatedObject)
-                  || dateField.dropdown.contains(relatedObject)))) {
+              || dateField.dropdown.contains(relatedObject)))) {
             // do not listen to inner focus events.
             processEvent = false;
           }
@@ -2856,8 +2864,9 @@ public class DefaultFlexViewFactory {
         if (rColumn is RCheckBox) {
           column.width = table.measureText(column.headerText).width + 16;
         } else {
-          column.width = Math.max(Math.min(table.measureText(TEMPLATE_CHAR).width * COLUMN_MAX_CHAR_COUNT,
-              editorComponent.maxWidth), table.measureText(column.headerText).width + 16);
+          column.width = Math.max(
+              Math.min(table.measureText(TEMPLATE_CHAR).width * COLUMN_MAX_CHAR_COUNT, editorComponent.maxWidth),
+              table.measureText(column.headerText).width + 16);
         }
       }
       width += column.width;
@@ -3438,10 +3447,18 @@ public class DefaultFlexViewFactory {
     var remoteState:RemoteValueState = remoteTextField.state;
     if (remoteTextField.characterAction) {
       textField.addEventListener(Event.CHANGE, function (event:Event):void {
-        remoteState.value = textField.text == "" ? null : textField.text;
-        var actionEvent:RActionEvent = new RActionEvent();
-        actionEvent.actionCommand = textField.text;
-        getActionHandler().execute(remoteTextField.characterAction, actionEvent, null, false);
+        remoteState[DefaultFlexViewFactory._INPUT_TIMESTAMP] = new Date();
+        var thresholdTimer:Timer = new Timer(DefaultFlexViewFactory._INPUT_THRESHOLD, 1);
+        thresholdTimer.addEventListener(TimerEvent.TIMER, function (event:TimerEvent):void {
+          if (new Date().time - (remoteState[DefaultFlexViewFactory._INPUT_TIMESTAMP] as Date).time
+              >= DefaultFlexViewFactory._INPUT_THRESHOLD) {
+            remoteState.value = textField.text == "" ? null : textField.text;
+            var actionEvent:RActionEvent = new RActionEvent();
+            actionEvent.actionCommand = textField.text;
+            getActionHandler().execute(remoteTextField.characterAction, actionEvent, null, false);
+          }
+        });
+        thresholdTimer.start();
       });
     }
     bindTextInput(textField, remoteState);
