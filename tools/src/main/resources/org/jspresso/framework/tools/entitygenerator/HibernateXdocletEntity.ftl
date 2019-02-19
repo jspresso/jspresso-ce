@@ -867,6 +867,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#local reworkedEnumValue=reworkedEnumValue?replace("<", "LT") />
   <#local reworkedEnumValue=reworkedEnumValue?replace(">", "GT") />
   <#local reworkedEnumValue=reworkedEnumValue?replace("=", "EQ") />
+  <#local reworkedEnumValue=reworkedEnumValue?replace("?", "QM") />
   String ${generateConstantName(propertyName + "_" + reworkedEnumValue)} = "${enumerationValue}";
 
   </#list>
