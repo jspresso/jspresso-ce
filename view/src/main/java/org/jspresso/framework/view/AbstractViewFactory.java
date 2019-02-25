@@ -3727,12 +3727,16 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     if (viewDescriptor.getPermId() != null && actionHandler.getSubject() != null) {
       String prefs = actionHandler.getUserPreference(viewDescriptor.getPermId());
       if (prefs != null) {
-        String[] columns = prefs.split("!");
-        columnPrefs = new Object[columns.length][3];
-        for (int i = 0; i < columns.length; i++) {
-          String[] column = columns[i].split(",");
-          Boolean visibility = column.length > 2 ? Boolean.valueOf(column[2]) : Boolean.TRUE;
-          columnPrefs[i] = new Object[]{column[0], Integer.valueOf(column[1]), visibility};
+        try {
+          String[] columns = prefs.split("!");
+          columnPrefs = new Object[columns.length][3];
+          for (int i = 0; i < columns.length; i++) {
+            String[] column = columns[i].split(",");
+            Boolean visibility = column.length > 2 ? Boolean.valueOf(column[2]) : Boolean.TRUE;
+            columnPrefs[i] = new Object[]{column[0], Integer.valueOf(column[1]), visibility};
+          }
+        } catch (Exception ignored) {
+          LOG.warn("Failed to restore the table columns preferences for permId " + viewDescriptor.getPermId());
         }
       }
     }
