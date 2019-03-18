@@ -18,16 +18,13 @@
  */
 package org.jspresso.framework.util.gui.map;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-
 import org.jspresso.framework.util.exception.NestedRuntimeException;
+import org.jspresso.framework.util.gui.ColorHelper;
+import org.jspresso.framework.util.html.HtmlHelper;
+
+import java.util.*;
 
 /**
  * Helper for map building
@@ -160,6 +157,127 @@ public class MapHelper {
       throw new NestedRuntimeException(ex);
     }
   }
+
+
+  /**
+   * Gets point label.
+   *
+   * @param label the label
+   * @return the point label
+   */
+  public static String getPointLabel(String label) {
+    return getPointLabel(label, new PointLabelParams());
+  }
+
+  /**
+   * Gets point label.
+   *
+   * @param label  the label
+   * @param params the params
+   *
+   * @return the point label
+   */
+  public static String getPointLabel(
+          String label,
+          PointLabelParams params) {
+
+    label = HtmlHelper.escapeForHTML(label, true);
+
+    String actionName = null;
+    if (params.useAtionHyperlink) {
+      if (params.actionParameter!=null)
+        actionName = "executeAction(\"" + params.actionParameter + "\")";
+      else
+        actionName += "executeAction()";
+    }
+
+    String foreground = params.hexColor != null ? params.hexColor : "0879c2";
+    String background = params.backgroundHexColor;
+    int size = params.size != null ? params.size : 2;
+
+    final String style;
+    if (background != null) {
+
+      if (background.length() !=8 ) {
+        style = " style=\"background-color:#" + background + ";\"";
+      }
+      else {
+        int[] rgba = ColorHelper.fromHexString("0x" + background);
+        style =  " style=\"background-color:rgba("
+                + rgba[0] + ", "
+                + rgba[1] + ", "
+                + rgba[2] + ", "
+                + rgba[3]*1.0d/255 + ");\"";
+      }
+    }
+    else {
+      style = "";
+    }
+
+    if (actionName != null)
+      label = "<a href='" + actionName + "'>" + label + "</a>";
+
+    return "<p" + style + ">" +
+            "<font color=\"#" + foreground + "\" size=\"" + size + "\"><b>&nbsp;"
+            + label
+            + "&nbsp;</b></font></p>";
+  }
+
+  /**
+   * Gets middle of two points.
+   *
+   * @param a the first point
+   * @param b the second point
+   *
+   * @return the middle point
+   */
+  public static Point getMiddle(Point a, Point b) {
+
+    double lat1 = Math.toRadians(a.getLatitude());
+    double lat2 = Math.toRadians(b.getLatitude());
+    double lon1 = Math.toRadians(a.getLongitude());
+
+    double dLon = Math.toRadians(b.getLongitude() - a.getLongitude());
+    double Bx = Math.cos(lat2) * Math.cos(dLon);
+    double By = Math.cos(lat2) * Math.sin(dLon);
+
+    double lat3 = Math.atan2(Math.sin(lat1) + Math.sin(lat2), Math.sqrt((Math.cos(lat1) + Bx) * (Math.cos(lat1) + Bx) + By * By));
+    double lon3 = lon1 + Math.atan2(By, Math.cos(lat1) + Bx);
+
+    return new Point(Math.toDegrees(lon3), Math.toDegrees(lat3));
+  }
+
+  /**
+   * The type Point label params.
+   */
+  public static class PointLabelParams {
+
+    /**
+     * The Label foreground hex color.
+     */
+    public String hexColor;
+
+    /**
+     * The Label hex color.
+     */
+    public String backgroundHexColor;
+
+    /**
+     * The Label size.
+     */
+    public Integer size;
+
+    /**
+     * Use hyperlink.
+     */
+    public boolean useAtionHyperlink;
+
+    /**
+     * The Action parameter.
+     */
+    public String actionParameter;
+  }
+
 
   private static void applyOptions(AbstractData data, JSONObject json) throws JSONException {
     for (Map.Entry<String, Object> entry : data.getOptions().entrySet()) {
