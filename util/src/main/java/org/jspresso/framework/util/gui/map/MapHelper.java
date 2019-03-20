@@ -133,8 +133,11 @@ public class MapHelper {
       if (routes != null) {
 
         List<JSONObject> routesList = new ArrayList<>();
+
         for (Route route : routes) {
+
           double[][] routePath = convertRoutes(route)[0];
+
           List<List<Double>> routeAsList = new ArrayList<>();
           for (double[] aRoute : routePath) {
             routeAsList.add(Arrays.asList(aRoute[0], aRoute[1]));
