@@ -621,13 +621,13 @@ qx.Class.define("org.jspresso.framework.view.qx.AbstractQxViewFactory", {
           if (remoteComponent instanceof org.jspresso.framework.gui.remote.RPercentField) {
             format.setScale(100);
             format.setPostfix(" %");
-            if (maxFractionDigit) {
-              if (maxFractionDigit >= 2) {
-                maxFractionDigit -= 2;
-              } else {
-                maxFractionDigit = 0;
-              }
-            }
+            // if (maxFractionDigit) {
+            //   if (maxFractionDigit >= 2) {
+            //     maxFractionDigit -= 2;
+            //   } else {
+            //     maxFractionDigit = 0;
+            //   }
+            // }
           }
           if (maxFractionDigit) {
             format.setMaximumFractionDigits(maxFractionDigit);

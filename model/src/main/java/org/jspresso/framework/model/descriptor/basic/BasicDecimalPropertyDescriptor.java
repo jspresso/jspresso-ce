@@ -150,17 +150,20 @@ public class BasicDecimalPropertyDescriptor extends
   @Override
   public Object interceptSetter(Object component, Object newValue) {
     Object actualNewValue = newValue;
-    if (getMaxFractionDigit() != null) {
+    Integer maxFractionDigit = getRoundingFractionDigit();
+    if (maxFractionDigit != null) {
       if (actualNewValue instanceof Double) {
         actualNewValue = new BigDecimal(actualNewValue.toString())
-            .setScale(getMaxFractionDigit(), RoundingMode.HALF_EVEN)
+            .setScale(maxFractionDigit, RoundingMode.HALF_EVEN)
             .doubleValue();
       } else if (actualNewValue instanceof BigDecimal) {
-        actualNewValue = ((BigDecimal) actualNewValue).setScale(
-            getMaxFractionDigit(), RoundingMode.HALF_EVEN);
+        actualNewValue = ((BigDecimal) actualNewValue).setScale(maxFractionDigit, RoundingMode.HALF_EVEN);
       }
     }
     return super.interceptSetter(component, actualNewValue);
   }
 
+  protected Integer getRoundingFractionDigit() {
+    return getMaxFractionDigit();
+  }
 }

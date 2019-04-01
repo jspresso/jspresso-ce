@@ -41,4 +41,16 @@ public class BasicPercentPropertyDescriptor extends
 
     return clonedDescriptor;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected Integer getRoundingFractionDigit() {
+    Integer maxFractionDigitForSetterTransformation = super.getRoundingFractionDigit();
+    if (maxFractionDigitForSetterTransformation == null) {
+      maxFractionDigitForSetterTransformation = 0;
+    }
+    return maxFractionDigitForSetterTransformation + 2;
+  }
 }
