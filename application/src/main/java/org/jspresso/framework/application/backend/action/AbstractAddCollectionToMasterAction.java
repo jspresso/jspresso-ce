@@ -93,8 +93,8 @@ public abstract class AbstractAddCollectionToMasterAction extends AbstractCollec
         ((IModelDescriptorAware) collectionAccessor).setModelDescriptor(getModelDescriptor(context));
       }
       try {
-        int index = -1;
-        if (!isIgnoreSelection() && collectionAccessor instanceof IListAccessor) {
+        int index = getInsertionIndex(context);
+        if (index < 0 && !isIgnoreSelection() && collectionAccessor instanceof IListAccessor) {
           if (getSelectedIndices(context) != null && getSelectedIndices(context).length > 0) {
             index = getSelectedIndices(context)[getSelectedIndices(context).length - 1];
           }
@@ -129,6 +129,17 @@ public abstract class AbstractAddCollectionToMasterAction extends AbstractCollec
       setSelectedModels(getViewPath(), newComponents, context);
     }
     return super.execute(actionHandler, context);
+  }
+
+  /**
+   * Gets insertion index.
+   *
+   * @param context
+   *     the context
+   * @return the insertion index
+   */
+  protected int getInsertionIndex(Map<String, Object> context) {
+    return -1;
   }
 
   /**
