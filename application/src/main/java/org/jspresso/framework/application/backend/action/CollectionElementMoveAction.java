@@ -56,12 +56,18 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
    * then it moves the selected element of the offset.
    * <p>
    * {@inheritDoc}
+   *
+   * @param actionHandler
+   *     the action handler
+   * @param context
+   *     the context
+   * @return the boolean
    */
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
 
-    if (toTop && toBottom) {
+    if (isToTop() && isToBottom()) {
       throw new ActionException(
           "Illegal use of toTop AND toBottom at the same time");
     }
@@ -92,10 +98,10 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
     List<Object> headList = new ArrayList<>();
     List<Object> tailList = new ArrayList<>();
 
-    int executeOffset = offset;
-    if (toTop) {
+    int executeOffset = getOffset();
+    if (isToTop()) {
       executeOffset = -size;
-    } else if (toBottom) {
+    } else if (isToBottom()) {
       executeOffset = size;
     }
 
@@ -152,7 +158,7 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
    * (move up) the selected elements indices.
    *
    * @param offset
-   *          the offset to set.
+   *     the offset to set.
    */
   public void setOffset(int offset) {
     this.offset = offset;
@@ -167,7 +173,7 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
    * list.
    *
    * @param toTop
-   *          the toTop to set.
+   *     the toTop to set.
    */
   public void setToTop(boolean toTop) {
     this.toTop = toTop;
@@ -182,7 +188,7 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
    * list.
    *
    * @param toBottom
-   *          the toBottom to set.
+   *     the toBottom to set.
    */
   public void setToBottom(boolean toBottom) {
     this.toBottom = toBottom;
@@ -190,5 +196,32 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
       this.toTop = false;
       this.offset = 0;
     }
+  }
+
+  /**
+   * Is to top boolean.
+   *
+   * @return the boolean
+   */
+  protected boolean isToTop() {
+    return toTop;
+  }
+
+  /**
+   * Is to bottom boolean.
+   *
+   * @return the boolean
+   */
+  protected boolean isToBottom() {
+    return toBottom;
+  }
+
+  /**
+   * Gets offset.
+   *
+   * @return the offset
+   */
+  protected int getOffset() {
+    return offset;
   }
 }
