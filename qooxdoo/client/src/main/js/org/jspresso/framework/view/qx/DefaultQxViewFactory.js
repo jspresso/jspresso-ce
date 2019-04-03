@@ -2016,9 +2016,10 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           mapContent = JSON.parse(mapContent);
           var markers = mapContent["markers"];
           var routes = mapContent["routes"];
-          if (markers || routes) {
+          var zones = mapContent["zones"];
+          if (markers || routes || zones) {
             map.showMap();
-            map.drawMapContent(markers, routes, remoteMap.getDefaultZoom());
+            map.drawMapContent(markers, routes, zones, remoteMap.getDefaultZoom());
           }
         } else {
           map.hideMap();
