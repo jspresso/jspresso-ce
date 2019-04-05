@@ -163,4 +163,10 @@ public class Zone {
     }
 
 
+    /**
+     * Sets transparent.
+     */
+    public void setTransparent() {
+        setFillColor("rgba(255, 255, 255, 0)");
+    }
 }

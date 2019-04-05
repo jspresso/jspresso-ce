@@ -152,7 +152,10 @@ public class MapDefinition {
      * Merge the map with another map
      * Points and routes are merged
      *
-     * @param map The map to merge
+     * @param map             The map to merge
+     * @param includingPoints the including points
+     * @param includingRoutes the including routes
+     * @param includingZones  the including zones
      */
     public void merge(MapDefinition map, boolean includingPoints, boolean includingRoutes, boolean includingZones) {
         if (includingPoints)
