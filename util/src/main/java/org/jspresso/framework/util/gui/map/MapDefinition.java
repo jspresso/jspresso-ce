@@ -24,30 +24,57 @@ import java.util.Set;
 /**
  * Map
  *
- * @author Maxime HAMM
- * Date: 27/01/2018
+ * @author Maxime HAMM Date: 27/01/2018
  */
 @SuppressWarnings("WeakerAccess")
 public class MapDefinition {
 
-    Set<Point> points;
-    Set<Route> routes;
+    /**
+     * The Points.
+     */
+    final Set<Point> points;
+    /**
+     * The Routes.
+     */
+    final Set<Route> routes;
+    /**
+     * The Zones.
+     */
+    final Set<Zone> zones;
 
     /**
      * Map constructor
      */
     public MapDefinition() {
-        this.points = new HashSet<>();
-        this.routes = new HashSet<>();
+        this(null, null, null);
     }
 
+    /**
+     * Instantiates a new Map definition.
+     *
+     * @param points the points
+     * @param routes the routes
+     */
     public MapDefinition(Set<Point> points, Set<Route> routes) {
-        this.points = points;
-        this.routes = routes;
+        this(points, routes, null);
+    }
+
+    /**
+     * Instantiates a new Map definition.
+     *
+     * @param points the points
+     * @param routes the routes
+     * @param zones  the zones
+     */
+    public MapDefinition(Set<Point> points, Set<Route> routes, Set<Zone> zones) {
+        this.points = points!=null ? points : new HashSet<Point>();
+        this.routes = routes != null ? routes : new HashSet<Route>();
+        this.zones = zones !=null ? zones : new HashSet<Zone>();
     }
 
     /**
      * Add a point
+     *
      * @param point The point to add
      */
     public void addPoint(Point point) {
@@ -55,7 +82,8 @@ public class MapDefinition {
     }
 
     /**
-     * Add a route
+     * Add a route.
+     *
      * @param route The route to add
      */
     public void addRoute(Route route) {
@@ -63,7 +91,17 @@ public class MapDefinition {
     }
 
     /**
-     * Gets points
+     * Add a zone.
+     *
+     * @param zone The route to add
+     */
+    public void addZone(Zone zone) {
+        zones.add(zone);
+    }
+
+    /**
+     * Gets points.
+     *
      * @return The points
      */
     public Set<Point> getPoints() {
@@ -72,6 +110,7 @@ public class MapDefinition {
 
     /**
      * Gets routes
+     *
      * @return The routes
      */
     public Set<Route> getRoutes() {
@@ -79,21 +118,36 @@ public class MapDefinition {
     }
 
     /**
+     * Gets zones.
+     *
+     * @return the zones
+     */
+    public Set<Zone> getZones() {
+        return zones;
+    }
+
+    /**
      * Build map as Json
+     *
      * @return The json map description
      */
     public String buildMap() {
-        return MapHelper.buildMap(points.toArray(new Point[0]), routes.toArray(new Route[0]));
+        return MapHelper.buildMap(
+                points.toArray(new Point[0]),
+                routes.toArray(new Route[0]),
+                zones.toArray(new Zone[0]));
     }
 
     /**
      * Merge the map with another map
      * Points and routes are merged
+     *
      * @param map The map to merge
      */
     public void merge(MapDefinition map) {
         routes.addAll(map.getRoutes());
         points.addAll(map.getPoints());
+        zones.addAll(map.getZones());
     }
 }
 

@@ -20,11 +20,9 @@ package org.jspresso.framework.util.gui.map;
 
 /**
  * Route
+ *
  * @author Maxime HAMM
- *
- * @see <a href="https://openlayers.org/en/latest/apidoc/ol.style.Stroke.html">Open layers stroke</a>
- *
- * Date: 27/01/2018
+ * @see <a href="https://openlayers.org/en/latest/apidoc/ol.style.Stroke.html">Open layers stroke</a> Date: 27/01/2018
  */
 @SuppressWarnings("WeakerAccess")
 public class Route extends AbstractData {
@@ -39,12 +37,24 @@ public class Route extends AbstractData {
      */
     public static final int DEFAULT_WIDTH = 3;
 
+    /**
+     * The Points.
+     */
     Point[] points;
+
+    /**
+     * The Color.
+     */
     String color;
+
+    /**
+     * The Width.
+     */
     Integer width;
 
     /**
      * Route constructor
+     *
      * @param points Array of points
      */
     public Route(Point... points) {
@@ -53,6 +63,7 @@ public class Route extends AbstractData {
 
     /**
      * Gets route's points
+     *
      * @return The points
      */
     public Point[] getPoints() {
@@ -61,6 +72,7 @@ public class Route extends AbstractData {
 
     /**
      * Sets route color
+     *
      * @param color The color
      */
     public void setColor(String color) {
@@ -69,6 +81,7 @@ public class Route extends AbstractData {
 
     /**
      * Gets route color
+     *
      * @return The color
      */
     public String getColor() {
@@ -77,6 +90,7 @@ public class Route extends AbstractData {
 
     /**
      * Sets route width
+     *
      * @param width The width
      */
     public void setWidth(Integer width) {
@@ -85,6 +99,7 @@ public class Route extends AbstractData {
 
     /**
      * Gets route width
+     *
      * @return The width
      */
     public Integer getWidth() {
