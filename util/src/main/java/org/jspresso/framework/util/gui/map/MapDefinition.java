@@ -145,9 +145,22 @@ public class MapDefinition {
      * @param map The map to merge
      */
     public void merge(MapDefinition map) {
-        routes.addAll(map.getRoutes());
-        points.addAll(map.getPoints());
-        zones.addAll(map.getZones());
+        merge(map, true, true, true);
+    }
+
+    /**
+     * Merge the map with another map
+     * Points and routes are merged
+     *
+     * @param map The map to merge
+     */
+    public void merge(MapDefinition map, boolean includingPoints, boolean includingRoutes, boolean includingZones) {
+        if (includingPoints)
+            points.addAll(map.getPoints());
+        if (includingRoutes)
+            routes.addAll(map.getRoutes());
+        if (includingZones)
+            zones.addAll(map.getZones());
     }
 }
 
