@@ -18,7 +18,7 @@
  */
 package org.jspresso.framework.util.gui.map;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -67,9 +67,9 @@ public class MapDefinition {
      * @param zones  the zones
      */
     public MapDefinition(Set<Point> points, Set<Route> routes, Set<Zone> zones) {
-        this.points = points!=null ? points : new HashSet<Point>();
-        this.routes = routes != null ? routes : new HashSet<Route>();
-        this.zones = zones !=null ? zones : new HashSet<Zone>();
+        this.points = points!=null ? points : new LinkedHashSet<Point>();
+        this.routes = routes != null ? routes : new LinkedHashSet<Route>();
+        this.zones = zones !=null ? zones : new LinkedHashSet<Zone>();
     }
 
     /**

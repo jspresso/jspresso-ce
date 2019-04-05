@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.util.gui.map;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -320,8 +321,8 @@ public class MapHelper {
         if (points == null || points.length==0)
             return null;
 
-        double lg = 0;
-        double lt = 0;
+        double lg;
+        double lt;
         double maxlat = 0, minlat = 0, maxlon = 0, minlon = 0;
         int i = 0;
         for (Point p : points) {
@@ -350,6 +351,60 @@ public class MapHelper {
         lg = (maxlon + minlon) / 2;
         return new Point(lt, lg);
     }
+
+    /**
+     * Gets boundary box containing points.
+     *
+     * @param points the points
+     * @return the boundary box
+     */
+    public static Pair<Point, Point> getBoundaryBox(Point... points) {
+
+        if (points == null || points.length==0)
+            return null;
+
+        double west = 0.0;
+        double east = 0.0;
+        double north = 0.0;
+        double south = 0.0;
+
+        for (int lc = 0; lc < points.length; lc++)
+        {
+            Point loc = points[lc];
+
+            double latitude = loc.getLongitude();
+            double longitude = loc.getLatitude();
+
+            if (lc == 0) {
+                north = latitude;
+                south = latitude;
+                west = longitude;
+                east = longitude;
+            }
+            else { if (latitude > north) {
+                    north = latitude;
+                }
+                else if (latitude < south) {
+                    south = latitude;
+                }
+                if (longitude < west) {
+                    west = longitude;
+                }
+                else if (longitude > east) {
+                    east = longitude;
+                }
+            }
+        }
+
+        double padding = 0.01;
+        north = north + padding;
+        south = south - padding;
+        west = west - padding;
+        east = east + padding;
+
+        return Pair.of(new Point(north, east), new Point(south, west));
+    }
+
 
     /**
      * The type Point label params.

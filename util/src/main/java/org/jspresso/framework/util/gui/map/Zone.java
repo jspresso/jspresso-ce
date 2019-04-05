@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.util.gui.map;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 /**
  * Zone
  *
@@ -150,5 +152,15 @@ public class Zone {
     public Point getBaryCenterMiddle() {
         return MapHelper.getBaryCenter(getPoints());
     }
+
+    /**
+     * Gets middle.
+     *
+     * @return the zone's middle
+     */
+    public Pair<Point, Point> getBoundaryBox() {
+        return MapHelper.getBoundaryBox(getPoints());
+    }
+
 
 }
