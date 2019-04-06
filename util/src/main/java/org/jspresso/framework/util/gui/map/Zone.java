@@ -63,6 +63,9 @@ public class Zone {
      */
     Integer lineWidth;
 
+    private Point barycenter;
+    private Pair<Point, Point> boundaryBox;
+
     /**
      * Instantiates a new Zone.
      *
@@ -79,6 +82,8 @@ public class Zone {
      */
     public void setPoints(Point... points) {
         this.points = points;
+        this.boundaryBox = null;
+        this.barycenter = null;
     }
 
     /**
@@ -145,12 +150,14 @@ public class Zone {
     }
 
     /**
-     * Gets middle.
+     * Gets bary center.
      *
      * @return the zone's middle
      */
-    public Point getBaryCenterMiddle() {
-        return MapHelper.getBaryCenter(getPoints());
+    public Point getBaryCenter() {
+        if (barycenter == null)
+            barycenter = MapHelper.getBaryCenter(getPoints());
+        return barycenter;
     }
 
     /**
@@ -159,7 +166,9 @@ public class Zone {
      * @return the zone's middle
      */
     public Pair<Point, Point> getBoundaryBox() {
-        return MapHelper.getBoundaryBox(getPoints());
+        if (boundaryBox == null)
+            boundaryBox = MapHelper.getBoundaryBox(0.01, getPoints());
+        return boundaryBox;
     }
 
 

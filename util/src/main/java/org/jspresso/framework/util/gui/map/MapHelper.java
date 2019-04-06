@@ -358,7 +358,7 @@ public class MapHelper {
      * @param points the points
      * @return the boundary box
      */
-    public static Pair<Point, Point> getBoundaryBox(Point... points) {
+    public static Pair<Point, Point> getBoundaryBox(double padding, Point... points) {
 
         if (points == null || points.length==0)
             return null;
@@ -396,7 +396,6 @@ public class MapHelper {
             }
         }
 
-        double padding = 0.01;
         north = north + padding;
         south = south - padding;
         west = west - padding;
