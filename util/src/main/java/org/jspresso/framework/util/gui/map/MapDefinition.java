@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.util.gui.map;
 
+import java.io.Serializable;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -27,7 +29,7 @@ import java.util.Set;
  * @author Maxime HAMM Date: 27/01/2018
  */
 @SuppressWarnings("WeakerAccess")
-public class MapDefinition {
+public class MapDefinition implements Serializable {
 
     /**
      * The Points.
@@ -41,6 +43,18 @@ public class MapDefinition {
      * The Zones.
      */
     final Set<Zone> zones;
+
+    /**
+     * Clone map map definition.
+     *
+     * @return the map definition
+     */
+    public MapDefinition cloneMap() {
+        return new MapDefinition(
+                new LinkedHashSet<>(Arrays.asList(MapHelper.clonePoints(points.toArray(new Point[0])))),
+                new LinkedHashSet<>(Arrays.asList(MapHelper.cloneRoutes(routes.toArray(new Route[0])))),
+                new LinkedHashSet<>(Arrays.asList(MapHelper.cloneZones(zones.toArray(new Zone[0])))));
+    }
 
     /**
      * Map constructor

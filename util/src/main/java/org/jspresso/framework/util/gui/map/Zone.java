@@ -20,13 +20,15 @@ package org.jspresso.framework.util.gui.map;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.io.Serializable;
+
 /**
  * Zone
  *
  * @author Maxime HAMM Date: 04/04/2019
  */
 @SuppressWarnings({"WeakerAccess"})
-public class Zone {
+public class Zone implements Serializable {
 
     /**
      * Route default color
@@ -65,6 +67,21 @@ public class Zone {
 
     private Point barycenter;
     private Pair<Point, Point> boundaryBox;
+
+    /**
+     * Clone point point.
+     *
+     * @return the point
+     */
+    public Zone cloneZone() {
+        Zone z = new Zone(MapHelper.clonePoints(points));
+        z.fillColor = this.fillColor;
+        z.lineColor = this.lineColor;
+        z.lineWidth = this.lineWidth;
+        z.barycenter = this.barycenter!=null ? this.barycenter.clonePoint() : null;
+        z.boundaryBox = this.boundaryBox!=null ? Pair.of(this.boundaryBox.getLeft().clonePoint(), this.boundaryBox.getRight().clonePoint()) : null;
+        return z;
+    }
 
     /**
      * Instantiates a new Zone.
@@ -178,4 +195,5 @@ public class Zone {
     public void setTransparent() {
         setFillColor("rgba(255, 255, 255, 0)");
     }
+
 }

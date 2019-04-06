@@ -355,7 +355,8 @@ public class MapHelper {
     /**
      * Gets boundary box containing points.
      *
-     * @param points the points
+     * @param padding the padding
+     * @param points  the points
      * @return the boundary box
      */
     public static Pair<Point, Point> getBoundaryBox(double padding, Point... points) {
@@ -402,6 +403,60 @@ public class MapHelper {
         east = east + padding;
 
         return Pair.of(new Point(north, east), new Point(south, west));
+    }
+
+    /**
+     * Clone points point [ ].
+     *
+     * @param points the points
+     * @return the point [ ]
+     */
+    static Point[] clonePoints(Point[] points) {
+
+        if (points==null)
+            return null;
+
+        Point[] clone = new Point[points.length];
+        for (int i = 0; i < points.length; i++) {
+            clone[i] = points[i].clonePoint();
+        }
+        return clone;
+    }
+
+    /**
+     * Clone zones zone [ ].
+     *
+     * @param zones the zones
+     * @return the zone [ ]
+     */
+    static Zone[] cloneZones(Zone[] zones) {
+
+        if (zones==null)
+            return null;
+
+        Zone[] clone = new Zone[zones.length];
+        for (int i = 0; i < zones.length; i++) {
+            clone[i] = zones[i].cloneZone();
+        }
+        return clone;
+    }
+
+    /**
+     * Clone routes route [ ].
+     *
+     * @param routes the routes
+     * @return the route [ ]
+     */
+    static Route[] cloneRoutes(Route[] routes) {
+
+        if (routes==null)
+            return null;
+
+        Route[] clone = new Route[routes.length];
+        for (int i = 0; i < routes.length; i++) {
+            clone[i] = routes[i].cloneRoute();
+        }
+        return clone;
     }
 
 
