@@ -402,7 +402,13 @@ public class MapHelper {
         west = west - padding;
         east = east + padding;
 
-        return Pair.of(new Point(north, east), new Point(south, west));
+        Point left = new Point(north, east);
+        left.setImagePath(null);
+
+        Point right = new Point(south, west);
+        right.setImagePath(null);
+
+        return Pair.of(left, right);
     }
 
     /**
