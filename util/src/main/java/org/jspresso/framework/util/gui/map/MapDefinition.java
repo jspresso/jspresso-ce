@@ -159,6 +159,8 @@ public class MapDefinition implements Serializable {
      * @param map The map to merge
      */
     public void merge(MapDefinition map) {
+        if (map==null)
+            return;
         merge(map, true, true, true);
     }
 
