@@ -435,14 +435,14 @@ public class MapHelper {
      * @param zones the zones
      * @return the zone [ ]
      */
-    static Zone[] cloneZones(Zone[] zones) {
+    static Zone[] cloneZones(Zone[] zones, boolean clonePoints) {
 
         if (zones==null)
             return null;
 
         Zone[] clone = new Zone[zones.length];
         for (int i = 0; i < zones.length; i++) {
-            clone[i] = zones[i].cloneZone();
+            clone[i] = zones[i].cloneZone(clonePoints);
         }
         return clone;
     }
@@ -451,16 +451,17 @@ public class MapHelper {
      * Clone routes route [ ].
      *
      * @param routes the routes
+     * @param clonePoints
      * @return the route [ ]
      */
-    static Route[] cloneRoutes(Route[] routes) {
+    static Route[] cloneRoutes(Route[] routes, boolean clonePoints) {
 
         if (routes==null)
             return null;
 
         Route[] clone = new Route[routes.length];
         for (int i = 0; i < routes.length; i++) {
-            clone[i] = routes[i].cloneRoute();
+            clone[i] = routes[i].cloneRoute(clonePoints);
         }
         return clone;
     }

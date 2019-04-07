@@ -49,11 +49,17 @@ public class MapDefinition implements Serializable {
      *
      * @return the map definition
      */
-    public MapDefinition cloneMap() {
-        return new MapDefinition(
-                new LinkedHashSet<>(Arrays.asList(MapHelper.clonePoints(points.toArray(new Point[0])))),
-                new LinkedHashSet<>(Arrays.asList(MapHelper.cloneRoutes(routes.toArray(new Route[0])))),
-                new LinkedHashSet<>(Arrays.asList(MapHelper.cloneZones(zones.toArray(new Zone[0])))));
+    public MapDefinition cloneMap(boolean clonePoints) {
+        if (clonePoints)
+            return new MapDefinition(
+                    new LinkedHashSet<>(Arrays.asList(MapHelper.clonePoints(points.toArray(new Point[0])))),
+                    new LinkedHashSet<>(Arrays.asList(MapHelper.cloneRoutes(routes.toArray(new Route[0]), clonePoints))),
+                    new LinkedHashSet<>(Arrays.asList(MapHelper.cloneZones(zones.toArray(new Zone[0]), clonePoints))));
+        else
+            return new MapDefinition(
+                    new LinkedHashSet<>(points),
+                    new LinkedHashSet<>(routes),
+                    new LinkedHashSet<>(zones));
     }
 
     /**

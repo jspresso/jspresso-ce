@@ -73,8 +73,10 @@ public class Zone implements Serializable {
      *
      * @return the point
      */
-    public Zone cloneZone() {
-        Zone z = new Zone(MapHelper.clonePoints(points));
+    public Zone cloneZone(boolean clonePoints) {
+
+        Zone z = clonePoints ? new Zone(MapHelper.clonePoints(points)) : new Zone(points);
+
         z.fillColor = this.fillColor;
         z.lineColor = this.lineColor;
         z.lineWidth = this.lineWidth;
