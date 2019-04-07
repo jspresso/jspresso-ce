@@ -21,6 +21,8 @@ package org.jspresso.framework.util.gui.map;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Zone
@@ -51,6 +53,11 @@ public class Zone implements Serializable {
     Point[] points;
 
     /**
+     * The Exclusions.
+     */
+    Set<ZoneExclusion> exclusions;
+
+    /**
      * The Fill color.
      */
     String fillColor;
@@ -71,6 +78,7 @@ public class Zone implements Serializable {
     /**
      * Clone point point.
      *
+     * @param clonePoints the clone points
      * @return the point
      */
     public Zone cloneZone(boolean clonePoints) {
@@ -80,8 +88,12 @@ public class Zone implements Serializable {
         z.fillColor = this.fillColor;
         z.lineColor = this.lineColor;
         z.lineWidth = this.lineWidth;
+
+        z.exclusions = new HashSet<>(this.exclusions);
+
         z.barycenter = this.barycenter!=null ? this.barycenter.clonePoint() : null;
         z.boundaryBox = this.boundaryBox!=null ? Pair.of(this.boundaryBox.getLeft().clonePoint(), this.boundaryBox.getRight().clonePoint()) : null;
+
         return z;
     }
 
@@ -92,6 +104,7 @@ public class Zone implements Serializable {
      */
     public Zone(Point... points) {
         this.points = points;
+        this.exclusions = new HashSet<>();
     }
 
     /**
@@ -121,6 +134,19 @@ public class Zone implements Serializable {
      */
     public String getFillColor() {
         return fillColor !=null ? fillColor : DEFAULT_FILL_COLOR;
+    }
+
+    /**
+     * Gets exclusions.
+     *
+     * @return the exclusions
+     */
+    public Set<ZoneExclusion> getExclusions() {
+        return exclusions;
+    }
+
+    public void addExcusion(ZoneExclusion exclusion) {
+        this.exclusions.add(exclusion);
     }
 
     /**
