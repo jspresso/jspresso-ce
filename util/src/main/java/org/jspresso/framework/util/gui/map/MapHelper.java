@@ -200,7 +200,7 @@ public class MapHelper {
 
                     //TODO Add support of mutliple zones and exclusions
                     List<JSONArray> jshape = new ArrayList<>();
-                    for (Point point : shape.getZones().iterator().next().getPoints()) {
+                    for (Point point : shape.getZone().getPoints()) {
 
                         JSONArray jpoint = new JSONArray(2);
                         jpoint.put(0, point.getLongitude());
@@ -364,12 +364,9 @@ public class MapHelper {
         Set<Point> points = new HashSet<>();
         for (Shape s: shapes) {
 
-            for (Zone z : s.getZones()) {
-
-                Pair<Point, Point> box = z.getBoundaryBox();
-                points.add(box.getLeft());
-                points.add(box.getRight());
-            }
+            Pair<Point, Point> box = s.getZone().getBoundaryBox();
+            points.add(box.getLeft());
+            points.add(box.getRight());
         }
 
         return getBoundaryBox(0d, points.toArray(new Point[0]));

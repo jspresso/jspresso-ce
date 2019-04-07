@@ -26,7 +26,7 @@ public class Shape {
      */
     public static final int DEFAULT_WIDTH = 1;
 
-    private Set<Zone> zones;
+    private Zone zone;
     private Set<Zone> exclusions;
 
     /**
@@ -59,11 +59,11 @@ public class Shape {
         s.lineWidth = this.lineWidth;
 
         if (clonePoints) {
-            s.zones = new LinkedHashSet<>(Arrays.asList(MapHelper.cloneZones(this.zones.toArray(new Zone[0]), clonePoints)));
-            s.exclusions = new LinkedHashSet<>(Arrays.asList(MapHelper.cloneZones(this.zones.toArray(new Zone[0]), clonePoints)));
+            s.zone = MapHelper.cloneZones(new Zone[]{this.zone}, clonePoints)[0];
+            s.exclusions = new LinkedHashSet<>(Arrays.asList(MapHelper.cloneZones(this.exclusions.toArray(new Zone[0]), clonePoints)));
         }
         else {
-            s.zones = new LinkedHashSet<>(this.zones);
+            s.zone = this.zone;
             s.exclusions = new LinkedHashSet<>(this.exclusions);
         }
 
@@ -71,21 +71,12 @@ public class Shape {
     }
 
     /**
-     * Gets zones.
+     * Gets zone.
      *
-     * @return the zones
+     * @return the zone
      */
-    public Set<Zone> getZones() {
-        return zones;
-    }
-
-    /**
-     * Add zone.
-     *
-     * @param zone the zone
-     */
-    public void addZone(Zone zone) {
-        zones.add(zone);
+    public Zone getZone() {
+        return zone;
     }
 
     /**
@@ -109,9 +100,12 @@ public class Shape {
     /**
      * Instantiates a new Shape.
      */
-    public Shape() {
-        zones = new LinkedHashSet<>();
+    public Shape(Zone zone) {
+        this.zone = zone;
         exclusions = new LinkedHashSet<>();
+    }
+
+    private Shape() {
     }
 
     /**
@@ -181,7 +175,7 @@ public class Shape {
      * @return the zone's middle
      */
     public Pair<Point, Point> getBoundaryBox() {
-        return MapHelper.getBoundaryBox(this.getZones().toArray(new Zone[0]));
+        return getZone().getBoundaryBox();
     }
 
 }
