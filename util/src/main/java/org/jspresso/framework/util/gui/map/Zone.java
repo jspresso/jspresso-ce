@@ -21,56 +21,18 @@ package org.jspresso.framework.util.gui.map;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Zone
  *
  * @author Maxime HAMM Date: 04/04/2019
  */
-@SuppressWarnings({"WeakerAccess"})
 public class Zone implements Serializable {
-
-    /**
-     * Route default color
-     */
-    public static final String DEFAULT_FILL_COLOR = "rgba(0, 0, 255, 0.1)";
-
-    /**
-     * The constant DEFAULT_LINE_COLOR.
-     */
-    public static final String DEFAULT_LINE_COLOR = "#599ac9";
-
-    /**
-     * The constant DEFAULT_WIDTH.
-     */
-    public static final int DEFAULT_WIDTH = 1;
 
     /**
      * The shape.
      */
-    Point[] points;
-
-    /**
-     * The Exclusions.
-     */
-    Set<ZoneExclusion> exclusions;
-
-    /**
-     * The Fill color.
-     */
-    String fillColor;
-
-    /**
-     * The Line color.
-     */
-    String lineColor;
-
-    /**
-     * The Line width.
-     */
-    Integer lineWidth;
+    private Point[] points;
 
     private Point barycenter;
     private Pair<Point, Point> boundaryBox;
@@ -85,12 +47,6 @@ public class Zone implements Serializable {
 
         Zone z = clonePoints ? new Zone(MapHelper.clonePoints(points)) : new Zone(points);
 
-        z.fillColor = this.fillColor;
-        z.lineColor = this.lineColor;
-        z.lineWidth = this.lineWidth;
-
-        z.exclusions = new HashSet<>(this.exclusions);
-
         z.barycenter = this.barycenter!=null ? this.barycenter.clonePoint() : null;
         z.boundaryBox = this.boundaryBox!=null ? Pair.of(this.boundaryBox.getLeft().clonePoint(), this.boundaryBox.getRight().clonePoint()) : null;
 
@@ -104,7 +60,8 @@ public class Zone implements Serializable {
      */
     public Zone(Point... points) {
         this.points = points;
-        this.exclusions = new HashSet<>();
+        this.boundaryBox = null;
+        this.barycenter = null;
     }
 
     /**
@@ -128,73 +85,6 @@ public class Zone implements Serializable {
     }
 
     /**
-     * Gets fill color.
-     *
-     * @return the fill color
-     */
-    public String getFillColor() {
-        return fillColor !=null ? fillColor : DEFAULT_FILL_COLOR;
-    }
-
-    /**
-     * Gets exclusions.
-     *
-     * @return the exclusions
-     */
-    public Set<ZoneExclusion> getExclusions() {
-        return exclusions;
-    }
-
-    public void addExcusion(ZoneExclusion exclusion) {
-        this.exclusions.add(exclusion);
-    }
-
-    /**
-     * Sets fill color.
-     *
-     * @param fillColor the fill color
-     */
-    public void setFillColor(String fillColor) {
-        this.fillColor = fillColor;
-    }
-
-    /**
-     * Gets line color.
-     *
-     * @return the line color
-     */
-    public String getLineColor() {
-        return lineColor !=null ? lineColor : DEFAULT_LINE_COLOR;
-    }
-
-    /**
-     * Sets line color.
-     *
-     * @param lineColor the line color
-     */
-    public void setLineColor(String lineColor) {
-        this.lineColor = lineColor;
-    }
-
-    /**
-     * Gets line width.
-     *
-     * @return the line width
-     */
-    public Integer getLineWidth() {
-        return lineWidth !=null ? lineWidth : DEFAULT_WIDTH;
-    }
-
-    /**
-     * Sets line width.
-     *
-     * @param lineWidth the line width
-     */
-    public void setLineWidth(Integer lineWidth) {
-        this.lineWidth = lineWidth;
-    }
-
-    /**
      * Gets bary center.
      *
      * @return the zone's middle
@@ -214,14 +104,6 @@ public class Zone implements Serializable {
         if (boundaryBox == null)
             boundaryBox = MapHelper.getBoundaryBox(0.01, getPoints());
         return boundaryBox;
-    }
-
-
-    /**
-     * Sets transparent.
-     */
-    public void setTransparent() {
-        setFillColor("rgba(255, 255, 255, 0)");
     }
 
 }
