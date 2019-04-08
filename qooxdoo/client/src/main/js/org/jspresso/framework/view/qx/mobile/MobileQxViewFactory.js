@@ -1422,7 +1422,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           mapContent = JSON.parse(mapContent);
           var markers = mapContent["markers"];
           var routes = mapContent["routes"];
-          var routes = mapContent["zones"];
+          var zones = mapContent["zones"];
           if (markers || routes || zones) {
             map.showMap();
             map.drawMapContent(markers, routes, zones, remoteMap.getDefaultZoom());
