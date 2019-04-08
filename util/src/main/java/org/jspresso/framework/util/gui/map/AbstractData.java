@@ -25,12 +25,13 @@ import java.util.Map;
 /**
  * Abstract data
  *
- * @author Maxime HAMM
- * Date: 27/01/2018
+ * @author Maxime HAMM Date: 27/01/2018
  */
 class AbstractData implements Serializable {
 
     private Map<String, Object> options;
+
+    private String id;
 
     /**
      * Gets options
@@ -43,16 +44,34 @@ class AbstractData implements Serializable {
 
     /**
      * Add option
-     * @see <a href="https://openlayers.org/en/latest/apidoc/ol.style.Icon.html">Open layers (point's icon)</a>
-     * @see <a href="https://openlayers.org/en/latest/apidoc/ol.style.Stroke.html">Open layers (route's lines)</a>
      *
      * @param option The option key
      * @param object The option value
+     * @see <a href="https://openlayers.org/en/latest/apidoc/ol.style.Icon.html">Open layers (point's icon)</a>
+     * @see <a href="https://openlayers.org/en/latest/apidoc/ol.style.Stroke.html">Open layers (route's lines)</a>
      */
     public void addOption(String option, Object object) {
         if (options == null)
             options = new HashMap<>();
 
         options.put(option, object);
+    }
+
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Sets id.
+     *
+     * @param id the id
+     */
+    public void setId(String id) {
+        this.id = id;
     }
 }

@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * The type Shape.
  */
-public class Shape {
+public class Shape extends AbstractData {
 
     /**
      * Route default color

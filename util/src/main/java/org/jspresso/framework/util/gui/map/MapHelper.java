@@ -186,6 +186,7 @@ public class MapHelper {
                 List<JSONObject> zonesList = new ArrayList<>();
                 for (Shape shape : shapes) {
 
+                    // Style
                     JSONObject style = new JSONObject(); {
 
                         JSONObject stroke = new JSONObject();
@@ -198,26 +199,56 @@ public class MapHelper {
                         style.put("fill", fill);
                     }
 
-                    //TODO Add support of mutliple zones and exclusions
-                    List<JSONArray> jshape = new ArrayList<>();
+                    // The zone
+                    List<JSONArray> jpoints = new ArrayList<>();
                     for (Point point : shape.getZone().getPoints()) {
 
                         JSONArray jpoint = new JSONArray(2);
                         jpoint.put(0, point.getLongitude());
                         jpoint.put(1, point.getLatitude());
-                        jshape.add(jpoint);
+                        jpoints.add(jpoint);
+                    }
+                    JSONArray jzone = new JSONArray(jpoints);
+
+                    // add exclusion
+                    if (!shape.getExclusions().isEmpty()) {
+
+                        // Add one more dimension
+                        int i=0;
+                        {
+                            JSONArray j = new JSONArray();
+                            j.put(i++, jzone);
+                            jzone = j;
+                        }
+
+                        // load exclusions
+                        for (Zone exclusion : shape.getExclusions()) {
+
+                            List<JSONArray> jp = new ArrayList<>();
+                            for (Point point : exclusion.getPoints()) {
+
+                                JSONArray jpoint = new JSONArray(2);
+                                jpoint.put(0, point.getLongitude());
+                                jpoint.put(1, point.getLatitude());
+                                jp.add(jpoint);
+                            }
+
+                            JSONArray jexclusion = new JSONArray(jp);
+                            jzone.put(i++, jexclusion);
+                        }
                     }
 
-                    JSONObject jzone = new JSONObject();
-                    jzone.put("style", style);
-                    jzone.put("shape", jshape);
+                    // consolidate
+                    JSONObject all = new JSONObject();
+                    all.put("style", style);
+                    all.put("shape", jzone);
 
-                    zonesList.add(jzone);
+                    zonesList.add(all);
                 }
                 mapContent.put(ZONES_KEY, zonesList);
             }
 
-            return mapContent.toString(0);
+            return mapContent.toString(2);
 
         } catch (JSONException ex) {
             throw new NestedRuntimeException(ex);
