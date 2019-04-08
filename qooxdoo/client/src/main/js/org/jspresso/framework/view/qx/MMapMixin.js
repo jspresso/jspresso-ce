@@ -221,7 +221,7 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
               zoneShape.push(ol.proj.fromLonLat(coordinatesOrInnerShape));
             } else {
               var zoneInnerShape = [];
-              for (var k = 0; k < jsonZoneCoordinates.length; k++) {
+              for (var k = 0; k < coordinatesOrInnerShape.length; k++) {
                 zoneInnerShape.push(ol.proj.fromLonLat(coordinatesOrInnerShape[k]));
               }
               zoneShape.push(zoneInnerShape);
