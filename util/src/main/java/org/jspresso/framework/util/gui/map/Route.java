@@ -53,6 +53,19 @@ public class Route extends AbstractData {
     Integer width;
 
     /**
+     * Clone point point.
+     *
+     * @return the point
+     */
+    public Route cloneRoute(boolean clonePoints) {
+        Route r = clonePoints ? new Route(MapHelper.clonePoints(points)) : new Route(points);
+        r.width = this.width;
+        r.color = this.color;
+        return r;
+    }
+
+
+    /**
      * Route constructor
      *
      * @param points Array of points

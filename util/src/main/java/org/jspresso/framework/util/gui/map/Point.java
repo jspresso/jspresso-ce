@@ -21,14 +21,11 @@ package org.jspresso.framework.util.gui.map;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 
-import java.io.Serializable;
-
 /**
  * Point
- * @see <a href="https://openlayers.org/en/latest/apidoc/ol.style.Icon.html">Open layers icon</a>
  *
- * @author Maxime HAMM
- * Date: 27/01/2018
+ * @author Maxime HAMM Date: 27/01/2018
+ * @see <a href="https://openlayers.org/en/latest/apidoc/ol.style.Icon.html">Open layers icon</a>
  */
 @SuppressWarnings("WeakerAccess")
 public class Point extends AbstractData {
@@ -51,7 +48,25 @@ public class Point extends AbstractData {
     String color;
 
     /**
+     * Clone point point.
+     *
+     * @return the point
+     */
+    public Point clonePoint() {
+
+        Point p = new Point(longitude, latitude);
+        p.imagePath = this.imagePath;
+        p.imageUrl = this.imageUrl;
+        p.htmlDescription = this.htmlDescription;
+        p.imageDimension = this.imageDimension;
+        p.color = this.color;
+
+        return p;
+    }
+
+    /**
      * Point constructor
+     *
      * @param longitude The longitude
      * @param latitude  The latitude
      */
@@ -62,6 +77,7 @@ public class Point extends AbstractData {
 
     /**
      * Gets longitude
+     *
      * @return The longitude
      */
     public double getLongitude() {
@@ -70,6 +86,7 @@ public class Point extends AbstractData {
 
     /**
      * Gets latitude
+     *
      * @return The latitude
      */
     public double getLatitude() {
@@ -78,6 +95,7 @@ public class Point extends AbstractData {
 
     /**
      * Sets resource image path
+     *
      * @param imagePath The image path
      */
     public void setImagePath(String imagePath) {
@@ -89,6 +107,7 @@ public class Point extends AbstractData {
 
     /**
      * Gets resource image path
+     *
      * @return The resource image path
      */
     public String getImagePath() {
@@ -97,6 +116,7 @@ public class Point extends AbstractData {
 
     /**
      * Sets resource image URL
+     *
      * @param imageUrl The image path
      */
     public void setImageUrl(String imageUrl) {
@@ -105,6 +125,7 @@ public class Point extends AbstractData {
 
     /**
      * Gets resource image URL
+     *
      * @return The resource image path
      */
     public String getImageUrl() {
@@ -139,6 +160,7 @@ public class Point extends AbstractData {
 
     /**
      * Sets dimension
+     *
      * @param imageDimension The dimension
      */
     public void setImageDimension(Dimension imageDimension) {
@@ -147,6 +169,7 @@ public class Point extends AbstractData {
 
     /**
      * Gets dimension
+     *
      * @return The dimension
      */
     public Dimension getImageDimension() {
@@ -155,6 +178,7 @@ public class Point extends AbstractData {
 
     /**
      * Sets point's color
+     *
      * @param color The color
      */
     public void setColor(String color) {
@@ -163,6 +187,7 @@ public class Point extends AbstractData {
 
     /**
      * Gets point's color
+     *
      * @return The color
      */
     public String getColor() {

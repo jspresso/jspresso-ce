@@ -18,6 +18,10 @@
  */
 package org.jspresso.framework.util.gui.map;
 
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.io.Serializable;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -27,7 +31,7 @@ import java.util.Set;
  * @author Maxime HAMM Date: 27/01/2018
  */
 @SuppressWarnings("WeakerAccess")
-public class MapDefinition {
+public class MapDefinition implements Serializable {
 
     /**
      * The Points.
@@ -38,9 +42,27 @@ public class MapDefinition {
      */
     final Set<Route> routes;
     /**
-     * The Zones.
+     * The Shapes.
      */
-    final Set<Zone> zones;
+    final Set<Shape> shapes;
+
+    /**
+     * Clone map map definition.
+     *
+     * @return the map definition
+     */
+    public MapDefinition cloneMap(boolean clonePoints) {
+        if (clonePoints)
+            return new MapDefinition(
+                    new LinkedHashSet<>(Arrays.asList(MapHelper.clonePoints(points.toArray(new Point[0])))),
+                    new LinkedHashSet<>(Arrays.asList(MapHelper.cloneRoutes(routes.toArray(new Route[0]), clonePoints))),
+                    new LinkedHashSet<>(Arrays.asList(MapHelper.cloneShapes(shapes.toArray(new Shape[0]), clonePoints))));
+        else
+            return new MapDefinition(
+                    new LinkedHashSet<>(points),
+                    new LinkedHashSet<>(routes),
+                    new LinkedHashSet<>(shapes));
+    }
 
     /**
      * Map constructor
@@ -64,12 +86,12 @@ public class MapDefinition {
      *
      * @param points the points
      * @param routes the routes
-     * @param zones  the zones
+     * @param shapes  the shapes
      */
-    public MapDefinition(Set<Point> points, Set<Route> routes, Set<Zone> zones) {
+    public MapDefinition(Set<Point> points, Set<Route> routes, Set<Shape> shapes) {
         this.points = points!=null ? points : new LinkedHashSet<Point>();
         this.routes = routes != null ? routes : new LinkedHashSet<Route>();
-        this.zones = zones !=null ? zones : new LinkedHashSet<Zone>();
+        this.shapes = shapes !=null ? shapes : new LinkedHashSet<Shape>();
     }
 
     /**
@@ -91,12 +113,12 @@ public class MapDefinition {
     }
 
     /**
-     * Add a zone.
+     * Add a shape.
      *
-     * @param zone The route to add
+     * @param shape The route to add
      */
-    public void addZone(Zone zone) {
-        zones.add(zone);
+    public void addShape(Shape shape) {
+        shapes.add(shape);
     }
 
     /**
@@ -118,12 +140,12 @@ public class MapDefinition {
     }
 
     /**
-     * Gets zones.
+     * Gets shapes.
      *
-     * @return the zones
+     * @return the shapes
      */
-    public Set<Zone> getZones() {
-        return zones;
+    public Set<Shape> getShapes() {
+        return shapes;
     }
 
     /**
@@ -135,7 +157,7 @@ public class MapDefinition {
         return MapHelper.buildMap(
                 points.toArray(new Point[0]),
                 routes.toArray(new Route[0]),
-                zones.toArray(new Zone[0]));
+                shapes.toArray(new Shape[0]));
     }
 
     /**
@@ -145,6 +167,8 @@ public class MapDefinition {
      * @param map The map to merge
      */
     public void merge(MapDefinition map) {
+        if (map==null)
+            return;
         merge(map, true, true, true);
     }
 
@@ -152,15 +176,27 @@ public class MapDefinition {
      * Merge the map with another map
      * Points and routes are merged
      *
-     * @param map The map to merge
+     * @param map             The map to merge
+     * @param includingPoints the including points
+     * @param includingRoutes the including routes
+     * @param includingShapes  the including shapes
      */
-    public void merge(MapDefinition map, boolean includingPoints, boolean includingRoutes, boolean includingZones) {
+    public void merge(MapDefinition map, boolean includingPoints, boolean includingRoutes, boolean includingShapes) {
         if (includingPoints)
             points.addAll(map.getPoints());
         if (includingRoutes)
             routes.addAll(map.getRoutes());
-        if (includingZones)
-            zones.addAll(map.getZones());
+        if (includingShapes)
+            shapes.addAll(map.getShapes());
+    }
+
+    /**
+     * Gets middle.
+     *
+     * @return the zone's middle
+     */
+    public Pair<Point, Point> getBoundaryBox() {
+        return MapHelper.getBoundaryBox(this.getShapes().toArray(new Shape[0]));
     }
 }
 

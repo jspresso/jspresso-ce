@@ -112,10 +112,10 @@ public class MapHelper {
      *
      * @param points the points
      * @param routes One or more couple of longitude and latitude
-     * @param zones  the zones
+     * @param shapes the shapes
      * @return the string
      */
-    public static String buildMap(Point[] points, Route[] routes, Zone[] zones) {
+    public static String buildMap(Point[] points, Route[] routes, Shape[] shapes) {
         try {
             JSONObject mapContent = new JSONObject();
 
@@ -180,43 +180,44 @@ public class MapHelper {
             }
 
             //
-            // Zones
-            if (zones != null) {
+            // Shapes
+            if (shapes != null) {
 
                 List<JSONObject> zonesList = new ArrayList<>();
-                for (Zone zone : zones) {
+                for (Shape shape : shapes) {
 
                     JSONObject style = new JSONObject(); {
 
                         JSONObject stroke = new JSONObject();
-                        stroke.put("color", zone.getLineColor());
-                        stroke.put("width", zone.getLineWidth());
+                        stroke.put("color", shape.getLineColor());
+                        stroke.put("width", shape.getLineWidth());
                         style.put("stroke", stroke);
 
                         JSONObject fill = new JSONObject();
-                        fill.put("color", zone.getFillColor());
+                        fill.put("color", shape.getFillColor());
                         style.put("fill", fill);
                     }
 
-                    List<JSONArray> shape = new ArrayList<>();
-                    for (Point point : zone.getPoints()) {
+                    //TODO Add support of mutliple zones and exclusions
+                    List<JSONArray> jshape = new ArrayList<>();
+                    for (Point point : shape.getZone().getPoints()) {
 
                         JSONArray jpoint = new JSONArray(2);
                         jpoint.put(0, point.getLongitude());
                         jpoint.put(1, point.getLatitude());
-                        shape.add(jpoint);
+                        jshape.add(jpoint);
                     }
 
                     JSONObject jzone = new JSONObject();
                     jzone.put("style", style);
-                    jzone.put("shape", shape);
+                    jzone.put("shape", jshape);
 
                     zonesList.add(jzone);
                 }
                 mapContent.put(ZONES_KEY, zonesList);
             }
 
-            return mapContent.toString(2);
+            return mapContent.toString(0);
 
         } catch (JSONException ex) {
             throw new NestedRuntimeException(ex);
@@ -353,12 +354,50 @@ public class MapHelper {
     }
 
     /**
-     * Gets boundary box containing points.
+     * Gets boundary box containing shapes.
      *
-     * @param points the points
+     * @param shapes the shapes
      * @return the boundary box
      */
-    public static Pair<Point, Point> getBoundaryBox(Point... points) {
+    public static Pair<Point, Point> getBoundaryBox(Shape... shapes) {
+
+        Set<Point> points = new HashSet<>();
+        for (Shape s: shapes) {
+
+            Pair<Point, Point> box = s.getZone().getBoundaryBox();
+            points.add(box.getLeft());
+            points.add(box.getRight());
+        }
+
+        return getBoundaryBox(0d, points.toArray(new Point[0]));
+    }
+
+    /**
+     * Gets boundary box containing zones.
+     *
+     * @param zones the zones
+     * @return the boundary box
+     */
+    public static Pair<Point, Point> getBoundaryBox(Zone... zones) {
+
+        Set<Point> points = new HashSet<>();
+        for (Zone z: zones) {
+            Pair<Point, Point> box = z.getBoundaryBox();
+            points.add(box.getLeft());
+            points.add(box.getRight());
+        }
+
+        return getBoundaryBox(0d, points.toArray(new Point[0]));
+    }
+
+    /**
+     * Gets boundary box containing points.
+     *
+     * @param padding the padding
+     * @param points  the points
+     * @return the boundary box
+     */
+    public static Pair<Point, Point> getBoundaryBox(double padding, Point... points) {
 
         if (points == null || points.length==0)
             return null;
@@ -396,13 +435,93 @@ public class MapHelper {
             }
         }
 
-        double padding = 0.01;
         north = north + padding;
         south = south - padding;
         west = west - padding;
         east = east + padding;
 
-        return Pair.of(new Point(north, east), new Point(south, west));
+        Point left = new Point(north, east);
+        left.setImagePath(null);
+
+        Point right = new Point(south, west);
+        right.setImagePath(null);
+
+        return Pair.of(left, right);
+    }
+
+    /**
+     * Clone points point [ ].
+     *
+     * @param points the points
+     * @return the point [ ]
+     */
+    static Point[] clonePoints(Point[] points) {
+
+        if (points==null)
+            return null;
+
+        Point[] clone = new Point[points.length];
+        for (int i = 0; i < points.length; i++) {
+            clone[i] = points[i].clonePoint();
+        }
+        return clone;
+    }
+
+    /**
+     * Clone shapes shape [ ].
+     *
+     * @param shapes      the shapes
+     * @param clonePoints the clone points
+     * @return the shape [ ]
+     */
+    static Shape[] cloneShapes(Shape[] shapes, boolean clonePoints) {
+
+        if (shapes==null)
+            return null;
+
+        Shape[] clone = new Shape[shapes.length];
+        for (int i = 0; i < shapes.length; i++) {
+            clone[i] = shapes[i].cloneShape(clonePoints);
+        }
+        return clone;
+    }
+
+    /**
+     * Clone zones zone [ ].
+     *
+     * @param zones       the zones
+     * @param clonePoints the clone points
+     * @return the zone [ ]
+     */
+    static Zone[] cloneZones(Zone[] zones, boolean clonePoints) {
+
+        if (zones==null)
+            return null;
+
+        Zone[] clone = new Zone[zones.length];
+        for (int i = 0; i < zones.length; i++) {
+            clone[i] = zones[i].cloneZone(clonePoints);
+        }
+        return clone;
+    }
+
+    /**
+     * Clone routes route [ ].
+     *
+     * @param routes      the routes
+     * @param clonePoints the clone points
+     * @return the route [ ]
+     */
+    static Route[] cloneRoutes(Route[] routes, boolean clonePoints) {
+
+        if (routes==null)
+            return null;
+
+        Route[] clone = new Route[routes.length];
+        for (int i = 0; i < routes.length; i++) {
+            clone[i] = routes[i].cloneRoute(clonePoints);
+        }
+        return clone;
     }
 
 

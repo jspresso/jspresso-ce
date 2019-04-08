@@ -20,48 +20,38 @@ package org.jspresso.framework.util.gui.map;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.io.Serializable;
+
 /**
  * Zone
  *
  * @author Maxime HAMM Date: 04/04/2019
  */
-@SuppressWarnings({"WeakerAccess"})
-public class Zone {
-
-    /**
-     * Route default color
-     */
-    public static final String DEFAULT_FILL_COLOR = "rgba(0, 0, 255, 0.1)";
-
-    /**
-     * The constant DEFAULT_LINE_COLOR.
-     */
-    public static final String DEFAULT_LINE_COLOR = "#599ac9";
-
-    /**
-     * The constant DEFAULT_WIDTH.
-     */
-    public static final int DEFAULT_WIDTH = 1;
+public class Zone implements Serializable {
 
     /**
      * The shape.
      */
-    Point[] points;
+    private Point[] points;
+
+    private Point barycenter;
+    private Pair<Point, Point> boundaryBox;
 
     /**
-     * The Fill color.
+     * Clone point point.
+     *
+     * @param clonePoints the clone points
+     * @return the point
      */
-    String fillColor;
+    public Zone cloneZone(boolean clonePoints) {
 
-    /**
-     * The Line color.
-     */
-    String lineColor;
+        Zone z = clonePoints ? new Zone(MapHelper.clonePoints(points)) : new Zone(points);
 
-    /**
-     * The Line width.
-     */
-    Integer lineWidth;
+        z.barycenter = this.barycenter!=null ? this.barycenter.clonePoint() : null;
+        z.boundaryBox = this.boundaryBox!=null ? Pair.of(this.boundaryBox.getLeft().clonePoint(), this.boundaryBox.getRight().clonePoint()) : null;
+
+        return z;
+    }
 
     /**
      * Instantiates a new Zone.
@@ -70,6 +60,8 @@ public class Zone {
      */
     public Zone(Point... points) {
         this.points = points;
+        this.boundaryBox = null;
+        this.barycenter = null;
     }
 
     /**
@@ -79,6 +71,8 @@ public class Zone {
      */
     public void setPoints(Point... points) {
         this.points = points;
+        this.boundaryBox = null;
+        this.barycenter = null;
     }
 
     /**
@@ -91,66 +85,14 @@ public class Zone {
     }
 
     /**
-     * Gets fill color.
-     *
-     * @return the fill color
-     */
-    public String getFillColor() {
-        return fillColor !=null ? fillColor : DEFAULT_FILL_COLOR;
-    }
-
-    /**
-     * Sets fill color.
-     *
-     * @param fillColor the fill color
-     */
-    public void setFillColor(String fillColor) {
-        this.fillColor = fillColor;
-    }
-
-    /**
-     * Gets line color.
-     *
-     * @return the line color
-     */
-    public String getLineColor() {
-        return lineColor !=null ? lineColor : DEFAULT_LINE_COLOR;
-    }
-
-    /**
-     * Sets line color.
-     *
-     * @param lineColor the line color
-     */
-    public void setLineColor(String lineColor) {
-        this.lineColor = lineColor;
-    }
-
-    /**
-     * Gets line width.
-     *
-     * @return the line width
-     */
-    public Integer getLineWidth() {
-        return lineWidth !=null ? lineWidth : DEFAULT_WIDTH;
-    }
-
-    /**
-     * Sets line width.
-     *
-     * @param lineWidth the line width
-     */
-    public void setLineWidth(Integer lineWidth) {
-        this.lineWidth = lineWidth;
-    }
-
-    /**
-     * Gets middle.
+     * Gets bary center.
      *
      * @return the zone's middle
      */
-    public Point getBaryCenterMiddle() {
-        return MapHelper.getBaryCenter(getPoints());
+    public Point getBaryCenter() {
+        if (barycenter == null)
+            barycenter = MapHelper.getBaryCenter(getPoints());
+        return barycenter;
     }
 
     /**
@@ -159,8 +101,9 @@ public class Zone {
      * @return the zone's middle
      */
     public Pair<Point, Point> getBoundaryBox() {
-        return MapHelper.getBoundaryBox(getPoints());
+        if (boundaryBox == null)
+            boundaryBox = MapHelper.getBoundaryBox(0.01, getPoints());
+        return boundaryBox;
     }
-
 
 }
