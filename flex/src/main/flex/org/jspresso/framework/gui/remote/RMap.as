@@ -25,6 +25,9 @@ package org.jspresso.framework.gui.remote {
 public class RMap extends RComponent {
 
   private var _defaultZoom:Number;
+  private var _markerAction:RAction;
+  private var _routeAction:RAction;
+  private var _zoneAction:RAction;
 
   public function RMap() {
     //default constructor.
@@ -36,6 +39,30 @@ public class RMap extends RComponent {
 
   public function set defaultZoom(value:Number):void {
     _defaultZoom = value;
+  }
+
+  public function get markerAction():RAction {
+    return _markerAction;
+  }
+
+  public function set markerAction(value:RAction):void {
+    _markerAction = value;
+  }
+
+  public function get routeAction():RAction {
+    return _routeAction;
+  }
+
+  public function set routeAction(value:RAction):void {
+    _routeAction = value;
+  }
+
+  public function get zoneAction():RAction {
+    return _zoneAction;
+  }
+
+  public function set zoneAction(value:RAction):void {
+    _zoneAction = value;
   }
 }
 }

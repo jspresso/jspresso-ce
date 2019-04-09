@@ -18,6 +18,8 @@
  */
 package org.jspresso.framework.view.descriptor;
 
+import org.jspresso.framework.view.action.IDisplayableAction;
+
 /**
  * This public interface is implemented by cartographic view descriptors.
  *
@@ -25,7 +27,9 @@ package org.jspresso.framework.view.descriptor;
  */
 public interface IMapViewDescriptor extends IViewDescriptor {
 
-  /** the &quot;zoom&quot; constant */
+  /**
+   * the &quot;zoom&quot; constant
+   */
   public final String ZOOM = "zoom";
 
   /**
@@ -41,4 +45,25 @@ public interface IMapViewDescriptor extends IViewDescriptor {
    * @return the default zoom
    */
   Integer getDefaultZoom();
+
+  /**
+   * Gets marker action.
+   *
+   * @return the marker action
+   */
+  IDisplayableAction getMarkerAction();
+
+  /**
+   * Gets route action.
+   *
+   * @return the route action
+   */
+  IDisplayableAction getRouteAction();
+
+  /**
+   * Gets zone action.
+   *
+   * @return the zone action
+   */
+  IDisplayableAction getZoneAction();
 }

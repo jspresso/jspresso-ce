@@ -28,6 +28,18 @@ qx.Class.define("org.jspresso.framework.gui.remote.RMap", {
     defaultZoom: {
       check: "Integer",
       nullable: true
+    },
+    markerAction: {
+      check: "org.jspresso.framework.gui.remote.RAction",
+      nullable: true
+    },
+    routeAction: {
+      check: "org.jspresso.framework.gui.remote.RAction",
+      nullable: true
+    },
+    zoneAction: {
+      check: "org.jspresso.framework.gui.remote.RAction",
+      nullable: true
     }
   }
 

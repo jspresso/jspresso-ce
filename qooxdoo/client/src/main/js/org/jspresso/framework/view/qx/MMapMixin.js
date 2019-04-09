@@ -27,7 +27,10 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
   },
 
   events: {
-    changeZoom: "qx.event.type.Data"
+    changeZoom: "qx.event.type.Data",
+    markerTap: "qx.event.type.Data",
+    routeTap: "qx.event.type.Data",
+    zoneTap: "qx.event.type.Data",
   },
 
   members: {
@@ -131,22 +134,21 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
         center: ol.proj.fromLonLat([0, 0]),
         zoom: 12
       });
-      //mapView.on("change:resolution", function (event) {
       this.__map.on("moveend", function (event) {
         this.fireDataEvent("changeZoom", Math.round(mapView.getZoom()));
       }, this);
-      /*
-            var markerSelect = new ol.interaction.Select();
-            this.__map.addInteraction(markerSelect);
-            markerSelect.on('select', function (evt) {
-              if (evt.selected && evt.selected.length) {
-                alert("toto");
-              }
-            });
-            this.__map.on('pointermove', function (evt) {
-              this.__map.getTargetElement().style.cursor = this.__map.hasFeatureAtPixel(evt.pixel) ? 'pointer' : '';
-            }, this);
-      */
+      this.__map.on("click", function (e) {
+        var that = this;
+        this.__map.forEachFeatureAtPixel(e.pixel, function (feature, layer) {
+          if (layer === that.__markersLayer) {
+            that.fireDataEvent("markerTap", feature.getId());
+          } else if (layer === that.__routesLayer) {
+            that.fireDataEvent("routeTap", feature.getId());
+          } else if (layer === that.__zonesLayer) {
+            that.fireDataEvent("zoneTap", feature.getId());
+          }
+        }, this)
+      }, this);
       this.__map.setView(mapView);
     },
 
@@ -160,6 +162,7 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
           var marker = new ol.Feature({
             geometry: new ol.geom.Point(markerNode)
           });
+          marker.setId(/*jsonMarker.id*/"marker_" + Date.now());
           if (jsonMarker.image) {
             marker.setStyle(new ol.style.Style({
               image: new ol.style.Icon(jsonMarker.image)
@@ -233,6 +236,7 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
           var zonePolygon = new ol.Feature({
             geometry: new ol.geom.Polygon(zoneShape)
           });
+          zonePolygon.setId(/*jsonZone.id*/"zone_" + Date.now());
           if (jsonZone.style) {
             var zoneStyle = {};
             if (jsonZone.style.stroke) {
@@ -266,15 +270,16 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
             routeNodes.push(routeNode);
             extendsCoordinates.push(routeNode);
           }
-          var routeSegment = new ol.Feature({
+          var routeLine = new ol.Feature({
             geometry: new ol.geom.LineString(routeNodes)
           });
+          routeLine.setId(/*jsonRoute.id*/"route_" + Date.now());
           if (jsonRoute.style) {
-            routeSegment.setStyle(new ol.style.Style({
+            routeLine.setStyle(new ol.style.Style({
               stroke: new ol.style.Stroke(jsonRoute.style)
             }));
           }
-          routesFeatures.push(routeSegment);
+          routesFeatures.push(routeLine);
         }
         this.__routesSource.clear(true);
         this.__routesSource.addFeatures(routesFeatures);

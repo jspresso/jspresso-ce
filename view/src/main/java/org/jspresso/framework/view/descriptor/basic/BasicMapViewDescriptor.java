@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.view.descriptor.basic;
 
+import org.jspresso.framework.view.action.IDisplayableAction;
 import org.jspresso.framework.view.descriptor.IMapViewDescriptor;
 
 /**
@@ -27,8 +28,11 @@ import org.jspresso.framework.view.descriptor.IMapViewDescriptor;
  */
 public class BasicMapViewDescriptor extends BasicViewDescriptor implements IMapViewDescriptor {
 
-  private String  mapContentProperty;
-  private Integer defaultZoom;
+  private String             mapContentProperty;
+  private Integer            defaultZoom;
+  private IDisplayableAction markerAction;
+  private IDisplayableAction routeAction;
+  private IDisplayableAction zoneAction;
 
   /**
    * Gets map content property.
@@ -69,5 +73,65 @@ public class BasicMapViewDescriptor extends BasicViewDescriptor implements IMapV
    */
   public void setDefaultZoom(Integer defaultZoom) {
     this.defaultZoom = defaultZoom;
+  }
+
+  /**
+   * Gets marker action.
+   *
+   * @return the marker action
+   */
+  @Override
+  public IDisplayableAction getMarkerAction() {
+    return markerAction;
+  }
+
+  /**
+   * Sets marker action.
+   *
+   * @param markerAction
+   *     the marker action
+   */
+  public void setMarkerAction(IDisplayableAction markerAction) {
+    this.markerAction = markerAction;
+  }
+
+  /**
+   * Gets route action.
+   *
+   * @return the route action
+   */
+  @Override
+  public IDisplayableAction getRouteAction() {
+    return routeAction;
+  }
+
+  /**
+   * Sets route action.
+   *
+   * @param routeAction
+   *     the route action
+   */
+  public void setRouteAction(IDisplayableAction routeAction) {
+    this.routeAction = routeAction;
+  }
+
+  /**
+   * Gets zone action.
+   *
+   * @return the zone action
+   */
+  @Override
+  public IDisplayableAction getZoneAction() {
+    return zoneAction;
+  }
+
+  /**
+   * Sets zone action.
+   *
+   * @param zoneAction
+   *     the zone action
+   */
+  public void setZoneAction(IDisplayableAction zoneAction) {
+    this.zoneAction = zoneAction;
   }
 }

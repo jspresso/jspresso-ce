@@ -1815,6 +1815,18 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     connector.addChildConnector(getConnectorFactory().createValueConnector(viewDescriptor.getMapContentProperty()));
     connector.setExceptionHandler(actionHandler);
     IView<RComponent> view = constructView(viewComponent, viewDescriptor, connector);
+    if (viewDescriptor.getMarkerAction() != null) {
+      viewComponent.setMarkerAction(
+          getActionFactory().createAction(viewDescriptor.getMarkerAction(), actionHandler, view, locale));
+    }
+    if (viewDescriptor.getRouteAction() != null) {
+      viewComponent.setRouteAction(
+          getActionFactory().createAction(viewDescriptor.getRouteAction(), actionHandler, view, locale));
+    }
+    if (viewDescriptor.getZoneAction() != null) {
+      viewComponent.setZoneAction(
+          getActionFactory().createAction(viewDescriptor.getZoneAction(), actionHandler, view, locale));
+    }
     return view;
   }
 

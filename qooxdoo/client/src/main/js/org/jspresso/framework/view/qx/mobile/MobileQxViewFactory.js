@@ -1436,6 +1436,21 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
           this.notifyMapChanged(remoteMap, event.getData());
         }, this);
       }
+      if (remoteMap.getMarkerAction()) {
+        map.addListener("markerTap", function (event) {
+          this._getActionHandler().execute(remoteMap.getMarkerAction(), event.getData());
+        }, this);
+      }
+      if (remoteMap.getRouteAction()) {
+        map.addListener("routeTap", function (event) {
+          this._getActionHandler().execute(remoteMap.getRouteAction(), event.getData());
+        }, this);
+      }
+      if (remoteMap.getZoneAction()) {
+        map.addListener("zoneTap", function (event) {
+          this._getActionHandler().execute(remoteMap.getZoneAction(), event.getData());
+        }, this);
+      }
       mapContentState.addListener("changeValue", updateMap, this);
       if (remoteMap.isInline()) {
         map.addListenerOnce("appear", updateMap);
