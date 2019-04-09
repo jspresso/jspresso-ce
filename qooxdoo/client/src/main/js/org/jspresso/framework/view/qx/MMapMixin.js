@@ -30,7 +30,7 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
     changeZoom: "qx.event.type.Data",
     markerTap: "qx.event.type.Data",
     routeTap: "qx.event.type.Data",
-    zoneTap: "qx.event.type.Data",
+    zoneTap: "qx.event.type.Data"
   },
 
   members: {
