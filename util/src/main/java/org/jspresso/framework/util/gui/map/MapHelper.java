@@ -200,15 +200,8 @@ public class MapHelper {
                     }
 
                     // The zone
-                    List<JSONArray> jpoints = new ArrayList<>();
-                    for (Point point : shape.getZone().getPoints()) {
-
-                        JSONArray jpoint = new JSONArray(2);
-                        jpoint.put(0, point.getLongitude());
-                        jpoint.put(1, point.getLatitude());
-                        jpoints.add(jpoint);
-                    }
-                    JSONArray jzone = new JSONArray(jpoints);
+                    JSONArray jzone = new JSONArray(
+                            buildZonePoints(shape.getZone()));
 
                     // add exclusion
                     if (!shape.getExclusions().isEmpty()) {
@@ -224,16 +217,7 @@ public class MapHelper {
                         // load exclusions
                         for (Zone exclusion : shape.getExclusions()) {
 
-                            List<JSONArray> jp = new ArrayList<>();
-                            for (Point point : exclusion.getPoints()) {
-
-                                JSONArray jpoint = new JSONArray(2);
-                                jpoint.put(0, point.getLongitude());
-                                jpoint.put(1, point.getLatitude());
-                                jp.add(jpoint);
-                            }
-
-                            JSONArray jexclusion = new JSONArray(jp);
+                            JSONArray jexclusion = new JSONArray(buildZonePoints(exclusion));
                             jzone.put(i++, jexclusion);
                         }
                     }
@@ -248,13 +232,26 @@ public class MapHelper {
                 mapContent.put(ZONES_KEY, zonesList);
             }
 
-            return mapContent.toString(2);
+            return mapContent.toString(0);
 
         } catch (JSONException ex) {
             throw new NestedRuntimeException(ex);
         }
     }
 
+    private static List<JSONArray> buildZonePoints(Zone zone) throws JSONException {
+
+        List<JSONArray> jpoints = new ArrayList<>();
+        for (Point p : zone.getPoints()) {
+
+            JSONArray jpoint = new JSONArray(2);
+            jpoint.put(0, p.getLongitude());
+            jpoint.put(1, p.getLatitude());
+            jpoints.add(jpoint);
+        }
+
+        return jpoints;
+    }
 
     /**
      * Gets point label.
