@@ -1423,7 +1423,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       var focusableChild = this._findFirstFocusableComponent(component);
       if (focusableChild) {
         var focusTask = new qx.util.DeferredCall(function () {
-          qx.event.Timer.once(function () {
+          qx.event.Timer.once(function (e) {
             focusableChild.focus();
           }, this, 100);
         }, this);
@@ -1814,14 +1814,14 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
       tf.addListener("focus", function () {
         //tf.selectAllText();
         var oldValue = tf.getValue();
-        qx.event.Timer.once(function () {
+        new qx.util.DeferredCall(function () {
           if (qx.ui.core.FocusHandler.getInstance().isFocused(tf)) {
             var newValue = tf.getValue();
             if (newValue && oldValue && newValue == oldValue) {
               tf.selectAllText();
             }
           }
-        }, {}, 0);
+        }, {}).schedule();
       });
       return tf;
     },

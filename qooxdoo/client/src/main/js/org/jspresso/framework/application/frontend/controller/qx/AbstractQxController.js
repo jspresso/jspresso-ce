@@ -69,7 +69,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
       if (action) {
         var actionEvent = new org.jspresso.framework.gui.remote.RActionEvent();
         actionEvent.setActionCommand(actionCommand);
-        qx.event.Timer.once(function () {
+        new qx.util.DeferredCall(function () {
           try {
             var savedDialogIndex = null;
             if (viewStateGuid && viewStatePermId) {
@@ -81,7 +81,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.Abstr
               actionHandler.setCurrentViewStateGuid(null, null, savedDialogIndex);
             }
           }
-        }, {}, 100);
+        }, {}).schedule();
       }
     };
     this._initRemoteController();

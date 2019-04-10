@@ -332,7 +332,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MobileQxViewFactory", {
         }, this);
       }
       toolBar.addListener("appear", function (e) {
-        qx.event.Timer.once(function () {
+        qx.event.Timer.once(function (e) {
               this.__sizeToolBarContent(toolBar);
             }, this,
             org.jspresso.framework.application.frontend.controller.qx.mobile.MobileQxController.ANIMATION_DURATION);

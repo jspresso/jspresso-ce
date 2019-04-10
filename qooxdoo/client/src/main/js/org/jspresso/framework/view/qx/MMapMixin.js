@@ -59,9 +59,9 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
      */
     _redrawMap: function () {
       if (this.__map !== null) {
-        qx.event.Timer.once(function () {
+        new qx.util.DeferredCall(function () {
           this.__map.updateSize();
-        }, this, 10);
+        }, this).schedule();
       }
     },
 
@@ -304,7 +304,10 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
         if (extendsCoordinates.length > 0) {
           var view = this.__map.getView();
           if (extendsCoordinates.length > 1) {
-            view.fit(ol.extent.boundingExtent(extendsCoordinates), this.__map.getSize());
+            new qx.util.DeferredCall(function () {
+              this.__map.updateSize();
+              view.fit(ol.extent.boundingExtent(extendsCoordinates), this.__map.getSize());
+            }, this).schedule();
           } else {
             view.setCenter(extendsCoordinates[0]);
             view.setZoom(defaultZoom ? defaultZoom : 12);

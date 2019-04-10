@@ -372,7 +372,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       var blocker = qx.ui.mobile.core.Blocker.getInstance();
       if (busy) {
         this.__busy = true;
-        qx.event.Timer.once(function () {
+        qx.event.Timer.once(function (e) {
           if (this.__busy && !blocker.isShown()) {
             blocker.show();
             this.__busyPopup.show();
@@ -572,7 +572,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
           pageToRestore = this._dialogStack[this._dialogStack.length - 1][0];
         }
         var callback = function () {
-          qx.event.Timer.once(function () {
+          qx.event.Timer.once(function (e) {
             this.__applicationContainer.remove(pageToDestroy);
             pageToDestroy.destroy();
           }, this, org.jspresso.framework.application.frontend.controller.qx.mobile.MobileQxController.ANIMATION_DURATION + 500);
@@ -703,7 +703,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
      */
     _handleBackCommand: function (backCommand) {
       if (this.isAnimating()) {
-        qx.event.Timer.once(function () {
+        qx.event.Timer.once(function (e) {
           this._handleBackCommand(backCommand);
         }, this, org.jspresso.framework.application.frontend.controller.qx.mobile.MobileQxController.ANIMATION_DURATION / 10);
       } else {
@@ -1058,7 +1058,7 @@ qx.Class.define("org.jspresso.framework.application.frontend.controller.qx.mobil
       if (bookmarkHintKey) {
         var content = new qx.ui.mobile.basic.Label(this.translate(bookmarkHintKey));
         var drawer = this._popupDrawer("bottom", content);
-        qx.event.Timer.once(function () {
+        qx.event.Timer.once(function (e) {
           drawer.hide();
         }, this, 5000);
       }

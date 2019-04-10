@@ -86,10 +86,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor implemen
    */
   @Override
   public String getPermId() {
-    if (permId != null) {
-      return permId;
-    }
-    return getName();
+    return permId;
   }
 
   /**

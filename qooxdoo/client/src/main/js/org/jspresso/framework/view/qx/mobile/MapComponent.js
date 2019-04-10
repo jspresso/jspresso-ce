@@ -46,7 +46,7 @@ qx.Class.define("org.jspresso.framework.view.qx.mobile.MapComponent", {
       }
       this.show();
       if (redraw) {
-        qx.event.Timer.once(this._redrawMap, this, 100);
+        new qx.util.DeferredCall(this._redrawMap, this).schedule();
       }
     },
 
