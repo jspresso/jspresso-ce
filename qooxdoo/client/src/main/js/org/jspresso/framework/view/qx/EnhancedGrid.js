@@ -31,20 +31,17 @@ qx.Class.define("org.jspresso.framework.view.qx.EnhancedGrid", {
      * Overriden to return a 0 flex value for collapsed panels
      */
     getRowFlex: function (row) {
-      if (this.getColumnCount() == 1) {
-        var children = this._getLayoutChildren();
-        for (var i = 0, l = children.length; i < l; i++) {
-          var child = children[i];
-          var props = child.getLayoutProperties();
-          if (props.row === row) {
-            if (child instanceof collapsablepanel.Panel && !child.getValue()) {
-              return 0;
-            }
-            break;
+      var children = this._getLayoutChildren();
+      for (var i = 0, l = children.length; i < l; i++) {
+        var child = children[i];
+        var props = child.getLayoutProperties();
+        if (props.row === row) {
+          if (!(child instanceof org.jspresso.framework.view.qx.EnhancedCollapsiblePanel) || child.getValue()) {
+            return this.base(arguments, row);
           }
         }
       }
-      return this.base(arguments, row);
+      return 0;
     }
   }
 });
