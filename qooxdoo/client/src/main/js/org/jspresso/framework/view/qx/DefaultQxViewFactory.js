@@ -626,7 +626,7 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
      */
     _createConstrainedGridContainer: function (remoteConstrainedGridContainer) {
       var constrainedGridContainer = new qx.ui.container.Composite();
-      var gridLayout = new qx.ui.layout.Grid();
+      var gridLayout = new org.jspresso.framework.view.qx.EnhancedGrid();
       constrainedGridContainer.setLayout(gridLayout);
 
       var spanningColumnsCellConstraints = [];
