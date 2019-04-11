@@ -55,6 +55,9 @@ public class Point extends AbstractData {
     public Point clonePoint() {
 
         Point p = new Point(longitude, latitude);
+
+        p.setId(this.getId());
+
         p.imagePath = this.imagePath;
         p.imageUrl = this.imageUrl;
         p.htmlDescription = this.htmlDescription;

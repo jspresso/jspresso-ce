@@ -37,6 +37,11 @@ import java.util.*;
 public class MapHelper {
 
     /**
+     * The constant MARKER_ID is &quot;id&quot;.
+     */
+    public static final String MARKER_ID = "id";
+
+    /**
      * The constant MARKERS_KEY is &quot;markers&quot;.
      */
     public static final String MARKERS_KEY = "markers";
@@ -127,6 +132,9 @@ public class MapHelper {
                 for (Point p : points) {
 
                     JSONObject marker = new JSONObject();
+                    if (p.getId()!=null)
+                        marker.put(MARKER_ID, p.getId());
+
                     marker.put(MARKER_COORD_KEY, Arrays.asList(p.getLongitude(), p.getLatitude()));
                     String imageUrl = p.getImageUrl();
                     if (imageUrl != null) {
@@ -165,7 +173,11 @@ public class MapHelper {
                     for (double[] aRoute : routePath) {
                         routeAsList.add(Arrays.asList(aRoute[0], aRoute[1]));
                     }
+
                     JSONObject json = new JSONObject();
+                    if (route.getId()!=null)
+                        json.put(MARKER_ID, route.getId());
+
                     json.put(ROUTE_PATH_KEY, routeAsList);
                     JSONObject routeStyle = new JSONObject();
                     routeStyle.put("color", route.getColor());
@@ -226,6 +238,9 @@ public class MapHelper {
                     JSONObject all = new JSONObject();
                     all.put("style", style);
                     all.put("shape", jzone);
+
+                    if (shape.getId()!=null)
+                        all.put(MARKER_ID, shape.getId());
 
                     zonesList.add(all);
                 }

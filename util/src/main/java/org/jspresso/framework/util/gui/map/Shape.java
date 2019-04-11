@@ -54,18 +54,14 @@ public class Shape extends AbstractData {
 
         Shape s = new Shape();
 
+        s.setId(this.getId());
+
         s.fillColor = this.fillColor;
         s.lineColor = this.lineColor;
         s.lineWidth = this.lineWidth;
 
-        if (clonePoints) {
-            s.zone = MapHelper.cloneZones(new Zone[]{this.zone}, clonePoints)[0];
-            s.exclusions = new LinkedHashSet<>(Arrays.asList(MapHelper.cloneZones(this.exclusions.toArray(new Zone[0]), clonePoints)));
-        }
-        else {
-            s.zone = this.zone;
-            s.exclusions = new LinkedHashSet<>(this.exclusions);
-        }
+        s.zone = MapHelper.cloneZones(new Zone[]{this.zone}, clonePoints)[0];
+        s.exclusions = new LinkedHashSet<>(Arrays.asList(MapHelper.cloneZones(this.exclusions.toArray(new Zone[0]), clonePoints)));
 
         return s;
     }
