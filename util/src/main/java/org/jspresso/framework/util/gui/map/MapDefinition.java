@@ -19,11 +19,13 @@
 package org.jspresso.framework.util.gui.map;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Map
@@ -33,18 +35,20 @@ import java.util.Set;
 @SuppressWarnings("WeakerAccess")
 public class MapDefinition implements Serializable {
 
+    public static final Logger LOG = LoggerFactory.getLogger(MapDefinition.class);
+
     /**
      * The Points.
      */
-    final Set<Point> points;
+    final List<Point> points;
     /**
      * The Routes.
      */
-    final Set<Route> routes;
+    final List<Route> routes;
     /**
      * The Shapes.
      */
-    final Set<Shape> shapes;
+    final List<Shape> shapes;
 
     /**
      * Clone map map definition.
@@ -54,14 +58,14 @@ public class MapDefinition implements Serializable {
     public MapDefinition cloneMap(boolean clonePoints) {
         if (clonePoints)
             return new MapDefinition(
-                    new LinkedHashSet<>(Arrays.asList(MapHelper.clonePoints(points.toArray(new Point[0])))),
-                    new LinkedHashSet<>(Arrays.asList(MapHelper.cloneRoutes(routes.toArray(new Route[0]), clonePoints))),
-                    new LinkedHashSet<>(Arrays.asList(MapHelper.cloneShapes(shapes.toArray(new Shape[0]), clonePoints))));
+                    new ArrayList<>(Arrays.asList(MapHelper.clonePoints(points.toArray(new Point[0])))),
+                    new ArrayList<>(Arrays.asList(MapHelper.cloneRoutes(routes.toArray(new Route[0]), clonePoints))),
+                    new ArrayList<>(Arrays.asList(MapHelper.cloneShapes(shapes.toArray(new Shape[0]), clonePoints))));
         else
             return new MapDefinition(
-                    new LinkedHashSet<>(points),
-                    new LinkedHashSet<>(routes),
-                    new LinkedHashSet<>(shapes));
+                    new ArrayList<>(points),
+                    new ArrayList<>(routes),
+                    new ArrayList<>(shapes));
     }
 
     /**
@@ -77,7 +81,7 @@ public class MapDefinition implements Serializable {
      * @param points the points
      * @param routes the routes
      */
-    public MapDefinition(Set<Point> points, Set<Route> routes) {
+    public MapDefinition(List<Point> points, List<Route> routes) {
         this(points, routes, null);
     }
 
@@ -88,19 +92,64 @@ public class MapDefinition implements Serializable {
      * @param routes the routes
      * @param shapes  the shapes
      */
-    public MapDefinition(Set<Point> points, Set<Route> routes, Set<Shape> shapes) {
-        this.points = points!=null ? points : new LinkedHashSet<Point>();
-        this.routes = routes != null ? routes : new LinkedHashSet<Route>();
-        this.shapes = shapes !=null ? shapes : new LinkedHashSet<Shape>();
+    public MapDefinition(List<Point> points, List<Route> routes, List<Shape> shapes) {
+        this.points = points!=null ? points : new ArrayList<Point>();
+        this.routes = routes != null ? routes : new ArrayList<Route>();
+        this.shapes = shapes !=null ? shapes : new ArrayList<Shape>();
     }
 
     /**
      * Add a point
      *
+     * NB : If another point already exists at same location,
+     * the point will ne added oonly if it's ID is different as different
+     *
      * @param point The point to add
      */
     public void addPoint(Point point) {
         points.add(point);
+    }
+
+    /**
+     * Add point if not exists.
+     *
+     * @param point the point
+     */
+    public void addPointIfNotExists(Point point) {
+        if (!points.contains(point))
+            points.add(point);
+    }
+
+    /**
+     * Merge point point.
+     *
+     * @param point the point
+     * @return the point
+     */
+    public Point mergePoint(Point point) {
+
+        final Point merged;
+        int i = points.indexOf(point);
+        if (i >= 0) {
+
+            Point p = points.get(i);
+            if (p.getId() == null)
+                p.setId(point.getId());
+
+            if (p.getHtmlDescription() == null)
+                p.setHtmlDescription(point.getHtmlDescription());
+
+            if (p.getImageUrl() == null)
+                p.setImageUrl(point.getImageUrl());
+
+            merged = p;
+        }
+        else {
+            points.add(point);
+            merged = point;
+        }
+
+        return merged;
     }
 
     /**
@@ -126,7 +175,7 @@ public class MapDefinition implements Serializable {
      *
      * @return The points
      */
-    public Set<Point> getPoints() {
+    public List<Point> getPoints() {
         return points;
     }
 
@@ -135,7 +184,7 @@ public class MapDefinition implements Serializable {
      *
      * @return The routes
      */
-    public Set<Route> getRoutes() {
+    public List<Route> getRoutes() {
         return routes;
     }
 
@@ -144,7 +193,7 @@ public class MapDefinition implements Serializable {
      *
      * @return the shapes
      */
-    public Set<Shape> getShapes() {
+    public List<Shape> getShapes() {
         return shapes;
     }
 
@@ -182,8 +231,11 @@ public class MapDefinition implements Serializable {
      * @param includingShapes  the including shapes
      */
     public void merge(MapDefinition map, boolean includingPoints, boolean includingRoutes, boolean includingShapes) {
-        if (includingPoints)
-            points.addAll(map.getPoints());
+        if (includingPoints) {
+            for (Point p :map.getPoints()) {
+                mergePoint(p);
+            }
+        }
         if (includingRoutes)
             routes.addAll(map.getRoutes());
         if (includingShapes)

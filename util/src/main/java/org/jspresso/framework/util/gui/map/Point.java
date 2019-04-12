@@ -21,6 +21,8 @@ package org.jspresso.framework.util.gui.map;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 
+import java.util.Arrays;
+
 /**
  * Point
  *
@@ -102,7 +104,15 @@ public class Point extends AbstractData {
      * @param imagePath The image path
      */
     public void setImagePath(String imagePath) {
-        if (imagePath!=null && !imagePath.startsWith("/"))
+
+        this.imageUrl = null;
+
+        if (imagePath == null) {
+            this.imagePath = null;
+            return;
+        }
+
+        if (!imagePath.startsWith("/"))
             imagePath = "/" + imagePath;
 
         this.imagePath = "classpath:" + imagePath;
@@ -123,6 +133,8 @@ public class Point extends AbstractData {
      * @param imageUrl The image path
      */
     public void setImageUrl(String imageUrl) {
+
+        this.imagePath = null;
         this.imageUrl = imageUrl;
     }
 
@@ -197,13 +209,27 @@ public class Point extends AbstractData {
         return color!=null ? color : DEFAULT_COLOR;
     }
 
+    @Override
+    public String toString() {
+        return "(" + longitude + "," + latitude + ")" + (id!=null ? " "+id:"");
+    }
+
     /**
-     * {@inheritDoc}
+     * Same point are equals if latitude and longitude are equals
      */
     @Override
     public boolean equals(Object obj) {
         return obj instanceof Point
             && ((Point) obj).latitude == this.latitude
             && ((Point) obj).longitude == this.longitude;
+    }
+
+    /**
+     * Return hashcode from latitude and latitude
+     * @return The hashcode
+     */
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(new double[]{latitude + latitude});
     }
 }

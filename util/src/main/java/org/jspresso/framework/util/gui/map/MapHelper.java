@@ -338,20 +338,8 @@ public class MapHelper {
      * @param b the second point
      * @return the middle point
      */
-    public static Point getBaryCenter(Point a, Point b) {
-
-        double lat1 = Math.toRadians(a.getLatitude());
-        double lat2 = Math.toRadians(b.getLatitude());
-        double lon1 = Math.toRadians(a.getLongitude());
-
-        double dLon = Math.toRadians(b.getLongitude() - a.getLongitude());
-        double Bx = Math.cos(lat2) * Math.cos(dLon);
-        double By = Math.cos(lat2) * Math.sin(dLon);
-
-        double lat3 = Math.atan2(Math.sin(lat1) + Math.sin(lat2), Math.sqrt((Math.cos(lat1) + Bx) * (Math.cos(lat1) + Bx) + By * By));
-        double lon3 = lon1 + Math.atan2(By, Math.cos(lat1) + Bx);
-
-        return new Point(Math.toDegrees(lon3), Math.toDegrees(lat3));
+    public static Point getCenter(Point a, Point b) {
+        return getBaryCenter(a, b);
     }
 
     /**

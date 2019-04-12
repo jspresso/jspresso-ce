@@ -31,7 +31,10 @@ class AbstractData implements Serializable {
 
     private Map<String, Object> options;
 
-    private String id;
+    /**
+     * The Id.
+     */
+    String id;
 
     /**
      * Gets options
