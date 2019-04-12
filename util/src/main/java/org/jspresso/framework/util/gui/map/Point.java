@@ -119,15 +119,6 @@ public class Point extends AbstractData {
     }
 
     /**
-     * Gets resource image path
-     *
-     * @return The resource image path
-     */
-    public String getImagePath() {
-        return imagePath!=null ? imagePath : MapHelper.RED_MARK;
-    }
-
-    /**
      * Sets resource image URL
      *
      * @param imageUrl The image path
@@ -150,7 +141,7 @@ public class Point extends AbstractData {
                 String slash = imagePath.startsWith("/") ? "" : "/";
                 imagePath = "classpath:" + slash + imagePath;
             }
-            return ResourceProviderServlet.computeImageResourceDownloadUrl(imagePath, getImageDimension());
+            imageUrl = ResourceProviderServlet.computeImageResourceDownloadUrl(imagePath, getImageDimension());
         }
         return imageUrl;
     }
