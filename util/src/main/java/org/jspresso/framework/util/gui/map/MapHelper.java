@@ -247,7 +247,7 @@ public class MapHelper {
                 mapContent.put(ZONES_KEY, zonesList);
             }
 
-            return mapContent.toString(0);
+            return mapContent.toString();
 
         } catch (JSONException ex) {
             throw new NestedRuntimeException(ex);
