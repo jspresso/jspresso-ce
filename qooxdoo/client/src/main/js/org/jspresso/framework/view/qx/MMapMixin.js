@@ -162,10 +162,16 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
           var marker = new ol.Feature({
             geometry: new ol.geom.Point(markerNode)
           });
-          marker.setId(/*jsonMarker.id*/"marker_" + Date.now());
+          if (jsonMarker.id) {
+            marker.setId(jsonMarker.id);
+          }
           if (jsonMarker.image) {
             marker.setStyle(new ol.style.Style({
               image: new ol.style.Icon(jsonMarker.image)
+            }));
+          } else {
+            marker.setStyle(new ol.style.Style({
+              image: null
             }));
           }
           if (jsonMarker.htmlDescription) {
@@ -236,7 +242,9 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
           var zonePolygon = new ol.Feature({
             geometry: new ol.geom.Polygon(zoneShape)
           });
-          zonePolygon.setId(/*jsonZone.id*/"zone_" + Date.now());
+          if (jsonZone.id) {
+            zonePolygon.setId(jsonZone.id);
+          }
           if (jsonZone.style) {
             var zoneStyle = {};
             if (jsonZone.style.stroke) {
@@ -273,7 +281,9 @@ qx.Mixin.define("org.jspresso.framework.view.qx.MMapMixin", {
           var routeLine = new ol.Feature({
             geometry: new ol.geom.LineString(routeNodes)
           });
-          routeLine.setId(/*jsonRoute.id*/"route_" + Date.now());
+          if (jsonRoute.id) {
+            routeLine.setId(jsonRoute.id);
+          }
           if (jsonRoute.style) {
             routeLine.setStyle(new ol.style.Style({
               stroke: new ol.style.Stroke(jsonRoute.style)
