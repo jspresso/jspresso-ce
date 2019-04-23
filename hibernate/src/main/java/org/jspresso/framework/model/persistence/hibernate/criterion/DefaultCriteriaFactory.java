@@ -290,7 +290,7 @@ public class DefaultCriteriaFactory extends AbstractActionContextAware implement
                           // there might be other restrictions
                           // digDeeper = false;
                         } else {
-                          digDeeper = true;
+                          digDeeper = false;
                         }
                         completeCriteria(currentCriteria, crit);
                       }
