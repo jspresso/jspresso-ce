@@ -412,8 +412,8 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
           IView<RComponent> pageSectionView = createView(pageSectionViewDescriptor, actionHandler, locale);
           RComponent peer = pageSectionView.getPeer();
           if (peer instanceof RMobileCompositePage
-              && pageSectionViewDescriptor instanceof MobileCompositePageViewDescriptor
-              && !pageSectionViewDescriptor.isReadOnly()) {
+              && pageSectionViewDescriptor instanceof MobileCompositePageViewDescriptor && !pageSectionViewDescriptor
+              .isReadOnly()) {
             if (((MobileCompositePageViewDescriptor) pageSectionViewDescriptor).isInlineEditing()) {
               if (((MobileCompositePageViewDescriptor) pageSectionViewDescriptor).getMainAction() == null) {
                 ((RMobileCompositePage) peer).setMainAction(null);
@@ -601,7 +601,7 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
    */
   @Override
   protected ICompositeView<RComponent> createEvenGridView(IEvenGridViewDescriptor viewDescriptor,
-                                                        IActionHandler actionHandler, Locale locale) {
+                                                          IActionHandler actionHandler, Locale locale) {
     ICompositeView<RComponent> evenGridView = super.createEvenGridView(viewDescriptor, actionHandler, locale);
     if (viewDescriptor instanceof MobileEvenGridViewDescriptor) {
       ((RMobileEvenGridContainer) evenGridView.getPeer()).setPosition(
@@ -912,6 +912,8 @@ public class MobileRemoteViewFactory extends AbstractRemoteViewFactory {
         scaledHeight = scaledWidth;
       }
       ((RMobileImageComponent) imagePropertyView.getPeer()).setImageSize(new Dimension(scaledWidth, scaledHeight));
+      ((RMobileImageComponent) imagePropertyView.getPeer()).setKeepRatio(
+          ((IImageViewDescriptor) propertyViewDescriptor).isKeepRatio());
       ((RMobileImageComponent) imagePropertyView.getPeer()).setFormatName(
           ((IImageBinaryPropertyDescriptor) propertyViewDescriptor.getModelDescriptor()).getFormatName());
     }

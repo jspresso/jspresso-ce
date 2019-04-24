@@ -27,6 +27,7 @@ public class RImageComponent extends RComponent {
   private var _scrollable:Boolean;
   private var _action:RAction;
   private var _horizontalAlignment:String;
+  private var _keepRatio:Boolean;
 
   public function RImageComponent() {
     //default constructor.
@@ -54,6 +55,14 @@ public class RImageComponent extends RComponent {
 
   public function set horizontalAlignment(value:String):void {
     _horizontalAlignment = value;
+  }
+
+  public function get keepRatio():Boolean {
+    return _keepRatio;
+  }
+
+  public function set keepRatio(value:Boolean):void {
+    _keepRatio = value;
   }
 }
 }

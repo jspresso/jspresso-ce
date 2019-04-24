@@ -41,6 +41,7 @@ public class BasicImageViewDescriptor extends BasicPropertyViewDescriptor
   private boolean drawable;
   private Integer scaledWidth;
   private Integer scaledHeight;
+  private Boolean keepRatio;
 
   /**
    * Constructs a new {@code BasicImageViewDescriptor} instance.
@@ -63,6 +64,8 @@ public class BasicImageViewDescriptor extends BasicPropertyViewDescriptor
    * Returns {@code true} if scrollable.
    * <p>
    * {@inheritDoc}
+   *
+   * @return the boolean
    */
   @Override
   public boolean isHorizontallyScrollable() {
@@ -73,6 +76,8 @@ public class BasicImageViewDescriptor extends BasicPropertyViewDescriptor
    * Returns {@code true} if scrollable.
    * <p>
    * {@inheritDoc}
+   *
+   * @return the boolean
    */
   @Override
   public boolean isVerticallyScrollable() {
@@ -85,7 +90,7 @@ public class BasicImageViewDescriptor extends BasicPropertyViewDescriptor
    * (default) means that the image view will be made scrollable.
    *
    * @param scrollable
-   *          the scrollable to set.
+   *     the scrollable to set.
    */
   public void setScrollable(boolean scrollable) {
     this.scrollable = scrollable;
@@ -93,6 +98,8 @@ public class BasicImageViewDescriptor extends BasicPropertyViewDescriptor
 
   /**
    * {@inheritDoc}
+   *
+   * @return the scaled width
    */
   @Override
   public Integer getScaledWidth() {
@@ -116,6 +123,8 @@ public class BasicImageViewDescriptor extends BasicPropertyViewDescriptor
 
   /**
    * {@inheritDoc}
+   *
+   * @return the scaled height
    */
   @Override
   public Integer getScaledHeight() {
@@ -151,12 +160,18 @@ public class BasicImageViewDescriptor extends BasicPropertyViewDescriptor
    * Configures whether this image view can be modified by the user drawing in the screen,
    * e.g. a POD signature. Defaults to {@code false}.
    *
-   * @param drawable the drawable
+   * @param drawable
+   *     the drawable
    */
   public void setDrawable(boolean drawable) {
     this.drawable = drawable;
   }
 
+  /**
+   * Gets preferred width.
+   *
+   * @return the preferred width
+   */
   @Override
   public Integer getPreferredWidth() {
     Integer preferredWidth = super.getPreferredWidth();
@@ -166,6 +181,11 @@ public class BasicImageViewDescriptor extends BasicPropertyViewDescriptor
     return preferredWidth;
   }
 
+  /**
+   * Gets preferred height.
+   *
+   * @return the preferred height
+   */
   @Override
   public Integer getPreferredHeight() {
     Integer preferredHeight = super.getPreferredHeight();
@@ -174,5 +194,31 @@ public class BasicImageViewDescriptor extends BasicPropertyViewDescriptor
       preferredHeight = scaledHeight == null ? null : scaledHeight + 50; // Toolbar
     }
     return preferredHeight;
+  }
+
+  /**
+   * Is keep ratio boolean.
+   *
+   * @return the boolean
+   */
+  @Override
+  public boolean isKeepRatio() {
+    if (keepRatio == null && getModelDescriptor() instanceof IScalableImageAware) {
+      return ((IScalableImageAware) getModelDescriptor()).isKeepRatio();
+    }
+    if (keepRatio == null) {
+      return true;
+    }
+    return keepRatio;
+  }
+
+  /**
+   * Sets keep ratio.
+   *
+   * @param keepRatio
+   *     the keep ratio
+   */
+  public void setKeepRatio(boolean keepRatio) {
+    this.keepRatio = keepRatio;
   }
 }

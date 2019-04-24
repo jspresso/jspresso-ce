@@ -31,9 +31,16 @@ public class BasicImageUrlPropertyDescriptor extends
 
   private Integer scaledWidth;
   private Integer scaledHeight;
+  private boolean keepRatio;
+
+  public BasicImageUrlPropertyDescriptor() {
+    keepRatio = true;
+  }
 
   /**
    * {@inheritDoc}
+   *
+   * @return the scaled width
    */
   @Override
   public Integer getScaledWidth() {
@@ -54,6 +61,8 @@ public class BasicImageUrlPropertyDescriptor extends
 
   /**
    * {@inheritDoc}
+   *
+   * @return the scaled height
    */
   @Override
   public Integer getScaledHeight() {
@@ -76,9 +85,31 @@ public class BasicImageUrlPropertyDescriptor extends
    * Returns {@code false}.
    * <p/>
    * {@inheritDoc}
+   *
+   * @return the default sortablility
    */
   @Override
   protected boolean getDefaultSortablility() {
     return false;
+  }
+
+  /**
+   * Is keep ratio boolean.
+   *
+   * @return the boolean
+   */
+  @Override
+  public boolean isKeepRatio() {
+    return keepRatio;
+  }
+
+  /**
+   * Sets keep ratio.
+   *
+   * @param keepRatio
+   *     the keep ratio
+   */
+  public void setKeepRatio(boolean keepRatio) {
+    this.keepRatio = keepRatio;
   }
 }

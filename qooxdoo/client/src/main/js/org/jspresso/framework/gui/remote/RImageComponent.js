@@ -35,6 +35,9 @@ qx.Class.define("org.jspresso.framework.gui.remote.RImageComponent", {
     horizontalAlignment: {
       check: "String",
       nullable: true
+    },
+    keepRatio: {
+      check: "Boolean"
     }
   }
 });

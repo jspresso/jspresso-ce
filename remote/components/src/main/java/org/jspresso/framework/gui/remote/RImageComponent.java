@@ -28,6 +28,7 @@ public class RImageComponent extends RComponent implements RActionable {
   private static final long serialVersionUID = 7583953076670140848L;
 
   private boolean scrollable;
+  private boolean keepRatio;
   private RAction action;
   private String  horizontalAlignment;
 
@@ -106,5 +107,24 @@ public class RImageComponent extends RComponent implements RActionable {
    */
   public void setHorizontalAlignment(String horizontalAlignment) {
     this.horizontalAlignment = horizontalAlignment;
+  }
+
+  /**
+   * Is keep ratio boolean.
+   *
+   * @return the boolean
+   */
+  public boolean isKeepRatio() {
+    return keepRatio;
+  }
+
+  /**
+   * Sets keep ratio.
+   *
+   * @param keepRatio
+   *     the keep ratio
+   */
+  public void setKeepRatio(boolean keepRatio) {
+    this.keepRatio = keepRatio;
   }
 }

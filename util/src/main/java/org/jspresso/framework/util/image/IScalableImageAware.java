@@ -37,4 +37,11 @@ public interface IScalableImageAware {
    * @return the scaled height
    */
   Integer getScaledHeight();
+
+  /**
+   * Is keep ratio boolean.
+   *
+   * @return the boolean
+   */
+  boolean isKeepRatio();
 }

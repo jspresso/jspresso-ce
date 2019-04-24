@@ -286,23 +286,27 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
         scrollContainer.add(imageComponent);
         return scrollContainer;
       } else {
-        var borderContainer = new qx.ui.container.Composite();
-        var borderLayout = new qx.ui.layout.Dock();
-        borderLayout.setSort("y");
-        borderContainer.setLayout(borderLayout);
-        var edge = "center";
-        var alignment = remoteImageComponent.getHorizontalAlignment();
-        if (alignment == "LEFT") {
-          edge = "west";
-        } else if (alignment == "CENTER") {
-          edge = "center";
-        } else if (alignment == "RIGHT") {
-          edge = "east";
+        if (remoteImageComponent.getKeepRatio()) {
+          var borderContainer = new qx.ui.container.Composite();
+          var borderLayout = new qx.ui.layout.Dock();
+          borderLayout.setSort("y");
+          borderContainer.setLayout(borderLayout);
+          var edge = "center";
+          var alignment = remoteImageComponent.getHorizontalAlignment();
+          if (alignment == "LEFT") {
+            edge = "west";
+          } else if (alignment == "CENTER") {
+            edge = "center";
+          } else if (alignment == "RIGHT") {
+            edge = "east";
+          }
+          borderContainer.add(imageComponent, {
+            edge: edge
+          });
+          imageComponent = borderContainer;
+        } else {
+          imageComponent.setScale(true);
         }
-        borderContainer.add(imageComponent, {
-          edge: edge
-        });
-        imageComponent = borderContainer;
       }
       return imageComponent;
     },

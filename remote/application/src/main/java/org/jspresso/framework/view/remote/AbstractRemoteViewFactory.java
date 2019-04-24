@@ -1189,6 +1189,11 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
     } else {
       viewComponent.setScrollable(false);
     }
+    if (propertyViewDescriptor instanceof IScalableImageAware) {
+      viewComponent.setKeepRatio(((IScalableImageAware) propertyViewDescriptor).isKeepRatio());
+    } else if (propertyDescriptor instanceof IScalableImageAware){
+      viewComponent.setKeepRatio(((IScalableImageAware) propertyDescriptor).isKeepRatio());
+    }
     IView<RComponent> view = constructView(viewComponent, propertyViewDescriptor, connector);
     if (propertyViewDescriptor.getAction() != null) {
       RAction action = getActionFactory().createAction(propertyViewDescriptor.getAction(), actionHandler, view, locale);

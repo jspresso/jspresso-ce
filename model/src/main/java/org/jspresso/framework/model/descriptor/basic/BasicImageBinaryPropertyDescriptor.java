@@ -36,9 +36,16 @@ public class BasicImageBinaryPropertyDescriptor extends BasicBinaryPropertyDescr
   private Integer scaledWidth;
   private Integer scaledHeight;
   private String  formatName;
+  private boolean keepRatio;
+
+  public BasicImageBinaryPropertyDescriptor() {
+    keepRatio = true;
+  }
 
   /**
    * {@inheritDoc}
+   *
+   * @return the scaled width
    */
   @Override
   public Integer getScaledWidth() {
@@ -59,6 +66,8 @@ public class BasicImageBinaryPropertyDescriptor extends BasicBinaryPropertyDescr
 
   /**
    * {@inheritDoc}
+   *
+   * @return the scaled height
    */
   @Override
   public Integer getScaledHeight() {
@@ -79,6 +88,8 @@ public class BasicImageBinaryPropertyDescriptor extends BasicBinaryPropertyDescr
 
   /**
    * {@inheritDoc}
+   *
+   * @return the format name
    */
   @Override
   public String getFormatName() {
@@ -96,6 +107,15 @@ public class BasicImageBinaryPropertyDescriptor extends BasicBinaryPropertyDescr
     this.formatName = formatName;
   }
 
+  /**
+   * Intercept setter object.
+   *
+   * @param component
+   *     the component
+   * @param newValue
+   *     the new value
+   * @return the object
+   */
   @Override
   public Object interceptSetter(Object component, Object newValue) {
     Object actualNewValue = newValue;
@@ -109,5 +129,25 @@ public class BasicImageBinaryPropertyDescriptor extends BasicBinaryPropertyDescr
       }
     }
     return super.interceptSetter(component, actualNewValue);
+  }
+
+  /**
+   * Is keep ratio boolean.
+   *
+   * @return the boolean
+   */
+  @Override
+  public boolean isKeepRatio() {
+    return keepRatio;
+  }
+
+  /**
+   * Sets keep ratio.
+   *
+   * @param keepRatio
+   *     the keep ratio
+   */
+  public void setKeepRatio(boolean keepRatio) {
+    this.keepRatio = keepRatio;
   }
 }
