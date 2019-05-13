@@ -57,34 +57,33 @@ import org.jspresso.framework.util.lang.ObjectUtils;
  * @author Vincent Vandenschrick
  */
 
-public abstract class AbstractValueConnector extends AbstractConnector
-    implements IValueConnector {
+public abstract class AbstractValueConnector extends AbstractConnector implements IValueConnector {
 
   private IExceptionHandler exceptionHandler;
   private Boolean           locallyReadable;
   private Boolean           locallyWritable;
   private boolean           mute;
 
-  private IValueConnector          modelConnector;
-  private IModelDescriptor         modelDescriptor;
-  private PropertyChangeListener   modelReadabilityListener;
-  private PropertyChangeListener   modelWritabilityListener;
+  private IValueConnector        modelConnector;
+  private IModelDescriptor       modelDescriptor;
+  private PropertyChangeListener modelReadabilityListener;
+  private PropertyChangeListener modelWritabilityListener;
 
-  private Object                   oldConnectorValue;
-  private boolean                  oldReadability;
+  private Object  oldConnectorValue;
+  private boolean oldReadability;
 
   private boolean                  oldWritability;
   private ICompositeValueConnector parentConnector;
 
-  private Collection<IGate>        readabilityGates;
-  private PropertyChangeListener   readabilityGatesListener;
+  private Collection<IGate>      readabilityGates;
+  private PropertyChangeListener readabilityGatesListener;
 
-  private ISecurityHandler         securityHandler;
+  private ISecurityHandler securityHandler;
 
-  private ValueChangeSupport       valueChangeSupport;
-  private Collection<IGate>        writabilityGates;
+  private ValueChangeSupport valueChangeSupport;
+  private Collection<IGate>  writabilityGates;
 
-  private PropertyChangeListener   writabilityGatesListener;
+  private PropertyChangeListener writabilityGatesListener;
 
   /**
    * Constructs a new AbstractValueConnector using an identifier. In case of a
@@ -92,7 +91,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * connects.
    *
    * @param id
-   *          The connector identifier.
+   *     The connector identifier.
    */
   public AbstractValueConnector(String id) {
     super(id);
@@ -116,8 +115,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
       readabilityGates = new THashSet<>(4);
     }
     readabilityGates.add(gate);
-    gate.addPropertyChangeListener(IGate.OPEN_PROPERTY,
-        getReadabilityGatesListener());
+    gate.addPropertyChangeListener(IGate.OPEN_PROPERTY, getReadabilityGatesListener());
     readabilityChange();
   }
 
@@ -169,8 +167,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
       writabilityGates = new THashSet<>(4);
     }
     writabilityGates.add(gate);
-    gate.addPropertyChangeListener(IGate.OPEN_PROPERTY,
-        getWritabilityGatesListener());
+    gate.addPropertyChangeListener(IGate.OPEN_PROPERTY, getWritabilityGatesListener());
     writabilityChange();
   }
 
@@ -234,15 +231,12 @@ public abstract class AbstractValueConnector extends AbstractConnector
    */
   @Override
   public AbstractValueConnector clone(String newConnectorId) {
-    AbstractValueConnector clonedConnector = (AbstractValueConnector) super
-        .clone(newConnectorId);
+    AbstractValueConnector clonedConnector = (AbstractValueConnector) super.clone(newConnectorId);
     clonedConnector.oldConnectorValue = null;
     clonedConnector.valueChangeSupport = null;
     for (IValueChangeListener listener : getValueChangeListeners()) {
       if (listener instanceof ICloneable && !(listener instanceof IValueConnector)) {
-        clonedConnector
-            .addValueChangeListener((IValueChangeListener) ((ICloneable) listener)
-                .clone());
+        clonedConnector.addValueChangeListener((IValueChangeListener) ((ICloneable) listener).clone());
       }
     }
     clonedConnector.parentConnector = null;
@@ -278,14 +272,11 @@ public abstract class AbstractValueConnector extends AbstractConnector
       if (another != null && another.getConnectorValue() != null) {
         if (getConnectorValue() instanceof Comparable) {
           if (getConnectorValue() instanceof String) {
-            return ((String) getConnectorValue())
-                .compareToIgnoreCase((String) another.getConnectorValue());
+            return ((String) getConnectorValue()).compareToIgnoreCase((String) another.getConnectorValue());
           }
-          return ((Comparable<Object>) getConnectorValue()).compareTo(another
-              .getConnectorValue());
+          return ((Comparable<Object>) getConnectorValue()).compareTo(another.getConnectorValue());
         }
-        return getConnectorValue().toString().compareToIgnoreCase(
-            another.getConnectorValue().toString());
+        return getConnectorValue().toString().compareToIgnoreCase(another.getConnectorValue().toString());
       } else {
         return 1;
       }
@@ -417,8 +408,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
       return false;
     }
     Boolean locallyWritable = isLocallyWritable();
-    if (getParentConnector() != null
-        && !getParentConnector().areChildrenWritable()) {
+    if (getParentConnector() != null && !getParentConnector().areChildrenWritable()) {
       if (locallyWritable == null) {
         return false;
       }
@@ -448,8 +438,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
       return;
     }
     readabilityGates.remove(gate);
-    gate.removePropertyChangeListener(IGate.OPEN_PROPERTY,
-        getReadabilityGatesListener());
+    gate.removePropertyChangeListener(IGate.OPEN_PROPERTY, getReadabilityGatesListener());
     readabilityChange();
   }
 
@@ -475,8 +464,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
       return;
     }
     writabilityGates.remove(gate);
-    gate.removePropertyChangeListener(IGate.OPEN_PROPERTY,
-        getWritabilityGatesListener());
+    gate.removePropertyChangeListener(IGate.OPEN_PROPERTY, getWritabilityGatesListener());
     writabilityChange();
   }
 
@@ -488,19 +476,15 @@ public abstract class AbstractValueConnector extends AbstractConnector
     Object actualValue = aValue;
     if (aValue instanceof Number) {
       if (getModelDescriptor() != null) {
-        Class<?> expectedType = getModelDescriptor()
-            .getModelType();
+        Class<?> expectedType = getModelDescriptor().getModelType();
         if (!expectedType.isAssignableFrom(aValue.getClass())) {
           if (Boolean.TYPE.equals(expectedType)) {
             expectedType = Boolean.class;
           }
           String stringValue = new BigDecimal(aValue.toString()).toPlainString();
           try {
-            actualValue = expectedType.getConstructor(new Class<?>[] {
-              String.class
-            }).newInstance(stringValue);
-          } catch (IllegalArgumentException | NoSuchMethodException | IllegalAccessException | InstantiationException
-              | SecurityException ex) {
+            actualValue = expectedType.getConstructor(new Class<?>[]{String.class}).newInstance(stringValue);
+          } catch (IllegalArgumentException | NoSuchMethodException | IllegalAccessException | InstantiationException | SecurityException ex) {
             throw new ConnectorInputException(ex, stringValue);
           } catch (InvocationTargetException ex) {
             throw new ConnectorInputException(ex.getCause(), stringValue);
@@ -553,10 +537,26 @@ public abstract class AbstractValueConnector extends AbstractConnector
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Boolean getLocallyWritable() {
+    return locallyWritable;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Boolean getLocallyReadable() {
+    return locallyReadable;
+  }
+
+  /**
    * Sets the modelConnector.
    *
    * @param modelConnector
-   *          the modelConnector to set.
+   *     the modelConnector to set.
    */
   @Override
   public void setModelConnector(IValueConnector modelConnector) {
@@ -565,12 +565,10 @@ public abstract class AbstractValueConnector extends AbstractConnector
       oldModelConnector.removeValueChangeListener(this);
       removeValueChangeListener(oldModelConnector);
       if (modelReadabilityListener != null) {
-        oldModelConnector.removePropertyChangeListener(
-            IValueConnector.READABLE_PROPERTY, modelReadabilityListener);
+        oldModelConnector.removePropertyChangeListener(IValueConnector.READABLE_PROPERTY, modelReadabilityListener);
       }
       if (modelWritabilityListener != null) {
-        oldModelConnector.removePropertyChangeListener(
-            IValueConnector.WRITABLE_PROPERTY, modelWritabilityListener);
+        oldModelConnector.removePropertyChangeListener(IValueConnector.WRITABLE_PROPERTY, modelWritabilityListener);
       }
     }
     this.modelConnector = modelConnector;
@@ -601,24 +599,21 @@ public abstract class AbstractValueConnector extends AbstractConnector
           }
         };
       }
-      getModelConnector().addPropertyChangeListener(
-          IValueConnector.READABLE_PROPERTY, modelReadabilityListener);
-      getModelConnector().addPropertyChangeListener(
-          IValueConnector.WRITABLE_PROPERTY, modelWritabilityListener);
+      getModelConnector().addPropertyChangeListener(IValueConnector.READABLE_PROPERTY, modelReadabilityListener);
+      getModelConnector().addPropertyChangeListener(IValueConnector.WRITABLE_PROPERTY, modelWritabilityListener);
     } else {
       setConnectorValue(null);
     }
     readabilityChange();
     writabilityChange();
-    firePropertyChange(IValueConnector.MODEL_CONNECTOR_PROPERTY,
-        oldModelConnector, getModelConnector());
+    firePropertyChange(IValueConnector.MODEL_CONNECTOR_PROPERTY, oldModelConnector, getModelConnector());
   }
 
   /**
    * Sets the modelDescriptor.
    *
    * @param modelDescriptor
-   *          the modelDescriptor to set.
+   *     the modelDescriptor to set.
    */
   @Override
   public void setModelDescriptor(IModelDescriptor modelDescriptor) {
@@ -629,7 +624,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * Sets the parentConnector.
    *
    * @param parentConnector
-   *          the parentConnector to set.
+   *     the parentConnector to set.
    */
   @Override
   public void setParentConnector(ICompositeValueConnector parentConnector) {
@@ -642,7 +637,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * Configures accessibility gates with the security handler.
    *
    * @param securityHandler
-   *          the security handler responsible for managing authorizations.
+   *     the security handler responsible for managing authorizations.
    */
   @Override
   public void setSecurityHandler(ISecurityHandler securityHandler) {
@@ -687,13 +682,11 @@ public abstract class AbstractValueConnector extends AbstractConnector
           // connector
           // value resulted in a value changed (a string to uppercase for
           // instance).
-          ((IValueConnector) evt.getSource())
-              .setConnectorValue(potentiallyChangedValue);
+          ((IValueConnector) evt.getSource()).setConnectorValue(potentiallyChangedValue);
         }
       }
     } finally {
-      valueChangeSupport.removeInhibitedListener((IValueConnector) evt
-          .getSource());
+      valueChangeSupport.removeInhibitedListener((IValueConnector) evt.getSource());
     }
   }
 
@@ -718,9 +711,9 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * track of the collection content change.
    *
    * @param connectorValue
-   *          the value to take a snapshot of.
+   *     the value to take a snapshot of.
    * @return the value to keep a reference on as the
-   *         {@code oldConnectorValue}.
+   * {@code oldConnectorValue}.
    */
   protected Object computeOldConnectorValue(Object connectorValue) {
     return connectorValue;
@@ -731,9 +724,9 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * value change event.
    *
    * @param oldValue
-   *          the old connector value.
+   *     the old connector value.
    * @param newValue
-   *          the new connector value.
+   *     the new connector value.
    * @return the created change event.
    */
   protected ValueChangeEvent createChangeEvent(Object oldValue, Object newValue) {
@@ -774,7 +767,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * Fires a value change, delegating to the value change support.
    *
    * @param changeEvent
-   *          the change event to propagate.
+   *     the change event to propagate.
    */
   protected void fireValueChange(ValueChangeEvent changeEvent) {
     if (valueChangeSupport != null) {
@@ -787,11 +780,11 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * if any.
    *
    * @param ex
-   *          the runtime exception.
+   *     the runtime exception.
    */
   protected void handleException(RuntimeException ex) {
-    if (getExceptionHandler() != null
-        && getExceptionHandler().handleException(ex, Collections.<String, Object>emptyMap())) {
+    if (getExceptionHandler() != null && getExceptionHandler().handleException(ex,
+        Collections.<String, Object>emptyMap())) {
       return;
     }
     throw ex;
@@ -806,6 +799,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Gets the oldConnectorValue.
+   *
    * @return Returns the oldConnectorValue.
    */
   protected Object getOldConnectorValue() {
@@ -858,7 +852,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * Sets the value to the peer connectee.
    *
    * @param connecteeValue
-   *          the connectee value to set
+   *     the connectee value to set
    */
   protected abstract void setConnecteeValue(Object connecteeValue);
 
@@ -874,11 +868,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
       if (connectorToListenTo != null) {
         for (IGate gate : gates) {
           if (gate instanceof IModelAware) {
-            ((IModelAware) gate).setModel(connectorToListenTo
-                .getConnectorValue());
-            connectorToListenTo
-                .addValueChangeListener(new InnerGateModelListener(
-                    (IModelAware) gate));
+            ((IModelAware) gate).setModel(connectorToListenTo.getConnectorValue());
+            connectorToListenTo.addValueChangeListener(new InnerGateModelListener((IModelAware) gate));
           }
         }
       }
@@ -896,8 +887,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
       return null;
     }
     /* connector.getModelDescriptor() instanceof IComponentDescriptorProvider<?> */
-    if (connector instanceof ICompositeValueConnector
-        && !(connector instanceof ICollectionConnector)) {
+    if (connector instanceof ICompositeValueConnector && !(connector instanceof ICollectionConnector)) {
       return connector;
     }
     return getComponentConnector(connector.getParentConnector());
@@ -911,7 +901,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
      * Constructs a new {@code InnerGateModelListener} instance.
      *
      * @param gate
-     *          the model gate.
+     *     the model gate.
      */
     public InnerGateModelListener(IModelAware gate) {
       this.gate = gate;

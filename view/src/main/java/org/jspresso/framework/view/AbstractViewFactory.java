@@ -58,6 +58,7 @@ import org.jspresso.framework.binding.IConfigurableConnectorFactory;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.binding.basic.BasicValueConnector;
 import org.jspresso.framework.binding.masterdetail.IModelCascadingBinder;
 import org.jspresso.framework.binding.model.IModelConnectorFactory;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
@@ -1136,7 +1137,7 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
         if (childCardView == null) {
           IViewDescriptor childCardViewDescriptor = cardViewDescriptor.getCardViewDescriptor(cardName);
           if (childCardViewDescriptor != null) {
-            childCardView = createChildCardView(childCardViewDescriptor, actionHandler, locale);
+            childCardView = createChildCardView(childCardViewDescriptor, cardViewConnector, actionHandler, locale);
             addCard(cardView, childCardView, cardName);
           }
         }
@@ -1199,15 +1200,48 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    *
    * @param childCardViewDescriptor
    *     the child card view descriptor
+   * @param cardViewConnector
+   *     the card view connector
    * @param actionHandler
    *     the action handler
    * @param locale
    *     the locale
    * @return the view
    */
-  protected IView<E> createChildCardView(IViewDescriptor childCardViewDescriptor, IActionHandler actionHandler,
-                                         Locale locale) {
-    return createView(childCardViewDescriptor, actionHandler, locale);
+  protected IView<E> createChildCardView(IViewDescriptor childCardViewDescriptor, final IValueConnector cardViewConnector,
+                                         IActionHandler actionHandler, Locale locale) {
+    final IView<E> childCardView = createView(childCardViewDescriptor, actionHandler, locale);
+    final IValueConnector childCardViewConnector = childCardView.getConnector();
+
+    final Boolean childCardViewConnectorLocallyWritable = childCardViewConnector.getLocallyWritable();
+    final Boolean childCardViewConnectorLocallyReadable = childCardViewConnector.getLocallyReadable();
+    if (!cardViewConnector.isWritable()) {
+      childCardViewConnector.setLocallyWritable(false);
+    }
+    if (!cardViewConnector.isReadable()) {
+      childCardViewConnector.setLocallyReadable(false);
+    }
+    cardViewConnector.addPropertyChangeListener(IValueConnector.WRITABLE_PROPERTY, new PropertyChangeListener() {
+      @Override
+      public void propertyChange(PropertyChangeEvent evt) {
+        if (!cardViewConnector.isWritable()) {
+          childCardViewConnector.setLocallyWritable(false);
+        } else {
+          childCardViewConnector.setLocallyWritable(childCardViewConnectorLocallyWritable);
+        }
+      }
+    });
+    cardViewConnector.addPropertyChangeListener(IValueConnector.READABLE_PROPERTY, new PropertyChangeListener() {
+      @Override
+      public void propertyChange(PropertyChangeEvent evt) {
+        if (!cardViewConnector.isReadable()) {
+          childCardViewConnector.setLocallyReadable(false);
+        } else {
+          childCardViewConnector.setLocallyReadable(childCardViewConnectorLocallyReadable);
+        }
+      }
+    });
+    return childCardView;
   }
 
   /**

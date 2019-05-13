@@ -220,6 +220,13 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
   void setLocallyReadable(Boolean locallyReadable);
 
   /**
+   * Wether this connector has been explitely set locally readable or not.
+   *
+   * @return the insser locally readable state.
+   */
+  Boolean getLocallyReadable();
+
+  /**
    * Sets the connector locally writable. Calling this method does not guarantee
    * that the writability status of the connector will actually be changed. It
    * may have some other rules or accessibility interceptors that prevent this
@@ -229,6 +236,12 @@ public interface IValueConnector extends IConnector, IValueChangeListener,
    *          true if writable.
    */
   void setLocallyWritable(Boolean locallyWritable);
+
+  /**
+   * Wether this connector has been explitely set locally writable or not.
+   * @return the insser locally writable state.
+   */
+  Boolean getLocallyWritable();
 
   /**
    * Sets the connector this connector is attached to in mvc relationship.
