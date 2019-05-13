@@ -1162,6 +1162,10 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
             // To handle polymorphism, especially for modules, we refine
             // the model descriptor.
             IValueConnector modelConnector = cardViewConnector.getModelConnector();
+            if (modelConnector.getModelConnector() != null) {
+              // For repeater special binding. see #666
+              modelConnector = modelConnector.getModelConnector();
+            }
             if (modelConnector != null && cardViewConnector.getModelDescriptor().getModelType().isAssignableFrom(
                 childCardViewDescriptor.getModelDescriptor().getModelType())) {
               modelConnector.setModelDescriptor(childCardViewDescriptor.getModelDescriptor());
