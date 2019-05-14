@@ -1078,7 +1078,19 @@ public abstract class AbstractRemoteViewFactory extends ControllerAwareViewFacto
         values.add(value);
         if (value != null && propertyDescriptor.isTranslated()) {
           if ("".equals(value)) {
-            translations.add(" ");
+            if (propertyViewDescriptor instanceof IEnumerationPropertyViewDescriptor
+                && ((IEnumerationPropertyViewDescriptor) propertyViewDescriptor).isRadio()) {
+              String undefinedTranslation = propertyDescriptor.getI18nValue("UNDEFINED", actionHandler, locale);
+              if (undefinedTranslation.endsWith(".UNDEFINED]")) {
+                undefinedTranslation = actionHandler.getTranslation("UNDEFINED", locale);
+                if (undefinedTranslation.endsWith(".UNDEFINED]")) {
+                  undefinedTranslation = " ";
+                }
+              }
+              translations.add(undefinedTranslation);
+            } else {
+              translations.add(" ");
+            }
           } else {
             translations.add(propertyDescriptor.getI18nValue(value, actionHandler, locale));
           }
