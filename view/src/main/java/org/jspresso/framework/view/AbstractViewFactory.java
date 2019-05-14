@@ -58,7 +58,6 @@ import org.jspresso.framework.binding.IConfigurableConnectorFactory;
 import org.jspresso.framework.binding.IMvcBinder;
 import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
 import org.jspresso.framework.binding.IValueConnector;
-import org.jspresso.framework.binding.basic.BasicValueConnector;
 import org.jspresso.framework.binding.masterdetail.IModelCascadingBinder;
 import org.jspresso.framework.binding.model.IModelConnectorFactory;
 import org.jspresso.framework.binding.model.ModelRefPropertyConnector;
@@ -120,6 +119,7 @@ import org.jspresso.framework.util.gate.ModelTrackingGate;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.gui.ERenderingOptions;
 import org.jspresso.framework.util.gui.IClientTypeAware;
+import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.lang.ICloneable;
 import org.jspresso.framework.util.lang.IContextAware;
@@ -1208,8 +1208,9 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
    *     the locale
    * @return the view
    */
-  protected IView<E> createChildCardView(IViewDescriptor childCardViewDescriptor, final IValueConnector cardViewConnector,
-                                         IActionHandler actionHandler, Locale locale) {
+  protected IView<E> createChildCardView(IViewDescriptor childCardViewDescriptor,
+                                         final IValueConnector cardViewConnector, IActionHandler actionHandler,
+                                         Locale locale) {
     final IView<E> childCardView = createView(childCardViewDescriptor, actionHandler, locale);
     final IValueConnector childCardViewConnector = childCardView.getConnector();
 
@@ -3456,19 +3457,29 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
                                                    ITreeViewDescriptor viewDescriptor,
                                                    IViewDescriptor treeLevelDescriptor, IActionHandler actionHandler,
                                                    Locale locale) {
-    nodeGroupPrototypeConnector.setDisplayValue(treeLevelDescriptor.getI18nName(actionHandler, locale));
-    nodeGroupPrototypeConnector.setDisplayDescription(treeLevelDescriptor.getI18nDescription(actionHandler, locale));
-    nodeGroupPrototypeConnector.setDisplayIcon(treeLevelDescriptor.getIcon());
+    String i18nName = treeLevelDescriptor.getI18nName(actionHandler, locale);
+    String i18nDescription = treeLevelDescriptor.getI18nDescription(actionHandler, locale);
+    Icon icon = treeLevelDescriptor.getIcon();
+    nodeGroupPrototypeConnector.setDisplayValue(i18nName);
+    nodeGroupPrototypeConnector.setDisplayDescription(i18nDescription);
+    nodeGroupPrototypeConnector.setDisplayIcon(icon);
     nodeGroupPrototypeConnector.setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
-    nodeGroupPrototypeConnector.addValueChangeListener(new TreeConnectorSyncer(actionHandler, locale));
+    nodeGroupPrototypeConnector.addValueChangeListener(
+        new TreeConnectorSyncer(i18nName, i18nDescription, icon, actionHandler, locale));
   }
 
   private static class TreeConnectorSyncer implements IValueChangeListener, ICloneable {
 
+    private final String i18nName;
+    private final String i18nDescription;
+    private final Icon icon;
     private IActionHandler actionHandler;
-    private Locale         locale;
+    private Locale          locale;
 
-    public TreeConnectorSyncer(IActionHandler actionHandler, Locale locale) {
+    public TreeConnectorSyncer(String i18nName, String i18nDescription, Icon icon, IActionHandler actionHandler, Locale locale) {
+      this.i18nName = i18nName;
+      this.i18nDescription = i18nDescription;
+      this.icon = icon;
       this.actionHandler = actionHandler;
       this.locale = locale;
     }
@@ -3482,17 +3493,29 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
 
     protected void syncTreeLevelConnectorDisplayValues(AbstractCompositeValueConnector connector, Object newValue) {
       if (newValue instanceof IDescriptor) {
-        connector.setDisplayValue(((IDescriptor) newValue).getI18nName(actionHandler, locale));
-        connector.setDisplayDescription(((IDescriptor) newValue).getI18nDescription(actionHandler, locale));
-        if (newValue instanceof IIconDescriptor) {
-          connector.setDisplayIcon(((IIconDescriptor) newValue).getIcon());
-        } else {
-          connector.setDisplayIcon(null);
+        if (i18nName == null) {
+          connector.setDisplayValue(((IDescriptor) newValue).getI18nName(actionHandler, locale));
+        }
+        if (i18nDescription == null) {
+          connector.setDisplayDescription(((IDescriptor) newValue).getI18nDescription(actionHandler, locale));
+        }
+        if (icon == null) {
+          if (newValue instanceof IIconDescriptor) {
+            connector.setDisplayIcon(((IIconDescriptor) newValue).getIcon());
+          } else {
+            connector.setDisplayIcon(null);
+          }
         }
       } else {
-        connector.setDisplayValue(null);
-        connector.setDisplayDescription(null);
-        connector.setDisplayIcon(null);
+        if (i18nName == null) {
+          connector.setDisplayValue(null);
+        }
+        if (i18nDescription == null) {
+          connector.setDisplayDescription(null);
+        }
+        if (icon == null) {
+          connector.setDisplayIcon(null);
+        }
       }
     }
 
