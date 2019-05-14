@@ -20,6 +20,8 @@ package org.jspresso.framework.state.remote;
 
 import java.util.List;
 
+import org.jspresso.framework.util.gui.Font;
+
 /**
  * The state of a composite remote value.
  *
@@ -32,6 +34,9 @@ public class RemoteCompositeValueState extends RemoteValueState {
   private List<RemoteValueState> children;
   private String                 description;
   private String                 iconImageUrl;
+  private String                 foreground;
+  private String                 background;
+  private Font                   font;
   private int                    leadingIndex;
   private int[]                  selectedIndices;
 
@@ -39,7 +44,7 @@ public class RemoteCompositeValueState extends RemoteValueState {
    * Constructs a new {@code RemoteCompositeValueState} instance.
    *
    * @param guid
-   *          the state guid.
+   *     the state guid.
    */
   public RemoteCompositeValueState(String guid) {
     super(guid);
@@ -103,7 +108,7 @@ public class RemoteCompositeValueState extends RemoteValueState {
    * Sets the children.
    *
    * @param children
-   *          the children to set.
+   *     the children to set.
    */
   public void setChildren(List<RemoteValueState> children) {
     this.children = children;
@@ -118,7 +123,7 @@ public class RemoteCompositeValueState extends RemoteValueState {
    * Sets the description.
    *
    * @param description
-   *          the description to set.
+   *     the description to set.
    */
   public void setDescription(String description) {
     this.description = description;
@@ -128,7 +133,7 @@ public class RemoteCompositeValueState extends RemoteValueState {
    * Sets the iconImageUrl.
    *
    * @param iconImageUrl
-   *          the iconImageUrl to set.
+   *     the iconImageUrl to set.
    */
   public void setIconImageUrl(String iconImageUrl) {
     this.iconImageUrl = iconImageUrl;
@@ -138,7 +143,7 @@ public class RemoteCompositeValueState extends RemoteValueState {
    * Sets the leadingIndex.
    *
    * @param leadingIndex
-   *          the leadingIndex to set.
+   *     the leadingIndex to set.
    */
   public void setLeadingIndex(int leadingIndex) {
     this.leadingIndex = leadingIndex;
@@ -148,9 +153,66 @@ public class RemoteCompositeValueState extends RemoteValueState {
    * Sets the selectedIndices.
    *
    * @param selectedIndices
-   *          the selectedIndices to set.
+   *     the selectedIndices to set.
    */
   public void setSelectedIndices(int... selectedIndices) {
     this.selectedIndices = selectedIndices;
+  }
+
+  /**
+   * Gets foreground.
+   *
+   * @return the foreground
+   */
+  public String getForeground() {
+    return foreground;
+  }
+
+  /**
+   * Sets foreground.
+   *
+   * @param foreground
+   *     the foreground
+   */
+  public void setForeground(String foreground) {
+    this.foreground = foreground;
+  }
+
+  /**
+   * Gets background.
+   *
+   * @return the background
+   */
+  public String getBackground() {
+    return background;
+  }
+
+  /**
+   * Sets background.
+   *
+   * @param background
+   *     the background
+   */
+  public void setBackground(String background) {
+    this.background = background;
+  }
+
+  /**
+   * Gets font.
+   *
+   * @return the font
+   */
+  public Font getFont() {
+    return font;
+  }
+
+  /**
+   * Sets font.
+   *
+   * @param font
+   *     the font
+   */
+  public void setFont(Font font) {
+    this.font = font;
   }
 }

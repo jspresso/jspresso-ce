@@ -25,6 +25,7 @@ import flash.events.Event;
 import mx.collections.ListCollectionView;
 import mx.events.PropertyChangeEvent;
 import mx.events.PropertyChangeEventKind;
+import org.jspresso.framework.util.gui.Font;
 
 [Bindable]
 [RemoteClass(alias="org.jspresso.framework.state.remote.RemoteCompositeValueState")]
@@ -33,6 +34,9 @@ public dynamic class RemoteCompositeValueState extends RemoteValueState {
   private var _children:ListCollectionView;
   private var _description:String;
   private var _iconImageUrl:String;
+  private var _foreground:String;
+  private var _background:String;
+  private var _font:Font;
   private var _leadingIndex:int;
   private var _selectedIndices:Array;
 
@@ -78,6 +82,30 @@ public dynamic class RemoteCompositeValueState extends RemoteValueState {
 
   public function get selectedIndices():Array {
     return _selectedIndices;
+  }
+
+  public function get foreground():String {
+    return _foreground;
+  }
+
+  public function set foreground(value:String):void {
+    _foreground = value;
+  }
+
+  public function get background():String {
+    return _background;
+  }
+
+  public function set background(value:String):void {
+    _background = value;
+  }
+
+  public function get font():Font {
+    return _font;
+  }
+
+  public function set font(value:Font):void {
+    _font = value;
   }
 
   public function notifyChildrenChanged():void {

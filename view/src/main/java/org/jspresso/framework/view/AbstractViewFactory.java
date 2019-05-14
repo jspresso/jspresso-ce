@@ -118,6 +118,8 @@ import org.jspresso.framework.util.gate.IModelGate;
 import org.jspresso.framework.util.gate.ModelTrackingGate;
 import org.jspresso.framework.util.gui.Dimension;
 import org.jspresso.framework.util.gui.ERenderingOptions;
+import org.jspresso.framework.util.gui.Font;
+import org.jspresso.framework.util.gui.FontHelper;
 import org.jspresso.framework.util.gui.IClientTypeAware;
 import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
@@ -3460,23 +3462,33 @@ public abstract class AbstractViewFactory<E, F, G> implements IViewFactory<E, F,
     String i18nName = treeLevelDescriptor.getI18nName(actionHandler, locale);
     String i18nDescription = treeLevelDescriptor.getI18nDescription(actionHandler, locale);
     Icon icon = treeLevelDescriptor.getIcon();
+    String foreground = treeLevelDescriptor.getForeground();
+    String background = treeLevelDescriptor.getBackground();
+    Font font = null;
+    if (treeLevelDescriptor.getFont() != null) {
+      font = FontHelper.fromString(treeLevelDescriptor.getFont());
+    }
     nodeGroupPrototypeConnector.setDisplayValue(i18nName);
     nodeGroupPrototypeConnector.setDisplayDescription(i18nDescription);
     nodeGroupPrototypeConnector.setDisplayIcon(icon);
     nodeGroupPrototypeConnector.setIconImageURLProvider(viewDescriptor.getIconImageURLProvider());
+    nodeGroupPrototypeConnector.setDisplayForeground(foreground);
+    nodeGroupPrototypeConnector.setDisplayBackground(background);
+    nodeGroupPrototypeConnector.setDisplayFont(font);
     nodeGroupPrototypeConnector.addValueChangeListener(
         new TreeConnectorSyncer(i18nName, i18nDescription, icon, actionHandler, locale));
   }
 
   private static class TreeConnectorSyncer implements IValueChangeListener, ICloneable {
 
-    private final String i18nName;
-    private final String i18nDescription;
-    private final Icon icon;
+    private String         i18nName;
+    private String         i18nDescription;
+    private Icon           icon;
     private IActionHandler actionHandler;
-    private Locale          locale;
+    private Locale         locale;
 
-    public TreeConnectorSyncer(String i18nName, String i18nDescription, Icon icon, IActionHandler actionHandler, Locale locale) {
+    public TreeConnectorSyncer(String i18nName, String i18nDescription, Icon icon, IActionHandler actionHandler,
+                               Locale locale) {
       this.i18nName = i18nName;
       this.i18nDescription = i18nDescription;
       this.icon = icon;

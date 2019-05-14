@@ -113,6 +113,24 @@ qx.Class.define("org.jspresso.framework.state.remote.RemoteCompositeValueState",
       event: "changeIconImageUrl",
       apply: "_applyEventPropagation"
     },
+    foreground: {
+      check: "String",
+      nullable: true,
+      event: "changeForeground",
+      apply: "_applyEventPropagation"
+    },
+    background: {
+      check: "String",
+      nullable: true,
+      event: "changeBackground",
+      apply: "_applyEventPropagation"
+    },
+    font: {
+      check: "org.jspresso.framework.util.gui.Font",
+      nullable: true,
+      event: "changeFont",
+      apply: "_applyEventPropagation"
+    },
     leadingIndex: {
       check: "Integer",
       nullable: true,

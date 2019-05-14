@@ -30,6 +30,7 @@ import org.jspresso.framework.util.event.IItemSelectionListener;
 import org.jspresso.framework.util.event.ItemSelectionEvent;
 import org.jspresso.framework.util.event.ItemSelectionSupport;
 import org.jspresso.framework.util.event.ValueChangeEvent;
+import org.jspresso.framework.util.gui.Font;
 import org.jspresso.framework.util.gui.Icon;
 import org.jspresso.framework.util.gui.IconProvider;
 
@@ -39,7 +40,6 @@ import org.jspresso.framework.util.gui.IconProvider;
  *
  * @author Vincent Vandenschrick
  */
-
 public abstract class AbstractCompositeValueConnector extends
     AbstractValueConnector implements IRenderableCompositeValueConnector {
 
@@ -48,6 +48,9 @@ public abstract class AbstractCompositeValueConnector extends
   private String                       displayDescription;
   private Icon                         displayIcon;
   private String                       displayValue;
+  private String                       displayForeground;
+  private String                       displayBackground;
+  private Font                         displayFont;
   private IconProvider                 iconImageURLProvider;
   private ItemSelectionSupport         itemSelectionSupport;
   private String                       renderingChildConnectorId;
@@ -58,7 +61,7 @@ public abstract class AbstractCompositeValueConnector extends
    * Constructs a new {@code AbstractCompositeValueConnector}.
    *
    * @param id
-   *          the connector identifier
+   *     the connector identifier
    */
   public AbstractCompositeValueConnector(String id) {
     super(id);
@@ -75,6 +78,8 @@ public abstract class AbstractCompositeValueConnector extends
 
   /**
    * {@inheritDoc}
+   *
+   * @return the boolean
    */
   @Override
   public boolean areChildrenWritable() {
@@ -95,6 +100,8 @@ public abstract class AbstractCompositeValueConnector extends
 
   /**
    * {@inheritDoc}
+   *
+   * @return the boolean
    */
   @Override
   public boolean areChildrenReadable() {
@@ -115,6 +122,8 @@ public abstract class AbstractCompositeValueConnector extends
 
   /**
    * {@inheritDoc}
+   *
+   * @return the abstract composite value connector
    */
   @Override
   public AbstractCompositeValueConnector clone() {
@@ -123,6 +132,10 @@ public abstract class AbstractCompositeValueConnector extends
 
   /**
    * {@inheritDoc}
+   *
+   * @param newConnectorId
+   *     the new connector id
+   * @return the abstract composite value connector
    */
   @Override
   public AbstractCompositeValueConnector clone(String newConnectorId) {
@@ -140,6 +153,10 @@ public abstract class AbstractCompositeValueConnector extends
 
   /**
    * {@inheritDoc}
+   *
+   * @param connectorKey
+   *     the connector key
+   * @return the child connector
    */
   @Override
   public IValueConnector getChildConnector(String connectorKey) {
@@ -151,6 +168,8 @@ public abstract class AbstractCompositeValueConnector extends
 
   /**
    * {@inheritDoc}
+   *
+   * @return the child connector count
    */
   @Override
   public int getChildConnectorCount() {
@@ -162,6 +181,8 @@ public abstract class AbstractCompositeValueConnector extends
 
   /**
    * {@inheritDoc}
+   *
+   * @return the child connector keys
    */
   @Override
   public Collection<String> getChildConnectorKeys() {
@@ -186,6 +207,8 @@ public abstract class AbstractCompositeValueConnector extends
    * connector value.
    * <p>
    * {@inheritDoc}
+   *
+   * @return the display icon
    */
   @Override
   public Icon getDisplayIcon() {
@@ -206,6 +229,8 @@ public abstract class AbstractCompositeValueConnector extends
    * the string representation.
    * <p>
    * {@inheritDoc}
+   *
+   * @return the display value
    */
   @Override
   public String getDisplayValue() {
@@ -221,6 +246,8 @@ public abstract class AbstractCompositeValueConnector extends
 
   /**
    * {@inheritDoc}
+   *
+   * @return the rendering connector
    */
   @Override
   public IValueConnector getRenderingConnector() {
@@ -245,7 +272,7 @@ public abstract class AbstractCompositeValueConnector extends
    * Sets the displayDescription.
    *
    * @param displayDescription
-   *          the displayDescription to set.
+   *     the displayDescription to set.
    */
   public void setDisplayDescription(String displayDescription) {
     this.displayDescription = displayDescription;
@@ -255,7 +282,7 @@ public abstract class AbstractCompositeValueConnector extends
    * Sets the static displayIcon.
    *
    * @param displayIcon
-   *          the displayIcon to set.
+   *     the displayIcon to set.
    */
   public void setDisplayIcon(Icon displayIcon) {
     this.displayIcon = displayIcon;
@@ -265,7 +292,7 @@ public abstract class AbstractCompositeValueConnector extends
    * Sets the static displayValue.
    *
    * @param displayValue
-   *          the displayValue to set.
+   *     the displayValue to set.
    */
   public void setDisplayValue(String displayValue) {
     this.displayValue = displayValue;
@@ -275,7 +302,7 @@ public abstract class AbstractCompositeValueConnector extends
    * Sets the iconImageURLProvider.
    *
    * @param iconImageURLProvider
-   *          the iconImageURLProvider to set.
+   *     the iconImageURLProvider to set.
    */
   public void setIconImageURLProvider(IconProvider iconImageURLProvider) {
     this.iconImageURLProvider = iconImageURLProvider;
@@ -285,16 +312,78 @@ public abstract class AbstractCompositeValueConnector extends
    * Sets the renderingChildConnectorId.
    *
    * @param renderingChildConnectorId
-   *          the renderingChildConnectorId to set.
+   *     the renderingChildConnectorId to set.
    */
   public void setRenderingChildConnectorId(String renderingChildConnectorId) {
     this.renderingChildConnectorId = renderingChildConnectorId;
   }
 
   /**
+   * Gets display foreground.
+   *
+   * @return the display foreground
+   */
+  @Override
+  public String getDisplayForeground() {
+    return displayForeground;
+  }
+
+  /**
+   * Sets display foreground.
+   *
+   * @param displayForeground
+   *     the display foreground
+   */
+  public void setDisplayForeground(String displayForeground) {
+    this.displayForeground = displayForeground;
+  }
+
+  /**
+   * Gets display background.
+   *
+   * @return the display background
+   */
+  @Override
+  public String getDisplayBackground() {
+    return displayBackground;
+  }
+
+  /**
+   * Sets display background.
+   *
+   * @param displayBackground
+   *     the display background
+   */
+  public void setDisplayBackground(String displayBackground) {
+    this.displayBackground = displayBackground;
+  }
+
+  /**
+   * Gets display font.
+   *
+   * @return the display font
+   */
+  @Override
+  public Font getDisplayFont() {
+    return displayFont;
+  }
+
+  /**
+   * Sets display font.
+   *
+   * @param displayFont
+   *     the display font
+   */
+  public void setDisplayFont(Font displayFont) {
+    this.displayFont = displayFont;
+  }
+
+  /**
    * Uses the value to compute the string representation.
    * <p>
    * {@inheritDoc}
+   *
+   * @return the string
    */
   @Override
   public String toString() {
@@ -317,7 +406,7 @@ public abstract class AbstractCompositeValueConnector extends
    * is the child connector id.
    *
    * @param childConnector
-   *          the added connector.
+   *     the added connector.
    */
   @Override
   public final void addChildConnector(IValueConnector childConnector) {
@@ -328,10 +417,9 @@ public abstract class AbstractCompositeValueConnector extends
    * Adds a new child connector using a specified storage key.
    *
    * @param storageKey
-   *          the key to use to store the child connector. It may be different
-   *          from its id.
+   *     the key to use to store the child connector. It may be different          from its id.
    * @param childConnector
-   *          the connector to be added as composite.
+   *     the connector to be added as composite.
    */
   @Override
   public void addChildConnector(String storageKey,
@@ -347,7 +435,7 @@ public abstract class AbstractCompositeValueConnector extends
    * used by subclasses which implement {@code IConnectorSelector}.
    *
    * @param listener
-   *          the listener to add.
+   *     the listener to add.
    */
   protected void implAddConnectorSelectionListener(
       IItemSelectionListener listener) {
@@ -362,7 +450,7 @@ public abstract class AbstractCompositeValueConnector extends
    * used by subclasses which implement {@code IConnectorSelector}.
    *
    * @param selectedConnector
-   *          the newly selected connector or null.
+   *     the newly selected connector or null.
    */
   protected void implFireSelectedConnectorChange(
       IValueConnector selectedConnector) {
@@ -374,7 +462,7 @@ public abstract class AbstractCompositeValueConnector extends
    * used by subclasses which implement {@code IItemSelectable}.
    *
    * @param evt
-   *          the item selection event to propagate.
+   *     the item selection event to propagate.
    */
   protected void implFireSelectedItemChange(ItemSelectionEvent evt) {
     selectedItem = evt.getSelectedItem();
@@ -406,7 +494,7 @@ public abstract class AbstractCompositeValueConnector extends
    * used by subclasses which implement {@code IConnectorSelector}.
    *
    * @param listener
-   *          the listener to remove.
+   *     the listener to remove.
    */
   protected void implRemoveConnectorSelectionListener(
       IItemSelectionListener listener) {
@@ -420,7 +508,7 @@ public abstract class AbstractCompositeValueConnector extends
    * used by subclasses which implement {@code IConnectorSelector}.
    *
    * @param tracksChildren
-   *          the trackingChildrenSelection to set.
+   *     the trackingChildrenSelection to set.
    */
   protected void implSetTracksChildrenSelection(boolean tracksChildren) {
     this.trackingChildrenSelection = tracksChildren;
@@ -437,6 +525,9 @@ public abstract class AbstractCompositeValueConnector extends
 
   /**
    * {@inheritDoc}
+   *
+   * @param storageKey
+   *     the storage key
    */
   @Override
   public void removeChildConnector(String storageKey) {
@@ -465,6 +556,9 @@ public abstract class AbstractCompositeValueConnector extends
 
   /**
    * {@inheritDoc}
+   *
+   * @param mvcBinder
+   *     the mvc binder
    */
   @Override
   public void recycle(IMvcBinder mvcBinder) {

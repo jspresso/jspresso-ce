@@ -128,6 +128,9 @@ public class RemoteCompositeConnector extends BasicCompositeConnector implements
     state.setWritable(isWritable());
     state.setDescription(getDisplayDescription());
     state.setIconImageUrl(ResourceProviderServlet.computeImageResourceDownloadUrl(getDisplayIcon(), RIcon.DEFAULT_DIM));
+    state.setForeground(getDisplayForeground());
+    state.setBackground(getDisplayBackground());
+    state.setFont(getDisplayFont());
     List<RemoteValueState> children = new ArrayList<>();
     for (String connectorKey : getChildConnectorKeys()) {
       IValueConnector childConnector = getChildConnector(connectorKey);

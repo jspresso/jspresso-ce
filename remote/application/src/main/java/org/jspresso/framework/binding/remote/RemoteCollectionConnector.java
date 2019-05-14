@@ -135,6 +135,9 @@ public class RemoteCollectionConnector extends BasicCollectionConnector
     state.setWritable(isWritable());
     state.setDescription(getDisplayDescription());
     state.setIconImageUrl(ResourceProviderServlet.computeImageResourceDownloadUrl(getDisplayIcon(), RIcon.DEFAULT_DIM));
+    state.setForeground(getDisplayForeground());
+    state.setBackground(getDisplayBackground());
+    state.setFont(getDisplayFont());
     state.setSelectedIndices(getSelectedIndices());
     List<RemoteValueState> children = new ArrayList<>();
     for (int i = 0; i < getChildConnectorCount(); i++) {

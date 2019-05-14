@@ -18,6 +18,7 @@
  */
 package org.jspresso.framework.binding;
 
+import org.jspresso.framework.util.gui.Font;
 import org.jspresso.framework.util.gui.Icon;
 
 /**
@@ -41,7 +42,7 @@ public interface IRenderableCompositeValueConnector extends
    * Clones this connector.
    *
    * @param newConnectorId
-   *          the identifier of the clone connector
+   *     the identifier of the clone connector
    * @return the connector's clone.
    */
   @Override
@@ -67,6 +68,27 @@ public interface IRenderableCompositeValueConnector extends
    * @return the rendered string value.
    */
   String getDisplayValue();
+
+  /**
+   * Gets display foreground.
+   *
+   * @return the display foreground
+   */
+  String getDisplayForeground();
+
+  /**
+   * Gets display background.
+   *
+   * @return the display background
+   */
+  String getDisplayBackground();
+
+  /**
+   * Gets display font.
+   *
+   * @return the display font
+   */
+  Font getDisplayFont();
 
   /**
    * Gets the connector responsible for rendering the composite connector.

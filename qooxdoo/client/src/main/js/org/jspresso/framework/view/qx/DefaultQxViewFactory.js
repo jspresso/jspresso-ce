@@ -2122,6 +2122,17 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           controller.bindProperty(controller.getIconPath(), "icon", controller.getIconOptions(), treeNode, modelNode);
           controller.bindProperty("description", "toolTipText", null, treeNode, modelNode);
           if (modelNode) {
+            if (modelNode.getForeground()) {
+              treeNode.setTextColor(
+                  org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(modelNode.getForeground()));
+            }
+            if (modelNode.getBackground()) {
+              treeNode.setBackgroundColor(
+                  org.jspresso.framework.view.qx.DefaultQxViewFactory._hexColorToQxColor(modelNode.getBackground()));
+            }
+            if (modelNode.getFont()) {
+              treeNode.setFont(org.jspresso.framework.view.qx.DefaultQxViewFactory._fontToQxFont(modelNode.getFont()));
+            }
             modelNode.addListener("changeSelectedIndices", function (e) {
               if (controller.getUserData("blockSelectionEvents")) {
                 return;

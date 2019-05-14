@@ -131,6 +131,9 @@ public class RemoteCollectionConnectorListProvider extends
     state.setWritable(isWritable());
     state.setDescription(getDisplayDescription());
     state.setIconImageUrl(ResourceProviderServlet.computeImageResourceDownloadUrl(getDisplayIcon(), RIcon.DEFAULT_DIM));
+    state.setForeground(getDisplayForeground());
+    state.setBackground(getDisplayBackground());
+    state.setFont(getDisplayFont());
     List<RemoteValueState> children = new ArrayList<>();
     for (ICollectionConnector childConnector : getCollectionConnectors()) {
       if (childConnector instanceof IRemoteStateOwner) {
