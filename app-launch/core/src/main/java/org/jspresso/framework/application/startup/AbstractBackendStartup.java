@@ -57,6 +57,17 @@ public abstract class AbstractBackendStartup extends AbstractStartup {
   }
 
   /**
+   * Gets the session backend controller. In case of a web service, the session backend controller might be different
+   * from the current backend controller that is attached to the thread. In that case, the session backend controller
+   * is only available when the web service is called from a Jspresso client UI.
+   *
+   * @return the session backend controller.
+   */
+  protected IBackendController getSessionBackendController() {
+    return BackendControllerHolder.getSessionBackendController();
+  }
+
+  /**
    * Back controller is retrieved from the spring context and started.
    */
   protected void startController() {

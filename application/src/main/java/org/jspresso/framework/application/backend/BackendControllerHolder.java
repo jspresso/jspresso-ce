@@ -72,6 +72,19 @@ public final class BackendControllerHolder {
     }
   }
 
+  public static IBackendController getSessionBackendController() {
+    IBackendController controller = null;
+    if (IS_WEB_CONTEXT && HttpRequestHolder.isAvailable()) {
+      HttpSession session = HttpRequestHolder.getServletRequest().getSession();
+      if (session != null) {
+        controller = (IBackendController) session.getAttribute(CURRENT_BACKEND_CONTROLLER_KEY);
+      }
+    } else {
+      controller = CURRENT_BACKEND_CONTROLLER.get();
+    }
+    return controller;
+  }
+
   /**
    * Sets the tread-bound backend controller.
    *
@@ -102,14 +115,7 @@ public final class BackendControllerHolder {
     IBackendController controller = getThreadBackendController();
     if(controller == null) {
       // If none is set, then query the session.
-      if (IS_WEB_CONTEXT && HttpRequestHolder.isAvailable()) {
-        HttpSession session = HttpRequestHolder.getServletRequest().getSession();
-        if (session != null) {
-          controller = (IBackendController) session.getAttribute(CURRENT_BACKEND_CONTROLLER_KEY);
-        }
-      } else {
-        controller = CURRENT_BACKEND_CONTROLLER.get();
-      }
+      controller = getSessionBackendController();
     }
     return controller;
   }
