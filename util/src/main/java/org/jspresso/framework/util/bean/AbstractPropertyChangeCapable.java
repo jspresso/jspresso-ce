@@ -212,7 +212,7 @@ public abstract class AbstractPropertyChangeCapable implements IPropertyChangeCa
   protected void firePropertyChange(PropertyChangeEvent evt) {
     Object oldValue = evt.getOldValue();
     Object newValue = evt.getNewValue();
-    if (oldValue == null && newValue == null || oldValue != null && newValue != null && oldValue.equals(newValue)) {
+    if (oldValue == null && newValue == null || oldValue != null && oldValue.equals(newValue)) {
       return;
     }
     if (delayedEvents != null) {
@@ -310,7 +310,7 @@ public abstract class AbstractPropertyChangeCapable implements IPropertyChangeCa
     if (weakPropertyChangeSupport != null) {
       listeners.addAll(Arrays.asList(weakPropertyChangeSupport.getPropertyChangeListeners()));
     }
-    return listeners.toArray(new PropertyChangeListener[listeners.size()]);
+    return listeners.toArray(new PropertyChangeListener[0]);
   }
 
   /**
@@ -333,7 +333,7 @@ public abstract class AbstractPropertyChangeCapable implements IPropertyChangeCa
     if (weakPropertyChangeSupport != null) {
       listeners.addAll(Arrays.asList(weakPropertyChangeSupport.getPropertyChangeListeners(propertyName)));
     }
-    return listeners.toArray(new PropertyChangeListener[listeners.size()]);
+    return listeners.toArray(new PropertyChangeListener[0]);
   }
 
   /**
