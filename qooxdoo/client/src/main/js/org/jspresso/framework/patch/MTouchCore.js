@@ -37,13 +37,38 @@ qx.Mixin.define("org.jspresso.framework.patch.MTouchCore", {
           // For Firefox
           && qx.core.Environment.get("engine.name") != "gecko") {
         // Fix for IE10 and pointer-events:none
-        var targetForIE = this.__evaluateTarget(domEvent);
+        var targetForIE = this.__evaluateTargetForIE(domEvent);
         if (targetForIE) {
           target = targetForIE;
         }
       }
 
       return target;
+    },
+
+    __evaluateTargetForIE: function (domEvent) {
+      var clientX = null;
+      var clientY = null;
+      if (domEvent && domEvent.touches && domEvent.touches.length !== 0) {
+        clientX = domEvent.touches[0].clientX;
+        clientY = domEvent.touches[0].clientY;
+      }
+
+      // Retrieve an array with elements on point X/Y.
+      var hitTargets = document.msElementsFromPoint(clientX, clientY);
+      if (hitTargets) {
+        // Traverse this array for the elements which has no pointer-events:none inside.
+        for (var i = 0; i < hitTargets.length; i++) {
+          var currentTarget = hitTargets[i];
+          var pointerEvents = qx.bom.element.Style.get(currentTarget, "pointer-events", 3);
+
+          if (pointerEvents != "none") {
+            return currentTarget;
+          }
+        }
+      }
+
+      return null;
     }
   }
 });
