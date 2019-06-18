@@ -18,19 +18,19 @@
  */
 
 qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
-  extend: qx.ui.table.cellrenderer.Default, include: [org.jspresso.framework.view.qx.MCellAdditionalStyle],
+  extend: qx.ui.table.cellrenderer.Default,
+  include: [org.jspresso.framework.view.qx.MCellAdditionalStyle],
 
-  construct: function (table, format, peerRegistry) {
+  construct: function (table, peerRegistry) {
     this.base(arguments);
-    this.__table = table;
-    this.__format = format;
-    this.__peerRegistry = peerRegistry;
+    this._table = table;
+    this._peerRegistry = peerRegistry;
   },
 
   members: {
     __format: null,
-    __table: null,
-    __peerRegistry: null,
+    _table: null,
+    _peerRegistry: null,
     __action: null,
     __asideActions: null,
     __disableMainActionWithField: false,
@@ -50,14 +50,14 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
               org.jspresso.framework.util.html.HtmlUtil.replaceNewlines(cellInfo.value));
         }
       }
-      if (org.jspresso.framework.util.html.HtmlUtil.isHtml(cellInfo.value) && this.__table.getRowHeight() < 150) {
+      if (org.jspresso.framework.util.html.HtmlUtil.isHtml(cellInfo.value) && this._table.getRowHeight() < 150) {
         var contentHeight = qx.bom.Label.getHtmlSize(cellInfo.value).height;
         if (contentHeight) {
           if (contentHeight > 150) {
             contentHeight = 150;
           }
-          if (this.__table.getRowHeight() < contentHeight) {
-            this.__table.setRowHeight(parseInt(contentHeight + (cellInfo.styleHeight * 2 / 5) + 4));
+          if (this._table.getRowHeight() < contentHeight) {
+            this._table.setRowHeight(parseInt(contentHeight + (cellInfo.styleHeight * 2 / 5) + 4));
           }
         }
       }
@@ -146,8 +146,8 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
 
     setAction: function (action) {
       if (action) {
-        if (!this.__peerRegistry.getRegistered(action)) {
-          this.__peerRegistry.register(action)
+        if (!this._peerRegistry.getRegistered(action)) {
+          this._peerRegistry.register(action)
         }
       }
       this.__action = action;
@@ -163,13 +163,17 @@ qx.Class.define("org.jspresso.framework.view.qx.FormattedTableCellRenderer", {
           var actionList = asideActions[i];
           for (var j = 0; j < actionList.getActions().length; j++) {
             var action = actionList.getActions()[j];
-            if (!this.__peerRegistry.getRegistered(action)) {
-              this.__peerRegistry.register(action)
+            if (!this._peerRegistry.getRegistered(action)) {
+              this._peerRegistry.register(action)
             }
           }
         }
       }
       this.__asideActions = asideActions;
+    },
+
+    setFormat: function(format) {
+      this.__format = format;
     },
 
     setDisableMainActionWithField: function (disableActionsWithField) {

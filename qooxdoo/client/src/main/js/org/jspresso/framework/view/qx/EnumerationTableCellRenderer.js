@@ -18,21 +18,22 @@
  */
 
 qx.Class.define("org.jspresso.framework.view.qx.EnumerationTableCellRenderer", {
-  extend: qx.ui.table.cellrenderer.Default,
-  include: [org.jspresso.framework.view.qx.MCellAdditionalStyle],
+  extend: org.jspresso.framework.view.qx.FormattedTableCellRenderer,
 
-  construct: function (table, labels, icons) {
-    this.base(arguments);
-    this.__table = table;
+  construct: function (table, peerRegistry, labels, icons) {
+    this.base(arguments, table, peerRegistry);
     this.__labels = labels;
     this.__icons = icons;
   },
 
 
   members: {
-    __table: null,
     __labels: null,
     __icons: null,
+
+    _formatValue: function (cellInfo) {
+      return  this.__labels[cellInfo.value] || "";
+    },
 
     _getContentHtml: function (cellInfo) {
       var cellViewState = null;
@@ -42,7 +43,7 @@ qx.Class.define("org.jspresso.framework.view.qx.EnumerationTableCellRenderer", {
       if (cellViewState && !cellViewState.getReadable()) {
         return "";
       }
-      return this.__getImgHtml(cellInfo) + (this.__labels[cellInfo.value] || "");
+      return this.__getImgHtml(cellInfo) + this.base(arguments, cellInfo);
     },
 
     __getImgHtml: function (cellInfo) {
@@ -63,8 +64,8 @@ qx.Class.define("org.jspresso.framework.view.qx.EnumerationTableCellRenderer", {
           "vertical-align": "middle",
           "margin-top": cellInfo.styleHeight / (-5) + "px"
         });
-        if (this.__table.getRowHeight() < h) {
-          this.__table.setRowHeight(h + 4);
+        if (this._table.getRowHeight() < h) {
+          this._table.setRowHeight(h + 4);
         }
         return '<img src="' + rIcon.getImageUrlSpec() + '" style="' + css + '"/>';
       }

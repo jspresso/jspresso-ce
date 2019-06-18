@@ -2659,7 +2659,8 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
             labels[value] = rColumn.getTranslations()[j];
             icons[value] = rColumn.getIcons()[j];
           }
-          cellRenderer = new org.jspresso.framework.view.qx.EnumerationTableCellRenderer(table, labels, icons);
+          cellRenderer = new org.jspresso.framework.view.qx.EnumerationTableCellRenderer(table,
+              this._getRemotePeerRegistry(), labels, icons);
         } else if (rColumn instanceof org.jspresso.framework.gui.remote.RActionField && !rColumn.getShowTextField()) {
           cellRenderer = new org.jspresso.framework.view.qx.BinaryTableCellRenderer();
         } else if (rColumn instanceof org.jspresso.framework.gui.remote.RImageComponent) {
@@ -2668,38 +2669,41 @@ qx.Class.define("org.jspresso.framework.view.qx.DefaultQxViewFactory", {
           cellRenderer.setAction(rColumn.getAction());
         } else {
           var format = this._createFormat(rColumn);
-          cellRenderer = new org.jspresso.framework.view.qx.FormattedTableCellRenderer(table, format,
+          cellRenderer = new org.jspresso.framework.view.qx.FormattedTableCellRenderer(table,
               this._getRemotePeerRegistry());
-          cellRenderer.setUseAutoAlign(false);
-
-          if (rColumn instanceof org.jspresso.framework.gui.remote.RLink || rColumn
-              instanceof org.jspresso.framework.gui.remote.RHtmlArea) {
-            this._getRemotePeerRegistry().register(rColumn.getAction());
-            cellRenderer.setAction(rColumn.getAction());
-          }
-          var columnActionMap = rColumn.getActionLists();
-          cellRenderer.setAsideActions(columnActionMap);
-          if (columnActionMap) {
-            for (var ali = 0; ali < columnActionMap.length; ali++) {
-              var actionList = columnActionMap[ali];
-              for (var ai = 0; ai < actionList.getActions().length; ai++) {
-                var remoteAction = actionList.getActions()[ai];
-                remoteAction.addListener("changeEnabled", function (e) {
-                  var data = {
-                    firstRow: 0,
-                    lastRow: tableModel.getRowCount() - 1,
-                    firstColumn: i,
-                    lastColumn: i
-                  };
-                  // For the cell to repaint itself and provide different programmatic rendering based on selection.
-                  tableModel.fireDataEvent("dataChanged", data);
-                }, this);
-              }
-            }
-          }
-          cellRenderer.setDisableMainActionWithField(rColumn instanceof org.jspresso.framework.gui.remote.RActionField);
+          cellRenderer.setFormat(format);
         }
         if (cellRenderer) {
+          if (cellRenderer instanceof org.jspresso.framework.view.qx.FormattedTableCellRenderer) {
+            cellRenderer.setUseAutoAlign(false);
+            if (rColumn instanceof org.jspresso.framework.gui.remote.RLink || rColumn
+                instanceof org.jspresso.framework.gui.remote.RHtmlArea) {
+              this._getRemotePeerRegistry().register(rColumn.getAction());
+              cellRenderer.setAction(rColumn.getAction());
+            }
+            var columnActionMap = rColumn.getActionLists();
+            cellRenderer.setAsideActions(columnActionMap);
+            if (columnActionMap) {
+              for (var ali = 0; ali < columnActionMap.length; ali++) {
+                var actionList = columnActionMap[ali];
+                for (var ai = 0; ai < actionList.getActions().length; ai++) {
+                  var remoteAction = actionList.getActions()[ai];
+                  remoteAction.addListener("changeEnabled", function (e) {
+                    var data = {
+                      firstRow: 0,
+                      lastRow: tableModel.getRowCount() - 1,
+                      firstColumn: i,
+                      lastColumn: i
+                    };
+                    // For the cell to repaint itself and provide different programmatic rendering based on selection.
+                    tableModel.fireDataEvent("dataChanged", data);
+                  }, this);
+                }
+              }
+            }
+            cellRenderer.setDisableMainActionWithField(
+                rColumn instanceof org.jspresso.framework.gui.remote.RActionField);
+          }
           var alignment = null;
           if (rColumn instanceof org.jspresso.framework.gui.remote.RLabel || rColumn
               instanceof org.jspresso.framework.gui.remote.RTextField || rColumn
