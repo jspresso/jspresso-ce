@@ -520,6 +520,9 @@ public abstract class AbstractRemoteController extends AbstractFrontendControlle
    */
   @Override
   public void login() {
+    if (getApplicationSession().getPrincipal() != null) {
+      return;
+    }
     boolean loginInteractive = isLoginInteractive();
     if (performLogin()) {
       if (loginInteractive) {
