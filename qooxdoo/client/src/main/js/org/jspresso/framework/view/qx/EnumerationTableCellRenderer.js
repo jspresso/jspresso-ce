@@ -43,7 +43,7 @@ qx.Class.define("org.jspresso.framework.view.qx.EnumerationTableCellRenderer", {
       if (cellViewState && !cellViewState.getReadable()) {
         return "";
       }
-      return this.__getImgHtml(cellInfo) + this.base(arguments, cellInfo);
+      return this.__getImgHtml(cellInfo) + (this.__labels[cellInfo.value] || "");/*this.base(arguments, cellInfo);*/
     },
 
     __getImgHtml: function (cellInfo) {
