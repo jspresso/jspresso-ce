@@ -650,8 +650,14 @@ public class DependsOnHelper {
     if (initialChildren != null && Hibernate.isInitialized(initialChildren)) {
       for (IPropertyChangeCapable child : initialChildren) {
         if (child != null) {
-          registerNotificationForwarding(child, sourceBean, accessorFactoryProvider, sourceElementProperty,
-              forwardedProperties);
+          if (forwardedProperties != null) {
+            registerNotificationForwarding(child, sourceBean, accessorFactoryProvider, sourceElementProperty,
+                forwardedProperties);
+          }
+          if (forwardedMethods != null) {
+            registerNotificationForwarding(child, sourceBean, accessorFactoryProvider, sourceElementProperty,
+                forwardedMethods);
+          }
         }
       }
     }
@@ -704,8 +710,14 @@ public class DependsOnHelper {
     if (initialChildren != null && Hibernate.isInitialized(initialChildren)) {
       for (IPropertyChangeCapable child : initialChildren) {
         if (child != null) {
-          unregisterNotificationForwarding(child, sourceBean, accessorFactoryProvider, sourceElementProperty,
-              forwardedProperties);
+          if (forwardedProperties != null) {
+            unregisterNotificationForwarding(child, sourceBean, accessorFactoryProvider, sourceElementProperty,
+                forwardedProperties);
+          }
+          if (forwardedMethods != null) {
+            unregisterNotificationForwarding(child, sourceBean, accessorFactoryProvider, sourceElementProperty,
+                forwardedMethods);
+          }
         }
       }
     }
