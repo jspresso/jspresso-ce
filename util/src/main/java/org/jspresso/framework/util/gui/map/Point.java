@@ -30,7 +30,7 @@ import java.util.Arrays;
  * @see <a href="https://openlayers.org/en/latest/apidoc/ol.style.Icon.html">Open layers icon</a>
  */
 @SuppressWarnings("WeakerAccess")
-public class Point extends AbstractData {
+public class Point extends AbstractData implements ILatLng {
 
     /**
      * Default icon dimension
@@ -85,6 +85,7 @@ public class Point extends AbstractData {
      *
      * @return The longitude
      */
+    @Override
     public double getLongitude() {
         return longitude;
     }
@@ -94,6 +95,7 @@ public class Point extends AbstractData {
      *
      * @return The latitude
      */
+    @Override
     public double getLatitude() {
         return latitude;
     }
