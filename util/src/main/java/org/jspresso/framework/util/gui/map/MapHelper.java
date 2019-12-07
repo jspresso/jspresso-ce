@@ -338,7 +338,7 @@ public class MapHelper {
      * @param b the second point
      * @return the middle point
      */
-    public static Point getCenter(Point a, Point b) {
+    public static Point getCenter(ILatLng a, ILatLng b) {
         return getBaryCenter(a, b);
     }
 
@@ -348,7 +348,7 @@ public class MapHelper {
      * @param points the points
      * @return the middle point
      */
-    public static Point getBaryCenter(Point... points) {
+    public static Point getBaryCenter(ILatLng... points) {
 
         if (points == null || points.length==0)
             return null;
@@ -357,7 +357,7 @@ public class MapHelper {
         double lt;
         double maxlat = 0, minlat = 0, maxlon = 0, minlon = 0;
         int i = 0;
-        for (Point p : points) {
+        for (ILatLng p : points) {
 
             lt = p.getLongitude();
             lg = p.getLatitude();
@@ -452,11 +452,11 @@ public class MapHelper {
                 east = longitude;
             }
             else { if (latitude > north) {
-                    north = latitude;
-                }
-                else if (latitude < south) {
-                    south = latitude;
-                }
+                north = latitude;
+            }
+            else if (latitude < south) {
+                south = latitude;
+            }
                 if (longitude < west) {
                     west = longitude;
                 }
