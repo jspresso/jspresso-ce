@@ -33,7 +33,7 @@
     <spring-ldap.version>2.0.1.RELEASE</spring-ldap.version>
     <spring-data-mongodb.version>1.8.1.RELEASE</spring-data-mongodb.version>
     <ldapbp.version>1.0</ldapbp.version>
-    <hibernate.version>4.3.11.Final</hibernate.version>
+    <hibernate.version>5.4.24.Final</hibernate.version>
     <jboss-logging.version>3.3.0.Final</jboss-logging.version>
     <jbosssx.version>4.9.3.Final</jbosssx.version>
     <qooxdoo.version>5.0.2</qooxdoo.version>
