@@ -31,7 +31,7 @@
     <spring.version>4.2.3.RELEASE</spring.version>
     <spring-data-commons.version>1.11.1.RELEASE</spring-data-commons.version>
     <spring-ldap.version>2.0.1.RELEASE</spring-ldap.version>
-    <spring-data-mongodb.version>1.8.1.RELEASE</spring-data-mongodb.version>
+    <spring-data-mongodb.version>3.3.5</spring-data-mongodb.version>
     <ldapbp.version>1.0</ldapbp.version>
     <hibernate.version>4.3.11.Final</hibernate.version>
     <jboss-logging.version>3.3.0.Final</jboss-logging.version>
