@@ -17,7 +17,7 @@
     <maven-plugin-api.version>2.0</maven-plugin-api.version>
     <maven-plugin-annotations.version>3.2</maven-plugin-annotations.version>
     <maven-plugin-plugin.version>3.5</maven-plugin-plugin.version>
-    <plexus-utils.version>3.0.8</plexus-utils.version>
+    <plexus-utils.version>3.0.16</plexus-utils.version>
     <maven.version>3.0.4</maven.version>
     <slf4j-maven-plugin-log.version>1.0.0</slf4j-maven-plugin-log.version>
   </properties>
